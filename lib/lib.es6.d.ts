@@ -529,8 +529,8 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare const Number: NumberConstructor;
 
-interface TemplateStringsArray extends Array<string> {
-    readonly raw: string[];
+interface TemplateStringsArray extends ReadonlyArray<string> {
+    readonly raw: ReadonlyArray<string>
 }
 
 interface Math {
@@ -1022,7 +1022,12 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[]): T[];
+    concat(...items: T[][]): T[];
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: (T | T[])[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1124,6 +1129,11 @@ interface Array<T> {
       * Removes the last element from an array and returns it.
       */
     pop(): T | undefined;
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: T[][]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
@@ -4190,6 +4200,10 @@ interface ArrayConstructor {
     of<T>(...items: T[]): Array<T>;
 }
 
+interface DateConstructor {
+    new (value: Date): Date;
+}
+
 interface Function {
     /**
       * Returns the name of the function. Function names are read-only and can not be changed.
@@ -4348,7 +4362,7 @@ interface NumberConstructor {
     /**
       * The value of the largest integer n such that n and n + 1 are both exactly representable as
       * a Number value.
-      * The value of Number.MIN_SAFE_INTEGER is 9007199254740991 2^53 − 1.
+      * The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1.
       */
     readonly MAX_SAFE_INTEGER: number;
 
@@ -4463,6 +4477,30 @@ interface ObjectConstructor {
       *  property.
       */
     defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
+}
+
+interface ReadonlyArray<T> {
+  /**
+    * Returns the value of the first element in the array where predicate is true, and undefined
+    * otherwise.
+    * @param predicate find calls predicate once for each element of the array, in ascending
+    * order, until it finds one where predicate returns true. If such an element is found, find
+    * immediately returns that element value. Otherwise, find returns undefined.
+    * @param thisArg If provided, it will be used as the this value for each invocation of
+    * predicate. If it is not provided, undefined is used instead.
+    */
+  find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): T | undefined;
+
+  /**
+    * Returns the index of the first element in the array where predicate is true, and undefined
+    * otherwise.
+    * @param predicate find calls predicate once for each element of the array, in ascending
+    * order, until it finds one where predicate returns true. If such an element is found, 
+    * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
+    * @param thisArg If provided, it will be used as the this value for each invocation of
+    * predicate. If it is not provided, undefined is used instead.
+    */
+  findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
 }
 
 interface RegExp {
@@ -4752,6 +4790,26 @@ interface ArrayConstructor {
       * @param iterable An iterable object to convert to an array.
       */
     from<T>(iterable: Iterable<T>): Array<T>;
+}
+
+interface ReadonlyArray<T> {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<T>;
+
+    /** 
+      * Returns an array of key, value pairs for every entry in the array
+      */
+    entries(): IterableIterator<[number, T]>;
+
+    /** 
+      * Returns an list of keys in the array
+      */
+    keys(): IterableIterator<number>;
+
+    /** 
+      * Returns an list of values in the array
+      */
+    values(): IterableIterator<T>;
 }
 
 interface IArguments {

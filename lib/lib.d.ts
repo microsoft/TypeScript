@@ -529,8 +529,8 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare const Number: NumberConstructor;
 
-interface TemplateStringsArray extends Array<string> {
-    readonly raw: string[];
+interface TemplateStringsArray extends ReadonlyArray<string> {
+    readonly raw: ReadonlyArray<string>
 }
 
 interface Math {
@@ -1022,7 +1022,12 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[]): T[];
+    concat(...items: T[][]): T[];
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: (T | T[])[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1124,6 +1129,11 @@ interface Array<T> {
       * Removes the last element from an array and returns it.
       */
     pop(): T | undefined;
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: T[][]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
