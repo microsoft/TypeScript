@@ -81,7 +81,8 @@ namespace ts {
             info: (s: string) => { },
             startGroup: () => { },
             endGroup: () => { },
-            msg: (s: string, type?: string) => { }
+            msg: (s: string, type?: string) => { },
+            getLogFileName: (): string => undefined
         };
 
         const projectService = new server.ProjectService(serverHost, logger, { isCancellationRequested: () => false }, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);

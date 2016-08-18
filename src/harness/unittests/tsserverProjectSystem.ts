@@ -14,7 +14,8 @@ namespace ts {
         info: () => void 0,
         startGroup: () => void 0,
         endGroup: () => void 0,
-        msg: () => void 0
+        msg: () => void 0,
+        getLogFileName: (): string => undefined
     };
 
     const nullCancellationToken: HostCancellationToken = {

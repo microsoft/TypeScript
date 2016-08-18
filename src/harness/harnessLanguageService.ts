@@ -646,6 +646,10 @@ namespace Harness.LanguageService {
             return true;
         }
 
+        getLogFileName(): string {
+            return undefined;
+        }
+
         hasLevel() {
             return false;
         }

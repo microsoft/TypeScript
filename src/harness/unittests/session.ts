@@ -36,6 +36,7 @@ namespace ts.server {
         startGroup(): void {},
         endGroup(): void {},
         msg(s: string, type?: string): void {},
+        getLogFileName: (): string => undefined
     };
 
     describe("the Session class", () => {
