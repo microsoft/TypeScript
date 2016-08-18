@@ -763,67 +763,11 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
         }
         else {
-            const compilerOptions = extend(options, defaultInitCompilerOptions);
-            const configurations: any = {
-                compilerOptions: serializeCompilerOptions(compilerOptions)
-            };
-
-            if (fileNames && fileNames.length) {
-                // only set the files property if we have at least one file
-                configurations.files = fileNames;
-            }
-            else {
-                configurations.exclude = ["node_modules"];
-                if (compilerOptions.outDir) {
-                    configurations.exclude.push(compilerOptions.outDir);
-                }
-            }
-
-            sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
+            sys.writeFile(file, JSON.stringify(generateTSConfig(options, fileNames), undefined, 4));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
         }
 
         return;
-
-        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
-            const result = createMap<string | number | boolean>();
-            const optionsNameMap = getOptionNameMap().optionNameMap;
-
-            for (const name in options) {
-                if (hasProperty(options, name)) {
-                    // tsconfig only options cannot be specified via command line,
-                    // so we can assume that only types that can appear here string | number | boolean
-                    const value = <string | number | boolean>options[name];
-                    switch (name) {
-                        case "init":
-                        case "watch":
-                        case "version":
-                        case "help":
-                        case "project":
-                            break;
-                        default:
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
-                            if (optionDefinition) {
-                                if (typeof optionDefinition.type === "string") {
-                                    // string, number or boolean
-                                    result[name] = value;
-                                }
-                                else {
-                                    // Enum
-                                    const typeMap = <Map<number>>optionDefinition.type;
-                                    for (const key in typeMap) {
-                                        if (typeMap[key] === value) {
-                                            result[name] = key;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
-            return result;
-        }
     }
 }
 

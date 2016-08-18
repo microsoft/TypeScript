@@ -1673,16 +1673,17 @@ namespace Harness {
             const encoded_actual = Utils.encodeString(actual);
             if (expected !== encoded_actual) {
                 if (actual === NoContent) {
-                    IO.writeFile(relativeFileName + ".delete", "");
+                    IO.writeFile(localPath(relativeFileName + ".delete"), "");
                 }
                 else {
-                    IO.writeFile(relativeFileName, actual);
+                    IO.writeFile(localPath(relativeFileName), actual);
                 }
                 // Overwrite & issue error
                 const errMsg = "The baseline file " + relativeFileName + " has changed.";
                 throw new Error(errMsg);
             }
         }
+
 
         export function runBaseline(
             descriptionForDescribe: string,

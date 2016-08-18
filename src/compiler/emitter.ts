@@ -5311,6 +5311,21 @@ const _super = (function (geti, seti) {
                         emitSignatureParameters(ctor);
                     }
                     else {
+                        // The ES2015 spec specifies in 14.5.14. Runtime Semantics: ClassDefinitionEvaluation:
+                        // If constructor is empty, then
+                        //     If ClassHeritag_eopt is present and protoParent is not null, then
+                        //          Let constructor be the result of parsing the source text
+                        //              constructor(...args) { super (...args);}
+                        //          using the syntactic grammar with the goal symbol MethodDefinition[~Yield].
+                        //      Else,
+                        //           Let constructor be the result of parsing the source text
+                        //               constructor( ){ }
+                        //           using the syntactic grammar with the goal symbol MethodDefinition[~Yield].
+                        //
+                        // While we could emit the '...args' rest parameter, certain later tools in the pipeline might
+                        // downlevel the '...args' portion less efficiently by naively copying the contents of 'arguments' to an array.
+                        // Instead, we'll avoid using a rest parameter and spread into the super call as
+                        // 'super(...arguments)' instead of 'super(...args)', as you can see below.
                         write("()");
                     }
                 }
@@ -5349,6 +5364,7 @@ const _super = (function (geti, seti) {
                             write("_super.apply(this, arguments);");
                         }
                         else {
+                            // See comment above on using '...arguments' instead of '...args'.
                             write("super(...arguments);");
                         }
                         emitEnd(baseTypeElement);
