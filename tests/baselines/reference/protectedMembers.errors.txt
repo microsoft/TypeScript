@@ -1,23 +1,22 @@
-tests/cases/compiler/protectedMembers.ts(40,1): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(41,1): error TS2445: Property 'f' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(42,1): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(43,1): error TS2445: Property 'sf' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(46,1): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(47,1): error TS2445: Property 'f' is protected and only accessible within class 'C2' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(48,1): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(49,1): error TS2445: Property 'sf' is protected and only accessible within class 'C2' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(68,9): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'.
-tests/cases/compiler/protectedMembers.ts(69,9): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'.
-tests/cases/compiler/protectedMembers.ts(86,5): error TS1089: 'protected' modifier cannot appear on a constructor declaration.
-tests/cases/compiler/protectedMembers.ts(98,1): error TS2322: Type 'B1' is not assignable to type 'A1'.
+tests/cases/compiler/protectedMembers.ts(40,4): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
+tests/cases/compiler/protectedMembers.ts(41,4): error TS2445: Property 'f' is protected and only accessible within class 'C1' and its subclasses.
+tests/cases/compiler/protectedMembers.ts(42,4): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
+tests/cases/compiler/protectedMembers.ts(43,4): error TS2445: Property 'sf' is protected and only accessible within class 'C1' and its subclasses.
+tests/cases/compiler/protectedMembers.ts(46,4): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
+tests/cases/compiler/protectedMembers.ts(47,4): error TS2445: Property 'f' is protected and only accessible within class 'C2' and its subclasses.
+tests/cases/compiler/protectedMembers.ts(48,4): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
+tests/cases/compiler/protectedMembers.ts(49,4): error TS2445: Property 'sf' is protected and only accessible within class 'C2' and its subclasses.
+tests/cases/compiler/protectedMembers.ts(68,11): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'.
+tests/cases/compiler/protectedMembers.ts(69,11): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'.
+tests/cases/compiler/protectedMembers.ts(97,1): error TS2322: Type 'B1' is not assignable to type 'A1'.
   Property 'x' is protected but type 'B1' is not a class derived from 'A1'.
-tests/cases/compiler/protectedMembers.ts(99,1): error TS2322: Type 'A1' is not assignable to type 'B1'.
+tests/cases/compiler/protectedMembers.ts(98,1): error TS2322: Type 'A1' is not assignable to type 'B1'.
   Property 'x' is protected in type 'A1' but public in type 'B1'.
-tests/cases/compiler/protectedMembers.ts(112,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
+tests/cases/compiler/protectedMembers.ts(111,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
   Property 'x' is protected in type 'B3' but public in type 'A3'.
 
 
-==== tests/cases/compiler/protectedMembers.ts (14 errors) ====
+==== tests/cases/compiler/protectedMembers.ts (13 errors) ====
     // Class with protected members
     class C1 {
         protected x: number;
@@ -58,30 +57,30 @@ tests/cases/compiler/protectedMembers.ts(112,7): error TS2415: Class 'B3' incorr
     
     // All of these should be errors
     c1.x;
-    ~~~~
+       ~
 !!! error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
     c1.f();
-    ~~~~
+       ~
 !!! error TS2445: Property 'f' is protected and only accessible within class 'C1' and its subclasses.
     C1.sx;
-    ~~~~~
+       ~~
 !!! error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
     C1.sf();
-    ~~~~~
+       ~~
 !!! error TS2445: Property 'sf' is protected and only accessible within class 'C1' and its subclasses.
     
     // All of these should be errors
     c2.x;
-    ~~~~
+       ~
 !!! error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
     c2.f();
-    ~~~~
+       ~
 !!! error TS2445: Property 'f' is protected and only accessible within class 'C2' and its subclasses.
     C2.sx;
-    ~~~~~
+       ~~
 !!! error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
     C2.sf();
-    ~~~~~
+       ~~
 !!! error TS2445: Property 'sf' is protected and only accessible within class 'C2' and its subclasses.
     
     // All of these should be ok
@@ -102,10 +101,10 @@ tests/cases/compiler/protectedMembers.ts(112,7): error TS2415: Class 'B3' incorr
         z;
         static foo(a: A, b: B, c: C, d: D, e: E) {
             a.x = 1;  // Error, access must be through C or type derived from C
-            ~~~
+              ~
 !!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'.
             b.x = 1;  // Error, access must be through C or type derived from C
-            ~~~
+              ~
 !!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'.
             c.x = 1;
             d.x = 1;
@@ -122,10 +121,7 @@ tests/cases/compiler/protectedMembers.ts(112,7): error TS2415: Class 'B3' incorr
     }
     
     class CC {
-        // Error, constructor cannot be protected
         protected constructor() {
-        ~~~~~~~~~
-!!! error TS1089: 'protected' modifier cannot appear on a constructor declaration.
         }
     }
     

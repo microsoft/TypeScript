@@ -14,7 +14,7 @@ async function f() {
 
 //// [awaitUnion_es6.js]
 function f() {
-    return __awaiter(this, void 0, Promise, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         let await_a = yield a;
         let await_b = yield b;
         let await_c = yield c;

@@ -1,0 +1,17 @@
+=== tests/cases/compiler/es6modulekindWithES5Target2.ts ===
+
+export default class C {
+>C : C
+
+    static s = 0;
+>s : number
+>0 : number
+
+    p = 1;
+>p : number
+>1 : number
+
+    method() { }
+>method : () => void
+}
+

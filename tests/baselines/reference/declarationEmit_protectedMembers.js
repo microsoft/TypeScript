@@ -135,7 +135,7 @@ declare class C1 {
     protected static sx: number;
     protected static sf(): number;
     protected static staticSetter: number;
-    protected static staticGetter: number;
+    protected static readonly staticGetter: number;
 }
 declare class C2 extends C1 {
     protected f(): number;
@@ -146,7 +146,7 @@ declare class C3 extends C2 {
     static sx: number;
     f(): number;
     static sf(): number;
-    static staticGetter: number;
+    static readonly staticGetter: number;
 }
 declare class C4 {
     protected a: number;

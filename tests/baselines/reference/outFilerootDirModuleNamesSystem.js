@@ -11,8 +11,9 @@ export default function foo() { new Foo(); }
 
 
 //// [output.js]
-System.register("b", ["a"], function(exports_1) {
+System.register("b", ["a"], function(exports_1, context_1) {
     "use strict";
+    var __moduleName = context_1 && context_1.id;
     var a_1;
     function foo() { new a_1.default(); }
     exports_1("default", foo);
@@ -25,8 +26,9 @@ System.register("b", ["a"], function(exports_1) {
         }
     }
 });
-System.register("a", ["b"], function(exports_2) {
+System.register("a", ["b"], function(exports_2, context_2) {
     "use strict";
+    var __moduleName = context_2 && context_2.id;
     var b_1;
     var Foo;
     return {
@@ -35,8 +37,8 @@ System.register("a", ["b"], function(exports_2) {
                 b_1 = b_1_1;
             }],
         execute: function() {
-            class Foo {
-            }
+            Foo = class Foo {
+            };
             exports_2("default", Foo);
             b_1.default();
         }

@@ -6,8 +6,8 @@ module A {
 >Point : Symbol(Point, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 10))
 
         constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 20))
->y : Symbol(y, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 37))
+>x : Symbol(Point.x, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 20))
+>y : Symbol(Point.y, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 37))
     }
 
     export module B {

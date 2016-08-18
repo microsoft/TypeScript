@@ -1,0 +1,28 @@
+=== tests/cases/conformance/es6/decorators/class/decoratorOnClass6.es6.ts ===
+declare function dec<T>(target: T): T;
+>dec : Symbol(dec, Decl(decoratorOnClass6.es6.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnClass6.es6.ts, 0, 21))
+>target : Symbol(target, Decl(decoratorOnClass6.es6.ts, 0, 24))
+>T : Symbol(T, Decl(decoratorOnClass6.es6.ts, 0, 21))
+>T : Symbol(T, Decl(decoratorOnClass6.es6.ts, 0, 21))
+
+@dec
+>dec : Symbol(dec, Decl(decoratorOnClass6.es6.ts, 0, 0))
+
+export class C {
+>C : Symbol(C, Decl(decoratorOnClass6.es6.ts, 0, 38))
+
+    static x() { return C.y; }
+>x : Symbol(C.x, Decl(decoratorOnClass6.es6.ts, 3, 16))
+>C.y : Symbol(C.y, Decl(decoratorOnClass6.es6.ts, 4, 30))
+>C : Symbol(C, Decl(decoratorOnClass6.es6.ts, 0, 38))
+>y : Symbol(C.y, Decl(decoratorOnClass6.es6.ts, 4, 30))
+
+    static y = 1;
+>y : Symbol(C.y, Decl(decoratorOnClass6.es6.ts, 4, 30))
+}
+
+let c = new C();
+>c : Symbol(c, Decl(decoratorOnClass6.es6.ts, 8, 3))
+>C : Symbol(C, Decl(decoratorOnClass6.es6.ts, 0, 38))
+

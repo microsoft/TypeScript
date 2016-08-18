@@ -34,7 +34,7 @@ var Bar = (function (_super) {
         _super.apply(this, arguments);
     }
     Bar[symbol] = function () {
-        return _super[symbol]();
+        return _super[symbol].call(this);
     };
     return Bar;
 }(Foo));

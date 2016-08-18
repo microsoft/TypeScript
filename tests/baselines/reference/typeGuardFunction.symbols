@@ -4,14 +4,14 @@ class A {
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
 
     propA: number;
->propA : Symbol(propA, Decl(typeGuardFunction.ts, 1, 9))
+>propA : Symbol(A.propA, Decl(typeGuardFunction.ts, 1, 9))
 }
 
 class B {
 >B : Symbol(B, Decl(typeGuardFunction.ts, 3, 1))
 
     propB: number;
->propB : Symbol(propB, Decl(typeGuardFunction.ts, 5, 9))
+>propB : Symbol(B.propB, Decl(typeGuardFunction.ts, 5, 9))
 }
 
 class C extends A {
@@ -19,7 +19,7 @@ class C extends A {
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
 
     propC: number;
->propC : Symbol(propC, Decl(typeGuardFunction.ts, 9, 19))
+>propC : Symbol(C.propC, Decl(typeGuardFunction.ts, 9, 19))
 }
 
 declare function isA(p1: any): p1 is A;
@@ -139,7 +139,7 @@ class D {
 >D : Symbol(D, Decl(typeGuardFunction.ts, 54, 1))
 
     method1(p1: A): p1 is C {
->method1 : Symbol(method1, Decl(typeGuardFunction.ts, 55, 9))
+>method1 : Symbol(D.method1, Decl(typeGuardFunction.ts, 55, 9))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 56, 12))
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
 >p1 : Symbol(p1, Decl(typeGuardFunction.ts, 56, 12))

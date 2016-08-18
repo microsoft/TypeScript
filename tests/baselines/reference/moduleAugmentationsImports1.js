@@ -101,4 +101,5 @@ declare module "d" {
     }
 }
 declare module "main" {
+    import "d";
 }

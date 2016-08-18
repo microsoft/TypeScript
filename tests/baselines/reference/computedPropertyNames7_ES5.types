@@ -6,8 +6,8 @@ enum E {
 >member : E
 }
 var v = {
->v : {}
->{    [E.member]: 0} : {}
+>v : { [x: number]: number; }
+>{    [E.member]: 0} : { [x: number]: number; }
 
     [E.member]: 0
 >E.member : E

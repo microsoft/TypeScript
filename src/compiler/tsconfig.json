@@ -1,25 +1,31 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
         "noImplicitAny": true,
+        "noImplicitThis": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "out": "../../built/local/tsc.js",
-        "sourceMap": true
+        "pretty": true,
+        "outFile": "../../built/local/tsc.js",
+        "sourceMap": true,
+        "declaration": true,
+        "stripInternal": true
     },
     "files": [
         "core.ts",
+        "performance.ts",
         "sys.ts",
         "types.ts",
-        "diagnosticInformationMap.generated.ts",
         "scanner.ts",
         "parser.ts",
         "utilities.ts",
         "binder.ts",
         "checker.ts",
+        "sourcemap.ts",
+        "declarationEmitter.ts",
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",
-        "tsc.ts"
+        "tsc.ts",
+        "diagnosticInformationMap.generated.ts"
     ]
 }

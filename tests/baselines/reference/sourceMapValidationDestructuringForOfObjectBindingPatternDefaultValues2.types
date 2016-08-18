@@ -102,7 +102,7 @@ let name: string, primary: string, secondary: string, skill: string;
 >skill : string
 
 for ({name: nameA = "noName" } of robots) {
->{name: nameA = "noName" } : { name: string; }
+>{name: nameA = "noName" } : { name?: string; }
 >name : Robot
 >nameA = "noName" : string
 >nameA : string
@@ -117,7 +117,7 @@ for ({name: nameA = "noName" } of robots) {
 >nameA : string
 }
 for ({name: nameA = "noName" } of getRobots()) {
->{name: nameA = "noName" } : { name: string; }
+>{name: nameA = "noName" } : { name?: string; }
 >name : Robot
 >nameA = "noName" : string
 >nameA : string
@@ -133,7 +133,7 @@ for ({name: nameA = "noName" } of getRobots()) {
 >nameA : string
 }
 for ({name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
->{name: nameA = "noName" } : { name: string; }
+>{name: nameA = "noName" } : { name?: string; }
 >name : { name: string; skill: string; }
 >nameA = "noName" : string
 >nameA : string
@@ -158,7 +158,7 @@ for ({name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "
 >nameA : string
 }
 for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
->{ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =    { primary: "nosKill", secondary: "noSkill" } } : { skills: { primary?: string; secondary?: string; }; }
+>{ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =    { primary: "nosKill", secondary: "noSkill" } } : { skills?: { primary?: string; secondary?: string; }; }
 >skills : MultiRobot
 >{ primary: primaryA = "primary", secondary: secondaryA = "secondary" } =    { primary: "nosKill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
 >{ primary: primaryA = "primary", secondary: secondaryA = "secondary" } : { primary?: string; secondary?: string; }
@@ -187,7 +187,7 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
 >primaryA : string
 }
 for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
->{ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =    { primary: "nosKill", secondary: "noSkill" } } : { skills: { primary?: string; secondary?: string; }; }
+>{ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =    { primary: "nosKill", secondary: "noSkill" } } : { skills?: { primary?: string; secondary?: string; }; }
 >skills : MultiRobot
 >{ primary: primaryA = "primary", secondary: secondaryA = "secondary" } =    { primary: "nosKill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
 >{ primary: primaryA = "primary", secondary: secondaryA = "secondary" } : { primary?: string; secondary?: string; }
@@ -217,7 +217,7 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
 >primaryA : string
 }
 for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
->{ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =    { primary: "nosKill", secondary: "noSkill" } } : { skills: { primary?: string; secondary?: string; }; }
+>{ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =    { primary: "nosKill", secondary: "noSkill" } } : { skills?: { primary?: string; secondary?: string; }; }
 >skills : MultiRobot
 >{ primary: primaryA = "primary", secondary: secondaryA = "secondary" } =    { primary: "nosKill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
 >{ primary: primaryA = "primary", secondary: secondaryA = "secondary" } : { primary?: string; secondary?: string; }
@@ -271,7 +271,7 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
 }
 
 for ({ name = "noName" } of robots) {
->{ name = "noName" } : { name: string; }
+>{ name = "noName" } : { name?: string; }
 >name : Robot
 >robots : Robot[]
 
@@ -283,7 +283,7 @@ for ({ name = "noName" } of robots) {
 >nameA : string
 }
 for ({ name = "noName" } of getRobots()) {
->{ name = "noName" } : { name: string; }
+>{ name = "noName" } : { name?: string; }
 >name : Robot
 >getRobots() : Robot[]
 >getRobots : () => Robot[]
@@ -296,7 +296,7 @@ for ({ name = "noName" } of getRobots()) {
 >nameA : string
 }
 for ({ name = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
->{ name = "noName" } : { name: string; }
+>{ name = "noName" } : { name?: string; }
 >name : { name: string; skill: string; }
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
@@ -318,7 +318,7 @@ for ({ name = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimme
 >nameA : string
 }
 for ({
->{    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { skills: { primary?: string; secondary?: string; }; }
+>{    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { skills?: { primary?: string; secondary?: string; }; }
 
     skills: {
 >skills : MultiRobot
@@ -349,7 +349,7 @@ for ({
 >primaryA : string
 }
 for ({
->{    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { skills: { primary?: string; secondary?: string; }; }
+>{    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { skills?: { primary?: string; secondary?: string; }; }
 
     skills: {
 >skills : MultiRobot
@@ -381,7 +381,7 @@ for ({
 >primaryA : string
 }
 for ({
->{    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { skills: { primary?: string; secondary?: string; }; }
+>{    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { skills?: { primary?: string; secondary?: string; }; }
 
     skills: {
 >skills : { name: string; skills: { primary: string; secondary: string; }; }
@@ -434,7 +434,7 @@ for ({
 
 
 for ({name: nameA = "noName", skill: skillA = "noSkill" } of robots) {
->{name: nameA = "noName", skill: skillA = "noSkill" } : { name: string; skill: string; }
+>{name: nameA = "noName", skill: skillA = "noSkill" } : { name?: string; skill?: string; }
 >name : Robot
 >nameA = "noName" : string
 >nameA : string
@@ -453,7 +453,7 @@ for ({name: nameA = "noName", skill: skillA = "noSkill" } of robots) {
 >nameA : string
 }
 for ({name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
->{name: nameA = "noName", skill: skillA = "noSkill"  } : { name: string; skill: string; }
+>{name: nameA = "noName", skill: skillA = "noSkill"  } : { name?: string; skill?: string; }
 >name : Robot
 >nameA = "noName" : string
 >nameA : string
@@ -473,7 +473,7 @@ for ({name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
 >nameA : string
 }
 for ({name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
->{name: nameA = "noName", skill: skillA = "noSkill"  } : { name: string; skill: string; }
+>{name: nameA = "noName", skill: skillA = "noSkill"  } : { name?: string; skill?: string; }
 >name : { name: string; skill: string; }
 >nameA = "noName" : string
 >nameA : string
@@ -502,7 +502,7 @@ for ({name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mower", 
 >nameA : string
 }
 for ({
->{    name: nameA = "noName",    skills: {        primary: primaryA = "primary",        secondary: secondaryA = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name: string; skills: { primary?: string; secondary?: string; }; }
+>{    name: nameA = "noName",    skills: {        primary: primaryA = "primary",        secondary: secondaryA = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
 
     name: nameA = "noName",
 >name : MultiRobot
@@ -545,7 +545,7 @@ for ({
 >nameA : string
 }
 for ({
->{    name: nameA = "noName",    skills: {        primary: primaryA = "primary",        secondary: secondaryA = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name: string; skills: { primary?: string; secondary?: string; }; }
+>{    name: nameA = "noName",    skills: {        primary: primaryA = "primary",        secondary: secondaryA = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
 
     name: nameA = "noName",
 >name : MultiRobot
@@ -589,7 +589,7 @@ for ({
 >nameA : string
 }
 for ({
->{    name: nameA = "noName",    skills: {        primary: primaryA = "primary",        secondary: secondaryA = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name: string; skills: { primary?: string; secondary?: string; }; }
+>{    name: nameA = "noName",    skills: {        primary: primaryA = "primary",        secondary: secondaryA = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
 
     name: nameA = "noName",
 >name : MultiRobot
@@ -655,7 +655,7 @@ for ({
 }
 
 for ({ name = "noName", skill  = "noSkill" } of robots) {
->{ name = "noName", skill  = "noSkill" } : { name: string; skill: string; }
+>{ name = "noName", skill  = "noSkill" } : { name?: string; skill?: string; }
 >name : Robot
 >skill : Robot
 >robots : Robot[]
@@ -668,7 +668,7 @@ for ({ name = "noName", skill  = "noSkill" } of robots) {
 >nameA : string
 }
 for ({ name = "noName", skill = "noSkill"  } of getRobots()) {
->{ name = "noName", skill = "noSkill"  } : { name: string; skill: string; }
+>{ name = "noName", skill = "noSkill"  } : { name?: string; skill?: string; }
 >name : Robot
 >skill : Robot
 >getRobots() : Robot[]
@@ -682,7 +682,7 @@ for ({ name = "noName", skill = "noSkill"  } of getRobots()) {
 >nameA : string
 }
 for ({ name = "noName", skill  = "noSkill" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
->{ name = "noName", skill  = "noSkill" } : { name: string; skill: string; }
+>{ name = "noName", skill  = "noSkill" } : { name?: string; skill?: string; }
 >name : { name: string; skill: string; }
 >skill : { name: string; skill: string; }
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
@@ -705,7 +705,7 @@ for ({ name = "noName", skill  = "noSkill" } of [{ name: "mower", skill: "mowing
 >nameA : string
 }
 for ({
->{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name: string; skills: { primary?: string; secondary?: string; }; }
+>{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
 
     name = "noName",
 >name : MultiRobot
@@ -739,7 +739,7 @@ for ({
 >nameA : string
 }
 for ({
->{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name: string; skills: { primary?: string; secondary?: string; }; }
+>{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
 
     name = "noName",
 >name : MultiRobot
@@ -774,7 +774,7 @@ for ({
 >nameA : string
 }
 for ({
->{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name: string; skills: { primary?: string; secondary?: string; }; }
+>{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "noSkill", secondary: "noSkill" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
 
     name = "noName",
 >name : { name: string; skills: { primary: string; secondary: string; }; }

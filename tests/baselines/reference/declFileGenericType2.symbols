@@ -48,7 +48,7 @@ declare module templa.mvc.composite {
 >IModel : Symbol(IModel, Decl(declFileGenericType2.ts, 1, 27))
 
         getControllers(): mvc.IController<mvc.IModel>[];
->getControllers : Symbol(getControllers, Decl(declFileGenericType2.ts, 14, 60))
+>getControllers : Symbol(ICompositeControllerModel.getControllers, Decl(declFileGenericType2.ts, 14, 60))
 >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 1, 22), Decl(declFileGenericType2.ts, 5, 22), Decl(declFileGenericType2.ts, 9, 22), Decl(declFileGenericType2.ts, 13, 22))
 >IController : Symbol(IController, Decl(declFileGenericType2.ts, 5, 27))
 >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 1, 22), Decl(declFileGenericType2.ts, 5, 22), Decl(declFileGenericType2.ts, 9, 22), Decl(declFileGenericType2.ts, 13, 22))
@@ -125,7 +125,7 @@ module templa.dom.mvc.composite {
 >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 33, 52))
 
         public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
->_controllers : Symbol(_controllers, Decl(declFileGenericType2.ts, 33, 179))
+>_controllers : Symbol(AbstractCompositeElementController._controllers, Decl(declFileGenericType2.ts, 33, 179))
 >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 4, 1), Decl(declFileGenericType2.ts, 8, 1), Decl(declFileGenericType2.ts, 12, 1), Decl(declFileGenericType2.ts, 17, 1), Decl(declFileGenericType2.ts, 21, 1), Decl(declFileGenericType2.ts, 30, 1))
 >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 1, 22), Decl(declFileGenericType2.ts, 5, 22), Decl(declFileGenericType2.ts, 9, 22), Decl(declFileGenericType2.ts, 13, 22))
 >IController : Symbol(templa.mvc.IController, Decl(declFileGenericType2.ts, 5, 27))
@@ -138,9 +138,9 @@ module templa.dom.mvc.composite {
 >super : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 23, 23))
 
             this._controllers = [];
->this._controllers : Symbol(_controllers, Decl(declFileGenericType2.ts, 33, 179))
+>this._controllers : Symbol(AbstractCompositeElementController._controllers, Decl(declFileGenericType2.ts, 33, 179))
 >this : Symbol(AbstractCompositeElementController, Decl(declFileGenericType2.ts, 32, 33))
->_controllers : Symbol(_controllers, Decl(declFileGenericType2.ts, 33, 179))
+>_controllers : Symbol(AbstractCompositeElementController._controllers, Decl(declFileGenericType2.ts, 33, 179))
         }
     }
 }

@@ -5,14 +5,6 @@
 ////class foo { }
 ////var bar = 0;
 
-goTo.marker("1");
-verify.referencesCountIs(0);
-
-goTo.marker("2");
-verify.referencesCountIs(0);
-
-goTo.marker("3");
-verify.referencesCountIs(0);
-
-goTo.marker("4");
-verify.referencesCountIs(0);
+for (const marker of test.markers()) {
+    verify.referencesAre([]);
+}

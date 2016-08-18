@@ -3,7 +3,7 @@ class A {
 >A : Symbol(A, Decl(numericIndexerConstraint4.ts, 0, 0))
 
     foo: number;
->foo : Symbol(foo, Decl(numericIndexerConstraint4.ts, 0, 9))
+>foo : Symbol(A.foo, Decl(numericIndexerConstraint4.ts, 0, 9))
 }
 
 class B extends A {
@@ -11,7 +11,7 @@ class B extends A {
 >A : Symbol(A, Decl(numericIndexerConstraint4.ts, 0, 0))
 
     bar: string;
->bar : Symbol(bar, Decl(numericIndexerConstraint4.ts, 4, 19))
+>bar : Symbol(B.bar, Decl(numericIndexerConstraint4.ts, 4, 19))
 }
 
 var x: {
@@ -21,7 +21,6 @@ var x: {
 >idx : Symbol(idx, Decl(numericIndexerConstraint4.ts, 9, 5))
 >A : Symbol(A, Decl(numericIndexerConstraint4.ts, 0, 0))
 
-} = { data: new B() }
->data : Symbol(data, Decl(numericIndexerConstraint4.ts, 10, 5))
+} = { 0: new B() }
 >B : Symbol(B, Decl(numericIndexerConstraint4.ts, 2, 1))
 

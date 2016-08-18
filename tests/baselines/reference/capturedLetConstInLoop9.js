@@ -140,25 +140,25 @@ function foo3 () {
 
 //// [capturedLetConstInLoop9.js]
 var _loop_1 = function(x) {
-    var x_1 = void 0;
+    var x_1;
     (function () { return x_1; });
     {
-        var x_2 = void 0;
+        var x_2;
         (function () { return x_2; });
     }
     try { }
     catch (e) {
-        var x_3 = void 0;
+        var x_3;
         (function () { return x_3; });
     }
     switch (x_1) {
         case 1:
-            var x_4 = void 0;
+            var x_4;
             (function () { return x_4; });
             break;
     }
     var _loop_2 = function() {
-        var x_5 = void 0;
+        var x_5;
         (function () { return x_5; });
     };
     while (1 == 1) {
@@ -225,7 +225,7 @@ function foo() {
     l0: for (var _f = 0, _g = []; _f < _g.length; _f++) {
         var a = _g[_f];
         var state_4 = _loop_3(a);
-        if (typeof state_4 === "object") return state_4.value
+        if (typeof state_4 === "object") return state_4.value;
         if (state_4 === "break") break;
         switch(state_4) {
             case "break-l0": break l0;

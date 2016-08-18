@@ -7,7 +7,7 @@ declare namespace JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxElementResolution.tsx, 1, 23))
 
 		foundFirst: { x: string };
->foundFirst : Symbol(foundFirst, Decl(tsxElementResolution.tsx, 2, 30))
+>foundFirst : Symbol(IntrinsicElements.foundFirst, Decl(tsxElementResolution.tsx, 2, 30))
 >x : Symbol(x, Decl(tsxElementResolution.tsx, 3, 15))
 
 		'string_named';
@@ -36,7 +36,7 @@ var a = <foundFirst  x="hello" />;
 
 var b = <string_named />;
 >b : Symbol(b, Decl(tsxElementResolution.tsx, 18, 3))
->string_named : Symbol(JSX.IntrinsicElements.'string_named', Decl(tsxElementResolution.tsx, 3, 28))
+>string_named : Symbol(JSX.IntrinsicElements['string_named'], Decl(tsxElementResolution.tsx, 3, 28))
 
 // TODO: This should not be a parse error (should
 //        parse a property name here, not identifier)
@@ -47,5 +47,7 @@ var d = <Other />;
 
 var e = <Dotted.Name />;
 >e : Symbol(e, Decl(tsxElementResolution.tsx, 23, 3))
+>Dotted.Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 12, 15))
+>Dotted : Symbol(Dotted, Decl(tsxElementResolution.tsx, 10, 14))
 >Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 12, 15))
 

@@ -9,16 +9,16 @@ module Foo.Bar {
 >Greeter : Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
 
         constructor(public greeting: string) {
->greeting : Symbol(greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
+>greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
         }
 
         greet() {
->greet : Symbol(greet, Decl(sourceMapValidationClasses.ts, 5, 9))
+>greet : Symbol(Greeter.greet, Decl(sourceMapValidationClasses.ts, 5, 9))
 
             return "<h1>" + this.greeting + "</h1>";
->this.greeting : Symbol(greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
+>this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
 >this : Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
->greeting : Symbol(greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
+>greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
         }
     }
 

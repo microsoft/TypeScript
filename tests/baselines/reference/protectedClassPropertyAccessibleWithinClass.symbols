@@ -5,29 +5,29 @@ class C {
 >C : Symbol(C, Decl(protectedClassPropertyAccessibleWithinClass.ts, 0, 0))
 
     protected x: string;
->x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
 
     protected get y() { return this.x; }
->y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 4, 40))
->this.x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 4, 40))
+>this.x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
 >this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinClass.ts, 0, 0))
->x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
 
     protected set y(x) { this.y = this.x; }
->y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 4, 40))
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 4, 40))
 >x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 5, 20))
->this.y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 4, 40))
+>this.y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 4, 40))
 >this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinClass.ts, 0, 0))
->y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 4, 40))
->this.x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 4, 40))
+>this.x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
 >this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinClass.ts, 0, 0))
->x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 2, 9))
 
     protected foo() { return this.foo; }
->foo : Symbol(foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 5, 43))
->this.foo : Symbol(foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 5, 43))
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 5, 43))
+>this.foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 5, 43))
 >this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinClass.ts, 0, 0))
->foo : Symbol(foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 5, 43))
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 5, 43))
 
     protected static x: string;
 >x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 6, 40))
@@ -66,29 +66,29 @@ class C2 {
 >C2 : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
 
     protected x: string;
->x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
+>x : Symbol(C2.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
 
     protected get y() { () => this.x; return null; }
->y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
->this.x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
+>y : Symbol(C2.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
+>this.x : Symbol(C2.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
->x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
+>x : Symbol(C2.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
 
     protected set y(x) { () => { this.y = this.x; } }
->y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
+>y : Symbol(C2.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
 >x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 20))
->this.y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
+>this.y : Symbol(C2.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
->y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
->this.x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
+>y : Symbol(C2.y, Decl(protectedClassPropertyAccessibleWithinClass.ts, 17, 24), Decl(protectedClassPropertyAccessibleWithinClass.ts, 18, 52))
+>this.x : Symbol(C2.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
->x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
+>x : Symbol(C2.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 16, 10))
 
     protected foo() { () => this.foo; }
->foo : Symbol(foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 53))
->this.foo : Symbol(foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 53))
+>foo : Symbol(C2.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 53))
+>this.foo : Symbol(C2.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 53))
 >this : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinClass.ts, 13, 1))
->foo : Symbol(foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 53))
+>foo : Symbol(C2.foo, Decl(protectedClassPropertyAccessibleWithinClass.ts, 19, 53))
 
     protected static x: string;
 >x : Symbol(C2.x, Decl(protectedClassPropertyAccessibleWithinClass.ts, 20, 39))

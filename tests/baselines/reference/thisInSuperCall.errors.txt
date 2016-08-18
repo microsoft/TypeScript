@@ -1,15 +1,18 @@
-tests/cases/compiler/thisInSuperCall.ts(14,15): error TS2332: 'this' cannot be referenced in current location.
-tests/cases/compiler/thisInSuperCall.ts(20,15): error TS2332: 'this' cannot be referenced in current location.
+tests/cases/compiler/thisInSuperCall.ts(7,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/thisInSuperCall.ts(14,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/thisInSuperCall.ts(20,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/thisInSuperCall.ts (2 errors) ====
+==== tests/cases/compiler/thisInSuperCall.ts (3 errors) ====
     class Base { 
         constructor(x: any) {}
     }
     
     class Foo extends Base {
         constructor() {
-            super(this); // no error
+            super(this); // error: "super" has to be called before "this" accessing
+                  ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
     
@@ -18,7 +21,7 @@ tests/cases/compiler/thisInSuperCall.ts(20,15): error TS2332: 'this' cannot be r
         constructor() {
             super(this); // error
                   ~~~~
-!!! error TS2332: 'this' cannot be referenced in current location.
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
     
@@ -26,6 +29,6 @@ tests/cases/compiler/thisInSuperCall.ts(20,15): error TS2332: 'this' cannot be r
         constructor(public p) {
             super(this); // error
                   ~~~~
-!!! error TS2332: 'this' cannot be referenced in current location.
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }

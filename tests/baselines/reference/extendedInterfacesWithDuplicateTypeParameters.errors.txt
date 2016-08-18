@@ -1,5 +1,5 @@
 tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts(1,42): error TS2300: Duplicate identifier 'A'.
-tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts(9,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts(9,11): error TS2428: All declarations of 'InterfaceWithSomeTypars' must have identical type parameters.
 tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts(9,38): error TS2300: Duplicate identifier 'C'.
 
 
@@ -16,7 +16,7 @@ tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts(9,38): err
     
     interface InterfaceWithSomeTypars<C, C> { // should error
               ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2428: All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of 'InterfaceWithSomeTypars' must have identical type parameters.
                                          ~
 !!! error TS2300: Duplicate identifier 'C'.
     	bar2(): void;

@@ -1,15 +1,39 @@
 /// <reference path="fourslash.ts"/>
 
 // @Filename: test/my fil"e.ts
-////{| "itemName": "Bar", "kind": "class" |}export class Bar {
-////    {| "itemName": "s", "kind": "property", "parentName": "Bar" |}public s: string;
+////export class Bar {
+////    public s: string;
 ////}
-////{| "itemName": "\"my fil\\\"e\"", "kind": "module" |}
-////{| "itemName": "x", "kind": "var", "parentName": "\"file\"" |}
 ////export var x: number;
 
-test.markers().forEach((marker) => {
-    verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
-});
-
-verify.getScriptLexicalStructureListCount(4); // external module node + variable in module + class + property
+verify.navigationBar([
+    {
+        "text": "\"my fil\\\"e\"",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "Bar",
+                "kind": "class",
+                "kindModifiers": "export"
+            },
+            {
+                "text": "x",
+                "kind": "var",
+                "kindModifiers": "export"
+            }
+        ]
+    },
+    {
+        "text": "Bar",
+        "kind": "class",
+        "kindModifiers": "export",
+        "childItems": [
+            {
+                "text": "s",
+                "kind": "property",
+                "kindModifiers": "public"
+            }
+        ],
+        "indent": 1
+    }
+]);

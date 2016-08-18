@@ -1,5 +1,5 @@
-tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(35,1): error TS2445: Property 'member' is protected and only accessible within class 'Protected' and its subclasses.
-tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(36,1): error TS2341: Property 'member' is private and only accessible within class 'Private'.
+tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(35,4): error TS2445: Property 'member' is protected and only accessible within class 'Protected' and its subclasses.
+tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(36,4): error TS2341: Property 'member' is private and only accessible within class 'Private'.
 tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(38,4): error TS2339: Property 'member' does not exist on type 'Default | Protected'.
 tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(39,4): error TS2339: Property 'member' does not exist on type 'Default | Private'.
 tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(40,4): error TS2339: Property 'member' does not exist on type 'Public | Protected'.
@@ -8,8 +8,8 @@ tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(42,5): err
 tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(43,5): error TS2339: Property 'member' does not exist on type 'Default | Public | Protected'.
 tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(44,5): error TS2339: Property 'member' does not exist on type 'Default | Public | Private'.
 tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(45,5): error TS2339: Property 'member' does not exist on type 'Default | Protected | Private'.
-tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(46,5): error TS2339: Property 'member' does not exist on type 'Public | Private | Protected'.
-tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(47,5): error TS2339: Property 'member' does not exist on type 'Default | Public | Private | Protected'.
+tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(46,5): error TS2339: Property 'member' does not exist on type 'Public | Protected | Private'.
+tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(47,5): error TS2339: Property 'member' does not exist on type 'Default | Public | Protected | Private'.
 
 
 ==== tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts (12 errors) ====
@@ -48,10 +48,10 @@ tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(47,5): err
     v1.member;
     v2.member;
     v3.member;
-    ~~~~~~~~~
+       ~~~~~~
 !!! error TS2445: Property 'member' is protected and only accessible within class 'Protected' and its subclasses.
     v4.member;
-    ~~~~~~~~~
+       ~~~~~~
 !!! error TS2341: Property 'member' is private and only accessible within class 'Private'.
     v5.member;
     v6.member;
@@ -80,8 +80,8 @@ tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts(47,5): err
 !!! error TS2339: Property 'member' does not exist on type 'Default | Protected | Private'.
     v14.member;
         ~~~~~~
-!!! error TS2339: Property 'member' does not exist on type 'Public | Private | Protected'.
+!!! error TS2339: Property 'member' does not exist on type 'Public | Protected | Private'.
     v15.member;
         ~~~~~~
-!!! error TS2339: Property 'member' does not exist on type 'Default | Public | Private | Protected'.
+!!! error TS2339: Property 'member' does not exist on type 'Default | Public | Protected | Private'.
     

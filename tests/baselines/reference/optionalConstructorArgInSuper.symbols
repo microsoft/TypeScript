@@ -6,7 +6,7 @@ class Base {
 >opt : Symbol(opt, Decl(optionalConstructorArgInSuper.ts, 1, 16))
 
     foo(other?) { }
->foo : Symbol(foo, Decl(optionalConstructorArgInSuper.ts, 1, 25))
+>foo : Symbol(Base.foo, Decl(optionalConstructorArgInSuper.ts, 1, 25))
 >other : Symbol(other, Decl(optionalConstructorArgInSuper.ts, 2, 8))
 }
 class Derived extends Base {

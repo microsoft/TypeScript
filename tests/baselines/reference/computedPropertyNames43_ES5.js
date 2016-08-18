@@ -41,6 +41,10 @@ var D = (function (_super) {
     Object.defineProperty(D.prototype, "get1", {
         // Computed properties
         get: function () { return new Foo; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(D.prototype, "set1", {
         set: function (p) { },
         enumerable: true,
         configurable: true

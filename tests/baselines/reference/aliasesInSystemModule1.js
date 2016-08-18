@@ -17,8 +17,9 @@ module M {
   
 
 //// [aliasesInSystemModule1.js]
-System.register(['foo'], function(exports_1) {
+System.register(['foo'], function(exports_1, context_1) {
     "use strict";
+    var __moduleName = context_1 && context_1.id;
     var alias;
     var cls, cls2, x, y, z, M;
     return {

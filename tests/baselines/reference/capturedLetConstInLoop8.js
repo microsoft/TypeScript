@@ -165,7 +165,6 @@ function foo() {
                 var state_1 = _loop_2(y);
                 if (typeof state_1 === "object") return state_1;
                 if (state_1 === "break") break;
-                if (state_1 === "continue") continue;
                 switch(state_1) {
                     case "break-l1": return state_1;
                     case "break-ll1": break ll1;
@@ -198,9 +197,8 @@ function foo() {
         };
         l1: for (var x = 0; x < 1; ++x) {
             var state_2 = _loop_1(x);
-            if (typeof state_2 === "object") return state_2.value
+            if (typeof state_2 === "object") return state_2.value;
             if (state_2 === "break") break;
-            if (state_2 === "continue") continue;
             switch(state_2) {
                 case "break-l1": break l1;
                 case "continue-l0": continue l0;
@@ -247,7 +245,6 @@ function foo_c() {
                 var state_3 = _loop_4(y);
                 if (typeof state_3 === "object") return state_3;
                 if (state_3 === "break") break;
-                if (state_3 === "continue") continue;
                 switch(state_3) {
                     case "break-l1": return state_3;
                     case "break-ll1": break ll1;
@@ -280,9 +277,8 @@ function foo_c() {
         };
         l1: for (var x = 0; x < 1;) {
             var state_4 = _loop_3(x);
-            if (typeof state_4 === "object") return state_4.value
+            if (typeof state_4 === "object") return state_4.value;
             if (state_4 === "break") break;
-            if (state_4 === "continue") continue;
             switch(state_4) {
                 case "break-l1": break l1;
                 case "continue-l0": continue l0;

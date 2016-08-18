@@ -16,9 +16,9 @@ verify.memberListCount(2);
 
 
 goTo.marker('typeReference');
-verify.memberListCount(0);
+verify.memberListCount(2);
 
 goTo.marker('enumValueReference');
 verify.memberListContains("toString");
 verify.memberListContains("toFixed");
-verify.memberListCount(5);
+verify.memberListCount(6);

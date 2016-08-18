@@ -4,7 +4,8 @@ var fs = require("fs");
 var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
-var Linter = require("tslint");
+var fold = require("travis-fold");
+var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -13,7 +14,7 @@ var serverDirectory = "src/server/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
-var unittestsDirectory = "tests/cases/unittests/";
+var unittestsDirectory = "src/harness/unittests/";
 var docDirectory = "doc/";
 
 var builtDirectory = "built/";
@@ -31,8 +32,31 @@ if (process.env.path !== undefined) {
    process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
+function toNs(diff) {
+    return diff[0] * 1e9 + diff[1];
+}
+
+function mark() {
+    if (!fold.isTravis()) return;
+    var stamp = process.hrtime();
+    var id = Math.floor(Math.random() * 0xFFFFFFFF).toString(16);
+    console.log("travis_time:start:" + id + "\r");
+    return {
+        stamp: stamp,
+        id: id
+    };
+}
+
+function measure(marker) {
+    if (!fold.isTravis()) return;
+    var diff = process.hrtime(marker.stamp);
+    var total = [marker.stamp[0] + diff[0], marker.stamp[1] + diff[1]];
+    console.log("travis_time:end:" + marker.id + ":start=" + toNs(marker.stamp) + ",finish=" + toNs(total) + ",duration=" + toNs(diff) + "\r");
+}
+
 var compilerSources = [
     "core.ts",
+    "performance.ts",
     "sys.ts",
     "types.ts",
     "scanner.ts",
@@ -53,6 +77,7 @@ var compilerSources = [
 
 var servicesSources = [
     "core.ts",
+    "performance.ts",
     "sys.ts",
     "types.ts",
     "scanner.ts",
@@ -99,7 +124,6 @@ var servicesSources = [
 }));
 
 var serverCoreSources = [
-    "node.d.ts",
     "editorServices.ts",
     "protocol.d.ts",
     "session.ts",
@@ -120,6 +144,7 @@ var languageServiceLibrarySources = [
 
 var harnessCoreSources = [
     "harness.ts",
+    "virtualFileSystem.ts",
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
     "fourslash.ts",
@@ -150,29 +175,74 @@ var harnessSources = harnessCoreSources.concat([
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
-    "tsconfigParsing.ts"
+    "tsconfigParsing.ts",
+    "commandLineParsing.ts",
+    "convertCompilerOptionsFromJson.ts",
+    "convertTypingOptionsFromJson.ts",
+    "tsserverProjectSystem.ts",
+    "matchFiles.ts",
+    "initializeTSConfig.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
     "protocol.d.ts",
     "session.ts",
     "client.ts",
-    "editorServices.ts",
+    "editorServices.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
 }));
 
-var librarySourceMap = [
-        { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
-        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
-        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
-        { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
-        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"]},
-        { target: "lib.es7.d.ts", sources: ["header.d.ts", "es6.d.ts", "es7.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
+var es2015LibrarySources = [
+    "es2015.core.d.ts",
+    "es2015.collection.d.ts",
+    "es2015.generator.d.ts",
+    "es2015.iterable.d.ts",
+    "es2015.promise.d.ts",
+    "es2015.proxy.d.ts",
+    "es2015.reflect.d.ts",
+    "es2015.symbol.d.ts",
+    "es2015.symbol.wellknown.d.ts"
 ];
+
+var es2015LibrarySourceMap = es2015LibrarySources.map(function(source) {
+   return  { target: "lib." + source, sources: ["header.d.ts", source] };
+});
+
+var es2016LibrarySource = [ "es2016.array.include.d.ts" ];
+
+var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+});
+
+var es2017LibrarySource = [
+    "es2017.object.d.ts",
+    "es2017.sharedmemory.d.ts"
+];
+
+var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+});
+
+var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
+
+var librarySourceMap = [
+        // Host library
+        { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"] },
+        { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
+        { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
+        { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
+
+        // JavaScript library
+        { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
+        { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
+        { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
+        { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
+
+        // JavaScript + all host library
+        { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
+        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") }
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
@@ -212,7 +282,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
-var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
+var host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
 var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
 var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
@@ -223,52 +293,73 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param prereqs: prerequisite tasks to compiling the file
     * @param prefixes: a list of files to prepend to the target file
     * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
-    * @param noOutFile: true to compile without using --out
-    * @param generateDeclarations: true to compile using --declaration
-    * @param outDir: true to compile using --outDir
-    * @param keepComments: false to compile using --removeComments
+    * @parap {Object}  opts - property bag containing auxiliary options
+    * @param {boolean} opts.noOutFile: true to compile without using --out
+    * @param {boolean} opts.generateDeclarations: true to compile using --declaration
+    * @param {string}  opts.outDir: value for '--outDir' command line option
+    * @param {boolean} opts.keepComments: false to compile using --removeComments
+    * @param {boolean} opts.preserveConstEnums: true if compiler should keep const enums in code
+    * @param {boolean} opts.noResolve: true if compiler should not include non-rooted files in compilation
+    * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
+    * @param {boolean} opts.noMapRoot: true if compiler omit mapRoot option
+    * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
+    * @param {Array} opts.types: array of types to include in compilation
     * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
     file(outFile, prereqs, function() {
+        var startCompileTime = mark();
+        opts = opts || {};
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noEmitOnError --pretty";
-
+        var options = "--noImplicitAny --noImplicitThis --noEmitOnError --types " 
+        if (opts.types) {
+            options += opts.types.join(",");
+        }
+        options += " --pretty";
         // Keep comments when specifically requested
         // or when in debug mode.
-        if (!(keepComments || useDebugMode)) {
+        if (!(opts.keepComments || useDebugMode)) {
             options += " --removeComments";
         }
 
-        if (generateDeclarations) {
+        if (opts.generateDeclarations) {
             options += " --declaration";
         }
 
-        if (preserveConstEnums || useDebugMode) {
+        if (opts.preserveConstEnums || useDebugMode) {
             options += " --preserveConstEnums";
         }
 
-        if (outDir) {
-            options += " --outDir " + outDir;
+        if (opts.outDir) {
+            options += " --outDir " + opts.outDir;
         }
 
-        if (!noOutFile) {
+        if (!opts.noOutFile) {
             options += " --out " + outFile;
         }
         else {
-            options += " --module commonjs"
+            options += " --module commonjs";
         }
 
-        if(noResolve) {
+        if(opts.noResolve) {
             options += " --noResolve";
         }
 
         if (useDebugMode) {
-            options += " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
+            if (opts.inlineSourceMap) {
+                options += " --inlineSourceMap --inlineSources";
+            } else {
+                options += " -sourcemap";
+                if (!opts.noMapRoot) {
+                    options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
+                }
+            }
+        } else {
+            options += " --newLine LF";
         }
 
-        if (stripInternal) {
-            options += " --stripInternal"
+        if (opts.stripInternal) {
+            options += " --stripInternal";
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
@@ -294,11 +385,13 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
                 callback();
             }
 
+            measure(startCompileTime);
             complete();
         });
         ex.addListener("error", function() {
             fs.unlinkSync(outFile);
             fail("Compilation of " + outFile + " unsuccessful");
+            measure(startCompileTime);
         });
         ex.run();
     }, {async: true});
@@ -382,13 +475,7 @@ compileFile(/*outfile*/configureNightlyJs,
             /*prereqs*/ [configureNightlyTs],
             /*prefixes*/ [],
             /*useBuiltCompiler*/ false,
-            /*noOutFile*/ false,
-            /*generateDeclarations*/ false,
-            /*outDir*/ undefined,
-            /*preserveConstEnums*/ undefined,
-            /*keepComments*/ false,
-            /*noResolve*/ false,
-            /*stripInternal*/ false);
+            { noOutFile: false, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
 
 task("setDebugMode", function() {
     useDebugMode = true;
@@ -406,15 +493,6 @@ task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "r
     console.log(cmd);
     exec(cmd);
 });
-
-var scriptsTsdJson = path.join(scriptsDirectory, "tsd.json");
-file(scriptsTsdJson);
-
-task("tsd-scripts", [scriptsTsdJson], function () {
-    var cmd = "tsd --config " + scriptsTsdJson + " install";
-    console.log(cmd)
-    exec(cmd);
-}, { async: true })
 
 var importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
 var importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
@@ -438,6 +516,7 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
+var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
@@ -446,13 +525,13 @@ var nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_s
 compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ [copyright],
             /*useBuiltCompiler*/ true,
-            /*noOutFile*/ false,
-            /*generateDeclarations*/ true,
-            /*outDir*/ undefined,
-            /*preserveConstEnums*/ true,
-            /*keepComments*/ true,
-            /*noResolve*/ false,
-            /*stripInternal*/ true,
+            /*opts*/ { noOutFile: false,
+                generateDeclarations: true,
+                preserveConstEnums: true,
+                keepComments: true,
+                noResolve: false,
+                stripInternal: true
+            },
             /*callback*/ function () {
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
@@ -475,27 +554,51 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
             });
 
-
-var serverFile = path.join(builtLocalDirectory, "tsserver.js");
-compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
-
-var lsslFile = path.join(builtLocalDirectory, "tslssl.js");
 compileFile(
-    lsslFile,
-    languageServiceLibrarySources,
-    [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
+    servicesFileInBrowserTest,
+    servicesSources,
+    [builtLocalDirectory, copyright].concat(servicesSources),
     /*prefixes*/ [copyright],
     /*useBuiltCompiler*/ true,
-    /*noOutFile*/ false,
-    /*generateDeclarations*/ true);
+    { noOutFile: false,
+      generateDeclarations: true,
+      preserveConstEnums: true,
+      keepComments: true,
+      noResolve: false,
+      stripInternal: true,
+      noMapRoot: true,
+      inlineSourceMap: true
+     });
+
+var serverFile = path.join(builtLocalDirectory, "tsserver.js");
+compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"] });
+var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
+var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
+compileFile(
+    tsserverLibraryFile,
+    languageServiceLibrarySources,
+    [builtLocalDirectory, copyright, builtLocalCompiler].concat(languageServiceLibrarySources).concat(libraryTargets),
+    /*prefixes*/ [copyright],
+    /*useBuiltCompiler*/ true,
+    { noOutFile: false, generateDeclarations: true });
 
 // Local target to build the language service server library
 desc("Builds language service server library");
-task("lssl", [lsslFile]);
+task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile]);
+
+desc("Emit the start of the build fold");
+task("build-fold-start", [] , function() {
+    if (fold.isTravis()) console.log(fold.start("build"));
+});
+
+desc("Emit the end of the build fold");
+task("build-fold-end", [] , function() {
+    if (fold.isTravis()) console.log(fold.end("build"));
+});
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
+task("local", ["build-fold-start", "generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, "lssl", "build-fold-end"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -551,7 +654,7 @@ task("generate-spec", [specMd]);
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
-    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -575,9 +678,15 @@ directory(builtLocalDirectory);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
-compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
+compileFile(
+    /*outFile*/ run,
+    /*source*/ harnessSources,
+    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
+    /*prefixes*/ [],
+    /*useBuiltCompiler:*/ true,
+    /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"] });
 
-var internalTests = "internal/"
+var internalTests = "internal/";
 
 var localBaseline = "tests/baselines/local/";
 var refBaseline = "tests/baselines/reference/";
@@ -634,9 +743,8 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, testConfigFile) {
-    console.log('Running test(s): ' + tests);
-    var testConfigContents = JSON.stringify({ test: [tests], light: light });
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount) {
+    var testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -646,7 +754,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
+function runConsoleTests(defaultReporter, runInParallel) {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
@@ -655,59 +763,110 @@ function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
+    var workerCount, taskConfigsFolder;
+    if (runInParallel) {
+        // generate name to store task configuration files
+        var prefix = os.tmpdir() + "/ts-tests";
+        var i = 1;
+        do {
+            taskConfigsFolder = prefix + i;
+            i++;
+        } while (fs.existsSync(taskConfigsFolder));
+        fs.mkdirSync(taskConfigsFolder);
 
-    if (tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        workerCount = process.env.workerCount || os.cpus().length;
+    }
+
+    if (tests || light || taskConfigsFolder) {
+        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 100000;
+        testTimeout = 400000;
     }
 
-    colors = process.env.colors || process.env.color
+    colors = process.env.colors || process.env.color;
     colors = colors ? ' --no-colors ' : ' --colors ';
     reporter = process.env.reporter || process.env.r || defaultReporter;
+    var bail = (process.env.bail || process.env.b) ? "--bail" : "";
+    var lintFlag = process.env.lint !== 'false';
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var subsetRegexes;
-    if(defaultSubsets.length === 0) {
-        subsetRegexes = [tests]
+    if(!runInParallel) {
+        var startTime = mark();
+        tests = tests ? ' -g "' + tests + '"' : '';
+        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
+        console.log(cmd);
+
+        var savedNodeEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = "development";
+        exec(cmd, function () {
+            process.env.NODE_ENV = savedNodeEnv;
+            measure(startTime);
+            runLinter();
+            finish();
+        }, function(e, status) {
+            process.env.NODE_ENV = savedNodeEnv;
+            measure(startTime);
+            finish(status);
+        });
+
     }
     else {
-        var subsets = tests ? tests.split("|") : defaultSubsets;
-        subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
-        subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
-    }
-    subsetRegexes.forEach(function (subsetRegex) {
-        tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
-        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
-        console.log(cmd);
-        exec(cmd, function () {
+        var savedNodeEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = "development";
+        var startTime = mark();
+        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function (err) {
+            process.env.NODE_ENV = savedNodeEnv;
+            measure(startTime);
+            // last worker clean everything and runs linter in case if there were no errors
             deleteTemporaryProjectOutput();
-            if (postLint) {
-                var lint = jake.Task['lint'];
-                lint.addListener('complete', function () {
-                    complete();
-                });
-                lint.invoke();
+            jake.rmRf(taskConfigsFolder);
+            if (err) {
+                fail(err);
             }
             else {
+                runLinter();
                 complete();
             }
         });
-    });
+    }
+
+    function failWithStatus(status) {
+        fail("Process exited with code " + status);
+    }
+
+    function finish(errorStatus) {
+        deleteTemporaryProjectOutput();
+        if (errorStatus !== undefined) {
+            failWithStatus(errorStatus);
+        }
+        else {
+            complete();
+        }
+    }
+    function runLinter() {
+        if (!lintFlag) {
+            return;
+        }
+        var lint = jake.Task['lint'];
+        lint.addListener('complete', function () {
+            complete();
+        });
+        lint.invoke();
+    }
 }
 
 var testTimeout = 20000;
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
+    runConsoleTests('min', /*runInParallel*/ true);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true bail=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('mocha-fivemat-progress-reporter', [], /*postLint*/ true);
+    runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
@@ -718,21 +877,20 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 }, { async: true });
 
 // Browser tests
-var nodeServerOutFile = 'tests/webTestServer.js'
-var nodeServerInFile = 'tests/webTestServer.ts'
-compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, /*noOutFile*/ true);
+var nodeServerOutFile = "tests/webTestServer.js";
+var nodeServerInFile = "tests/webTestServer.ts";
+compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true });
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
-    var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
+    var cmd = 'browserify built/local/run.js -d -o built/local/bundle.js';
     exec(cmd);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
-task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function() {
+desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], browser=[chrome|IE]");
+task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
     cleanTestDirs();
-    host = "node"
-    port = process.env.port || process.env.p || '8888';
+    host = "node";
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -741,17 +899,17 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
         fs.unlinkSync(testConfigFile);
     }
     if(tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        writeTestConfigFile(tests, light);
     }
 
     tests = tests ? tests : '';
-    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests
+    var cmd = host + " tests/webTestServer.js " + browser + " " + JSON.stringify(tests);
     console.log(cmd);
     exec(cmd);
 }, {async: true});
 
 function getDiffTool() {
-    var program = process.env['DIFF']
+    var program = process.env['DIFF'];
     if (!program) {
         fail("Add the 'DIFF' environment variable to the path of the program you want to use.");
     }
@@ -780,16 +938,16 @@ task("tests-debug", ["setDebugMode", "tests"]);
 // Makes the test results the new baseline
 desc("Makes the most recent test results the new baseline, overwriting the old baseline");
 task("baseline-accept", function(hardOrSoft) {
-    if (!hardOrSoft || hardOrSoft == "hard") {
-        jake.rmRf(refBaseline);
-        fs.renameSync(localBaseline, refBaseline);
-    }
-    else if (hardOrSoft == "soft") {
-        var files = jake.readdirR(localBaseline);
-        for (var i in files) {
+    var files = jake.readdirR(localBaseline);
+    var deleteEnding = '.delete';
+    for (var i in files) {
+        if (files[i].substr(files[i].length - deleteEnding.length) === deleteEnding) {
+            var filename = path.basename(files[i]);
+            filename = filename.substr(0, filename.length - deleteEnding.length);
+            fs.unlink(path.join(refBaseline, filename));
+        } else {
             jake.cpR(files[i], refBaseline);
         }
-        jake.rmRf(path.join(refBaseline, "local"));
     }
 });
 
@@ -863,15 +1021,16 @@ task("update-sublime", ["local", serverFile], function() {
 });
 
 var tslintRuleDir = "scripts/tslint";
-var tslintRules = ([
+var tslintRules = [
     "nextLineRule",
-    "noNullRule",
     "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
     "noInOperatorRule",
-    "noIncrementDecrementRule"
-]);
+    "noIncrementDecrementRule",
+    "objectLiteralSurroundingSpaceRule",
+    "noTypeAssertionWhitespaceRule"
+];
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
 });
@@ -879,114 +1038,104 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
     return path.join(builtLocalDirectory, "tslint", p + ".js");
 });
 desc("Compiles tslint rules to js");
-task("build-rules", tslintRulesOutFiles);
+task("build-rules", ["build-rules-start"].concat(tslintRulesOutFiles).concat(["build-rules-end"]));
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint"));
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
+    { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint")});
 });
 
-function getLinterOptions() {
-    return {
-        configuration: require("./tslint.json"),
-        formatter: "prose",
-        formattersDirectory: undefined,
-        rulesDirectory: "built/local/tslint"
-    };
-}
-
-function lintFileContents(options, path, contents) {
-    var ll = new Linter(path, contents, options);
-    console.log("Linting '" + path + "'.")
-    return ll.lint();
-}
-
-function lintFile(options, path) {
-    var contents = fs.readFileSync(path, "utf8");
-    return lintFileContents(options, path, contents);
-}
-
-function lintFileAsync(options, path, cb) {
-    fs.readFile(path, "utf8", function(err, contents) {
-        if (err) {
-            return cb(err);
-        }
-        var result = lintFileContents(options, path, contents);
-        cb(undefined, result);
-    });
-}
-
-var servicesLintTargets = [
-    "navigateTo.ts",
-    "outliningElementsCollector.ts",
-    "patternMatcher.ts",
-    "services.ts",
-    "shims.ts",
-].map(function (s) {
-    return path.join(servicesDirectory, s);
+desc("Emit the start of the build-rules fold");
+task("build-rules-start", [] , function() {
+    if (fold.isTravis()) console.log(fold.start("build-rules"));
 });
+
+desc("Emit the end of the build-rules fold");
+task("build-rules-end", [] , function() {
+    if (fold.isTravis()) console.log(fold.end("build-rules"));
+});
+
 var lintTargets = compilerSources
-    .concat(harnessCoreSources)
+    .concat(harnessSources)
+    // Other harness sources
+    .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f) }))
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
-    .concat(servicesLintTargets);
+    .concat(servicesSources)
+    .concat(["Gulpfile.ts"])
+    .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath]);
 
-desc("Runs tslint on the compiler sources");
-task("lint", ["build-rules"], function() {
-    var lintOptions = getLinterOptions();
-    var failed = 0;
-    for (var i in lintTargets) {
-        var result = lintFile(lintOptions, lintTargets[i]);
-        if (result.failureCount > 0) {
-            console.log(result.output);
-            failed += result.failureCount;
-        }
+function sendNextFile(files, child, callback, failures) {
+    var file = files.pop();
+    if (file) {
+        console.log("Linting '" + file + "'.");
+        child.send({kind: "file", name: file});
     }
-    if (failed > 0) {
-        fail('Linter errors.', failed);
+    else {
+        child.send({kind: "close"});
+        callback(failures);
     }
-});
-
-/**
- * This is required because file watches on Windows get fires _twice_
- * when a file changes on some node/windows version configuations
- * (node v4 and win 10, for example). By not running a lint for a file
- * which already has a pending lint, we avoid duplicating our work.
- * (And avoid printing duplicate results!)
- */
-var lintSemaphores = {};
-
-function lintWatchFile(filename) {
-    fs.watch(filename, {persistent: true}, function(event) {
-        if (event !== "change") {
-            return;
-        }
-
-        if (!lintSemaphores[filename]) {
-            lintSemaphores[filename] = true;
-            lintFileAsync(getLinterOptions(), filename, function(err, result) {
-                delete lintSemaphores[filename];
-                if (err) {
-                    console.log(err);
-                    return;
-                }
-                if (result.failureCount > 0) {
-                    console.log("***Lint failure***");
-                    for (var i = 0; i < result.failures.length; i++) {
-                        var failure = result.failures[i];
-                        var start = failure.startPosition.lineAndCharacter;
-                        var end = failure.endPosition.lineAndCharacter;
-                        console.log("warning " + filename + " (" + (start.line + 1) + "," + (start.character + 1) + "," + (end.line + 1) + "," + (end.character + 1) + "): " + failure.failure);
-                    }
-                    console.log("*** Total " + result.failureCount + " failures.");
-                }
-            });
-        }
-    });
 }
 
-desc("Watches files for changes to rerun a lint pass");
-task("lint-server", ["build-rules"], function() {
-    console.log("Watching ./src for changes to linted files");
-    for (var i = 0; i < lintTargets.length; i++) {
-        lintWatchFile(lintTargets[i]);
+function spawnLintWorker(files, callback) {
+    var child = child_process.fork("./scripts/parallel-lint");
+    var failures = 0;
+    child.on("message", function(data) {
+        switch (data.kind) {
+            case "result":
+                if (data.failures > 0) {
+                    failures += data.failures;
+                    console.log(data.output);
+                }
+                sendNextFile(files, child, callback, failures);
+                break;
+            case "error":
+                console.error(data.error);
+                failures++;
+                sendNextFile(files, child, callback, failures);
+                break;
+        }
+    });
+    sendNextFile(files, child, callback, failures);
+}
+
+desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
+task("lint", ["build-rules"], function() {
+    if (fold.isTravis()) console.log(fold.start("lint"));
+    var startTime = mark();
+    var failed = 0;
+    var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
+    var done = {};
+    for (var i in lintTargets) {
+        var target = lintTargets[i];
+        if (!done[target] && fileMatcher.test(target)) {
+            done[target] = fs.statSync(target).size;
+        }
     }
-});
+
+    var workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
+
+    var names = Object.keys(done).sort(function(namea, nameb) {
+        return done[namea] - done[nameb];
+    });
+
+    for (var i = 0; i < workerCount; i++) {
+        spawnLintWorker(names, finished);
+    }
+
+    var completed = 0;
+    var failures = 0;
+    function finished(fails) {
+        completed++;
+        failures += fails;
+        if (completed === workerCount) {
+            measure(startTime);
+            if (fold.isTravis()) console.log(fold.end("lint"));
+            if (failures > 0) {
+                fail('Linter errors.', failed);
+            }
+            else {
+                complete();
+            }
+        }
+    }
+}, {async: true});

@@ -73,3 +73,5 @@ declare module "./observable" {
 }
 export {};
 //// [main.d.ts]
+import "./map1";
+import "./map2";

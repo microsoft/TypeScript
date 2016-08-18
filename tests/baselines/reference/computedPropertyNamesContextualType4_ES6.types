@@ -12,7 +12,7 @@ interface I {
 var o: I = {
 >o : I
 >I : I
->{    [""+"foo"]: "",    [""+"bar"]: 0} : { [x: string]: string | number; [x: number]: undefined; }
+>{    [""+"foo"]: "",    [""+"bar"]: 0} : { [x: string]: string | number; }
 
     [""+"foo"]: "",
 >""+"foo" : string

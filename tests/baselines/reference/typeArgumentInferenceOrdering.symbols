@@ -18,7 +18,7 @@ class C {
 >C : Symbol(C, Decl(typeArgumentInferenceOrdering.ts, 1, 23))
 
     y: I;
->y : Symbol(y, Decl(typeArgumentInferenceOrdering.ts, 3, 9))
+>y : Symbol(C.y, Decl(typeArgumentInferenceOrdering.ts, 3, 9))
 >I : Symbol(I, Decl(typeArgumentInferenceOrdering.ts, 5, 1))
 }
 
@@ -26,7 +26,7 @@ interface I {
 >I : Symbol(I, Decl(typeArgumentInferenceOrdering.ts, 5, 1))
 
     x(): Goo;
->x : Symbol(x, Decl(typeArgumentInferenceOrdering.ts, 7, 13))
+>x : Symbol(I.x, Decl(typeArgumentInferenceOrdering.ts, 7, 13))
 >Goo : Symbol(Goo, Decl(typeArgumentInferenceOrdering.ts, 9, 1))
 }
 
@@ -34,6 +34,6 @@ interface Goo {
 >Goo : Symbol(Goo, Decl(typeArgumentInferenceOrdering.ts, 9, 1))
 
     p: string;
->p : Symbol(p, Decl(typeArgumentInferenceOrdering.ts, 11, 15))
+>p : Symbol(Goo.p, Decl(typeArgumentInferenceOrdering.ts, 11, 15))
 }
 

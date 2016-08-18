@@ -86,7 +86,7 @@ for (;;) {
     var x_4 = 10;
     use(x_4);
 }
-for (var x_5 = void 0;;) {
+for (var x_5;;) {
     use(x_5);
     x_5 = 1;
 }

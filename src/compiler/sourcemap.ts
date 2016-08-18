@@ -16,6 +16,14 @@ namespace ts {
     }
 
     let nullSourceMapWriter: SourceMapWriter;
+    // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
+    const defaultLastEncodedSourceMapSpan: SourceMapSpan = {
+        emittedLine: 1,
+        emittedColumn: 1,
+        sourceLine: 1,
+        sourceColumn: 1,
+        sourceIndex: 0
+    };
 
     export function getNullSourceMapWriter(): SourceMapWriter {
         if (nullSourceMapWriter === undefined) {
@@ -38,6 +46,7 @@ namespace ts {
 
     export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
+        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
         let currentSourceFile: SourceFile;
         let sourceMapDir: string; // The directory in which sourcemap will be
         let stopOverridingSpan = false;
@@ -79,13 +88,7 @@ namespace ts {
 
             // Last recorded and encoded spans
             lastRecordedSourceMapSpan = undefined;
-            lastEncodedSourceMapSpan = {
-                emittedLine: 1,
-                emittedColumn: 1,
-                sourceLine: 1,
-                sourceColumn: 1,
-                sourceIndex: 0
-            };
+            lastEncodedSourceMapSpan = defaultLastEncodedSourceMapSpan;
             lastEncodedNameIndex = 0;
 
             // Initialize source map data
@@ -159,12 +162,14 @@ namespace ts {
                 // Pop sourceMapDecodedMappings to remove last entry
                 sourceMapData.sourceMapDecodedMappings.pop();
 
-                // Change the last encoded source map
+                // Point the lastEncodedSourceMapSpace to the previous encoded sourceMapSpan
+                // If the list is empty which indicates that we are at the beginning of the file,
+                // we have to reset it to default value (same value when we first initialize sourceMapWriter)
                 lastEncodedSourceMapSpan = sourceMapData.sourceMapDecodedMappings.length ?
                     sourceMapData.sourceMapDecodedMappings[sourceMapData.sourceMapDecodedMappings.length - 1] :
-                    undefined;
+                    defaultLastEncodedSourceMapSpan;
 
-                // TODO: Update lastEncodedNameIndex 
+                // TODO: Update lastEncodedNameIndex
                 // Since we dont support this any more, lets not worry about it right now.
                 // When we start supporting nameIndex, we will get back to this
 
@@ -236,6 +241,10 @@ namespace ts {
                 return;
             }
 
+            if (extendedDiagnostics) {
+                performance.mark("beforeSourcemap");
+            }
+
             const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
 
             // Convert the location to be one-based.
@@ -275,6 +284,11 @@ namespace ts {
             }
 
             updateLastEncodedAndRecordedSpans();
+
+            if (extendedDiagnostics) {
+                performance.mark("afterSourcemap");
+                performance.measure("Source Map", "beforeSourcemap", "afterSourcemap");
+            }
         }
 
         function getStartPos(range: TextRange) {

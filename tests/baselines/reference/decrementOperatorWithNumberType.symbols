@@ -10,7 +10,7 @@ class A {
 >A : Symbol(A, Decl(decrementOperatorWithNumberType.ts, 2, 31))
 
     public a: number;
->a : Symbol(a, Decl(decrementOperatorWithNumberType.ts, 4, 9))
+>a : Symbol(A.a, Decl(decrementOperatorWithNumberType.ts, 4, 9))
 }
 module M {
 >M : Symbol(M, Decl(decrementOperatorWithNumberType.ts, 6, 1))

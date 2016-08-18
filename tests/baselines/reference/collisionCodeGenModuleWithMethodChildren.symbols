@@ -9,7 +9,7 @@ module M {
 >c : Symbol(c, Decl(collisionCodeGenModuleWithMethodChildren.ts, 1, 21))
 
         fn(M, p = x) { }
->fn : Symbol(fn, Decl(collisionCodeGenModuleWithMethodChildren.ts, 2, 13))
+>fn : Symbol(c.fn, Decl(collisionCodeGenModuleWithMethodChildren.ts, 2, 13))
 >M : Symbol(M, Decl(collisionCodeGenModuleWithMethodChildren.ts, 3, 11))
 >p : Symbol(p, Decl(collisionCodeGenModuleWithMethodChildren.ts, 3, 13))
 >x : Symbol(x, Decl(collisionCodeGenModuleWithMethodChildren.ts, 1, 14))
@@ -23,7 +23,7 @@ module M {
 >d : Symbol(d, Decl(collisionCodeGenModuleWithMethodChildren.ts, 7, 10))
 
         fn2() {
->fn2 : Symbol(fn2, Decl(collisionCodeGenModuleWithMethodChildren.ts, 8, 13))
+>fn2 : Symbol(d.fn2, Decl(collisionCodeGenModuleWithMethodChildren.ts, 8, 13))
 
             var M;
 >M : Symbol(M, Decl(collisionCodeGenModuleWithMethodChildren.ts, 10, 15))
@@ -42,7 +42,7 @@ module M {
 >e : Symbol(e, Decl(collisionCodeGenModuleWithMethodChildren.ts, 16, 10))
 
         fn3() {
->fn3 : Symbol(fn3, Decl(collisionCodeGenModuleWithMethodChildren.ts, 17, 13))
+>fn3 : Symbol(e.fn3, Decl(collisionCodeGenModuleWithMethodChildren.ts, 17, 13))
 
             function M() {
 >M : Symbol(M, Decl(collisionCodeGenModuleWithMethodChildren.ts, 18, 15))
@@ -62,7 +62,7 @@ module M { // Shouldnt bn _M
 >f : Symbol(f, Decl(collisionCodeGenModuleWithMethodChildren.ts, 26, 10))
 
         M() {
->M : Symbol(M, Decl(collisionCodeGenModuleWithMethodChildren.ts, 27, 13))
+>M : Symbol(f.M, Decl(collisionCodeGenModuleWithMethodChildren.ts, 27, 13))
         }
     }
 }

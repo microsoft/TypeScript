@@ -1,0 +1,4 @@
+=== tests/cases/compiler/exportEqualsUmd.ts ===
+export = { ["hi"]: "there" };
+>"hi" : Symbol(["hi"], Decl(exportEqualsUmd.ts, 0, 10))
+

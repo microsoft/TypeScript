@@ -4,7 +4,7 @@ module A {
 
     export interface I { x: number }
 >I : Symbol(I, Decl(exportImportNonInstantiatedModule.ts, 0, 10))
->x : Symbol(x, Decl(exportImportNonInstantiatedModule.ts, 1, 24))
+>x : Symbol(I.x, Decl(exportImportNonInstantiatedModule.ts, 1, 24))
 }
 
 module B {

@@ -284,7 +284,7 @@ export declare class c1 {
     nc_p3: number;
     private nc_pp3;
     static nc_s3: string;
-    onlyGetter: number;
+    readonly onlyGetter: number;
     onlySetter: number;
 }
 //// [declFileAccessors_1.d.ts]
@@ -302,6 +302,6 @@ declare class c2 {
     nc_p3: number;
     private nc_pp3;
     static nc_s3: string;
-    onlyGetter: number;
+    readonly onlyGetter: number;
     onlySetter: number;
 }

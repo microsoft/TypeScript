@@ -7,13 +7,15 @@
         "indent": [true,
             "spaces"
         ],
+        "linebreak-style": [true, "CRLF"],
         "one-line": [true,
             "check-open-brace",
             "check-whitespace"
         ],
         "no-var-keyword": true,
         "quotemark": [true,
-            "double"
+            "double",
+            "avoid-escape"
         ],
         "semicolon": true,
         "whitespace": [true,
@@ -30,19 +32,20 @@
             "property-declaration": "nospace",
             "variable-declaration": "nospace"
         }],
-        "next-line": [true, 
+        "next-line": [true,
             "check-catch",
             "check-else"
         ],
         "no-internal-module": true,
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
-        "no-null": true,
+        "no-null-keyword": true,
         "no-unused-variable": true,
         "boolean-trivia": true,
         "type-operator-spacing": true,
         "prefer-const": true,
-        "no-in-operator": true,
-        "no-increment-decrement": true
+        "no-increment-decrement": true,
+        "object-literal-surrounding-space": true,
+        "no-type-assertion-whitespace": true
   }
 }

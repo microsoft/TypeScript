@@ -15,7 +15,7 @@ interface ShapeFactory {
 >ShapeFactory : Symbol(ShapeFactory, Decl(staticInterfaceAssignmentCompat.ts, 4, 1))
 
     create(): Shape;
->create : Symbol(create, Decl(staticInterfaceAssignmentCompat.ts, 6, 24))
+>create : Symbol(ShapeFactory.create, Decl(staticInterfaceAssignmentCompat.ts, 6, 24))
 >Shape : Symbol(Shape, Decl(staticInterfaceAssignmentCompat.ts, 0, 0))
 }
 

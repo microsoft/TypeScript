@@ -10,20 +10,20 @@ interface Robot {
 >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 2, 1))
 
     name: string;
->name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 3, 17))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 3, 17))
 
     skill: string;
->skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 4, 17))
+>skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 4, 17))
 }
 
 interface MultiRobot {
 >MultiRobot : Symbol(MultiRobot, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 6, 1))
 
     name: string;
->name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 8, 22))
+>name : Symbol(MultiRobot.name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 8, 22))
 
     skills: {
->skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 9, 17))
+>skills : Symbol(MultiRobot.skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 9, 17))
 
         primary: string;
 >primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 10, 13))

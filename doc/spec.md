@@ -3885,7 +3885,7 @@ function g(x: number) {
 
 the inferred return type for 'f' and 'g' is Any because the functions reference themselves through a cycle with no return type annotations. Adding an explicit return type 'number' to either breaks the cycle and causes the return type 'number' to be inferred for the other.
 
-An explicitly typed function whose return type isn't the Void or the Any type must have at least one return statement somewhere in its body. An exception to this rule is if the function implementation consists of a single 'throw' statement.
+An explicitly typed function whose return type isn't the Void type, the Any type, or a union type containing the Void or Any type as a constituent must have at least one return statement somewhere in its body. An exception to this rule is if the function implementation consists of a single 'throw' statement.
 
 The type of 'this' in a function implementation is the Any type.
 

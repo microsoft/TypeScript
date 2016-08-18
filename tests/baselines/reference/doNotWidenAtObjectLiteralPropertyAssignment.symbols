@@ -3,18 +3,18 @@ interface ITestEventInterval {
 >ITestEventInterval : Symbol(ITestEventInterval, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 0, 0))
 
     begin: number;
->begin : Symbol(begin, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 0, 30))
+>begin : Symbol(ITestEventInterval.begin, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 0, 30))
 }
 
 interface IIntervalTreeNode {
 >IIntervalTreeNode : Symbol(IIntervalTreeNode, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 2, 1))
 
     interval: ITestEventInterval;
->interval : Symbol(interval, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 4, 29))
+>interval : Symbol(IIntervalTreeNode.interval, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 4, 29))
 >ITestEventInterval : Symbol(ITestEventInterval, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 0, 0))
 
     children?: IIntervalTreeNode[];
->children : Symbol(children, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 5, 33))
+>children : Symbol(IIntervalTreeNode.children, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 5, 33))
 >IIntervalTreeNode : Symbol(IIntervalTreeNode, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 2, 1))
 }
 

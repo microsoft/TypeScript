@@ -1,0 +1,26 @@
+=== tests/cases/conformance/externalModules/a.ts ===
+/// <reference path="foo.d.ts" />
+let y: Foo;
+>y : Symbol(y, Decl(a.ts, 1, 3))
+>Foo : Symbol(Foo, Decl(foo.d.ts, 4, 15))
+
+y.foo();
+>y.foo : Symbol(Foo.foo, Decl(foo.d.ts, 1, 21))
+>y : Symbol(y, Decl(a.ts, 1, 3))
+>foo : Symbol(Foo.foo, Decl(foo.d.ts, 1, 21))
+
+
+=== tests/cases/conformance/externalModules/foo.d.ts ===
+
+declare class Thing {
+>Thing : Symbol(Thing, Decl(foo.d.ts, 0, 0))
+
+	foo(): number;
+>foo : Symbol(Thing.foo, Decl(foo.d.ts, 1, 21))
+}
+export = Thing;
+>Thing : Symbol(Thing, Decl(foo.d.ts, 0, 0))
+
+export as namespace Foo;
+>Foo : Symbol(Foo, Decl(foo.d.ts, 4, 15))
+
