@@ -8,6 +8,7 @@
 /////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis*/(1  )
 /////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets*/[1  ]; [ ]; []; [,];
 /////*InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces*/`${1}`;`${   1  }`
+/////*InsertSpaceAfterTypeAssertion*/const bar = <Bar>    Thing.getFoo();
 /////*PlaceOpenBraceOnNewLineForFunctions*/class   foo   { 
 ////}
 /////*PlaceOpenBraceOnNewLineForControlBlocks*/if (true)   {
@@ -21,6 +22,7 @@ runTest("InsertSpaceAfterFunctionKeywordForAnonymousFunctions", "(function () { 
 runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis", "    ( 1 )", "    (1)");
 runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets", "[ 1 ];[];[];[ , ];", "[1];[];[];[,];");
 runTest("InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces", "`${ 1 }`; `${ 1 }`", "`${1}`; `${1}`");
+runTest("InsertSpaceAfterTypeAssertion", "const bar = <Bar> Thing.getFoo();", "const bar = <Bar>Thing.getFoo();");
 runTest("PlaceOpenBraceOnNewLineForFunctions", "class foo", "class foo {");
 runTest("PlaceOpenBraceOnNewLineForControlBlocks", "if ( true )", "if ( true ) {");
 

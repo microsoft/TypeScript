@@ -124,6 +124,13 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NewLineBeforeOpenBraceInTypeScriptDeclWithBlock);
             }
 
+            if (options.InsertSpaceAfterTypeAssertion) {
+                rules.push(this.globalRules.SpaceAfterTypeAssertion);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceAfterTypeAssertion);
+            }
+
             rules = rules.concat(this.globalRules.LowPriorityCommonRules);
 
             return rules;

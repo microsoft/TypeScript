@@ -326,6 +326,7 @@ namespace FourSlash {
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
                 InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
                 InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+                InsertSpaceAfterTypeAssertion: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
