@@ -2713,12 +2713,10 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    /** Return ".ts" or ".tsx" if that is the extension. */
+    /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
     export function tryExtractTypeScriptExtension(fileName: string): string | undefined {
-        return find(supportedTypescriptExtensionsWithDtsFirst, extension => fileExtensionIs(fileName, extension));
+        return find(supportedTypescriptExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
     }
-    // Must have '.d.ts' first because if '.ts' goes first, that will be detected as the extension instead of '.d.ts'.
-    const supportedTypescriptExtensionsWithDtsFirst = supportedTypeScriptExtensions.slice().reverse();
 
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences

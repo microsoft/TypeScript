@@ -1243,6 +1243,8 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
+    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
