@@ -5151,21 +5151,11 @@ namespace ts {
         }
 
         function resolveKeysQueryType(type: KeysQueryType): Type {
-            // Get index types to include in the union if need be
-            let indexTypes: Type[];
-            const numberIndex = getIndexInfoOfType(type.baseType, IndexKind.Number);
-            const stringIndex = getIndexInfoOfType(type.baseType, IndexKind.String);
-            if (numberIndex) {
-                indexTypes = [numberType];
-            }
-            if (stringIndex) {
-                indexTypes ? indexTypes.push(stringType) : indexTypes = [stringType];
-            }
             // Skip any essymbol members and remember to unescape the identifier before making a type from it
-            const memberTypes = concatenate(indexTypes, map(filter(getPropertiesOfType(type.baseType),
+            const memberTypes = map(filter(getPropertiesOfType(type.baseType),
                 symbol => !startsWith(symbol.name, "__@")),
                 symbol => getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(symbol.name))
-            ));
+            );
             return memberTypes ? getUnionType(memberTypes) : neverType;
         }
 
@@ -13404,7 +13394,7 @@ namespace ts {
                     contextualType = apparentType;
                 }
                 if (contextualType.flags & TypeFlags.KeysQuery) {
-                    return true;
+                    return type === stringType;
                 }
                 if (type.flags & TypeFlags.String) {
                     return maybeTypeOfKind(contextualType, TypeFlags.StringLiteral);
