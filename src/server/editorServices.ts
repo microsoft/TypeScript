@@ -130,15 +130,15 @@ namespace ts.server {
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions: Map<T> = {};
+            const newResolutions = createMap<T>();
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = lookUp(newResolutions, name);
+                let resolution = newResolutions[name];
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, name);
+                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile[name];
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
@@ -378,7 +378,7 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        wildcardDirectories?: ts.Map<ts.WatchDirectoryFlags>;
+        wildcardDirectories?: ts.MapLike<ts.WatchDirectoryFlags>;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -391,7 +391,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
         program: ts.Program;
-        filenameToSourceFile: ts.Map<ts.SourceFile> = {};
+        filenameToSourceFile = ts.createMap<ts.SourceFile>();
         updateGraphSeq = 0;
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
@@ -504,7 +504,7 @@ namespace ts.server {
                 return;
             }
 
-            this.filenameToSourceFile = {};
+            this.filenameToSourceFile = createMap<SourceFile>();
             const sourceFiles = this.program.getSourceFiles();
             for (let i = 0, len = sourceFiles.length; i < len; i++) {
                 const normFilename = ts.normalizePath(sourceFiles[i].fileName);
@@ -563,7 +563,7 @@ namespace ts.server {
             }
 
             let strBuilder = "";
-            ts.forEachValue(this.filenameToSourceFile,
+            ts.forEachProperty(this.filenameToSourceFile,
                 sourceFile => { strBuilder += sourceFile.fileName + "\n"; });
             return strBuilder;
         }
@@ -613,7 +613,7 @@ namespace ts.server {
     }
 
     export class ProjectService {
-        filenameToScriptInfo: ts.Map<ScriptInfo> = {};
+        filenameToScriptInfo = ts.createMap<ScriptInfo>();
         // open, non-configured root files
         openFileRoots: ScriptInfo[] = [];
         // projects built from openFileRoots
@@ -625,12 +625,12 @@ namespace ts.server {
         // open files that are roots of a configured project
         openFileRootsConfigured: ScriptInfo[] = [];
         // a path to directory watcher map that detects added tsconfig files
-        directoryWatchersForTsconfig: ts.Map<FileWatcher> = {};
+        directoryWatchersForTsconfig = ts.createMap<FileWatcher>();
         // count of how many projects are using the directory watcher. If the
         // number becomes 0 for a watcher, then we should close it.
-        directoryWatchersRefCount: ts.Map<number> = {};
+        directoryWatchersRefCount = ts.createMap<number>();
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFileListChanges: Map<any> = {};
+        timerForDetectingProjectFileListChanges = createMap<any>();
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -857,7 +857,7 @@ namespace ts.server {
             if (project.isConfiguredProject()) {
                 project.projectFileWatcher.close();
                 project.directoryWatcher.close();
-                forEachValue(project.directoriesWatchedForWildcards, watcher => { watcher.close(); });
+                forEachProperty(project.directoriesWatchedForWildcards, watcher => { watcher.close(); });
                 delete project.directoriesWatchedForWildcards;
                 this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
             }
@@ -1124,7 +1124,7 @@ namespace ts.server {
 
         getScriptInfo(filename: string) {
             filename = ts.normalizePath(filename);
-            return ts.lookUp(this.filenameToScriptInfo, filename);
+            return this.filenameToScriptInfo[filename];
         }
 
         /**
@@ -1133,7 +1133,7 @@ namespace ts.server {
          */
         openFile(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
             fileName = ts.normalizePath(fileName);
-            let info = ts.lookUp(this.filenameToScriptInfo, fileName);
+            let info = this.filenameToScriptInfo[fileName];
             if (!info) {
                 let content: string;
                 if (this.host.fileExists(fileName)) {
@@ -1246,7 +1246,7 @@ namespace ts.server {
          * @param filename is absolute pathname
          */
         closeClientFile(filename: string) {
-            const info = ts.lookUp(this.filenameToScriptInfo, filename);
+            const info = this.filenameToScriptInfo[filename];
             if (info) {
                 this.closeOpenFile(info);
                 info.isOpen = false;
@@ -1255,14 +1255,14 @@ namespace ts.server {
         }
 
         getProjectForFile(filename: string) {
-            const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+            const scriptInfo = this.filenameToScriptInfo[filename];
             if (scriptInfo) {
                 return scriptInfo.defaultProject;
             }
         }
 
         printProjectsForFile(filename: string) {
-            const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+            const scriptInfo = this.filenameToScriptInfo[filename];
             if (scriptInfo) {
                 this.psLogger.startGroup();
                 this.psLogger.info("Projects for " + filename);
@@ -1419,7 +1419,7 @@ namespace ts.server {
                     /*recursive*/ true
                 );
 
-                project.directoriesWatchedForWildcards = reduceProperties(projectOptions.wildcardDirectories, (watchers, flag, directory) => {
+                project.directoriesWatchedForWildcards = reduceProperties(createMap(projectOptions.wildcardDirectories), (watchers, flag, directory) => {
                     if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                         const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                         this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);

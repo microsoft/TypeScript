@@ -750,7 +750,7 @@ namespace Harness {
 
             export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
                 const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
-                for (const file in listFiles(path)) {
+                for (const file of listFiles(path)) {
                     fs.addFile(file);
                 }
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
@@ -848,9 +848,9 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
+        const libFileNameSourceFileMap=  ts.createMap<ts.SourceFile>({
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
-        };
+        });
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
@@ -1005,13 +1005,13 @@ namespace Harness {
         let optionsIndex: ts.Map<ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
-                optionsIndex = {};
+                optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
                     optionsIndex[option.name.toLowerCase()] = option;
                 }
             }
-            return ts.lookUp(optionsIndex, name.toLowerCase());
+            return optionsIndex[name.toLowerCase()];
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1569,6 +1569,7 @@ namespace Harness {
 
     /** Support class for baseline files */
     export namespace Baseline {
+        const NoContent = "<no content>";
 
         export interface BaselineOptions {
             Subfolder?: string;
@@ -1635,14 +1636,6 @@ namespace Harness {
                 throw new Error("The generated content was \"undefined\". Return \"null\" if no baselining is required.\"");
             }
 
-            // Store the content in the 'local' folder so we
-            // can accept it later (manually)
-            /* tslint:disable:no-null-keyword */
-            if (actual !== null) {
-            /* tslint:enable:no-null-keyword */
-                IO.writeFile(actualFileName, actual);
-            }
-
             return actual;
         }
 
@@ -1659,7 +1652,7 @@ namespace Harness {
             /* tslint:disable:no-null-keyword */
             if (actual === null) {
             /* tslint:enable:no-null-keyword */
-                actual = "<no content>";
+                actual = NoContent;
             }
 
             let expected = "<no content>";
@@ -1672,12 +1665,19 @@ namespace Harness {
 
         function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, descriptionForDescribe: string) {
             const encoded_actual = Utils.encodeString(actual);
-            if (expected != encoded_actual) {
+            if (expected !== encoded_actual) {
+                if (actual === NoContent) {
+                    IO.writeFile(localPath(relativeFileName + ".delete"), "");
+                }
+                else {
+                    IO.writeFile(localPath(relativeFileName), actual);
+                }
                 // Overwrite & issue error
                 const errMsg = "The baseline file " + relativeFileName + " has changed.";
                 throw new Error(errMsg);
             }
         }
+
 
         export function runBaseline(
             descriptionForDescribe: string,

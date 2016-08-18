@@ -233,15 +233,15 @@ namespace ts {
             const useNonPollingWatchers = process.env["TSC_NONPOLLING_WATCHER"];
 
             function createWatchedFileSet() {
-                const dirWatchers: Map<DirectoryWatcher> = {};
+                const dirWatchers = createMap<DirectoryWatcher>();
                 // One file can have multiple watchers
-                const fileWatcherCallbacks: Map<FileWatcherCallback[]> = {};
+                const fileWatcherCallbacks = createMap<FileWatcherCallback[]>();
                 return { addFile, removeFile };
 
                 function reduceDirWatcherRefCountForFile(fileName: string) {
                     const dirName = getDirectoryPath(fileName);
-                    if (hasProperty(dirWatchers, dirName)) {
-                        const watcher = dirWatchers[dirName];
+                    const watcher = dirWatchers[dirName];
+                    if (watcher) {
                         watcher.referenceCount -= 1;
                         if (watcher.referenceCount <= 0) {
                             watcher.close();
@@ -251,13 +251,12 @@ namespace ts {
                 }
 
                 function addDirWatcher(dirPath: string): void {
-                    if (hasProperty(dirWatchers, dirPath)) {
-                        const watcher = dirWatchers[dirPath];
+                    let watcher = dirWatchers[dirPath];
+                    if (watcher) {
                         watcher.referenceCount += 1;
                         return;
                     }
-
-                    const watcher: DirectoryWatcher = _fs.watch(
+                    watcher = _fs.watch(
                         dirPath,
                         { persistent: true },
                         (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
@@ -268,12 +267,7 @@ namespace ts {
                 }
 
                 function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
-                    if (hasProperty(fileWatcherCallbacks, filePath)) {
-                        fileWatcherCallbacks[filePath].push(callback);
-                    }
-                    else {
-                        fileWatcherCallbacks[filePath] = [callback];
-                    }
+                    (fileWatcherCallbacks[filePath] || (fileWatcherCallbacks[filePath] = [])).push(callback);
                 }
 
                 function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
@@ -289,8 +283,9 @@ namespace ts {
                 }
 
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
-                    if (hasProperty(fileWatcherCallbacks, filePath)) {
-                        const newCallbacks = copyListRemovingItem(callback, fileWatcherCallbacks[filePath]);
+                    const callbacks = fileWatcherCallbacks[filePath];
+                    if (callbacks) {
+                        const newCallbacks = copyListRemovingItem(callback, callbacks);
                         if (newCallbacks.length === 0) {
                             delete fileWatcherCallbacks[filePath];
                         }
@@ -306,7 +301,7 @@ namespace ts {
                         ? undefined
                         : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
                     // Some applications save a working file via rename operations
-                    if ((eventName === "change" || eventName === "rename") && hasProperty(fileWatcherCallbacks, fileName)) {
+                    if ((eventName === "change" || eventName === "rename") && fileWatcherCallbacks[fileName]) {
                         for (const fileCallback of fileWatcherCallbacks[fileName]) {
                             fileCallback(fileName);
                         }
