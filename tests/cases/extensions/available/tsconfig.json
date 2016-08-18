@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        // This baseUrl option is useful while writing tests - it lets us 
+        //   pretend all these modules can see one another (as if they were in a node_modules folder)
+        //   since when they're loaded into the virtual fs the test host provides, they _will_ be in a
+        //   node_modules folder
+        "baseUrl": "./"
+    }
+}

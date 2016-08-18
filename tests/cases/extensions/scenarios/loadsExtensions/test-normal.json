@@ -1,0 +1,9 @@
+{
+    "inputFiles": [
+        "hello.ts"
+    ],
+    "availableExtensions": ["dummy"],
+    "compilerOptions": {
+        "extensions": ["dummy"]
+    }
+}

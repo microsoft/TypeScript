@@ -242,7 +242,7 @@ namespace FourSlash {
             }
         }
 
-        constructor(private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
+        constructor(private basePath: string, private testType: FourSlashTestType | ((token: ts.HostCancellationToken) => Harness.LanguageService.LanguageServiceAdapter), public testData: FourSlashData) {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
             const compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
@@ -251,7 +251,13 @@ namespace FourSlash {
             }
             compilationOptions.skipDefaultLibCheck = true;
 
-            const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
+            let languageServiceAdapter: Harness.LanguageService.LanguageServiceAdapter;
+            if (typeof testType === "number") {
+                languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
+            }
+            else {
+                languageServiceAdapter = testType(this.cancellationToken);
+            }
             this.languageServiceAdapterHost = languageServiceAdapter.getHost();
             this.languageService = languageServiceAdapter.getLanguageService();
 
@@ -2260,7 +2266,7 @@ namespace FourSlash {
         runFourSlashTestContent(basePath, testType, content, fileName);
     }
 
-    export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string): void {
+    export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType | ((token: ts.HostCancellationToken) => Harness.LanguageService.LanguageServiceAdapter), content: string, fileName: string): void {
         // Parse out the files and their metadata
         const testData = parseTestData(basePath, content, fileName);
         const state = new TestState(basePath, testType, testData);

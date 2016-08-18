@@ -606,13 +606,18 @@ namespace ts {
             // First get and report any syntactic errors.
             diagnostics = program.getSyntacticDiagnostics();
 
+            // Count warnings/messages and ignore them for determining continued error reporting
+            const nonErrorCount = countWhere(diagnostics, d => d.category !== DiagnosticCategory.Error);
+
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
-            if (diagnostics.length === 0) {
-                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+            if (diagnostics.length === nonErrorCount) {
+                diagnostics = diagnostics.concat(program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics()));
 
-                if (diagnostics.length === 0) {
-                    diagnostics = program.getSemanticDiagnostics();
+                const nonErrorCount = countWhere(diagnostics, d => d.category !== DiagnosticCategory.Error);
+
+                if (diagnostics.length === nonErrorCount) {
+                    diagnostics = diagnostics.concat(program.getSemanticDiagnostics());
                 }
             }
 

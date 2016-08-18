@@ -67,7 +67,7 @@ namespace ts {
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
 
-        getModuleResolutionsForFile?(fileName: string): string;
+        getModuleResolutionsForFile?(fileName: string, loadJs?: boolean): string;
         getTypeReferenceDirectiveResolutionsForFile?(fileName: string): string;
         directoryExists(directoryName: string): boolean;
     }
@@ -129,6 +129,7 @@ namespace ts {
         getSyntacticDiagnostics(fileName: string): string;
         getSemanticDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
+        getProgramDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
         getSemanticClassifications(fileName: string, start: number, length: number): string;
@@ -302,7 +303,7 @@ namespace ts {
         private loggingEnabled = false;
         private tracingEnabled = false;
 
-        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
+        public resolveModuleNames: (moduleName: string[], containingFile: string, loadJs?: boolean) => ResolvedModule[];
         public resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         public directoryExists: (directoryName: string) => boolean;
 
@@ -310,8 +311,8 @@ namespace ts {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
-                this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
-                    const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
+                this.resolveModuleNames = (moduleNames: string[], containingFile: string, loadJs?: boolean) => {
+                    const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile, loadJs));
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
                         return result ? { resolvedFileName: result } : undefined;
@@ -562,11 +563,11 @@ namespace ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number | string; }[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
-    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number; } {
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number | string; } {
         return {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
             start: diagnostic.start,
@@ -695,6 +696,15 @@ namespace ts {
                 "getCompilerOptionsDiagnostics()",
                 () => {
                     const diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+                    return this.realizeDiagnostics(diagnostics);
+                });
+        }
+
+        public getProgramDiagnostics(): string {
+            return this.forwardJSONCall(
+                "getProgramDiagnostics()",
+                () => {
+                    const diagnostics = this.languageService.getProgramDiagnostics();
                     return this.realizeDiagnostics(diagnostics);
                 });
         }

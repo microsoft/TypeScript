@@ -1,0 +1,8 @@
+{
+  "name": "extension-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "types": "index.d.ts"
+}

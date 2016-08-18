@@ -17,6 +17,7 @@
 /// <reference path="compilerRunner.ts" />
 /// <reference path="fourslashRunner.ts" />
 /// <reference path="projectsRunner.ts" />
+/// <reference path="extensionRunner.ts" />
 /// <reference path="rwcRunner.ts" />
 /// <reference path="harness.ts" />
 
@@ -58,6 +59,8 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
             return new RWCRunner();
         case "test262":
             return new Test262BaselineRunner();
+        case "extension":
+            return new ExtensionRunner();
     }
 }
 
@@ -155,6 +158,9 @@ if (testConfigContent !== "") {
                 case "test262":
                     runners.push(new Test262BaselineRunner());
                     break;
+                case "extension":
+                    runners.push(new ExtensionRunner());
+                    break;
             }
         }
     }
@@ -176,6 +182,9 @@ if (runners.length === 0) {
     runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
     runners.push(new FourSlashRunner(FourSlashTestType.Server));
     // runners.push(new GeneratedFourslashRunner());
+
+    // extension
+    runners.push(new ExtensionRunner());
 }
 
 if (taskConfigsFolder) {
