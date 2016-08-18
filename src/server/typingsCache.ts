@@ -17,6 +17,7 @@ namespace ts.server {
         readonly typingOptions: TypingOptions;
         readonly compilerOptions: CompilerOptions;
         readonly typings: TypingsArray;
+        poisoned: boolean;
     }
 
     const emptyArray: any[] = [];
@@ -27,10 +28,7 @@ namespace ts.server {
             return (<ConfiguredProject>proj).getTypingOptions();
         }
 
-        const enableAutoDiscovery =
-            proj.projectKind === ProjectKind.Inferred &&
-            proj.getCompilerOptions().allowJs &&
-            proj.getFileNames().every(f => fileExtensionIsAny(f, jsOrDts));
+        const enableAutoDiscovery = proj.getFileNames().every(f => fileExtensionIsAny(f, jsOrDts));
 
         // TODO: add .d.ts files to excludes 
         return { enableAutoDiscovery, include: emptyArray, exclude: emptyArray };
@@ -98,10 +96,20 @@ namespace ts.server {
             }
 
             const entry = this.perProjectCache[project.getProjectName()];
+            const result: TypingsArray = entry ? entry.typings : <any>emptyArray;
             if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
+                // something has been changed, issue a request to update typings
                 this.installer.enqueueInstallTypingsRequest(project, typingOptions);
+                // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
+                // instead it acts as a placeholder to prevent issuing multiple requests
+                this.perProjectCache[project.getProjectName()] = {
+                    compilerOptions: project.getCompilerOptions(),
+                    typingOptions,
+                    typings: result,
+                    poisoned: true
+                };
             }
-            return entry ? entry.typings : <any>emptyArray;
+            return result;
         }
 
         invalidateCachedTypingsForProject(project: Project) {
@@ -116,7 +124,8 @@ namespace ts.server {
             this.perProjectCache[projectName] = {
                 compilerOptions,
                 typingOptions,
-                typings: toTypingsArray(newTypings)
+                typings: toTypingsArray(newTypings),
+                poisoned: false
             };
         }
 

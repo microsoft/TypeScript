@@ -9,15 +9,23 @@ namespace ts.server {
         gzipSync(buf: Buffer): Buffer
     } = require("zlib");
 
+    const net: {
+        connect(options: { port: number }, onConnect?: () => void): NodeSocket
+    } = require("net");
+
+    const childProcess: {
+        fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
+    } = require("child_process");
+
     interface NodeChildProcess {
         send(message: any, sendHandle?: any): void;
         on(message: "message", f: (m: any) => void): void;
         kill(): void;
     }
 
-    const childProcess: {
-        fork(modulePath: string): NodeChildProcess;
-    } = require("child_process");
+    interface NodeSocket {
+        write(data: string, encoding: string): boolean;
+    }
 
     interface ReadLineOptions {
         input: NodeJS.ReadableStream;
@@ -106,6 +114,10 @@ namespace ts.server {
             }
         }
 
+        getLogFileName() {
+            return this.logFilename;
+        }
+
         perftrc(s: string) {
             this.msg(s, Msg.Perf);
         }
@@ -163,9 +175,15 @@ namespace ts.server {
 
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
+        private socket: NodeSocket;
         private projectService: ProjectService;
 
-        constructor(private readonly logger: server.Logger) {
+        constructor(private readonly logger: server.Logger, private readonly eventPort: number) {
+            if (eventPort) {
+                const s = net.connect({ port: eventPort }, () => {
+                    this.socket = s;
+                });
+            }
         }
 
         attach(projectService: ProjectService) {
@@ -174,7 +192,11 @@ namespace ts.server {
                 this.logger.info("Binding...");
             }
 
-            this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"));
+            let args: string[] = [];
+            if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
+                args = [ "--logFile", combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`) ];
+            }
+            this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args);
             this.installer.on("message", m => this.handleMessage(m));
             process.on("exit", () => {
                 this.installer.kill();
@@ -198,12 +220,15 @@ namespace ts.server {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
             }
             this.projectService.updateTypingsForProject(response);
+            if (response.kind == "set" && this.socket) {
+                this.socket.write(JSON.stringify({ kind: "updateTypings", message: response }) + "\r\n", "utf8");
+            }
         }
     }
 
     class IOSession extends Session {
-        constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, logger: server.Logger) {
-            super(host, cancellationToken, useSingleInferredProject, new NodeTypingsInstaller(logger), Buffer.byteLength, maxUncompressedMessageSize, compress, process.hrtime, logger);
+        constructor(host: ServerHost, cancellationToken: HostCancellationToken, eventPort: number, useSingleInferredProject: boolean, logger: server.Logger) {
+            super(host, cancellationToken, useSingleInferredProject, new NodeTypingsInstaller(logger, eventPort), Buffer.byteLength, maxUncompressedMessageSize, compress, process.hrtime, logger);
         }
 
         exit() {
@@ -435,8 +460,19 @@ namespace ts.server {
         };
     };
 
-    const useSingleInferredProject = sys.args.some(arg => arg === "--useSingleInferredProject");
-    const ioSession = new IOSession(sys, cancellationToken, useSingleInferredProject, logger);
+    let eventPort: number;
+    {
+        const index = sys.args.indexOf("--eventPort");
+        if (index >= 0 && index < sys.args.length - 1) {
+            const v = parseInt(sys.args[index + 1]);
+            if (!isNaN(v)) {
+                eventPort = v;
+            }
+        }
+    }
+
+    const useSingleInferredProject = sys.args.indexOf("--useSingleInferredProject") >= 0;
+    const ioSession = new IOSession(sys, cancellationToken, eventPort, useSingleInferredProject, logger);
     process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");
     });

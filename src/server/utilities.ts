@@ -17,6 +17,7 @@ namespace ts.server {
         startGroup(): void;
         endGroup(): void;
         msg(s: string, type?: Msg.Types): void;
+        getLogFileName(): string;
     }
 
     export namespace Msg {
@@ -29,13 +30,27 @@ namespace ts.server {
         export type Types = Err | Info | Perf;
     }
 
+    function getProjectRootPath(project: Project): Path {
+        switch (project.projectKind) {
+            case ProjectKind.Configured:
+                return <Path>project.getProjectName();
+            case ProjectKind.Inferred:
+                // TODO: fixme
+                return <Path>"";
+            case ProjectKind.External:
+                const projectName = project.getProjectName();
+                const host = project.projectService.host;
+                return host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
+        }
+    }
+
     export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
             fileNames: project.getFileNames(),
             compilerOptions: project.getCompilerOptions(),
             typingOptions,
-            projectRootPath: <Path>(project.projectKind === ProjectKind.Inferred ? "" : getDirectoryPath(project.getProjectName())), // TODO: fixme
+            projectRootPath: getProjectRootPath(project),
             cachePath,
             kind: "discover"
         };

@@ -42,7 +42,7 @@ namespace ts.server.typingsInstaller {
     }
 
     export class NodeTypingsInstaller extends TypingsInstaller {
-        private execSync: { (command: string, options: { stdio: "ignore" | "pipe" }): Buffer | string };
+        private execSync: { (command: string, options: { stdio: "ignore" | "pipe", cwd?: string }): Buffer | string };
         private exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
         private npmBinPath: string;
 
@@ -86,7 +86,7 @@ namespace ts.server.typingsInstaller {
 
         protected isPackageInstalled(packageName: string) {
             try {
-                const output = this.execSync(`npm list --global --depth=1 ${packageName}`, { stdio: "pipe" }).toString();
+                const output = this.execSync(`npm list --silent --global --depth=1 ${packageName}`, { stdio: "pipe" }).toString();
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`IsPackageInstalled::stdout '${output}'`);
                 }
@@ -103,7 +103,7 @@ namespace ts.server.typingsInstaller {
 
         protected installPackage(packageName: string) {
             try {
-                const output = this.execSync(`npm install --global ${packageName}`, { stdio: "pipe" }).toString();
+                const output = this.execSync(`npm install --silent --global ${packageName}`, { stdio: "pipe" }).toString();
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`installPackage::stdout '${output}'`);
                 }
@@ -132,10 +132,11 @@ namespace ts.server.typingsInstaller {
             const id = this.tsdRunCount;
             this.tsdRunCount++;
             const tsdPath = combinePaths(this.npmBinPath, "tsd");
+            const command = `${tsdPath} install ${typingsToInstall.join(" ")} -ros`;
             if (this.log.isEnabled()) {
-                this.log.writeLine(`Running tsd ${id}, tsd path '${tsdPath}, typings to install: ${JSON.stringify(typingsToInstall)}. cache path '${cachePath}'`);
+                this.log.writeLine(`Running tsd ${id}, command '${command}'. cache path '${cachePath}'`);
             }
-            this.exec(`${tsdPath} install ${typingsToInstall.join(" ")} -ros`, { cwd: cachePath }, (err, stdout, stderr) => {
+            this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`TSD ${id} stdout: ${stdout}`);
                     this.log.writeLine(`TSD ${id} stderr: ${stderr}`);
@@ -157,7 +158,14 @@ namespace ts.server.typingsInstaller {
         }
     }
 
-    const log = new FileLog(process.env.TI_LOG_FILE);
+    let logFilePath: string;
+    {
+        const logFileIndex = sys.args.indexOf("--logFile");
+        if (logFileIndex >= 0 && logFileIndex < sys.args.length - 1) {
+            logFilePath = sys.args[logFileIndex + 1];
+        }
+    }
+    const log = new FileLog(logFilePath);
     if (log.isEnabled()) {
         process.on("uncaughtException", (e: Error) => {
             log.writeLine(`Unhandled exception: ${e} at ${e.stack}`);
