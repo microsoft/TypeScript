@@ -1,0 +1,150 @@
+=== tests/cases/conformance/types/keysof/simpleKeysofTest.ts ===
+// First, check that the new keyword doesn't interfere
+// with any other potential uses of the identifier `keysof`.
+namespace keysof {
+>keysof : Symbol(keysof, Decl(simpleKeysofTest.ts, 0, 0), Decl(simpleKeysofTest.ts, 5, 31))
+
+    export type name = {};
+>name : Symbol(name, Decl(simpleKeysofTest.ts, 2, 18))
+}
+function old(a: keysof.name) {}
+>old : Symbol(old, Decl(simpleKeysofTest.ts, 4, 1))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 5, 13))
+>keysof : Symbol(keysof, Decl(simpleKeysofTest.ts, 0, 0), Decl(simpleKeysofTest.ts, 5, 31))
+>name : Symbol(keysof.name, Decl(simpleKeysofTest.ts, 2, 18))
+
+type keysof = {a: string};
+>keysof : Symbol(keysof, Decl(simpleKeysofTest.ts, 0, 0), Decl(simpleKeysofTest.ts, 5, 31))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 7, 15))
+
+function old2(a: keysof, b: keysof): keysof { return {a: ""}; }
+>old2 : Symbol(old2, Decl(simpleKeysofTest.ts, 7, 26))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 8, 14))
+>keysof : Symbol(keysof, Decl(simpleKeysofTest.ts, 0, 0), Decl(simpleKeysofTest.ts, 5, 31))
+>b : Symbol(b, Decl(simpleKeysofTest.ts, 8, 24))
+>keysof : Symbol(keysof, Decl(simpleKeysofTest.ts, 0, 0), Decl(simpleKeysofTest.ts, 5, 31))
+>keysof : Symbol(keysof, Decl(simpleKeysofTest.ts, 0, 0), Decl(simpleKeysofTest.ts, 5, 31))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 8, 54))
+
+var old3 = (): keysof => ({a: ""});
+>old3 : Symbol(old3, Decl(simpleKeysofTest.ts, 9, 3))
+>keysof : Symbol(keysof, Decl(simpleKeysofTest.ts, 0, 0), Decl(simpleKeysofTest.ts, 5, 31))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 9, 27))
+
+function disambiguate1(a: keysof ({b: number})) {}
+>disambiguate1 : Symbol(disambiguate1, Decl(simpleKeysofTest.ts, 9, 35))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 11, 23))
+>b : Symbol(b, Decl(simpleKeysofTest.ts, 11, 35))
+
+function disambiguate2(): keysof ({a}) {return "a";}
+>disambiguate2 : Symbol(disambiguate2, Decl(simpleKeysofTest.ts, 11, 50))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 12, 35))
+
+// Then check that the `keysof` operator works as expected 
+interface FooBar {
+>FooBar : Symbol(FooBar, Decl(simpleKeysofTest.ts, 12, 52))
+
+    foo: "yes";
+>foo : Symbol(FooBar.foo, Decl(simpleKeysofTest.ts, 15, 18))
+
+    bar: "no";
+>bar : Symbol(FooBar.bar, Decl(simpleKeysofTest.ts, 16, 15))
+
+    [index: string]: string; // Remove when the indexer is patched to passthru unions
+>index : Symbol(index, Decl(simpleKeysofTest.ts, 18, 5))
+}
+
+function pick(thing: FooBar, member: keysof FooBar) {
+>pick : Symbol(pick, Decl(simpleKeysofTest.ts, 19, 1))
+>thing : Symbol(thing, Decl(simpleKeysofTest.ts, 21, 14))
+>FooBar : Symbol(FooBar, Decl(simpleKeysofTest.ts, 12, 52))
+>member : Symbol(member, Decl(simpleKeysofTest.ts, 21, 28))
+>FooBar : Symbol(FooBar, Decl(simpleKeysofTest.ts, 12, 52))
+
+    return thing[member];
+>thing : Symbol(thing, Decl(simpleKeysofTest.ts, 21, 14))
+>member : Symbol(member, Decl(simpleKeysofTest.ts, 21, 28))
+}
+
+const a = pick({foo: "yes", "bar": "no"}, "bar");
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 25, 5))
+>pick : Symbol(pick, Decl(simpleKeysofTest.ts, 19, 1))
+>foo : Symbol(foo, Decl(simpleKeysofTest.ts, 25, 16))
+
+function pick2<T>(thing: T, member: keysof T): keysof T {
+>pick2 : Symbol(pick2, Decl(simpleKeysofTest.ts, 25, 49))
+>T : Symbol(T, Decl(simpleKeysofTest.ts, 27, 15))
+>thing : Symbol(thing, Decl(simpleKeysofTest.ts, 27, 18))
+>T : Symbol(T, Decl(simpleKeysofTest.ts, 27, 15))
+>member : Symbol(member, Decl(simpleKeysofTest.ts, 27, 27))
+>T : Symbol(T, Decl(simpleKeysofTest.ts, 27, 15))
+>T : Symbol(T, Decl(simpleKeysofTest.ts, 27, 15))
+
+    return member;
+>member : Symbol(member, Decl(simpleKeysofTest.ts, 27, 27))
+}
+const realA: "a" = "a";
+>realA : Symbol(realA, Decl(simpleKeysofTest.ts, 30, 5))
+
+const x = pick2({a: "", b: 0}, realA);
+>x : Symbol(x, Decl(simpleKeysofTest.ts, 31, 5))
+>pick2 : Symbol(pick2, Decl(simpleKeysofTest.ts, 25, 49))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 31, 17))
+>b : Symbol(b, Decl(simpleKeysofTest.ts, 31, 23))
+>realA : Symbol(realA, Decl(simpleKeysofTest.ts, 30, 5))
+
+const xx = pick2({a: "", b: 0}, "a");
+>xx : Symbol(xx, Decl(simpleKeysofTest.ts, 32, 5))
+>pick2 : Symbol(pick2, Decl(simpleKeysofTest.ts, 25, 49))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 32, 18))
+>b : Symbol(b, Decl(simpleKeysofTest.ts, 32, 24))
+
+const item = {0: "yes", 1: "no"};
+>item : Symbol(item, Decl(simpleKeysofTest.ts, 33, 5))
+
+const xxx = pick2(item, "0");
+>xxx : Symbol(xxx, Decl(simpleKeysofTest.ts, 34, 5))
+>pick2 : Symbol(pick2, Decl(simpleKeysofTest.ts, 25, 49))
+>item : Symbol(item, Decl(simpleKeysofTest.ts, 33, 5))
+
+function annotate<U, T extends keysof U>(obj: U, key: T): U & {annotation: T} {
+>annotate : Symbol(annotate, Decl(simpleKeysofTest.ts, 34, 29))
+>U : Symbol(U, Decl(simpleKeysofTest.ts, 36, 18))
+>T : Symbol(T, Decl(simpleKeysofTest.ts, 36, 20))
+>U : Symbol(U, Decl(simpleKeysofTest.ts, 36, 18))
+>obj : Symbol(obj, Decl(simpleKeysofTest.ts, 36, 41))
+>U : Symbol(U, Decl(simpleKeysofTest.ts, 36, 18))
+>key : Symbol(key, Decl(simpleKeysofTest.ts, 36, 48))
+>T : Symbol(T, Decl(simpleKeysofTest.ts, 36, 20))
+>U : Symbol(U, Decl(simpleKeysofTest.ts, 36, 18))
+>annotation : Symbol(annotation, Decl(simpleKeysofTest.ts, 36, 63))
+>T : Symbol(T, Decl(simpleKeysofTest.ts, 36, 20))
+
+    const ret = obj as U & {annotation: T};
+>ret : Symbol(ret, Decl(simpleKeysofTest.ts, 37, 9))
+>obj : Symbol(obj, Decl(simpleKeysofTest.ts, 36, 41))
+>U : Symbol(U, Decl(simpleKeysofTest.ts, 36, 18))
+>annotation : Symbol(annotation, Decl(simpleKeysofTest.ts, 37, 28))
+>T : Symbol(T, Decl(simpleKeysofTest.ts, 36, 20))
+
+    if (key === "annotation") return ret; // Already annotated
+>key : Symbol(key, Decl(simpleKeysofTest.ts, 36, 48))
+>ret : Symbol(ret, Decl(simpleKeysofTest.ts, 37, 9))
+
+    ret.annotation = key;
+>ret.annotation : Symbol(annotation, Decl(simpleKeysofTest.ts, 37, 28))
+>ret : Symbol(ret, Decl(simpleKeysofTest.ts, 37, 9))
+>annotation : Symbol(annotation, Decl(simpleKeysofTest.ts, 37, 28))
+>key : Symbol(key, Decl(simpleKeysofTest.ts, 36, 48))
+
+    return ret;
+>ret : Symbol(ret, Decl(simpleKeysofTest.ts, 37, 9))
+}
+
+annotate({a: "things", b: "stuff"}, "b").annotation === "b";
+>annotate({a: "things", b: "stuff"}, "b").annotation : Symbol(annotation, Decl(simpleKeysofTest.ts, 36, 63))
+>annotate : Symbol(annotate, Decl(simpleKeysofTest.ts, 34, 29))
+>a : Symbol(a, Decl(simpleKeysofTest.ts, 43, 10))
+>b : Symbol(b, Decl(simpleKeysofTest.ts, 43, 22))
+>annotation : Symbol(annotation, Decl(simpleKeysofTest.ts, 36, 63))
+

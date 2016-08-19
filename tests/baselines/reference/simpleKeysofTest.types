@@ -1,0 +1,189 @@
+=== tests/cases/conformance/types/keysof/simpleKeysofTest.ts ===
+// First, check that the new keyword doesn't interfere
+// with any other potential uses of the identifier `keysof`.
+namespace keysof {
+>keysof : any
+
+    export type name = {};
+>name : {}
+}
+function old(a: keysof.name) {}
+>old : (a: {}) => void
+>a : {}
+>keysof : any
+>name : {}
+
+type keysof = {a: string};
+>keysof : { a: string; }
+>a : string
+
+function old2(a: keysof, b: keysof): keysof { return {a: ""}; }
+>old2 : (a: { a: string; }, b: { a: string; }) => { a: string; }
+>a : { a: string; }
+>keysof : { a: string; }
+>b : { a: string; }
+>keysof : { a: string; }
+>keysof : { a: string; }
+>{a: ""} : { a: string; }
+>a : string
+>"" : string
+
+var old3 = (): keysof => ({a: ""});
+>old3 : () => { a: string; }
+>(): keysof => ({a: ""}) : () => { a: string; }
+>keysof : { a: string; }
+>({a: ""}) : { a: string; }
+>{a: ""} : { a: string; }
+>a : string
+>"" : string
+
+function disambiguate1(a: keysof ({b: number})) {}
+>disambiguate1 : (a: keysof { b: number; }) => void
+>a : keysof { b: number; }
+>b : number
+
+function disambiguate2(): keysof ({a}) {return "a";}
+>disambiguate2 : () => keysof { a: any; }
+>a : any
+>"a" : "a"
+
+// Then check that the `keysof` operator works as expected 
+interface FooBar {
+>FooBar : FooBar
+
+    foo: "yes";
+>foo : "yes"
+
+    bar: "no";
+>bar : "no"
+
+    [index: string]: string; // Remove when the indexer is patched to passthru unions
+>index : string
+}
+
+function pick(thing: FooBar, member: keysof FooBar) {
+>pick : (thing: FooBar, member: keysof FooBar) => string
+>thing : FooBar
+>FooBar : FooBar
+>member : keysof FooBar
+>FooBar : FooBar
+
+    return thing[member];
+>thing[member] : string
+>thing : FooBar
+>member : keysof FooBar
+}
+
+const a = pick({foo: "yes", "bar": "no"}, "bar");
+>a : string
+>pick({foo: "yes", "bar": "no"}, "bar") : string
+>pick : (thing: FooBar, member: keysof FooBar) => string
+>{foo: "yes", "bar": "no"} : { foo: "yes"; "bar": "no"; }
+>foo : "yes"
+>"yes" : "yes"
+>"no" : "no"
+>"bar" : "bar"
+
+function pick2<T>(thing: T, member: keysof T): keysof T {
+>pick2 : <T>(thing: T, member: keysof T) => keysof T
+>T : T
+>thing : T
+>T : T
+>member : keysof T
+>T : T
+>T : T
+
+    return member;
+>member : keysof T
+}
+const realA: "a" = "a";
+>realA : "a"
+>"a" : "a"
+
+const x = pick2({a: "", b: 0}, realA);
+>x : keysof { a: string; b: number; }
+>pick2({a: "", b: 0}, realA) : keysof { a: string; b: number; }
+>pick2 : <T>(thing: T, member: keysof T) => keysof T
+>{a: "", b: 0} : { a: string; b: number; }
+>a : string
+>"" : string
+>b : number
+>0 : number
+>realA : "a"
+
+const xx = pick2({a: "", b: 0}, "a");
+>xx : keysof { a: string; b: number; }
+>pick2({a: "", b: 0}, "a") : keysof { a: string; b: number; }
+>pick2 : <T>(thing: T, member: keysof T) => keysof T
+>{a: "", b: 0} : { a: string; b: number; }
+>a : string
+>"" : string
+>b : number
+>0 : number
+>"a" : "a"
+
+const item = {0: "yes", 1: "no"};
+>item : { 0: string; 1: string; }
+>{0: "yes", 1: "no"} : { 0: string; 1: string; }
+>"yes" : string
+>"no" : string
+
+const xxx = pick2(item, "0");
+>xxx : keysof { 0: string; 1: string; }
+>pick2(item, "0") : keysof { 0: string; 1: string; }
+>pick2 : <T>(thing: T, member: keysof T) => keysof T
+>item : { 0: string; 1: string; }
+>"0" : "0"
+
+function annotate<U, T extends keysof U>(obj: U, key: T): U & {annotation: T} {
+>annotate : <U, T extends keysof U>(obj: U, key: T) => U & { annotation: T; }
+>U : U
+>T : T
+>U : U
+>obj : U
+>U : U
+>key : T
+>T : T
+>U : U
+>annotation : T
+>T : T
+
+    const ret = obj as U & {annotation: T};
+>ret : U & { annotation: T; }
+>obj as U & {annotation: T} : U & { annotation: T; }
+>obj : U
+>U : U
+>annotation : T
+>T : T
+
+    if (key === "annotation") return ret; // Already annotated
+>key === "annotation" : boolean
+>key : T
+>"annotation" : "annotation"
+>ret : U & { annotation: T; }
+
+    ret.annotation = key;
+>ret.annotation = key : T
+>ret.annotation : T
+>ret : U & { annotation: T; }
+>annotation : T
+>key : T
+
+    return ret;
+>ret : U & { annotation: T; }
+}
+
+annotate({a: "things", b: "stuff"}, "b").annotation === "b";
+>annotate({a: "things", b: "stuff"}, "b").annotation === "b" : boolean
+>annotate({a: "things", b: "stuff"}, "b").annotation : "b"
+>annotate({a: "things", b: "stuff"}, "b") : { a: string; b: string; } & { annotation: "b"; }
+>annotate : <U, T extends keysof U>(obj: U, key: T) => U & { annotation: T; }
+>{a: "things", b: "stuff"} : { a: string; b: string; }
+>a : string
+>"things" : string
+>b : string
+>"stuff" : string
+>"b" : "b"
+>annotation : "b"
+>"b" : "b"
+
