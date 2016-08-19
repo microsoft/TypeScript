@@ -1132,12 +1132,10 @@ namespace FourSlash {
 
             }
             Harness.Baseline.runBaseline(
-                "Breakpoint Locations for " + this.activeFile.fileName,
                 baselineFile,
                 () => {
                     return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
-                },
-                true /* run immediately */);
+                });
         }
 
         public baselineGetEmitOutput() {
@@ -1159,7 +1157,6 @@ namespace FourSlash {
             }
 
             Harness.Baseline.runBaseline(
-                "Generate getEmitOutput baseline : " + emitFiles.join(" "),
                 this.testData.globalOptions[metadataOptionNames.baselineFile],
                 () => {
                     let resultString = "";
@@ -1185,8 +1182,7 @@ namespace FourSlash {
                     });
 
                     return resultString;
-                },
-                true /* run immediately */);
+                });
         }
 
         public printBreakpointLocation(pos: number) {
@@ -1730,13 +1726,11 @@ namespace FourSlash {
 
         public baselineCurrentFileNameOrDottedNameSpans() {
             Harness.Baseline.runBaseline(
-                "Name OrDottedNameSpans for " + this.activeFile.fileName,
                 this.testData.globalOptions[metadataOptionNames.baselineFile],
                 () => {
                     return this.baselineCurrentFileLocations(pos =>
                         this.getNameOrDottedNameSpan(pos));
-                },
-                true /* run immediately */);
+                });
         }
 
         public printNameOrDottedNameSpans(pos: number) {

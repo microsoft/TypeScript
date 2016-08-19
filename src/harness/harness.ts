@@ -1604,31 +1604,7 @@ namespace Harness {
         }
 
         const fileCache: { [idx: string]: boolean } = {};
-        function generateActual(actualFileName: string, generateContent: () => string): string {
-            // For now this is written using TypeScript, because sys is not available when running old test cases.
-            // But we need to move to sys once we have
-            // Creates the directory including its parent if not already present
-            function createDirectoryStructure(dirName: string) {
-                if (fileCache[dirName] || IO.directoryExists(dirName)) {
-                    fileCache[dirName] = true;
-                    return;
-                }
-
-                const parentDirectory = IO.directoryName(dirName);
-                if (parentDirectory != "") {
-                    createDirectoryStructure(parentDirectory);
-                }
-                IO.createDirectory(dirName);
-                fileCache[dirName] = true;
-            }
-
-            // Create folders if needed
-            createDirectoryStructure(Harness.IO.directoryName(actualFileName));
-
-            // Delete the actual file in case it fails
-            if (IO.fileExists(actualFileName)) {
-                IO.deleteFile(actualFileName);
-            }
+        function generateActual(generateContent: () => string): string {
 
             const actual = generateContent();
 
@@ -1663,43 +1639,51 @@ namespace Harness {
             return { expected, actual };
         }
 
-        function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, descriptionForDescribe: string) {
+        function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string) {
+            // For now this is written using TypeScript, because sys is not available when running old test cases.
+            // But we need to move to sys once we have
+            // Creates the directory including its parent if not already present
+            function createDirectoryStructure(dirName: string) {
+                if (fileCache[dirName] || IO.directoryExists(dirName)) {
+                    fileCache[dirName] = true;
+                    return;
+                }
+
+                const parentDirectory = IO.directoryName(dirName);
+                if (parentDirectory != "") {
+                    createDirectoryStructure(parentDirectory);
+                }
+                IO.createDirectory(dirName);
+                fileCache[dirName] = true;
+            }
+
+            // Create folders if needed
+            createDirectoryStructure(Harness.IO.directoryName(actualFileName));
+
+            // Delete the actual file in case it fails
+            if (IO.fileExists(actualFileName)) {
+                IO.deleteFile(actualFileName);
+            }
+
             const encoded_actual = Utils.encodeString(actual);
             if (expected !== encoded_actual) {
                 if (actual === NoContent) {
-                    IO.writeFile(localPath(relativeFileName + ".delete"), "");
+                    IO.writeFile(actualFileName + ".delete", "");
                 }
                 else {
-                    IO.writeFile(localPath(relativeFileName), actual);
+                    IO.writeFile(actualFileName, actual);
                 }
-                // Overwrite & issue error
-                const errMsg = "The baseline file " + relativeFileName + " has changed.";
-                throw new Error(errMsg);
+                throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }
         }
 
+        export function runBaseline(relativeFileName: string, generateContent: () => string, opts?: BaselineOptions): void {
 
-        export function runBaseline(
-            descriptionForDescribe: string,
-            relativeFileName: string,
-            generateContent: () => string,
-            runImmediately = false,
-            opts?: BaselineOptions): void {
-
-            let actual = <string>undefined;
             const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
-            if (runImmediately) {
-                actual = generateActual(actualFileName, generateContent);
-                const comparison = compareToBaseline(actual, relativeFileName, opts);
-                writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
-            }
-            else {
-                actual = generateActual(actualFileName, generateContent);
-
-                const comparison = compareToBaseline(actual, relativeFileName, opts);
-                writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
-            }
+            const actual = generateActual(generateContent);
+            const comparison = compareToBaseline(actual, relativeFileName, opts);
+            writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName);
         }
     }
 
