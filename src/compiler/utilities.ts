@@ -1196,12 +1196,6 @@ namespace ts {
         return false;
     }
 
-    export function isExternalModuleNameRelative(moduleName: string): boolean {
-        // TypeScript 1.0 spec (April 2014): 11.2.1
-        // An external module name is "relative" if the first term is "." or "..".
-        return /^\.\.?($|[\\/])/.test(moduleName);
-    }
-
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         const moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
@@ -2230,16 +2224,6 @@ namespace ts {
                 : sourceFile.fileName;
             return removeFileExtension(path) + ".d.ts";
         }
-    }
-
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
-        return compilerOptions.target || ScriptTarget.ES3;
-    }
-
-    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
-        return typeof compilerOptions.module === "number" ?
-            compilerOptions.module :
-            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
     }
 
     export interface EmitFileNames {
