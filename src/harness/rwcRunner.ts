@@ -226,7 +226,7 @@ namespace RWC {
                 Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
                     .concat(otherFiles)
                     .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
-                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)));
+                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts);
             });
         });
     }
