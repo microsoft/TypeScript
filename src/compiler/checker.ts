@@ -5151,12 +5151,15 @@ namespace ts {
         }
 
         function resolveKeysQueryType(type: KeysQueryType): Type {
-            // Skip any essymbol members and remember to unescape the identifier before making a type from it
-            const memberTypes = map(filter(getPropertiesOfType(type.baseType),
-                symbol => !startsWith(symbol.name, "__@")),
-                symbol => getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(symbol.name))
-            );
-            return memberTypes ? getUnionType(memberTypes) : neverType;
+            if (!type.resolvedBaseUnion) {
+                // Skip any essymbol members and remember to unescape the identifier before making a type from it
+                const memberTypes = map(filter(getPropertiesOfType(type.baseType),
+                    symbol => !startsWith(symbol.name, "__@")),
+                    symbol => getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(symbol.name))
+                );
+                type.resolvedBaseUnion = memberTypes ? getUnionType(memberTypes) : neverType;
+            }
+            return type.resolvedBaseUnion;
         }
 
         function getKeysQueryType(type: Type): KeysQueryType {

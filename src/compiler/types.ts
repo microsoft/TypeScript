@@ -2350,6 +2350,9 @@ namespace ts {
     // KeysOf Query types (TypeFlags.KeysQuery)
     export interface KeysQueryType extends Type {
         baseType: Type;
+        /* @internal */
+        // Do not access directly. Use resolveKeysQueryType.
+        resolvedBaseUnion?: Type;
     }
 
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
