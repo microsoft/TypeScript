@@ -518,12 +518,12 @@ namespace ts {
         function getSymbolLinks(symbol: Symbol): SymbolLinks {
             if (symbol.flags & SymbolFlags.Transient) return <TransientSymbol>symbol;
             const id = getSymbolId(symbol);
-            return symbolLinks[id] || (symbolLinks[id] = {});
+            return getOrUpdateArray(symbolLinks, id, () => ({}));
         }
 
         function getNodeLinks(node: Node): NodeLinks {
             const nodeId = getNodeId(node);
-            return nodeLinks[nodeId] || (nodeLinks[nodeId] = { flags: 0 });
+            return getOrUpdateArray<NodeLinks>(nodeLinks, nodeId, () => ({ flags: 0 }));
         }
 
         function isGlobalSourceFile(node: Node) {
@@ -5027,7 +5027,7 @@ namespace ts {
                 }
                 const typeArguments = map(node.typeArguments, getTypeFromTypeNode);
                 const id = getTypeListId(typeArguments);
-                return links.instantiations[id] || (links.instantiations[id] = instantiateType(type, createTypeMapper(typeParameters, typeArguments)));
+                return getOrUpdate(links.instantiations, id, () => instantiateType(type, createTypeMapper(typeParameters, typeArguments)));
             }
             if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
@@ -5236,7 +5236,7 @@ namespace ts {
 
         function createTupleType(elementTypes: Type[], thisType?: Type) {
             const id = getTypeListId(elementTypes) + "," + (thisType ? thisType.id : 0);
-            return tupleTypes[id] || (tupleTypes[id] = createNewTupleType(elementTypes, thisType));
+            return getOrUpdate(tupleTypes, id, () => createNewTupleType(elementTypes, thisType));
         }
 
         function createNewTupleType(elementTypes: Type[], thisType?: Type) {
@@ -5480,7 +5480,7 @@ namespace ts {
 
         function getLiteralTypeForText(flags: TypeFlags, text: string) {
             const map = flags & TypeFlags.StringLiteral ? stringLiteralTypes : numericLiteralTypes;
-            return map[text] || (map[text] = createLiteralType(flags, text));
+            return getOrUpdate(map, text, () => createLiteralType(flags, text));
         }
 
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
@@ -8351,7 +8351,7 @@ namespace ts {
                 // If we have previously computed the control flow type for the reference at
                 // this flow loop junction, return the cached type.
                 const id = getFlowNodeId(flow);
-                const cache = flowLoopCaches[id] || (flowLoopCaches[id] = createMap<Type>());
+                const cache = getOrUpdateArray<Map<Type>>(flowLoopCaches, id, createMap);
                 if (!key) {
                     key = getFlowCacheKey(reference);
                 }
