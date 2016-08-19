@@ -53,7 +53,7 @@ function rawr(dino: RexOrRaptor) {
     }
 
     throw "Unexpected " + dino;
->"Unexpected " + dino : string
+>"Unexpected " + dino : never
 >"Unexpected " : string
 >dino : never
 }
