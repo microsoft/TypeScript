@@ -222,7 +222,12 @@ namespace RWC {
                 }
             });
 
-            // TODO: Type baselines (need to refactor out from compilerRunner)
+            it("has the expected types", () => {
+                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
+                    .concat(otherFiles)
+                    .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
+                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)));
+            });
         });
     }
 }
