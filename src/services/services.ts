@@ -4913,6 +4913,24 @@ namespace ts {
 
             if (!documentation) {
                 documentation = symbol.getDocumentationComment();
+                if ((!documentation || documentation.length === 0) && symbol.flags & SymbolFlags.Property) {
+                    // For some special property access expressions like `experts.foo = foo` or `module.exports.foo = foo`
+                    // there documentation comments might be attached to the right hand side symbol of their declarations.
+                    // The pattern of such special property access is that the parent symbol is the symbol of the file.
+                    if (symbol.parent && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
+                        forEach(symbol.declarations, declaration => {
+                            if (declaration.parent && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                                const rhsSymbol = program.getTypeChecker().getSymbolAtLocation((<BinaryExpression>declaration.parent).right);
+                                if (rhsSymbol) {
+                                    documentation = rhsSymbol.getDocumentationComment();
+                                    if (documentation && documentation.length > 0) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
             }
 
             return { displayParts, documentation, symbolKind };
