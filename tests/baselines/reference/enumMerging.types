@@ -208,12 +208,12 @@ module M6 {
 >Yellow : A.Color
 
     t = A.Color.Red;
->t = A.Color.Red : A.Color
+>t = A.Color.Red : A.Color.Red
 >t : A.Color
->A.Color.Red : A.Color
+>A.Color.Red : A.Color.Red
 >A.Color : typeof A.Color
 >A : typeof A
 >Color : typeof A.Color
->Red : A.Color
+>Red : A.Color.Red
 }
 

@@ -14,7 +14,7 @@
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "a",
@@ -63,7 +63,7 @@ goTo.file("file2.ts");
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "a",
@@ -104,7 +104,7 @@ goTo.file("file3.ts");
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "a",
@@ -150,7 +150,7 @@ goTo.file("file4.ts");
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "A",

@@ -6,7 +6,7 @@ var i = 10;
 if (i == 10) {
 >i == 10 : boolean
 >i : number
->10 : number
+>10 : 10
 
     i++;
 >i++ : number
@@ -18,7 +18,7 @@ if (i == 10) {
 if (i == 10)
 >i == 10 : boolean
 >i : number
->10 : number
+>10 : 10
 {
     i++;
 >i++ : number
@@ -27,7 +27,7 @@ if (i == 10)
 else if (i == 20) {
 >i == 20 : boolean
 >i : number
->20 : number
+>20 : 20
 
     i--;
 >i-- : number
@@ -36,7 +36,7 @@ else if (i == 20) {
 } else if (i == 30) {
 >i == 30 : boolean
 >i : number
->30 : number
+>30 : 30
 
     i += 70;
 >i += 70 : number

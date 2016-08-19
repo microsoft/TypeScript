@@ -157,9 +157,7 @@ namespace ts {
 
         if (usedTypeDirectiveReferences) {
             for (const directive in usedTypeDirectiveReferences) {
-                if (hasProperty(usedTypeDirectiveReferences, directive)) {
-                    referencesOutput += `/// <reference types="${directive}" />${newLine}`;
-                }
+                referencesOutput += `/// <reference types="${directive}" />${newLine}`;
             }
         }
 
@@ -269,10 +267,10 @@ namespace ts {
             }
 
             if (!usedTypeDirectiveReferences) {
-                usedTypeDirectiveReferences = {};
+                usedTypeDirectiveReferences = createMap<string>();
             }
             for (const directive of typeReferenceDirectives) {
-                if (!hasProperty(usedTypeDirectiveReferences, directive)) {
+                if (!(directive in usedTypeDirectiveReferences)) {
                     usedTypeDirectiveReferences[directive] = directive;
                 }
             }
@@ -397,7 +395,7 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ThisType:
-                case SyntaxKind.StringLiteralType:
+                case SyntaxKind.LiteralType:
                     return writeTextOfNode(currentText, type);
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);
@@ -441,7 +439,7 @@ namespace ts {
                 }
             }
 
-            function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
+            function emitEntityName(entityName: EntityNameOrEntityNameExpression) {
                 const visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
                     entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
@@ -452,9 +450,9 @@ namespace ts {
             }
 
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
-                if (isSupportedExpressionWithTypeArguments(node)) {
+                if (isEntityNameExpression(node.expression)) {
                     Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
-                    emitEntityName(<Identifier | PropertyAccessExpression>node.expression);
+                    emitEntityName(node.expression);
                     if (node.typeArguments) {
                         write("<");
                         emitCommaList(node.typeArguments, emitType);
@@ -537,14 +535,14 @@ namespace ts {
         // do not need to keep track of created temp names.
         function getExportDefaultTempVariableName(): string {
             const baseName = "_default";
-            if (!hasProperty(currentIdentifiers, baseName)) {
+            if (!(baseName in currentIdentifiers)) {
                 return baseName;
             }
             let count = 0;
             while (true) {
                 count++;
                 const name = baseName + "_" + count;
-                if (!hasProperty(currentIdentifiers, name)) {
+                if (!(name in currentIdentifiers)) {
                     return name;
                 }
             }
@@ -1019,7 +1017,7 @@ namespace ts {
             }
 
             function emitTypeOfTypeReference(node: ExpressionWithTypeArguments) {
-                if (isSupportedExpressionWithTypeArguments(node)) {
+                if (isEntityNameExpression(node.expression)) {
                     emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
                 }
                 else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {

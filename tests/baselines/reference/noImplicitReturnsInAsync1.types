@@ -8,7 +8,7 @@ async function test(isError: boolean = false) {
     if (isError === true) {
 >isError === true : boolean
 >isError : boolean
->true : boolean
+>true : true
 
         return;
     }

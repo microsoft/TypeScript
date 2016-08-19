@@ -37,8 +37,8 @@ class D {
     }
 }
 class E extends D {
-    constructor(...args) {
-        super(...args);
+    constructor() {
+        super(...arguments);
         this.z = true;
     }
 }

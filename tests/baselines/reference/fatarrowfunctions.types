@@ -208,7 +208,7 @@ function ternaryTest(isWhile:boolean) {
 >n : any
 >n === 0 : boolean
 >n : any
->0 : number
+>0 : 0
 
 }
 
