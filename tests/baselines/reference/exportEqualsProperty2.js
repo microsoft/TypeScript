@@ -13,7 +13,7 @@ namespace C {
 export = C.B;
 
 //// [b.ts]
-import B = require("./a.ts");
+import B = require("./a");
 const x: B = { c: B };
 
 
@@ -28,5 +28,5 @@ var C = (function () {
 module.exports = C.B;
 //// [b.js]
 "use strict";
-var B = require("./a.ts");
+var B = require("./a");
 var x = { c: B };

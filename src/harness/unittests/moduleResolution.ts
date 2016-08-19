@@ -446,8 +446,8 @@ export = C;
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",
                 "/a/B/c/moduleD.ts": `
-import a = require("./moduleA.ts");
-import b = require("./moduleB.ts");
+import a = require("./moduleA");
+import b = require("./moduleB");
                 `
             });
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
@@ -458,8 +458,8 @@ import b = require("./moduleB.ts");
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",
                 "/a/B/c/moduleD.ts": `
-import a = require("./moduleA.ts");
-import b = require("./moduleB.ts");
+import a = require("./moduleA");
+import b = require("./moduleB");
                 `
             });
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);

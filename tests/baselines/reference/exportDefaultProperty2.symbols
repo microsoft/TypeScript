@@ -21,7 +21,7 @@ export default C.B;
 >B : Symbol(default, Decl(a.ts, 2, 9), Decl(a.ts, 5, 13))
 
 === tests/cases/compiler/b.ts ===
-import B from "./a.ts";
+import B from "./a";
 >B : Symbol(B, Decl(b.ts, 0, 6))
 
 const x: B = { c: B };
