@@ -1024,7 +1024,7 @@ namespace ts {
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
-            return find(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
+            return findMap(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
@@ -1361,7 +1361,14 @@ namespace ts {
 
             if (moduleNotFoundError) {
                 // report errors only if it was requested
-                error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
+                const tsExtension = tryExtractTypeScriptExtension(moduleName);
+                if (tsExtension) {
+                    const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
+                    error(moduleReferenceLiteral, diag, tsExtension, removeExtension(moduleName, tsExtension));
+                }
+                else {
+                    error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
+                }
             }
             return undefined;
         }
