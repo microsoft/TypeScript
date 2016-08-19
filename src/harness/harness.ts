@@ -458,7 +458,7 @@ namespace Harness {
     // harness always uses one kind of new line
     const harnessNewLine = "\r\n";
 
-    // Roote for file paths that are stored in a virtual file system
+    // Root for file paths that are stored in a virtual file system
     export const virtualFileSystemRoot = "/";
 
     namespace IOImpl {
@@ -752,14 +752,14 @@ namespace Harness {
             }
 
             export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
-                const fs = new Utils.VirtualFileSystem<string>(path, useCaseSensitiveFileNames());
+                const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
                 for (const file of listFiles(path)) {
                     fs.addFile(file);
                 }
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
                     const entry = fs.traversePath(path);
                     if (entry && entry.isDirectory()) {
-                        const directory = <Utils.VirtualDirectory<string>>entry;
+                        const directory = <Utils.VirtualDirectory>entry;
                         return {
                             files: ts.map(directory.getFiles(), f => f.name),
                             directories: ts.map(directory.getDirectories(), d => d.name)

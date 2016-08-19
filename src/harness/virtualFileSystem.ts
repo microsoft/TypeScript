@@ -1,11 +1,11 @@
 /// <reference path="harness.ts" />
 /// <reference path="..\compiler\commandLineParser.ts"/>
 namespace Utils {
-    export class VirtualFileSystemEntry<T> {
-        fileSystem: VirtualFileSystem<T>;
+    export class VirtualFileSystemEntry {
+        fileSystem: VirtualFileSystem;
         name: string;
 
-        constructor(fileSystem: VirtualFileSystem<T>, name: string) {
+        constructor(fileSystem: VirtualFileSystem, name: string) {
             this.fileSystem = fileSystem;
             this.name = name;
         }
@@ -15,15 +15,15 @@ namespace Utils {
         isFileSystem() { return false; }
     }
 
-    export class VirtualFile<T> extends VirtualFileSystemEntry<T> {
-        content: T;
+    export class VirtualFile extends VirtualFileSystemEntry {
+        content?: Harness.LanguageService.ScriptInfo;
         isFile() { return true; }
     }
 
-    export abstract class VirtualFileSystemContainer<T> extends VirtualFileSystemEntry<T> {
-        abstract getFileSystemEntries(): VirtualFileSystemEntry<T>[];
+    export abstract class VirtualFileSystemContainer extends VirtualFileSystemEntry {
+        abstract getFileSystemEntries(): VirtualFileSystemEntry[];
 
-        getFileSystemEntry(name: string): VirtualFileSystemEntry<T> {
+        getFileSystemEntry(name: string): VirtualFileSystemEntry {
             for (const entry of this.getFileSystemEntries()) {
                 if (this.fileSystem.sameName(entry.name, name)) {
                     return entry;
@@ -32,57 +32,57 @@ namespace Utils {
             return undefined;
         }
 
-        getDirectories(): VirtualDirectory<T>[] {
-            return <VirtualDirectory<T>[]>ts.filter(this.getFileSystemEntries(), entry => entry.isDirectory());
+        getDirectories(): VirtualDirectory[] {
+            return <VirtualDirectory[]>ts.filter(this.getFileSystemEntries(), entry => entry.isDirectory());
         }
 
-        getFiles(): VirtualFile<T>[] {
-            return <VirtualFile<T>[]>ts.filter(this.getFileSystemEntries(), entry => entry.isFile());
+        getFiles(): VirtualFile[] {
+            return <VirtualFile[]>ts.filter(this.getFileSystemEntries(), entry => entry.isFile());
         }
 
-        getDirectory(name: string): VirtualDirectory<T> {
+        getDirectory(name: string): VirtualDirectory {
             const entry = this.getFileSystemEntry(name);
-            return entry.isDirectory() ? <VirtualDirectory<T>>entry : undefined;
+            return entry.isDirectory() ? <VirtualDirectory>entry : undefined;
         }
 
-        getFile(name: string): VirtualFile<T> {
+        getFile(name: string): VirtualFile {
             const entry = this.getFileSystemEntry(name);
-            return entry.isFile() ? <VirtualFile<T>>entry : undefined;
+            return entry.isFile() ? <VirtualFile>entry : undefined;
         }
     }
 
-    export class VirtualDirectory<T> extends VirtualFileSystemContainer<T> {
-        private entries: VirtualFileSystemEntry<T>[] = [];
+    export class VirtualDirectory extends VirtualFileSystemContainer {
+        private entries: VirtualFileSystemEntry[] = [];
 
         isDirectory() { return true; }
 
         getFileSystemEntries() { return this.entries.slice(); }
 
-        addDirectory(name: string): VirtualDirectory<T> {
+        addDirectory(name: string): VirtualDirectory {
             const entry = this.getFileSystemEntry(name);
             if (entry === undefined) {
-                const directory = new VirtualDirectory<T>(this.fileSystem, name);
+                const directory = new VirtualDirectory(this.fileSystem, name);
                 this.entries.push(directory);
                 return directory;
             }
             else if (entry.isDirectory()) {
-                return <VirtualDirectory<T>>entry;
+                return <VirtualDirectory>entry;
             }
             else {
                 return undefined;
             }
         }
 
-        addFile(name: string, content?: T): VirtualFile<T> {
+        addFile(name: string, content?: Harness.LanguageService.ScriptInfo): VirtualFile {
             const entry = this.getFileSystemEntry(name);
             if (entry === undefined) {
-                const file = new VirtualFile<T>(this.fileSystem, name);
+                const file = new VirtualFile(this.fileSystem, name);
                 file.content = content;
                 this.entries.push(file);
                 return file;
             }
             else if (entry.isFile()) {
-                const file = <VirtualFile<T>>entry;
+                const file = <VirtualFile>entry;
                 file.content = content;
                 return file;
             }
@@ -92,8 +92,8 @@ namespace Utils {
         }
     }
 
-    export class VirtualFileSystem<T> extends VirtualFileSystemContainer<T> {
-        private root: VirtualDirectory<T>;
+    export class VirtualFileSystem extends VirtualFileSystemContainer {
+        private root: VirtualDirectory;
 
         currentDirectory: string;
         useCaseSensitiveFileNames: boolean;
@@ -101,7 +101,7 @@ namespace Utils {
         constructor(currentDirectory: string, useCaseSensitiveFileNames: boolean) {
             super(undefined, "");
             this.fileSystem = this;
-            this.root = new VirtualDirectory<T>(this, "");
+            this.root = new VirtualDirectory(this, "");
             this.currentDirectory = currentDirectory;
             this.useCaseSensitiveFileNames = useCaseSensitiveFileNames;
         }
@@ -111,9 +111,9 @@ namespace Utils {
         getFileSystemEntries() { return this.root.getFileSystemEntries(); }
 
         addDirectory(path: string) {
-            path = this.normalizePathRoot(path);
+            path = ts.normalizePath(path);
             const components = ts.getNormalizedPathComponents(path, this.currentDirectory);
-            let directory: VirtualDirectory<T> = this.root;
+            let directory: VirtualDirectory = this.root;
             for (const component of components) {
                 directory = directory.addDirectory(component);
                 if (directory === undefined) {
@@ -124,8 +124,8 @@ namespace Utils {
             return directory;
         }
 
-        addFile(path: string, content?: T) {
-            const absolutePath = this.normalizePathRoot(ts.getNormalizedAbsolutePath(path, this.currentDirectory));
+        addFile(path: string, content?: Harness.LanguageService.ScriptInfo) {
+            const absolutePath = ts.normalizePath(ts.getNormalizedAbsolutePath(path, this.currentDirectory));
             const fileName = ts.getBaseFileName(path);
             const directoryPath = ts.getDirectoryPath(absolutePath);
             const directory = this.addDirectory(directoryPath);
@@ -142,15 +142,15 @@ namespace Utils {
         }
 
         traversePath(path: string) {
-            path = this.normalizePathRoot(path);
-            let directory: VirtualDirectory<T> = this.root;
+            path = ts.normalizePath(path);
+            let directory: VirtualDirectory = this.root;
             for (const component of ts.getNormalizedPathComponents(path, this.currentDirectory)) {
                 const entry = directory.getFileSystemEntry(component);
                 if (entry === undefined) {
                     return undefined;
                 }
                 else if (entry.isDirectory()) {
-                    directory = <VirtualDirectory<T>>entry;
+                    directory = <VirtualDirectory>entry;
                 }
                 else {
                     return entry;
@@ -168,7 +168,7 @@ namespace Utils {
         getAccessibleFileSystemEntries(path: string) {
             const entry = this.traversePath(path);
             if (entry && entry.isDirectory()) {
-                const directory = <VirtualDirectory<T>>entry;
+                const directory = <VirtualDirectory>entry;
                 return {
                     files: ts.map(directory.getFiles(), f => f.name),
                     directories: ts.map(directory.getDirectories(), d => d.name)
@@ -178,11 +178,11 @@ namespace Utils {
         }
 
         getAllFileEntries() {
-            const fileEntries: VirtualFile<T>[] = [];
+            const fileEntries: VirtualFile[] = [];
             getFilesRecursive(this.root, fileEntries);
             return fileEntries;
 
-            function getFilesRecursive(dir: VirtualDirectory<T>, result: VirtualFile<T>[]) {
+            function getFilesRecursive(dir: VirtualDirectory, result: VirtualFile[]) {
                 const files = dir.getFiles();
                 const dirs = dir.getDirectories();
                 for (const file of files) {
@@ -193,17 +193,9 @@ namespace Utils {
                 }
             }
         }
-
-        normalizePathRoot(path: string) {
-            const components = ts.getNormalizedPathComponents(path, this.currentDirectory);
-
-            // Toss the root component
-            components[0] = "";
-            return components.join(ts.directorySeparator);
-        }
     }
 
-    export class MockParseConfigHost extends VirtualFileSystem<string> implements ts.ParseConfigHost {
+    export class MockParseConfigHost extends VirtualFileSystem implements ts.ParseConfigHost {
         constructor(currentDirectory: string, ignoreCase: boolean, files: string[]) {
             super(currentDirectory, ignoreCase);
             for (const file of files) {

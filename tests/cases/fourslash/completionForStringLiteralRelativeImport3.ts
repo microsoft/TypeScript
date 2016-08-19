@@ -3,17 +3,17 @@
 // Should give completions for absolute paths
 
 // @Filename: tests/test0.ts
-//// import * as foo1 from "c:/tests/cases/f/*import_as0*/
-//// import * as foo2 from "c:/tests/cases/fourslash/*import_as1*/
-//// import * as foo3 from "c:/tests/cases/fourslash//*import_as2*/
+//// import * as foo1 from "/tests/cases/f/*import_as0*/
+//// import * as foo2 from "/tests/cases/fourslash/*import_as1*/
+//// import * as foo3 from "/tests/cases/fourslash//*import_as2*/
 
-//// import foo4 = require("c:/tests/cases/f/*import_equals0*/
-//// import foo5 = require("c:/tests/cases/fourslash/*import_equals1*/
-//// import foo6 = require("c:/tests/cases/fourslash//*import_equals2*/
+//// import foo4 = require("/tests/cases/f/*import_equals0*/
+//// import foo5 = require("/tests/cases/fourslash/*import_equals1*/
+//// import foo6 = require("/tests/cases/fourslash//*import_equals2*/
 
-//// var foo7 = require("c:/tests/cases/f/*require0*/
-//// var foo8 = require("c:/tests/cases/fourslash/*require1*/
-//// var foo9 = require("c:/tests/cases/fourslash//*require2*/
+//// var foo7 = require("/tests/cases/f/*require0*/
+//// var foo8 = require("/tests/cases/fourslash/*require1*/
+//// var foo9 = require("/tests/cases/fourslash//*require2*/
 
 // @Filename: f1.ts
 //// /*f1*/

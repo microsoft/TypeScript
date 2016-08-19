@@ -123,7 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
-        protected virtualFileSystem: Utils.VirtualFileSystem<ScriptInfo> = new Utils.VirtualFileSystem<ScriptInfo>(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
+        protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
                     protected settings = ts.getDefaultCompilerOptions()) {
@@ -148,7 +148,7 @@ namespace Harness.LanguageService {
 
         public getScriptInfo(fileName: string): ScriptInfo {
             const fileEntry = this.virtualFileSystem.traversePath(fileName);
-            return fileEntry && fileEntry.isFile() ? (<Utils.VirtualFile<ScriptInfo>>fileEntry).content : undefined;
+            return fileEntry && fileEntry.isFile() ? (<Utils.VirtualFile>fileEntry).content : undefined;
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
@@ -187,11 +187,11 @@ namespace Harness.LanguageService {
         getDirectories(path: string): string[] {
             const dir = this.virtualFileSystem.traversePath(path);
             if (dir && dir.isDirectory()) {
-                return ts.map((<Utils.VirtualDirectory<ScriptInfo>>dir).getDirectories(), (d) => ts.combinePaths(path, d.name));
+                return ts.map((<Utils.VirtualDirectory>dir).getDirectories(), (d) => ts.combinePaths(path, d.name));
             }
             return [];
         }
-        getCurrentDirectory(): string { return virtualFileSystemRoot }
+        getCurrentDirectory(): string { return virtualFileSystemRoot; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {

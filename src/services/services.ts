@@ -1171,7 +1171,7 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
 
-        /**
+        /*
          * getDirectories is also required for full import and type reference completions. Without it defined, certain
          * completions will not be provided
          */

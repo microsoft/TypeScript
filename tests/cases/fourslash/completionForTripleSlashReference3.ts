@@ -3,13 +3,13 @@
 // Should give completions for absolute paths
 
 // @Filename: tests/test0.ts
-//// /// <reference path="c:/tests/cases/f/*0*/
+//// /// <reference path="/tests/cases/f/*0*/
 
 // @Filename: tests/test1.ts
-//// /// <reference path="c:/tests/cases/fourslash/*1*/
+//// /// <reference path="/tests/cases/fourslash/*1*/
 
 // @Filename: tests/test2.ts
-//// /// <reference path="c:/tests/cases/fourslash//*2*/
+//// /// <reference path="/tests/cases/fourslash//*2*/
 
 // @Filename: f1.ts
 //// /*f1*/
