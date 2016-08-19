@@ -30,8 +30,6 @@ declare namespace ts.server.protocol {
           * Object containing arguments for the command
           */
         arguments?: any;
-
-        canCompressResponse?: boolean;
     }
 
     /**

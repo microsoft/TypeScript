@@ -696,10 +696,8 @@ namespace Harness.LanguageService {
             const server = new ts.server.Session(serverHost,
                 { isCancellationRequested: () => false },
                 /*useOneInferredProject*/ false,
-		/*typingsInstaller*/ undefined,
+                /*typingsInstaller*/ undefined,
                 Utils.byteLength,
-                Utils.maxUncompressedMessageSize,
-                Utils.compress,
                 process.hrtime, serverHost);
 
             // Fake the connection between the client and the server

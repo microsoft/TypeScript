@@ -5,10 +5,6 @@
 
 namespace ts.server {
 
-    const zlib: {
-        gzipSync(buf: Buffer): Buffer
-    } = require("zlib");
-
     const net: {
         connect(options: { port: number }, onConnect?: () => void): NodeSocket
     } = require("net");
@@ -85,13 +81,6 @@ namespace ts.server {
         output: process.stdout,
         terminal: false,
     });
-
-    function compress(s: string): CompressedData {
-        const data = zlib.gzipSync(new Buffer(s, "utf8"));
-        return { data, length: data.length, compressionKind: "gzip" };
-    }
-
-    const maxUncompressedMessageSize = 84000;
 
     class Logger implements ts.server.Logger {
         private fd = -1;
@@ -178,7 +167,7 @@ namespace ts.server {
         private socket: NodeSocket;
         private projectService: ProjectService;
 
-        constructor(private readonly logger: server.Logger, private readonly eventPort: number) {
+        constructor(private readonly logger: server.Logger, private readonly eventPort: number, private newLine: string) {
             if (eventPort) {
                 const s = net.connect({ port: eventPort }, () => {
                     this.socket = s;
@@ -221,14 +210,14 @@ namespace ts.server {
             }
             this.projectService.updateTypingsForProject(response);
             if (response.kind == "set" && this.socket) {
-                this.socket.write(JSON.stringify({ kind: "updateTypings", message: response }) + "\r\n", "utf8");
+                this.socket.write(formatMessage({ seq: 0, type: "event", message: response }, this.logger, Buffer.byteLength, this.newLine), "utf8");
             }
         }
     }
 
     class IOSession extends Session {
         constructor(host: ServerHost, cancellationToken: HostCancellationToken, eventPort: number, useSingleInferredProject: boolean, logger: server.Logger) {
-            super(host, cancellationToken, useSingleInferredProject, new NodeTypingsInstaller(logger, eventPort), Buffer.byteLength, maxUncompressedMessageSize, compress, process.hrtime, logger);
+            super(host, cancellationToken, useSingleInferredProject, new NodeTypingsInstaller(logger, eventPort, host.newLine), Buffer.byteLength, process.hrtime, logger);
         }
 
         exit() {
