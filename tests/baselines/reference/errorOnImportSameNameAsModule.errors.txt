@@ -1,0 +1,10 @@
+tests/cases/compiler/errorOnImportSameNameAsModule.ts(2,1): error TS2303: Circular definition of import alias 'bar'.
+
+
+==== tests/cases/compiler/errorOnImportSameNameAsModule.ts (1 errors) ====
+    module bar { }
+    import bar = bar;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2303: Circular definition of import alias 'bar'.
+    
+    
