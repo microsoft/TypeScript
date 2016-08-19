@@ -143,6 +143,7 @@ namespace ts {
 
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const neverSignature = createSignature(undefined, undefined, undefined, emptyArray, neverType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
@@ -8263,9 +8264,12 @@ namespace ts {
                 // Assignments only narrow the computed type if the declared type is a union type. Thus, we
                 // only need to evaluate the assigned type if the declared type is a union type.
                 if (isMatchingReference(reference, node)) {
-                    return declaredType.flags & TypeFlags.Union ?
-                        getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(node)) :
-                        declaredType;
+                    const type = getInitialOrAssignedType(node);
+                    if (type !== neverType) {
+                        return declaredType.flags & TypeFlags.Union ?
+                            getAssignmentReducedType(<UnionType>declaredType, type) :
+                            declaredType;
+                    }
                 }
                 // We didn't have a direct match. However, if the reference is a dotted name, this
                 // may be an assignment to a left hand part of the reference. For example, for a
@@ -8282,17 +8286,8 @@ namespace ts {
                 const flowType = getTypeAtFlowNode(flow.antecedent);
                 let type = getTypeFromFlowType(flowType);
                 if (type !== neverType) {
-                    // If we have an antecedent type (meaning we're reachable in some way), we first
-                    // attempt to narrow the antecedent type. If that produces the never type, and if
-                    // the antecedent type is incomplete (i.e. a transient type in a loop), then we
-                    // take the type guard as an indication that control *could* reach here once we
-                    // have the complete type. We proceed by reverting to the declared type and then
-                    // narrow that.
                     const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
                     type = narrowType(type, flow.expression, assumeTrue);
-                    if (type === neverType && isIncomplete(flowType)) {
-                        type = narrowType(declaredType, flow.expression, assumeTrue);
-                    }
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
@@ -10723,7 +10718,7 @@ namespace ts {
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             const type = checkNonNullExpression(left);
-            if (isTypeAny(type)) {
+            if (isTypeAny(type) || type === neverType) {
                 return type;
             }
 
@@ -10859,8 +10854,8 @@ namespace ts {
             const objectType = getApparentType(checkNonNullExpression(node.expression));
             const indexType = node.argumentExpression ? checkExpression(node.argumentExpression) : unknownType;
 
-            if (objectType === unknownType) {
-                return unknownType;
+            if (objectType === unknownType || objectType === neverType) {
+                return objectType;
             }
 
             const isConstEnum = isConstEnumObjectType(objectType);
@@ -11910,6 +11905,9 @@ namespace ts {
             }
 
             const funcType = checkNonNullExpression(node.expression);
+            if (funcType === neverType) {
+                return neverSignature;
+            }
             const apparentType = getApparentType(funcType);
 
             if (apparentType === unknownType) {
@@ -11965,6 +11963,9 @@ namespace ts {
             }
 
             let expressionType = checkNonNullExpression(node.expression);
+            if (expressionType === neverType) {
+                return neverSignature;
+            }
 
             // If expressionType's apparent type(section 3.8.1) is an object type with one or
             // more construct signatures, the expression is processed in the same manner as a
@@ -12831,6 +12832,9 @@ namespace ts {
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             const operandType = checkExpression(node.operand);
+            if (operandType === neverType) {
+                return neverType;
+            }
             if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral && isLiteralContextForType(node, numberType)) {
                 return getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>node.operand).text);
             }
@@ -12864,6 +12868,9 @@ namespace ts {
 
         function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
             const operandType = checkExpression(node.operand);
+            if (operandType === neverType) {
+                return neverType;
+            }
             const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
                 Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
@@ -12928,6 +12935,9 @@ namespace ts {
         }
 
         function checkInstanceOfExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
+            if (leftType === neverType || rightType === neverType) {
+                return neverType;
+            }
             // TypeScript 1.0 spec (April 2014): 4.15.4
             // The instanceof operator requires the left operand to be of type Any, an object type, or a type parameter type,
             // and the right operand to be of type Any or a subtype of the 'Function' interface type.
@@ -12944,6 +12954,9 @@ namespace ts {
         }
 
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
+            if (leftType === neverType || rightType === neverType) {
+                return neverType;
+            }
             // TypeScript 1.0 spec (April 2014): 4.15.5
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
@@ -13142,6 +13155,9 @@ namespace ts {
                 case SyntaxKind.CaretEqualsToken:
                 case SyntaxKind.AmpersandToken:
                 case SyntaxKind.AmpersandEqualsToken:
+                    if (leftType === neverType || rightType === neverType) {
+                        return neverType;
+                    }
                     // TypeScript 1.0 spec (April 2014): 4.19.1
                     // These operators require their operands to be of type Any, the Number primitive type,
                     // or an enum type. Operands of an enum type are treated
@@ -13174,6 +13190,9 @@ namespace ts {
                     return numberType;
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.PlusEqualsToken:
+                    if (leftType === neverType || rightType === neverType) {
+                        return neverType;
+                    }
                     // TypeScript 1.0 spec (April 2014): 4.19.2
                     // The binary + operator requires both operands to be of the Number primitive type or an enum type,
                     // or at least one of the operands to be of type Any or the String primitive type.
