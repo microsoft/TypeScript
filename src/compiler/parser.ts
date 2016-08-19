@@ -417,6 +417,8 @@ namespace ts {
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (<JSDocPropertyTag>node).typeExpression) ||
                     visitNode(cbNode, (<JSDocPropertyTag>node).name);
+            case SyntaxKind.JSDocLiteralType:
+                    return visitNode(cbNode, (<JSDocLiteralType>node).literal);
         }
     }
 
@@ -3415,6 +3417,7 @@ namespace ts {
          *      6) - UnaryExpression[?yield]
          *      7) ~ UnaryExpression[?yield]
          *      8) ! UnaryExpression[?yield]
+         *      9) [+Await] await UnaryExpression[?yield]
          */
         function parseSimpleUnaryExpression(): UnaryExpression {
             switch (token()) {
@@ -3429,6 +3432,8 @@ namespace ts {
                     return parseTypeOfExpression();
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
+                case SyntaxKind.AwaitKeyword:
+                    return parseAwaitExpression();
                 case SyntaxKind.LessThanToken:
                     // This is modified UnaryExpression grammar in TypeScript
                     //  UnaryExpression (modified):
@@ -5889,9 +5894,13 @@ namespace ts {
                     case SyntaxKind.SymbolKeyword:
                     case SyntaxKind.VoidKeyword:
                         return parseTokenNode<JSDocType>();
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NumericLiteral:
+                    case SyntaxKind.TrueKeyword:
+                    case SyntaxKind.FalseKeyword:
+                        return parseJSDocLiteralType();
                 }
 
-                // TODO (drosen): Parse string literal types in JSDoc as well.
                 return parseJSDocTypeReference();
             }
 
@@ -6067,6 +6076,12 @@ namespace ts {
             function parseJSDocAllType(): JSDocAllType {
                 const result = <JSDocAllType>createNode(SyntaxKind.JSDocAllType);
                 nextToken();
+                return finishNode(result);
+            }
+
+            function parseJSDocLiteralType(): JSDocLiteralType {
+                const result = <JSDocLiteralType>createNode(SyntaxKind.JSDocLiteralType);
+                result.literal = parseLiteralTypeNode();
                 return finishNode(result);
             }
 

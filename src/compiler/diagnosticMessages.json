@@ -1951,6 +1951,10 @@
         "category": "Error",
         "code": 2690
     },
+    "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
+        "category": "Error",
+        "code": 2691
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2231,7 +2235,7 @@
         "category": "Error",
         "code": 4082
     },
-    "Conflicting library definitions for '{0}' found at '{1}' and '{2}'. Copy the correct file to the 'typings' folder to resolve this conflict.": {
+    "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Message",
         "code": 4090
     },
@@ -2827,6 +2831,10 @@
     "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
         "category": "Message",
         "code": 6137
+    },
+    "Property '{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6138
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
