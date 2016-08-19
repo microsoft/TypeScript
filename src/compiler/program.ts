@@ -501,7 +501,7 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
-            matchedPattern = matchPatternOrExact(getKeys(state.compilerOptions.paths), moduleName);
+            matchedPattern = matchPatternOrExact(getOwnKeys(state.compilerOptions.paths), moduleName);
         }
 
         if (matchedPattern) {
@@ -831,14 +831,6 @@ namespace ts {
             : { resolvedModule: undefined, failedLookupLocations };
     }
 
-    /* @internal */
-    export const defaultInitCompilerOptions: CompilerOptions = {
-        module: ModuleKind.CommonJS,
-        target: ScriptTarget.ES5,
-        noImplicitAny: false,
-        sourceMap: false,
-    };
-
     interface OutputFingerprint {
         hash: string;
         byteOrderMark: boolean;
@@ -860,9 +852,10 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
-                const start = performance.mark();
+                performance.mark("beforeIORead");
                 text = sys.readFile(fileName, options.charset);
-                performance.measure("I/O Read", start);
+                performance.mark("afterIORead");
+                performance.measure("I/O Read", "beforeIORead", "afterIORead");
             }
             catch (e) {
                 if (onError) {
@@ -877,7 +870,7 @@ namespace ts {
         }
 
         function directoryExists(directoryPath: string): boolean {
-            if (hasProperty(existingDirectories, directoryPath)) {
+            if (directoryPath in existingDirectories) {
                 return true;
             }
             if (sys.directoryExists(directoryPath)) {
@@ -905,7 +898,7 @@ namespace ts {
             const hash = sys.createHash(data);
             const mtimeBefore = sys.getModifiedTime(fileName);
 
-            if (mtimeBefore && hasProperty(outputFingerprints, fileName)) {
+            if (mtimeBefore && fileName in outputFingerprints) {
                 const fingerprint = outputFingerprints[fileName];
 
                 // If output has not been changed, and the file has no external modification
@@ -929,7 +922,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                const start = performance.mark();
+                performance.mark("beforeIOWrite");
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
@@ -939,7 +932,8 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                performance.measure("I/O Write", start);
+                performance.mark("afterIOWrite");
+                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
             }
             catch (e) {
                 if (onError) {
@@ -1042,14 +1036,9 @@ namespace ts {
         const resolutions: T[] = [];
         const cache = createMap<T>();
         for (const name of names) {
-            let result: T;
-            if (hasProperty(cache, name)) {
-                result = cache[name];
-            }
-            else {
-                result = loader(name, containingFile);
-                cache[name] = result;
-            }
+            const result = name in cache
+                ? cache[name]
+                : cache[name] = loader(name, containingFile);
             resolutions.push(result);
         }
         return resolutions;
@@ -1121,7 +1110,7 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules = createMap<boolean>();
 
-        const start = performance.mark();
+        performance.mark("beforeProgram");
 
         host = host || createCompilerHost(options);
 
@@ -1219,8 +1208,8 @@ namespace ts {
         };
 
         verifyCompilerOptions();
-
-        performance.measure("Program", start);
+        performance.mark("afterProgram");
+        performance.measure("Program", "beforeProgram", "afterProgram");
 
         return program;
 
@@ -1250,7 +1239,7 @@ namespace ts {
                 classifiableNames = createMap<string>();
 
                 for (const sourceFile of files) {
-                    copyMap(sourceFile.classifiableNames, classifiableNames);
+                    copyProperties(sourceFile.classifiableNames, classifiableNames);
                 }
             }
 
@@ -1278,7 +1267,7 @@ namespace ts {
                 (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
                 !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
-                !mapIsEqualTo(oldOptions.paths, options.paths)) {
+                !equalOwnProperties(oldOptions.paths, options.paths)) {
                 return false;
             }
 
@@ -1400,7 +1389,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
-                isSourceFileFromExternalLibrary: (file: SourceFile) => !!lookUp(sourceFilesFoundSearchingNodeModules, file.path),
+                isSourceFileFromExternalLibrary: (file: SourceFile) => !!sourceFilesFoundSearchingNodeModules[file.path],
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -1463,14 +1452,15 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
-            const start = performance.mark();
+            performance.mark("beforeEmit");
 
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            performance.measure("Emit", start);
+            performance.mark("afterEmit");
+            performance.measure("Emit", "beforeEmit", "afterEmit");
             return emitResult;
         }
 
@@ -1937,7 +1927,7 @@ namespace ts {
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
                 // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
-                if (file && lookUp(sourceFilesFoundSearchingNodeModules, file.path) && currentNodeModulesDepth == 0) {
+                if (file && sourceFilesFoundSearchingNodeModules[file.path] && currentNodeModulesDepth == 0) {
                     sourceFilesFoundSearchingNodeModules[file.path] = false;
                     if (!options.noResolve) {
                         processReferencedFiles(file, getDirectoryPath(fileName), isDefaultLib);
@@ -1948,7 +1938,7 @@ namespace ts {
                     processImportedModules(file, getDirectoryPath(fileName));
                 }
                 // See if we need to reprocess the imports due to prior skipped imports
-                else if (file && lookUp(modulesWithElidedImports, file.path)) {
+                else if (file && modulesWithElidedImports[file.path]) {
                     if (currentNodeModulesDepth < maxNodeModulesJsDepth) {
                         modulesWithElidedImports[file.path] = false;
                         processImportedModules(file, getDirectoryPath(fileName));
@@ -2015,15 +2005,17 @@ namespace ts {
         }
 
         function processTypeReferenceDirectives(file: SourceFile) {
-            const typeDirectives = map(file.typeReferenceDirectives, l => l.fileName);
+            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
+            const typeDirectives = map(file.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
             const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.fileName);
 
             for (let i = 0; i < typeDirectives.length; i++) {
                 const ref = file.typeReferenceDirectives[i];
                 const resolvedTypeReferenceDirective = resolutions[i];
                 // store resolved type directive on the file
-                setResolvedTypeReferenceDirective(file, ref.fileName, resolvedTypeReferenceDirective);
-                processTypeReferenceDirective(ref.fileName, resolvedTypeReferenceDirective, file, ref.pos, ref.end);
+                const fileName = ref.fileName.toLocaleLowerCase();
+                setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective);
+                processTypeReferenceDirective(fileName, resolvedTypeReferenceDirective, file, ref.pos, ref.end);
             }
         }
 
@@ -2048,7 +2040,7 @@ namespace ts {
                         const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName);
                         if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
                             fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd,
-                                Diagnostics.Conflicting_library_definitions_for_0_found_at_1_and_2_Copy_the_correct_file_to_the_typings_folder_to_resolve_this_conflict,
+                                Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
                                 typeReferenceDirective,
                                 resolvedTypeReferenceDirective.resolvedFileName,
                                 previousResolution.resolvedFileName
