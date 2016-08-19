@@ -11,5 +11,5 @@ namespace C {
 export default C.B;
 
 // @Filename: b.ts
-import B from "./a.ts";
+import B from "./a";
 const x: B = { c: B };
