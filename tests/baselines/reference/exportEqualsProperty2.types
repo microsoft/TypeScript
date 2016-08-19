@@ -1,5 +1,5 @@
 === tests/cases/compiler/b.ts ===
-import B = require("./a.ts");
+import B = require("./a");
 >B : number
 
 const x: B = { c: B };

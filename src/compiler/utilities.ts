@@ -2686,6 +2686,10 @@ namespace ts {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
+    /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
+    export function tryExtractTypeScriptExtension(fileName: string): string | undefined {
+        return find(supportedTypescriptExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
+    }
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
      * representing the UTF-8 encoding of the character, and return the expanded char code list.

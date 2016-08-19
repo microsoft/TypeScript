@@ -113,8 +113,22 @@ namespace ts {
         return undefined;
     }
 
-    /** Like `forEach`, but assumes existence of array and fails if no truthy value is found. */
-    export function find<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
+    /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
+    export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const value = array[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    /**
+     * Returns the first truthy result of `callback`, or else fails.
+     * This is like `forEach`, but never returns undefined.
+     */
+    export function findMap<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
         for (let i = 0, len = array.length; i < len; i++) {
             const result = callback(array[i], i);
             if (result) {
@@ -1316,6 +1330,8 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
+    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
@@ -1406,8 +1422,12 @@ namespace ts {
         return path;
     }
 
-    export function tryRemoveExtension(path: string, extension: string): string {
-        return fileExtensionIs(path, extension) ? path.substring(0, path.length - extension.length) : undefined;
+    export function tryRemoveExtension(path: string, extension: string): string | undefined {
+        return fileExtensionIs(path, extension) ? removeExtension(path, extension) : undefined;
+    }
+
+    export function removeExtension(path: string, extension: string): string {
+        return path.substring(0, path.length - extension.length);
     }
 
     export function isJsxOrTsxExtension(ext: string): boolean {

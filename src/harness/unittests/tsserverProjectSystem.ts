@@ -1127,8 +1127,8 @@ namespace ts {
             const file1 = {
                 path: "/a/b/f1.ts",
                 content: `
-                export * from "../c/f2.ts";
-                export * from "../d/f3.ts";`
+                export * from "../c/f2";
+                export * from "../d/f3";`
             };
             const file2 = {
                 path: "/a/c/f2.ts",
