@@ -179,8 +179,8 @@ namespace ts {
         UndefinedKeyword,
         FromKeyword,
         GlobalKeyword,
-        OfKeyword,
-        KeysOfKeyword, // LastKeyword and LastToken
+        OfKeyword, // LastKeyword and LastToken
+        KeysOfKeyword,
 
         // Parse tree nodes
 
@@ -363,7 +363,7 @@ namespace ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = KeysOfKeyword,
+        LastKeyword = OfKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
