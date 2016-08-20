@@ -13,7 +13,7 @@ namespace C {
 export default C.B;
 
 //// [b.ts]
-import B from "./a.ts";
+import B from "./a";
 const x: B = { c: B };
 
 
@@ -29,5 +29,5 @@ exports.__esModule = true;
 exports["default"] = C.B;
 //// [b.js]
 "use strict";
-var a_ts_1 = require("./a.ts");
-var x = { c: a_ts_1["default"] };
+var a_1 = require("./a");
+var x = { c: a_1["default"] };

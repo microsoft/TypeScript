@@ -11,5 +11,5 @@ namespace C {
 export = C.B;
 
 // @Filename: b.ts
-import B = require("./a.ts");
+import B = require("./a");
 const x: B = { c: B };
