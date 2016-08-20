@@ -2150,7 +2150,8 @@ declare namespace ts {
         GreaterThan = 1,
     }
     function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined;
-    function find<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U;
+    function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined;
+    function findMap<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U;
     function contains<T>(array: T[], value: T): boolean;
     function indexOf<T>(array: T[], value: T): number;
     function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number;
@@ -2237,6 +2238,7 @@ declare namespace ts {
     function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind;
     function getScriptKindFromFileName(fileName: string): ScriptKind;
     const supportedTypeScriptExtensions: string[];
+    const supportedTypescriptExtensionsForExtractExtension: string[];
     const supportedJavascriptExtensions: string[];
     function getSupportedExtensions(options?: CompilerOptions): string[];
     function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions): boolean;
@@ -2251,7 +2253,8 @@ declare namespace ts {
     function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority;
     function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority;
     function removeFileExtension(path: string): string;
-    function tryRemoveExtension(path: string, extension: string): string;
+    function tryRemoveExtension(path: string, extension: string): string | undefined;
+    function removeExtension(path: string, extension: string): string;
     function isJsxOrTsxExtension(ext: string): boolean;
     function changeExtension<T extends string | Path>(path: T, newExtension: string): T;
     interface ObjectAllocator {
@@ -5249,6 +5252,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Import_declaration_0_is_using_private_name_1: {
             code: number;
             category: DiagnosticCategory;
@@ -7208,6 +7217,7 @@ declare namespace ts {
     function getLocalSymbolForExportDefault(symbol: Symbol): Symbol;
     function hasJavaScriptFileExtension(fileName: string): boolean;
     function hasTypeScriptFileExtension(fileName: string): boolean;
+    function tryExtractTypeScriptExtension(fileName: string): string | undefined;
     const stringify: (value: any) => string;
     function convertToBase64(input: string): string;
     function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string;
