@@ -116,6 +116,7 @@ namespace ts {
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
+        const autoType = createIntrinsicType(TypeFlags.Any, "any");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsWideningType, "undefined");
@@ -3052,6 +3053,10 @@ namespace ts {
             // Use type from type annotation if one is present
             if (declaration.type) {
                 return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
+            }
+
+            if (declaration.kind === SyntaxKind.VariableDeclaration && !(getCombinedNodeFlags(declaration) & NodeFlags.Const) && !declaration.initializer) {
+                return autoType;
             }
 
             if (declaration.kind === SyntaxKind.Parameter) {
@@ -8197,7 +8202,9 @@ namespace ts {
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            const initialType = assumeInitialized ? declaredType : includeFalsyTypes(declaredType, TypeFlags.Undefined);
+            const initialType = assumeInitialized ? declaredType :
+                declaredType === autoType ? undefinedType :
+                includeFalsyTypes(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
             const result = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
@@ -8272,11 +8279,9 @@ namespace ts {
                 // only need to evaluate the assigned type if the declared type is a union type.
                 if (isMatchingReference(reference, node)) {
                     const type = getInitialOrAssignedType(node);
-                    if (type !== neverType) {
-                        return declaredType.flags & TypeFlags.Union ?
-                            getAssignmentReducedType(<UnionType>declaredType, type) :
-                            declaredType;
-                    }
+                    return declaredType === autoType || type === neverType ? type :
+                        declaredType.flags & TypeFlags.Union ? getAssignmentReducedType(<UnionType>declaredType, type) :
+                        declaredType;
                 }
                 // We didn't have a direct match. However, if the reference is a dotted name, this
                 // may be an assignment to a left hand part of the reference. For example, for a
@@ -8850,13 +8855,20 @@ namespace ts {
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
-            const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isParameter ||
-                flowContainer !== declarationContainer || isInAmbientContext(declaration);
+            const assumeInitialized = flowContainer !== declarationContainer || isParameter ||
+                type !== autoType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0) ||
+                isInAmbientContext(declaration);
             const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
-            if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
+            if (type === autoType) {
+                if (compilerOptions.noImplicitAny && flowType === autoType) {
+                    error(declaration.name, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(anyType));
+                    return anyType;
+                }
+            }
+            else if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
                 return type;
