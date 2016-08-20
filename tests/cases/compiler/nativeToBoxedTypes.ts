@@ -9,3 +9,7 @@ s = S;
 var B = new Boolean();
 var b = true;
 b = B;
+
+var sym: symbol; 
+var Sym: Symbol;
+sym = Sym;

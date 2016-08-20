@@ -6258,13 +6258,6 @@ namespace ts {
                     targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                 }
 
-                // check if trying to relate primitives to the boxed/apparent backing types.
-                if ((sourceType === "Number" && targetType === "number") ||
-                    (sourceType === "String" && targetType === "string") ||
-                    (sourceType === "Boolean" && targetType === "boolean")) {
-                        reportError(Diagnostics._0_is_a_primitive_type_while_1_is_a_boxed_object_Prefer_using_0_when_possible, targetType, sourceType);
-                }
-
                 if (!message) {
                     message = relation === comparableRelation ?
                         Diagnostics.Type_0_is_not_comparable_to_type_1 :
@@ -6272,6 +6265,19 @@ namespace ts {
                 }
 
                 reportError(message, sourceType, targetType);
+            }
+
+            function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
+                const sourceType = typeToString(source);
+                const targetType = typeToString(target);
+
+                if ((globalStringType === source && stringType === target) ||
+                    (globalNumberType === source && numberType === target) ||
+                    (globalBooleanType === source && booleanType === target) ||
+                    (getGlobalESSymbolType() === source && esSymbolType === target)) {
+                        console.log(source);console.log(target);
+                        reportError(Diagnostics._0_is_a_primitive_type_while_1_is_a_boxed_object_Prefer_using_0_when_possible, targetType, sourceType);
+                }
             }
 
             // Compare two types and return
@@ -6394,6 +6400,10 @@ namespace ts {
                             return result;
                         }
                     }
+                }
+
+                if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.Primitive) {
+                    tryElaborateErrorsForPrimitivesAndObjects(source, target);
                 }
 
                 if (reportErrors) {
