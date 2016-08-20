@@ -4,9 +4,10 @@ tests/cases/compiler/nativeToBoxedTypes.ts(7,1): error TS2322: Type 'String' is 
   'string' is a primitive type while 'String' is a boxed object. Prefer using 'string' when possible.
 tests/cases/compiler/nativeToBoxedTypes.ts(11,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
   'boolean' is a primitive type while 'Boolean' is a boxed object. Prefer using 'boolean' when possible.
+tests/cases/compiler/nativeToBoxedTypes.ts(14,10): error TS2304: Cannot find name 'Symbol'.
 
 
-==== tests/cases/compiler/nativeToBoxedTypes.ts (3 errors) ====
+==== tests/cases/compiler/nativeToBoxedTypes.ts (4 errors) ====
     var N = new Number();
     var n = 100;
     n = N;
@@ -27,3 +28,9 @@ tests/cases/compiler/nativeToBoxedTypes.ts(11,1): error TS2322: Type 'Boolean' i
     ~
 !!! error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
 !!! error TS2322:   'boolean' is a primitive type while 'Boolean' is a boxed object. Prefer using 'boolean' when possible.
+    
+    var sym: symbol; 
+    var Sym: Symbol;
+             ~~~~~~
+!!! error TS2304: Cannot find name 'Symbol'.
+    sym = Sym;
