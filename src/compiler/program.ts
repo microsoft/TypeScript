@@ -662,24 +662,27 @@ namespace ts {
      * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
-    function loadModuleFromFile(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
-        // First try to keep/add an extension: importing "./foo.ts" can be matched by a file "./foo.ts", and "./foo" by "./foo.d.ts"
-        const resolvedByAddingOrKeepingExtension = loadModuleFromFileWorker(candidate, extensions, failedLookupLocation, onlyRecordFailures, state);
-        if (resolvedByAddingOrKeepingExtension) {
-            return resolvedByAddingOrKeepingExtension;
+    function loadModuleFromFile(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
+        // First, try adding an extension. An import of "foo" could be matched by a file "foo.ts", or "foo.js" by "foo.js.ts"
+        const resolvedByAddingExtension = tryAddingExtensions(candidate, extensions, failedLookupLocation, onlyRecordFailures, state);
+        if (resolvedByAddingExtension) {
+            return resolvedByAddingExtension;
         }
-        // Then try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one, e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
+
+        // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
+        // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
         if (hasJavaScriptFileExtension(candidate)) {
             const extensionless = removeFileExtension(candidate);
             if (state.traceEnabled) {
                 const extension = candidate.substring(extensionless.length);
                 trace(state.host, Diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension);
             }
-            return loadModuleFromFileWorker(extensionless, extensions, failedLookupLocation, onlyRecordFailures, state);
+            return tryAddingExtensions(extensionless, extensions, failedLookupLocation, onlyRecordFailures, state);
         }
     }
 
-    function loadModuleFromFileWorker(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
+    /** Try to return an existing file that adds one of the `extensions` to `candidate`. */
+    function tryAddingExtensions(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
         if (!onlyRecordFailures) {
             // check if containing folder exists - if it doesn't then just record failures for all supported extensions without disk probing
             const directory = getDirectoryPath(candidate);
@@ -687,26 +690,24 @@ namespace ts {
                 onlyRecordFailures = !directoryProbablyExists(directory, state.host);
             }
         }
-        return forEach(extensions, tryLoad);
+        return forEach(extensions, ext =>
+            !(state.skipTsx && isJsxOrTsxExtension(ext)) && tryFile(candidate + ext, failedLookupLocation, onlyRecordFailures, state));
+    }
 
-        function tryLoad(ext: string): string {
-            if (state.skipTsx && isJsxOrTsxExtension(ext)) {
-                return undefined;
+    /** Return the file if it exists. */
+    function tryFile(fileName: string, failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
+        if (!onlyRecordFailures && state.host.fileExists(fileName)) {
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.File_0_exist_use_it_as_a_name_resolution_result, fileName);
             }
-            const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
-            if (!onlyRecordFailures && state.host.fileExists(fileName)) {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.File_0_exist_use_it_as_a_name_resolution_result, fileName);
-                }
-                return fileName;
+            return fileName;
+        }
+        else {
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.File_0_does_not_exist, fileName);
             }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.File_0_does_not_exist, fileName);
-                }
-                failedLookupLocation.push(fileName);
-                return undefined;
-            }
+            failedLookupLocation.push(fileName);
+            return undefined;
         }
     }
 
@@ -719,7 +720,9 @@ namespace ts {
             }
             const typesFile = tryReadTypesSection(packageJsonPath, candidate, state);
             if (typesFile) {
-                const result = loadModuleFromFile(typesFile, extensions, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(typesFile), state.host), state);
+                const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(typesFile), state.host);
+                // The package.json "typings" property must specify the file with extension, so just try that exact filename.
+                const result = tryFile(typesFile, failedLookupLocation, onlyRecordFailures, state);
                 if (result) {
                     return result;
                 }
