@@ -1339,7 +1339,7 @@ namespace Harness {
             });
         }
 
-        export function doTypeAndSymbolBaseline(baselinePath: string, result: CompilerResult, allFiles: {unitName: string, content: string}[]) {
+        export function doTypeAndSymbolBaseline(baselinePath: string, result: CompilerResult, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions) {
             if (result.errors.length !== 0) {
                 return;
             }
@@ -1396,7 +1396,7 @@ namespace Harness {
 
                 const fullExtension = isSymbolBaseLine ? ".symbols" : ".types";
 
-                Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
+                Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, fullExtension), () => fullBaseLine, opts);
             }
 
             function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
