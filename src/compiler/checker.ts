@@ -6271,7 +6271,7 @@ namespace ts {
                         Diagnostics.Type_0_is_not_assignable_to_type_1;
                 }
 
-                reportError(message, sourceType, targetType);               
+                reportError(message, sourceType, targetType);
             }
 
             // Compare two types and return
