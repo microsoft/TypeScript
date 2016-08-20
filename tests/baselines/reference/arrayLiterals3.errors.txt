@@ -18,6 +18,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
       Types of parameters 'items' and 'items' are incompatible.
         Type 'Number' is not assignable to type 'string | number'.
           Type 'Number' is not assignable to type 'number'.
+            'number' is a primitive type while 'Number' is a boxed object. Prefer using 'number' when possible.
 
 
 ==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (6 errors) ====
@@ -81,4 +82,5 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
 !!! error TS2322:       Types of parameters 'items' and 'items' are incompatible.
 !!! error TS2322:         Type 'Number' is not assignable to type 'string | number'.
 !!! error TS2322:           Type 'Number' is not assignable to type 'number'.
+!!! error TS2322:             'number' is a primitive type while 'Number' is a boxed object. Prefer using 'number' when possible.
     

@@ -1,0 +1,29 @@
+tests/cases/compiler/nativeToBoxedTypes.ts(3,1): error TS2322: Type 'Number' is not assignable to type 'number'.
+  'number' is a primitive type while 'Number' is a boxed object. Prefer using 'number' when possible.
+tests/cases/compiler/nativeToBoxedTypes.ts(7,1): error TS2322: Type 'String' is not assignable to type 'string'.
+  'string' is a primitive type while 'String' is a boxed object. Prefer using 'string' when possible.
+tests/cases/compiler/nativeToBoxedTypes.ts(11,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
+  'boolean' is a primitive type while 'Boolean' is a boxed object. Prefer using 'boolean' when possible.
+
+
+==== tests/cases/compiler/nativeToBoxedTypes.ts (3 errors) ====
+    var N = new Number();
+    var n = 100;
+    n = N;
+    ~
+!!! error TS2322: Type 'Number' is not assignable to type 'number'.
+!!! error TS2322:   'number' is a primitive type while 'Number' is a boxed object. Prefer using 'number' when possible.
+    
+    var S = new String();
+    var s = "foge";
+    s = S;
+    ~
+!!! error TS2322: Type 'String' is not assignable to type 'string'.
+!!! error TS2322:   'string' is a primitive type while 'String' is a boxed object. Prefer using 'string' when possible.
+    
+    var B = new Boolean();
+    var b = true;
+    b = B;
+    ~
+!!! error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
+!!! error TS2322:   'boolean' is a primitive type while 'Boolean' is a boxed object. Prefer using 'boolean' when possible.

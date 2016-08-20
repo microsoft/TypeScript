@@ -6258,13 +6258,20 @@ namespace ts {
                     targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                 }
 
+                // check if trying to relate primitives to the boxed/apparent backing types.
+                if ((sourceType === "Number" && targetType === "number") ||
+                    (sourceType === "String" && targetType === "string") ||
+                    (sourceType === "Boolean" && targetType === "boolean")) {
+                        reportError(Diagnostics._0_is_a_primitive_type_while_1_is_a_boxed_object_Prefer_using_0_when_possible, targetType, sourceType);
+                }
+
                 if (!message) {
                     message = relation === comparableRelation ?
                         Diagnostics.Type_0_is_not_comparable_to_type_1 :
                         Diagnostics.Type_0_is_not_assignable_to_type_1;
                 }
 
-                reportError(message, sourceType, targetType);
+                reportError(message, sourceType, targetType);               
             }
 
             // Compare two types and return
