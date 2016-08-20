@@ -2070,7 +2070,7 @@ namespace ts {
      * for completions.
      * For example, this matches /// <reference path="fragment
      */
-    const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^'"]*)$/;
+    const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3]*)$/;
 
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
