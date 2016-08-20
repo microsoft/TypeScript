@@ -1,4 +1,5 @@
 // @target: es6
+// @strictNullChecks: true
 declare var p: Promise<boolean>;
 
 const a = p.then();
