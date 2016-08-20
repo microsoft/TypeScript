@@ -19958,7 +19958,7 @@ namespace ts {
         function getAmbientModules(): Symbol[] {
             const result: Symbol[] = [];
             for (const sym in globals) {
-                if (hasProperty(globals, sym) && ambientModuleSymbolRegex.test(sym)) {
+                if (ambientModuleSymbolRegex.test(sym)) {
                     result.push(globals[sym]);
                 }
             }
