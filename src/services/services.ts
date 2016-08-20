@@ -5004,6 +5004,28 @@ namespace ts {
 
             if (!documentation) {
                 documentation = symbol.getDocumentationComment();
+                if (documentation.length === 0 && symbol.flags & SymbolFlags.Property) {
+                    // For some special property access expressions like `experts.foo = foo` or `module.exports.foo = foo`
+                    // there documentation comments might be attached to the right hand side symbol of their declarations.
+                    // The pattern of such special property access is that the parent symbol is the symbol of the file.
+                    if (symbol.parent && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
+                        for (const declaration of symbol.declarations) {
+                            if (!declaration.parent || declaration.parent.kind !== SyntaxKind.BinaryExpression) {
+                                continue;
+                            }
+
+                            const rhsSymbol = program.getTypeChecker().getSymbolAtLocation((<BinaryExpression>declaration.parent).right);
+                            if (!rhsSymbol) {
+                                continue;
+                            }
+
+                            documentation = rhsSymbol.getDocumentationComment();
+                            if (documentation.length > 0) {
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             return { displayParts, documentation, symbolKind };

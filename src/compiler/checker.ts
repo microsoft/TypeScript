@@ -14126,12 +14126,7 @@ namespace ts {
                 checkSignatureDeclaration(node);
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!isInAmbientContext(node) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
-                        if (node.flags & NodeFlags.HasExplicitReturn) {
-                            if (compilerOptions.noImplicitReturns) {
-                                error(node.name, Diagnostics.Not_all_code_paths_return_a_value);
-                            }
-                        }
-                        else {
+                        if (!(node.flags & NodeFlags.HasExplicitReturn)) {
                             error(node.name, Diagnostics.A_get_accessor_must_return_a_value);
                         }
                     }
@@ -14161,7 +14156,10 @@ namespace ts {
                         checkAccessorDeclarationTypesIdentical(node, otherAccessor, getThisTypeOfDeclaration, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
                     }
                 }
-                getTypeOfAccessors(getSymbolOfNode(node));
+                const returnType = getTypeOfAccessors(getSymbolOfNode(node));
+                if (node.kind === SyntaxKind.GetAccessor) {
+                    checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnType);
+                }
             }
             if (node.parent.kind !== SyntaxKind.ObjectLiteralExpression) {
                 checkSourceElement(node.body);
