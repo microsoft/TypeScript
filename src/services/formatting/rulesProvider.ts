@@ -81,6 +81,17 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceBetweenBrackets);
             }
 
+            if (options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces) {
+                rules.push(this.globalRules.SpaceAfterOpenBrace);
+                rules.push(this.globalRules.SpaceBeforeCloseBrace);
+                rules.push(this.globalRules.NoSpaceBetweenEmptyBraceBrackets);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceAfterOpenBrace);
+                rules.push(this.globalRules.NoSpaceBeforeCloseBrace);
+                rules.push(this.globalRules.NoSpaceBetweenEmptyBraceBrackets);
+            }
+
             if (options.InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces) {
                 rules.push(this.globalRules.SpaceAfterTemplateHeadAndMiddle);
                 rules.push(this.globalRules.SpaceBeforeTemplateMiddleAndTail);
