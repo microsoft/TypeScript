@@ -6401,11 +6401,10 @@ namespace ts {
                     }
                 }
 
-                if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.Primitive) {
-                    tryElaborateErrorsForPrimitivesAndObjects(source, target);
-                }
-
                 if (reportErrors) {
+                    if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.Primitive) {
+                        tryElaborateErrorsForPrimitivesAndObjects(source, target);
+                    }
                     reportRelationError(headMessage, source, target);
                 }
                 return Ternary.False;
