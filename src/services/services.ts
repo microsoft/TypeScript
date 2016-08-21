@@ -21,7 +21,6 @@ namespace ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
-        getNonJsDocCommentChildren?(sourceFile?: SourceFile): Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
@@ -197,7 +196,6 @@ namespace ts {
         public parent: Node;
         public jsDocComments: JSDocComment[];
         private _children: Node[];
-        private _nonJsDocCommentChildren: Node[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             this.pos = pos;
@@ -275,22 +273,20 @@ namespace ts {
         }
 
         private createChildren(sourceFile?: SourceFile) {
-            let jsDocCommentChildren: Node[];
-            let nonJsDocCommentChildren: Node[];
+            let children: Node[];
             if (this.kind >= SyntaxKind.FirstNode) {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
-                jsDocCommentChildren = [];
-                nonJsDocCommentChildren = [];
+                children = [];
                 let pos = this.pos;
                 const useJSDocScanner = this.kind >= SyntaxKind.FirstJSDocTagNode && this.kind <= SyntaxKind.LastJSDocTagNode;
-                const processNode = (node: Node, children = nonJsDocCommentChildren) => {
+                const processNode = (node: Node) => {
                     if (pos < node.pos) {
                         pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);
                     }
                     children.push(node);
                     pos = node.end;
                 };
-                const processNodes = (nodes: NodeArray<Node>, children = nonJsDocCommentChildren) => {
+                const processNodes = (nodes: NodeArray<Node>) => {
                     if (pos < nodes.pos) {
                         pos = this.addSyntheticNodes(children, pos, nodes.pos, useJSDocScanner);
                     }
@@ -300,7 +296,7 @@ namespace ts {
                 // jsDocComments need to be the first children
                 if (this.jsDocComments) {
                     for (const jsDocComment of this.jsDocComments) {
-                        processNode(jsDocComment, jsDocCommentChildren);
+                        processNode(jsDocComment);
                     }
                 }
                 // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
@@ -309,12 +305,11 @@ namespace ts {
                 pos = this.pos;
                 forEachChild(this, processNode, processNodes);
                 if (pos < this.end) {
-                    this.addSyntheticNodes(nonJsDocCommentChildren, pos, this.end);
+                    this.addSyntheticNodes(children, pos, this.end);
                 }
                 scanner.setText(undefined);
             }
-            this._nonJsDocCommentChildren = nonJsDocCommentChildren || emptyArray;
-            this._children = concatenate(jsDocCommentChildren, this._nonJsDocCommentChildren);
+            this._children = children || emptyArray;
         }
 
         public getChildCount(sourceFile?: SourceFile): number {
@@ -330,18 +325,6 @@ namespace ts {
         public getChildren(sourceFile?: SourceFile): Node[] {
             if (!this._children) this.createChildren(sourceFile);
             return this._children;
-        }
-
-        public getNonJsDocCommentChildren(sourceFile?: SourceFile): Node[] {
-            // If the cached children were cleared, that means some node before the current node has changed.
-            // so even if we have a cached nonJsDocCommentChildren, it would be outdated as well.
-            if (!this._children) {
-                this.createChildren(sourceFile);
-            }
-            // If the node has cached children but not nonJsDocCommentChildren, it means the children is not created
-            // via calling the "createChildren" method, so it can only be a SyntaxList. As SyntaxList cannot have jsDocCommentChildren
-            // anyways, we can just return its children.
-            return this._nonJsDocCommentChildren ? this._nonJsDocCommentChildren : this._children;
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
@@ -7591,6 +7574,10 @@ namespace ts {
              * False will mean that node is not classified and traverse routine should recurse into node contents.
              */
             function tryClassifyNode(node: Node): boolean {
+                if (isJSDocTag(node)) {
+                    return true;
+                }
+
                 if (nodeIsMissing(node)) {
                     return true;
                 }
@@ -7746,7 +7733,7 @@ namespace ts {
                 if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
                     checkForClassificationCancellation(element.kind);
 
-                    const children = element.getNonJsDocCommentChildren ? element.getNonJsDocCommentChildren(sourceFile) : element.getChildren(sourceFile);
+                    const children = element.getChildren(sourceFile);
                     for (let i = 0, n = children.length; i < n; i++) {
                         const child = children[i];
                         if (!tryClassifyNode(child)) {
