@@ -1,4 +1,4 @@
-tests/cases/compiler/genericConstructInvocationWithNoTypeArg.ts(4,27): error TS2691: Cannot find name 'Foo'. A type exists with this name, but no value.
+tests/cases/compiler/genericConstructInvocationWithNoTypeArg.ts(4,27): error TS2692: Cannot find name 'Foo'. A type exists with this name, but no value.
 
 
 ==== tests/cases/compiler/genericConstructInvocationWithNoTypeArg.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/genericConstructInvocationWithNoTypeArg.ts(4,27): error TS2
     }
     var f2: Foo<number> = new Foo(3);
                               ~~~
-!!! error TS2691: Cannot find name 'Foo'. A type exists with this name, but no value.
+!!! error TS2692: Cannot find name 'Foo'. A type exists with this name, but no value.
     

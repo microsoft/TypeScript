@@ -1,5 +1,5 @@
 tests/cases/compiler/typeofSimple.ts(3,5): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/typeofSimple.ts(8,21): error TS2691: Cannot find name 'J'. A type exists with this name, but no value.
+tests/cases/compiler/typeofSimple.ts(8,21): error TS2692: Cannot find name 'J'. A type exists with this name, but no value.
 
 
 ==== tests/cases/compiler/typeofSimple.ts (2 errors) ====
@@ -14,7 +14,7 @@ tests/cases/compiler/typeofSimple.ts(8,21): error TS2691: Cannot find name 'J'. 
     
     var numberJ: typeof J; //Error, cannot reference type in typeof
                         ~
-!!! error TS2691: Cannot find name 'J'. A type exists with this name, but no value.
+!!! error TS2692: Cannot find name 'J'. A type exists with this name, but no value.
     var numberI: I<typeof v2>;
     
     var fun: () => I<number>;

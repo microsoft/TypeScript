@@ -1955,6 +1955,10 @@
         "category": "Error",
         "code": 2691
     },
+    "Cannot find name '{0}'. A type exists with this name, but no value.": {
+        "category": "Error",
+        "code": 2692
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
