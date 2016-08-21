@@ -106,7 +106,7 @@ namespace ts {
             isOptionalParameter
         };
 
-        const tupleTypes: TupleType[] = [];
+        const tupleTypes: GenericType[] = [];
         const unionTypes = createMap<UnionType>();
         const intersectionTypes = createMap<IntersectionType>();
         const stringLiteralTypes = createMap<LiteralType>();
@@ -2213,7 +2213,7 @@ namespace ts {
                     }
                     else if (type.target.flags & TypeFlags.Tuple) {
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writeTypeList(type.typeArguments.slice(0, type.target.typeParameters.length), SyntaxKind.CommaToken);
+                        writeTypeList(type.typeArguments.slice(0, getTypeReferenceArity(type)), SyntaxKind.CommaToken);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
                     else {
@@ -4978,6 +4978,10 @@ namespace ts {
             return type;
         }
 
+        function getTypeReferenceArity(type: TypeReference): number {
+            return type.target.typeParameters.length;
+        }
+
         // Get type from reference to class or interface
         function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
@@ -5220,7 +5224,14 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function createTupleTypeOfArity(arity: number): TupleType {
+        // We represent tuple types as type references to synthesized generic interface types created by
+        // this function. The types are of the form:
+        //
+        //   interface Tuple<T0, T1, T2, ...> extends Array<T0 | T1 | T2 | ...> { 0: T0, 1: T1, 2: T2, ... }
+        //
+        // Note that the generic type created by this function has no symbol associated with it. The same
+        // is true for each of the synthesized type parameters.
+        function createTupleTypeOfArity(arity: number): GenericType {
             const typeParameters: TypeParameter[] = [];
             const properties: Symbol[] = [];
             for (let i = 0; i < arity; i++) {
@@ -5230,7 +5241,7 @@ namespace ts {
                 property.type = typeParameter;
                 properties.push(property);
             }
-            const type = <TupleType & InterfaceTypeWithDeclaredMembers>createObjectType(TypeFlags.Tuple | TypeFlags.Reference);
+            const type = <GenericType & InterfaceTypeWithDeclaredMembers>createObjectType(TypeFlags.Tuple | TypeFlags.Reference);
             type.typeParameters = typeParameters;
             type.outerTypeParameters = undefined;
             type.localTypeParameters = typeParameters;
@@ -5248,12 +5259,8 @@ namespace ts {
             return type;
         }
 
-        function getTupleTypeOfArity(arity: number): TupleType {
+        function getTupleTypeOfArity(arity: number): GenericType {
             return tupleTypes[arity] || (tupleTypes[arity] = createTupleTypeOfArity(arity));
-        }
-
-        function getTypeReferenceArity(type: TypeReference): number {
-            return type.target.typeParameters.length;
         }
 
         function createTupleType(elementTypes: Type[]) {

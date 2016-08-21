@@ -2263,7 +2263,7 @@ namespace ts {
         Class                   = 1 << 15,  // Class
         Interface               = 1 << 16,  // Interface
         Reference               = 1 << 17,  // Generic type reference
-        Tuple                   = 1 << 18,  // Tuple
+        Tuple                   = 1 << 18,  // Synthesized generic tuple type
         Union                   = 1 << 19,  // Union (T | U)
         Intersection            = 1 << 20,  // Intersection (T & U)
         Anonymous               = 1 << 21,  // Anonymous
@@ -2384,8 +2384,6 @@ namespace ts {
         /* @internal */
         instantiations: Map<TypeReference>;   // Generic instantiation cache
     }
-
-    export interface TupleType extends GenericType { }
 
     export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
