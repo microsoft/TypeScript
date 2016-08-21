@@ -702,7 +702,8 @@ namespace ts.server {
         }
 
         handleProjectFileListChanges(project: Project) {
-            const { projectOptions } = this.configFileToProjectOptions(project.projectFilename);
+            const { projectOptions, errors } = this.configFileToProjectOptions(project.projectFilename);
+            this.reportConfigFileDiagnostics(project.projectFilename, errors);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
@@ -720,18 +721,32 @@ namespace ts.server {
             }
         }
 
+        reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile?: string) {
+            if (diagnostics && diagnostics.length > 0) {
+                this.eventHandler({
+                    eventName: "configFileDiag",
+                    data: { configFileName, diagnostics, triggerFile }
+                });
+            }
+        }
+
         /**
          * This is the callback function when a watched directory has an added tsconfig file.
          */
         directoryWatchedForTsconfigChanged(fileName: string) {
-            if (ts.getBaseFileName(fileName) != "tsconfig.json") {
+            if (ts.getBaseFileName(fileName) !== "tsconfig.json") {
                 this.log(fileName + " is not tsconfig.json");
                 return;
             }
 
             this.log("Detected newly added tsconfig file: " + fileName);
 
-            const { projectOptions } = this.configFileToProjectOptions(fileName);
+            const { projectOptions, errors } = this.configFileToProjectOptions(fileName);
+            this.reportConfigFileDiagnostics(fileName, errors);
+
+            if (!projectOptions) {
+                return;
+            }
 
             const rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));
             const openFileRoots = this.openFileRoots.map(s => this.getCanonicalFileName(s.fileName));
@@ -1224,7 +1239,7 @@ namespace ts.server {
                 const project = this.findConfiguredProjectByConfigFile(configFileName);
                 if (!project) {
                     const configResult = this.openConfigFile(configFileName, fileName);
-                    if (!configResult.success) {
+                    if (!configResult.project) {
                         return { configFileName, configFileErrors: configResult.errors };
                     }
                     else {
@@ -1335,33 +1350,31 @@ namespace ts.server {
             return undefined;
         }
 
-        configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, errors: Diagnostic[] } {
+        configFileToProjectOptions(configFilename: string): { projectOptions?: ProjectOptions, errors: Diagnostic[] } {
             configFilename = ts.normalizePath(configFilename);
+            let errors: Diagnostic[] = [];
             // file references will be relative to dirPath (or absolute)
             const dirPath = ts.getDirectoryPath(configFilename);
             const contents = this.host.readFile(configFilename);
-            const rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
-            if (rawConfig.error) {
-                return { succeeded: false, errors: [rawConfig.error] };
+            const { configJsonObject, diagnostics } = ts.parseAndReEmitConfigJSONFile(contents);
+            errors = concatenate(errors, diagnostics);
+            const parsedCommandLine = ts.parseJsonConfigFileContent(configJsonObject, this.host, dirPath, /*existingOptions*/ {}, configFilename);
+            errors = concatenate(errors, parsedCommandLine.errors);
+            Debug.assert(!!parsedCommandLine.fileNames);
+
+            if (parsedCommandLine.fileNames.length === 0) {
+                errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
+                return { errors };
             }
             else {
-                const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath, /*existingOptions*/ {}, configFilename);
-                Debug.assert(!!parsedCommandLine.fileNames);
-
-                if (parsedCommandLine.fileNames.length === 0) {
-                    const error = createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename);
-                    return { succeeded: false, errors: concatenate(parsedCommandLine.errors, [error]) };
-                }
-                else {
-                    // if the project has some files, we can continue with the parsed options and tolerate
-                    // errors in the parsedCommandLine
-                    const projectOptions: ProjectOptions = {
-                        files: parsedCommandLine.fileNames,
-                        wildcardDirectories: parsedCommandLine.wildcardDirectories,
-                        compilerOptions: parsedCommandLine.options,
-                    };
-                    return { succeeded: true, projectOptions, errors: parsedCommandLine.errors };
-                }
+                // if the project has some files, we can continue with the parsed options and tolerate
+                // errors in the parsedCommandLine
+                const projectOptions: ProjectOptions = {
+                    files: parsedCommandLine.fileNames,
+                    wildcardDirectories: parsedCommandLine.wildcardDirectories,
+                    compilerOptions: parsedCommandLine.options,
+                };
+                return { projectOptions, errors };
             }
         }
 
@@ -1383,65 +1396,63 @@ namespace ts.server {
             return false;
         }
 
-        openConfigFile(configFilename: string, clientFileName?: string): { success: boolean, project?: Project, errors: Diagnostic[] } {
-            const { succeeded, projectOptions, errors: errorsFromConfigFile } = this.configFileToProjectOptions(configFilename);
-            // Note: even if "succeeded"" is true, "errors" may still exist, as they are just tolerated
-            if (!succeeded) {
-                return { success: false, errors: errorsFromConfigFile };
+        openConfigFile(configFilename: string, clientFileName?: string): { project?: Project, errors: Diagnostic[] } {
+            const parseConfigFileResult = this.configFileToProjectOptions(configFilename);
+            let errors = parseConfigFileResult.errors;
+            if (!parseConfigFileResult.projectOptions) {
+                return { errors };
             }
-            else {
-                if (!projectOptions.compilerOptions.disableSizeLimit && projectOptions.compilerOptions.allowJs) {
-                    if (this.exceedTotalNonTsFileSizeLimit(projectOptions.files)) {
-                        const project = this.createProject(configFilename, projectOptions, /*languageServiceDisabled*/ true);
+            const projectOptions = parseConfigFileResult.projectOptions;
+            if (!projectOptions.compilerOptions.disableSizeLimit && projectOptions.compilerOptions.allowJs) {
+                if (this.exceedTotalNonTsFileSizeLimit(projectOptions.files)) {
+                    const project = this.createProject(configFilename, projectOptions, /*languageServiceDisabled*/ true);
 
-                        // for configured projects with languageService disabled, we only watch its config file,
-                        // do not care about the directory changes in the folder.
-                        project.projectFileWatcher = this.host.watchFile(
-                            toPath(configFilename, configFilename, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
-                            _ => this.watchedProjectConfigFileChanged(project));
-                        return { success: true, project, errors: errorsFromConfigFile };
-                    }
+                    // for configured projects with languageService disabled, we only watch its config file,
+                    // do not care about the directory changes in the folder.
+                    project.projectFileWatcher = this.host.watchFile(
+                        toPath(configFilename, configFilename, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+                        _ => this.watchedProjectConfigFileChanged(project));
+                    return { project, errors };
+                }
+            }
+
+            const project = this.createProject(configFilename, projectOptions);
+            for (const rootFilename of projectOptions.files) {
+                if (this.host.fileExists(rootFilename)) {
+                    const info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
+                    project.addRoot(info);
+                }
+                else {
+                    (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
+                }
+            }
+            project.finishGraph();
+            project.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(project));
+
+            const configDirectoryPath = ts.getDirectoryPath(configFilename);
+
+            this.log("Add recursive watcher for: " + configDirectoryPath);
+            project.directoryWatcher = this.host.watchDirectory(
+                configDirectoryPath,
+                path => this.directoryWatchedForSourceFilesChanged(project, path),
+                /*recursive*/ true
+            );
+
+            project.directoriesWatchedForWildcards = reduceProperties(createMap(projectOptions.wildcardDirectories), (watchers, flag, directory) => {
+                if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
+                    const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                    this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);
+                    watchers[directory] = this.host.watchDirectory(
+                        directory,
+                        path => this.directoryWatchedForSourceFilesChanged(project, path),
+                        recursive
+                    );
                 }
 
-                const project = this.createProject(configFilename, projectOptions);
-                let errors: Diagnostic[];
-                for (const rootFilename of projectOptions.files) {
-                    if (this.host.fileExists(rootFilename)) {
-                        const info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
-                        project.addRoot(info);
-                    }
-                    else {
-                        (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
-                    }
-                }
-                project.finishGraph();
-                project.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(project));
+                return watchers;
+            }, <Map<FileWatcher>>{});
 
-                const configDirectoryPath = ts.getDirectoryPath(configFilename);
-
-                this.log("Add recursive watcher for: " + configDirectoryPath);
-                project.directoryWatcher = this.host.watchDirectory(
-                    configDirectoryPath,
-                    path => this.directoryWatchedForSourceFilesChanged(project, path),
-                    /*recursive*/ true
-                );
-
-                project.directoriesWatchedForWildcards = reduceProperties(createMap(projectOptions.wildcardDirectories), (watchers, flag, directory) => {
-                    if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
-                        const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
-                        this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);
-                        watchers[directory] = this.host.watchDirectory(
-                            directory,
-                            path => this.directoryWatchedForSourceFilesChanged(project, path),
-                            recursive
-                        );
-                    }
-
-                    return watchers;
-                }, <Map<FileWatcher>>{});
-
-                return { success: true, project: project, errors: concatenate(errors, errorsFromConfigFile) };
-            }
+            return { project: project, errors };
         }
 
         updateConfiguredProject(project: Project): Diagnostic[] {
@@ -1450,8 +1461,8 @@ namespace ts.server {
                 this.removeProject(project);
             }
             else {
-                const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(project.projectFilename);
-                if (!succeeded) {
+                const { projectOptions, errors } = this.configFileToProjectOptions(project.projectFilename);
+                if (!projectOptions) {
                     return errors;
                 }
                 else {
