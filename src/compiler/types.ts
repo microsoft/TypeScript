@@ -2385,10 +2385,7 @@ namespace ts {
         instantiations: Map<TypeReference>;   // Generic instantiation cache
     }
 
-    export interface TupleType extends ObjectType {
-        elementTypes: Type[];  // Element types
-        thisType?: Type;       // This-type of tuple (only needed for tuples that are constraints of type parameters)
-    }
+    export interface TupleType extends GenericType { }
 
     export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
