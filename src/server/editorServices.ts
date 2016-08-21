@@ -603,8 +603,11 @@ namespace ts.server {
         return projects.length > 1 ? deduplicate(result, areEqual) : result;
     }
 
+    export type ProjectServiceEvent =
+        { eventName: "context", data: { project: Project, fileName: string } } | { eventName: "configFileDiag", data: { triggerFile?: string, configFileName: string, diagnostics: Diagnostic[] } }
+
     export interface ProjectServiceEventHandler {
-        (eventName: string, project: Project, fileName: string): void;
+        (event: ProjectServiceEvent): void;
     }
 
     export interface HostConfiguration {
@@ -748,10 +751,13 @@ namespace ts.server {
             return ts.normalizePath(name);
         }
 
-        watchedProjectConfigFileChanged(project: Project) {
+        watchedProjectConfigFileChanged(project: Project): void {
             this.log("Config file changed: " + project.projectFilename);
-            this.updateConfiguredProject(project);
+            const configFileErrors = this.updateConfiguredProject(project);
             this.updateProjectStructure();
+            if (configFileErrors && configFileErrors.length > 0) {
+                this.eventHandler({ eventName: "configFileDiag", data: { triggerFile: project.projectFilename, configFileName: project.projectFilename, diagnostics: configFileErrors } });
+            }
         }
 
         log(msg: string, type = "Err") {
@@ -828,13 +834,13 @@ namespace ts.server {
                 for (let j = 0, flen = this.openFileRoots.length; j < flen; j++) {
                     const openFile = this.openFileRoots[j];
                     if (this.eventHandler) {
-                        this.eventHandler("context", openFile.defaultProject, openFile.fileName);
+                        this.eventHandler({ eventName: "context", data: { project: openFile.defaultProject, fileName: openFile.fileName } });
                     }
                 }
                 for (let j = 0, flen = this.openFilesReferenced.length; j < flen; j++) {
                     const openFile = this.openFilesReferenced[j];
                     if (this.eventHandler) {
-                        this.eventHandler("context", openFile.defaultProject, openFile.fileName);
+                        this.eventHandler({ eventName: "context", data: { project: openFile.defaultProject, fileName: openFile.fileName } });
                     }
                 }
             }
@@ -1234,11 +1240,12 @@ namespace ts.server {
                 else {
                     this.updateConfiguredProject(project);
                 }
+                return { configFileName };
             }
             else {
                 this.log("No config files found.");
             }
-            return configFileName ? { configFileName } : {};
+            return {};
         }
 
         /**
@@ -1328,7 +1335,7 @@ namespace ts.server {
             return undefined;
         }
 
-        configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, errors?: Diagnostic[] } {
+        configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, errors: Diagnostic[] } {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
             const dirPath = ts.getDirectoryPath(configFilename);
@@ -1341,20 +1348,19 @@ namespace ts.server {
                 const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath, /*existingOptions*/ {}, configFilename);
                 Debug.assert(!!parsedCommandLine.fileNames);
 
-                if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
-                    return { succeeded: false, errors: parsedCommandLine.errors };
-                }
-                else if (parsedCommandLine.fileNames.length === 0) {
+                if (parsedCommandLine.fileNames.length === 0) {
                     const error = createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename);
-                    return { succeeded: false, errors: [error] };
+                    return { succeeded: false, errors: concatenate(parsedCommandLine.errors, [error]) };
                 }
                 else {
+                    // if the project has some files, we can continue with the parsed options and tolerate
+                    // errors in the parsedCommandLine
                     const projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
                         wildcardDirectories: parsedCommandLine.wildcardDirectories,
                         compilerOptions: parsedCommandLine.options,
                     };
-                    return { succeeded: true, projectOptions };
+                    return { succeeded: true, projectOptions, errors: parsedCommandLine.errors };
                 }
             }
         }
@@ -1377,10 +1383,11 @@ namespace ts.server {
             return false;
         }
 
-        openConfigFile(configFilename: string, clientFileName?: string): { success: boolean, project?: Project, errors?: Diagnostic[] } {
-            const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(configFilename);
+        openConfigFile(configFilename: string, clientFileName?: string): { success: boolean, project?: Project, errors: Diagnostic[] } {
+            const { succeeded, projectOptions, errors: errorsFromConfigFile } = this.configFileToProjectOptions(configFilename);
+            // Note: even if "succeeded"" is true, "errors" may still exist, as they are just tolerated
             if (!succeeded) {
-                return { success: false, errors };
+                return { success: false, errors: errorsFromConfigFile };
             }
             else {
                 if (!projectOptions.compilerOptions.disableSizeLimit && projectOptions.compilerOptions.allowJs) {
@@ -1392,7 +1399,7 @@ namespace ts.server {
                         project.projectFileWatcher = this.host.watchFile(
                             toPath(configFilename, configFilename, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                             _ => this.watchedProjectConfigFileChanged(project));
-                        return { success: true, project };
+                        return { success: true, project, errors: errorsFromConfigFile };
                     }
                 }
 
@@ -1433,7 +1440,7 @@ namespace ts.server {
                     return watchers;
                 }, <Map<FileWatcher>>{});
 
-                return { success: true, project: project, errors };
+                return { success: true, project: project, errors: concatenate(errors, errorsFromConfigFile) };
             }
         }
 
@@ -1451,7 +1458,7 @@ namespace ts.server {
                     if (projectOptions.compilerOptions && !projectOptions.compilerOptions.disableSizeLimit && this.exceedTotalNonTsFileSizeLimit(projectOptions.files)) {
                         project.setProjectOptions(projectOptions);
                         if (project.languageServiceDiabled) {
-                            return;
+                            return errors;
                         }
 
                         project.disableLanguageService();
@@ -1459,7 +1466,7 @@ namespace ts.server {
                             project.directoryWatcher.close();
                             project.directoryWatcher = undefined;
                         }
-                        return;
+                        return errors;
                     }
 
                     if (project.languageServiceDiabled) {
@@ -1478,7 +1485,7 @@ namespace ts.server {
                             }
                         }
                         project.finishGraph();
-                        return;
+                        return errors;
                     }
 
                     // if the project is too large, the root files might not have been all loaded if the total
@@ -1524,6 +1531,7 @@ namespace ts.server {
                     project.setProjectOptions(projectOptions);
                     project.finishGraph();
                 }
+                return errors;
             }
         }
 
