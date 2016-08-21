@@ -623,5 +623,23 @@ namespace ts {
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 0);
         });
+
+        it("should tolerate config file errors and still try to build a project", () => {
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6",
+                        "allowAnything": true
+                    },
+                    "someOtherProperty": {}
+                }`
+            };
+            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, commonFile2, libFile, configFile]);
+            const projectService = new server.ProjectService(host, nullLogger);
+            projectService.openClientFile(commonFile1.path);
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkConfiguredProjectRootFiles(projectService.configuredProjects[0], [commonFile1.path, commonFile2.path]);
+        });
     });
 }
