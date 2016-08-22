@@ -1,14 +1,18 @@
-//// [castOfAwait.ts]
-async function f() {
-    <number> await 0;
-    typeof await 0;
-    void await 0;
-    await void <string> typeof <number> void await 0;
-    await await 0;
+//// [await_unaryExpression_es6_2.ts]
+
+async function bar1() {
+    delete await 42;
 }
 
+async function bar2() {
+    delete await 42;
+}
 
-//// [castOfAwait.js]
+async function bar3() {
+    void await 42;
+}
+
+//// [await_unaryExpression_es6_2.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -17,12 +21,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-function f() {
+function bar1() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield 0;
-        typeof (yield 0);
-        void (yield 0);
-        yield void typeof void (yield 0);
-        yield yield 0;
+        delete (yield 42);
+    });
+}
+function bar2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        delete (yield 42);
+    });
+}
+function bar3() {
+    return __awaiter(this, void 0, void 0, function* () {
+        void (yield 42);
     });
 }
