@@ -1,10 +1,8 @@
 tests/cases/conformance/types/tuple/castingTuple.ts(28,10): error TS2352: Type '[number, string]' cannot be converted to type '[number, number]'.
-  Types of property '1' are incompatible.
-    Type 'string' is not comparable to type 'number'.
+  Type 'string' is not comparable to type 'number'.
 tests/cases/conformance/types/tuple/castingTuple.ts(29,10): error TS2352: Type '[C, D]' cannot be converted to type '[A, I]'.
-  Types of property '0' are incompatible.
-    Type 'C' is not comparable to type 'A'.
-      Property 'a' is missing in type 'C'.
+  Type 'C' is not comparable to type 'A'.
+    Property 'a' is missing in type 'C'.
 tests/cases/conformance/types/tuple/castingTuple.ts(30,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
 tests/cases/conformance/types/tuple/castingTuple.ts(31,1): error TS2304: Cannot find name 't4'.
 
@@ -40,14 +38,12 @@ tests/cases/conformance/types/tuple/castingTuple.ts(31,1): error TS2304: Cannot 
     var t3 = <[number, number]>numStrTuple;
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Type '[number, string]' cannot be converted to type '[number, number]'.
-!!! error TS2352:   Types of property '1' are incompatible.
-!!! error TS2352:     Type 'string' is not comparable to type 'number'.
+!!! error TS2352:   Type 'string' is not comparable to type 'number'.
     var t9 = <[A, I]>classCDTuple;
              ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Type '[C, D]' cannot be converted to type '[A, I]'.
-!!! error TS2352:   Types of property '0' are incompatible.
-!!! error TS2352:     Type 'C' is not comparable to type 'A'.
-!!! error TS2352:       Property 'a' is missing in type 'C'.
+!!! error TS2352:   Type 'C' is not comparable to type 'A'.
+!!! error TS2352:     Property 'a' is missing in type 'C'.
     var array1 = <number[]>numStrTuple;
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
