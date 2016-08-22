@@ -777,11 +777,11 @@ namespace ts {
     }
 
     export function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean {
-        if (!hasProperty(jsonOption, "compileOnSave")) {
+        if (!hasProperty(jsonOption, compileOnSaveCommandLineOption.name)) {
             return false;
         }
         const result = convertJsonOption(compileOnSaveCommandLineOption, jsonOption["compileOnSave"], basePath, errors);
-        if (typeof result == "boolean") {
+        if (typeof result === "boolean" && result) {
             return result;
         }
         return false;
