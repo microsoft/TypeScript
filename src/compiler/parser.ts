@@ -5893,6 +5893,9 @@ namespace ts {
                     case SyntaxKind.BooleanKeyword:
                     case SyntaxKind.SymbolKeyword:
                     case SyntaxKind.VoidKeyword:
+                    case SyntaxKind.NullKeyword:
+                    case SyntaxKind.UndefinedKeyword:
+                    case SyntaxKind.NeverKeyword:
                         return parseTokenNode<JSDocType>();
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
