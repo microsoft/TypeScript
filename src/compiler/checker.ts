@@ -3065,7 +3065,7 @@ namespace ts {
                 // Use contextual parameter type if one is available
                 let type: Type;
                 if (declaration.symbol.name === "this") {
-                    const thisParameter = getContextuallyTypedThisParameter(func);
+                    const thisParameter = getContextualThisParameter(func);
                     type = thisParameter ? getTypeOfSymbol(thisParameter) : undefined;
                 }
                 else {
@@ -4695,7 +4695,7 @@ namespace ts {
                     minArgumentCount--;
                 }
                 if (!thisParameter && isObjectLiteralMethod(declaration)) {
-                    thisParameter = getContextuallyTypedThisParameter(declaration);
+                    thisParameter = getContextualThisParameter(declaration);
                 }
 
                 const classType = declaration.kind === SyntaxKind.Constructor ?
@@ -9330,7 +9330,7 @@ namespace ts {
             }
         }
 
-        function getContextuallyTypedThisParameter(func: FunctionLikeDeclaration): Symbol {
+        function getContextualThisParameter(func: FunctionLikeDeclaration): Symbol {
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
