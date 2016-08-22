@@ -912,7 +912,7 @@ namespace ts {
             // Note: it is not actually necessary to save/restore the context flags here.  That's
             // because the saving/restoring of these flags happens naturally through the recursive
             // descent nature of our parser.  However, we still store this here just so we can
-            // assert that that invariant holds.
+            // assert that invariant holds.
             const saveContextFlags = contextFlags;
 
             // If we're only looking ahead, then tell the scanner to only lookahead as well.
@@ -2765,7 +2765,7 @@ namespace ts {
             // Note: for ease of implementation we treat productions '2' and '3' as the same thing.
             // (i.e. they're both BinaryExpressions with an assignment operator in it).
 
-            // First, do the simple check if we have a YieldExpression (production '5').
+            // First, do the simple check if we have a YieldExpression (production '6').
             if (isYieldExpression()) {
                 return parseYieldExpression();
             }
@@ -3373,20 +3373,40 @@ namespace ts {
         }
 
         /**
-         * Parse ES7 unary expression and await expression
+         * Parse ES7 exponential expression and await expression
          *
-         * ES7 UnaryExpression:
-         *      1) SimpleUnaryExpression[?yield]
-         *      2) IncrementExpression[?yield] ** UnaryExpression[?yield]
+         * ES7 ExponentiationExpression:
+         *      1) UnaryExpression[?Yield]
+         *      2) UpdateExpression[?Yield] ** ExponentiationExpression[?Yield]
+         *
          */
         function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
-            if (isIncrementExpression()) {
+            /**
+             * ES7 UpdateExpression:
+             *      1) LeftHandSideExpression[?Yield]
+             *      2) LeftHandSideExpression[?Yield][no LineTerminator here]++
+             *      3) LeftHandSideExpression[?Yield][no LineTerminator here]--
+             *      4) ++UnaryExpression[?Yield]
+             *      5) --UnaryExpression[?Yield]
+             */
+            if (isUpdateExpression()) {
                 const incrementExpression = parseIncrementExpression();
                 return token() === SyntaxKind.AsteriskAsteriskToken ?
                     <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), incrementExpression) :
                     incrementExpression;
             }
 
+            /**
+             * ES7 UnaryExpression:
+             *      1) UpdateExpression[?yield]
+             *      2) delete UpdateExpression[?yield]
+             *      3) void UpdateExpression[?yield]
+             *      4) typeof UpdateExpression[?yield]
+             *      5) + UpdateExpression[?yield]
+             *      6) - UpdateExpression[?yield]
+             *      7) ~ UpdateExpression[?yield]
+             *      8) ! UpdateExpression[?yield]
+             */
             const unaryOperator = token();
             const simpleUnaryExpression = parseSimpleUnaryExpression();
             if (token() === SyntaxKind.AsteriskAsteriskToken) {
@@ -3404,8 +3424,8 @@ namespace ts {
         /**
          * Parse ES7 simple-unary expression or higher:
          *
-         * ES7 SimpleUnaryExpression:
-         *      1) IncrementExpression[?yield]
+         * ES7 UnaryExpression:
+         *      1) UpdateExpression[?yield]
          *      2) delete UnaryExpression[?yield]
          *      3) void UnaryExpression[?yield]
          *      4) typeof UnaryExpression[?yield]
@@ -3445,14 +3465,14 @@ namespace ts {
         /**
          * Check if the current token can possibly be an ES7 increment expression.
          *
-         * ES7 IncrementExpression:
+         * ES7 UpdateExpression:
          *      LeftHandSideExpression[?Yield]
          *      LeftHandSideExpression[?Yield][no LineTerminator here]++
          *      LeftHandSideExpression[?Yield][no LineTerminator here]--
          *      ++LeftHandSideExpression[?Yield]
          *      --LeftHandSideExpression[?Yield]
          */
-        function isIncrementExpression(): boolean {
+        function isUpdateExpression(): boolean {
             // This function is called inside parseUnaryExpression to decide
             // whether to call parseSimpleUnaryExpression or call parseIncrementExpression directly
             switch (token()) {
@@ -5892,6 +5912,9 @@ namespace ts {
                     case SyntaxKind.BooleanKeyword:
                     case SyntaxKind.SymbolKeyword:
                     case SyntaxKind.VoidKeyword:
+                    case SyntaxKind.NullKeyword:
+                    case SyntaxKind.UndefinedKeyword:
+                    case SyntaxKind.NeverKeyword:
                         return parseTokenNode<JSDocType>();
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
