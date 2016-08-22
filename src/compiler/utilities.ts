@@ -301,6 +301,10 @@ namespace ts {
         return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
     }
 
+    export function isJSDocTag(node: Node) {
+        return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
+    }
+
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
         if (nodeIsMissing(node) || !node.decorators) {
             return getTokenPosOfNode(node, sourceFile);
