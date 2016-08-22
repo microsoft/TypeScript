@@ -3063,9 +3063,14 @@ namespace ts {
                     }
                 }
                 // Use contextual parameter type if one is available
-                const type = declaration.symbol.name === "this"
-                    ? getContextuallyTypedThisType(func)
-                    : getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                let type: Type;
+                if (declaration.symbol.name === "this") {
+                    const thisParameter = getContextuallyTypedThisParameter(func);
+                    type = thisParameter ? getTypeOfSymbol(thisParameter) : undefined;
+                }
+                else {
+                    type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                }
                 if (type) {
                     return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
                 }
@@ -4688,6 +4693,9 @@ namespace ts {
                 }
                 if (isJSConstructSignature) {
                     minArgumentCount--;
+                }
+                if (!thisParameter && isObjectLiteralMethod(declaration)) {
+                    thisParameter = getContextuallyTypedThisParameter(declaration);
                 }
 
                 const classType = declaration.kind === SyntaxKind.Constructor ?
@@ -9087,10 +9095,6 @@ namespace ts {
                 if (thisType) {
                     return thisType;
                 }
-                const type = getContextuallyTypedThisType(container);
-                if (type) {
-                    return type;
-                }
             }
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
@@ -9326,11 +9330,11 @@ namespace ts {
             }
         }
 
-        function getContextuallyTypedThisType(func: FunctionLikeDeclaration): Type {
+        function getContextuallyTypedThisParameter(func: FunctionLikeDeclaration): Symbol {
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
-                    return getThisTypeOfSignature(contextualSignature);
+                    return contextualSignature.thisParameter;
                 }
             }
 
