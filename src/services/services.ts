@@ -1213,6 +1213,7 @@ namespace ts {
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[];
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         findReferences(fileName: string, position: number): ReferencedSymbol[];
@@ -1299,6 +1300,11 @@ namespace ts {
         fileName: string;
         isWriteAccess: boolean;
         isDefinition: boolean;
+    }
+
+    export interface ImplementationLocation {
+        textSpan: TextSpan;
+        fileName: string;
     }
 
     export interface DocumentHighlights {
@@ -5288,6 +5294,149 @@ namespace ts {
             return getDefinitionFromSymbol(type.symbol, node);
         }
 
+         /// Goto implementation
+        function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
+            synchronizeHostData();
+
+            const entries: ImplementationLocation[] = [];
+            const node = getTouchingPropertyName(getValidSourceFile(fileName), position);
+            const typeChecker = program.getTypeChecker();
+
+            if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                const entry = getReferenceEntryForShorthandPropertyAssignment(node, typeChecker);
+                entries.push({
+                    textSpan: entry.textSpan,
+                    fileName: entry.fileName
+                });
+            }
+            else if (definitionIsImplementation(node, typeChecker)) {
+                const definitions = getDefinitionAtPosition(fileName, position);
+                forEach(definitions, (definition: DefinitionInfo) => {
+                    entries.push({
+                        textSpan: definition.textSpan,
+                        fileName: definition.fileName
+                    });
+                });
+            }
+            else {
+                // Do a search for all references and filter them down to implementations only
+                const result = getReferencedSymbolsForNode(node, program.getSourceFiles(), /*findInStrings*/false, /*findInComments*/false, /*implementations*/true);
+
+                forEach(result, referencedSymbol => {
+                    if (referencedSymbol.references) {
+                        forEach(referencedSymbol.references, entry => {
+                            entries.push({
+                                textSpan: entry.textSpan,
+                                fileName: entry.fileName
+                            });
+                        });
+                    }
+                });
+            }
+
+            return entries;
+        }
+
+        /**
+         * Returns true if the implementation for this node is the same as its definition
+         */
+        function definitionIsImplementation(node: Node, typeChecker: TypeChecker) {
+            if (node.kind === SyntaxKind.SuperKeyword || node.kind === SyntaxKind.ThisKeyword) {
+                return true;
+            }
+
+            if (node.parent.kind === SyntaxKind.PropertyAccessExpression || node.parent.kind === SyntaxKind.ElementAccessExpression) {
+                const expression = (<ElementAccessExpression | PropertyAccessExpression>node.parent).expression;
+
+                // Members of "this" and "super" only have one possible implementation, so no need to find
+                // all references. Similarly, for the left hand side of the expression it only really
+                // makes sense to return the definition
+                if (node === expression || expression.kind === SyntaxKind.SuperKeyword || expression.kind === SyntaxKind.ThisKeyword) {
+                    return true;
+                }
+
+                // Check to see if this is a property that can have multiple implementations by determining
+                // if the parent is an interface (or class, or union/intersection)
+                const expressionType = typeChecker.getTypeAtLocation(expression);
+                if (expressionType && expressionType.getFlags() & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.UnionOrIntersection)) {
+                    return false;
+                }
+
+                // Also check the right hand side to see if this is a type being accessed on a namespace/module
+                const rightHandType = typeChecker.getTypeAtLocation(node);
+                return rightHandType && !(rightHandType.getFlags() & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.UnionOrIntersection));
+            }
+
+            const symbol = typeChecker.getSymbolAtLocation(node);
+            return symbol && !isClassOrInterfaceReference(symbol) && !(symbol.parent && isClassOrInterfaceReference(symbol.parent));
+        }
+
+        function getReferenceEntryForShorthandPropertyAssignment(node: Node, typeChecker: TypeChecker) {
+            const refSymbol = typeChecker.getSymbolAtLocation(node);
+            const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(refSymbol.valueDeclaration);
+
+            if (shorthandSymbol) {
+                const shorthandDeclarations = shorthandSymbol.getDeclarations();
+                if (shorthandDeclarations.length === 1) {
+                    return getReferenceEntryFromNode(shorthandDeclarations[0]);
+                }
+                else if (shorthandDeclarations.length > 1) {
+                    // This can happen when the property being assigned is a constructor for a
+                    // class that also has interface declarations with the same name. We just want
+                    // the class itself
+
+                    return forEach(shorthandDeclarations, declaration => {
+                        if (declaration.kind === SyntaxKind.ClassDeclaration)  {
+                            return getReferenceEntryFromNode(declaration);
+                        }
+                    });
+                }
+            }
+        }
+
+        function isClassOrInterfaceReference(toCheck: Symbol) {
+            return toCheck.getFlags() & (SymbolFlags.Class | SymbolFlags.Interface);
+        }
+
+        function isIdentifierOfImplementation(node: Identifier): boolean {
+            const parent = node.parent;
+
+            if (isIdentifierName(node) || isFunctionDeclarationIdentifierName(node)) {
+                // PropertyAccessExpression?
+                switch (parent.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return !!(<FunctionLikeDeclaration>parent).body;
+                    case SyntaxKind.PropertyDeclaration:
+                        return !!(<PropertyDeclaration>parent).initializer;
+                    case SyntaxKind.PropertyAssignment:
+                        return true;
+                }
+            }
+            else if (isVariableLike(parent) && parent.name === node) {
+                return !!parent.initializer;
+            }
+
+            return isIdentifierOfClass(node) || isIdentifierOfEnumDeclaration(node);
+        }
+
+        function isIdentifierOfClass(node: Identifier) {
+            return (node.parent.kind === SyntaxKind.ClassDeclaration || node.parent.kind === SyntaxKind.ClassExpression) &&
+                (<ClassLikeDeclaration>node.parent).name === node;
+        }
+
+        function isIdentifierOfEnumDeclaration(node: Identifier) {
+            return node.parent.kind === SyntaxKind.EnumDeclaration && (<EnumDeclaration>node.parent).name === node;
+        }
+
+        function isTypeAssertionExpression(node: Node): node is TypeAssertion {
+            return node.kind === SyntaxKind.TypeAssertionExpression;
+        }
+
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             let results = getOccurrencesAtPositionCore(fileName, position);
 
@@ -5334,7 +5483,7 @@ namespace ts {
                     node.kind === SyntaxKind.StringLiteral ||
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
 
-                    const referencedSymbols = getReferencedSymbolsForNode(node, sourceFilesToSearch, /*findInStrings*/ false, /*findInComments*/ false);
+                    const referencedSymbols = getReferencedSymbolsForNode(node, sourceFilesToSearch, /*findInStrings*/ false, /*findInComments*/ false, /*implementations*/false);
                     return convertReferencedSymbols(referencedSymbols);
                 }
 
@@ -6006,7 +6155,7 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                 // case SyntaxKind.SuperKeyword: TODO:GH#9268
                 case SyntaxKind.StringLiteral:
-                    return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
+                    return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments, /*implementations*/false);
             }
             return undefined;
         }
@@ -6024,36 +6173,39 @@ namespace ts {
             }
         }
 
-        function getReferencedSymbolsForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
+        function getReferencedSymbolsForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean, implementations: boolean): ReferencedSymbol[] {
             const typeChecker = program.getTypeChecker();
-
-            // Labels
-            if (isLabelName(node)) {
-                if (isJumpStatementTarget(node)) {
-                    const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-                    // if we have a label definition, look within its statement for references, if not, then
-                    // the label is undefined and we have no results..
-                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : undefined;
-                }
-                else {
-                    // it is a label definition and not a target, search within the parent labeledStatement
-                    return getLabelReferencesInNode(node.parent, <Identifier>node);
-                }
-            }
-
-            if (isThis(node)) {
-                return getReferencesForThisKeyword(node, sourceFiles);
-            }
-
-            if (node.kind === SyntaxKind.SuperKeyword) {
-                return getReferencesForSuperKeyword(node);
-            }
-
             const symbol = typeChecker.getSymbolAtLocation(node);
 
-            if (!symbol && node.kind === SyntaxKind.StringLiteral) {
-                return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles);
+            if (!implementations) {
+                // Labels
+                if (isLabelName(node)) {
+                    if (isJumpStatementTarget(node)) {
+                        const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+                        // if we have a label definition, look within its statement for references, if not, then
+                        // the label is undefined and we have no results..
+                        return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : undefined;
+                    }
+                    else {
+                        // it is a label definition and not a target, search within the parent labeledStatement
+                        return getLabelReferencesInNode(node.parent, <Identifier>node);
+                    }
+                }
+
+                if (isThis(node)) {
+                    return getReferencesForThisKeyword(node, sourceFiles);
+                }
+
+                if (node.kind === SyntaxKind.SuperKeyword) {
+                    return getReferencesForSuperKeyword(node);
+                }
+
+
+                if (!symbol && node.kind === SyntaxKind.StringLiteral) {
+                    return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles);
+                }
             }
+
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
@@ -6084,9 +6236,11 @@ namespace ts {
             // Maps from a symbol ID to the ReferencedSymbol entry in 'result'.
             const symbolToIndex: number[] = [];
 
+            const indexToSymbol: {[index: number]: Symbol} = {};
+
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
+                getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex, indexToSymbol);
             }
             else {
                 const internedName = getInternedName(symbol, node, declarations);
@@ -6097,9 +6251,13 @@ namespace ts {
 
                     if (nameTable[internedName] !== undefined) {
                         result = result || [];
-                        getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
+                        getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex, indexToSymbol);
                     }
                 }
+            }
+
+            if (implementations) {
+                return filterToImplementations(node, symbol, result, indexToSymbol);
             }
 
             return result;
@@ -6363,7 +6521,8 @@ namespace ts {
                 findInStrings: boolean,
                 findInComments: boolean,
                 result: ReferencedSymbol[],
-                symbolToIndex: number[]): void {
+                symbolToIndex: number[],
+                indexToSymbol: {[index: number]: Symbol}): void {
 
                 const sourceFile = container.getSourceFile();
                 const tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
@@ -6430,7 +6589,6 @@ namespace ts {
                         }
                     });
                 }
-
                 return;
 
                 function getReferencedSymbol(symbol: Symbol): ReferencedSymbol {
@@ -6439,6 +6597,7 @@ namespace ts {
                     if (index === undefined) {
                         index = result.length;
                         symbolToIndex[symbolId] = index;
+                        indexToSymbol[index] = symbol;
 
                         result.push({
                             definition: getDefinition(symbol),
@@ -6456,6 +6615,268 @@ namespace ts {
                         const commentText = sourceFile.text.substring(c.pos, c.end);
                         return !tripleSlashDirectivePrefixRegex.test(commentText);
                     }
+                }
+            }
+
+            function filterToImplementations(node: Node, searchSymbol: Symbol, refs: ReferencedSymbol[], indexToSymbol: {[index: number]: Symbol}): ReferencedSymbol[] {
+                if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
+                    const type = typeChecker.getTypeAtLocation(node.parent.expression);
+
+                    if (type.getFlags() & TypeFlags.Class) {
+                        // The search results in refs will contain all implementations of the property. This includes
+                        // all implementations in classes that parentSymbol extends from and sibling implementations
+                        // (i.e. implementations in classes with common ancestors that declare the property). We need to
+                        // filter the results to only the implementation used by parentSymbol's class and any implementations
+                        // in any sub-classes
+                        return filterToClassMemberImplementations(node.parent, searchSymbol, refs, indexToSymbol);
+                    }
+                    else if (type.getFlags() & (TypeFlags.UnionOrIntersection | TypeFlags.Interface)) {
+                        // If parentSymbol did not declare the property being accessed, then the search results
+                        // in refs will also contain references to the interfaces that parentSymbol inherits from.
+                        // We need to filter out any implementations of those parent interfaces in addition to filtering out the
+                        // non-implementation references
+                        return filterReferenceEntries(refs, (entry) => {
+                            const impl = getImplementationFromEntry(entry);
+                            if (impl) {
+                                const entryNode = getTokenAtPosition(getValidSourceFile(entry.fileName), entry.textSpan.start);
+                                const element = getContainingObjectLiteralElement(entryNode);
+                                if (element && element.parent && element.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                                    const objType = getDeclaredTypeOfObjectLiteralExpression(element.parent);
+
+                                    if (objType && typeChecker.isTypeAssignableTo(objType, type)) {
+                                        return impl;
+                                    }
+                                }
+                                else {
+                                    const defClass = getContainingClass(entryNode);
+                                    if (defClass) {
+                                        const classType = typeChecker.getTypeAtLocation(defClass);
+                                        if (typeChecker.isTypeAssignableTo(classType, type)) {
+                                            return impl;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+
+                return filterReferenceEntries(refs, getImplementationFromEntry);
+            }
+
+            function getDeclaredTypeOfObjectLiteralExpression(node: Node): Type {
+                if (node && node.parent) {
+                    if (node.parent.kind === SyntaxKind.ParenthesizedExpression) {
+                        return getDeclaredTypeOfObjectLiteralExpression(node.parent);
+                    }
+
+                    if (isVariableLike(node.parent) && node.parent.type) {
+                        return typeChecker.getTypeAtLocation(node.parent.type);
+                    }
+                    else if (node.parent.kind === SyntaxKind.ReturnStatement) {
+                        const containerSig = typeChecker.getSignatureFromDeclaration(getContainingFunction(node));
+                        return typeChecker.getReturnTypeOfSignature(containerSig);
+                    }
+                    else if (node.parent.kind === SyntaxKind.TypeAssertionExpression) {
+                        return typeChecker.getTypeAtLocation((<TypeAssertion>node.parent).type);
+                    }
+                }
+                return undefined;
+            }
+
+            function filterReferenceEntries(refs: ReferencedSymbol[], filterer: (x: ReferenceEntry) => ReferenceEntry): ReferencedSymbol[] {
+                const result: ReferencedSymbol[] = [];
+                forEach(refs, (ref) => {
+                    const filtered: ReferenceEntry[] = [];
+                    forEach(ref.references, (entry) => {
+                        const filteredEntry = filterer(entry);
+                        if (filteredEntry) {
+                            filtered.push(filteredEntry);
+                        }
+                    });
+                    if (filtered.length) {
+                        result.push({ definition: ref.definition, references: filtered });
+                    }
+                });
+                return result;
+            }
+
+            function filterToClassMemberImplementations(parent: PropertyAccessExpression, searchSymbol: Symbol, refs: ReferencedSymbol[], indexToSymbol: {[index: number]: Symbol}): ReferencedSymbol[] {
+                // Need to find out what class this member is being accessed on
+                const type = typeChecker.getTypeAtLocation(parent.expression);
+                const classHierarchy: Symbol[] = getClassHierarchy(searchSymbol.parent);
+
+                let lowest: ReferencedSymbol[];
+                let lowestRank: number;
+
+                // Filter down the references to those that refer to implementations of the symbol. That is, implementations
+                // from subclasses of the parent class and the lowest implementation in the parent class' class hierarchy
+                forEach(refs, (refSymbol, index) => {
+                    const actual = indexToSymbol[index];
+
+                    // We only care about implementations in classes in the hierarchy
+                    if (actual.parent.getFlags() & SymbolFlags.Interface) {
+                        return;
+                    }
+                    const rank = classHierarchy.indexOf(actual.parent);
+
+                    // No need to check anything past the lowest we have found so far
+                    if (lowest && rank > lowestRank) {
+                        return;
+                    }
+
+                    const implementations: ReferenceEntry[] = [];
+                    forEach(refSymbol.references, (entry) => {
+                        const impl = getImplementationFromEntry(entry, type, classHierarchy);
+                        if (impl) {
+                            implementations.push(impl);
+                        }
+                    });
+                    if (implementations.length) {
+                        if (!lowest || rank < lowestRank) {
+                            lowest = [{ definition: refSymbol.definition, references: implementations }];
+                            lowestRank = rank;
+                        }
+                        else if (rank === lowestRank) {
+                            lowest.push({ definition: refSymbol.definition, references: implementations });
+                        }
+                    }
+                });
+
+                return lowest;
+            }
+
+            function getImplementationFromEntry(entry: ReferenceEntry, base?: Type, hierarchy?: Symbol[]): ReferenceEntry {
+                const sourceFile = getValidSourceFile(entry.fileName);
+                const refNode = getTouchingPropertyName(sourceFile, entry.textSpan.start);
+
+                // Check to make sure this reference is either part of a sub class or a class that we explicitly
+                // inherit from in the class hierarchy
+                if (isMemberOfSubOrParentClass(refNode, base, hierarchy) && refNode.kind === SyntaxKind.Identifier) {
+                    // Check if we found a function/propertyAssignment/method with an implementation or initializer
+                    if (isIdentifierOfImplementation(<Identifier>refNode)) {
+                        return getReferenceEntryFromNode(refNode.parent);
+                    }
+                    else if (refNode.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                        // Go ahead and dereference the shorthand assignment by going to its definition
+                        return getReferenceEntryForShorthandPropertyAssignment(refNode, typeChecker);
+                    }
+
+                    // Check if the node is within an extends or implements clause
+                    const containingHeritageClause = getContainingClassHeritageClause(refNode);
+                    if (containingHeritageClause) {
+                        return getReferenceEntryFromNode(containingHeritageClause.parent);
+                    }
+
+                    // If we got a type reference, try and see if the reference applies to any expressions that can implement an interface
+                    const containingTypeReference = getContainingTypeReference(refNode);
+                    if (containingTypeReference) {
+                        const parent = containingTypeReference.parent;
+                        if (isVariableLike(parent) && parent.type === containingTypeReference && parent.initializer && isImplementationExpression(parent.initializer)) {
+                            return getReferenceEntryFromNode(parent.initializer);
+                        }
+                        else if (isFunctionLike(parent) && parent.type === containingTypeReference && parent.body && parent.body.kind === SyntaxKind.Block) {
+                            return forEachReturnStatement(<Block>parent.body, (returnStatement) => {
+                                if (returnStatement.expression && isImplementationExpression(returnStatement.expression)) {
+                                    return getReferenceEntryFromNode(returnStatement.expression);
+                                }
+                            });
+                        }
+                        else if (isTypeAssertionExpression(parent) && isImplementationExpression(parent.expression)) {
+                            return getReferenceEntryFromNode(parent.expression);
+                        }
+                    }
+                }
+            }
+
+            function isMemberOfSubOrParentClass(reference: Node, base: Type, hierarchy: Symbol[]) {
+                if (!base || !hierarchy) {
+                    return true;
+                }
+                const referenceSymbol = typeChecker.getSymbolAtLocation(reference);
+                if (referenceSymbol && referenceSymbol.parent) {
+                    if (hierarchy.indexOf(referenceSymbol.parent) !== -1) {
+                        return true;
+                    }
+
+                    const referenceParentDeclarations = referenceSymbol.parent.getDeclarations();
+                    if (referenceParentDeclarations.length) {
+                        const referenceParentType = typeChecker.getTypeAtLocation(referenceParentDeclarations[0]);
+                        return typeChecker.isTypeAssignableTo(referenceParentType, base);
+                    }
+                }
+                return false;
+            }
+
+            function getContainingTypeReference(node: Node): Node {
+                if (node) {
+                    if (node.kind === SyntaxKind.TypeReference) {
+                        return node;
+                    }
+
+                    if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) {
+                        return getContainingTypeReference(node.parent);
+                    }
+                }
+                return undefined;
+            }
+
+            function getContainingClassHeritageClause(node: Node): HeritageClause {
+                if (node) {
+                    if (node.kind === SyntaxKind.ExpressionWithTypeArguments
+                        && node.parent.kind === SyntaxKind.HeritageClause
+                        && isClassLike(node.parent.parent)) {
+                        return <HeritageClause>node.parent;
+                    }
+
+                    else if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
+                        return getContainingClassHeritageClause(node.parent);
+                    }
+                }
+                return undefined;
+            }
+
+            /**
+             * Returns true if this is an expression that could be used to implement an interface.
+             */
+            function isImplementationExpression(node: Expression): boolean {
+                // Unwrap parentheses
+                if (node.kind === SyntaxKind.ParenthesizedExpression) {
+                    return isImplementationExpression((<ParenthesizedExpression>node).expression);
+                }
+
+                return node.kind === SyntaxKind.ArrowFunction ||
+                    node.kind === SyntaxKind.FunctionExpression ||
+                    node.kind === SyntaxKind.ObjectLiteralExpression ||
+                    node.kind === SyntaxKind.ClassExpression;
+            }
+
+            function getClassHierarchy(symbol: Symbol) {
+                const classes: Symbol[] = [];
+                getClassHierarchyRecursive(symbol, classes, createMap<Symbol>());
+                return classes;
+
+                function getClassHierarchyRecursive(symbol: Symbol, result: Symbol[], previousIterationSymbolsCache: SymbolTable) {
+                    if (hasProperty(previousIterationSymbolsCache, symbol.name)) {
+                        return;
+                    }
+                    previousIterationSymbolsCache[symbol.name] = symbol;
+
+                    if (result.indexOf(symbol) !== -1) {
+                        return;
+                    }
+                    result.push(symbol);
+                    forEach(symbol.getDeclarations(), (decl) => {
+                        if (isClassLike(decl)) {
+                            const heritage = getClassExtendsHeritageClauseElement(decl);
+                            if (heritage) {
+                                const type = typeChecker.getTypeAtLocation(heritage);
+                                if (type && type.symbol) {
+                                    getClassHierarchyRecursive(type.symbol, result, previousIterationSymbolsCache);
+                                }
+                            }
+                        }
+                    });
                 }
             }
 
@@ -8310,6 +8731,7 @@ namespace ts {
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
             getTypeDefinitionAtPosition,
+            getImplementationAtPosition,
             getReferencesAtPosition,
             findReferences,
             getOccurrencesAtPosition,

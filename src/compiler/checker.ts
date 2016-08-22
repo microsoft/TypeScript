@@ -103,7 +103,8 @@ namespace ts {
 
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
-            isOptionalParameter
+            isOptionalParameter,
+            isTypeAssignableTo
         };
 
         const tupleTypes = createMap<TupleType>();

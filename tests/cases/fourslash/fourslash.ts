@@ -110,6 +110,7 @@ declare namespace FourSlashInterface {
         eof(): void;
         definition(definitionIndex?: number): void;
         type(definitionIndex?: number): void;
+        implementation(implementationIndex?: number): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
         file(index: number, content?: string, scriptKindName?: string): any;
@@ -134,6 +135,7 @@ declare namespace FourSlashInterface {
         quickInfoExists(): void;
         definitionCountIs(expectedCount: number): void;
         typeDefinitionCountIs(expectedCount: number): void;
+        implementationCountIs(expectedCount: number): void;
         definitionLocationExists(): void;
         verifyDefinitionsName(name: string, containerName: string): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
@@ -226,6 +228,7 @@ declare namespace FourSlashInterface {
         getSyntacticDiagnostics(expected: string): void;
         getSemanticDiagnostics(expected: string): void;
         ProjectInfo(expected: string[]): void;
+        allRangesAppearInImplementationList(): void;
     }
     class edit {
         backspace(count?: number): void;
