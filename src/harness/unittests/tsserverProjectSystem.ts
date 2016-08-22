@@ -1,4 +1,5 @@
 ﻿/// <reference path="..\harness.ts" />
+/// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts {
     function notImplemented(): any {
@@ -13,7 +14,8 @@ namespace ts {
         info: () => void 0,
         startGroup: () => void 0,
         endGroup: () => void 0,
-        msg: () => void 0
+        msg: () => void 0,
+        getLogFileName: (): string => undefined
     };
 
     const nullCancellationToken: HostCancellationToken = {
@@ -25,6 +27,59 @@ namespace ts {
         path: "/a/lib/lib.d.ts",
         content: libFileContent
     };
+
+    class TestTypingsInstaller extends server.typingsInstaller.TypingsInstaller implements server.ITypingsInstaller {
+        protected projectService: server.ProjectService;
+        constructor(readonly cachePath: string, readonly installTypingHost: server.ServerHost) {
+            super(cachePath, <Path>"");
+            this.init();
+        }
+
+        safeFileList = <Path>"";
+        postInstallActions: (( map: (t: string[]) => string[]) => void)[] = [];
+
+        runPostInstallActions(map: (t: string[]) => string[]) {
+            for (const f of this.postInstallActions) {
+                f(map);
+            }
+            this.postInstallActions = [];
+        }
+
+        onProjectClosed(p: server.Project) {
+
+        }
+
+        attach(projectService: server.ProjectService) {
+            this.projectService = projectService;
+        }
+
+        getInstallTypingHost() {
+            return this.installTypingHost;
+        }
+
+        installPackage(packageName: string) {
+            return true;
+        }
+
+        isPackageInstalled(packageName: string) {
+            return true;
+        }
+
+        runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void) {
+            this.postInstallActions.push(map => {
+                postInstallAction(map(typingsToInstall));
+            });
+        }
+
+        sendResponse(response: server.SetTypings | server.InvalidateCachedTypings) {
+            this.projectService.updateTypingsForProject(response);
+        }
+
+        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
+            const request = server.createInstallTypingsRequest(project, typingOptions, this.cachePath);
+            this.install(request);
+        }
+    }
 
     function getExecutingFilePathFromLibFile(libFilePath: string): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
@@ -105,20 +160,10 @@ namespace ts {
         return entry;
     }
 
-    function sizeOfMap(map: Map<any>): number {
-        let n = 0;
-        for (const name in map) {
-            if (hasProperty(map, name)) {
-                n++;
-            }
-        }
-        return n;
-    }
-
     function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
-        assert.equal(sizeOfMap(map), expectedKeys.length, `${caption}: incorrect size of map`);
+        assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(hasProperty(map, name), `${caption} is expected to contain ${name}, actual keys: ${getKeys(map)}`);
+            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
         }
     }
 
@@ -180,7 +225,13 @@ namespace ts {
         }
 
         count() {
-            return sizeOfMap(this.map);
+            let n = 0;
+/* tslint:disable:no-unused-variable */
+            for (const _ in this.map) {
+/* tslint:enable:no-unused-variable */
+                n++;
+            }
+            return n;
         }
 
         invoke() {
@@ -202,12 +253,11 @@ namespace ts {
         private fs: ts.FileMap<FSEntry>;
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
-
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories: Map<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
-        readonly watchedFiles: Map<FileWatcherCallback[]> = {};
+        readonly watchedDirectories =  createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
+        readonly watchedFiles = createMap<FileWatcherCallback[]>();
 
         private filesOrFolders: FileOrFolder[];
 
@@ -291,7 +341,7 @@ namespace ts {
 
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
-            const callbacks = lookUp(this.watchedDirectories, path) || (this.watchedDirectories[path] = []);
+            const callbacks = this.watchedDirectories[path] || (this.watchedDirectories[path] = []);
             callbacks.push({ cb: callback, recursive });
             return {
                 referenceCount: 0,
@@ -312,7 +362,7 @@ namespace ts {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = lookUp(this.watchedDirectories, path);
+            const callbacks = this.watchedDirectories[path];
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -322,7 +372,7 @@ namespace ts {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = lookUp(this.watchedFiles, path);
+            const callbacks = this.watchedFiles[path];
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);
@@ -332,7 +382,7 @@ namespace ts {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            const callbacks = lookUp(this.watchedFiles, path) || (this.watchedFiles[path] = []);
+            const callbacks = this.watchedFiles[path] || (this.watchedFiles[path] = []);
             callbacks.push(callback);
             return {
                 close: () => {
@@ -369,10 +419,14 @@ namespace ts {
 
         clearImmediate(timeoutId: any): void {
             this.immediateCallbacks.unregister(timeoutId);
-        }
+        };
 
         createDirectory(directoryName: string): void {
             this.createFileOrFolder({ path: directoryName });
+        }
+
+        writeFile(path: string, content: string): void {
+            this.createFileOrFolder({ path, content, fileSize: content.length });
         }
 
         createFileOrFolder(f: FileOrFolder, createParentDirectory = false): void {
@@ -390,16 +444,6 @@ namespace ts {
             filesOrFolders.push(f);
             this.reloadFS(filesOrFolders);
         }
-
-        writeFile(fileName: string, content: string) {
-            const path = this.toPath(fileName);
-            const newEntry: File = {
-                content,
-                fullPath: path,
-                path
-            };
-            this.fs.set(path, newEntry);
-        };
 
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;
@@ -452,7 +496,7 @@ namespace ts {
                 content: `export let x: number`
             };
             const host = createServerHost([appFile, moduleFile, libFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             const { configFileName } = projectService.openClientFile(appFile.path);
 
             assert(!configFileName, `should not find config, got: '${configFileName}`);
@@ -490,7 +534,7 @@ namespace ts {
             };
 
             const host = createServerHost([configFile, libFile, file1, file2, file3]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
@@ -517,7 +561,7 @@ namespace ts {
             const host = createServerHost(filesWithoutConfig);
 
             const filesWithConfig = [libFile, commonFile1, commonFile2, configFile];
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openClientFile(commonFile1.path);
             projectService.openClientFile(commonFile2.path);
 
@@ -548,7 +592,7 @@ namespace ts {
                 content: `{}`
             };
             const host = createServerHost([commonFile1, libFile, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openClientFile(commonFile1.path);
             checkWatchedDirectories(host, ["/a/b"]);
             checkNumberOfConfiguredProjects(projectService, 1);
@@ -576,7 +620,7 @@ namespace ts {
                 }`
             };
             const host = createServerHost([commonFile1, commonFile2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openClientFile(commonFile1.path);
             projectService.openClientFile(commonFile2.path);
 
@@ -592,7 +636,7 @@ namespace ts {
                 content: `{}`
             };
             const host = createServerHost([commonFile1, commonFile2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openClientFile(commonFile1.path);
 
             checkNumberOfConfiguredProjects(projectService, 1);
@@ -622,7 +666,7 @@ namespace ts {
             };
             const files = [commonFile1, commonFile2, configFile];
             const host = createServerHost(files);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openClientFile(commonFile1.path);
 
             const project = projectService.configuredProjects[0];
@@ -655,7 +699,7 @@ namespace ts {
             };
 
             const host = createServerHost([commonFile1, commonFile2, excludedFile1, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(commonFile1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
@@ -689,7 +733,7 @@ namespace ts {
             };
             const files = [file1, nodeModuleFile, classicModuleFile, configFile];
             const host = createServerHost(files);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openClientFile(file1.path);
             projectService.openClientFile(nodeModuleFile.path);
             projectService.openClientFile(classicModuleFile.path);
@@ -730,7 +774,7 @@ namespace ts {
                 }`
             };
             const host = createServerHost([file1, file2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openClientFile(file1.path);
             projectService.closeClientFile(file1.path);
             projectService.openClientFile(file2.path);
@@ -757,7 +801,7 @@ namespace ts {
                 }`
             };
             const host = createServerHost([file1, file2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openClientFile(file1.path);
             projectService.closeClientFile(file1.path);
             projectService.openClientFile(file2.path);
@@ -790,7 +834,7 @@ namespace ts {
             };
 
             const host = createServerHost([file1, file2, file3, libFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ true);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ true, /*typingsInstaller*/ undefined);
             projectService.openClientFile(file1.path);
             projectService.openClientFile(file2.path);
             projectService.openClientFile(file3.path);
@@ -823,7 +867,7 @@ namespace ts {
                 }`
             };
             const host = createServerHost([file1, configFile, libFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ true);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ true, /*typingsInstaller*/ undefined);
             projectService.openClientFile(file1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
 
@@ -842,7 +886,7 @@ namespace ts {
             };
             const externalProjectName = "externalproject";
             const host = createServerHost([file1, file2]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openExternalProject({
                 rootFiles: toExternalFiles([file1.path, file2.path]),
                 options: {},
@@ -900,7 +944,7 @@ namespace ts {
             };
             const externalProjectName = "externalproject";
             const host = createServerHost([file1, file2, file3, config1, config2]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
             projectService.openExternalProject({
                 rootFiles: toExternalFiles([config1.path, config2.path, file3.path]),
                 options: {},
@@ -938,7 +982,7 @@ namespace ts {
             };
             const externalProjectName = "externalproject";
             const host = createServerHost([file1, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -969,7 +1013,7 @@ namespace ts {
             };
             const externalProjectName = "externalproject";
             const host = createServerHost([file1, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1004,7 +1048,7 @@ namespace ts {
                 content: `export let y = 1;`
             };
             const host = createServerHost([file1, file2, file3]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
 
@@ -1041,7 +1085,7 @@ namespace ts {
                 content: `export let y = 1;`
             };
             const host = createServerHost([file1, file2, file3]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
 
@@ -1080,7 +1124,7 @@ namespace ts {
             };
 
             const host = createServerHost([file1, file2, file3]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -1101,8 +1145,8 @@ namespace ts {
             const file1 = {
                 path: "/a/b/f1.ts",
                 content: `
-                export * from "../c/f2.ts";
-                export * from "../d/f3.ts";`
+                export * from "../c/f2";
+                export * from "../d/f3";`
             };
             const file2 = {
                 path: "/a/c/f2.ts",
@@ -1113,7 +1157,7 @@ namespace ts {
                 content: "export let y = 1;"
             };
             const host = createServerHost([file1, file2, file3]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file2.path);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -1148,7 +1192,7 @@ namespace ts {
             };
 
             const host = createServerHost([file1, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1179,7 +1223,7 @@ namespace ts {
             };
 
             const host = createServerHost([file1, file2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1212,7 +1256,7 @@ namespace ts {
             };
 
             const host = createServerHost([file1, file2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1240,7 +1284,7 @@ namespace ts {
                 content: "let y = 1"
             };
             const host = createServerHost([file1, file2]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path]) });
             checkNumberOfProjects(projectService, { externalProjects: 1 });
@@ -1266,7 +1310,7 @@ namespace ts {
             };
 
             const host = createServerHost([file1, file2, file3]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ModuleResolutionKind.NodeJs }, rootFiles: toExternalFiles([file1.path, file2.path]) });
             checkNumberOfProjects(projectService, { externalProjects: 1 });
@@ -1293,7 +1337,7 @@ namespace ts {
                 content: JSON.stringify({ compilerOptions: {} })
             };
             const host = createServerHost([file1, file2, config]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1321,7 +1365,7 @@ namespace ts {
                 content: "export let x = 1"
             };
             const host = createServerHost([file1, file2]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
             projectService.openClientFile(file2.path);
@@ -1346,7 +1390,7 @@ namespace ts {
                 content: `<html><script language="javascript">var x = 1;</></html>`
             };
             const host = createServerHost([file1]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
             const projectFileName = "projectFileName";
             projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
 
@@ -1384,7 +1428,7 @@ namespace ts {
                 content: "export let x: number"
             };
             const host = createServerHost([file1, modFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file1.path);
             projectService.openClientFile(modFile.path);
@@ -1401,7 +1445,7 @@ namespace ts {
                 content: "{x: 1}"
             };
             const host = createServerHost([file1]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true, /*typingsInstaller*/ undefined);
             projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES5, allowJs: false });
             projectService.openClientFile(file1.path);
             projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path);
@@ -1429,7 +1473,7 @@ namespace ts {
                 content: "{}"
             };
             const host = createServerHost([file1, file2, tsconfig1, tsconfig2]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false, /*typingsInstaller*/ undefined);
 
             projectService.openClientFile(file2.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1821,6 +1865,59 @@ namespace ts {
             const expectedEmittedFileName = "/a/b/f1.js";
             assert.isTrue(host.fileExists(expectedEmittedFileName));
             assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+        });
+    });
+    
+    describe("typings installer", () => {
+        it("configured projects (tsd installed) 1", () => {
+            const file1 = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const tsconfig = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        allowJs: true
+                    },
+                    typingOptions: {
+                        enableAutoDiscovery: true
+                    }
+                })
+            };
+            const packageJson = {
+                path: "/a/b/package.json",
+                content: JSON.stringify({
+                    name: "test",
+                    dependencies: {
+                        jquery: "^3.1.0"
+                    }
+                })
+            };
+
+            const jquery = {
+                path: "/a/data/typings/jquery/jquery.d.ts",
+                content: "declare const $: { x: number }"
+            };
+
+            const host = createServerHost([file1, tsconfig, packageJson]);
+            const installer = new TestTypingsInstaller("/a/data/", host);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true, installer);
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const p = projectService.configuredProjects[0];
+            checkProjectActualFiles(p, [ file1.path ]);
+
+            assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
+
+            installer.runPostInstallActions(t => {
+                assert.deepEqual(t, ["jquery"]);
+                host.createFileOrFolder(jquery, /*createParentDirectory*/ true);
+                return ["jquery/jquery.d.ts"];
+            });
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(p, [ file1.path, jquery.path ]);
         });
     });
 }

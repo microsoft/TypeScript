@@ -453,9 +453,9 @@ namespace ts.formatting {
                 case SyntaxKind.MethodDeclaration:
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
-                    }
-                    // fall-through
-
+                    }/*
+                    fall-through
+                    */
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
                     return (<Declaration>node).name.kind;
@@ -732,7 +732,7 @@ namespace ts.formatting {
                         else {
                             // indent token only if end line of previous range does not match start line of the token
                             const prevEndLine = savePreviousRange && sourceFile.getLineAndCharacterOfPosition(savePreviousRange.end).line;
-                            indentToken = lastTriviaWasNewLine &&  tokenStart.line !== prevEndLine;
+                            indentToken = lastTriviaWasNewLine && tokenStart.line !== prevEndLine;
                         }
                     }
                 }
@@ -892,7 +892,7 @@ namespace ts.formatting {
         }
 
         function indentationIsDifferent(indentationString: string, startLinePosition: number): boolean {
-            return indentationString !== sourceFile.text.substr(startLinePosition , indentationString.length);
+            return indentationString !== sourceFile.text.substr(startLinePosition, indentationString.length);
         }
 
         function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean) {
@@ -936,7 +936,7 @@ namespace ts.formatting {
 
             // shift all parts on the delta size
             const delta = indentation - nonWhitespaceColumnInFirstPart.column;
-            for (let i = startIndex, len = parts.length; i < len; i++, startLine++) {
+            for (let i = startIndex, len = parts.length; i < len; i++ , startLine++) {
                 const startLinePos = getStartPositionOfLine(startLine, sourceFile);
                 const nonWhitespaceCharacterAndColumn =
                     i === 0

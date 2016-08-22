@@ -6,6 +6,7 @@
 /// <reference path="scriptVersionCache.ts"/>
 /// <reference path="lsHost.ts"/>
 /// <reference path="project.ts"/>
+/// <reference path="typingsCache.ts"/>
 
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
@@ -41,7 +42,7 @@ namespace ts.server {
         project?: ConfiguredProject;
     }
 
-    interface OpenConfiguredProjectResult {
+    export interface OpenConfiguredProjectResult {
         configFileName?: string;
         configFileErrors?: Diagnostic[];
     }
@@ -90,12 +91,12 @@ namespace ts.server {
         /**
          * a path to directory watcher map that detects added tsconfig files
          **/
-        private readonly directoryWatchersForTsconfig: Map<FileWatcher> = {};
+        private readonly directoryWatchersForTsconfig: Map<FileWatcher> = createMap<FileWatcher>();
         /**
          * count of how many projects are using the directory watcher.
          * If the number becomes 0 for a watcher, then we should close it.
          **/
-        private readonly directoryWatchersRefCount: Map<number> = {};
+        private readonly directoryWatchersRefCount: Map<number> = createMap<number>();
 
         constructor(private readonly projectService: ProjectService) {
         }
@@ -130,6 +131,9 @@ namespace ts.server {
     }
 
     export class ProjectService {
+
+        public readonly typingsCache: TypingsCache;
+
         private readonly documentRegistry: DocumentRegistry;
 
         /**
@@ -139,7 +143,7 @@ namespace ts.server {
         /**
          * maps external project file name to list of config files that were the part of this project
          */
-        private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]> = {};
+        private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]> = createMap<NormalizedPath[]>();
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
@@ -172,11 +176,18 @@ namespace ts.server {
             public readonly logger: Logger,
             public readonly cancellationToken: HostCancellationToken,
             private readonly useSingleInferredProject: boolean,
+            private typingsInstaller: ITypingsInstaller,
             private readonly eventHandler?: ProjectServiceEventHandler) {
 
             this.toCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(host);
+
+            const installer = typingsInstaller || nullTypingsInstaller;
+            installer.attach(this);
+
+            this.typingsCache = new TypingsCache(installer);
+
             // ts.disableIncrementalParsing = true;
 
             this.hostConfiguration = {
@@ -193,6 +204,22 @@ namespace ts.server {
 
         ensureInferredProjectsUpToDate_TestOnly() {
             this.ensureInferredProjectsUpToDate();
+        }
+
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
+            const project = this.findProject(response.projectName);
+            if (!project) {
+                return;
+            }
+            switch (response.kind) {
+                case "set":
+                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
+                    project.updateGraph();
+                    break;
+                case "invalidate":
+                    this.typingsCache.invalidateCachedTypingsForProject(project);
+                    break;
+            }
         }
 
         setCompilerOptionsForInferredProjects(compilerOptions: CompilerOptions): void {
@@ -653,7 +680,8 @@ namespace ts.server {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
                 configHasFilesProperty: configObj.config["files"] !== undefined,
-                wildcardDirectories: parsedCommandLine.wildcardDirectories,
+                wildcardDirectories: createMap(parsedCommandLine.wildcardDirectories),
+                typingOptions: parsedCommandLine.typingOptions,
                 compileOnSave: parsedCommandLine.compileOnSave
             };
             return { success: true, projectOptions };
@@ -699,6 +727,7 @@ namespace ts.server {
                 this.documentRegistry,
                 projectOptions.configHasFilesProperty,
                 projectOptions.compilerOptions,
+                projectOptions.typingOptions,
                 projectOptions.wildcardDirectories,
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
                 /*compileOnSaveEnabled*/ !!projectOptions.compileOnSave);

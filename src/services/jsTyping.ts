@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
 // See LICENSE.txt in the project root for complete license information.
 
-/// <reference path='services.ts' />
+/// <reference path='../compiler/types.ts' />
+/// <reference path='../compiler/core.ts' />
+/// <reference path='../compiler/commandLineParser.ts' />
 
 /* @internal */
 namespace ts.JsTyping {
@@ -47,23 +49,21 @@ namespace ts.JsTyping {
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
-        const inferredTypings: Map<string> = {};
+        const inferredTypings = createMap<string>();
 
         if (!typingOptions || !typingOptions.enableAutoDiscovery) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 
         // Only infer typings for .js and .jsx files
-        fileNames = filter(map(fileNames, normalizePath), f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JS, ScriptKind.JSX));
+        fileNames = filter(map(fileNames, normalizePath), f => {
+            const kind = ensureScriptKind(f, getScriptKindFromFileName(f));
+            return kind === ScriptKind.JS || kind === ScriptKind.JSX;
+        });
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            if (result.config) {
-                safeList = result.config;
-            }
-            else {
-                safeList = {};
-            };
+            safeList = createMap<string>(result.config);
         }
 
         const filesToWatch: string[] = [];
@@ -93,7 +93,7 @@ namespace ts.JsTyping {
 
         // Add the cached typing locations for inferred typings that are already installed
         for (const name in packageNameToTypingLocation) {
-            if (hasProperty(inferredTypings, name) && !inferredTypings[name]) {
+            if (name in inferredTypings && !inferredTypings[name]) {
                 inferredTypings[name] = packageNameToTypingLocation[name];
             }
         }
@@ -124,7 +124,7 @@ namespace ts.JsTyping {
             }
 
             for (const typing of typingNames) {
-                if (!hasProperty(inferredTypings, typing)) {
+                if (!(typing in inferredTypings)) {
                     inferredTypings[typing] = undefined;
                 }
             }
@@ -139,16 +139,16 @@ namespace ts.JsTyping {
                 const jsonConfig: PackageJson = result.config;
                 filesToWatch.push(jsonPath);
                 if (jsonConfig.dependencies) {
-                    mergeTypings(getKeys(jsonConfig.dependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.dependencies));
                 }
                 if (jsonConfig.devDependencies) {
-                    mergeTypings(getKeys(jsonConfig.devDependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.devDependencies));
                 }
                 if (jsonConfig.optionalDependencies) {
-                    mergeTypings(getKeys(jsonConfig.optionalDependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.optionalDependencies));
                 }
                 if (jsonConfig.peerDependencies) {
-                    mergeTypings(getKeys(jsonConfig.peerDependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.peerDependencies));
                 }
             }
         }
@@ -167,10 +167,10 @@ namespace ts.JsTyping {
                 mergeTypings(cleanedTypingNames);
             }
             else {
-                mergeTypings(filter(cleanedTypingNames, f => hasProperty(safeList, f)));
+                mergeTypings(filter(cleanedTypingNames, f => f in safeList));
             }
 
-            const hasJsxFile = forEach(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));
+            const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
             if (hasJsxFile) {
                 mergeTypings(["react"]);
             }

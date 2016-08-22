@@ -8,24 +8,10 @@ namespace ts.server {
         stack?: string;
     }
 
-    export interface CompressedData {
-        length: number;
-        compressionKind: string;
-        data: any;
-    }
-
     function hrTimeToMilliseconds(time: number[]): number {
         const seconds = time[0];
         const nanoseconds = time[1];
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
-    }
-
-    export interface ServerHost extends System {
-        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
-        clearTimeout(timeoutId: any): void;
-        setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
-        clearImmediate(timeoutId: any): void;
-        writeCompressedData(prefix: string, data: CompressedData, suffix: string): void;
     }
 
     interface FileStart {
@@ -148,7 +134,20 @@ namespace ts.server {
         export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
     }
 
+    export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
+        const verboseLogging = logger.hasLevel(LogLevel.verbose);
+
+        const json = JSON.stringify(msg);
+        if (verboseLogging) {
+            logger.info(msg.type + ": " + json);
+        }
+
+        const len = byteLength(json, "utf8");
+        return `Content-Length: ${1 + len}\r\n\r\n${json}${newLine}`;
+    }
+
     export class Session {
+        private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private errorTimer: any; /*NodeJS.Timer | number*/
         private immediateId: any;
@@ -158,15 +157,15 @@ namespace ts.server {
             private host: ServerHost,
             cancellationToken: HostCancellationToken,
             useSingleInferredProject: boolean,
+            protected readonly typingsInstaller: ITypingsInstaller,
             private byteLength: (buf: string, encoding?: string) => number,
-            private maxUncompressedMessageSize: number,
-            private compress: (s: string) => CompressedData,
             private hrtime: (start?: number[]) => number[],
             protected logger: Logger) {
             this.projectService =
-                new ProjectService(host, logger, cancellationToken, useSingleInferredProject, (eventName, project, fileName) => {
+                new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, (eventName, project, fileName) => {
                     this.handleEvent(eventName, project, fileName);
                 });
+            this.gcTimer = new GcTimer(host, /*delay*/ 15000, logger);
         }
 
         private handleEvent(eventName: string, project: Project, fileName: NormalizedPath) {
@@ -188,27 +187,8 @@ namespace ts.server {
             this.logger.msg(msg, Msg.Err);
         }
 
-        public send(msg: protocol.Message, canCompressResponse: boolean) {
-            const verboseLogging = this.logger.hasLevel(LogLevel.verbose);
-
-            const json = JSON.stringify(msg);
-            if (verboseLogging) {
-                this.logger.info(msg.type + ": " + json);
-            }
-
-            const len = this.byteLength(json, "utf8");
-            if (len < this.maxUncompressedMessageSize || !canCompressResponse) {
-                this.host.write(`Content-Length: ${1 + this.byteLength(json, "utf8")}\r\n\r\n${json}${this.host.newLine}`);
-            }
-            else {
-                const start = verboseLogging && this.hrtime();
-                const compressed = this.compress(json);
-                if (verboseLogging) {
-                    const elapsed = this.hrtime(start);
-                    this.logger.info(`compressed message ${json.length} to ${compressed.length} in ${hrTimeToMilliseconds(elapsed)} ms using ${compressed.compressionKind}`);
-                }
-                this.host.writeCompressedData(`Content-Length: ${compressed.length + 1} ${compressed.compressionKind}\r\n\r\n`, compressed, this.host.newLine);
-            }
+        public send(msg: protocol.Message) {
+            this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }
 
         public configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ts.Diagnostic[]) {
@@ -223,7 +203,7 @@ namespace ts.server {
                     diagnostics: bakedDiags
                 }
             };
-            this.send(ev, /*canCompressResponse*/ false);
+            this.send(ev);
         }
 
         public event(info: any, eventName: string) {
@@ -233,10 +213,10 @@ namespace ts.server {
                 event: eventName,
                 body: info,
             };
-            this.send(ev, /*canCompressResponse*/ false);
+            this.send(ev);
         }
 
-        public output(info: any, cmdName: string, canCompressResponse: boolean, reqSeq = 0, errorMsg?: string) {
+        public output(info: any, cmdName: string, reqSeq = 0, errorMsg?: string) {
             const res: protocol.Response = {
                 seq: 0,
                 type: "response",
@@ -250,7 +230,7 @@ namespace ts.server {
             else {
                 res.message = errorMsg;
             }
-            this.send(res, canCompressResponse);
+            this.send(res);
         }
 
         private getLocation(position: number, scriptInfo: ScriptInfo): protocol.Location {
@@ -344,11 +324,9 @@ namespace ts.server {
             this.cleanProjects("inferred projects", this.projectService.inferredProjects);
             this.cleanProjects("configured projects", this.projectService.configuredProjects);
             this.cleanProjects("external projects", this.projectService.externalProjects);
-            if (typeof global !== "undefined" && global.gc) {
-                this.logger.info(`global.gc()`);
-                global.gc();
-                global.gc();
-                global.gc();
+            if (this.host.gc) {
+                this.logger.info(`host.gc()`);
+                this.host.gc();
             }
         }
 
@@ -1037,7 +1015,7 @@ namespace ts.server {
                 this.changeSeq++;
                 // make sure no changes happen before this one is finished
                 if (project.reloadScript(file)) {
-                    this.output(undefined, CommandNames.Reload, /*canCompressResponse*/ false, reqSeq);
+                    this.output(undefined, CommandNames.Reload, reqSeq);
                 }
             }
         }
@@ -1248,7 +1226,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
+        private handlers = createMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments);
                 // TODO: report errors
@@ -1417,7 +1395,7 @@ namespace ts.server {
             },
             [CommandNames.Configure]: (request: protocol.ConfigureRequest) => {
                 this.projectService.setHostConfiguration(request.arguments);
-                this.output(undefined, CommandNames.Configure, /*canCompressResponse*/ false, request.seq);
+                this.output(undefined, CommandNames.Configure, request.seq);
                 return this.notRequired();
             },
             [CommandNames.Reload]: (request: protocol.ReloadRequest) => {
@@ -1471,9 +1449,10 @@ namespace ts.server {
                 this.projectService.reloadProjects();
                 return this.notRequired();
             }
-        };
+        });
+
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
-            if (this.handlers[command]) {
+            if (command in this.handlers) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
             this.handlers[command] = handler;
@@ -1486,12 +1465,13 @@ namespace ts.server {
             }
             else {
                 this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);
-                this.output(undefined, CommandNames.Unknown, /*canCompressResponse*/ false, request.seq, `Unrecognized JSON command: ${request.command}`);
+                this.output(undefined, CommandNames.Unknown, request.seq, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }
         }
 
         public onMessage(message: string) {
+            this.gcTimer.scheduleCollect();
             let start: number[];
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
@@ -1516,23 +1496,22 @@ namespace ts.server {
                 }
 
                 if (response) {
-                    this.output(response, request.command, request.canCompressResponse, request.seq);
+                    this.output(response, request.command, request.seq);
                 }
                 else if (responseRequired) {
-                    this.output(undefined, request.command, /*canCompressResponse*/ false, request.seq, "No content available.");
+                    this.output(undefined, request.command, request.seq, "No content available.");
                 }
             }
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
-                    this.output({ canceled: true }, request.command, /*canCompressResponse*/ false, request.seq);
+                    this.output({ canceled: true }, request.command, request.seq);
                     return;
                 }
                 this.logError(err, message);
                 this.output(
                     undefined,
                     request ? request.command : CommandNames.Unknown,
-                    /*canCompressResponse*/ false,
                     request ? request.seq : 0,
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }

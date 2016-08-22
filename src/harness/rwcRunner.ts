@@ -158,55 +158,56 @@ namespace RWC {
 
 
             it("has the expected emitted code", () => {
-                Harness.Baseline.runBaseline("has the expected emitted code", baseName + ".output.js", () => {
+                Harness.Baseline.runBaseline(baseName + ".output.js", () => {
                     return Harness.Compiler.collateOutputs(compilerResult.files);
-                }, false, baselineOpts);
+                }, baselineOpts);
             });
 
             it("has the expected declaration file content", () => {
-                Harness.Baseline.runBaseline("has the expected declaration file content", baseName + ".d.ts", () => {
+                Harness.Baseline.runBaseline(baseName + ".d.ts", () => {
                     if (!compilerResult.declFilesCode.length) {
                         return null;
                     }
 
                     return Harness.Compiler.collateOutputs(compilerResult.declFilesCode);
-                }, false, baselineOpts);
+                }, baselineOpts);
             });
 
             it("has the expected source maps", () => {
-                Harness.Baseline.runBaseline("has the expected source maps", baseName + ".map", () => {
+                Harness.Baseline.runBaseline(baseName + ".map", () => {
                     if (!compilerResult.sourceMaps.length) {
                         return null;
                     }
 
                     return Harness.Compiler.collateOutputs(compilerResult.sourceMaps);
-                }, false, baselineOpts);
+                }, baselineOpts);
             });
 
             /*it("has correct source map record", () => {
                 if (compilerOptions.sourceMap) {
-                    Harness.Baseline.runBaseline("has correct source map record", baseName + ".sourcemap.txt", () => {
+                    Harness.Baseline.runBaseline(baseName + ".sourcemap.txt", () => {
                         return compilerResult.getSourceMapRecord();
-                    }, false, baselineOpts);
+                    }, baselineOpts);
                 }
             });*/
 
             it("has the expected errors", () => {
-                Harness.Baseline.runBaseline("has the expected errors", baseName + ".errors.txt", () => {
+                Harness.Baseline.runBaseline(baseName + ".errors.txt", () => {
                     if (compilerResult.errors.length === 0) {
                         return null;
                     }
                     // Do not include the library in the baselines to avoid noise
                     const baselineFiles = inputFiles.concat(otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
-                    return Harness.Compiler.getErrorBaseline(baselineFiles, compilerResult.errors);
-                }, false, baselineOpts);
+                    const errors = compilerResult.errors.filter(e => !Harness.isDefaultLibraryFile(e.file.fileName));
+                    return Harness.Compiler.getErrorBaseline(baselineFiles, errors);
+                }, baselineOpts);
             });
 
             // Ideally, a generated declaration file will have no errors. But we allow generated
             // declaration file errors as part of the baseline.
             it("has the expected errors in generated declaration files", () => {
                 if (compilerOptions.declaration && !compilerResult.errors.length) {
-                    Harness.Baseline.runBaseline("has the expected errors in generated declaration files", baseName + ".dts.errors.txt", () => {
+                    Harness.Baseline.runBaseline(baseName + ".dts.errors.txt", () => {
                         const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
                             inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
 
@@ -217,11 +218,16 @@ namespace RWC {
                         return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
                             Harness.IO.newLine() + Harness.IO.newLine() +
                             Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
-                    }, false, baselineOpts);
+                    }, baselineOpts);
                 }
             });
 
-            // TODO: Type baselines (need to refactor out from compilerRunner)
+            it("has the expected types", () => {
+                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
+                    .concat(otherFiles)
+                    .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
+                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts);
+            });
         });
     }
 }

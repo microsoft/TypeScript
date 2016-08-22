@@ -7,16 +7,16 @@ namespace ts {
     }
 
     function createDefaultServerHost(fileMap: Map<File>): server.ServerHost {
-        const existingDirectories: Map<boolean> = {};
-        forEachValue(fileMap, v => {
-            let dir = getDirectoryPath(v.name);
+        const existingDirectories = createMap<boolean>();
+        for (const name in fileMap) {
+            let dir = getDirectoryPath(name);
             let previous: string;
             do {
                 existingDirectories[dir] = true;
                 previous = dir;
                 dir = getDirectoryPath(dir);
             } while (dir !== previous);
-        });
+        }
         return {
             args: <string[]>[],
             newLine: "\r\n",
@@ -24,7 +24,7 @@ namespace ts {
             write: (s: string) => {
             },
             readFile: (path: string, encoding?: string): string => {
-                return hasProperty(fileMap, path) && fileMap[path].content;
+                return path in fileMap ? fileMap[path].content : undefined;
             },
             writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => {
                 throw new Error("NYI");
@@ -36,10 +36,10 @@ namespace ts {
                 throw new Error("NYI");
             },
             fileExists: (path: string): boolean => {
-                return hasProperty(fileMap, path);
+                return path in fileMap;
             },
             directoryExists: (path: string): boolean => {
-                return hasProperty(existingDirectories, path);
+                return existingDirectories[path] || false;
             },
             createDirectory: (path: string) => {
             },
@@ -81,10 +81,11 @@ namespace ts {
             info: (s: string) => { },
             startGroup: () => { },
             endGroup: () => { },
-            msg: (s: string, type?: string) => { }
+            msg: (s: string, type?: string) => { },
+            getLogFileName: (): string => undefined
         };
 
-        const projectService = new server.ProjectService(serverHost, logger, { isCancellationRequested: () => false }, /*useOneInferredProject*/ false);
+        const projectService = new server.ProjectService(serverHost, logger, { isCancellationRequested: () => false }, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
         const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */true, /*containingProject*/ undefined);
         const project = projectService.createInferredProjectWithRootFileIfNecessary(rootScriptInfo);
         project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
@@ -106,7 +107,7 @@ namespace ts {
                 content: `foo()`
             };
 
-            const serverHost = createDefaultServerHost({ [root.name]: root, [imported.name]: imported });
+            const serverHost = createDefaultServerHost(createMap({ [root.name]: root, [imported.name]: imported }));
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             // ensure that imported file was found
@@ -193,7 +194,7 @@ namespace ts {
                 content: `export var y = 1`
             };
 
-            const fileMap: Map<File> = { [root.name]: root };
+            const fileMap = createMap({ [root.name]: root });
             const serverHost = createDefaultServerHost(fileMap);
             const originalFileExists = serverHost.fileExists;
 

@@ -1,4 +1,4 @@
-﻿/// <reference path="..\services\services.ts" />
+﻿/// <reference path="types.d.ts" />
 
 namespace ts.server {
     export enum LogLevel {
@@ -17,6 +17,7 @@ namespace ts.server {
         startGroup(): void;
         endGroup(): void;
         msg(s: string, type?: Msg.Types): void;
+        getLogFileName(): string;
     }
 
     export namespace Msg {
@@ -27,6 +28,32 @@ namespace ts.server {
         export type Perf = "Perf";
         export const Perf: Perf = "Perf";
         export type Types = Err | Info | Perf;
+    }
+
+    function getProjectRootPath(project: Project): Path {
+        switch (project.projectKind) {
+            case ProjectKind.Configured:
+                return <Path>project.getProjectName();
+            case ProjectKind.Inferred:
+                // TODO: fixme
+                return <Path>"";
+            case ProjectKind.External:
+                const projectName = project.getProjectName();
+                const host = project.projectService.host;
+                return host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
+        }
+    }
+
+    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, cachePath?: string): DiscoverTypings {
+        return {
+            projectName: project.getProjectName(),
+            fileNames: project.getFileNames(),
+            compilerOptions: project.getCompilerOptions(),
+            typingOptions,
+            projectRootPath: getProjectRootPath(project),
+            cachePath,
+            kind: "discover"
+        };
     }
 
     export namespace Errors {
@@ -55,7 +82,7 @@ namespace ts.server {
         };
     }
 
-    export function mergeMaps(target: Map<any>, source: Map<any>): void {
+    export function mergeMaps(target: MapLike<any>, source: MapLike <any>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
@@ -123,7 +150,6 @@ namespace ts.server {
         };
     }
     function throwLanguageServiceIsDisabledError() {
-        ;
         throw new Error("LanguageService is disabled");
     }
 
@@ -188,6 +214,7 @@ namespace ts.server {
         files?: string[];
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
+        typingOptions?: TypingOptions;
         compileOnSave?: boolean;
     }
 
@@ -201,7 +228,7 @@ namespace ts.server {
     }
 
     export class ThrottledOperations {
-        private pendingTimeouts: Map<any> = {};
+        private pendingTimeouts: Map<any> = createMap<any>();
         constructor(private readonly host: ServerHost) {
         }
 
@@ -217,6 +244,33 @@ namespace ts.server {
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
             delete self.pendingTimeouts[operationId];
             cb();
+        }
+    }
+
+    export class GcTimer {
+        private timerId: any;
+        constructor(private readonly host: ServerHost, private readonly delay: number, private readonly logger: Logger) {
+        }
+
+        public scheduleCollect() {
+            if (!this.host.gc || this.timerId != undefined) {
+                // no global.gc or collection was already scheduled - skip this request
+                return;
+            }
+            this.timerId = this.host.setTimeout(GcTimer.run, this.delay, this);
+        }
+
+        private static run(self: GcTimer) {
+            self.timerId = undefined;
+
+            const log = self.logger.hasLevel(LogLevel.requestTime);
+            const before = log && self.host.getMemoryUsage();
+
+            self.host.gc();
+            if (log) {
+                const after = self.host.getMemoryUsage();
+                self.logger.perftrc(`GC::before ${before}, after ${after}`);
+            }
         }
     }
 }

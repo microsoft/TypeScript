@@ -17,7 +17,7 @@ function createCancellationToken(args: string[]): HostCancellationToken {
         }
     }
     if (!cancellationPipeName) {
-        return { isCancellationRequested: () => false  };
+        return { isCancellationRequested: () => false };
     }
     return {
         isCancellationRequested() {
@@ -25,10 +25,10 @@ function createCancellationToken(args: string[]): HostCancellationToken {
                 fs.statSync(cancellationPipeName);
                 return true;
             }
-            catch(e) {
+            catch (e) {
                 return false;
             }
         }
     };
 }
-export = createCancellationToken
+export = createCancellationToken;

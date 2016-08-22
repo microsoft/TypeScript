@@ -36,6 +36,7 @@ namespace ts.server {
         startGroup(): void {},
         endGroup(): void {},
         msg(s: string, type?: string): void {},
+        getLogFileName: (): string => undefined
     };
 
     describe("the Session class", () => {
@@ -43,7 +44,7 @@ namespace ts.server {
         let lastSent: protocol.Message;
 
         beforeEach(() => {
-            session = new Session(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, mockLogger);
+            session = new Session(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger);
             session.send = (msg: protocol.Message) => {
                 lastSent = msg;
             };
@@ -110,7 +111,7 @@ namespace ts.server {
         describe("onMessage", () => {
             it("should not throw when commands are executed with invalid arguments", () => {
                 let i = 0;
-                for (name in CommandNames) {
+                for (const name in CommandNames) {
                     if (!Object.prototype.hasOwnProperty.call(CommandNames, name)) {
                         continue;
                     }
@@ -181,7 +182,7 @@ namespace ts.server {
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg, /*canCompressResponse*/ false)).to.not.exist;
+                expect(session.send(msg)).to.not.exist;
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
@@ -249,7 +250,7 @@ namespace ts.server {
                 };
                 const command = "test";
 
-                session.output(body, command, /*canCompressResponse*/ false);
+                session.output(body, command);
 
                 expect(lastSent).to.deep.equal({
                     seq: 0,
@@ -268,7 +269,7 @@ namespace ts.server {
             lastSent: protocol.Message;
             customHandler = "testhandler";
             constructor() {
-                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger);
                 this.addProtocolHandler(this.customHandler, () => {
                     return { response: undefined, responseRequired: true };
                 });
@@ -287,7 +288,7 @@ namespace ts.server {
             };
             const command = "test";
 
-            session.output(body, command, /*canCompressResponse*/ false);
+            session.output(body, command);
 
             expect(session.lastSent).to.deep.equal({
                 seq: 0,
@@ -326,7 +327,7 @@ namespace ts.server {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
             constructor(private client: InProcClient) {
-                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger);
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
                     response: req.arguments,
                     responseRequired: true
@@ -347,11 +348,11 @@ namespace ts.server {
                     ({ response } = this.executeCommand(msg));
                 }
                 catch (e) {
-                    this.output(undefined, msg.command, /*canCompressResponse*/ false, msg.seq, e.toString());
+                    this.output(undefined, msg.command, msg.seq, e.toString());
                     return;
                 }
                 if (response) {
-                    this.output(response, msg.command, /*canCompressResponse*/ false, msg.seq);
+                    this.output(response, msg.command, msg.seq);
                 }
             }
 
@@ -366,13 +367,13 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks: ts.Map<(resp: protocol.Response) => void> = {};
-            private eventHandlers: ts.Map<(args: any) => void> = {};
+            private callbacks = createMap<(resp: protocol.Response) => void>();
+            private eventHandlers = createMap<(args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {
                     const response = <protocol.Response>msg;
-                    if (this.callbacks[response.request_seq]) {
+                    if (response.request_seq in this.callbacks) {
                         this.callbacks[response.request_seq](response);
                         delete this.callbacks[response.request_seq];
                     }
@@ -384,7 +385,7 @@ namespace ts.server {
             }
 
             emit(name: string, args: any): void {
-                if (this.eventHandlers[name]) {
+                if (name in this.eventHandlers) {
                     this.eventHandlers[name](args);
                 }
             }

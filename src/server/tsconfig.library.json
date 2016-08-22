@@ -10,6 +10,14 @@
         "types": []
     },
     "files": [
+        "../services/shims.ts",
+        "../services/utilities.ts",
+        "utilities.ts",
+        "scriptVersionCache.ts",
+        "scriptInfo.ts",
+        "lshost.ts",
+        "typingsCache.ts",
+        "project.ts",
         "editorServices.ts",
         "protocol.d.ts",
         "session.ts"
