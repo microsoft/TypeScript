@@ -3381,10 +3381,6 @@ namespace ts {
          *
          */
         function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
-            if (isAwaitExpression()) {
-                return parseAwaitExpression();
-            }
-
             /**
              * ES7 UpdateExpression:
              *      1) LeftHandSideExpression[?Yield]
@@ -3452,13 +3448,15 @@ namespace ts {
                     return parseTypeOfExpression();
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
-                case SyntaxKind.AwaitKeyword:
-                    return parseAwaitExpression();
                 case SyntaxKind.LessThanToken:
                     // This is modified UnaryExpression grammar in TypeScript
                     //  UnaryExpression (modified):
                     //      < type > UnaryExpression
                     return parseTypeAssertion();
+                case SyntaxKind.AwaitKeyword:
+                    if (isAwaitExpression()) {
+                        return parseAwaitExpression();
+                    }
                 default:
                     return parseIncrementExpression();
             }
@@ -3485,6 +3483,7 @@ namespace ts {
                 case SyntaxKind.DeleteKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.AwaitKeyword:
                     return false;
                 case SyntaxKind.LessThanToken:
                     // If we are not in JSX context, we are parsing TypeAssertion which is an UnaryExpression
