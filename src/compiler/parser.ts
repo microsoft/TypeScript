@@ -3377,7 +3377,7 @@ namespace ts {
          *
          * ES7 ExponentiationExpression:
          *      1) UnaryExpression[?Yield]
-         *      2) UpdateExpression[?Yield]**ExponentiationExpression[?Yield]
+         *      2) UpdateExpression[?Yield] ** ExponentiationExpression[?Yield]
          *
          */
         function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
