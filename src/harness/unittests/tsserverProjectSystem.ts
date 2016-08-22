@@ -214,7 +214,7 @@ namespace ts {
                 referenceCount: 0,
                 directoryName,
                 close: () => {
-                    removeFirstItemWhere(callbacks, cb => cb.cb === callback);
+                    unorderedRemoveFirstItemWhere(callbacks, cb => cb.cb === callback);
                     if (!callbacks.length) {
                         delete this.watchedDirectories[path];
                     }
@@ -248,7 +248,7 @@ namespace ts {
             callbacks.push(callback);
             return {
                 close: () => {
-                    removeItem(callback, callbacks);
+                    unorderedRemoveItem(callback, callbacks);
                     if (!callbacks.length) {
                         delete this.watchedFiles[path];
                     }
@@ -263,7 +263,7 @@ namespace ts {
         };
         readonly clearTimeout = (timeoutId: any): void => {
             if (typeof timeoutId === "number") {
-                removeItemAt(this.callbackQueue, timeoutId);
+                unorderedRemoveItemAt(this.callbackQueue, timeoutId);
             }
         };
 

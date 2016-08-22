@@ -490,7 +490,7 @@ namespace ts {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             if (removed) {
-                removeItem(sourceFile.fileName, rootFileNames);
+                unorderedRemoveItem(sourceFile.fileName, rootFileNames);
             }
             startTimerForRecompilation();
         }

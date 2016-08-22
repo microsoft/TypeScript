@@ -5336,7 +5336,7 @@ namespace ts {
             while (i > 0) {
                 i--;
                 if (isSubtypeOfAny(types[i], types)) {
-                    removeItemAt(types, i);
+                    removeItemAtPreservingOrder(types, i);
                 }
             }
         }

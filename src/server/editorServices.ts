@@ -275,7 +275,7 @@ namespace ts.server {
         removeRoot(info: ScriptInfo) {
             if (this.filenameToScript.contains(info.path)) {
                 this.filenameToScript.remove(info.path);
-                removeItem(info, this.roots);
+                unorderedRemoveItem(info, this.roots);
                 this.resolvedModuleNames.remove(info.path);
                 this.resolvedTypeReferenceDirectives.remove(info.path);
             }
@@ -849,7 +849,7 @@ namespace ts.server {
                 project.directoryWatcher.close();
                 forEachValue(project.directoriesWatchedForWildcards, watcher => { watcher.close(); });
                 delete project.directoriesWatchedForWildcards;
-                removeItem(project, this.configuredProjects);
+                unorderedRemoveItem(project, this.configuredProjects);
             }
             else {
                 for (const directory of project.directoriesWatchedForTsconfig) {
@@ -861,7 +861,7 @@ namespace ts.server {
                         delete project.projectService.directoryWatchersForTsconfig[directory];
                     }
                 }
-                removeItem(project, this.inferredProjects);
+                unorderedRemoveItem(project, this.inferredProjects);
             }
 
             const fileNames = project.getFileNames();
@@ -986,7 +986,7 @@ namespace ts.server {
                 }
             }
             else {
-                removeItem(info, this.openFilesReferenced);
+                unorderedRemoveItem(info, this.openFilesReferenced);
             }
             info.close();
         }
@@ -1496,13 +1496,13 @@ namespace ts.server {
                             // openFileRoots or openFileReferenced.
                             if (info.isOpen) {
                                 if (this.openFileRoots.indexOf(info) >= 0) {
-                                    removeItem(info, this.openFileRoots);
+                                    unorderedRemoveItem(info, this.openFileRoots);
                                     if (info.defaultProject && !info.defaultProject.isConfiguredProject()) {
                                         this.removeProject(info.defaultProject);
                                     }
                                 }
                                 if (this.openFilesReferenced.indexOf(info) >= 0) {
-                                    removeItem(info, this.openFilesReferenced);
+                                    unorderedRemoveItem(info, this.openFilesReferenced);
                                 }
                                 this.openFileRootsConfigured.push(info);
                                 info.defaultProject = project;
