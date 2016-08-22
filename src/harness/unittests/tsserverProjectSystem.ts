@@ -209,12 +209,13 @@ namespace ts {
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
             const callbacks = lookUp(this.watchedDirectories, path) || (this.watchedDirectories[path] = []);
-            callbacks.push({ cb: callback, recursive });
+            const cbWithRecursive = { cb: callback, recursive };
+            callbacks.push(cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
                 close: () => {
-                    unorderedRemoveFirstItemWhere(callbacks, cb => cb.cb === callback);
+                    unorderedRemoveItem(cbWithRecursive, callbacks);
                     if (!callbacks.length) {
                         delete this.watchedDirectories[path];
                     }

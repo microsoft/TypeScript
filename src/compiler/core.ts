@@ -1415,7 +1415,7 @@ namespace ts {
     }
 
     /** Remove the *first* element satisfying `predicate`. */
-    export function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): void {
+    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): void {
         for (let i = 0; i < array.length; i++) {
             if (predicate(array[i])) {
                 unorderedRemoveItemAt(array, i);
