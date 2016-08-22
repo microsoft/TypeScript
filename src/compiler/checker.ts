@@ -3564,11 +3564,13 @@ namespace ts {
                 if (type.flags & TypeFlags.Tuple) {
                     type.resolvedBaseTypes = [createArrayType(getUnionType(type.typeParameters))];
                 }
-                else if (type.symbol.flags & SymbolFlags.Class) {
-                    resolveBaseTypesOfClass(type);
-                }
-                else if (type.symbol.flags & SymbolFlags.Interface) {
-                    resolveBaseTypesOfInterface(type);
+                else if (type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    if (type.symbol.flags & SymbolFlags.Class) {
+                        resolveBaseTypesOfClass(type);
+                    }
+                    if (type.symbol.flags & SymbolFlags.Interface) {
+                        resolveBaseTypesOfInterface(type);
+                    }
                 }
                 else {
                     Debug.fail("type must be class or interface");
@@ -4972,7 +4974,7 @@ namespace ts {
         }
 
         function cloneTypeReference(source: TypeReference): TypeReference {
-            let type = <TypeReference>createObjectType(source.flags, source.symbol);
+            const type = <TypeReference>createObjectType(source.flags, source.symbol);
             type.target = source.target;
             type.typeArguments = source.typeArguments;
             return type;
