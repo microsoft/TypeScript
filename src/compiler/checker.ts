@@ -4979,7 +4979,7 @@ namespace ts {
         }
 
         function getTypeReferenceArity(type: TypeReference): number {
-            return type.target.typeParameters.length;
+            return type.target.typeParameters ? type.target.typeParameters.length : 0;
         }
 
         // Get type from reference to class or interface
