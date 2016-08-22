@@ -1126,13 +1126,13 @@ namespace ts {
                     else {
                         symbolFromVariable = getPropertyOfVariable(targetSymbol, name.text);
                     }
-                    // If the export member we're looking for is default, and there is no real default but allowSyntheticDefaultImports is on, return the entire module as the default
-                    if (!symbolFromVariable && allowSyntheticDefaultImports && name.text === "default") {
-                        symbolFromVariable = resolveExternalModuleSymbol(moduleSymbol) || resolveSymbol(moduleSymbol);
-                    }
                     // if symbolFromVariable is export - get its final target
                     symbolFromVariable = resolveSymbol(symbolFromVariable);
-                    const symbolFromModule = getExportOfModule(targetSymbol, name.text);
+                    let symbolFromModule = getExportOfModule(targetSymbol, name.text);
+                    // If the export member we're looking for is default, and there is no real default but allowSyntheticDefaultImports is on, return the entire module as the default
+                    if (!symbolFromModule && allowSyntheticDefaultImports && name.text === "default") {
+                        symbolFromModule = resolveExternalModuleSymbol(moduleSymbol) || resolveSymbol(moduleSymbol);
+                    }
                     const symbol = symbolFromModule && symbolFromVariable ?
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                         symbolFromModule || symbolFromVariable;
