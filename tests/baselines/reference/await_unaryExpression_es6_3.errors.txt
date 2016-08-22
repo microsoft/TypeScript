@@ -5,13 +5,13 @@ tests/cases/conformance/async/es6/await_unaryExpression_es6_3.ts(7,7): error TS1
 ==== tests/cases/conformance/async/es6/await_unaryExpression_es6_3.ts (2 errors) ====
     
     async function bar1() {
-        ++await 42; // OK
+        ++await 42; // Error
           ~~~~~
 !!! error TS1109: Expression expected.
     }
     
     async function bar2() {
-        --await 42; // OK
+        --await 42; // Error
           ~~~~~
 !!! error TS1109: Expression expected.
     }

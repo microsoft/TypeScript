@@ -1,11 +1,11 @@
 ﻿// @target: es6
 
 async function bar1() {
-    ++await 42; // OK
+    ++await 42; // Error
 }
 
 async function bar2() {
-    --await 42; // OK
+    --await 42; // Error
 }
 
 async function bar3() {
