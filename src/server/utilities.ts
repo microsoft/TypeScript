@@ -38,9 +38,8 @@ namespace ts.server {
                 // TODO: fixme
                 return <Path>"";
             case ProjectKind.External:
-                const projectName = project.getProjectName();
-                const host = project.projectService.host;
-                return host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
+                const projectName = normalizeSlashes(project.getProjectName());
+                return project.projectService.host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
         }
     }
 
