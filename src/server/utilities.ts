@@ -57,8 +57,12 @@ namespace ts.server {
     }
 
     export namespace Errors {
-        export const NoProject = new Error("No Project.");
-        export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");
+        export function ThrowNoProject(): never {
+            throw new Error("No Project.");
+        }
+        export function ThrowProjectLanguageServiceDisabled(): never {
+            throw new Error("The project's language service is disabled.");
+        }
     }
 
     export function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings {

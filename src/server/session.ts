@@ -485,7 +485,7 @@ namespace ts.server {
         }
 
         private getProjectInfoWorker(uncheckedFileName: string, projectFileName: string, needFileNameList: boolean) {
-            const { file, project } = this.getFileAndProjectWorker(uncheckedFileName, projectFileName, /*refreshInferredProjects*/ true, /*errorOnMissingProject*/ true);
+            const { project } = this.getFileAndProjectWorker(uncheckedFileName, projectFileName, /*refreshInferredProjects*/ true, /*errorOnMissingProject*/ true);
             const projectInfo = {
                 configFileName: project.getProjectName(),
                 languageServiceDisabled: !project.languageServiceEnabled,
@@ -516,7 +516,7 @@ namespace ts.server {
             // ts.filter handles case when 'projects' is undefined 
             projects = filter(projects, p => p.languageServiceEnabled);
             if (!projects || !projects.length) {
-                throw Errors.NoProject;
+                return Errors.ThrowNoProject();
             }
             return projects;
         }
@@ -721,7 +721,7 @@ namespace ts.server {
             const file = toNormalizedPath(uncheckedFileName);
             const project: Project = this.getProject(projectFileName) || this.projectService.getDefaultProjectForFile(file, refreshInferredProjects);
             if (!project && errorOnMissingProject) {
-                throw Errors.NoProject;
+                return Errors.ThrowNoProject();
             }
             return { file, project };
         }
