@@ -1534,5 +1534,45 @@ namespace ts {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(p, [ file1.path, jquery.path ]);
         });
+
+        it ("inferred project (tsd installed)", () => {
+            const file1 = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const packageJson = {
+                path: "/a/b/package.json",
+                content: JSON.stringify({
+                    name: "test",
+                    dependencies: {
+                        jquery: "^3.1.0"
+                    }
+                })
+            };
+
+            const jquery = {
+                path: "/a/data/typings/jquery/jquery.d.ts",
+                content: "declare const $: { x: number }"
+            };
+            const host = createServerHost([file1, packageJson]);
+            const installer = new TestTypingsInstaller("/a/data/", host);
+
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true, installer);
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const p = projectService.inferredProjects[0];
+            checkProjectActualFiles(p, [ file1.path ]);
+
+            assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
+
+            installer.runPostInstallActions(t => {
+                assert.deepEqual(t, ["jquery"]);
+                host.createFileOrFolder(jquery, /*createParentDirectory*/ true);
+                return ["jquery/jquery.d.ts"];
+            });
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(p, [ file1.path, jquery.path ]);
+        });
     });
 }
