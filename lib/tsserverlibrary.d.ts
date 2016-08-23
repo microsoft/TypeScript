@@ -305,8 +305,11 @@ declare namespace ts {
         JSDocPropertyTag = 280,
         JSDocTypeLiteral = 281,
         JSDocLiteralType = 282,
-        SyntaxList = 283,
-        Count = 284,
+        JSDocNullKeyword = 283,
+        JSDocUndefinedKeyword = 284,
+        JSDocNeverKeyword = 285,
+        SyntaxList = 286,
+        Count = 287,
         FirstAssignment = 56,
         LastAssignment = 68,
         FirstReservedWord = 70,
@@ -333,7 +336,7 @@ declare namespace ts {
         FirstJSDocNode = 257,
         LastJSDocNode = 282,
         FirstJSDocTagNode = 273,
-        LastJSDocTagNode = 282,
+        LastJSDocTagNode = 285,
     }
     const enum NodeFlags {
         None = 0,
@@ -1638,10 +1641,6 @@ declare namespace ts {
     }
     interface GenericType extends InterfaceType, TypeReference {
         instantiations: Map<TypeReference>;
-    }
-    interface TupleType extends ObjectType {
-        elementTypes: Type[];
-        thisType?: Type;
     }
     interface UnionOrIntersectionType extends Type {
         types: Type[];
@@ -7028,6 +7027,7 @@ declare namespace ts {
     function nodeIsPresent(node: Node): boolean;
     function getTokenPosOfNode(node: Node, sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
     function isJSDocNode(node: Node): boolean;
+    function isJSDocTag(node: Node): boolean;
     function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number;
     function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia?: boolean): string;
     function getTextOfNodeFromSourceText(sourceText: string, node: Node): string;
@@ -7442,6 +7442,10 @@ declare namespace ts {
     function stripQuotes(name: string): string;
     function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean;
     function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind;
+    function parseAndReEmitConfigJSONFile(content: string): {
+        configJsonObject: any;
+        diagnostics: Diagnostic[];
+    };
 }
 declare namespace ts.JsTyping {
     interface TypingResolutionHost {
@@ -8426,7 +8430,7 @@ declare namespace ts.server {
         private immediateId;
         private changeSeq;
         constructor(host: ServerHost, byteLength: (buf: string, encoding?: string) => number, hrtime: (start?: number[]) => number[], logger: Logger);
-        private handleEvent(eventName, project, fileName);
+        private handleEvent(event);
         logError(err: Error, cmd: string): void;
         private sendLineToClient(line);
         send(msg: protocol.Message): void;
@@ -8602,8 +8606,22 @@ declare namespace ts.server {
         project?: Project;
     }
     function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean): T[];
+    type ProjectServiceEvent = {
+        eventName: "context";
+        data: {
+            project: Project;
+            fileName: string;
+        };
+    } | {
+        eventName: "configFileDiag";
+        data: {
+            triggerFile?: string;
+            configFileName: string;
+            diagnostics: Diagnostic[];
+        };
+    };
     interface ProjectServiceEventHandler {
-        (eventName: string, project: Project, fileName: string): void;
+        (event: ProjectServiceEvent): void;
     }
     interface HostConfiguration {
         formatCodeOptions: ts.FormatCodeOptions;
@@ -8630,6 +8648,7 @@ declare namespace ts.server {
         directoryWatchedForSourceFilesChanged(project: Project, fileName: string): void;
         startTimerForDetectingProjectFileListChanges(project: Project): void;
         handleProjectFileListChanges(project: Project): void;
+        reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile?: string): void;
         directoryWatchedForTsconfigChanged(fileName: string): void;
         getCanonicalFileName(fileName: string): string;
         watchedProjectConfigFileChanged(project: Project): void;
@@ -8664,15 +8683,13 @@ declare namespace ts.server {
         configProjectIsActive(fileName: string): boolean;
         findConfiguredProjectByConfigFile(configFileName: string): Project;
         configFileToProjectOptions(configFilename: string): {
-            succeeded: boolean;
             projectOptions?: ProjectOptions;
-            errors?: Diagnostic[];
+            errors: Diagnostic[];
         };
         private exceedTotalNonTsFileSizeLimit(fileNames);
         openConfigFile(configFilename: string, clientFileName?: string): {
-            success: boolean;
             project?: Project;
-            errors?: Diagnostic[];
+            errors: Diagnostic[];
         };
         updateConfiguredProject(project: Project): Diagnostic[];
         createProject(projectFilename: string, projectOptions?: ProjectOptions, languageServiceDisabled?: boolean): Project;

@@ -319,8 +319,11 @@ declare namespace ts {
         JSDocPropertyTag = 280,
         JSDocTypeLiteral = 281,
         JSDocLiteralType = 282,
-        SyntaxList = 283,
-        Count = 284,
+        JSDocNullKeyword = 283,
+        JSDocUndefinedKeyword = 284,
+        JSDocNeverKeyword = 285,
+        SyntaxList = 286,
+        Count = 287,
         FirstAssignment = 56,
         LastAssignment = 68,
         FirstReservedWord = 70,
@@ -347,7 +350,7 @@ declare namespace ts {
         FirstJSDocNode = 257,
         LastJSDocNode = 282,
         FirstJSDocTagNode = 273,
-        LastJSDocTagNode = 282,
+        LastJSDocTagNode = 285,
     }
     enum NodeFlags {
         None = 0,
@@ -1500,10 +1503,6 @@ declare namespace ts {
         typeArguments: Type[];
     }
     interface GenericType extends InterfaceType, TypeReference {
-    }
-    interface TupleType extends ObjectType {
-        elementTypes: Type[];
-        thisType?: Type;
     }
     interface UnionOrIntersectionType extends Type {
         types: Type[];
