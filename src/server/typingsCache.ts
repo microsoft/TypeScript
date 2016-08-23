@@ -20,20 +20,6 @@ namespace ts.server {
         poisoned: boolean;
     }
 
-    const emptyArray: any[] = [];
-    const jsOrDts = [".js", ".d.ts"];
-
-    function getTypingOptionsForProjects(proj: Project): TypingOptions {
-        if (proj.projectKind === ProjectKind.Configured) {
-            return (<ConfiguredProject>proj).getTypingOptions();
-        }
-
-        const enableAutoDiscovery = proj.getFileNames().every(f => fileExtensionIsAny(f, jsOrDts));
-
-        // TODO: add .d.ts files to excludes 
-        return { enableAutoDiscovery, include: emptyArray, exclude: emptyArray };
-    }
-
     function setIsEqualTo(arr1: string[], arr2: string[]): boolean {
         if (arr1 === arr2) {
             return true;
@@ -89,7 +75,7 @@ namespace ts.server {
         }
 
         getTypingsForProject(project: Project): TypingsArray {
-            const typingOptions = getTypingOptionsForProjects(project);
+            const typingOptions = project.getTypingOptions();
 
             if (!typingOptions.enableAutoDiscovery) {
                 return <any>emptyArray;
@@ -113,7 +99,7 @@ namespace ts.server {
         }
 
         invalidateCachedTypingsForProject(project: Project) {
-            const typingOptions = getTypingOptionsForProjects(project);
+            const typingOptions = project.getTypingOptions();
             if (!typingOptions.enableAutoDiscovery) {
                 return;
             }

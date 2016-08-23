@@ -160,11 +160,14 @@ namespace ts.server {
             protected readonly typingsInstaller: ITypingsInstaller,
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
-            protected logger: Logger) {
-            this.projectService =
-                new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, (eventName, project, fileName) => {
-                    this.handleEvent(eventName, project, fileName);
-                });
+            protected logger: Logger,
+            protected readonly canUseEvents: boolean) {
+
+            const eventHandler: ProjectServiceEventHandler = canUseEvents
+                ? (eventName, project, fileName) => this.handleEvent(eventName, project, fileName)
+                : undefined;
+
+            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler);
             this.gcTimer = new GcTimer(host, /*delay*/ 15000, logger);
         }
 
@@ -188,6 +191,12 @@ namespace ts.server {
         }
 
         public send(msg: protocol.Message) {
+            if (msg.type === "event" && !this.canUseEvents) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                }
+                return;
+            }
             this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }
 
@@ -487,7 +496,7 @@ namespace ts.server {
         }
 
         private getProjectInfoWorker(uncheckedFileName: string, projectFileName: string, needFileNameList: boolean) {
-            const { file, project } = this.getFileAndProjectWorker(uncheckedFileName, projectFileName, /*refreshInferredProjects*/ true, /*errorOnMissingProject*/ true);
+            const { project } = this.getFileAndProjectWorker(uncheckedFileName, projectFileName, /*refreshInferredProjects*/ true, /*errorOnMissingProject*/ true);
             const projectInfo = {
                 configFileName: project.getProjectName(),
                 languageServiceDisabled: !project.languageServiceEnabled,
@@ -518,7 +527,7 @@ namespace ts.server {
             // ts.filter handles case when 'projects' is undefined 
             projects = filter(projects, p => p.languageServiceEnabled);
             if (!projects || !projects.length) {
-                throw Errors.NoProject;
+                return Errors.ThrowNoProject();
             }
             return projects;
         }
@@ -723,7 +732,7 @@ namespace ts.server {
             const file = toNormalizedPath(uncheckedFileName);
             const project: Project = this.getProject(projectFileName) || this.projectService.getDefaultProjectForFile(file, refreshInferredProjects);
             if (!project && errorOnMissingProject) {
-                throw Errors.NoProject;
+                return Errors.ThrowNoProject();
             }
             return { file, project };
         }
@@ -946,7 +955,7 @@ namespace ts.server {
         private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             if (!project) {
-                throw Errors.NoProject;
+                Errors.ThrowNoProject();
             }
             const scriptInfo = project.getScriptInfo(file);
             return project.builder.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));

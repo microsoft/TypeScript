@@ -1591,7 +1591,7 @@ namespace ts {
 
                 host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
             });
 
             it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
@@ -1719,7 +1719,7 @@ namespace ts {
 
                 host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
                 typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [moduleFile1, file1Consumer1]);
@@ -1758,7 +1758,7 @@ namespace ts {
 
                 host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
                 typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
                 openFilesForSession([moduleFile1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
             });
@@ -1776,7 +1776,7 @@ namespace ts {
 
                 host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
                 typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
                 openFilesForSession([moduleFile1], session);
 
                 const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
@@ -1805,7 +1805,7 @@ namespace ts {
 
                 host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
                 typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
                 openFilesForSession([moduleFile1], session);
 
                 const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
@@ -1827,7 +1827,7 @@ namespace ts {
                 };
                 host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
                 typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [moduleFile1, file1Consumer1, file1Consumer1Consumer1]);
@@ -1863,7 +1863,7 @@ namespace ts {
             };
             const host = createServerHost([file1, file2, config, libFile]);
             const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-            const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
+            const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
 
             openFilesForSession([file1, file2], session);
             const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(server.CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: config.path });
@@ -1924,6 +1924,46 @@ namespace ts {
                 return ["jquery/jquery.d.ts"];
             });
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(p, [ file1.path, jquery.path ]);
+        });
+
+        it ("inferred project (tsd installed)", () => {
+            const file1 = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const packageJson = {
+                path: "/a/b/package.json",
+                content: JSON.stringify({
+                    name: "test",
+                    dependencies: {
+                        jquery: "^3.1.0"
+                    }
+                })
+            };
+
+            const jquery = {
+                path: "/a/data/typings/jquery/jquery.d.ts",
+                content: "declare const $: { x: number }"
+            };
+            const host = createServerHost([file1, packageJson]);
+            const installer = new TestTypingsInstaller("/a/data/", host);
+
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true, installer);
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const p = projectService.inferredProjects[0];
+            checkProjectActualFiles(p, [ file1.path ]);
+
+            assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
+
+            installer.runPostInstallActions(t => {
+                assert.deepEqual(t, ["jquery"]);
+                host.createFileOrFolder(jquery, /*createParentDirectory*/ true);
+                return ["jquery/jquery.d.ts"];
+            });
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(p, [ file1.path, jquery.path ]);
         });
     });

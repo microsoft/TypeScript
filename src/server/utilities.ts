@@ -8,6 +8,8 @@ namespace ts.server {
         verbose
     }
 
+    export const emptyArray: ReadonlyArray<any> = [];
+
     export interface Logger {
         close(): void;
         hasLevel(level: LogLevel): boolean;
@@ -38,9 +40,8 @@ namespace ts.server {
                 // TODO: fixme
                 return <Path>"";
             case ProjectKind.External:
-                const projectName = project.getProjectName();
-                const host = project.projectService.host;
-                return host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
+                const projectName = normalizeSlashes(project.getProjectName());
+                return project.projectService.host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
         }
     }
 
@@ -57,8 +58,12 @@ namespace ts.server {
     }
 
     export namespace Errors {
-        export const NoProject = new Error("No Project.");
-        export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");
+        export function ThrowNoProject(): never {
+            throw new Error("No Project.");
+        }
+        export function ThrowProjectLanguageServiceDisabled(): never {
+            throw new Error("The project's language service is disabled.");
+        }
     }
 
     export function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings {
