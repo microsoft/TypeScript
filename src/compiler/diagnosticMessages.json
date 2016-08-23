@@ -1955,7 +1955,7 @@
         "category": "Error",
         "code": 2691
     },
-    "'{0}' is a primitive type while '{1}' is a boxed object. Prefer using '{0}' when possible.": {
+    "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
         "category": "Error",
         "code": 2692
     },

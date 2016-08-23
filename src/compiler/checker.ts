@@ -6275,7 +6275,7 @@ namespace ts {
                     (globalNumberType === source && numberType === target) ||
                     (globalBooleanType === source && booleanType === target) ||
                     (getGlobalESSymbolType() === source && esSymbolType === target)) {
-                        reportError(Diagnostics._0_is_a_primitive_type_while_1_is_a_boxed_object_Prefer_using_0_when_possible, targetType, sourceType);
+                        reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
                 }
             }
 
