@@ -25,9 +25,9 @@ use(moduleB.moduleC);
 use(moduleB.moduleCStar);
 >use(moduleB.moduleCStar) : void
 >use : (v: any) => void
->moduleB.moduleCStar : typeof 
+>moduleB.moduleCStar : typeof "tests/cases/compiler/file3"
 >moduleB : typeof moduleB
->moduleCStar : typeof 
+>moduleCStar : typeof "tests/cases/compiler/file3"
 
 === tests/cases/compiler/file2.ts ===
 
