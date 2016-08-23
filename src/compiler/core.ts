@@ -1,4 +1,4 @@
-/// <reference path="types.ts"/>
+﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
 
@@ -47,6 +47,7 @@ namespace ts {
             contains,
             remove,
             forEachValue: forEachValueInMap,
+            getKeys,
             clear,
         };
 
@@ -54,6 +55,14 @@ namespace ts {
             for (const key in files) {
                 f(<Path>key, files[key]);
             }
+        }
+
+        function getKeys() {
+            const keys: Path[] = [];
+            for (const key in files) {
+                keys.push(<Path>key);
+            }
+            return keys;
         }
 
         // path should already be well-formed so it does not need to be normalized
@@ -311,18 +320,25 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch(array: number[], value: number): number {
+    export function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number): number {
+        if (!array || array.length === 0) {
+            return -1;
+        }
+
         let low = 0;
         let high = array.length - 1;
+        comparer = comparer !== undefined
+            ? comparer
+            : (v1, v2) => (v1 < v2 ? -1 : (v1 > v2 ? 1 : 0));
 
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
             const midValue = array[middle];
 
-            if (midValue === value) {
+            if (comparer(midValue, value) === 0) {
                 return middle;
             }
-            else if (midValue > value) {
+            else if (comparer(midValue, value) > 0) {
                 high = middle - 1;
             }
             else {

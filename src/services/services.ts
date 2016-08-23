@@ -1253,7 +1253,7 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
-        getEmitOutput(fileName: string): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
         getProgram(): Program;
 
@@ -7069,7 +7069,7 @@ namespace ts {
             return ts.NavigateTo.getNavigateToItems(program, checker, cancellationToken, searchValue, maxResultCount);
         }
 
-        function getEmitOutput(fileName: string): EmitOutput {
+        function getEmitOutput(fileName: string, emitDeclarationsOnly?: boolean): EmitOutput {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
@@ -7083,7 +7083,7 @@ namespace ts {
                 });
             }
 
-            const emitOutput = program.emit(sourceFile, writeFile, cancellationToken);
+            const emitOutput = program.emit(sourceFile, writeFile, cancellationToken, emitDeclarationsOnly);
 
             return {
                 outputFiles,

@@ -1,4 +1,4 @@
-/// <reference path="types.d.ts" />
+﻿/// <reference path="types.d.ts" />
 
 namespace ts.server {
     export enum LogLevel {
@@ -220,6 +220,7 @@ namespace ts.server {
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
         typingOptions?: TypingOptions;
+        compileOnSave?: boolean;
     }
 
     export function isInferredProjectName(name: string) {

@@ -705,15 +705,25 @@ namespace ts.server {
             return false;
         }
 
+<<<<<<< HEAD
         private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typingOptions: TypingOptions) {
+=======
+        private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], compilerOptions: CompilerOptions, typingOptions: TypingOptions) {
+>>>>>>> d736db3b01a5f4f4215c17845deb3ae09cf28787
             const project = new ExternalProject(
                 projectFileName,
                 this,
                 this.documentRegistry,
+<<<<<<< HEAD
                 options,
                 typingOptions,
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(options, files, externalFilePropertyReader),
                 !!options.compileOnSave);
+=======
+                compilerOptions,
+                typingOptions,
+                /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(compilerOptions, files, externalFilePropertyReader));
+>>>>>>> d736db3b01a5f4f4215c17845deb3ae09cf28787
 
             const errors = this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined);
             this.externalProjects.push(project);
@@ -778,7 +788,11 @@ namespace ts.server {
             return { success: true, project, errors };
         }
 
+<<<<<<< HEAD
         private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypingOptions: TypingOptions, compileOnSave: boolean) {
+=======
+        private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypingOptions: TypingOptions) {
+>>>>>>> d736db3b01a5f4f4215c17845deb3ae09cf28787
             const oldRootScriptInfos = project.getRootScriptInfos();
             const newRootScriptInfos: ScriptInfo[] = [];
             const newRootScriptInfoMap: NormalizedPathMap<ScriptInfo> = createNormalizedPathMap<ScriptInfo>();
@@ -839,7 +853,10 @@ namespace ts.server {
 
             project.setCompilerOptions(newOptions);
             (<ExternalProject | ConfiguredProject>project).setTypingOptions(newTypingOptions);
+<<<<<<< HEAD
             project.compileOnSaveEnabled = !!compileOnSave;
+=======
+>>>>>>> d736db3b01a5f4f4215c17845deb3ae09cf28787
             project.updateGraph();
         }
 
@@ -869,7 +886,11 @@ namespace ts.server {
                     project.enableLanguageService();
                 }
                 this.watchConfigDirectoryForProject(project, projectOptions);
+<<<<<<< HEAD
                 this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typingOptions, projectOptions.compileOnSave);
+=======
+                this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typingOptions);
+>>>>>>> d736db3b01a5f4f4215c17845deb3ae09cf28787
             }
         }
 
@@ -1139,7 +1160,11 @@ namespace ts.server {
         openExternalProject(proj: protocol.ExternalProject): void {
             const externalProject = this.findExternalProjectByProjectName(proj.projectFileName);
             if (externalProject) {
+<<<<<<< HEAD
                 this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, proj.options, proj.typingOptions, proj.options.compileOnSave);
+=======
+                this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, proj.options, proj.typingOptions);
+>>>>>>> d736db3b01a5f4f4215c17845deb3ae09cf28787
                 return;
             }
 

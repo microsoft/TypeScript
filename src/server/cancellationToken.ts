@@ -1,4 +1,4 @@
-/// <reference types="node"/>
+/// <reference types="node" />
 
 
 // TODO: extract services types 

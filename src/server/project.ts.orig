@@ -123,6 +123,7 @@ namespace ts.server {
 
         abstract getProjectName(): string;
         abstract getTypingOptions(): TypingOptions;
+<<<<<<< HEAD
 
         getSourceFile(path: Path) {
             if (!this.program) {
@@ -130,6 +131,8 @@ namespace ts.server {
             }
             return this.program.getSourceFileByPath(path);
         }
+=======
+>>>>>>> d736db3b01a5f4f4215c17845deb3ae09cf28787
 
         close() {
             if (this.program) {
@@ -548,6 +551,10 @@ namespace ts.server {
             this.typingOptions = newTypingOptions;
         }
 
+        setTypingOptions(newTypingOptions: TypingOptions): void {
+            this.typingOptions = newTypingOptions;
+        }
+
         getTypingOptions() {
             return this.typingOptions;
         }
@@ -628,9 +635,14 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
             typingOptions: TypingOptions,
+<<<<<<< HEAD
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled = true) {
             super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+=======
+            languageServiceEnabled: boolean) {
+            super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions);
+>>>>>>> d736db3b01a5f4f4215c17845deb3ae09cf28787
             this.setTypingOptions(typingOptions);
         }
 

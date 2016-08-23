@@ -498,6 +498,7 @@ declare namespace ts.server.protocol {
     export interface ExternalProject {
         projectFileName: string;
         rootFiles: ExternalFile[];
+<<<<<<< HEAD
         options: ExternalProjectCompilerOptions;
         typingOptions?: TypingOptions;
     }
@@ -508,6 +509,10 @@ declare namespace ts.server.protocol {
      */
     export interface ExternalProjectCompilerOptions extends CompilerOptions {
         compileOnSave?: boolean;
+=======
+        options: CompilerOptions;
+        typingOptions?: TypingOptions;
+>>>>>>> d736db3b01a5f4f4215c17845deb3ae09cf28787
     }
 
     export interface ProjectVersionInfo {
