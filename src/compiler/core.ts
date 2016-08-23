@@ -829,8 +829,20 @@ namespace ts {
     export function normalizePath(path: string): string {
         path = normalizeSlashes(path);
         const rootLength = getRootLength(path);
+        const root = path.substr(0, rootLength);
         const normalized = getNormalizedParts(path, rootLength);
-        return path.substr(0, rootLength) + normalized.join(directorySeparator);
+        if (normalized.length) {
+            const joinedParts = root + normalized.join(directorySeparator);
+            return isPathToDirectory(path) ? joinedParts + "/" : joinedParts;
+        }
+        else {
+            return root;
+        }
+    }
+
+    /** A path ending with '/' refers to a directory only, never a file. */
+    export function isPathToDirectory(path: string): boolean {
+        return path.charCodeAt(path.length - 1) === CharacterCodes.slash;
     }
 
     export function getDirectoryPath(path: Path): Path;

@@ -11,10 +11,10 @@ export default { aIndex: 0 };
 import a from ".";
 import aIndex from "./";
 a.a;
-aIndex.a; //aIndex.aIndex; See GH#9690
+aIndex.aIndex;
 
 // @Filename: /a/b/test.ts
 import a from "..";
 import aIndex from "../";
 a.a;
-aIndex.a; //aIndex.aIndex;
+aIndex.aIndex;

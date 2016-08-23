@@ -11,13 +11,13 @@ export default { aIndex: 0 };
 import a from ".";
 import aIndex from "./";
 a.a;
-aIndex.a; //aIndex.aIndex; See GH#9690
+aIndex.aIndex;
 
 //// [test.ts]
 import a from "..";
 import aIndex from "../";
 a.a;
-aIndex.a; //aIndex.aIndex;
+aIndex.aIndex;
 
 
 //// [a.js]
@@ -33,10 +33,10 @@ exports["default"] = { aIndex: 0 };
 var _1 = require(".");
 var _2 = require("./");
 _1["default"].a;
-_2["default"].a; //aIndex.aIndex; See GH#9690
+_2["default"].aIndex;
 //// [test.js]
 "use strict";
 var __1 = require("..");
 var _1 = require("../");
 __1["default"].a;
-_1["default"].a; //aIndex.aIndex;
+_1["default"].aIndex;
