@@ -2,6 +2,7 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSuperty
   Types of property 'x' are incompatible.
     Type 'U' is not assignable to type 'string'.
       Type 'String' is not assignable to type 'string'.
+        'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 
 
 ==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts (1 errors) ====
@@ -19,5 +20,6 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSuperty
 !!! error TS2415:   Types of property 'x' are incompatible.
 !!! error TS2415:     Type 'U' is not assignable to type 'string'.
 !!! error TS2415:       Type 'String' is not assignable to type 'string'.
+!!! error TS2415:         'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
         x: U;
     }

@@ -6300,6 +6300,18 @@ namespace ts {
                 reportError(message, sourceType, targetType);
             }
 
+            function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
+                const sourceType = typeToString(source);
+                const targetType = typeToString(target);
+
+                if ((globalStringType === source && stringType === target) ||
+                    (globalNumberType === source && numberType === target) ||
+                    (globalBooleanType === source && booleanType === target) ||
+                    (getGlobalESSymbolType() === source && esSymbolType === target)) {
+                        reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
+                }
+            }
+
             // Compare two types and return
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
@@ -6423,6 +6435,9 @@ namespace ts {
                 }
 
                 if (reportErrors) {
+                    if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.Primitive) {
+                        tryElaborateErrorsForPrimitivesAndObjects(source, target);
+                    }
                     reportRelationError(headMessage, source, target);
                 }
                 return Ternary.False;
