@@ -366,9 +366,9 @@ namespace ts.server {
             }
 
             const compilerService = project.compilerService;
-            const position = compilerService.host.lineOffsetToPosition(file, line, offset);
+            const implementations = compilerService.languageService.getImplementationAtPosition(file,
+                compilerService.host.lineOffsetToPosition(file, line, offset));
 
-            const implementations = compilerService.languageService.getImplementationAtPosition(file, position);
             if (!implementations) {
                 return undefined;
             }

@@ -1669,11 +1669,6 @@ namespace ts {
         return false;
     }
 
-    export function isFunctionDeclarationIdentifierName(node: Identifier): boolean {
-        return node.parent.kind === SyntaxKind.FunctionDeclaration &&
-            (<FunctionDeclaration>node.parent).name === node;
-    }
-
     // An alias symbol is created by one of the following declarations:
     // import <symbol> = ...
     // import <symbol> from ...

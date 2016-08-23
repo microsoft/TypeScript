@@ -5302,6 +5302,8 @@ namespace ts {
             const node = getTouchingPropertyName(getValidSourceFile(fileName), position);
             const typeChecker = program.getTypeChecker();
 
+            // If invoked directly on a shorthand property assignment, then return
+            // the declaration of the symbol being assigned (not the symbol being assigned to).
             if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const entry = getReferenceEntryForShorthandPropertyAssignment(node, typeChecker);
                 entries.push({
@@ -5309,6 +5311,10 @@ namespace ts {
                     fileName: entry.fileName
                 });
             }
+
+            // For most symbols, the definition is the same as the implementation so we can just
+            // call "Go to Definition". This case should handle anything that is not a type
+            // reference to or member of an interface, class, or union/intersection type.
             else if (definitionIsImplementation(node, typeChecker)) {
                 const definitions = getDefinitionAtPosition(fileName, position);
                 forEach(definitions, (definition: DefinitionInfo) => {
@@ -5318,8 +5324,12 @@ namespace ts {
                     });
                 });
             }
+
+            // Interfaces, classes, and unions/intersection types separate the implementation and
+            // definition so "Go to Definition" is not sufficient. This case handles invocations
+            // on type references and members of those types.
             else {
-                // Do a search for all references and filter them down to implementations only
+                // Perform "Find all References" and filter them down to implementations only
                 const result = getReferencedSymbolsForNode(node, program.getSourceFiles(), /*findInStrings*/false, /*findInComments*/false, /*implementations*/true);
 
                 forEach(result, referencedSymbol => {
@@ -5362,7 +5372,8 @@ namespace ts {
                     return false;
                 }
 
-                // Also check the right hand side to see if this is a type being accessed on a namespace/module
+                // Also check the right hand side to see if this is a type being accessed on a namespace/module.
+                // For example, SomeModule.SomeType
                 const rightHandType = typeChecker.getTypeAtLocation(node);
                 return rightHandType && !(rightHandType.getFlags() & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.UnionOrIntersection));
             }
@@ -5422,6 +5433,11 @@ namespace ts {
             }
 
             return isIdentifierOfClass(node) || isIdentifierOfEnumDeclaration(node);
+        }
+
+        function isFunctionDeclarationIdentifierName(node: Identifier): boolean {
+            return node.parent.kind === SyntaxKind.FunctionDeclaration &&
+                (<FunctionDeclaration>node.parent).name === node;
         }
 
         function isIdentifierOfClass(node: Identifier) {
