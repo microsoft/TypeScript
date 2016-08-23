@@ -459,7 +459,6 @@ namespace ts {
             seq: 0,
             type: "request",
             command,
-            canCompressResponse: false,
             arguments: args
         };
         return newRequest;
@@ -1522,6 +1521,7 @@ namespace ts {
             // A compile on save affected file request using file1
             let moduleFile1FileListRequest: server.protocol.Request;
             let host: TestServerHost;
+            let typingsInstaller: server.ITypingsInstaller;
             let session: server.Session;
 
             beforeEach(() => {
@@ -1590,7 +1590,8 @@ namespace ts {
                 moduleFile1FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path });
 
                 host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+                typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
             });
 
             it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
@@ -1717,7 +1718,8 @@ namespace ts {
                 };
 
                 host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+                typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [moduleFile1, file1Consumer1]);
@@ -1755,7 +1757,8 @@ namespace ts {
                 };
 
                 host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+                typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
                 openFilesForSession([moduleFile1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
             });
@@ -1772,7 +1775,8 @@ namespace ts {
                 };
 
                 host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+                typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
                 openFilesForSession([moduleFile1], session);
 
                 const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
@@ -1800,7 +1804,8 @@ namespace ts {
                 };
 
                 host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+                typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
                 openFilesForSession([moduleFile1], session);
 
                 const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
@@ -1821,7 +1826,8 @@ namespace ts {
                     content: `import {y} from "./file1Consumer1";`
                 };
                 host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
-                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+                typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [moduleFile1, file1Consumer1, file1Consumer1Consumer1]);
@@ -1856,7 +1862,8 @@ namespace ts {
                 content: `{}`
             };
             const host = createServerHost([file1, file2, config, libFile]);
-            const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+            const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+            const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger);
 
             openFilesForSession([file1, file2], session);
             const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(server.CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: config.path });
@@ -1867,7 +1874,7 @@ namespace ts {
             assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
     });
-    
+
     describe("typings installer", () => {
         it("configured projects (tsd installed) 1", () => {
             const file1 = {

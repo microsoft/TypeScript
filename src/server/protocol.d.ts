@@ -124,9 +124,6 @@ declare namespace ts.server.protocol {
         needFileNameList: boolean;
     }
 
-    export interface IsCompileOnSaveEnabledForProjectRequest extends ProjectRequest {
-    }
-
     /**
       * A request to get the project information of the current file
       */

@@ -181,7 +181,7 @@ namespace ts.server {
             return map(this.program.getSourceFiles(), sourceFile => this.getScriptInfoLSHost(sourceFile.path));
         }
 
-        getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles = false) {
+        getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles: boolean) {
             if (!this.languageServiceEnabled) {
                 return undefined;
             }
@@ -422,7 +422,7 @@ namespace ts.server {
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
             // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            const referencedFiles: Map<boolean> = {};
+            const referencedFiles = createMap<boolean>();
             if (sourceFile.imports) {
                 const checker: TypeChecker = this.program.getTypeChecker();
                 for (const importName of sourceFile.imports) {
@@ -449,13 +449,18 @@ namespace ts.server {
             // Handle type reference directives
             if (sourceFile.resolvedTypeReferenceDirectiveNames) {
                 for (const typeName in sourceFile.resolvedTypeReferenceDirectiveNames) {
-                    const fileName = sourceFile.resolvedTypeReferenceDirectiveNames[typeName].resolvedFileName;
+                    const resolvedTypeReferenceDirective = sourceFile.resolvedTypeReferenceDirectiveNames[typeName];
+                    if (!resolvedTypeReferenceDirective) {
+                        continue;
+                    }
+
+                    const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
                     referencedFiles[typeFilePath] = true;
                 }
             }
 
-            return map(getKeys(referencedFiles), key => <Path>key);
+            return map(Object.keys(referencedFiles), key => <Path>key);
         }
 
         // remove a root file from project
