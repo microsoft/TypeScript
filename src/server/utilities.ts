@@ -8,6 +8,8 @@ namespace ts.server {
         verbose
     }
 
+    export const emptyArray: ReadonlyArray<any> = [];
+
     export interface Logger {
         close(): void;
         hasLevel(level: LogLevel): boolean;

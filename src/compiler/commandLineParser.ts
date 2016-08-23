@@ -876,7 +876,7 @@ namespace ts {
         return { options, errors };
     }
 
-    export function convertTypingOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {
+    export function convertTypingOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: TypingOptions, errors: Diagnostic[] } {
         const errors: Diagnostic[] = [];
         const options = convertTypingOptionsFromJsonWorker(jsonOptions, basePath, errors, configFileName);
         return { options, errors };

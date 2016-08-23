@@ -19,6 +19,12 @@ namespace ts.server {
         }
     }
 
+    const jsOrDts = [".js", ".d.ts"];
+
+    export function allFilesAreJsOrDts(project: Project): boolean {
+        return project.getFileNames().every(f => fileExtensionIsAny(f, jsOrDts));
+    }
+
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
@@ -103,6 +109,7 @@ namespace ts.server {
         }
 
         abstract getProjectName(): string;
+        abstract getTypingOptions(): TypingOptions;
 
         close() {
             if (this.program) {
@@ -414,6 +421,14 @@ namespace ts.server {
                 this.projectService.stopWatchingDirectory(directory);
             }
         }
+
+        getTypingOptions(): TypingOptions {
+            return {
+                enableAutoDiscovery: allFilesAreJsOrDts(this),
+                include: [],
+                exclude: []
+            };
+        }
     }
 
     export class ConfiguredProject extends Project {
@@ -432,6 +447,10 @@ namespace ts.server {
             private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions);
+        }
+
+        setTypingOptions(newTypingOptions: TypingOptions): void {
+            this.typingOptions = newTypingOptions;
         }
 
         getTypingOptions() {
@@ -508,12 +527,43 @@ namespace ts.server {
     }
 
     export class ExternalProject extends Project {
+        private typingOptions: TypingOptions;
         constructor(readonly externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
+            typingOptions: TypingOptions,
             languageServiceEnabled: boolean) {
             super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions);
+            this.setTypingOptions(typingOptions);
+        }
+
+        getTypingOptions() {
+            return this.typingOptions;
+        }
+
+        setTypingOptions(newTypingOptions: TypingOptions): void {
+            if (!newTypingOptions) {
+                // set default typings options
+                newTypingOptions = {
+                    enableAutoDiscovery: allFilesAreJsOrDts(this),
+                    include: [],
+                    exclude: []
+                };
+            }
+            else {
+                if (newTypingOptions.enableAutoDiscovery === undefined) {
+                    // if autoDiscovery was not specified by the caller - set it based on the content of the project
+                    newTypingOptions.enableAutoDiscovery = allFilesAreJsOrDts(this);
+                }
+                if (!newTypingOptions.include) {
+                    newTypingOptions.include = [];
+                }
+                if (!newTypingOptions.exclude) {
+                    newTypingOptions.exclude = [];
+                }
+            }
+            this.typingOptions = newTypingOptions;
         }
 
         getProjectName() {

@@ -499,6 +499,7 @@ declare namespace ts.server.protocol {
         projectFileName: string;
         rootFiles: ExternalFile[];
         options: CompilerOptions;
+        typingOptions?: TypingOptions;
     }
 
     export interface ProjectVersionInfo {
