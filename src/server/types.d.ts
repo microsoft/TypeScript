@@ -45,6 +45,7 @@ declare namespace ts.server {
         readonly typingOptions: ts.TypingOptions;
         readonly compilerOptions: ts.CompilerOptions;
         readonly typings: string[];
+        readonly files: string[];
         readonly kind: "set";
     }
 

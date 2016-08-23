@@ -287,6 +287,7 @@ namespace ts.server.typingsInstaller {
                 typingOptions: request.typingOptions,
                 compilerOptions: request.compilerOptions,
                 typings,
+                files: request.fileNames,
                 kind: "set"
             };
         }

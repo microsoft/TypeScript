@@ -17,6 +17,7 @@ namespace ts.server {
         readonly typingOptions: TypingOptions;
         readonly compilerOptions: CompilerOptions;
         readonly typings: TypingsArray;
+        readonly files: string[];
         poisoned: boolean;
     }
 
@@ -73,6 +74,10 @@ namespace ts.server {
         return opt1.allowJs != opt2.allowJs;
     }
 
+    function filesChanged(before: string[], after: string[]): boolean {
+        return !setIsEqualTo(before, after);
+    }
+
     export interface TypingsArray extends ReadonlyArray<string> {
         " __typingsArrayBrand": any;
     }
@@ -97,7 +102,7 @@ namespace ts.server {
 
             const entry = this.perProjectCache[project.getProjectName()];
             const result: TypingsArray = entry ? entry.typings : <any>emptyArray;
-            if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
+            if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions) || filesChanged(project.getFileNames(), entry.files)) {
                 // something has been changed, issue a request to update typings
                 this.installer.enqueueInstallTypingsRequest(project, typingOptions);
                 // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
@@ -106,6 +111,7 @@ namespace ts.server {
                     compilerOptions: project.getCompilerOptions(),
                     typingOptions,
                     typings: result,
+                    files: project.getFileNames(),
                     poisoned: true
                 };
             }
@@ -120,11 +126,12 @@ namespace ts.server {
             this.installer.enqueueInstallTypingsRequest(project, typingOptions);
         }
 
-        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, newTypings: string[]) {
+        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, newTypings: string[], files: string[]) {
             this.perProjectCache[projectName] = {
                 compilerOptions,
                 typingOptions,
                 typings: toTypingsArray(newTypings),
+                files: files,
                 poisoned: false
             };
         }
