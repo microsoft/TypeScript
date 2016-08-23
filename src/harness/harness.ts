@@ -1385,8 +1385,15 @@ namespace Harness {
                 e2 = e;
             }
 
-            if (e1 || e2) {
-                throw e1 || e2;
+            if (e1 && e2) {
+                throw new Error(e1.message + ts.sys.newLine + e2.message);
+            }
+
+            if (e1) {
+                throw e1;
+            }
+            else if(e2) {
+                throw e2;
             }
 
             return;
