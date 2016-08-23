@@ -153,16 +153,22 @@ namespace ts.server {
             private logger: Logger
         ) {
             this.projectService =
-                new ProjectService(host, logger, (eventName, project, fileName) => {
-                    this.handleEvent(eventName, project, fileName);
+                new ProjectService(host, logger, event => {
+                    this.handleEvent(event);
                 });
         }
 
-        private handleEvent(eventName: string, project: Project, fileName: string) {
-            if (eventName == "context") {
-                this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
-                this.updateErrorCheck([{ fileName, project }], this.changeSeq,
-                    (n) => n === this.changeSeq, 100);
+        private handleEvent(event: ProjectServiceEvent) {
+            switch (event.eventName) {
+                case "context":
+                    const { project, fileName } = event.data;
+                    this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
+                    this.updateErrorCheck([{ fileName, project }], this.changeSeq,
+                        (n) => n === this.changeSeq, 100);
+                    break;
+                case "configFileDiag":
+                    const { triggerFile, configFileName, diagnostics } = event.data;
+                    this.configFileDiagnosticEvent(triggerFile, configFileName, diagnostics);
             }
         }
 

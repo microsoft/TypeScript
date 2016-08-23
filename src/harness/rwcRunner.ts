@@ -158,13 +158,13 @@ namespace RWC {
 
 
             it("has the expected emitted code", () => {
-                Harness.Baseline.runBaseline(baseName + ".output.js", () => {
+                Harness.Baseline.runBaseline(`${baseName}.output.js`, () => {
                     return Harness.Compiler.collateOutputs(compilerResult.files);
                 }, baselineOpts);
             });
 
             it("has the expected declaration file content", () => {
-                Harness.Baseline.runBaseline(baseName + ".d.ts", () => {
+                Harness.Baseline.runBaseline(`${baseName}.d.ts`, () => {
                     if (!compilerResult.declFilesCode.length) {
                         return null;
                     }
@@ -174,7 +174,7 @@ namespace RWC {
             });
 
             it("has the expected source maps", () => {
-                Harness.Baseline.runBaseline(baseName + ".map", () => {
+                Harness.Baseline.runBaseline(`${baseName}.map`, () => {
                     if (!compilerResult.sourceMaps.length) {
                         return null;
                     }
@@ -192,7 +192,7 @@ namespace RWC {
             });*/
 
             it("has the expected errors", () => {
-                Harness.Baseline.runBaseline(baseName + ".errors.txt", () => {
+                Harness.Baseline.runBaseline(`${baseName}.errors.txt`, () => {
                     if (compilerResult.errors.length === 0) {
                         return null;
                     }
@@ -207,7 +207,7 @@ namespace RWC {
             // declaration file errors as part of the baseline.
             it("has the expected errors in generated declaration files", () => {
                 if (compilerOptions.declaration && !compilerResult.errors.length) {
-                    Harness.Baseline.runBaseline(baseName + ".dts.errors.txt", () => {
+                    Harness.Baseline.runBaseline(`${baseName}.dts.errors.txt`, () => {
                         const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
                             inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
 
@@ -223,7 +223,7 @@ namespace RWC {
             });
 
             it("has the expected types", () => {
-                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
+                Harness.Compiler.doTypeAndSymbolBaseline(`${baseName}.types`, compilerResult, inputFiles
                     .concat(otherFiles)
                     .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
                     .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts);
