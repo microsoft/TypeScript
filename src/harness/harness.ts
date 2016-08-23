@@ -1396,7 +1396,12 @@ namespace Harness {
 
                 const fullExtension = isSymbolBaseLine ? ".symbols" : ".types";
 
-                Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, fullExtension), () => fullBaseLine, opts);
+                // When calling this function from rwc-runner, it is possible that the baselinePath will have no extension.
+                // As rwc test- file is stored in json which ".json" will get stripped off.
+                // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
+                const outputFileName = ts.endsWith(baselinePath, ".ts") || ts.endsWith(baselinePath, ".tsx") ?
+                    baselinePath.replace(/\.tsx?/, fullExtension) : baselinePath.concat(fullExtension);
+                Harness.Baseline.runBaseline(outputFileName, () => fullBaseLine, opts);
             }
 
             function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
