@@ -158,11 +158,14 @@ namespace ts.server {
             protected readonly typingsInstaller: ITypingsInstaller,
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
-            protected logger: Logger) {
-            this.projectService =
-                new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, (eventName, project, fileName) => {
-                    this.handleEvent(eventName, project, fileName);
-                });
+            protected logger: Logger,
+            protected readonly canUseEvents: boolean) {
+
+            const eventHandler: ProjectServiceEventHandler = canUseEvents
+                ? (eventName, project, fileName) => this.handleEvent(eventName, project, fileName)
+                : undefined;
+
+            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler);
             this.gcTimer = new GcTimer(host, /*delay*/ 15000, logger);
         }
 
@@ -186,6 +189,12 @@ namespace ts.server {
         }
 
         public send(msg: protocol.Message) {
+            if (msg.type === "event" && !this.canUseEvents) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                }
+                return;
+            }
             this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }
 
