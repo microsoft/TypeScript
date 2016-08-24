@@ -2067,7 +2067,7 @@ namespace ts {
                 // and we could then access that data during declaration emit.
                 writer.trackSymbol(symbol, enclosingDeclaration, meaning);
                 function walkSymbol(symbol: Symbol, meaning: SymbolFlags): void {
-                    function recur(symbol: Symbol, meaning: SymbolFlags, endOfChain?: boolean): void {
+                    function climbSymbol(symbol: Symbol, meaning: SymbolFlags, endOfChain?: boolean): void {
                         if (symbol) {
                             const accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning, !!(flags & SymbolFormatFlags.UseOnlyExternalAliasing));
 
@@ -2075,7 +2075,7 @@ namespace ts {
                                 needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
 
                                 // Go up and add our parent.
-                                recur(
+                                climbSymbol(
                                     getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol),
                                     getQualifiedLeftMeaning(meaning));
                             }
@@ -2098,7 +2098,7 @@ namespace ts {
                         }
                     }
 
-                    recur(symbol, meaning, /*endOfChain*/ true);
+                    climbSymbol(symbol, meaning, /*endOfChain*/ true);
                 }
 
                 // Get qualified name if the symbol is not a type parameter
@@ -2108,10 +2108,10 @@ namespace ts {
                 const typeFormatFlag = TypeFormatFlags.UseFullyQualifiedType & typeFlags;
                 if (!isTypeParameter && (enclosingDeclaration || typeFormatFlag)) {
                     walkSymbol(symbol, meaning);
-                    return;
                 }
-
-                return appendParentTypeArgumentsAndSymbolName(symbol);
+                else {
+                    appendParentTypeArgumentsAndSymbolName(symbol);
+                }
             }
 
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
