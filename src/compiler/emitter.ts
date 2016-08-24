@@ -8365,7 +8365,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath }: EmitFileNames,
-            sourceFiles: SourceFile[], isBundledEmit: boolean) {
+            sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) {
             if (!emitOnlyDtsFiles) {
                 // Make sure not to write js File and source map file if any of them cannot be written
                 if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
@@ -8377,7 +8377,7 @@ const _super = (function (geti, seti) {
             }
 
             if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
+                emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
             }
 
             if (!emitSkipped && emittedFilesList) {
