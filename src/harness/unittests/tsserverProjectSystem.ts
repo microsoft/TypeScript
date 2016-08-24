@@ -1844,6 +1844,28 @@ namespace ts {
                 session.executeCommand(changeFile1Consumer1ShapeRequest);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [moduleFile1, file1Consumer1, file1Consumer1Consumer1]);
             });
+
+            it("should work fine for files with circular references", () => {
+                const file1: FileOrFolder = {
+                    path: "/a/b/file1.ts",
+                    content: `
+                    /// <reference path="./file2.ts" />
+                    export var t1 = 10;`
+                };
+                const file2: FileOrFolder = {
+                    path: "/a/b/file2.ts",
+                    content: `
+                    /// <reference path="./file1.ts" />
+                    export var t2 = 10;`
+                };
+                host = createServerHost([file1, file2, configFile]);
+                typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+
+                openFilesForSession([file1, file2], session);
+                const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
+                sendAffectedFileRequestAndCheckResult(session, file1AffectedListRequest, [file1, file2]);
+            });
         });
     });
 

@@ -2231,7 +2231,7 @@ namespace ts {
     }
 
     export function forEachExpectedEmitFile(host: EmitHost,
-        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
+        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles?: boolean) => void,
         targetSourceFile?: SourceFile,
         emitOnlyDtsFiles?: boolean) {
         const options = host.getCompilerOptions();
@@ -2272,7 +2272,7 @@ namespace ts {
                 sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
                 declarationFilePath
             };
-            action(emitFileNames, [sourceFile], /*isBundledEmit*/false);
+            action(emitFileNames, [sourceFile], /*isBundledEmit*/false, emitOnlyDtsFiles);
         }
 
         function onBundledEmit(host: EmitHost) {
