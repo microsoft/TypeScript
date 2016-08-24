@@ -1370,30 +1370,31 @@ namespace Harness {
 
             // Produce baselines.  The first gives the types for all expressions.
             // The second gives symbols for all identifiers.
-            let e1: Error, e2: Error;
+            let typesError: Error, symbolsError: Error;
             try {
                 checkBaseLines(/*isSymbolBaseLine*/ false);
             }
             catch (e) {
-                e1 = e;
+                typesError = e;
             }
 
             try {
                 checkBaseLines(/*isSymbolBaseLine*/ true);
             }
             catch (e) {
-                e2 = e;
+                symbolsError = e;
             }
 
-            if (e1 && e2) {
-                throw new Error(e1.message + ts.sys.newLine + e2.message);
+            if (typesError && symbolsError) {
+                throw new Error(typesError.message + ts.sys.newLine + symbolsError.message);
             }
 
-            if (e1) {
-                throw e1;
+            if (typesError) {
+                throw typesError;
             }
-            else if(e2) {
-                throw e2;
+
+            if (symbolsError) {
+                throw symbolsError;
             }
 
             return;
@@ -1403,7 +1404,7 @@ namespace Harness {
 
                 const fullExtension = isSymbolBaseLine ? ".symbols" : ".types";
 
-                // When calling this function from rwc-runner, it is possible that the baselinePath will have no extension.
+                // When calling this function from rwc-runner, the baselinePath will have no extension.
                 // As rwc test- file is stored in json which ".json" will get stripped off.
                 // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
                 const outputFileName = ts.endsWith(baselinePath, ".ts") || ts.endsWith(baselinePath, ".tsx") ?
