@@ -36,12 +36,12 @@ namespace ts {
         return declarationDiagnostics.getDiagnostics(targetSourceFile ? targetSourceFile.fileName : undefined);
 
         function getDeclarationDiagnosticsFromFile({ declarationFilePath }: EmitFileNames, sources: SourceFile[], isBundledEmit: boolean) {
-            emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, sources, isBundledEmit);
+            emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, sources, isBundledEmit, /*emitOnlyDtsFiles*/ false);
         }
     }
 
     function emitDeclarations(host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, declarationFilePath: string,
-        sourceFiles: SourceFile[], isBundledEmit: boolean): DeclarationEmit {
+        sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean): DeclarationEmit {
         const newLine = host.getNewLine();
         const compilerOptions = host.getCompilerOptions();
 
@@ -98,7 +98,7 @@ namespace ts {
                         // global file reference is added only
                         //  - if it is not bundled emit (because otherwise it would be self reference)
                         //  - and it is not already added
-                        if (writeReferencePath(referencedFile, !isBundledEmit && !addedGlobalFileReference)) {
+                        if (writeReferencePath(referencedFile, !isBundledEmit && !addedGlobalFileReference, emitOnlyDtsFiles)) {
                             addedGlobalFileReference = true;
                         }
                         emittedReferencedFiles.push(referencedFile);
@@ -1713,7 +1713,7 @@ namespace ts {
          * @param referencedFile
          * @param addBundledFileReference Determines if global file reference corresponding to bundled file should be emitted or not
          */
-        function writeReferencePath(referencedFile: SourceFile, addBundledFileReference: boolean): boolean {
+        function writeReferencePath(referencedFile: SourceFile, addBundledFileReference: boolean, emitOnlyDtsFiles: boolean): boolean {
             let declFileName: string;
             let addedBundledEmitReference = false;
             if (isDeclarationFile(referencedFile)) {
@@ -1722,7 +1722,7 @@ namespace ts {
             }
             else {
                 // Get the declaration file path
-                forEachExpectedEmitFile(host, getDeclFileName, referencedFile);
+                forEachExpectedEmitFile(host, getDeclFileName, referencedFile, emitOnlyDtsFiles);
             }
 
             if (declFileName) {
@@ -1751,8 +1751,8 @@ namespace ts {
     }
 
     /* @internal */
-    export function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection) {
-        const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFiles, isBundledEmit);
+    export function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, emitOnlyDtsFiles: boolean) {
+        const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFiles, isBundledEmit, emitOnlyDtsFiles);
         const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
         if (!emitSkipped) {
             const declarationOutput = emitDeclarationResult.referencesOutput

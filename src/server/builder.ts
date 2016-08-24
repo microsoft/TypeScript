@@ -243,7 +243,7 @@ namespace ts.server {
 
             const referencedFilePaths = this.project.getReferencedFiles(fileInfo.scriptInfo.path);
             if (referencedFilePaths.length > 0) {
-                return map(referencedFilePaths, f => this.getFileInfo(f)).sort(ModuleBuilderFileInfo.compareFileInfos);
+                return map(referencedFilePaths, f => this.getOrCreateFileInfo(f)).sort(ModuleBuilderFileInfo.compareFileInfos);
             }
             return [];
         }
