@@ -711,11 +711,11 @@ namespace ts.server {
                 this,
                 this.documentRegistry,
                 options,
-                typingOptions,
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(options, files, externalFilePropertyReader),
                 !!options.compileOnSave);
 
-            const errors = this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined);
+            const errors = this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typingOptions);
+
             this.externalProjects.push(project);
             return { project, errors };
         }
@@ -728,12 +728,11 @@ namespace ts.server {
                 this.documentRegistry,
                 projectOptions.configHasFilesProperty,
                 projectOptions.compilerOptions,
-                projectOptions.typingOptions,
                 projectOptions.wildcardDirectories,
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
                 /*compileOnSaveEnabled*/ !!projectOptions.compileOnSave);
 
-            const errors = this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName);
+            const errors = this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typingOptions);
 
             project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
             if (!sizeLimitExceeded) {
@@ -751,7 +750,7 @@ namespace ts.server {
             }
         }
 
-        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string): Diagnostic[] {
+        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typingOptions: TypingOptions): Diagnostic[] {
             let errors: Diagnostic[];
             for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
@@ -765,6 +764,7 @@ namespace ts.server {
                     (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
                 }
             }
+            project.setTypingOptions(typingOptions);
             project.updateGraph();
             return errors;
         }

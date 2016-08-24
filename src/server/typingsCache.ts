@@ -77,7 +77,7 @@ namespace ts.server {
         getTypingsForProject(project: Project): TypingsArray {
             const typingOptions = project.getTypingOptions();
 
-            if (!typingOptions.enableAutoDiscovery) {
+            if (!typingOptions || !typingOptions.enableAutoDiscovery) {
                 return <any>emptyArray;
             }
 

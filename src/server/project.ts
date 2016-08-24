@@ -22,8 +22,8 @@ namespace ts.server {
 
     const jsOrDts = [".js", ".d.ts"];
 
-    export function allFilesAreJsOrDts(project: Project): boolean {
-        return project.getFileNames().every(f => fileExtensionIsAny(f, jsOrDts));
+    export function allRootFilesAreJsOrDts(project: Project): boolean {
+        return project.getRootScriptInfos().every(f => fileExtensionIsAny(f.fileName, jsOrDts));
     }
 
     export abstract class Project {
@@ -518,7 +518,7 @@ namespace ts.server {
 
         getTypingOptions(): TypingOptions {
             return {
-                enableAutoDiscovery: allFilesAreJsOrDts(this),
+                enableAutoDiscovery: allRootFilesAreJsOrDts(this),
                 include: [],
                 exclude: []
             };
@@ -526,6 +526,7 @@ namespace ts.server {
     }
 
     export class ConfiguredProject extends Project {
+        private typingOptions: TypingOptions;
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<FileWatcher>;
@@ -537,7 +538,6 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
-            private typingOptions: TypingOptions,
             private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled = false) {
@@ -627,11 +627,9 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
-            typingOptions: TypingOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled = true) {
             super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
-            this.setTypingOptions(typingOptions);
         }
 
         getTypingOptions() {
@@ -642,7 +640,7 @@ namespace ts.server {
             if (!newTypingOptions) {
                 // set default typings options
                 newTypingOptions = {
-                    enableAutoDiscovery: allFilesAreJsOrDts(this),
+                    enableAutoDiscovery: allRootFilesAreJsOrDts(this),
                     include: [],
                     exclude: []
                 };
@@ -650,7 +648,7 @@ namespace ts.server {
             else {
                 if (newTypingOptions.enableAutoDiscovery === undefined) {
                     // if autoDiscovery was not specified by the caller - set it based on the content of the project
-                    newTypingOptions.enableAutoDiscovery = allFilesAreJsOrDts(this);
+                    newTypingOptions.enableAutoDiscovery = allRootFilesAreJsOrDts(this);
                 }
                 if (!newTypingOptions.include) {
                     newTypingOptions.include = [];
