@@ -1542,7 +1542,7 @@ namespace Harness {
                 }
 
                 Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js.map"), () => {
-                    if (options.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
+                    if ((options.noEmitOnError && result.errors.length !== 0) || result.sourceMaps.length === 0) {
                         // We need to return null here or the runBaseLine will actually create a empty file.
                         // Baselining isn't required here because there is no output.
                         /* tslint:disable:no-null-keyword */

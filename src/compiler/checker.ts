@@ -1270,7 +1270,7 @@ namespace ts {
         }
 
         // Resolves a qualified name and any involved aliases
-        function resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean): Symbol | undefined {
+        function resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node): Symbol | undefined {
             if (nodeIsMissing(name)) {
                 return undefined;
             }
@@ -1368,10 +1368,10 @@ namespace ts {
                 const tsExtension = tryExtractTypeScriptExtension(moduleName);
                 if (tsExtension) {
                     const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
-                    error(moduleReferenceLiteral, diag, tsExtension, removeExtension(moduleName, tsExtension));
+                    error(errorNode, diag, tsExtension, removeExtension(moduleName, tsExtension));
                 }
                 else {
-                    error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
+                    error(errorNode, moduleNotFoundError, moduleName);
                 }
             }
             return undefined;
@@ -9169,10 +9169,11 @@ namespace ts {
                     return thisType;
                 }
             }
+
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*includeOuterFunctions*/ true);
+                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
             }
 
             if (isInJavaScriptFile(node)) {

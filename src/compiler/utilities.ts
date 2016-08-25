@@ -2177,7 +2177,7 @@ namespace ts {
 
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
-        const fileDiagnostics: Map<Diagnostic[]> = {};
+        const fileDiagnostics = createMap<Diagnostic[]>();
 
         let diagnosticsModified = false;
         let modificationCount = 0;
@@ -3317,7 +3317,7 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache: Map<string> = {};
+    const syntaxKindCache = createMap<string>();
 
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;
@@ -3465,7 +3465,7 @@ namespace ts {
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver) {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-        const exportSpecifiers: Map<ExportSpecifier[]> = {};
+        const exportSpecifiers = createMap<ExportSpecifier[]>();
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
         for (const node of sourceFile.statements) {
@@ -3506,7 +3506,7 @@ namespace ts {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
                             const name = (specifier.propertyName || specifier.name).text;
-                            getOrUpdateProperty(exportSpecifiers, name, () => []).push(specifier);
+                            (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
                         }
                     }
                     break;

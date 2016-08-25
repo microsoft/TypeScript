@@ -216,13 +216,13 @@ namespace ts {
         Endfinally = 7,
     }
 
-    const instructionNames: Map<string> = {
+    const instructionNames = createMap<string>({
         [Instruction.Return]: "return",
         [Instruction.Break]: "break",
         [Instruction.Yield]: "yield",
         [Instruction.YieldStar]: "yield*",
         [Instruction.Endfinally]: "endfinally",
-    };
+    });
 
     export function transformGenerators(context: TransformationContext) {
         const {
@@ -2060,8 +2060,8 @@ namespace ts {
             const name = declareLocal(text);
 
             if (!renamedCatchVariables) {
-                renamedCatchVariables = {};
-                renamedCatchVariableDeclarations = {};
+                renamedCatchVariables = createMap<boolean>();
+                renamedCatchVariableDeclarations = createMap<Identifier>();
                 context.enableSubstitution(SyntaxKind.Identifier);
             }
 

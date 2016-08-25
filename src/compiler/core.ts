@@ -128,6 +128,7 @@ namespace ts {
         }
 
         return true;
+    }
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
     export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
@@ -199,6 +200,7 @@ namespace ts {
     }
 
     export function filter<T, U extends T>(array: T[], f: (x: T) => x is U): U[];
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[]
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         if (array) {
             const len = array.length;
@@ -706,6 +708,15 @@ namespace ts {
             result[makeKey(value)] = makeValue ? makeValue(value) : value;
         }
         return result;
+    }
+
+    export function isEmpty<T>(map: Map<T>) {
+        for (const id in map) {
+            if (hasProperty(map, id)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     export function cloneMap<T>(map: Map<T>) {
