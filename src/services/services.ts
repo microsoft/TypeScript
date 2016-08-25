@@ -280,11 +280,14 @@ namespace ts {
                 let pos = this.pos;
                 const useJSDocScanner = this.kind >= SyntaxKind.FirstJSDocTagNode && this.kind <= SyntaxKind.LastJSDocTagNode;
                 const processNode = (node: Node) => {
-                    if (pos < node.pos) {
+                    const isJSDocTagNode = isJSDocTag(node);
+                    if (!isJSDocTagNode && pos < node.pos) {
                         pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);
                     }
                     children.push(node);
-                    pos = node.end;
+                    if (!isJSDocTagNode) {
+                        pos = node.end;
+                    }
                 };
                 const processNodes = (nodes: NodeArray<Node>) => {
                     if (pos < nodes.pos) {
@@ -299,10 +302,6 @@ namespace ts {
                         processNode(jsDocComment);
                     }
                 }
-                // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
-                // For that to work, the jsdoc comments should still be the leading trivia of the first child. 
-                // Restoring the scanner position ensures that. 
-                pos = this.pos;
                 forEachChild(this, processNode, processNodes);
                 if (pos < this.end) {
                     this.addSyntheticNodes(children, pos, this.end);
