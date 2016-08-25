@@ -8224,10 +8224,6 @@ namespace ts {
             return !!(type.flags & TypeFlags.Anonymous && (<AnonymousType>type).assignedMembers);
         }
 
-        function isOpenTypeProperty(symbol: Symbol): boolean {
-            return !!symbol.openType;
-        }
-
         function expandOpenType(type: AnonymousType, propAccess: PropertyAccessExpression) {
             const name = propAccess.name.text;
             const prop = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, name);
