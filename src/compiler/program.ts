@@ -720,8 +720,9 @@ namespace ts {
             const typesFile = tryReadTypesSection(packageJsonPath, candidate, state);
             if (typesFile) {
                 const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(typesFile), state.host);
-                // The package.json "typings" property must specify the file with extension, so just try that exact filename.
-                const result = tryFile(typesFile, failedLookupLocation, onlyRecordFailures, state);
+                // A package.json "typings" may specify an exact filename, or may choose to omit an extension.
+                const result = tryFile(typesFile, failedLookupLocation, onlyRecordFailures, state) ||
+                    tryAddingExtensions(typesFile, extensions, failedLookupLocation, onlyRecordFailures, state);
                 if (result) {
                     return result;
                 }

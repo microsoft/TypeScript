@@ -1955,7 +1955,7 @@
         "category": "Error",
         "code": 2691
     },
-    "Cannot find name '{0}'. A type exists with this name, but no value.": {
+    "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
         "category": "Error",
         "code": 2692
     },

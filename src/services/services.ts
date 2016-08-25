@@ -299,6 +299,10 @@ namespace ts {
                         processNode(jsDocComment);
                     }
                 }
+                // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
+                // For that to work, the jsdoc comments should still be the leading trivia of the first child. 
+                // Restoring the scanner position ensures that. 
+                pos = this.pos;
                 forEachChild(this, processNode, processNodes);
                 if (pos < this.end) {
                     this.addSyntheticNodes(children, pos, this.end);
@@ -7596,6 +7600,10 @@ namespace ts {
              * False will mean that node is not classified and traverse routine should recurse into node contents.
              */
             function tryClassifyNode(node: Node): boolean {
+                if (isJSDocTag(node)) {
+                    return true;
+                }
+
                 if (nodeIsMissing(node)) {
                     return true;
                 }
