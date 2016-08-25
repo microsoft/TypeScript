@@ -5257,6 +5257,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        _0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Import_declaration_0_is_using_private_name_1: {
             code: number;
             category: DiagnosticCategory;
