@@ -1375,8 +1375,7 @@ namespace ts {
     }
 
     export interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
-        // For more complex definitions where kind and name are insufficient to properly colorize the text
-        displayParts?: SymbolDisplayPart[];
+        displayParts: SymbolDisplayPart[];
     }
 
     export interface ReferencedSymbol {
@@ -6640,11 +6639,6 @@ namespace ts {
                     getReferencesForStringLiteralInFile(sourceFile, type, possiblePositions, references);
                 }
 
-                const symbol = typeChecker.getSymbolAtLocation(node);
-
-                const displayParts = symbol ? getSymbolDisplayPartsDocumentationAndSymbolKind(
-                    symbol, node.getSourceFile(), getContainerNode(node), node).displayParts : undefined;
-
                 return [{
                     definition: {
                         containerKind: "",
@@ -6653,7 +6647,7 @@ namespace ts {
                         kind: ScriptElementKind.variableElement,
                         name: type.text,
                         textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
-                        displayParts
+                        displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
                     },
                     references: references
                 }];
