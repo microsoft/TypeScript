@@ -491,14 +491,14 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, public compileOnSaveEnabled: boolean) {
             super(ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
                 /*files*/ undefined,
                 languageServiceEnabled,
                 compilerOptions,
-                /*compileOnSaveEnabled*/ false);
+                compileOnSaveEnabled);
 
             this.inferredProjectName = makeInferredProjectName(InferredProject.NextId);
             InferredProject.NextId++;
@@ -540,7 +540,7 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean,
-            public compileOnSaveEnabled = false) {
+            public compileOnSaveEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
         }
 
@@ -628,7 +628,7 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
-            public compileOnSaveEnabled = true) {
+            public compileOnSaveEnabled: boolean) {
             super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
         }
 

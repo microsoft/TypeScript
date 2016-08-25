@@ -712,7 +712,7 @@ namespace ts.server {
                 this.documentRegistry,
                 options,
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(options, files, externalFilePropertyReader),
-                !!options.compileOnSave);
+                options.compileOnSave === undefined ? true : options.compileOnSave);
 
             const errors = this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typingOptions);
 
@@ -730,7 +730,7 @@ namespace ts.server {
                 projectOptions.compilerOptions,
                 projectOptions.wildcardDirectories,
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
-                /*compileOnSaveEnabled*/ !!projectOptions.compileOnSave);
+                projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave);
 
             const errors = this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typingOptions);
 
@@ -877,7 +877,7 @@ namespace ts.server {
             const useExistingProject = this.useSingleInferredProject && this.inferredProjects.length;
             const project = useExistingProject
                 ? this.inferredProjects[0]
-                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects);
+                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects, /*compileOnSaveEnabled*/ false);
 
             project.addRoot(root);
 
