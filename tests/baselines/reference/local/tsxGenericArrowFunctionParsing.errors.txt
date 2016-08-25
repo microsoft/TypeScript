@@ -1,0 +1,39 @@
+tests/cases/conformance/jsx/file.tsx(8,11): error TS2604: JSX element type 'T' does not have any construct or call signatures.
+tests/cases/conformance/jsx/file.tsx(20,11): error TS2604: JSX element type 'T' does not have any construct or call signatures.
+tests/cases/conformance/jsx/file.tsx(24,11): error TS2604: JSX element type 'T' does not have any construct or call signatures.
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    declare module JSX {
+    	interface Element { isElement; }
+    }
+    
+    var T, T1, T2;
+    
+    // This is an element
+    var x1 = <T>() => {}</T>;
+              ~
+!!! error TS2604: JSX element type 'T' does not have any construct or call signatures.
+    x1.isElement;
+    
+    // This is a generic function
+    var x2 = <T extends {}>() => {};
+    x2();
+    
+    // This is a generic function
+    var x3 = <T, T1>() => {};
+    x3();
+    
+    // This is an element
+    var x4 = <T extends={true}>() => {}</T>;
+              ~
+!!! error TS2604: JSX element type 'T' does not have any construct or call signatures.
+    x4.isElement;
+    
+    // This is an element
+    var x5 = <T extends>() => {}</T>;
+              ~
+!!! error TS2604: JSX element type 'T' does not have any construct or call signatures.
+    x5.isElement;
+    
+    
