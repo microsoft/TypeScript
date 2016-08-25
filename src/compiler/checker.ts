@@ -1023,8 +1023,8 @@ namespace ts {
             }
         }
 
-        function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
-            return findMap(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
+        function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
+            return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
@@ -1191,6 +1191,7 @@ namespace ts {
             if (!links.target) {
                 links.target = resolvingSymbol;
                 const node = getDeclarationOfAliasSymbol(symbol);
+                Debug.assert(!!node);
                 const target = getTargetOfAliasDeclaration(node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
@@ -1226,6 +1227,7 @@ namespace ts {
             if (!links.referenced) {
                 links.referenced = true;
                 const node = getDeclarationOfAliasSymbol(symbol);
+                Debug.assert(!!node);
                 if (node.kind === SyntaxKind.ExportAssignment) {
                     // export default <symbol>
                     checkExpressionCached((<ExportAssignment>node).expression);
@@ -6301,6 +6303,18 @@ namespace ts {
                 reportError(message, sourceType, targetType);
             }
 
+            function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
+                const sourceType = typeToString(source);
+                const targetType = typeToString(target);
+
+                if ((globalStringType === source && stringType === target) ||
+                    (globalNumberType === source && numberType === target) ||
+                    (globalBooleanType === source && booleanType === target) ||
+                    (getGlobalESSymbolType() === source && esSymbolType === target)) {
+                        reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
+                }
+            }
+
             // Compare two types and return
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
@@ -6424,6 +6438,9 @@ namespace ts {
                 }
 
                 if (reportErrors) {
+                    if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.Primitive) {
+                        tryElaborateErrorsForPrimitivesAndObjects(source, target);
+                    }
                     reportRelationError(headMessage, source, target);
                 }
                 return Ternary.False;
