@@ -1158,9 +1158,13 @@ namespace ts {
         error?(s: string): void;
         useCaseSensitiveFileNames?(): boolean;
 
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
-        readFile(path: string, encoding?: string): string;
-        fileExists(path: string): boolean;
+        /*
+         * LS host can optionally implement these methods to support getImportModuleCompletionsAtPosition.
+         * Without these methods, only completions for ambient modules will be provided.
+         */
+        readDirectory?(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
+        readFile?(path: string, encoding?: string): string;
+        fileExists?(path: string): boolean;
 
         /*
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
@@ -3155,7 +3159,8 @@ namespace ts {
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
-                    return host.fileExists(fileName);
+                    // stub missing host functionality
+                    return hostCache.getOrCreateEntry(fileName) !== undefined;
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
@@ -4598,23 +4603,25 @@ namespace ts {
                 const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
 
                 if (directoryProbablyExists(baseDirectory, host)) {
-                    // Enumerate the available files
-                    const files = host.readDirectory(baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
-                    for (let filePath of files) {
-                        filePath = normalizePath(filePath);
-                        if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
-                            continue;
-                        }
+                    if (host.readDirectory) {
+                        // Enumerate the available files if possible
+                        const files = host.readDirectory(baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
+                        for (let filePath of files) {
+                            filePath = normalizePath(filePath);
+                            if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
+                                continue;
+                            }
 
-                        const fileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
-                        const duplicate = !includeExtensions && forEach(result, entry => entry.name === fileName);
+                            const fileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
+                            const duplicate = !includeExtensions && forEach(result, entry => entry.name === fileName);
 
-                        if (!duplicate) {
-                            result.push({
-                                name: fileName,
-                                kind: ScriptElementKind.scriptElement,
-                                sortText: fileName
-                            });
+                            if (!duplicate) {
+                                result.push({
+                                    name: fileName,
+                                    kind: ScriptElementKind.scriptElement,
+                                    sortText: fileName
+                                });
+                            }
                         }
                     }
 
@@ -4691,44 +4698,46 @@ namespace ts {
             }
 
             function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: string[]): string[] {
-                const parsed = hasZeroOrOneAsteriskCharacter(pattern) ? tryParsePattern(pattern) : undefined;
-                if (parsed) {
-                    // The prefix has two effective parts: the directory path and the base component after the filepath that is not a
-                    // full directory component. For example: directory/path/of/prefix/base*
-                    const normalizedPrefix = normalizeAndPreserveTrailingSlash(parsed.prefix);
-                    const normalizedPrefixDirectory = getDirectoryPath(normalizedPrefix);
-                    const normalizedPrefixBase = getBaseFileName(normalizedPrefix);
+                if (host.readDirectory) {
+                    const parsed = hasZeroOrOneAsteriskCharacter(pattern) ? tryParsePattern(pattern) : undefined;
+                    if (parsed) {
+                        // The prefix has two effective parts: the directory path and the base component after the filepath that is not a
+                        // full directory component. For example: directory/path/of/prefix/base*
+                        const normalizedPrefix = normalizeAndPreserveTrailingSlash(parsed.prefix);
+                        const normalizedPrefixDirectory = getDirectoryPath(normalizedPrefix);
+                        const normalizedPrefixBase = getBaseFileName(normalizedPrefix);
 
-                    const fragmentHasPath = fragment.indexOf(directorySeparator) !== -1;
+                        const fragmentHasPath = fragment.indexOf(directorySeparator) !== -1;
 
-                    // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
-                    const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + getDirectoryPath(fragment)) : normalizedPrefixDirectory;
+                        // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
+                        const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + getDirectoryPath(fragment)) : normalizedPrefixDirectory;
 
-                    const normalizedSuffix = normalizePath(parsed.suffix);
-                    const baseDirectory = combinePaths(baseUrl, expandedPrefixDirectory);
-                    const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
+                        const normalizedSuffix = normalizePath(parsed.suffix);
+                        const baseDirectory = combinePaths(baseUrl, expandedPrefixDirectory);
+                        const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
 
-                    // If we have a suffix, then we need to read the directory all the way down. We could create a glob
-                    // that encodes the suffix, but we would have to escape the character "?" which readDirectory
-                    // doesn't support. For now, this is safer but slower
-                    const includeGlob = normalizedSuffix ? "**/*" : "./*";
+                        // If we have a suffix, then we need to read the directory all the way down. We could create a glob
+                        // that encodes the suffix, but we would have to escape the character "?" which readDirectory
+                        // doesn't support. For now, this is safer but slower
+                        const includeGlob = normalizedSuffix ? "**/*" : "./*";
 
-                    const matches = host.readDirectory(baseDirectory, fileExtensions, undefined, [includeGlob]);
-                    const result: string[] = [];
+                        const matches = host.readDirectory(baseDirectory, fileExtensions, undefined, [includeGlob]);
+                        const result: string[] = [];
 
-                    // Trim away prefix and suffix
-                    for (const match of matches) {
-                        const normalizedMatch = normalizePath(match);
-                        if (!endsWith(normalizedMatch, normalizedSuffix) || !startsWith(normalizedMatch, completePrefix)) {
-                            continue;
+                        // Trim away prefix and suffix
+                        for (const match of matches) {
+                            const normalizedMatch = normalizePath(match);
+                            if (!endsWith(normalizedMatch, normalizedSuffix) || !startsWith(normalizedMatch, completePrefix)) {
+                                continue;
+                            }
+
+                            const start = completePrefix.length;
+                            const length = normalizedMatch.length - start - normalizedSuffix.length;
+
+                            result.push(removeFileExtension(normalizedMatch.substr(start, length)));
                         }
-
-                        const start = completePrefix.length;
-                        const length = normalizedMatch.length - start - normalizedSuffix.length;
-
-                        result.push(removeFileExtension(normalizedMatch.substr(start, length)));
+                        return result;
                     }
-                    return result;
                 }
 
                 return undefined;
@@ -4762,7 +4771,7 @@ namespace ts {
                         if (!isNestedModule) {
                             nonRelativeModules.push(visibleModule.moduleName);
                         }
-                        else if (startsWith(visibleModule.moduleName, moduleNameFragment)) {
+                        else if (host.readDirectory && startsWith(visibleModule.moduleName, moduleNameFragment)) {
                             const nestedFiles = host.readDirectory(visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
 
                             for (let f of nestedFiles) {
@@ -4891,28 +4900,31 @@ namespace ts {
 
             function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string) {
                 const result: VisibleModuleInfo[] = [];
-                for (const packageJson of findPackageJsons(scriptPath)) {
-                    const package = tryReadingPackageJson(packageJson);
-                    if (!package) {
-                        return;
-                    }
 
-                    const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
-                    const foundModuleNames: string[] = [];
+                if (host.readFile && host.fileExists) {
+                    for (const packageJson of findPackageJsons(scriptPath)) {
+                        const package = tryReadingPackageJson(packageJson);
+                        if (!package) {
+                            return;
+                        }
 
-                    if (package.dependencies) {
-                        addPotentialPackageNames(package.dependencies, foundModuleNames);
-                    }
-                    if (package.devDependencies) {
-                        addPotentialPackageNames(package.devDependencies, foundModuleNames);
-                    }
+                        const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
+                        const foundModuleNames: string[] = [];
 
-                    for (const moduleName of foundModuleNames) {
-                        const moduleDir = combinePaths(nodeModulesDir, moduleName);
-                        result.push({
-                            moduleName,
-                            moduleDir
-                        });
+                        if (package.dependencies) {
+                            addPotentialPackageNames(package.dependencies, foundModuleNames);
+                        }
+                        if (package.devDependencies) {
+                            addPotentialPackageNames(package.devDependencies, foundModuleNames);
+                        }
+
+                        for (const moduleName of foundModuleNames) {
+                            const moduleDir = combinePaths(nodeModulesDir, moduleName);
+                            result.push({
+                                moduleName,
+                                moduleDir
+                            });
+                        }
                     }
                 }
 
