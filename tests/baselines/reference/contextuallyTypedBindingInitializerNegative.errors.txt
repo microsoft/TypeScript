@@ -11,8 +11,7 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(16,23): error TS2322: Type '(arg: string) => number' is not assignable to type '(s: string) => string'.
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(21,14): error TS2322: Type '[number, number]' is not assignable to type '[string, number]'.
-  Types of property '0' are incompatible.
-    Type 'number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(26,14): error TS2322: Type '"baz"' is not assignable to type '"foo" | "bar"'.
 
 
@@ -57,8 +56,7 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
     function g({ prop = [101, 1234] }: Tuples) {}
                  ~~~~
 !!! error TS2322: Type '[number, number]' is not assignable to type '[string, number]'.
-!!! error TS2322:   Types of property '0' are incompatible.
-!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
     
     interface StringUnion {
         prop: "foo" | "bar";
