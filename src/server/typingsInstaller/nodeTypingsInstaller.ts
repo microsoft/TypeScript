@@ -46,7 +46,7 @@ namespace ts.server.typingsInstaller {
         private exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
         private npmBinPath: string;
 
-        private tsdRunCount = 1;
+        private installRunCount = 1;
         readonly installTypingHost: InstallTypingHost = sys;
 
         constructor(log?: Log) {
@@ -101,23 +101,6 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected installPackage(packageName: string) {
-            try {
-                const output = this.execSync(`npm install --silent --global ${packageName}`, { stdio: "pipe" }).toString();
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`installPackage::stdout '${output}'`);
-                }
-                return true;
-            }
-            catch (e) {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`installPackage::err::stdout '${e.stdout && e.stdout.toString()}'`);
-                    this.log.writeLine(`installPackage::err::stderr '${e.stdout && e.stderr.toString()}'`);
-                }
-                return false;
-            }
-        }
-
         protected sendResponse(response: SetTypings | InvalidateCachedTypings) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response: ${JSON.stringify(response)}`);
@@ -128,30 +111,23 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
-            const id = this.tsdRunCount;
-            this.tsdRunCount++;
-            const tsdPath = combinePaths(this.npmBinPath, "tsd");
-            const command = `${tsdPath} install ${typingsToInstall.join(" ")} -ros`;
+        protected runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
+            const id = this.installRunCount;
+            this.installRunCount++;
+            const command = `npm install @types/${typingsToInstall.join(" @types/")} --save-dev`;
             if (this.log.isEnabled()) {
-                this.log.writeLine(`Running tsd ${id}, command '${command}'. cache path '${cachePath}'`);
+                this.log.writeLine(`Running npm install @types ${id}, command '${command}'. cache path '${cachePath}'`);
             }
             this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`TSD ${id} stdout: ${stdout}`);
-                    this.log.writeLine(`TSD ${id} stderr: ${stderr}`);
-                }
-                const i = stdout.indexOf("running install");
-                if (i < 0) {
-                    return;
+                    this.log.writeLine(`npm install @types ${id} stdout: ${stdout}`);
+                    this.log.writeLine(`npm install @types ${id} stderr: ${stderr}`);
                 }
                 const installedTypings: string[] = [];
-
-                const expr = /^\s*-\s*(\S+)\s*$/gm;
-                expr.lastIndex = i;
+                const expr = /^.*(node_modules)\\(@types)\\(\S+)\s*$/gm;
                 let match: RegExpExecArray;
                 while (match = expr.exec(stdout)) {
-                    installedTypings.push(match[1]);
+                    installedTypings.push(`${match[1]}/${match[2]}/${match[3]}`);
                 }
                 postInstallAction(installedTypings);
             });

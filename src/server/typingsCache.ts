@@ -17,12 +17,11 @@ namespace ts.server {
         readonly typingOptions: TypingOptions;
         readonly compilerOptions: CompilerOptions;
         readonly typings: TypingsArray;
-        readonly files: string[];
         poisoned: boolean;
     }
 
     const emptyArray: any[] = [];
-    const jsOrDts = [".js", ".d.ts"];
+    const jsOrDts = [".js", ".jsx", ".d.ts"];
 
     function getTypingOptionsForProjects(proj: Project): TypingOptions {
         if (proj.projectKind === ProjectKind.Configured) {
@@ -74,10 +73,6 @@ namespace ts.server {
         return opt1.allowJs != opt2.allowJs;
     }
 
-    function filesChanged(before: string[], after: string[]): boolean {
-        return !setIsEqualTo(before, after);
-    }
-
     export interface TypingsArray extends ReadonlyArray<string> {
         " __typingsArrayBrand": any;
     }
@@ -102,18 +97,17 @@ namespace ts.server {
 
             const entry = this.perProjectCache[project.getProjectName()];
             const result: TypingsArray = entry ? entry.typings : <any>emptyArray;
-            if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions) || filesChanged(project.getFileNames(), entry.files)) {
-                // something has been changed, issue a request to update typings
-                this.installer.enqueueInstallTypingsRequest(project, typingOptions);
+            if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
                 // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
                 // instead it acts as a placeholder to prevent issuing multiple requests
                 this.perProjectCache[project.getProjectName()] = {
                     compilerOptions: project.getCompilerOptions(),
                     typingOptions,
                     typings: result,
-                    files: project.getFileNames(),
                     poisoned: true
                 };
+                // something has been changed, issue a request to update typings
+                this.installer.enqueueInstallTypingsRequest(project, typingOptions);
             }
             return result;
         }
@@ -126,12 +120,11 @@ namespace ts.server {
             this.installer.enqueueInstallTypingsRequest(project, typingOptions);
         }
 
-        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, newTypings: string[], files: string[]) {
+        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, newTypings: string[]) {
             this.perProjectCache[projectName] = {
                 compilerOptions,
                 typingOptions,
                 typings: toTypingsArray(newTypings),
-                files: files,
                 poisoned: false
             };
         }

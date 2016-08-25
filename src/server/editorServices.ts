@@ -213,7 +213,7 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case "set":
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings, response.files);
+                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
                     project.updateGraph();
                     break;
                 case "invalidate":
