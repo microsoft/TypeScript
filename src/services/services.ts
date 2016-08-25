@@ -300,8 +300,8 @@ namespace ts {
                     }
                 }
                 // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
-                // For that to work, the jsdoc comments should still be the leading trivia of the first child. 
-                // Restoring the scanner position ensures that. 
+                // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+                // Restoring the scanner position ensures that.
                 pos = this.pos;
                 forEachChild(this, processNode, processNodes);
                 if (pos < this.end) {
@@ -1374,8 +1374,13 @@ namespace ts {
         containerName: string;
     }
 
+    export interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
+        // For more complex definitions where kind and name are insufficient to properly colorize the text
+        displayParts?: SymbolDisplayPart[];
+    }
+
     export interface ReferencedSymbol {
-        definition: DefinitionInfo;
+        definition: ReferencedSymbolDefinitionInfo;
         references: ReferenceEntry[];
     }
 
@@ -6108,7 +6113,7 @@ namespace ts {
 
             return result;
 
-            function getDefinition(symbol: Symbol): DefinitionInfo {
+            function getDefinition(symbol: Symbol): ReferencedSymbolDefinitionInfo {
                 const info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), node);
                 const name = map(info.displayParts, p => p.text).join("");
                 const declarations = symbol.declarations;
@@ -6122,7 +6127,8 @@ namespace ts {
                     name,
                     kind: info.symbolKind,
                     fileName: declarations[0].getSourceFile().fileName,
-                    textSpan: createTextSpan(declarations[0].getStart(), 0)
+                    textSpan: createTextSpan(declarations[0].getStart(), 0),
+                    displayParts: info.displayParts
                 };
             }
 
@@ -6317,7 +6323,7 @@ namespace ts {
                     }
                 });
 
-                const definition: DefinitionInfo = {
+                const definition: ReferencedSymbolDefinitionInfo = {
                     containerKind: "",
                     containerName: "",
                     fileName: targetLabel.getSourceFile().fileName,
@@ -6634,6 +6640,11 @@ namespace ts {
                     getReferencesForStringLiteralInFile(sourceFile, type, possiblePositions, references);
                 }
 
+                const symbol = typeChecker.getSymbolAtLocation(node);
+
+                const displayParts = symbol ? getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    symbol, node.getSourceFile(), getContainerNode(node), node).displayParts : undefined;
+
                 return [{
                     definition: {
                         containerKind: "",
@@ -6641,7 +6652,8 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: type.text,
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                        displayParts
                     },
                     references: references
                 }];
