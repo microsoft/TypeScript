@@ -941,12 +941,18 @@ namespace ts.server {
             }, []);
         }
 
-        private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs) {
+        private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): protocol.CompileOnSaveAffectedFileListSingleProject[] {
             const info = this.projectService.getScriptInfo(args.file);
-            let result: string[] = [];
-            for (const project of info.containingProjects) {
+            const result: protocol.CompileOnSaveAffectedFileListSingleProject[] = [];
+
+            // if specified a project, we only return affected file list in this project
+            const projectsToSearch = args.projectFileName ? [this.projectService.findProject(args.projectFileName)] : info.containingProjects;
+            for (const project of projectsToSearch) {
                 if (project.compileOnSaveEnabled) {
-                    result = concatenate(result, project.getCompileOnSaveAffectedFileList(info));
+                    result.push({
+                        projectFileName: project.getProjectName(),
+                        fileNames: project.getCompileOnSaveAffectedFileList(info)
+                    });
                 }
             }
             return result;
