@@ -1,0 +1,26 @@
+c:/root/index.ts(4,5): error TS2339: Property 'y' does not exist on type 'typeof "shortid"'.
+
+
+==== c:/root/index.ts (1 errors) ====
+    /// <reference path="c:/root/typings/index.d.ts" />
+    import * as foo from "shortid";
+    foo.x // found in index.d.ts
+    foo.y // ignored from shortid/index.ts
+        ~
+!!! error TS2339: Property 'y' does not exist on type 'typeof "shortid"'.
+    
+    
+==== c:/root/node_modules/shortid/node_modules/z/index.js (0 errors) ====
+    // z will not be found because maxNodeModulesJsDepth: 0
+    module.exports = { z: 'no' };
+    
+==== c:/root/node_modules/shortid/index.js (0 errors) ====
+    var z = require('z');
+    var y = { y: 'foo' };
+    module.exports = y;
+    
+==== c:/root/typings/index.d.ts (0 errors) ====
+    declare module "shortid" {
+        export var x: number;
+    }
+    
