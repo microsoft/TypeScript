@@ -1023,8 +1023,8 @@ namespace ts {
             }
         }
 
-        function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
-            return findMap(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
+        function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
+            return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
@@ -1191,6 +1191,7 @@ namespace ts {
             if (!links.target) {
                 links.target = resolvingSymbol;
                 const node = getDeclarationOfAliasSymbol(symbol);
+                Debug.assert(!!node);
                 const target = getTargetOfAliasDeclaration(node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
@@ -1226,6 +1227,7 @@ namespace ts {
             if (!links.referenced) {
                 links.referenced = true;
                 const node = getDeclarationOfAliasSymbol(symbol);
+                Debug.assert(!!node);
                 if (node.kind === SyntaxKind.ExportAssignment) {
                     // export default <symbol>
                     checkExpressionCached((<ExportAssignment>node).expression);
