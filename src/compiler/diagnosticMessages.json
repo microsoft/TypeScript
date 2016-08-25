@@ -1959,6 +1959,10 @@
         "category": "Error",
         "code": 2692
     },
+    "'{0}' only refers to a type, but is being used as a value here.": {
+        "category": "Error",
+        "code": 2693
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

@@ -1,4 +1,4 @@
-tests/cases/compiler/classExtendsInterfaceInExpression.ts(7,25): error TS2692: Cannot find name 'A'. A type exists with this name, but no value.
+tests/cases/compiler/classExtendsInterfaceInExpression.ts(7,25): error TS2693: 'A' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/compiler/classExtendsInterfaceInExpression.ts (1 errors) ====
@@ -10,5 +10,5 @@ tests/cases/compiler/classExtendsInterfaceInExpression.ts(7,25): error TS2692: C
     
     class C extends factory(A) {}
                             ~
-!!! error TS2692: Cannot find name 'A'. A type exists with this name, but no value.
+!!! error TS2693: 'A' only refers to a type, but is being used as a value here.
     
