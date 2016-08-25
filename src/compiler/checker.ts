@@ -3055,7 +3055,9 @@ namespace ts {
                 return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
             }
 
-            if (declaration.kind === SyntaxKind.VariableDeclaration && !(getCombinedNodeFlags(declaration) & NodeFlags.Const) && !declaration.initializer) {
+            // Use control flow type inference for non-ambient, non-exported var or let variables with no initializer
+            if (declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) && !declaration.initializer &&
+                !(getCombinedNodeFlags(declaration) & (NodeFlags.Export | NodeFlags.Const)) && !isInAmbientContext(declaration)) {
                 return autoType;
             }
 
@@ -3226,8 +3228,11 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.Prototype) {
                     return links.type = getTypeOfPrototypeProperty(symbol);
                 }
-                // Handle catch clause variables
                 const declaration = symbol.valueDeclaration;
+                if (!declaration && symbol.openType) {
+                    return getFlowTypeOfReference(symbol.propAccess, autoType, /*assumeInitialized*/ false, symbol.openType.flowNode, symbol.openType.flowContainer);
+                }
+                // Handle catch clause variables
                 if (declaration.parent.kind === SyntaxKind.CatchClause) {
                     return links.type = anyType;
                 }
@@ -4239,7 +4244,6 @@ namespace ts {
         }
 
         function resolveAnonymousTypeMembers(type: AnonymousType) {
-            const symbol = type.symbol;
             if (type.target) {
                 const members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper, /*mappingThisOnly*/ false);
                 const callSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper, instantiateSignature);
@@ -4247,43 +4251,49 @@ namespace ts {
                 const stringIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.String), type.mapper);
                 const numberIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.Number), type.mapper);
                 setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+                return;
             }
-            else if (symbol.flags & SymbolFlags.TypeLiteral) {
+            if (type.assignedMembers) {
+                setObjectTypeMembers(type, type.assignedMembers, emptyArray, emptyArray, undefined, undefined);
+                type.assignedMembers = undefined;
+                return;
+            }
+            const symbol = type.symbol;
+            if (symbol.flags & SymbolFlags.TypeLiteral) {
                 const members = symbol.members;
                 const callSignatures = getSignaturesOfSymbol(members["__call"]);
                 const constructSignatures = getSignaturesOfSymbol(members["__new"]);
                 const stringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 const numberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
                 setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+                return;
             }
-            else {
-                // Combinations of function, class, enum and module
-                let members = emptySymbols;
-                let constructSignatures: Signature[] = emptyArray;
-                if (symbol.flags & SymbolFlags.HasExports) {
-                    members = getExportsOfSymbol(symbol);
+            // Combinations of function, class, enum and module
+            let members = emptySymbols;
+            let constructSignatures: Signature[] = emptyArray;
+            if (symbol.flags & SymbolFlags.HasExports) {
+                members = getExportsOfSymbol(symbol);
+            }
+            if (symbol.flags & SymbolFlags.Class) {
+                const classType = getDeclaredTypeOfClassOrInterface(symbol);
+                constructSignatures = getSignaturesOfSymbol(symbol.members["__constructor"]);
+                if (!constructSignatures.length) {
+                    constructSignatures = getDefaultConstructSignatures(classType);
                 }
-                if (symbol.flags & SymbolFlags.Class) {
-                    const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                    constructSignatures = getSignaturesOfSymbol(symbol.members["__constructor"]);
-                    if (!constructSignatures.length) {
-                        constructSignatures = getDefaultConstructSignatures(classType);
-                    }
-                    const baseConstructorType = getBaseConstructorTypeOfClass(classType);
-                    if (baseConstructorType.flags & TypeFlags.ObjectType) {
-                        members = createSymbolTable(getNamedMembers(members));
-                        addInheritedMembers(members, getPropertiesOfObjectType(baseConstructorType));
-                    }
+                const baseConstructorType = getBaseConstructorTypeOfClass(classType);
+                if (baseConstructorType.flags & TypeFlags.ObjectType) {
+                    members = createSymbolTable(getNamedMembers(members));
+                    addInheritedMembers(members, getPropertiesOfObjectType(baseConstructorType));
                 }
-                const numberIndexInfo = symbol.flags & SymbolFlags.Enum ? enumNumberIndexInfo : undefined;
-                setObjectTypeMembers(type, members, emptyArray, constructSignatures, undefined, numberIndexInfo);
-                // We resolve the members before computing the signatures because a signature may use
-                // typeof with a qualified name expression that circularly references the type we are
-                // in the process of resolving (see issue #6072). The temporarily empty signature list
-                // will never be observed because a qualified name can't reference signatures.
-                if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
-                    (<ResolvedType>type).callSignatures = getSignaturesOfSymbol(symbol);
-                }
+            }
+            const numberIndexInfo = symbol.flags & SymbolFlags.Enum ? enumNumberIndexInfo : undefined;
+            setObjectTypeMembers(type, members, emptyArray, constructSignatures, undefined, numberIndexInfo);
+            // We resolve the members before computing the signatures because a signature may use
+            // typeof with a qualified name expression that circularly references the type we are
+            // in the process of resolving (see issue #6072). The temporarily empty signature list
+            // will never be observed because a qualified name can't reference signatures.
+            if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
+                (<ResolvedType>type).callSignatures = getSignaturesOfSymbol(symbol);
             }
         }
 
@@ -7218,7 +7228,8 @@ namespace ts {
         }
 
         function getNonNullableType(type: Type): Type {
-            return strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+            const nonNullableType = strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+            return nonNullableType !== neverType ? nonNullableType : type;
         }
 
         /**
@@ -8197,19 +8208,53 @@ namespace ts {
             return incomplete ? { flags: 0, type } : type;
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, flowContainer: Node) {
+        function isEmptyObjectLiteralType(type: Type): boolean {
+            return type.flags & TypeFlags.ObjectLiteral && getPropertiesOfType(type).length === 0;
+        }
+
+        function createOpenType(flowNode: FlowNode, flowContainer: Node): Type {
+            const result = <AnonymousType>createObjectType(TypeFlags.Anonymous);
+            result.assignedMembers = createMap<Symbol>();
+            result.flowNode = flowNode;
+            result.flowContainer = flowContainer;
+            return result;
+        }
+
+        function isOpenType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Anonymous && (<AnonymousType>type).assignedMembers);
+        }
+
+        function isOpenTypeProperty(symbol: Symbol): boolean {
+            return !!symbol.openType;
+        }
+
+        function expandOpenType(type: AnonymousType, propAccess: PropertyAccessExpression) {
+            const name = propAccess.name.text;
+            const prop = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, name);
+            prop.openType = type;
+            prop.propAccess = propAccess;
+            type.assignedMembers[name] = prop;
+            return type;
+        }
+
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, flowNode: FlowNode, flowContainer: Node) {
             let key: string;
-            if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
+            if (!flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
             const initialType = assumeInitialized ? declaredType :
                 declaredType === autoType ? undefinedType :
                 includeFalsyTypes(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
-            const result = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
+            const result = getTypeFromFlowType(getTypeAtFlowNode(flowNode));
             visitedFlowCount = visitedFlowStart;
             if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull) === neverType) {
                 return declaredType;
+            }
+            if (isOpenType(result)) {
+                if (reference.parent.kind === SyntaxKind.PropertyAccessExpression && isAssignmentTarget(reference.parent)) {
+                    return anyType;
+                }
             }
             return result;
 
@@ -8279,16 +8324,24 @@ namespace ts {
                 // only need to evaluate the assigned type if the declared type is a union type.
                 if (isMatchingReference(reference, node)) {
                     const type = getInitialOrAssignedType(node);
-                    return declaredType === autoType || type === neverType ? type :
+                    return type === neverType ? neverType :
+                        declaredType === autoType ? isEmptyObjectLiteralType(type) ? createOpenType(flowNode, flowContainer) : type :
                         declaredType.flags & TypeFlags.Union ? getAssignmentReducedType(<UnionType>declaredType, type) :
                         declaredType;
+                }
+                // See if we're expanding an open type.
+                if (declaredType === autoType && node.kind === SyntaxKind.PropertyAccessExpression && isMatchingReference(reference, (<PropertyAccessExpression>node).expression)) {
+                    const type = getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent));
+                    if (isOpenType(type)) {
+                        return expandOpenType(type, <PropertyAccessExpression>node);
+                    }
                 }
                 // We didn't have a direct match. However, if the reference is a dotted name, this
                 // may be an assignment to a left hand part of the reference. For example, for a
                 // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
-                // return the declared type.
+                // return the initial type.
                 if (containsMatchingReference(reference, node)) {
-                    return declaredType;
+                    return initialType;
                 }
                 // Assignment doesn't affect reference
                 return undefined;
@@ -8858,7 +8911,7 @@ namespace ts {
             const assumeInitialized = flowContainer !== declarationContainer || isParameter ||
                 type !== autoType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0) ||
                 isInAmbientContext(declaration);
-            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
+            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, node.flowNode, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
@@ -9120,7 +9173,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, node.flowNode, /*flowContainer*/ undefined);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -10714,15 +10767,14 @@ namespace ts {
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
             const type = checkExpression(node);
-            if (strictNullChecks) {
-                const kind = getFalsyFlags(type) & TypeFlags.Nullable;
-                if (kind) {
-                    error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
-                        Diagnostics.Object_is_possibly_null_or_undefined :
-                        Diagnostics.Object_is_possibly_undefined :
-                        Diagnostics.Object_is_possibly_null);
-                }
-                return getNonNullableType(type);
+            const kind = getFalsyFlags(type) & TypeFlags.Nullable;
+            if (kind) {
+                error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
+                    Diagnostics.Object_is_possibly_null_or_undefined :
+                    Diagnostics.Object_is_possibly_undefined :
+                    Diagnostics.Object_is_possibly_null);
+                const nonNullableType = getNonNullableType(type);
+                return getFalsyFlags(nonNullableType) & TypeFlags.Nullable ? unknownType : nonNullableType;
             }
             return type;
         }
@@ -10785,7 +10837,7 @@ namespace ts {
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
-            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, node.flowNode, /*flowContainer*/ undefined);
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
@@ -15539,6 +15591,10 @@ namespace ts {
             }
         }
 
+        function convertAutoToAny(type: Type) {
+            return type === autoType ? anyType : type;
+        }
+
         // Check variable, parameter, or property declaration
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkDecorators(node);
@@ -15589,7 +15645,7 @@ namespace ts {
                 return;
             }
             const symbol = getSymbolOfNode(node);
-            const type = getTypeOfVariableOrParameterOrProperty(symbol);
+            const type = convertAutoToAny(getTypeOfVariableOrParameterOrProperty(symbol));
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 // Don't validate for-in initializer as it is already an error
@@ -15601,7 +15657,7 @@ namespace ts {
             else {
                 // Node is a secondary declaration, check that type is identical to primary declaration and check that
                 // initializer is consistent with type associated with the node
-                const declarationType = getWidenedTypeForVariableLikeDeclaration(node);
+                const declarationType = convertAutoToAny(getWidenedTypeForVariableLikeDeclaration(node));
                 if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
                     error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
                 }

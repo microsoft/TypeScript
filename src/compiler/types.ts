@@ -2164,6 +2164,8 @@ namespace ts {
         /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
+        /* @internal */ openType?: AnonymousType;  // The open type to which this property belongs
+        /* @internal */ propAccess?: PropertyAccessExpression;  // Property access expression for open type property
     }
 
     /* @internal */
@@ -2407,6 +2409,9 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+        assignedMembers?: SymbolTable;  // Open type members
+        flowNode?: FlowNode;     // Open type control flow node
+        flowContainer?: Node;    // Open type control flow container
     }
 
     /* @internal */
