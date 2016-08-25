@@ -186,6 +186,7 @@ namespace ts {
             const content = `{
                 "compilerOptions": {
                     "allowJs": true
+                    // Some comments
                     "outDir": "bin"
                 }
                 "files": ["file1.ts"]
