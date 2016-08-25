@@ -23,23 +23,23 @@ abstract class Watcher {
 class Alarm extends Watcher implements Listener, Ringer, StringLiteral {
     str: string;
     handle = e => {
-        this.str = e.time; // error
+        this.str = e.time;
     }
     superHandle = e => {
-        this.str = e.time; // error
+        this.str = e.time;
         return e.time;
     }
     ring(times) {
-        this.str = times; // error
+        this.str = times;
     }
     watch(e) {
-        this.str = e.time; // error
+        this.str = e.time;
         return e.time;
     }
     literal() {
-        return "A"; // ok: "A" is assignable to "A"
+        return "A";
     }
-    literals = "A"; // ok: "A" is assignable to "A" | "B"
+    literals = "A";
 }
 
 interface A {
@@ -58,15 +58,15 @@ class C {
     r: number;
 }
 class Multiple extends C implements A, B {
-    p = undefined; // error, Multiple.p is implicitly any because A.p and B.p exist
-    q(n) {         // error, n is implicitly any because A.q and B.q exist
+    p = undefined;
+    q(n) {
         n.length;
         n.toFixed;
     }
-    r = null;     // OK, C.r wins over A.r and B.r
-    s = null;     // OK, A.s and B.s match
+    r = null;
+    s = null;
 }
 let multiple = new Multiple();
-multiple.r.toFixed; // OK, C.r wins so Multiple.r: number
-multiple.r.length;  // error, Multiple.r: number
-multiple.s.length;   // OK, A.s and B.s match.
+multiple.r.toFixed;
+multiple.r.length;
+multiple.s.length;
