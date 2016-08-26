@@ -2076,6 +2076,8 @@ namespace ts {
      */
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3]*)$/;
 
+    const nodeModulesDependencyKeys = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
+
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
     /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
@@ -4606,22 +4608,26 @@ namespace ts {
                     if (host.readDirectory) {
                         // Enumerate the available files if possible
                         const files = host.readDirectory(baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
+                        const foundFiles = createMap<boolean>();
                         for (let filePath of files) {
                             filePath = normalizePath(filePath);
                             if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
                                 continue;
                             }
 
-                            const fileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
-                            const duplicate = !includeExtensions && forEach(result, entry => entry.name === fileName);
+                            const foundFileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
 
-                            if (!duplicate) {
-                                result.push({
-                                    name: fileName,
-                                    kind: ScriptElementKind.scriptElement,
-                                    sortText: fileName
-                                });
+                            if (!foundFiles[foundFileName]) {
+                                foundFiles[foundFileName] = true;
                             }
+                        }
+
+                        for (const foundFile in foundFiles) {
+                            result.push({
+                                name: foundFile,
+                                kind: ScriptElementKind.scriptElement,
+                                sortText: foundFile
+                            });
                         }
                     }
 
@@ -4836,7 +4842,7 @@ namespace ts {
             function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, result: ImportCompletionEntry[] = []): ImportCompletionEntry[] {
                 // Check for typings specified in compiler options
                 if (options.types) {
-                    for (const moduleName of options.types){
+                    for (const moduleName of options.types) {
                         result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
                     }
                 }
@@ -4911,11 +4917,9 @@ namespace ts {
                         const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
                         const foundModuleNames: string[] = [];
 
-                        if (package.dependencies) {
-                            addPotentialPackageNames(package.dependencies, foundModuleNames);
-                        }
-                        if (package.devDependencies) {
-                            addPotentialPackageNames(package.devDependencies, foundModuleNames);
+                        // Provide completions for all non @types dependencies
+                        for (const key of nodeModulesDependencyKeys) {
+                            addPotentialPackageNames(package[key], foundModuleNames);
                         }
 
                         for (const moduleName of foundModuleNames) {
@@ -4940,11 +4944,12 @@ namespace ts {
                     }
                 }
 
-                // Add all the package names that are not in the @types scope
                 function addPotentialPackageNames(dependencies: any, result: string[]) {
-                    for (const dep in dependencies) {
-                        if (dependencies.hasOwnProperty(dep) && !startsWith(dep, "@types/")) {
-                            result.push(dep);
+                    if (dependencies) {
+                        for (const dep in dependencies) {
+                            if (dependencies.hasOwnProperty(dep) && !startsWith(dep, "@types/")) {
+                                result.push(dep);
+                            }
                         }
                     }
                 }
@@ -4955,7 +4960,6 @@ namespace ts {
             }
 
             // Replace everything after the last directory seperator that appears
-            // FIXME: do we care about the other seperator?
             function getDirectoryFragmentTextSpan(text: string, textStart: number): TextSpan {
                 const index = text.lastIndexOf(directorySeparator);
                 const offset = index !== -1 ? index + 1 : 0;
