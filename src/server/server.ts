@@ -232,8 +232,22 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        constructor(host: ServerHost, cancellationToken: HostCancellationToken, eventPort: number, useSingleInferredProject: boolean, logger: server.Logger) {
-            super(host, cancellationToken, useSingleInferredProject, new NodeTypingsInstaller(logger, eventPort, host.newLine), Buffer.byteLength, process.hrtime, logger);
+        constructor(
+            host: ServerHost,
+            cancellationToken: HostCancellationToken,
+            installerEventPort: number,
+            canUseEvents: boolean,
+            useSingleInferredProject: boolean,
+            logger: server.Logger) {
+            super(
+                host,
+                cancellationToken,
+                useSingleInferredProject,
+                new NodeTypingsInstaller(logger, installerEventPort, host.newLine),
+                Buffer.byteLength,
+                process.hrtime,
+                logger,
+                canUseEvents);
         }
 
         exit() {
@@ -477,7 +491,7 @@ namespace ts.server {
     }
 
     const useSingleInferredProject = sys.args.indexOf("--useSingleInferredProject") >= 0;
-    const ioSession = new IOSession(sys, cancellationToken, eventPort, useSingleInferredProject, logger);
+    const ioSession = new IOSession(sys, cancellationToken, eventPort, /*canUseEvents*/ eventPort === undefined, useSingleInferredProject, logger);
     process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");
     });

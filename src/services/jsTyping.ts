@@ -29,6 +29,8 @@ namespace ts.JsTyping {
     // that we are confident require typings
     let safeList: Map<string>;
 
+    const EmptySafeList: Map<string> = createMap<string>();
+
     /**
      * @param host is the object providing I/O related operations.
      * @param fileNames are the file names that belong to the same project
@@ -63,7 +65,7 @@ namespace ts.JsTyping {
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            safeList = createMap<string>(result.config);
+            safeList = result.config ? createMap<string>(result.config) : EmptySafeList;
         }
 
         const filesToWatch: string[] = [];
@@ -163,10 +165,8 @@ namespace ts.JsTyping {
             const jsFileNames = filter(fileNames, hasJavaScriptFileExtension);
             const inferredTypingNames = map(jsFileNames, f => removeFileExtension(getBaseFileName(f.toLowerCase())));
             const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
-            if (safeList === undefined) {
-                mergeTypings(cleanedTypingNames);
-            }
-            else {
+
+            if (safeList !== EmptySafeList) {
                 mergeTypings(filter(cleanedTypingNames, f => f in safeList));
             }
 

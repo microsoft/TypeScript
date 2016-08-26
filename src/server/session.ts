@@ -1,4 +1,4 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
+﻿/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
 /// <reference path="protocol.d.ts" />
 /// <reference path="editorServices.ts" />
@@ -79,6 +79,8 @@ namespace ts.server {
         export const Completions = "completions";
         export const CompletionsFull = "completions-full";
         export const CompletionDetails = "completionEntryDetails";
+        export const CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
+        export const CompileOnSaveEmitFile = "compileOnSaveEmitFile";
         export const Configure = "configure";
         export const Definition = "definition";
         export const DefinitionFull = "definition-full";
@@ -158,11 +160,14 @@ namespace ts.server {
             protected readonly typingsInstaller: ITypingsInstaller,
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
-            protected logger: Logger) {
-            this.projectService =
-                new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, (eventName, project, fileName) => {
-                    this.handleEvent(eventName, project, fileName);
-                });
+            protected logger: Logger,
+            protected readonly canUseEvents: boolean) {
+
+            const eventHandler: ProjectServiceEventHandler = canUseEvents
+                ? (eventName, project, fileName) => this.handleEvent(eventName, project, fileName)
+                : undefined;
+
+            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler);
             this.gcTimer = new GcTimer(host, /*delay*/ 15000, logger);
         }
 
@@ -186,6 +191,12 @@ namespace ts.server {
         }
 
         public send(msg: protocol.Message) {
+            if (msg.type === "event" && !this.canUseEvents) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                }
+                return;
+            }
             this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }
 
@@ -930,6 +941,32 @@ namespace ts.server {
             }, []);
         }
 
+        private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): protocol.CompileOnSaveAffectedFileListSingleProject[] {
+            const info = this.projectService.getScriptInfo(args.file);
+            const result: protocol.CompileOnSaveAffectedFileListSingleProject[] = [];
+
+            // if specified a project, we only return affected file list in this project
+            const projectsToSearch = args.projectFileName ? [this.projectService.findProject(args.projectFileName)] : info.containingProjects;
+            for (const project of projectsToSearch) {
+                if (project.compileOnSaveEnabled) {
+                    result.push({
+                        projectFileName: project.getProjectName(),
+                        fileNames: project.getCompileOnSaveAffectedFileList(info)
+                    });
+                }
+            }
+            return result;
+        }
+
+        private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
+            const { file, project } = this.getFileAndProject(args);
+            if (!project) {
+                Errors.ThrowNoProject();
+            }
+            const scriptInfo = project.getScriptInfo(file);
+            return project.builder.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+        }
+
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
@@ -1224,7 +1261,21 @@ namespace ts.server {
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
                 const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
-                return this.requiredResponse(result);
+                if (!result.some(p => p.projectErrors && p.projectErrors.length !== 0)) {
+                    return this.requiredResponse(result);
+                }
+                const converted = map(result, p => {
+                    if (!p.projectErrors || p.projectErrors.length === 0) {
+                        return p;
+                    }
+                    return {
+                        info: p.info,
+                        changes: p.changes,
+                        files: p.files,
+                        projectErrors: this.convertToDiagnosticsWithLinePosition(p.projectErrors, /*scriptInfo*/ undefined)
+                    };
+                });
+                return this.requiredResponse(converted);
             },
             [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
                 this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles, request.arguments.closedFiles);
@@ -1330,6 +1381,12 @@ namespace ts.server {
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments));
+            },
+            [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
+                return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));
+            },
+            [CommandNames.CompileOnSaveEmitFile]: (request: protocol.CompileOnSaveEmitFileRequest) => {
+                return this.requiredResponse(this.emitFile(request.arguments));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));

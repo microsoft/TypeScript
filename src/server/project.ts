@@ -1,8 +1,9 @@
-/// <reference path="..\services\services.ts" />
+﻿/// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
 /// <reference path="typingsCache.ts"/>
+/// <reference path="builder.ts"/>
 
 namespace ts.server {
 
@@ -19,6 +20,16 @@ namespace ts.server {
         }
     }
 
+    const jsOrDts = [".js", ".d.ts"];
+
+    export function allRootFilesAreJsOrDts(project: Project): boolean {
+        return project.getRootScriptInfos().every(f => fileExtensionIsAny(f.fileName, jsOrDts));
+    }
+
+    export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
+        projectErrors: Diagnostic[];
+    }
+
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
@@ -26,6 +37,7 @@ namespace ts.server {
         private program: ts.Program;
 
         private languageService: LanguageService;
+        builder: Builder;
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
@@ -49,13 +61,16 @@ namespace ts.server {
 
         private typingFiles: TypingsArray;
 
+        protected projectErrors: Diagnostic[];
+
         constructor(
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
             private documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             public languageServiceEnabled: boolean,
-            private compilerOptions: CompilerOptions) {
+            private compilerOptions: CompilerOptions,
+            public compileOnSaveEnabled: boolean) {
 
             if (!this.compilerOptions) {
                 this.compilerOptions = ts.getDefaultCompilerOptions();
@@ -73,7 +88,13 @@ namespace ts.server {
             else {
                 this.disableLanguageService();
             }
+
+            this.builder = createBuilder(this);
             this.markAsDirty();
+        }
+
+        getProjectErrors() {
+            return this.projectErrors;
         }
 
         getLanguageService(ensureSynchronized = true): LanguageService {
@@ -81,6 +102,14 @@ namespace ts.server {
                 this.updateGraph();
             }
             return this.languageService;
+        }
+
+        getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
+            if (!this.languageServiceEnabled) {
+                return [];
+            }
+            this.updateGraph();
+            return this.builder.getFilesAffectedBy(scriptInfo);
         }
 
         getProjectVersion() {
@@ -103,6 +132,14 @@ namespace ts.server {
         }
 
         abstract getProjectName(): string;
+        abstract getTypingOptions(): TypingOptions;
+
+        getSourceFile(path: Path) {
+            if (!this.program) {
+                return undefined;
+            }
+            return this.program.getSourceFileByPath(path);
+        }
 
         close() {
             if (this.program) {
@@ -157,6 +194,17 @@ namespace ts.server {
             return this.rootFiles;
         }
 
+        getScriptInfos() {
+            return map(this.program.getSourceFiles(), sourceFile => this.getScriptInfoLSHost(sourceFile.path));
+        }
+
+        getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles: boolean) {
+            if (!this.languageServiceEnabled) {
+                return undefined;
+            }
+            return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
+        }
+
         getFileNames() {
             if (!this.program) {
                 return [];
@@ -175,6 +223,14 @@ namespace ts.server {
             }
             const sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => asNormalizedPath(sourceFile.fileName));
+        }
+
+        getFileNamesWithoutDefaultLib() {
+            if (!this.languageServiceEnabled) {
+                return this.getRootFiles();
+            }
+            const defaultLibraryFileName = getDefaultLibFileName(this.compilerOptions);
+            return filter(this.getFileNames(), file => getBaseFileName(file) !== defaultLibraryFileName);
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
@@ -269,6 +325,7 @@ namespace ts.server {
                     }
                 }
             }
+            this.builder.onProjectUpdateGraph();
             return hasChanges;
         }
 
@@ -282,7 +339,9 @@ namespace ts.server {
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
             const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
-            Debug.assert(!scriptInfo || scriptInfo.isAttached(this));
+            if (scriptInfo && !scriptInfo.isAttached(this)) {
+                return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
+            }
             return scriptInfo;
         }
 
@@ -324,7 +383,7 @@ namespace ts.server {
             return false;
         }
 
-        getChangesSinceVersion(lastKnownVersion?: number): protocol.ProjectFiles {
+        getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
             this.updateGraph();
 
             const info = {
@@ -337,7 +396,7 @@ namespace ts.server {
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
                 // if current structure version is the same - return info witout any changes
                 if (this.projectStructureVersion == this.lastReportedVersion) {
-                    return { info };
+                    return { info, projectErrors: this.projectErrors };
                 }
                 // compute and return the difference
                 const lastReportedFileNames = this.lastReportedFileNames;
@@ -359,15 +418,68 @@ namespace ts.server {
 
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, changes: { added, removed } };
+                return { info, changes: { added, removed }, projectErrors: this.projectErrors };
             }
             else {
                 // unknown version - return everything
                 const projectFileNames = this.getFileNames();
                 this.lastReportedFileNames = arrayToMap(projectFileNames, x => x);
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, files: projectFileNames };
+                return { info, files: projectFileNames, projectErrors: this.projectErrors };
             }
+        }
+
+        getReferencedFiles(path: Path): Path[] {
+            if (!this.languageServiceEnabled) {
+                return [];
+            }
+
+            const sourceFile = this.getSourceFile(path);
+            if (!sourceFile) {
+                return [];
+            }
+            // We need to use a set here since the code can contain the same import twice,
+            // but that will only be one dependency.
+            // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
+            const referencedFiles = createMap<boolean>();
+            if (sourceFile.imports) {
+                const checker: TypeChecker = this.program.getTypeChecker();
+                for (const importName of sourceFile.imports) {
+                    const symbol = checker.getSymbolAtLocation(importName);
+                    if (symbol && symbol.declarations && symbol.declarations[0]) {
+                        const declarationSourceFile = symbol.declarations[0].getSourceFile();
+                        if (declarationSourceFile) {
+                            referencedFiles[declarationSourceFile.path] = true;
+                        }
+                    }
+                }
+            }
+
+            const currentDirectory = getDirectoryPath(path);
+            const getCanonicalFileName = createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
+            // Handle triple slash references
+            if (sourceFile.referencedFiles) {
+                for (const referencedFile of sourceFile.referencedFiles) {
+                    const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName);
+                    referencedFiles[referencedPath] = true;
+                }
+            }
+
+            // Handle type reference directives
+            if (sourceFile.resolvedTypeReferenceDirectiveNames) {
+                for (const typeName in sourceFile.resolvedTypeReferenceDirectiveNames) {
+                    const resolvedTypeReferenceDirective = sourceFile.resolvedTypeReferenceDirectiveNames[typeName];
+                    if (!resolvedTypeReferenceDirective) {
+                        continue;
+                    }
+
+                    const fileName = resolvedTypeReferenceDirective.resolvedFileName;
+                    const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    referencedFiles[typeFilePath] = true;
+                }
+            }
+
+            return map(Object.keys(referencedFiles), key => <Path>key);
         }
 
         // remove a root file from project
@@ -391,13 +503,14 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, public compileOnSaveEnabled: boolean) {
             super(ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
                 /*files*/ undefined,
                 languageServiceEnabled,
-                compilerOptions);
+                compilerOptions,
+                compileOnSaveEnabled);
 
             this.inferredProjectName = makeInferredProjectName(InferredProject.NextId);
             InferredProject.NextId++;
@@ -414,9 +527,18 @@ namespace ts.server {
                 this.projectService.stopWatchingDirectory(directory);
             }
         }
+
+        getTypingOptions(): TypingOptions {
+            return {
+                enableAutoDiscovery: allRootFilesAreJsOrDts(this),
+                include: [],
+                exclude: []
+            };
+        }
     }
 
     export class ConfiguredProject extends Project {
+        private typingOptions: TypingOptions;
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<FileWatcher>;
@@ -428,10 +550,18 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
-            private typingOptions: TypingOptions,
             private wildcardDirectories: Map<WatchDirectoryFlags>,
-            languageServiceEnabled: boolean) {
-            super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions);
+            languageServiceEnabled: boolean,
+            public compileOnSaveEnabled: boolean) {
+            super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+        }
+
+        setProjectErrors(projectErrors: Diagnostic[]) {
+            this.projectErrors = projectErrors;
+        }
+
+        setTypingOptions(newTypingOptions: TypingOptions): void {
+            this.typingOptions = newTypingOptions;
         }
 
         getTypingOptions() {
@@ -508,12 +638,46 @@ namespace ts.server {
     }
 
     export class ExternalProject extends Project {
+        private typingOptions: TypingOptions;
         constructor(readonly externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
-            languageServiceEnabled: boolean) {
-            super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions);
+            languageServiceEnabled: boolean,
+            public compileOnSaveEnabled: boolean) {
+            super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+        }
+
+        getTypingOptions() {
+            return this.typingOptions;
+        }
+
+        setProjectErrors(projectErrors: Diagnostic[]) {
+            this.projectErrors = projectErrors;
+        }
+
+        setTypingOptions(newTypingOptions: TypingOptions): void {
+            if (!newTypingOptions) {
+                // set default typings options
+                newTypingOptions = {
+                    enableAutoDiscovery: allRootFilesAreJsOrDts(this),
+                    include: [],
+                    exclude: []
+                };
+            }
+            else {
+                if (newTypingOptions.enableAutoDiscovery === undefined) {
+                    // if autoDiscovery was not specified by the caller - set it based on the content of the project
+                    newTypingOptions.enableAutoDiscovery = allRootFilesAreJsOrDts(this);
+                }
+                if (!newTypingOptions.include) {
+                    newTypingOptions.include = [];
+                }
+                if (!newTypingOptions.exclude) {
+                    newTypingOptions.exclude = [];
+                }
+            }
+            this.typingOptions = newTypingOptions;
         }
 
         getProjectName() {

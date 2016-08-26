@@ -1,4 +1,4 @@
-/// <reference path="types.d.ts" />
+﻿/// <reference path="types.d.ts" />
 
 namespace ts.server {
     export enum LogLevel {
@@ -7,6 +7,8 @@ namespace ts.server {
         requestTime,
         verbose
     }
+
+    export const emptyArray: ReadonlyArray<any> = [];
 
     export interface Logger {
         close(): void;
@@ -61,6 +63,9 @@ namespace ts.server {
         }
         export function ThrowProjectLanguageServiceDisabled(): never {
             throw new Error("The project's language service is disabled.");
+        }
+        export function ThrowProjectDoesNotContainDocument(fileName: string, project: Project): never {
+            throw new Error(`Project '${project.getProjectName()}' does not contain document '${fileName}'`);
         }
     }
 
@@ -218,6 +223,7 @@ namespace ts.server {
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
         typingOptions?: TypingOptions;
+        compileOnSave?: boolean;
     }
 
     export function isInferredProjectName(name: string) {

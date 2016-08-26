@@ -498,7 +498,16 @@ declare namespace ts.server.protocol {
     export interface ExternalProject {
         projectFileName: string;
         rootFiles: ExternalFile[];
-        options: CompilerOptions;
+        options: ExternalProjectCompilerOptions;
+        typingOptions?: TypingOptions;
+    }
+
+    /**
+     * For external projects, some of the project settings are sent together with
+     * compiler settings.
+     */
+    export interface ExternalProjectCompilerOptions extends CompilerOptions {
+        compileOnSave?: boolean;
     }
 
     export interface ProjectVersionInfo {
@@ -524,6 +533,10 @@ declare namespace ts.server.protocol {
         info?: ProjectVersionInfo;
         files?: string[];
         changes?: ProjectChanges;
+    }
+
+    export interface ProjectFilesWithDiagnostics extends ProjectFiles {
+        projectErrors: DiagnosticWithLinePosition[];
     }
 
     export interface ChangedOpenFile {
@@ -718,6 +731,26 @@ declare namespace ts.server.protocol {
       * currently send a response to a close request.
       */
     export interface CloseRequest extends FileRequest {
+    }
+
+    export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
+    }
+
+    export interface CompileOnSaveAffectedFileListSingleProject {
+        projectFileName: string;
+        fileNames: string[];
+    }
+
+    export interface CompileOnSaveAffectedFileListResponse extends Response {
+        body: CompileOnSaveAffectedFileListSingleProject[];
+    }
+
+    export interface CompileOnSaveEmitFileRequest extends FileRequest {
+        args: CompileOnSaveEmitFileRequestArgs;
+    }
+
+    export interface CompileOnSaveEmitFileRequestArgs extends FileRequestArgs {
+        forced?: boolean;
     }
 
     /**

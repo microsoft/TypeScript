@@ -698,7 +698,8 @@ namespace Harness.LanguageService {
                 /*useOneInferredProject*/ false,
                 /*typingsInstaller*/ undefined,
                 Utils.byteLength,
-                process.hrtime, serverHost);
+                process.hrtime, serverHost,
+                /*canUseEvents*/ true);
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);

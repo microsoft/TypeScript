@@ -76,6 +76,10 @@ namespace ts.server {
             return this.compilationSettings;
         }
 
+        useCaseSensitiveFileNames() {
+            return this.host.useCaseSensitiveFileNames;
+        }
+
         getCancellationToken() {
             return this.cancellationToken;
         }

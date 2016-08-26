@@ -1,4 +1,4 @@
-/// <reference path="checker.ts"/>
+﻿/// <reference path="checker.ts"/>
 /// <reference path="sourcemap.ts" />
 /// <reference path="declarationEmitter.ts"/>
 
@@ -336,7 +336,7 @@ namespace ts {
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
@@ -396,7 +396,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         const newLine = host.getNewLine();
 
         const emitJavaScript = createFileEmitter();
-        forEachExpectedEmitFile(host, emitFile, targetSourceFile);
+        forEachExpectedEmitFile(host, emitFile, targetSourceFile, emitOnlyDtsFiles);
 
         return {
             emitSkipped,
@@ -1615,7 +1615,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             else if (declaration.kind === SyntaxKind.ImportSpecifier) {
                                 // Identifier references named import
                                 write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
-                                const name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
+                                const name = (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
                                 const identifier = getTextOfNodeFromSourceText(currentText, name);
                                 if (languageVersion === ScriptTarget.ES3 && identifier === "default") {
                                     write('["default"]');
@@ -3254,19 +3254,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         write("var ");
                         let seen: Map<string>;
                         for (const id of convertedLoopState.hoistedLocalVariables) {
-                           // Don't initialize seen unless we have at least one element.
-                           // Emit a comma to separate for all but the first element.
-                           if (!seen) {
+                            // Don't initialize seen unless we have at least one element.
+                            // Emit a comma to separate for all but the first element.
+                            if (!seen) {
                                seen = createMap<string>();
-                           }
-                           else {
-                               write(", ");
-                           }
+                            }
+                            else {
+                                write(", ");
+                            }
 
                            if (!(id.text in seen)) {
-                               emit(id);
-                               seen[id.text] = id.text;
-                           }
+                                emit(id);
+                                seen[id.text] = id.text;
+                            }
                         }
                         write(";");
                         writeLine();
@@ -7415,7 +7415,7 @@ const _super = (function (geti, seti) {
                                 // - import equals declarations that import external modules are not emitted
                                 continue;
                             }
-                            // fall-though for import declarations that import internal modules
+                        // fall-though for import declarations that import internal modules
                         default:
                             writeLine();
                             emit(statement);
@@ -8364,24 +8364,28 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string },
-            sourceFiles: SourceFile[], isBundledEmit: boolean) {
-            // Make sure not to write js File and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
-                emitJavaScript(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
-            }
-            else {
-                emitSkipped = true;
+        function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath }: EmitFileNames,
+            sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) {
+            if (!emitOnlyDtsFiles) {
+                // Make sure not to write js File and source map file if any of them cannot be written
+                if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
+                    emitJavaScript(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
+                }
+                else {
+                    emitSkipped = true;
+                }
             }
 
             if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
+                emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
             }
 
             if (!emitSkipped && emittedFilesList) {
-                emittedFilesList.push(jsFilePath);
-                if (sourceMapFilePath) {
-                    emittedFilesList.push(sourceMapFilePath);
+                if (!emitOnlyDtsFiles) {
+                    emittedFilesList.push(jsFilePath);
+                    if (sourceMapFilePath) {
+                        emittedFilesList.push(sourceMapFilePath);
+                    }
                 }
                 if (declarationFilePath) {
                     emittedFilesList.push(declarationFilePath);
