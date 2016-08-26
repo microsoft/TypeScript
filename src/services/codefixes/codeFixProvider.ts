@@ -14,7 +14,7 @@ namespace ts {
     }
 
     export namespace codefix {
-        const codeFixes: Map<CodeFix[]> = {};
+        const codeFixes = createMap<CodeFix[]>();
 
         export function registerCodeFix(action: CodeFix) {
             forEach(action.errorCodes, error => {
@@ -29,7 +29,7 @@ namespace ts {
 
         export class CodeFixProvider {
             public static getSupportedErrorCodes() {
-                return getKeys(codeFixes);
+                return Object.keys(codeFixes);
             }
 
             public getFixes(context: CodeFixContext): CodeAction[] {

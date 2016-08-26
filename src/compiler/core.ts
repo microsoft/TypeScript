@@ -293,19 +293,6 @@ namespace ts {
     }
 
     /**
-     * Returns the first element that matches the predicate, or undefined if none
-     * could be found.
-     */
-    export function find<T>(array: T[], predicate: (item: T) => boolean): T {
-        for (let i = 0, len = array.length; i < len; i++) {
-            if (predicate(array[i])) {
-                return array[i];
-            }
-        }
-        return undefined;
-    }
-
-    /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
     export function lastOrUndefined<T>(array: T[]): T {
