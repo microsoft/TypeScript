@@ -6570,8 +6570,8 @@ namespace ts {
 
                 const thisOrSuperSymbol = typeChecker.getSymbolAtLocation(thisOrSuperKeyword);
 
-                const { displayParts } =  getSymbolDisplayPartsDocumentationAndSymbolKind(
-                    thisOrSuperSymbol, thisOrSuperKeyword.getSourceFile(), getContainerNode(thisOrSuperKeyword), thisOrSuperKeyword);
+                const displayParts = thisOrSuperSymbol && getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    thisOrSuperSymbol, thisOrSuperKeyword.getSourceFile(), getContainerNode(thisOrSuperKeyword), thisOrSuperKeyword).displayParts;
 
                 return [{
                     definition: {
