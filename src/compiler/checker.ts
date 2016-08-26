@@ -7242,9 +7242,10 @@ namespace ts {
          * with no call or construct signatures.
          */
         function isObjectLiteralType(type: Type) {
-            return type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral)) !== 0 &&
+            return !!(type.symbol && type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral) &&
                 getSignaturesOfType(type, SignatureKind.Call).length === 0 &&
-                getSignaturesOfType(type, SignatureKind.Construct).length === 0;
+                getSignaturesOfType(type, SignatureKind.Construct).length === 0 ||
+                type.flags & TypeFlags.Anonymous && (<AnonymousType>type).assignedMembers);
         }
 
         function createTransientSymbol(source: Symbol, type: Type) {
@@ -8218,7 +8219,7 @@ namespace ts {
         }
 
         function createOpenType(flowNode: FlowNode, flowContainer: Node): Type {
-            const result = <AnonymousType>createObjectType(TypeFlags.Anonymous);
+            const result = <AnonymousType>createObjectType(TypeFlags.Anonymous | TypeFlags.ObjectLiteral);
             result.assignedMembers = createMap<Symbol>();
             result.flowNode = flowNode;
             result.flowContainer = flowContainer;
