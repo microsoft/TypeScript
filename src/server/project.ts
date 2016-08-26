@@ -355,9 +355,6 @@ namespace ts.server {
                         removed.push(id);
                     }
                 }
-                if (added.length > 0 || removed.length > 0) {
-                    this.projectService.typingsCache.invalidateCachedTypingsForProject(this);
-                }
                 this.lastReportedFileNames = currentFiles;
 
                 this.lastReportedFileNames = currentFiles;

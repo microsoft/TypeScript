@@ -294,6 +294,7 @@ namespace ts.server {
             let shouldRefreshInferredProjects = false;
             for (const p of projects) {
                 if (!p.updateGraph()) {
+                    this.typingsCache.invalidateCachedTypingsForProject(p);
                     shouldRefreshInferredProjects = true;
                 }
             }

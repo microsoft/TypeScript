@@ -19,12 +19,7 @@ namespace ts.server.typingsInstaller {
 
     function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost): string {
         const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
-        return result.resolvedModule ? result.resolvedModule.resolvedFileName : null;
-    }
-
-    function getPackageName(typingFile: string) {
-        const idx = typingFile.lastIndexOf("/");
-        return idx > 0 ? typingFile.substr(idx + 1) : undefined;
+        return result.resolvedModule && result.resolvedModule.resolvedFileName;
     }
 
     export abstract class TypingsInstaller {
@@ -137,7 +132,7 @@ namespace ts.server.typingsInstaller {
                 if (npmConfig.devDependencies) {
                     for (const key in npmConfig.devDependencies) {
                         // key is @types/<package name>
-                        const packageName = getPackageName(key);
+                        const packageName = getBaseFileName(key);
                         if (!packageName) {
                             continue;
                         }
@@ -199,7 +194,7 @@ namespace ts.server.typingsInstaller {
                 const installedPackages: Map<true> = createMap<true>();
                 const installedTypingFiles: string[] = [];
                 for (const t of installedTypings) {
-                    const packageName = getPackageName(t);
+                    const packageName = getBaseFileName(t);
                     if (!packageName) {
                         continue;
                     }
