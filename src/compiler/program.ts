@@ -11,6 +11,7 @@ namespace ts {
     const defaultTypeRoots = ["node_modules/@types"];
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
+        searchPath = normalizeSlashes(searchPath);
         while (true) {
             const fileName = combinePaths(searchPath, "tsconfig.json");
             if (fileExists(fileName)) {
@@ -26,7 +27,7 @@ namespace ts {
     }
 
     export function resolveTripleslashReference(moduleName: string, containingFile: string): string {
-        const basePath = getDirectoryPath(containingFile);
+        const basePath = getDirectoryPath(normalizeSlashes(containingFile));
         const referencedFileName = isRootedDiskPath(moduleName) ? moduleName : combinePaths(basePath, moduleName);
         return normalizePath(referencedFileName);
     }
