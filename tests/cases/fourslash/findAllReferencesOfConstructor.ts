@@ -28,6 +28,8 @@
 ////    }
 ////    method() { super(); }
 ////}
+// Does not find 'super()' calls for a class that merely implements 'C',
+// since those must be calling a different constructor.
 ////class E implements C {
 ////    constructor() { super(); }
 ////}

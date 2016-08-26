@@ -1515,5 +1515,4 @@ namespace ts {
             ? ((fileName) => fileName)
             : ((fileName) => fileName.toLowerCase());
     }
-
 }

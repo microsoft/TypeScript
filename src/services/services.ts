@@ -4614,7 +4614,6 @@ namespace ts {
             let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, location);
             let hasAddedSymbolInfo: boolean;
             const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
-            const isConstructor = location.kind === SyntaxKind.ConstructorKeyword;
             let type: Type;
 
             // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -4625,12 +4624,7 @@ namespace ts {
                 }
 
                 let signature: Signature;
-                type = isThisExpression
-                    ? typeChecker.getTypeAtLocation(location)
-                    : isConstructor
-                        // For constructor, get type of the class.
-                        ? typeChecker.getTypeOfSymbolAtLocation(symbol.parent, location)
-                        : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+                type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
                 if (type) {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                         const right = (<PropertyAccessExpression>location.parent).name;
@@ -6067,11 +6061,9 @@ namespace ts {
                 return getReferencesForSuperKeyword(node);
             }
 
-            const isConstructor = node.kind === SyntaxKind.ConstructorKeyword;
-
             // `getSymbolAtLocation` normally returns the symbol of the class when given the constructor keyword,
             // so we have to specify that we want the constructor symbol.
-            let symbol = isConstructor ? node.parent.symbol : typeChecker.getSymbolAtLocation(node);
+            const symbol = typeChecker.getSymbolAtLocation(node);
 
             if (!symbol && node.kind === SyntaxKind.StringLiteral) {
                 return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles);
@@ -6097,8 +6089,7 @@ namespace ts {
 
             // Get the text to search for.
             // Note: if this is an external module symbol, the name doesn't include quotes.
-            const nameSymbol = isConstructor ? symbol.parent : symbol; // A constructor is referenced using the name of its class.
-            const declaredName = stripQuotes(getDeclaredName(typeChecker, nameSymbol, node));
+            const declaredName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -6112,7 +6103,7 @@ namespace ts {
                 getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
             }
             else {
-                const internedName = isConstructor ? declaredName : getInternedName(symbol, node, declarations);
+                const internedName = getInternedName(symbol, node, declarations);
                 for (const sourceFile of sourceFiles) {
                     cancellationToken.throwIfCancellationRequested();
 
@@ -6145,7 +6136,7 @@ namespace ts {
                 };
             }
 
-            function getAliasSymbolForPropertyNameSymbol(symbol: Symbol, location: Node): Symbol {
+            function getAliasSymbolForPropertyNameSymbol(symbol: Symbol, location: Node): Symbol | undefined {
                 if (symbol.flags & SymbolFlags.Alias) {
                     // Default import get alias
                     const defaultImport = getDeclarationOfKind(symbol, SyntaxKind.ImportClause);
@@ -6169,6 +6160,10 @@ namespace ts {
                     }
                 }
                 return undefined;
+            }
+
+            function followAliasIfNecessary(symbol: Symbol, location: Node): Symbol {
+                return getAliasSymbolForPropertyNameSymbol(symbol, location) || symbol;
             }
 
             function getPropertySymbolOfDestructuringAssignment(location: Node) {
@@ -6434,7 +6429,8 @@ namespace ts {
                         if (referenceSymbol) {
                             const referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
                             const shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                            const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation);
+                            const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation,
+                                /*searchLocationIsConstructor*/ searchLocation.kind === SyntaxKind.ConstructorKeyword);
 
                             if (relatedSymbol) {
                                 const referencedSymbol = getReferencedSymbol(relatedSymbol);
@@ -6461,23 +6457,19 @@ namespace ts {
 
                 /** Adds references when a constructor is used with `new this()` in its own class and `super()` calls in subclasses.  */
                 function findAdditionalConstructorReferences(referenceSymbol: Symbol, referenceLocation: Node): void {
-                    const searchClassSymbol = searchSymbol.parent;
-                    Debug.assert(isClassLike(searchClassSymbol.valueDeclaration));
+                    Debug.assert(isClassLike(searchSymbol.valueDeclaration));
 
                     const referenceClass = referenceLocation.parent;
-                    if (referenceSymbol === searchClassSymbol && isClassLike(referenceClass)) {
+                    if (referenceSymbol === searchSymbol && isClassLike(referenceClass)) {
+                        Debug.assert(referenceClass.name === referenceLocation);
                         // This is the class declaration containing the constructor.
-                        const calls = findOwnConstructorCalls(referenceSymbol, <ClassLikeDeclaration>referenceClass);
-                        addReferences(calls);
+                        addReferences(findOwnConstructorCalls(referenceSymbol, referenceClass));
                     }
                     else {
                         // If this class appears in `extends C`, then the extending class' "super" calls are references.
                         const classExtending = tryGetClassExtendingIdentifier(referenceLocation);
-                        if (classExtending && isClassLike(classExtending)) {
-                            if (getRelatedSymbol([searchClassSymbol], referenceSymbol, referenceLocation)) {
-                                const supers = superConstructorAccesses(classExtending);
-                                addReferences(supers);
-                            }
+                        if (classExtending && isClassLike(classExtending) && followAliasIfNecessary(referenceSymbol, referenceLocation) === searchSymbol) {
+                            addReferences(superConstructorAccesses(classExtending));
                         }
                     }
                 }
@@ -6915,21 +6907,17 @@ namespace ts {
                 }
             }
 
-            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): Symbol | undefined {
+            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node, searchLocationIsConstructor: boolean): Symbol | undefined {
                 if (contains(searchSymbols, referenceSymbol)) {
-                    return referenceSymbol;
+                    // If we are searching for constructor uses, they must be 'new' expressions.
+                    return !(searchLocationIsConstructor && !isNewExpressionTarget(referenceLocation)) && referenceSymbol;
                 }
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols but by looking up for related symbol of this alias so it can handle multiple level of indirectness.
                 const aliasSymbol = getAliasSymbolForPropertyNameSymbol(referenceSymbol, referenceLocation);
                 if (aliasSymbol) {
-                    return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation);
-                }
-
-                // If we are in a constructor and we didn't find the symbol yet, we should try looking for the constructor instead.
-                if (isNewExpressionTarget(referenceLocation) && referenceSymbol.members && referenceSymbol.members["__constructor"]) {
-                    return getRelatedSymbol(searchSymbols, referenceSymbol.members["__constructor"], referenceLocation.parent);
+                    return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation, searchLocationIsConstructor);
                 }
 
                 // If the reference location is in an object literal, try to get the contextual type for the
