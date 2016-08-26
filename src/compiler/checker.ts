@@ -3021,6 +3021,10 @@ namespace ts {
             return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
         }
 
+        function isAutoTypeInitializer(node: Expression) {
+            return !node || node.kind === SyntaxKind.ObjectLiteralExpression && (<ObjectLiteralExpression>node).properties.length === 0;
+        }
+
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
@@ -3056,8 +3060,9 @@ namespace ts {
             }
 
             // Use control flow type inference for non-ambient, non-exported var or let variables with no initializer
-            if (declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) && !declaration.initializer &&
-                !(getCombinedNodeFlags(declaration) & (NodeFlags.Export | NodeFlags.Const)) && !isInAmbientContext(declaration)) {
+            if (declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
+                !(getCombinedNodeFlags(declaration) & (NodeFlags.Export | NodeFlags.Const)) &&
+                isAutoTypeInitializer(declaration.initializer) && !isInAmbientContext(declaration)) {
                 return autoType;
             }
 
@@ -3230,7 +3235,8 @@ namespace ts {
                 }
                 const declaration = symbol.valueDeclaration;
                 if (!declaration && symbol.openType) {
-                    return getFlowTypeOfReference(symbol.propAccess, autoType, /*assumeInitialized*/ false, symbol.openType.flowNode, symbol.openType.flowContainer);
+                    return getWidenedType(getFlowTypeOfReference(symbol.propAccess, autoType, /*assumeInitialized*/ false,
+                        symbol.openType.flowNode, symbol.openType.flowContainer));
                 }
                 // Handle catch clause variables
                 if (declaration.parent.kind === SyntaxKind.CatchClause) {
@@ -4255,7 +4261,6 @@ namespace ts {
             }
             if (type.assignedMembers) {
                 setObjectTypeMembers(type, type.assignedMembers, emptyArray, emptyArray, undefined, undefined);
-                type.assignedMembers = undefined;
                 return;
             }
             const symbol = type.symbol;
@@ -8221,7 +8226,7 @@ namespace ts {
         }
 
         function isOpenType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Anonymous && (<AnonymousType>type).assignedMembers);
+            return !!(type.flags & TypeFlags.Anonymous && (<AnonymousType>type).assignedMembers) && !(<ResolvedType>type).members;
         }
 
         function expandOpenType(type: AnonymousType, propAccess: PropertyAccessExpression) {
@@ -8239,7 +8244,7 @@ namespace ts {
                 return declaredType;
             }
             const initialType = assumeInitialized ? declaredType :
-                declaredType === autoType ? undefinedType :
+                declaredType === autoType ? reference.kind === SyntaxKind.PropertyAccessExpression ? neverType : undefinedType :
                 includeFalsyTypes(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
             const result = getTypeFromFlowType(getTypeAtFlowNode(flowNode));
@@ -8248,9 +8253,8 @@ namespace ts {
                 return declaredType;
             }
             if (isOpenType(result)) {
-                if (reference.parent.kind === SyntaxKind.PropertyAccessExpression && isAssignmentTarget(reference.parent)) {
-                    return anyType;
-                }
+                // Resolving the members of the open type has the effect of sealing it from further expansion.
+                resolveStructuredTypeMembers(<AnonymousType>result);
             }
             return result;
 
@@ -8325,11 +8329,22 @@ namespace ts {
                         declaredType.flags & TypeFlags.Union ? getAssignmentReducedType(<UnionType>declaredType, type) :
                         declaredType;
                 }
-                // See if we're expanding an open type.
-                if (declaredType === autoType && node.kind === SyntaxKind.PropertyAccessExpression && isMatchingReference(reference, (<PropertyAccessExpression>node).expression)) {
-                    const type = getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent));
-                    if (isOpenType(type)) {
-                        return expandOpenType(type, <PropertyAccessExpression>node);
+                // When the declared type is autoType, we're analyzing a control flow typed local variable or
+                // a property of an open type.
+                if (declaredType === autoType) {
+                    // Check if we're expanding an open type. Specifically, if the node is an assignment to a
+                    // property of the reference we're analyzing and if the current control flow type of the
+                    // reference is an open type, we add a property to that open type.
+                    if (node.kind === SyntaxKind.PropertyAccessExpression && isMatchingReference(reference, (<PropertyAccessExpression>node).expression)) {
+                        const type = getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent));
+                        if (isOpenType(type)) {
+                            return expandOpenType(<AnonymousType>type, <PropertyAccessExpression>node);
+                        }
+                    }
+                    // Check if we're implicitly initializing a property to undefined. Specifically, for a reference
+                    // 'x.y.z', if we're assigning a value to 'x.y' we consider 'z' to be undefined.
+                    if (reference.kind === SyntaxKind.PropertyAccessExpression && isMatchingReference((<PropertyAccessExpression>reference).expression, node)) {
+                        return undefinedType;
                     }
                 }
                 // We didn't have a direct match. However, if the reference is a dotted name, this
@@ -10787,6 +10802,15 @@ namespace ts {
             const type = checkNonNullExpression(left);
             if (isTypeAny(type) || type === neverType) {
                 return type;
+            }
+
+            // When a property access expression 'x.y' is the target of an assignment and when 'x' has an
+            // open type, if the flow node associated with the open type is the same as the flow node associated
+            // with the property access (i.e. if this is the specific open type that was constructed for 'x' in
+            // the property access), then we consider 'x.y' to have type any so that any assignment is permitted.
+            if (type.flags & TypeFlags.Anonymous && (<AnonymousType>type).assignedMembers && isAssignmentTarget(node) &&
+                node.flowNode === (<AnonymousType>type).flowNode) {
+                return anyType;
             }
 
             const apparentType = getApparentType(getWidenedType(type));
