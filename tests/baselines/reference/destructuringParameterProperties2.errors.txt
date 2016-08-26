@@ -6,8 +6,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(9
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(13,21): error TS2339: Property 'b' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(17,21): error TS2339: Property 'c' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(21,27): error TS2345: Argument of type '[number, undefined, string]' is not assignable to parameter of type '[number, string, boolean]'.
-  Types of property '2' are incompatible.
-    Type 'string' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts (8 errors) ====
@@ -48,8 +47,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(2
     var x = new C1(undefined, [0, undefined, ""]);
                               ~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, undefined, string]' is not assignable to parameter of type '[number, string, boolean]'.
-!!! error TS2345:   Types of property '2' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type 'boolean'.
+!!! error TS2345:   Type 'string' is not assignable to type 'boolean'.
     var [x_a, x_b, x_c] = [x.getA(), x.getB(), x.getC()];
     
     var y = new C1(10, [0, "", true]);
