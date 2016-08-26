@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare var React: any;
+>React : any
+
+<div>&#123;braces&#xfd;</div>;
+><div>&#123;braces&#xfd;</div> : any
+>div : any
+>div : any
+

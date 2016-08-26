@@ -7686,8 +7686,13 @@ const _super = (function (geti, seti) {
             }
 
             function trimReactWhitespaceAndApplyEntities(node: JsxText): string {
-                let result: string = undefined;
                 const text = getTextOfNode(node, /*includeTrivia*/ true);
+                const result = trimReactWhitespace(text);
+                return result && applyReactHtmlEntities(result);
+            }
+
+            function trimReactWhitespace(text: string): string | undefined {
+                let result: string = undefined;
                 let firstNonWhitespace = 0;
                 let lastNonWhitespace = -1;
 
@@ -7716,21 +7721,28 @@ const _super = (function (geti, seti) {
                     result = (result ? result + "\" + ' ' + \"" : "") + escapeString(part);
                 }
 
-                if (result) {
-                    // Replace entities like &nbsp;
-                    result = result.replace(/&(\w+);/g, function(s: any, m: string) {
-                        if (entities[m] !== undefined) {
-                            const ch = String.fromCharCode(entities[m]);
-                            // &quot; needs to be escaped
-                            return ch === '"' ? "\\\"" : ch;
-                        }
-                        else {
-                            return s;
-                        }
-                    });
-                }
-
                 return result;
+            }
+
+            /**
+             * Replace entities like "&nbsp;", "&#123", and "&#xDEADBEEF" with the characters they encode.
+             * See https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
+             */
+            function applyReactHtmlEntities(text: string): string {
+                return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
+                    if (decimal) {
+                        return String.fromCharCode(parseInt(decimal, 10));
+                    }
+                    else if (hex) {
+                        return String.fromCharCode(parseInt(hex, 16));
+                    }
+                    else {
+                        const ch = entities[word];
+                        // &quot; needs to be escaped
+                        // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
+                        return ch ? (ch === CharacterCodes.doubleQuote ? '\\"' : String.fromCharCode(ch)) : match;
+                    }
+                });
             }
 
             function isJsxChildEmittable(child: JsxChild): boolean  {
