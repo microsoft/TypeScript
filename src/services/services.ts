@@ -6463,7 +6463,7 @@ namespace ts {
                     if (referenceSymbol === searchSymbol && isClassLike(referenceClass)) {
                         Debug.assert(referenceClass.name === referenceLocation);
                         // This is the class declaration containing the constructor.
-                        addReferences(findOwnConstructorCalls(referenceSymbol, referenceClass));
+                        addReferences(findOwnConstructorCalls(searchSymbol));
                     }
                     else {
                         // If this class appears in `extends C`, then the extending class' "super" calls are references.
@@ -6481,20 +6481,20 @@ namespace ts {
                     }
                 }
 
-                /** `referenceLocation` is the class where the constructor was defined.
+                /** `classSymbol` is the class where the constructor was defined.
                  * Reference the constructor and all calls to `new this()`.
                  */
-                function findOwnConstructorCalls(referenceSymbol: Symbol, referenceLocation: ClassLikeDeclaration): Node[] {
+                function findOwnConstructorCalls(classSymbol: Symbol): Node[] {
                     const result: Node[] = [];
 
-                    for (const decl of referenceSymbol.members["__constructor"].declarations) {
+                    for (const decl of classSymbol.members["__constructor"].declarations) {
                         Debug.assert(decl.kind === SyntaxKind.Constructor);
                         const ctrKeyword = decl.getChildAt(0);
                         Debug.assert(ctrKeyword.kind === SyntaxKind.ConstructorKeyword);
                         result.push(ctrKeyword);
                     }
 
-                    forEachProperty(referenceSymbol.exports, member => {
+                    forEachProperty(classSymbol.exports, member => {
                         const decl = member.valueDeclaration;
                         if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
                             const body = (<MethodDeclaration>decl).body;
