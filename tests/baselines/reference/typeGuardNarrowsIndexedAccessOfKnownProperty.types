@@ -1,0 +1,89 @@
+=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty.ts ===
+interface Square {
+>Square : Square
+
+    kind: "square";
+>kind : "square"
+
+    size: number;
+>size : number
+}
+
+interface Rectangle {
+>Rectangle : Rectangle
+
+    kind: "rectangle";
+>kind : "rectangle"
+
+    width: number;
+>width : number
+
+    height: number;
+>height : number
+}
+
+interface Circle {
+>Circle : Circle
+
+    kind: "circle";
+>kind : "circle"
+
+    radius: number;
+>radius : number
+}
+
+type Shape = Square | Rectangle | Circle;
+>Shape : Shape
+>Square : Square
+>Rectangle : Rectangle
+>Circle : Circle
+
+function area(s: Shape) {
+>area : (s: Shape) => number
+>s : Shape
+>Shape : Shape
+
+    // In the following switch statement, the type of s is narrowed in each case clause
+    // according to the value of the discriminant property, thus allowing the other properties
+    // of that variant to be accessed without a type assertion.
+    switch (s['kind']) {
+>s['kind'] : "square" | "rectangle" | "circle"
+>s : Shape
+>'kind' : string
+
+        case "square": return s.size * s.size;
+>"square" : "square"
+>s.size * s.size : number
+>s.size : number
+>s : Square
+>size : number
+>s.size : number
+>s : Square
+>size : number
+
+        case "rectangle": return s.width * s.height;
+>"rectangle" : "rectangle"
+>s.width * s.height : number
+>s.width : number
+>s : Rectangle
+>width : number
+>s.height : number
+>s : Rectangle
+>height : number
+
+        case "circle": return Math.PI * s.radius * s.radius;
+>"circle" : "circle"
+>Math.PI * s.radius * s.radius : number
+>Math.PI * s.radius : number
+>Math.PI : number
+>Math : Math
+>PI : number
+>s.radius : number
+>s : Circle
+>radius : number
+>s.radius : number
+>s : Circle
+>radius : number
+    }
+}
+
