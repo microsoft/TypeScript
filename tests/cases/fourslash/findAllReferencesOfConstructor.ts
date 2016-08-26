@@ -39,5 +39,6 @@
 ////class d extends a.C { constructor() { [|super|](); }
 
 const ranges = test.ranges();
-verify.referencesOf(ranges[0], ranges);
-verify.referencesOf(ranges[1], ranges);
+for (const ctr of ranges.slice(0, 3)) {
+    verify.referencesOf(ctr, ranges);
+}

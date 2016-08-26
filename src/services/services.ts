@@ -4628,7 +4628,8 @@ namespace ts {
             const symbolFlags = symbol.flags;
             let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, location);
             let hasAddedSymbolInfo: boolean;
-            const isThisExpression: boolean = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
+            const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
+            const isConstructor = location.kind === SyntaxKind.ConstructorKeyword;
             let type: Type;
 
             // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -4639,7 +4640,12 @@ namespace ts {
                 }
 
                 let signature: Signature;
-                type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+                type = isThisExpression
+                    ? typeChecker.getTypeAtLocation(location)
+                    : isConstructor
+                        // For constructor, get type of the class.
+                        ? typeChecker.getTypeOfSymbolAtLocation(symbol.parent, location)
+                        : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
                 if (type) {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                         const right = (<PropertyAccessExpression>location.parent).name;
@@ -4737,9 +4743,7 @@ namespace ts {
                         if (functionDeclaration.kind === SyntaxKind.Constructor) {
                             // show (constructor) Type(...) signature
                             symbolKind = ScriptElementKind.constructorImplementationElement;
-                            // For a constructor, `type` will be unknown.
-                            const showSymbol = symbol.declarations[0].kind === SyntaxKind.Constructor ? symbol.parent : type.symbol;
-                            addPrefixForAnyFunctionOrVar(showSymbol, symbolKind);
+                            addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
                         }
                         else {
                             // (function/method) symbol(..signature)
