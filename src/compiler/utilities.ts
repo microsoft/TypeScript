@@ -2659,10 +2659,17 @@ namespace ts {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
-    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
-        return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
+    /** Get `C` given `N` if `N` is in the position `class C extends N` where `N` is an ExpressionWithTypeArguments. */
+    export function tryGetClassExtendingExpressionWithTypeArguments(node: Node): ClassLikeDeclaration | undefined {
+        if (node.kind === SyntaxKind.ExpressionWithTypeArguments &&
             (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
-            isClassLike(node.parent.parent);
+            isClassLike(node.parent.parent)) {
+            return node.parent.parent;
+        }
+    }
+
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
+        return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
     }
 
     export function isEntityNameExpression(node: Expression): node is EntityNameExpression {

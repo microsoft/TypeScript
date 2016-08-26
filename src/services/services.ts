@@ -2805,24 +2805,9 @@ namespace ts {
         return target && target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
     }
 
-    /** Get `C` given `N` if `N` is in the position `class C extends N` */
-    function tryGetClassExtendingNode(node: Node): ClassLikeDeclaration | undefined {
-        const target = climbPastPropertyAccess(node);
-
-        const expr = target.parent;
-        if (expr.kind !== SyntaxKind.ExpressionWithTypeArguments) {
-            return;
-        }
-
-        const heritageClause = expr.parent;
-        if (heritageClause.kind !== SyntaxKind.HeritageClause) {
-            return;
-        }
-
-        const classNode = <ClassLikeDeclaration>heritageClause.parent;
-        if (getHeritageClause(classNode.heritageClauses, SyntaxKind.ExtendsKeyword) === heritageClause) {
-            return classNode;
-        }
+    /** Get `C` given `N` if `N` is in the position `class C extends N` or `class C extends foo.N` where `N` is an identifier. */
+    function tryGetClassExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
+        return tryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).parent);
     }
 
     function isNameOfModuleDeclaration(node: Node) {
@@ -6487,7 +6472,7 @@ namespace ts {
                     }
                     else {
                         // If this class appears in `extends C`, then the extending class' "super" calls are references.
-                        const classExtending = tryGetClassExtendingNode(referenceLocation);
+                        const classExtending = tryGetClassExtendingIdentifier(referenceLocation);
                         if (classExtending && isClassLike(classExtending)) {
                             if (getRelatedSymbol([searchClassSymbol], referenceSymbol, referenceLocation)) {
                                 const supers = superConstructorAccesses(classExtending);
