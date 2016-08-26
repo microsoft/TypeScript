@@ -26,6 +26,10 @@ namespace ts.server {
         return project.getRootScriptInfos().every(f => fileExtensionIsAny(f.fileName, jsOrDts));
     }
 
+    export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
+        projectErrors: Diagnostic[];
+    }
+
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
@@ -57,6 +61,8 @@ namespace ts.server {
 
         private typingFiles: TypingsArray;
 
+        protected projectErrors: Diagnostic[];
+
         constructor(
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
@@ -85,6 +91,10 @@ namespace ts.server {
 
             this.builder = createBuilder(this);
             this.markAsDirty();
+        }
+
+        getProjectErrors() {
+            return this.projectErrors;
         }
 
         getLanguageService(ensureSynchronized = true): LanguageService {
@@ -329,7 +339,9 @@ namespace ts.server {
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
             const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
-            Debug.assert(!scriptInfo || scriptInfo.isAttached(this));
+            if (scriptInfo && !scriptInfo.isAttached(this)) {
+                return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
+            }
             return scriptInfo;
         }
 
@@ -371,7 +383,7 @@ namespace ts.server {
             return false;
         }
 
-        getChangesSinceVersion(lastKnownVersion?: number): protocol.ProjectFiles {
+        getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
             this.updateGraph();
 
             const info = {
@@ -384,7 +396,7 @@ namespace ts.server {
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
                 // if current structure version is the same - return info witout any changes
                 if (this.projectStructureVersion == this.lastReportedVersion) {
-                    return { info };
+                    return { info, projectErrors: this.projectErrors };
                 }
                 // compute and return the difference
                 const lastReportedFileNames = this.lastReportedFileNames;
@@ -406,14 +418,14 @@ namespace ts.server {
 
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, changes: { added, removed } };
+                return { info, changes: { added, removed }, projectErrors: this.projectErrors };
             }
             else {
                 // unknown version - return everything
                 const projectFileNames = this.getFileNames();
                 this.lastReportedFileNames = arrayToMap(projectFileNames, x => x);
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, files: projectFileNames };
+                return { info, files: projectFileNames, projectErrors: this.projectErrors };
             }
         }
 
@@ -544,6 +556,10 @@ namespace ts.server {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
         }
 
+        setProjectErrors(projectErrors: Diagnostic[]) {
+            this.projectErrors = projectErrors;
+        }
+
         setTypingOptions(newTypingOptions: TypingOptions): void {
             this.typingOptions = newTypingOptions;
         }
@@ -634,6 +650,10 @@ namespace ts.server {
 
         getTypingOptions() {
             return this.typingOptions;
+        }
+
+        setProjectErrors(projectErrors: Diagnostic[]) {
+            this.projectErrors = projectErrors;
         }
 
         setTypingOptions(newTypingOptions: TypingOptions): void {

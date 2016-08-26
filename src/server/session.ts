@@ -1261,7 +1261,21 @@ namespace ts.server {
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
                 const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
-                return this.requiredResponse(result);
+                if (!result.some(p => p.projectErrors && p.projectErrors.length !== 0)) {
+                    return this.requiredResponse(result);
+                }
+                const converted = map(result, p => {
+                    if (!p.projectErrors || p.projectErrors.length === 0) {
+                        return p;
+                    }
+                    return {
+                        info: p.info,
+                        changes: p.changes,
+                        files: p.files,
+                        projectErrors: this.convertToDiagnosticsWithLinePosition(p.projectErrors, /*scriptInfo*/ undefined)
+                    };
+                });
+                return this.requiredResponse(converted);
             },
             [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
                 this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles, request.arguments.closedFiles);

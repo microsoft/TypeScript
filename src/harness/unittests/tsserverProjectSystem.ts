@@ -36,7 +36,7 @@ namespace ts {
         }
 
         safeFileList = <Path>"";
-        postInstallActions: (( map: (t: string[]) => string[]) => void)[] = [];
+        postInstallActions: ((map: (t: string[]) => string[]) => void)[] = [];
 
         runPostInstallActions(map: (t: string[]) => string[]) {
             for (const f of this.postInstallActions) {
@@ -281,7 +281,7 @@ namespace ts {
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories =  createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
+        readonly watchedDirectories = createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
         readonly watchedFiles = createMap<FileWatcherCallback[]>();
 
         private filesOrFolders: FileOrFolder[];
@@ -2011,7 +2011,7 @@ namespace ts {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [ file1.path ]);
+            checkProjectActualFiles(p, [file1.path]);
 
             assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
 
@@ -2021,10 +2021,10 @@ namespace ts {
                 return ["jquery/jquery.d.ts"];
             });
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [ file1.path, jquery.path ]);
+            checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
 
-        it ("inferred project (tsd installed)", () => {
+        it("inferred project (tsd installed)", () => {
             const file1 = {
                 path: "/a/b/app.js",
                 content: ""
@@ -2051,7 +2051,7 @@ namespace ts {
 
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const p = projectService.inferredProjects[0];
-            checkProjectActualFiles(p, [ file1.path ]);
+            checkProjectActualFiles(p, [file1.path]);
 
             assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
 
@@ -2061,10 +2061,10 @@ namespace ts {
                 return ["jquery/jquery.d.ts"];
             });
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            checkProjectActualFiles(p, [ file1.path, jquery.path ]);
+            checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
 
-        it ("external project - no typing options, no .d.ts/js files", () => {
+        it("external project - no typing options, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
                 content: ""
@@ -2091,7 +2091,7 @@ namespace ts {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
         });
 
-        it ("external project - no autoDiscovery in typing options, no .d.ts/js files", () => {
+        it("external project - no autoDiscovery in typing options, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
                 content: ""
@@ -2119,7 +2119,7 @@ namespace ts {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
         });
 
-        it ("external project - autoDiscovery = true, no .d.ts/js files", () => {
+        it("external project - autoDiscovery = true, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
                 content: ""
@@ -2154,6 +2154,211 @@ namespace ts {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             assert.isTrue(enqueueIsCalled, "expected 'enqueueIsCalled' to be true");
             assert.isTrue(runTsdIsCalled, "expected 'runTsdIsCalled' to be true");
+        });
+    });
+
+    describe("Project errors", () => {
+        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: string[]) {
+            assert.isTrue(projectFiles !== undefined, "missing project files");
+            const errors = projectFiles.projectErrors;
+            assert.equal(errors ? errors.length : 0, expectedErrors.length, `expected ${expectedErrors.length} error in the list`);
+            if (expectedErrors.length) {
+                for (let i = 0; i < errors.length; i++) {
+                    const actualMessage = flattenDiagnosticMessageText(errors[i].messageText, "\n");
+                    const expectedMessage = expectedErrors[i];
+                    assert.equal(actualMessage, expectedMessage, "error message does not match");
+                }
+            }
+        }
+
+        it("external project - diagnostics for missing files", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: ""
+            };
+            const file2 = {
+                path: "/a/b/lib.ts",
+                content: ""
+            };
+            // only file1 exists - expect error
+            const host = createServerHost([file1]);
+            const projectService = createProjectService(host);
+            const projectFileName = "/a/b/test.csproj";
+
+            {
+                projectService.openExternalProject({
+                    projectFileName,
+                    options: {},
+                    rootFiles: toExternalFiles([file1.path, file2.path])
+                });
+
+                projectService.checkNumberOfProjects({ externalProjects: 1 });
+                const knownProjects = projectService.synchronizeProjectList([]);
+                checkProjectErrors(knownProjects[0], ["File '/a/b/lib.ts' not found."]);
+            }
+            // only file2 exists - expect error
+            host.reloadFS([file2]);
+            {
+                projectService.openExternalProject({
+                    projectFileName,
+                    options: {},
+                    rootFiles: toExternalFiles([file1.path, file2.path])
+                });
+                projectService.checkNumberOfProjects({ externalProjects: 1 });
+                const knownProjects = projectService.synchronizeProjectList([]);
+                checkProjectErrors(knownProjects[0], ["File '/a/b/app.ts' not found."]);
+            }
+
+            // both files exist - expect no errors
+            host.reloadFS([file1, file2]);
+            {
+                projectService.openExternalProject({
+                    projectFileName,
+                    options: {},
+                    rootFiles: toExternalFiles([file1.path, file2.path])
+                });
+
+                projectService.checkNumberOfProjects({ externalProjects: 1 });
+                const knownProjects = projectService.synchronizeProjectList([]);
+                checkProjectErrors(knownProjects[0], []);
+            }
+        });
+
+        it("configured projects - diagnostics for missing files", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: ""
+            };
+            const file2 = {
+                path: "/a/b/lib.ts",
+                content: ""
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
+            };
+            const host = createServerHost([file1, config]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectErrors(projectService.synchronizeProjectList([])[0], ["File '/a/b/lib.ts' not found."]);
+
+            host.reloadFS([file1, file2, config]);
+
+            projectService.openClientFile(file1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectErrors(projectService.synchronizeProjectList([])[0], []);
+        });
+
+        it("configured projects - diagnostics for corrupted config 1", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: ""
+            };
+            const file2 = {
+                path: "/a/b/lib.ts",
+                content: ""
+            };
+            const correctConfig = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
+            };
+            const corruptedConfig = {
+                path: correctConfig.path,
+                content: correctConfig.content.substr(1)
+            };
+            const host = createServerHost([file1, file2, corruptedConfig]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            {
+                projectService.checkNumberOfProjects({ inferredProjects: 1, configuredProjects: 1 });
+                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
+                assert.isTrue(configuredProject !== undefined, "should find configured project");
+                checkProjectErrors(configuredProject, [`Failed to parse file \'/a/b/tsconfig.json\': Unexpected token : in JSON at position 7.`]);
+            }
+            // fix config and trigger watcher
+            host.reloadFS([file1, file2, correctConfig]);
+            host.triggerFileWatcherCallback(correctConfig.path, /*false*/);
+            {
+                projectService.checkNumberOfProjects({ configuredProjects: 1 });
+                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
+                assert.isTrue(configuredProject !== undefined, "should find configured project");
+                checkProjectErrors(configuredProject, []);
+            }
+        });
+
+        it("configured projects - diagnostics for corrupted config 2", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: ""
+            };
+            const file2 = {
+                path: "/a/b/lib.ts",
+                content: ""
+            };
+            const correctConfig = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
+            };
+            const corruptedConfig = {
+                path: correctConfig.path,
+                content: correctConfig.content.substr(1)
+            };
+            const host = createServerHost([file1, file2, correctConfig]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            {
+                projectService.checkNumberOfProjects({ configuredProjects: 1 });
+                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
+                assert.isTrue(configuredProject !== undefined, "should find configured project");
+                checkProjectErrors(configuredProject, []);
+            }
+            // fix config and trigger watcher
+            host.reloadFS([file1, file2, corruptedConfig]);
+            host.triggerFileWatcherCallback(corruptedConfig.path, /*false*/);
+            {
+                projectService.checkNumberOfProjects({ inferredProjects: 1, configuredProjects: 1 });
+                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
+                assert.isTrue(configuredProject !== undefined, "should find configured project");
+                checkProjectErrors(configuredProject, [`Failed to parse file \'/a/b/tsconfig.json\': Unexpected token : in JSON at position 7.`]);
+            }
+        });
+    });
+
+    describe("Proper errors", () => {
+        it("document is not contained in project", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: ""
+            };
+            const corruptedConfig = {
+                path: "/a/b/tsconfig.json",
+                content: "{"
+            };
+            const host = createServerHost([file1, corruptedConfig]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1, configuredProjects: 1 });
+
+            const project = projectService.findProject(corruptedConfig.path);
+            let expectedMessage: string;
+            try {
+                server.Errors.ThrowProjectDoesNotContainDocument(file1.path, project);
+                assert(false, "should not get there");
+            }
+            catch (e) {
+                expectedMessage = (<Error>e).message;
+            }
+            try {
+                project.getScriptInfo(file1.path);
+            }
+            catch (e) {
+                assert.equal((<Error>e).message, expectedMessage, "Unexpected error");
+            }
         });
     });
 }

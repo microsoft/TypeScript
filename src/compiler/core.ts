@@ -1,5 +1,6 @@
 ﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
+/// <reference path="diagnosticInformationMap.generated.ts" />
 
 
 /* @internal */

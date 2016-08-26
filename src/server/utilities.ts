@@ -64,6 +64,9 @@ namespace ts.server {
         export function ThrowProjectLanguageServiceDisabled(): never {
             throw new Error("The project's language service is disabled.");
         }
+        export function ThrowProjectDoesNotContainDocument(fileName: string, project: Project): never {
+            throw new Error(`Project '${project.getProjectName()}' does not contain document '${fileName}'`);
+        }
     }
 
     export function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings {

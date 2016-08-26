@@ -535,6 +535,10 @@ declare namespace ts.server.protocol {
         changes?: ProjectChanges;
     }
 
+    export interface ProjectFilesWithDiagnostics extends ProjectFiles {
+        projectErrors: DiagnosticWithLinePosition[];
+    }
+
     export interface ChangedOpenFile {
         fileName: string;
         changes: ts.TextChange[];

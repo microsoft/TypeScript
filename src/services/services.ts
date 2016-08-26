@@ -3053,7 +3053,7 @@ namespace ts {
         let program: Program;
         let lastProjectVersion: string;
 
-        const useCaseSensitivefileNames = false;
+        const useCaseSensitivefileNames = host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames();
         const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
         const currentDirectory = host.getCurrentDirectory();
