@@ -7725,7 +7725,7 @@ const _super = (function (geti, seti) {
             }
 
             /**
-             * Replace entities like "&nbsp;", "&#123", and "&#xDEADBEEF" with the characters they encode.
+             * Replace entities like "&nbsp;", "&#123;", and "&#xDEADBEEF;" with the characters they encode.
              * See https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
              */
             function applyReactHtmlEntities(text: string): string {
