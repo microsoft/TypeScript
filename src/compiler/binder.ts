@@ -594,6 +594,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
                     return isNarrowableReference(expr);
                 case SyntaxKind.CallExpression:
                     return hasNarrowableArgument(<CallExpression>expr);
@@ -608,9 +609,21 @@ namespace ts {
         }
 
         function isNarrowableReference(expr: Expression): boolean {
-            return expr.kind === SyntaxKind.Identifier ||
-                expr.kind === SyntaxKind.ThisKeyword ||
-                expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
+            if (expr.kind === SyntaxKind.ElementAccessExpression) {
+                const argument = (expr as ElementAccessExpression).argumentExpression;
+                return argument.kind === SyntaxKind.StringLiteral || argument.kind === SyntaxKind.NumericLiteral || argument.kind === SyntaxKind.EnumMember;
+            }
+            while (true) {
+                if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword) {
+                    return true;
+                }
+                else if (expr.kind === SyntaxKind.PropertyAccessExpression) {
+                    expr = (expr as PropertyAccessExpression).expression;
+                }
+                else {
+                    return false;
+                }
+            }
         }
 
         function hasNarrowableArgument(expr: CallExpression) {
