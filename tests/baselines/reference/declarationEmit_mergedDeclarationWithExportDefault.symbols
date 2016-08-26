@@ -5,11 +5,11 @@ class Logger {
 
   public logLevel = Logger.LogLevel.Info;
 >logLevel : Symbol(Logger.logLevel, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 1, 14))
->Logger.LogLevel.Info : Symbol(default.LogLevel.Info, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 7, 12))
->Logger.LogLevel : Symbol(default.LogLevel, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 5, 18))
+>Logger.LogLevel.Info : Symbol(Logger.LogLevel.Info, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 7, 12))
+>Logger.LogLevel : Symbol(Logger.LogLevel, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 5, 18))
 >Logger : Symbol(Logger, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 0, 0), Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 3, 1))
->LogLevel : Symbol(default.LogLevel, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 5, 18))
->Info : Symbol(default.LogLevel.Info, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 7, 12))
+>LogLevel : Symbol(Logger.LogLevel, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 5, 18))
+>Info : Symbol(Logger.LogLevel.Info, Decl(declarationEmit_mergedDeclarationWithExportDefault.ts, 7, 12))
 }
 
 namespace Logger {

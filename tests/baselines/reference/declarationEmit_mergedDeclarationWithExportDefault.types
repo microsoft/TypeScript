@@ -4,12 +4,12 @@ class Logger {
 >Logger : Logger
 
   public logLevel = Logger.LogLevel.Info;
->logLevel : default.LogLevel
->Logger.LogLevel.Info : default.LogLevel
->Logger.LogLevel : typeof default.LogLevel
+>logLevel : Logger.LogLevel
+>Logger.LogLevel.Info : Logger.LogLevel
+>Logger.LogLevel : typeof Logger.LogLevel
 >Logger : typeof Logger
->LogLevel : typeof default.LogLevel
->Info : default.LogLevel
+>LogLevel : typeof Logger.LogLevel
+>Info : Logger.LogLevel
 }
 
 namespace Logger {

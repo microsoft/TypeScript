@@ -37,7 +37,7 @@ exports["default"] = Logger;
 
 //// [declarationEmit_mergedDeclarationWithExportDefault.d.ts]
 declare class Logger {
-    logLevel: default.LogLevel;
+    logLevel: Logger.LogLevel;
 }
 declare namespace Logger {
     enum LogLevel {
@@ -46,28 +46,3 @@ declare namespace Logger {
     }
 }
 export default Logger;
-
-
-//// [DtsFileErrors]
-
-
-tests/cases/compiler/declarationEmit_mergedDeclarationWithExportDefault.d.ts(2,15): error TS1110: Type expected.
-tests/cases/compiler/declarationEmit_mergedDeclarationWithExportDefault.d.ts(2,22): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-
-
-==== tests/cases/compiler/declarationEmit_mergedDeclarationWithExportDefault.d.ts (2 errors) ====
-    declare class Logger {
-        logLevel: default.LogLevel;
-                  ~~~~~~~
-!!! error TS1110: Type expected.
-                         ~
-!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-    }
-    declare namespace Logger {
-        enum LogLevel {
-            Verbose = 0,
-            Info = 1,
-        }
-    }
-    export default Logger;
-    
