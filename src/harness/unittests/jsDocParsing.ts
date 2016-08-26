@@ -9,7 +9,7 @@ namespace ts {
                     const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
                     assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
 
-                    Harness.Baseline.runBaseline("parseCorrectly", "JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
+                    Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
                         () => Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type));
                 });
             }
@@ -99,7 +99,7 @@ namespace ts {
                         Debug.fail("Comment has at least one diagnostic: " + comment.diagnostics[0].messageText);
                     }
 
-                    Harness.Baseline.runBaseline("parseCorrectly", "JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
+                    Harness.Baseline.runBaseline("JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
                         () => JSON.stringify(comment.jsDocComment,
                             (k, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4));
                 });

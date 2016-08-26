@@ -10,6 +10,8 @@
         "types": []
     },
     "files": [
+        "../services/shims.ts",
+        "../services/utilities.ts",
         "editorServices.ts",
         "protocol.d.ts",
         "session.ts"

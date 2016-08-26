@@ -1663,7 +1663,7 @@ namespace ts {
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
             if (convertedLoopState) {
                 if (!convertedLoopState.labels) {
-                    convertedLoopState.labels = {};
+                    convertedLoopState.labels = createMap<string>();
                 }
                 convertedLoopState.labels[node.label.text] = node.label.text;
             }
@@ -1815,7 +1815,9 @@ namespace ts {
                     );
                 }
                 else {
-                    assignment.end = initializer.end;
+                    // Currently there is not way to check that assignment is binary expression of destructing assignment
+                    // so we have to cast never type to binaryExpression
+                    (<BinaryExpression>assignment).end = initializer.end;
                     statements.push(createStatement(assignment, /*location*/ moveRangeEnd(initializer, -1)));
                 }
             }
@@ -2249,13 +2251,13 @@ namespace ts {
         function setLabeledJump(state: ConvertedLoopState, isBreak: boolean, labelText: string, labelMarker: string): void {
             if (isBreak) {
                 if (!state.labeledNonLocalBreaks) {
-                    state.labeledNonLocalBreaks = {};
+                    state.labeledNonLocalBreaks = createMap<string>();
                 }
                 state.labeledNonLocalBreaks[labelText] = labelMarker;
             }
             else {
                 if (!state.labeledNonLocalContinues) {
-                    state.labeledNonLocalContinues = {};
+                    state.labeledNonLocalContinues = createMap<string>();
                 }
                 state.labeledNonLocalContinues[labelText] = labelMarker;
             }

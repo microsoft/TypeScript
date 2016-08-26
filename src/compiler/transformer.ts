@@ -10,14 +10,14 @@
 
 /* @internal */
 namespace ts {
-    const moduleTransformerMap: Map<Transformer> = {
+    const moduleTransformerMap = createMap<Transformer>({
         [ModuleKind.ES6]: transformES6Module,
         [ModuleKind.System]: transformSystemModule,
         [ModuleKind.AMD]: transformModule,
         [ModuleKind.CommonJS]: transformModule,
         [ModuleKind.UMD]: transformModule,
         [ModuleKind.None]: transformModule,
-    };
+    });
 
     const enum SyntaxKindFeatureFlags {
         Substitution = 1 << 0,
@@ -206,7 +206,7 @@ namespace ts {
         const transformId = nextTransformId;
         nextTransformId++;
 
-        const tokenSourceMapRanges: Map<TextRange> = { };
+        const tokenSourceMapRanges = createMap<TextRange>();
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);

@@ -219,6 +219,7 @@ namespace ts {
 
     function createSourceMapWriterWorker(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
+        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
         let currentSourceFile: SourceFile;
         let currentSourceText: string;
         let sourceMapDir: string; // The directory in which sourcemap will be
@@ -462,7 +463,9 @@ namespace ts {
                 return;
             }
 
-            const start = performance.mark();
+            if (extendedDiagnostics) {
+                performance.mark("beforeSourcemap");
+            }
 
             const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
 
@@ -504,7 +507,10 @@ namespace ts {
 
             updateLastEncodedAndRecordedSpans();
 
-            performance.measure("Source Map", start);
+            if (extendedDiagnostics) {
+                performance.mark("afterSourcemap");
+                performance.measure("Source Map", "beforeSourcemap", "afterSourcemap");
+            }
         }
 
         function getStartPosPastDecorators(range: TextRange) {
@@ -782,30 +788,30 @@ namespace ts {
             getSourceMapData,
             setSourceFile,
             emitPos(pos: number): void {
-                const sourcemapStart = performance.mark();
+                 performance.mark("sourcemapStart");
                 emitPos(pos);
-                performance.measure("sourceMapTime", sourcemapStart);
+                performance.measure("sourceMapTime", "sourcemapStart");
             },
             emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
-                const sourcemapStart = performance.mark();
+                performance.mark("emitSourcemap:emitStart");
                 emitStart(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
-                performance.measure("sourceMapTime", sourcemapStart);
+                performance.measure("sourceMapTime", "emitSourcemap:emitStart");
             },
             emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
-                const sourcemapStart = performance.mark();
+                performance.mark("emitSourcemap:emitEnd");
                 emitEnd(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
-                performance.measure("sourceMapTime", sourcemapStart);
+                performance.measure("sourceMapTime", "emitSourcemap:emitEnd");
             },
             emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
-                const sourcemapStart = performance.mark();
+                performance.mark("emitSourcemap:emitTokenStart");
                 tokenStartPos = emitTokenStart(token, tokenStartPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
-                performance.measure("sourceMapTime", sourcemapStart);
+                performance.measure("sourceMapTime", "emitSourcemap:emitTokenStart");
                 return tokenStartPos;
             },
             emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
-                const sourcemapStart = performance.mark();
+                performance.mark("emitSourcemap:emitTokenEnd");
                 tokenEndPos = emitTokenEnd(token, tokenEndPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
-                performance.measure("sourceMapTime", sourcemapStart);
+                performance.measure("sourceMapTime", "emitSourcemap:emitTokenEnd");
                 return tokenEndPos;
             },
             changeEmitSourcePos,
