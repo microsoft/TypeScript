@@ -4846,17 +4846,10 @@ namespace ts {
                         result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
                     }
                 }
-                else if (host.getDirectories && options.typeRoots) {
-                    const absoluteRoots = map(options.typeRoots, rootDirectory => {
-                        if (isRootedDiskPath(rootDirectory)) {
-                            return normalizePath(rootDirectory);
-                        }
-
-                        const basePath = options.project || host.getCurrentDirectory();
-                        return normalizePath(combinePaths(basePath, rootDirectory));
-                    });
-                    for (const absoluteRoot of absoluteRoots) {
-                        getCompletionEntriesFromDirectories(host, options, absoluteRoot, result);
+                else if (host.getDirectories) {
+                    const typeRoots = getEffectiveTypeRoots(options, host.getCurrentDirectory());
+                    for (const root of typeRoots) {
+                        getCompletionEntriesFromDirectories(host, options, root, result);
                     }
                 }
 
