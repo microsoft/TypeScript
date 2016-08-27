@@ -67,15 +67,15 @@ var o: {
 >prop2 : string | boolean
 
 } = {
->{        prop1: "string" ,        prop2: true    } : { prop1: string; prop2: boolean; }
+>{        prop1: "string" ,        prop2: true    } : { prop1: string; prop2: true; }
 
         prop1: "string" ,
 >prop1 : string
 >"string" : string
 
         prop2: true
->prop2 : boolean
->true : boolean
+>prop2 : true
+>true : true
     }
 
 if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}

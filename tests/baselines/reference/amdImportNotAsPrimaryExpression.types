@@ -28,7 +28,7 @@ var y: typeof foo.C1.s1 = false;
 >foo : typeof foo
 >C1 : typeof foo.C1
 >s1 : boolean
->false : boolean
+>false : false
 
 var z: foo.M1.I2;
 >z : f.I2

@@ -1,7 +1,7 @@
 tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(3,5): error TS2322: Type '{ a1: boolean; a2: number; }' is not assignable to type '{ a1: number; a2: string; }'.
   Types of property 'a1' are incompatible.
     Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(4,5): error TS2322: Type '[number, [[boolean]], boolean]' is not assignable to type '[number, [[string]], boolean]'.
+tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(4,5): error TS2322: Type '[number, [[boolean]], true]' is not assignable to type '[number, [[string]], boolean]'.
   Type '[[boolean]]' is not assignable to type '[[string]]'.
     Type '[boolean]' is not assignable to type '[string]'.
       Type 'boolean' is not assignable to type 'string'.
@@ -19,7 +19,7 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(1
 !!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
     var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [[false]], true];  // Error
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '[number, [[boolean]], boolean]' is not assignable to type '[number, [[string]], boolean]'.
+!!! error TS2322: Type '[number, [[boolean]], true]' is not assignable to type '[number, [[string]], boolean]'.
 !!! error TS2322:   Type '[[boolean]]' is not assignable to type '[[string]]'.
 !!! error TS2322:     Type '[boolean]' is not assignable to type '[string]'.
 !!! error TS2322:       Type 'boolean' is not assignable to type 'string'.
