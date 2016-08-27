@@ -13467,7 +13467,7 @@ namespace ts {
                     return maybeTypeOfKind(contextualType, (TypeFlags.NumberLiteral | TypeFlags.EnumLiteral));
                 }
                 if (type.flags & TypeFlags.Boolean) {
-                    return maybeTypeOfKind(contextualType, TypeFlags.BooleanLiteral) && !isTypeAssignableTo(booleanType, contextualType);
+                    return maybeTypeOfKind(contextualType, TypeFlags.BooleanLiteral);
                 }
                 if (type.flags & TypeFlags.Enum) {
                     return typeContainsLiteralFromEnum(contextualType, <EnumType>type);
