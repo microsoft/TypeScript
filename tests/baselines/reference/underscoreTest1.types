@@ -235,8 +235,8 @@ _.all([true, 1, null, 'yes'], _.identity);
 >_.all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[true, 1, null, 'yes'] : (string | number | boolean)[]
->true : boolean
+>[true, 1, null, 'yes'] : (string | number | true)[]
+>true : true
 >1 : number
 >null : null
 >'yes' : string
@@ -249,11 +249,11 @@ _.any([null, 0, 'yes', false]);
 >_.any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[null, 0, 'yes', false] : (string | number | boolean)[]
+>[null, 0, 'yes', false] : (string | number | false)[]
 >null : null
 >0 : number
 >'yes' : string
->false : boolean
+>false : false
 
 _.contains([1, 2, 3], 3);
 >_.contains([1, 2, 3], 3) : boolean
@@ -512,10 +512,10 @@ _.compact([0, 1, false, 2, '', 3]);
 >_.compact : <T>(list: T[]) => T[]
 >_ : Underscore.Static
 >compact : <T>(list: T[]) => T[]
->[0, 1, false, 2, '', 3] : (string | number | boolean)[]
+>[0, 1, false, 2, '', 3] : (string | number | false)[]
 >0 : number
 >1 : number
->false : boolean
+>false : false
 >2 : number
 >'' : string
 >3 : number
@@ -571,7 +571,7 @@ _.flatten([1, [2], [3, [[4]]]], true);
 >[[4]] : number[][]
 >[4] : number[]
 >4 : number
->true : boolean
+>true : true
 
 _.without([1, 2, 1, 0, 3, 1, 4], 0, 1);
 >_.without([1, 2, 1, 0, 3, 1, 4], 0, 1) : number[]
@@ -668,9 +668,9 @@ _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);
 >40 : number
 >50 : number
 >[true, false, false] : boolean[]
->true : boolean
->false : boolean
->false : boolean
+>true : true
+>false : false
+>false : false
 
 _.object(['moe', 'larry', 'curly'], [30, 40, 50]);
 >_.object(['moe', 'larry', 'curly'], [30, 40, 50]) : any

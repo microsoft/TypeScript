@@ -5,7 +5,7 @@ var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 >foo : () => boolean
->true : boolean
+>true : true
 
 class A {
 >A : A

@@ -18,11 +18,11 @@ class Derived extends Based {
 
             constructor() {
                 this.y = true;
->this.y = true : boolean
+>this.y = true : true
 >this.y : boolean
 >this : this
 >y : boolean
->true : boolean
+>true : true
             }
         }
         super();

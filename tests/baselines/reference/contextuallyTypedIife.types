@@ -43,7 +43,7 @@
 >c : boolean
 >"foo" : string
 >101 : number
->false : boolean
+>false : false
 
 // default parameters
 ((m = 10) => m + 1)(12);
