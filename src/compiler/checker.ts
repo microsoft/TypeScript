@@ -1300,7 +1300,7 @@ namespace ts {
                 symbol = getSymbol(getExportsOfSymbol(namespace), right.text, meaning);
                 if (!symbol) {
                     if (!ignoreErrors) {
-                        error(right, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace), declarationNameToString(right));
+                        error(right, Diagnostics.Module_or_namespace_0_has_no_exported_member_1, getFullyQualifiedName(namespace), declarationNameToString(right));
                     }
                     return undefined;
                 }
