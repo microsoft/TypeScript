@@ -245,11 +245,20 @@ namespace ts.server {
 
         private semanticCheck(file: string, project: Project) {
             try {
+                let start: number[];
+                if (this.logger.isVerbose()) {
+                    start = this.hrtime();
+                }
+
                 const diags = project.compilerService.languageService.getSemanticDiagnostics(file);
 
                 if (diags) {
                     const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
                     this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                }
+
+                if (this.logger.isVerbose()) {
+                    this.logPerfMessurement(start, false, true);
                 }
             }
             catch (err) {
@@ -259,10 +268,19 @@ namespace ts.server {
 
         private syntacticCheck(file: string, project: Project) {
             try {
+                let start: number[];
+                if (this.logger.isVerbose()) {
+                    start = this.hrtime();
+                }
+
                 const diags = project.compilerService.languageService.getSyntacticDiagnostics(file);
                 if (diags) {
                     const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
                     this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+                }
+
+                if (this.logger.isVerbose()) {
+                    this.logPerfMessurement(start, false, true);
                 }
             }
             catch (err) {
@@ -1225,6 +1243,14 @@ namespace ts.server {
             }
         }
 
+        private logPerfMessurement(start: number[], isAsync: boolean, isBackground: boolean) {
+            const elapsed = this.hrtime(start);
+            const seconds = elapsed[0];
+            const nanoseconds = elapsed[1];
+            const elapsedMs = ((1e9 * seconds) + nanoseconds) / 1000000.0;
+            this.logger.msg(`${isAsync ? "Async " : isBackground ? "Background " : ""}Elapsed time (in milliseconds):  ${elapsedMs.toFixed(4).toString()}`, "Perf");
+        }
+
         public onMessage(message: string) {
             let start: number[];
             if (this.logger.isVerbose()) {
@@ -1237,15 +1263,7 @@ namespace ts.server {
                 const {response, responseRequired} = this.executeCommand(request);
 
                 if (this.logger.isVerbose()) {
-                    const elapsed = this.hrtime(start);
-                    const seconds = elapsed[0];
-                    const nanoseconds = elapsed[1];
-                    const elapsedMs = ((1e9 * seconds) + nanoseconds) / 1000000.0;
-                    let leader = "Elapsed time (in milliseconds)";
-                    if (!responseRequired) {
-                        leader = "Async elapsed time (in milliseconds)";
-                    }
-                    this.logger.msg(leader + ": " + elapsedMs.toFixed(4).toString(), "Perf");
+                    this.logPerfMessurement(start, !responseRequired, false);
                 }
                 if (response) {
                     this.output(response, request.command, request.seq);
