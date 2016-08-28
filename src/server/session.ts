@@ -143,7 +143,7 @@ namespace ts.server {
     export class Session {
         protected projectService: ProjectService;
         private errorTimer: any; /*NodeJS.Timer | number*/
-        private immediateId: any;
+        private settimeoutId: any;
         private changeSeq = 0;
 
         constructor(
@@ -308,9 +308,9 @@ namespace ts.server {
             if (this.errorTimer) {
                 clearTimeout(this.errorTimer);
             }
-            if (this.immediateId) {
-                clearImmediate(this.immediateId);
-                this.immediateId = undefined;
+            if (this.settimeoutId) {
+                clearTimeout(this.settimeoutId);
+                this.settimeoutId = undefined;
             }
             let index = 0;
             const checkOne = () => {
@@ -319,16 +319,16 @@ namespace ts.server {
                     index++;
                     if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
-                        this.immediateId = setImmediate(() => {
+                        this.settimeoutId = setTimeout(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
-                            this.immediateId = undefined;
+                            this.settimeoutId = undefined;
                             if (checkList.length > index) {
                                 this.errorTimer = setTimeout(checkOne, followMs);
                             }
                             else {
                                 this.errorTimer = undefined;
                             }
-                        });
+                        }, followMs);
                     }
                 }
             };
@@ -852,6 +852,9 @@ namespace ts.server {
         }
 
         private getDiagnostics(delay: number, fileNames: string[]) {
+            if (delay < 1000) {
+                delay = 1000;
+            }
             const checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
                 fileName = ts.normalizePath(fileName);
                 const project = this.projectService.getProjectForFile(fileName);
