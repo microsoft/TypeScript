@@ -1,0 +1,60 @@
+tests/cases/compiler/unionPropertyExistance.ts(24,4): error TS2339: Property 'onlyInB' does not exist on type 'AB'.
+  Property 'onlyInB' does not exist on type 'A'.
+tests/cases/compiler/unionPropertyExistance.ts(27,5): error TS2339: Property 'notInC' does not exist on type 'ABC'.
+  Property 'notInC' does not exist on type 'C'.
+tests/cases/compiler/unionPropertyExistance.ts(28,4): error TS2339: Property 'notInB' does not exist on type 'AB'.
+  Property 'notInB' does not exist on type 'B'.
+tests/cases/compiler/unionPropertyExistance.ts(29,5): error TS2339: Property 'notInB' does not exist on type 'ABC'.
+  Property 'notInB' does not exist on type 'B'.
+tests/cases/compiler/unionPropertyExistance.ts(32,5): error TS2339: Property 'inNone' does not exist on type 'ABC'.
+  Property 'inNone' does not exist on type 'A'.
+
+
+==== tests/cases/compiler/unionPropertyExistance.ts (5 errors) ====
+    interface A {
+        inAll: string;
+        notInB: string;
+        notInC: string;
+    }
+    
+    interface B {
+        inAll: boolean;
+        onlyInB: number;
+        notInC: string;
+    }
+    
+    interface C {
+        inAll: number;
+        notInB: string;
+    }
+    
+    type AB = A | B;
+    type ABC = C | AB;
+    
+    var ab: AB;
+    var abc: ABC;
+    
+    ab.onlyInB;
+       ~~~~~~~
+!!! error TS2339: Property 'onlyInB' does not exist on type 'AB'.
+!!! error TS2339:   Property 'onlyInB' does not exist on type 'A'.
+    
+    ab.notInC; // Ok
+    abc.notInC;
+        ~~~~~~
+!!! error TS2339: Property 'notInC' does not exist on type 'ABC'.
+!!! error TS2339:   Property 'notInC' does not exist on type 'C'.
+    ab.notInB;
+       ~~~~~~
+!!! error TS2339: Property 'notInB' does not exist on type 'AB'.
+!!! error TS2339:   Property 'notInB' does not exist on type 'B'.
+    abc.notInB;
+        ~~~~~~
+!!! error TS2339: Property 'notInB' does not exist on type 'ABC'.
+!!! error TS2339:   Property 'notInB' does not exist on type 'B'.
+    
+    abc.inAll; // Ok
+    abc.inNone;
+        ~~~~~~
+!!! error TS2339: Property 'inNone' does not exist on type 'ABC'.
+!!! error TS2339:   Property 'inNone' does not exist on type 'A'.
