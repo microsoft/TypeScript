@@ -951,6 +951,10 @@ namespace ts.server {
             const info = this.projectService.getScriptInfo(args.file);
             const result: protocol.CompileOnSaveAffectedFileListSingleProject[] = [];
 
+            if (!info) {
+                return [];
+            }
+
             // if specified a project, we only return affected file list in this project
             const projectsToSearch = args.projectFileName ? [this.projectService.findProject(args.projectFileName)] : info.containingProjects;
             for (const project of projectsToSearch) {
