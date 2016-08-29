@@ -1,47 +1,41 @@
 interface Square {
-    sub: {kind: 'square'; };
-    /*'0': {
-        sub: {
-            under: {
-                kind: "square"
-            }
-        }
-    };*/
+    kind: "square";
     size: number;
 }
 
 interface Rectangle {
-    /*'0': {
-        sub: {
-            under: {
-                kind: "rectangle"
-            }
-        }
-    };*/
-    sub: { kind: 'rectangle'; };
+    kind: "rectangle";
     width: number;
     height: number;
 }
 
 interface Circle {
-    /*'0': {
-        sub: {
-            under : {
-                kind: "circle"
-            }
-        }
-    };*/
-    sub: { kind: 'circle'; };
+    kind: "circle";
     radius: number;
 }
 
 type Shape = Square | Rectangle | Circle;
-
-function area(s: Shape) {
-    switch(s.sub.kind) {
-    //switch (s[0].sub['under']['kind']) {
+interface Subshape {
+    "0": {
+        sub: {
+            under: {
+                shape: Shape;
+            }
+        }
+    }
+}
+function area(s: Shape): number {
+    switch(s['kind']) {
         case "square": return s.size * s.size;
         case "rectangle": return s.width * s.height;
         case "circle": return Math.PI * s.radius * s.radius;
+    }
+}
+
+function subarea(s: Subshape): number {
+    switch(s[0]["sub"].under["shape"]["kind"]) {
+        case "square": return s[0].sub.under.shape.size * s[0].sub.under.shape.size;
+        case "rectangle": return s[0]["sub"]["under"]["shape"]["width"] * s[0]["sub"]["under"]["shape"].height;
+        case "circle": return Math.PI * s[0].sub.under["shape"].radius * s[0]["sub"].under.shape["radius"];
     }
 }
