@@ -4,9 +4,9 @@ tests/cases/compiler/noImplicitAnyParametersInModule.ts(13,22): error TS7006: Pa
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(13,25): error TS7006: Parameter 'z' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(16,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(16,30): error TS7006: Parameter 'z' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(19,19): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInModule.ts(19,19): error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(22,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(22,22): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInModule.ts(22,22): error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(25,19): error TS7006: Parameter 'x1' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(26,31): error TS7006: Parameter 'y2' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(27,19): error TS7006: Parameter 'x3' implicitly has an 'any' type.
@@ -17,9 +17,9 @@ tests/cases/compiler/noImplicitAnyParametersInModule.ts(36,21): error TS7006: Pa
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(36,24): error TS7006: Parameter 'z' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(39,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(39,29): error TS7006: Parameter 'z' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(42,18): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInModule.ts(42,18): error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
 tests/cases/compiler/noImplicitAnyParametersInModule.ts(45,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(45,21): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInModule.ts(45,21): error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
 
 
 ==== tests/cases/compiler/noImplicitAnyParametersInModule.ts (22 errors) ====
@@ -55,14 +55,14 @@ tests/cases/compiler/noImplicitAnyParametersInModule.ts(45,21): error TS7019: Re
         // Implicit-'any[]' error for r.
         function m_f6(...r): void { }
                       ~~~~
-!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+!!! error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
     
         // Implicit-'any'/'any[]' errors for x and r.
         function m_f7(x, ...r): void { }
                       ~
 !!! error TS7006: Parameter 'x' implicitly has an 'any' type.
                          ~~~~
-!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+!!! error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
     
         // Implicit-'any' errors for x1, y2, x3, and y3.
         function m_f8(x1, y1: number): any;
@@ -104,12 +104,12 @@ tests/cases/compiler/noImplicitAnyParametersInModule.ts(45,21): error TS7019: Re
         // Implicit-'any[]' errors for r.
         var m_f13 = (...r) => "";
                      ~~~~
-!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+!!! error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
     
         // Implicit-'any'/'any[]' errors for x and r.
         var m_f14 = (x, ...r) => "";
                      ~
 !!! error TS7006: Parameter 'x' implicitly has an 'any' type.
                         ~~~~
-!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+!!! error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
     }

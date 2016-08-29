@@ -1,5 +1,5 @@
-tests/cases/compiler/noImplicitAnyParametersInInterface.ts(4,5): error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
-tests/cases/compiler/noImplicitAnyParametersInInterface.ts(5,5): error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(4,5): error TS7021: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(5,5): error TS7021: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(5,6): error TS7006: Parameter 'x1' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(6,6): error TS7006: Parameter 'x2' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(6,22): error TS7006: Parameter 'z2' implicitly has an 'any' type.
@@ -9,9 +9,9 @@ tests/cases/compiler/noImplicitAnyParametersInInterface.ts(18,11): error TS7006:
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(18,14): error TS7006: Parameter 'z' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(21,8): error TS7006: Parameter 'x' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(21,19): error TS7006: Parameter 'z' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInInterface.ts(24,8): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(24,8): error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(27,8): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInInterface.ts(27,11): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(27,11): error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(30,8): error TS7006: Parameter 'x1' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(31,20): error TS7006: Parameter 'y2' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(32,8): error TS7006: Parameter 'x3' implicitly has an 'any' type.
@@ -22,9 +22,9 @@ tests/cases/compiler/noImplicitAnyParametersInInterface.ts(41,14): error TS7006:
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(41,17): error TS7006: Parameter 'z' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(44,11): error TS7006: Parameter 'x' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(44,22): error TS7006: Parameter 'z' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInInterface.ts(47,11): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(47,11): error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
 tests/cases/compiler/noImplicitAnyParametersInInterface.ts(50,11): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInInterface.ts(50,14): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+tests/cases/compiler/noImplicitAnyParametersInInterface.ts(50,14): error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
 
 
 ==== tests/cases/compiler/noImplicitAnyParametersInInterface.ts (27 errors) ====
@@ -33,10 +33,10 @@ tests/cases/compiler/noImplicitAnyParametersInInterface.ts(50,14): error TS7019:
         // Implicit-'any' errors for first two call signatures, x1, x2, z2.
         ();
         ~~~
-!!! error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7021: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
         (x1);
         ~~~~~
-!!! error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7021: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
          ~~
 !!! error TS7006: Parameter 'x1' implicitly has an 'any' type.
         (x2, y2: string, z2): any;
@@ -75,14 +75,14 @@ tests/cases/compiler/noImplicitAnyParametersInInterface.ts(50,14): error TS7019:
         // Implicit-'any[]' errors for r.
         f6(...r): void;
            ~~~~
-!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+!!! error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
     
         // Implicit-'any'/'any[]' errors for x, r.
         f7(x, ...r): void;
            ~
 !!! error TS7006: Parameter 'x' implicitly has an 'any' type.
               ~~~~
-!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+!!! error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
     
         // Implicit-'any' errors for x1, y2, x3, and y3.
         f8(x1, y1: number): any;
@@ -124,12 +124,12 @@ tests/cases/compiler/noImplicitAnyParametersInInterface.ts(50,14): error TS7019:
         // Implicit-'any[]' error for r.
         f13: (...r) => string;
               ~~~~
-!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+!!! error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
     
         // Implicit-'any'/'any[]' errors for x, r.
         f14: (x, ...r) => string;
               ~
 !!! error TS7006: Parameter 'x' implicitly has an 'any' type.
                  ~~~~
-!!! error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+!!! error TS7020: Rest parameter 'r' implicitly has an 'any[]' type.
     }
