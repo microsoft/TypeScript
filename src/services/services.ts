@@ -2788,18 +2788,37 @@ namespace ts {
         return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
     }
 
+    function climbPastPropertyAccess(node: Node) {
+        return isRightSideOfPropertyAccess(node) ? node.parent : node;
+    }
+
     function isCallExpressionTarget(node: Node): boolean {
-        if (isRightSideOfPropertyAccess(node)) {
-            node = node.parent;
-        }
-        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
+        return !!getCallOrNewExpressionWorker(node, SyntaxKind.CallExpression);
     }
 
     function isNewExpressionTarget(node: Node): boolean {
-        if (isRightSideOfPropertyAccess(node)) {
-            node = node.parent;
+        return !!getCallOrNewExpressionWorker(node, SyntaxKind.NewExpression);
+    }
+
+    function getCallOrNewExpressionTargetingNode(node: Node): CallExpression | NewExpression | undefined {
+        return <CallExpression>getCallOrNewExpressionWorker(node, SyntaxKind.CallExpression) || <NewExpression>getCallOrNewExpressionWorker(node, SyntaxKind.NewExpression);
+    }
+
+    function tryGetCalledDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
+        const callOrNewExpression = getCallOrNewExpressionTargetingNode(node);
+        if (callOrNewExpression) {
+            const signature = typeChecker.getResolvedSignature(callOrNewExpression);
+            return signature.declaration;
         }
-        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).expression === node;
+    }
+
+    function getCallOrNewExpressionWorker(node: Node, kind: SyntaxKind): Node | undefined {
+        const target = climbPastPropertyAccess(node);
+        return target &&
+            target.parent &&
+            target.parent.kind === kind &&
+            (<CallExpression>target.parent).expression === target &&
+            target.parent;
     }
 
     function isNameOfModuleDeclaration(node: Node) {
@@ -5068,14 +5087,25 @@ namespace ts {
             };
         }
 
+        function getSymbolInfo(typeChecker: TypeChecker, symbol: Symbol, node: Node) {
+            return {
+                symbolName: typeChecker.symbolToString(symbol), // Do not get scoped name, just the name of the symbol
+                symbolKind: getSymbolKind(symbol, node),
+                containerName: symbol.parent ? typeChecker.symbolToString(symbol.parent, node) : ""
+            };
+        }
+
+        function getDefinitionFromSignatureDeclaration(decl: SignatureDeclaration): DefinitionInfo {
+            const typeChecker = program.getTypeChecker();
+            const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, decl.symbol, decl);
+            return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
+        }
+
         function getDefinitionFromSymbol(symbol: Symbol, node: Node): DefinitionInfo[] {
             const typeChecker = program.getTypeChecker();
             const result: DefinitionInfo[] = [];
             const declarations = symbol.getDeclarations();
-            const symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            const symbolKind = getSymbolKind(symbol, node);
-            const containerSymbol = symbol.parent;
-            const containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, symbol, node);
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
@@ -5201,6 +5231,12 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
+
+            const calledDeclaration = tryGetCalledDeclaration(typeChecker, node);
+            if (calledDeclaration) {
+                return [getDefinitionFromSignatureDeclaration(calledDeclaration)];
+            }
+
             let symbol = typeChecker.getSymbolAtLocation(node);
 
             // Could not find a symbol e.g. node is string or number keyword,

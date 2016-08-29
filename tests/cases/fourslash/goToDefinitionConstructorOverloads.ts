@@ -11,11 +11,11 @@
 
 goTo.marker('constructorOverloadReference1');
 goTo.definition();
-verify.caretAtMarker('constructorDefinition');
+verify.caretAtMarker('constructorOverload1');
 
 goTo.marker('constructorOverloadReference2');
 goTo.definition();
-verify.caretAtMarker('constructorDefinition');
+verify.caretAtMarker('constructorOverload2');
 
 goTo.marker('constructorOverload1');
 goTo.definition();
