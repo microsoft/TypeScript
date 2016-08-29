@@ -143,7 +143,7 @@ namespace ts.server {
     export class Session {
         protected projectService: ProjectService;
         private errorTimer: any; /*NodeJS.Timer | number*/
-        private settimeoutId: any;
+        private setTimeoutId: any;
         private changeSeq = 0;
 
         constructor(
@@ -258,7 +258,7 @@ namespace ts.server {
                 }
 
                 if (this.logger.isVerbose()) {
-                    this.logPerfMessurement(start, false, true);
+                    this.logPerfMessurement(start, /*isAsync*/ false, /*isBackground*/true);
                 }
             }
             catch (err) {
@@ -280,7 +280,7 @@ namespace ts.server {
                 }
 
                 if (this.logger.isVerbose()) {
-                    this.logPerfMessurement(start, false, true);
+                    this.logPerfMessurement(start, /*isAsync*/ false, /*isBackground*/ true);
                 }
             }
             catch (err) {
@@ -308,9 +308,9 @@ namespace ts.server {
             if (this.errorTimer) {
                 clearTimeout(this.errorTimer);
             }
-            if (this.settimeoutId) {
-                clearTimeout(this.settimeoutId);
-                this.settimeoutId = undefined;
+            if (this.setTimeoutId) {
+                clearTimeout(this.setTimeoutId);
+                this.setTimeoutId = undefined;
             }
             let index = 0;
             const checkOne = () => {
@@ -319,9 +319,9 @@ namespace ts.server {
                     index++;
                     if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
-                        this.settimeoutId = setTimeout(() => {
+                        this.setTimeoutId = setTimeout(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
-                            this.settimeoutId = undefined;
+                            this.setTimeoutId = undefined;
                             if (checkList.length > index) {
                                 this.errorTimer = setTimeout(checkOne, followMs);
                             }
@@ -1247,9 +1247,7 @@ namespace ts.server {
         }
 
         private logPerfMessurement(start: number[], isAsync: boolean, isBackground: boolean) {
-            const elapsed = this.hrtime(start);
-            const seconds = elapsed[0];
-            const nanoseconds = elapsed[1];
+            const [seconds, nanoseconds] = this.hrtime(start);
             const elapsedMs = ((1e9 * seconds) + nanoseconds) / 1000000.0;
             this.logger.msg(`${isAsync ? "Async " : isBackground ? "Background " : ""}Elapsed time (in milliseconds):  ${elapsedMs.toFixed(4).toString()}`, "Perf");
         }
@@ -1266,7 +1264,7 @@ namespace ts.server {
                 const {response, responseRequired} = this.executeCommand(request);
 
                 if (this.logger.isVerbose()) {
-                    this.logPerfMessurement(start, !responseRequired, false);
+                    this.logPerfMessurement(start, /*isAsync*/ !responseRequired, /*isBackground*/ false);
                 }
                 if (response) {
                     this.output(response, request.command, request.seq);
