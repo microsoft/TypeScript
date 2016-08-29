@@ -11,6 +11,4 @@
 ////}
 ////A.B./*2*/f("");
 
-goTo.marker("2");
-goTo.definition();
-verify.caretAtMarker("1");
+verify.goToDefinition("2", "1");

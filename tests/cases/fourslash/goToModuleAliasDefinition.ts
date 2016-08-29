@@ -7,7 +7,6 @@
 //// /*3*/import n = require('a');
 //// var x = new /*1*/n.Foo();
 
-goTo.marker('1');
-goTo.definition();
 // Won't-fixed: Should go to '2' instead
-verify.caretAtMarker('3');
+verify.goToDefinition("1", "3");
+goTo.marker('1');

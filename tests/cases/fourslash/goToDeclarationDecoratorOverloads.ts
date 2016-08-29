@@ -13,10 +13,6 @@
 ////    @/*useDecSymbol*/dec [s]() {}
 ////}
 
-goTo.marker("useDecString");
-goTo.definition();
-verify.caretAtMarker("defDecString");
-
-goTo.marker("useDecSymbol");
-goTo.definition();
-verify.caretAtMarker("defDecSymbol");
+verify.goToDefinition(
+    "useDecString", "defDecString",
+    "useDecSymbol", "defDecSymbol");
