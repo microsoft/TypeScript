@@ -2872,25 +2872,29 @@
         "category": "Error",
         "code": 7015
     },
-    "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
+    "Property '{0}' implicitly has type 'any', because its set accessor lacks a parameter type annotation.": {
         "category": "Error",
         "code": 7016
     },
-    "Index signature of object type implicitly has an 'any' type.": {
+    "Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.": {
         "category": "Error",
         "code": 7017
     },
-    "Object literal's property '{0}' implicitly has an '{1}' type.": {
+    "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
         "code": 7018
     },
-    "Rest parameter '{0}' implicitly has an 'any[]' type.": {
+    "Object literal's property '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7019
     },
-    "Call signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
+    "Rest parameter '{0}' implicitly has an 'any[]' type.": {
         "category": "Error",
         "code": 7020
+    },
+    "Call signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
+        "category": "Error",
+        "code": 7021
     },
     "'{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
         "category": "Error",
