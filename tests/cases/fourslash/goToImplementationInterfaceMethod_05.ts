@@ -15,7 +15,7 @@
 //// }
 ////
 //// class OtherBar extends SuperBar {
-////     [|hello() {}|]     // This could be considered a false positive because it does not extend Bar. Returned because it shares a common ancestor and is structurally equivalent
+////     hello() {}
 ////     hello2() {}
 ////     hello3() {}
 //// }

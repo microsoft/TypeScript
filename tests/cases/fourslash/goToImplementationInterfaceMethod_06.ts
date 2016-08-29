@@ -28,7 +28,7 @@
 //// };
 ////
 //// class FooLike implements SuperFoo {
-////      [|hello() {}|]            // This case could be considered a false positive. It does not explicitly implement Foo but does implement it structurally and it shares a common ancestor
+////      hello() {}
 ////      someOtherFunction() {}
 //// }
 ////
