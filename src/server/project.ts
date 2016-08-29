@@ -312,6 +312,7 @@ namespace ts.server {
             // - newProgram is different from the old program and structure of the old program was not reused.
             if (!oldProgram || (this.program !== oldProgram && !oldProgram.structureIsReused)) {
                 hasChanges = true;
+                this.projectService.typingsCache.invalidateCachedTypingsForProject(this);
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
                         if (this.program.getSourceFileByPath(f.path)) {
@@ -413,9 +414,6 @@ namespace ts.server {
                     if (hasProperty(lastReportedFileNames, id) && !hasProperty(currentFiles, id)) {
                         removed.push(id);
                     }
-                }
-                if (added.length > 0 || removed.length > 0) {
-                    this.projectService.typingsCache.invalidateCachedTypingsForProject(this);
                 }
                 this.lastReportedFileNames = currentFiles;
 
