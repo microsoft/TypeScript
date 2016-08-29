@@ -21,6 +21,14 @@ type ABC = C | AB;
 var ab: AB;
 var abc: ABC;
 
+declare const x: "foo" | "bar";
+declare const bFoo: B | "foo";
+
+x.nope();
+bFoo.onlyInB;
+x.length; // Ok
+bFoo.length;
+
 ab.onlyInB;
 
 ab.notInC; // Ok
