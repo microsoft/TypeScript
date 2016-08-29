@@ -1,8 +1,7 @@
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(10,5): error TS2322: Type 'undefined[]' is not assignable to type '[any, any, any]'.
   Property '0' is missing in type 'undefined[]'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,5): error TS2322: Type '[string, number, boolean]' is not assignable to type '[boolean, string, number]'.
-  Types of property '0' are incompatible.
-    Type 'string' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error TS2322: Type '[number, number, string, boolean]' is not assignable to type '[number, number]'.
   Types of property 'pop' are incompatible.
     Type '() => string | number | boolean' is not assignable to type '() => number'.
@@ -18,6 +17,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
       Types of parameters 'items' and 'items' are incompatible.
         Type 'Number' is not assignable to type 'string | number'.
           Type 'Number' is not assignable to type 'number'.
+            'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
 
 
 ==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (6 errors) ====
@@ -37,8 +37,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
     var a1: [boolean, string, number] = ["string", 1, true];  // Error
         ~~
 !!! error TS2322: Type '[string, number, boolean]' is not assignable to type '[boolean, string, number]'.
-!!! error TS2322:   Types of property '0' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'string' is not assignable to type 'boolean'.
     
     // The resulting type an array literal expression is determined as follows:
     //     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
@@ -81,4 +80,5 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
 !!! error TS2322:       Types of parameters 'items' and 'items' are incompatible.
 !!! error TS2322:         Type 'Number' is not assignable to type 'string | number'.
 !!! error TS2322:           Type 'Number' is not assignable to type 'number'.
+!!! error TS2322:             'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
     

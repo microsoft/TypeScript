@@ -126,6 +126,7 @@ interface KeyAlgorithm {
 }
 
 interface KeyboardEventInit extends EventModifierInit {
+    code?: string;
     key?: string;
     location?: number;
     repeat?: boolean;
@@ -2288,7 +2289,7 @@ declare var DeviceRotationRate: {
     new(): DeviceRotationRate;
 }
 
-interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent {
+interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent, ParentNode {
     /**
       * Sets or gets the URL for the current document. 
       */
@@ -3351,7 +3352,7 @@ declare var Document: {
     new(): Document;
 }
 
-interface DocumentFragment extends Node, NodeSelector {
+interface DocumentFragment extends Node, NodeSelector, ParentNode {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -3420,7 +3421,7 @@ declare var EXT_texture_filter_anisotropic: {
     readonly TEXTURE_MAX_ANISOTROPY_EXT: number;
 }
 
-interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode {
+interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode, ParentNode {
     readonly classList: DOMTokenList;
     className: string;
     readonly clientHeight: number;
@@ -3675,6 +3676,16 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     getElementsByClassName(classNames: string): NodeListOf<Element>;
     matches(selector: string): boolean;
     closest(selector: string): Element | null;
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions): void;
+    scroll(options?: ScrollToOptions): void;
+    scroll(x: number, y: number): void;
+    scrollTo(options?: ScrollToOptions): void;
+    scrollTo(x: number, y: number): void;
+    scrollBy(options?: ScrollToOptions): void;
+    scrollBy(x: number, y: number): void;
+    insertAdjacentElement(position: string, insertedElement: Element): Element | null;
+    insertAdjacentHTML(where: string, html: string): void;
+    insertAdjacentText(where: string, text: string): void;
     addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -4446,7 +4457,7 @@ interface HTMLCanvasElement extends HTMLElement {
       * @param type The standard MIME type for the image format to return. If you do not specify this parameter, the default value is a PNG format image.
       */
     toDataURL(type?: string, ...args: any[]): string;
-    toBlob(callback: (result: Blob | null) => void, ... arguments: any[]): void;
+    toBlob(callback: (result: Blob | null) => void, type?: string, ...arguments: any[]): void;
 }
 
 declare var HTMLCanvasElement: {
@@ -4621,11 +4632,7 @@ interface HTMLElement extends Element {
     click(): void;
     dragDrop(): boolean;
     focus(): void;
-    insertAdjacentElement(position: string, insertedElement: Element): Element;
-    insertAdjacentHTML(where: string, html: string): void;
-    insertAdjacentText(where: string, text: string): void;
     msGetInputContext(): MSInputMethodContext;
-    scrollIntoView(top?: boolean): void;
     setActive(): void;
     addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -5890,6 +5897,7 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
       */
     type: string;
     import?: Document;
+    integrity: string;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -6178,7 +6186,7 @@ interface HTMLMediaElement extends HTMLElement {
       */
     canPlayType(type: string): string;
     /**
-      * Fires immediately after the client loads the object.
+      * Resets the audio or video object and loads a new media resource.
       */
     load(): void;
     /**
@@ -6751,6 +6759,7 @@ interface HTMLScriptElement extends HTMLElement {
       * Sets or retrieves the MIME type for the associated scripting engine.
       */
     type: string;
+    integrity: string;
 }
 
 declare var HTMLScriptElement: {
@@ -7756,6 +7765,7 @@ interface KeyboardEvent extends UIEvent {
     readonly repeat: boolean;
     readonly shiftKey: boolean;
     readonly which: number;
+    readonly code: string;
     getModifierState(keyArg: string): boolean;
     initKeyboardEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, keyArg: string, locationArg: number, modifiersListArg: string, repeat: boolean, locale: string): void;
     readonly DOM_KEY_LOCATION_JOYSTICK: number;
@@ -9128,6 +9138,7 @@ interface PerformanceTiming {
     readonly responseStart: number;
     readonly unloadEventEnd: number;
     readonly unloadEventStart: number;
+    readonly secureConnectionStart: number;
     toJSON(): any;
 }
 
@@ -11405,8 +11416,8 @@ declare var StereoPannerNode: {
 interface Storage {
     readonly length: number;
     clear(): void;
-    getItem(key: string): string;
-    key(index: number): string;
+    getItem(key: string): string | null;
+    key(index: number): string | null;
     removeItem(key: string): void;
     setItem(key: string, data: string): void;
     [key: string]: any;
@@ -12947,7 +12958,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onunload: (this: this, ev: Event) => any;
     onvolumechange: (this: this, ev: Event) => any;
     onwaiting: (this: this, ev: Event) => any;
-    readonly opener: Window;
+    opener: any;
     orientation: string | number;
     readonly outerHeight: number;
     readonly outerWidth: number;
@@ -13002,6 +13013,9 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
+    scroll(options?: ScrollToOptions): void;
+    scrollTo(options?: ScrollToOptions): void;
+    scrollBy(options?: ScrollToOptions): void;
     addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -14029,6 +14043,20 @@ interface ProgressEventInit extends EventInit {
     total?: number;
 }
 
+interface ScrollOptions {
+    behavior?: ScrollBehavior;
+}
+
+interface ScrollToOptions extends ScrollOptions {
+    left?: number;
+    top?: number;
+}
+
+interface ScrollIntoViewOptions extends ScrollOptions {
+    block?: ScrollLogicalPosition;
+    inline?: ScrollLogicalPosition;
+}
+
 interface ClipboardEventInit extends EventInit {
     data?: string;
     dataType?: string;
@@ -14072,7 +14100,7 @@ interface EcdsaParams extends Algorithm {
 }
 
 interface EcKeyGenParams extends Algorithm {
-    typedCurve: string;
+    namedCurve: string;
 }
 
 interface EcKeyAlgorithm extends KeyAlgorithm {
@@ -14208,6 +14236,13 @@ interface JsonWebKey {
     k?: string;
 }
 
+interface ParentNode {
+    readonly children: HTMLCollection;
+    readonly firstElementChild: Element;
+    readonly lastElementChild: Element;
+    readonly childElementCount: number;
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
@@ -14278,7 +14313,7 @@ declare var location: Location;
 declare var locationbar: BarProp;
 declare var menubar: BarProp;
 declare var msCredentials: MSCredentials;
-declare var name: string;
+declare const name: never;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;
 declare var onabort: (this: Window, ev: UIEvent) => any;
@@ -14372,7 +14407,7 @@ declare var ontouchstart: (ev: TouchEvent) => any;
 declare var onunload: (this: Window, ev: Event) => any;
 declare var onvolumechange: (this: Window, ev: Event) => any;
 declare var onwaiting: (this: Window, ev: Event) => any;
-declare var opener: Window;
+declare var opener: any;
 declare var orientation: string | number;
 declare var outerHeight: number;
 declare var outerWidth: number;
@@ -14425,6 +14460,9 @@ declare function webkitCancelAnimationFrame(handle: number): void;
 declare function webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
+declare function scroll(options?: ScrollToOptions): void;
+declare function scrollTo(options?: ScrollToOptions): void;
+declare function scrollBy(options?: ScrollToOptions): void;
 declare function toString(): string;
 declare function addEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 declare function dispatchEvent(evt: Event): boolean;
@@ -14580,6 +14618,8 @@ type MSOutboundPayload = MSVideoSendPayload | MSAudioSendPayload;
 type RTCIceGatherCandidate = RTCIceCandidate | RTCIceCandidateComplete;
 type RTCTransport = RTCDtlsTransport | RTCSrtpSdesTransport;
 type payloadtype = number;
+type ScrollBehavior = "auto" | "instant" | "smooth";
+type ScrollLogicalPosition = "start" | "center" | "end" | "nearest";
 type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
 type MouseWheelEvent = WheelEvent;
