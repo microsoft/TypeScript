@@ -159,9 +159,9 @@ namespace Utils {
     }
 
     export class MockParseConfigHost extends VirtualFileSystem implements ts.ParseConfigHost {
-        constructor(currentDirectory: string, ignoreCase: boolean, files: ts.Map<string> | string[]) {
+        constructor(currentDirectory: string, ignoreCase: boolean, files: ts.MapLike<string> | string[]) {
             super(currentDirectory, ignoreCase);
-            const fileNames = (files instanceof Array) ? files : ts.getKeys(files);
+            const fileNames = (files instanceof Array) ? files : ts.getOwnKeys(files);
             for (const file of fileNames) {
                 this.addFile(file, (files as any)[file]);
             }

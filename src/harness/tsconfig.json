@@ -90,6 +90,7 @@
         "./unittests/convertCompilerOptionsFromJson.ts",
         "./unittests/convertTypingOptionsFromJson.ts",
         "./unittests/tsserverProjectSystem.ts",
-        "./unittests/matchFiles.ts"
+        "./unittests/matchFiles.ts",
+        "./unittests/initializeTSConfig.ts"
     ]
 }

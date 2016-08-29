@@ -3,6 +3,7 @@ tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(
     Type '() => Object' is not assignable to type '() => boolean'.
       Type 'Object' is not assignable to type 'boolean'.
 tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(19,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
+  'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
 tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(20,1): error TS2322: Type 'NotBoolean' is not assignable to type 'boolean'.
 
 
@@ -33,6 +34,7 @@ tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(
     x = a; // expected error
     ~
 !!! error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
+!!! error TS2322:   'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
     x = b; // expected error
     ~
 !!! error TS2322: Type 'NotBoolean' is not assignable to type 'boolean'.

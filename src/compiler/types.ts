@@ -1,7 +1,11 @@
-
 namespace ts {
-    export interface Map<T> {
+
+    export interface MapLike<T> {
         [index: string]: T;
+    }
+
+    export interface Map<T> extends MapLike<T> {
+        __mapBrand: any;
     }
 
     // branded string type used to store absolute, normalized and canonicalized paths
@@ -346,6 +350,10 @@ namespace ts {
         JSDocTypedefTag,
         JSDocPropertyTag,
         JSDocTypeLiteral,
+        JSDocLiteralType,
+        JSDocNullKeyword,
+        JSDocUndefinedKeyword,
+        JSDocNeverKeyword,
 
         // Synthesized list
         SyntaxList,
@@ -376,9 +384,9 @@ namespace ts {
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocTypeLiteral,
+        LastJSDocNode = JSDocLiteralType,
         FirstJSDocTagNode = JSDocComment,
-        LastJSDocTagNode = JSDocTypeLiteral
+        LastJSDocTagNode = JSDocNeverKeyword
     }
 
     export const enum NodeFlags {
@@ -982,13 +990,19 @@ namespace ts {
         multiLine?: boolean;
     }
 
+    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
+    export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
+
     // @kind(SyntaxKind.PropertyAccessExpression)
     export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         name: Identifier;
     }
-
-    export type IdentifierOrPropertyAccess = Identifier | PropertyAccessExpression;
+    /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
+    export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
+        _propertyAccessExpressionLikeQualifiedNameBrand?: any;
+        expression: EntityNameExpression;
+    }
 
     // @kind(SyntaxKind.ElementAccessExpression)
     export interface ElementAccessExpression extends MemberExpression {
@@ -1492,6 +1506,10 @@ namespace ts {
         type: JSDocType;
     }
 
+    export interface JSDocLiteralType extends JSDocType {
+        literal: LiteralTypeNode;
+    }
+
     export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
     // @kind(SyntaxKind.JSDocRecordMember)
@@ -1604,6 +1622,16 @@ namespace ts {
         clauseStart: number;   // Start index of case/default clause range
         clauseEnd: number;     // End index of case/default clause range
         antecedent: FlowNode;
+    }
+
+    export type FlowType = Type | IncompleteType;
+
+    // Incomplete types occur during control flow analysis of loops. An IncompleteType
+    // is distinguished from a regular type by a flags value of zero. Incomplete type
+    // objects are internal to the getFlowTypeOfRefecence function and never escape it.
+    export interface IncompleteType {
+        flags: TypeFlags;  // No flags set
+        type: Type;        // The type marked incomplete
     }
 
     export interface AmdDependency {
@@ -2023,7 +2051,7 @@ namespace ts {
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult;
-        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
+        isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
@@ -2032,7 +2060,7 @@ namespace ts {
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
-        getTypeReferenceDirectivesForEntityName(name: EntityName | PropertyAccessExpression): string[];
+        getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
     }
 
@@ -2139,6 +2167,8 @@ namespace ts {
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
+        /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
+        /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
     }
 
     /* @internal */
@@ -2152,6 +2182,8 @@ namespace ts {
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
+        hasCommonType?: boolean;            // True if constituents of synthetic property all have same type
+        isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
@@ -2162,9 +2194,7 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
-    export interface SymbolTable {
-        [index: string]: Symbol;
-    }
+    export type SymbolTable = Map<Symbol>;
 
     /** Represents a "prefix*suffix" pattern. */
     /* @internal */
@@ -2191,23 +2221,24 @@ namespace ts {
         AsyncMethodWithSuper                = 0x00000800,  // An async method that reads a value from a member of 'super'.
         AsyncMethodWithSuperBinding         = 0x00001000,  // An async method that assigns a value to a member of 'super'.
         CaptureArguments                    = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
-        EnumValuesComputed                  = 0x00004000, // Values for enum members have been computed, and any errors have been reported for them.
-        LexicalModuleMergesWithClass        = 0x00008000, // Instantiated lexical module declaration is merged with a previous class declaration.
-        LoopWithCapturedBlockScopedBinding  = 0x00010000, // Loop that contains block scoped variable captured in closure
-        CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
-        BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
-        ClassWithBodyScopedClassBinding     = 0x00080000, // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding              = 0x00100000, // Binding to a decorated class inside of the class's body.
-        NeedsLoopOutParameter               = 0x00200000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        EnumValuesComputed                  = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
+        LexicalModuleMergesWithClass        = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithCapturedBlockScopedBinding  = 0x00010000,  // Loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding          = 0x00020000,  // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop            = 0x00040000,  // Block-scoped binding with declaration nested inside iteration statement
+        ClassWithBodyScopedClassBinding     = 0x00080000,  // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding              = 0x00100000,  // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter               = 0x00200000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        AssignmentsMarked                   = 0x00400000,  // Parameter assignments have been marked
     }
 
     /* @internal */
     export interface NodeLinks {
+        flags?: NodeCheckFlags;           // Set of flags specific to Node
         resolvedType?: Type;              // Cached type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
-        flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
@@ -2237,7 +2268,7 @@ namespace ts {
         Class                   = 1 << 15,  // Class
         Interface               = 1 << 16,  // Interface
         Reference               = 1 << 17,  // Generic type reference
-        Tuple                   = 1 << 18,  // Tuple
+        Tuple                   = 1 << 18,  // Synthesized generic tuple type
         Union                   = 1 << 19,  // Union (T | U)
         Intersection            = 1 << 20,  // Intersection (T & U)
         Anonymous               = 1 << 21,  // Anonymous
@@ -2357,10 +2388,6 @@ namespace ts {
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
         instantiations: Map<TypeReference>;   // Generic instantiation cache
-    }
-
-    export interface TupleType extends ObjectType {
-        elementTypes: Type[];  // Element types
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -2547,7 +2574,7 @@ namespace ts {
     }
 
     export type RootPaths = string[];
-    export type PathSubstitutions = Map<string[]>;
+    export type PathSubstitutions = MapLike<string[]>;
     export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
@@ -2707,7 +2734,7 @@ namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
+        wildcardDirectories?: MapLike<WatchDirectoryFlags>;
     }
 
     export const enum WatchDirectoryFlags {
@@ -2717,7 +2744,7 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
-        wildcardDirectories: Map<WatchDirectoryFlags>;
+        wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
 
     /* @internal */
@@ -2739,7 +2766,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<number | string>;             // an object literal mapping named values to actual values
+        type: Map<number | string>;  // an object literal mapping named values to actual values
     }
 
     /* @internal */
@@ -2902,6 +2929,7 @@ namespace ts {
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
+        getDirectories?(path: string): string[];
     }
 
     export interface ResolvedModule {

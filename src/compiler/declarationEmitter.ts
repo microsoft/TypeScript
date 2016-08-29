@@ -157,9 +157,7 @@ namespace ts {
 
         if (usedTypeDirectiveReferences) {
             for (const directive in usedTypeDirectiveReferences) {
-                if (hasProperty(usedTypeDirectiveReferences, directive)) {
-                    referencesOutput += `/// <reference types="${directive}" />${newLine}`;
-                }
+                referencesOutput += `/// <reference types="${directive}" />${newLine}`;
             }
         }
 
@@ -269,10 +267,10 @@ namespace ts {
             }
 
             if (!usedTypeDirectiveReferences) {
-                usedTypeDirectiveReferences = {};
+                usedTypeDirectiveReferences = createMap<string>();
             }
             for (const directive of typeReferenceDirectives) {
-                if (!hasProperty(usedTypeDirectiveReferences, directive)) {
+                if (!(directive in usedTypeDirectiveReferences)) {
                     usedTypeDirectiveReferences[directive] = directive;
                 }
             }
@@ -441,7 +439,7 @@ namespace ts {
                 }
             }
 
-            function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
+            function emitEntityName(entityName: EntityNameOrEntityNameExpression) {
                 const visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
                     entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
@@ -452,9 +450,9 @@ namespace ts {
             }
 
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
-                if (isSupportedExpressionWithTypeArguments(node)) {
+                if (isEntityNameExpression(node.expression)) {
                     Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
-                    emitEntityName(<Identifier | PropertyAccessExpression>node.expression);
+                    emitEntityName(node.expression);
                     if (node.typeArguments) {
                         write("<");
                         emitCommaList(node.typeArguments, emitType);
@@ -537,14 +535,14 @@ namespace ts {
         // do not need to keep track of created temp names.
         function getExportDefaultTempVariableName(): string {
             const baseName = "_default";
-            if (!hasProperty(currentIdentifiers, baseName)) {
+            if (!(baseName in currentIdentifiers)) {
                 return baseName;
             }
             let count = 0;
             while (true) {
                 count++;
                 const name = baseName + "_" + count;
-                if (!hasProperty(currentIdentifiers, name)) {
+                if (!(name in currentIdentifiers)) {
                     return name;
                 }
             }
@@ -1019,7 +1017,7 @@ namespace ts {
             }
 
             function emitTypeOfTypeReference(node: ExpressionWithTypeArguments) {
-                if (isSupportedExpressionWithTypeArguments(node)) {
+                if (isEntityNameExpression(node.expression)) {
                     emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
                 }
                 else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
@@ -1134,8 +1132,10 @@ namespace ts {
                     // it if it's not a well known symbol. In that case, the text of the name will be exactly
                     // what we want, namely the name expression enclosed in brackets.
                     writeTextOfNode(currentText, node.name);
-                    // If optional property emit ?
-                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature || node.kind === SyntaxKind.Parameter) && hasQuestionToken(node)) {
+                    // If optional property emit ? but in the case of parameterProperty declaration with "?" indicating optional parameter for the constructor
+                    // we don't want to emit property declaration with "?"
+                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
+                        (node.kind === SyntaxKind.Parameter && !isParameterPropertyDeclaration(node))) && hasQuestionToken(node)) {
                         write("?");
                     }
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
