@@ -20,10 +20,10 @@ namespace ts.server {
         }
     }
 
-    const jsOrDts = [".js", ".d.ts"];
-
     export function allRootFilesAreJsOrDts(project: Project): boolean {
-        return project.getRootScriptInfos().every(f => fileExtensionIsAny(f.fileName, jsOrDts));
+        return project.getRootScriptInfos().every(f => {
+            return f.scriptKind === ScriptKind.JS || f.scriptKind == ScriptKind.JSX || fileExtensionIs(f.fileName, ".d.ts");
+        });
     }
 
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {

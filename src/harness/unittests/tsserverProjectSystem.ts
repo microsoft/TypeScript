@@ -2183,7 +2183,7 @@ namespace ts {
                 for (let i = 0; i < errors.length; i++) {
                     const actualMessage = flattenDiagnosticMessageText(errors[i].messageText, "\n");
                     const expectedMessage = expectedErrors[i];
-                    assert.equal(actualMessage, expectedMessage, "error message does not match");
+                    assert.isTrue(actualMessage.indexOf(expectedMessage) === 0, `error message does not match, expected ${actualMessage} to start with ${expectedMessage}`);
                 }
             }
         }
@@ -2297,7 +2297,7 @@ namespace ts {
                     "')' expected.",
                     "Declaration or statement expected.",
                     "Declaration or statement expected.",
-                    "Failed to parse file '/a/b/tsconfig.json': Unexpected token ) in JSON at position 7."
+                    "Failed to parse file '/a/b/tsconfig.json'"
                 ]);
             }
             // fix config and trigger watcher
@@ -2349,7 +2349,7 @@ namespace ts {
                     "')' expected.",
                     "Declaration or statement expected.",
                     "Declaration or statement expected.",
-                    "Failed to parse file '/a/b/tsconfig.json': Unexpected token ) in JSON at position 7."
+                    "Failed to parse file '/a/b/tsconfig.json'"
                 ]);
             }
         });
@@ -2373,6 +2373,29 @@ namespace ts {
 
             const project = projectService.findProject(corruptedConfig.path);
             checkProjectRootFiles(project, [file1.path]);
+        });
+    });
+
+    describe("autoDiscovery", () => {
+        it("does not depend on extension", () => {
+            const file1 = {
+                path: "/a/b/app.html",
+                content: ""
+            };
+            const file2 = {
+                path: "/a/b/app.d.ts",
+                content: ""
+            };
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                projectFileName: "/a/b/proj.csproj",
+                rootFiles: [toExternalFile(file2.path), { fileName: file1.path, hasMixedContent: true, scriptKind: ScriptKind.JS }],
+                options: {}
+            });
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            const typingOptions = projectService.externalProjects[0].getTypingOptions();
+            assert.isTrue(typingOptions.enableAutoDiscovery, "Typing autodiscovery should be enabled");
         });
     });
 }
