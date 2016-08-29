@@ -1,4 +1,4 @@
-//// [unionPropertyExistance.ts]
+//// [unionPropertyExistence.ts]
 interface A {
     inAll: string;
     notInB: string;
@@ -32,7 +32,7 @@ abc.notInB;
 abc.inAll; // Ok
 abc.inNone;
 
-//// [unionPropertyExistance.js]
+//// [unionPropertyExistence.js]
 var ab;
 var abc;
 ab.onlyInB;

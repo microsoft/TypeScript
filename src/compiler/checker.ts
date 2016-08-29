@@ -10773,7 +10773,7 @@ namespace ts {
             const prop = getPropertyOfType(apparentType, right.text);
             if (!prop) {
                 if (right.text && !checkAndReportErrorForExtendingInterface(node)) {
-                    reportNonexistantProperty(right, type.flags & TypeFlags.ThisType ? apparentType : type);
+                    reportNonexistentProperty(right, type.flags & TypeFlags.ThisType ? apparentType : type);
                 }
                 return unknownType;
             }
@@ -10811,9 +10811,9 @@ namespace ts {
             }
             return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
 
-            function reportNonexistantProperty(propNode: Identifier, containingType: Type) {
+            function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
                 let errorInfo: DiagnosticMessageChain;
-                if (containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Enum)) {
+                if (containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
                     for (const subtype of (containingType as UnionType).types) {
                         if (!getPropertyOfType(subtype, propNode.text)) {
                             errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(subtype));
