@@ -23,10 +23,15 @@ namespace ts {
             public getCodeRefactors(context: CodeFixContext): CodeAction[] {
                 let refactors: CodeAction[] = [];
                 const token = getTokenAtRange(context.sourceFile, context.span.start, context.span.length + context.span.start);
+
+                if (!token) {
+                    return refactors;
+                }
+
                 const actions = codeActions[token.kind];
 
                 if (!actions || actions.length == 0) {
-                    throw new Error("No refactors found.");
+                    return refactors;
                 }
 
                 actions.forEach(a => {

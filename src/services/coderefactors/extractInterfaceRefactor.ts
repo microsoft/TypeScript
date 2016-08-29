@@ -3,8 +3,13 @@ namespace ts.codeRefactor {
     registerCodeRefactor({
         name: "Extract Interface from Property",
         nodeLabel: ts.SyntaxKind.PropertyDeclaration,
-        getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
+        getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {            
             let propertyDeclaration = <PropertyDeclaration>token;
+
+            if (propertyDeclaration.type) {
+                return null;
+            }
+
             let textChanges: TextChange[] = [];
             if (propertyDeclaration.initializer) {
                 const interfaceName: string = "newInterface_" + propertyDeclaration.name.getText();

@@ -52,7 +52,7 @@ namespace ts.codeRefactor {
                             start: context.span.start,
                             length: 0
                         },
-                        newText: docCommentTemplate.newText
+                        newText: docCommentTemplate.newText + context.newLineCharacter
                     }]
                 }]
             }];

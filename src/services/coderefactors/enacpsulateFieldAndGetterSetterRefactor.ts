@@ -102,7 +102,7 @@ namespace ts.codeRefactor {
 
     function getGetterSetterText(propertyDeclaration: PropertyDeclaration, identifierText: string, context: CodeFixContext): string {
         const version = context.sourceFile.languageVersion;
-        let getterSetterText: string = getSetterBeginning(version, identifierText);
+        let getterSetterText: string = context.newLineCharacter + getSetterBeginning(version, identifierText);
         getterSetterText += "(new" + identifierText;
         getterSetterText += (propertyDeclaration.type) ? ": " + propertyDeclaration.type.getText() : "";
         getterSetterText += ") {" + context.newLineCharacter;

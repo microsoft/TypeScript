@@ -38,14 +38,14 @@ namespace ts {
                 const fixes = codeFixes[context.errorCode];
                 let allActions: CodeAction[] = [];
 
-                Debug.assert(fixes && fixes.length > 0, "No fixes found for error: '${errorCode}'.");
-
-                forEach(fixes, f => {
-                    const actions = f.getCodeActions(context);
-                    if (actions && actions.length > 0) {
-                        allActions = allActions.concat(actions);
-                    }
-                });
+                if (fixes && fixes.length > 0) {
+                    forEach(fixes, f => {
+                        const actions = f.getCodeActions(context);
+                        if (actions && actions.length > 0) {
+                            allActions = allActions.concat(actions);
+                        }
+                    });
+                }
 
                 return allActions;
             }
