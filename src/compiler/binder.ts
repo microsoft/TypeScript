@@ -617,8 +617,9 @@ namespace ts {
             }
             if (expr.kind === SyntaxKind.ElementAccessExpression) {
                 const access = expr as ElementAccessExpression;
-                const isArgumentLiteral = access.argumentExpression.kind === SyntaxKind.StringLiteral ||
-                    access.argumentExpression.kind === SyntaxKind.NumericLiteral;
+                const isArgumentLiteral = access.argumentExpression &&
+                    (access.argumentExpression.kind === SyntaxKind.StringLiteral ||
+                     access.argumentExpression.kind === SyntaxKind.NumericLiteral);
                 return isArgumentLiteral && isNarrowableReference(access.expression);
             }
             return false;

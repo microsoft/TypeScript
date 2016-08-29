@@ -7848,11 +7848,25 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                     return target.kind === SyntaxKind.ThisKeyword;
                 case SyntaxKind.PropertyAccessExpression:
-                    return target.kind === SyntaxKind.PropertyAccessExpression &&
-                        (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
-                        isMatchingReference((<PropertyAccessExpression>source).expression, (<PropertyAccessExpression>target).expression);
+                case SyntaxKind.ElementAccessExpression:
+                    if (target.kind !== SyntaxKind.PropertyAccessExpression && target.kind !== SyntaxKind.ElementAccessExpression) {
+                        return false;
+                    }
+                    const sourceAccess = source as PropertyAccessExpression | ElementAccessExpression;
+                    const targetAccess = target as PropertyAccessExpression | ElementAccessExpression;
+                    return isMatchingReference(sourceAccess.expression, targetAccess.expression) &&
+                        getAccessedPropertyName(sourceAccess) === getAccessedPropertyName(targetAccess);
+                }
+                return false;
+        }
+
+        function getAccessedPropertyName(access: PropertyAccessExpression | ElementAccessExpression, type?: Type | undefined): string {
+            if (!type) {
+                type = getTypeOfNode(access.expression);
             }
-            return false;
+            return access.kind === SyntaxKind.PropertyAccessExpression ?
+                (access as PropertyAccessExpression).name.text :
+                getPropertyNameForIndexedAccess((access as ElementAccessExpression).argumentExpression, type);
         }
 
         function containsMatchingReference(source: Node, target: Node) {
@@ -8456,17 +8470,13 @@ namespace ts {
                     expr.kind !== SyntaxKind.PropertyAccessExpression && expr.kind !== SyntaxKind.ElementAccessExpression) {
                     return false;
                 }
-                const name = expr.kind === SyntaxKind.PropertyAccessExpression ?
-                    (expr as PropertyAccessExpression).name.text :
-                    getPropertyNameForIndexedAccess((expr as ElementAccessExpression).argumentExpression, declaredType);
-                return isMatchingReference(reference, (expr as PropertyAccessExpression | ElementAccessExpression).expression) &&
-                    isDiscriminantProperty(declaredType, name);
+                const access = expr as PropertyAccessExpression | ElementAccessExpression;
+                const name = getAccessedPropertyName(access, declaredType);
+                return isMatchingReference(reference, access.expression) && isDiscriminantProperty(declaredType, name);
             }
 
             function narrowTypeByDiscriminant(type: Type, access: PropertyAccessExpression | ElementAccessExpression, narrowType: (t: Type) => Type): Type {
-                const propName = access.kind === SyntaxKind.PropertyAccessExpression ?
-                    (access as PropertyAccessExpression).name.text :
-                    getPropertyNameForIndexedAccess((access as ElementAccessExpression).argumentExpression, type);
+                const propName = getAccessedPropertyName(access, type);
                 const propType = getTypeOfPropertyOfType(type, propName);
                 const narrowedPropType = propType && narrowType(propType);
                 return propType === narrowedPropType ? type : filterType(type, t => isTypeComparableTo(getTypeOfPropertyOfType(t, propName), narrowedPropType));
@@ -10933,7 +10943,7 @@ namespace ts {
                     const prop = getPropertyOfType(objectType, name);
                     if (prop) {
                         getNodeLinks(node).resolvedSymbol = prop;
-                        return getTypeOfSymbol(prop);
+                        return getFlowTypeOfReference(node, getTypeOfSymbol(prop), /*assumeInitialized*/ true, /*flowContainer*/ undefined);
                     }
                     else if (isConstEnum) {
                         error(node.argumentExpression, Diagnostics.Property_0_does_not_exist_on_const_enum_1, name, symbolToString(objectType.symbol));
