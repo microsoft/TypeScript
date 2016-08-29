@@ -164,18 +164,24 @@ namespace ts.server {
             protected readonly canUseEvents: boolean) {
 
             const eventHandler: ProjectServiceEventHandler = canUseEvents
-                ? (eventName, project, fileName) => this.handleEvent(eventName, project, fileName)
+                ? event => this.handleEvent(event)
                 : undefined;
 
             this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler);
             this.gcTimer = new GcTimer(host, /*delay*/ 15000, logger);
         }
 
-        private handleEvent(eventName: string, project: Project, fileName: NormalizedPath) {
-            if (eventName == "context") {
-                this.logger.info("got context event, updating diagnostics for" + fileName);
-                this.updateErrorCheck([{ fileName, project }], this.changeSeq,
-                    (n) => n === this.changeSeq, 100);
+        private handleEvent(event: ProjectServiceEvent) {
+            switch (event.eventName) {
+                case "context":
+                    const { project, fileName } = event.data;
+                    this.projectService.logger.info(`got context event, updating diagnostics for ${fileName}`);
+                    this.updateErrorCheck([{ fileName, project }], this.changeSeq,
+                        (n) => n === this.changeSeq, 100);
+                    break;
+                case "configFileDiag":
+                    const { triggerFile, configFileName, diagnostics } = event.data;
+                    this.configFileDiagnosticEvent(triggerFile, configFileName, diagnostics);
             }
         }
 

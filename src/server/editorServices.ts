@@ -11,16 +11,19 @@
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
+    export type ProjectServiceEvent =
+        { eventName: "context", data: { project: Project, fileName: NormalizedPath } } | { eventName: "configFileDiag", data: { triggerFile?: string, configFileName: string, diagnostics: Diagnostic[] } }
+
+    export interface ProjectServiceEventHandler {
+        (event: ProjectServiceEvent): void;
+    }
+
     /**
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
     export function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
         const result = projects.reduce<T[]>((previous, current) => concatenate(previous, action(current)), []).sort(comparer);
         return projects.length > 1 ? deduplicate(result, areEqual) : result;
-    }
-
-    export interface ProjectServiceEventHandler {
-        (eventName: string, project: Project, fileName: NormalizedPath): void;
     }
 
     export interface HostConfiguration {
@@ -349,7 +352,7 @@ namespace ts.server {
                 }
 
                 for (const openFile of this.openFiles) {
-                    this.eventHandler("context", openFile.getDefaultProject(), openFile.fileName);
+                    this.eventHandler({ eventName: "context", data: { project: openFile.getDefaultProject(), fileName: openFile.fileName } });
                 }
             }
 
@@ -377,7 +380,8 @@ namespace ts.server {
         }
 
         private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject) {
-            const { projectOptions } = this.convertConfigFileContentToProjectOptions(project.configFileName);
+            const { projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.configFileName);
+            this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
@@ -410,6 +414,9 @@ namespace ts.server {
                 this.logger.info(`${fileName} is not tsconfig.json`);
                 return;
             }
+
+            const { configFileErrors } = this.convertConfigFileContentToProjectOptions(fileName);
+            this.reportConfigFileDiagnostics(fileName, configFileErrors);
 
             this.logger.info(`Detected newly added tsconfig file: ${fileName}`);
             this.reloadProjects();
@@ -658,38 +665,46 @@ namespace ts.server {
         private convertConfigFileContentToProjectOptions(configFilename: string): ConfigFileConversionResult {
             configFilename = normalizePath(configFilename);
 
-            const configObj = parseConfigFileTextToJson(configFilename, this.host.readFile(configFilename));
-            if (configObj.error) {
-                return { success: false, configFileErrors: [configObj.error] };
+            const configFileContent = this.host.readFile(configFilename);
+            let errors: Diagnostic[];
+
+            const result = parseConfigFileTextToJson(configFilename, configFileContent);
+            let config = result.config;
+
+            if (result.error) {
+                // try to reparse config file
+                const { configJsonObject: sanitizedConfig, diagnostics } = sanitizeConfigFile(configFilename, configFileContent);
+                config = sanitizedConfig;
+                errors = diagnostics.length ? diagnostics : [result.error];
             }
 
             const parsedCommandLine = parseJsonConfigFileContent(
-                configObj.config,
+                config,
                 this.host,
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},
                 configFilename);
 
-            Debug.assert(!!parsedCommandLine.fileNames);
-
-            if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
-                return { success: false, configFileErrors: parsedCommandLine.errors };
+            if (parsedCommandLine.errors.length) {
+                errors = concatenate(errors, parsedCommandLine.errors);
             }
 
+            Debug.assert(!!parsedCommandLine.fileNames);
+
             if (parsedCommandLine.fileNames.length === 0) {
-                const error = createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename);
-                return { success: false, configFileErrors: [error] };
+                errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
+                return { success: false, configFileErrors: errors };
             }
 
             const projectOptions: ProjectOptions = {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
-                configHasFilesProperty: configObj.config["files"] !== undefined,
+                configHasFilesProperty: config["files"] !== undefined,
                 wildcardDirectories: createMap(parsedCommandLine.wildcardDirectories),
                 typingOptions: parsedCommandLine.typingOptions,
                 compileOnSave: parsedCommandLine.compileOnSave
             };
-            return { success: true, projectOptions };
+            return { success: true, projectOptions, configFileErrors: errors };
         }
 
         private exceededTotalSizeLimitForNonTsFiles<T>(options: CompilerOptions, fileNames: T[], propertyReader: FilePropertyReader<T>) {
@@ -719,12 +734,21 @@ namespace ts.server {
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(options, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave);
 
-            this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typingOptions);
+            this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typingOptions, /*configFileErrors*/ undefined);
             this.externalProjects.push(project);
             return project;
         }
 
-        private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, clientFileName?: string) {
+        private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile?: string) {
+            if (diagnostics && diagnostics.length > 0) {
+                this.eventHandler({
+                    eventName: "configFileDiag",
+                    data: { configFileName, diagnostics, triggerFile }
+                });
+            }
+        }
+
+        private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], clientFileName?: string) {
             const sizeLimitExceeded = this.exceededTotalSizeLimitForNonTsFiles(projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             const project = new ConfiguredProject(
                 configFileName,
@@ -736,7 +760,7 @@ namespace ts.server {
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave);
 
-            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typingOptions);
+            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typingOptions, configFileErrors);
 
             project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
             if (!sizeLimitExceeded) {
@@ -754,7 +778,7 @@ namespace ts.server {
             }
         }
 
-        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typingOptions: TypingOptions): void {
+        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typingOptions: TypingOptions, configFileErrors: Diagnostic[]): void {
             let errors: Diagnostic[];
             for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
@@ -768,21 +792,22 @@ namespace ts.server {
                     (errors || (errors = [])).push(createFileNotFoundDiagnostic(rootFilename));
                 }
             }
-            project.setProjectErrors(errors);
+            project.setProjectErrors(concatenate(configFileErrors, errors));
             project.setTypingOptions(typingOptions);
             project.updateGraph();
         }
 
         private openConfigFile(configFileName: NormalizedPath, clientFileName?: string): OpenConfigFileResult {
             const conversionResult = this.convertConfigFileContentToProjectOptions(configFileName);
-            if (!conversionResult.success) {
-                // open project with no files and set errors on the project
-                const project = this.createAndAddConfiguredProject(configFileName, { files: [], compilerOptions: {} }, clientFileName);
-                project.setProjectErrors(conversionResult.configFileErrors);
-                return { success: false, errors: conversionResult.configFileErrors };
-            }
-            const project = this.createAndAddConfiguredProject(configFileName, conversionResult.projectOptions, clientFileName);
-            return { success: true, project, errors: project.getProjectErrors() };
+            const projectOptions = conversionResult.success
+                ? conversionResult.projectOptions
+                : { files: [], compilerOptions: {} };
+            const project = this.createAndAddConfiguredProject(configFileName, projectOptions, conversionResult.configFileErrors, clientFileName);
+            return {
+                success: conversionResult.success,
+                project,
+                errors: project.getProjectErrors()
+            };
         }
 
         private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypingOptions: TypingOptions, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
