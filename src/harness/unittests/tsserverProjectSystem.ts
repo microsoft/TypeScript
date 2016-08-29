@@ -1562,4 +1562,27 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [file1.path]);
         });
     });
+
+    describe("autoDiscovery", () => {
+        it("does not depend on extension", () => {
+            const file1 = {
+                path: "/a/b/app.html",
+                content: ""
+            };
+            const file2 = {
+                path: "/a/b/app.d.ts",
+                content: ""
+            };
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                projectFileName: "/a/b/proj.csproj",
+                rootFiles: [toExternalFile(file2.path), { fileName: file1.path, hasMixedContent: true, scriptKind: ScriptKind.JS }],
+                options: {}
+            });
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            const typingOptions = projectService.externalProjects[0].getTypingOptions();
+            assert.isTrue(typingOptions.enableAutoDiscovery, "Typing autodiscovery should be enabled");
+        });
+    });
 }
