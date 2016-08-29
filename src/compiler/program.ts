@@ -4,7 +4,8 @@
 
 namespace ts {
     /** The version of the TypeScript compiler release */
-    export const version = "2.1.0";
+
+    export const version = "2.0.2";
 
     const emptyArray: any[] = [];
 
@@ -465,7 +466,7 @@ namespace ts {
         // - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
         // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
         // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
-        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 2;
+        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 0;
         let currentNodeModulesDepth = 0;
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track

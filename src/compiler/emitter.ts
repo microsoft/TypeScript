@@ -1817,6 +1817,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 else if (node.parent.kind === SyntaxKind.ConditionalExpression && (<ConditionalExpression>node.parent).condition === node) {
                     return true;
                 }
+                else if (node.parent.kind === SyntaxKind.PrefixUnaryExpression || node.parent.kind === SyntaxKind.DeleteExpression ||
+                    node.parent.kind === SyntaxKind.TypeOfExpression || node.parent.kind === SyntaxKind.VoidExpression) {
+                    return true;
+                }
 
                 return false;
             }

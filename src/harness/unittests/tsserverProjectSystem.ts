@@ -832,6 +832,23 @@ namespace ts {
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 0);
         });
+        it("should tolerate config file errors and still try to build a project", () => {
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6",
+                        "allowAnything": true
+                    },
+                    "someOtherProperty": {}
+                }`
+            };
+            const host = createServerHost([commonFile1, commonFile2, libFile, configFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(commonFile1.path);
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkProjectRootFiles(projectService.configuredProjects[0], [commonFile1.path, commonFile2.path]);
+        });
 
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
             const file1 = {
@@ -2273,10 +2290,15 @@ namespace ts {
 
             projectService.openClientFile(file1.path);
             {
-                projectService.checkNumberOfProjects({ inferredProjects: 1, configuredProjects: 1 });
+                projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, [`Failed to parse file \'/a/b/tsconfig.json\': Unexpected token : in JSON at position 7.`]);
+                checkProjectErrors(configuredProject,  [
+                    "')' expected.",
+                    "Declaration or statement expected.",
+                    "Declaration or statement expected.",
+                    "Failed to parse file '/a/b/tsconfig.json': Unexpected token ) in JSON at position 7."
+                ]);
             }
             // fix config and trigger watcher
             host.reloadFS([file1, file2, correctConfig]);
@@ -2316,14 +2338,19 @@ namespace ts {
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
             }
-            // fix config and trigger watcher
+            // break config and trigger watcher
             host.reloadFS([file1, file2, corruptedConfig]);
             host.triggerFileWatcherCallback(corruptedConfig.path, /*false*/);
             {
-                projectService.checkNumberOfProjects({ inferredProjects: 1, configuredProjects: 1 });
+                projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, [`Failed to parse file \'/a/b/tsconfig.json\': Unexpected token : in JSON at position 7.`]);
+                checkProjectErrors(configuredProject, [
+                    "')' expected.",
+                    "Declaration or statement expected.",
+                    "Declaration or statement expected.",
+                    "Failed to parse file '/a/b/tsconfig.json': Unexpected token ) in JSON at position 7."
+                ]);
             }
         });
     });
@@ -2342,23 +2369,10 @@ namespace ts {
             const projectService = createProjectService(host);
 
             projectService.openClientFile(file1.path);
-            projectService.checkNumberOfProjects({ inferredProjects: 1, configuredProjects: 1 });
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
 
             const project = projectService.findProject(corruptedConfig.path);
-            let expectedMessage: string;
-            try {
-                server.Errors.ThrowProjectDoesNotContainDocument(file1.path, project);
-                assert(false, "should not get there");
-            }
-            catch (e) {
-                expectedMessage = (<Error>e).message;
-            }
-            try {
-                project.getScriptInfo(file1.path);
-            }
-            catch (e) {
-                assert.equal((<Error>e).message, expectedMessage, "Unexpected error");
-            }
+            checkProjectRootFiles(project, [file1.path]);
         });
     });
 }

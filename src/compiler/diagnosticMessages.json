@@ -1955,6 +1955,10 @@
         "category": "Error",
         "code": 2691
     },
+    "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
+        "category": "Error",
+        "code": 2692
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
