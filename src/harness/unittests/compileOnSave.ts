@@ -429,7 +429,7 @@ namespace ts.projectSystem {
                     path: "/a/b/referenceFile1.ts",
                     content: `
                     /// <reference path="./moduleFile1.ts" />
-                    var x = Foo();`
+                    export var x = Foo();`
                 };
                 const host = createServerHost([moduleFile1, referenceFile1, configFile]);
                 const session = createSession(host);
@@ -444,6 +444,23 @@ namespace ts.projectSystem {
                 ]);
                 const requestForMissingFile = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, requestForMissingFile, []);
+            });
+
+            it("should detect non-existing code file", () => {
+                const referenceFile1: FileOrFolder = {
+                    path: "/a/b/referenceFile1.ts",
+                    content: `
+                    /// <reference path="./moduleFile2.ts" />
+                    export var x = Foo();`
+                };
+                const host = createServerHost([referenceFile1, configFile]);
+                const session = createSession(host);
+
+                openFilesForSession([referenceFile1], session);
+                const request = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
+                sendAffectedFileRequestAndCheckResult(session, request, [
+                    { projectFileName: configFile.path, files: [referenceFile1] }
+                ]);
             });
         });
     });
