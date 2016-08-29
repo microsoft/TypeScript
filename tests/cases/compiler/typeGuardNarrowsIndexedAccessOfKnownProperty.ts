@@ -1,26 +1,45 @@
 interface Square {
-    kind: "square";
+    sub: {kind: 'square'; };
+    /*'0': {
+        sub: {
+            under: {
+                kind: "square"
+            }
+        }
+    };*/
     size: number;
 }
 
 interface Rectangle {
-    kind: "rectangle";
+    /*'0': {
+        sub: {
+            under: {
+                kind: "rectangle"
+            }
+        }
+    };*/
+    sub: { kind: 'rectangle'; };
     width: number;
     height: number;
 }
 
 interface Circle {
-    kind: "circle";
+    /*'0': {
+        sub: {
+            under : {
+                kind: "circle"
+            }
+        }
+    };*/
+    sub: { kind: 'circle'; };
     radius: number;
 }
 
 type Shape = Square | Rectangle | Circle;
 
 function area(s: Shape) {
-    // In the following switch statement, the type of s is narrowed in each case clause
-    // according to the value of the discriminant property, thus allowing the other properties
-    // of that variant to be accessed without a type assertion.
-    switch (s['kind']) {
+    switch(s.sub.kind) {
+    //switch (s[0].sub['under']['kind']) {
         case "square": return s.size * s.size;
         case "rectangle": return s.width * s.height;
         case "circle": return Math.PI * s.radius * s.radius;

@@ -609,21 +609,19 @@ namespace ts {
         }
 
         function isNarrowableReference(expr: Expression): boolean {
+            if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword) {
+                return true;
+            }
+            if (expr.kind === SyntaxKind.PropertyAccessExpression) {
+                return isNarrowableReference((expr as PropertyAccessExpression).expression);
+            }
             if (expr.kind === SyntaxKind.ElementAccessExpression) {
-                const argument = (expr as ElementAccessExpression).argumentExpression;
-                return argument.kind === SyntaxKind.StringLiteral || argument.kind === SyntaxKind.NumericLiteral || argument.kind === SyntaxKind.EnumMember;
+                const access = expr as ElementAccessExpression;
+                const isArgumentLiteral = access.argumentExpression.kind === SyntaxKind.StringLiteral ||
+                    access.argumentExpression.kind === SyntaxKind.NumericLiteral;
+                return isArgumentLiteral && isNarrowableReference(access.expression);
             }
-            while (true) {
-                if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword) {
-                    return true;
-                }
-                else if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                    expr = (expr as PropertyAccessExpression).expression;
-                }
-                else {
-                    return false;
-                }
-            }
+            return false;
         }
 
         function hasNarrowableArgument(expr: CallExpression) {
@@ -1737,6 +1735,7 @@ namespace ts {
                     }
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
                     if (currentFlow && isNarrowableReference(<Expression>node)) {
                         node.flowNode = currentFlow;
                     }
