@@ -2792,6 +2792,10 @@ namespace ts {
         return isRightSideOfPropertyAccess(node) ? node.parent : node;
     }
 
+    function climbPastManyPropertyAccesses(node: Node): Node {
+        return isRightSideOfPropertyAccess(node) ? climbPastManyPropertyAccesses(node.parent) : node;
+    }
+
     function isCallExpressionTarget(node: Node): boolean {
         node = climbPastPropertyAccess(node);
         return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
@@ -2804,7 +2808,7 @@ namespace ts {
 
     /** Returns a CallLikeExpression where `node` is the target being invoked. */
     function getAncestorCallLikeExpression(node: Node): CallLikeExpression | undefined {
-        const target = climbPastPropertyAccess(node);
+        const target = climbPastManyPropertyAccesses(node);
         const callLike = target.parent;
         return isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target && callLike;
     }
