@@ -1,0 +1,50 @@
+=== tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping3.ts ===
+interface A {
+>A : A
+
+    p: string;
+>p : string
+
+    r: string;
+>r : string
+
+    s: string;
+>s : string
+}
+interface B {
+>B : B
+
+    p: number;
+>p : number
+
+    r: boolean;
+>r : boolean
+
+    s: string;
+>s : string
+}
+class C {
+>C : C
+
+    r: number;
+>r : number
+}
+class Multiple extends C implements A, B {
+>Multiple : Multiple
+>C : C
+>A : A
+>B : B
+
+    p = undefined; // ok, Multiple.p: string & number
+>p : string & number
+>undefined : undefined
+
+    r = null;     // OK, r: string & boolean & number
+>r : number & string & boolean
+>null : null
+
+    s = null;     // OK, s: string
+>s : string
+>null : null
+}
+

@@ -1,0 +1,48 @@
+=== tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping3.ts ===
+interface A {
+>A : Symbol(A, Decl(implementedPropertyContextualTyping3.ts, 0, 0))
+
+    p: string;
+>p : Symbol(A.p, Decl(implementedPropertyContextualTyping3.ts, 0, 13))
+
+    r: string;
+>r : Symbol(A.r, Decl(implementedPropertyContextualTyping3.ts, 1, 14))
+
+    s: string;
+>s : Symbol(A.s, Decl(implementedPropertyContextualTyping3.ts, 2, 14))
+}
+interface B {
+>B : Symbol(B, Decl(implementedPropertyContextualTyping3.ts, 4, 1))
+
+    p: number;
+>p : Symbol(B.p, Decl(implementedPropertyContextualTyping3.ts, 5, 13))
+
+    r: boolean;
+>r : Symbol(B.r, Decl(implementedPropertyContextualTyping3.ts, 6, 14))
+
+    s: string;
+>s : Symbol(B.s, Decl(implementedPropertyContextualTyping3.ts, 7, 15))
+}
+class C {
+>C : Symbol(C, Decl(implementedPropertyContextualTyping3.ts, 9, 1))
+
+    r: number;
+>r : Symbol(C.r, Decl(implementedPropertyContextualTyping3.ts, 10, 9))
+}
+class Multiple extends C implements A, B {
+>Multiple : Symbol(Multiple, Decl(implementedPropertyContextualTyping3.ts, 12, 1))
+>C : Symbol(C, Decl(implementedPropertyContextualTyping3.ts, 9, 1))
+>A : Symbol(A, Decl(implementedPropertyContextualTyping3.ts, 0, 0))
+>B : Symbol(B, Decl(implementedPropertyContextualTyping3.ts, 4, 1))
+
+    p = undefined; // ok, Multiple.p: string & number
+>p : Symbol(Multiple.p, Decl(implementedPropertyContextualTyping3.ts, 13, 42))
+>undefined : Symbol(undefined)
+
+    r = null;     // OK, r: string & boolean & number
+>r : Symbol(Multiple.r, Decl(implementedPropertyContextualTyping3.ts, 14, 18))
+
+    s = null;     // OK, s: string
+>s : Symbol(Multiple.s, Decl(implementedPropertyContextualTyping3.ts, 15, 13))
+}
+

@@ -43,33 +43,20 @@ class Alarm extends Watcher implements Listener, Ringer, StringLiteral {
 }
 
 interface A {
-    p: string;
     q(n: string): void;
-    r: string;
-    s: string;
 }
 interface B {
-    p: number;
     q(n: number): void;
-    r: boolean;
-    s: string;
 }
 class C {
     r: number;
 }
 class Multiple extends C implements A, B {
-    p = undefined; // error, Multiple.p is implicitly any because A.p and B.p exist
     q(n) {         // error, n is implicitly any because A.q and B.q exist
-        n.length;
-        n.toFixed;
+        n.length;  // and the unioned type has no signature
+        n.toFixed; // (even though the constituent types each do)
     }
-    r = null;     // OK, C.r wins over A.r and B.r
-    s = null;     // OK, A.s and B.s match
 }
-let multiple = new Multiple();
-multiple.r.toFixed; // OK, C.r wins so Multiple.r: number
-multiple.r.length;  // error, Multiple.r: number
-multiple.s.length;   // OK, A.s and B.s match.
 
 
 //// [implementedPropertyContextualTyping1.js]
@@ -118,17 +105,10 @@ var Multiple = (function (_super) {
     __extends(Multiple, _super);
     function Multiple() {
         _super.apply(this, arguments);
-        this.p = undefined; // error, Multiple.p is implicitly any because A.p and B.p exist
-        this.r = null; // OK, C.r wins over A.r and B.r
-        this.s = null; // OK, A.s and B.s match
     }
     Multiple.prototype.q = function (n) {
-        n.length;
-        n.toFixed;
+        n.length; // and the unioned type has no signature
+        n.toFixed; // (even though the constituent types each do)
     };
     return Multiple;
 }(C));
-var multiple = new Multiple();
-multiple.r.toFixed; // OK, C.r wins so Multiple.r: number
-multiple.r.length; // error, Multiple.r: number
-multiple.s.length; // OK, A.s and B.s match.
