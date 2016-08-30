@@ -1,12 +1,12 @@
 ﻿/// <reference path="..\harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
-namespace ts {
-    function notImplemented(): any {
+namespace ts.projectSystem {
+    export function notImplemented(): any {
         throw new Error("Not yet implemented");
     }
 
-    const nullLogger: server.Logger = {
+    export const nullLogger: server.Logger = {
         close: () => void 0,
         hasLevel: () => void 0,
         loggingEnabled: () => false,
@@ -18,20 +18,20 @@ namespace ts {
         getLogFileName: (): string => undefined
     };
 
-    const nullCancellationToken: HostCancellationToken = {
+    export const nullCancellationToken: HostCancellationToken = {
         isCancellationRequested: () => false
     };
 
-    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
-    const libFile: FileOrFolder = {
+    export const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
+    export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
         content: libFileContent
     };
 
-    class TestTypingsInstaller extends server.typingsInstaller.TypingsInstaller implements server.ITypingsInstaller {
+    export class TestTypingsInstaller extends server.typingsInstaller.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
-        constructor(readonly cachePath: string, readonly installTypingHost: server.ServerHost) {
-            super(cachePath, <Path>"");
+        constructor(readonly globalTypingsCacheLocation: string, readonly installTypingHost: server.ServerHost) {
+            super(globalTypingsCacheLocation, <Path>"");
             this.init();
         }
 
@@ -75,31 +75,31 @@ namespace ts {
         }
 
         enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
-            const request = server.createInstallTypingsRequest(project, typingOptions, this.cachePath);
+            const request = server.createInstallTypingsRequest(project, typingOptions, this.globalTypingsCacheLocation);
             this.install(request);
         }
     }
 
-    function getExecutingFilePathFromLibFile(libFilePath: string): string {
+    export function getExecutingFilePathFromLibFile(libFilePath: string): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
-    function toExternalFile(fileName: string): server.protocol.ExternalFile {
+    export function toExternalFile(fileName: string): server.protocol.ExternalFile {
         return { fileName };
     }
 
-    function toExternalFiles(fileNames: string[]) {
+    export function toExternalFiles(fileNames: string[]) {
         return map(fileNames, toExternalFile);
     }
 
-    interface TestServerHostCreationParameters {
+    export interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         libFile?: FileOrFolder;
         currentDirectory?: string;
     }
 
-    function createServerHost(fileOrFolderList: FileOrFolder[],
+    export function createServerHost(fileOrFolderList: FileOrFolder[],
         params?: TestServerHostCreationParameters,
         libFilePath: string = libFile.path): TestServerHost {
 
@@ -113,7 +113,7 @@ namespace ts {
             fileOrFolderList);
     }
 
-    interface CreateProjectServiceParameters {
+    export interface CreateProjectServiceParameters {
         cancellationToken?: HostCancellationToken;
         logger?: server.Logger;
         useSingleInferredProject?: boolean;
@@ -122,7 +122,7 @@ namespace ts {
     }
 
 
-    class TestProjectService extends server.ProjectService {
+    export class TestProjectService extends server.ProjectService {
         constructor(host: server.ServerHost, logger: server.Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
             typingsInstaller: server.ITypingsInstaller, eventHandler: server.ProjectServiceEventHandler) {
             super(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler);
@@ -132,42 +132,42 @@ namespace ts {
             checkNumberOfProjects(this, count);
         }
     }
-    function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}) {
+    export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}) {
         const cancellationToken = parameters.cancellationToken || nullCancellationToken;
         const logger = parameters.logger || nullLogger;
         const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
         return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller, parameters.eventHandler);
     }
 
-    interface FileOrFolder {
+    export interface FileOrFolder {
         path: string;
         content?: string;
         fileSize?: number;
     }
 
-    interface FSEntry {
+    export interface FSEntry {
         path: Path;
         fullPath: string;
     }
 
-    interface File extends FSEntry {
+    export interface File extends FSEntry {
         content: string;
         fileSize?: number;
     }
 
-    interface Folder extends FSEntry {
+    export interface Folder extends FSEntry {
         entries: FSEntry[];
     }
 
-    function isFolder(s: FSEntry): s is Folder {
+    export function isFolder(s: FSEntry): s is Folder {
         return isArray((<Folder>s).entries);
     }
 
-    function isFile(s: FSEntry): s is File {
+    export function isFile(s: FSEntry): s is File {
         return typeof (<File>s).content === "string";
     }
 
-    function addFolder(fullPath: string, toPath: (s: string) => Path, fs: FileMap<FSEntry>): Folder {
+    export function addFolder(fullPath: string, toPath: (s: string) => Path, fs: FileMap<FSEntry>): Folder {
         const path = toPath(fullPath);
         if (fs.contains(path)) {
             Debug.assert(isFolder(fs.get(path)));
@@ -185,55 +185,55 @@ namespace ts {
         return entry;
     }
 
-    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
+    export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
         assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
             assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
         }
     }
 
-    function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
+    export function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
         assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${JSON.stringify(expectedFileNames)}, got ${actualFileNames}`);
         for (const f of expectedFileNames) {
             assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${JSON.stringify(actualFileNames)}`);
         }
     }
 
-    function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
+    export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.configuredProjects.length, expected, `expected ${expected} configured project(s)`);
     }
 
-    function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
+    export function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.externalProjects.length, expected, `expected ${expected} external project(s)`);
     }
 
-    function checkNumberOfInferredProjects(projectService: server.ProjectService, expected: number) {
+    export function checkNumberOfInferredProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.inferredProjects.length, expected, `expected ${expected} inferred project(s)`);
     }
 
-    function checkNumberOfProjects(projectService: server.ProjectService, count: { inferredProjects?: number, configuredProjects?: number, externalProjects?: number }) {
+    export function checkNumberOfProjects(projectService: server.ProjectService, count: { inferredProjects?: number, configuredProjects?: number, externalProjects?: number }) {
         checkNumberOfConfiguredProjects(projectService, count.configuredProjects || 0);
         checkNumberOfExternalProjects(projectService, count.externalProjects || 0);
         checkNumberOfInferredProjects(projectService, count.inferredProjects || 0);
     }
 
-    function checkWatchedFiles(host: TestServerHost, expectedFiles: string[]) {
+    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[]) {
         checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
     }
 
-    function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[]) {
+    export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[]) {
         checkMapKeys("watchedDirectories", host.watchedDirectories, expectedDirectories);
     }
 
-    function checkProjectActualFiles(project: server.Project, expectedFiles: string[]) {
+    export function checkProjectActualFiles(project: server.Project, expectedFiles: string[]) {
         checkFileNames(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
-    function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
+    export function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
         checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
-    class Callbacks {
+    export class Callbacks {
         private map: { [n: number]: TimeOutCallback } = {};
         private nextId = 1;
 
@@ -269,9 +269,9 @@ namespace ts {
         }
     }
 
-    type TimeOutCallback = () => any;
+    export type TimeOutCallback = () => any;
 
-    class TestServerHost implements server.ServerHost {
+    export class TestServerHost implements server.ServerHost {
         args: string[] = [];
         newLine: "\n";
 
@@ -479,7 +479,7 @@ namespace ts {
         readonly exit = () => notImplemented();
     }
 
-    function makeSessionRequest<T>(command: string, args: T) {
+    export function makeSessionRequest<T>(command: string, args: T) {
         const newRequest: server.protocol.Request = {
             seq: 0,
             type: "request",
@@ -489,7 +489,7 @@ namespace ts {
         return newRequest;
     }
 
-    function openFilesForSession(files: FileOrFolder[], session: server.Session) {
+    export function openFilesForSession(files: FileOrFolder[], session: server.Session) {
         for (const file of files) {
             const request = makeSessionRequest<server.protocol.OpenRequestArgs>(server.CommandNames.Open, { file: file.path });
             session.executeCommand(request);
@@ -1542,819 +1542,6 @@ namespace ts {
         });
     });
 
-    describe("CompileOnSave affected list", () => {
-        function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: FileOrFolder[] }[]) {
-            const response: server.protocol.CompileOnSaveAffectedFileListSingleProject[] = session.executeCommand(request).response;
-            const actualResult = response.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
-            expectedFileList = expectedFileList.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
-
-            assert.equal(actualResult.length, expectedFileList.length, `Actual result project number is different from the expected project number`);
-
-            for (let i = 0; i < actualResult.length; i++) {
-                const actualResultSingleProject = actualResult[i];
-                const expectedResultSingleProject = expectedFileList[i];
-                assert.equal(actualResultSingleProject.projectFileName, expectedResultSingleProject.projectFileName, `Actual result contains different projects than the expected result`);
-
-                const actualResultSingleProjectFileNameList = actualResultSingleProject.fileNames.sort();
-                const expectedResultSingleProjectFileNameList = map(expectedResultSingleProject.files, f => f.path).sort();
-                assert.isTrue(
-                    arrayIsEqualTo(actualResultSingleProjectFileNameList, expectedResultSingleProjectFileNameList),
-                    `For project ${actualResultSingleProject.projectFileName}, the actual result is ${actualResultSingleProjectFileNameList}, while expected ${expectedResultSingleProjectFileNameList}`);
-            }
-        }
-
-        describe("for configured projects", () => {
-            let moduleFile1: FileOrFolder;
-            let file1Consumer1: FileOrFolder;
-            let file1Consumer2: FileOrFolder;
-            let moduleFile2: FileOrFolder;
-            let globalFile3: FileOrFolder;
-            let configFile: FileOrFolder;
-            let changeModuleFile1ShapeRequest1: server.protocol.Request;
-            let changeModuleFile1InternalRequest1: server.protocol.Request;
-            let changeModuleFile1ShapeRequest2: server.protocol.Request;
-            // A compile on save affected file request using file1
-            let moduleFile1FileListRequest: server.protocol.Request;
-
-            beforeEach(() => {
-                moduleFile1 = {
-                    path: "/a/b/moduleFile1.ts",
-                    content: "export function Foo() { };"
-                };
-
-                file1Consumer1 = {
-                    path: "/a/b/file1Consumer1.ts",
-                    content: `import {Foo} from "./moduleFile1"; export var y = 10;`
-                };
-
-                file1Consumer2 = {
-                    path: "/a/b/file1Consumer2.ts",
-                    content: `import {Foo} from "./moduleFile1"; let z = 10;`
-                };
-
-                moduleFile2 = {
-                    path: "/a/b/moduleFile2.ts",
-                    content: `export var Foo4 = 10;`
-                };
-
-                globalFile3 = {
-                    path: "/a/b/globalFile3.ts",
-                    content: `interface GlobalFoo { age: number }`
-                };
-
-                configFile = {
-                    path: "/a/b/tsconfig.json",
-                    content: `{
-                        "compileOnSave": true
-                    }`
-                };
-
-                // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1ShapeRequest1 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `export var T: number;`
-                });
-
-                // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1InternalRequest1 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `var T1: number;`
-                });
-
-                // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `export var T2: number;`
-                });
-
-                moduleFile1FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path, projectFileName: configFile.path });
-            });
-
-            it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
-                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([moduleFile1, file1Consumer1], session);
-
-                // Send an initial compileOnSave request
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
-                session.executeCommand(changeModuleFile1ShapeRequest1);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
-
-                // Change the content of file1 to `export var T: number;export function Foo() { console.log('hi'); };`
-                const changeFile1InternalRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 46,
-                    endLine: 1,
-                    endOffset: 46,
-                    insertString: `console.log('hi');`
-                });
-                session.executeCommand(changeFile1InternalRequest);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
-            });
-
-            it("should be up-to-date with the reference map changes", () => {
-                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([moduleFile1, file1Consumer1], session);
-
-                // Send an initial compileOnSave request
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
-
-                // Change file2 content to `let y = Foo();`
-                const removeFile1Consumer1ImportRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: file1Consumer1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 28,
-                    insertString: ""
-                });
-                session.executeCommand(removeFile1Consumer1ImportRequest);
-                session.executeCommand(changeModuleFile1ShapeRequest1);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
-
-                // Add the import statements back to file2
-                const addFile2ImportRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: file1Consumer1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `import {Foo} from "./moduleFile1";`
-                });
-                session.executeCommand(addFile2ImportRequest);
-
-                // Change the content of file1 to `export var T2: string;export var T: number;export function Foo() { };`
-                const changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `export var T2: string;`
-                });
-                session.executeCommand(changeModuleFile1ShapeRequest2);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
-            });
-
-            it("should be up-to-date with changes made in non-open files", () => {
-                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([moduleFile1], session);
-
-                // Send an initial compileOnSave request
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
-
-                file1Consumer1.content = `let y = 10;`;
-                host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer1.path, /*removed*/ false);
-
-                session.executeCommand(changeModuleFile1ShapeRequest1);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
-            });
-
-            it("should be up-to-date with deleted files", () => {
-                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([moduleFile1], session);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
-
-                session.executeCommand(changeModuleFile1ShapeRequest1);
-                // Delete file1Consumer2
-                host.reloadFS([moduleFile1, file1Consumer1, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer2.path, /*removed*/ true);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
-            });
-
-            it("should be up-to-date with newly created files", () => {
-                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([moduleFile1], session);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
-
-                const file1Consumer3: FileOrFolder = {
-                    path: "/a/b/file1Consumer3.ts",
-                    content: `import {Foo} from "./moduleFile1"; let y = Foo();`
-                };
-                host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3, globalFile3, configFile, libFile]);
-                host.triggerDirectoryWatcherCallback(ts.getDirectoryPath(file1Consumer3.path), file1Consumer3.path);
-                host.runQueuedTimeoutCallbacks();
-                session.executeCommand(changeModuleFile1ShapeRequest1);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3] }]);
-            });
-
-            it("should detect changes in non-root files", () => {
-                moduleFile1 = {
-                    path: "/a/b/moduleFile1.ts",
-                    content: "export function Foo() { };"
-                };
-
-                file1Consumer1 = {
-                    path: "/a/b/file1Consumer1.ts",
-                    content: `import {Foo} from "./moduleFile1"; let y = Foo();`
-                };
-
-                configFile = {
-                    path: "/a/b/tsconfig.json",
-                    content: `{
-                        "compileOnSave": true,
-                        "files": ["${file1Consumer1.path}"]
-                    }`
-                };
-
-                const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([moduleFile1, file1Consumer1], session);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
-
-                // change file1 shape now, and verify both files are affected
-                session.executeCommand(changeModuleFile1ShapeRequest1);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
-
-                // change file1 internal, and verify only file1 is affected
-                session.executeCommand(changeModuleFile1InternalRequest1);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
-            });
-
-            it("should return all files if a global file changed shape", () => {
-                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([globalFile3], session);
-                const changeGlobalFile3ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: globalFile3.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `var T2: string;`
-                });
-
-                // check after file1 shape changes
-                session.executeCommand(changeGlobalFile3ShapeRequest);
-                const globalFile3FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: globalFile3.path });
-                sendAffectedFileRequestAndCheckResult(session, globalFile3FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2] }]);
-            });
-
-            it("should return empty array if CompileOnSave is not enabled", () => {
-                configFile = {
-                    path: "/a/b/tsconfig.json",
-                    content: `{}`
-                };
-
-                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-                openFilesForSession([moduleFile1], session);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
-            });
-
-            it("should always return the file itself if '--isolatedModules' is specified", () => {
-                configFile = {
-                    path: "/a/b/tsconfig.json",
-                    content: `{
-                        "compileOnSave": true,
-                        "compilerOptions": {
-                            "isolatedModules": true
-                        }
-                    }`
-                };
-
-                const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-                openFilesForSession([moduleFile1], session);
-
-                const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 27,
-                    endLine: 1,
-                    endOffset: 27,
-                    insertString: `Point,`
-                });
-                session.executeCommand(file1ChangeShapeRequest);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
-            });
-
-            it("should always return the file itself if '--out' or '--outFile' is specified", () => {
-                configFile = {
-                    path: "/a/b/tsconfig.json",
-                    content: `{
-                        "compileOnSave": true,
-                        "compilerOptions": {
-                            "module": "system",
-                            "outFile": "/a/b/out.js"
-                        }
-                    }`
-                };
-
-                const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-                openFilesForSession([moduleFile1], session);
-
-                const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 27,
-                    endLine: 1,
-                    endOffset: 27,
-                    insertString: `Point,`
-                });
-                session.executeCommand(file1ChangeShapeRequest);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
-            });
-
-            it("should return cascaded affected file list", () => {
-                const file1Consumer1Consumer1: FileOrFolder = {
-                    path: "/a/b/file1Consumer1Consumer1.ts",
-                    content: `import {y} from "./file1Consumer1";`
-                };
-                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([moduleFile1, file1Consumer1], session);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer1Consumer1] }]);
-
-                const changeFile1Consumer1ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    file: file1Consumer1.path,
-                    line: 2,
-                    offset: 1,
-                    endLine: 2,
-                    endOffset: 1,
-                    insertString: `export var T: number;`
-                });
-                session.executeCommand(changeModuleFile1ShapeRequest1);
-                session.executeCommand(changeFile1Consumer1ShapeRequest);
-                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer1Consumer1] }]);
-            });
-
-            it("should work fine for files with circular references", () => {
-                const file1: FileOrFolder = {
-                    path: "/a/b/file1.ts",
-                    content: `
-                    /// <reference path="./file2.ts" />
-                    export var t1 = 10;`
-                };
-                const file2: FileOrFolder = {
-                    path: "/a/b/file2.ts",
-                    content: `
-                    /// <reference path="./file1.ts" />
-                    export var t2 = 10;`
-                };
-                const host = createServerHost([file1, file2, configFile]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([file1, file2], session);
-                const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
-                sendAffectedFileRequestAndCheckResult(session, file1AffectedListRequest, [{ projectFileName: configFile.path, files: [file1, file2] }]);
-            });
-
-            it("should return results for all projects if not specifying projectFileName", () => {
-                const file1: FileOrFolder = { path: "/a/b/file1.ts", content: "export var t = 10;" };
-                const file2: FileOrFolder = { path: "/a/b/file2.ts", content: `import {t} from "./file1"; var t2 = 11;` };
-                const file3: FileOrFolder = { path: "/a/c/file2.ts", content: `import {t} from "../b/file1"; var t3 = 11;` };
-                const configFile1: FileOrFolder = { path: "/a/b/tsconfig.json", content: `{ "compileOnSave": true }` };
-                const configFile2: FileOrFolder = { path: "/a/c/tsconfig.json", content: `{ "compileOnSave": true }` };
-
-                const host = createServerHost([file1, file2, file3, configFile1, configFile2]);
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-                openFilesForSession([file1, file2, file3], session);
-                const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
-
-                sendAffectedFileRequestAndCheckResult(session, file1AffectedListRequest, [
-                    { projectFileName: configFile1.path, files: [file1, file2] },
-                    { projectFileName: configFile2.path, files: [file1, file3] }
-                ]);
-            });
-        });
-    });
-
-    describe("EmitFile test", () => {
-        it("should emit specified file", () => {
-            const file1 = {
-                path: "/a/b/f1.ts",
-                content: `export function Foo() { return 10; }`
-            };
-            const file2 = {
-                path: "/a/b/f2.ts",
-                content: `import {Foo} from "./f1"; let y = Foo();`
-            };
-            const configFile = {
-                path: "/a/b/tsconfig.json",
-                content: `{}`
-            };
-            const host = createServerHost([file1, file2, configFile, libFile]);
-            const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-            const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-
-            openFilesForSession([file1, file2], session);
-            const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(server.CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: configFile.path });
-            session.executeCommand(compileFileRequest);
-
-            const expectedEmittedFileName = "/a/b/f1.js";
-            assert.isTrue(host.fileExists(expectedEmittedFileName));
-            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
-        });
-    });
-
-    describe("typings installer", () => {
-        it("configured projects (tsd installed) 1", () => {
-            const file1 = {
-                path: "/a/b/app.js",
-                content: ""
-            };
-            const tsconfig = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: {
-                        allowJs: true
-                    },
-                    typingOptions: {
-                        enableAutoDiscovery: true
-                    }
-                })
-            };
-            const packageJson = {
-                path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
-            };
-
-            const jquery = {
-                path: "/a/data/typings/jquery/jquery.d.ts",
-                content: "declare const $: { x: number }"
-            };
-
-            const host = createServerHost([file1, tsconfig, packageJson]);
-            const installer = new TestTypingsInstaller("/a/data/", host);
-            const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
-            projectService.openClientFile(file1.path);
-
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [file1.path]);
-
-            assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
-
-            installer.runPostInstallActions(t => {
-                assert.deepEqual(t, ["jquery"]);
-                host.createFileOrFolder(jquery, /*createParentDirectory*/ true);
-                return ["jquery/jquery.d.ts"];
-            });
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, jquery.path]);
-        });
-
-        it("inferred project (tsd installed)", () => {
-            const file1 = {
-                path: "/a/b/app.js",
-                content: ""
-            };
-            const packageJson = {
-                path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
-            };
-
-            const jquery = {
-                path: "/a/data/typings/jquery/jquery.d.ts",
-                content: "declare const $: { x: number }"
-            };
-            const host = createServerHost([file1, packageJson]);
-            const installer = new TestTypingsInstaller("/a/data/", host);
-
-            const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
-            projectService.openClientFile(file1.path);
-
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            const p = projectService.inferredProjects[0];
-            checkProjectActualFiles(p, [file1.path]);
-
-            assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
-
-            installer.runPostInstallActions(t => {
-                assert.deepEqual(t, ["jquery"]);
-                host.createFileOrFolder(jquery, /*createParentDirectory*/ true);
-                return ["jquery/jquery.d.ts"];
-            });
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, jquery.path]);
-        });
-
-        it("external project - no typing options, no .d.ts/js files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const host = createServerHost([file1]);
-            const installer = new (class extends TestTypingsInstaller {
-                constructor() {
-                    super("", host);
-                }
-                enqueueInstallTypingsRequest() {
-                    assert(false, "auto discovery should not be enabled");
-                }
-            })();
-
-            const projectFileName = "/a/app/test.csproj";
-            const projectService = createProjectService(host, { typingsInstaller: installer });
-            projectService.openExternalProject({
-                projectFileName,
-                options: {},
-                rootFiles: [toExternalFile(file1.path)]
-            });
-            // by default auto discovery will kick in if project contain only .js/.d.ts files
-            // in this case project contain only ts files - no auto discovery
-            projectService.checkNumberOfProjects({ externalProjects: 1 });
-        });
-
-        it("external project - no autoDiscovery in typing options, no .d.ts/js files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const host = createServerHost([file1]);
-            const installer = new (class extends TestTypingsInstaller {
-                constructor() {
-                    super("", host);
-                }
-                enqueueInstallTypingsRequest() {
-                    assert(false, "auto discovery should not be enabled");
-                }
-            })();
-
-            const projectFileName = "/a/app/test.csproj";
-            const projectService = createProjectService(host, { typingsInstaller: installer });
-            projectService.openExternalProject({
-                projectFileName,
-                options: {},
-                rootFiles: [toExternalFile(file1.path)],
-                typingOptions: { include: ["jquery"] }
-            });
-            // by default auto discovery will kick in if project contain only .js/.d.ts files
-            // in this case project contain only ts files - no auto discovery even if typing options is set
-            projectService.checkNumberOfProjects({ externalProjects: 1 });
-        });
-
-        it("external project - autoDiscovery = true, no .d.ts/js files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const host = createServerHost([file1]);
-            let enqueueIsCalled = false;
-            let runTsdIsCalled = false;
-            const installer = new (class extends TestTypingsInstaller {
-                constructor() {
-                    super("", host);
-                }
-                enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
-                    enqueueIsCalled = true;
-                    super.enqueueInstallTypingsRequest(project, typingOptions);
-                }
-                runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
-                    assert.deepEqual(typingsToInstall, ["node"]);
-                    runTsdIsCalled = true;
-                    super.runTsd(cachePath, typingsToInstall, postInstallAction);
-                }
-            })();
-
-            const projectFileName = "/a/app/test.csproj";
-            const projectService = createProjectService(host, { typingsInstaller: installer });
-            projectService.openExternalProject({
-                projectFileName,
-                options: {},
-                rootFiles: [toExternalFile(file1.path)],
-                typingOptions: { enableAutoDiscovery: true, include: ["node"] }
-            });
-            // autoDiscovery is set in typing options - use it even if project contains only .ts files
-            projectService.checkNumberOfProjects({ externalProjects: 1 });
-            assert.isTrue(enqueueIsCalled, "expected 'enqueueIsCalled' to be true");
-            assert.isTrue(runTsdIsCalled, "expected 'runTsdIsCalled' to be true");
-        });
-    });
-
-    describe("Project errors", () => {
-        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: string[]) {
-            assert.isTrue(projectFiles !== undefined, "missing project files");
-            const errors = projectFiles.projectErrors;
-            assert.equal(errors ? errors.length : 0, expectedErrors.length, `expected ${expectedErrors.length} error in the list`);
-            if (expectedErrors.length) {
-                for (let i = 0; i < errors.length; i++) {
-                    const actualMessage = flattenDiagnosticMessageText(errors[i].messageText, "\n");
-                    const expectedMessage = expectedErrors[i];
-                    assert.isTrue(actualMessage.indexOf(expectedMessage) === 0, `error message does not match, expected ${actualMessage} to start with ${expectedMessage}`);
-                }
-            }
-        }
-
-        it("external project - diagnostics for missing files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/lib.ts",
-                content: ""
-            };
-            // only file1 exists - expect error
-            const host = createServerHost([file1]);
-            const projectService = createProjectService(host);
-            const projectFileName = "/a/b/test.csproj";
-
-            {
-                projectService.openExternalProject({
-                    projectFileName,
-                    options: {},
-                    rootFiles: toExternalFiles([file1.path, file2.path])
-                });
-
-                projectService.checkNumberOfProjects({ externalProjects: 1 });
-                const knownProjects = projectService.synchronizeProjectList([]);
-                checkProjectErrors(knownProjects[0], ["File '/a/b/lib.ts' not found."]);
-            }
-            // only file2 exists - expect error
-            host.reloadFS([file2]);
-            {
-                projectService.openExternalProject({
-                    projectFileName,
-                    options: {},
-                    rootFiles: toExternalFiles([file1.path, file2.path])
-                });
-                projectService.checkNumberOfProjects({ externalProjects: 1 });
-                const knownProjects = projectService.synchronizeProjectList([]);
-                checkProjectErrors(knownProjects[0], ["File '/a/b/app.ts' not found."]);
-            }
-
-            // both files exist - expect no errors
-            host.reloadFS([file1, file2]);
-            {
-                projectService.openExternalProject({
-                    projectFileName,
-                    options: {},
-                    rootFiles: toExternalFiles([file1.path, file2.path])
-                });
-
-                projectService.checkNumberOfProjects({ externalProjects: 1 });
-                const knownProjects = projectService.synchronizeProjectList([]);
-                checkProjectErrors(knownProjects[0], []);
-            }
-        });
-
-        it("configured projects - diagnostics for missing files", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/lib.ts",
-                content: ""
-            };
-            const config = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
-            };
-            const host = createServerHost([file1, config]);
-            const projectService = createProjectService(host);
-
-            projectService.openClientFile(file1.path);
-            projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectErrors(projectService.synchronizeProjectList([])[0], ["File '/a/b/lib.ts' not found."]);
-
-            host.reloadFS([file1, file2, config]);
-
-            projectService.openClientFile(file1.path);
-            projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectErrors(projectService.synchronizeProjectList([])[0], []);
-        });
-
-        it("configured projects - diagnostics for corrupted config 1", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/lib.ts",
-                content: ""
-            };
-            const correctConfig = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
-            };
-            const corruptedConfig = {
-                path: correctConfig.path,
-                content: correctConfig.content.substr(1)
-            };
-            const host = createServerHost([file1, file2, corruptedConfig]);
-            const projectService = createProjectService(host);
-
-            projectService.openClientFile(file1.path);
-            {
-                projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
-                assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject,  [
-                    "')' expected.",
-                    "Declaration or statement expected.",
-                    "Declaration or statement expected.",
-                    "Failed to parse file '/a/b/tsconfig.json'"
-                ]);
-            }
-            // fix config and trigger watcher
-            host.reloadFS([file1, file2, correctConfig]);
-            host.triggerFileWatcherCallback(correctConfig.path, /*false*/);
-            {
-                projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
-                assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, []);
-            }
-        });
-
-        it("configured projects - diagnostics for corrupted config 2", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: ""
-            };
-            const file2 = {
-                path: "/a/b/lib.ts",
-                content: ""
-            };
-            const correctConfig = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
-            };
-            const corruptedConfig = {
-                path: correctConfig.path,
-                content: correctConfig.content.substr(1)
-            };
-            const host = createServerHost([file1, file2, correctConfig]);
-            const projectService = createProjectService(host);
-
-            projectService.openClientFile(file1.path);
-            {
-                projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
-                assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, []);
-            }
-            // break config and trigger watcher
-            host.reloadFS([file1, file2, corruptedConfig]);
-            host.triggerFileWatcherCallback(corruptedConfig.path, /*false*/);
-            {
-                projectService.checkNumberOfProjects({ configuredProjects: 1 });
-                const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
-                assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, [
-                    "')' expected.",
-                    "Declaration or statement expected.",
-                    "Declaration or statement expected.",
-                    "Failed to parse file '/a/b/tsconfig.json'"
-                ]);
-            }
-        });
-    });
-
     describe("Proper errors", () => {
         it("document is not contained in project", () => {
             const file1 = {
@@ -2396,6 +1583,123 @@ namespace ts {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             const typingOptions = projectService.externalProjects[0].getTypingOptions();
             assert.isTrue(typingOptions.enableAutoDiscovery, "Typing autodiscovery should be enabled");
+        });
+    });
+
+    describe("extra resolution pass in lshost", () => {
+        it("can load typings that are proper modules", () => {
+            const file1 = {
+                path: "/a/b/app.js",
+                content: `var x = require("lib")`
+            };
+            const lib = {
+                path: "/a/cache/node_modules/@types/lib/index.d.ts",
+                content: "export let x = 1"
+            };
+            const host: TestServerHost & ModuleResolutionHost = createServerHost([file1, lib]);
+            const resolutionTrace: string[] = [];
+            host.trace = resolutionTrace.push.bind(resolutionTrace);
+            const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller("/a/cache", host) });
+
+            projectService.setCompilerOptionsForInferredProjects({ traceResolution: true, allowJs: true });
+            projectService.openClientFile(file1.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+            const proj = projectService.inferredProjects[0];
+
+            assert.deepEqual(resolutionTrace, [
+                "======== Resolving module 'lib' from '/a/b/app.js'. ========",
+                "Module resolution kind is not specified, using 'NodeJs'.",
+                "Loading module 'lib' from 'node_modules' folder.",
+                "File '/a/b/node_modules/lib.ts' does not exist.",
+                "File '/a/b/node_modules/lib.tsx' does not exist.",
+                "File '/a/b/node_modules/lib.d.ts' does not exist.",
+                "File '/a/b/node_modules/lib.js' does not exist.",
+                "File '/a/b/node_modules/lib.jsx' does not exist.",
+                "File '/a/b/node_modules/lib/package.json' does not exist.",
+                "File '/a/b/node_modules/lib/index.ts' does not exist.",
+                "File '/a/b/node_modules/lib/index.tsx' does not exist.",
+                "File '/a/b/node_modules/lib/index.d.ts' does not exist.",
+                "File '/a/b/node_modules/lib/index.js' does not exist.",
+                "File '/a/b/node_modules/lib/index.jsx' does not exist.",
+                "File '/a/b/node_modules/@types/lib.ts' does not exist.",
+                "File '/a/b/node_modules/@types/lib.tsx' does not exist.",
+                "File '/a/b/node_modules/@types/lib.d.ts' does not exist.",
+                "File '/a/b/node_modules/@types/lib.js' does not exist.",
+                "File '/a/b/node_modules/@types/lib.jsx' does not exist.",
+                "File '/a/b/node_modules/@types/lib/package.json' does not exist.",
+                "File '/a/b/node_modules/@types/lib/index.ts' does not exist.",
+                "File '/a/b/node_modules/@types/lib/index.tsx' does not exist.",
+                "File '/a/b/node_modules/@types/lib/index.d.ts' does not exist.",
+                "File '/a/b/node_modules/@types/lib/index.js' does not exist.",
+                "File '/a/b/node_modules/@types/lib/index.jsx' does not exist.",
+                "File '/a/node_modules/lib.ts' does not exist.",
+                "File '/a/node_modules/lib.tsx' does not exist.",
+                "File '/a/node_modules/lib.d.ts' does not exist.",
+                "File '/a/node_modules/lib.js' does not exist.",
+                "File '/a/node_modules/lib.jsx' does not exist.",
+                "File '/a/node_modules/lib/package.json' does not exist.",
+                "File '/a/node_modules/lib/index.ts' does not exist.",
+                "File '/a/node_modules/lib/index.tsx' does not exist.",
+                "File '/a/node_modules/lib/index.d.ts' does not exist.",
+                "File '/a/node_modules/lib/index.js' does not exist.",
+                "File '/a/node_modules/lib/index.jsx' does not exist.",
+                "File '/a/node_modules/@types/lib.ts' does not exist.",
+                "File '/a/node_modules/@types/lib.tsx' does not exist.",
+                "File '/a/node_modules/@types/lib.d.ts' does not exist.",
+                "File '/a/node_modules/@types/lib.js' does not exist.",
+                "File '/a/node_modules/@types/lib.jsx' does not exist.",
+                "File '/a/node_modules/@types/lib/package.json' does not exist.",
+                "File '/a/node_modules/@types/lib/index.ts' does not exist.",
+                "File '/a/node_modules/@types/lib/index.tsx' does not exist.",
+                "File '/a/node_modules/@types/lib/index.d.ts' does not exist.",
+                "File '/a/node_modules/@types/lib/index.js' does not exist.",
+                "File '/a/node_modules/@types/lib/index.jsx' does not exist.",
+                "File '/node_modules/lib.ts' does not exist.",
+                "File '/node_modules/lib.tsx' does not exist.",
+                "File '/node_modules/lib.d.ts' does not exist.",
+                "File '/node_modules/lib.js' does not exist.",
+                "File '/node_modules/lib.jsx' does not exist.",
+                "File '/node_modules/lib/package.json' does not exist.",
+                "File '/node_modules/lib/index.ts' does not exist.",
+                "File '/node_modules/lib/index.tsx' does not exist.",
+                "File '/node_modules/lib/index.d.ts' does not exist.",
+                "File '/node_modules/lib/index.js' does not exist.",
+                "File '/node_modules/lib/index.jsx' does not exist.",
+                "File '/node_modules/@types/lib.ts' does not exist.",
+                "File '/node_modules/@types/lib.tsx' does not exist.",
+                "File '/node_modules/@types/lib.d.ts' does not exist.",
+                "File '/node_modules/@types/lib.js' does not exist.",
+                "File '/node_modules/@types/lib.jsx' does not exist.",
+                "File '/node_modules/@types/lib/package.json' does not exist.",
+                "File '/node_modules/@types/lib/index.ts' does not exist.",
+                "File '/node_modules/@types/lib/index.tsx' does not exist.",
+                "File '/node_modules/@types/lib/index.d.ts' does not exist.",
+                "File '/node_modules/@types/lib/index.js' does not exist.",
+                "File '/node_modules/@types/lib/index.jsx' does not exist.",
+                "======== Module name 'lib' was not resolved. ========",
+                `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
+                "File '/a/cache/node_modules/lib.ts' does not exist.",
+                "File '/a/cache/node_modules/lib.tsx' does not exist.",
+                "File '/a/cache/node_modules/lib.d.ts' does not exist.",
+                "File '/a/cache/node_modules/lib.js' does not exist.",
+                "File '/a/cache/node_modules/lib.jsx' does not exist.",
+                "File '/a/cache/node_modules/lib/package.json' does not exist.",
+                "File '/a/cache/node_modules/lib/index.ts' does not exist.",
+                "File '/a/cache/node_modules/lib/index.tsx' does not exist.",
+                "File '/a/cache/node_modules/lib/index.d.ts' does not exist.",
+                "File '/a/cache/node_modules/lib/index.js' does not exist.",
+                "File '/a/cache/node_modules/lib/index.jsx' does not exist.",
+                "File '/a/cache/node_modules/@types/lib.ts' does not exist.",
+                "File '/a/cache/node_modules/@types/lib.tsx' does not exist.",
+                "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
+                "File '/a/cache/node_modules/@types/lib.js' does not exist.",
+                "File '/a/cache/node_modules/@types/lib.jsx' does not exist.",
+                "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
+                "File '/a/cache/node_modules/@types/lib/index.ts' does not exist.",
+                "File '/a/cache/node_modules/@types/lib/index.tsx' does not exist.",
+                "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
+            ]);
+            checkProjectActualFiles(proj, [ file1.path, lib.path ]);
         });
     });
 }

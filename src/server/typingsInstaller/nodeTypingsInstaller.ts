@@ -3,31 +3,9 @@
 
 namespace ts.server.typingsInstaller {
 
-    const os: {
-        homedir(): string
-    } = require("os");
-
     const fs: {
         appendFileSync(file: string, content: string): void
     } = require("fs");
-
-    function getGlobalCacheLocation() {
-        let basePath: string;
-        switch (process.platform) {
-            case "win32":
-                basePath = process.env.LOCALAPPDATA || process.env.APPDATA || os.homedir();
-                break;
-            case "linux":
-                basePath = os.homedir();
-                break;
-            case "darwin":
-                basePath = combinePaths(os.homedir(), "Library/Application Support/");
-                break;
-        }
-
-        Debug.assert(basePath !== undefined);
-        return combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
-    }
 
     class FileLog implements Log {
         constructor(private readonly logFile?: string) {
@@ -49,8 +27,8 @@ namespace ts.server.typingsInstaller {
         private installRunCount = 1;
         readonly installTypingHost: InstallTypingHost = sys;
 
-        constructor(log?: Log) {
-            super(getGlobalCacheLocation(), toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)), log);
+        constructor(globalTypingsCacheLocation: string, log: Log) {
+            super(globalTypingsCacheLocation, toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)), log);
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
             }
@@ -140,23 +118,27 @@ namespace ts.server.typingsInstaller {
         }
     }
 
-    let logFilePath: string;
-    {
-        const logFileIndex = sys.args.indexOf("--logFile");
-        if (logFileIndex >= 0 && logFileIndex < sys.args.length - 1) {
-            logFilePath = sys.args[logFileIndex + 1];
-        }
+    function findArgument(argumentName: string) {
+        const index = sys.args.indexOf(argumentName);
+        return index >= 0 && index < sys.args.length - 1
+            ? sys.args[index]
+            : undefined;
     }
+
+    const logFilePath = findArgument("--logFile");
+    const globalTypingsCacheLocation = findArgument("--globalTypingsCacheLocation");
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {
         process.on("uncaughtException", (e: Error) => {
             log.writeLine(`Unhandled exception: ${e} at ${e.stack}`);
         });
-        process.on("disconnect", () => {
-            log.writeLine(`Parent process has exited, shutting down...`);
-            process.exit(0);
-        });
     }
-    const installer = new NodeTypingsInstaller(log);
+    process.on("disconnect", () => {
+        if (log.isEnabled()) {
+            log.writeLine(`Parent process has exited, shutting down...`);
+        }
+        process.exit(0);
+    });
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, log);
     installer.init();
 }

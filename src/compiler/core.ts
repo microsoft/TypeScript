@@ -1571,7 +1571,8 @@ namespace ts {
         return true;
     }
 
-    function createResolvedModule(resolvedFileName: string, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
+    /* @internal */
+    export function createResolvedModule(resolvedFileName: string, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
         return { resolvedModule: resolvedFileName ? { resolvedFileName, isExternalLibraryImport } : undefined, failedLookupLocations };
     }
 
@@ -1989,7 +1990,7 @@ namespace ts {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
                 }
-                resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state);
+                resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state, /*checkOneLevel*/ false);
                 isExternalLibraryImport = resolvedFileName !== undefined;
             }
             else {
@@ -2138,7 +2139,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState): string {
+    export function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, checkOneLevel: boolean): string {
         directory = normalizeSlashes(directory);
         while (true) {
             const baseName = getBaseFileName(directory);
@@ -2159,7 +2160,7 @@ namespace ts {
             }
 
             const parentPath = getDirectoryPath(directory);
-            if (parentPath === directory) {
+            if (parentPath === directory || checkOneLevel) {
                 break;
             }
 

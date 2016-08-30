@@ -9,10 +9,37 @@ namespace ts.server {
         private readonly resolvedTypeReferenceDirectives: ts.FileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
         private readonly getCanonicalFileName: (fileName: string) => string;
 
+        private readonly resolveModuleName: typeof resolveModuleName;
+        readonly trace: (s: string) => void;
+
         constructor(private readonly host: ServerHost, private readonly project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
             this.resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+
+            if (host.trace) {
+                this.trace = s => host.trace(s);
+            }
+
+            this.resolveModuleName = (moduleName, containingFile, compilerOptions, host) => {
+                const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
+                if (primaryResult.resolvedModule) {
+                    return primaryResult;
+                }
+                const globalCache = this.project.projectService.typingsInstaller.globalTypingsCacheLocation;
+                if (this.project.getTypingOptions().enableAutoDiscovery && globalCache) {
+                    const traceEnabled = isTraceEnabled(compilerOptions, host);
+                    if (traceEnabled) {
+                        trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, this.project.getProjectName(), moduleName, globalCache);
+                    }
+                    const state: ModuleResolutionState = { compilerOptions, host, skipTsx: false, traceEnabled };
+                    const resolvedName = loadModuleFromNodeModules(moduleName, globalCache, primaryResult.failedLookupLocations, state, /*checkOneLevel*/ true);
+                    if (resolvedName) {
+                        return createResolvedModule(resolvedName, /*isExternalLibraryImport*/ true, primaryResult.failedLookupLocations);
+                    }
+                }
+                return primaryResult;
+            };
         }
 
         private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
@@ -89,7 +116,7 @@ namespace ts.server {
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
-            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, resolveModuleName, m => m.resolvedModule);
+            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName, m => m.resolvedModule);
         }
 
         getDefaultLibFileName() {
