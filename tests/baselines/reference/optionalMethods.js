@@ -142,6 +142,6 @@ declare class Base {
     f?(): number;
 }
 declare class Derived extends Base {
-    a: number;
+    a: number | undefined;
     f(): number;
 }
