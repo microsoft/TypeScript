@@ -20,7 +20,7 @@ namespace ts.server {
             content: string,
             readonly scriptKind: ScriptKind,
             public isOpen = false,
-            private hasMixedContent = false) {
+            public hasMixedContent = false) {
 
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);

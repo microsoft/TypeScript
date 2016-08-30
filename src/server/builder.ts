@@ -160,16 +160,17 @@ namespace ts.server {
          */
         getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
             const info = this.getOrCreateFileInfo(scriptInfo.path);
+            const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
             if (info.updateShapeSignature()) {
                 const options = this.project.getCompilerOptions();
                 // If `--out` or `--outFile` is specified, any new emit will result in re-emitting the entire project,
                 // so returning the file itself is good enough.
                 if (options && (options.out || options.outFile)) {
-                    return [scriptInfo.fileName];
+                    return singleFileResult;
                 }
-                return this.project.getFileNamesWithoutDefaultLib();
+                return map(filter(this.project.getScriptInfosWithoutDefaultLib(), info => !info.hasMixedContent), info => info.fileName);
             }
-            return [scriptInfo.fileName];
+            return singleFileResult;
         }
     }
 
@@ -319,18 +320,19 @@ namespace ts.server {
         getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
             this.ensureProjectDependencyGraphUpToDate();
 
+            const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
             const fileInfo = this.getFileInfo(scriptInfo.path);
             if (!fileInfo || !fileInfo.updateShapeSignature()) {
-                return [scriptInfo.fileName];
+                return singleFileResult;
             }
 
             if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
-                return this.project.getFileNamesWithoutDefaultLib();
+                return map(filter(this.project.getScriptInfosWithoutDefaultLib(), info => !info.hasMixedContent), info => info.fileName);
             }
 
             const options = this.project.getCompilerOptions();
             if (options && (options.isolatedModules || options.out || options.outFile)) {
-                return [scriptInfo.fileName];
+                return singleFileResult;
             }
 
             // Now we need to if each file in the referencedBy list has a shape change as well.
@@ -339,8 +341,8 @@ namespace ts.server {
 
             // Use slice to clone the array to avoid manipulating in place
             const queue = fileInfo.referencedBy.slice(0);
-            const fileNameSet = createMap<boolean>();
-            fileNameSet[scriptInfo.fileName] = true;
+            const fileNameSet = createMap<ScriptInfo>();
+            fileNameSet[scriptInfo.fileName] = scriptInfo;
             while (queue.length > 0) {
                 const processingFileInfo = queue.pop();
                 if (processingFileInfo.updateShapeSignature() && processingFileInfo.referencedBy.length > 0) {
@@ -350,9 +352,15 @@ namespace ts.server {
                         }
                     }
                 }
-                fileNameSet[processingFileInfo.scriptInfo.fileName] = true;
+                fileNameSet[processingFileInfo.scriptInfo.fileName] = processingFileInfo.scriptInfo;
             }
-            return Object.keys(fileNameSet);
+            const result: string[] = [];
+            for (const fileName in fileNameSet) {
+                if (!fileNameSet[fileName].hasMixedContent) {
+                    result.push(fileName);
+                }
+            }
+            return result;
         }
     }
 

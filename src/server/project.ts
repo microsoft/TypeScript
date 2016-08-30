@@ -109,8 +109,7 @@ namespace ts.server {
                 return [];
             }
             this.updateGraph();
-            const allAffectedFiles = this.builder.getFilesAffectedBy(scriptInfo);
-            return filter(allAffectedFiles, file => fileExtensionIsAny(file, [".ts", ".tsx"]));
+            return this.builder.getFilesAffectedBy(scriptInfo);
         }
 
         getProjectVersion() {
@@ -226,12 +225,12 @@ namespace ts.server {
             return sourceFiles.map(sourceFile => asNormalizedPath(sourceFile.fileName));
         }
 
-        getFileNamesWithoutDefaultLib() {
+        getScriptInfosWithoutDefaultLib() {
             if (!this.languageServiceEnabled) {
-                return this.getRootFiles();
+                return this.getRootScriptInfos();
             }
             const defaultLibraryFileName = getDefaultLibFileName(this.compilerOptions);
-            return filter(this.getFileNames(), file => getBaseFileName(file) !== defaultLibraryFileName);
+            return filter(this.getScriptInfos(), info => getBaseFileName(info.fileName) !== defaultLibraryFileName);
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
