@@ -139,7 +139,7 @@ namespace ts.server.typingsInstaller {
     function findArgument(argumentName: string) {
         const index = sys.args.indexOf(argumentName);
         return index >= 0 && index < sys.args.length - 1
-            ? sys.args[index]
+            ? sys.args[index + 1]
             : undefined;
     }
 

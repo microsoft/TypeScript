@@ -443,7 +443,7 @@ namespace ts.server {
             // but that will only be one dependency.
             // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
             const referencedFiles = createMap<boolean>();
-            if (sourceFile.imports) {
+            if (sourceFile.imports && sourceFile.imports.length > 0) {
                 const checker: TypeChecker = this.program.getTypeChecker();
                 for (const importName of sourceFile.imports) {
                     const symbol = checker.getSymbolAtLocation(importName);
@@ -459,7 +459,7 @@ namespace ts.server {
             const currentDirectory = getDirectoryPath(path);
             const getCanonicalFileName = createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
             // Handle triple slash references
-            if (sourceFile.referencedFiles) {
+            if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
                     const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName);
                     referencedFiles[referencedPath] = true;
@@ -480,7 +480,8 @@ namespace ts.server {
                 }
             }
 
-            return map(Object.keys(referencedFiles), key => <Path>key);
+            const allFileNames = map(Object.keys(referencedFiles), key => <Path>key);
+            return filter(allFileNames, file => this.projectService.host.fileExists(file));
         }
 
         // remove a root file from project
