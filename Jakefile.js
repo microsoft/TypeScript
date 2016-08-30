@@ -209,6 +209,9 @@ var harnessSources = harnessCoreSources.concat([
     "convertCompilerOptionsFromJson.ts",
     "convertTypingOptionsFromJson.ts",
     "tsserverProjectSystem.ts",
+    "compileOnSave.ts",
+    "typingsInstaller.ts",
+    "projectErrors.ts",
     "matchFiles.ts",
     "initializeTSConfig.ts",
 ].map(function (f) {
