@@ -1817,6 +1817,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 else if (node.parent.kind === SyntaxKind.ConditionalExpression && (<ConditionalExpression>node.parent).condition === node) {
                     return true;
                 }
+                else if (node.parent.kind === SyntaxKind.PrefixUnaryExpression || node.parent.kind === SyntaxKind.DeleteExpression ||
+                    node.parent.kind === SyntaxKind.TypeOfExpression || node.parent.kind === SyntaxKind.VoidExpression) {
+                    return true;
+                }
 
                 return false;
             }
@@ -6583,7 +6587,7 @@ const _super = (function (geti, seti) {
                             // import { x, y } from "foo"
                             // import d, * as x from "foo"
                             // import d, { x, y } from "foo"
-                            const isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
+                            const isNakedImport = node.kind === SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
                             if (!isNakedImport) {
                                 write(varOrConst);
                                 write(getGeneratedNameForNode(<ImportDeclaration>node));

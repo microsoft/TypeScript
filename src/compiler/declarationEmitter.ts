@@ -1132,8 +1132,10 @@ namespace ts {
                     // it if it's not a well known symbol. In that case, the text of the name will be exactly
                     // what we want, namely the name expression enclosed in brackets.
                     writeTextOfNode(currentText, node.name);
-                    // If optional property emit ?
-                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature || node.kind === SyntaxKind.Parameter) && hasQuestionToken(node)) {
+                    // If optional property emit ? but in the case of parameterProperty declaration with "?" indicating optional parameter for the constructor
+                    // we don't want to emit property declaration with "?"
+                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
+                        (node.kind === SyntaxKind.Parameter && !isParameterPropertyDeclaration(node))) && hasQuestionToken(node)) {
                         write("?");
                     }
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {

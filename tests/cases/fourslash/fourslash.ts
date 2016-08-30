@@ -173,6 +173,7 @@ declare namespace FourSlashInterface {
          * If `ranges` is omitted, this is `test.ranges()`.
          */
         rangesReferenceEachOther(ranges?: Range[]): void;
+        findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
         rangesWithSameTextReferenceEachOther(): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;
