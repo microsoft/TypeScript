@@ -3445,39 +3445,15 @@ namespace ts {
         function getTypeOfBasePropertyDeclaration(declaration: PropertyDeclaration) {
             if (declaration.parent.kind === SyntaxKind.ClassDeclaration) {
                 const parent = <ClassLikeDeclaration>declaration.parent;
-                const propertyName = declaration.symbol.name;
-                const extendedPropertyType = getSinglePropertyTypeOfTypes(getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(parent))), propertyName);
-                if (extendedPropertyType) {
-                    return extendedPropertyType;
-                }
-                const implementedTypeNodes = getClassImplementsHeritageClauseElements(parent);
-                if (implementedTypeNodes) {
-                    return getSinglePropertyTypeOfTypes(map(implementedTypeNodes, getTypeFromTypeReference), propertyName);
+                const types = getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(parent)));
+                const implementedTypeNodes = getClassImplementsHeritageClauseElements(parent) || ([] as NodeArray<ExpressionWithTypeArguments>);
+                const allBases = getIntersectionType(types.concat(map(implementedTypeNodes, getTypeFromTypeReference)));
+                const baseProperty = getPropertyOfType(allBases, declaration.symbol.name);
+                if (baseProperty) {
+                    return getTypeOfSymbol(baseProperty);
                 }
             }
-
             return undefined;
-        }
-
-        function getSinglePropertyTypeOfTypes(types: Type[], propertyName: string) {
-            let result: Type;
-            for (const t of types) {
-                if (t !== unknownType) {
-                    const property = getPropertyOfType(t, propertyName);
-                    if (!property || property.valueDeclaration.flags & NodeFlags.Private) {
-                        continue;
-                    }
-                    if (property.name === propertyName) {
-                        const propertyType = getTypeOfSymbol(property);
-                        if (result && result !== propertyType) {
-                            // if there's more than one matching property, return undefined
-                            return undefined;
-                        }
-                        result = propertyType;
-                    }
-                }
-            }
-            return result;
         }
 
         function getTargetType(type: ObjectType): Type {
