@@ -480,7 +480,7 @@ namespace ts.server {
             }
 
             const allFileNames = map(Object.keys(referencedFiles), key => <Path>key);
-            return ts.filter(allFileNames, file => this.projectService.host.fileExists(file));
+            return filter(allFileNames, file => this.projectService.host.fileExists(file));
         }
 
         // remove a root file from project
