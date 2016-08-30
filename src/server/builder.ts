@@ -15,6 +15,10 @@ namespace ts.server {
         createHash(algorithm: string): Hash
     } = require("crypto");
 
+    function shouldEmitFile(scriptInfo: ScriptInfo) {
+        return !scriptInfo.hasMixedContent;
+    }
+
     /**
      * An abstract file info that maintains a shape signature.
      */
@@ -168,7 +172,7 @@ namespace ts.server {
                 if (options && (options.out || options.outFile)) {
                     return singleFileResult;
                 }
-                return map(filter(this.project.getScriptInfosWithoutDefaultLib(), info => !info.hasMixedContent), info => info.fileName);
+                return map(filter(this.project.getScriptInfosWithoutDefaultLib(), shouldEmitFile), info => info.fileName);
             }
             return singleFileResult;
         }
@@ -327,7 +331,7 @@ namespace ts.server {
             }
 
             if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
-                return map(filter(this.project.getScriptInfosWithoutDefaultLib(), info => !info.hasMixedContent), info => info.fileName);
+                return map(filter(this.project.getScriptInfosWithoutDefaultLib(), shouldEmitFile), info => info.fileName);
             }
 
             const options = this.project.getCompilerOptions();
@@ -356,7 +360,7 @@ namespace ts.server {
             }
             const result: string[] = [];
             for (const fileName in fileNameSet) {
-                if (!fileNameSet[fileName].hasMixedContent) {
+                if (shouldEmitFile(fileNameSet[fileName])) {
                     result.push(fileName);
                 }
             }
