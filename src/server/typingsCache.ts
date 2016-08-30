@@ -5,12 +5,14 @@ namespace ts.server {
         enqueueInstallTypingsRequest(p: Project, typingOptions: TypingOptions): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
+        readonly globalTypingsCacheLocation: string;
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
         enqueueInstallTypingsRequest: () => {},
         attach: (projectService: ProjectService) => {},
-        onProjectClosed: (p: Project) => {}
+        onProjectClosed: (p: Project) => {},
+        globalTypingsCacheLocation: undefined
     };
 
     class TypingsCacheEntry {

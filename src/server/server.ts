@@ -13,6 +13,29 @@ namespace ts.server {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
     } = require("child_process");
 
+    const os: {
+        homedir(): string
+    } = require("os");
+
+
+    function getGlobalTypingsCacheLocation() {
+        let basePath: string;
+        switch (process.platform) {
+            case "win32":
+                basePath = process.env.LOCALAPPDATA || process.env.APPDATA || os.homedir();
+                break;
+            case "linux":
+                basePath = os.homedir();
+                break;
+            case "darwin":
+                basePath = combinePaths(os.homedir(), "Library/Application Support/");
+                break;
+        }
+
+        Debug.assert(basePath !== undefined);
+        return combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
+    }
+
     interface NodeChildProcess {
         send(message: any, sendHandle?: any): void;
         on(message: "message", f: (m: any) => void): void;
@@ -167,7 +190,11 @@ namespace ts.server {
         private socket: NodeSocket;
         private projectService: ProjectService;
 
-        constructor(private readonly logger: server.Logger, private readonly eventPort: number, private newLine: string) {
+        constructor(
+            private readonly logger: server.Logger,
+            private readonly eventPort: number,
+            readonly globalTypingsCacheLocation: string,
+            private newLine: string) {
             if (eventPort) {
                 const s = net.connect({ port: eventPort }, () => {
                     this.socket = s;
@@ -181,7 +208,7 @@ namespace ts.server {
                 this.logger.info("Binding...");
             }
 
-            const args: string[] = [];
+            const args: string[] = ["--globalTypingsCacheLocation", this.globalTypingsCacheLocation];
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
                 args.push("--logFile", combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
             }
@@ -238,12 +265,13 @@ namespace ts.server {
             installerEventPort: number,
             canUseEvents: boolean,
             useSingleInferredProject: boolean,
+            globalTypingsCacheLocation: string,
             logger: server.Logger) {
             super(
                 host,
                 cancellationToken,
                 useSingleInferredProject,
-                new NodeTypingsInstaller(logger, installerEventPort, host.newLine),
+                new NodeTypingsInstaller(logger, installerEventPort, globalTypingsCacheLocation, host.newLine),
                 Buffer.byteLength,
                 process.hrtime,
                 logger,
@@ -442,12 +470,6 @@ namespace ts.server {
         }
     }
 
-    function writeCompressedData(prefix: string, compressed: CompressedData, suffix: string): void {
-        sys.write(prefix);
-        writeMessage(compressed.data);
-        sys.write(suffix);
-    }
-
     const sys = <ServerHost>ts.sys;
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
@@ -463,7 +485,6 @@ namespace ts.server {
     sys.clearTimeout = clearTimeout;
     sys.setImmediate = setImmediate;
     sys.clearImmediate = clearImmediate;
-    sys.writeCompressedData = writeCompressedData;
     if (typeof global !== "undefined" && global.gc) {
         sys.gc = () => global.gc();
     }
@@ -491,7 +512,14 @@ namespace ts.server {
     }
 
     const useSingleInferredProject = sys.args.indexOf("--useSingleInferredProject") >= 0;
-    const ioSession = new IOSession(sys, cancellationToken, eventPort, /*canUseEvents*/ eventPort === undefined, useSingleInferredProject, logger);
+    const ioSession = new IOSession(
+        sys,
+        cancellationToken,
+        eventPort,
+        /*canUseEvents*/ eventPort === undefined,
+        useSingleInferredProject,
+        getGlobalTypingsCacheLocation(),
+        logger);
     process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");
     });

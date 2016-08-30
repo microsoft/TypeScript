@@ -16,6 +16,7 @@ declare namespace ts.server {
         clearImmediate(timeoutId: any): void;
         writeCompressedData(prefix: string, data: CompressedData, suffix: string): void;
         gc?(): void;
+        trace?(s: string): void;
     }
 
     export interface TypingInstallerRequest {
