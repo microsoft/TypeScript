@@ -109,7 +109,8 @@ namespace ts.server {
                 return [];
             }
             this.updateGraph();
-            return this.builder.getFilesAffectedBy(scriptInfo);
+            const allAffectedFiles = this.builder.getFilesAffectedBy(scriptInfo);
+            return filter(allAffectedFiles, file => fileExtensionIsAny(file, [".ts", ".tsx"]));
         }
 
         getProjectVersion() {
