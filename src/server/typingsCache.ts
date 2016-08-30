@@ -82,7 +82,7 @@ namespace ts.server {
             }
 
             const entry = this.perProjectCache[project.getProjectName()];
-            const result: TypingsArray = entry ? entry.typings : <any>emptyArray;
+            const result: TypingsArray = entry && entry.typings.length > 0 ? entry.typings : toTypingsArray(typingOptions.include);
             if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
                 // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
                 // instead it acts as a placeholder to prevent issuing multiple requests

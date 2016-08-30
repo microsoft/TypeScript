@@ -114,7 +114,7 @@ namespace ts.server.typingsInstaller {
         protected runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
             const id = this.installRunCount;
             this.installRunCount++;
-            const command = `npm install ${typingsToInstall.map(t => "@types/" + t)} --save-dev`;
+            const command = `npm install ${typingsToInstall.map(t => "@types/" + t).join(" ")} --save-dev`;
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Running npm install @types ${id}, command '${command}'. cache path '${cachePath}'`);
             }
