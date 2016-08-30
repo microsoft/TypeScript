@@ -3445,9 +3445,9 @@ namespace ts {
         function getTypeOfBasePropertyDeclaration(declaration: PropertyDeclaration) {
             if (declaration.parent.kind === SyntaxKind.ClassDeclaration) {
                 const parent = <ClassLikeDeclaration>declaration.parent;
-                const types = getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(parent)));
-                const implementedTypeNodes = getClassImplementsHeritageClauseElements(parent) || ([] as NodeArray<ExpressionWithTypeArguments>);
-                const allBases = getIntersectionType(types.concat(map(implementedTypeNodes, getTypeFromTypeReference)));
+                const baseClasses = getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(parent)));
+                const implementsNode = getClassImplementsHeritageClauseElements(parent) || ([] as NodeArray<ExpressionWithTypeArguments>);
+                const allBases = getIntersectionType(baseClasses.concat(map(implementsNode, getTypeFromTypeReference)));
                 const baseProperty = getPropertyOfType(allBases, declaration.symbol.name);
                 if (baseProperty) {
                     return getTypeOfSymbol(baseProperty);
