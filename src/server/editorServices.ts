@@ -312,6 +312,7 @@ namespace ts.server {
             const info = this.getScriptInfoForNormalizedPath(fileName);
             if (!info) {
                 this.logger.info(`Error: got watch notification for unknown file: ${fileName}`);
+                return;
             }
 
             if (!this.host.fileExists(fileName)) {
