@@ -315,10 +315,6 @@
         "category": "Error",
         "code": 1110
     },
-    "A class member cannot be declared optional.": {
-        "category": "Error",
-        "code": 1112
-    },
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
         "code": 1113
@@ -447,7 +443,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided with a valid module type. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
+    "Cannot use imports, exports, or module augmentations when '--module' is 'none'.": {
         "category": "Error",
         "code": 1148
     },
@@ -575,7 +571,7 @@
         "category": "Error",
         "code": 1186
     },
-    "A parameter property may not be a binding pattern.": {
+    "A parameter property may not be declared using a binding pattern.": {
         "category": "Error",
         "code": 1187
     },
@@ -631,17 +627,13 @@
         "category": "Error",
         "code": 1200
     },
-    "Import assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
+    "Import assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 1202
     },
-    "Export assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'export default' or another module format instead.": {
+    "Export assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 1203
-    },
-    "Cannot compile modules into 'es2015' when targeting 'ES5' or lower.": {
-        "category": "Error",
-        "code": 1204
     },
     "Decorators are not valid here.": {
         "category": "Error",
@@ -691,7 +683,7 @@
         "category": "Error",
         "code": 1219
     },
-    "Generators are only available when targeting ECMAScript 6 or higher.": {
+    "Generators are only available when targeting ECMAScript 2015 or higher.": {
         "category": "Error",
         "code": 1220
     },
@@ -823,6 +815,10 @@
         "category": "Error",
         "code": 1252
     },
+    "'{0}' tag cannot be used independently as a top level JSDoc tag.": {
+        "category": "Error",
+        "code": 1253
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -831,7 +827,7 @@
         "category": "Error",
         "code": 1308
     },
-    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+    "Async functions are only available when targeting ECMAScript 2015 or higher.": {
         "category": "Error",
         "code": 1311
     },
@@ -854,6 +850,10 @@
     "Global module exports may only appear at top level.": {
         "category": "Error",
         "code": 1316
+    },
+    "A parameter property cannot be declared using a rest parameter.": {
+        "category": "Error",
+        "code": 1317
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1751,6 +1751,14 @@
         "category": "Error",
         "code": 2533
     },
+    "A function returning 'never' cannot have a reachable end point.": {
+        "category": "Error",
+        "code": 2534
+    },
+    "Enum type '{0}' has members with initializers that are not literals.": {
+        "category": "Error",
+        "code": 2535
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1843,10 +1851,6 @@
         "category": "Error",
         "code": 2664
     },
-    "Module augmentation cannot introduce new names in the top level scope.": {
-        "category": "Error",
-        "code": 2665
-    },
     "Exports and export assignments are not permitted in module augmentations.": {
         "category": "Error",
         "code": 2666
@@ -1911,7 +1915,7 @@
         "category": "Error",
         "code": 2681
     },
-    "A setter cannot have a 'this' parameter.": {
+    "'get' and 'set' accessor must have the same 'this' type.": {
         "category": "Error",
         "code": 2682
     },
@@ -1926,6 +1930,34 @@
     "The 'this' types of each signature are incompatible.": {
         "category": "Error",
         "code": 2685
+    },
+    "Identifier '{0}' must be imported from a module": {
+        "category": "Error",
+        "code": 2686
+    },
+    "All declarations of '{0}' must have identical modifiers.": {
+        "category": "Error",
+        "code": 2687
+    },
+    "Cannot find type definition file for '{0}'.": {
+        "category": "Error",
+        "code": 2688
+    },
+    "Cannot extend an interface '{0}'. Did you mean 'implements'?": {
+        "category": "Error",
+        "code": 2689
+    },
+    "A class must be declared after its base class.": {
+        "category": "Error",
+        "code": 2690
+    },
+    "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
+        "category": "Error",
+        "code": 2691
+    },
+    "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
+        "category": "Error",
+        "code": 2692
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2207,7 +2239,7 @@
         "category": "Error",
         "code": 4082
     },
-    "Conflicting library definitions for '{0}' found at '{1}' and '{2}'. Copy the correct file to the 'typings' folder to resolve this conflict.": {
+    "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Message",
         "code": 4090
     },
@@ -2219,6 +2251,14 @@
     "Cannot find the common subdirectory path for the input files.": {
         "category": "Error",
         "code": 5009
+    },
+    "File specification cannot end in a recursive directory wildcard ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5010
+    },
+    "File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5011
     },
     "Cannot read file '{0}': {1}": {
         "category": "Error",
@@ -2252,7 +2292,7 @@
         "category": "Error",
         "code": 5047
     },
-    "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+    "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
     },
@@ -2300,13 +2340,21 @@
         "category": "Error",
         "code": 5062
     },
-    "Substututions for pattern '{0}' should be an array.": {
+    "Substitutions for pattern '{0}' should be an array.": {
         "category": "Error",
         "code": 5063
     },
     "Substitution '{0}' for pattern '{1}' has incorrect type, expected 'string', got '{2}'.": {
         "category": "Error",
         "code": 5064
+    },
+    "File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5065
+    },
+    "Substitutions for pattern '{0}' shouldn't be an empty array.": {
+        "category": "Error",
+        "code": 5066
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2351,6 +2399,10 @@
     "Allow default imports from modules with no default export. This does not affect code emit, just typechecking.": {
         "category": "Message",
         "code": 6011
+    },
+    "Skip type checking of declaration files.": {
+        "category": "Message",
+        "code": 6012
     },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
         "category": "Message",
@@ -2748,6 +2800,46 @@
         "category": "Message",
         "code": 6128
     },
+    "The config file '{0}' found doesn't contain any source files.": {
+        "category": "Error",
+        "code": 6129
+    },
+    "Resolving real path for '{0}', result '{1}'": {
+        "category": "Message",
+        "code": 6130
+    },
+    "Cannot compile modules using option '{0}' unless the '--module' flag is 'amd' or 'system'.": {
+        "category": "Error",
+        "code": 6131
+    },
+    "File name '{0}' has a '{1}' extension - stripping it": {
+        "category": "Message",
+        "code": 6132
+    },
+    "'{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6133
+    },
+    "Report errors on unused locals.": {
+        "category": "Message",
+        "code": 6134
+    },
+    "Report errors on unused parameters.": {
+        "category": "Message",
+        "code": 6135
+    },
+    "The maximum dependency depth to search under node_modules and load JavaScript files": {
+        "category": "Message",
+        "code": 6136
+    },
+    "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
+        "category": "Message",
+        "code": 6137
+    },
+    "Property '{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6138
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2891,10 +2983,6 @@
     "'parameter modifiers' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8012
-    },
-    "'property declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8014
     },
     "'enum declarations' can only be used in a .ts file.": {
         "category": "Error",

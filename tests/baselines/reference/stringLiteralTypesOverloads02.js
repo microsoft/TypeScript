@@ -106,6 +106,6 @@ declare const boolean: "boolean";
 declare const stringOrNumber: "string" | "number";
 declare const stringOrBoolean: "string" | "boolean";
 declare const booleanOrNumber: "number" | "boolean";
-declare const stringOrBooleanOrNumber: "string" | "boolean" | "number";
+declare const stringOrBooleanOrNumber: "string" | "number" | "boolean";
 declare namespace Consts2 {
 }

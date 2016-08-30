@@ -1,7 +1,8 @@
 // @noImplicitReferences: true
 // @traceResolution: true
 // @declaration: true
-// @typesRoot: /
+// @typeRoots: /types
+// @currentDirectory: /
 
 // local value shadows global - no need to add type reference directive 
    

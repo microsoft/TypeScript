@@ -1,7 +1,8 @@
 // @noImplicitReferences: true
 // @traceResolution: true
 // @declaration: true
-// @typesRoot: /
+// @typeRoots: /types
+// @currentDirectory: /
 
 // $ comes from type declaration file - type reference directive should be added
 

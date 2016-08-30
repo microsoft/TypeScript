@@ -2,7 +2,7 @@
 
 namespace ts {
     export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
-    export type DirectoryWatcherCallback = (directoryName: string) => void;
+    export type DirectoryWatcherCallback = (fileName: string) => void;
     export interface WatchedFile {
         fileName: string;
         callback: FileWatcherCallback;
@@ -15,6 +15,7 @@ namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
+        getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
@@ -24,11 +25,13 @@ namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
-        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        getDirectories(path: string): string[];
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
         getModifiedTime?(path: string): Date;
         createHash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
+        realpath?(path: string): string;
     }
 
     export interface FileWatcher {
@@ -70,16 +73,19 @@ namespace ts {
         resolvePath(path: string): string;
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
-        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        getDirectories(path: string): string[];
+        readDirectory(path: string, extensions?: string[], basePaths?: string[], excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        realpath(path: string): string;
     };
 
-    export var sys: System = (function () {
+    export var sys: System = (function() {
 
         function getWScriptSystem(): System {
 
             const fso = new ActiveXObject("Scripting.FileSystemObject");
+            const shell = new ActiveXObject("WScript.Shell");
 
             const fileStream = new ActiveXObject("ADODB.Stream");
             fileStream.Type = 2 /*text*/;
@@ -147,10 +153,6 @@ namespace ts {
                 }
             }
 
-            function getCanonicalPath(path: string): string {
-                return path.toLowerCase();
-            }
-
             function getNames(collection: any): string[] {
                 const result: string[] = [];
                 for (let e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
@@ -159,31 +161,28 @@ namespace ts {
                 return result.sort();
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
-                const result: string[] = [];
-                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
-                return result;
-                function visitDirectory(path: string) {
+            function getDirectories(path: string): string[] {
+                const folder = fso.GetFolder(path);
+                return getNames(folder.subfolders);
+            }
+
+            function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
+                try {
                     const folder = fso.GetFolder(path || ".");
                     const files = getNames(folder.files);
-                    for (const current of files) {
-                        const name = combinePaths(path, current);
-                        if ((!extension || fileExtensionIs(name, extension)) && !contains(exclude, getCanonicalPath(name))) {
-                            result.push(name);
-                        }
-                    }
-                    const subfolders = getNames(folder.subfolders);
-                    for (const current of subfolders) {
-                        const name = combinePaths(path, current);
-                        if (!contains(exclude, getCanonicalPath(name))) {
-                            visitDirectory(name);
-                        }
-                    }
+                    const directories = getNames(folder.subfolders);
+                    return { files, directories };
+                }
+                catch (e) {
+                    return { files: [], directories: [] };
                 }
             }
 
-            return {
+            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[]): string[] {
+                return matchFiles(path, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, shell.CurrentDirectory, getAccessibleFileSystemEntries);
+            }
+
+            const wscriptSystem: System = {
                 args,
                 newLine: "\r\n",
                 useCaseSensitiveFileNames: false,
@@ -202,7 +201,7 @@ namespace ts {
                     return fso.FolderExists(path);
                 },
                 createDirectory(directoryName: string) {
-                    if (!this.directoryExists(directoryName)) {
+                    if (!wscriptSystem.directoryExists(directoryName)) {
                         fso.CreateFolder(directoryName);
                     }
                 },
@@ -210,8 +209,9 @@ namespace ts {
                     return WScript.ScriptFullName;
                 },
                 getCurrentDirectory() {
-                    return new ActiveXObject("WScript.Shell").CurrentDirectory;
+                    return shell.CurrentDirectory;
                 },
+                getDirectories,
                 readDirectory,
                 exit(exitCode?: number): void {
                     try {
@@ -221,6 +221,7 @@ namespace ts {
                     }
                 }
             };
+            return wscriptSystem;
         }
 
         function getNodeSystem(): System {
@@ -232,15 +233,15 @@ namespace ts {
             const useNonPollingWatchers = process.env["TSC_NONPOLLING_WATCHER"];
 
             function createWatchedFileSet() {
-                const dirWatchers: Map<DirectoryWatcher> = {};
+                const dirWatchers = createMap<DirectoryWatcher>();
                 // One file can have multiple watchers
-                const fileWatcherCallbacks: Map<FileWatcherCallback[]> = {};
+                const fileWatcherCallbacks = createMap<FileWatcherCallback[]>();
                 return { addFile, removeFile };
 
                 function reduceDirWatcherRefCountForFile(fileName: string) {
                     const dirName = getDirectoryPath(fileName);
-                    if (hasProperty(dirWatchers, dirName)) {
-                        const watcher = dirWatchers[dirName];
+                    const watcher = dirWatchers[dirName];
+                    if (watcher) {
                         watcher.referenceCount -= 1;
                         if (watcher.referenceCount <= 0) {
                             watcher.close();
@@ -250,13 +251,12 @@ namespace ts {
                 }
 
                 function addDirWatcher(dirPath: string): void {
-                    if (hasProperty(dirWatchers, dirPath)) {
-                        const watcher = dirWatchers[dirPath];
+                    let watcher = dirWatchers[dirPath];
+                    if (watcher) {
                         watcher.referenceCount += 1;
                         return;
                     }
-
-                    const watcher: DirectoryWatcher = _fs.watch(
+                    watcher = _fs.watch(
                         dirPath,
                         { persistent: true },
                         (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
@@ -267,12 +267,7 @@ namespace ts {
                 }
 
                 function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
-                    if (hasProperty(fileWatcherCallbacks, filePath)) {
-                        fileWatcherCallbacks[filePath].push(callback);
-                    }
-                    else {
-                        fileWatcherCallbacks[filePath] = [callback];
-                    }
+                    (fileWatcherCallbacks[filePath] || (fileWatcherCallbacks[filePath] = [])).push(callback);
                 }
 
                 function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
@@ -288,8 +283,9 @@ namespace ts {
                 }
 
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
-                    if (hasProperty(fileWatcherCallbacks, filePath)) {
-                        const newCallbacks = copyListRemovingItem(callback, fileWatcherCallbacks[filePath]);
+                    const callbacks = fileWatcherCallbacks[filePath];
+                    if (callbacks) {
+                        const newCallbacks = copyListRemovingItem(callback, callbacks);
                         if (newCallbacks.length === 0) {
                             delete fileWatcherCallbacks[filePath];
                         }
@@ -305,7 +301,7 @@ namespace ts {
                         ? undefined
                         : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
                     // Some applications save a working file via rename operations
-                    if ((eventName === "change" || eventName === "rename") && hasProperty(fileWatcherCallbacks, fileName)) {
+                    if ((eventName === "change" || eventName === "rename") && fileWatcherCallbacks[fileName]) {
                         for (const fileCallback of fileWatcherCallbacks[fileName]) {
                             fileCallback(fileName);
                         }
@@ -370,8 +366,43 @@ namespace ts {
                 }
             }
 
-            function getCanonicalPath(path: string): string {
-                return useCaseSensitiveFileNames ? path : path.toLowerCase();
+            function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
+                try {
+                    const entries = _fs.readdirSync(path || ".").sort();
+                    const files: string[] = [];
+                    const directories: string[] = [];
+                    for (const entry of entries) {
+                        // This is necessary because on some file system node fails to exclude
+                        // "." and "..". See https://github.com/nodejs/node/issues/4002
+                        if (entry === "." || entry === "..") {
+                            continue;
+                        }
+                        const name = combinePaths(path, entry);
+
+                        let stat: any;
+                        try {
+                            stat = _fs.statSync(name);
+                        }
+                        catch (e) {
+                            continue;
+                        }
+
+                        if (stat.isFile()) {
+                            files.push(entry);
+                        }
+                        else if (stat.isDirectory()) {
+                            directories.push(entry);
+                        }
+                    }
+                    return { files, directories };
+                }
+                catch (e) {
+                    return { files: [], directories: [] };
+                }
+            }
+
+            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[]): string[] {
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), getAccessibleFileSystemEntries);
             }
 
             const enum FileSystemEntryKind {
@@ -400,40 +431,11 @@ namespace ts {
                 return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
-                const result: string[] = [];
-                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
-                return result;
-                function visitDirectory(path: string) {
-                    const files = _fs.readdirSync(path || ".").sort();
-                    const directories: string[] = [];
-                    for (const current of files) {
-                        // This is necessary because on some file system node fails to exclude
-                        // "." and "..". See https://github.com/nodejs/node/issues/4002
-                        if (current === "." || current === "..") {
-                            continue;
-                        }
-                        const name = combinePaths(path, current);
-                        if (!contains(exclude, getCanonicalPath(name))) {
-                            const stat = _fs.statSync(name);
-                            if (stat.isFile()) {
-                                if (!extension || fileExtensionIs(name, extension)) {
-                                    result.push(name);
-                                }
-                            }
-                            else if (stat.isDirectory()) {
-                                directories.push(name);
-                            }
-                        }
-                    }
-                    for (const current of directories) {
-                        visitDirectory(current);
-                    }
-                }
+            function getDirectories(path: string): string[] {
+                return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
             }
 
-            return {
+            const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
@@ -489,13 +491,13 @@ namespace ts {
                         }
                     );
                 },
-                resolvePath: function (path: string): string {
+                resolvePath: function(path: string): string {
                     return _path.resolve(path);
                 },
                 fileExists,
                 directoryExists,
                 createDirectory(directoryName: string) {
-                    if (!this.directoryExists(directoryName)) {
+                    if (!nodeSystem.directoryExists(directoryName)) {
                         _fs.mkdirSync(directoryName);
                     }
                 },
@@ -505,6 +507,7 @@ namespace ts {
                 getCurrentDirectory() {
                     return process.cwd();
                 },
+                getDirectories,
                 readDirectory,
                 getModifiedTime(path) {
                     try {
@@ -525,14 +528,28 @@ namespace ts {
                     }
                     return process.memoryUsage().heapUsed;
                 },
+                getFileSize(path) {
+                    try {
+                        const stat = _fs.statSync(path);
+                        if (stat.isFile()) {
+                            return stat.size;
+                        }
+                    }
+                    catch (e) { }
+                    return 0;
+                },
                 exit(exitCode?: number): void {
                     process.exit(exitCode);
+                },
+                realpath(path: string): string {
+                    return _fs.realpathSync(path);
                 }
             };
+            return nodeSystem;
         }
 
         function getChakraSystem(): System {
-
+            const realpath = ChakraHost.realpath && ((path: string) => ChakraHost.realpath(path));
             return {
                 newLine: ChakraHost.newLine || "\r\n",
                 args: ChakraHost.args,
@@ -556,8 +573,13 @@ namespace ts {
                 createDirectory: ChakraHost.createDirectory,
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
-                readDirectory: ChakraHost.readDirectory,
+                getDirectories: ChakraHost.getDirectories,
+                readDirectory: (path: string, extensions?: string[], excludes?: string[], includes?: string[]) => {
+                    const pattern = getFileMatcherPatterns(path, extensions, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
+                    return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
+                },
                 exit: ChakraHost.quit,
+                realpath
             };
         }
 

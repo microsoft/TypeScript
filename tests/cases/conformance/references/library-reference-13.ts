@@ -1,12 +1,14 @@
 // @noImplicitReferences: true
 // @traceResolution: true
+// @currentDirectory: /
 
 // load type declarations from types section of tsconfig
 
 // @filename: /a/tsconfig.json
 {
     "compilerOptions": {
-        "types": [ "jquery" ]
+        "types": [ "jquery" ],
+        "typeRoots": ["/a/types"]
     }
 }
 

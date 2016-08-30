@@ -17,6 +17,7 @@ tests/baselines/reference/projectOutput/*
 tests/baselines/local/projectOutput/*
 tests/services/baselines/prototyping/local/*
 tests/services/browser/typescriptServices.js
+scripts/authors.js
 scripts/configureNightly.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
@@ -34,7 +35,6 @@ tests/webhost/*.d.ts
 tests/webhost/webtsc.js
 tests/cases/**/*.js
 tests/cases/**/*.js.map
-tests/cases/**/*.d.ts
 *.config
 scripts/debug.bat
 scripts/run.bat
@@ -49,3 +49,6 @@ internal/
 **/.vs
 **/.vscode
 !**/.vscode/tasks.json
+!tests/cases/projects/projectOption/**/node_modules
+!tests/cases/projects/NodeModulesSearch/**/*
+!tests/baselines/reference/project/nodeModules*/**/*

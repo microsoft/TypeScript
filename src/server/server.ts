@@ -1,11 +1,59 @@
-/// <reference path="node.d.ts" />
+/// <reference types="node" />
 /// <reference path="session.ts" />
 // used in fs.writeSync
 /* tslint:disable:no-null-keyword */
 
 namespace ts.server {
-    const readline: NodeJS.ReadLine = require("readline");
-    const fs: typeof NodeJS.fs = require("fs");
+    interface ReadLineOptions {
+        input: NodeJS.ReadableStream;
+        output?: NodeJS.WritableStream;
+        terminal?: boolean;
+        historySize?: number;
+    }
+
+    interface Key {
+        sequence?: string;
+        name?: string;
+        ctrl?: boolean;
+        meta?: boolean;
+        shift?: boolean;
+    }
+
+    interface Stats {
+        isFile(): boolean;
+        isDirectory(): boolean;
+        isBlockDevice(): boolean;
+        isCharacterDevice(): boolean;
+        isSymbolicLink(): boolean;
+        isFIFO(): boolean;
+        isSocket(): boolean;
+        dev: number;
+        ino: number;
+        mode: number;
+        nlink: number;
+        uid: number;
+        gid: number;
+        rdev: number;
+        size: number;
+        blksize: number;
+        blocks: number;
+        atime: Date;
+        mtime: Date;
+        ctime: Date;
+        birthtime: Date;
+    }
+
+    const readline: {
+        createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
+    } = require("readline");
+    const fs: {
+        openSync(path: string, options: string): number;
+        close(fd: number): void;
+        writeSync(fd: number, buffer: Buffer, offset: number, length: number, position?: number): number;
+        writeSync(fd: number, data: any, position?: number, enconding?: string): number;
+        statSync(path: string): Stats;
+        stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
+    } = require("fs");
 
     const rl = readline.createInterface({
         input: process.stdin,
@@ -266,16 +314,21 @@ namespace ts.server {
         }
     }
 
+    const sys = <ServerHost>ts.sys;
+
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    ts.sys.write = (s: string) => writeMessage(s);
-    ts.sys.watchFile = (fileName, callback) => {
+    sys.write = (s: string) => writeMessage(s);
+    sys.watchFile = (fileName, callback) => {
         const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
         return {
             close: () => pollingWatchedFileSet.removeFile(watchedFile)
         };
     };
 
-    const ioSession = new IOSession(ts.sys, logger);
+    sys.setTimeout = setTimeout;
+    sys.clearTimeout = clearTimeout;
+
+    const ioSession = new IOSession(sys, logger);
     process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });

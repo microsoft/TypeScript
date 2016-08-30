@@ -55,14 +55,14 @@ function foo() {
                 if (y == 1) {
 >y == 1 : boolean
 >y : number
->1 : number
+>1 : 1
 
                     break;
                 }
                 if (y == 1) {
 >y == 1 : boolean
 >y : number
->1 : number
+>1 : 1
 
                     break l1;
 >l1 : any
@@ -70,7 +70,7 @@ function foo() {
                 if (y == 1) {
 >y == 1 : boolean
 >y : number
->1 : number
+>1 : 1
 
                     break ll1;
 >ll1 : any
@@ -78,7 +78,7 @@ function foo() {
                 if (y == 1) {
 >y == 1 : boolean
 >y : number
->1 : number
+>1 : 1
 
                     continue l0;
 >l0 : any
@@ -87,14 +87,14 @@ function foo() {
                 if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                     continue;
                 }
                 if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                     continue l1;
 >l1 : any
@@ -102,7 +102,7 @@ function foo() {
                 if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                     continue ll1;
 >ll1 : any
@@ -110,7 +110,7 @@ function foo() {
                 if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                     return "123"
 >"123" : string
@@ -118,7 +118,7 @@ function foo() {
                 if (x == 3) {
 >x == 3 : boolean
 >x : number
->3 : number
+>3 : 3
 
                     return;
                 }
@@ -126,14 +126,14 @@ function foo() {
             if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
                 break;
             }
             if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
                 break l1;
 >l1 : any
@@ -141,14 +141,14 @@ function foo() {
             if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                 continue;
             }
             if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                 continue l1;
 >l1 : any
@@ -156,7 +156,7 @@ function foo() {
             if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                 continue l0;
 >l0 : any
@@ -164,7 +164,7 @@ function foo() {
             if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                 return "456";
 >"456" : string
@@ -172,7 +172,7 @@ function foo() {
             if (x == 3) {
 >x == 3 : boolean
 >x : number
->3 : number
+>3 : 3
 
                 return;
             }
@@ -230,14 +230,14 @@ function foo_c() {
                 if (y == 1) {
 >y == 1 : boolean
 >y : number
->1 : number
+>1 : 1
 
                     break;
                 }
                 if (y == 1) {
 >y == 1 : boolean
 >y : number
->1 : number
+>1 : 1
 
                     break l1;
 >l1 : any
@@ -245,7 +245,7 @@ function foo_c() {
                 if (y == 1) {
 >y == 1 : boolean
 >y : number
->1 : number
+>1 : 1
 
                     break ll1;
 >ll1 : any
@@ -253,7 +253,7 @@ function foo_c() {
                 if (y == 1) {
 >y == 1 : boolean
 >y : number
->1 : number
+>1 : 1
 
                     continue l0;
 >l0 : any
@@ -262,14 +262,14 @@ function foo_c() {
                 if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                     continue;
                 }
                 if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                     continue l1;
 >l1 : any
@@ -277,7 +277,7 @@ function foo_c() {
                 if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                     continue ll1;
 >ll1 : any
@@ -285,7 +285,7 @@ function foo_c() {
                 if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                     return "123"
 >"123" : string
@@ -293,7 +293,7 @@ function foo_c() {
                 if (x == 3) {
 >x == 3 : boolean
 >x : number
->3 : number
+>3 : 3
 
                     return;
                 }
@@ -301,14 +301,14 @@ function foo_c() {
             if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
                 break;
             }
             if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
                 break l1;
 >l1 : any
@@ -316,14 +316,14 @@ function foo_c() {
             if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                 continue;
             }
             if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                 continue l1;
 >l1 : any
@@ -331,7 +331,7 @@ function foo_c() {
             if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                 continue l0;
 >l0 : any
@@ -339,7 +339,7 @@ function foo_c() {
             if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
                 return "456";
 >"456" : string
@@ -347,7 +347,7 @@ function foo_c() {
             if (x == 3) {
 >x == 3 : boolean
 >x : number
->3 : number
+>3 : 3
 
                 return;
             }

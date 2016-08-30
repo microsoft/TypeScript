@@ -1,8 +1,9 @@
 // @noImplicitReferences: true
 // @traceResolution: true
 // @declaration: true
-// @typesRoot: /
+// @typeRoots: /types
 // @types: lib
+// @currentDirectory: /
 
 // @filename: /types/lib/index.d.ts
 interface $ { x }

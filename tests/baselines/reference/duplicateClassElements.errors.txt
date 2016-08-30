@@ -1,4 +1,3 @@
-tests/cases/compiler/duplicateClassElements.ts(2,12): error TS2300: Duplicate identifier 'a'.
 tests/cases/compiler/duplicateClassElements.ts(3,12): error TS2300: Duplicate identifier 'a'.
 tests/cases/compiler/duplicateClassElements.ts(4,12): error TS2393: Duplicate function implementation.
 tests/cases/compiler/duplicateClassElements.ts(6,12): error TS2393: Duplicate function implementation.
@@ -15,10 +14,9 @@ tests/cases/compiler/duplicateClassElements.ts(23,9): error TS2300: Duplicate id
 tests/cases/compiler/duplicateClassElements.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/duplicateClassElements.ts(26,9): error TS2300: Duplicate identifier 'z'.
 tests/cases/compiler/duplicateClassElements.ts(29,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/duplicateClassElements.ts(29,9): error TS2300: Duplicate identifier 'x2'.
 tests/cases/compiler/duplicateClassElements.ts(32,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/duplicateClassElements.ts(32,9): error TS2300: Duplicate identifier 'x2'.
 tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2300: Duplicate identifier 'x2'.
+tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x2' must be of type 'number', but here has type 'any'.
 tests/cases/compiler/duplicateClassElements.ts(36,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/duplicateClassElements.ts(36,9): error TS2300: Duplicate identifier 'z2'.
 tests/cases/compiler/duplicateClassElements.ts(39,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -26,11 +24,9 @@ tests/cases/compiler/duplicateClassElements.ts(39,9): error TS2300: Duplicate id
 tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
 
 
-==== tests/cases/compiler/duplicateClassElements.ts (26 errors) ====
+==== tests/cases/compiler/duplicateClassElements.ts (24 errors) ====
     class a {
         public a;
-               ~
-!!! error TS2300: Duplicate identifier 'a'.
         public a;
                ~
 !!! error TS2300: Duplicate identifier 'a'.
@@ -90,19 +86,17 @@ tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate i
         get x2() {
             ~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~
-!!! error TS2300: Duplicate identifier 'x2'.
             return 10;
         }
         set x2(_x: number) {
             ~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~~
-!!! error TS2300: Duplicate identifier 'x2'.
         }
         public x2;
                ~~
 !!! error TS2300: Duplicate identifier 'x2'.
+               ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x2' must be of type 'number', but here has type 'any'.
     
         get z2() {
             ~~

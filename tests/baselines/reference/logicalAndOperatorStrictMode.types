@@ -1,0 +1,423 @@
+=== tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts ===
+
+const a = [0];
+>a : number[]
+>[0] : number[]
+>0 : number
+
+const s = "";
+>s : string
+>"" : string
+
+const x = 0;
+>x : number
+>0 : number
+
+const b = false;
+>b : boolean
+>false : boolean
+
+const v: void = undefined;
+>v : void
+>undefined : undefined
+
+const u = undefined;
+>u : undefined
+>undefined : undefined
+
+const n = null;
+>n : null
+>null : null
+
+const z = s || x || u;
+>z : string | number | undefined
+>s || x || u : string | number | undefined
+>s || x : string | number
+>s : string
+>x : number
+>u : undefined
+
+const a1 = a && a;
+>a1 : number[]
+>a && a : number[]
+>a : number[]
+>a : number[]
+
+const a2 = a && s;
+>a2 : string
+>a && s : string
+>a : number[]
+>s : string
+
+const a3 = a && x;
+>a3 : number
+>a && x : number
+>a : number[]
+>x : number
+
+const a4 = a && b;
+>a4 : boolean
+>a && b : boolean
+>a : number[]
+>b : boolean
+
+const a5 = a && v;
+>a5 : void
+>a && v : void
+>a : number[]
+>v : void
+
+const a6 = a && u;
+>a6 : undefined
+>a && u : undefined
+>a : number[]
+>u : undefined
+
+const a7 = a && n;
+>a7 : null
+>a && n : null
+>a : number[]
+>n : null
+
+const a8 = a && z;
+>a8 : string | number | undefined
+>a && z : string | number | undefined
+>a : number[]
+>z : string | number | undefined
+
+const s1 = s && a;
+>s1 : "" | number[]
+>s && a : "" | number[]
+>s : string
+>a : number[]
+
+const s2 = s && s;
+>s2 : string
+>s && s : string
+>s : string
+>s : string
+
+const s3 = s && x;
+>s3 : number | ""
+>s && x : number | ""
+>s : string
+>x : number
+
+const s4 = s && b;
+>s4 : boolean | ""
+>s && b : boolean | ""
+>s : string
+>b : boolean
+
+const s5 = s && v;
+>s5 : void | ""
+>s && v : void | ""
+>s : string
+>v : void
+
+const s6 = s && u;
+>s6 : "" | undefined
+>s && u : "" | undefined
+>s : string
+>u : undefined
+
+const s7 = s && n;
+>s7 : "" | null
+>s && n : "" | null
+>s : string
+>n : null
+
+const s8 = s && z;
+>s8 : string | number | undefined
+>s && z : string | number | undefined
+>s : string
+>z : string | number | undefined
+
+const x1 = x && a;
+>x1 : 0 | number[]
+>x && a : 0 | number[]
+>x : number
+>a : number[]
+
+const x2 = x && s;
+>x2 : string | 0
+>x && s : string | 0
+>x : number
+>s : string
+
+const x3 = x && x;
+>x3 : number
+>x && x : number
+>x : number
+>x : number
+
+const x4 = x && b;
+>x4 : boolean | 0
+>x && b : boolean | 0
+>x : number
+>b : boolean
+
+const x5 = x && v;
+>x5 : void | 0
+>x && v : void | 0
+>x : number
+>v : void
+
+const x6 = x && u;
+>x6 : 0 | undefined
+>x && u : 0 | undefined
+>x : number
+>u : undefined
+
+const x7 = x && n;
+>x7 : 0 | null
+>x && n : 0 | null
+>x : number
+>n : null
+
+const x8 = x && z;
+>x8 : string | number | undefined
+>x && z : string | number | undefined
+>x : number
+>z : string | number | undefined
+
+const b1 = b && a;
+>b1 : false | number[]
+>b && a : false | number[]
+>b : boolean
+>a : number[]
+
+const b2 = b && s;
+>b2 : string | false
+>b && s : string | false
+>b : boolean
+>s : string
+
+const b3 = b && x;
+>b3 : number | false
+>b && x : number | false
+>b : boolean
+>x : number
+
+const b4 = b && b;
+>b4 : boolean
+>b && b : boolean
+>b : boolean
+>b : true
+
+const b5 = b && v;
+>b5 : false | void
+>b && v : false | void
+>b : boolean
+>v : void
+
+const b6 = b && u;
+>b6 : false | undefined
+>b && u : false | undefined
+>b : boolean
+>u : undefined
+
+const b7 = b && n;
+>b7 : false | null
+>b && n : false | null
+>b : boolean
+>n : null
+
+const b8 = b && z;
+>b8 : string | number | false | undefined
+>b && z : string | number | false | undefined
+>b : boolean
+>z : string | number | undefined
+
+const v1 = v && a;
+>v1 : void
+>v && a : void
+>v : void
+>a : number[]
+
+const v2 = v && s;
+>v2 : void
+>v && s : void
+>v : void
+>s : string
+
+const v3 = v && x;
+>v3 : void
+>v && x : void
+>v : void
+>x : number
+
+const v4 = v && b;
+>v4 : void
+>v && b : void
+>v : void
+>b : boolean
+
+const v5 = v && v;
+>v5 : void
+>v && v : void
+>v : void
+>v : never
+
+const v6 = v && u;
+>v6 : void
+>v && u : void
+>v : void
+>u : undefined
+
+const v7 = v && n;
+>v7 : void
+>v && n : void
+>v : void
+>n : null
+
+const v8 = v && z;
+>v8 : void
+>v && z : void
+>v : void
+>z : string | number | undefined
+
+const u1 = u && a;
+>u1 : undefined
+>u && a : undefined
+>u : undefined
+>a : number[]
+
+const u2 = u && s;
+>u2 : undefined
+>u && s : undefined
+>u : undefined
+>s : string
+
+const u3 = u && x;
+>u3 : undefined
+>u && x : undefined
+>u : undefined
+>x : number
+
+const u4 = u && b;
+>u4 : undefined
+>u && b : undefined
+>u : undefined
+>b : boolean
+
+const u5 = u && v;
+>u5 : undefined
+>u && v : undefined
+>u : undefined
+>v : void
+
+const u6 = u && u;
+>u6 : undefined
+>u && u : undefined
+>u : undefined
+>u : never
+
+const u7 = u && n;
+>u7 : undefined
+>u && n : undefined
+>u : undefined
+>n : null
+
+const u8 = u && z;
+>u8 : undefined
+>u && z : undefined
+>u : undefined
+>z : string | number | undefined
+
+const n1 = n && a;
+>n1 : null
+>n && a : null
+>n : null
+>a : number[]
+
+const n2 = n && s;
+>n2 : null
+>n && s : null
+>n : null
+>s : string
+
+const n3 = n && x;
+>n3 : null
+>n && x : null
+>n : null
+>x : number
+
+const n4 = n && b;
+>n4 : null
+>n && b : null
+>n : null
+>b : boolean
+
+const n5 = n && v;
+>n5 : null
+>n && v : null
+>n : null
+>v : void
+
+const n6 = n && u;
+>n6 : null
+>n && u : null
+>n : null
+>u : undefined
+
+const n7 = n && n;
+>n7 : null
+>n && n : null
+>n : null
+>n : never
+
+const n8 = n && z;
+>n8 : null
+>n && z : null
+>n : null
+>z : string | number | undefined
+
+const z1 = z && a;
+>z1 : "" | 0 | number[] | undefined
+>z && a : "" | 0 | number[] | undefined
+>z : string | number | undefined
+>a : number[]
+
+const z2 = z && s;
+>z2 : string | 0 | undefined
+>z && s : string | 0 | undefined
+>z : string | number | undefined
+>s : string
+
+const z3 = z && x;
+>z3 : number | "" | undefined
+>z && x : number | "" | undefined
+>z : string | number | undefined
+>x : number
+
+const z4 = z && b;
+>z4 : boolean | "" | 0 | undefined
+>z && b : boolean | "" | 0 | undefined
+>z : string | number | undefined
+>b : boolean
+
+const z5 = z && v;
+>z5 : void | "" | 0
+>z && v : void | "" | 0
+>z : string | number | undefined
+>v : void
+
+const z6 = z && u;
+>z6 : "" | 0 | undefined
+>z && u : "" | 0 | undefined
+>z : string | number | undefined
+>u : undefined
+
+const z7 = z && n;
+>z7 : "" | 0 | null | undefined
+>z && n : "" | 0 | null | undefined
+>z : string | number | undefined
+>n : null
+
+const z8 = z && z;
+>z8 : string | number | undefined
+>z && z : string | number | undefined
+>z : string | number | undefined
+>z : string | number
+
