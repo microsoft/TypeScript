@@ -3346,7 +3346,13 @@ namespace ts {
                         // Otherwise, fall back to 'any'.
                         else {
                             if (compilerOptions.noImplicitAny) {
-                                error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_type_annotation, symbolToString(symbol));
+                                if (setter) {
+                                    error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
+                                }
+                                else {
+                                    Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
+                                    error(getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
+                                }
                             }
                             type = anyType;
                         }
