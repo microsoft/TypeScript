@@ -183,17 +183,16 @@ namespace ts.server {
             public readonly logger: Logger,
             public readonly cancellationToken: HostCancellationToken,
             private readonly useSingleInferredProject: boolean,
-            private typingsInstaller: ITypingsInstaller,
+            readonly typingsInstaller: ITypingsInstaller = nullTypingsInstaller,
             private readonly eventHandler?: ProjectServiceEventHandler) {
 
             this.toCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(host);
 
-            const installer = typingsInstaller || nullTypingsInstaller;
-            installer.attach(this);
+            this.typingsInstaller.attach(this);
 
-            this.typingsCache = new TypingsCache(installer);
+            this.typingsCache = new TypingsCache(this.typingsInstaller);
 
             // ts.disableIncrementalParsing = true;
 

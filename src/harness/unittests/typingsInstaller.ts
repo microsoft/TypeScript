@@ -44,7 +44,7 @@ namespace ts.projectSystem {
             const p = projectService.configuredProjects[0];
             checkProjectActualFiles(p, [file1.path]);
 
-            assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
+            assert(host.fileExists(combinePaths(installer.globalTypingsCacheLocation, "tsd.json")));
 
             installer.runPostInstallActions(t => {
                 assert.deepEqual(t, ["jquery"]);
@@ -84,7 +84,7 @@ namespace ts.projectSystem {
             const p = projectService.inferredProjects[0];
             checkProjectActualFiles(p, [file1.path]);
 
-            assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
+            assert(host.fileExists(combinePaths(installer.globalTypingsCacheLocation, "tsd.json")));
 
             installer.runPostInstallActions(t => {
                 assert.deepEqual(t, ["jquery"]);
