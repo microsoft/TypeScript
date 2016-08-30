@@ -31,9 +31,6 @@
 /////*10*/extMod./*11*/m1./*12*/fooExp/*13q*/ort(/*13*/);
 ////var new/*14*/Var = new extMod.m1.m2./*15*/c();
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.file("commentsExternalModules_file0.ts");
 goTo.marker('1');
 verify.quickInfoIs("namespace m1", "Namespace comment");
