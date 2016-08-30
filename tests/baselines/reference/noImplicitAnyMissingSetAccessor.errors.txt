@@ -1,4 +1,4 @@
-tests/cases/compiler/noImplicitAnyMissingSetAccessor.ts(4,25): error TS7017: Property 'message' implicitly has type 'any', because its get accessor lacks a return type annotation.
+tests/cases/compiler/noImplicitAnyMissingSetAccessor.ts(4,25): error TS7033: Property 'message' implicitly has type 'any', because its get accessor lacks a return type annotation.
 
 
 ==== tests/cases/compiler/noImplicitAnyMissingSetAccessor.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/noImplicitAnyMissingSetAccessor.ts(4,25): error TS7017: Pro
     {
         public abstract get message();
                             ~~~~~~~
-!!! error TS7017: Property 'message' implicitly has type 'any', because its get accessor lacks a return type annotation.
+!!! error TS7033: Property 'message' implicitly has type 'any', because its get accessor lacks a return type annotation.
     }
     
     class Child extends Parent {
