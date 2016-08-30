@@ -1844,6 +1844,13 @@ namespace ts {
         owners: string[];
     }
 
+    // Internal interface used for tracking state in find all references when checking
+    // the inheritance hierarchy of property access expressions
+    interface SymbolInheritanceState {
+        symbol: Symbol;
+        cachedInheritanceResults: Map<boolean>;
+    }
+
     export interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
     }
@@ -6546,13 +6553,17 @@ namespace ts {
                 // symbol of the local type of the symbol the property is being accessed on. This is because our search
                 // symbol may have a different parent symbol if the local type's symbol does not declare the property
                 // being accessed (i.e. it is declared in some parent class or interface)
-                let parentSymbol: Symbol = undefined;
-                let inheritanceCache: Map<boolean> = undefined;
-                if (implementations && searchLocation.parent && searchLocation.parent.kind === SyntaxKind.PropertyAccessExpression && searchLocation === (<PropertyAccessExpression>searchLocation.parent).name) {
+                let parentSymbols: SymbolInheritanceState[] = undefined;
+
+                if (implementations && isRightSideOfPropertyAccess(searchLocation)) {
                     const localParentType = typeChecker.getTypeAtLocation((<PropertyAccessExpression>searchLocation.parent).expression);
-                    if (localParentType && localParentType.symbol && localParentType.symbol.getFlags() & (SymbolFlags.Interface | SymbolFlags.Class) && localParentType.symbol.parent !== searchSymbol.parent) {
-                        parentSymbol = localParentType.symbol;
-                        inheritanceCache = createMap<boolean>();
+                    if (localParentType) {
+                        if (localParentType.symbol && isClassOrInterfaceReference(localParentType.symbol) && localParentType.symbol.parent !== searchSymbol.parent) {
+                            parentSymbols = [createSymbolInheritanceState(localParentType.symbol)];
+                        }
+                        else if (localParentType.getFlags() & TypeFlags.UnionOrIntersection) {
+                            parentSymbols = map(getSymbolsForComponentTypes(<UnionOrIntersectionType>localParentType), createSymbolInheritanceState);
+                        }
                     }
                 }
 
@@ -6596,7 +6607,7 @@ namespace ts {
                         if (referenceSymbol) {
                             const referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
                             const shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                            const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation, parentSymbol, inheritanceCache);
+                            const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation, parentSymbols);
 
                             if (relatedSymbol) {
                                 const referenceEntry = implementations ? getImplementationReferenceEntryForNode(referenceLocation) : getReferenceEntryFromNode(referenceLocation);
@@ -6689,6 +6700,18 @@ namespace ts {
                         }
                     }
                 }
+            }
+
+            function getSymbolsForComponentTypes(type: UnionOrIntersectionType, result: Symbol[] = []): Symbol[] {
+                for (const componentType of type.types) {
+                    if (componentType.symbol && componentType.symbol.getFlags() & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                        result.push(componentType.symbol);
+                    }
+                    if (componentType.getFlags() & TypeFlags.UnionOrIntersection) {
+                        getSymbolsForComponentTypes(<UnionOrIntersectionType>componentType, result);
+                    }
+                }
+                return result;
             }
 
             function getContainingTypeReference(node: Node): Node {
@@ -6786,7 +6809,7 @@ namespace ts {
                     return inherits;
                 }
 
-                function searchTypeReference(typeReference: ExpressionWithTypeArguments, cachedResults: Map<boolean>) {
+                function searchTypeReference(typeReference: ExpressionWithTypeArguments, cachedResults: Map<boolean>): boolean {
                     if (typeReference) {
                         const type = typeChecker.getTypeAtLocation(typeReference);
                         if (type && type.symbol) {
@@ -6795,6 +6818,13 @@ namespace ts {
                     }
                     return false;
                 }
+            }
+
+            function createSymbolInheritanceState(symbol: Symbol): SymbolInheritanceState {
+                return {
+                    symbol,
+                    cachedInheritanceResults: createMap<boolean>()
+                };
             }
 
             function getReferencesForSuperKeyword(superKeyword: Node): ReferencedSymbol[] {
@@ -7144,7 +7174,7 @@ namespace ts {
                 }
             }
 
-            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node, parentSymbol: Symbol, inheritanceCache: Map<boolean>): Symbol {
+            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node, parentSymbols: SymbolInheritanceState[]): Symbol {
                 if (searchSymbols.indexOf(referenceSymbol) >= 0) {
                     return referenceSymbol;
                 }
@@ -7153,7 +7183,7 @@ namespace ts {
                 // symbols but by looking up for related symbol of this alias so it can handle multiple level of indirectness.
                 const aliasSymbol = getAliasSymbolForPropertyNameSymbol(referenceSymbol, referenceLocation);
                 if (aliasSymbol) {
-                    return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation, parentSymbol, inheritanceCache);
+                    return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation, parentSymbols);
                 }
 
                 // If the reference location is in an object literal, try to get the contextual type for the
@@ -7198,7 +7228,13 @@ namespace ts {
                     // Finally, try all properties with the same name in any type the containing type extended or implemented, and
                     // see if any is in the list. If we were passed a parent symbol, only include types that are subtypes of the
                     // parent symbol
-                    if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface) && (!parentSymbol || inheritsFrom(rootSymbol.parent, parentSymbol, inheritanceCache))) {
+                    if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                        if (parentSymbols) {
+                            if (!forEach(parentSymbols, ({symbol, cachedInheritanceResults}) => inheritsFrom(rootSymbol.parent, symbol, cachedInheritanceResults))) {
+                                return undefined;
+                            }
+                        }
+
                         const result: Symbol[] = [];
                         getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ createMap<Symbol>());
                         return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);

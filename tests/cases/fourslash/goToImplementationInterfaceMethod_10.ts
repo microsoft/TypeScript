@@ -1,9 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
-// Should handle intersection types
+// Should handle union and intersection types
 
-//// interface Foo {
+//// interface BaseFoo {
 //// 	 hello(): void;
+//// }
+////
+//// interface Foo extends BaseFoo {
 //// 	 aloha(): void;
 //// }
 ////
@@ -13,12 +16,16 @@
 //// }
 ////
 //// class FooImpl implements Foo {
-////  	 hello() {/**FooImpl*/}
+////  	 [|hello() {/**FooImpl*/}|]
 ////  	 aloha() {}
 //// }
 ////
+//// class BaseFooImpl implements BaseFoo {
+////  	 hello() {/**BaseFooImpl*/}    // Should not show up
+//// }
+////
 //// class BarImpl implements Bar {
-//// 	 hello() {/**BarImpl*/}
+//// 	 [|hello() {/**BarImpl*/}|]
 //// 	 goodbye() {}
 //// }
 ////
@@ -28,9 +35,15 @@
 //// 	 goodbye() {}
 //// }
 ////
-//// function someFunction(x: Foo & Bar) {
-//// 	 x.he/*function_call*/llo();
+//// function someFunction(x: Foo | Bar) {
+//// 	 x.he/*function_call0*/llo();
+//// }
+////
+//// function anotherFunction(x: Foo & Bar) {
+//// 	 x.he/*function_call1*/llo();
 //// }
 
-goTo.marker("function_call");
-verify.allRangesAppearInImplementationList();
+for (var i = 0; i < 2; i++) {
+    goTo.marker("function_call" + i);
+    verify.allRangesAppearInImplementationList();
+}

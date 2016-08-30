@@ -1,36 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
-// Should handle union types
+// Should handle members of object literals in type assertion expressions
 
 //// interface Foo {
-//// 	 hello(): void;
-//// 	 aloha(): void;
+////    hel/*reference*/lo(): void;
 //// }
 ////
-//// interface Bar {
-////  	 hello(): void;
-////  	 goodbye(): void;
-//// }
-////
-//// class FooImpl implements Foo {
-////  	 [|hello() {/**FooImpl*/}|]
-////  	 aloha() {}
-//// }
-////
-//// class BarImpl implements Bar {
-//// 	 [|hello() {/**BarImpl*/}|]
-//// 	 goodbye() {}
-//// }
-////
-//// class FooAndBarImpl implements Foo, Bar {
-//// 	 [|hello() {/**FooAndBarImpl*/}|]
-//// 	 aloha() {}
-//// 	 goodbye() {}
-//// }
-////
-//// function someFunction(x: Foo | Bar) {
-//// 	 x.he/*function_call*/llo();
-//// }
-
-goTo.marker("function_call");
+//// var x = <Foo> { [|hello: () => {}|] };
+//// var y = <Foo> (((({ [|hello: () => {}|] }))));
+goTo.marker("reference");
 verify.allRangesAppearInImplementationList();
