@@ -16,18 +16,6 @@ namespace ts {
     "strictNullChecks": false
   }
 }`,
-        "/dev/tsconfig.tests.json": `{
-  "extends": ["./configs/tests", "./tsconfig"],
-  "compilerOptions": {
-    "module": "commonjs"
-  }
-}`,
-        "/dev/tsconfig.tests.browser.json": `{
-  "extends": ["./configs/tests", "./tsconfig"],
-  "compilerOptions": {
-    "module": "amd"
-  }
-}`,
         "/dev/configs/base.json": `{
   "compilerOptions": {
     "allowJs": true,
@@ -75,12 +63,6 @@ namespace ts {
 }`,
         "/dev/failure2.json": `{
     "excludes": ["*.js"]
-}`,
-        "/dev/multi.json": `{
-    "extends": ["./configs/first", "./configs/second"],
-    "compilerOptions": {
-        "allowJs": false
-    }
 }`,
         "/dev/configs/first.json": `{
     "extends": "./base",
@@ -168,31 +150,6 @@ namespace ts {
                     combinePaths(basePath, "supplemental.ts"),
                 ]);
 
-                testSuccess("can resolve an extension with a multiple base extensions that overrides options", "tsconfig.tests.json", {
-                    allowJs: true,
-                    noImplicitAny: true,
-                    strictNullChecks: true,
-                    preserveConstEnums: true,
-                    removeComments: false,
-                    sourceMap: true,
-                    module: ts.ModuleKind.CommonJS,
-                }, [
-                    combinePaths(basePath, "main.ts"),
-                    combinePaths(basePath, "supplemental.ts"),
-                    combinePaths(basePath, "tests/unit/spec.ts"),
-                    combinePaths(basePath, "tests/utils.ts"),
-                ]);
-
-                testSuccess("can resolve a diamond dependency graph", "multi.json", {
-                    allowJs: false,
-                    noImplicitAny: true,
-                    strictNullChecks: true,
-                    module: ts.ModuleKind.AMD,
-                }, [
-                    combinePaths(basePath, "configs/../main.ts"), // Probably should consider resolving these kinds of paths when they appear
-                    combinePaths(basePath, "supplemental.ts"),
-                ]);
-
                 testFailure("can report errors on circular imports", "circular.json", [
                     {
                         code: 18000,
@@ -213,10 +170,10 @@ namespace ts {
                     messageText: `Unknown option 'excludes'. Did you mean 'exclude'?`
                 }]);
 
-                testFailure("can error when 'extends' is neither a string nor a string[]", "extends.json", [{
+                testFailure("can error when 'extends' is not a string", "extends.json", [{
                     code: 5024,
                     category: DiagnosticCategory.Error,
-                    messageText: `Compiler option 'extends' requires a value of type string or string[].`
+                    messageText: `Compiler option 'extends' requires a value of type string.`
                 }]);
 
                 testFailure("can error when 'extends' is neither relative nor rooted.", "extends2.json", [{

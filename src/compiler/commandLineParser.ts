@@ -822,17 +822,8 @@ namespace ts {
             if (typeof json["extends"] === "string") {
                 [include, exclude, files, baseOptions] = (tryExtendsName(json["extends"]) || [include, exclude, files, baseOptions]);
             }
-            else if (typeof json["extends"] === "object" && json["extends"].length) {
-                for (const name of json["extends"]) {
-                    const [tempinclude, tempexclude, tempfiles, tempBase]: [string[], string[], string[], CompilerOptions] = (tryExtendsName(name) || [include, exclude, files, baseOptions]);
-                    include = tempinclude || include;
-                    exclude = tempexclude || exclude;
-                    files = tempfiles || files;
-                    baseOptions = assign({}, baseOptions, tempBase);
-                }
-            }
             else {
-                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string or string[]"));
+                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
             }
             if (include && !json["include"]) {
                 json["include"] = include;
