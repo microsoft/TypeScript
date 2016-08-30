@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/relativeModuleWithoutSlash.ts] ////
+//// [tests/cases/compiler/importWithTrailingSlash.ts] ////
 
 //// [a.ts]
 
