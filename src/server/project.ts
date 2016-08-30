@@ -312,7 +312,7 @@ namespace ts.server {
             // - newProgram is different from the old program and structure of the old program was not reused.
             if (!oldProgram || (this.program !== oldProgram && !oldProgram.structureIsReused)) {
                 hasChanges = true;
-                this.projectService.typingsCache.invalidateCachedTypingsForProject(this);
+                //this.projectService.typingsCache.invalidateCachedTypingsForProject(this);
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
                         if (this.program.getSourceFileByPath(f.path)) {
@@ -405,15 +405,24 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
+                let invalidateTypings = false;
                 for (const id in currentFiles) {
                     if (hasProperty(currentFiles, id) && !hasProperty(lastReportedFileNames, id)) {
                         added.push(id);
+                        if (this.typingFiles.indexOf(id) < 0) {
+                            invalidateTypings = true;
+                            break;
+                        }
                     }
                 }
                 for (const id in lastReportedFileNames) {
                     if (hasProperty(lastReportedFileNames, id) && !hasProperty(currentFiles, id)) {
                         removed.push(id);
+                        invalidateTypings = true;
                     }
+                }
+                if (invalidateTypings) {
+                    this.projectService.typingsCache.invalidateCachedTypingsForProject(this);
                 }
                 this.lastReportedFileNames = currentFiles;
 

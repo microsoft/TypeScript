@@ -114,23 +114,29 @@ namespace ts.server.typingsInstaller {
         protected runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
             const id = this.installRunCount;
             this.installRunCount++;
-            const command = `npm install ${typingsToInstall.map(t => "@types/" + t).join(" ")} --save-dev`;
-            if (this.log.isEnabled()) {
-                this.log.writeLine(`Running npm install @types ${id}, command '${command}'. cache path '${cachePath}'`);
-            }
-            this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
+            let installCount = 0;
+            const installedTypings: string[] = [];
+            const expr = /^.*(@types\/\w+)\S*\s*$/gm;
+            let match: RegExpExecArray;
+            for (const typing of typingsToInstall) {
+                const command = `npm install @types/${typing} --save-dev`;
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`npm install @types ${id} stdout: ${stdout}`);
-                    this.log.writeLine(`npm install @types ${id} stderr: ${stderr}`);
+                    this.log.writeLine(`Running npm install @types ${id}, command '${command}'. cache path '${cachePath}'`);
                 }
-                const installedTypings: string[] = [];
-                const expr = /^.*(node_modules)\\(@types)\\(\S+)\s*$/gm;
-                let match: RegExpExecArray;
-                while (match = expr.exec(stdout)) {
-                    installedTypings.push(`${match[1]}/${match[2]}/${match[3]}`);
-                }
-                postInstallAction(installedTypings);
-            });
+                this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
+                    installCount++;
+                    if (this.log.isEnabled()) {
+                        this.log.writeLine(`npm install @types ${id} stdout: ${stdout}`);
+                        this.log.writeLine(`npm install @types ${id} stderr: ${stderr}`);
+                    }
+                    while (match = expr.exec(stdout)) {
+                        installedTypings.push(`node_modules/${match[1]}`);
+                    }
+                    if (installCount >= typingsToInstall.length) {
+                        postInstallAction(installedTypings);
+                    }
+                });
+            }
         }
     }
 
