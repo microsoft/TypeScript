@@ -76,7 +76,7 @@ namespace ts.server {
         constructor(private readonly installer: ITypingsInstaller) {
         }
 
-        getTypingsForProject(project: Project): TypingsArray {
+        getTypingsForProject(project: Project, forceRefresh: boolean): TypingsArray {
             const typingOptions = project.getTypingOptions();
 
             if (!typingOptions || !typingOptions.enableAutoDiscovery) {
@@ -84,8 +84,8 @@ namespace ts.server {
             }
 
             const entry = this.perProjectCache[project.getProjectName()];
-            const result: TypingsArray = entry && entry.typings.length > 0 ? entry.typings : toTypingsArray(typingOptions.include);
-            if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
+            const result: TypingsArray = entry ? entry.typings : <any>emptyArray;
+            if (forceRefresh || !entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
                 // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
                 // instead it acts as a placeholder to prevent issuing multiple requests
                 this.perProjectCache[project.getProjectName()] = {

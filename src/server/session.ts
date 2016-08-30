@@ -168,7 +168,7 @@ namespace ts.server {
                 : undefined;
 
             this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler);
-            this.gcTimer = new GcTimer(host, /*delay*/ 15000, logger);
+            this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);
         }
 
         private handleEvent(event: ProjectServiceEvent) {

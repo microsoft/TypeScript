@@ -283,7 +283,7 @@ namespace ts.server {
                 return true;
             }
             let hasChanges = this.updateGraphWorker();
-            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this);
+            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, hasChanges);
             if (this.setTypings(cachedTypings)) {
                 hasChanges = this.updateGraphWorker() || hasChanges;
             }
@@ -312,7 +312,6 @@ namespace ts.server {
             // - newProgram is different from the old program and structure of the old program was not reused.
             if (!oldProgram || (this.program !== oldProgram && !oldProgram.structureIsReused)) {
                 hasChanges = true;
-                //this.projectService.typingsCache.invalidateCachedTypingsForProject(this);
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
                         if (this.program.getSourceFileByPath(f.path)) {
@@ -405,27 +404,16 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                let invalidateTypings = false;
                 for (const id in currentFiles) {
-                    if (hasProperty(currentFiles, id) && !hasProperty(lastReportedFileNames, id)) {
+                    if (!hasProperty(lastReportedFileNames, id)) {
                         added.push(id);
-                        if (this.typingFiles.indexOf(id) < 0) {
-                            invalidateTypings = true;
-                            break;
-                        }
                     }
                 }
                 for (const id in lastReportedFileNames) {
-                    if (hasProperty(lastReportedFileNames, id) && !hasProperty(currentFiles, id)) {
+                    if (!hasProperty(currentFiles, id)) {
                         removed.push(id);
-                        invalidateTypings = true;
                     }
                 }
-                if (invalidateTypings) {
-                    this.projectService.typingsCache.invalidateCachedTypingsForProject(this);
-                }
-                this.lastReportedFileNames = currentFiles;
-
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, changes: { added, removed }, projectErrors: this.projectErrors };

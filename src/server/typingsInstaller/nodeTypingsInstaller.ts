@@ -92,7 +92,7 @@ namespace ts.server.typingsInstaller {
         protected runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
             const id = this.installRunCount;
             this.installRunCount++;
-            let installCount = 0;
+            let execInstallCmdCount = 0;
             const installedTypings: string[] = [];
             const expr = /^.*(@types\/\w+)\S*\s*$/gm;
             let match: RegExpExecArray;
@@ -102,7 +102,7 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`Running npm install @types ${id}, command '${command}'. cache path '${cachePath}'`);
                 }
                 this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
-                    installCount++;
+                    execInstallCmdCount++;
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`npm install @types ${id} stdout: ${stdout}`);
                         this.log.writeLine(`npm install @types ${id} stderr: ${stderr}`);
@@ -110,7 +110,7 @@ namespace ts.server.typingsInstaller {
                     while (match = expr.exec(stdout)) {
                         installedTypings.push(`node_modules/${match[1]}`);
                     }
-                    if (installCount >= typingsToInstall.length) {
+                    if (execInstallCmdCount >= typingsToInstall.length) {
                         postInstallAction(installedTypings);
                     }
                 });
@@ -121,7 +121,7 @@ namespace ts.server.typingsInstaller {
     function findArgument(argumentName: string) {
         const index = sys.args.indexOf(argumentName);
         return index >= 0 && index < sys.args.length - 1
-            ? sys.args[index]
+            ? sys.args[index + 1]
             : undefined;
     }
 
