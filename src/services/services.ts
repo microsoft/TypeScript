@@ -2793,32 +2793,25 @@ namespace ts {
     }
 
     function isCallExpressionTarget(node: Node): boolean {
-        return !!getCallOrNewExpressionWorker(node, SyntaxKind.CallExpression);
+        node = climbPastPropertyAccess(node);
+        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
     }
 
     function isNewExpressionTarget(node: Node): boolean {
-        return !!getCallOrNewExpressionWorker(node, SyntaxKind.NewExpression);
+        node = climbPastPropertyAccess(node);
+        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).expression === node;
     }
 
-    function getCallOrNewExpressionTargetingNode(node: Node): CallExpression | NewExpression | undefined {
-        return <CallExpression>getCallOrNewExpressionWorker(node, SyntaxKind.CallExpression) || <NewExpression>getCallOrNewExpressionWorker(node, SyntaxKind.NewExpression);
-    }
-
-    function tryGetCalledDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
-        const callOrNewExpression = getCallOrNewExpressionTargetingNode(node);
-        if (callOrNewExpression) {
-            const signature = typeChecker.getResolvedSignature(callOrNewExpression);
-            return signature.declaration;
-        }
-    }
-
-    function getCallOrNewExpressionWorker(node: Node, kind: SyntaxKind): Node | undefined {
+    /** Returns a CallLikeExpression where `node` is the target being invoked. */
+    function getAncestorCallLikeExpression(node: Node): CallLikeExpression | undefined {
         const target = climbPastPropertyAccess(node);
-        return target &&
-            target.parent &&
-            target.parent.kind === kind &&
-            (<CallExpression>target.parent).expression === target &&
-            target.parent;
+        const callLike = target.parent;
+        return isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target && callLike;
+    }
+
+    function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
+        const callLike = getAncestorCallLikeExpression(node);
+        return callLike && typeChecker.getResolvedSignature(callLike).declaration;
     }
 
     function isNameOfModuleDeclaration(node: Node) {
@@ -5232,7 +5225,7 @@ namespace ts {
 
             const typeChecker = program.getTypeChecker();
 
-            const calledDeclaration = tryGetCalledDeclaration(typeChecker, node);
+            const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
             if (calledDeclaration) {
                 return [getDefinitionFromSignatureDeclaration(calledDeclaration)];
             }
