@@ -11,15 +11,15 @@ export function foo(target: Object, propertyKey: string | symbol, parameterIndex
 >parameterIndex : Symbol(parameterIndex, Decl(0.ts, 2, 65))
 
 === tests/cases/conformance/decorators/class/constructor/2.ts ===
-import {base} from "./0.ts"
+import {base} from "./0"
 >base : Symbol(base, Decl(2.ts, 0, 8))
 
-import {foo} from "./0.ts"
+import {foo} from "./0"
 >foo : Symbol(foo, Decl(2.ts, 1, 8))
 
 /* Comment on the Class Declaration */
 export class C  extends base{
->C : Symbol(C, Decl(2.ts, 1, 26))
+>C : Symbol(C, Decl(2.ts, 1, 23))
 >base : Symbol(base, Decl(2.ts, 0, 8))
 
     constructor(@foo prop: any) {

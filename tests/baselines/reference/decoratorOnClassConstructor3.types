@@ -11,10 +11,10 @@ export function foo(target: Object, propertyKey: string | symbol, parameterIndex
 >parameterIndex : number
 
 === tests/cases/conformance/decorators/class/constructor/2.ts ===
-import {base} from "./0.ts"
+import {base} from "./0"
 >base : typeof base
 
-import {foo} from "./0.ts"
+import {foo} from "./0"
 >foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
 
 /* Comment on the Class Declaration */

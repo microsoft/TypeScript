@@ -6,8 +6,8 @@ export class base { }
 export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
 
 //// [2.ts]
-import {base} from "./0.ts"
-import {foo} from "./0.ts"
+import {base} from "./0"
+import {foo} from "./0"
 
 /* Comment on the Class Declaration */
 export class C  extends base{
@@ -42,8 +42,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _0_ts_1 = require("./0.ts");
-var _0_ts_2 = require("./0.ts");
+var _0_1 = require("./0");
+var _0_2 = require("./0");
 /* Comment on the Class Declaration */
 var C = (function (_super) {
     __extends(C, _super);
@@ -51,8 +51,8 @@ var C = (function (_super) {
         _super.call(this);
     }
     return C;
-}(_0_ts_1.base));
+}(_0_1.base));
 C = __decorate([
-    __param(0, _0_ts_2.foo)
+    __param(0, _0_2.foo)
 ], C);
 exports.C = C;
