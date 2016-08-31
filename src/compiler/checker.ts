@@ -10827,6 +10827,20 @@ namespace ts {
 
             if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
                 checkClassPropertyAccess(node, left, apparentType, prop);
+
+                // Check if prop is 1) a static property 2) capturing block-scope variable
+                const isStaticPropertyAccessing = prop.valueDeclaration ? hasModifier(prop.valueDeclaration, ModifierFlags.Static) : false;
+                if (isStaticPropertyAccessing) {
+                    const containingFunction = getContainingFunction(node);
+                    if (containingFunction && containingFunction.parent && containingFunction.parent.kind === SyntaxKind.PropertyDeclaration) {
+                         const containingPropertyDeclaration = <PropertyDeclaration>containingFunction.parent;
+                         if (containingPropertyDeclaration.parent.kind === SyntaxKind.ClassExpression &&
+                             hasModifier(containingPropertyDeclaration, ModifierFlags.Static) &&
+                             getSymbolOfNode(containingPropertyDeclaration.parent) === prop.parent) {
+                                 getNodeLinks(containingPropertyDeclaration.parent).flags |= NodeCheckFlags.ClassExpressionCaptureBlockScoped;
+                         }
+                    }
+                }
             }
 
             let propType = getTypeOfSymbol(prop);

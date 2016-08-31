@@ -2307,6 +2307,7 @@ namespace ts {
         AssignmentsMarked                   = 0x00400000,  // Parameter assignments have been marked
         ClassWithConstructorReference       = 0x00800000,  // Class that contains a binding to its constructor inside of the class body.
         ConstructorReferenceInClass         = 0x01000000,  // Binding to a class constructor inside of the class's body.
+        ClassExpressionCaptureBlockScoped   = 0X02000000,  // ClassExpression that contains block scoped variables
     }
 
     /* @internal */

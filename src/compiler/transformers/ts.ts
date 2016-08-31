@@ -764,6 +764,46 @@ namespace ts {
             );
 
             if (staticProperties.length > 0) {
+                if (resolver.getNodeCheckFlags(classExpression) & NodeCheckFlags.ClassExpressionCaptureBlockScoped) {
+                    const statements: Statement[] = [];
+                    const temp = createTempVariable(/*recordTempVariable*/ undefined);
+                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
+                        // record an alias as the class name is not in scope for statics.
+                        enableSubstitutionForClassAliases();
+                        classAliases[getOriginalNodeId(node)] = getSynthesizedClone(temp);
+                    }
+                    setNodeEmitFlags(classExpression, NodeEmitFlags.Indented | getNodeEmitFlags(classExpression));
+                    statements.push(
+                        createVariableStatement(
+                            /*modifiers*/ undefined,
+                            createLetDeclarationList([
+                                createVariableDeclaration(
+                                    temp,
+                                    /*type*/ undefined,
+                                    /*initializer*/ classExpression
+                                )
+                            ])
+                        )
+                    );
+                    const staticPropertiesInitializedExpressions = generateInitializedPropertyExpressions(node, staticProperties, temp);
+                    for (let expression of staticPropertiesInitializedExpressions) {
+                        statements.push(createStatement(expression));
+                    }
+                    statements.push(createReturn(temp));
+                    return createCall(
+                        createArrowFunction(
+                            /*modifier*/ undefined,
+                            /*typeParameters*/ undefined,
+                            /*parameters*/ undefined,
+                            /*type*/ undefined,
+                            /*equalsGreaterThanToken*/ undefined,
+                            setMultiLine(createBlock(statements), /*multiLine*/ true)
+                        ),
+                        /*typeArguments*/ undefined,
+                        /*argumentsArray*/ undefined
+                    );
+                }
+
                 const expressions: Expression[] = [];
                 const temp = createTempVariable(hoistVariableDeclaration);
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
