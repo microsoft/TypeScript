@@ -139,13 +139,6 @@ namespace ts.server {
         abstract getProjectName(): string;
         abstract getTypingOptions(): TypingOptions;
 
-        getNavigateToItems(searchValue: string, maxResultCount: number) {
-            if (!this.languageServiceEnabled) {
-                return [];
-            }
-            return this.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*excludeDts*/ this.isJsOnlyProject());
-        }
-
         getSourceFile(path: Path) {
             if (!this.program) {
                 return undefined;
