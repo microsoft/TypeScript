@@ -172,7 +172,7 @@ namespace ts.server {
                 if (options && (options.out || options.outFile)) {
                     return singleFileResult;
                 }
-                return map(filter(this.project.getScriptInfosWithoutDefaultLib(), shouldEmitFile), info => info.fileName);
+                return this.project.getAllEmittableFiles();
             }
             return singleFileResult;
         }
@@ -331,7 +331,7 @@ namespace ts.server {
             }
 
             if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
-                return map(filter(this.project.getScriptInfosWithoutDefaultLib(), shouldEmitFile), info => info.fileName);
+                return this.project.getAllEmittableFiles();
             }
 
             const options = this.project.getCompilerOptions();

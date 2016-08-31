@@ -225,12 +225,19 @@ namespace ts.server {
             return sourceFiles.map(sourceFile => asNormalizedPath(sourceFile.fileName));
         }
 
-        getScriptInfosWithoutDefaultLib() {
+        getAllEmittableFiles() {
             if (!this.languageServiceEnabled) {
-                return this.getRootScriptInfos();
+                return [];
             }
             const defaultLibraryFileName = getDefaultLibFileName(this.compilerOptions);
-            return filter(this.getScriptInfos(), info => getBaseFileName(info.fileName) !== defaultLibraryFileName);
+            const infos = this.getScriptInfos();
+            const result: string[] = [];
+            for (const info of infos) {
+                if (getBaseFileName(info.fileName) !== defaultLibraryFileName && !info.hasMixedContent) {
+                    result.push(info.fileName);
+                }
+            }
+            return result;
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
