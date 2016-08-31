@@ -871,7 +871,12 @@ namespace ts.server {
 
             project.setCompilerOptions(newOptions);
             (<ExternalProject | ConfiguredProject>project).setTypingOptions(newTypingOptions);
-            project.compileOnSaveEnabled = !!compileOnSave;
+
+            // VS only set the CompileOnSaveEnabled option in the request if the option was changed recently
+            // therefore if it is undefined, it should not be updated.
+            if (compileOnSave !== undefined) {
+                project.compileOnSaveEnabled = compileOnSave;
+            }
             project.setProjectErrors(concatenate(configFileErrors, projectErrors));
 
             project.updateGraph();
