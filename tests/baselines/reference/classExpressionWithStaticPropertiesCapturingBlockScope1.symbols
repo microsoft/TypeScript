@@ -1,0 +1,40 @@
+=== tests/cases/compiler/classExpressionWithStaticPropertiesCapturingBlockScope1.ts ===
+
+declare var console: any;
+>console : Symbol(console, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 1, 11))
+
+const arr: any[] = [];
+>arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 2, 5))
+
+for (let i = 0; i < 3; i++) {
+>i : Symbol(i, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 3, 8))
+>i : Symbol(i, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 3, 8))
+>i : Symbol(i, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 3, 8))
+
+    arr.push(class C {
+>arr.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 2, 5))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>C : Symbol(C, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 4, 13))
+
+        static x = i;
+>x : Symbol(C.x, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 4, 22))
+>i : Symbol(i, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 3, 8))
+
+        static y = function() { return C.x * 2; };
+>y : Symbol(C.y, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 5, 21))
+>C.x : Symbol(C.x, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 4, 22))
+>C : Symbol(C, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 4, 13))
+>x : Symbol(C.x, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 4, 22))
+
+    });
+}
+
+arr.forEach(C => console.log(C.y())); 
+>arr.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 2, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>C : Symbol(C, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 10, 12))
+>console : Symbol(console, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 1, 11))
+>C : Symbol(C, Decl(classExpressionWithStaticPropertiesCapturingBlockScope1.ts, 10, 12))
+
