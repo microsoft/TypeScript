@@ -1388,8 +1388,12 @@ namespace ts {
         containerName: string;
     }
 
+    export interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
+        displayParts: SymbolDisplayPart[];
+    }
+
     export interface ReferencedSymbol {
-        definition: DefinitionInfo;
+        definition: ReferencedSymbolDefinitionInfo;
         references: ReferenceEntry[];
     }
 
@@ -6127,7 +6131,7 @@ namespace ts {
 
             return result;
 
-            function getDefinition(symbol: Symbol): DefinitionInfo {
+            function getDefinition(symbol: Symbol): ReferencedSymbolDefinitionInfo {
                 const info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), node);
                 const name = map(info.displayParts, p => p.text).join("");
                 const declarations = symbol.declarations;
@@ -6141,7 +6145,8 @@ namespace ts {
                     name,
                     kind: info.symbolKind,
                     fileName: declarations[0].getSourceFile().fileName,
-                    textSpan: createTextSpan(declarations[0].getStart(), 0)
+                    textSpan: createTextSpan(declarations[0].getStart(), 0),
+                    displayParts: info.displayParts
                 };
             }
 
@@ -6336,13 +6341,14 @@ namespace ts {
                     }
                 });
 
-                const definition: DefinitionInfo = {
+                const definition: ReferencedSymbolDefinitionInfo = {
                     containerKind: "",
                     containerName: "",
                     fileName: targetLabel.getSourceFile().fileName,
                     kind: ScriptElementKind.label,
                     name: labelName,
-                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd())
+                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd()),
+                    displayParts: [displayPart(labelName, SymbolDisplayPartKind.text)]
                 };
 
                 return [{ definition, references }];
@@ -6582,6 +6588,11 @@ namespace ts {
                     getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
                 }
 
+                const thisOrSuperSymbol = typeChecker.getSymbolAtLocation(thisOrSuperKeyword);
+
+                const displayParts = thisOrSuperSymbol && getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    thisOrSuperSymbol, thisOrSuperKeyword.getSourceFile(), getContainerNode(thisOrSuperKeyword), thisOrSuperKeyword).displayParts;
+
                 return [{
                     definition: {
                         containerKind: "",
@@ -6589,7 +6600,8 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: "this",
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                        displayParts
                     },
                     references: references
                 }];
@@ -6660,7 +6672,8 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: type.text,
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                        displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
                     },
                     references: references
                 }];
