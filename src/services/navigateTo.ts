@@ -2,7 +2,7 @@
 namespace ts.NavigateTo {
     type RawNavigateToItem = { name: string; fileName: string; matchKind: PatternMatchKind; isCaseSensitive: boolean; declaration: Declaration };
 
-    export function getNavigateToItems(program: Program, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number, excludeTypes: boolean): NavigateToItem[] {
+    export function getNavigateToItems(program: Program, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number, excludeDts: boolean): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
         let rawItems: RawNavigateToItem[] = [];
 
@@ -43,7 +43,7 @@ namespace ts.NavigateTo {
 
                         const fileName = sourceFile.fileName;
                         const matchKind = bestMatchKind(matches);
-                        if (excludeTypes && declaration.symbol && (declaration.symbol.flags & SymbolFlags.Type)) {
+                        if (excludeDts && fileExtensionIs(declaration.getSourceFile().fileName, ".d.ts")) {
                             continue;
                         }
                         rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });

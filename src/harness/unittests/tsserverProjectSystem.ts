@@ -1731,7 +1731,7 @@ namespace ts.projectSystem {
             // Try to find some interface type defined in lib.d.ts
             const libTypeNavToRequest = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
             const items: server.protocol.NavtoItem[] = session.executeCommand(libTypeNavToRequest).response;
-            assert.isFalse(containsNavToItem(items, "Document", "interface"), `Found type symbol in JavaScript project nav to request result.`);
+            assert.isFalse(containsNavToItem(items, "Document", "interface"), `Found lib.d.ts symbol in JavaScript project nav to request result.`);
 
             const localFunctionNavToRequst = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
             const items2: server.protocol.NavtoItem[] = session.executeCommand(localFunctionNavToRequst).response;

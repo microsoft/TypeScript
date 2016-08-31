@@ -134,11 +134,11 @@ namespace ts.server {
         abstract getProjectName(): string;
         abstract getTypingOptions(): TypingOptions;
 
-        getNavigateToItems(searchValue: string, maxResultCount: number, excludeTypes?: boolean) {
+        getNavigateToItems(searchValue: string, maxResultCount: number) {
             if (!this.languageServiceEnabled) {
                 return [];
             }
-            return this.getLanguageService().getNavigateToItems(searchValue, maxResultCount, excludeTypes);
+            return this.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*excludeDts*/ allRootFilesAreJsOrDts(this));
         }
 
         getSourceFile(path: Path) {
@@ -622,10 +622,6 @@ namespace ts.server {
                 this.directoryWatcher.close();
                 this.directoryWatcher = undefined;
             }
-        }
-
-        getNavigateToItems(searchValue: string, maxResultCount: number) {
-            return super.getNavigateToItems(searchValue, maxResultCount, /*excludeTypes*/ this.isJSProject);
         }
 
         close() {
