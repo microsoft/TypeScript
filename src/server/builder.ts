@@ -15,7 +15,7 @@ namespace ts.server {
         createHash(algorithm: string): Hash
     } = require("crypto");
 
-    function shouldEmitFile(scriptInfo: ScriptInfo) {
+    export function shouldEmitFile(scriptInfo: ScriptInfo) {
         return !scriptInfo.hasMixedContent;
     }
 

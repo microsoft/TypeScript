@@ -233,7 +233,7 @@ namespace ts.server {
             const infos = this.getScriptInfos();
             const result: string[] = [];
             for (const info of infos) {
-                if (getBaseFileName(info.fileName) !== defaultLibraryFileName && !info.hasMixedContent) {
+                if (getBaseFileName(info.fileName) !== defaultLibraryFileName && shouldEmitFile(info)) {
                     result.push(info.fileName);
                 }
             }
