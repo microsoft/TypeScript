@@ -786,7 +786,7 @@ namespace ts {
                         )
                     );
                     const staticPropertiesInitializedExpressions = generateInitializedPropertyExpressions(node, staticProperties, temp);
-                    for (let expression of staticPropertiesInitializedExpressions) {
+                    for (const expression of staticPropertiesInitializedExpressions) {
                         statements.push(createStatement(expression));
                     }
                     statements.push(createReturn(temp));
