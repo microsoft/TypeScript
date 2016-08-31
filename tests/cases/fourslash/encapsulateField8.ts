@@ -19,11 +19,11 @@ verify.codeRefactor({
 class C1 {
     private _x: number;
 
-    function setx(newx : number) {
+    public setx(newx : number) {
         this._x = newx;
     }
 
-    function getx() : number {
+    public getx() : number {
         return this._x;
     }
 }

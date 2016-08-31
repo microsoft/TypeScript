@@ -404,20 +404,58 @@ namespace ts.server {
             return ts.map(diagnostics, originalDiagnostic => formatDiag(file, project, originalDiagnostic));
         }
 
-        private getCodeRefactors(args: protocol.CodeRefactorsRequestArgs): CodeAction[] {
-            const fileName: string = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(fileName);
+        private getCodeActionsWithLineAndOffset(codeActions: CodeAction[], compilerService: CompilerService): CodeActionWithLineOffset[] {
+            const codeActionsWithLineOffset: CodeActionWithLineOffset[] = [];
 
-            if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+            if (codeActions && codeActions.length > 0) {
+                let fileTextChangesWithLineOffset: FileTextChangesWithLineOffset[] = [];
+                for (const codeAction of codeActions) {
+                    const fileTextChanges: FileTextChanges[] = codeAction.changes;
+                    if (fileTextChanges && fileTextChanges.length > 0) {
+                        fileTextChangesWithLineOffset = [];
+                        let textChangesWithLineOffset: TextChangeWithLineOffset[] = [];
+                        for (const change of fileTextChanges) {
+                            const textChanges: ts.TextChange[] = change.textChanges;
+                            if (textChanges && textChanges.length > 0) {
+                                textChangesWithLineOffset = [];
+                                for (const textChange of textChanges) {
+                                    const textSpan: TextSpan = textChange.span;
+
+                                    const startPosition = compilerService.host.positionToLineOffset(change.fileName, textSpan.start);
+                                    const endPosition = compilerService.host.positionToLineOffset(change.fileName, textSpan.start + textSpan.length);
+
+                                    textChangesWithLineOffset.push({
+                                        newText: textChange.newText,
+                                        span: {
+                                            start: {
+                                                line: startPosition.line,
+                                                offset: startPosition.offset
+                                            },
+                                            end: {
+                                                line: endPosition.line,
+                                                offset: endPosition.offset
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                            fileTextChangesWithLineOffset.push({
+                                fileName: change.fileName,
+                                textChanges: textChangesWithLineOffset
+                            });
+                        }
+                    }
+                    codeActionsWithLineOffset.push({
+                        description: codeAction.description,
+                        changes: fileTextChangesWithLineOffset
+                    });
+                }
             }
 
-            const { compilerService } = project;
-
-            return compilerService.languageService.getCodeRefactors(fileName, args.start, args.end, compilerService.languageService);
+            return codeActionsWithLineOffset;
         }
 
-        private getCodeFixes(args: protocol.CodeFixesRequestArgs): CodeAction[] {
+        private getCodeRefactors(args: protocol.CodeRefactorsRequestArgs): CodeActionWithLineOffset[] {
             const fileName: string = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(fileName);
 
@@ -427,7 +465,24 @@ namespace ts.server {
 
             const { compilerService } = project;
 
-            return compilerService.languageService.getCodeFixesAtPosition(fileName, args.start, args.end, args.errorCodes);
+            const codeActions: CodeAction[] = compilerService.languageService.getCodeRefactors(fileName, args.start, args.end, compilerService.languageService);
+            const codeActionsWithLineOffset: CodeActionWithLineOffset[] = this.getCodeActionsWithLineAndOffset(codeActions, compilerService);
+            return codeActionsWithLineOffset;
+        }
+
+        private getCodeFixes(args: protocol.CodeFixesRequestArgs): CodeActionWithLineOffset[] {
+            const fileName: string = ts.normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(fileName);
+
+            if (!project || project.languageServiceDiabled) {
+                throw Errors.NoProject;
+            }
+
+            const { compilerService } = project;
+
+            const codeActions: CodeAction[] = compilerService.languageService.getCodeFixesAtPosition(fileName, args.start, args.end, args.errorCodes);
+            const codeActionsWithLineOffset: CodeActionWithLineOffset[] = this.getCodeActionsWithLineAndOffset(codeActions, compilerService);
+            return codeActionsWithLineOffset;
         }
 
         private getSyntacticDiagnosticsSync(args: protocol.FileRequestArgs): protocol.Diagnostic[] {

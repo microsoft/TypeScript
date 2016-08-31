@@ -1,30 +1,6 @@
 /* @internal */
 namespace ts.codeRefactor {
     registerCodeRefactor({
-        name: "Add JSDoc Comments to Method",
-        nodeLabel: ts.SyntaxKind.MethodDeclaration,
-        getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            return getJSDocCodeRefactor(token.pos + 1, context, Diagnostics.Add_JSDoc_Comments_to_Method);
-        }
-    });
-
-    registerCodeRefactor({
-        name: "Add JSDoc Comments to Constructor",
-        nodeLabel: ts.SyntaxKind.Constructor,
-        getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            return getJSDocCodeRefactor(token.pos + 1, context, Diagnostics.Add_JSDoc_Comments_to_Constructor);
-        }
-    });
-
-    registerCodeRefactor({
-        name: "Add JSDoc Comments to Function",
-        nodeLabel: ts.SyntaxKind.FunctionDeclaration,
-        getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            return getJSDocCodeRefactor(token.pos, context, Diagnostics.Add_JSDoc_Comments_to_Function);
-        }
-    });
-
-    registerCodeRefactor({
         name: "Add JSDoc Comments to Class",
         nodeLabel: ts.SyntaxKind.ClassDeclaration,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {

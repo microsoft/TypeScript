@@ -628,6 +628,49 @@ namespace ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
+        private getCodeActionWithoutLineAndOffset(codeActionsWithLineOffset: CodeActionWithLineOffset[]): ts.CodeAction[] {
+            const codeActions: CodeAction[] = [];
+            if (codeActionsWithLineOffset && codeActionsWithLineOffset.length > 0) {
+                let fileTextChanges: FileTextChanges[] = [];
+                for (const codeActionWithLineOffset of codeActionsWithLineOffset) {
+                    const fileTextChangesWithLineOffset: FileTextChangesWithLineOffset[] = codeActionWithLineOffset.changes;
+                    if (fileTextChangesWithLineOffset && fileTextChangesWithLineOffset.length > 0) {
+                        fileTextChanges = [];
+                        let textChanges: ts.TextChange[] = [];
+                        for (const changeWithLineOffset of fileTextChangesWithLineOffset) {
+                            const textChangesWithLineOffset: ts.TextChangeWithLineOffset[] = changeWithLineOffset.textChanges;
+                            if (textChangesWithLineOffset && textChangesWithLineOffset.length > 0) {
+                                textChanges = [];
+                                for (const textChangeWithLineOffset of textChangesWithLineOffset) {
+                                    const textSpanWithLineOffset: TextSpanWithLineOffset = textChangeWithLineOffset.span;
+
+                                    const startPosition = this.lineOffsetToPosition(changeWithLineOffset.fileName, textSpanWithLineOffset.start);
+                                    const endPosition = this.lineOffsetToPosition(changeWithLineOffset.fileName, textSpanWithLineOffset.end);
+
+                                    textChanges.push({
+                                        newText: textChangeWithLineOffset.newText,
+                                        span: {
+                                            start: startPosition,
+                                            length: endPosition - startPosition
+                                        }
+                                    });
+                                }
+                            }
+                            fileTextChanges.push({
+                                fileName: changeWithLineOffset.fileName,
+                                textChanges: textChanges
+                            });
+                        }
+                    }
+                    codeActions.push({
+                        description: codeActionWithLineOffset.description,
+                        changes: fileTextChanges
+                    });
+                }
+            }
+            return codeActions;
+        }
+
         getCodeRefactors(fileName: string, start: number, end: number, serviceInstance: LanguageService): ts.CodeAction[] {
             const args: protocol.CodeRefactorsRequestArgs = {
                 file: fileName,
@@ -637,8 +680,8 @@ namespace ts.server {
 
             const request = this.processRequest<protocol.CodeRefactorsRequest>(CommandNames.CodeRefactors, args);
             const response = this.processResponse<protocol.CodeRefactorsResponse>(request);
-
-            return response.body;
+            const codeActions: CodeAction[] = this.getCodeActionWithoutLineAndOffset(response.body);
+            return codeActions;
         }
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.CodeAction[] {
@@ -651,8 +694,8 @@ namespace ts.server {
 
             const request = this.processRequest<protocol.CodeFixesRequest>(CommandNames.CodeFixes, args);
             const response = this.processResponse<protocol.CodeFixesResponse>(request);
-
-            return response.body;
+            const codeActions: CodeAction[] = this.getCodeActionWithoutLineAndOffset(response.body);
+            return codeActions;
         }
 
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {

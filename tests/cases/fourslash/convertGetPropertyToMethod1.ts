@@ -39,7 +39,7 @@ export module m1 {
             this._x = newx;
         }
 
-        function getx(): string {
+        public getx(): string {
             return this._x;
         }
     }

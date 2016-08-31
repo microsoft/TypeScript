@@ -28,11 +28,11 @@ export module m1 {
     export class C1 {
         private _x: string;
 
-        function setx(newx: string) {
+        public setx(newx: string) {
             this._x = newx;
         }
 
-        function getx(): string {
+        public getx(): string {
             return this._x;
         }
     }

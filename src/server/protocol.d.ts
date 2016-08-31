@@ -94,7 +94,7 @@ declare namespace ts.server.protocol {
     }
 
     export interface CodeRefactorsResponse extends Response {
-        body?: CodeAction[];
+        body?: CodeActionWithLineOffset[];
     }
 
     export interface CodeFixesRequestArgs {
@@ -105,7 +105,7 @@ declare namespace ts.server.protocol {
     }
 
     export interface CodeFixesResponse extends Response {
-        body?: CodeAction[];
+        body?: CodeActionWithLineOffset[];
     }
 
     export interface CodeFixesRequest extends Request {

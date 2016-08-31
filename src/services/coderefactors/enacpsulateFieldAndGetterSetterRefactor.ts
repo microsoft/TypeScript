@@ -10,7 +10,7 @@ namespace ts.codeRefactor {
             let getChild: Node = getChildOfType(token, SyntaxKind.GetKeyword);
             let identifierChild: Node = getChildOfType(token, SyntaxKind.Identifier);
 
-            textChanges.push({ newText: context.newLineCharacter + "function", span: { start: getChild.pos, length: getChild.end - getChild.pos } });
+            textChanges.push({ newText: context.newLineCharacter + "public", span: { start: getChild.pos, length: getChild.end - getChild.pos } });
             textChanges.push({ newText: "get", span: { start: identifierChild.getStart(), length: 0 } });
 
             fileTextChanges.push({
@@ -37,7 +37,7 @@ namespace ts.codeRefactor {
             let setChild: Node = getChildOfType(token, SyntaxKind.SetKeyword);
             let identifierChild: Node = getChildOfType(token, SyntaxKind.Identifier);
 
-            textChanges.push({ newText: context.newLineCharacter + "function", span: { start: setChild.pos, length: setChild.end - setChild.pos } });
+            textChanges.push({ newText: context.newLineCharacter + "public", span: { start: setChild.pos, length: setChild.end - setChild.pos } });
             textChanges.push({ newText: "set", span: { start: identifierChild.getStart(), length: 0 } });
 
             fileTextChanges.push({
@@ -178,14 +178,14 @@ namespace ts.codeRefactor {
         if (version !== ScriptTarget.ES3) {
             return "set " + accessorName;
         }
-        return "function set" + accessorName;
+        return "public set" + accessorName;
     }
 
     function getGetterBeginning(version: ScriptTarget, accessorName: string): string {
         if (version !== ScriptTarget.ES3) {
             return "get " + accessorName;
         } else {
-            return "function get" + accessorName;
+            return "public get" + accessorName;
         }
     }
 

@@ -1300,6 +1300,31 @@ namespace ts {
         changes: FileTextChanges[];
     }
 
+    export interface PositionWithLineOffset {
+        line: number;
+        offset: number;
+    }
+
+    export interface TextSpanWithLineOffset {
+        start: PositionWithLineOffset;
+        end: PositionWithLineOffset;
+    }
+
+    export class TextChangeWithLineOffset {
+        span: TextSpanWithLineOffset;
+        newText: string;
+    }
+
+    export interface FileTextChangesWithLineOffset {
+        fileName: string;
+        textChanges: TextChangeWithLineOffset[];
+    }
+
+    export interface CodeActionWithLineOffset {
+        description: string;
+        changes: FileTextChangesWithLineOffset[];
+    }
+
     export interface TextInsertion {
         newText: string;
         /** The position in newText the caret should point to after the insertion. */
