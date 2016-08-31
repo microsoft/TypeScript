@@ -1710,7 +1710,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("nagivateTo for javascript project", () => {
+    describe("nagivate for javascript project", () => {
         function containsNavToItem(items: server.protocol.NavtoItem[], itemName: string, itemKind: string) {
             return find(items, item => item.name === itemName && item.kind === itemKind) !== undefined;
         }

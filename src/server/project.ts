@@ -63,6 +63,11 @@ namespace ts.server {
 
         protected projectErrors: Diagnostic[];
 
+        private _isJsOnlyProject: boolean;
+        public isJsOnlyProject() {
+            return this._isJsOnlyProject;
+        }
+
         constructor(
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
@@ -138,7 +143,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return [];
             }
-            return this.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*excludeDts*/ allRootFilesAreJsOrDts(this));
+            return this.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*excludeDts*/ this.isJsOnlyProject());
         }
 
         getSourceFile(path: Path) {
@@ -295,6 +300,7 @@ namespace ts.server {
                 hasChanges = this.updateGraphWorker() || hasChanges;
             }
             if (hasChanges) {
+                this._isJsOnlyProject = allRootFilesAreJsOrDts(this);
                 this.projectStructureVersion++;
             }
             return !hasChanges;
@@ -551,8 +557,6 @@ namespace ts.server {
         private directoryWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<FileWatcher>;
 
-        public readonly isJSProject: boolean;
-
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
@@ -565,7 +569,6 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
-            this.isJSProject = getBaseFileName(configFileName) === "jsconfig.json";
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {
