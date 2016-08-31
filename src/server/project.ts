@@ -134,6 +134,13 @@ namespace ts.server {
         abstract getProjectName(): string;
         abstract getTypingOptions(): TypingOptions;
 
+        getNavigateToItems(searchValue: string, maxResultCount: number, excludeTypes?: boolean) {
+            if (!this.languageServiceEnabled) {
+                return [];
+            }
+            return this.getLanguageService().getNavigateToItems(searchValue, maxResultCount, excludeTypes);
+        }
+
         getSourceFile(path: Path) {
             if (!this.program) {
                 return undefined;
@@ -543,6 +550,9 @@ namespace ts.server {
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<FileWatcher>;
+
+        public readonly isJSProject: boolean;
+
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
@@ -555,6 +565,7 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+            this.isJSProject = getBaseFileName(configFileName) === "jsconfig.json";
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {
@@ -611,6 +622,10 @@ namespace ts.server {
                 this.directoryWatcher.close();
                 this.directoryWatcher = undefined;
             }
+        }
+
+        getNavigateToItems(searchValue: string, maxResultCount: number) {
+            return super.getNavigateToItems(searchValue, maxResultCount, /*excludeTypes*/ this.isJSProject);
         }
 
         close() {

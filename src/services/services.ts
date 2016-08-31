@@ -1240,7 +1240,7 @@ namespace ts {
         /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
 
-        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number, excludeTypes?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
 
         getOutliningSpans(fileName: string): OutliningSpan[];
@@ -7066,10 +7066,10 @@ namespace ts {
         }
 
         /// NavigateTo
-        function getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[] {
+        function getNavigateToItems(searchValue: string, maxResultCount?: number, excludeTypes?: boolean): NavigateToItem[] {
             synchronizeHostData();
             const checker = getProgram().getTypeChecker();
-            return ts.NavigateTo.getNavigateToItems(program, checker, cancellationToken, searchValue, maxResultCount);
+            return ts.NavigateTo.getNavigateToItems(program, checker, cancellationToken, searchValue, maxResultCount, excludeTypes);
         }
 
         function getEmitOutput(fileName: string, emitDeclarationsOnly?: boolean): EmitOutput {

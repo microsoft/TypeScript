@@ -113,6 +113,13 @@ namespace ts.projectSystem {
             fileOrFolderList);
     }
 
+    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller) {
+        if (typingsInstaller === undefined) {
+            typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+        }
+        return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+    }
+
     export interface CreateProjectServiceParameters {
         cancellationToken?: HostCancellationToken;
         logger?: server.Logger;
@@ -1699,7 +1706,36 @@ namespace ts.projectSystem {
                 "File '/a/cache/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
             ]);
-            checkProjectActualFiles(proj, [ file1.path, lib.path ]);
+            checkProjectActualFiles(proj, [file1.path, lib.path]);
+        });
+    });
+
+    describe("nagivateTo for javascript project", () => {
+        function containsNavToItem(items: server.protocol.NavtoItem[], itemName: string, itemKind: string) {
+            return find(items, item => item.name === itemName && item.kind === itemKind) !== undefined;
+        }
+
+        it("should not include type symbols", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.js",
+                content: "function foo() {}"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/jsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([file1, configFile, libFile]);
+            const session = createSession(host);
+            openFilesForSession([file1], session);
+
+            // Try to find some interface type defined in lib.d.ts
+            const libTypeNavToRequest = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
+            const items: server.protocol.NavtoItem[] = session.executeCommand(libTypeNavToRequest).response;
+            assert.isFalse(containsNavToItem(items, "Document", "interface"), `Found type symbol in JavaScript project nav to request result.`);
+
+            const localFunctionNavToRequst = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
+            const items2: server.protocol.NavtoItem[] = session.executeCommand(localFunctionNavToRequst).response;
+            assert.isTrue(containsNavToItem(items2, "foo", "function"), `Cannot find function symbol "foo".`);
         });
     });
 }
