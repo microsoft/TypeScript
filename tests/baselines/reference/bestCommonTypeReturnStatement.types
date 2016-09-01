@@ -18,7 +18,7 @@ function f() {
 >f : () => IPromise<any>
 
     if (true) return b();
->true : boolean
+>true : true
 >b() : IPromise<void>
 >b : () => IPromise<void>
 

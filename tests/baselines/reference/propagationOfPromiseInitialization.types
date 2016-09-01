@@ -28,16 +28,16 @@ foo.then((x) => {
 >foo.then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
 >foo : IPromise<number>
 >then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
->(x) => {    // x is inferred to be a number    return "asdf";} : (x: number) => string
+>(x) => {    // x is inferred to be a number    return "asdf";} : (x: number) => "asdf"
 >x : number
 
     // x is inferred to be a number
     return "asdf";
->"asdf" : string
+>"asdf" : "asdf"
 
 }).then((x) => {
 >then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
->(x) => {    // x is inferred to be string    x.length;    return 123;} : (x: string) => number
+>(x) => {    // x is inferred to be string    x.length;    return 123;} : (x: string) => 123
 >x : string
 
     // x is inferred to be string
@@ -47,7 +47,7 @@ foo.then((x) => {
 >length : number
 
     return 123;
->123 : number
+>123 : 123
 
 });
 

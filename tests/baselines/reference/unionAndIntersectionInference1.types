@@ -54,14 +54,14 @@ function destructure<a, r>(
 
 var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
 >value : string | Y
->Math.random() > 0.5 ? 'hey!' : <Y>undefined : string | Y
+>Math.random() > 0.5 ? 'hey!' : <Y>undefined : Y | "hey!"
 >Math.random() > 0.5 : boolean
 >Math.random() : number
 >Math.random : () => number
 >Math : Math
 >random : () => number
->0.5 : number
->'hey!' : string
+>0.5 : 0.5
+>'hey!' : "hey!"
 ><Y>undefined : Y
 >Y : Y
 >undefined : undefined
@@ -71,12 +71,12 @@ var result = destructure(value, text => 'string', y => 'other one'); // text: st
 >destructure(value, text => 'string', y => 'other one') : string
 >destructure : <a, r>(something: Y | a, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
 >value : string | Y
->text => 'string' : (text: string) => string
+>text => 'string' : (text: string) => "string"
 >text : string
->'string' : string
->y => 'other one' : (y: Y) => string
+>'string' : "string"
+>y => 'other one' : (y: Y) => "other one"
 >y : Y
->'other one' : string
+>'other one' : "other one"
 
 // Repro from #4212
 

@@ -1,10 +1,10 @@
 === tests/cases/compiler/functionWithNoBestCommonType1.ts ===
 
 function foo() {
->foo : () => boolean | void
+>foo : () => true | void
 
     return true;
->true : boolean
+>true : true
 
     return bar();
 >bar() : void

@@ -7,7 +7,7 @@ var a = {
 >function() { } : () => void
 
   "bar" : 5
->5 : number
+>5 : 5
 
 };
 

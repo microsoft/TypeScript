@@ -3,10 +3,10 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(17,23): error TS2344: Type '{}' does not satisfy the constraint 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(32,34): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(34,15): error TS2304: Cannot find name 'Window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(41,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(41,35): error TS2345: Argument of type '(x: string) => ""' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(48,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(48,35): error TS2345: Argument of type '(x: string) => ""' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(49,15): error TS2344: Type 'string' does not satisfy the constraint 'number'.
@@ -79,7 +79,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     someGenerics4<string, number>('', () => 3);
     someGenerics4<string, number>('', (x: string) => ''); // Error
                                       ~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345: Argument of type '(x: string) => ""' is not assignable to parameter of type '(x: number) => void'.
 !!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2345:     Type 'number' is not assignable to type 'string'.
     someGenerics4<string, number>(null, null);
@@ -90,7 +90,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     someGenerics5<number, string>('', () => 3);
     someGenerics5<number, string>('', (x: string) => ''); // Error
                                       ~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+!!! error TS2345: Argument of type '(x: string) => ""' is not assignable to parameter of type '(x: number) => void'.
 !!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2345:     Type 'number' is not assignable to type 'string'.
     someGenerics5<string, number>(null, null); // Error

@@ -7,7 +7,7 @@ function foo1(y = class {c = x}, x = 1) {
 >c : number
 >x : number
 >x : number
->1 : number
+>1 : 1
 
     new y().c;
 >new y().c : number
@@ -24,7 +24,7 @@ function foo2(y = function(x: typeof z) {}, z = 1) {
 >x : number
 >z : number
 >z : number
->1 : number
+>1 : 1
     
 }
 
@@ -41,6 +41,6 @@ function foo3(y = { x: <typeof z>a }, z = 1) {
 >z : number
 >a : any
 >z : number
->1 : number
+>1 : 1
     
 }

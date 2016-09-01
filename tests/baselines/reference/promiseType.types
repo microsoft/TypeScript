@@ -16,9 +16,9 @@ const b = p.then(b => 1);
 >p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
 >p : Promise<boolean>
 >then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
->b => 1 : (b: boolean) => number
+>b => 1 : (b: boolean) => 1
 >b : boolean
->1 : number
+>1 : 1
 
 const c = p.then(b => 1, e => 'error');
 >c : Promise<string | number>
@@ -26,12 +26,12 @@ const c = p.then(b => 1, e => 'error');
 >p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
 >p : Promise<boolean>
 >then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
->b => 1 : (b: boolean) => number
+>b => 1 : (b: boolean) => 1
 >b : boolean
->1 : number
->e => 'error' : (e: any) => string
+>1 : 1
+>e => 'error' : (e: any) => "error"
 >e : any
->'error' : string
+>'error' : "error"
 
 const d = p.then(b => 1, e => { });
 >d : Promise<number | void>
@@ -39,9 +39,9 @@ const d = p.then(b => 1, e => { });
 >p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
 >p : Promise<boolean>
 >then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
->b => 1 : (b: boolean) => number
+>b => 1 : (b: boolean) => 1
 >b : boolean
->1 : number
+>1 : 1
 >e => { } : (e: any) => void
 >e : any
 
@@ -51,9 +51,9 @@ const e = p.then(b => 1, e => { throw Error(); });
 >p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
 >p : Promise<boolean>
 >then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
->b => 1 : (b: boolean) => number
+>b => 1 : (b: boolean) => 1
 >b : boolean
->1 : number
+>1 : 1
 >e => { throw Error(); } : (e: any) => never
 >e : any
 >Error() : Error
@@ -65,9 +65,9 @@ const f = p.then(b => 1, e => Promise.reject(Error()));
 >p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
 >p : Promise<boolean>
 >then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
->b => 1 : (b: boolean) => number
+>b => 1 : (b: boolean) => 1
 >b : boolean
->1 : number
+>1 : 1
 >e => Promise.reject(Error()) : (e: any) => Promise<never>
 >e : any
 >Promise.reject(Error()) : Promise<never>
@@ -83,9 +83,9 @@ const g = p.catch(e => 'error');
 >p.catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
 >p : Promise<boolean>
 >catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
->e => 'error' : (e: any) => string
+>e => 'error' : (e: any) => "error"
 >e : any
->'error' : string
+>'error' : "error"
 
 const h = p.catch(e => { });
 >h : Promise<boolean | void>
@@ -143,7 +143,7 @@ async function B() {
 >p : Promise<boolean>
 
     return 1;
->1 : number
+>1 : 1
 }
 
 // NOTE: This reports a "No best comment type exists among return expressions." error, and is
@@ -168,7 +168,7 @@ async function D() {
 >p : Promise<boolean>
 
         return 1;
->1 : number
+>1 : 1
     }
     catch (e) {
 >e : any
@@ -185,7 +185,7 @@ async function E() {
 >p : Promise<boolean>
 
         return 1;
->1 : number
+>1 : 1
     }
     catch (e) {
 >e : any
@@ -206,7 +206,7 @@ async function F() {
 >p : Promise<boolean>
 
         return 1;
->1 : number
+>1 : 1
     }
     catch (e) {
 >e : any

@@ -13,5 +13,5 @@ function foo(bar:(a?)=>void) { return 0 }
 >foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }
 >bar : (a?: any) => void
 >a : any
->0 : number
+>0 : 0
 

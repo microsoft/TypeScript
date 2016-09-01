@@ -9,7 +9,7 @@ declare function as(...args: any[]);
 // Example 1
 var x = 10
 >x : number
->10 : number
+>10 : 10
 
 as `Hello world`; // should not error
 >as `Hello world` : any
@@ -19,7 +19,7 @@ as `Hello world`; // should not error
 // Example 2
 var y = 20
 >y : number
->20 : number
+>20 : 20
 
 as(Foo); // should emit
 >as(Foo) : any

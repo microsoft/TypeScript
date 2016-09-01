@@ -11,7 +11,7 @@ async function func(): Promise<void> {
 >Promise : Promise<T>
 
     "before";
->"before" : string
+>"before" : "before"
 
     var b = await p, a;
 >b : boolean
@@ -20,5 +20,5 @@ async function func(): Promise<void> {
 >a : any
 
     "after";
->"after" : string
+>"after" : "after"
 }

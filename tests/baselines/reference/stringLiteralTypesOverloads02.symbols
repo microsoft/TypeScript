@@ -28,7 +28,7 @@ function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string 
 >getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads02.ts, 0, 0), Decl(stringLiteralTypesOverloads02.ts, 1, 48), Decl(stringLiteralTypesOverloads02.ts, 2, 48), Decl(stringLiteralTypesOverloads02.ts, 3, 50), Decl(stringLiteralTypesOverloads02.ts, 4, 70), Decl(stringLiteralTypesOverloads02.ts, 5, 70), Decl(stringLiteralTypesOverloads02.ts, 6, 68), Decl(stringLiteralTypesOverloads02.ts, 7, 90))
 >x : Symbol(x, Decl(stringLiteralTypesOverloads02.ts, 7, 27))
 
-function getFalsyPrimitive(x: string) {
+function getFalsyPrimitive(x: string): string | number | boolean {
 >getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads02.ts, 0, 0), Decl(stringLiteralTypesOverloads02.ts, 1, 48), Decl(stringLiteralTypesOverloads02.ts, 2, 48), Decl(stringLiteralTypesOverloads02.ts, 3, 50), Decl(stringLiteralTypesOverloads02.ts, 4, 70), Decl(stringLiteralTypesOverloads02.ts, 5, 70), Decl(stringLiteralTypesOverloads02.ts, 6, 68), Decl(stringLiteralTypesOverloads02.ts, 7, 90))
 >x : Symbol(x, Decl(stringLiteralTypesOverloads02.ts, 8, 27))
 
@@ -68,13 +68,13 @@ namespace Consts1 {
 >getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads02.ts, 0, 0), Decl(stringLiteralTypesOverloads02.ts, 1, 48), Decl(stringLiteralTypesOverloads02.ts, 2, 48), Decl(stringLiteralTypesOverloads02.ts, 3, 50), Decl(stringLiteralTypesOverloads02.ts, 4, 70), Decl(stringLiteralTypesOverloads02.ts, 5, 70), Decl(stringLiteralTypesOverloads02.ts, 6, 68), Decl(stringLiteralTypesOverloads02.ts, 7, 90))
 }
 
-const string: "string" = "string"
+const string = "string"
 >string : Symbol(string, Decl(stringLiteralTypesOverloads02.ts, 29, 5))
 
-const number: "number" = "number"
+const number = "number"
 >number : Symbol(number, Decl(stringLiteralTypesOverloads02.ts, 30, 5))
 
-const boolean: "boolean" = "boolean"
+const boolean = "boolean"
 >boolean : Symbol(boolean, Decl(stringLiteralTypesOverloads02.ts, 31, 5))
 
 const stringOrNumber = string || number;

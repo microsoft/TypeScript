@@ -1,6 +1,6 @@
 === tests/cases/compiler/file1.ts ===
 "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
 import * as MyModule from "./mymodule";
 >MyModule : typeof MyModule

@@ -7,10 +7,10 @@ function f1() {
 >f1 : () => number
 
     if (true) {
->true : boolean
+>true : true
 
         return 1;
->1 : number
+>1 : 1
 
     } else {
         return null;
@@ -19,23 +19,23 @@ function f1() {
 }
 
 function f2() {
->f2 : () => number
+>f2 : () => 1 | 2
 
     if (true) {
->true : boolean
+>true : true
 
         return 1;
->1 : number
+>1 : 1
 
     } else if (false) {
->false : boolean
+>false : false
 
         return null;
 >null : null
 
     } else {
         return 2;
->2 : number
+>2 : 2
     }
 }
 
@@ -44,7 +44,7 @@ function f4() {
 
     try {
         return 1;
->1 : number
+>1 : 1
     }
     catch (e) {
 >e : any
@@ -54,7 +54,7 @@ function f4() {
     }
     finally {
         return 1;
->1 : number
+>1 : 1
     }
 }
 
@@ -62,7 +62,7 @@ function f5() {
 >f5 : () => Object
 
     return 1;
->1 : number
+>1 : 1
 
     return new Object();
 >new Object() : Object
@@ -76,7 +76,7 @@ function f6<T>(x: T) {
 >T : T
 
     if (true) {
->true : boolean
+>true : true
 
         return x;
 >x : T
@@ -110,7 +110,7 @@ function f9() {
 >f9 : () => { x: number; y?: number; } | { x: number; z?: number; }
 
     if (true) {
->true : boolean
+>true : true
 
         return a;
 >a : { x: number; y?: number; }
@@ -126,7 +126,7 @@ function f10() {
 >f10 : () => { x: number; y?: number; } | { x: number; z?: number; }
 
     if (true) {
->true : boolean
+>true : true
 
         return b;
 >b : { x: number; z?: number; }
@@ -142,7 +142,7 @@ function f11() {
 >f11 : () => (x: number) => void
 
     if (true) {
->true : boolean
+>true : true
 
         return (x: number) => { }
 >(x: number) => { } : (x: number) => void
@@ -161,7 +161,7 @@ function f12() {
 >f12 : () => (x: Object) => void
 
     if (true) {
->true : boolean
+>true : true
 
         return (x: Object) => { }
 >(x: Object) => { } : (x: Object) => void

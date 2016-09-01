@@ -185,7 +185,7 @@ function f1(x: A | B) {
 >B : B
 
     while (true) {
->true : boolean
+>true : true
 
         x.prop;
 >x.prop : { a: string; } | { b: string; }
@@ -230,7 +230,7 @@ function f2(x: A | B) {
 >B : B
 
     while (true) {
->true : boolean
+>true : true
 
         if (x.kind) {
 >x.kind : boolean

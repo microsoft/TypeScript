@@ -20,7 +20,7 @@ fa = fa.concat([0]);
 >fa : number[]
 >concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
 >[0] : number[]
->0 : number
+>0 : 0
 
 fa = fa.concat(0);
 >fa = fa.concat(0) : number[]
@@ -29,7 +29,7 @@ fa = fa.concat(0);
 >fa.concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
 >fa : number[]
 >concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
->0 : number
+>0 : 0
 
 
 

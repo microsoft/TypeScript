@@ -16,27 +16,27 @@ trans(({a}) => a);
 trans(([b,c]) => 'foo');
 >trans(([b,c]) => 'foo') : number
 >trans : <T>(f: (x: T) => string) => number
->([b,c]) => 'foo' : ([b, c]: [any, any]) => string
+>([b,c]) => 'foo' : ([b, c]: [any, any]) => "foo"
 >b : any
 >c : any
->'foo' : string
+>'foo' : "foo"
 
 trans(({d: [e,f]}) => 'foo');
 >trans(({d: [e,f]}) => 'foo') : number
 >trans : <T>(f: (x: T) => string) => number
->({d: [e,f]}) => 'foo' : ({d: [e, f]}: { d: [any, any]; }) => string
+>({d: [e,f]}) => 'foo' : ({d: [e, f]}: { d: [any, any]; }) => "foo"
 >d : any
 >e : any
 >f : any
->'foo' : string
+>'foo' : "foo"
 
 trans(([{g},{h}]) => 'foo');
 >trans(([{g},{h}]) => 'foo') : number
 >trans : <T>(f: (x: T) => string) => number
->([{g},{h}]) => 'foo' : ([{g}, {h}]: [{ g: any; }, { h: any; }]) => string
+>([{g},{h}]) => 'foo' : ([{g}, {h}]: [{ g: any; }, { h: any; }]) => "foo"
 >g : any
 >h : any
->'foo' : string
+>'foo' : "foo"
 
 trans(({a, b = 10}) => a);
 >trans(({a, b = 10}) => a) : number
@@ -44,6 +44,6 @@ trans(({a, b = 10}) => a);
 >({a, b = 10}) => a : ({a, b}: { a: any; b?: number; }) => any
 >a : any
 >b : number
->10 : number
+>10 : 10
 >a : any
 

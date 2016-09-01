@@ -6,13 +6,13 @@ var x = {'text\
 ': string; }
 
 ':'hello'}
->'hello' : string
+>'hello' : "hello"
 
 x.text = "bar"
->x.text = "bar" : string
+>x.text = "bar" : "bar"
 >x.text : string
 >x : { 'text\
 ': string; }
 >text : string
->"bar" : string
+>"bar" : "bar"
 

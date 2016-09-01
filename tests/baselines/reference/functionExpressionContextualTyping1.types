@@ -4,8 +4,8 @@
 
 enum E { red, blue }
 >E : E
->red : E
->blue : E
+>red : E.red
+>blue : E.blue
 
 // A contextual signature S is extracted from a function type T as follows:
 //      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.
@@ -14,7 +14,7 @@ var a0: (n: number, s: string) => number = (num, str) => {
 >a0 : (n: number, s: string) => number
 >n : number
 >s : string
->(num, str) => {    num.toExponential();    return 0;} : (num: number, str: string) => number
+>(num, str) => {    num.toExponential();    return 0;} : (num: number, str: string) => 0
 >num : number
 >str : string
 
@@ -25,7 +25,7 @@ var a0: (n: number, s: string) => number = (num, str) => {
 >toExponential : (fractionDigits?: number) => string
 
     return 0;
->0 : number
+>0 : 0
 }
 
 class Class<T> {
@@ -41,7 +41,7 @@ var a1: (c: Class<Number>) => number = (a1) => {
 >c : Class<Number>
 >Class : Class<T>
 >Number : Number
->(a1) => {    a1.foo();    return 1;} : (a1: Class<Number>) => number
+>(a1) => {    a1.foo();    return 1;} : (a1: Class<Number>) => 1
 >a1 : Class<Number>
 
     a1.foo();
@@ -51,7 +51,7 @@ var a1: (c: Class<Number>) => number = (a1) => {
 >foo : () => void
 
     return 1;
->1 : number
+>1 : 1
 }
 
 // A contextual signature S is extracted from a function type T as follows:
@@ -87,15 +87,15 @@ b2 = (foo, bar) => { return foo + 1; }
 >bar : string
 >foo + 1 : number
 >foo : number
->1 : number
+>1 : 1
 
 b2 = (foo, bar) => { return "hello"; }
->b2 = (foo, bar) => { return "hello"; } : (foo: number, bar: string) => string
+>b2 = (foo, bar) => { return "hello"; } : (foo: number, bar: string) => "hello"
 >b2 : ((n: number, s: string) => number) | ((n: number, s: string) => string)
->(foo, bar) => { return "hello"; } : (foo: number, bar: string) => string
+>(foo, bar) => { return "hello"; } : (foo: number, bar: string) => "hello"
 >foo : number
 >bar : string
->"hello" : string
+>"hello" : "hello"
 
 var b3: (name: string, num: number, boo: boolean) => void;
 >b3 : (name: string, num: number, boo: boolean) => void
@@ -114,18 +114,18 @@ var b4: (n: E) => string = (number = 1) => { return "hello"; };
 >b4 : (n: E) => string
 >n : E
 >E : E
->(number = 1) => { return "hello"; } : (number?: E) => string
+>(number = 1) => { return "hello"; } : (number?: E) => "hello"
 >number : E
 >1 : 1
->"hello" : string
+>"hello" : "hello"
 
 var b5: (n: {}) => string = (number = "string") => { return "hello"; };
 >b5 : (n: {}) => string
 >n : {}
->(number = "string") => { return "hello"; } : (number?: {}) => string
+>(number = "string") => { return "hello"; } : (number?: {}) => "hello"
 >number : {}
->"string" : string
->"hello" : string
+>"string" : "string"
+>"hello" : "hello"
 
 // A contextual signature S is extracted from a function type T as follows:
 //      Otherwise, no contextual signature can be extracted from T and S is undefined.

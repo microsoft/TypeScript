@@ -25,7 +25,7 @@ function f2({ "show": showRename = v => v }: Show) {}
 
 function f3({ ["show"]: showRename = v => v }: Show) {}
 >f3 : ({["show"]: showRename}: Show) => void
->"show" : string
+>"show" : "show"
 >showRename : ((x: number) => string) | ((v: number) => number)
 >v => v : (v: number) => number
 >v : number
@@ -82,8 +82,8 @@ function g({ prop = [101, 1234] }: Tuples) {}
 >g : ({prop}: Tuples) => void
 >prop : [string, number] | [number, number]
 >[101, 1234] : [number, number]
->101 : number
->1234 : number
+>101 : 101
+>1234 : 1234
 >Tuples : Tuples
 
 interface StringUnion {

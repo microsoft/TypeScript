@@ -57,7 +57,7 @@ tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
->10 : number
+>10 : 10
 
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }`;
 >tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }` : number
@@ -75,7 +75,7 @@ tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y =>
 >y : <T>(p: T) => T
 >undefined : undefined
 >y : <T>(p: T) => T
->10 : number
+>10 : 10
 
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }`;
 >tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }` : any

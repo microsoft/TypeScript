@@ -6,14 +6,14 @@ function a0() {
 >x : any
 >x < 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : any
 >x : any
 >x + 1 : any
 >x : any
->1 : number
+>1 : 1
     }
     for (let x;;) {
 >x : any
@@ -23,7 +23,7 @@ function a0() {
 >x : any
 >x + 2 : any
 >x : any
->2 : number
+>2 : 2
     }
 }
 
@@ -34,14 +34,14 @@ function a1() {
 >x : any
 >x < 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : any
 >x : any
 >x + 1 : any
 >x : any
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => any
@@ -55,7 +55,7 @@ function a1() {
 >x : any
 >x + 2 : any
 >x : any
->2 : number
+>2 : 2
     }
 }
 
@@ -66,14 +66,14 @@ function a2() {
 >x : any
 >x < 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : any
 >x : any
 >x + 1 : any
 >x : any
->1 : number
+>1 : 1
     }
     for (let x;;) {
 >x : any
@@ -83,7 +83,7 @@ function a2() {
 >x : any
 >x + 2 : any
 >x : any
->2 : number
+>2 : 2
 
         () => x;
 >() => x : () => any
@@ -99,14 +99,14 @@ function a3() {
 >x : any
 >x < 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : any
 >x : any
 >x + 1 : any
 >x : any
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => any
@@ -120,7 +120,7 @@ function a3() {
 >x : any
 >x + 2 : any
 >x : any
->2 : number
+>2 : 2
 
         () => x;
 >() => x : () => any

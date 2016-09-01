@@ -2,11 +2,11 @@
 var func = function (){return "ONE";};
 >func : () => string
 >function (){return "ONE";} : () => string
->"ONE" : string
+>"ONE" : "ONE"
 
 func = function (){return "ONE";};
->func = function (){return "ONE";} : () => string
+>func = function (){return "ONE";} : () => "ONE"
 >func : () => string
->function (){return "ONE";} : () => string
->"ONE" : string
+>function (){return "ONE";} : () => "ONE"
+>"ONE" : "ONE"
 

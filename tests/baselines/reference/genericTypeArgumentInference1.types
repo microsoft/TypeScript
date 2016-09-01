@@ -47,11 +47,11 @@ var r = _.all([true, 1, null, 'yes'], _.identity);
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->[true, 1, null, 'yes'] : (string | number | true)[]
+>[true, 1, null, 'yes'] : (true | 1 | "yes")[]
 >true : true
->1 : number
+>1 : 1
 >null : null
->'yes' : string
+>'yes' : "yes"
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T
@@ -87,7 +87,7 @@ var r4 = _.all([<any>true], _.identity);
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >[<any>true] : any[]
 ><any>true : any
->true : boolean
+>true : true
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T

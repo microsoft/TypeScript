@@ -1,9 +1,9 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type '(x: number) => number' is not assignable to type '() => number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type '(x: number) => 1' is not assignable to type '() => number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(19,5): error TS2322: Type '(x: number) => number' is not assignable to type '() => number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(20,5): error TS2322: Type '(x: number, y?: number) => number' is not assignable to type '() => number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(22,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '() => number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(33,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x?: number) => number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(39,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(39,5): error TS2322: Type '(x: number, y: number) => 1' is not assignable to type '(x: number) => number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(45,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
 
 
@@ -25,7 +25,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         a = (x?: number) => 1; // ok, same number of required params
         a = (x: number) => 1; // error, too many required params
         ~
-!!! error TS2322: Type '(x: number) => number' is not assignable to type '() => number'.
+!!! error TS2322: Type '(x: number) => 1' is not assignable to type '() => number'.
         a = b.a; // ok
         a = b.a2; // ok
         a = b.a3; // error
@@ -58,7 +58,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         a3 = (x: number) => 1; // ok, same number of required params
         a3 = (x: number, y: number) => 1;  // error, too many required params
         ~~
-!!! error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+!!! error TS2322: Type '(x: number, y: number) => 1' is not assignable to type '(x: number) => number'.
         a3 = b.a; // ok
         a3 = b.a2; // ok
         a3 = b.a3; // ok

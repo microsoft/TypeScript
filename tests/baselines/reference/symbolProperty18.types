@@ -7,13 +7,13 @@ var i = {
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->0 : number
+>0 : 0
 
     [Symbol.toStringTag]() { return "" },
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
->"" : string
+>"" : ""
 
     set [Symbol.toPrimitive](p: boolean) { }
 >Symbol.toPrimitive : symbol

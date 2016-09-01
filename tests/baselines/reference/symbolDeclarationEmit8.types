@@ -7,5 +7,5 @@ var obj = {
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
->0 : number
+>0 : 0
 }

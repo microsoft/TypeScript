@@ -22,7 +22,7 @@ var f4 = (x: string, y: number, z = 10) => { }
 >x : string
 >y : number
 >z : number
->10 : number
+>10 : 10
 
 function foo(func: () => boolean) { }
 >foo : (func: () => boolean) => void

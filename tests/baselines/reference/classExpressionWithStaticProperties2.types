@@ -4,6 +4,6 @@ var v = class C { static a = 1; static b };
 >class C { static a = 1; static b } : typeof C
 >C : typeof C
 >a : number
->1 : number
+>1 : 1
 >b : any
 

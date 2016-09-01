@@ -58,7 +58,7 @@ export {
 
 export var value = "youpi";
 >value : string
->"youpi" : string
+>"youpi" : "youpi"
 
 export default value;
 >value : string
@@ -67,5 +67,5 @@ export default value;
 
 export var value2 = "v";
 >value2 : string
->"v" : string
+>"v" : "v"
 

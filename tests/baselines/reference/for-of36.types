@@ -2,7 +2,7 @@
 var tuple: [string, boolean] = ["", true];
 >tuple : [string, boolean]
 >["", true] : [string, true]
->"" : string
+>"" : ""
 >true : true
 
 for (var v of tuple) {

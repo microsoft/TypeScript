@@ -109,9 +109,9 @@ module Editor {
 >next : List<T>
 
             for (i = 0; !(entry.isHead); i++) {
->i = 0 : number
+>i = 0 : 0
 >i : number
->0 : number
+>0 : 0
 >!(entry.isHead) : boolean
 >(entry.isHead) : boolean
 >entry.isHead : boolean

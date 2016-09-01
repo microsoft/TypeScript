@@ -4,7 +4,7 @@ var v = class C { static a = 1; static b = 2 };
 >class C { static a = 1; static b = 2 } : typeof C
 >C : typeof C
 >a : number
->1 : number
+>1 : 1
 >b : number
->2 : number
+>2 : 2
 
