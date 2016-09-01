@@ -94,20 +94,24 @@ function deleteFolderRecursive(dirPath: string) {
     }
 };
 
-function writeFile(path: string, data: any, opts: { recursive: boolean }) {
+function writeFile(p: string, data: any, opts: { recursive: boolean }) {
     try {
-        fs.writeFileSync(path, data);
+        fs.writeFileSync(p, data);
     }
     catch (e) {
-        // assume file was written to a directory that exists, if not, start recursively creating them as necessary
-        const parts = switchToForwardSlashes(path).split("/");
-        for (let i = 0; i < parts.length; i++) {
-            const subDir = parts.slice(0, i).join("/");
-            if (!fs.existsSync(subDir)) {
-                fs.mkdir(subDir);
-            }
-        }
-        fs.writeFileSync(path, data);
+        mkdir(path.dirname(p));
+        fs.writeFileSync(p, data);
+    }
+}
+
+function mkdir(p: string) {
+    const basePath = path.dirname(p);
+    let shouldCreateParent = p !== basePath && !fs.existsSync(basePath);
+    if (shouldCreateParent) {
+        mkdir(basePath);
+    }
+    if (shouldCreateParent || !fs.existsSync(p)) {
+        fs.mkdirSync(p);
     }
 }
 
