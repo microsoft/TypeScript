@@ -22,6 +22,7 @@ exports.c = c;
 "use strict";
 var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.c();
+ // unreferenced
 
 
 //// [server.d.ts]

@@ -129,8 +129,8 @@ verify.memberListContains("c", "constructor m1.m2.c(): m1.m2.c", "");
 verify.memberListContains("i", "var m1.m2.i: m1.m2.c", "i");
 
 goTo.marker('9');
-verify.completionListContains("m2", "namespace m2", "");
-verify.quickInfoIs("namespace m2", "");
+verify.completionListContains("m2", "namespace m2", "namespace comment of m2.m3");
+verify.quickInfoIs("namespace m2", "namespace comment of m2.m3");
 
 goTo.marker('10');
 verify.memberListContains("m3", "namespace m2.m3");
@@ -141,12 +141,12 @@ verify.quickInfoIs("constructor m2.m3.c(): m2.m3.c", "");
 verify.memberListContains("c", "constructor m2.m3.c(): m2.m3.c", "");
 
 goTo.marker('12');
-verify.completionListContains("m3", "namespace m3", "");
-verify.quickInfoIs("namespace m3", "");
+verify.completionListContains("m3", "namespace m3", "namespace comment of m3.m4.m5");
+verify.quickInfoIs("namespace m3", "namespace comment of m3.m4.m5");
 
 goTo.marker('13');
-verify.memberListContains("m4", "namespace m3.m4", "");
-verify.quickInfoIs("namespace m3.m4", "");
+verify.memberListContains("m4", "namespace m3.m4", "namespace comment of m3.m4.m5");
+verify.quickInfoIs("namespace m3.m4", "namespace comment of m3.m4.m5");
 
 goTo.marker('14');
 verify.memberListContains("m5", "namespace m3.m4.m5");
@@ -157,12 +157,12 @@ verify.quickInfoIs("constructor m3.m4.m5.c(): m3.m4.m5.c", "");
 verify.memberListContains("c", "constructor m3.m4.m5.c(): m3.m4.m5.c", "");
 
 goTo.marker('16');
-verify.completionListContains("m4", "namespace m4", "");
-verify.quickInfoIs("namespace m4", "");
+verify.completionListContains("m4", "namespace m4", "namespace comment of m4.m5.m6");
+verify.quickInfoIs("namespace m4", "namespace comment of m4.m5.m6");
 
 goTo.marker('17');
-verify.memberListContains("m5", "namespace m4.m5", "");
-verify.quickInfoIs("namespace m4.m5", "");
+verify.memberListContains("m5", "namespace m4.m5", "namespace comment of m4.m5.m6");
+verify.quickInfoIs("namespace m4.m5", "namespace comment of m4.m5.m6");
 
 goTo.marker('18');
 verify.memberListContains("m6", "namespace m4.m5.m6");
@@ -178,11 +178,11 @@ verify.quickInfoIs("constructor m4.m5.m6.m7.c(): m4.m5.m6.m7.c", "");
 
 goTo.marker('21');
 verify.completionListContains("m5", "namespace m5");
-verify.quickInfoIs("namespace m5", "");
+verify.quickInfoIs("namespace m5", "namespace comment of m5.m6.m7");
 
 goTo.marker('22');
 verify.memberListContains("m6", "namespace m5.m6");
-verify.quickInfoIs("namespace m5.m6", "");
+verify.quickInfoIs("namespace m5.m6", "namespace comment of m5.m6.m7");
 
 goTo.marker('23');
 verify.memberListContains("m7", "namespace m5.m6.m7");

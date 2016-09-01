@@ -29,4 +29,4 @@ define(["require", "exports"], function (require, exports) {
 //// [recursiveExportAssignmentAndFindAliasedType1_moduleA.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-});
+}); // This should result in type ClassB

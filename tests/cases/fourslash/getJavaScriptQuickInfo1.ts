@@ -6,4 +6,4 @@
 ////var /**/v;
 
 goTo.marker();
-verify.quickInfoIs('var v: new (p1: number) => string');
+verify.quickInfoIs('var v: new (arg1: number) => string');

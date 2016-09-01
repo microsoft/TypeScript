@@ -116,7 +116,7 @@ goTo.marker('c');
 verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n\nThis is fourth Line");
 
 goTo.marker('d');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@random tag This should be third line");
+verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line");
 goTo.marker('1');
 verify.quickInfoIs(undefined, "");
 
@@ -126,17 +126,17 @@ goTo.marker('2');
 verify.quickInfoIs(undefined, "");
 
 goTo.marker('f');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@random tag This should be third line");
+verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line");
 goTo.marker('3');
 verify.quickInfoIs(undefined, "first line of param\n\nparam information third line");
 
 goTo.marker('g');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@random tag This should be third line");
+verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line");
 goTo.marker('4');
 verify.quickInfoIs(undefined, "param information first line");
 
 goTo.marker('h');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@random tag This should be third line");
+verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line");
 goTo.marker('5');
 verify.quickInfoIs(undefined, "param information first line\n\nparam information third line");
 
@@ -151,7 +151,7 @@ goTo.marker('7');
 verify.quickInfoIs(undefined, "param information first line\n\nparam information third line");
 
 goTo.marker('k');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@randomtag \n\n random information first line\n\n random information third line");
+verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line");
 goTo.marker('8');
 verify.quickInfoIs(undefined, "hello   ");
 
