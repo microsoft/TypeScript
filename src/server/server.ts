@@ -267,7 +267,7 @@ namespace ts.server {
         }
 
         function removeFile(file: WatchedFile) {
-            unorderedRemoveItem(file, watchedFiles);
+            unorderedRemoveItem(watchedFiles, file);
         }
 
         return {

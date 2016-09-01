@@ -285,7 +285,7 @@ namespace ts {
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
                     const callbacks = fileWatcherCallbacks[filePath];
                     if (callbacks) {
-                        unorderedRemoveItem(callback, callbacks);
+                        unorderedRemoveItem(callbacks, callback);
                         if (callbacks.length === 0) {
                             delete fileWatcherCallbacks[filePath];
                         }

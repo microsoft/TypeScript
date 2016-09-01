@@ -1501,7 +1501,7 @@ namespace ts {
     }
 
     /** Remove an item from an array, moving everything to its right one space left. */
-    export function removeItemAtPreservingOrder<T>(array: T[], index: number): void {
+    export function orderedRemoveItemAt<T>(array: T[], index: number): void {
         // This seems to be faster than either `array.splice(i, 1)` or `array.copyWithin(i, i+ 1)`.
         for (let i = index; i < array.length - 1; i++) {
             array[i] = array[i + 1];
@@ -1516,7 +1516,7 @@ namespace ts {
     }
 
     /** Remove the *first* occurrence of `item` from the array. */
-    export function unorderedRemoveItem<T>(item: T, array: T[]): void {
+    export function unorderedRemoveItem<T>(array: T[], item: T): void {
         unorderedRemoveFirstItemWhere(array, element => element === item);
     }
 
