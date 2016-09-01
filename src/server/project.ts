@@ -20,10 +20,16 @@ namespace ts.server {
         }
     }
 
+    function isJsOrDtsFile(info: ScriptInfo) {
+        return info.scriptKind === ScriptKind.JS || info.scriptKind == ScriptKind.JSX || fileExtensionIs(info.fileName, ".d.ts");
+    }
+
     export function allRootFilesAreJsOrDts(project: Project): boolean {
-        return project.getRootScriptInfos().every(f => {
-            return f.scriptKind === ScriptKind.JS || f.scriptKind == ScriptKind.JSX || fileExtensionIs(f.fileName, ".d.ts");
-        });
+        return project.getRootScriptInfos().every(isJsOrDtsFile);
+    }
+
+    export function allFilesAreJsOrDts(project: Project): boolean {
+        return project.getScriptInfos().every(isJsOrDtsFile);
     }
 
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
@@ -63,9 +69,9 @@ namespace ts.server {
 
         protected projectErrors: Diagnostic[];
 
-        private _isJsOnlyProject: boolean;
         public isJsOnlyProject() {
-            return this._isJsOnlyProject;
+            this.updateGraph();
+            return allFilesAreJsOrDts(this);
         }
 
         constructor(
@@ -293,7 +299,6 @@ namespace ts.server {
                 hasChanges = this.updateGraphWorker() || hasChanges;
             }
             if (hasChanges) {
-                this._isJsOnlyProject = allRootFilesAreJsOrDts(this);
                 this.projectStructureVersion++;
             }
             return !hasChanges;
