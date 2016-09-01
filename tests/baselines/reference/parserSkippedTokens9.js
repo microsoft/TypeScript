@@ -4,3 +4,4 @@
 
 //// [parserSkippedTokens9.js]
 ; // existing trivia
+ /*bar*/

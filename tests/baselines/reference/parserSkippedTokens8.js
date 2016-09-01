@@ -3,4 +3,4 @@
 /*foo*/ \ /*bar*/
 
 //// [parserSkippedTokens8.js]
-;
+; /*bar*/

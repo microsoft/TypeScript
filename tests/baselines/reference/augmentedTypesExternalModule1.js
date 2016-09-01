@@ -13,4 +13,4 @@ define(["require", "exports"], function (require, exports) {
         c5.prototype.foo = function () { };
         return c5;
     }());
-});
+}); // should be ok everywhere

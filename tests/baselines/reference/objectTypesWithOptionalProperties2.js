@@ -42,6 +42,5 @@ var C2 = (function () {
     return C2;
 }());
 var b = {
-    x: function () { }, 1: // error
-     // error
+    x: function () { }, 1:  // error
 };
