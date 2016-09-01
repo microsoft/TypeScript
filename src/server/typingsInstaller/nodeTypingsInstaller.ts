@@ -109,7 +109,7 @@ namespace ts.server.typingsInstaller {
                         filteredTypings.push(typing);
                     }
                     if (execInstallCmdCount >= typingsToInstall.length) {
-                        const command = `npm install ${filteredTypings.map(t => "@types/" + t).join(" ")} --save-dev -json`;
+                        const command = `npm install ${filteredTypings.map(t => "@types/" + t).join(" ")} --save-dev`;
                         if (this.log.isEnabled()) {
                             this.log.writeLine(`Running npm install @types ${id}, command '${command}'. cache path '${cachePath}'`);
                         }
@@ -118,19 +118,29 @@ namespace ts.server.typingsInstaller {
                                 this.log.writeLine(`npm install @types ${id} stdout: ${stdout}`);
                                 this.log.writeLine(`npm install @types ${id} stderr: ${stderr}`);
                             }
-                            const installedTypings: string[] = [];
-                            try {
-                                const response = JSON.parse(stdout);
-                                if (response.dependencies) {
-                                    for (const typing in response.dependencies) {
-                                        installedTypings.push(typing);
+                            if (stdout === "") {
+                                return;
+                            }
+                            const command = "npm ls -json";
+                            this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
+                                if (this.log.isEnabled()) {
+                                    this.log.writeLine(`npm ls -json ${id} stdout: ${stdout}`);
+                                    this.log.writeLine(`npm ls -json ${id} stderr: ${stderr}`);
+                                }
+                                const installedTypings: string[] = [];
+                                try {
+                                    const response = JSON.parse(stdout);
+                                    if (response.dependencies) {
+                                        for (const typing in response.dependencies) {
+                                            installedTypings.push(typing);
+                                        }
                                     }
                                 }
-                            }
-                            catch (e) {
-                                this.log.writeLine(`Error parsing installed @types dependencies. Error details: ${e.message}`);
-                            }
-                            postInstallAction(installedTypings);
+                                catch (e) {
+                                    this.log.writeLine(`Error parsing installed @types dependencies. Error details: ${e.message}`);
+                                }
+                                postInstallAction(installedTypings);
+                            });
                         });
                     }
                 });
