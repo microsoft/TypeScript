@@ -15,7 +15,7 @@ interface IPromise<T> {
 }
 
 function f() {
->f : () => IPromise<void>
+>f : () => IPromise<any>
 
     if (true) return b();
 >true : boolean

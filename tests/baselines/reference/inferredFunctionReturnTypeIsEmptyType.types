@@ -1,0 +1,17 @@
+=== tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts ===
+
+function foo() {
+>foo : () => string | number
+
+    if (true) {
+>true : boolean
+
+        return 42;
+>42 : number
+    }
+    else {
+        return "42";
+>"42" : string
+    }
+};
+
