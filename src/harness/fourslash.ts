@@ -1564,7 +1564,7 @@ namespace FourSlash {
         public goToDefinition(definitionIndex: number) {
             const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!definitions || !definitions.length) {
-                this.raiseError("goToDefinition failed - expected to at least one definition location but got 0");
+                this.raiseError("goToDefinition failed - expected to find at least one definition location but got 0");
             }
 
             if (definitionIndex >= definitions.length) {
@@ -1579,7 +1579,7 @@ namespace FourSlash {
         public goToTypeDefinition(definitionIndex: number) {
             const definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!definitions || !definitions.length) {
-                this.raiseError("goToTypeDefinition failed - expected to at least one definition location but got 0");
+                this.raiseError("goToTypeDefinition failed - expected to find at least one definition location but got 0");
             }
 
             if (definitionIndex >= definitions.length) {
@@ -1600,7 +1600,7 @@ namespace FourSlash {
                 this.raiseError(`goToDefinition - expected to 0 definition locations but got ${definitions.length}`);
             }
             else if (!foundDefinitions && !negative) {
-                this.raiseError("goToDefinition - expected to at least one definition location but got 0");
+                this.raiseError("goToDefinition - expected to find at least one definition location but got 0");
             }
         }
 
