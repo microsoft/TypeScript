@@ -2914,7 +2914,7 @@ namespace ts {
             // undefined or any type of the parent.
             if (!parentType || isTypeAny(parentType)) {
                 if (declaration.initializer) {
-                    return checkExpressionCached(declaration.initializer);
+                    return getBaseTypeOfLiteralType(checkExpressionCached(declaration.initializer));
                 }
                 return parentType;
             }
@@ -3109,7 +3109,7 @@ namespace ts {
         // pattern. Otherwise, it is the type any.
         function getTypeFromBindingElement(element: BindingElement, includePatternInType?: boolean, reportErrors?: boolean): Type {
             if (element.initializer) {
-                return checkExpressionCached(element.initializer);
+                return getBaseTypeOfLiteralType(checkExpressionCached(element.initializer));
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(<BindingPattern>element.name, includePatternInType, reportErrors);
@@ -7218,6 +7218,10 @@ namespace ts {
                 type;
         }
 
+        function getBaseTypeIfUnitType(type: Type): Type {
+            return isUnitType(type) ? getBaseTypeOfLiteralType(type) : type;
+        }
+
         /**
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
@@ -7504,6 +7508,11 @@ namespace ts {
             return type.couldContainTypeParameters;
         }
 
+        function hasPrimitiveConstraint(type: TypeParameter): boolean {
+            const constraint = getConstraintOfTypeParameter(type);
+            return constraint && (constraint.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum)) !== 0;
+        }
+
         function inferTypes(context: InferenceContext, source: Type, target: Type) {
             let sourceStack: Type[];
             let targetStack: Type[];
@@ -7578,7 +7587,8 @@ namespace ts {
                                 const candidates = inferiority ?
                                     inferences.secondary || (inferences.secondary = []) :
                                     inferences.primary || (inferences.primary = []);
-                                const widened = isUnitType(source) ? getBaseTypeOfLiteralType(source): source;
+                                // Infer base primitive type for unit types.
+                                const widened = isUnitType(source) && !hasPrimitiveConstraint(<TypeParameter>target) ? getBaseTypeOfLiteralType(source) : source;
                                 if (!contains(candidates, widened)) {
                                     candidates.push(widened);
                                 }
@@ -8310,7 +8320,8 @@ namespace ts {
                 // Assignments only narrow the computed type if the declared type is a union type. Thus, we
                 // only need to evaluate the assigned type if the declared type is a union type.
                 if (isMatchingReference(reference, node)) {
-                    return declaredType.flags & TypeFlags.Union ?
+                    const isIncrementOrDecrement = node.parent.kind === SyntaxKind.PrefixUnaryExpression || node.parent.kind === SyntaxKind.PostfixUnaryExpression;
+                    return declaredType.flags & TypeFlags.Union && !isIncrementOrDecrement ?
                         getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(node)) :
                         declaredType;
                 }
@@ -9402,14 +9413,14 @@ namespace ts {
                         if (parameter.dotDotDotToken) {
                             const restTypes: Type[] = [];
                             for (let i = indexOfParameter; i < iife.arguments.length; i++) {
-                                restTypes.push(getTypeOfExpression(iife.arguments[i]));
+                                restTypes.push(getBaseTypeOfLiteralType(checkExpression(iife.arguments[i])));
                             }
                             return createArrayType(getUnionType(restTypes));
                         }
                         const links = getNodeLinks(iife);
                         const cached = links.resolvedSignature;
                         links.resolvedSignature = anySignature;
-                        const type = checkExpression(iife.arguments[indexOfParameter]);
+                        const type = getBaseTypeOfLiteralType(checkExpression(iife.arguments[indexOfParameter]));
                         links.resolvedSignature = cached;
                         return type;
                     }
@@ -12263,7 +12274,7 @@ namespace ts {
         }
 
         function checkAssertion(node: AssertionExpression) {
-            const exprType = getRegularTypeOfObjectLiteral(checkExpression(node.expression));
+            const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(node.expression)));
 
             checkSourceElement(node.type);
             const targetType = getTypeFromTypeNode(node.type);
@@ -12455,9 +12466,6 @@ namespace ts {
                 }
                 // Return a union of the return expression types.
                 type = getUnionType(types, /*subtypeReduction*/ true);
-                if (isUnitType(type)) {
-                    type = getBaseTypeOfLiteralType(type);
-                }
 
                 if (funcIsGenerator) {
                     type = createIterableIteratorType(type);
@@ -12465,6 +12473,9 @@ namespace ts {
             }
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
+                if (isUnitType(type)) {
+                    type = getBaseTypeOfLiteralType(type);
+                }
             }
 
             const widenedType = getWidenedType(type);
@@ -13244,11 +13255,11 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    const leftIsUnit = isLiteralType(leftType);
-                    const rightIsUnit = isLiteralType(rightType);
-                    if (!leftIsUnit || !rightIsUnit) {
-                        leftType = leftIsUnit ? getBaseTypeOfLiteralType(leftType) : leftType;
-                        rightType = rightIsUnit ? getBaseTypeOfLiteralType(rightType) : rightType;
+                    const leftIsLiteral = isLiteralType(leftType);
+                    const rightIsLiteral = isLiteralType(rightType);
+                    if (!leftIsLiteral || !rightIsLiteral) {
+                        leftType = leftIsLiteral ? getBaseTypeOfLiteralType(leftType) : leftType;
+                        rightType = rightIsLiteral ? getBaseTypeOfLiteralType(rightType) : rightType;
                     }
                     if (!isTypeEqualityComparableTo(leftType, rightType) && !isTypeEqualityComparableTo(rightType, leftType)) {
                         reportOperatorError();

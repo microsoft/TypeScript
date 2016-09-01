@@ -568,6 +568,9 @@ namespace ts {
                 case SyntaxKind.PrefixUnaryExpression:
                     bindPrefixUnaryExpressionFlow(<PrefixUnaryExpression>node);
                     break;
+                case SyntaxKind.PostfixUnaryExpression:
+                    bindPostfixUnaryExpressionFlow(<PostfixUnaryExpression>node);
+                    break;
                 case SyntaxKind.BinaryExpression:
                     bindBinaryExpressionFlow(<BinaryExpression>node);
                     break;
@@ -1083,6 +1086,16 @@ namespace ts {
             }
             else {
                 forEachChild(node, bind);
+                if (node.operator === SyntaxKind.PlusEqualsToken || node.operator === SyntaxKind.MinusMinusToken) {
+                    bindAssignmentTargetFlow(node.operand);
+                }
+            }
+        }
+
+        function bindPostfixUnaryExpressionFlow(node: PostfixUnaryExpression) {
+            forEachChild(node, bind);
+            if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
+                bindAssignmentTargetFlow(node.operand);
             }
         }
 
