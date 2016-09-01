@@ -7218,10 +7218,6 @@ namespace ts {
                 type;
         }
 
-        function getBaseTypeIfUnitType(type: Type): Type {
-            return isUnitType(type) ? getBaseTypeOfLiteralType(type) : type;
-        }
-
         /**
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
@@ -10788,7 +10784,7 @@ namespace ts {
                 checkClassPropertyAccess(node, left, apparentType, prop);
             }
 
-            let propType = getTypeOfSymbol(prop);
+            const propType = getTypeOfSymbol(prop);
 
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
@@ -13403,20 +13399,6 @@ namespace ts {
             const type1 = checkExpression(node.whenTrue, contextualMapper);
             const type2 = checkExpression(node.whenFalse, contextualMapper);
             return getBestChoiceType(type1, type2);
-        }
-
-        function typeContainsLiteralFromEnum(type: Type, enumType: EnumType) {
-            if (type.flags & TypeFlags.Union) {
-                for (const t of (<UnionType>type).types) {
-                    if (t.flags & TypeFlags.EnumLiteral && (<EnumLiteralType>t).baseType === enumType) {
-                        return true;
-                    }
-                }
-            }
-            if (type.flags & TypeFlags.EnumLiteral) {
-                return (<EnumLiteralType>type).baseType === enumType;
-            }
-            return false;
         }
 
         function checkLiteralExpression(node: Expression): Type {
