@@ -14,10 +14,6 @@
 ////    }
 ////}
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
-
 goTo.marker('1');
 verify.completionListContains('f');
 verify.completionListContains('foo');

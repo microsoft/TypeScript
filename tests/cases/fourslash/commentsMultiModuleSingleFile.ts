@@ -16,9 +16,6 @@
 ////new /*1*/mu/*4*/ltiM.b();
 ////new mu/*5*/ltiM.c();
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker('1');
 verify.completionListContains("multiM", "namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
 

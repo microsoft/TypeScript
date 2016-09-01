@@ -1373,8 +1373,12 @@ namespace ts {
         containerName: string;
     }
 
+    export interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
+        displayParts: SymbolDisplayPart[];
+    }
+
     export interface ReferencedSymbol {
-        definition: DefinitionInfo;
+        definition: ReferencedSymbolDefinitionInfo;
         references: ReferenceEntry[];
     }
 
@@ -2792,6 +2796,11 @@ namespace ts {
         return isRightSideOfPropertyAccess(node) ? node.parent : node;
     }
 
+    /** Get `C` given `N` if `N` is in the position `class C extends N` or `class C extends foo.N` where `N` is an identifier. */
+    function tryGetClassExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
+        return tryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).parent);
+    }
+
     function isCallExpressionTarget(node: Node): boolean {
         return isCallOrNewExpressionTarget(node, SyntaxKind.CallExpression);
     }
@@ -2805,9 +2814,20 @@ namespace ts {
         return target && target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
     }
 
-    /** Get `C` given `N` if `N` is in the position `class C extends N` or `class C extends foo.N` where `N` is an identifier. */
-    function tryGetClassExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
-        return tryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).parent);
+    function climbPastManyPropertyAccesses(node: Node): Node {
+        return isRightSideOfPropertyAccess(node) ? climbPastManyPropertyAccesses(node.parent) : node;
+    }
+
+    /** Returns a CallLikeExpression where `node` is the target being invoked. */
+    function getAncestorCallLikeExpression(node: Node): CallLikeExpression | undefined {
+        const target = climbPastManyPropertyAccesses(node);
+        const callLike = target.parent;
+        return callLike && isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target && callLike;
+    }
+
+    function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
+        const callLike = getAncestorCallLikeExpression(node);
+        return callLike && typeChecker.getResolvedSignature(callLike).declaration;
     }
 
     function isNameOfModuleDeclaration(node: Node) {
@@ -5076,14 +5096,25 @@ namespace ts {
             };
         }
 
+        function getSymbolInfo(typeChecker: TypeChecker, symbol: Symbol, node: Node) {
+            return {
+                symbolName: typeChecker.symbolToString(symbol), // Do not get scoped name, just the name of the symbol
+                symbolKind: getSymbolKind(symbol, node),
+                containerName: symbol.parent ? typeChecker.symbolToString(symbol.parent, node) : ""
+            };
+        }
+
+        function createDefinitionFromSignatureDeclaration(decl: SignatureDeclaration): DefinitionInfo {
+            const typeChecker = program.getTypeChecker();
+            const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, decl.symbol, decl);
+            return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
+        }
+
         function getDefinitionFromSymbol(symbol: Symbol, node: Node): DefinitionInfo[] {
             const typeChecker = program.getTypeChecker();
             const result: DefinitionInfo[] = [];
             const declarations = symbol.getDeclarations();
-            const symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            const symbolKind = getSymbolKind(symbol, node);
-            const containerSymbol = symbol.parent;
-            const containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, symbol, node);
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
@@ -5209,6 +5240,12 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
+
+            const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
+            if (calledDeclaration) {
+                return [createDefinitionFromSignatureDeclaration(calledDeclaration)];
+            }
+
             let symbol = typeChecker.getSymbolAtLocation(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
@@ -6118,7 +6155,7 @@ namespace ts {
 
             return result;
 
-            function getDefinition(symbol: Symbol): DefinitionInfo {
+            function getDefinition(symbol: Symbol): ReferencedSymbolDefinitionInfo {
                 const info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), node);
                 const name = map(info.displayParts, p => p.text).join("");
                 const declarations = symbol.declarations;
@@ -6132,7 +6169,8 @@ namespace ts {
                     name,
                     kind: info.symbolKind,
                     fileName: declarations[0].getSourceFile().fileName,
-                    textSpan: createTextSpan(declarations[0].getStart(), 0)
+                    textSpan: createTextSpan(declarations[0].getStart(), 0),
+                    displayParts: info.displayParts
                 };
             }
 
@@ -6331,13 +6369,14 @@ namespace ts {
                     }
                 });
 
-                const definition: DefinitionInfo = {
+                const definition: ReferencedSymbolDefinitionInfo = {
                     containerKind: "",
                     containerName: "",
                     fileName: targetLabel.getSourceFile().fileName,
                     kind: ScriptElementKind.label,
                     name: labelName,
-                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd())
+                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd()),
+                    displayParts: [displayPart(labelName, SymbolDisplayPartKind.text)]
                 };
 
                 return [{ definition, references }];
@@ -6660,6 +6699,11 @@ namespace ts {
                     getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
                 }
 
+                const thisOrSuperSymbol = typeChecker.getSymbolAtLocation(thisOrSuperKeyword);
+
+                const displayParts = thisOrSuperSymbol && getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    thisOrSuperSymbol, thisOrSuperKeyword.getSourceFile(), getContainerNode(thisOrSuperKeyword), thisOrSuperKeyword).displayParts;
+
                 return [{
                     definition: {
                         containerKind: "",
@@ -6667,7 +6711,8 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: "this",
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                        displayParts
                     },
                     references: references
                 }];
@@ -6738,7 +6783,8 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: type.text,
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                        displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
                     },
                     references: references
                 }];

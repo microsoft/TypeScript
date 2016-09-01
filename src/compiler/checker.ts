@@ -3346,7 +3346,13 @@ namespace ts {
                         // Otherwise, fall back to 'any'.
                         else {
                             if (compilerOptions.noImplicitAny) {
-                                error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_type_annotation, symbolToString(symbol));
+                                if (setter) {
+                                    error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
+                                }
+                                else {
+                                    Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
+                                    error(getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
+                                }
                             }
                             type = anyType;
                         }
@@ -11960,18 +11966,12 @@ namespace ts {
             // Function interface, since they have none by default. This is a bit of a leap of faith
             // that the user will not add any.
             const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-
             const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
-            // TS 1.0 spec: 4.12
-            // If FuncExpr is of type Any, or of an object type that has no call or construct signatures
-            // but is a subtype of the Function interface, the call is an untyped function call. In an
-            // untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
+
+            // TS 1.0 Spec: 4.12
+            // In an untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
             // types are provided for the argument expressions, and the result is always of type Any.
-            // We exclude union types because we may have a union of function types that happen to have
-            // no common signatures.
-            if (isTypeAny(funcType) ||
-                (isTypeAny(apparentType) && funcType.flags & TypeFlags.TypeParameter) ||
-                (!callSignatures.length && !constructSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
                 // The unknownType indicates that an error already occurred (and was reported).  No
                 // need to report another error in this case.
                 if (funcType !== unknownType && node.typeArguments) {
@@ -11992,6 +11992,29 @@ namespace ts {
                 return resolveErrorCall(node);
             }
             return resolveCall(node, callSignatures, candidatesOutArray);
+        }
+
+        /**
+         * TS 1.0 spec: 4.12
+         * If FuncExpr is of type Any, or of an object type that has no call or construct signatures
+         * but is a subtype of the Function interface, the call is an untyped function call.
+         */
+        function isUntypedFunctionCall(funcType: Type, apparentFuncType: Type, numCallSignatures: number, numConstructSignatures: number) {
+            if (isTypeAny(funcType)) {
+                return true;
+            }
+            if (isTypeAny(apparentFuncType) && funcType.flags & TypeFlags.TypeParameter) {
+                return true;
+            }
+            if (!numCallSignatures && !numConstructSignatures) {
+                // We exclude union types because we may have a union of function types that happen to have
+                // no common signatures.
+                if (funcType.flags & TypeFlags.Union) {
+                    return false;
+                }
+                return isTypeAssignableTo(funcType, globalFunctionType);
+            }
+            return false;
         }
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
@@ -12119,8 +12142,9 @@ namespace ts {
             }
 
             const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
 
-            if (isTypeAny(tagType) || (!callSignatures.length && !(tagType.flags & TypeFlags.Union) && isTypeAssignableTo(tagType, globalFunctionType))) {
+            if (isUntypedFunctionCall(tagType, apparentType, callSignatures.length, constructSignatures.length)) {
                 return resolveUntypedCall(node);
             }
 
@@ -12165,7 +12189,8 @@ namespace ts {
             }
 
             const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-            if (funcType === anyType || (!callSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
                 return resolveUntypedCall(node);
             }
 
@@ -18763,7 +18788,13 @@ namespace ts {
                     (augmentations || (augmentations = [])).push(file.moduleAugmentations);
                 }
                 if (file.symbol && file.symbol.globalExports) {
-                    mergeSymbolTable(globals, file.symbol.globalExports);
+                    // Merge in UMD exports with first-in-wins semantics (see #9771)
+                    const source = file.symbol.globalExports;
+                    for (const id in source) {
+                        if (!(id in globals)) {
+                            globals[id] = source[id];
+                        }
+                    }
                 }
             });
 
