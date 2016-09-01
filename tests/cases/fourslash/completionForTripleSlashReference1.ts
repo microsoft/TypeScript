@@ -32,20 +32,20 @@
 
 for (let i = 0; i < 5; i++) {
     goTo.marker("" + i);
-    verify.importModuleCompletionListContains("f1.ts");
-    verify.importModuleCompletionListContains("f1.d.ts");
-    verify.importModuleCompletionListContains("f2.tsx");
-    verify.importModuleCompletionListContains("e1.ts");
-    verify.importModuleCompletionListContains("parentTest");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(5);
+    verify.completionListContains("f1.ts");
+    verify.completionListContains("f1.d.ts");
+    verify.completionListContains("f2.tsx");
+    verify.completionListContains("e1.ts");
+    verify.completionListContains("parentTest");
+    verify.not.completionListItemsCountIsGreaterThan(5);
 }
 
 goTo.marker("5");
-verify.importModuleCompletionListContains("g1.ts");
-verify.importModuleCompletionListContains("sub");
-verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);
+verify.completionListContains("g1.ts");
+verify.completionListContains("sub");
+verify.not.completionListItemsCountIsGreaterThan(2);
 
 goTo.marker("6");
-verify.importModuleCompletionListContains("g1.ts");
-verify.importModuleCompletionListContains("sub");
-verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);
+verify.completionListContains("g1.ts");
+verify.completionListContains("sub");
+verify.not.completionListItemsCountIsGreaterThan(2);

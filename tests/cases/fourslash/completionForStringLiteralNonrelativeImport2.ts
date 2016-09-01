@@ -31,7 +31,7 @@ const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");
-    verify.importModuleCompletionListContains("repeated");
-    verify.importModuleCompletionListContains("other");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);
+    verify.completionListContains("repeated");
+    verify.completionListContains("other");
+    verify.not.completionListItemsCountIsGreaterThan(2);
 }

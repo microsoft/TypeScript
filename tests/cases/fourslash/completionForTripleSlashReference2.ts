@@ -24,10 +24,10 @@
 
 for (let i = 0; i < 5; i++) {
     goTo.marker("" + i);
-    verify.importModuleCompletionListContains("f1.ts");
-    verify.importModuleCompletionListContains("f1.js");
-    verify.importModuleCompletionListContains("f1.d.ts");
-    verify.importModuleCompletionListContains("f2.tsx");
-    verify.importModuleCompletionListContains("f4.jsx");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(5);
+    verify.completionListContains("f1.ts");
+    verify.completionListContains("f1.js");
+    verify.completionListContains("f1.d.ts");
+    verify.completionListContains("f2.tsx");
+    verify.completionListContains("f4.jsx");
+    verify.not.completionListItemsCountIsGreaterThan(5);
 }

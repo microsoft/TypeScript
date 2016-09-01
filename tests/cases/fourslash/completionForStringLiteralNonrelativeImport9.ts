@@ -30,7 +30,7 @@ const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");
-    verify.importModuleCompletionListContains("module1");
-    verify.importModuleCompletionListContains("module2");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);
+    verify.completionListContains("module1");
+    verify.completionListContains("module2");
+    verify.not.completionListItemsCountIsGreaterThan(2);
 }

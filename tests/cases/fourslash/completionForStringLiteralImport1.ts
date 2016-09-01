@@ -21,13 +21,13 @@
 //// export var x = 9;
 
 goTo.marker("0");
-verify.importModuleCompletionListContains("someFile1", 0);
+verify.completionListContains("someFile1", undefined, undefined, undefined, 0);
 
 goTo.marker("1");
-verify.importModuleCompletionListContains("someFile2", 1);
+verify.completionListContains("someFile2", undefined, undefined, undefined, 1);
 
 goTo.marker("2");
-verify.importModuleCompletionListContains("some-module", 2);
+verify.completionListContains("some-module", undefined, undefined, undefined, 2);
 
 goTo.marker("3");
-verify.importModuleCompletionListContains("fourslash", 3);
+verify.completionListContains("fourslash", undefined, undefined, undefined, 3);

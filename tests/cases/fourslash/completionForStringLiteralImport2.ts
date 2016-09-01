@@ -21,13 +21,13 @@
 //// export var x = 9;
 
 goTo.marker("0");
-verify.importModuleCompletionListContains("someFile.ts", 0);
+verify.completionListContains("someFile.ts", undefined, undefined, undefined, 0);
 
 goTo.marker("1");
-verify.importModuleCompletionListContains("some-module", 1);
+verify.completionListContains("some-module", undefined, undefined, undefined, 1);
 
 goTo.marker("2");
-verify.importModuleCompletionListContains("someOtherFile.ts", 2);
+verify.completionListContains("someOtherFile.ts", undefined, undefined, undefined, 2);
 
 goTo.marker("3");
-verify.importModuleCompletionListContains("some-module", 3);
+verify.completionListContains("some-module", undefined, undefined, undefined, 3);

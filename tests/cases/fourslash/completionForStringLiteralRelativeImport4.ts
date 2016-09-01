@@ -42,11 +42,11 @@ const kinds = ["import_as", "import_equals", "require"];
 for (const kind of kinds) {
     goTo.marker(kind + "0");
 
-    verify.importModuleCompletionListContains("module0");
-    verify.importModuleCompletionListContains("module1");
-    verify.importModuleCompletionListContains("module2");
-    verify.importModuleCompletionListContains("more");
+    verify.completionListContains("module0");
+    verify.completionListContains("module1");
+    verify.completionListContains("module2");
+    verify.completionListContains("more");
 
     // Should not contain itself
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(4);
+    verify.not.completionListItemsCountIsGreaterThan(4);
 }

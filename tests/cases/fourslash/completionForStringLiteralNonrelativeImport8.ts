@@ -45,11 +45,11 @@ const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");
-    verify.importModuleCompletionListContains("0test");
+    verify.completionListContains("0test");
 
     goTo.marker(kind + "1");
-    verify.importModuleCompletionListContains("1test");
+    verify.completionListContains("1test");
 
     goTo.marker(kind + "2");
-    verify.importModuleCompletionListContains("2test");
+    verify.completionListContains("2test");
 }

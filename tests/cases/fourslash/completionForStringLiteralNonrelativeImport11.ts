@@ -28,11 +28,11 @@ const kinds = ["import_as", "import_equals", "require"];
 for (const kind of kinds) {
     goTo.marker(kind + "0");
 
-    verify.importModuleCompletionListContains("module");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
+    verify.completionListContains("module");
+    verify.not.completionListItemsCountIsGreaterThan(1);
 
     goTo.marker(kind + "1");
 
-    verify.importModuleCompletionListContains("index");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
+    verify.completionListContains("index");
+    verify.not.completionListItemsCountIsGreaterThan(1);
 }

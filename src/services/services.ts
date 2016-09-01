@@ -4236,9 +4236,8 @@ namespace ts {
 
             const sourceFile = getValidSourceFile(fileName);
 
-            const importCompletionInfo = getImportModuleCompletionsAtPosition(fileName, position);
-            if (importCompletionInfo && importCompletionInfo.entries.length !== 0) {
-                return importCompletionInfo;
+            if (isInReferenceComment(sourceFile, position)) {
+                return getTripleSlashReferenceCompletion(sourceFile, position);
             }
 
             if (isInString(sourceFile, position)) {
@@ -4410,6 +4409,13 @@ namespace ts {
                     // a['/*completion position*/']
                     return getStringLiteralCompletionEntriesFromElementAccess(node.parent);
                 }
+                else if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node) || isRequireCall(node.parent, false)) {
+                    // Get all known external module names or complete a path to a module
+                    // i.e. import * as ns from "/*completion position*/";
+                    //      import x = require("/*completion position*/");
+                    //      var y = require("/*completion position*/");
+                    return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node);
+                }
                 else {
                     const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
                     if (argumentInfo) {
@@ -4502,55 +4508,35 @@ namespace ts {
                     }
                 }
             }
-        }
 
-        function getImportModuleCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
-            synchronizeHostData();
-
-            const sourceFile = getValidSourceFile(fileName);
-            if (isInReferenceComment(sourceFile, position)) {
-                return getTripleSlashReferenceCompletion(sourceFile, position);
-            }
-            else if (isInString(sourceFile, position)) {
-                const node = findPrecedingToken(position, sourceFile);
-                if (!node || node.kind !== SyntaxKind.StringLiteral) {
-                    return undefined;
-                }
-
-                if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node) || isRequireCall(node.parent, false)) {
-                    // Get all known external module names or complete a path to a module
-                    return {
-                        isMemberCompletion: false,
-                        isNewIdentifierLocation: true,
-                        entries: getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node)
-                    };
-                }
-            }
-
-            return undefined;
-
-            function getStringLiteralCompletionEntriesFromModuleNames(node: StringLiteral) {
+            function getStringLiteralCompletionEntriesFromModuleNames(node: StringLiteral): CompletionInfo {
                 const literalValue = normalizeSlashes(node.text);
 
                 const scriptPath = node.getSourceFile().path;
                 const scriptDirectory = getDirectoryPath(scriptPath);
 
                 const span = getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1);
+                let entries: CompletionEntry[];
                 if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
                     const compilerOptions = program.getCompilerOptions();
                     if (compilerOptions.rootDirs) {
-                        return getCompletionEntriesForDirectoryFragmentWithRootDirs(
+                        entries = getCompletionEntriesForDirectoryFragmentWithRootDirs(
                             compilerOptions.rootDirs, literalValue, scriptDirectory, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false, span, scriptPath);
                     }
                     else {
-                        return getCompletionEntriesForDirectoryFragment(
+                        entries = getCompletionEntriesForDirectoryFragment(
                             literalValue, scriptDirectory, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false, span, scriptPath);
                     }
                 }
                 else {
                     // Check for node modules
-                    return getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, span);
+                    entries = getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, span);
                 }
+                return {
+                    isMemberCompletion: false,
+                    isNewIdentifierLocation: true,
+                    entries
+                };
             }
 
             /**

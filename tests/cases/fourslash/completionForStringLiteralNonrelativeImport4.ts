@@ -27,8 +27,8 @@ const kinds = ["import_as", "import_equals", "require"];
 for (const kind of kinds) {
     goTo.marker(kind + "0");
 
-    verify.importModuleCompletionListContains("fake-module");
-    verify.importModuleCompletionListContains("fake-module2");
-    verify.importModuleCompletionListContains("fake-module3");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(3);
+    verify.completionListContains("fake-module");
+    verify.completionListContains("fake-module2");
+    verify.completionListContains("fake-module3");
+    verify.not.completionListItemsCountIsGreaterThan(3);
 }

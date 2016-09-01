@@ -38,6 +38,6 @@
 
 goTo.marker("0");
 
-verify.importModuleCompletionListContains("module0.ts");
+verify.completionListContains("module0.ts");
 
-verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
+verify.not.completionListItemsCountIsGreaterThan(1);

@@ -598,38 +598,6 @@ namespace FourSlash {
             }
         }
 
-        public verifyImportModuleCompletionListItemsCountIsGreaterThan(count: number, negative: boolean) {
-            const completions = this.getImportModuleCompletionListAtCaret();
-            const itemsCount = completions.entries.length;
-
-            if (negative) {
-                if (itemsCount > count) {
-                    this.raiseError(`Expected import module completion list items count to not be greater than ${count}, but is actually ${itemsCount}`);
-                }
-            }
-            else {
-                if (itemsCount <= count) {
-                    this.raiseError(`Expected import module completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
-                }
-            }
-        }
-
-        public verifyImportModuleCompletionListIsEmpty(negative: boolean) {
-            const completions = this.getImportModuleCompletionListAtCaret();
-            if ((!completions || completions.entries.length === 0) && negative) {
-                this.raiseError("Completion list is empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition);
-            }
-            else if (completions && completions.entries.length !== 0 && !negative) {
-                let errorMsg = "\n" + "Completion List contains: [" + completions.entries[0].name;
-                for (let i = 1; i < completions.entries.length; i++) {
-                    errorMsg += ", " + completions.entries[i].name;
-                }
-                errorMsg += "]\n";
-
-                this.raiseError("Completion list is not empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition + errorMsg);
-            }
-        }
-
         public verifyCompletionListStartsWithItemsInOrder(items: string[]): void {
             if (items.length === 0) {
                 return;
@@ -701,10 +669,10 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
+        public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
             const completions = this.getCompletionListAtCaret();
             if (completions) {
-                this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind);
+                this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind, spanIndex);
             }
             else {
                 this.raiseError(`No completions at position '${this.currentCaretPosition}' when looking for '${symbol}'.`);
@@ -720,25 +688,32 @@ namespace FourSlash {
          * @param expectedText the text associated with the symbol
          * @param expectedDocumentation the documentation text associated with the symbol
          * @param expectedKind the kind of symbol (see ScriptElementKind)
+         * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
-        public verifyCompletionListDoesNotContain(symbol: string, expectedText?: string, expectedDocumentation?: string, expectedKind?: string) {
+        public verifyCompletionListDoesNotContain(symbol: string, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number) {
             const that = this;
+            let replacementSpan: ts.TextSpan;
+            if (spanIndex !== undefined) {
+                replacementSpan = this.getTextSpanForRangeAtIndex(spanIndex);
+            }
+
             function filterByTextOrDocumentation(entry: ts.CompletionEntry) {
                 const details = that.getCompletionEntryDetails(entry.name);
                 const documentation = ts.displayPartsToString(details.documentation);
                 const text = ts.displayPartsToString(details.displayParts);
-                if (expectedText && expectedDocumentation) {
-                    return (documentation === expectedDocumentation && text === expectedText) ? true : false;
+
+                // If any of the expected values are undefined, assume that users don't
+                // care about them.
+                if (replacementSpan && !TestState.textSpansEqual(replacementSpan, entry.replacementSpan)) {
+                    return false;
                 }
-                else if (expectedText && !expectedDocumentation) {
-                    return text === expectedText ? true : false;
+                else if (expectedText && text !== expectedText) {
+                    return false;
                 }
-                else if (expectedDocumentation && !expectedText) {
-                    return documentation === expectedDocumentation ? true : false;
+                else if (expectedDocumentation && documentation !== expectedDocumentation) {
+                    return false;
                 }
-                // Because expectedText and expectedDocumentation are undefined, we assume that
-                // users don"t care to compare them so we will treat that entry as if the entry has matching text and documentation
-                // and keep it in the list of filtered entry.
+
                 return true;
             }
 
@@ -762,45 +737,11 @@ namespace FourSlash {
                     if (expectedKind) {
                         error += "Expected kind: " + expectedKind + " to equal: " + filterCompletions[0].kind + ".";
                     }
+                    if (replacementSpan) {
+                        const spanText = filterCompletions[0].replacementSpan ? stringify(filterCompletions[0].replacementSpan) : undefined;
+                        error += "Expected replacement span: " + stringify(replacementSpan) + " to equal: " + spanText + ".";
+                    }
                     this.raiseError(error);
-                }
-            }
-        }
-
-        public verifyImportModuleCompletionListContains(symbol: string, rangeIndex?: number) {
-            const completions = this.getImportModuleCompletionListAtCaret();
-            if (completions) {
-                const completion = ts.forEach(completions.entries, completion => completion.name === symbol ? completion : undefined);
-                if (!completion) {
-                    const itemsString = completions.entries.map(item => item.name).join(",\n");
-                    this.raiseError(`Expected "${symbol}" to be in list [${itemsString}]`);
-                }
-                else if (rangeIndex !== undefined) {
-                    const ranges = this.getRanges();
-                    if (ranges && ranges.length > rangeIndex) {
-                        const range = ranges[rangeIndex];
-
-                        const start = completion.replacementSpan.start;
-                        const end = start + completion.replacementSpan.length;
-                        if (range.start !== start || range.end !== end) {
-                            this.raiseError(`Expected completion span for '${symbol}', ${stringify(completion.replacementSpan)}, to cover range ${stringify(range)}`);
-                        }
-                    }
-                    else {
-                        this.raiseError(`Expected completion span for '${symbol}' to cover range at index ${rangeIndex}, but no range was found at that index`);
-                    }
-                }
-            }
-            else {
-                this.raiseError(`No import module completions at position '${this.currentCaretPosition}' when looking for '${symbol}'.`);
-            }
-        }
-
-        public verifyImportModuleCompletionListDoesNotContain(symbol: string) {
-            const completions = this.getImportModuleCompletionListAtCaret();
-            if (completions) {
-                if (ts.forEach(completions.entries, completion => completion.name === symbol)) {
-                    this.raiseError(`Import module completion list did contain ${symbol}`);
                 }
             }
         }
@@ -888,10 +829,6 @@ namespace FourSlash {
         }
 
         private getCompletionListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-        }
-
-        private getImportModuleCompletionListAtCaret() {
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
@@ -2241,7 +2178,7 @@ namespace FourSlash {
             return text.substring(startPos, endPos);
         }
 
-        private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, text?: string, documentation?: string, kind?: string) {
+        private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
                 if (item.name === name) {
@@ -2258,6 +2195,11 @@ namespace FourSlash {
 
                     if (kind !== undefined) {
                         assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + name));
+                    }
+
+                    if (spanIndex !== undefined) {
+                        const span = this.getTextSpanForRangeAtIndex(spanIndex);
+                        assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + name));
                     }
 
                     return;
@@ -2316,6 +2258,17 @@ namespace FourSlash {
             return `line ${(pos.line + 1)}, col ${pos.character}`;
         }
 
+        private getTextSpanForRangeAtIndex(index: number): ts.TextSpan {
+            const ranges = this.getRanges();
+            if (ranges && ranges.length > index) {
+                const range = ranges[index];
+                return { start: range.start, length: range.end - range.start };
+            }
+            else {
+                this.raiseError("Supplied span index: " + index + " does not exist in range list of size: " + (ranges ? 0 : ranges.length));
+            }
+        }
+
         public getMarkerByName(markerName: string) {
             const markerPos = this.testData.markerPositions[markerName];
             if (markerPos === undefined) {
@@ -2338,6 +2291,10 @@ namespace FourSlash {
 
         public resetCancelled(): void {
             this.cancellationToken.resetCancelled();
+        }
+
+        private static textSpansEqual(a: ts.TextSpan, b: ts.TextSpan) {
+            return a && b && a.start === b.start && a.length === b.length;
         }
     }
 
@@ -2909,12 +2866,12 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
+        public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
             if (this.negative) {
-                this.state.verifyCompletionListDoesNotContain(symbol, text, documentation, kind);
+                this.state.verifyCompletionListDoesNotContain(symbol, text, documentation, kind, spanIndex);
             }
             else {
-                this.state.verifyCompletionListContains(symbol, text, documentation, kind);
+                this.state.verifyCompletionListContains(symbol, text, documentation, kind, spanIndex);
             }
         }
 
@@ -2922,23 +2879,6 @@ namespace FourSlashInterface {
         // completion list is brought up if necessary
         public completionListItemsCountIsGreaterThan(count: number) {
             this.state.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
-        }
-
-        public importModuleCompletionListContains(symbol: string, rangeIndex?: number): void {
-            if (this.negative) {
-                this.state.verifyImportModuleCompletionListDoesNotContain(symbol);
-            }
-            else {
-                this.state.verifyImportModuleCompletionListContains(symbol, rangeIndex);
-            }
-        }
-
-        public importModuleCompletionListItemsCountIsGreaterThan(count: number): void {
-            this.state.verifyImportModuleCompletionListItemsCountIsGreaterThan(count, this.negative);
-        }
-
-        public importModuleCompletionListIsEmpty(): void {
-            this.state.verifyImportModuleCompletionListIsEmpty(this.negative);
         }
 
         public assertHasRanges(ranges: FourSlash.Range[]) {

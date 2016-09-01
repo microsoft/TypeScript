@@ -20,9 +20,9 @@ const kinds = ["import_as", "import_equals", "require"];
 for (const kind of kinds) {
     goTo.marker(kind + "0");
 
-    verify.importModuleCompletionListContains("module");
-    verify.importModuleCompletionListContains("dev-module");
-    verify.importModuleCompletionListContains("optional-module");
-    verify.importModuleCompletionListContains("peer-module");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(4);
+    verify.completionListContains("module");
+    verify.completionListContains("dev-module");
+    verify.completionListContains("optional-module");
+    verify.completionListContains("peer-module");
+    verify.not.completionListItemsCountIsGreaterThan(4);
 }
