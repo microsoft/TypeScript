@@ -18627,6 +18627,9 @@ namespace ts {
                         continue;
                     }
                     const file = host.getSourceFile(resolvedDirective.resolvedFileName);
+                    if (!file) {
+                        continue;
+                    }
                     fileToDirective.set(file.path, key);
                 }
             }

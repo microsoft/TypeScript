@@ -93,13 +93,11 @@ namespace ts.server.typingsInstaller {
             const id = this.installRunCount;
             this.installRunCount++;
             let execInstallCmdCount = 0;
-            const installedTypings: string[] = [];
-            const expr = /^.*(@types\/\w+)\S*\s*$/gm;
-            let match: RegExpExecArray;
+            let filteredTypings: string[] = [];
             for (const typing of typingsToInstall) {
-                const command = `npm install @types/${typing} --save-dev`;
+                const command = `npm view @types/${typing} --silent name`;
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Running npm install @types ${id}, command '${command}'. cache path '${cachePath}'`);
+                    this.log.writeLine(`Running npm view @types ${id}, command '${command}'.`);
                 }
                 this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
                     execInstallCmdCount++;
@@ -107,11 +105,33 @@ namespace ts.server.typingsInstaller {
                         this.log.writeLine(`npm install @types ${id} stdout: ${stdout}`);
                         this.log.writeLine(`npm install @types ${id} stderr: ${stderr}`);
                     }
-                    while (match = expr.exec(stdout)) {
-                        installedTypings.push(`node_modules/${match[1]}`);
+                    if (stdout !== "") {
+                        filteredTypings.push(typing);
                     }
                     if (execInstallCmdCount >= typingsToInstall.length) {
-                        postInstallAction(installedTypings);
+                        const command = `npm install ${filteredTypings.map(t => "@types/" + t).join(" ")} --save-dev -json`;
+                        if (this.log.isEnabled()) {
+                            this.log.writeLine(`Running npm install @types ${id}, command '${command}'. cache path '${cachePath}'`);
+                        }
+                        this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
+                            if (this.log.isEnabled()) {
+                                this.log.writeLine(`npm install @types ${id} stdout: ${stdout}`);
+                                this.log.writeLine(`npm install @types ${id} stderr: ${stderr}`);
+                            }
+                            const installedTypings: string[] = [];
+                            try {
+                                const response = JSON.parse(stdout);
+                                if (response.dependencies) {
+                                    for (const typing in response.dependencies) {
+                                        installedTypings.push(typing);
+                                    }
+                                }
+                            }
+                            catch (e) {
+                                this.log.writeLine(`Error parsing installed @types dependencies. Error details: ${e.message}`);
+                            }
+                            postInstallAction(installedTypings);
+                        });
                     }
                 });
             }

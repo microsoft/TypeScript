@@ -26,7 +26,6 @@ namespace ts.server.typingsInstaller {
         private packageNameToTypingLocation: Map<string> = createMap<string>();
         private missingTypingsSet: Map<true> = createMap<true>();
         private knownCachesSet: Map<true> = createMap<true>();
-
         private projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
 
         abstract readonly installTypingHost: InstallTypingHost;
@@ -202,6 +201,9 @@ namespace ts.server.typingsInstaller {
                     var typingFile = typingToFileName(cachePath, packageName, this.installTypingHost);
                     if (!typingFile) {
                         continue;
+                    }
+                    if (!this.packageNameToTypingLocation[packageName]) {
+                        this.packageNameToTypingLocation[packageName] = typingFile;
                     }
                     installedTypingFiles.push(typingFile);
                 }
