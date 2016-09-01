@@ -4,7 +4,7 @@
 // @traceResolution: true
 // @types: lib
 // @out: output.js
-// @module: amd
+
 // @currentDirectory: /
 
 // @filename: /types/lib/index.d.ts

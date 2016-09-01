@@ -509,7 +509,6 @@ class ProjectRunner extends RunnerBase {
                     // });
 
                     // Verify that all the generated .d.ts files compile
-
                     it("Errors in generated Dts files for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (!compilerResult.errors.length && testCase.declaration) {
                             const dTsCompileResult = compileCompileDTsFiles(compilerResult);

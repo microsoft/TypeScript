@@ -199,17 +199,13 @@ namespace ts {
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
             const callbacks = this.watchedDirectories[path] || (this.watchedDirectories[path] = []);
-            callbacks.push({ cb: callback, recursive });
+            const cbWithRecursive = { cb: callback, recursive };
+            callbacks.push(cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
                 close: () => {
-                    for (let i = 0; i < callbacks.length; i++) {
-                        if (callbacks[i].cb === callback) {
-                            callbacks.splice(i, 1);
-                            break;
-                        }
-                    }
+                    unorderedRemoveItem(callbacks, cbWithRecursive);
                     if (!callbacks.length) {
                         delete this.watchedDirectories[path];
                     }
@@ -243,8 +239,7 @@ namespace ts {
             callbacks.push(callback);
             return {
                 close: () => {
-                    const i = callbacks.indexOf(callback);
-                    callbacks.splice(i, 1);
+                    unorderedRemoveItem(callbacks, callback);
                     if (!callbacks.length) {
                         delete this.watchedFiles[path];
                     }
@@ -259,7 +254,7 @@ namespace ts {
         };
         readonly clearTimeout = (timeoutId: any): void => {
             if (typeof timeoutId === "number") {
-                this.callbackQueue.splice(timeoutId, 1);
+                orderedRemoveItemAt(this.callbackQueue, timeoutId);
             }
         };
 
