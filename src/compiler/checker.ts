@@ -12477,20 +12477,8 @@ namespace ts {
                         return isAsync ? createPromiseReturnType(func, voidType) : voidType;
                     }
                 }
-                // When yield/return statements are contextually typed we allow the return type to be a union type.
-                // Otherwise we require the yield/return expressions to have a best common supertype.
-                type = contextualSignature ? getUnionType(types, /*subtypeReduction*/ true) : getCommonSupertype(types);
-                if (!type) {
-                    if (funcIsGenerator) {
-                        error(func, Diagnostics.No_best_common_type_exists_among_yield_expressions);
-                        return createIterableIteratorType(unknownType);
-                    }
-                    else {
-                        error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
-                        // Defer to unioning the return types so we get a) downstream errors earlier and b) better Salsa experience
-                        return isAsync ? createPromiseReturnType(func, getUnionType(types, /*subtypeReduction*/ true)) : getUnionType(types, /*subtypeReduction*/ true);
-                    }
-                }
+                // Return a union of the return expression types.
+                type = getUnionType(types, /*subtypeReduction*/ true);
 
                 if (funcIsGenerator) {
                     type = createIterableIteratorType(type);
