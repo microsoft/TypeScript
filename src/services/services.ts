@@ -2810,7 +2810,7 @@ namespace ts {
     function getAncestorCallLikeExpression(node: Node): CallLikeExpression | undefined {
         const target = climbPastManyPropertyAccesses(node);
         const callLike = target.parent;
-        return isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target && callLike;
+        return callLike && isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target && callLike;
     }
 
     function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
