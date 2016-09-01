@@ -1159,7 +1159,7 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
 
         /*
-         * LS host can optionally implement these methods to support getImportModuleCompletionsAtPosition.
+         * LS host can optionally implement these methods to support completions for module specifiers.
          * Without these methods, only completions for ambient modules will be provided.
          */
         readDirectory?(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
@@ -1211,7 +1211,6 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getImportModuleCompletionsAtPosition(fileName: string, position: number): ImportCompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
@@ -1482,17 +1481,7 @@ namespace ts {
         kind: string;            // see ScriptElementKind
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         sortText: string;
-    }
-
-    export interface ImportCompletionInfo {
-        textSpan: TextSpan;
-        entries: ImportCompletionEntry[];
-    }
-
-    export interface ImportCompletionEntry {
-        name: string;
-        kind: string;            // see ScriptElementKind
-        sortText: string;
+        replacementSpan?: TextSpan;
     }
 
     export interface CompletionEntryDetails {
@@ -4247,6 +4236,11 @@ namespace ts {
 
             const sourceFile = getValidSourceFile(fileName);
 
+            const importCompletionInfo = getImportModuleCompletionsAtPosition(fileName, position);
+            if (importCompletionInfo && importCompletionInfo.entries.length !== 0) {
+                return importCompletionInfo;
+            }
+
             if (isInString(sourceFile, position)) {
                 return getStringLiteralCompletionEntries(sourceFile, position);
             }
@@ -4510,7 +4504,7 @@ namespace ts {
             }
         }
 
-        function getImportModuleCompletionsAtPosition(fileName: string, position: number): ImportCompletionInfo {
+        function getImportModuleCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
@@ -4526,8 +4520,9 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node) || isRequireCall(node.parent, false)) {
                     // Get all known external module names or complete a path to a module
                     return {
-                        entries: getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node),
-                        textSpan: getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1)
+                        isMemberCompletion: false,
+                        isNewIdentifierLocation: true,
+                        entries: getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node)
                     };
                 }
             }
@@ -4539,20 +4534,22 @@ namespace ts {
 
                 const scriptPath = node.getSourceFile().path;
                 const scriptDirectory = getDirectoryPath(scriptPath);
+
+                const span = getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1);
                 if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
                     const compilerOptions = program.getCompilerOptions();
                     if (compilerOptions.rootDirs) {
                         return getCompletionEntriesForDirectoryFragmentWithRootDirs(
-                            compilerOptions.rootDirs, literalValue, scriptDirectory, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false, scriptPath);
+                            compilerOptions.rootDirs, literalValue, scriptDirectory, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false, span, scriptPath);
                     }
                     else {
                         return getCompletionEntriesForDirectoryFragment(
-                            literalValue, scriptDirectory, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false, scriptPath);
+                            literalValue, scriptDirectory, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false, span, scriptPath);
                     }
                 }
                 else {
                     // Check for node modules
-                    return getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory);
+                    return getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, span);
                 }
             }
 
@@ -4577,21 +4574,21 @@ namespace ts {
                 return deduplicate(map(rootDirs, rootDirectory => combinePaths(rootDirectory, relativeDirectory)));
             }
 
-            function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, exclude?: string): ImportCompletionEntry[] {
+            function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, exclude?: string): CompletionEntry[] {
                 const basePath = program.getCompilerOptions().project || host.getCurrentDirectory();
                 const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
                 const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptPath, ignoreCase);
 
-                const result: ImportCompletionEntry[] = [];
+                const result: CompletionEntry[] = [];
 
                 for (const baseDirectory of baseDirectories) {
-                    getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensions, includeExtensions, exclude, result);
+                    getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensions, includeExtensions, span, exclude, result);
                 }
 
                 return result;
             }
 
-            function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, exclude?: string, result: ImportCompletionEntry[] = []): ImportCompletionEntry[] {
+            function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
                 fragment = getDirectoryPath(fragment);
                 if (!fragment) {
                     fragment = "./";
@@ -4623,11 +4620,7 @@ namespace ts {
                         }
 
                         for (const foundFile in foundFiles) {
-                            result.push({
-                                name: foundFile,
-                                kind: ScriptElementKind.scriptElement,
-                                sortText: foundFile
-                            });
+                            result.push(createCompletionEntryForModule(foundFile, ScriptElementKind.scriptElement, span));
                         }
                     }
 
@@ -4637,11 +4630,7 @@ namespace ts {
                         for (const directory of directories) {
                             const directoryName = getBaseFileName(normalizePath(directory));
 
-                            result.push({
-                                name: directoryName,
-                                kind: ScriptElementKind.directory,
-                                sortText: directoryName
-                            });
+                            result.push(createCompletionEntryForModule(directoryName, ScriptElementKind.directory, span));
                         }
                     }
                 }
@@ -4656,17 +4645,17 @@ namespace ts {
              *      Modules from node_modules (i.e. those listed in package.json)
              *          This includes all files that are found in node_modules/moduleName/ with acceptable file extensions
              */
-            function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string): ImportCompletionEntry[] {
+            function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string, span: TextSpan): CompletionEntry[] {
                 const options = program.getCompilerOptions();
                 const { baseUrl, paths } = options;
 
-                let result: ImportCompletionEntry[];
+                let result: CompletionEntry[];
 
                 if (baseUrl) {
                     const fileExtensions = getSupportedExtensions(options);
                     const projectDir = options.project || host.getCurrentDirectory();
                     const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
-                    result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false);
+                    result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false, span);
 
                     if (paths) {
                         for (const path in paths) {
@@ -4675,7 +4664,7 @@ namespace ts {
                                     if (paths[path]) {
                                         for (const pattern of paths[path]) {
                                             for (const match of getModulesForPathsPattern(fragment, baseUrl, pattern, fileExtensions)) {
-                                                result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName));
+                                                result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName, span));
                                             }
                                         }
                                     }
@@ -4683,7 +4672,7 @@ namespace ts {
                                 else if (startsWith(path, fragment)) {
                                     const entry = paths[path] && paths[path].length === 1 && paths[path][0];
                                     if (entry) {
-                                        result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName));
+                                        result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName, span));
                                     }
                                 }
                             }
@@ -4694,10 +4683,10 @@ namespace ts {
                     result = [];
                 }
 
-                getCompletionEntriesFromTypings(host, options, scriptPath, result);
+                getCompletionEntriesFromTypings(host, options, scriptPath, span, result);
 
                 for (const moduleName of enumeratePotentialNonRelativeModules(fragment, scriptPath, options)) {
-                    result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
+                    result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName, span));
                 }
 
                 return result;
@@ -4792,7 +4781,7 @@ namespace ts {
                 return deduplicate(nonRelativeModules);
             }
 
-            function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number): ImportCompletionInfo {
+            function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number): CompletionInfo {
                 const token = getTokenAtPosition(sourceFile, position);
                 if (!token) {
                     return undefined;
@@ -4818,38 +4807,39 @@ namespace ts {
                     const toComplete = match[3];
 
                     const scriptPath = getDirectoryPath(sourceFile.path);
+                    let entries: CompletionEntry[];
                     if (kind === "path") {
                         // Give completions for a relative path
-                        const textSpan: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
-                        return {
-                            entries: getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true, sourceFile.path),
-                            textSpan
-                        };
+                        const span: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
+                        entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true, span, sourceFile.path);
                     }
                     else {
                         // Give completions based on the typings available
-                        const textSpan: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
-                        return {
-                            entries: getCompletionEntriesFromTypings(host, program.getCompilerOptions(), scriptPath),
-                            textSpan
-                        };
+                        const span: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
+                        entries = getCompletionEntriesFromTypings(host, program.getCompilerOptions(), scriptPath, span);
                     }
+
+                    return {
+                        isMemberCompletion: false,
+                        isNewIdentifierLocation: true,
+                        entries
+                    };
                 }
 
                 return undefined;
             }
 
-            function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, result: ImportCompletionEntry[] = []): ImportCompletionEntry[] {
+            function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, span: TextSpan, result: CompletionEntry[] = []): CompletionEntry[] {
                 // Check for typings specified in compiler options
                 if (options.types) {
                     for (const moduleName of options.types) {
-                        result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
+                        result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName, span));
                     }
                 }
                 else if (host.getDirectories) {
                     const typeRoots = getEffectiveTypeRoots(options, host.getCurrentDirectory());
                     for (const root of typeRoots) {
-                        getCompletionEntriesFromDirectories(host, options, root, result);
+                        getCompletionEntriesFromDirectories(host, options, root, span, result);
                     }
                 }
 
@@ -4857,18 +4847,18 @@ namespace ts {
                     // Also get all @types typings installed in visible node_modules directories
                     for (const package of findPackageJsons(scriptPath)) {
                         const typesDir = combinePaths(getDirectoryPath(package), "node_modules/@types");
-                        getCompletionEntriesFromDirectories(host, options, typesDir, result);
+                        getCompletionEntriesFromDirectories(host, options, typesDir, span, result);
                     }
                 }
 
                 return result;
             }
 
-            function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, result: ImportCompletionEntry[]) {
+            function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, span: TextSpan, result: CompletionEntry[]) {
                 if (host.getDirectories && directoryProbablyExists(directory, host)) {
                     for (let typeDirectory of host.getDirectories(directory)) {
                         typeDirectory = normalizePath(typeDirectory);
-                        result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName));
+                        result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName, span));
                     }
                 }
             }
@@ -4948,8 +4938,8 @@ namespace ts {
                 }
             }
 
-            function createCompletionEntryForModule(name: string, kind: string): ImportCompletionEntry {
-                return { name, kind, sortText: name };
+            function createCompletionEntryForModule(name: string, kind: string, replacementSpan: TextSpan): CompletionEntry {
+                return { name, kind, kindModifiers: ScriptElementKindModifier.none, sortText: name, replacementSpan };
             }
 
             // Replace everything after the last directory seperator that appears
@@ -8783,7 +8773,6 @@ namespace ts {
             getEncodedSyntacticClassifications,
             getEncodedSemanticClassifications,
             getCompletionsAtPosition,
-            getImportModuleCompletionsAtPosition,
             getCompletionEntryDetails,
             getSignatureHelpItems,
             getQuickInfoAtPosition,

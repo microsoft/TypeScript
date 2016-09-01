@@ -216,28 +216,16 @@ namespace ts.server {
             return {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body
-            };
-        }
+                entries: response.body.map(({ name, kind, kindModifiers, sortText, replacementSpan }) => {
 
-        getImportModuleCompletionsAtPosition(fileName: string, position: number): ImportCompletionInfo {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.CompletionsRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-                prefix: undefined
-            };
+                    let convertedSpan: TextSpan;
+                    if (replacementSpan) {
+                        convertedSpan = createTextSpanFromBounds(this.lineOffsetToPosition(fileName, replacementSpan.start),
+                            this.lineOffsetToPosition(fileName, replacementSpan.end));
+                    }
 
-            const request = this.processRequest<protocol.ImportModuleCompletionsRequest>(CommandNames.ImportModuleCompletions, args);
-            const response = this.processResponse<protocol.ImportModuleCompletionsResponse>(request);
-
-            const startPosition = this.lineOffsetToPosition(fileName, response.span.start);
-            const endPosition = this.lineOffsetToPosition(fileName, response.span.end);
-
-            return {
-                textSpan: ts.createTextSpanFromBounds(startPosition, endPosition),
-                entries: response.body
+                    return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                })
             };
         }
 

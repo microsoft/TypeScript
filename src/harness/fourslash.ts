@@ -780,10 +780,10 @@ namespace FourSlash {
                     if (ranges && ranges.length > rangeIndex) {
                         const range = ranges[rangeIndex];
 
-                        const start = completions.textSpan.start;
-                        const end = start + completions.textSpan.length;
+                        const start = completion.replacementSpan.start;
+                        const end = start + completion.replacementSpan.length;
                         if (range.start !== start || range.end !== end) {
-                            this.raiseError(`Expected completion span for '${symbol}', ${stringify(completions.textSpan)}, to cover range ${stringify(range)}`);
+                            this.raiseError(`Expected completion span for '${symbol}', ${stringify(completion.replacementSpan)}, to cover range ${stringify(range)}`);
                         }
                     }
                     else {
@@ -892,7 +892,7 @@ namespace FourSlash {
         }
 
         private getImportModuleCompletionListAtCaret() {
-            return this.languageService.getImportModuleCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionEntryDetails(entryName: string) {

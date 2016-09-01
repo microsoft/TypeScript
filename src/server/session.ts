@@ -103,7 +103,6 @@ namespace ts.server {
         export const Change = "change";
         export const Close = "close";
         export const Completions = "completions";
-        export const ImportModuleCompletions = "importModuleCompletions";
         export const CompletionDetails = "completionEntryDetails";
         export const Configure = "configure";
         export const Definition = "definition";
@@ -773,7 +772,17 @@ namespace ts.server {
 
             return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                 if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                    result.push(entry);
+                    const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+
+                    let convertedSpan: protocol.TextSpan = undefined;
+                    if (replacementSpan) {
+                        convertedSpan = {
+                            start: compilerService.host.positionToLineOffset(fileName, replacementSpan.start),
+                            end: compilerService.host.positionToLineOffset(fileName, replacementSpan.start + replacementSpan.length)
+                        };
+                    }
+
+                    result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
                 }
                 return result;
             }, []).sort((a, b) => a.name.localeCompare(b.name));

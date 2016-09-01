@@ -718,16 +718,6 @@ declare namespace ts.server.protocol {
     }
 
     /**
-      * Import Module Completions request; value of command field is
-      * "importModuleCompletions". Given a file location (file, line,
-      * col) return the possible completions for external module
-      * specifiers or paths given that position refers to a module
-      * import declaration, require call, or triple slash reference.
-      */
-    export interface ImportModuleCompletionsRequest extends FileLocationRequest {
-    }
-
-    /**
       * Arguments for completion details request.
       */
     export interface CompletionDetailsRequestArgs extends FileLocationRequestArgs {
@@ -783,6 +773,11 @@ declare namespace ts.server.protocol {
          * is often the same as the name but may be different in certain circumstances.
          */
         sortText: string;
+        /**
+         * An optional span that indicates the text to be replaced by this completion item. If present,
+         * this span should be used instead of the default one.
+         */
+        replacementSpan?: TextSpan;
     }
 
     /**
@@ -814,11 +809,6 @@ declare namespace ts.server.protocol {
 
     export interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
-    }
-
-    export interface ImportModuleCompletionsResponse extends Response {
-        span: TextSpan;
-        body?: ImportCompletionEntry[];
     }
 
     export interface CompletionDetailsResponse extends Response {
