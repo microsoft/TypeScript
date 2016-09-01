@@ -2797,7 +2797,7 @@ namespace ts {
     }
 
     /** Get `C` given `N` if `N` is in the position `class C extends N` or `class C extends foo.N` where `N` is an identifier. */
-    function tryGetClassExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
+    function tryGetClassByExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
         return tryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).parent);
     }
 
@@ -6506,7 +6506,7 @@ namespace ts {
                     }
                     else {
                         // If this class appears in `extends C`, then the extending class' "super" calls are references.
-                        const classExtending = tryGetClassExtendingIdentifier(referenceLocation);
+                        const classExtending = tryGetClassByExtendingIdentifier(referenceLocation);
                         if (classExtending && isClassLike(classExtending) && followAliasIfNecessary(referenceSymbol, referenceLocation) === searchSymbol) {
                             addReferences(superConstructorAccesses(classExtending));
                         }
@@ -6538,7 +6538,7 @@ namespace ts {
                         if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
                             const body = (<MethodDeclaration>decl).body;
                             if (body) {
-                                forEachDescendant(body, SyntaxKind.ThisKeyword, thisKeyword => {
+                                forEachDescendantOfKind(body, SyntaxKind.ThisKeyword, thisKeyword => {
                                     if (isNewExpressionTarget(thisKeyword)) {
                                         result.push(thisKeyword);
                                     }
@@ -6563,7 +6563,7 @@ namespace ts {
                         Debug.assert(decl.kind === SyntaxKind.Constructor);
                         const body = (<ConstructorDeclaration>decl).body;
                         if (body) {
-                            forEachDescendant(body, SyntaxKind.SuperKeyword, node => {
+                            forEachDescendantOfKind(body, SyntaxKind.SuperKeyword, node => {
                                 if (isCallExpressionTarget(node)) {
                                     result.push(node);
                                 }
@@ -6956,7 +6956,7 @@ namespace ts {
             function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node, searchLocationIsConstructor: boolean): Symbol | undefined {
                 if (contains(searchSymbols, referenceSymbol)) {
                     // If we are searching for constructor uses, they must be 'new' expressions.
-                    return !(searchLocationIsConstructor && !isNewExpressionTarget(referenceLocation)) && referenceSymbol;
+                    return (!searchLocationIsConstructor || isNewExpressionTarget(referenceLocation)) && referenceSymbol;
                 }
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
@@ -8487,12 +8487,12 @@ namespace ts {
         };
     }
 
-    function forEachDescendant(node: Node, kind: SyntaxKind, action: (node: Node) => void) {
+    function forEachDescendantOfKind(node: Node, kind: SyntaxKind, action: (node: Node) => void) {
         forEachChild(node, child => {
             if (child.kind === kind) {
                 action(child);
             }
-            forEachDescendant(child, kind, action);
+            forEachDescendantOfKind(child, kind, action);
         });
     }
 
