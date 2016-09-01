@@ -1380,7 +1380,7 @@ namespace ts {
 
     function getJSDocTags(node: Node, checkParentVariableStatement: boolean): JSDocTag[] {
         return getJSDocs(node, checkParentVariableStatement, docs => {
-            let result: JSDocTag[] = [];
+            const result: JSDocTag[] = [];
             for (const doc of docs) {
                 if (doc.tags) {
                     result.push(...doc.tags);

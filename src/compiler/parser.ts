@@ -6151,6 +6151,12 @@ namespace ts {
                 return comment;
             }
 
+            const enum TagState {
+                BeginningOfLine,
+                SawAsterisk,
+                SavingComments
+            }
+
             export function parseJSDocCommentWorker(start: number, length: number): JSDoc {
                 const content = sourceText;
                 start = start || 0;
@@ -6359,8 +6365,7 @@ namespace ts {
 
                 function parseTagComments(indent: number) {
                     const comments: string[] = [];
-                    let savingComments = false;
-                    let seenAsterisk = true;
+                    let state = TagState.SawAsterisk;
                     let done = false;
                     let margin: number | undefined;
                     let text: string;
@@ -6375,9 +6380,8 @@ namespace ts {
                         text = scanner.getTokenText();
                         switch (token()) {
                             case SyntaxKind.NewLineTrivia:
-                                if (seenAsterisk) {
-                                    savingComments = false;
-                                    seenAsterisk = false;
+                                if (state >= TagState.SawAsterisk) {
+                                    state = TagState.BeginningOfLine;
                                     comments.push(text);
                                 }
                                 indent = 0;
@@ -6386,7 +6390,7 @@ namespace ts {
                                 done = true;
                                 break;
                             case SyntaxKind.WhitespaceTrivia:
-                                if (savingComments && seenAsterisk) {
+                                if (state === TagState.SavingComments) {
                                     pushComment(text);
                                 }
                                 else {
@@ -6398,18 +6402,16 @@ namespace ts {
                                 }
                                 break;
                             case SyntaxKind.AsteriskToken:
-                                if (!seenAsterisk) {
+                                if (state === TagState.BeginningOfLine) {
                                     // leading asterisks start recording on the *next* (non-whitespace) token
-                                    savingComments = false;
+                                    state = TagState.SawAsterisk;
                                     indent += text.length;
+                                    break;
                                 }
-                                // FALLTHROUGH to gather comments
+                                // FALLTHROUGH otherwise to record the * as a comment
                             default:
-                                if (seenAsterisk) {
-                                    savingComments = true; // leading identifiers start recording as well
-                                    pushComment(text);
-                                }
-                                seenAsterisk = true;
+                                state = TagState.SavingComments; // leading identifiers start recording as well
+                                pushComment(text);
                                 break;
                         }
                         if (!done) {
