@@ -1500,18 +1500,38 @@ namespace ts {
         }
     }
 
-    export function copyListRemovingItem<T>(item: T, list: T[]) {
-        const copiedList: T[] = [];
-        for (const e of list) {
-            if (e !== item) {
-                copiedList.push(e);
-            }
+    /** Remove an item from an array, moving everything to its right one space left. */
+    export function orderedRemoveItemAt<T>(array: T[], index: number): void {
+        // This seems to be faster than either `array.splice(i, 1)` or `array.copyWithin(i, i+ 1)`.
+        for (let i = index; i < array.length - 1; i++) {
+            array[i] = array[i + 1];
         }
-        return copiedList;
+        array.pop();
     }
 
-    export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
-        return useCaseSensitivefileNames
+    export function unorderedRemoveItemAt<T>(array: T[], index: number): void {
+        // Fill in the "hole" left at `index`.
+        array[index] = array[array.length - 1];
+        array.pop();
+    }
+
+    /** Remove the *first* occurrence of `item` from the array. */
+    export function unorderedRemoveItem<T>(array: T[], item: T): void {
+        unorderedRemoveFirstItemWhere(array, element => element === item);
+    }
+
+    /** Remove the *first* element satisfying `predicate`. */
+    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): void {
+        for (let i = 0; i < array.length; i++) {
+            if (predicate(array[i])) {
+                unorderedRemoveItemAt(array, i);
+                break;
+            }
+        }
+    }
+
+    export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): (fileName: string) => string {
+        return useCaseSensitiveFileNames
             ? ((fileName) => fileName)
             : ((fileName) => fileName.toLowerCase());
     }

@@ -5378,7 +5378,7 @@ namespace ts {
             while (i > 0) {
                 i--;
                 if (isSubtypeOfAny(types[i], types)) {
-                    types.splice(i, 1);
+                    orderedRemoveItemAt(types, i);
                 }
             }
         }
