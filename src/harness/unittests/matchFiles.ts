@@ -1020,6 +1020,70 @@ namespace ts {
                 assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                 assert.deepEqual(actual.errors, expected.errors);
             });
+            it("exclude outDir by default", () => {
+                const json = {
+                    compilerOptions: {
+                        outDir: "./x"
+                    }
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        outDir: "./x"
+                    },
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/b.ts",
+                        "c:/dev/c.d.ts",
+                        "c:/dev/z/a.ts",
+                        "c:/dev/z/aba.ts",
+                        "c:/dev/z/abz.ts",
+                        "c:/dev/z/b.ts",
+                        "c:/dev/z/bba.ts",
+                        "c:/dev/z/bbz.ts",
+                    ],
+                    wildcardDirectories: {
+                        "c:/dev": ts.WatchDirectoryFlags.Recursive
+                    }
+                };
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                assert.deepEqual(actual.fileNames, expected.fileNames);
+                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual.errors, expected.errors);
+            });
+            it("should not exclude outDir if exclude is given", () => {
+                const json = {
+                    compilerOptions: {
+                        outDir: "./x"
+                    },
+                    exclude: [
+                        "z"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        outDir: "./x"
+                    },
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/b.ts",
+                        "c:/dev/c.d.ts",
+                        "c:/dev/x/a.ts",
+                        "c:/dev/x/aa.ts",
+                        "c:/dev/x/b.ts",
+                        "c:/dev/x/y/a.ts",
+                        "c:/dev/x/y/b.ts",
+                    ],
+                    wildcardDirectories: {
+                        "c:/dev": ts.WatchDirectoryFlags.Recursive
+                    }
+                };
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                assert.deepEqual(actual.fileNames, expected.fileNames);
+                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual.errors, expected.errors);
+            });
             describe("with trailing recursive directory", () => {
                 it("in includes", () => {
                     const json = {
