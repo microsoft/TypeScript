@@ -203,6 +203,8 @@ namespace ts {
      * Filters an array by a predicate function. Returns the same array instance if the predicate is
      * true for all elements, otherwise returns a new array instance containing the filtered subset.
      */
+    export function filter<T, U extends T>(array: T[], f: (x: T) => x is U): U[];
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[]
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         if (array) {
             const len = array.length;

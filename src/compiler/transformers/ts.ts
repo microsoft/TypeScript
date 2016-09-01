@@ -1034,7 +1034,7 @@ namespace ts {
          * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
          */
         function getInitializedProperties(node: ClassExpression | ClassDeclaration, isStatic: boolean): PropertyDeclaration[] {
-            return filter(node.members, isStatic ? isStaticInitializedProperty : isInstanceInitializedProperty);
+            return filter(node.members, isStatic ? isStaticInitializedProperty : isInstanceInitializedProperty); 
         }
 
         /**
