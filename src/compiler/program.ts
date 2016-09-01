@@ -8,8 +8,6 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    const defaultTypeRoots = ["node_modules/@types"];
-
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         while (true) {
             const fileName = combinePaths(searchPath, "tsconfig.json");
@@ -168,7 +166,7 @@ namespace ts {
 
     const typeReferenceExtensions = [".d.ts"];
 
-    function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost) {
+    function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost): string[] | undefined {
         if (options.typeRoots) {
             return options.typeRoots;
         }
@@ -181,10 +179,33 @@ namespace ts {
             currentDirectory = host.getCurrentDirectory();
         }
 
-        if (!currentDirectory) {
-            return undefined;
+        return currentDirectory && getDefaultTypeRoots(currentDirectory, host);
+    }
+
+    function getDefaultTypeRoots(currentDirectory: string, host: ModuleResolutionHost): string[] | undefined {
+        const nodeModules = getNearestNodeModules(currentDirectory, host);
+        return nodeModules && [combinePaths(nodeModules, "@types")];
+    }
+
+    function getNearestNodeModules(currentDirectory: string, host: ModuleResolutionHost): string | undefined {
+        if (!host.directoryExists) {
+            return combinePaths(currentDirectory, "node_modules");
+            // And if it doesn't exist, tough.
         }
-        return map(defaultTypeRoots, d => combinePaths(currentDirectory, d));
+
+        while (true) {
+            const nodeModules = combinePaths(currentDirectory, "node_modules");
+            if (host.directoryExists(nodeModules)) {
+                return nodeModules;
+            }
+            else {
+                const parent = getDirectoryPath(currentDirectory);
+                if (parent === currentDirectory) {
+                    return undefined;
+                }
+                currentDirectory = parent;
+            }
+        }
     }
 
     /**
