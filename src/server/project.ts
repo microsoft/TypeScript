@@ -20,10 +20,16 @@ namespace ts.server {
         }
     }
 
+    function isJsOrDtsFile(info: ScriptInfo) {
+        return info.scriptKind === ScriptKind.JS || info.scriptKind == ScriptKind.JSX || fileExtensionIs(info.fileName, ".d.ts");
+    }
+
     export function allRootFilesAreJsOrDts(project: Project): boolean {
-        return project.getRootScriptInfos().every(f => {
-            return f.scriptKind === ScriptKind.JS || f.scriptKind == ScriptKind.JSX || fileExtensionIs(f.fileName, ".d.ts");
-        });
+        return project.getRootScriptInfos().every(isJsOrDtsFile);
+    }
+
+    export function allFilesAreJsOrDts(project: Project): boolean {
+        return project.getScriptInfos().every(isJsOrDtsFile);
     }
 
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
@@ -62,6 +68,11 @@ namespace ts.server {
         private typingFiles: TypingsArray;
 
         protected projectErrors: Diagnostic[];
+
+        public isJsOnlyProject() {
+            this.updateGraph();
+            return allFilesAreJsOrDts(this);
+        }
 
         constructor(
             readonly projectKind: ProjectKind,
@@ -550,6 +561,7 @@ namespace ts.server {
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<FileWatcher>;
+
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 

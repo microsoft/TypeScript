@@ -37,11 +37,6 @@ namespace ts.projectSystem {
             // A compile on save affected file request using file1
             let moduleFile1FileListRequest: server.protocol.Request;
 
-            function createSession(host: server.ServerHost) {
-                const typingsInstaller = new TestTypingsInstaller("/a/data/", host);
-                return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
-            }
-
             beforeEach(() => {
                 moduleFile1 = {
                     path: "/a/b/moduleFile1.ts",

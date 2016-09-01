@@ -1099,7 +1099,7 @@ namespace ts.server {
                 return combineProjectOutput(
                     projects,
                     project => {
-                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount);
+                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, /*excludeDts*/ project.isJsOnlyProject());
                         if (!navItems) {
                             return [];
                         }
@@ -1137,7 +1137,7 @@ namespace ts.server {
             else {
                 return combineProjectOutput(
                     projects,
-                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount),
+                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, /*excludeDts*/ project.isJsOnlyProject()),
                     /*comparer*/ undefined,
                     navigateToItemIsEqualTo);
             }
