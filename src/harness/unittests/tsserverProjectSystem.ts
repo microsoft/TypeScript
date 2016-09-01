@@ -56,15 +56,11 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        installPackage(packageName: string) {
-            return true;
-        }
-
         isPackageInstalled(packageName: string) {
             return true;
         }
 
-        runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void) {
+        runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void) {
             this.postInstallActions.push(map => {
                 postInstallAction(map(typingsToInstall));
             });

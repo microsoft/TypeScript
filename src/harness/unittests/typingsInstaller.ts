@@ -157,7 +157,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1]);
             let enqueueIsCalled = false;
-            let runTsdIsCalled = false;
+            let runInstallIsCalled = false;
             const installer = new (class extends TestTypingsInstaller {
                 constructor() {
                     super("", host);
@@ -168,8 +168,8 @@ namespace ts.projectSystem {
                 }
                 runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
                     assert.deepEqual(typingsToInstall, ["node"]);
-                    runTsdIsCalled = true;
-                    super.runTsd(cachePath, typingsToInstall, postInstallAction);
+                    runInstallIsCalled = true;
+                    super.runInstall(cachePath, typingsToInstall, postInstallAction);
                 }
             })();
 
@@ -184,7 +184,7 @@ namespace ts.projectSystem {
             // autoDiscovery is set in typing options - use it even if project contains only .ts files
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             assert.isTrue(enqueueIsCalled, "expected 'enqueueIsCalled' to be true");
-            assert.isTrue(runTsdIsCalled, "expected 'runTsdIsCalled' to be true");
+            assert.isTrue(runInstallIsCalled, "expected 'runInstallIsCalled' to be true");
         });
     });
 }
