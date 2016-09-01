@@ -599,10 +599,11 @@ namespace ts {
      * If false, whitespace is skipped until the first line break and comments between that location
      * and the next token are returned.
      * If true, comments occurring between the given position and the next line break are returned.
+     * If there is no line break, then no comments are returned.
      */
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
-        let collecting = trailing || pos === 0;
+        let needToSkipTrailingComment = pos > 0;
         while (pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
@@ -615,7 +616,11 @@ namespace ts {
                     if (trailing) {
                         return result;
                     }
-                    collecting = true;
+                    else if (needToSkipTrailingComment) {
+                        // skip the first line if not trailing (it'll be part of the trailing comment).
+                        needToSkipTrailingComment = false;
+                        result = undefined;
+                    }
                     if (result && result.length) {
                         lastOrUndefined(result).hasTrailingNewLine = true;
                     }
@@ -651,11 +656,13 @@ namespace ts {
                                 pos++;
                             }
                         }
-                        if (collecting) {
+
+                        // if we are at the end of the file, don't add trailing comments.
+                        // end-of-file comments are added as leading comment of the end-of-file token.
+                        if (pos < text.length || !trailing) {
                             if (!result) {
                                 result = [];
                             }
-
                             result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
                         }
                         continue;
@@ -671,10 +678,10 @@ namespace ts {
                     }
                     break;
             }
-            return result;
+            return !trailing ? result : undefined;
         }
 
-        return result;
+        return !trailing ? result : undefined;
     }
 
     export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
@@ -1689,40 +1696,46 @@ namespace ts {
             }
 
             startPos = pos;
-
-            // Eat leading whitespace
-            let ch = text.charCodeAt(pos);
-            while (pos < end) {
-                ch = text.charCodeAt(pos);
-                if (isWhiteSpaceSingleLine(ch)) {
-                    pos++;
-                }
-                else {
-                    break;
-                }
-            }
             tokenPos = pos;
 
+            const ch = text.charCodeAt(pos);
             switch (ch) {
+                case CharacterCodes.tab:
+                case CharacterCodes.verticalTab:
+                case CharacterCodes.formFeed:
+                case CharacterCodes.space:
+                    while (pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos))) {
+                        pos++;
+                    }
+                    return token = SyntaxKind.WhitespaceTrivia;
                 case CharacterCodes.at:
-                    return pos += 1, token = SyntaxKind.AtToken;
+                    pos++;
+                    return token = SyntaxKind.AtToken;
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
-                    return pos += 1, token = SyntaxKind.NewLineTrivia;
+                    pos++;
+                    return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:
-                    return pos += 1, token = SyntaxKind.AsteriskToken;
+                    pos++;
+                    return token = SyntaxKind.AsteriskToken;
                 case CharacterCodes.openBrace:
-                    return pos += 1, token = SyntaxKind.OpenBraceToken;
+                    pos++;
+                    return token = SyntaxKind.OpenBraceToken;
                 case CharacterCodes.closeBrace:
-                    return pos += 1, token = SyntaxKind.CloseBraceToken;
+                    pos++;
+                    return token = SyntaxKind.CloseBraceToken;
                 case CharacterCodes.openBracket:
-                    return pos += 1, token = SyntaxKind.OpenBracketToken;
+                    pos++;
+                    return token = SyntaxKind.OpenBracketToken;
                 case CharacterCodes.closeBracket:
-                    return pos += 1, token = SyntaxKind.CloseBracketToken;
+                    pos++;
+                    return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.equals:
-                    return pos += 1, token = SyntaxKind.EqualsToken;
+                    pos++;
+                    return token = SyntaxKind.EqualsToken;
                 case CharacterCodes.comma:
-                    return pos += 1, token = SyntaxKind.CommaToken;
+                    pos++;
+                    return token = SyntaxKind.CommaToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
