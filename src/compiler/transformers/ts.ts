@@ -866,7 +866,7 @@ namespace ts {
             // 'super(...arguments)' instead of 'super(...args)', as you can see in "transformConstructorBody".
             return constructor
                 ? visitNodes(constructor.parameters, visitor, isParameter)
-                : [] as NodeArray<ParameterDeclaration>;
+                : <ParameterDeclaration[]>[];
         }
 
         /**
