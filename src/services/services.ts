@@ -5092,7 +5092,7 @@ namespace ts {
             };
         }
 
-        function getDefinitionFromSignatureDeclaration(decl: SignatureDeclaration): DefinitionInfo {
+        function createDefinitionFromSignatureDeclaration(decl: SignatureDeclaration): DefinitionInfo {
             const typeChecker = program.getTypeChecker();
             const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, decl.symbol, decl);
             return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
@@ -5231,7 +5231,7 @@ namespace ts {
 
             const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
             if (calledDeclaration) {
-                return [getDefinitionFromSignatureDeclaration(calledDeclaration)];
+                return [createDefinitionFromSignatureDeclaration(calledDeclaration)];
             }
 
             let symbol = typeChecker.getSymbolAtLocation(node);
