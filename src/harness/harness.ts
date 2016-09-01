@@ -1342,7 +1342,7 @@ namespace Harness {
             });
         }
 
-        export function doTypeAndSymbolBaseline(baselinePath: string, result: CompilerResult, allFiles: {unitName: string, content: string}[]) {
+        export function doTypeAndSymbolBaseline(baselinePath: string, result: CompilerResult, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions) {
             if (result.errors.length !== 0) {
                 return;
             }
@@ -1373,23 +1373,31 @@ namespace Harness {
 
             // Produce baselines.  The first gives the types for all expressions.
             // The second gives symbols for all identifiers.
-            let e1: Error, e2: Error;
+            let typesError: Error, symbolsError: Error;
             try {
                 checkBaseLines(/*isSymbolBaseLine*/ false);
             }
             catch (e) {
-                e1 = e;
+                typesError = e;
             }
 
             try {
                 checkBaseLines(/*isSymbolBaseLine*/ true);
             }
             catch (e) {
-                e2 = e;
+                symbolsError = e;
             }
 
-            if (e1 || e2) {
-                throw e1 || e2;
+            if (typesError && symbolsError) {
+                throw new Error(typesError.message + ts.sys.newLine + symbolsError.message);
+            }
+
+            if (typesError) {
+                throw typesError;
+            }
+
+            if (symbolsError) {
+                throw symbolsError;
             }
 
             return;
@@ -1399,7 +1407,12 @@ namespace Harness {
 
                 const fullExtension = isSymbolBaseLine ? ".symbols" : ".types";
 
-                Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
+                // When calling this function from rwc-runner, the baselinePath will have no extension.
+                // As rwc test- file is stored in json which ".json" will get stripped off.
+                // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
+                const outputFileName = ts.endsWith(baselinePath, ".ts") || ts.endsWith(baselinePath, ".tsx") ?
+                    baselinePath.replace(/\.tsx?/, fullExtension) : baselinePath.concat(fullExtension);
+                Harness.Baseline.runBaseline(outputFileName, () => fullBaseLine, opts);
             }
 
             function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {

@@ -717,8 +717,9 @@ namespace ts {
             const typesFile = tryReadTypesSection(packageJsonPath, candidate, state);
             if (typesFile) {
                 const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(typesFile), state.host);
-                // The package.json "typings" property must specify the file with extension, so just try that exact filename.
-                const result = tryFile(typesFile, failedLookupLocation, onlyRecordFailures, state);
+                // A package.json "typings" may specify an exact filename, or may choose to omit an extension.
+                const result = tryFile(typesFile, failedLookupLocation, onlyRecordFailures, state) ||
+                    tryAddingExtensions(typesFile, extensions, failedLookupLocation, onlyRecordFailures, state);
                 if (result) {
                     return result;
                 }
@@ -1097,7 +1098,7 @@ namespace ts {
         // - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
         // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
         // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
-        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 2;
+        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 0;
         let currentNodeModulesDepth = 0;
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track

@@ -50,9 +50,6 @@
 
 ////var /*23*/r8a = _.map</*error1*/B/*error2*/, string>(c5, (/*8*/x) => { return x.foo() });
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker('1');
 verify.quickInfoIs('(parameter) x: number');
 goTo.marker('2');
