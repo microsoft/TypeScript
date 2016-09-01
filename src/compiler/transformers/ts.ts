@@ -821,7 +821,7 @@ namespace ts {
                 return visitEachChild(constructor, visitor, context);
             }
 
-            const parameters = transformConstructorParameters(constructor, hasExtendsClause);
+            const parameters = transformConstructorParameters(constructor);
             const body = transformConstructorBody(node, constructor, hasExtendsClause, parameters);
 
             //  constructor(${parameters}) {
@@ -848,10 +848,25 @@ namespace ts {
          * @param constructor The constructor declaration.
          * @param hasExtendsClause A value indicating whether the class has an extends clause.
          */
-        function transformConstructorParameters(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
+        function transformConstructorParameters(constructor: ConstructorDeclaration) {
+            // The ES2015 spec specifies in 14.5.14. Runtime Semantics: ClassDefinitionEvaluation:
+            // If constructor is empty, then
+            //     If ClassHeritag_eopt is present and protoParent is not null, then
+            //          Let constructor be the result of parsing the source text
+            //              constructor(...args) { super (...args);}
+            //          using the syntactic grammar with the goal symbol MethodDefinition[~Yield].
+            //      Else,
+            //           Let constructor be the result of parsing the source text
+            //               constructor( ){ }
+            //           using the syntactic grammar with the goal symbol MethodDefinition[~Yield].
+            //
+            // While we could emit the '...args' rest parameter, certain later tools in the pipeline might
+            // downlevel the '...args' portion less efficiently by naively copying the contents of 'arguments' to an array.
+            // Instead, we'll avoid using a rest parameter and spread into the super call as
+            // 'super(...arguments)' instead of 'super(...args)', as you can see in "transformConstructorBody".
             return constructor
                 ? visitNodes(constructor.parameters, visitor, isParameter)
-                : hasExtendsClause ? [createRestParameter("args")] : [];
+                : <ParameterDeclaration[]>[];
         }
 
         /**
@@ -889,18 +904,16 @@ namespace ts {
                 addRange(statements, map(propertyAssignments, transformParameterWithPropertyAssignment));
             }
             else if (hasExtendsClause) {
-                Debug.assert(parameters.length === 1 && isIdentifier(parameters[0].name));
-
                 // Add a synthetic `super` call:
                 //
-                //  super(...args);
+                //  super(...arguments);
                 //
                 statements.push(
                     createStatement(
                         createCall(
                             createSuper(),
                             /*typeArguments*/ undefined,
-                            [createSpread(<Identifier>parameters[0].name)]
+                            [createSpread(createIdentifier("arguments"))]
                         )
                     )
                 );
