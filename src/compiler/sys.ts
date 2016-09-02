@@ -267,7 +267,7 @@ namespace ts {
                 }
 
                 function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
-                    (fileWatcherCallbacks[filePath] || (fileWatcherCallbacks[filePath] = [])).push(callback);
+                    multiMapAdd(fileWatcherCallbacks, filePath, callback);
                 }
 
                 function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
@@ -285,12 +285,9 @@ namespace ts {
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
                     const callbacks = fileWatcherCallbacks[filePath];
                     if (callbacks) {
-                        const newCallbacks = copyListRemovingItem(callback, callbacks);
-                        if (newCallbacks.length === 0) {
+                        unorderedRemoveItem(callbacks, callback);
+                        if (callbacks.length === 0) {
                             delete fileWatcherCallbacks[filePath];
-                        }
-                        else {
-                            fileWatcherCallbacks[filePath] = newCallbacks;
                         }
                     }
                 }
