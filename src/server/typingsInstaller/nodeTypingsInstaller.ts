@@ -93,58 +93,58 @@ namespace ts.server.typingsInstaller {
             const id = this.installRunCount;
             this.installRunCount++;
             let execInstallCmdCount = 0;
-            let filteredTypings: string[] = [];
+            const filteredTypings: string[] = [];
             for (const typing of typingsToInstall) {
                 const command = `npm view @types/${typing} --silent name`;
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`Running npm view @types ${id}, command '${command}'.`);
-                }
-                this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
-                    execInstallCmdCount++;
-                    if (this.log.isEnabled()) {
-                        this.log.writeLine(`npm install @types ${id} stdout: ${stdout}`);
-                        this.log.writeLine(`npm install @types ${id} stderr: ${stderr}`);
-                    }
-                    if (stdout !== "") {
+                this.execAsync("npm view", command, cachePath, id, (err, stdout, stderr) => {
+                    if (stdout) {
                         filteredTypings.push(typing);
                     }
-                    if (execInstallCmdCount >= typingsToInstall.length) {
-                        const command = `npm install ${filteredTypings.map(t => "@types/" + t).join(" ")} --save-dev`;
-                        if (this.log.isEnabled()) {
-                            this.log.writeLine(`Running npm install @types ${id}, command '${command}'. cache path '${cachePath}'`);
-                        }
-                        this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
-                            if (this.log.isEnabled()) {
-                                this.log.writeLine(`npm install @types ${id} stdout: ${stdout}`);
-                                this.log.writeLine(`npm install @types ${id} stderr: ${stderr}`);
-                            }
-                            if (stdout === "") {
-                                return;
-                            }
-                            const command = "npm ls -json";
-                            this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
-                                if (this.log.isEnabled()) {
-                                    this.log.writeLine(`npm ls -json ${id} stdout: ${stdout}`);
-                                    this.log.writeLine(`npm ls -json ${id} stderr: ${stderr}`);
-                                }
-                                const installedTypings: string[] = [];
-                                try {
-                                    const response = JSON.parse(stdout);
-                                    if (response.dependencies) {
-                                        for (const typing in response.dependencies) {
-                                            installedTypings.push(typing);
-                                        }
-                                    }
-                                }
-                                catch (e) {
-                                    this.log.writeLine(`Error parsing installed @types dependencies. Error details: ${e.message}`);
-                                }
-                                postInstallAction(installedTypings);
-                            });
-                        });
+                    execInstallCmdCount++;
+                    if (execInstallCmdCount === typingsToInstall.length) {
+                        installFilteredTypings(this, filteredTypings);
                     }
                 });
             }
+
+            function installFilteredTypings(self: NodeTypingsInstaller, filteredTypings: string[]) {
+                const command = `npm install ${filteredTypings.map(t => "@types/" + t).join(" ")} --save-dev`;
+                self.execAsync("npm install", command, cachePath, id, (err, stdout, stderr) => {
+                    if (stdout) {
+                        reportInstalledTypings(self);
+                    }
+                });
+            }
+
+            function reportInstalledTypings(self: NodeTypingsInstaller) {
+                const command = "npm ls -json";
+                self.execAsync("npm ls", command, cachePath, id, (err, stdout, stderr) => {
+                    let installedTypings: string[];
+                    try {
+                        const response = JSON.parse(stdout);
+                        if (response.dependencies) {
+                            installedTypings = getOwnKeys(response.dependencies);
+                        }
+                    }
+                    catch (e) {
+                        self.log.writeLine(`Error parsing installed @types dependencies. Error details: ${e.message}`);
+                    }
+                    postInstallAction(installedTypings || []);
+                });
+            }
+        }
+
+        private execAsync(prefix: string, command: string, cwd: string, requestId: number, cb: (err: Error, stdout: string, stderr: string) => void) {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`#${requestId} running command '${command}'.`);
+            }
+            this.exec(command, { cwd }, (err, stdout, stderr) => {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`${prefix} #${requestId} stdout: ${stdout}`);
+                    this.log.writeLine(`${prefix} #${requestId} stderr: ${stderr}`);
+                }
+                cb(err, stdout, stderr);
+            });
         }
     }
 

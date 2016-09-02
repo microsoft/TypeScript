@@ -4,7 +4,8 @@
 
 namespace ts.projectSystem {
     describe("typings installer", () => {
-        it("configured projects (tsd installed) 1", () => {
+        it("configured projects (typings installed) 1", () => {
+            debugger;
             const file1 = {
                 path: "/a/b/app.js",
                 content: ""
@@ -31,7 +32,7 @@ namespace ts.projectSystem {
             };
 
             const jquery = {
-                path: "/a/data/typings/jquery/jquery.d.ts",
+                path: "/a/data/node_modules/@types/jquery/index.d.ts",
                 content: "declare const $: { x: number }"
             };
 
@@ -44,18 +45,18 @@ namespace ts.projectSystem {
             const p = projectService.configuredProjects[0];
             checkProjectActualFiles(p, [file1.path]);
 
-            assert(host.fileExists(combinePaths(installer.globalTypingsCacheLocation, "tsd.json")));
+            assert(host.fileExists(combinePaths(installer.globalTypingsCacheLocation, "package.json")));
 
             installer.runPostInstallActions(t => {
                 assert.deepEqual(t, ["jquery"]);
                 host.createFileOrFolder(jquery, /*createParentDirectory*/ true);
-                return ["jquery/jquery.d.ts"];
+                return ["@types/jquery"];
             });
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
 
-        it("inferred project (tsd installed)", () => {
+        it("inferred project (typings installed)", () => {
             const file1 = {
                 path: "/a/b/app.js",
                 content: ""
@@ -71,7 +72,7 @@ namespace ts.projectSystem {
             };
 
             const jquery = {
-                path: "/a/data/typings/jquery/jquery.d.ts",
+                path: "/a/data/node_modules/@types/jquery/index.d.ts",
                 content: "declare const $: { x: number }"
             };
             const host = createServerHost([file1, packageJson]);
@@ -84,12 +85,12 @@ namespace ts.projectSystem {
             const p = projectService.inferredProjects[0];
             checkProjectActualFiles(p, [file1.path]);
 
-            assert(host.fileExists(combinePaths(installer.globalTypingsCacheLocation, "tsd.json")));
+            assert(host.fileExists(combinePaths(installer.globalTypingsCacheLocation, "package.json")));
 
             installer.runPostInstallActions(t => {
                 assert.deepEqual(t, ["jquery"]);
                 host.createFileOrFolder(jquery, /*createParentDirectory*/ true);
-                return ["jquery/jquery.d.ts"];
+                return ["@types/jquery"];
             });
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
@@ -166,7 +167,7 @@ namespace ts.projectSystem {
                     enqueueIsCalled = true;
                     super.enqueueInstallTypingsRequest(project, typingOptions);
                 }
-                runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
+                runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
                     assert.deepEqual(typingsToInstall, ["node"]);
                     runInstallIsCalled = true;
                     super.runInstall(cachePath, typingsToInstall, postInstallAction);

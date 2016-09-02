@@ -135,7 +135,7 @@ namespace ts.server.typingsInstaller {
                         if (!packageName) {
                             continue;
                         }
-                        var typingFile = typingToFileName(cacheLocation, packageName, this.installTypingHost);
+                        const typingFile = typingToFileName(cacheLocation, packageName, this.installTypingHost);
                         if (!typingFile) {
                             continue;
                         }
@@ -198,7 +198,7 @@ namespace ts.server.typingsInstaller {
                         continue;
                     }
                     installedPackages[packageName] = true;
-                    var typingFile = typingToFileName(cachePath, packageName, this.installTypingHost);
+                    const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost);
                     if (!typingFile) {
                         continue;
                     }
