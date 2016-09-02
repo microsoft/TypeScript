@@ -12,12 +12,12 @@
 >"accProperty" : "accProperty"
 ><PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : PropertyDescriptor
 >PropertyDescriptor : PropertyDescriptor
->({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : { get: () => 11; set: (v: any) => void; }
->{                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            } : { get: () => 11; set: (v: any) => void; }
+>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : { get: () => number; set: (v: any) => void; }
+>{                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            } : { get: () => number; set: (v: any) => void; }
 
                 get: function () {
->get : () => 11
->function () {                    eval("public = 1;");                    return 11;                } : () => 11
+>get : () => number
+>function () {                    eval("public = 1;");                    return 11;                } : () => number
 
                     eval("public = 1;");
 >eval("public = 1;") : any

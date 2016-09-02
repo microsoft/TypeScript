@@ -33,6 +33,6 @@ foo(n => n.length, () => 'hi');
 >n.length : number
 >n : string
 >length : number
->() => 'hi' : () => "hi"
+>() => 'hi' : () => string
 >'hi' : "hi"
 

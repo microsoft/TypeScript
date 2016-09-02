@@ -40,7 +40,7 @@ class Chain<T> {
 >x : T
 >result : S
 >then : <S>(cb: (x: S) => S) => Chain<S>
->x => "abc" : (x: S) => "abc"
+>x => "abc" : (x: S) => string
 >x : S
 >"abc" : "abc"
 >then : <S>(cb: (x: string) => S) => Chain<S>

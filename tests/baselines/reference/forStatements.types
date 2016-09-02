@@ -136,7 +136,7 @@ for(var anOtherFunction: (x: string) => number = F;;){}
 for(var aLambda: typeof F = (x) => 2;;){}
 >aLambda : (x: string) => number
 >F : (x: string) => number
->(x) => 2 : (x: string) => 2
+>(x) => 2 : (x: string) => number
 >x : string
 >2 : 2
 
@@ -159,7 +159,7 @@ for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
 >M.F2 : (x: number) => string
 >M : typeof M
 >F2 : (x: number) => string
->(x) => 'this is a string' : (x: number) => "this is a string"
+>(x) => 'this is a string' : (x: number) => string
 >x : number
 >'this is a string' : "this is a string"
 

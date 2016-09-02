@@ -108,7 +108,7 @@ var c1: number;
 
 var c1 = h(5);
 >c1 : number
->h(5) : number
+>h(5) : 5
 >h : <T>(x: string | boolean | T) => T
 >5 : 5
 
@@ -117,7 +117,7 @@ var c2: string;
 
 var c2 = h("abc");
 >c2 : string
->h("abc") : string
+>h("abc") : "abc"
 >h : <T>(x: string | boolean | T) => T
 >"abc" : "abc"
 

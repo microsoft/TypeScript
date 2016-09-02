@@ -71,10 +71,10 @@ var result = destructure(value, text => 'string', y => 'other one'); // text: st
 >destructure(value, text => 'string', y => 'other one') : string
 >destructure : <a, r>(something: Y | a, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
 >value : string | Y
->text => 'string' : (text: string) => "string"
+>text => 'string' : (text: string) => string
 >text : string
 >'string' : "string"
->y => 'other one' : (y: Y) => "other one"
+>y => 'other one' : (y: Y) => string
 >y : Y
 >'other one' : "other one"
 

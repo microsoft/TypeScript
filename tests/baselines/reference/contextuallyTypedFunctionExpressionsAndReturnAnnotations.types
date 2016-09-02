@@ -29,11 +29,11 @@ foo((y): (y2: number) => void => {
 foo((y: string) => {
 >foo((y: string) => {    return y2 => {        var z = y2.toFixed(); // Should be string        return 0;    };}) : any
 >foo : (x: (y: string) => (y2: number) => void) => any
->(y: string) => {    return y2 => {        var z = y2.toFixed(); // Should be string        return 0;    };} : (y: string) => (y2: number) => 0
+>(y: string) => {    return y2 => {        var z = y2.toFixed(); // Should be string        return 0;    };} : (y: string) => (y2: number) => number
 >y : string
 
     return y2 => {
->y2 => {        var z = y2.toFixed(); // Should be string        return 0;    } : (y2: number) => 0
+>y2 => {        var z = y2.toFixed(); // Should be string        return 0;    } : (y2: number) => number
 >y2 : number
 
         var z = y2.toFixed(); // Should be string

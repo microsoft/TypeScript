@@ -59,9 +59,9 @@ ls = "eager";
 >"eager" : "eager"
 
 ls = () => "lazy";
->ls = () => "lazy" : () => "lazy"
+>ls = () => "lazy" : () => string
 >ls : Lazy<string>
->() => "lazy" : () => "lazy"
+>() => "lazy" : () => string
 >"lazy" : "lazy"
 
 type Foo<T> = T | { x: Foo<T> };

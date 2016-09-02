@@ -20,8 +20,8 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(47,5): error TS2322: Type '(x: number) => boolean' is not assignable to type '(x: string) => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(48,5): error TS2322: Type '(x: string) => "a string"' is not assignable to type '(x: string) => number'.
-  Type '"a string"' is not assignable to type 'number'.
+tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(48,5): error TS2322: Type '(x: string) => string' is not assignable to type '(x: string) => number'.
+  Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(50,5): error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
   Types of property 'A' are incompatible.
     Type 'typeof N.A' is not assignable to type 'typeof M.A'.
@@ -115,8 +115,8 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     var aLambda: typeof F = (x) => 'a string';
         ~~~~~~~
-!!! error TS2322: Type '(x: string) => "a string"' is not assignable to type '(x: string) => number'.
-!!! error TS2322:   Type '"a string"' is not assignable to type 'number'.
+!!! error TS2322: Type '(x: string) => string' is not assignable to type '(x: string) => number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
     
     var aModule: typeof M = N;
         ~~~~~~~

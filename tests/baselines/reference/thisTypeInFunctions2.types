@@ -138,7 +138,7 @@ extend2({
 simple({
 >simple({    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }}) : void
 >simple : (arg: SimpleInterface) => void
->{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): any; bar(): 14; }
+>{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): any; bar(): number; }
 
     foo(n) {
 >foo : (n: string) => any
@@ -156,7 +156,7 @@ simple({
 
     },
     bar() {
->bar : () => 14
+>bar : () => number
 
         return 14;
 >14 : 14

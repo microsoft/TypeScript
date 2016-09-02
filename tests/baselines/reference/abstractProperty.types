@@ -51,7 +51,7 @@ class C extends B {
 >"edge" : "edge"
 
     readonly ro = "readonly please";
->ro : string
+>ro : "readonly please"
 >"readonly please" : "readonly please"
 
     readonlyProp: string; // don't have to give a value, in fact
