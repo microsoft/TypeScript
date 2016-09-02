@@ -770,7 +770,7 @@ namespace ts {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             if (constructor) {
-                addCaptureThisForNodeIfNeeded(statements, constructor);
+                declareOrCaptureThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement);
                 addDefaultValueAssignmentsIfNeeded(statements, constructor);
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
             }
@@ -780,6 +780,13 @@ namespace ts {
             if (constructor) {
                 const body = saveStateAndInvoke(constructor, hasSynthesizedSuper ? transformConstructorBodyWithSynthesizedSuper : transformConstructorBodyWithoutSynthesizedSuper);
                 addRange(statements, body);
+            }
+            if (constructor ? hasSynthesizedSuper : extendsClauseElement) {
+                statements.push(
+                    createReturn(
+                        createIdentifier("_this")
+                    )
+                );
             }
 
             addRange(statements, endLexicalEnvironment());
@@ -800,11 +807,11 @@ namespace ts {
         }
 
         function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
-            return visitNodes(node.body.statements, visitor, isStatement, 1);
+            return visitNodes(node.body.statements, visitor, isStatement, /*start*/ 1);
         }
 
         function transformConstructorBodyWithoutSynthesizedSuper(node: ConstructorDeclaration) {
-            return visitNodes(node.body.statements, visitor, isStatement, 0);
+            return visitNodes(node.body.statements, visitor, isStatement, /*start*/ 0);
         }
 
         /**
@@ -823,16 +830,27 @@ namespace ts {
             // If this is the case, or if the class has an `extends` clause but no
             // constructor, we emit a synthesized call to `_super`.
             if (constructor ? hasSynthesizedSuper : extendsClauseElement) {
-                statements.push(
-                    createStatement(
-                        createFunctionApply(
-                            createIdentifier("_super"),
-                            createThis(),
-                            createIdentifier("arguments")
-                        ),
-                        /*location*/ extendsClauseElement
-                    )
+                const superCall = createFunctionApply(
+                    createIdentifier("_super"),
+                    createThis(),
+                    createIdentifier("arguments"),
                 );
+                const superReturnValueOrThis = createLogicalOr(superCall, createThis());
+
+                statements.push(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        createVariableDeclarationList([
+                            createVariableDeclaration(
+                                "_this",
+                                /*type*/ undefined,
+                                superReturnValueOrThis
+                            )
+                        ]),
+                    /*location*/ extendsClauseElement)
+                );
+
+                enableSubstitutionsForCapturedThis();
             }
         }
 
@@ -1079,6 +1097,15 @@ namespace ts {
             statements.push(forStatement);
         }
 
+        function declareOrCaptureThisForConstructorIfNeeded(statements: Statement[], ctor: ConstructorDeclaration, hasExtendsClause: boolean) {
+            if (hasExtendsClause) {
+                captureThisForNode(statements, ctor, /*initializer*/ undefined);
+            }
+            else {
+                addCaptureThisForNodeIfNeeded(statements, ctor);
+            }
+        }
+
         /**
          * Adds a statement to capture the `this` of a function declaration if it is needed.
          *
@@ -1087,22 +1114,26 @@ namespace ts {
          */
         function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): void {
             if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
-                enableSubstitutionsForCapturedThis();
-                const captureThisStatement = createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            "_this",
-                            /*type*/ undefined,
-                            createThis()
-                        )
-                    ])
-                );
-
-                setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments | NodeEmitFlags.CustomPrologue);
-                setSourceMapRange(captureThisStatement, node);
-                statements.push(captureThisStatement);
+                captureThisForNode(statements, node, createThis());
             }
+        }
+
+        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined) {
+            enableSubstitutionsForCapturedThis();
+            const captureThisStatement = createVariableStatement(
+                /*modifiers*/ undefined,
+                createVariableDeclarationList([
+                    createVariableDeclaration(
+                        "_this",
+                        /*type*/ undefined,
+                        initializer
+                    )
+                ])
+            );
+
+            setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments | NodeEmitFlags.CustomPrologue);
+            setSourceMapRange(captureThisStatement, node);
+            statements.push(captureThisStatement);
         }
 
         /**
@@ -2468,11 +2499,12 @@ namespace ts {
          *
          * @param node a CallExpression.
          */
-        function visitCallExpression(node: CallExpression): LeftHandSideExpression {
+        function visitCallExpression(node: CallExpression): CallExpression | BinaryExpression {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
 
             const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
+            let resultingCall: CallExpression | BinaryExpression;
             if (node.transformFlags & TransformFlags.ContainsSpreadElementExpression) {
                 // [source]
                 //      f(...a, b)
@@ -2488,7 +2520,7 @@ namespace ts {
                 //      _super.m.apply(this, a.concat([b]))
                 //      _super.prototype.m.apply(this, a.concat([b]))
 
-                return createFunctionApply(
+                resultingCall = createFunctionApply(
                     visitNode(target, visitor, isExpression),
                     visitNode(thisArg, visitor, isExpression),
                     transformAndSpreadElements(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
@@ -2505,13 +2537,24 @@ namespace ts {
                 //      _super.m.call(this, a)
                 //      _super.prototype.m.call(this, a)
 
-                return createFunctionCall(
+                resultingCall = createFunctionCall(
                     visitNode(target, visitor, isExpression),
                     visitNode(thisArg, visitor, isExpression),
                     visitNodes(node.arguments, visitor, isExpression),
                     /*location*/ node
                 );
             }
+
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                return createAssignment(
+                    createIdentifier("_this"),
+                    createLogicalOr(
+                        resultingCall,
+                        createThis()
+                    )
+                );
+            }
+            return resultingCall;
         }
 
         /**
