@@ -12419,11 +12419,6 @@ namespace ts {
             return promiseType;
         }
 
-        function checkReturnExpression(node: Expression, contextualMapper?: TypeMapper): Type {
-            const type = checkExpressionCached(node, contextualMapper);
-            return isUnitType(type) && !hasLiteralContextualType(node) ? getBaseTypeOfLiteralType(type) : type;
-        }
-
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
@@ -12433,7 +12428,7 @@ namespace ts {
             const isAsync = isAsyncFunctionLike(func);
             let type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
-                type = checkReturnExpression(<Expression>func.body, contextualMapper);
+                type = checkExpressionCached(<Expression>func.body, contextualMapper);
                 if (isAsync) {
                     // From within an async function you can return either a non-promise value or a promise. Any
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
@@ -12477,6 +12472,9 @@ namespace ts {
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
+            if (isUnitType(type) && !(contextualSignature && isLiteralContextualType(getReturnTypeOfSignature(contextualSignature)))) {
+                type = getBaseTypeOfLiteralType(type);
+            }
 
             const widenedType = getWidenedType(type);
             // From within an async function you can return either a non-promise value or a promise. Any
@@ -12491,7 +12489,7 @@ namespace ts {
             forEachYieldExpression(<Block>func.body, yieldExpression => {
                 const expr = yieldExpression.expression;
                 if (expr) {
-                    let type = checkReturnExpression(expr, contextualMapper);
+                    let type = checkExpressionCached(expr, contextualMapper);
 
                     if (yieldExpression.asteriskToken) {
                         // A yield* expression effectively yields everything that its operand yields
@@ -12541,7 +12539,7 @@ namespace ts {
             forEachReturnStatement(<Block>func.body, returnStatement => {
                 const expr = returnStatement.expression;
                 if (expr) {
-                    let type = checkReturnExpression(expr, contextualMapper);
+                    let type = checkExpressionCached(expr, contextualMapper);
                     if (isAsync) {
                         // From within an async function you can return either a non-promise value or a promise. Any
                         // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
@@ -13455,8 +13453,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function hasLiteralContextualType(node: Expression) {
-            let contextualType = getContextualType(node);
+        function isLiteralContextualType(contextualType: Type) {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.TypeParameter) {
                     const apparentType = getApparentTypeOfTypeParameter(<TypeParameter>contextualType);
@@ -13475,7 +13472,7 @@ namespace ts {
 
         function checkExpressionForMutableLocation(node: Expression, contextualMapper?: TypeMapper): Type {
             const type = checkExpression(node, contextualMapper);
-            return hasLiteralContextualType(node) ? type : getBaseTypeOfLiteralType(type);
+            return isLiteralContextualType(getContextualType(node)) ? type : getBaseTypeOfLiteralType(type);
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, contextualMapper?: TypeMapper): Type {
