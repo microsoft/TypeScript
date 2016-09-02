@@ -34,7 +34,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var FooBase = (function () {
     function FooBase(x) {
     }
-    FooBase.prototype.bar1 = function () { /*WScript.Echo("base bar1");*/ };
+    FooBase.prototype.bar1 = function () { };
     return FooBase;
 }());
 var Foo = (function (_super) {
@@ -42,7 +42,7 @@ var Foo = (function (_super) {
     function Foo(x, y) {
         _super.call(this, x);
     }
-    Foo.prototype.bar1 = function () { /*WScript.Echo("bar1");*/ };
+    Foo.prototype.bar1 = function () { };
     return Foo;
 }(FooBase));
 var f1 = new Foo("hey");

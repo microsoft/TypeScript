@@ -10,14 +10,14 @@ var /*2*/x = point./*3*/x;
 
 
 //// [declFileObjectLiteralWithOnlyGetter.js]
-function /*1*/ makePoint(x) {
+function makePoint(x) {
     return {
         get x() { return x; },
     };
 }
 ;
 var /*4*/ point = makePoint(2);
-var /*2*/ x = point./*3*/ x;
+var /*2*/ x = point.x;
 
 
 //// [declFileObjectLiteralWithOnlyGetter.d.ts]

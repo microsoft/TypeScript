@@ -107,4 +107,4 @@ var SomeEnum;
     SomeEnum[SomeEnum["A"] = this] = "A";
     SomeEnum[SomeEnum["B"] = this.spaaaace] = "B"; // Also should not be allowed
 })(SomeEnum || (SomeEnum = {}));
-module.exports = this; // Should be an error
+module.exports = this;

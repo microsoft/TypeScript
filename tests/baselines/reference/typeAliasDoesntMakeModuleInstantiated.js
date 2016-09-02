@@ -11,4 +11,3 @@ declare module m {
 declare var m: m.IStatic; // Should be ok to have var 'm' as module is non instantiated
 
 //// [typeAliasDoesntMakeModuleInstantiated.js]
- // Should be ok to have var 'm' as module is non instantiated

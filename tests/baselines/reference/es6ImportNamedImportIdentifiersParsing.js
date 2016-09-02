@@ -7,4 +7,3 @@ import { default as yield } from "somemodule"; // no error
 import { default as default } from "somemodule"; // default as is ok, error of default binding name
 
 //// [es6ImportNamedImportIdentifiersParsing.js]
- // default as is ok, error of default binding name

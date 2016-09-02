@@ -2,4 +2,3 @@
 /*foo*/ \ /*bar*/
 
 //// [parserSkippedTokens7.js]
- /*bar*/

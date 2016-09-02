@@ -14,4 +14,4 @@ define(["require", "exports"], function (require, exports) {
         foo(); // ok
     }
     return foo;
-}); // not ok
+});

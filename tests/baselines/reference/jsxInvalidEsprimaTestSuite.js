@@ -62,7 +62,7 @@ a['foo'] > ;
 <a><a />;
 <a b=>;
 var x = <div>one</div><div>two</div>;;
-var x = <div>one</div>/* intervening comment */  /* intervening comment */ <div>two</div>;;
+var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>two</div>;;
 <a>{"str"}}</a>;
 <span className="a"/> id="b" />;
 <div className/>>;
@@ -76,4 +76,4 @@ var x = <div>one</div>/* intervening comment */  /* intervening comment */ <div>
 <a b=>;
 <a b={ < }>;
 <a>}</a>;
-<a />/*hai*/ /*hai*/asdf/>;</></></></>;
+<a /> /*hai*//*hai*/asdf/>;</></></></>;

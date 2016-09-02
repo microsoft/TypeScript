@@ -7,4 +7,4 @@ var f: () => any;
 //// [commentOnParenthesizedExpressionOpenParen1.js]
 var j;
 var f;
-(/* Preserve */ j = f());
+(j = f());

@@ -83,9 +83,7 @@ f(// comment 1
 // comment 2
 function () {
     // comment 4
-}
- // comment 5
-);
+});
 // body is not a block
 f(function (_) { return 1 +
     2; });

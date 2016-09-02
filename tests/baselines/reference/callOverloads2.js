@@ -30,7 +30,7 @@ var Foo = (function () {
     function Foo(x) {
         // WScript.Echo("Constructor function has executed");
     }
-    Foo.prototype.bar1 = function () { /*WScript.Echo("bar1");*/ };
+    Foo.prototype.bar1 = function () { };
     return Foo;
 }());
 function F1(s) { return s; } // error

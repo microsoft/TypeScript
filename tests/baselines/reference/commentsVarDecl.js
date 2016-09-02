@@ -64,13 +64,13 @@ x = myVariable;
 /** jsdocstyle comment - only this comment should be in .d.ts file*/
 var n = 30;
 /** var deckaration with comment on type as well*/
-var y = /** value comment */ 20;
+var y = 20;
 /// var deckaration with comment on type as well
 var yy = 
 /// value comment
 20;
 /** comment2 */
-var z = /** lambda comment */ function (x, y) { return x + y; };
+var z = function (x, y) { return x + y; };
 var z2;
 var x2 = z2;
 var n4;
@@ -98,6 +98,6 @@ declare var y: number;
 declare var yy: number;
 /** comment2 */
 declare var z: (x: number, y: number) => number;
-declare var z2: /** type comment*/ (x: number) => string;
+declare var z2: (x: number) => string;
 declare var x2: (x: number) => string;
 declare var n4: (x: number) => string;

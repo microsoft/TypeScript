@@ -25,4 +25,3 @@ interface F extends A, D {
 } // ok because we overrode D's number index signature
 
 //// [inheritedStringIndexersFromDifferentBaseTypes2.js]
- // ok because we overrode D's number index signature

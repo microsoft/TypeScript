@@ -90,4 +90,3 @@ function f42(i) {
 function f4NoError(arguments) {
     var arguments; // No error
 }
- // no codegen no error

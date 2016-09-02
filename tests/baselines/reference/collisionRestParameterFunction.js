@@ -63,4 +63,3 @@ function f4(_i) {
 }
 function f4NoError(_i) {
 }
- // no codegen no error
