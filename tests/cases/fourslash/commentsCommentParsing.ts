@@ -351,39 +351,39 @@ verify.completionListContains("multiply", "function multiply(a: number, b: numbe
 verify.completionListContains("f1", "function f1(a: number): any (+1 overload)", "fn f1 with number");
 
 goTo.marker('28');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{()=>string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('28q');
-verify.quickInfoIs("function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void", "This is subtract function{()=>string; } } f this is optional param f");
+verify.quickInfoIs("function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void", "This is subtract function{ () => string; } } f this is optional param f");
 goTo.marker('28aq');
 verify.quickInfoIs("(parameter) a: number", "");
 
 goTo.marker('29');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{()=>string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
 verify.currentParameterHelpArgumentDocCommentIs("this is about b");
 goTo.marker('29aq');
 verify.quickInfoIs("(parameter) b: number", "this is about b");
 
 goTo.marker('30');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{()=>string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
 verify.currentParameterHelpArgumentDocCommentIs("this is optional param c");
 goTo.marker('30aq');
 verify.quickInfoIs("(parameter) c: () => string", "this is optional param c");
 
 goTo.marker('31');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{()=>string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
 verify.currentParameterHelpArgumentDocCommentIs("this is optional param d");
 goTo.marker('31aq');
 verify.quickInfoIs("(parameter) d: () => string", "this is optional param d");
 
 goTo.marker('32');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{()=>string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
 verify.currentParameterHelpArgumentDocCommentIs("this is optional param e");
 goTo.marker('32aq');
 verify.quickInfoIs("(parameter) e: () => string", "this is optional param e");
 
 goTo.marker('33');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{()=>string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('33aq');
 verify.quickInfoIs("(parameter) f: () => string", "");

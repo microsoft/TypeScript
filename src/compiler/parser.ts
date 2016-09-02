@@ -6151,10 +6151,10 @@ namespace ts {
                 return comment;
             }
 
-            const enum TagState {
+            const enum JSDocState {
                 BeginningOfLine,
                 SawAsterisk,
-                SavingComments
+                SavingComments,
             }
 
             export function parseJSDocCommentWorker(start: number, length: number): JSDoc {
@@ -6180,93 +6180,81 @@ namespace ts {
                 scanner.scanRange(start + 3, length - 5, () => {
                     // Initially we can parse out a tag.  We also have seen a starting asterisk.
                     // This is so that /** * @type */ doesn't parse.
-                    let canParseTag = true;
-                    let seenAsterisk = true;
                     let advanceToken = true;
+                    let state = JSDocState.SawAsterisk;
                     let margin: number | undefined = undefined;
                     let indent = start - Math.max(content.lastIndexOf("\n", start), 0) + 4;
-                    let text: string;
+                    function pushComment(text: string) {
+                        if (!margin) {
+                            margin = indent;
+                        }
+                        comments.push(text);
+                        indent += text.length;
+                    }
 
                     nextJSDocToken();
                     while (token() === SyntaxKind.WhitespaceTrivia) {
                         nextJSDocToken();
                     }
                     if (token() === SyntaxKind.NewLineTrivia) {
-                        canParseTag = true;
-                        seenAsterisk = false;
+                        state = JSDocState.BeginningOfLine;
                         nextJSDocToken();
                     }
                     while (token() !== SyntaxKind.EndOfFileToken) {
                         switch (token()) {
                             case SyntaxKind.AtToken:
-                                if (canParseTag) {
+                                if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
                                     removeTrailingNewlines(comments);
                                     parseTag(indent);
-                                    // This will take us past the end of the line, so it's OK to parse a tag on the next pass through the loop
-                                    // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag. But real-world comments may break this rule.
-                                    seenAsterisk = false;
+                                    // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
+                                    // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
+                                    // for malformed examples like `/** @param {string} x @returns {number} the length */`
+                                    state = JSDocState.BeginningOfLine;
                                     advanceToken = false;
                                     margin = undefined;
+                                    indent++;
                                 }
                                 else {
-                                    comments.push(scanner.getTokenText());
+                                    pushComment(scanner.getTokenText());
                                 }
-                                indent++;
                                 break;
-
                             case SyntaxKind.NewLineTrivia:
-                                // After a line break, we can parse a tag, and we haven't seen an asterisk on the next line yet
                                 comments.push(scanner.getTokenText());
-                                canParseTag = true;
-                                seenAsterisk = false;
+                                state = JSDocState.BeginningOfLine;
                                 indent = 0;
                                 break;
-
                             case SyntaxKind.AsteriskToken:
-                                text = scanner.getTokenText();
-                                if (seenAsterisk) {
+                                const asterisk = scanner.getTokenText();
+                                if (state === JSDocState.SawAsterisk) {
                                     // If we've already seen an asterisk, then we can no longer parse a tag on this line
-                                    canParseTag = false;
-                                    comments.push(text);
-                                    if (!margin) {
-                                        margin = indent;
-                                    }
+                                    state = JSDocState.SavingComments;
+                                    pushComment(asterisk);
                                 }
-                                // Ignore the first asterisk on a line
-                                seenAsterisk = true;
-                                indent += text.length;
+                                else {
+                                    // Ignore the first asterisk on a line
+                                    state = JSDocState.SawAsterisk;
+                                    indent += asterisk.length;
+                                }
                                 break;
-
                             case SyntaxKind.Identifier:
                                 // Anything else is doc comment text. We just save it. Because it
                                 // wasn't a tag, we can no longer parse a tag on this line until we hit the next
                                 // line break.
-                                text = scanner.getTokenText();
-                                comments.push(text);
-                                if (!margin) {
-                                    margin = indent;
-                                }
-                                canParseTag = false;
-                                indent += text.length;
+                                pushComment(scanner.getTokenText());
+                                state = JSDocState.SavingComments;
                                 break;
-
-
                             case SyntaxKind.WhitespaceTrivia:
-                                // only collect whitespace if we *know* that we're just looking at comments, not a possible jsdoc tag
-                                text = scanner.getTokenText();
-                                if (!canParseTag || margin !== undefined && indent + text.length > margin) {
-                                    comments.push(text.slice(margin - indent - 1));
+                                // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
+                                const whitespace = scanner.getTokenText();
+                                if (state === JSDocState.SavingComments || margin !== undefined && indent + whitespace.length > margin) {
+                                    comments.push(whitespace.slice(margin - indent - 1));
                                 }
-                                indent += text.length;
+                                indent += whitespace.length;
                                 break;
-
                             case SyntaxKind.EndOfFileToken:
                                 break;
-
                             default:
-                                text = scanner.getTokenText();
-                                comments.push(text);
-                                indent += text.length;
+                                pushComment(scanner.getTokenText());
                                 break;
                         }
                         if (advanceToken) {
@@ -6365,10 +6353,8 @@ namespace ts {
 
                 function parseTagComments(indent: number) {
                     const comments: string[] = [];
-                    let state = TagState.SawAsterisk;
-                    let done = false;
+                    let state = JSDocState.SawAsterisk;
                     let margin: number | undefined;
-                    let text: string;
                     function pushComment(text: string) {
                         if (!margin) {
                             margin = indent;
@@ -6376,47 +6362,49 @@ namespace ts {
                         comments.push(text);
                         indent += text.length;
                     }
-                    while (!done && token() !== SyntaxKind.EndOfFileToken) {
-                        text = scanner.getTokenText();
+                    while (token() !== SyntaxKind.AtToken && token() !== SyntaxKind.EndOfFileToken) {
                         switch (token()) {
                             case SyntaxKind.NewLineTrivia:
-                                if (state >= TagState.SawAsterisk) {
-                                    state = TagState.BeginningOfLine;
-                                    comments.push(text);
+                                if (state >= JSDocState.SawAsterisk) {
+                                    state = JSDocState.BeginningOfLine;
+                                    comments.push(scanner.getTokenText());
                                 }
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
-                                done = true;
+                                // Done
                                 break;
                             case SyntaxKind.WhitespaceTrivia:
-                                if (state === TagState.SavingComments) {
-                                    pushComment(text);
+                                if (state === JSDocState.SavingComments) {
+                                    pushComment(scanner.getTokenText());
                                 }
                                 else {
+                                    const whitespace = scanner.getTokenText();
                                     // if the whitespace crosses the margin, take only the whitespace that passes the margin
-                                    if (margin !== undefined && indent + text.length > margin) {
-                                        comments.push(text.slice(margin - indent - 1));
+                                    if (margin !== undefined && indent + whitespace.length > margin) {
+                                        comments.push(whitespace.slice(margin - indent - 1));
                                     }
-                                    indent += text.length;
+                                    indent += whitespace.length;
                                 }
                                 break;
                             case SyntaxKind.AsteriskToken:
-                                if (state === TagState.BeginningOfLine) {
+                                if (state === JSDocState.BeginningOfLine) {
                                     // leading asterisks start recording on the *next* (non-whitespace) token
-                                    state = TagState.SawAsterisk;
-                                    indent += text.length;
+                                    state = JSDocState.SawAsterisk;
+                                    indent += scanner.getTokenText().length;
                                     break;
                                 }
                                 // FALLTHROUGH otherwise to record the * as a comment
                             default:
-                                state = TagState.SavingComments; // leading identifiers start recording as well
-                                pushComment(text);
+                                state = JSDocState.SavingComments; // leading identifiers start recording as well
+                                pushComment(scanner.getTokenText());
                                 break;
                         }
-                        if (!done) {
-                            nextJSDocToken();
+                        if (token() === SyntaxKind.AtToken) {
+                            // Done
+                            break;
                         }
+                        nextJSDocToken();
                     }
 
                     removeLeadingNewlines(comments);
