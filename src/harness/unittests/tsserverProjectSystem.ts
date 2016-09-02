@@ -2,6 +2,17 @@
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
+    const safeList = {
+        path: <Path>"/safeList.json",
+        content: JSON.stringify({
+            commander: "commander",
+            express: "express",
+            jquery: "jquery",
+            lodash: "lodash",
+            moment: "moment"
+        })
+    };
+
     export function notImplemented(): any {
         throw new Error("Not yet implemented");
     }
@@ -31,11 +42,11 @@ namespace ts.projectSystem {
     export class TestTypingsInstaller extends server.typingsInstaller.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
         constructor(readonly globalTypingsCacheLocation: string, readonly installTypingHost: server.ServerHost) {
-            super(globalTypingsCacheLocation, <Path>"");
+            super(globalTypingsCacheLocation, safeList.path);
             this.init();
         }
 
-        safeFileList = <Path>"";
+        safeFileList = safeList.path;
         postInstallActions: ((map: (t: string[]) => string[]) => void)[] = [];
 
         runPostInstallActions(map: (t: string[]) => string[]) {
@@ -56,15 +67,11 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        installPackage(packageName: string) {
-            return true;
-        }
-
         isPackageInstalled(packageName: string) {
             return true;
         }
 
-        runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void) {
+        runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void) {
             this.postInstallActions.push(map => {
                 postInstallAction(map(typingsToInstall));
             });
@@ -106,11 +113,13 @@ namespace ts.projectSystem {
         if (!params) {
             params = {};
         }
-        return new TestServerHost(
+        const host = new TestServerHost(
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
             params.executingFilePath || getExecutingFilePathFromLibFile(libFilePath),
             params.currentDirectory || "/",
             fileOrFolderList);
+        host.createFileOrFolder(safeList, /*createParentDirectory*/ true);
+        return host;
     }
 
     export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller) {

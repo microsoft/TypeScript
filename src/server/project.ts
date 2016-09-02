@@ -301,7 +301,7 @@ namespace ts.server {
                 return true;
             }
             let hasChanges = this.updateGraphWorker();
-            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this);
+            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, hasChanges);
             if (this.setTypings(cachedTypings)) {
                 hasChanges = this.updateGraphWorker() || hasChanges;
             }
@@ -423,17 +423,15 @@ namespace ts.server {
                 const added: string[] = [];
                 const removed: string[] = [];
                 for (const id in currentFiles) {
-                    if (hasProperty(currentFiles, id) && !hasProperty(lastReportedFileNames, id)) {
+                    if (!hasProperty(lastReportedFileNames, id)) {
                         added.push(id);
                     }
                 }
                 for (const id in lastReportedFileNames) {
-                    if (hasProperty(lastReportedFileNames, id) && !hasProperty(currentFiles, id)) {
+                    if (!hasProperty(currentFiles, id)) {
                         removed.push(id);
                     }
                 }
-                this.lastReportedFileNames = currentFiles;
-
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, changes: { added, removed }, projectErrors: this.projectErrors };

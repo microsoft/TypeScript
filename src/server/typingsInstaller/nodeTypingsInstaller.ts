@@ -24,7 +24,7 @@ namespace ts.server.typingsInstaller {
         private exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
         private npmBinPath: string;
 
-        private tsdRunCount = 1;
+        private installRunCount = 1;
         readonly installTypingHost: InstallTypingHost = sys;
 
         constructor(globalTypingsCacheLocation: string, log: Log) {
@@ -79,23 +79,6 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected installPackage(packageName: string) {
-            try {
-                const output = this.execSync(`npm install --silent --global ${packageName}`, { stdio: "pipe" }).toString();
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`installPackage::stdout '${output}'`);
-                }
-                return true;
-            }
-            catch (e) {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`installPackage::err::stdout '${e.stdout && e.stdout.toString()}'`);
-                    this.log.writeLine(`installPackage::err::stderr '${e.stdout && e.stderr.toString()}'`);
-                }
-                return false;
-            }
-        }
-
         protected sendResponse(response: SetTypings | InvalidateCachedTypings) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response: ${JSON.stringify(response)}`);
@@ -106,32 +89,61 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
-            const id = this.tsdRunCount;
-            this.tsdRunCount++;
-            const tsdPath = combinePaths(this.npmBinPath, "tsd");
-            const command = `${tsdPath} install ${typingsToInstall.join(" ")} -ros`;
-            if (this.log.isEnabled()) {
-                this.log.writeLine(`Running tsd ${id}, command '${command}'. cache path '${cachePath}'`);
+        protected runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
+            const id = this.installRunCount;
+            this.installRunCount++;
+            let execInstallCmdCount = 0;
+            const filteredTypings: string[] = [];
+            for (const typing of typingsToInstall) {
+                const command = `npm view @types/${typing} --silent name`;
+                this.execAsync("npm view", command, cachePath, id, (err, stdout, stderr) => {
+                    if (stdout) {
+                        filteredTypings.push(typing);
+                    }
+                    execInstallCmdCount++;
+                    if (execInstallCmdCount === typingsToInstall.length) {
+                        installFilteredTypings(this, filteredTypings);
+                    }
+                });
             }
-            this.exec(command, { cwd: cachePath }, (err, stdout, stderr) => {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`TSD ${id} stdout: ${stdout}`);
-                    this.log.writeLine(`TSD ${id} stderr: ${stderr}`);
-                }
-                const i = stdout.indexOf("running install");
-                if (i < 0) {
-                    return;
-                }
-                const installedTypings: string[] = [];
 
-                const expr = /^\s*-\s*(\S+)\s*$/gm;
-                expr.lastIndex = i;
-                let match: RegExpExecArray;
-                while (match = expr.exec(stdout)) {
-                    installedTypings.push(match[1]);
+            function installFilteredTypings(self: NodeTypingsInstaller, filteredTypings: string[]) {
+                const command = `npm install ${filteredTypings.map(t => "@types/" + t).join(" ")} --save-dev`;
+                self.execAsync("npm install", command, cachePath, id, (err, stdout, stderr) => {
+                    if (stdout) {
+                        reportInstalledTypings(self);
+                    }
+                });
+            }
+
+            function reportInstalledTypings(self: NodeTypingsInstaller) {
+                const command = "npm ls -json";
+                self.execAsync("npm ls", command, cachePath, id, (err, stdout, stderr) => {
+                    let installedTypings: string[];
+                    try {
+                        const response = JSON.parse(stdout);
+                        if (response.dependencies) {
+                            installedTypings = getOwnKeys(response.dependencies);
+                        }
+                    }
+                    catch (e) {
+                        self.log.writeLine(`Error parsing installed @types dependencies. Error details: ${e.message}`);
+                    }
+                    postInstallAction(installedTypings || []);
+                });
+            }
+        }
+
+        private execAsync(prefix: string, command: string, cwd: string, requestId: number, cb: (err: Error, stdout: string, stderr: string) => void) {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`#${requestId} running command '${command}'.`);
+            }
+            this.exec(command, { cwd }, (err, stdout, stderr) => {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`${prefix} #${requestId} stdout: ${stdout}`);
+                    this.log.writeLine(`${prefix} #${requestId} stderr: ${stderr}`);
                 }
-                postInstallAction(installedTypings);
+                cb(err, stdout, stderr);
             });
         }
     }
