@@ -599,11 +599,10 @@ namespace ts {
      * If false, whitespace is skipped until the first line break and comments between that location
      * and the next token are returned.
      * If true, comments occurring between the given position and the next line break are returned.
-     * If there is no line break, then no comments are returned.
      */
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
-        let needToSkipTrailingComment = pos > 0;
+        let collecting = trailing || pos === 0;
         while (pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
@@ -616,11 +615,7 @@ namespace ts {
                     if (trailing) {
                         return result;
                     }
-                    else if (needToSkipTrailingComment) {
-                        // skip the first line if not trailing (it'll be part of the trailing comment).
-                        needToSkipTrailingComment = false;
-                        result = undefined;
-                    }
+                    collecting = true;
                     if (result && result.length) {
                         lastOrUndefined(result).hasTrailingNewLine = true;
                     }
@@ -656,13 +651,11 @@ namespace ts {
                                 pos++;
                             }
                         }
-
-                        // if we are at the end of the file, don't add trailing comments.
-                        // end-of-file comments are added as leading comment of the end-of-file token.
-                        if (pos < text.length || !trailing) {
+                        if (collecting) {
                             if (!result) {
                                 result = [];
                             }
+
                             result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
                         }
                         continue;
@@ -678,10 +671,10 @@ namespace ts {
                     }
                     break;
             }
-            return !trailing ? result : undefined;
+            return result;
         }
 
-        return !trailing ? result : undefined;
+        return result;
     }
 
     export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {

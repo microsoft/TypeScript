@@ -851,7 +851,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
-            function emitLinePreservingList(parent: Node, nodes: NodeArray<Node>, allowTrailingComma: boolean, spacesBetweenBraces: boolean, commentsBeforePunctuation: boolean) {
+            function emitLinePreservingList(parent: Node, nodes: NodeArray<Node>, allowTrailingComma: boolean, spacesBetweenBraces: boolean) {
                 Debug.assert(nodes.length > 0);
 
                 increaseIndent();
@@ -877,9 +877,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
 
                     emit(nodes[i]);
-                    if (commentsBeforePunctuation) {
-                        emitLeadingCommentsAtEnd(nodes[i]);
-                    }
                 }
 
                 if (nodes.hasTrailingComma && allowTrailingComma) {
@@ -898,7 +895,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
-            function emitList<TNode extends Node>(nodes: TNode[], start: number, count: number, multiLine: boolean, trailingComma: boolean, leadingComma?: boolean, noTrailingNewLine?: boolean, commentsBeforePunctuation?: boolean, emitNode?: (node: TNode) => void): number {
+            function emitList<TNode extends Node>(nodes: TNode[], start: number, count: number, multiLine: boolean, trailingComma: boolean, leadingComma?: boolean, noTrailingNewLine?: boolean, emitNode?: (node: TNode) => void): number {
                 if (!emitNode) {
                     emitNode = emit;
                 }
@@ -916,10 +913,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         }
                     }
                     const node = nodes[start + i];
+                    // This emitting is to make sure we emit following comment properly
+                    //   ...(x, /*comment1*/ y)...
+                    //         ^ => node.pos
+                    // "comment1" is not considered leading comment for "y" but rather
+                    // considered as trailing comment of the previous node.
+                    emitTrailingCommentsOfPosition(node.pos);
                     emitNode(node);
-                    if (commentsBeforePunctuation) {
-                        emitLeadingCommentsAtEnd(nodes[i]);
-                    }
                     leadingComma = true;
                 }
                 if (trailingComma) {
@@ -1897,7 +1897,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
                 else if (languageVersion >= ScriptTarget.ES6 || !forEach(elements, isSpreadElementExpression)) {
                     write("[");
-                    emitLinePreservingList(node, node.elements, elements.hasTrailingComma, /*spacesBetweenBraces*/ false, /*commentsBeforePunctuation*/ true);
+                    emitLinePreservingList(node, node.elements, elements.hasTrailingComma, /*spacesBetweenBraces*/ false);
                     write("]");
                 }
                 else {
@@ -1921,7 +1921,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     // then try to preserve the original shape of the object literal.
                     // Otherwise just try to preserve the formatting.
                     if (numElements === properties.length) {
-                        emitLinePreservingList(node, properties, /*allowTrailingComma*/ languageVersion >= ScriptTarget.ES5, /*spacesBetweenBraces*/ true, /*commentsBeforePunctuation*/ true);
+                        emitLinePreservingList(node, properties, /*allowTrailingComma*/ languageVersion >= ScriptTarget.ES5, /*spacesBetweenBraces*/ true);
                     }
                     else {
                         const multiLine = node.multiLine;
@@ -2166,6 +2166,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             function emitPropertyAssignment(node: PropertyDeclaration) {
                 emit(node.name);
                 write(": ");
+                // This is to ensure that we emit comment in the following case:
+                //      For example:
+                //          obj = {
+                //              id: /*comment1*/ ()=>void
+                //          }
+                // "comment1" is not considered to be leading comment for node.initializer
+                // but rather a trailing comment on the previous node.
+                emitTrailingCommentsOfPosition(node.initializer.pos);
                 emit(node.initializer);
             }
 
@@ -2277,7 +2285,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
 
                 emit(node.expression);
-                emitLeadingCommentsAtEnd(node.expression);
                 const dotRangeStart = nodeIsSynthesized(node.expression) ? -1 : node.expression.end;
                 const dotRangeEnd = nodeIsSynthesized(node.expression) ? -1 : skipTrivia(currentText, node.expression.end) + 1;
                 const dotToken = <TextRange>{ pos: dotRangeStart, end: dotRangeEnd };
@@ -2494,17 +2501,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     emitThis(expression);
                     if (node.arguments.length) {
                         write(", ");
-                        emitTrailingCommentsOfPosition(node.arguments.pos);
                         emitCommaList(node.arguments);
-                        emitLeadingCommentsAtEnd(node.arguments);
                     }
                     write(")");
                 }
                 else {
                     write("(");
-                    emitTrailingCommentsOfPosition(node.arguments.pos);
                     emitCommaList(node.arguments);
-                    emitLeadingCommentsAtEnd(node.arguments);
                     write(")");
                 }
             }
@@ -2605,7 +2608,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 write("(");
                 emit(node.expression);
-                emitLeadingCommentsAtEnd(node.expression);
                 write(")");
             }
 
@@ -2884,7 +2886,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
                     else {
                         emit(node.left);
-                        emitLeadingCommentsAtEnd(node.left);
                         // Add indentation before emit the operator if the operator is on different line
                         // For example:
                         //      3
@@ -3897,7 +3898,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
                 emitNodeWithCommentsAndWithoutSourcemap(node.name);
                 emitEnd(node.name);
-                emitLeadingCommentsAtEnd(node.name);
             }
 
             function createVoidZero(): Expression {
@@ -4040,7 +4040,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         emit(name);
                     }
 
-                    emitLeadingCommentsAtEnd(name);
                     write(" = ");
                     emit(value);
                 });
@@ -4592,7 +4591,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     emitStart(restParam);
                     write("var ");
                     emitNodeWithCommentsAndWithoutSourcemap(restParam.name);
-                    emitLeadingCommentsAtEnd(restParam.name);
                     write(" = [];");
                     emitEnd(restParam);
                     emitTrailingComments(restParam);
@@ -4614,7 +4612,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     writeLine();
                     emitStart(restParam);
                     emitNodeWithCommentsAndWithoutSourcemap(restParam.name);
-                    emitLeadingCommentsAtEnd(restParam.name);
                     write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
                     emitEnd(restParam);
                     decreaseIndent();
@@ -4636,7 +4633,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             function emitDeclarationName(node: Declaration) {
                 if (node.name) {
                     emitNodeWithCommentsAndWithoutSourcemap(node.name);
-                    emitLeadingCommentsAtEnd(node.name);
                 }
                 else {
                     write(getGeneratedNameForNode(node));
@@ -4664,7 +4660,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 const { kind, parent } = node;
                 if (kind !== SyntaxKind.MethodDeclaration &&
                     kind !== SyntaxKind.MethodSignature &&
-                    kind !== SyntaxKind.ArrowFunction &&
                     parent &&
                     parent.kind !== SyntaxKind.PropertyAssignment &&
                     parent.kind !== SyntaxKind.CallExpression &&
@@ -4739,11 +4734,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     const parameters = node.parameters;
                     const skipCount = node.parameters.length && (<Identifier>node.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword ? 1 : 0;
                     const omitCount = languageVersion < ScriptTarget.ES6 && hasDeclaredRestParameter(node) ? 1 : 0;
-                    emitTrailingCommentsOfPosition(node.parameters.pos);
-                    emitList(parameters, skipCount, parameters.length - omitCount - skipCount, /*multiLine*/ false, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ false, /*commentsBeforePunctuation*/ true);
-                    if ((parameters.length - omitCount - skipCount) <= 0) {
-                        emitLeadingCommentsAtEnd(node.parameters);
-                    }
+                    emitList(parameters, skipCount, parameters.length - omitCount - skipCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
                 write(")");
                 decreaseIndent();
@@ -5800,7 +5791,7 @@ const _super = (function (geti, seti) {
                 writeLine();
 
                 const decoratorCount = decorators ? decorators.length : 0;
-                let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true, /*commentsBeforePunctuation*/ false,
+                let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true,
                     decorator => emit(decorator.expression));
                 if (firstParameterDecorator) {
                     argumentsWritten += emitDecoratorsOfParameters(constructor, /*leadingComma*/ argumentsWritten > 0);
@@ -5900,7 +5891,7 @@ const _super = (function (geti, seti) {
                     writeLine();
 
                     const decoratorCount = decorators ? decorators.length : 0;
-                    let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true, /*commentsBeforePunctuation*/ false,
+                    let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true,
                         decorator => emit(decorator.expression));
 
                     if (firstParameterDecorator) {
@@ -5942,7 +5933,7 @@ const _super = (function (geti, seti) {
                     for (const parameter of node.parameters) {
                         if (nodeIsDecorated(parameter)) {
                             const decorators = parameter.decorators;
-                            argumentsWritten += emitList(decorators, 0, decorators.length, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ leadingComma, /*noTrailingNewLine*/ true, /*commentsBeforePunctuation*/ false, decorator => {
+                            argumentsWritten += emitList(decorators, 0, decorators.length, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ leadingComma, /*noTrailingNewLine*/ true, decorator => {
                                 write(`__param(${parameterIndex}, `);
                                 emit(decorator.expression);
                                 write(")");
@@ -6356,7 +6347,6 @@ const _super = (function (geti, seti) {
                 emitExpressionForPropertyName(node.name);
                 emitEnd(node);
                 write(";");
-                emitLeadingCommentsAtEnd(node.name);
             }
 
             function writeEnumMemberDeclarationValue(member: EnumMember) {
@@ -8319,11 +8309,8 @@ const _super = (function (geti, seti) {
 
             /**
              * Emit trailing comments at the position. The term trailing comment is used here to describe following comment:
-             *      x, /*comment1* / // comment2
-             *         ^ => pos; the function will emit "comment1" and "comment2" in the emitJS
-             * However,
              *      x /*comment1* /, y
-             * 'comment1' is actually a leading comment of ',' and needs to be emitted using emitLeadingCommentsAtEnd
+             *         ^ => pos; the function will emit "comment1"
              */
             function emitTrailingCommentsOfPosition(pos: number) {
                 if (compilerOptions.removeComments) {
@@ -8336,18 +8323,7 @@ const _super = (function (geti, seti) {
                 emitComments(currentText, currentLineMap, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            /**
-             * Emit leading comments for the token after the current token.
-             * This is only needed for punctuation tokens. For example, in
-             *      x /*comment1* /, y
-             * 'comment1' is a leading comment of ',' but needs to be emitted
-             * from x because there is no token for ','.
-             */
-            function emitLeadingCommentsAtEnd(node: Node | NodeArray<any>) {
-                emitLeadingCommentsOfPositionWorker(node.end, /*trailingSeparator*/ false);
-            }
-
-            function emitLeadingCommentsOfPositionWorker(pos: number, trailingSeparator = true) {
+            function emitLeadingCommentsOfPositionWorker(pos: number) {
                 if (compilerOptions.removeComments) {
                     return;
                 }
@@ -8365,7 +8341,7 @@ const _super = (function (geti, seti) {
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, { pos: pos, end: pos }, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentText, currentLineMap, writer, leadingComments, trailingSeparator, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitDetachedCommentsAndUpdateCommentsInfo(node: TextRange) {
