@@ -8,8 +8,6 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    const defaultTypeRoots = ["node_modules/@types"];
-
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         while (true) {
             const fileName = combinePaths(searchPath, "tsconfig.json");
@@ -168,7 +166,7 @@ namespace ts {
 
     const typeReferenceExtensions = [".d.ts"];
 
-    function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost) {
+    function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost): string[] | undefined {
         if (options.typeRoots) {
             return options.typeRoots;
         }
@@ -181,11 +179,37 @@ namespace ts {
             currentDirectory = host.getCurrentDirectory();
         }
 
-        if (!currentDirectory) {
-            return undefined;
-        }
-        return map(defaultTypeRoots, d => combinePaths(currentDirectory, d));
+        return currentDirectory && getDefaultTypeRoots(currentDirectory, host);
     }
+
+    /**
+     * Returns the path to every node_modules/@types directory from some ancestor directory.
+     * Returns undefined if there are none.
+     */
+    function getDefaultTypeRoots(currentDirectory: string, host: ModuleResolutionHost): string[] | undefined {
+        if (!host.directoryExists) {
+            return [combinePaths(currentDirectory, "node_modules")];
+            // And if it doesn't exist, tough.
+        }
+
+        let typeRoots: string[];
+
+        while (true) {
+            const atTypes = combinePaths(currentDirectory, nodeModulesAtTypes);
+            if (host.directoryExists(atTypes)) {
+                (typeRoots || (typeRoots = [])).push(atTypes);
+            }
+
+            const parent = getDirectoryPath(currentDirectory);
+            if (parent === currentDirectory) {
+                break;
+            }
+            currentDirectory = parent;
+        }
+
+        return typeRoots;
+    }
+    const nodeModulesAtTypes = combinePaths("node_modules", "@types");
 
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
