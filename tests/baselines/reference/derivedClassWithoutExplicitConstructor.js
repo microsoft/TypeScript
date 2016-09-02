@@ -45,6 +45,7 @@ var Derived = (function (_super) {
         _this = _super.apply(this, arguments) || this;
         _this.x = 1;
         _this.y = 'hello';
+        return _this;
     }
     return Derived;
 }(Base));
@@ -63,6 +64,7 @@ var D = (function (_super) {
         _this = _super.apply(this, arguments) || this;
         _this.x = 2;
         _this.y = null;
+        return _this;
     }
     return D;
 }(Base2));

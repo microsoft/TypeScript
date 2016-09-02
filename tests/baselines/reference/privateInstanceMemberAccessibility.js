@@ -31,6 +31,7 @@ var Derived = (function (_super) {
         _this = _super.apply(this, arguments) || this;
         _this.x = _super.prototype.foo; // error
         _this.z = _super.prototype.foo; // error
+        return _this;
     }
     Derived.prototype.y = function () {
         return _super.prototype.foo; // error

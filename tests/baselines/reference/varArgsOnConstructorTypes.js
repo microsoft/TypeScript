@@ -45,6 +45,7 @@ define(["require", "exports"], function (require, exports) {
             _this = _super.call(this, element) || this;
             _this.p1 = element;
             _this.p2 = url;
+            return _this;
         }
         return B;
     }(A));

@@ -36,6 +36,7 @@ var D = (function (_super) {
             t: _this._t
         };
         var i = Factory.create(s);
+        return _this;
     }
     return D;
 }(Base));

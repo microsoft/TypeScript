@@ -46,6 +46,7 @@ var b = (function (_super) {
             }
         };
         _this._super = 10; // No error
+        return _this;
     }
     return b;
 }(Foo));

@@ -52,6 +52,7 @@ var B = (function (_super) {
         var _this;
         var x = 1; // should not error
         _this = _super.call(this) || this;
+        return _this;
     }
     return B;
 }(A));
@@ -62,6 +63,7 @@ var C = (function (_super) {
         var _this;
         _this.p = 10;
         var x = 1; // should error
+        return _this;
     }
     return C;
 }(A));
@@ -71,6 +73,7 @@ var D = (function (_super) {
         var _this;
         _this.p = 11;
         var x = 1; // should error
+        return _this;
     }
     return D;
 }(A));
@@ -80,6 +83,7 @@ var E = (function (_super) {
         var _this;
         _this.p = 12;
         var x = 1; // should error
+        return _this;
     }
     return E;
 }(A));

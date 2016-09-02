@@ -39,6 +39,7 @@ var C = (function (_super) {
         var _this;
         _this.x;
         any;
+        return _this;
     }
     return C;
 }(B));

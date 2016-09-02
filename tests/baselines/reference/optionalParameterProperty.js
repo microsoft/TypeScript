@@ -28,6 +28,7 @@ var D = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         _this.p = p;
+        return _this;
     }
     return D;
 }(C));

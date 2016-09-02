@@ -30,6 +30,7 @@ var A = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.x = 1;
+        return _this;
     }
     return A;
 }(Z));

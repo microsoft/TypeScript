@@ -62,6 +62,7 @@ var TypeScript;
             var _this;
             _this = _super.apply(this, arguments) || this;
             _this._elementType = null;
+            return _this;
         }
         PullTypeSymbol.prototype.toString = function (scopeSymbol, useConstraintInName) {
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();

@@ -121,6 +121,7 @@ var Derived = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         _super.prototype. = value;
+        return _this;
     }
     Derived.prototype.foo = function () { _super.prototype. = value; };
     Derived.sfoo = function () { _super. = value; };

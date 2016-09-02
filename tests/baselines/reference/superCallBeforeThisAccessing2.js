@@ -26,6 +26,7 @@ var D = (function (_super) {
     function D() {
         var _this;
         _this = _super.call(this, function () { _this._t; }) || this; // no error. only check when this is directly accessing in constructor
+        return _this;
     }
     return D;
 }(Base));

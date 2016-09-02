@@ -2396,6 +2396,7 @@ var TypeScript;
             _this.preComments = null;
             _this.postComments = null;
             _this.isParenthesized = false;
+            return _this;
         }
         AST.prototype.isExpression = function () { return false; };
         AST.prototype.isStatementOrExpression = function () { return false; };
@@ -2547,6 +2548,7 @@ var TypeScript;
             _this = _super.call(this, NodeType.Error) || this;
             _this.minChar = min;
             _this.limChar = lim;
+            return _this;
         }
         return IncompleteAST;
     }(AST));
@@ -2558,6 +2560,7 @@ var TypeScript;
             _this = _super.call(this, NodeType.List) || this;
             _this.enclosingScope = null;
             _this.members = new AST[];
+            return _this;
         }
         ASTList.prototype.addToControlFlow = function (context) {
             var len = this.members.length;
@@ -2629,6 +2632,7 @@ var TypeScript;
             _this.sym = null;
             _this.cloId = -1;
             _this.setText(actualText, hasEscapeSequence);
+            return _this;
         }
         Identifier.prototype.setText = function (actualText, hasEscapeSequence) {
             this.actualText = actualText;
@@ -2669,6 +2673,7 @@ var TypeScript;
         function MissingIdentifier() {
             var _this;
             _this = _super.call(this, "__missing") || this;
+            return _this;
         }
         MissingIdentifier.prototype.isMissing = function () {
             return true;
@@ -2685,6 +2690,7 @@ var TypeScript;
             var _this;
             _this = _super.call(this, NodeType.Label) || this;
             _this.id = id;
+            return _this;
         }
         Label.prototype.printLabel = function () { return this.id.actualText + ":"; };
         Label.prototype.typeCheck = function (typeFlow) {
@@ -2709,6 +2715,7 @@ var TypeScript;
         function Expression(nodeType) {
             var _this;
             _this = _super.call(this, nodeType) || this;
+            return _this;
         }
         Expression.prototype.isExpression = function () { return true; };
         Expression.prototype.isStatementOrExpression = function () { return true; };
@@ -2723,6 +2730,7 @@ var TypeScript;
             _this.operand = operand;
             _this.targetType = null; // Target type for an object literal (null if no target type)
             _this.castTerm = null;
+            return _this;
         }
         UnaryExpression.prototype.addToControlFlow = function (context) {
             _super.prototype.addToControlFlow.call(this, context);
@@ -2869,6 +2877,7 @@ var TypeScript;
             _this.arguments = arguments;
             _this.signature = null;
             _this.minChar = _this.target.minChar;
+            return _this;
         }
         CallExpression.prototype.typeCheck = function (typeFlow) {
             if (this.nodeType == NodeType.New) {
@@ -2900,6 +2909,7 @@ var TypeScript;
             _this = _super.call(this, nodeType) || this;
             _this.operand1 = operand1;
             _this.operand2 = operand2;
+            return _this;
         }
         BinaryExpression.prototype.typeCheck = function (typeFlow) {
             switch (this.nodeType) {
@@ -3054,6 +3064,7 @@ var TypeScript;
             _this.operand1 = operand1;
             _this.operand2 = operand2;
             _this.operand3 = operand3;
+            return _this;
         }
         ConditionalExpression.prototype.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckQMark(this);
@@ -3080,6 +3091,7 @@ var TypeScript;
             _this.value = value;
             _this.hasEmptyFraction = hasEmptyFraction;
             _this.isNegativeZero = false;
+            return _this;
         }
         NumberLiteral.prototype.typeCheck = function (typeFlow) {
             this.type = typeFlow.doubleType;
@@ -3120,6 +3132,7 @@ var TypeScript;
             var _this;
             _this = _super.call(this, NodeType.Regex) || this;
             _this.regex = regex;
+            return _this;
         }
         RegexLiteral.prototype.typeCheck = function (typeFlow) {
             this.type = typeFlow.regexType;
@@ -3141,6 +3154,7 @@ var TypeScript;
             var _this;
             _this = _super.call(this, NodeType.QString) || this;
             _this.text = text;
+            return _this;
         }
         StringLiteral.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3167,6 +3181,7 @@ var TypeScript;
         function ModuleElement(nodeType) {
             var _this;
             _this = _super.call(this, nodeType) || this;
+            return _this;
         }
         return ModuleElement;
     }(AST));
@@ -3180,6 +3195,7 @@ var TypeScript;
             _this.alias = alias;
             _this.varFlags = VarFlags.None;
             _this.isDynamicImport = false;
+            return _this;
         }
         ImportDeclaration.prototype.isStatementOrExpression = function () { return true; };
         ImportDeclaration.prototype.emit = function (emitter, tokenId, startLine) {
@@ -3242,6 +3258,7 @@ var TypeScript;
             _this.typeExpr = null;
             _this.varFlags = VarFlags.None;
             _this.sym = null;
+            return _this;
         }
         BoundDecl.prototype.isStatementOrExpression = function () { return true; };
         BoundDecl.prototype.isPrivate = function () { return hasFlag(this.varFlags, VarFlags.Private); };
@@ -3261,6 +3278,7 @@ var TypeScript;
         function VarDecl(id, nest) {
             var _this;
             _this = _super.call(this, id, NodeType.VarDecl, nest) || this;
+            return _this;
         }
         VarDecl.prototype.isAmbient = function () { return hasFlag(this.varFlags, VarFlags.Ambient); };
         VarDecl.prototype.isExported = function () { return hasFlag(this.varFlags, VarFlags.Exported); };
@@ -3281,6 +3299,7 @@ var TypeScript;
             _this = _super.call(this, id, NodeType.ArgDecl, 0) || this;
             _this.isOptional = false;
             _this.parameterPropertySym = null;
+            return _this;
         }
         ArgDecl.prototype.isOptionalArg = function () { return this.isOptional || this.init; };
         ArgDecl.prototype.treeViewLabel = function () {
@@ -3331,6 +3350,7 @@ var TypeScript;
             _this.returnStatementsWithExpressions = [];
             _this.scopeType = null; // Type of the FuncDecl, before target typing
             _this.endingToken = null;
+            return _this;
         }
         FuncDecl.prototype.internalName = function () {
             if (this.internalNameCache == null) {
@@ -3458,6 +3478,7 @@ var TypeScript;
             _this.containsUnicodeCharInComment = false;
             _this.vars = vars;
             _this.scopes = scopes;
+            return _this;
         }
         Script.prototype.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckScript(this);
@@ -3517,6 +3538,7 @@ var TypeScript;
             _this.members = members;
             _this.leftCurlyCount = 0;
             _this.rightCurlyCount = 0;
+            return _this;
         }
         return NamedDeclaration;
     }(ModuleElement));
@@ -3535,6 +3557,7 @@ var TypeScript;
             _this.vars = vars;
             _this.scopes = scopes;
             _this.prettyName = _this.name.actualText;
+            return _this;
         }
         ModuleDeclaration.prototype.isExported = function () { return hasFlag(this.modFlags, ModuleFlags.Exported); };
         ModuleDeclaration.prototype.isAmbient = function () { return hasFlag(this.modFlags, ModuleFlags.Ambient); };
@@ -3565,6 +3588,7 @@ var TypeScript;
             _this.extendsList = extendsList;
             _this.implementsList = implementsList;
             _this.varFlags = VarFlags.None;
+            return _this;
         }
         TypeDeclaration.prototype.isExported = function () {
             return hasFlag(this.varFlags, VarFlags.Exported);
@@ -3584,6 +3608,7 @@ var TypeScript;
             _this.constructorDecl = null;
             _this.constructorNestingLevel = 0;
             _this.endingToken = null;
+            return _this;
         }
         ClassDeclaration.prototype.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckClass(this);
@@ -3599,6 +3624,7 @@ var TypeScript;
         function InterfaceDeclaration(name, members, extendsList, implementsList) {
             var _this;
             _this = _super.call(this, NodeType.InterfaceDeclaration, name, extendsList, implementsList, members) || this;
+            return _this;
         }
         InterfaceDeclaration.prototype.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckInterface(this);
@@ -3614,6 +3640,7 @@ var TypeScript;
             var _this;
             _this = _super.call(this, nodeType) || this;
             _this.flags |= ASTFlags.IsStatement;
+            return _this;
         }
         Statement.prototype.isLoop = function () { return false; };
         Statement.prototype.isStatementOrExpression = function () { return true; };
@@ -3632,6 +3659,7 @@ var TypeScript;
             _this = _super.call(this, NodeType.LabeledStatement) || this;
             _this.labels = labels;
             _this.stmt = stmt;
+            return _this;
         }
         LabeledStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3667,6 +3695,7 @@ var TypeScript;
             _this = _super.call(this, NodeType.Block) || this;
             _this.statements = statements;
             _this.isStatementBlock = isStatementBlock;
+            return _this;
         }
         Block.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3723,6 +3752,7 @@ var TypeScript;
             _this = _super.call(this, nodeType) || this;
             _this.target = null;
             _this.resolvedTarget = null;
+            return _this;
         }
         Jump.prototype.hasExplicitTarget = function () { return (this.target); };
         Jump.prototype.setResolvedTarget = function (parser, stmt) {
@@ -3775,6 +3805,7 @@ var TypeScript;
             _this = _super.call(this, NodeType.While) || this;
             _this.cond = cond;
             _this.body = null;
+            return _this;
         }
         WhileStatement.prototype.isLoop = function () { return true; };
         WhileStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -3829,6 +3860,7 @@ var TypeScript;
             _this.body = null;
             _this.whileAST = null;
             _this.cond = null;
+            return _this;
         }
         DoWhileStatement.prototype.isLoop = function () { return true; };
         DoWhileStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -3886,6 +3918,7 @@ var TypeScript;
             _this.cond = cond;
             _this.elseBod = null;
             _this.statement = new ASTSpan();
+            return _this;
         }
         IfStatement.prototype.isCompoundStatement = function () { return true; };
         IfStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -3963,6 +3996,7 @@ var TypeScript;
             var _this;
             _this = _super.call(this, NodeType.Return) || this;
             _this.returnExpression = null;
+            return _this;
         }
         ReturnStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3994,6 +4028,7 @@ var TypeScript;
         function EndCode() {
             var _this;
             _this = _super.call(this, NodeType.EndCode) || this;
+            return _this;
         }
         return EndCode;
     }(AST));
@@ -4009,6 +4044,7 @@ var TypeScript;
             if (_this.lval && (_this.lval.nodeType == NodeType.VarDecl)) {
                 _this.lval.varFlags |= VarFlags.AutoInit;
             }
+            return _this;
         }
         ForInStatement.prototype.isLoop = function () { return true; };
         ForInStatement.prototype.isFiltered = function () {
@@ -4120,6 +4156,7 @@ var TypeScript;
             var _this;
             _this = _super.call(this, NodeType.For) || this;
             _this.init = init;
+            return _this;
         }
         ForStatement.prototype.isLoop = function () { return true; };
         ForStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -4213,6 +4250,7 @@ var TypeScript;
             _this = _super.call(this, NodeType.With) || this;
             _this.expr = expr;
             _this.withSym = null;
+            return _this;
         }
         WithStatement.prototype.isCompoundStatement = function () { return true; };
         WithStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -4241,6 +4279,7 @@ var TypeScript;
             _this.val = val;
             _this.defaultCase = null;
             _this.statement = new ASTSpan();
+            return _this;
         }
         SwitchStatement.prototype.isCompoundStatement = function () { return true; };
         SwitchStatement.prototype.emit = function (emitter, tokenId, startLine) {
@@ -4312,6 +4351,7 @@ var TypeScript;
             var _this;
             _this = _super.call(this, NodeType.Case) || this;
             _this.expr = null;
+            return _this;
         }
         CaseStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4367,6 +4407,7 @@ var TypeScript;
             _this = _super.call(this, NodeType.TypeRef) || this;
             _this.term = term;
             _this.arrayCount = arrayCount;
+            return _this;
         }
         TypeReference.prototype.emit = function (emitter, tokenId, startLine) {
             throw new Error("should not emit a type ref");
@@ -4398,6 +4439,7 @@ var TypeScript;
             _this = _super.call(this, NodeType.TryFinally) || this;
             _this.tryNode = tryNode;
             _this.finallyNode = finallyNode;
+            return _this;
         }
         TryFinally.prototype.isCompoundStatement = function () { return true; };
         TryFinally.prototype.emit = function (emitter, tokenId, startLine) {
@@ -4444,6 +4486,7 @@ var TypeScript;
             _this = _super.call(this, NodeType.TryCatch) || this;
             _this.tryNode = tryNode;
             _this.catchNode = catchNode;
+            return _this;
         }
         TryCatch.prototype.isCompoundStatement = function () { return true; };
         TryCatch.prototype.emit = function (emitter, tokenId, startLine) {
@@ -4494,6 +4537,7 @@ var TypeScript;
             var _this;
             _this = _super.call(this, NodeType.Try) || this;
             _this.body = body;
+            return _this;
         }
         Try.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4529,6 +4573,7 @@ var TypeScript;
             if (_this.param) {
                 _this.param.varFlags |= VarFlags.AutoInit;
             }
+            return _this;
         }
         Catch.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4597,6 +4642,7 @@ var TypeScript;
             var _this;
             _this = _super.call(this, NodeType.Finally) || this;
             _this.body = body;
+            return _this;
         }
         Finally.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4629,6 +4675,7 @@ var TypeScript;
             _this.isBlockComment = isBlockComment;
             _this.endsLine = endsLine;
             _this.text = null;
+            return _this;
         }
         Comment.prototype.getText = function () {
             if (this.text == null) {
@@ -4652,6 +4699,7 @@ var TypeScript;
         function DebuggerStatement() {
             var _this;
             _this = _super.call(this, NodeType.Debugger) || this;
+            return _this;
         }
         DebuggerStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);

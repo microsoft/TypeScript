@@ -35,6 +35,7 @@ var B = (function (_super) {
         else {
             _this = _super.call(this, 'a2', 'b2') || this;
         }
+        return _this;
     }
     return B;
 }(A));

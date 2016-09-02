@@ -29,6 +29,7 @@ var C = (function (_super) {
         var obj = (_a = {},
             _a[(_this = _super.call(this) || this, "prop")] = function () { },
             _a);
+        return _this;
         var _a;
     }
     return C;

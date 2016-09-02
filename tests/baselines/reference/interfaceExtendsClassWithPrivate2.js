@@ -43,6 +43,7 @@ var D = (function (_super) {
         _this = _super.apply(this, arguments) || this;
         _this.x = 2;
         _this.y = 3;
+        return _this;
     }
     D.prototype.foo = function (x) { return x; };
     D.prototype.other = function (x) { return x; };
@@ -55,6 +56,7 @@ var D2 = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.x = "";
+        return _this;
     }
     D2.prototype.foo = function (x) { return x; };
     D2.prototype.other = function (x) { return x; };

@@ -92,6 +92,7 @@ var RegisteredUser = (function (_super) {
         _super.prototype.sayHello.call(_this);
         // super call in a lambda in a constructor 
         var x = function () { return _super.prototype.sayHello.call(_this); };
+        return _this;
     }
     RegisteredUser.prototype.sayHello = function () {
         var _this = this;
@@ -110,6 +111,7 @@ var RegisteredUser2 = (function (_super) {
         _this.name = "Joe";
         // super call in a nested lambda in a constructor 
         var x = function () { return function () { return function () { return _super.prototype.sayHello.call(_this); }; }; };
+        return _this;
     }
     RegisteredUser2.prototype.sayHello = function () {
         var _this = this;
@@ -126,6 +128,7 @@ var RegisteredUser3 = (function (_super) {
         _this.name = "Sam";
         // super property in a nested lambda in a constructor 
         var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
+        return _this;
     }
     RegisteredUser3.prototype.sayHello = function () {
         var _this = this;
@@ -142,6 +145,7 @@ var RegisteredUser4 = (function (_super) {
         _this.name = "Mark";
         // super in a nested lambda in a constructor 
         var x = function () { return function () { return _super.prototype.; }; };
+        return _this;
     }
     RegisteredUser4.prototype.sayHello = function () {
         var _this = this;

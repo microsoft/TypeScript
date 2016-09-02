@@ -105,6 +105,7 @@ var Derived1 = (function (_super) {
     function Derived1(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     return Derived1;
 }(Base));
@@ -113,6 +114,7 @@ var Derived2 = (function (_super) {
     function Derived2(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     Derived2.prototype.b = function (a) { };
     return Derived2;
@@ -122,6 +124,7 @@ var Derived3 = (function (_super) {
     function Derived3(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     Object.defineProperty(Derived3.prototype, "c", {
         get: function () { return x; },
@@ -135,6 +138,7 @@ var Derived4 = (function (_super) {
     function Derived4(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     Object.defineProperty(Derived4.prototype, "c", {
         set: function (v) { },
@@ -148,6 +152,7 @@ var Derived5 = (function (_super) {
     function Derived5(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     return Derived5;
 }(Base));
@@ -156,6 +161,7 @@ var Derived6 = (function (_super) {
     function Derived6(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     return Derived6;
 }(Base));
@@ -164,6 +170,7 @@ var Derived7 = (function (_super) {
     function Derived7(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     Derived7.s = function (a) { };
     return Derived7;
@@ -173,6 +180,7 @@ var Derived8 = (function (_super) {
     function Derived8(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     Object.defineProperty(Derived8, "t", {
         get: function () { return x; },
@@ -186,6 +194,7 @@ var Derived9 = (function (_super) {
     function Derived9(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     Object.defineProperty(Derived9, "t", {
         set: function (v) { },
@@ -199,6 +208,7 @@ var Derived10 = (function (_super) {
     function Derived10(a) {
         var _this;
         _this = _super.call(this, a) || this;
+        return _this;
     }
     return Derived10;
 }(Base));

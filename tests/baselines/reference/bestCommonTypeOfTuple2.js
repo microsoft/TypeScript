@@ -63,6 +63,7 @@ var D1 = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.i = "bar";
+        return _this;
     }
     return D1;
 }(C1));

@@ -32,6 +32,7 @@ var D = (function (_super) {
         x(); // no error; we only check super is called before this when the container is a constructor
         _this._t; // error
         _this = _super.call(this, undefined) || this;
+        return _this;
     }
     return D;
 }(Base));

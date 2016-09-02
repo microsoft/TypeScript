@@ -18,6 +18,7 @@ var D = (function (_super) {
     function D() {
         var _this;
         _this._t; // No error
+        return _this;
     }
     return D;
 }(null));

@@ -48,6 +48,7 @@ var Q = (function (_super) {
         _this = _super.call(this) || this;
         _this.z = z;
         _this.xx = _super.prototype.;
+        return _this;
     }
     Q.prototype.foo = function (zz) {
         if (zz === void 0) { zz = _super.prototype.; }

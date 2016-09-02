@@ -2384,6 +2384,7 @@ var Harness;
             _this = _super.call(this, description, block) || this;
             _this.description = description;
             _this.block = block;
+            return _this;
         }
         TestCase.prototype.addChild = function (child) {
             throw new Error("Testcases may not be nested inside other testcases");
@@ -2419,6 +2420,7 @@ var Harness;
             _this = _super.call(this, description, block) || this;
             _this.description = description;
             _this.block = block;
+            return _this;
         }
         /** Run the block, and if the block doesn't raise an error, run the children. */
         Scenario.prototype.run = function (done) {
@@ -2473,6 +2475,7 @@ var Harness;
         function Run() {
             var _this;
             _this = _super.call(this, 'Test Run', null) || this;
+            return _this;
         }
         Run.prototype.run = function () {
             emitLog('start');

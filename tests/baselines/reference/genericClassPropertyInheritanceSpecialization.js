@@ -111,6 +111,7 @@ var PortalFx;
                     function Validator(message) {
                         var _this;
                         _this = _super.call(this, message) || this;
+                        return _this;
                     }
                     return Validator;
                 }(Portal.Controls.Validators.Validator));

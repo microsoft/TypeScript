@@ -25,6 +25,7 @@ var Greeter = (function (_super) {
         _this = _super.apply(this, arguments) || this;
         _this.a = 10;
         _this.nameA = "Ten";
+        return _this;
     }
     return Greeter;
 }(AbstractGreeter));

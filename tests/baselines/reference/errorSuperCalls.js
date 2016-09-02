@@ -135,6 +135,7 @@ var Derived = (function (_super) {
         var _this;
         _super.prototype..call(_this);
         _this = _super.call(this) || this;
+        return _this;
     }
     return Derived;
 }(Base));
@@ -150,6 +151,7 @@ var OtherDerived = (function (_super) {
         _this = _super.apply(this, arguments) || this;
         //super call in class member initializer of derived type
         _this.t = _this = _super.call(this) || this;
+        return _this;
     }
     OtherDerived.prototype.fn = function () {
         //super call in class member function of derived type

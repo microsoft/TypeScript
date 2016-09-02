@@ -37,6 +37,7 @@ var Bar = (function (_super) {
     function Bar() {
         var _this;
         _this = _super.call(this, function (s) { s = 5; }) || this;
+        return _this;
     }
     return Bar;
 }(Foo)); // error, if types are applied correctly

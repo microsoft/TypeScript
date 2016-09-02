@@ -29,6 +29,7 @@ var C = (function (_super) {
     function C() {
         var _this;
         _this = _super.call(this, function (value) { return String(value()); }) || this;
+        return _this;
     }
     return C;
 }(A));

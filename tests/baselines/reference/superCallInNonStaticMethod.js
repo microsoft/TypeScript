@@ -71,6 +71,7 @@ var Other = (function (_super) {
         _this.propertyInitializer = _super.prototype.instanceMethod.call(_this);
         _this.functionProperty = function () { _super.prototype.instanceMethod.call(_this); };
         _super.prototype.instanceMethod.call(_this);
+        return _this;
     }
     // in instance method
     Other.prototype.instanceMethod = function () {

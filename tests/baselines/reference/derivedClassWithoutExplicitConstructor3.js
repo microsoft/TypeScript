@@ -67,6 +67,7 @@ var Derived = (function (_super) {
         _this = _super.call(this, 2) || this;
         _this.b = '';
         _this.b = y;
+        return _this;
     }
     return Derived;
 }(Base));
@@ -77,6 +78,7 @@ var Derived2 = (function (_super) {
         _this = _super.apply(this, arguments) || this;
         _this.x = 1;
         _this.y = 'hello';
+        return _this;
     }
     return Derived2;
 }(Derived));
@@ -96,6 +98,7 @@ var D = (function (_super) {
         _this = _super.call(this, 2) || this;
         _this.b = null;
         _this.b = y;
+        return _this;
     }
     return D;
 }(Base));
@@ -106,6 +109,7 @@ var D2 = (function (_super) {
         _this = _super.apply(this, arguments) || this;
         _this.x = 2;
         _this.y = null;
+        return _this;
     }
     return D2;
 }(D));

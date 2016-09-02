@@ -321,6 +321,7 @@ var c3 = (function (_super) {
         var _this;
         _this = _super.call(this, 10) || this;
         _this.p1 = _super.prototype.c2_p1;
+        return _this;
     }
     /** c3 f1*/
     c3.prototype.f1 = function () {
@@ -409,6 +410,7 @@ var c6 = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         _this.d = _super.prototype.b;
+        return _this;
     }
     return c6;
 }(c5));

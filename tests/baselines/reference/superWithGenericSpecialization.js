@@ -30,6 +30,7 @@ var D = (function (_super) {
     function D() {
         var _this;
         _this = _super.call(this) || this; // uses the type parameter type of the base class, ie string
+        return _this;
     }
     return D;
 }(C));

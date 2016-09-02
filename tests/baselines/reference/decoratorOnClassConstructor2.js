@@ -47,6 +47,7 @@ var C = (function (_super) {
     function C(prop) {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     return C;
 }(_0_ts_1.base));

@@ -47,6 +47,7 @@ var Derived = (function (_super) {
                 _this = _super.call(this) || this;
             }
         };
+        return _this;
     }
     return Derived;
 }(Base));

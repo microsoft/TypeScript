@@ -112,6 +112,7 @@ var Derived = (function (_super) {
         var _this;
         var a = 1;
         _this = _super.call(this) || this; // ok
+        return _this;
     }
     return Derived;
 }(Base));
@@ -122,6 +123,7 @@ var Derived2 = (function (_super) {
         _this.y = y;
         var a = 1;
         _this = _super.call(this) || this; // error
+        return _this;
     }
     return Derived2;
 }(Base));
@@ -132,6 +134,7 @@ var Derived3 = (function (_super) {
         _this = _super.call(this) || this; // ok
         _this.y = y;
         var a = 1;
+        return _this;
     }
     return Derived3;
 }(Base));
@@ -142,6 +145,7 @@ var Derived4 = (function (_super) {
         _this.a = 1;
         var b = 2;
         _this = _super.call(this) || this; // error
+        return _this;
     }
     return Derived4;
 }(Base));
@@ -152,6 +156,7 @@ var Derived5 = (function (_super) {
         _this = _super.call(this) || this; // ok
         _this.a = 1;
         var b = 2;
+        return _this;
     }
     return Derived5;
 }(Base));
@@ -162,6 +167,7 @@ var Derived6 = (function (_super) {
         _this.a = 1;
         var b = 2;
         _this = _super.call(this) || this; // error: "super" has to be called before "this" accessing
+        return _this;
     }
     return Derived6;
 }(Base));
@@ -173,6 +179,7 @@ var Derived7 = (function (_super) {
         _this.a = 3;
         _this.b = 3;
         _this = _super.call(this) || this; // error
+        return _this;
     }
     return Derived7;
 }(Base));
@@ -184,6 +191,7 @@ var Derived8 = (function (_super) {
         _this.a = 1;
         _this.a = 3;
         _this.b = 3;
+        return _this;
     }
     return Derived8;
 }(Base));
@@ -201,6 +209,7 @@ var Derived9 = (function (_super) {
         _this.a = 3;
         _this.b = 3;
         _this = _super.call(this) || this; // error
+        return _this;
     }
     return Derived9;
 }(Base2));
@@ -212,6 +221,7 @@ var Derived10 = (function (_super) {
         _this.a = 1;
         _this.a = 3;
         _this.b = 3;
+        return _this;
     }
     return Derived10;
 }(Base2));

@@ -60,6 +60,7 @@ var C = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.ro = "readonly please";
+        return _this;
     }
     Object.defineProperty(C.prototype, "concreteWithNoBody", {
         get: function () { },
@@ -81,6 +82,7 @@ var WrongTypePropertyImpl = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.num = "nope, wrong";
+        return _this;
     }
     return WrongTypePropertyImpl;
 }(WrongTypeProperty));
@@ -108,6 +110,7 @@ var WrongTypeAccessorImpl2 = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.num = "nope, wrong";
+        return _this;
     }
     return WrongTypeAccessorImpl2;
 }(WrongTypeAccessor));

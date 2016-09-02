@@ -60,6 +60,7 @@ var B = (function (_super) {
         _this = _super.call(this, x) || this;
         // Fails, x is readonly
         _this.x = 1;
+        return _this;
     }
     return B;
 }(A));
@@ -72,6 +73,7 @@ var C = (function (_super) {
         _this = _super.call(this, x) || this;
         _this.x = x;
         _this.x = 1;
+        return _this;
     }
     return C;
 }(A));
@@ -90,6 +92,7 @@ var E = (function (_super) {
         _this = _super.call(this, x) || this;
         _this.x = x;
         _this.x = 1;
+        return _this;
     }
     return E;
 }(D));

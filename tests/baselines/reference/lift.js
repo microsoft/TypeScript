@@ -36,6 +36,7 @@ var C = (function (_super) {
         _this = _super.call(this, y) || this;
         var x = 10 + w;
         var ll = x * w;
+        return _this;
     }
     C.prototype.liftxyz = function () { return x + z + this.y; };
     C.prototype.liftxylocllz = function () { return x + z + this.y + this.ll; };

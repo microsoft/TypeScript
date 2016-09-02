@@ -118,6 +118,7 @@ var Derived = (function (_super) {
     function Derived() {
         var _this;
         _this = _super.call(this, function () { return _this; }) || this;
+        return _this;
     }
     return Derived;
 }(Base));
@@ -160,6 +161,7 @@ var M2;
         function Derived() {
             var _this;
             _this = _super.call(this, function () { return _this; }) || this;
+            return _this;
         }
         return Derived;
     }(Base));

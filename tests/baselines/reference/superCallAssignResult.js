@@ -27,6 +27,7 @@ var H = (function (_super) {
         var _this;
         var x = _this = _super.call(this, 5) || this; // Should be of type void, not E.
         x = 5;
+        return _this;
     }
     return H;
 }(E));

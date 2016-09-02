@@ -31,6 +31,7 @@ var Super = (function (_super) {
         var _this;
         var that = _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     return Super;
 }(Base));

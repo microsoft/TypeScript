@@ -32,6 +32,7 @@ var Derived = (function (_super) {
         _this = _super.call(this, p) || this;
         _this.p = p;
         _this.p; // OK
+        return _this;
     }
     return Derived;
 }(Base));

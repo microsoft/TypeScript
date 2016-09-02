@@ -44,6 +44,7 @@ var Derived = (function (_super) {
     function Derived() {
         var _this;
         _this = _super.call(this, _this) || this; // ok
+        return _this;
     }
     return Derived;
 }(Base));
@@ -53,6 +54,7 @@ var Derived2 = (function (_super) {
         var _this;
         _this = _super.call(this, _this) || this; // error
         _this.a = a;
+        return _this;
     }
     return Derived2;
 }(Base));
@@ -62,6 +64,7 @@ var Derived3 = (function (_super) {
         var _this;
         _this = _super.call(this, function () { return _this; }) || this; // error
         _this.a = a;
+        return _this;
     }
     return Derived3;
 }(Base));
@@ -71,6 +74,7 @@ var Derived4 = (function (_super) {
         var _this;
         _this = _super.call(this, function () { return this; }) || this; // ok
         _this.a = a;
+        return _this;
     }
     return Derived4;
 }(Base));

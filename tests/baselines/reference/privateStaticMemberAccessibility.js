@@ -25,6 +25,7 @@ var Derived = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.bing = function () { return Base.foo; }; // error
+        return _this;
     }
     return Derived;
 }(Base));

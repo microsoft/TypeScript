@@ -34,6 +34,7 @@ var B = (function (_super) {
         _this = _super.call(this) || this;
         _this.x = x;
         _this.blah = 2;
+        return _this;
     }
     return B;
 }(A));

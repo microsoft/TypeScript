@@ -26,6 +26,7 @@ var Super = (function (_super) {
     function Super() {
         var _this;
         _this = _super.call(this, (function () { return _this; })()) || this; // ok since this is not the case: The constructor declares parameter properties or the containing class declares instance member variables with initializers.
+        return _this;
     }
     return Super;
 }(Base));

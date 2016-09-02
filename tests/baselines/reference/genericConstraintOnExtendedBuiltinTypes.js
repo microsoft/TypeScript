@@ -54,6 +54,7 @@ var EndGate;
             function NumberTween(from) {
                 var _this;
                 _this = _super.call(this, from) || this;
+                return _this;
             }
             return NumberTween;
         }(Tweening.Tween));

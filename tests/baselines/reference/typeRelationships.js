@@ -78,6 +78,7 @@ var D = (function (_super) {
         _this.self2 = _this.self;
         _this.self3 = _this.foo();
         _this.d = new D();
+        return _this;
     }
     D.prototype.bar = function () {
         this.self = this.self1;

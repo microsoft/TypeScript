@@ -53,6 +53,7 @@ var MyDerived = (function (_super) {
         _this = _super.call(this) || this;
         var f1 = _super.prototype.getValue.call(_this);
         var f2 = _super.prototype.value;
+        return _this;
     }
     return MyDerived;
 }(MyBase));

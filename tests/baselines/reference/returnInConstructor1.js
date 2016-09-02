@@ -126,6 +126,7 @@ var H = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         return new G(); //error
+        return _this;
     }
     return H;
 }(F));
@@ -135,6 +136,7 @@ var I = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         return new G();
+        return _this;
     }
     return I;
 }(G));

@@ -32,6 +32,7 @@ var Sub = (function (_super) {
         var _this;
         _this = _super.call(this, options.value) || this;
         _this.options = options;
+        return _this;
     }
     return Sub;
 }(Super));

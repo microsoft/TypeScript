@@ -30,6 +30,7 @@ var D = (function (_super) {
         _this.v = 1;
         _this.p = 1;
         C.s = 1;
+        return _this;
     }
     return D;
 }(C));

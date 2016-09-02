@@ -42,6 +42,7 @@ var Foo = (function (_super) {
     function Foo(x, y) {
         var _this;
         _this = _super.call(this, x) || this;
+        return _this;
     }
     Foo.prototype.bar1 = function () { };
     return Foo;

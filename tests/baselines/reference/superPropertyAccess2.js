@@ -54,6 +54,7 @@ var D = (function (_super) {
         _this = _super.call(this) || this;
         _super.prototype.bar.call(_this); // error
         _super.prototype.x; // error
+        return _this;
     }
     D.foo = function () {
         _super.bar.call(this); // OK

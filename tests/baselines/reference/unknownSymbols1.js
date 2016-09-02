@@ -65,6 +65,7 @@ var C4 = (function (_super) {
     function C4() {
         var _this;
         _this = _super.call(this, asdf) || this;
+        return _this;
     }
     return C4;
 }(C3));

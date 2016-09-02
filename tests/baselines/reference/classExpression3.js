@@ -18,6 +18,7 @@ var C = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.c = 3;
+        return _this;
     }
     return class_1;
 }((function (_super) {
@@ -26,6 +27,7 @@ var C = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.b = 2;
+        return _this;
     }
     return class_2;
 }((function () {

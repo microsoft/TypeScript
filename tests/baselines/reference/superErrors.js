@@ -93,6 +93,7 @@ var RegisteredUser = (function (_super) {
             var _this = this;
             return function () { return _super.; };
         })();
+        return _this;
     }
     RegisteredUser.prototype.sayHello = function () {
         // super call in a method

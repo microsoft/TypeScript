@@ -111,6 +111,7 @@ var Foo = (function (_super) {
         _this.zoo = "zoo";
         _this.x = x;
         _this.gar = 5;
+        return _this;
     }
     Foo.prototype.bar = function () { return 0; };
     Foo.prototype.boo = function (x) { return x; };

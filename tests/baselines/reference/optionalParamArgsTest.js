@@ -164,6 +164,7 @@ var C2 = (function (_super) {
         var _this;
         if (v2 === void 0) { v2 = 6; }
         _this = _super.call(this, v2) || this;
+        return _this;
     }
     return C2;
 }(C1));

@@ -51,6 +51,7 @@ var Bar = (function (_super) {
     function Bar() {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     return Bar;
 }(Foo.Object));
@@ -59,6 +60,7 @@ var Baz = (function (_super) {
     function Baz() {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     return Baz;
 }(Object));

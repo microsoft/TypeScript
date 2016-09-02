@@ -68,6 +68,7 @@ var D = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.x = moduleA;
+        return _this;
     }
     return D;
 }(C));

@@ -25,6 +25,7 @@ var D = (function (_super) {
     function D(x) {
         var _this;
         _super.prototype..call(_this, x);
+        return _this;
     }
     return D;
 }(C));

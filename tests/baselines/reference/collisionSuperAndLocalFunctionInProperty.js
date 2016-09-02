@@ -48,6 +48,7 @@ var b = (function (_super) {
                 }
             }
         };
+        return _this;
     }
     return b;
 }(Foo));

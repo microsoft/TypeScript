@@ -31,6 +31,7 @@ var SubText = (function (_super) {
     function SubText(text, span) {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     return SubText;
 }(TextBase));

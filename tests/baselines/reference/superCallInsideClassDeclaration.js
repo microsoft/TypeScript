@@ -41,9 +41,11 @@ var B = (function (_super) {
             function D() {
                 var _this;
                 _this = _super.call(this) || this;
+                return _this;
             }
             return D;
         }(C));
+        return _this;
     }
     return B;
 }(A));

@@ -62,6 +62,7 @@ var C = (function (_super) {
                 p.length;
             }
         });
+        return _this;
     }
     return C;
 }(CBase));

@@ -189,6 +189,7 @@ var SomeDerived1 = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         _super.prototype.publicMember = 1;
+        return _this;
     }
     SomeDerived1.prototype.fn = function () {
         var x = _super.prototype.publicMember;
@@ -223,6 +224,7 @@ var SomeDerived2 = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         _super.prototype.privateMember = 1;
+        return _this;
     }
     SomeDerived2.prototype.fn = function () {
         var x = _super.prototype.privateMember;

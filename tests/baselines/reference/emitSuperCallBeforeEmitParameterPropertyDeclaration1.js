@@ -33,6 +33,7 @@ var B = (function (_super) {
         'someStringForEgngInject';
         _this = _super.call(this) || this;
         _this.x = x;
+        return _this;
     }
     return B;
 }(A));

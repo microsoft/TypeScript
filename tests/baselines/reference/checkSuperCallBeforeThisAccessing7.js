@@ -25,6 +25,7 @@ var Super = (function (_super) {
     function Super() {
         var _this;
         _this = _super.call(this, (function () { return _this; })) || this; // No error
+        return _this;
     }
     return Super;
 }(Base));

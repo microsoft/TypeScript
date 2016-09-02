@@ -78,6 +78,7 @@ var B = (function (_super) {
         "use strict"; // No error
         _this = _super.call(this) || this;
         _this.s = 9;
+        return _this;
     }
     return B;
 }(A));
@@ -88,6 +89,7 @@ var C = (function (_super) {
         _this = _super.call(this) || this; // No error
         _this.s = 9;
         "use strict";
+        return _this;
     }
     return C;
 }(A));
@@ -99,6 +101,7 @@ var D = (function (_super) {
         var x = 1; // Error
         _this = _super.call(this) || this;
         "use strict";
+        return _this;
     }
     return D;
 }(A));
@@ -108,6 +111,7 @@ var Bs = (function (_super) {
         var _this;
         "use strict"; // No error
         _this = _super.call(this) || this;
+        return _this;
     }
     return Bs;
 }(A));
@@ -118,6 +122,7 @@ var Cs = (function (_super) {
         var _this;
         _this = _super.call(this) || this; // No error
         "use strict";
+        return _this;
     }
     return Cs;
 }(A));
@@ -129,6 +134,7 @@ var Ds = (function (_super) {
         var x = 1; // no Error
         _this = _super.call(this) || this;
         "use strict";
+        return _this;
     }
     return Ds;
 }(A));

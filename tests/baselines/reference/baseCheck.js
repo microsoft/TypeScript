@@ -45,6 +45,7 @@ var ELoc = (function (_super) {
     function ELoc(x) {
         var _this;
         _this = _super.call(this, 0, x) || this;
+        return _this;
     }
     return ELoc;
 }(C));
@@ -53,6 +54,7 @@ var ELocVar = (function (_super) {
     function ELocVar(x) {
         var _this;
         _this = _super.call(this, 0, loc) || this;
+        return _this;
     }
     ELocVar.prototype.m = function () {
         var loc = 10;
@@ -65,6 +67,7 @@ var D = (function (_super) {
         var _this;
         _this = _super.call(this, _this.z) || this;
         _this.z = z;
+        return _this;
     }
     return D;
 }(C)); // too few params
@@ -74,6 +77,7 @@ var E = (function (_super) {
         var _this;
         _this = _super.call(this, 0, _this.z) || this;
         _this.z = z;
+        return _this;
     }
     return E;
 }(C));
@@ -83,6 +87,7 @@ var F = (function (_super) {
         var _this;
         _this = _super.call(this, "hello", _this.z) || this;
         _this.z = z;
+        return _this;
     }
     return F;
 }(C)); // first param type

@@ -27,6 +27,7 @@ var Foo = (function (_super) {
         var _this;
         _this = _super.call(this, _this) || this;
         _this.x = x;
+        return _this;
     }
     return Foo;
 }(Base));

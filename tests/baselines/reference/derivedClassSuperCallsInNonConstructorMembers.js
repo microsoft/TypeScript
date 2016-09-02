@@ -49,6 +49,7 @@ var Derived = (function (_super) {
         var _this;
         _this = _super.apply(this, arguments) || this;
         _this.a = _this = _super.call(this) || this;
+        return _this;
     }
     Derived.prototype.b = function () {
         _this = _super.call(this) || this;

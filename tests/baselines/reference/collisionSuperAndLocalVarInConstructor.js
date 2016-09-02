@@ -39,6 +39,7 @@ var b = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         var _super = 10; // Should be error 
+        return _this;
     }
     return b;
 }(Foo));
@@ -50,6 +51,7 @@ var c = (function (_super) {
         var x = function () {
             var _super = 10; // Should be error
         };
+        return _this;
     }
     return c;
 }(Foo));

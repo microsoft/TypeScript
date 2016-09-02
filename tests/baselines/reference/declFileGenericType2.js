@@ -60,6 +60,7 @@ var templa;
                 function AbstractElementController() {
                     var _this;
                     _this = _super.call(this) || this;
+                    return _this;
                 }
                 return AbstractElementController;
             }(templa.mvc.AbstractController));
@@ -82,6 +83,7 @@ var templa;
                         var _this;
                         _this = _super.call(this) || this;
                         _this._controllers = [];
+                        return _this;
                     }
                     return AbstractCompositeElementController;
                 }(templa.dom.mvc.AbstractElementController));

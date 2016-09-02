@@ -17,6 +17,7 @@ var George = (function (_super) {
     function George() {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     return George;
 }((function () {

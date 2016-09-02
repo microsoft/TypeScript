@@ -73,6 +73,7 @@ var ClassWithNoInitializer = (function (_super) {
     function ClassWithNoInitializer() {
         var _this;
         _this = _super.call(this, _this) || this; // error: "super" has to be called before "this" accessing
+        return _this;
     }
     return ClassWithNoInitializer;
 }(BaseErrClass));
@@ -83,6 +84,7 @@ var ClassWithInitializer = (function (_super) {
         var _this;
         _this = _super.call(this, _this) || this; // Error
         _this.t = 4;
+        return _this;
     }
     return ClassWithInitializer;
 }(BaseErrClass));

@@ -35,6 +35,7 @@ var B = (function (_super) {
         'someStringForEgngInject';
         _this = _super.call(this) || this;
         _this.blub = 12;
+        return _this;
     }
     return B;
 }(A));

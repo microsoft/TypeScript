@@ -80,6 +80,7 @@ var D1 = (function (_super) {
         _this = _super.call(this, "abc", "def") || this;
         _this.x = "x";
         _this.y = "y";
+        return _this;
     }
     return D1;
 }(getBase()));
@@ -91,6 +92,7 @@ var D2 = (function (_super) {
         _this = _super.call(this, 10, 20) || this;
         _this.x = 1;
         _this.y = 2;
+        return _this;
     }
     return D2;
 }(getBase()));
@@ -101,6 +103,7 @@ var D3 = (function (_super) {
         _this = _super.call(this, "abc", 42) || this;
         _this.x = "x";
         _this.y = 2;
+        return _this;
     }
     return D3;
 }(getBase()));

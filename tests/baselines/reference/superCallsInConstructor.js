@@ -51,6 +51,7 @@ var Derived = (function (_super) {
         catch (e) {
             _this = _super.call(this) || this;
         }
+        return _this;
     }
     return Derived;
 }(Base));

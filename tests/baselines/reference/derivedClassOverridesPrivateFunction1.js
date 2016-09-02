@@ -34,6 +34,7 @@ var DerivedClass = (function (_super) {
     function DerivedClass() {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     DerivedClass.prototype._init = function () {
     };

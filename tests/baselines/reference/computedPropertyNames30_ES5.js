@@ -40,6 +40,7 @@ var C = (function (_super) {
                 _a);
             var _a;
         });
+        return _this;
     }
     return C;
 }(Base));

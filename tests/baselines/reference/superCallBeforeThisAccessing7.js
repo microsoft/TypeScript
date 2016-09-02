@@ -32,6 +32,7 @@ var D = (function (_super) {
             j: _this._t
         };
         _this = _super.call(this, undefined) || this;
+        return _this;
     }
     return D;
 }(Base));

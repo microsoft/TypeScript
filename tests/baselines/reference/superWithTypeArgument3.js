@@ -30,6 +30,7 @@ var D = (function (_super) {
     function D() {
         var _this;
         _super.prototype..call(_this);
+        return _this;
     }
     D.prototype.bar = function () {
         _super.prototype.bar.call(this, null);

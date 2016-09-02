@@ -40,6 +40,7 @@ var BarExtended = (function (_super) {
     function BarExtended() {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     return BarExtended;
 }(Bar));

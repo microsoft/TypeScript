@@ -46,6 +46,7 @@ var b = (function (_super) {
         _this = _super.call(this) || this;
         function _super() {
         }
+        return _this;
     }
     return b;
 }(Foo));
@@ -58,6 +59,7 @@ var c = (function (_super) {
             function _super() {
             }
         };
+        return _this;
     }
     return c;
 }(Foo));

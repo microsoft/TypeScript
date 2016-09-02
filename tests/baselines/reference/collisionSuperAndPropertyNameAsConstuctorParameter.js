@@ -46,6 +46,7 @@ var b1 = (function (_super) {
     function b1(_super) {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     return b1;
 }(a));
@@ -55,6 +56,7 @@ var b2 = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         _this._super = _super;
+        return _this;
     }
     return b2;
 }(a));
@@ -63,6 +65,7 @@ var b3 = (function (_super) {
     function b3(_super) {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     return b3;
 }(a));
@@ -72,6 +75,7 @@ var b4 = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         _this._super = _super;
+        return _this;
     }
     return b4;
 }(a));

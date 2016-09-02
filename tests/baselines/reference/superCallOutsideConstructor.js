@@ -46,6 +46,7 @@ var D = (function (_super) {
         var y2 = function () {
             _this = _super.call(this) || this;
         };
+        return _this;
     }
     return D;
 }(C));

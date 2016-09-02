@@ -45,6 +45,7 @@ var T6 = (function (_super) {
         // which is instantiated with 'number' in the extends clause
         _this = _super.call(this, "hi") || this;
         var x = _this.foo;
+        return _this;
     }
     return T6;
 }(T5));

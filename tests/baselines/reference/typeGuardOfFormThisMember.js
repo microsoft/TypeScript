@@ -121,6 +121,7 @@ var Test;
             var _this;
             _this = _super.call(this, path) || this;
             _this.content = content;
+            return _this;
         }
         return File;
     }(FileSystemObject));

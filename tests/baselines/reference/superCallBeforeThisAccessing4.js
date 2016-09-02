@@ -27,6 +27,7 @@ var D = (function (_super) {
         var _this;
         _this._t;
         _this = _super.call(this) || this;
+        return _this;
     }
     return D;
 }(null));
@@ -36,6 +37,7 @@ var E = (function (_super) {
         var _this;
         _this = _super.call(this) || this;
         _this._t;
+        return _this;
     }
     return E;
 }(null));

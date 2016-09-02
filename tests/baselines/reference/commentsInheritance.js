@@ -229,6 +229,7 @@ var c3 = (function (_super) {
     function c3() {
         var _this;
         _this = _super.call(this, 10) || this;
+        return _this;
     }
     /** c3 f1*/
     c3.prototype.f1 = function () {

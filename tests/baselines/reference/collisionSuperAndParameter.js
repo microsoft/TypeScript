@@ -100,6 +100,7 @@ var Foo2 = (function (_super) {
             doStuff: function (_super) {
             }
         };
+        return _this;
     }
     Foo2.prototype.x = function () {
         var _this = this;
@@ -126,6 +127,7 @@ var Foo4 = (function (_super) {
     function Foo4(_super) {
         var _this;
         _this = _super.call(this) || this;
+        return _this;
     }
     Foo4.prototype.y = function (_super) {
         var _this = this;

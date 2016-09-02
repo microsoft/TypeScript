@@ -39,6 +39,7 @@ var C = (function (_super) {
         _this = _super.apply(this, arguments) || this;
         _this.raw = "edge";
         _this.ro = "readonly please";
+        return _this;
     }
     Object.defineProperty(C.prototype, "prop", {
         get: function () { return "foo"; },

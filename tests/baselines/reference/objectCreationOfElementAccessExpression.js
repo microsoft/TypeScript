@@ -84,6 +84,7 @@ var MonsterFood = (function (_super) {
         var _this;
         _this = _super.call(this, name) || this;
         _this.flavor = flavor;
+        return _this;
     }
     return MonsterFood;
 }(Food));
@@ -93,6 +94,7 @@ var IceCream = (function (_super) {
         var _this;
         _this = _super.call(this, "Ice Cream", flavor) || this;
         _this.flavor = flavor;
+        return _this;
     }
     return IceCream;
 }(MonsterFood));
@@ -103,6 +105,7 @@ var Cookie = (function (_super) {
         _this = _super.call(this, "Cookie", flavor) || this;
         _this.flavor = flavor;
         _this.isGlutenFree = isGlutenFree;
+        return _this;
     }
     return Cookie;
 }(MonsterFood));
@@ -112,6 +115,7 @@ var PetFood = (function (_super) {
         var _this;
         _this = _super.call(this, name) || this;
         _this.whereToBuy = whereToBuy;
+        return _this;
     }
     return PetFood;
 }(Food));
@@ -121,6 +125,7 @@ var ExpensiveOrganicDogFood = (function (_super) {
         var _this;
         _this = _super.call(this, "Origen", whereToBuy) || this;
         _this.whereToBuy = whereToBuy;
+        return _this;
     }
     return ExpensiveOrganicDogFood;
 }(PetFood));
@@ -131,6 +136,7 @@ var ExpensiveOrganicCatFood = (function (_super) {
         _this = _super.call(this, "Nature's Logic", whereToBuy) || this;
         _this.whereToBuy = whereToBuy;
         _this.containsFish = containsFish;
+        return _this;
     }
     return ExpensiveOrganicCatFood;
 }(PetFood));

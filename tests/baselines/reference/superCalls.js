@@ -53,6 +53,7 @@ var Derived = (function (_super) {
         //type of super call expression is void
         var p = _this = _super.call(this, '') || this;
         var p = v();
+        return _this;
     }
     return Derived;
 }(Base));
@@ -67,6 +68,7 @@ var OtherDerived = (function (_super) {
         var _this;
         var p = '';
         _this = _super.call(this) || this;
+        return _this;
     }
     return OtherDerived;
 }(OtherBase));

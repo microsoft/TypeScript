@@ -143,6 +143,7 @@ var Derived = (function (_super) {
         _this = _super.call(this) || this;
         (_a = _super.prototype). = Math.pow(_a., value);
         var _a;
+        return _this;
     }
     Derived.prototype.foo = function () {
         (_a = _super.prototype). = Math.pow(_a., value);

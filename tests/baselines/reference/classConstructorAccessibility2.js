@@ -80,6 +80,7 @@ var DerivedA = (function (_super) {
         var _this;
         _this = _super.call(this, x) || this;
         _this.x = x;
+        return _this;
     }
     DerivedA.prototype.createInstance = function () { new DerivedA(5); };
     DerivedA.prototype.createBaseInstance = function () { new BaseA(6); };
@@ -92,6 +93,7 @@ var DerivedB = (function (_super) {
         var _this;
         _this = _super.call(this, x) || this;
         _this.x = x;
+        return _this;
     }
     DerivedB.prototype.createInstance = function () { new DerivedB(7); };
     DerivedB.prototype.createBaseInstance = function () { new BaseB(8); }; // ok
@@ -104,6 +106,7 @@ var DerivedC = (function (_super) {
         var _this;
         _this = _super.call(this, x) || this;
         _this.x = x;
+        return _this;
     }
     DerivedC.prototype.createInstance = function () { new DerivedC(9); };
     DerivedC.prototype.createBaseInstance = function () { new BaseC(10); }; // error

@@ -239,6 +239,7 @@ var ts;
             _this.name = name;
             _this.type = type;
             _this.flags = flags;
+            return _this;
         }
         Property.prototype.equals = function (other) {
             return this.name === other.name &&
@@ -260,6 +261,7 @@ var ts;
             _this.typeParameters = typeParameters;
             _this.parameters = parameters;
             _this.returnType = returnType;
+            return _this;
         }
         Signature.prototype.equalsNoReturn = function (other) {
             return this.parameters.length === other.parameters.length &&
@@ -281,6 +283,7 @@ var ts;
             _this.name = name;
             _this.type = type;
             _this.flags = flags;
+            return _this;
         }
         Parameter.prototype.equals = function (other) {
             return this.name === other.name &&
