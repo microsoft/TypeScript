@@ -3086,7 +3086,7 @@ namespace ts {
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 const exprType = checkExpressionCached(declaration.initializer);
-                const type = getCombinedNodeFlags(declaration) & NodeFlags.Const ? exprType : getBaseTypeOfLiteralType(exprType);
+                const type = getCombinedNodeFlags(declaration) & (NodeFlags.Const | NodeFlags.Readonly) ? exprType : getBaseTypeOfLiteralType(exprType);
                 return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
