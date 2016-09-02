@@ -28,9 +28,9 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B(x) {
-        var _this;
         "use strict";
         'someStringForEgngInject';
+        var _this;
         _this = _super.call(this) || this;
         _this.x = x;
         _this.blah = 2;

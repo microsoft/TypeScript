@@ -74,8 +74,8 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        var _this;
         "use strict"; // No error
+        var _this;
         _this = _super.call(this) || this;
         _this.s = 9;
         return _this;
@@ -108,8 +108,8 @@ var D = (function (_super) {
 var Bs = (function (_super) {
     __extends(Bs, _super);
     function Bs() {
-        var _this;
         "use strict"; // No error
+        var _this;
         _this = _super.call(this) || this;
         return _this;
     }
