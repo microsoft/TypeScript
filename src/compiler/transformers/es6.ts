@@ -774,9 +774,21 @@ namespace ts {
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function transformConstructorBody(constructor: ConstructorDeclaration, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
+        function transformConstructorBody(constructor: ConstructorDeclaration | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
             const statements: Statement[] = [];
             startLexicalEnvironment();
+
+            let statementOffset = -1;
+            if (hasSynthesizedSuper) {
+                // If a super call has already been synthesized,
+                // we're going to assume that we should just transform everything after that.
+                // The assumption is that no prior step in the pipeline has added any prologue directives.
+                statementOffset = 1;
+            }
+            else if (constructor) {
+                // Otherwise, try to emit all potential prologue directives first.
+                statementOffset = addPrologueDirectives(statements, constructor.body.statements, /*ensureUseStrict*/ false, visitor);
+            }
 
             if (constructor) {
                 declareOrCaptureThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement);
@@ -787,9 +799,11 @@ namespace ts {
             addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
 
             if (constructor) {
-                const body = saveStateAndInvoke(constructor, hasSynthesizedSuper ? transformConstructorBodyWithSynthesizedSuper : transformConstructorBodyWithoutSynthesizedSuper);
+                Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
+                const body = saveStateAndInvoke(constructor, makeTransformerForConstructorBodyAtOffset(statementOffset));
                 addRange(statements, body);
             }
+
             if (extendsClauseElement) {
                 statements.push(
                     createReturn(
@@ -815,12 +829,8 @@ namespace ts {
             return block;
         }
 
-        function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
-            return visitNodes(node.body.statements, visitor, isStatement, /*start*/ 1);
-        }
-
-        function transformConstructorBodyWithoutSynthesizedSuper(node: ConstructorDeclaration) {
-            return visitNodes(node.body.statements, visitor, isStatement, /*start*/ 0);
+        function makeTransformerForConstructorBodyAtOffset(offset: number): (c: ConstructorDeclaration) => NodeArray<Statement> {
+            return constructor => visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ offset);
         }
 
         /**
