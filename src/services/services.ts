@@ -280,11 +280,14 @@ namespace ts {
                 let pos = this.pos;
                 const useJSDocScanner = this.kind >= SyntaxKind.FirstJSDocTagNode && this.kind <= SyntaxKind.LastJSDocTagNode;
                 const processNode = (node: Node) => {
-                    if (pos < node.pos) {
+                    const isJSDocTagNode = isJSDocTag(node);
+                    if (!isJSDocTagNode && pos < node.pos) {
                         pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);
                     }
                     children.push(node);
-                    pos = node.end;
+                    if (!isJSDocTagNode) {
+                        pos = node.end;
+                    }
                 };
                 const processNodes = (nodes: NodeArray<Node>) => {
                     if (pos < nodes.pos) {
@@ -1369,8 +1372,12 @@ namespace ts {
         containerName: string;
     }
 
+    export interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
+        displayParts: SymbolDisplayPart[];
+    }
+
     export interface ReferencedSymbol {
-        definition: DefinitionInfo;
+        definition: ReferencedSymbolDefinitionInfo;
         references: ReferenceEntry[];
     }
 
@@ -2784,18 +2791,42 @@ namespace ts {
         return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
     }
 
+    function climbPastPropertyAccess(node: Node) {
+        return isRightSideOfPropertyAccess(node) ? node.parent : node;
+    }
+
+    /** Get `C` given `N` if `N` is in the position `class C extends N` or `class C extends foo.N` where `N` is an identifier. */
+    function tryGetClassByExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
+        return tryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).parent);
+    }
+
     function isCallExpressionTarget(node: Node): boolean {
-        if (isRightSideOfPropertyAccess(node)) {
-            node = node.parent;
-        }
-        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
+        return isCallOrNewExpressionTarget(node, SyntaxKind.CallExpression);
     }
 
     function isNewExpressionTarget(node: Node): boolean {
-        if (isRightSideOfPropertyAccess(node)) {
-            node = node.parent;
-        }
-        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).expression === node;
+        return isCallOrNewExpressionTarget(node, SyntaxKind.NewExpression);
+    }
+
+    function isCallOrNewExpressionTarget(node: Node, kind: SyntaxKind) {
+        const target = climbPastPropertyAccess(node);
+        return target && target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
+    }
+
+    function climbPastManyPropertyAccesses(node: Node): Node {
+        return isRightSideOfPropertyAccess(node) ? climbPastManyPropertyAccesses(node.parent) : node;
+    }
+
+    /** Returns a CallLikeExpression where `node` is the target being invoked. */
+    function getAncestorCallLikeExpression(node: Node): CallLikeExpression | undefined {
+        const target = climbPastManyPropertyAccesses(node);
+        const callLike = target.parent;
+        return callLike && isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target && callLike;
+    }
+
+    function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
+        const callLike = getAncestorCallLikeExpression(node);
+        return callLike && typeChecker.getResolvedSignature(callLike).declaration;
     }
 
     function isNameOfModuleDeclaration(node: Node) {
@@ -4601,7 +4632,7 @@ namespace ts {
             const symbolFlags = symbol.flags;
             let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, location);
             let hasAddedSymbolInfo: boolean;
-            const isThisExpression: boolean = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
+            const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
             let type: Type;
 
             // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -4916,6 +4947,28 @@ namespace ts {
 
             if (!documentation) {
                 documentation = symbol.getDocumentationComment();
+                if (documentation.length === 0 && symbol.flags & SymbolFlags.Property) {
+                    // For some special property access expressions like `experts.foo = foo` or `module.exports.foo = foo`
+                    // there documentation comments might be attached to the right hand side symbol of their declarations.
+                    // The pattern of such special property access is that the parent symbol is the symbol of the file.
+                    if (symbol.parent && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
+                        for (const declaration of symbol.declarations) {
+                            if (!declaration.parent || declaration.parent.kind !== SyntaxKind.BinaryExpression) {
+                                continue;
+                            }
+
+                            const rhsSymbol = program.getTypeChecker().getSymbolAtLocation((<BinaryExpression>declaration.parent).right);
+                            if (!rhsSymbol) {
+                                continue;
+                            }
+
+                            documentation = rhsSymbol.getDocumentationComment();
+                            if (documentation.length > 0) {
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             return { displayParts, documentation, symbolKind };
@@ -5042,14 +5095,25 @@ namespace ts {
             };
         }
 
+        function getSymbolInfo(typeChecker: TypeChecker, symbol: Symbol, node: Node) {
+            return {
+                symbolName: typeChecker.symbolToString(symbol), // Do not get scoped name, just the name of the symbol
+                symbolKind: getSymbolKind(symbol, node),
+                containerName: symbol.parent ? typeChecker.symbolToString(symbol.parent, node) : ""
+            };
+        }
+
+        function createDefinitionFromSignatureDeclaration(decl: SignatureDeclaration): DefinitionInfo {
+            const typeChecker = program.getTypeChecker();
+            const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, decl.symbol, decl);
+            return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
+        }
+
         function getDefinitionFromSymbol(symbol: Symbol, node: Node): DefinitionInfo[] {
             const typeChecker = program.getTypeChecker();
             const result: DefinitionInfo[] = [];
             const declarations = symbol.getDeclarations();
-            const symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            const symbolKind = getSymbolKind(symbol, node);
-            const containerSymbol = symbol.parent;
-            const containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, symbol, node);
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
@@ -5175,6 +5239,12 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
+
+            const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
+            if (calledDeclaration) {
+                return [createDefinitionFromSignatureDeclaration(calledDeclaration)];
+            }
+
             let symbol = typeChecker.getSymbolAtLocation(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
@@ -5982,6 +6052,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.ThisKeyword:
                 // case SyntaxKind.SuperKeyword: TODO:GH#9268
+                case SyntaxKind.ConstructorKeyword:
                 case SyntaxKind.StringLiteral:
                     return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
             }
@@ -6026,6 +6097,8 @@ namespace ts {
                 return getReferencesForSuperKeyword(node);
             }
 
+            // `getSymbolAtLocation` normally returns the symbol of the class when given the constructor keyword,
+            // so we have to specify that we want the constructor symbol.
             const symbol = typeChecker.getSymbolAtLocation(node);
 
             if (!symbol && node.kind === SyntaxKind.StringLiteral) {
@@ -6081,7 +6154,7 @@ namespace ts {
 
             return result;
 
-            function getDefinition(symbol: Symbol): DefinitionInfo {
+            function getDefinition(symbol: Symbol): ReferencedSymbolDefinitionInfo {
                 const info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), node);
                 const name = map(info.displayParts, p => p.text).join("");
                 const declarations = symbol.declarations;
@@ -6095,11 +6168,12 @@ namespace ts {
                     name,
                     kind: info.symbolKind,
                     fileName: declarations[0].getSourceFile().fileName,
-                    textSpan: createTextSpan(declarations[0].getStart(), 0)
+                    textSpan: createTextSpan(declarations[0].getStart(), 0),
+                    displayParts: info.displayParts
                 };
             }
 
-            function getAliasSymbolForPropertyNameSymbol(symbol: Symbol, location: Node): Symbol {
+            function getAliasSymbolForPropertyNameSymbol(symbol: Symbol, location: Node): Symbol | undefined {
                 if (symbol.flags & SymbolFlags.Alias) {
                     // Default import get alias
                     const defaultImport = getDeclarationOfKind(symbol, SyntaxKind.ImportClause);
@@ -6123,6 +6197,10 @@ namespace ts {
                     }
                 }
                 return undefined;
+            }
+
+            function followAliasIfNecessary(symbol: Symbol, location: Node): Symbol {
+                return getAliasSymbolForPropertyNameSymbol(symbol, location) || symbol;
             }
 
             function getPropertySymbolOfDestructuringAssignment(location: Node) {
@@ -6290,13 +6368,14 @@ namespace ts {
                     }
                 });
 
-                const definition: DefinitionInfo = {
+                const definition: ReferencedSymbolDefinitionInfo = {
                     containerKind: "",
                     containerName: "",
                     fileName: targetLabel.getSourceFile().fileName,
                     kind: ScriptElementKind.label,
                     name: labelName,
-                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd())
+                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd()),
+                    displayParts: [displayPart(labelName, SymbolDisplayPartKind.text)]
                 };
 
                 return [{ definition, references }];
@@ -6388,7 +6467,8 @@ namespace ts {
                         if (referenceSymbol) {
                             const referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
                             const shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                            const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation);
+                            const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation,
+                                /*searchLocationIsConstructor*/ searchLocation.kind === SyntaxKind.ConstructorKeyword);
 
                             if (relatedSymbol) {
                                 const referencedSymbol = getReferencedSymbol(relatedSymbol);
@@ -6404,11 +6484,93 @@ namespace ts {
                                 const referencedSymbol = getReferencedSymbol(shorthandValueSymbol);
                                 referencedSymbol.references.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
                             }
+                            else if (searchLocation.kind === SyntaxKind.ConstructorKeyword) {
+                                findAdditionalConstructorReferences(referenceSymbol, referenceLocation);
+                            }
                         }
                     });
                 }
 
                 return;
+
+                /** Adds references when a constructor is used with `new this()` in its own class and `super()` calls in subclasses.  */
+                function findAdditionalConstructorReferences(referenceSymbol: Symbol, referenceLocation: Node): void {
+                    Debug.assert(isClassLike(searchSymbol.valueDeclaration));
+
+                    const referenceClass = referenceLocation.parent;
+                    if (referenceSymbol === searchSymbol && isClassLike(referenceClass)) {
+                        Debug.assert(referenceClass.name === referenceLocation);
+                        // This is the class declaration containing the constructor.
+                        addReferences(findOwnConstructorCalls(searchSymbol));
+                    }
+                    else {
+                        // If this class appears in `extends C`, then the extending class' "super" calls are references.
+                        const classExtending = tryGetClassByExtendingIdentifier(referenceLocation);
+                        if (classExtending && isClassLike(classExtending) && followAliasIfNecessary(referenceSymbol, referenceLocation) === searchSymbol) {
+                            addReferences(superConstructorAccesses(classExtending));
+                        }
+                    }
+                }
+
+                function addReferences(references: Node[]): void {
+                    if (references.length) {
+                        const referencedSymbol = getReferencedSymbol(searchSymbol);
+                        addRange(referencedSymbol.references, map(references, getReferenceEntryFromNode));
+                    }
+                }
+
+                /** `classSymbol` is the class where the constructor was defined.
+                 * Reference the constructor and all calls to `new this()`.
+                 */
+                function findOwnConstructorCalls(classSymbol: Symbol): Node[] {
+                    const result: Node[] = [];
+
+                    for (const decl of classSymbol.members["__constructor"].declarations) {
+                        Debug.assert(decl.kind === SyntaxKind.Constructor);
+                        const ctrKeyword = decl.getChildAt(0);
+                        Debug.assert(ctrKeyword.kind === SyntaxKind.ConstructorKeyword);
+                        result.push(ctrKeyword);
+                    }
+
+                    forEachProperty(classSymbol.exports, member => {
+                        const decl = member.valueDeclaration;
+                        if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
+                            const body = (<MethodDeclaration>decl).body;
+                            if (body) {
+                                forEachDescendantOfKind(body, SyntaxKind.ThisKeyword, thisKeyword => {
+                                    if (isNewExpressionTarget(thisKeyword)) {
+                                        result.push(thisKeyword);
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    return result;
+                }
+
+                /** Find references to `super` in the constructor of an extending class.  */
+                function superConstructorAccesses(cls: ClassLikeDeclaration): Node[] {
+                    const symbol = cls.symbol;
+                    const ctr = symbol.members["__constructor"];
+                    if (!ctr) {
+                        return [];
+                    }
+
+                    const result: Node[] = [];
+                    for (const decl of ctr.declarations) {
+                        Debug.assert(decl.kind === SyntaxKind.Constructor);
+                        const body = (<ConstructorDeclaration>decl).body;
+                        if (body) {
+                            forEachDescendantOfKind(body, SyntaxKind.SuperKeyword, node => {
+                                if (isCallExpressionTarget(node)) {
+                                    result.push(node);
+                                }
+                            });
+                        }
+                    };
+                    return result;
+                }
 
                 function getReferencedSymbol(symbol: Symbol): ReferencedSymbol {
                     const symbolId = getSymbolId(symbol);
@@ -6536,6 +6698,11 @@ namespace ts {
                     getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
                 }
 
+                const thisOrSuperSymbol = typeChecker.getSymbolAtLocation(thisOrSuperKeyword);
+
+                const displayParts = thisOrSuperSymbol && getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    thisOrSuperSymbol, thisOrSuperKeyword.getSourceFile(), getContainerNode(thisOrSuperKeyword), thisOrSuperKeyword).displayParts;
+
                 return [{
                     definition: {
                         containerKind: "",
@@ -6543,7 +6710,8 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: "this",
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                        displayParts
                     },
                     references: references
                 }];
@@ -6614,7 +6782,8 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: type.text,
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                        displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
                     },
                     references: references
                 }];
@@ -6783,16 +6952,17 @@ namespace ts {
                 }
             }
 
-            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): Symbol {
-                if (searchSymbols.indexOf(referenceSymbol) >= 0) {
-                    return referenceSymbol;
+            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node, searchLocationIsConstructor: boolean): Symbol | undefined {
+                if (contains(searchSymbols, referenceSymbol)) {
+                    // If we are searching for constructor uses, they must be 'new' expressions.
+                    return (!searchLocationIsConstructor || isNewExpressionTarget(referenceLocation)) && referenceSymbol;
                 }
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols but by looking up for related symbol of this alias so it can handle multiple level of indirectness.
                 const aliasSymbol = getAliasSymbolForPropertyNameSymbol(referenceSymbol, referenceLocation);
                 if (aliasSymbol) {
-                    return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation);
+                    return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation, searchLocationIsConstructor);
                 }
 
                 // If the reference location is in an object literal, try to get the contextual type for the
@@ -7573,6 +7743,10 @@ namespace ts {
              * False will mean that node is not classified and traverse routine should recurse into node contents.
              */
             function tryClassifyNode(node: Node): boolean {
+                if (isJSDocTag(node)) {
+                    return true;
+                }
+
                 if (nodeIsMissing(node)) {
                     return true;
                 }
@@ -8310,6 +8484,15 @@ namespace ts {
             getNonBoundSourceFile,
             getProgram
         };
+    }
+
+    function forEachDescendantOfKind(node: Node, kind: SyntaxKind, action: (node: Node) => void) {
+        forEachChild(node, child => {
+            if (child.kind === kind) {
+                action(child);
+            }
+            forEachDescendantOfKind(child, kind, action);
+        });
     }
 
     /* @internal */

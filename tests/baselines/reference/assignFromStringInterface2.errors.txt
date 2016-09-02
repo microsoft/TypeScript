@@ -1,4 +1,5 @@
 tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(47,1): error TS2322: Type 'String' is not assignable to type 'string'.
+  'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(48,1): error TS2322: Type 'NotString' is not assignable to type 'string'.
 
 
@@ -52,6 +53,7 @@ tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(48
     x = a; // expected error
     ~
 !!! error TS2322: Type 'String' is not assignable to type 'string'.
+!!! error TS2322:   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
     x = b; // expected error
     ~
 !!! error TS2322: Type 'NotString' is not assignable to type 'string'.

@@ -56,9 +56,6 @@
 ////
 ////var /*23*/r8a = _.map<number, /*error1*/B/*error2*/, string>(c5, (/*8a*/x,/*8b*/y) => { return y.foo() }); 
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker('2a');
 verify.quickInfoIs('(parameter) x: Collection<number, number>');
 goTo.marker('2b');

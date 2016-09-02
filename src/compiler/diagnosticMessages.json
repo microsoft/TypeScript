@@ -1955,6 +1955,10 @@
         "category": "Error",
         "code": 2691
     },
+    "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
+        "category": "Error",
+        "code": 2692
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2867,11 +2871,7 @@
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
-    },
-    "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
-        "category": "Error",
-        "code": 7016
-    },
+    }, 
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
         "code": 7017
@@ -2927,6 +2927,14 @@
     "Binding element '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7031
+    },
+    "Property '{0}' implicitly has type 'any', because its set accessor lacks a parameter type annotation.": {
+        "category": "Error",
+        "code": 7032
+    },
+    "Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.": {
+        "category": "Error",
+        "code": 7033
     },
     "You cannot rename this element.": {
         "category": "Error",

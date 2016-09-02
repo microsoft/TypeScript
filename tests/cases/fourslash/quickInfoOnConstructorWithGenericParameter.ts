@@ -16,9 +16,6 @@
 ////}
 ////var x = new /*2*/B(/*1*/
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker("1");
 verify.currentSignatureHelpIs("B(a: Foo<I>, b: number): B");
 edit.insert("null,");

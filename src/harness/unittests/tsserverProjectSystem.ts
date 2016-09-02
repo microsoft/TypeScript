@@ -198,17 +198,13 @@ namespace ts {
 
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
-            const callbacks = multiMapAdd(this.watchedDirectories, path, { cb: callback, recursive });
+            const cbWithRecursive = { cb: callback, recursive };
+            const callbacks = multiMapAdd(this.watchedDirectories, path, cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
                 close: () => {
-                    for (let i = 0; i < callbacks.length; i++) {
-                        if (callbacks[i].cb === callback) {
-                            callbacks.splice(i, 1);
-                            break;
-                        }
-                    }
+                    unorderedRemoveItem(callbacks, cbWithRecursive);
                     if (!callbacks.length) {
                         delete this.watchedDirectories[path];
                     }
@@ -241,8 +237,7 @@ namespace ts {
             const callbacks = multiMapAdd(this.watchedFiles, path, callback);
             return {
                 close: () => {
-                    const i = callbacks.indexOf(callback);
-                    callbacks.splice(i, 1);
+                    unorderedRemoveItem(callbacks, callback);
                     if (!callbacks.length) {
                         delete this.watchedFiles[path];
                     }
@@ -257,7 +252,7 @@ namespace ts {
         };
         readonly clearTimeout = (timeoutId: any): void => {
             if (typeof timeoutId === "number") {
-                this.callbackQueue.splice(timeoutId, 1);
+                orderedRemoveItemAt(this.callbackQueue, timeoutId);
             }
         };
 
@@ -620,6 +615,24 @@ namespace ts {
             projectService.openClientFile(file2.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 0);
+        });
+
+        it("should tolerate config file errors and still try to build a project", () => {
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6",
+                        "allowAnything": true
+                    },
+                    "someOtherProperty": {}
+                }`
+            };
+            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, commonFile2, libFile, configFile]);
+            const projectService = new server.ProjectService(host, nullLogger);
+            projectService.openClientFile(commonFile1.path);
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkConfiguredProjectRootFiles(projectService.configuredProjects[0], [commonFile1.path, commonFile2.path]);
         });
     });
 }

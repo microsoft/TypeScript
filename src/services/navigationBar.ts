@@ -466,6 +466,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.VariableDeclaration:
                     return hasSomeImportantChild(item);
 
                 case SyntaxKind.ArrowFunction:

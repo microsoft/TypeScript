@@ -10,7 +10,7 @@ namespace ts {
                 const outputFileName = `tsConfig/${name.replace(/[^a-z0-9\-. ]/ig, "")}/tsconfig.json`;
 
                 it(`Correct output for ${outputFileName}`, () => {
-                    Harness.Baseline.runBaseline("Correct output", outputFileName, () => {
+                    Harness.Baseline.runBaseline(outputFileName, () => {
                         if (initResult) {
                             return JSON.stringify(initResult, undefined, 4);
                         }

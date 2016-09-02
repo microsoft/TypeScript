@@ -551,7 +551,7 @@ function restoreSavedNodeEnv() {
     process.env.NODE_ENV = savedNodeEnv;
 }
 
-let testTimeout = 20000;
+let testTimeout = 40000;
 function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void) {
     const lintFlag = cmdLineOptions["lint"];
     cleanTestDirs((err) => {

@@ -1328,6 +1328,233 @@ namespace Harness {
                 Harness.IO.newLine() + Harness.IO.newLine() + outputLines.join("\r\n");
         }
 
+        export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[]) {
+            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string => {
+                if (errors.length === 0) {
+                    /* tslint:disable:no-null-keyword */
+                    return null;
+                    /* tslint:enable:no-null-keyword */
+                }
+                return getErrorBaseline(inputFiles, errors);
+            });
+        }
+
+        export function doTypeAndSymbolBaseline(baselinePath: string, result: CompilerResult, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions) {
+            if (result.errors.length !== 0) {
+                return;
+            }
+            // The full walker simulates the types that you would get from doing a full
+            // compile.  The pull walker simulates the types you get when you just do
+            // a type query for a random node (like how the LS would do it).  Most of the
+            // time, these will be the same.  However, occasionally, they can be different.
+            // Specifically, when the compiler internally depends on symbol IDs to order
+            // things, then we may see different results because symbols can be created in a
+            // different order with 'pull' operations, and thus can produce slightly differing
+            // output.
+            //
+            // For example, with a full type check, we may see a type displayed as: number | string
+            // But with a pull type check, we may see it as:                        string | number
+            //
+            // These types are equivalent, but depend on what order the compiler observed
+            // certain parts of the program.
+
+            const program = result.program;
+
+            const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
+
+            const fullResults = ts.createMap<TypeWriterResult[]>();
+
+            for (const sourceFile of allFiles) {
+                fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+            }
+
+            // Produce baselines.  The first gives the types for all expressions.
+            // The second gives symbols for all identifiers.
+            let typesError: Error, symbolsError: Error;
+            try {
+                checkBaseLines(/*isSymbolBaseLine*/ false);
+            }
+            catch (e) {
+                typesError = e;
+            }
+
+            try {
+                checkBaseLines(/*isSymbolBaseLine*/ true);
+            }
+            catch (e) {
+                symbolsError = e;
+            }
+
+            if (typesError && symbolsError) {
+                throw new Error(typesError.message + ts.sys.newLine + symbolsError.message);
+            }
+
+            if (typesError) {
+                throw typesError;
+            }
+
+            if (symbolsError) {
+                throw symbolsError;
+            }
+
+            return;
+
+            function checkBaseLines(isSymbolBaseLine: boolean) {
+                const fullBaseLine = generateBaseLine(fullResults, isSymbolBaseLine);
+
+                const fullExtension = isSymbolBaseLine ? ".symbols" : ".types";
+
+                // When calling this function from rwc-runner, the baselinePath will have no extension.
+                // As rwc test- file is stored in json which ".json" will get stripped off.
+                // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
+                const outputFileName = ts.endsWith(baselinePath, ".ts") || ts.endsWith(baselinePath, ".tsx") ?
+                    baselinePath.replace(/\.tsx?/, fullExtension) : baselinePath.concat(fullExtension);
+                Harness.Baseline.runBaseline(outputFileName, () => fullBaseLine, opts);
+            }
+
+            function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                const typeLines: string[] = [];
+                const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+
+                allFiles.forEach(file => {
+                    const codeLines = file.content.split("\n");
+                    typeWriterResults[file.unitName].forEach(result => {
+                        if (isSymbolBaseline && !result.symbol) {
+                            return;
+                        }
+
+                        const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
+                        const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
+                        if (!typeMap[file.unitName]) {
+                            typeMap[file.unitName] = {};
+                        }
+
+                        let typeInfo = [formattedLine];
+                        const existingTypeInfo = typeMap[file.unitName][result.line];
+                        if (existingTypeInfo) {
+                            typeInfo = existingTypeInfo.concat(typeInfo);
+                        }
+                        typeMap[file.unitName][result.line] = typeInfo;
+                    });
+
+                    typeLines.push("=== " + file.unitName + " ===\r\n");
+                    for (let i = 0; i < codeLines.length; i++) {
+                        const currentCodeLine = codeLines[i];
+                        typeLines.push(currentCodeLine + "\r\n");
+                        if (typeMap[file.unitName]) {
+                            const typeInfo = typeMap[file.unitName][i];
+                            if (typeInfo) {
+                                typeInfo.forEach(ty => {
+                                    typeLines.push(">" + ty + "\r\n");
+                                });
+                                if (i + 1 < codeLines.length && (codeLines[i + 1].match(/^\s*[{|}]\s*$/) || codeLines[i + 1].trim() === "")) {
+                                }
+                                else {
+                                    typeLines.push("\r\n");
+                                }
+                            }
+                        }
+                        else {
+                            typeLines.push("No type information for this code.");
+                        }
+                    }
+                });
+
+                return typeLines.join("");
+            }
+        }
+
+        function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
+            return file.writeByteOrderMark ? "\u00EF\u00BB\u00BF" : "";
+        }
+
+        export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: CompilerResult) {
+            if (options.inlineSourceMap) {
+                if (result.sourceMaps.length > 0) {
+                    throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
+                }
+                return;
+            }
+            else if (options.sourceMap) {
+                if (result.sourceMaps.length !== result.files.length) {
+                    throw new Error("Number of sourcemap files should be same as js files.");
+                }
+
+                Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js.map"), () => {
+                    if (options.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
+                        // We need to return null here or the runBaseLine will actually create a empty file.
+                        // Baselining isn't required here because there is no output.
+                        /* tslint:disable:no-null-keyword */
+                        return null;
+                        /* tslint:enable:no-null-keyword */
+                    }
+
+                    let sourceMapCode = "";
+                    for (let i = 0; i < result.sourceMaps.length; i++) {
+                        sourceMapCode += "//// [" + Harness.Path.getFileName(result.sourceMaps[i].fileName) + "]\r\n";
+                        sourceMapCode += getByteOrderMarkText(result.sourceMaps[i]);
+                        sourceMapCode += result.sourceMaps[i].code;
+                    }
+
+                    return sourceMapCode;
+                });
+            }
+        }
+
+        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
+            if (!options.noEmit && result.files.length === 0 && result.errors.length === 0) {
+                throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
+            }
+
+            // check js output
+            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js"), () => {
+                let tsCode = "";
+                const tsSources = otherFiles.concat(toBeCompiled);
+                if (tsSources.length > 1) {
+                    tsCode += "//// [" + header + "] ////\r\n\r\n";
+                }
+                for (let i = 0; i < tsSources.length; i++) {
+                    tsCode += "//// [" + Harness.Path.getFileName(tsSources[i].unitName) + "]\r\n";
+                    tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
+                }
+
+                let jsCode = "";
+                for (let i = 0; i < result.files.length; i++) {
+                    jsCode += "//// [" + Harness.Path.getFileName(result.files[i].fileName) + "]\r\n";
+                    jsCode += getByteOrderMarkText(result.files[i]);
+                    jsCode += result.files[i].code;
+                }
+
+                if (result.declFilesCode.length > 0) {
+                    jsCode += "\r\n\r\n";
+                    for (let i = 0; i < result.declFilesCode.length; i++) {
+                        jsCode += "//// [" + Harness.Path.getFileName(result.declFilesCode[i].fileName) + "]\r\n";
+                        jsCode += getByteOrderMarkText(result.declFilesCode[i]);
+                        jsCode += result.declFilesCode[i].code;
+                    }
+                }
+
+                const declFileCompilationResult =
+                    Harness.Compiler.compileDeclarationFiles(
+                        toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined);
+
+                if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
+                    jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
+                    jsCode += "\r\n\r\n";
+                    jsCode += Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
+                }
+
+                if (jsCode.length > 0) {
+                    return tsCode + "\r\n\r\n" + jsCode;
+                }
+                else {
+                    /* tslint:disable:no-null-keyword */
+                    return null;
+                    /* tslint:enable:no-null-keyword */
+                }
+            });
+        }
+
         export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): string {
             // Collect, test, and sort the fileNames
             outputFiles.sort((a, b) => cleanName(a.fileName).localeCompare(cleanName(b.fileName)));
@@ -1558,7 +1785,7 @@ namespace Harness {
                     tsConfig.options.configFilePath = data.name;
 
                     // delete entry from the list
-                    testUnitData.splice(i, 1);
+                    ts.orderedRemoveItemAt(testUnitData, i);
 
                     break;
                 }
@@ -1604,31 +1831,7 @@ namespace Harness {
         }
 
         const fileCache: { [idx: string]: boolean } = {};
-        function generateActual(actualFileName: string, generateContent: () => string): string {
-            // For now this is written using TypeScript, because sys is not available when running old test cases.
-            // But we need to move to sys once we have
-            // Creates the directory including its parent if not already present
-            function createDirectoryStructure(dirName: string) {
-                if (fileCache[dirName] || IO.directoryExists(dirName)) {
-                    fileCache[dirName] = true;
-                    return;
-                }
-
-                const parentDirectory = IO.directoryName(dirName);
-                if (parentDirectory != "") {
-                    createDirectoryStructure(parentDirectory);
-                }
-                IO.createDirectory(dirName);
-                fileCache[dirName] = true;
-            }
-
-            // Create folders if needed
-            createDirectoryStructure(Harness.IO.directoryName(actualFileName));
-
-            // Delete the actual file in case it fails
-            if (IO.fileExists(actualFileName)) {
-                IO.deleteFile(actualFileName);
-            }
+        function generateActual(generateContent: () => string): string {
 
             const actual = generateContent();
 
@@ -1663,43 +1866,51 @@ namespace Harness {
             return { expected, actual };
         }
 
-        function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, descriptionForDescribe: string) {
+        function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string) {
+            // For now this is written using TypeScript, because sys is not available when running old test cases.
+            // But we need to move to sys once we have
+            // Creates the directory including its parent if not already present
+            function createDirectoryStructure(dirName: string) {
+                if (fileCache[dirName] || IO.directoryExists(dirName)) {
+                    fileCache[dirName] = true;
+                    return;
+                }
+
+                const parentDirectory = IO.directoryName(dirName);
+                if (parentDirectory != "") {
+                    createDirectoryStructure(parentDirectory);
+                }
+                IO.createDirectory(dirName);
+                fileCache[dirName] = true;
+            }
+
+            // Create folders if needed
+            createDirectoryStructure(Harness.IO.directoryName(actualFileName));
+
+            // Delete the actual file in case it fails
+            if (IO.fileExists(actualFileName)) {
+                IO.deleteFile(actualFileName);
+            }
+
             const encoded_actual = Utils.encodeString(actual);
             if (expected !== encoded_actual) {
                 if (actual === NoContent) {
-                    IO.writeFile(localPath(relativeFileName + ".delete"), "");
+                    IO.writeFile(actualFileName + ".delete", "");
                 }
                 else {
-                    IO.writeFile(localPath(relativeFileName), actual);
+                    IO.writeFile(actualFileName, actual);
                 }
-                // Overwrite & issue error
-                const errMsg = "The baseline file " + relativeFileName + " has changed.";
-                throw new Error(errMsg);
+                throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }
         }
 
+        export function runBaseline(relativeFileName: string, generateContent: () => string, opts?: BaselineOptions): void {
 
-        export function runBaseline(
-            descriptionForDescribe: string,
-            relativeFileName: string,
-            generateContent: () => string,
-            runImmediately = false,
-            opts?: BaselineOptions): void {
-
-            let actual = <string>undefined;
             const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
-            if (runImmediately) {
-                actual = generateActual(actualFileName, generateContent);
-                const comparison = compareToBaseline(actual, relativeFileName, opts);
-                writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
-            }
-            else {
-                actual = generateActual(actualFileName, generateContent);
-
-                const comparison = compareToBaseline(actual, relativeFileName, opts);
-                writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
-            }
+            const actual = generateActual(generateContent);
+            const comparison = compareToBaseline(actual, relativeFileName, opts);
+            writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName);
         }
     }
 
