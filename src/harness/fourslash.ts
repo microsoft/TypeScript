@@ -1649,8 +1649,7 @@ namespace FourSlash {
             const result = ts.createMap<Range[]>();
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
-                const ranges = result[text] || (result[text] = []);
-                ranges.push(range);
+                ts.multiMapAdd(result, text, range);
             }
             return result;
         }

@@ -987,8 +987,7 @@ namespace ts {
             function addDeclaration(declaration: Declaration) {
                 const name = getDeclarationName(declaration);
                 if (name) {
-                    const declarations = getDeclarations(name);
-                    declarations.push(declaration);
+                    multiMapAdd(result, name, declaration);
                 }
             }
 
