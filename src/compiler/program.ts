@@ -183,31 +183,33 @@ namespace ts {
     }
 
     function getDefaultTypeRoots(currentDirectory: string, host: ModuleResolutionHost): string[] | undefined {
-        const nodeModules = getNearestNodeModules(currentDirectory, host);
-        return nodeModules && [combinePaths(nodeModules, "@types")];
+        return map(getAllNodeModulesDirectories(currentDirectory, host), nodeModules => combinePaths(nodeModules, "@types"));
     }
 
-    function getNearestNodeModules(currentDirectory: string, host: ModuleResolutionHost): string | undefined {
+    /** Returns the path to every node_modules directory from some ancestor directory. */
+    function getAllNodeModulesDirectories(currentDirectory: string, host: ModuleResolutionHost): string[] | undefined {
         if (!host.directoryExists) {
-            return combinePaths(currentDirectory, "node_modules");
+            return [combinePaths(currentDirectory, "node_modules")];
             // And if it doesn't exist, tough.
         }
+
+        const all: string[] = [];
 
         while (true) {
             const nodeModules = combinePaths(currentDirectory, "node_modules");
             if (host.directoryExists(nodeModules)) {
-                return nodeModules;
+                all.push(nodeModules);
             }
-            else {
-                const parent = getDirectoryPath(currentDirectory);
-                if (parent === currentDirectory) {
-                    return undefined;
-                }
-                currentDirectory = parent;
-            }
-        }
-    }
 
+            const parent = getDirectoryPath(currentDirectory);
+            if (parent === currentDirectory) {
+                break;
+            }
+            currentDirectory = parent;
+        }
+
+        return all;
+    }
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
