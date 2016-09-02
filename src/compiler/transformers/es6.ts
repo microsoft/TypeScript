@@ -722,7 +722,10 @@ namespace ts {
         function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
             const constructor = getFirstConstructorWithBody(node);
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
-            statements.push(
+            const savedUseCapturedThis = useCapturedThis;
+            useCapturedThis = true;
+
+            const constructorFunction =
                 createFunctionDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
@@ -733,8 +736,13 @@ namespace ts {
                     /*type*/ undefined,
                     transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper),
                     /*location*/ constructor || node
-                )
-            );
+                );
+
+            if (extendsClauseElement) {
+                setNodeEmitFlags(constructorFunction, NodeEmitFlags.CapturesThis);
+            }
+            useCapturedThis = savedUseCapturedThis;
+            statements.push(constructorFunction);
         }
 
         /**
@@ -769,6 +777,7 @@ namespace ts {
         function transformConstructorBody(constructor: ConstructorDeclaration, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
             const statements: Statement[] = [];
             startLexicalEnvironment();
+
             if (constructor) {
                 declareOrCaptureThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement);
                 addDefaultValueAssignmentsIfNeeded(statements, constructor);
@@ -830,12 +839,14 @@ namespace ts {
             // If this is the case, or if the class has an `extends` clause but no
             // constructor, we emit a synthesized call to `_super`.
             if (constructor ? hasSynthesizedSuper : extendsClauseElement) {
+                const actualThis = createThis();
+                setNodeEmitFlags(actualThis, NodeEmitFlags.NoSubstitution);
                 const superCall = createFunctionApply(
                     createIdentifier("_super"),
-                    createThis(),
+                    actualThis,
                     createIdentifier("arguments"),
                 );
-                const superReturnValueOrThis = createLogicalOr(superCall, createThis());
+                const superReturnValueOrThis = createLogicalOr(superCall, actualThis);
 
                 statements.push(
                     createVariableStatement(
@@ -2504,6 +2515,9 @@ namespace ts {
             // because we contain a SpreadElementExpression.
 
             const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                setNodeEmitFlags(thisArg, NodeEmitFlags.NoSubstitution);
+            }
             let resultingCall: CallExpression | BinaryExpression;
             if (node.transformFlags & TransformFlags.ContainsSpreadElementExpression) {
                 // [source]
@@ -2546,11 +2560,13 @@ namespace ts {
             }
 
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                const actualThis = createThis();
+                setNodeEmitFlags(actualThis, NodeEmitFlags.NoSubstitution);
                 return createAssignment(
                     createIdentifier("_this"),
                     createLogicalOr(
                         resultingCall,
-                        createThis()
+                        actualThis
                     )
                 );
             }
