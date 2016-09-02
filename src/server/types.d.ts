@@ -14,7 +14,6 @@ declare namespace ts.server {
         clearTimeout(timeoutId: any): void;
         setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
         clearImmediate(timeoutId: any): void;
-        writeCompressedData(prefix: string, data: CompressedData, suffix: string): void;
         gc?(): void;
         trace?(s: string): void;
     }

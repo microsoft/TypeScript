@@ -23,8 +23,7 @@ namespace ts.server {
         setTimeout(callback, ms, ...args) { return 0; },
         clearTimeout(timeoutId) { },
         setImmediate: () => 0,
-        clearImmediate() {},
-        writeCompressedData() {}
+        clearImmediate() {}
     };
     const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
     const mockLogger: Logger = {

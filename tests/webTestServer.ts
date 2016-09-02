@@ -106,7 +106,7 @@ function writeFile(p: string, data: any, opts: { recursive: boolean }) {
 
 function mkdir(p: string) {
     const basePath = path.dirname(p);
-    let shouldCreateParent = p !== basePath && !fs.existsSync(basePath);
+    const shouldCreateParent = p !== basePath && !fs.existsSync(basePath);
     if (shouldCreateParent) {
         mkdir(basePath);
     }

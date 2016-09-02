@@ -572,9 +572,6 @@ namespace Harness.LanguageService {
             this.writeMessage(message);
         }
 
-        writeCompressedData() {
-        }
-
         readFile(fileName: string): string {
             if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
                 fileName = Harness.Compiler.defaultLibFileName;
