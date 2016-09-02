@@ -1086,7 +1086,7 @@ namespace ts {
 
         function internIdentifier(text: string): string {
             text = escapeIdentifier(text);
-            return getOrUpdate(identifiers, text, () => text);
+            return getOrUpdate(identifiers, text, text => text);
         }
 
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues

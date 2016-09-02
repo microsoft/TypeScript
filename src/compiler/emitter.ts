@@ -760,7 +760,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function getGeneratedNameForNode(node: Node) {
                 const id = getNodeId(node);
-                return getOrUpdateArray(nodeToGeneratedName, id, () => unescapeIdentifier(generateNameForNode(node)));
+                return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateNameForNode(node)));
             }
 
             /** Write emitted output to disk */

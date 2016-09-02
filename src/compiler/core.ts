@@ -409,17 +409,21 @@ namespace ts {
         return hasOwnProperty.call(map, key) ? map[key] : undefined;
     }
 
-    /** Gets a property in a Map, or if it doesn't exist, creates and returns it. */
-    export function getOrUpdate<T>(map: Map<T>, key: string, makeValue: () => T) {
-        return map[key] || (map[key] = makeValue());
+    /**
+     * Gets a property in a Map, or if it doesn't exist, creates and returns it.
+     * `makeValue` is also passed the key to avoid creating unnecessary closures.
+     */
+    export function getOrUpdate<T>(map: Map<T>, key: string, makeValue: (key: string) => T) {
+        return map[key] || (map[key] = makeValue(key));
     }
 
     /**
      * Gets a value in an array, or if it doesn't exist, creates and returns it.
      * It is the caller's responsibility to ensure that `key` is within the bounds of the array.
+     * `makeValue` is also passed the key to avoid creating unnecessary closures.
      */
-    export function getOrUpdateArray<T>(arr: T[], key: number, makeValue: () => T) {
-        return arr[key] || (arr[key] = makeValue());
+    export function getOrUpdateArray<T>(arr: T[], key: number, makeValue: (key: number) => T) {
+        return arr[key] || (arr[key] = makeValue(key));
     }
 
     /**
