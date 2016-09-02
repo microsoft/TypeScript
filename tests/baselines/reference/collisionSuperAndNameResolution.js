@@ -27,7 +27,8 @@ var base = (function () {
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Foo.prototype.x = function () {
         console.log(_super); // Error as this doesnt not resolve to user defined _super

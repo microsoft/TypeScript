@@ -57,7 +57,8 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.ro = "readonly please";
     }
     Object.defineProperty(C.prototype, "concreteWithNoBody", {
@@ -77,7 +78,8 @@ var WrongTypeProperty = (function () {
 var WrongTypePropertyImpl = (function (_super) {
     __extends(WrongTypePropertyImpl, _super);
     function WrongTypePropertyImpl() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.num = "nope, wrong";
     }
     return WrongTypePropertyImpl;
@@ -90,7 +92,8 @@ var WrongTypeAccessor = (function () {
 var WrongTypeAccessorImpl = (function (_super) {
     __extends(WrongTypeAccessorImpl, _super);
     function WrongTypeAccessorImpl() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Object.defineProperty(WrongTypeAccessorImpl.prototype, "num", {
         get: function () { return "nope, wrong"; },
@@ -102,7 +105,8 @@ var WrongTypeAccessorImpl = (function (_super) {
 var WrongTypeAccessorImpl2 = (function (_super) {
     __extends(WrongTypeAccessorImpl2, _super);
     function WrongTypeAccessorImpl2() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.num = "nope, wrong";
     }
     return WrongTypeAccessorImpl2;

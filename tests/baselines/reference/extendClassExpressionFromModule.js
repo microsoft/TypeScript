@@ -31,7 +31,8 @@ var x = foo1;
 var y = (function (_super) {
     __extends(y, _super);
     function y() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return y;
 }(x));

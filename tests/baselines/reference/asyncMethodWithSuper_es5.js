@@ -61,7 +61,8 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     // async method with only call/get on 'super' does not require a binding
     B.prototype.simple = function () {

@@ -15,14 +15,16 @@ var __extends = (this && this.__extends) || function (d, b) {
 var C = (function (_super) {
     __extends(class_1, _super);
     function class_1() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.c = 3;
     }
     return class_1;
 }((function (_super) {
     __extends(class_2, _super);
     function class_2() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.b = 2;
     }
     return class_2;

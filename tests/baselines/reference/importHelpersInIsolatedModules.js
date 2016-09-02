@@ -45,7 +45,8 @@ exports.A = A;
 var B = (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return B;
 }(A));
@@ -78,7 +79,8 @@ var A = (function () {
 var B = (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return B;
 }(A));

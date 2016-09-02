@@ -36,7 +36,8 @@ var Foo = (function () {
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         var _super = 10; // Should be error 
     }
     return b;
@@ -44,7 +45,8 @@ var b = (function (_super) {
 var c = (function (_super) {
     __extends(c, _super);
     function c() {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         var x = function () {
             var _super = 10; // Should be error
         };

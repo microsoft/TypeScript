@@ -81,7 +81,8 @@ var Food = (function () {
 var MonsterFood = (function (_super) {
     __extends(MonsterFood, _super);
     function MonsterFood(name, flavor) {
-        _super.call(this, name);
+        var _this;
+        _this = _super.call(this, name) || this;
         this.flavor = flavor;
     }
     return MonsterFood;
@@ -89,7 +90,8 @@ var MonsterFood = (function (_super) {
 var IceCream = (function (_super) {
     __extends(IceCream, _super);
     function IceCream(flavor) {
-        _super.call(this, "Ice Cream", flavor);
+        var _this;
+        _this = _super.call(this, "Ice Cream", flavor) || this;
         this.flavor = flavor;
     }
     return IceCream;
@@ -97,7 +99,8 @@ var IceCream = (function (_super) {
 var Cookie = (function (_super) {
     __extends(Cookie, _super);
     function Cookie(flavor, isGlutenFree) {
-        _super.call(this, "Cookie", flavor);
+        var _this;
+        _this = _super.call(this, "Cookie", flavor) || this;
         this.flavor = flavor;
         this.isGlutenFree = isGlutenFree;
     }
@@ -106,7 +109,8 @@ var Cookie = (function (_super) {
 var PetFood = (function (_super) {
     __extends(PetFood, _super);
     function PetFood(name, whereToBuy) {
-        _super.call(this, name);
+        var _this;
+        _this = _super.call(this, name) || this;
         this.whereToBuy = whereToBuy;
     }
     return PetFood;
@@ -114,7 +118,8 @@ var PetFood = (function (_super) {
 var ExpensiveOrganicDogFood = (function (_super) {
     __extends(ExpensiveOrganicDogFood, _super);
     function ExpensiveOrganicDogFood(whereToBuy) {
-        _super.call(this, "Origen", whereToBuy);
+        var _this;
+        _this = _super.call(this, "Origen", whereToBuy) || this;
         this.whereToBuy = whereToBuy;
     }
     return ExpensiveOrganicDogFood;
@@ -122,7 +127,8 @@ var ExpensiveOrganicDogFood = (function (_super) {
 var ExpensiveOrganicCatFood = (function (_super) {
     __extends(ExpensiveOrganicCatFood, _super);
     function ExpensiveOrganicCatFood(whereToBuy, containsFish) {
-        _super.call(this, "Nature's Logic", whereToBuy);
+        var _this;
+        _this = _super.call(this, "Nature's Logic", whereToBuy) || this;
         this.whereToBuy = whereToBuy;
         this.containsFish = containsFish;
     }

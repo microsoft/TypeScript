@@ -49,7 +49,8 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.x = 1;
         this.y = 'hello';
     }
@@ -68,7 +69,8 @@ var Base2 = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.x = 2;
         this.y = null;
     }

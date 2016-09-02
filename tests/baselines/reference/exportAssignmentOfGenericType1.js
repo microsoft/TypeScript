@@ -34,7 +34,8 @@ define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (req
     var M = (function (_super) {
         __extends(M, _super);
         function M() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return M;
     }(q));

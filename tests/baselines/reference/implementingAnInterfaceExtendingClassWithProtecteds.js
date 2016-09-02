@@ -75,28 +75,32 @@ var Bar4 = (function () {
 var Bar5 = (function (_super) {
     __extends(Bar5, _super);
     function Bar5() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return Bar5;
 }(Foo));
 var Bar6 = (function (_super) {
     __extends(Bar6, _super);
     function Bar6() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return Bar6;
 }(Foo));
 var Bar7 = (function (_super) {
     __extends(Bar7, _super);
     function Bar7() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return Bar7;
 }(Foo));
 var Bar8 = (function (_super) {
     __extends(Bar8, _super);
     function Bar8() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return Bar8;
 }(Foo));

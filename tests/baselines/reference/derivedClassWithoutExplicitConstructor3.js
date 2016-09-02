@@ -63,7 +63,8 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(y, z) {
-        _super.call(this, 2);
+        var _this;
+        _this = _super.call(this, 2) || this;
         this.b = '';
         this.b = y;
     }
@@ -72,7 +73,8 @@ var Derived = (function (_super) {
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.x = 1;
         this.y = 'hello';
     }
@@ -90,7 +92,8 @@ var Base2 = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D(y, z) {
-        _super.call(this, 2);
+        var _this;
+        _this = _super.call(this, 2) || this;
         this.b = null;
         this.b = y;
     }
@@ -99,7 +102,8 @@ var D = (function (_super) {
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.x = 2;
         this.y = null;
     }

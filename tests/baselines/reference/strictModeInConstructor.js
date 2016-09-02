@@ -74,8 +74,9 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
+        var _this;
         "use strict"; // No error
-        _super.call(this);
+        _this = _super.call(this) || this;
         this.s = 9;
     }
     return B;
@@ -83,7 +84,8 @@ var B = (function (_super) {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.call(this); // No error
+        var _this;
+        _this = _super.call(this) || this; // No error
         this.s = 9;
         "use strict";
     }
@@ -92,9 +94,10 @@ var C = (function (_super) {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
+        var _this;
         this.s = 9;
         var x = 1; // Error
-        _super.call(this);
+        _this = _super.call(this) || this;
         "use strict";
     }
     return D;
@@ -102,8 +105,9 @@ var D = (function (_super) {
 var Bs = (function (_super) {
     __extends(Bs, _super);
     function Bs() {
+        var _this;
         "use strict"; // No error
-        _super.call(this);
+        _this = _super.call(this) || this;
     }
     return Bs;
 }(A));
@@ -111,7 +115,8 @@ Bs.s = 9;
 var Cs = (function (_super) {
     __extends(Cs, _super);
     function Cs() {
-        _super.call(this); // No error
+        var _this;
+        _this = _super.call(this) || this; // No error
         "use strict";
     }
     return Cs;
@@ -120,8 +125,9 @@ Cs.s = 9;
 var Ds = (function (_super) {
     __extends(Ds, _super);
     function Ds() {
+        var _this;
         var x = 1; // no Error
-        _super.call(this);
+        _this = _super.call(this) || this;
         "use strict";
     }
     return Ds;

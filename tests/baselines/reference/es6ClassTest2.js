@@ -267,7 +267,8 @@ var SuperParent = (function () {
 var SuperChild = (function (_super) {
     __extends(SuperChild, _super);
     function SuperChild() {
-        _super.call(this, 1);
+        var _this;
+        _this = _super.call(this, 1) || this;
     }
     SuperChild.prototype.b = function () {
         _super.prototype.b.call(this, 'str');
@@ -314,7 +315,8 @@ var BaseClassWithConstructor = (function () {
 var ChildClassWithoutConstructor = (function (_super) {
     __extends(ChildClassWithoutConstructor, _super);
     function ChildClassWithoutConstructor() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return ChildClassWithoutConstructor;
 }(BaseClassWithConstructor));

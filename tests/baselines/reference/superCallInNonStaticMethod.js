@@ -66,8 +66,8 @@ var Doing = (function () {
 var Other = (function (_super) {
     __extends(Other, _super);
     function Other() {
-        var _this = this;
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         this.propertyInitializer = _super.prototype.instanceMethod.call(this);
         this.functionProperty = function () { _super.prototype.instanceMethod.call(_this); };
         _super.prototype.instanceMethod.call(this);

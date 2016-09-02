@@ -29,13 +29,14 @@ var Base = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         (function () {
             var obj = (_a = {},
                 // Ideally, we would capture this. But the reference is
                 // illegal, and not capturing this is consistent with
                 //treatment of other similar violations.
-                _a[(_super.call(this), "prop")] = function () { },
+                _a[(_this = _super.call(_this) || _this, "prop")] = function () { },
                 _a);
             var _a;
         });

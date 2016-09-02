@@ -27,7 +27,8 @@ var C = (function (_super) {
     __extends(C, _super);
     // Ensure 'value' is not of type 'any' by invoking it with type arguments.
     function C() {
-        _super.call(this, function (value) { return String(value()); });
+        var _this;
+        _this = _super.call(this, function (value) { return String(value()); }) || this;
     }
     return C;
 }(A));

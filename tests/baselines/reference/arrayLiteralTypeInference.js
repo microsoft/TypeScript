@@ -65,14 +65,16 @@ var Action = (function () {
 var ActionA = (function (_super) {
     __extends(ActionA, _super);
     function ActionA() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return ActionA;
 }(Action));
 var ActionB = (function (_super) {
     __extends(ActionB, _super);
     function ActionB() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return ActionB;
 }(Action));

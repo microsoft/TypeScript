@@ -71,7 +71,8 @@ var Base5 = (function () {
 var Sub5 = (function (_super) {
     __extends(Sub5, _super);
     function Sub5() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Sub5.prototype.x = function () {
         return "SubX";
@@ -81,7 +82,8 @@ var Sub5 = (function (_super) {
 var SubSub5 = (function (_super) {
     __extends(SubSub5, _super);
     function SubSub5() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     SubSub5.prototype.x = function () {
         return _super.prototype.x.call(this);
@@ -103,7 +105,8 @@ var Base6 = (function () {
 var Sub6 = (function (_super) {
     __extends(Sub6, _super);
     function Sub6() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Sub6.prototype.y = function () {
         return "SubY";
@@ -113,7 +116,8 @@ var Sub6 = (function (_super) {
 var SubSub6 = (function (_super) {
     __extends(SubSub6, _super);
     function SubSub6() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     SubSub6.prototype.y = function () {
         return _super.prototype.y.call(this);

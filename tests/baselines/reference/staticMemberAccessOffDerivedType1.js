@@ -26,7 +26,8 @@ var SomeBase = (function () {
 var P = (function (_super) {
     __extends(P, _super);
     function P() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return P;
 }(SomeBase));

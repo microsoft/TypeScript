@@ -38,7 +38,8 @@ var Bar = (function () {
 var BarExtended = (function (_super) {
     __extends(BarExtended, _super);
     function BarExtended() {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
     }
     return BarExtended;
 }(Bar));

@@ -94,7 +94,8 @@ var Foo = (function () {
 var Foo2 = (function (_super) {
     __extends(Foo2, _super);
     function Foo2(_super) {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         this.prop4 = {
             doStuff: function (_super) {
             }
@@ -123,7 +124,8 @@ var Foo2 = (function (_super) {
 var Foo4 = (function (_super) {
     __extends(Foo4, _super);
     function Foo4(_super) {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
     }
     Foo4.prototype.y = function (_super) {
         var _this = this;

@@ -70,7 +70,8 @@ var ClassWithNoInitializer = (function (_super) {
     __extends(ClassWithNoInitializer, _super);
     //'this' in optional super call
     function ClassWithNoInitializer() {
-        _super.call(this, this); // Error
+        var _this;
+        _this = _super.call(this, this) || this; // Error
     }
     return ClassWithNoInitializer;
 }(BaseErrClass));
@@ -78,7 +79,8 @@ var ClassWithInitializer = (function (_super) {
     __extends(ClassWithInitializer, _super);
     //'this' in required super call
     function ClassWithInitializer() {
-        _super.call(this, this); // Error
+        var _this;
+        _this = _super.call(this, this) || this; // Error
         this.t = 4;
     }
     return ClassWithInitializer;
@@ -96,7 +98,8 @@ genericFunc(undefined); // Should be an error
 var ErrClass3 = (function (_super) {
     __extends(ErrClass3, _super);
     function ErrClass3() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return ErrClass3;
 }(this));

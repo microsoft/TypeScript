@@ -2380,7 +2380,8 @@ var Harness;
     var TestCase = (function (_super) {
         __extends(TestCase, _super);
         function TestCase(description, block) {
-            _super.call(this, description, block);
+            var _this;
+            _this = _super.call(this, description, block) || this;
             this.description = description;
             this.block = block;
         }
@@ -2414,7 +2415,8 @@ var Harness;
     var Scenario = (function (_super) {
         __extends(Scenario, _super);
         function Scenario(description, block) {
-            _super.call(this, description, block);
+            var _this;
+            _this = _super.call(this, description, block) || this;
             this.description = description;
             this.block = block;
         }
@@ -2469,7 +2471,8 @@ var Harness;
     var Run = (function (_super) {
         __extends(Run, _super);
         function Run() {
-            _super.call(this, 'Test Run', null);
+            var _this;
+            _this = _super.call(this, 'Test Run', null) || this;
         }
         Run.prototype.run = function () {
             emitLog('start');

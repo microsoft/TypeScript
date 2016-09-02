@@ -168,7 +168,8 @@ var Greeter;
     var class2 = (function (_super) {
         __extends(class2, _super);
         function class2() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return class2;
     }(class1));

@@ -44,14 +44,16 @@ var a = (function () {
 var b1 = (function (_super) {
     __extends(b1, _super);
     function b1(_super) {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
     }
     return b1;
 }(a));
 var b2 = (function (_super) {
     __extends(b2, _super);
     function b2(_super) {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         this._super = _super;
     }
     return b2;
@@ -59,14 +61,16 @@ var b2 = (function (_super) {
 var b3 = (function (_super) {
     __extends(b3, _super);
     function b3(_super) {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
     }
     return b3;
 }(a));
 var b4 = (function (_super) {
     __extends(b4, _super);
     function b4(_super) {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         this._super = _super;
     }
     return b4;

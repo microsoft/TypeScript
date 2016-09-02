@@ -42,7 +42,8 @@ var foo2 = require("./foo2");
 var x = (function (_super) {
     __extends(x, _super);
     function x() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return x;
 }(foo2.x));

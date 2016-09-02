@@ -57,7 +57,8 @@ var Foo = (function () {
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Bar.prototype.method = function (a) {
         return this.optionalProperty;

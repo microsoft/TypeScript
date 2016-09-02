@@ -40,7 +40,8 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     B.prototype.bar = function () { return 1; };
     return B;
@@ -48,7 +49,8 @@ var B = (function (_super) {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     C.prototype.baz = function () { return 1; };
     return C;

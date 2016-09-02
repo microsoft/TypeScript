@@ -12,7 +12,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 var derived = (function (_super) {
     __extends(derived, _super);
     function derived() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return derived;
 }(base));

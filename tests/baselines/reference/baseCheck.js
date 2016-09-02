@@ -43,14 +43,16 @@ var C = (function () {
 var ELoc = (function (_super) {
     __extends(ELoc, _super);
     function ELoc(x) {
-        _super.call(this, 0, x);
+        var _this;
+        _this = _super.call(this, 0, x) || this;
     }
     return ELoc;
 }(C));
 var ELocVar = (function (_super) {
     __extends(ELocVar, _super);
     function ELocVar(x) {
-        _super.call(this, 0, loc);
+        var _this;
+        _this = _super.call(this, 0, loc) || this;
     }
     ELocVar.prototype.m = function () {
         var loc = 10;
@@ -60,7 +62,8 @@ var ELocVar = (function (_super) {
 var D = (function (_super) {
     __extends(D, _super);
     function D(z) {
-        _super.call(this, this.z);
+        var _this;
+        _this = _super.call(this, this.z) || this;
         this.z = z;
     }
     return D;
@@ -68,7 +71,8 @@ var D = (function (_super) {
 var E = (function (_super) {
     __extends(E, _super);
     function E(z) {
-        _super.call(this, 0, this.z);
+        var _this;
+        _this = _super.call(this, 0, this.z) || this;
         this.z = z;
     }
     return E;
@@ -76,7 +80,8 @@ var E = (function (_super) {
 var F = (function (_super) {
     __extends(F, _super);
     function F(z) {
-        _super.call(this, "hello", this.z);
+        var _this;
+        _this = _super.call(this, "hello", this.z) || this;
         this.z = z;
     }
     return F;

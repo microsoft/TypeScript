@@ -21,7 +21,8 @@ var AbstractGreeter = (function () {
 var Greeter = (function (_super) {
     __extends(Greeter, _super);
     function Greeter() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.a = 10;
         this.nameA = "Ten";
     }

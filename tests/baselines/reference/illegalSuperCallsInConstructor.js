@@ -34,16 +34,17 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var r2 = function () { return _super.call(this); };
-        var r3 = function () { _super.call(this); };
-        var r4 = function () { _super.call(this); };
+        var _this;
+        var r2 = function () { return _this = _super.call(_this) || _this; };
+        var r3 = function () { _this = _super.call(_this) || _this; };
+        var r4 = function () { _this = _super.call(this) || this; };
         var r5 = {
             get foo() {
-                _super.call(this);
+                _this = _super.call(this) || this;
                 return 1;
             },
             set foo(v) {
-                _super.call(this);
+                _this = _super.call(this) || this;
             }
         };
     }

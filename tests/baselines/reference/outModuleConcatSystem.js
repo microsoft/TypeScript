@@ -44,7 +44,8 @@ System.register("b", ["ref/a"], function (exports_2, context_2) {
             B = (function (_super) {
                 __extends(B, _super);
                 function B() {
-                    _super.apply(this, arguments);
+                    var _this = _super.apply(this, arguments) || this;
+                    return _this;
                 }
                 return B;
             }(a_1.A));

@@ -41,7 +41,8 @@ var CBaseBase = (function () {
 var CBase = (function (_super) {
     __extends(CBase, _super);
     function CBase() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return CBase;
 }(CBaseBase));
@@ -59,7 +60,8 @@ var Wrapper = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     C.prototype.works = function () {
         new CBaseBase(this);

@@ -23,8 +23,8 @@ var Base = (function () {
 var Super = (function (_super) {
     __extends(Super, _super);
     function Super() {
-        var _this = this;
-        _super.call(this, (function () { return _this; })); // No error
+        var _this;
+        _this = _super.call(this, (function () { return _this; })) || this; // No error
     }
     return Super;
 }(Base));

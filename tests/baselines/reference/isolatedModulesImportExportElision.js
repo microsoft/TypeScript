@@ -26,7 +26,8 @@ var ns = require("module");
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return C;
 }(module_2.c2.C));

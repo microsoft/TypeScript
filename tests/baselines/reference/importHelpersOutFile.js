@@ -35,7 +35,8 @@ define("b", ["require", "exports", "tslib", "a"], function (require, exports, ts
     var B = (function (_super) {
         tslib_1.__extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return B;
     }(a_1.A));
@@ -46,7 +47,8 @@ define("c", ["require", "exports", "tslib", "a"], function (require, exports, ts
     var C = (function (_super) {
         tslib_2.__extends(C, _super);
         function C() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return C;
     }(a_2.A));

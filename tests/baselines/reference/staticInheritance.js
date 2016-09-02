@@ -27,7 +27,8 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.p1 = doThing(A); // OK
         this.p2 = doThing(B); // OK
     }

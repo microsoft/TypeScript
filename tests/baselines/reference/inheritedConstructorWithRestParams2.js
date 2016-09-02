@@ -53,14 +53,16 @@ var BaseBase2 = (function () {
 var Base = (function (_super) {
     __extends(Base, _super);
     function Base() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return Base;
 }(BaseBase));
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return Derived;
 }(Base));

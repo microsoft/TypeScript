@@ -35,7 +35,8 @@ var BaseComponent = require("BaseComponent");
 var TestComponent = (function (_super) {
     __extends(TestComponent, _super);
     function TestComponent() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     TestComponent.prototype.render = function () {
         return <BaseComponent />;

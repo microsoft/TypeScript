@@ -34,7 +34,8 @@ var Point = (function () {
 var ColoredPoint = (function (_super) {
     __extends(ColoredPoint, _super);
     function ColoredPoint(x, y, color) {
-        _super.call(this, x, y);
+        var _this;
+        _this = _super.call(this, x, y) || this;
         this.color = color;
     }
     ColoredPoint.prototype.toString = function () {

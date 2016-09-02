@@ -30,7 +30,8 @@ var React = require("react");
 var Text = (function (_super) {
     __extends(Text, _super);
     function Text() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this._tagName = 'div';
     }
     Text.prototype.render = function () {

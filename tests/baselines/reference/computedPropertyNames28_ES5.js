@@ -24,9 +24,10 @@ var Base = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         var obj = (_a = {},
-            _a[(_super.call(this), "prop")] = function () { },
+            _a[(_this = _super.call(this) || this, "prop")] = function () { },
             _a);
         var _a;
     }

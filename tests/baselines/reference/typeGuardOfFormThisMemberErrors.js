@@ -68,7 +68,8 @@ var Test;
     var File = (function (_super) {
         __extends(File, _super);
         function File(path, content) {
-            _super.call(this, path);
+            var _this;
+            _this = _super.call(this, path) || this;
             this.content = content;
         }
         return File;
@@ -77,7 +78,8 @@ var Test;
     var Directory = (function (_super) {
         __extends(Directory, _super);
         function Directory() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return Directory;
     }(FileSystemObject));

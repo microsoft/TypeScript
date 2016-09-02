@@ -32,7 +32,8 @@ define(["require", "exports", "tslib", "./a"], function (require, exports, tslib
     var B = (function (_super) {
         tslib_1.__extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return B;
     }(a_1.A));

@@ -169,7 +169,8 @@ var ts;
     var Type = (function (_super) {
         __extends(Type, _super);
         function Type() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         Type.prototype.equals = function (that) {
             if (this === that)
@@ -233,7 +234,8 @@ var ts;
     var Property = (function (_super) {
         __extends(Property, _super);
         function Property(name, type, flags) {
-            _super.call(this);
+            var _this;
+            _this = _super.call(this) || this;
             this.name = name;
             this.type = type;
             this.flags = flags;
@@ -253,7 +255,8 @@ var ts;
     var Signature = (function (_super) {
         __extends(Signature, _super);
         function Signature(typeParameters, parameters, returnType) {
-            _super.call(this);
+            var _this;
+            _this = _super.call(this) || this;
             this.typeParameters = typeParameters;
             this.parameters = parameters;
             this.returnType = returnType;
@@ -273,7 +276,8 @@ var ts;
     var Parameter = (function (_super) {
         __extends(Parameter, _super);
         function Parameter(name, type, flags) {
-            _super.call(this);
+            var _this;
+            _this = _super.call(this) || this;
             this.name = name;
             this.type = type;
             this.flags = flags;

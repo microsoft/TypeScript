@@ -32,7 +32,8 @@ var Control = (function () {
 var Button = (function (_super) {
     __extends(Button, _super);
     function Button() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Button.prototype.select = function () { };
     return Button;
@@ -40,7 +41,8 @@ var Button = (function (_super) {
 var TextBox = (function (_super) {
     __extends(TextBox, _super);
     function TextBox() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     TextBox.prototype.select = function () { };
     return TextBox;
@@ -48,7 +50,8 @@ var TextBox = (function (_super) {
 var Image = (function (_super) {
     __extends(Image, _super);
     function Image() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return Image;
 }(Control));

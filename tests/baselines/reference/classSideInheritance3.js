@@ -33,7 +33,8 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B(x, data) {
-        _super.call(this, x);
+        var _this;
+        _this = _super.call(this, x) || this;
         this.data = data;
     }
     return B;
@@ -41,7 +42,8 @@ var B = (function (_super) {
 var C = (function (_super) {
     __extends(C, _super);
     function C(x) {
-        _super.call(this, x);
+        var _this;
+        _this = _super.call(this, x) || this;
     }
     return C;
 }(A));

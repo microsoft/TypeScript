@@ -47,7 +47,8 @@ function B1() {
     return (function (_super) {
         __extends(class_1, _super);
         function class_1() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return class_1;
     }(A));
@@ -57,7 +58,8 @@ var B2 = (function () {
         this.anon = (function (_super) {
             __extends(class_2, _super);
             function class_2() {
-                _super.apply(this, arguments);
+                var _this = _super.apply(this, arguments) || this;
+                return _this;
             }
             return class_2;
         }(A));
@@ -68,7 +70,8 @@ function B3() {
     return (function (_super) {
         __extends(Inner, _super);
         function Inner() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return Inner;
     }(A));
@@ -77,14 +80,16 @@ function B3() {
 var K = (function (_super) {
     __extends(K, _super);
     function K() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return K;
 }(B1()));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return C;
 }((new B2().anon)));
@@ -92,7 +97,8 @@ var b3Number = B3();
 var S = (function (_super) {
     __extends(S, _super);
     function S() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return S;
 }(b3Number));

@@ -190,7 +190,8 @@ var Sample;
                 var Mode = (function (_super) {
                     __extends(Mode, _super);
                     function Mode() {
-                        _super.apply(this, arguments);
+                        var _this = _super.apply(this, arguments) || this;
+                        return _this;
                     }
                     // scenario 2
                     Mode.prototype.getInitialState = function () {

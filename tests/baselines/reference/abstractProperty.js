@@ -35,7 +35,8 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.raw = "edge";
         this.ro = "readonly please";
     }

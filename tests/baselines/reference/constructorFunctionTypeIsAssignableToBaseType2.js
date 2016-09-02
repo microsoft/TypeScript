@@ -47,7 +47,8 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(x) {
-        _super.call(this, x);
+        var _this;
+        _this = _super.call(this, x) || this;
     }
     return Derived;
 }(Base));
@@ -55,7 +56,8 @@ var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     // ok, not enforcing assignability relation on this
     function Derived2(x) {
-        _super.call(this, x);
+        var _this;
+        _this = _super.call(this, x) || this;
         return 1;
     }
     return Derived2;

@@ -22,7 +22,8 @@ var Z = (function () {
 var Y = (function (_super) {
     __extends(Y, _super);
     function Y() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Y.prototype.func = function (value) { };
     return Y;

@@ -53,14 +53,16 @@ var B2 = (function () {
 var D1 = (function (_super) {
     __extends(D1, _super);
     function D1() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return D1;
 }(B1));
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return D2;
 }(B2));
@@ -72,7 +74,8 @@ var N = (function () {
 var ND = (function (_super) {
     __extends(ND, _super);
     function ND() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return ND;
 }(N));
@@ -86,7 +89,8 @@ var Good = (function () {
 var Baad = (function (_super) {
     __extends(Baad, _super);
     function Baad() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Baad.prototype.f = function () { return 0; };
     Baad.prototype.g = function (n) { return 0; };

@@ -57,7 +57,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Derived.createEmpty = function () {
         var item = new Derived();

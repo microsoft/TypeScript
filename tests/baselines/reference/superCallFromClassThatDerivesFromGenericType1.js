@@ -20,7 +20,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
     }
     return D;
 }(B));

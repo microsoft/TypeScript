@@ -82,21 +82,24 @@ new x; // okay -- undefined behavior at runtime
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return C;
 }(B)); // error -- not declared abstract
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return D;
 }(B)); // okay
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     E.prototype.bar = function () { return 1; };
     return E;
@@ -104,7 +107,8 @@ var E = (function (_super) {
 var F = (function (_super) {
     __extends(F, _super);
     function F() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     F.prototype.bar = function () { return 2; };
     return F;

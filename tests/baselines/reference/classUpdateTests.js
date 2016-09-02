@@ -157,7 +157,8 @@ var D = (function () {
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        _super.apply(this, arguments);
+        var _this;
+        _this = _super.apply(this, arguments) || this;
         this.p1 = 0;
     }
     return E;
@@ -165,34 +166,38 @@ var E = (function (_super) {
 var F = (function (_super) {
     __extends(F, _super);
     function F() {
+        var _this;
     } // ERROR - super call required
     return F;
 }(E));
 var G = (function (_super) {
     __extends(G, _super);
     function G() {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         this.p1 = 0;
     } // NO ERROR
     return G;
 }(D));
 var H = (function () {
     function H() {
-        _super.call(this);
+        _this = _super.call(this) || this;
     } // ERROR - no super call allowed
     return H;
 }());
 var I = (function (_super) {
     __extends(I, _super);
     function I() {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
     } // ERROR - no super call allowed
     return I;
 }(Object));
 var J = (function (_super) {
     __extends(J, _super);
     function J(p1) {
-        _super.call(this); // NO ERROR
+        var _this;
+        _this = _super.call(this) || this; // NO ERROR
         this.p1 = p1;
     }
     return J;
@@ -200,16 +205,18 @@ var J = (function (_super) {
 var K = (function (_super) {
     __extends(K, _super);
     function K(p1) {
+        var _this;
         this.p1 = p1;
         var i = 0;
-        _super.call(this);
+        _this = _super.call(this) || this;
     }
     return K;
 }(G));
 var L = (function (_super) {
     __extends(L, _super);
     function L(p1) {
-        _super.call(this); // NO ERROR
+        var _this;
+        _this = _super.call(this) || this; // NO ERROR
         this.p1 = p1;
     }
     return L;
@@ -217,9 +224,10 @@ var L = (function (_super) {
 var M = (function (_super) {
     __extends(M, _super);
     function M(p1) {
+        var _this;
         this.p1 = p1;
         var i = 0;
-        _super.call(this);
+        _this = _super.call(this) || this;
     }
     return M;
 }(G));

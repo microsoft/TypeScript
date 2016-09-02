@@ -50,7 +50,8 @@ var Foo = (function () {
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     b.prototype.foo = function () {
         function _super() {
@@ -63,7 +64,8 @@ var b = (function (_super) {
 var c = (function (_super) {
     __extends(c, _super);
     function c() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     c.prototype.foo = function () {
         var x = function () {

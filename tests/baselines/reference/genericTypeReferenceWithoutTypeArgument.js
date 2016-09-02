@@ -60,7 +60,8 @@ var g = function f(x) { var y; return y; };
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return D;
 }(C));
@@ -76,7 +77,8 @@ var M;
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return D2;
 }(M.E));

@@ -23,7 +23,8 @@ var Base = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     D.prototype.myMethod = function () {
         this.options;

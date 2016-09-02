@@ -49,7 +49,8 @@ var MyBase = (function () {
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
-        _super.call(this);
+        var _this;
+        _this = _super.call(this) || this;
         var f1 = _super.prototype.getValue.call(this);
         var f2 = _super.prototype.value;
     }
@@ -71,7 +72,8 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     Object.defineProperty(B.prototype, "property", {
         set: function (value) {

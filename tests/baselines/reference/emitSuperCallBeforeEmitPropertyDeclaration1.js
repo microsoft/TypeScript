@@ -30,9 +30,10 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
+        var _this;
         "use strict";
         'someStringForEgngInject';
-        _super.call(this);
+        _this = _super.call(this) || this;
         this.blub = 12;
     }
     return B;

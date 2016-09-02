@@ -22,7 +22,8 @@ var A = (function () {
 var C = (function (_super) {
     __extends(class_1, _super);
     function class_1() {
-        _super.apply(this, arguments);
+        var _this = _super.apply(this, arguments) || this;
+        return _this;
     }
     return class_1;
 }(A));

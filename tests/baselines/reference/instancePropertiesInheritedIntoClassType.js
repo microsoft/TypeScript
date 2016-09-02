@@ -69,7 +69,8 @@ var NonGeneric;
     var D = (function (_super) {
         __extends(D, _super);
         function D() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return D;
     }(C));
@@ -101,7 +102,8 @@ var Generic;
     var D = (function (_super) {
         __extends(D, _super);
         function D() {
-            _super.apply(this, arguments);
+            var _this = _super.apply(this, arguments) || this;
+            return _this;
         }
         return D;
     }(C));
