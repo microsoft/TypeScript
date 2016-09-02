@@ -7586,7 +7586,6 @@ namespace ts {
                                 const candidates = inferiority ?
                                     inferences.secondary || (inferences.secondary = []) :
                                     inferences.primary || (inferences.primary = []);
-                                // Infer base primitive type for unit types.
                                 if (!contains(candidates, source)) {
                                     candidates.push(source);
                                 }
