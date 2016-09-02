@@ -7506,7 +7506,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return constraint && (constraint.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum)) !== 0;
+            return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive);
         }
 
         function inferTypes(context: InferenceContext, source: Type, target: Type) {
@@ -7515,7 +7515,10 @@ namespace ts {
             let depth = 0;
             let inferiority = 0;
             const visited = createMap<boolean>();
-            inferFromTypes(source, target);
+            // We widen a literal source type only if we're inferring directly to a type parameter
+            // that has no primitive or literal constraint.
+            const shouldWiden = isLiteralType(source) && target.flags & TypeFlags.TypeParameter && !hasPrimitiveConstraint(<TypeParameter>target);
+            inferFromTypes(shouldWiden ? getBaseTypeOfLiteralType(source) : source, target);
 
             function isInProcess(source: Type, target: Type) {
                 for (let i = 0; i < depth; i++) {
@@ -7584,9 +7587,8 @@ namespace ts {
                                     inferences.secondary || (inferences.secondary = []) :
                                     inferences.primary || (inferences.primary = []);
                                 // Infer base primitive type for unit types.
-                                const widened = isUnitType(source) && !hasPrimitiveConstraint(<TypeParameter>target) ? getBaseTypeOfLiteralType(source) : source;
-                                if (!contains(candidates, widened)) {
-                                    candidates.push(widened);
+                                if (!contains(candidates, source)) {
+                                    candidates.push(source);
                                 }
                             }
                             return;
