@@ -8288,11 +8288,7 @@ const _super = (function (geti, seti) {
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, node, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                // However, a leading mid-line comment of the end of file token is emitted with spaces before,
-                // as if it were a trailing comment of the previous token
-                const commentStartsInMidLine = leadingComments && leadingComments.length && leadingComments[0].pos - 1 > 0 && currentText.charCodeAt(leadingComments[0].pos - 1) !== 10;
-                const isEndOfFile = node.kind === SyntaxKind.EndOfFileToken && commentStartsInMidLine;
-                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ !isEndOfFile, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitTrailingComments(node: Node) {
