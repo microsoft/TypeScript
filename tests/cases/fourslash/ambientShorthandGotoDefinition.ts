@@ -12,9 +12,10 @@
 
 goTo.marker("useFoo");
 verify.quickInfoIs("import foo");
-verify.goToDefinition(
-    "useFoo", "importFoo",
-    "importFoo", "module");
+verify.goToDefinition({
+    useFoo: "importFoo",
+    importFoo: "module"
+});
 
 goTo.marker("useBar");
 verify.quickInfoIs("import bar");
@@ -22,12 +23,14 @@ verify.goToDefinition("useBar", "module");
 
 goTo.marker("useBaz");
 verify.quickInfoIs("import baz");
-verify.goToDefinition(
-    "useBaz", "importBaz",
-    "idBaz", "module");
+verify.goToDefinition({
+    useBaz: "importBaz",
+    idBaz: "module"
+});
 
 goTo.marker("useBang");
 verify.quickInfoIs("import bang = require(\"jquery\")");
-verify.goToDefinition(
-    "useBang", "importBang",
-    "idBang", "module");
+verify.goToDefinition({
+    useBang: "importBang",
+    idBang: "module"
+});

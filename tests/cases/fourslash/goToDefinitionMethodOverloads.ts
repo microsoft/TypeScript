@@ -18,10 +18,11 @@
 ////methodOverload./*instanceMethodReference1*/method();
 ////methodOverload./*instanceMethodReference2*/method("456");
 
-verify.goToDefinition(
-    "staticMethodReference1", "staticMethodOverload1",
-    "staticMethodReference2", "staticMethodOverload2",
-    "instanceMethodReference1", "instanceMethodOverload1",
-    "instanceMethodReference2", "instanceMethodOverload2",
-    "staticMethodOverload1Name", "staticMethodDefinition",
-    "instanceMethodOverload1Name", "instanceMethodDefinition");
+verify.goToDefinition({
+    staticMethodReference1: "staticMethodOverload1",
+    staticMethodReference2: "staticMethodOverload2",
+    instanceMethodReference1: "instanceMethodOverload1",
+    instanceMethodReference2: "instanceMethodOverload2",
+    staticMethodOverload1Name: "staticMethodDefinition",
+    instanceMethodOverload1Name: "instanceMethodDefinition"
+});

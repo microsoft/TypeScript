@@ -20,9 +20,10 @@
 ////}
 
 
-verify.goToDefinition(
+verify.goToDefinition({
     // Super in call position goes to constructor.
-    "super", "ctr",
+    super: "ctr",
     // Super in any other position goes to the superclass.
-    "superExpression", "B",
-    "superBroken", []);
+    superExpression: "B",
+    superBroken: []
+});

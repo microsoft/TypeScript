@@ -19,6 +19,7 @@
 //// /** @type {Animal} */
 //// var animal; animal.animalName/*4*/
 
-verify.goToDefinition(
-    "3", "1",
-    "4", "2");
+verify.goToDefinition({
+    3: "1",
+    4: "2"
+});

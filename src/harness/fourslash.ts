@@ -529,23 +529,34 @@ namespace FourSlash {
             this.verifyGoToDefinitionWorker(endMarker instanceof Array ? endMarker : [endMarker]);
         }
 
-        public verifyGoToDefinition(startsAndEnds: (string | string[])[]) {
-            if (startsAndEnds.length % 2) {
-                throw new Error("verify.goToDefinition needs an even number of arguments.");
+        public verifyGoToDefinition(arg0: any, endMarkerNames?: string | string[]) {
+            if (endMarkerNames) {
+                this.verifyGoToDefinitionPlain(arg0, endMarkerNames);
             }
-
-            for (let i = 0; i < startsAndEnds.length; i += 2) {
-                const start = startsAndEnds[i];
-                const end = startsAndEnds[i + 1];
-
-                if (start instanceof Array) {
-                    for (const s of start) {
-                        this.verifyGoToDefinitionSingle(s, end);
+            else if (arg0 instanceof Array) {
+                const pairs: [string | string[], string | string[]][] = arg0;
+                for (const [start, end] of pairs) {
+                    this.verifyGoToDefinitionPlain(start, end);
+                }
+            }
+            else {
+                const obj: { [startMarkerName: string]: string | string[] } = arg0;
+                for (const startMarkerName in obj) {
+                    if (ts.hasProperty(obj, startMarkerName)) {
+                        this.verifyGoToDefinitionPlain(startMarkerName, obj[startMarkerName]);
                     }
                 }
-                else {
-                    this.verifyGoToDefinitionSingle(start, end);
+            }
+        }
+
+        private verifyGoToDefinitionPlain(startMarkerNames: string | string[], endMarkerNames: string | string[]) {
+            if (startMarkerNames instanceof Array) {
+                for (const start of startMarkerNames) {
+                    this.verifyGoToDefinitionSingle(start, endMarkerNames);
                 }
+            }
+            else {
+                this.verifyGoToDefinitionSingle(startMarkerNames, endMarkerNames);
             }
         }
 
@@ -555,9 +566,9 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToDefinitionSingle(start: string, end: string | string[]) {
-            this.goToMarker(start);
-            this.verifyGoToDefinitionWorker(end instanceof Array ? end : [end]);
+        private verifyGoToDefinitionSingle(startMarkerName: string, endMarkerNames: string | string[]) {
+            this.goToMarker(startMarkerName);
+            this.verifyGoToDefinitionWorker(endMarkerNames instanceof Array ? endMarkerNames : [endMarkerNames]);
         }
 
         private verifyGoToDefinitionWorker(endMarkers: string[]) {
@@ -2947,8 +2958,11 @@ namespace FourSlashInterface {
             this.state.verifyGoToDefinitionIs(endMarkers);
         }
 
-        public goToDefinition(...startsAndEnds: (string | string[])[]) {
-            this.state.verifyGoToDefinition(startsAndEnds);
+        public goToDefinition(startMarkerName: string | string[], endMarkerName: string | string[]): void;
+        public goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
+        public goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
+        public goToDefinition(arg0: any, endMarkerName?: string | string[]) {
+            this.state.verifyGoToDefinition(arg0, endMarkerName);
         }
 
         public goToDefinitionForMarkers(...markerNames: string[]) {

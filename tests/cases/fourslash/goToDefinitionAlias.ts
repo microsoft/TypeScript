@@ -23,6 +23,7 @@
 ////    x;
 ////}
 
-verify.goToDefinition(
-    ["alias1Type", "alias1Value"], "alias1Definition",
-    ["alias2Type", "alias2Value"], "alias2Definition");
+verify.goToDefinition([
+    [["alias1Type", "alias1Value"], "alias1Definition"],
+    [["alias2Type", "alias2Value"], "alias2Definition"]
+]);

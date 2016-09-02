@@ -7,6 +7,7 @@
 /////*useFNumber*/f`${0}`;
 /////*useFBool*/f`${false}`;
 
-verify.goToDefinition(
-    "useFNumber", "defFNumber",
-    "useFBool", "defFBool");
+verify.goToDefinition({
+    useFNumber: "defFNumber",
+    useFBool: "defFBool"
+});

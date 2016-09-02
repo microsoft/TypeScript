@@ -14,6 +14,7 @@
 //// var x = <My/*c*/Class />;
 //// var y = <MyClass f/*p*/oo= 'hello' />;
 
-verify.goToDefinition(
-    "c", "ct",
-    "p", "pt");
+verify.goToDefinition({
+    c: "ct",
+    p: "pt"
+});

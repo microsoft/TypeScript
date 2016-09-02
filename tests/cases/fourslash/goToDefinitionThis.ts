@@ -8,7 +8,8 @@
 ////    get self(/*getterDecl*/this: number) { return /*getterUse*/this; }
 ////}
 
-verify.goToDefinition(
-    "fnUse", "fnDecl",
-    "clsUse", "cls",
-    "getterUse", "getterDecl");
+verify.goToDefinition({
+    "fnUse": "fnDecl",
+    "clsUse": "cls",
+    "getterUse": "getterDecl"
+});

@@ -156,9 +156,12 @@ declare namespace FourSlashInterface {
          * `verify.goToDefinition("a", "b");` verifies that go-to-definition at marker "a" takes you to marker "b".
          * `verify.goToDefinition(["a", "aa"], "b");` verifies that markers "a" and "aa" have the same definition "b".
          * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
-         * Finally, `verify.goToDefinition("a", "b", "c", "d");` is just `verify.goToDefinition("a", "b"); verify.goToDefinition("c", "d");`.
          */
-        goToDefinition(...startsAndEnds: (string | string[])[]): void;
+        goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
+        /** Performs `goToDefinition` for each pair. */
+        goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
+        /** Performs `goToDefinition` on each key and value. */
+        goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
         /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
         goToDefinitionForMarkers(...markerNames: string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;

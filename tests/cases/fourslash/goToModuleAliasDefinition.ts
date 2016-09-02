@@ -9,4 +9,3 @@
 
 // Won't-fixed: Should go to '2' instead
 verify.goToDefinition("1", "3");
-goTo.marker('1');
