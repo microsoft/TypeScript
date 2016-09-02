@@ -23,8 +23,8 @@ var Greeter = (function (_super) {
     function Greeter() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this.a = 10;
-        this.nameA = "Ten";
+        _this.a = 10;
+        _this.nameA = "Ten";
     }
     return Greeter;
 }(AbstractGreeter));

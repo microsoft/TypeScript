@@ -94,41 +94,41 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 2 >Emitted(14, 19) Source(7, 2) + SourceIndex(0)
 ---
 >>>        _this = _super.apply(this, arguments) || this;
->>>        this.a = 10;
+>>>        _this.a = 10;
 1->^^^^^^^^
-2 >        ^^^^^^
-3 >              ^^^
-4 >                 ^^
-5 >                   ^
-6 >                    ^^^^^^^^->
+2 >        ^^^^^^^
+3 >               ^^^
+4 >                  ^^
+5 >                    ^
+6 >                     ^^^^^^^^->
 1->
 2 >        a
-3 >               = 
-4 >                 10
-5 >                   ;
+3 >                = 
+4 >                  10
+5 >                    ;
 1->Emitted(16, 9) Source(5, 12) + SourceIndex(0)
-2 >Emitted(16, 15) Source(5, 13) + SourceIndex(0)
-3 >Emitted(16, 18) Source(5, 16) + SourceIndex(0)
-4 >Emitted(16, 20) Source(5, 18) + SourceIndex(0)
-5 >Emitted(16, 21) Source(5, 19) + SourceIndex(0)
+2 >Emitted(16, 16) Source(5, 13) + SourceIndex(0)
+3 >Emitted(16, 19) Source(5, 16) + SourceIndex(0)
+4 >Emitted(16, 21) Source(5, 18) + SourceIndex(0)
+5 >Emitted(16, 22) Source(5, 19) + SourceIndex(0)
 ---
->>>        this.nameA = "Ten";
+>>>        _this.nameA = "Ten";
 1->^^^^^^^^
-2 >        ^^^^^^^^^^
-3 >                  ^^^
-4 >                     ^^^^^
-5 >                          ^
+2 >        ^^^^^^^^^^^
+3 >                   ^^^
+4 >                      ^^^^^
+5 >                           ^
 1->
   >    public 
 2 >        nameA
-3 >                   = 
-4 >                     "Ten"
-5 >                          ;
+3 >                    = 
+4 >                      "Ten"
+5 >                           ;
 1->Emitted(17, 9) Source(6, 12) + SourceIndex(0)
-2 >Emitted(17, 19) Source(6, 17) + SourceIndex(0)
-3 >Emitted(17, 22) Source(6, 20) + SourceIndex(0)
-4 >Emitted(17, 27) Source(6, 25) + SourceIndex(0)
-5 >Emitted(17, 28) Source(6, 26) + SourceIndex(0)
+2 >Emitted(17, 20) Source(6, 17) + SourceIndex(0)
+3 >Emitted(17, 23) Source(6, 20) + SourceIndex(0)
+4 >Emitted(17, 28) Source(6, 25) + SourceIndex(0)
+5 >Emitted(17, 29) Source(6, 26) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
