@@ -790,7 +790,7 @@ namespace ts {
                 const body = saveStateAndInvoke(constructor, hasSynthesizedSuper ? transformConstructorBodyWithSynthesizedSuper : transformConstructorBodyWithoutSynthesizedSuper);
                 addRange(statements, body);
             }
-            if (constructor ? hasSynthesizedSuper : extendsClauseElement) {
+            if (extendsClauseElement) {
                 statements.push(
                     createReturn(
                         createIdentifier("_this")
