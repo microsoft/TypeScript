@@ -182,23 +182,22 @@ namespace ts {
         return currentDirectory && getDefaultTypeRoots(currentDirectory, host);
     }
 
+    /**
+     * Returns the path to every node_modules/@types directory from some ancestor directory.
+     * Returns undefined if there are none.
+     */
     function getDefaultTypeRoots(currentDirectory: string, host: ModuleResolutionHost): string[] | undefined {
-        return map(getAllNodeModulesDirectories(currentDirectory, host), nodeModules => combinePaths(nodeModules, "@types"));
-    }
-
-    /** Returns the path to every node_modules directory from some ancestor directory. */
-    function getAllNodeModulesDirectories(currentDirectory: string, host: ModuleResolutionHost): string[] | undefined {
         if (!host.directoryExists) {
             return [combinePaths(currentDirectory, "node_modules")];
             // And if it doesn't exist, tough.
         }
 
-        const all: string[] = [];
+        let typeRoots: string[];
 
         while (true) {
-            const nodeModules = combinePaths(currentDirectory, "node_modules");
-            if (host.directoryExists(nodeModules)) {
-                all.push(nodeModules);
+            const atTypes = combinePaths(currentDirectory, nodeModulesAtTypes);
+            if (host.directoryExists(atTypes)) {
+                (typeRoots || (typeRoots = [])).push(atTypes);
             }
 
             const parent = getDirectoryPath(currentDirectory);
@@ -208,8 +207,10 @@ namespace ts {
             currentDirectory = parent;
         }
 
-        return all;
+        return typeRoots;
     }
+    const nodeModulesAtTypes = combinePaths("node_modules", "@types");
+
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
