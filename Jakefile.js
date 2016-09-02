@@ -94,7 +94,17 @@ var servicesSources = [
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
+    "types.ts",
+    "utilities.ts",
+    "allocators.ts",
     "breakpoints.ts",
+    "classifier.ts",
+    "completions.ts",
+    "documentHighlights.ts",
+    "findAllReferences.ts",
+    "goToDefinition.ts",
+    "jsDoc.ts",
+    "jsTyping.ts",
     "navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
@@ -102,8 +112,7 @@ var servicesSources = [
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",
-    "types.ts",
-    "utilities.ts",
+    "symbolDisplay.ts",
     "formatting/formatting.ts",
     "formatting/formattingContext.ts",
     "formatting/formattingRequestKind.ts",

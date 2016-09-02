@@ -960,7 +960,7 @@ namespace ts {
 
         constructor(factory: ShimFactory, private logger: Logger) {
             super(factory);
-            this.classifier = createClassifier();
+            this.classifier = Classifier.createClassifier();
         }
 
         public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
