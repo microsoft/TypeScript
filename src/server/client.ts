@@ -216,15 +216,17 @@ namespace ts.server {
             return {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body.map(({ name, kind, kindModifiers, sortText, replacementSpan }) => {
+                entries: response.body.map(entry => {
 
-                    let convertedSpan: TextSpan;
-                    if (replacementSpan) {
-                        convertedSpan = createTextSpanFromBounds(this.lineOffsetToPosition(fileName, replacementSpan.start),
+                    if (entry.replacementSpan !== undefined) {
+                        const { name, kind, kindModifiers, sortText, replacementSpan} = entry;
+
+                        const convertedSpan = createTextSpanFromBounds(this.lineOffsetToPosition(fileName, replacementSpan.start),
                             this.lineOffsetToPosition(fileName, replacementSpan.end));
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
                     }
 
-                    return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                    return entry as { name: string, kind: string, kindModifiers: string, sortText: string };
                 })
             };
         }
