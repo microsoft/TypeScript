@@ -188,7 +188,7 @@ namespace ts {
      */
     function getDefaultTypeRoots(currentDirectory: string, host: ModuleResolutionHost): string[] | undefined {
         if (!host.directoryExists) {
-            return [combinePaths(currentDirectory, "node_modules")];
+            return [combinePaths(currentDirectory, nodeModulesAtTypes)];
             // And if it doesn't exist, tough.
         }
 
