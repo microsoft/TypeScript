@@ -19,15 +19,11 @@
 ////    }
 ////}
 
-// Super in call position goes to constructor.
-goTo.marker("super");
-goTo.definition();
-verify.caretAtMarker("ctr");
 
-// Super in any other position goes to the superclass.
-goTo.marker("superExpression");
-goTo.definition();
-verify.caretAtMarker("B");
-
-goTo.marker("superBroken");
-verify.definitionCountIs(0);
+verify.goToDefinition({
+    // Super in call position goes to constructor.
+    super: "ctr",
+    // Super in any other position goes to the superclass.
+    superExpression: "B",
+    superBroken: []
+});

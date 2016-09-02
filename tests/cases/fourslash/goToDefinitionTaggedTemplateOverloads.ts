@@ -7,10 +7,7 @@
 /////*useFNumber*/f`${0}`;
 /////*useFBool*/f`${false}`;
 
-goTo.marker("useFNumber");
-goTo.definition();
-verify.caretAtMarker("defFNumber");
-
-goTo.marker("useFBool");
-goTo.definition();
-verify.caretAtMarker("defFBool");
+verify.goToDefinition({
+    useFNumber: "defFNumber",
+    useFBool: "defFBool"
+});
