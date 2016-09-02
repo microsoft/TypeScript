@@ -33,7 +33,7 @@ var D = (function (_super) {
         var _this;
         _this = _super.call(this, i) || this;
         var s = {
-            t: this._t
+            t: _this._t
         };
         var i = Factory.create(s);
     }

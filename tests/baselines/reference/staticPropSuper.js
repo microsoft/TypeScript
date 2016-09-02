@@ -60,7 +60,7 @@ var C = (function (_super) {
     __extends(C, _super);
     function C() {
         var _this;
-        this.p = 10;
+        _this.p = 10;
         var x = 1; // should error
     }
     return C;
@@ -69,7 +69,7 @@ var D = (function (_super) {
     __extends(D, _super);
     function D() {
         var _this;
-        this.p = 11;
+        _this.p = 11;
         var x = 1; // should error
     }
     return D;
@@ -78,7 +78,7 @@ var E = (function (_super) {
     __extends(E, _super);
     function E() {
         var _this;
-        this.p = 12;
+        _this.p = 12;
         var x = 1; // should error
     }
     return E;

@@ -34,7 +34,7 @@ var B = (function (_super) {
         "use strict";
         'someStringForEgngInject';
         _this = _super.call(this) || this;
-        this.blub = 12;
+        _this.blub = 12;
     }
     return B;
 }(A));

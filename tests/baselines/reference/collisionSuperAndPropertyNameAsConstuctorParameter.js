@@ -54,7 +54,7 @@ var b2 = (function (_super) {
     function b2(_super) {
         var _this;
         _this = _super.call(this) || this;
-        this._super = _super;
+        _this._super = _super;
     }
     return b2;
 }(a));
@@ -71,7 +71,7 @@ var b4 = (function (_super) {
     function b4(_super) {
         var _this;
         _this = _super.call(this) || this;
-        this._super = _super;
+        _this._super = _super;
     }
     return b4;
 }(a));

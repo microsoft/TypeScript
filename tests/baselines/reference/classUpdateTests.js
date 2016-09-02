@@ -159,7 +159,7 @@ var E = (function (_super) {
     function E() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this.p1 = 0;
+        _this.p1 = 0;
     }
     return E;
 }(D));
@@ -175,7 +175,7 @@ var G = (function (_super) {
     function G() {
         var _this;
         _this = _super.call(this) || this;
-        this.p1 = 0;
+        _this.p1 = 0;
     } // NO ERROR
     return G;
 }(D));
@@ -198,7 +198,7 @@ var J = (function (_super) {
     function J(p1) {
         var _this;
         _this = _super.call(this) || this; // NO ERROR
-        this.p1 = p1;
+        _this.p1 = p1;
     }
     return J;
 }(G));
@@ -206,7 +206,7 @@ var K = (function (_super) {
     __extends(K, _super);
     function K(p1) {
         var _this;
-        this.p1 = p1;
+        _this.p1 = p1;
         var i = 0;
         _this = _super.call(this) || this;
     }
@@ -217,7 +217,7 @@ var L = (function (_super) {
     function L(p1) {
         var _this;
         _this = _super.call(this) || this; // NO ERROR
-        this.p1 = p1;
+        _this.p1 = p1;
     }
     return L;
 }(G));
@@ -225,7 +225,7 @@ var M = (function (_super) {
     __extends(M, _super);
     function M(p1) {
         var _this;
-        this.p1 = p1;
+        _this.p1 = p1;
         var i = 0;
         _this = _super.call(this) || this;
     }

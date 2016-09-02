@@ -83,7 +83,7 @@ var MonsterFood = (function (_super) {
     function MonsterFood(name, flavor) {
         var _this;
         _this = _super.call(this, name) || this;
-        this.flavor = flavor;
+        _this.flavor = flavor;
     }
     return MonsterFood;
 }(Food));
@@ -92,7 +92,7 @@ var IceCream = (function (_super) {
     function IceCream(flavor) {
         var _this;
         _this = _super.call(this, "Ice Cream", flavor) || this;
-        this.flavor = flavor;
+        _this.flavor = flavor;
     }
     return IceCream;
 }(MonsterFood));
@@ -101,8 +101,8 @@ var Cookie = (function (_super) {
     function Cookie(flavor, isGlutenFree) {
         var _this;
         _this = _super.call(this, "Cookie", flavor) || this;
-        this.flavor = flavor;
-        this.isGlutenFree = isGlutenFree;
+        _this.flavor = flavor;
+        _this.isGlutenFree = isGlutenFree;
     }
     return Cookie;
 }(MonsterFood));
@@ -111,7 +111,7 @@ var PetFood = (function (_super) {
     function PetFood(name, whereToBuy) {
         var _this;
         _this = _super.call(this, name) || this;
-        this.whereToBuy = whereToBuy;
+        _this.whereToBuy = whereToBuy;
     }
     return PetFood;
 }(Food));
@@ -120,7 +120,7 @@ var ExpensiveOrganicDogFood = (function (_super) {
     function ExpensiveOrganicDogFood(whereToBuy) {
         var _this;
         _this = _super.call(this, "Origen", whereToBuy) || this;
-        this.whereToBuy = whereToBuy;
+        _this.whereToBuy = whereToBuy;
     }
     return ExpensiveOrganicDogFood;
 }(PetFood));
@@ -129,8 +129,8 @@ var ExpensiveOrganicCatFood = (function (_super) {
     function ExpensiveOrganicCatFood(whereToBuy, containsFish) {
         var _this;
         _this = _super.call(this, "Nature's Logic", whereToBuy) || this;
-        this.whereToBuy = whereToBuy;
-        this.containsFish = containsFish;
+        _this.whereToBuy = whereToBuy;
+        _this.containsFish = containsFish;
     }
     return ExpensiveOrganicCatFood;
 }(PetFood));

@@ -51,7 +51,7 @@ var MyDerived = (function (_super) {
     function MyDerived() {
         var _this;
         _this = _super.call(this) || this;
-        var f1 = _super.prototype.getValue.call(this);
+        var f1 = _super.prototype.getValue.call(_this);
         var f2 = _super.prototype.value;
     }
     return MyDerived;

@@ -28,7 +28,7 @@ var C = (function (_super) {
     __extends(C, _super);
     function C(a) {
         var _this;
-        if (a === void 0) { a = _super.foo.call(this); }
+        if (a === void 0) { a = _super.foo.call(_this); }
     }
     return C;
 }(B));

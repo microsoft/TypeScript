@@ -32,7 +32,7 @@ var Text = (function (_super) {
     function Text() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this._tagName = 'div';
+        _this._tagName = 'div';
     }
     Text.prototype.render = function () {
         return (<this._tagName />);

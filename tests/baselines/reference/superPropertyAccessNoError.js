@@ -101,7 +101,7 @@ var SomeDerivedClass = (function (_super) {
     function SomeDerivedClass() {
         var _this;
         _this = _super.call(this) || this;
-        var x = _super.prototype.func.call(this);
+        var x = _super.prototype.func.call(_this);
         var x;
     }
     SomeDerivedClass.prototype.fn = function () {

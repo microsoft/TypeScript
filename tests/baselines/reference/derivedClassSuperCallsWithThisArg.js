@@ -43,7 +43,7 @@ var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         var _this;
-        _this = _super.call(this, this) || this; // ok
+        _this = _super.call(this, _this) || this; // ok
     }
     return Derived;
 }(Base));
@@ -51,8 +51,8 @@ var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2(a) {
         var _this;
-        _this = _super.call(this, this) || this; // error
-        this.a = a;
+        _this = _super.call(this, _this) || this; // error
+        _this.a = a;
     }
     return Derived2;
 }(Base));
@@ -61,7 +61,7 @@ var Derived3 = (function (_super) {
     function Derived3(a) {
         var _this;
         _this = _super.call(this, function () { return _this; }) || this; // error
-        this.a = a;
+        _this.a = a;
     }
     return Derived3;
 }(Base));
@@ -70,7 +70,7 @@ var Derived4 = (function (_super) {
     function Derived4(a) {
         var _this;
         _this = _super.call(this, function () { return this; }) || this; // ok
-        this.a = a;
+        _this.a = a;
     }
     return Derived4;
 }(Base));

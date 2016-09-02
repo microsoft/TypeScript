@@ -42,7 +42,7 @@ var b = (function (_super) {
     function b() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this.prop2 = {
+        _this.prop2 = {
             doStuff: function () {
                 function _super() {
                 }

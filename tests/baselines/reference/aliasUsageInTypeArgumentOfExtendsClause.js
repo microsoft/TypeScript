@@ -67,7 +67,7 @@ var D = (function (_super) {
     function D() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this.x = moduleA;
+        _this.x = moduleA;
     }
     return D;
 }(C));

@@ -29,8 +29,8 @@ var B = (function (_super) {
     function B() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this.p1 = doThing(A); // OK
-        this.p2 = doThing(B); // OK
+        _this.p1 = doThing(A); // OK
+        _this.p2 = doThing(B); // OK
     }
     return B;
 }(A));

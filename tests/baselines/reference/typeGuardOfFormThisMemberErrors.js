@@ -70,7 +70,7 @@ var Test;
         function File(path, content) {
             var _this;
             _this = _super.call(this, path) || this;
-            this.content = content;
+            _this.content = content;
         }
         return File;
     }(FileSystemObject));

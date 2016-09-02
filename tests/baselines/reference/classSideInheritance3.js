@@ -35,7 +35,7 @@ var B = (function (_super) {
     function B(x, data) {
         var _this;
         _this = _super.call(this, x) || this;
-        this.data = data;
+        _this.data = data;
     }
     return B;
 }(A));

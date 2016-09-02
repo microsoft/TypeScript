@@ -320,7 +320,7 @@ var c3 = (function (_super) {
     function c3() {
         var _this;
         _this = _super.call(this, 10) || this;
-        this.p1 = _super.prototype.c2_p1;
+        _this.p1 = _super.prototype.c2_p1;
     }
     /** c3 f1*/
     c3.prototype.f1 = function () {
@@ -408,7 +408,7 @@ var c6 = (function (_super) {
     function c6() {
         var _this;
         _this = _super.call(this) || this;
-        this.d = _super.prototype.b;
+        _this.d = _super.prototype.b;
     }
     return c6;
 }(c5));

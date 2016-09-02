@@ -74,10 +74,10 @@ var D = (function (_super) {
     function D() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this.self1 = this;
-        this.self2 = this.self;
-        this.self3 = this.foo();
-        this.d = new D();
+        _this.self1 = _this;
+        _this.self2 = _this.self;
+        _this.self3 = _this.foo();
+        _this.d = new D();
     }
     D.prototype.bar = function () {
         this.self = this.self1;

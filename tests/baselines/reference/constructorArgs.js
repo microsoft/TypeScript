@@ -31,7 +31,7 @@ var Sub = (function (_super) {
     function Sub(options) {
         var _this;
         _this = _super.call(this, options.value) || this;
-        this.options = options;
+        _this.options = options;
     }
     return Sub;
 }(Super));

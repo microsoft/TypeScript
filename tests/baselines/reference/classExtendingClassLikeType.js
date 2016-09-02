@@ -78,8 +78,8 @@ var D1 = (function (_super) {
     function D1() {
         var _this;
         _this = _super.call(this, "abc", "def") || this;
-        this.x = "x";
-        this.y = "y";
+        _this.x = "x";
+        _this.y = "y";
     }
     return D1;
 }(getBase()));
@@ -89,8 +89,8 @@ var D2 = (function (_super) {
         var _this;
         _this = _super.call(this, 10) || this;
         _this = _super.call(this, 10, 20) || this;
-        this.x = 1;
-        this.y = 2;
+        _this.x = 1;
+        _this.y = 2;
     }
     return D2;
 }(getBase()));
@@ -99,8 +99,8 @@ var D3 = (function (_super) {
     function D3() {
         var _this;
         _this = _super.call(this, "abc", 42) || this;
-        this.x = "x";
-        this.y = 2;
+        _this.x = "x";
+        _this.y = 2;
     }
     return D3;
 }(getBase()));

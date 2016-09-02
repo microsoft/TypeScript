@@ -61,7 +61,7 @@ var Derived = (function (_super) {
     function Derived(p) {
         var _this;
         _this = _super.call(this, p) || this;
-        this.p; // OK
+        _this.p; // OK
     }
     return Derived;
 }(C3));

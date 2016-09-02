@@ -96,7 +96,7 @@ var Foo2 = (function (_super) {
     function Foo2(_super) {
         var _this;
         _this = _super.call(this) || this;
-        this.prop4 = {
+        _this.prop4 = {
             doStuff: function (_super) {
             }
         };

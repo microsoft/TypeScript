@@ -40,12 +40,12 @@ var b = (function (_super) {
     function b() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this.prop2 = {
+        _this.prop2 = {
             doStuff: function () {
                 var _super = 10; // Should be error 
             }
         };
-        this._super = 10; // No error
+        _this._super = 10; // No error
     }
     return b;
 }(Foo));

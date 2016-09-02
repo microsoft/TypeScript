@@ -71,7 +71,7 @@ var ClassWithNoInitializer = (function (_super) {
     //'this' in optional super call
     function ClassWithNoInitializer() {
         var _this;
-        _this = _super.call(this, this) || this; // Error
+        _this = _super.call(this, _this) || this; // Error
     }
     return ClassWithNoInitializer;
 }(BaseErrClass));
@@ -80,8 +80,8 @@ var ClassWithInitializer = (function (_super) {
     //'this' in required super call
     function ClassWithInitializer() {
         var _this;
-        _this = _super.call(this, this) || this; // Error
-        this.t = 4;
+        _this = _super.call(this, _this) || this; // Error
+        _this.t = 4;
     }
     return ClassWithInitializer;
 }(BaseErrClass));

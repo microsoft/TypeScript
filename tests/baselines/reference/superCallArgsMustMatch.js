@@ -44,7 +44,7 @@ var T6 = (function (_super) {
         // Should error; base constructor has type T for first arg,
         // which is instantiated with 'number' in the extends clause
         _this = _super.call(this, "hi") || this;
-        var x = this.foo;
+        var x = _this.foo;
     }
     return T6;
 }(T5));

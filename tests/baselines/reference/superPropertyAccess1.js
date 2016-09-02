@@ -52,7 +52,7 @@ var D = (function (_super) {
     function D() {
         var _this;
         _this = _super.call(this) || this;
-        _super.prototype.bar.call(this);
+        _super.prototype.bar.call(_this);
         _super.prototype.x; // error
     }
     D.prototype.foo = function () {

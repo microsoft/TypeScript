@@ -105,12 +105,12 @@ var Foo = (function (_super) {
         var _this;
         if (z === void 0) { z = 0; }
         _this = _super.call(this, x) || this;
-        this.y = y;
-        this.z = z;
-        this.gar = 0;
-        this.zoo = "zoo";
-        this.x = x;
-        this.gar = 5;
+        _this.y = y;
+        _this.z = z;
+        _this.gar = 0;
+        _this.zoo = "zoo";
+        _this.x = x;
+        _this.gar = 5;
     }
     Foo.prototype.bar = function () { return 0; };
     Foo.prototype.boo = function (x) { return x; };

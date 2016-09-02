@@ -29,7 +29,7 @@ var A = (function (_super) {
     function A() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this.x = 1;
+        _this.x = 1;
     }
     return A;
 }(Z));

@@ -17,7 +17,7 @@ var D = (function (_super) {
     __extends(D, _super);
     function D() {
         var _this;
-        this._t; // No error
+        _this._t; // No error
     }
     return D;
 }(null));

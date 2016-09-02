@@ -30,7 +30,7 @@ var D = (function (_super) {
         var _this;
         var x = {
             k: _this = _super.call(this, undefined) || this,
-            j: this._t
+            j: _this._t
         };
     }
     return D;

@@ -57,7 +57,7 @@ var C = (function (_super) {
         }) || this;
         // Should be okay.
         // 'p' should have type 'string'.
-        _super.prototype.foo.call(this, {
+        _super.prototype.foo.call(_this, {
             method: function (p) {
                 p.length;
             }

@@ -68,9 +68,9 @@ var Other = (function (_super) {
     function Other() {
         var _this;
         _this = _super.call(this) || this;
-        this.propertyInitializer = _super.prototype.instanceMethod.call(this);
-        this.functionProperty = function () { _super.prototype.instanceMethod.call(_this); };
-        _super.prototype.instanceMethod.call(this);
+        _this.propertyInitializer = _super.prototype.instanceMethod.call(_this);
+        _this.functionProperty = function () { _super.prototype.instanceMethod.call(_this); };
+        _super.prototype.instanceMethod.call(_this);
     }
     // in instance method
     Other.prototype.instanceMethod = function () {

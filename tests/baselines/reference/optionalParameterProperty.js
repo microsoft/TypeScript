@@ -27,7 +27,7 @@ var D = (function (_super) {
     function D(p) {
         var _this;
         _this = _super.call(this) || this;
-        this.p = p;
+        _this.p = p;
     }
     return D;
 }(C));

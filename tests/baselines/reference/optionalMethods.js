@@ -111,7 +111,7 @@ var Derived = (function (_super) {
     function Derived() {
         var _this;
         _this = _super.apply(this, arguments) || this;
-        this.a = 1;
+        _this.a = 1;
     }
     Derived.prototype.f = function () { return 1; };
     return Derived;

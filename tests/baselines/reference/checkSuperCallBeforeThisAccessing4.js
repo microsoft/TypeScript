@@ -45,8 +45,8 @@ var Derived = (function (_super) {
         })();
         _this = _super.call(this) || this;
         _this = _super.call(this) || this;
-        this.x = 10;
-        var that = this;
+        _this.x = 10;
+        var that = _this;
     }
     return Derived;
 }(Based));

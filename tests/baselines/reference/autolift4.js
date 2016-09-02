@@ -45,7 +45,7 @@ var Point3D = (function (_super) {
     function Point3D(x, y, z, m) {
         var _this;
         _this = _super.call(this, x, y) || this;
-        this.z = z;
+        _this.z = z;
     }
     Point3D.prototype.getDist = function () {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.m);

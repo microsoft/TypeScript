@@ -37,8 +37,8 @@ var Derived = (function (_super) {
             return innver;
         }());
         _this = _super.call(this) || this;
-        this.x = 10;
-        var that = this;
+        _this.x = 10;
+        var that = _this;
     }
     return Derived;
 }(Based));

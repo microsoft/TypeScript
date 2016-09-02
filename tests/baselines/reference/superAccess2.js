@@ -46,8 +46,8 @@ var Q = (function (_super) {
         if (zz === void 0) { zz = _super.; }
         if (zzz === void 0) { zzz = function () { return _super.; }; }
         _this = _super.call(this) || this;
-        this.z = z;
-        this.xx = _super.prototype.;
+        _this.z = z;
+        _this.xx = _super.prototype.;
     }
     Q.prototype.foo = function (zz) {
         if (zz === void 0) { zz = _super.prototype.; }

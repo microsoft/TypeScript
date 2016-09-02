@@ -37,7 +37,7 @@ var C = (function (_super) {
     __extends(C, _super);
     function C() {
         var _this;
-        this.x;
+        _this.x;
         any;
     }
     return C;

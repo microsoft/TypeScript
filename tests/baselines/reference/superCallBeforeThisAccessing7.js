@@ -29,7 +29,7 @@ var D = (function (_super) {
     function D() {
         var _this;
         var x = {
-            j: this._t
+            j: _this._t
         };
         _this = _super.call(this, undefined) || this;
     }

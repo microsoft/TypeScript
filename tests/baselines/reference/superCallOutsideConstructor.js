@@ -39,9 +39,9 @@ var D = (function (_super) {
     function D() {
         var _this;
         _this = _super.call(this) || this;
-        this.x = _this = _super.call(this) || this;
+        _this.x = _this = _super.call(this) || this;
         var y = function () {
-            _this = _super.call(_this) || _this;
+            _this = _super.call(this) || this;
         };
         var y2 = function () {
             _this = _super.call(this) || this;
