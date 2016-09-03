@@ -522,7 +522,6 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 4 >Emitted(34, 24) Source(32, 24) + SourceIndex(0)
 5 >Emitted(34, 25) Source(32, 25) + SourceIndex(0)
 ---
->>>        return _this;
 >>>    }
 1 >^^^^
 2 >    ^
@@ -530,8 +529,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1 >
   >    
 2 >    }
-1 >Emitted(36, 5) Source(33, 5) + SourceIndex(0)
-2 >Emitted(36, 6) Source(33, 6) + SourceIndex(0)
+1 >Emitted(35, 5) Source(33, 5) + SourceIndex(0)
+2 >Emitted(35, 6) Source(33, 6) + SourceIndex(0)
 ---
 >>>    return D;
 1->^^^^
@@ -539,8 +538,8 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 1->
   >
 2 >    }
-1->Emitted(37, 5) Source(34, 1) + SourceIndex(0)
-2 >Emitted(37, 13) Source(34, 2) + SourceIndex(0)
+1->Emitted(36, 5) Source(34, 1) + SourceIndex(0)
+2 >Emitted(36, 13) Source(34, 2) + SourceIndex(0)
 ---
 >>>}(C));
 1 >
@@ -573,11 +572,11 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
   >               return null;
   >       }
   >   }
-1 >Emitted(38, 1) Source(34, 1) + SourceIndex(0)
-2 >Emitted(38, 2) Source(34, 2) + SourceIndex(0)
-3 >Emitted(38, 2) Source(17, 1) + SourceIndex(0)
-4 >Emitted(38, 3) Source(17, 17) + SourceIndex(0)
-5 >Emitted(38, 4) Source(17, 18) + SourceIndex(0)
-6 >Emitted(38, 7) Source(34, 2) + SourceIndex(0)
+1 >Emitted(37, 1) Source(34, 1) + SourceIndex(0)
+2 >Emitted(37, 2) Source(34, 2) + SourceIndex(0)
+3 >Emitted(37, 2) Source(17, 1) + SourceIndex(0)
+4 >Emitted(37, 3) Source(17, 17) + SourceIndex(0)
+5 >Emitted(37, 4) Source(17, 18) + SourceIndex(0)
+6 >Emitted(37, 7) Source(34, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=derivedClassConstructorWithExplicitReturns01.js.map

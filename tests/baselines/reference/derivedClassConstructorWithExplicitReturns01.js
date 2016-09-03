@@ -69,7 +69,6 @@ var D = (function (_super) {
         }
         else
             return null;
-        return _this;
     }
     return D;
 }(C));

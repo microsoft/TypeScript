@@ -23,7 +23,6 @@ var C = (function (_super) {
     function C() {
         var _this = _super.call(this) || this;
         return Object.create(null);
-        return _this;
     }
     return C;
 }(null));
@@ -32,7 +31,6 @@ var D = (function (_super) {
     function D() {
         var _this;
         return Object.create(null);
-        return _this;
     }
     return D;
 }(null));
