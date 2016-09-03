@@ -791,10 +791,10 @@ namespace ts {
             }
 
             if (constructor) {
-                Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
-                statementOffset = declareOrCaptureThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, statementOffset);
                 addDefaultValueAssignmentsIfNeeded(statements, constructor);
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+                Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
+                statementOffset = declareOrCaptureThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, statementOffset);
             }
 
             addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
