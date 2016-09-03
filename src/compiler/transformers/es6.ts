@@ -791,7 +791,8 @@ namespace ts {
             }
 
             if (constructor) {
-                declareOrCaptureThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement);
+                Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
+                statementOffset = declareOrCaptureThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, statementOffset);
                 addDefaultValueAssignmentsIfNeeded(statements, constructor);
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
             }
@@ -799,7 +800,6 @@ namespace ts {
             addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
 
             if (constructor) {
-                Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
                 const body = saveStateAndInvoke(constructor, makeTransformerForConstructorBodyAtOffset(statementOffset));
                 addRange(statements, body);
             }
@@ -1118,13 +1118,49 @@ namespace ts {
             statements.push(forStatement);
         }
 
-        function declareOrCaptureThisForConstructorIfNeeded(statements: Statement[], ctor: ConstructorDeclaration, hasExtendsClause: boolean) {
+        /**
+         * Declares a `_this` variable for derived classes and for when arrow functions capture `this`.
+         *
+         * @returns The new statement offset into the `statements` array.
+         */
+        function declareOrCaptureThisForConstructorIfNeeded(statements: Statement[], ctor: ConstructorDeclaration, hasExtendsClause: boolean, firstNonPrologue: number) {
             if (hasExtendsClause) {
-                captureThisForNode(statements, ctor, /*initializer*/ undefined);
+                // Most of the time, a 'super' call will be the first real statement in a constructor body.
+                // In these cases, we'd like to transform these into a *single* statement instead of a declaration
+                // followed by an assignment statement for '_this'. For instance, if we emitted without an initializer,
+                // we'd get:
+                //
+                //      var _this;
+                //      _this = super();
+                //
+                // instead of
+                //
+                //      var _this = super();
+                //
+                let initializer: Expression = undefined;
+                let firstStatement: Statement;
+                if (firstNonPrologue < ctor.body.statements.length) {
+                    firstStatement = ctor.body.statements[firstNonPrologue];
+
+                    if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
+                        initializer = setOriginalNode(
+                            visitImmediateSuperCallInBody(((firstStatement as ExpressionStatement).expression as CallExpression)),
+                            (firstStatement as ExpressionStatement).expression
+                        );
+                    }
+                }
+                captureThisForNode(statements, ctor, /*initializer*/ initializer, firstStatement);
+
+                // We're actually skipping an extra statement. Signal this to the caller.
+                if (initializer) {
+                    return firstNonPrologue + 1;
+                }
             }
             else {
                 addCaptureThisForNodeIfNeeded(statements, ctor);
             }
+
+            return firstNonPrologue;
         }
 
         /**
@@ -1139,7 +1175,9 @@ namespace ts {
             }
         }
 
-        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined) {
+        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void;
+        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, originalStatement: Statement): void;
+        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, originalStatement?: Statement): void {
             enableSubstitutionsForCapturedThis();
             const captureThisStatement = createVariableStatement(
                 /*modifiers*/ undefined,
@@ -1149,7 +1187,8 @@ namespace ts {
                         /*type*/ undefined,
                         initializer
                     )
-                ])
+                ]),
+                originalStatement
             );
 
             setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments | NodeEmitFlags.CustomPrologue);
@@ -2520,7 +2559,15 @@ namespace ts {
          *
          * @param node a CallExpression.
          */
-        function visitCallExpression(node: CallExpression): CallExpression | BinaryExpression {
+        function visitCallExpression(node: CallExpression) {
+            return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
+        }
+
+        function visitImmediateSuperCallInBody(node: CallExpression) {
+            return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ false);
+        }
+
+        function visitCallExpressionWithPotentialCapturedThisAssignment(node: CallExpression, assignToCapturedThis: boolean): CallExpression | BinaryExpression {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
 
@@ -2572,13 +2619,14 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const actualThis = createThis();
                 setNodeEmitFlags(actualThis, NodeEmitFlags.NoSubstitution);
-                return createAssignment(
-                    createIdentifier("_this"),
+                const initializer =
                     createLogicalOr(
                         resultingCall,
                         actualThis
                     )
-                );
+                return assignToCapturedThis
+                    ? createAssignment(createIdentifier("_this"), initializer)
+                    : initializer
             }
             return resultingCall;
         }
