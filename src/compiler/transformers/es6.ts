@@ -1143,9 +1143,10 @@ namespace ts {
                     firstStatement = ctor.body.statements[firstNonPrologue];
 
                     if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
+                        const superCall = (firstStatement as ExpressionStatement).expression as CallExpression;
                         initializer = setOriginalNode(
-                            visitImmediateSuperCallInBody(((firstStatement as ExpressionStatement).expression as CallExpression)),
-                            (firstStatement as ExpressionStatement).expression
+                            saveStateAndInvoke(superCall, visitImmediateSuperCallInBody),
+                            superCall
                         );
                     }
                 }
