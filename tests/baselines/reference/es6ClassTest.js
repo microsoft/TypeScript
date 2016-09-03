@@ -102,8 +102,8 @@ var Bar = (function () {
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y, z) {
-        var _this = _super.call(this, x) || this;
         if (z === void 0) { z = 0; }
+        var _this = _super.call(this, x) || this;
         _this.y = y;
         _this.z = z;
         _this.gar = 0;

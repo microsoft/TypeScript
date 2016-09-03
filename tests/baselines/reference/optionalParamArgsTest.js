@@ -161,8 +161,8 @@ var C1 = (function () {
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2(v2) {
-        var _this = _super.call(this, v2) || this;
         if (v2 === void 0) { v2 = 6; }
+        var _this = _super.call(this, v2) || this;
         return _this;
     }
     return C2;
