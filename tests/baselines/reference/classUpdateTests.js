@@ -157,8 +157,7 @@ var D = (function () {
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        var _this;
-        _this = _super.apply(this, arguments) || this;
+        var _this = _super.apply(this, arguments) || this;
         _this.p1 = 0;
         return _this;
     }
@@ -175,8 +174,7 @@ var F = (function (_super) {
 var G = (function (_super) {
     __extends(G, _super);
     function G() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         _this.p1 = 0;
         return _this;
     } // NO ERROR
@@ -191,8 +189,7 @@ var H = (function () {
 var I = (function (_super) {
     __extends(I, _super);
     function I() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         return _this;
     } // ERROR - no super call allowed
     return I;
@@ -200,8 +197,7 @@ var I = (function (_super) {
 var J = (function (_super) {
     __extends(J, _super);
     function J(p1) {
-        var _this;
-        _this = _super.call(this) || this; // NO ERROR
+        var _this = _super.call(this) || this;
         _this.p1 = p1;
         return _this;
     }
@@ -221,8 +217,7 @@ var K = (function (_super) {
 var L = (function (_super) {
     __extends(L, _super);
     function L(p1) {
-        var _this;
-        _this = _super.call(this) || this; // NO ERROR
+        var _this = _super.call(this) || this;
         _this.p1 = p1;
         return _this;
     }

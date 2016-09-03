@@ -68,8 +68,7 @@ var Test;
     var File = (function (_super) {
         __extends(File, _super);
         function File(path, content) {
-            var _this;
-            _this = _super.call(this, path) || this;
+            var _this = _super.call(this, path) || this;
             _this.content = content;
             return _this;
         }

@@ -35,8 +35,7 @@ new Foo(function (s) { s = 5; }); // error, if types are applied correctly
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        var _this;
-        _this = _super.call(this, function (s) { s = 5; }) || this;
+        var _this = _super.call(this, function (s) { s = 5; }) || this;
         return _this;
     }
     return Bar;

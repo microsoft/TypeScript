@@ -147,8 +147,7 @@ var OtherBase = (function () {
 var OtherDerived = (function (_super) {
     __extends(OtherDerived, _super);
     function OtherDerived() {
-        var _this;
-        _this = _super.apply(this, arguments) || this;
+        var _this = _super.apply(this, arguments) || this;
         //super call in class member initializer of derived type
         _this.t = _this = _super.call(this) || this;
         return _this;

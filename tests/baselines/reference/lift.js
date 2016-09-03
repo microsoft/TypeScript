@@ -32,8 +32,7 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C(y, z, w) {
-        var _this;
-        _this = _super.call(this, y) || this;
+        var _this = _super.call(this, y) || this;
         var x = 10 + w;
         var ll = x * w;
         return _this;

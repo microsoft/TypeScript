@@ -76,8 +76,7 @@ var User = (function () {
 var RegisteredUser = (function (_super) {
     __extends(RegisteredUser, _super);
     function RegisteredUser() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         _this.name = "Frank";
         // super call in an inner function in a constructor
         function inner() {

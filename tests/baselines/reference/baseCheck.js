@@ -43,8 +43,7 @@ var C = (function () {
 var ELoc = (function (_super) {
     __extends(ELoc, _super);
     function ELoc(x) {
-        var _this;
-        _this = _super.call(this, 0, x) || this;
+        var _this = _super.call(this, 0, x) || this;
         return _this;
     }
     return ELoc;
@@ -52,8 +51,7 @@ var ELoc = (function (_super) {
 var ELocVar = (function (_super) {
     __extends(ELocVar, _super);
     function ELocVar(x) {
-        var _this;
-        _this = _super.call(this, 0, loc) || this;
+        var _this = _super.call(this, 0, loc) || this;
         return _this;
     }
     ELocVar.prototype.m = function () {
@@ -64,8 +62,7 @@ var ELocVar = (function (_super) {
 var D = (function (_super) {
     __extends(D, _super);
     function D(z) {
-        var _this;
-        _this = _super.call(this, _this.z) || this;
+        var _this = _super.call(this, _this.z) || this;
         _this.z = z;
         return _this;
     }
@@ -74,8 +71,7 @@ var D = (function (_super) {
 var E = (function (_super) {
     __extends(E, _super);
     function E(z) {
-        var _this;
-        _this = _super.call(this, 0, _this.z) || this;
+        var _this = _super.call(this, 0, _this.z) || this;
         _this.z = z;
         return _this;
     }
@@ -84,8 +80,7 @@ var E = (function (_super) {
 var F = (function (_super) {
     __extends(F, _super);
     function F(z) {
-        var _this;
-        _this = _super.call(this, "hello", _this.z) || this;
+        var _this = _super.call(this, "hello", _this.z) || this;
         _this.z = z;
         return _this;
     }

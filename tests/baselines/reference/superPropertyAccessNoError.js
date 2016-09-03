@@ -99,8 +99,7 @@ var SomeBaseClass = (function () {
 var SomeDerivedClass = (function (_super) {
     __extends(SomeDerivedClass, _super);
     function SomeDerivedClass() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         var x = _super.prototype.func.call(_this);
         var x;
         return _this;

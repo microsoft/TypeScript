@@ -41,11 +41,10 @@ var Q = (function (_super) {
     __extends(Q, _super);
     // Super is not allowed in constructor args
     function Q(z, zz, zzz) {
-        var _this;
+        var _this = _super.call(this) || this;
         if (z === void 0) { z = _super.; }
         if (zz === void 0) { zz = _super.; }
         if (zzz === void 0) { zzz = function () { return _super.; }; }
-        _this = _super.call(this) || this;
         _this.z = z;
         _this.xx = _super.prototype.;
         return _this;

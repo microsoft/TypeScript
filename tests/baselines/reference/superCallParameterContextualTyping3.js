@@ -47,10 +47,10 @@ var CBase = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        var _this;
+        var _this = 
         // Should be okay.
         // 'p' should have type 'string'.
-        _this = _super.call(this, {
+        _super.call(this, {
             method: function (p) {
                 p.length;
             }

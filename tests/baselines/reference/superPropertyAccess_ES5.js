@@ -49,8 +49,7 @@ var MyBase = (function () {
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         var f1 = _super.prototype.getValue.call(_this);
         var f2 = _super.prototype.value;
         return _this;

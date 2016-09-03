@@ -81,8 +81,7 @@ var Food = (function () {
 var MonsterFood = (function (_super) {
     __extends(MonsterFood, _super);
     function MonsterFood(name, flavor) {
-        var _this;
-        _this = _super.call(this, name) || this;
+        var _this = _super.call(this, name) || this;
         _this.flavor = flavor;
         return _this;
     }
@@ -91,8 +90,7 @@ var MonsterFood = (function (_super) {
 var IceCream = (function (_super) {
     __extends(IceCream, _super);
     function IceCream(flavor) {
-        var _this;
-        _this = _super.call(this, "Ice Cream", flavor) || this;
+        var _this = _super.call(this, "Ice Cream", flavor) || this;
         _this.flavor = flavor;
         return _this;
     }
@@ -101,8 +99,7 @@ var IceCream = (function (_super) {
 var Cookie = (function (_super) {
     __extends(Cookie, _super);
     function Cookie(flavor, isGlutenFree) {
-        var _this;
-        _this = _super.call(this, "Cookie", flavor) || this;
+        var _this = _super.call(this, "Cookie", flavor) || this;
         _this.flavor = flavor;
         _this.isGlutenFree = isGlutenFree;
         return _this;
@@ -112,8 +109,7 @@ var Cookie = (function (_super) {
 var PetFood = (function (_super) {
     __extends(PetFood, _super);
     function PetFood(name, whereToBuy) {
-        var _this;
-        _this = _super.call(this, name) || this;
+        var _this = _super.call(this, name) || this;
         _this.whereToBuy = whereToBuy;
         return _this;
     }
@@ -122,8 +118,7 @@ var PetFood = (function (_super) {
 var ExpensiveOrganicDogFood = (function (_super) {
     __extends(ExpensiveOrganicDogFood, _super);
     function ExpensiveOrganicDogFood(whereToBuy) {
-        var _this;
-        _this = _super.call(this, "Origen", whereToBuy) || this;
+        var _this = _super.call(this, "Origen", whereToBuy) || this;
         _this.whereToBuy = whereToBuy;
         return _this;
     }
@@ -132,8 +127,7 @@ var ExpensiveOrganicDogFood = (function (_super) {
 var ExpensiveOrganicCatFood = (function (_super) {
     __extends(ExpensiveOrganicCatFood, _super);
     function ExpensiveOrganicCatFood(whereToBuy, containsFish) {
-        var _this;
-        _this = _super.call(this, "Nature's Logic", whereToBuy) || this;
+        var _this = _super.call(this, "Nature's Logic", whereToBuy) || this;
         _this.whereToBuy = whereToBuy;
         _this.containsFish = containsFish;
         return _this;

@@ -197,8 +197,7 @@ value;
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         _super.prototype. *= value;
         _super.prototype. += value;
         return _this;

@@ -123,8 +123,7 @@ var G = (function () {
 var H = (function (_super) {
     __extends(H, _super);
     function H() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         return new G(); //error
         return _this;
     }
@@ -133,8 +132,7 @@ var H = (function (_super) {
 var I = (function (_super) {
     __extends(I, _super);
     function I() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         return new G();
         return _this;
     }

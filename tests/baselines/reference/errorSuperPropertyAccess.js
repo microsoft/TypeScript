@@ -186,8 +186,7 @@ SomeBase.publicStaticMember = 0;
 var SomeDerived1 = (function (_super) {
     __extends(SomeDerived1, _super);
     function SomeDerived1() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         _super.prototype.publicMember = 1;
         return _this;
     }
@@ -221,8 +220,7 @@ var SomeDerived1 = (function (_super) {
 var SomeDerived2 = (function (_super) {
     __extends(SomeDerived2, _super);
     function SomeDerived2() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         _super.prototype.privateMember = 1;
         return _this;
     }

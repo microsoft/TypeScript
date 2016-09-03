@@ -49,8 +49,7 @@ var Foo;
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         return _this;
     }
     return Bar;
@@ -58,8 +57,7 @@ var Bar = (function (_super) {
 var Baz = (function (_super) {
     __extends(Baz, _super);
     function Baz() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         return _this;
     }
     return Baz;

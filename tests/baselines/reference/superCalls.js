@@ -47,8 +47,7 @@ var Derived = (function (_super) {
     __extends(Derived, _super);
     //super call in class constructor of derived type
     function Derived(q) {
-        var _this;
-        _this = _super.call(this, '') || this;
+        var _this = _super.call(this, '') || this;
         _this.q = q;
         //type of super call expression is void
         var p = _this = _super.call(this, '') || this;

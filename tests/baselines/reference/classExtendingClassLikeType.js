@@ -76,8 +76,7 @@ var D0 = (function (_super) {
 var D1 = (function (_super) {
     __extends(D1, _super);
     function D1() {
-        var _this;
-        _this = _super.call(this, "abc", "def") || this;
+        var _this = _super.call(this, "abc", "def") || this;
         _this.x = "x";
         _this.y = "y";
         return _this;
@@ -87,8 +86,7 @@ var D1 = (function (_super) {
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        var _this;
-        _this = _super.call(this, 10) || this;
+        var _this = _super.call(this, 10) || this;
         _this = _super.call(this, 10, 20) || this;
         _this.x = 1;
         _this.y = 2;
@@ -99,8 +97,7 @@ var D2 = (function (_super) {
 var D3 = (function (_super) {
     __extends(D3, _super);
     function D3() {
-        var _this;
-        _this = _super.call(this, "abc", 42) || this;
+        var _this = _super.call(this, "abc", 42) || this;
         _this.x = "x";
         _this.y = 2;
         return _this;

@@ -30,8 +30,7 @@ var Base = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this;
-        _this = _super.call(this, i) || this;
+        var _this = _super.call(this, i) || this;
         var s = {
             t: _this._t
         };

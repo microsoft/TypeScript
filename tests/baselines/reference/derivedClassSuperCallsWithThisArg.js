@@ -42,8 +42,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this;
-        _this = _super.call(this, _this) || this; // ok
+        var _this = _super.call(this, _this) || this;
         return _this;
     }
     return Derived;
@@ -51,8 +50,7 @@ var Derived = (function (_super) {
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2(a) {
-        var _this;
-        _this = _super.call(this, _this) || this; // error
+        var _this = _super.call(this, _this) || this;
         _this.a = a;
         return _this;
     }
@@ -61,8 +59,7 @@ var Derived2 = (function (_super) {
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3(a) {
-        var _this;
-        _this = _super.call(this, function () { return _this; }) || this; // error
+        var _this = _super.call(this, function () { return _this; }) || this;
         _this.a = a;
         return _this;
     }
@@ -71,8 +68,7 @@ var Derived3 = (function (_super) {
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4(a) {
-        var _this;
-        _this = _super.call(this, function () { return this; }) || this; // ok
+        var _this = _super.call(this, function () { return this; }) || this;
         _this.a = a;
         return _this;
     }

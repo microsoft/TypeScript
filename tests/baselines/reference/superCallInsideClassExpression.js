@@ -39,8 +39,7 @@ var B = (function (_super) {
         var D = (function (_super) {
             __extends(class_1, _super);
             function class_1() {
-                var _this;
-                _this = _super.call(this) || this;
+                var _this = _super.call(this) || this;
                 return _this;
             }
             return class_1;

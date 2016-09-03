@@ -29,8 +29,7 @@ var Base = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         (function () {
             var obj = (_a = {},
                 // Ideally, we would capture this. But the reference is

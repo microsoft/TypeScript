@@ -21,8 +21,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         return Object.create(null);
         return _this;
     }

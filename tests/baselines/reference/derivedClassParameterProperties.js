@@ -130,8 +130,7 @@ var Derived2 = (function (_super) {
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3(y) {
-        var _this;
-        _this = _super.call(this) || this; // ok
+        var _this = _super.call(this) || this;
         _this.y = y;
         var a = 1;
         return _this;
@@ -152,8 +151,7 @@ var Derived4 = (function (_super) {
 var Derived5 = (function (_super) {
     __extends(Derived5, _super);
     function Derived5(y) {
-        var _this;
-        _this = _super.call(this) || this; // ok
+        var _this = _super.call(this) || this;
         _this.a = 1;
         var b = 2;
         return _this;
@@ -186,8 +184,7 @@ var Derived7 = (function (_super) {
 var Derived8 = (function (_super) {
     __extends(Derived8, _super);
     function Derived8(y) {
-        var _this;
-        _this = _super.call(this) || this; // ok
+        var _this = _super.call(this) || this;
         _this.a = 1;
         _this.a = 3;
         _this.b = 3;
@@ -216,8 +213,7 @@ var Derived9 = (function (_super) {
 var Derived10 = (function (_super) {
     __extends(Derived10, _super);
     function Derived10(y) {
-        var _this;
-        _this = _super.call(this) || this; // ok
+        var _this = _super.call(this) || this;
         _this.a = 1;
         _this.a = 3;
         _this.b = 3;

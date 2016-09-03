@@ -116,8 +116,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this;
-        _this = _super.call(this, function () { return _this; }) || this;
+        var _this = _super.call(this, function () { return _this; }) || this;
         return _this;
     }
     return Derived;
@@ -159,8 +158,7 @@ var M2;
     var Derived = (function (_super) {
         __extends(Derived, _super);
         function Derived() {
-            var _this;
-            _this = _super.call(this, function () { return _this; }) || this;
+            var _this = _super.call(this, function () { return _this; }) || this;
             return _this;
         }
         return Derived;

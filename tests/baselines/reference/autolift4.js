@@ -43,8 +43,7 @@ Point.origin = new Point(0, 0);
 var Point3D = (function (_super) {
     __extends(Point3D, _super);
     function Point3D(x, y, z, m) {
-        var _this;
-        _this = _super.call(this, x, y) || this;
+        var _this = _super.call(this, x, y) || this;
         _this.z = z;
         return _this;
     }

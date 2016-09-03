@@ -51,8 +51,7 @@ var EndGate;
         var NumberTween = (function (_super) {
             __extends(NumberTween, _super);
             function NumberTween(from) {
-                var _this;
-                _this = _super.call(this, from) || this;
+                var _this = _super.call(this, from) || this;
                 return _this;
             }
             return NumberTween;

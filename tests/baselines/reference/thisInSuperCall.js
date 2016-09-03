@@ -36,8 +36,7 @@ var Base = (function () {
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo() {
-        var _this;
-        _this = _super.call(this, _this) || this; // error: "super" has to be called before "this" accessing
+        var _this = _super.call(this, _this) || this;
         return _this;
     }
     return Foo;
@@ -45,8 +44,7 @@ var Foo = (function (_super) {
 var Foo2 = (function (_super) {
     __extends(Foo2, _super);
     function Foo2() {
-        var _this;
-        _this = _super.call(this, _this) || this; // error
+        var _this = _super.call(this, _this) || this;
         _this.p = 0;
         return _this;
     }
@@ -55,8 +53,7 @@ var Foo2 = (function (_super) {
 var Foo3 = (function (_super) {
     __extends(Foo3, _super);
     function Foo3(p) {
-        var _this;
-        _this = _super.call(this, _this) || this; // error
+        var _this = _super.call(this, _this) || this;
         _this.p = p;
         return _this;
     }

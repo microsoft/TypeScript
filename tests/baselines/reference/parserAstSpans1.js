@@ -318,8 +318,7 @@ var c2 = (function () {
 var c3 = (function (_super) {
     __extends(c3, _super);
     function c3() {
-        var _this;
-        _this = _super.call(this, 10) || this;
+        var _this = _super.call(this, 10) || this;
         _this.p1 = _super.prototype.c2_p1;
         return _this;
     }
@@ -407,8 +406,7 @@ var c5 = (function () {
 var c6 = (function (_super) {
     __extends(c6, _super);
     function c6() {
-        var _this;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         _this.d = _super.prototype.b;
         return _this;
     }

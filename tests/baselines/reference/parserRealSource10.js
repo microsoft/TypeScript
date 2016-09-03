@@ -826,8 +826,7 @@ var TypeScript;
     var NumberLiteralToken = (function (_super) {
         __extends(NumberLiteralToken, _super);
         function NumberLiteralToken(value, hasEmptyFraction) {
-            var _this;
-            _this = _super.call(this, TokenID.NumberLiteral) || this;
+            var _this = _super.call(this, TokenID.NumberLiteral) || this;
             _this.value = value;
             _this.hasEmptyFraction = hasEmptyFraction;
             return _this;
@@ -844,8 +843,7 @@ var TypeScript;
     var StringLiteralToken = (function (_super) {
         __extends(StringLiteralToken, _super);
         function StringLiteralToken(value) {
-            var _this;
-            _this = _super.call(this, TokenID.StringLiteral) || this;
+            var _this = _super.call(this, TokenID.StringLiteral) || this;
             _this.value = value;
             return _this;
         }
@@ -861,8 +859,7 @@ var TypeScript;
     var IdentifierToken = (function (_super) {
         __extends(IdentifierToken, _super);
         function IdentifierToken(value, hasEscapeSequence) {
-            var _this;
-            _this = _super.call(this, TokenID.Identifier) || this;
+            var _this = _super.call(this, TokenID.Identifier) || this;
             _this.value = value;
             _this.hasEscapeSequence = hasEscapeSequence;
             return _this;
@@ -879,8 +876,7 @@ var TypeScript;
     var WhitespaceToken = (function (_super) {
         __extends(WhitespaceToken, _super);
         function WhitespaceToken(tokenId, value) {
-            var _this;
-            _this = _super.call(this, tokenId) || this;
+            var _this = _super.call(this, tokenId) || this;
             _this.value = value;
             return _this;
         }
@@ -896,8 +892,7 @@ var TypeScript;
     var CommentToken = (function (_super) {
         __extends(CommentToken, _super);
         function CommentToken(tokenID, value, isBlock, startPos, line, endsLine) {
-            var _this;
-            _this = _super.call(this, tokenID) || this;
+            var _this = _super.call(this, tokenID) || this;
             _this.value = value;
             _this.isBlock = isBlock;
             _this.startPos = startPos;
@@ -917,8 +912,7 @@ var TypeScript;
     var RegularExpressionLiteralToken = (function (_super) {
         __extends(RegularExpressionLiteralToken, _super);
         function RegularExpressionLiteralToken(regex) {
-            var _this;
-            _this = _super.call(this, TokenID.RegularExpressionLiteral) || this;
+            var _this = _super.call(this, TokenID.RegularExpressionLiteral) || this;
             _this.regex = regex;
             return _this;
         }

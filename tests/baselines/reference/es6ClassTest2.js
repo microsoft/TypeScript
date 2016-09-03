@@ -267,8 +267,7 @@ var SuperParent = (function () {
 var SuperChild = (function (_super) {
     __extends(SuperChild, _super);
     function SuperChild() {
-        var _this;
-        _this = _super.call(this, 1) || this;
+        var _this = _super.call(this, 1) || this;
         return _this;
     }
     SuperChild.prototype.b = function () {

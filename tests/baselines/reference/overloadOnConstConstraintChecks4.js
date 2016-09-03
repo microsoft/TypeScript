@@ -27,8 +27,7 @@ var Z = (function () {
 var A = (function (_super) {
     __extends(A, _super);
     function A() {
-        var _this;
-        _this = _super.apply(this, arguments) || this;
+        var _this = _super.apply(this, arguments) || this;
         _this.x = 1;
         return _this;
     }

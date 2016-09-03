@@ -234,8 +234,7 @@ var ts;
     var Property = (function (_super) {
         __extends(Property, _super);
         function Property(name, type, flags) {
-            var _this;
-            _this = _super.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.name = name;
             _this.type = type;
             _this.flags = flags;
@@ -256,8 +255,7 @@ var ts;
     var Signature = (function (_super) {
         __extends(Signature, _super);
         function Signature(typeParameters, parameters, returnType) {
-            var _this;
-            _this = _super.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.typeParameters = typeParameters;
             _this.parameters = parameters;
             _this.returnType = returnType;
@@ -278,8 +276,7 @@ var ts;
     var Parameter = (function (_super) {
         __extends(Parameter, _super);
         function Parameter(name, type, flags) {
-            var _this;
-            _this = _super.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.name = name;
             _this.type = type;
             _this.flags = flags;
