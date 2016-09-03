@@ -16,7 +16,7 @@ namespace Utils {
     }
 
     export class VirtualFile extends VirtualFileSystemEntry {
-        content: string;
+        content?: Harness.LanguageService.ScriptInfo;
         isFile() { return true; }
     }
 
@@ -73,7 +73,7 @@ namespace Utils {
             }
         }
 
-        addFile(name: string, content?: string): VirtualFile {
+        addFile(name: string, content?: Harness.LanguageService.ScriptInfo): VirtualFile {
             const entry = this.getFileSystemEntry(name);
             if (entry === undefined) {
                 const file = new VirtualFile(this.fileSystem, name);
@@ -111,6 +111,7 @@ namespace Utils {
         getFileSystemEntries() { return this.root.getFileSystemEntries(); }
 
         addDirectory(path: string) {
+            path = ts.normalizePath(path);
             const components = ts.getNormalizedPathComponents(path, this.currentDirectory);
             let directory: VirtualDirectory = this.root;
             for (const component of components) {
@@ -123,8 +124,8 @@ namespace Utils {
             return directory;
         }
 
-        addFile(path: string, content?: string) {
-            const absolutePath = ts.getNormalizedAbsolutePath(path, this.currentDirectory);
+        addFile(path: string, content?: Harness.LanguageService.ScriptInfo) {
+            const absolutePath = ts.normalizePath(ts.getNormalizedAbsolutePath(path, this.currentDirectory));
             const fileName = ts.getBaseFileName(path);
             const directoryPath = ts.getDirectoryPath(absolutePath);
             const directory = this.addDirectory(directoryPath);
@@ -141,6 +142,7 @@ namespace Utils {
         }
 
         traversePath(path: string) {
+            path = ts.normalizePath(path);
             let directory: VirtualDirectory = this.root;
             for (const component of ts.getNormalizedPathComponents(path, this.currentDirectory)) {
                 const entry = directory.getFileSystemEntry(component);
@@ -157,6 +159,40 @@ namespace Utils {
 
             return directory;
         }
+
+        /**
+         * Reads the directory at the given path and retrieves a list of file names and a list
+         * of directory names within it. Suitable for use with ts.matchFiles()
+         * @param path  The path to the directory to be read
+         */
+        getAccessibleFileSystemEntries(path: string) {
+            const entry = this.traversePath(path);
+            if (entry && entry.isDirectory()) {
+                const directory = <VirtualDirectory>entry;
+                return {
+                    files: ts.map(directory.getFiles(), f => f.name),
+                    directories: ts.map(directory.getDirectories(), d => d.name)
+                };
+            }
+            return { files: [], directories: [] };
+        }
+
+        getAllFileEntries() {
+            const fileEntries: VirtualFile[] = [];
+            getFilesRecursive(this.root, fileEntries);
+            return fileEntries;
+
+            function getFilesRecursive(dir: VirtualDirectory, result: VirtualFile[]) {
+                const files = dir.getFiles();
+                const dirs = dir.getDirectories();
+                for (const file of files) {
+                    result.push(file);
+                }
+                for (const subDir of dirs) {
+                    getFilesRecursive(subDir, result);
+                }
+            }
+        }
     }
 
     export class MockParseConfigHost extends VirtualFileSystem implements ts.ParseConfigHost {
@@ -169,18 +205,6 @@ namespace Utils {
 
         readDirectory(path: string, extensions: string[], excludes: string[], includes: string[]) {
             return ts.matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, (path: string) => this.getAccessibleFileSystemEntries(path));
-        }
-
-        getAccessibleFileSystemEntries(path: string) {
-            const entry = this.traversePath(path);
-            if (entry && entry.isDirectory()) {
-                const directory = <VirtualDirectory>entry;
-                return {
-                    files: ts.map(directory.getFiles(), f => f.name),
-                    directories: ts.map(directory.getDirectories(), d => d.name)
-                };
-            }
-            return { files: [], directories: [] };
         }
     }
 }

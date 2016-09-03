@@ -306,11 +306,6 @@ namespace ts.server {
             throw new Error("No script with name '" + filename + "'");
         }
 
-        resolvePath(path: string): string {
-            const result = this.host.resolvePath(path);
-            return result;
-        }
-
         fileExists(path: string): boolean {
             const result = this.host.fileExists(path);
             return result;
@@ -322,6 +317,14 @@ namespace ts.server {
 
         getDirectories(path: string): string[] {
             return this.host.getDirectories(path);
+        }
+
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+            return this.host.readDirectory(path, extensions, exclude, include);
+        }
+
+        readFile(path: string, encoding?: string): string {
+            return this.host.readFile(path, encoding);
         }
 
         /**
