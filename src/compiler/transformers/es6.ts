@@ -804,7 +804,9 @@ namespace ts {
                 addRange(statements, body);
             }
 
-            if (extendsClauseElement) {
+            // Return `_this` unless we're sure enough that it would be pointless to add a return statement.
+            // If there's a constructor that we can tell returns in enough places, then we *do not* want to add a return.
+            if (extendsClauseElement && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
                 statements.push(
                     createReturn(
                         createIdentifier("_this")
@@ -831,6 +833,36 @@ namespace ts {
 
         function makeTransformerForConstructorBodyAtOffset(offset: number): (c: ConstructorDeclaration) => NodeArray<Statement> {
             return constructor => visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ offset);
+        }
+
+        /**
+         * We want to try to avoid emitting a return statement in certain cases if a user already returned something.
+         * It would be pointless and generate dead code, so we'll try to make things a little bit prettier
+         * by doing a minimal check on whether some common patterns always explicitly return.
+         */
+        function isSufficientlyCoveredByReturnStatements(statement: Statement): boolean {
+            // A return statement is considered covered.
+            if (statement.kind === SyntaxKind.ReturnStatement) {
+                return true;
+            }
+
+            // An if-statement with two covered branches is covered.
+            else if (statement.kind === SyntaxKind.IfStatement) {
+                const ifStatement = statement as IfStatement;
+                if (ifStatement.elseStatement) {
+                    return isSufficientlyCoveredByReturnStatements(ifStatement.thenStatement) &&
+                        isSufficientlyCoveredByReturnStatements(ifStatement.elseStatement);
+                }
+            }
+            // A block is covered if it has a last statement which is covered.
+            else if (statement.kind === SyntaxKind.Block) {
+                const lastStatement = lastOrUndefined((statement as Block).statements);
+                if (lastStatement && isSufficientlyCoveredByReturnStatements(lastStatement)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /**
