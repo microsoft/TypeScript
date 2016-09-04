@@ -27,7 +27,7 @@ var Test;
         function Tester() {
         }
         Tester.prototype.willThrowError = function () {
-            Mocked = Mocked || function () {
+            Mocked = Mocked || function () { // => Error: Invalid left-hand side of assignment expression.
                 return { myProp: "test" };
             };
         };

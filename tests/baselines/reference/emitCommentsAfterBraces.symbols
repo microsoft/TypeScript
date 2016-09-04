@@ -1,0 +1,9 @@
+=== tests/cases/compiler/emitCommentsAfterBraces.ts ===
+if (true) {//validation and tokenization
+	let a = 42;
+>a : Symbol(a, Decl(emitCommentsAfterBraces.ts, 1, 4))
+}
+
+if (true) {/*comment*/ let a = 42;}
+>a : Symbol(a, Decl(emitCommentsAfterBraces.ts, 4, 26))
+

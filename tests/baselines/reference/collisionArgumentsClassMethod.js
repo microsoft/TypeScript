@@ -52,38 +52,38 @@ class c3 {
 var c1 = (function () {
     function c1() {
     }
-    c1.prototype.foo = function (i) {
+    c1.prototype.foo = function (i) { //arguments is error
         var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     };
-    c1.prototype.foo1 = function (arguments) {
+    c1.prototype.foo1 = function (arguments) { //arguments is error
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
         var arguments = 10; // no error
     };
-    c1.prototype.fooNoError = function (arguments) {
+    c1.prototype.fooNoError = function (arguments) { // no error
         var arguments = 10; // no error
     };
-    c1.prototype.f4 = function (i) {
+    c1.prototype.f4 = function (i) { // error
         var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     };
-    c1.prototype.f41 = function (arguments) {
+    c1.prototype.f41 = function (arguments) { // error
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     };
-    c1.prototype.f4NoError = function (arguments) {
+    c1.prototype.f4NoError = function (arguments) { // no error
         var arguments; // no error
     };
     return c1;

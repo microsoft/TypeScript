@@ -29,16 +29,16 @@ class X {
 }
 var prop11; // spaces before the first type argument
 var prop12; // spaces before the first type argument
-function f1() {
+function f1() { // Inferred return type
     return prop11;
 }
-function f2() {
+function f2() { // Inferred return type
     return prop12;
 }
-function f3() {
+function f3() { // written with space before type argument
     return prop11;
 }
-function f4() {
+function f4() { // written type with parenthesis
     return prop12;
 }
 class Y {

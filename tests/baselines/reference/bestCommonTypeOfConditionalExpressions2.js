@@ -59,7 +59,7 @@ var r9 = true ? derived : derived2;
 function foo(t, u) {
     return true ? t : u;
 }
-function foo2(t, u) {
+function foo2(t, u) { // Error for referencing own type parameter
     return true ? t : u; // Ok because BCT(T, U) = U
 }
 function foo3(t, u) {

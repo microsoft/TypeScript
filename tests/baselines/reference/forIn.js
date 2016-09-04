@@ -23,16 +23,16 @@ for (var l in arr) {
 
 //// [forIn.js]
 var arr = null;
-for (var i in arr) {
+for (var i in arr) { // error
     var x1 = arr[i];
     var y1 = arr[i];
 }
-for (var j in arr) {
+for (var j in arr) { // ok
     var x2 = arr[j];
     var y2 = arr[j];
 }
 var arr2 = [];
-for (j in arr2) {
+for (j in arr2) { // ok
     var x3 = arr2[j];
     var y3 = arr2[j];
 }

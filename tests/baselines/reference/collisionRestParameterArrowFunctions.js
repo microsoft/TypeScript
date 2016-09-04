@@ -14,14 +14,14 @@ var f2NoError = () => {
 }
 
 //// [collisionRestParameterArrowFunctions.js]
-var f1 = function (_i) {
+var f1 = function (_i) { //_i is error
     var restParameters = [];
     for (var _a = 1; _a < arguments.length; _a++) {
         restParameters[_a - 1] = arguments[_a];
     }
     var _i = 10; // no error
 };
-var f1NoError = function (_i) {
+var f1NoError = function (_i) { // no error
     var _i = 10; // no error
 };
 var f2 = function () {

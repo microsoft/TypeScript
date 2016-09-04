@@ -24,13 +24,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-function _super() {
+function _super() { // No error
 }
 var Foo = (function () {
     function Foo() {
         this.prop1 = {
             doStuff: function () {
-                function _super() {
+                function _super() { // No error
                 }
             }
         };
@@ -43,7 +43,7 @@ var b = (function (_super) {
         _super.apply(this, arguments);
         this.prop2 = {
             doStuff: function () {
-                function _super() {
+                function _super() { // error
                 }
             }
         };

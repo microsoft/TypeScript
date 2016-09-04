@@ -73,18 +73,18 @@ var Foo = (function () {
     }
     Foo.prototype.a = function () {
         var _this = this;
-        var lamda = function (_super) {
+        var lamda = function (_super) { // No Error 
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    Foo.prototype.b = function (_super) {
+    Foo.prototype.b = function (_super) { // No Error 
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     Object.defineProperty(Foo.prototype, "c", {
-        set: function (_super) {
+        set: function (_super) { // No error
         },
         enumerable: true,
         configurable: true
@@ -96,24 +96,24 @@ var Foo2 = (function (_super) {
     function Foo2(_super) {
         _super.call(this);
         this.prop4 = {
-            doStuff: function (_super) {
+            doStuff: function (_super) { // should be error
             }
         };
     }
     Foo2.prototype.x = function () {
         var _this = this;
-        var lamda = function (_super) {
+        var lamda = function (_super) { // Error 
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    Foo2.prototype.y = function (_super) {
+    Foo2.prototype.y = function (_super) { // Error 
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     Object.defineProperty(Foo2.prototype, "z", {
-        set: function (_super) {
+        set: function (_super) { // Error
         },
         enumerable: true,
         configurable: true
@@ -125,7 +125,7 @@ var Foo4 = (function (_super) {
     function Foo4(_super) {
         _super.call(this);
     }
-    Foo4.prototype.y = function (_super) {
+    Foo4.prototype.y = function (_super) { // Error 
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture

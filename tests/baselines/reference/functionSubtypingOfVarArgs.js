@@ -34,7 +34,7 @@ var StringEvent = (function (_super) {
     function StringEvent() {
         _super.apply(this, arguments);
     }
-    StringEvent.prototype.add = function (listener) {
+    StringEvent.prototype.add = function (listener) { // valid, items is subtype of args
         _super.prototype.add.call(this, listener);
     };
     return StringEvent;

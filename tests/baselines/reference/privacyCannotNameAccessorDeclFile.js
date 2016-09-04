@@ -192,7 +192,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
     function publicClassWithWithPrivateGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
+        get: function () { // Error
             return exporter.createExportedWidget1();
         },
         enumerable: true,
@@ -206,7 +206,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
+        get: function () { // Error
             return exporter.createExportedWidget1();
         },
         enumerable: true,
@@ -220,7 +220,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
+        get: function () { // Error
             return exporter.createExportedWidget3();
         },
         enumerable: true,
@@ -234,7 +234,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
+        get: function () { // Error
             return exporter.createExportedWidget3();
         },
         enumerable: true,
@@ -315,28 +315,28 @@ var publicClassWithPrivateModuleGetAccessorTypes = (function () {
     function publicClassWithPrivateModuleGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
+        get: function () { // Error
             return exporter.createExportedWidget2();
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
+        get: function () { // Error
             return exporter.createExportedWidget2();
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
+        get: function () { // Error
             return exporter.createExportedWidget4();
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
+        get: function () { // Error
             return exporter.createExportedWidget4();
         },
         enumerable: true,

@@ -17,21 +17,21 @@ var f2NoError = () => {
 }
 
 //// [collisionArgumentsArrowFunctions.js]
-var f1 = function (i) {
+var f1 = function (i) { //arguments is error
     var arguments = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         arguments[_i - 1] = arguments[_i];
     }
     var arguments; // no error
 };
-var f12 = function (arguments) {
+var f12 = function (arguments) { //arguments is error
     var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rest[_i - 1] = arguments[_i];
     }
     var arguments = 10; // no error
 };
-var f1NoError = function (arguments) {
+var f1NoError = function (arguments) { // no error
     var arguments = 10; // no error
 };
 var f2 = function () {

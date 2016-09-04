@@ -26,7 +26,7 @@ var Foo = (function () {
         get: function () {
             return 0;
         },
-        set: function (n) {
+        set: function (n) { // should not be an error - infer number
         },
         enumerable: true,
         configurable: true

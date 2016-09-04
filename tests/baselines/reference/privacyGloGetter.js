@@ -135,10 +135,10 @@ var m1;
             configurable: true
         });
         Object.defineProperty(C3_public.prototype, "p4_public", {
-            get: function () {
+            get: function () { // error
                 return new C2_private(); //error
             },
-            set: function (m1_c3_p4_arg) {
+            set: function (m1_c3_p4_arg) { // error
             },
             enumerable: true,
             configurable: true

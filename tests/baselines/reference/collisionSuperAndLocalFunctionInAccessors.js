@@ -45,19 +45,19 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-function _super() {
+function _super() { // No error
 }
 var Foo = (function () {
     function Foo() {
     }
     Object.defineProperty(Foo.prototype, "prop1", {
         get: function () {
-            function _super() {
+            function _super() { // No error
             }
             return 10;
         },
         set: function (val) {
-            function _super() {
+            function _super() { // No error
             }
         },
         enumerable: true,
@@ -72,12 +72,12 @@ var b = (function (_super) {
     }
     Object.defineProperty(b.prototype, "prop2", {
         get: function () {
-            function _super() {
+            function _super() { // Should be error
             }
             return 10;
         },
         set: function (val) {
-            function _super() {
+            function _super() { // Should be error
             }
         },
         enumerable: true,
@@ -93,14 +93,14 @@ var c = (function (_super) {
     Object.defineProperty(c.prototype, "prop2", {
         get: function () {
             var x = function () {
-                function _super() {
+                function _super() { // Should be error
                 }
             };
             return 10;
         },
         set: function (val) {
             var x = function () {
-                function _super() {
+                function _super() { // Should be error
                 }
             };
         },

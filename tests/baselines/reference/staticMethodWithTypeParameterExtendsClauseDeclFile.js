@@ -37,13 +37,13 @@ exports.publicClass = publicClass;
 var publicClassWithWithPrivateTypeParameters = (function () {
     function publicClassWithWithPrivateTypeParameters() {
     }
-    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1 = function () {
+    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1 = function () { // do not emit extends clause
     };
-    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod1 = function () {
+    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod1 = function () { // do not emit extends clause
     };
-    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod2 = function () {
+    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod2 = function () { // do not emit extends clause
     };
-    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod2 = function () {
+    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod2 = function () { // do not emit extends clause
     };
     publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
     };

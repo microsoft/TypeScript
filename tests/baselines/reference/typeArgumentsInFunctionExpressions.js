@@ -12,11 +12,11 @@ var obj2 = function f<T>(a: T): T { // should not error
 
 
 //// [typeArgumentsInFunctionExpressions.js]
-var obj = function f(a) {
+var obj = function f(a) { // should not error
     var x;
     return a;
 };
-var obj2 = function f(a) {
+var obj2 = function f(a) { // should not error
     var x;
     return a;
 };

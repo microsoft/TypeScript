@@ -1076,7 +1076,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
     function publicClassWithWithPrivateGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
+        get: function () { // Error
             return null;
         },
         enumerable: true,
@@ -1090,7 +1090,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
+        get: function () { // Error
             return null;
         },
         enumerable: true,
@@ -1104,7 +1104,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
+        get: function () { // Error
             return new privateClass();
         },
         enumerable: true,
@@ -1118,7 +1118,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
+        get: function () { // Error
             return new privateClass();
         },
         enumerable: true,
@@ -1322,7 +1322,7 @@ var publicClassWithWithPrivateSetAccessorTypes = (function () {
     function publicClassWithWithPrivateSetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-        set: function (param) {
+        set: function (param) { // Error
         },
         enumerable: true,
         configurable: true
@@ -1334,7 +1334,7 @@ var publicClassWithWithPrivateSetAccessorTypes = (function () {
         configurable: true
     });
     Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-        set: function (param) {
+        set: function (param) { // Error
         },
         enumerable: true,
         configurable: true
@@ -1440,28 +1440,28 @@ var publicClassWithPrivateModuleGetAccessorTypes = (function () {
     function publicClassWithPrivateModuleGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
+        get: function () { // Error
             return null;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
+        get: function () { // Error
             return null;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
+        get: function () { // Error
             return new privateModule.publicClass();
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
+        get: function () { // Error
             return new privateModule.publicClass();
         },
         enumerable: true,
@@ -1474,13 +1474,13 @@ var publicClassWithPrivateModuleSetAccessorTypes = (function () {
     function publicClassWithPrivateModuleSetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-        set: function (param) {
+        set: function (param) { // Error
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-        set: function (param) {
+        set: function (param) { // Error
         },
         enumerable: true,
         configurable: true
@@ -1555,7 +1555,7 @@ var publicModule;
         function publicClassWithWithPrivateGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
+            get: function () { // Error
                 return null;
             },
             enumerable: true,
@@ -1569,7 +1569,7 @@ var publicModule;
             configurable: true
         });
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
+            get: function () { // Error
                 return null;
             },
             enumerable: true,
@@ -1583,7 +1583,7 @@ var publicModule;
             configurable: true
         });
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
+            get: function () { // Error
                 return new privateClass();
             },
             enumerable: true,
@@ -1597,7 +1597,7 @@ var publicModule;
             configurable: true
         });
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
+            get: function () { // Error
                 return new privateClass();
             },
             enumerable: true,
@@ -1801,7 +1801,7 @@ var publicModule;
         function publicClassWithWithPrivateSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
+            set: function (param) { // Error
             },
             enumerable: true,
             configurable: true
@@ -1813,7 +1813,7 @@ var publicModule;
             configurable: true
         });
         Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
+            set: function (param) { // Error
             },
             enumerable: true,
             configurable: true
@@ -1919,28 +1919,28 @@ var publicModule;
         function publicClassWithPrivateModuleGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
+            get: function () { // Error
                 return null;
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
+            get: function () { // Error
                 return null;
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
+            get: function () { // Error
                 return new privateModule.publicClass();
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
+            get: function () { // Error
                 return new privateModule.publicClass();
             },
             enumerable: true,
@@ -1953,13 +1953,13 @@ var publicModule;
         function publicClassWithPrivateModuleSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
+            set: function (param) { // Error
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
+            set: function (param) { // Error
             },
             enumerable: true,
             configurable: true
@@ -3091,7 +3091,7 @@ var publicModuleInGlobal;
         function publicClassWithWithPrivateGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
+            get: function () { // Error
                 return null;
             },
             enumerable: true,
@@ -3105,7 +3105,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
+            get: function () { // Error
                 return null;
             },
             enumerable: true,
@@ -3119,7 +3119,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
+            get: function () { // Error
                 return new privateClass();
             },
             enumerable: true,
@@ -3133,7 +3133,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
+            get: function () { // Error
                 return new privateClass();
             },
             enumerable: true,
@@ -3337,7 +3337,7 @@ var publicModuleInGlobal;
         function publicClassWithWithPrivateSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
+            set: function (param) { // Error
             },
             enumerable: true,
             configurable: true
@@ -3349,7 +3349,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
+            set: function (param) { // Error
             },
             enumerable: true,
             configurable: true
@@ -3455,28 +3455,28 @@ var publicModuleInGlobal;
         function publicClassWithPrivateModuleGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
+            get: function () { // Error
                 return null;
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
+            get: function () { // Error
                 return null;
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
+            get: function () { // Error
                 return new privateModule.publicClass();
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
+            get: function () { // Error
                 return new privateModule.publicClass();
             },
             enumerable: true,
@@ -3489,13 +3489,13 @@ var publicModuleInGlobal;
         function publicClassWithPrivateModuleSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
+            set: function (param) { // Error
             },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
+            set: function (param) { // Error
             },
             enumerable: true,
             configurable: true

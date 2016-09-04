@@ -68,7 +68,7 @@ function inside(a) {
 }
 function outside() {
     var b;
-    function inside(a) {
+    function inside(a) { // Still an error because b is declared inside the function
         if (a === void 0) { a = b; }
         var b;
     }

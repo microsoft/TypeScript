@@ -13,6 +13,6 @@ var A = (function () {
     }
     return A;
 }());
-function foo(x) {
+function foo(x) { //should error, 123 is not string
     if (x === void 0) { x = new A(123); }
 }
