@@ -111,7 +111,7 @@ var m1b;
 var m1b = 1; // error
 var m1c = 1; // Should be allowed
 var m1d;
-(function (m1d) {
+(function (m1d) {// error
     var I = (function () {
         function I() {
         }

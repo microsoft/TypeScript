@@ -1,0 +1,16 @@
+=== tests/cases/compiler/commentOnIfElseStatement1.ts ===
+
+// 1
+if (false) {
+>false : boolean
+}
+// 2
+else if (!true) {
+>!true : boolean
+>true : boolean
+
+}
+// 3
+else {
+	
+}

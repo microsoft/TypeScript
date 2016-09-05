@@ -76,7 +76,7 @@ define(["require", "exports"], function (require, exports) {
             var t;
         })(inst || (inst = {}));
         var inst;
-        (function (inst) {
+        (function (inst) {// one error
             var t;
         })(inst = M.inst || (M.inst = {}));
     })(M || (M = {}));
@@ -103,7 +103,7 @@ define(["require", "exports"], function (require, exports) {
             return C;
         }());
         var C;
-        (function (C) {
+        (function (C) {// Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
             var t;
         })(C = M.C || (M.C = {}));
     })(M || (M = {}));

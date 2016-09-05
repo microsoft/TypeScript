@@ -32,7 +32,7 @@ function fn2() {
 function fn() {
     try {
     }
-    catch () {
+    catch () {// syntax error, missing '(x)'
     }
     try {
     }

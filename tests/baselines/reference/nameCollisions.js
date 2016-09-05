@@ -52,7 +52,7 @@ var T;
 (function (T) {
     var x = 2;
     var x;
-    (function (x) {
+    (function (x) {// error
         var Bar = (function () {
             function Bar() {
             }

@@ -6,4 +6,9 @@ var v = {
 >f : Symbol(f, Decl(commentsBeforeFunctionExpression1.ts, 0, 9))
 >a : Symbol(a, Decl(commentsBeforeFunctionExpression1.ts, 1, 19))
 }
+var w = 
+>w : Symbol(w, Decl(commentsBeforeFunctionExpression1.ts, 3, 3))
+
+/* 1 */ (a) => 0;
+>a : Symbol(a, Decl(commentsBeforeFunctionExpression1.ts, 4, 9))
 

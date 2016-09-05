@@ -58,6 +58,8 @@ var M;
             return Bar;
         }());
         S.Bar = Bar;
+        // Emit Foo
+        // Foo, <Foo />;
     })(S = M.S || (M.S = {}));
 })(M || (M = {}));
 var M;

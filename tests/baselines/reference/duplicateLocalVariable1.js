@@ -382,7 +382,7 @@ var TestRunner = (function () {
                 exception = true;
                 testResult = false;
                 if (typeof testcase.errorMessageRegEx === "string") {
-                    if (testcase.errorMessageRegEx === "") {
+                    if (testcase.errorMessageRegEx === "") {// Any error is fine
                         testResult = true;
                     }
                     else if (e.message) {
@@ -391,6 +391,7 @@ var TestRunner = (function () {
                     }
                 }
                 if (testResult === false) {
+                    //console.log(e.message);
                 }
             }
             if ((testcase.errorMessageRegEx !== undefined) && !exception) {

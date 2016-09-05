@@ -2944,6 +2944,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
+            function emitEmptyBlockComments(node: Node) {
+                // special handling for empty blocks
+                let pos = node.pos;
+
+                // skipping leading comments
+                const comments = getLeadingCommentRanges(currentText, node.pos);
+
+                if (comments) {
+                    const lastComment = lastOrUndefined(comments);
+                    if (lastComment) {
+                        pos = lastComment.end;
+                    }
+                }
+
+                pos = currentText.indexOf("{", pos) + 1;
+                // emitting all comments after '{'
+                emitTrailingCommentsOfPosition(pos);
+                emitLeadingCommentsOfPosition(pos);
+            }
+
             function emitBlock(node: Block) {
                 if (isSingleLineEmptyBlock(node)) {
                     emitToken(SyntaxKind.OpenBraceToken, node.pos);
@@ -2954,6 +2974,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
+
+                if (!!node.statements.length) {
+                    const firstStatementNode = node.statements[0];
+                    emitTrailingCommentsOfPosition(firstStatementNode.pos);
+                }
+                else {
+                    emitEmptyBlockComments(node);
+                }
+
                 if (node.kind === SyntaxKind.ModuleBlock) {
                     Debug.assert(node.parent.kind === SyntaxKind.ModuleDeclaration);
                     emitCaptureThisForNodeIfNecessary(node.parent);
@@ -2962,6 +2991,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 if (node.kind === SyntaxKind.ModuleBlock) {
                     emitTempDeclarations(/*newLine*/ true);
                 }
+
+                if (!!node.statements.length) {
+                    const lastStatementNode = lastOrUndefined(node.statements);
+                    emitLeadingCommentsOfPosition(lastStatementNode.end);
+                }
+
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
@@ -2993,6 +3028,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
+                    emitLeadingCommentsOfPosition(node.thenStatement.end);
                     writeLine();
                     emitToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
@@ -4660,6 +4696,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 const { kind, parent } = node;
                 if (kind !== SyntaxKind.MethodDeclaration &&
                     kind !== SyntaxKind.MethodSignature &&
+                    kind !== SyntaxKind.ArrowFunction &&
                     parent &&
                     parent.kind !== SyntaxKind.PropertyAssignment &&
                     parent.kind !== SyntaxKind.CallExpression &&

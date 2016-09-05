@@ -1011,6 +1011,7 @@ var TypeScript;
                         ctx.path.push(cur);
                     }
                     else {
+                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");
                     }
                 }
                 // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually

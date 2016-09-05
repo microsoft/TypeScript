@@ -9,4 +9,11 @@ var v = {
 >a : any
 >0 : number
 }
+var w = 
+>w : (a: any) => number
+
+/* 1 */ (a) => 0;
+>(a) => 0 : (a: any) => number
+>a : any
+>0 : number
 
