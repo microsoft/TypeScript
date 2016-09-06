@@ -930,7 +930,8 @@ namespace ts {
         const options: TranspileOptions = {
             fileName: "config.js",
             compilerOptions: {
-                target: ScriptTarget.ES6
+                target: ScriptTarget.ES6,
+                removeComments: true
             },
             reportDiagnostics: true
         };

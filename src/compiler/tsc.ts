@@ -482,10 +482,7 @@ namespace ts {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             if (removed) {
-                const index = rootFileNames.indexOf(sourceFile.fileName);
-                if (index >= 0) {
-                    rootFileNames.splice(index, 1);
-                }
+                unorderedRemoveItem(rootFileNames, sourceFile.fileName);
             }
             startTimerForRecompilation();
         }

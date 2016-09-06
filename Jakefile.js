@@ -128,6 +128,7 @@ var servicesSources = [
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",
+    "types.ts",
     "utilities.ts",
     "formatting/formatting.ts",
     "formatting/formattingContext.ts",
