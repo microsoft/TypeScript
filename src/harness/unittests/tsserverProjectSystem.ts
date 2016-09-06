@@ -198,18 +198,12 @@ namespace ts {
 
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories[path] || (this.watchedDirectories[path] = []);
             const cbWithRecursive = { cb: callback, recursive };
-            callbacks.push(cbWithRecursive);
+            multiMapAdd(this.watchedDirectories, path, cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
-                close: () => {
-                    unorderedRemoveItem(callbacks, cbWithRecursive);
-                    if (!callbacks.length) {
-                        delete this.watchedDirectories[path];
-                    }
-                }
+                close: () => multiMapRemove(this.watchedDirectories, path, cbWithRecursive)
             };
         }
 
@@ -235,16 +229,8 @@ namespace ts {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles[path] || (this.watchedFiles[path] = []);
-            callbacks.push(callback);
-            return {
-                close: () => {
-                    unorderedRemoveItem(callbacks, callback);
-                    if (!callbacks.length) {
-                        delete this.watchedFiles[path];
-                    }
-                }
-            };
+            multiMapAdd(this.watchedFiles, path, callback);
+            return { close: () => multiMapRemove(this.watchedFiles, path, callback) };
         }
 
         // TOOD: record and invoke callbacks to simulate timer events

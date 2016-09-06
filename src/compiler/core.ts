@@ -751,6 +751,36 @@ namespace ts {
     }
 
     /**
+     * Adds the value to an array of values associated with the key, and returns the array.
+     * Creates the array if it does not already exist.
+     */
+    export function multiMapAdd<V>(map: Map<V[]>, key: string, value: V): V[] {
+        const values = map[key];
+        if (values) {
+            values.push(value);
+            return values;
+        }
+        else {
+            return map[key] = [value];
+        }
+    }
+
+    /**
+     * Removes a value from an array of values associated with the key.
+     * Does not preserve the order of those values.
+     * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
+     */
+    export function multiMapRemove<V>(map: Map<V[]>, key: string, value: V): void {
+        const values = map[key];
+        if (values) {
+            unorderedRemoveItem(values, value);
+            if (!values.length) {
+                delete map[key];
+            }
+        }
+    }
+
+    /**
      * Tests whether a value is an array.
      */
     export function isArray(value: any): value is any[] {
