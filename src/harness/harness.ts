@@ -1788,7 +1788,7 @@ namespace Harness {
                     tsConfig.options.configFilePath = data.name;
 
                     // delete entry from the list
-                    testUnitData.splice(i, 1);
+                    ts.orderedRemoveItemAt(testUnitData, i);
 
                     break;
                 }

@@ -8,8 +8,6 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    const defaultTypeRoots = ["node_modules/@types"];
-
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
             const fileName = combinePaths(searchPath, configName);
@@ -168,21 +166,50 @@ namespace ts {
 
     const typeReferenceExtensions = [".d.ts"];
 
-    export function getEffectiveTypeRoots(options: CompilerOptions, currentDirectory: string) {
+    export function getEffectiveTypeRoots(options: CompilerOptions, host: { directoryExists?: (directoryName: string) => boolean, getCurrentDirectory?: () => string }): string[] | undefined  {
         if (options.typeRoots) {
             return options.typeRoots;
         }
 
+        let currentDirectory: string;
         if (options.configFilePath) {
             currentDirectory = getDirectoryPath(options.configFilePath);
         }
-
-        if (!currentDirectory) {
-            return undefined;
+        else if (host.getCurrentDirectory) {
+            currentDirectory = host.getCurrentDirectory();
         }
 
-        return map(defaultTypeRoots, d => combinePaths(currentDirectory, d));
+        return currentDirectory && getDefaultTypeRoots(currentDirectory, host);
     }
+
+    /**
+     * Returns the path to every node_modules/@types directory from some ancestor directory.
+     * Returns undefined if there are none.
+     */
+    function getDefaultTypeRoots(currentDirectory: string,  host: { directoryExists?: (directoryName: string) => boolean }): string[] | undefined {
+        if (!host.directoryExists) {
+            return [combinePaths(currentDirectory, nodeModulesAtTypes)];
+            // And if it doesn't exist, tough.
+        }
+
+        let typeRoots: string[];
+
+        while (true) {
+            const atTypes = combinePaths(currentDirectory, nodeModulesAtTypes);
+            if (host.directoryExists(atTypes)) {
+                (typeRoots || (typeRoots = [])).push(atTypes);
+            }
+
+            const parent = getDirectoryPath(currentDirectory);
+            if (parent === currentDirectory) {
+                break;
+            }
+            currentDirectory = parent;
+        }
+
+        return typeRoots;
+    }
+    const nodeModulesAtTypes = combinePaths("node_modules", "@types");
 
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.

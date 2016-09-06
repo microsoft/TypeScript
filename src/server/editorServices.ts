@@ -275,7 +275,7 @@ namespace ts.server {
         removeRoot(info: ScriptInfo) {
             if (this.filenameToScript.contains(info.path)) {
                 this.filenameToScript.remove(info.path);
-                this.roots = copyListRemovingItem(info, this.roots);
+                unorderedRemoveItem(this.roots, info);
                 this.resolvedModuleNames.remove(info.path);
                 this.resolvedTypeReferenceDirectives.remove(info.path);
             }
@@ -588,16 +588,6 @@ namespace ts.server {
         project?: Project;
     }
 
-    function copyListRemovingItem<T>(item: T, list: T[]) {
-        const copiedList: T[] = [];
-        for (let i = 0, len = list.length; i < len; i++) {
-            if (list[i] != item) {
-                copiedList.push(list[i]);
-            }
-        }
-        return copiedList;
-    }
-
     /**
      * This helper funciton processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
@@ -883,7 +873,7 @@ namespace ts.server {
                 project.directoryWatcher.close();
                 forEachProperty(project.directoriesWatchedForWildcards, watcher => { watcher.close(); });
                 delete project.directoriesWatchedForWildcards;
-                this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
+                unorderedRemoveItem(this.configuredProjects, project);
             }
             else {
                 for (const directory of project.directoriesWatchedForTsconfig) {
@@ -895,7 +885,7 @@ namespace ts.server {
                         delete project.projectService.directoryWatchersForTsconfig[directory];
                     }
                 }
-                this.inferredProjects = copyListRemovingItem(project, this.inferredProjects);
+                unorderedRemoveItem(this.inferredProjects, project);
             }
 
             const fileNames = project.getFileNames();
@@ -1020,7 +1010,7 @@ namespace ts.server {
                 }
             }
             else {
-                this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                unorderedRemoveItem(this.openFilesReferenced, info);
             }
             info.close();
         }
@@ -1527,13 +1517,13 @@ namespace ts.server {
                             // openFileRoots or openFileReferenced.
                             if (info.isOpen) {
                                 if (this.openFileRoots.indexOf(info) >= 0) {
-                                    this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                                    unorderedRemoveItem(this.openFileRoots, info);
                                     if (info.defaultProject && !info.defaultProject.isConfiguredProject()) {
                                         this.removeProject(info.defaultProject);
                                     }
                                 }
                                 if (this.openFilesReferenced.indexOf(info) >= 0) {
-                                    this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                                    unorderedRemoveItem(this.openFilesReferenced, info);
                                 }
                                 this.openFileRootsConfigured.push(info);
                                 info.defaultProject = project;

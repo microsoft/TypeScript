@@ -1035,6 +1035,18 @@ namespace ts {
         return undefined;
     }
 
+    export function isCallLikeExpression(node: Node): node is CallLikeExpression {
+        switch (node.kind) {
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.Decorator:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     export function getInvokedExpression(node: CallLikeExpression): Expression {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
@@ -2659,10 +2671,17 @@ namespace ts {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
-    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
-        return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
+    /** Get `C` given `N` if `N` is in the position `class C extends N` where `N` is an ExpressionWithTypeArguments. */
+    export function tryGetClassExtendingExpressionWithTypeArguments(node: Node): ClassLikeDeclaration | undefined {
+        if (node.kind === SyntaxKind.ExpressionWithTypeArguments &&
             (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
-            isClassLike(node.parent.parent);
+            isClassLike(node.parent.parent)) {
+            return node.parent.parent;
+        }
+    }
+
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
+        return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
     }
 
     export function isEntityNameExpression(node: Expression): node is EntityNameExpression {

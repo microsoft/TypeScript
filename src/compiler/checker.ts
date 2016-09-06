@@ -146,6 +146,7 @@ namespace ts {
 
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
@@ -5381,7 +5382,7 @@ namespace ts {
             while (i > 0) {
                 i--;
                 if (isSubtypeOfAny(types[i], types)) {
-                    types.splice(i, 1);
+                    orderedRemoveItemAt(types, i);
                 }
             }
         }
@@ -8761,7 +8762,7 @@ namespace ts {
             // The location isn't a reference to the given symbol, meaning we're being asked
             // a hypothetical question of what type the symbol would have if there was a reference
             // to it at the given location. Since we have no control flow information for the
-            // hypotherical reference (control flow information is created and attached by the
+            // hypothetical reference (control flow information is created and attached by the
             // binder), we simply return the declared type of the symbol.
             return getTypeOfSymbol(symbol);
         }
@@ -12232,10 +12233,10 @@ namespace ts {
             // or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
             // to correctly fill the candidatesOutArray.
             const cached = links.resolvedSignature;
-            if (cached && cached !== anySignature && !candidatesOutArray) {
+            if (cached && cached !== resolvingSignature && !candidatesOutArray) {
                 return cached;
             }
-            links.resolvedSignature = anySignature;
+            links.resolvedSignature = resolvingSignature;
             const result = resolveSignature(node, candidatesOutArray);
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
@@ -12247,7 +12248,7 @@ namespace ts {
         function getResolvedOrAnySignature(node: CallLikeExpression) {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
-            return getNodeLinks(node).resolvedSignature === anySignature ? anySignature : getResolvedSignature(node);
+            return getNodeLinks(node).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(node);
         }
 
         function getInferredClassType(symbol: Symbol) {
