@@ -283,13 +283,7 @@ namespace ts {
                 }
 
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
-                    const callbacks = fileWatcherCallbacks[filePath];
-                    if (callbacks) {
-                        unorderedRemoveItem(callbacks, callback);
-                        if (callbacks.length === 0) {
-                            delete fileWatcherCallbacks[filePath];
-                        }
-                    }
+                    multiMapRemove(fileWatcherCallbacks, filePath, callback);
                 }
 
                 function fileEventHandler(eventName: string, relativeFileName: string, baseDirPath: string) {
