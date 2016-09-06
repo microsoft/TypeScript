@@ -8,10 +8,4 @@
 ////o./*reference1*/myObjectMethod();
 ////o["/*reference2*/myObjectMethod"]();
 
-goTo.marker("reference1");
-goTo.definition();
-verify.caretAtMarker("definition");
-
-goTo.marker("reference2");
-goTo.definition();
-verify.caretAtMarker("definition");
+verify.goToDefinition(["reference1", "reference2"], "definition");
