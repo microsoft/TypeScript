@@ -1,16 +1,17 @@
-//// [classExpressionWithStaticPropertiesES63.ts]
+//// [classExpressionWithStaticPropertiesCapturingBlockScopeES62.ts]
 
 declare var console: any;
-const arr: {y(): number}[] = [];
+const arr: any[] = [];
 for (let i = 0; i < 3; i++) {
     arr.push(class C {
         static x = i;
         static y = () => C.x * 2;
     });
 }
-arr.forEach(C => console.log(C.y()));
 
-//// [classExpressionWithStaticPropertiesES63.js]
+arr.forEach(C => console.log(C.y())); 
+
+//// [classExpressionWithStaticPropertiesCapturingBlockScopeES62.js]
 const arr = [];
 for (let i = 0; i < 3; i++) {
     arr.push((() => {

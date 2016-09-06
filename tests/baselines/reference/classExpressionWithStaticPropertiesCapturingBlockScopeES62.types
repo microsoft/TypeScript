@@ -1,0 +1,58 @@
+=== tests/cases/compiler/classExpressionWithStaticPropertiesCapturingBlockScopeES62.ts ===
+
+declare var console: any;
+>console : any
+
+const arr: any[] = [];
+>arr : any[]
+>[] : undefined[]
+
+for (let i = 0; i < 3; i++) {
+>i : number
+>0 : number
+>i < 3 : boolean
+>i : number
+>3 : number
+>i++ : number
+>i : number
+
+    arr.push(class C {
+>arr.push(class C {        static x = i;        static y = () => C.x * 2;    }) : number
+>arr.push : (...items: any[]) => number
+>arr : any[]
+>push : (...items: any[]) => number
+>class C {        static x = i;        static y = () => C.x * 2;    } : typeof C
+>C : typeof C
+
+        static x = i;
+>x : number
+>i : number
+
+        static y = () => C.x * 2;
+>y : () => number
+>() => C.x * 2 : () => number
+>C.x * 2 : number
+>C.x : number
+>C : typeof C
+>x : number
+>2 : number
+
+    });
+}
+
+arr.forEach(C => console.log(C.y())); 
+>arr.forEach(C => console.log(C.y())) : void
+>arr.forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>arr : any[]
+>forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>C => console.log(C.y()) : (C: any) => any
+>C : any
+>console.log(C.y()) : any
+>console.log : any
+>console : any
+>log : any
+>C.y() : any
+>C.y : any
+>C : any
+>y : any
+
