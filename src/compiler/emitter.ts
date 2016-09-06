@@ -6587,7 +6587,7 @@ const _super = (function (geti, seti) {
                             // import { x, y } from "foo"
                             // import d, * as x from "foo"
                             // import d, { x, y } from "foo"
-                            const isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
+                            const isNakedImport = node.kind === SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
                             if (!isNakedImport) {
                                 write(varOrConst);
                                 write(getGeneratedNameForNode(<ImportDeclaration>node));
@@ -6851,7 +6851,7 @@ const _super = (function (geti, seti) {
                                 // export { x, y }
                                 for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
                                     const name = (specifier.propertyName || specifier.name).text;
-                                    (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
+                                    multiMapAdd(exportSpecifiers, name, specifier);
                                 }
                             }
                             break;

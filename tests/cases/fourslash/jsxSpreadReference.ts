@@ -17,9 +17,7 @@
 //// var [|/*dst*/nn|]: {name?: string; size?: number};
 //// var x = <MyClass {...[|n/*src*/n|]}></MyClass>;
 
-goTo.marker('src');
-goTo.definition();
-verify.caretAtMarker('dst');
+verify.goToDefinition("src", "dst");
 
 goTo.marker('src');
 verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);

@@ -14,7 +14,6 @@ verify.quickInfoIs("var __proto__: M.__proto__", "");
 goTo.marker('3');
 verify.completionListContains("__proto__", "var __proto__: M.__proto__", "");
 edit.insert("__proto__");
-goTo.definition();
-verify.caretAtMarker('2');
+verify.goToDefinitionIs("2");
 goTo.marker('4');
 verify.quickInfoIs("var fun: (__proto__: any) => boolean", "");
