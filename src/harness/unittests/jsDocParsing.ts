@@ -767,16 +767,9 @@ namespace ts {
                     parsesCorrectly(
                         "{null}",
                         `{
-    "kind": "JSDocTypeReference",
+    "kind": "NullKeyword",
     "pos": 1,
-    "end": 5,
-    "name": {
-        "kind": "Identifier",
-        "pos": 1,
-        "end": 5,
-        "originalKeywordKind": "NullKeyword",
-        "text": "null"
-    }
+    "end": 5
 }`);
                 });
 
@@ -784,16 +777,9 @@ namespace ts {
                     parsesCorrectly(
                         "{undefined}",
                         `{
-    "kind": "JSDocTypeReference",
+    "kind": "UndefinedKeyword",
     "pos": 1,
-    "end": 10,
-    "name": {
-        "kind": "Identifier",
-        "pos": 1,
-        "end": 10,
-        "originalKeywordKind": "UndefinedKeyword",
-        "text": "undefined"
-    }
+    "end": 10
 }`);
                 });
 

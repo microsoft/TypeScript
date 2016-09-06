@@ -16,11 +16,7 @@
 ////    return target => target;
 ////}
 
-
-goTo.marker('decoratorUse');
-goTo.definition();
-verify.caretAtMarker('decoratorDefinition');
-
-goTo.marker('decoratorFactoryUse');
-goTo.definition();
-verify.caretAtMarker('decoratorFactoryDefinition');
+verify.goToDefinition({
+    decoratorUse: "decoratorDefinition",
+    decoratorFactoryUse: "decoratorFactoryDefinition"
+});
