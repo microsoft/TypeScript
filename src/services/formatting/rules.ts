@@ -50,6 +50,8 @@ namespace ts.formatting {
         // Insert a space after { and before } in single-line contexts, but remove space from empty object literals {}.
         public SpaceAfterOpenBrace: Rule;
         public SpaceBeforeCloseBrace: Rule;
+        public NoSpaceAfterOpenBrace: Rule;
+        public NoSpaceBeforeCloseBrace: Rule;
         public NoSpaceBetweenEmptyBraceBrackets: Rule;
 
         // Insert new line after { and before } in multi-line contexts.
@@ -287,6 +289,8 @@ namespace ts.formatting {
             // Insert a space after { and before } in single-line contexts, but remove space from empty object literals {}.
             this.SpaceAfterOpenBrace = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBraceToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSingleLineBlockContext), RuleAction.Space));
             this.SpaceBeforeCloseBrace = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSingleLineBlockContext), RuleAction.Space));
+            this.NoSpaceAfterOpenBrace = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBraceToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSingleLineBlockContext), RuleAction.Delete));
+            this.NoSpaceBeforeCloseBrace = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSingleLineBlockContext), RuleAction.Delete));
             this.NoSpaceBetweenEmptyBraceBrackets = new Rule(RuleDescriptor.create1(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsObjectContext), RuleAction.Delete));
 
             // Insert new line after { and before } in multi-line contexts.
@@ -414,7 +418,7 @@ namespace ts.formatting {
                 this.SpaceAfterPostdecrementWhenFollowedBySubtract,
                 this.SpaceAfterSubtractWhenFollowedByUnaryMinus, this.SpaceAfterSubtractWhenFollowedByPredecrement,
                 this.NoSpaceAfterCloseBrace,
-                this.SpaceAfterOpenBrace, this.SpaceBeforeCloseBrace, this.NewLineBeforeCloseBraceInBlockContext,
+                this.NewLineBeforeCloseBraceInBlockContext,
                 this.SpaceAfterCloseBrace, this.SpaceBetweenCloseBraceAndElse, this.SpaceBetweenCloseBraceAndWhile, this.NoSpaceBetweenEmptyBraceBrackets,
                 this.NoSpaceBetweenFunctionKeywordAndStar, this.SpaceAfterStarInGeneratorDeclaration,
                 this.SpaceAfterFunctionInFuncDecl, this.NewLineAfterOpenBraceInBlockContext, this.SpaceAfterGetSetInMember,
