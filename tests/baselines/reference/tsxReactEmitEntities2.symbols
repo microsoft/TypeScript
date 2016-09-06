@@ -1,0 +1,8 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(file.tsx, 0, 11))
+
+<div>&#123;braces&#xfd;</div>;
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+
