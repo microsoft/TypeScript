@@ -81,7 +81,9 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceBetweenBrackets);
             }
 
-            if (options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces) {
+            // The default value of InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces is true
+            // so if the option is undefined, we should treat it as true as well
+            if (options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces !== false) {
                 rules.push(this.globalRules.SpaceAfterOpenBrace);
                 rules.push(this.globalRules.SpaceBeforeCloseBrace);
                 rules.push(this.globalRules.NoSpaceBetweenEmptyBraceBrackets);
