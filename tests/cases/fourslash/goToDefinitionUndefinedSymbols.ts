@@ -5,7 +5,6 @@
 ////var x = {}; x.some/*undefinedProperty*/Property;
 ////var a: any; a.some/*unkownProperty*/Property;
 
-test.markers().forEach((m, i, a) => {
-    goTo.position(m.position, m.fileName);
-    verify.not.definitionLocationExists();
-});
+for (const marker of test.markerNames()) {
+    verify.goToDefinition(marker, []);
+}

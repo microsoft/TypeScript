@@ -1,7 +1,6 @@
 tests/cases/conformance/es6/destructuring/optionalBindingParameters1.ts(2,14): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 tests/cases/conformance/es6/destructuring/optionalBindingParameters1.ts(8,5): error TS2345: Argument of type '[boolean, number, string]' is not assignable to parameter of type '[string, number, boolean]'.
-  Types of property '0' are incompatible.
-    Type 'boolean' is not assignable to type 'string'.
+  Type 'boolean' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/es6/destructuring/optionalBindingParameters1.ts (2 errors) ====
@@ -17,5 +16,4 @@ tests/cases/conformance/es6/destructuring/optionalBindingParameters1.ts(8,5): er
     foo([false, 0, ""]);
         ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[boolean, number, string]' is not assignable to parameter of type '[string, number, boolean]'.
-!!! error TS2345:   Types of property '0' are incompatible.
-!!! error TS2345:     Type 'boolean' is not assignable to type 'string'.
+!!! error TS2345:   Type 'boolean' is not assignable to type 'string'.

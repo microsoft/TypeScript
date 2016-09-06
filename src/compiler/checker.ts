@@ -106,7 +106,7 @@ namespace ts {
             isOptionalParameter
         };
 
-        const tupleTypes = createMap<TupleType>();
+        const tupleTypes: GenericType[] = [];
         const unionTypes = createMap<UnionType>();
         const intersectionTypes = createMap<IntersectionType>();
         const stringLiteralTypes = createMap<LiteralType>();
@@ -143,6 +143,7 @@ namespace ts {
 
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
@@ -1023,8 +1024,8 @@ namespace ts {
             }
         }
 
-        function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
-            return findMap(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
+        function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
+            return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
@@ -1126,13 +1127,13 @@ namespace ts {
                     else {
                         symbolFromVariable = getPropertyOfVariable(targetSymbol, name.text);
                     }
-                    // If the export member we're looking for is default, and there is no real default but allowSyntheticDefaultImports is on, return the entire module as the default
-                    if (!symbolFromVariable && allowSyntheticDefaultImports && name.text === "default") {
-                        symbolFromVariable = resolveExternalModuleSymbol(moduleSymbol) || resolveSymbol(moduleSymbol);
-                    }
                     // if symbolFromVariable is export - get its final target
                     symbolFromVariable = resolveSymbol(symbolFromVariable);
-                    const symbolFromModule = getExportOfModule(targetSymbol, name.text);
+                    let symbolFromModule = getExportOfModule(targetSymbol, name.text);
+                    // If the export member we're looking for is default, and there is no real default but allowSyntheticDefaultImports is on, return the entire module as the default
+                    if (!symbolFromModule && allowSyntheticDefaultImports && name.text === "default") {
+                        symbolFromModule = resolveExternalModuleSymbol(moduleSymbol) || resolveSymbol(moduleSymbol);
+                    }
                     const symbol = symbolFromModule && symbolFromVariable ?
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                         symbolFromModule || symbolFromVariable;
@@ -1191,6 +1192,7 @@ namespace ts {
             if (!links.target) {
                 links.target = resolvingSymbol;
                 const node = getDeclarationOfAliasSymbol(symbol);
+                Debug.assert(!!node);
                 const target = getTargetOfAliasDeclaration(node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
@@ -1226,6 +1228,7 @@ namespace ts {
             if (!links.referenced) {
                 links.referenced = true;
                 const node = getDeclarationOfAliasSymbol(symbol);
+                Debug.assert(!!node);
                 if (node.kind === SyntaxKind.ExportAssignment) {
                     // export default <symbol>
                     checkExpressionCached((<ExportAssignment>node).expression);
@@ -2145,9 +2148,6 @@ namespace ts {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
-                    else if (type.flags & TypeFlags.Tuple) {
-                        writeTupleType(<TupleType>type);
-                    }
                     else if (!(flags & TypeFormatFlags.InTypeAlias) && type.flags & (TypeFlags.Anonymous | TypeFlags.UnionOrIntersection) && type.aliasSymbol) {
                         const typeArguments = type.aliasTypeArguments;
                         writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
@@ -2214,6 +2214,11 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
+                    else if (type.target.flags & TypeFlags.Tuple) {
+                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                        writeTypeList(type.typeArguments.slice(0, getTypeReferenceArity(type)), SyntaxKind.CommaToken);
+                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    }
                     else {
                         // Write the type reference in the format f<A>.g<B>.C<X, Y> where A and B are type arguments
                         // for outer type parameters, and f and g are the respective declaring containers of those
@@ -2240,12 +2245,6 @@ namespace ts {
                         const typeParameterCount = (type.target.typeParameters || emptyArray).length;
                         writeSymbolTypeReference(type.symbol, typeArguments, i, typeParameterCount, flags);
                     }
-                }
-
-                function writeTupleType(type: TupleType) {
-                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                    writeTypeList(type.elementTypes, SyntaxKind.CommaToken);
-                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
                 }
 
                 function writeUnionOrIntersectionType(type: UnionOrIntersectionType, flags: TypeFormatFlags) {
@@ -2958,7 +2957,7 @@ namespace ts {
                         : elementType;
                     if (!type) {
                         if (isTupleType(parentType)) {
-                            error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(parentType), (<TupleType>parentType).elementTypes.length, pattern.elements.length);
+                            error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(parentType), getTypeReferenceArity(<TypeReference>parentType), pattern.elements.length);
                         }
                         else {
                             error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
@@ -3070,9 +3069,14 @@ namespace ts {
                     }
                 }
                 // Use contextual parameter type if one is available
-                const type = declaration.symbol.name === "this"
-                    ? getContextuallyTypedThisType(func)
-                    : getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                let type: Type;
+                if (declaration.symbol.name === "this") {
+                    const thisParameter = getContextualThisParameter(func);
+                    type = thisParameter ? getTypeOfSymbol(thisParameter) : undefined;
+                }
+                else {
+                    type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                }
                 if (type) {
                     return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
                 }
@@ -3150,12 +3154,12 @@ namespace ts {
             }
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
             const elementTypes = map(elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
+            let result = createTupleType(elementTypes);
             if (includePatternInType) {
-                const result = createNewTupleType(elementTypes);
+                result = cloneTypeReference(result);
                 result.pattern = pattern;
-                return result;
             }
-            return createTupleType(elementTypes);
+            return result;
         }
 
         // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
@@ -3343,7 +3347,13 @@ namespace ts {
                         // Otherwise, fall back to 'any'.
                         else {
                             if (compilerOptions.noImplicitAny) {
-                                error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_type_annotation, symbolToString(symbol));
+                                if (setter) {
+                                    error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
+                                }
+                                else {
+                                    Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
+                                    error(getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
+                                }
                             }
                             type = anyType;
                         }
@@ -3564,17 +3574,20 @@ namespace ts {
         }
 
         function getBaseTypes(type: InterfaceType): ObjectType[] {
-            const isClass = type.symbol.flags & SymbolFlags.Class;
-            const isInterface = type.symbol.flags & SymbolFlags.Interface;
             if (!type.resolvedBaseTypes) {
-                if (!isClass && !isInterface) {
+                if (type.flags & TypeFlags.Tuple) {
+                    type.resolvedBaseTypes = [createArrayType(getUnionType(type.typeParameters))];
+                }
+                else if (type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    if (type.symbol.flags & SymbolFlags.Class) {
+                        resolveBaseTypesOfClass(type);
+                    }
+                    if (type.symbol.flags & SymbolFlags.Interface) {
+                        resolveBaseTypesOfInterface(type);
+                    }
+                }
+                else {
                     Debug.fail("type must be class or interface");
-                }
-                if (isClass) {
-                    resolveBaseTypesOfClass(type);
-                }
-                if (isInterface) {
-                    resolveBaseTypesOfInterface(type);
                 }
             }
             return type.resolvedBaseTypes;
@@ -4001,20 +4014,25 @@ namespace ts {
                 return createTypeReference((<TypeReference>type).target,
                     concatenate((<TypeReference>type).typeArguments, [thisArgument || (<TypeReference>type).target.thisType]));
             }
-            if (type.flags & TypeFlags.Tuple) {
-                return createTupleType((type as TupleType).elementTypes, thisArgument);
-            }
             return type;
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
-            let mapper = identityMapper;
-            let members = source.symbol.members;
-            let callSignatures = source.declaredCallSignatures;
-            let constructSignatures = source.declaredConstructSignatures;
-            let stringIndexInfo = source.declaredStringIndexInfo;
-            let numberIndexInfo = source.declaredNumberIndexInfo;
-            if (!rangeEquals(typeParameters, typeArguments, 0, typeParameters.length)) {
+            let mapper: TypeMapper;
+            let members: SymbolTable;
+            let callSignatures: Signature[];
+            let constructSignatures: Signature[];
+            let stringIndexInfo: IndexInfo;
+            let numberIndexInfo: IndexInfo;
+            if (rangeEquals(typeParameters, typeArguments, 0, typeParameters.length)) {
+                mapper = identityMapper;
+                members = source.symbol ? source.symbol.members : createSymbolTable(source.declaredProperties);
+                callSignatures = source.declaredCallSignatures;
+                constructSignatures = source.declaredConstructSignatures;
+                stringIndexInfo = source.declaredStringIndexInfo;
+                numberIndexInfo = source.declaredNumberIndexInfo;
+            }
+            else {
                 mapper = createTypeMapper(typeParameters, typeArguments);
                 members = createInstantiatedSymbolTable(source.declaredProperties, mapper, /*mappingThisOnly*/ typeParameters.length === 1);
                 callSignatures = instantiateList(source.declaredCallSignatures, mapper, instantiateSignature);
@@ -4024,7 +4042,7 @@ namespace ts {
             }
             const baseTypes = getBaseTypes(source);
             if (baseTypes.length) {
-                if (members === source.symbol.members) {
+                if (source.symbol && members === source.symbol.members) {
                     members = createSymbolTable(source.declaredProperties);
                 }
                 const thisArgument = lastOrUndefined(typeArguments);
@@ -4092,26 +4110,6 @@ namespace ts {
                 }
             }
             return result;
-        }
-
-        function createTupleTypeMemberSymbols(memberTypes: Type[]): SymbolTable {
-            const members = createMap<Symbol>();
-            for (let i = 0; i < memberTypes.length; i++) {
-                const symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "" + i);
-                symbol.type = memberTypes[i];
-                members[i] = symbol;
-            }
-            return members;
-        }
-
-        function resolveTupleTypeMembers(type: TupleType) {
-            const arrayElementType = getUnionType(type.elementTypes);
-            // Make the tuple type itself the 'this' type by including an extra type argument
-            // (Unless it's provided in the case that the tuple is a type parameter constraint)
-            const arrayType = resolveStructuredTypeMembers(createTypeFromGenericGlobalType(globalArrayType, [arrayElementType, type.thisType || type]));
-            const members = createTupleTypeMemberSymbols(type.elementTypes);
-            addInheritedMembers(members, arrayType.properties);
-            setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexInfo, arrayType.numberIndexInfo);
         }
 
         function findMatchingSignature(signatureList: Signature[], signature: Signature, partialMatch: boolean, ignoreThisTypes: boolean, ignoreReturnTypes: boolean): Signature {
@@ -4291,9 +4289,6 @@ namespace ts {
                 }
                 else if (type.flags & TypeFlags.Anonymous) {
                     resolveAnonymousTypeMembers(<AnonymousType>type);
-                }
-                else if (type.flags & TypeFlags.Tuple) {
-                    resolveTupleTypeMembers(<TupleType>type);
                 }
                 else if (type.flags & TypeFlags.Union) {
                     resolveUnionTypeMembers(<UnionType>type);
@@ -4694,6 +4689,9 @@ namespace ts {
                 if (isJSConstructSignature) {
                     minArgumentCount--;
                 }
+                if (!thisParameter && isObjectLiteralMethod(declaration)) {
+                    thisParameter = getContextualThisParameter(declaration);
+                }
 
                 const classType = declaration.kind === SyntaxKind.Constructor ?
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
@@ -4992,6 +4990,17 @@ namespace ts {
             return type;
         }
 
+        function cloneTypeReference(source: TypeReference): TypeReference {
+            const type = <TypeReference>createObjectType(source.flags, source.symbol);
+            type.target = source.target;
+            type.typeArguments = source.typeArguments;
+            return type;
+        }
+
+        function getTypeReferenceArity(type: TypeReference): number {
+            return type.target.typeParameters ? type.target.typeParameters.length : 0;
+        }
+
         // Get type from reference to class or interface
         function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
@@ -5234,17 +5243,47 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function createTupleType(elementTypes: Type[], thisType?: Type) {
-            const id = getTypeListId(elementTypes) + "," + (thisType ? thisType.id : 0);
-            return tupleTypes[id] || (tupleTypes[id] = createNewTupleType(elementTypes, thisType));
+        // We represent tuple types as type references to synthesized generic interface types created by
+        // this function. The types are of the form:
+        //
+        //   interface Tuple<T0, T1, T2, ...> extends Array<T0 | T1 | T2 | ...> { 0: T0, 1: T1, 2: T2, ... }
+        //
+        // Note that the generic type created by this function has no symbol associated with it. The same
+        // is true for each of the synthesized type parameters.
+        function createTupleTypeOfArity(arity: number): GenericType {
+            const typeParameters: TypeParameter[] = [];
+            const properties: Symbol[] = [];
+            for (let i = 0; i < arity; i++) {
+                const typeParameter = <TypeParameter>createType(TypeFlags.TypeParameter);
+                typeParameters.push(typeParameter);
+                const property = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "" + i);
+                property.type = typeParameter;
+                properties.push(property);
+            }
+            const type = <GenericType & InterfaceTypeWithDeclaredMembers>createObjectType(TypeFlags.Tuple | TypeFlags.Reference);
+            type.typeParameters = typeParameters;
+            type.outerTypeParameters = undefined;
+            type.localTypeParameters = typeParameters;
+            type.instantiations = createMap<TypeReference>();
+            type.instantiations[getTypeListId(type.typeParameters)] = <GenericType>type;
+            type.target = <GenericType>type;
+            type.typeArguments = type.typeParameters;
+            type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter | TypeFlags.ThisType);
+            type.thisType.constraint = type;
+            type.declaredProperties = properties;
+            type.declaredCallSignatures = emptyArray;
+            type.declaredConstructSignatures = emptyArray;
+            type.declaredStringIndexInfo = undefined;
+            type.declaredNumberIndexInfo = undefined;
+            return type;
         }
 
-        function createNewTupleType(elementTypes: Type[], thisType?: Type) {
-            const propagatedFlags = getPropagatingFlagsOfTypes(elementTypes, /*excludeKinds*/ 0);
-            const type = <TupleType>createObjectType(TypeFlags.Tuple | propagatedFlags);
-            type.elementTypes = elementTypes;
-            type.thisType = thisType;
-            return type;
+        function getTupleTypeOfArity(arity: number): GenericType {
+            return tupleTypes[arity] || (tupleTypes[arity] = createTupleTypeOfArity(arity));
+        }
+
+        function createTupleType(elementTypes: Type[]) {
+            return createTypeReference(getTupleTypeOfArity(elementTypes.length), elementTypes);
         }
 
         function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
@@ -5340,7 +5379,7 @@ namespace ts {
             while (i > 0) {
                 i--;
                 if (isSubtypeOfAny(types[i], types)) {
-                    types.splice(i, 1);
+                    orderedRemoveItemAt(types, i);
                 }
             }
         }
@@ -5551,6 +5590,12 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                     return nullType;
                 case SyntaxKind.NeverKeyword:
+                    return neverType;
+                case SyntaxKind.JSDocNullKeyword:
+                    return nullType;
+                case SyntaxKind.JSDocUndefinedKeyword:
+                    return undefinedType;
+                case SyntaxKind.JSDocNeverKeyword:
                     return neverType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
@@ -5844,9 +5889,6 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Reference) {
                     return createTypeReference((<TypeReference>type).target, instantiateList((<TypeReference>type).typeArguments, mapper, instantiateType));
-                }
-                if (type.flags & TypeFlags.Tuple) {
-                    return createTupleType(instantiateList((<TupleType>type).elementTypes, mapper, instantiateType));
                 }
                 if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
                     return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*subtypeReduction*/ false, type.aliasSymbol, mapper.targetTypes);
@@ -6267,6 +6309,18 @@ namespace ts {
                 reportError(message, sourceType, targetType);
             }
 
+            function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
+                const sourceType = typeToString(source);
+                const targetType = typeToString(target);
+
+                if ((globalStringType === source && stringType === target) ||
+                    (globalNumberType === source && numberType === target) ||
+                    (globalBooleanType === source && booleanType === target) ||
+                    (getGlobalESSymbolType() === source && esSymbolType === target)) {
+                        reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
+                }
+            }
+
             // Compare two types and return
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
@@ -6390,6 +6444,9 @@ namespace ts {
                 }
 
                 if (reportErrors) {
+                    if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.Primitive) {
+                        tryElaborateErrorsForPrimitivesAndObjects(source, target);
+                    }
                     reportRelationError(headMessage, source, target);
                 }
                 return Ternary.False;
@@ -7168,8 +7225,8 @@ namespace ts {
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
          */
-        function isTupleType(type: Type): type is TupleType {
-            return !!(type.flags & TypeFlags.Tuple);
+        function isTupleType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Reference && (<TypeReference>type).target.flags & TypeFlags.Tuple);
         }
 
         function getFalsyFlagsOfTypes(types: Type[]): TypeFlags {
@@ -7301,11 +7358,8 @@ namespace ts {
                 if (type.flags & TypeFlags.Union) {
                     return getUnionType(map((<UnionType>type).types, getWidenedConstituentType));
                 }
-                if (isArrayType(type)) {
-                    return createArrayType(getWidenedType((<TypeReference>type).typeArguments[0]));
-                }
-                if (isTupleType(type)) {
-                    return createTupleType(map(type.elementTypes, getWidenedType));
+                if (isArrayType(type) || isTupleType(type)) {
+                    return createTypeReference((<TypeReference>type).target, map((<TypeReference>type).typeArguments, getWidenedType));
                 }
             }
             return type;
@@ -7331,11 +7385,8 @@ namespace ts {
                     }
                 }
             }
-            if (isArrayType(type)) {
-                return reportWideningErrorsInType((<TypeReference>type).typeArguments[0]);
-            }
-            if (isTupleType(type)) {
-                for (const t of type.elementTypes) {
+            if (isArrayType(type) || isTupleType(type)) {
+                for (const t of (<TypeReference>type).typeArguments) {
                     if (reportWideningErrorsInType(t)) {
                         errorReported = true;
                     }
@@ -7445,7 +7496,6 @@ namespace ts {
         function couldContainTypeParameters(type: Type): boolean {
             return !!(type.flags & TypeFlags.TypeParameter ||
                 type.flags & TypeFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeParameters) ||
-                type.flags & TypeFlags.Tuple && forEach((<TupleType>type).elementTypes, couldContainTypeParameters) ||
                 type.flags & TypeFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
                 type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeParameters(<UnionOrIntersectionType>type));
         }
@@ -7545,14 +7595,6 @@ namespace ts {
                     const targetTypes = (<TypeReference>target).typeArguments || emptyArray;
                     const count = sourceTypes.length < targetTypes.length ? sourceTypes.length : targetTypes.length;
                     for (let i = 0; i < count; i++) {
-                        inferFromTypes(sourceTypes[i], targetTypes[i]);
-                    }
-                }
-                else if (source.flags & TypeFlags.Tuple && target.flags & TypeFlags.Tuple && (<TupleType>source).elementTypes.length === (<TupleType>target).elementTypes.length) {
-                    // If source and target are tuples of the same size, infer from element types
-                    const sourceTypes = (<TupleType>source).elementTypes;
-                    const targetTypes = (<TupleType>target).elementTypes;
-                    for (let i = 0; i < sourceTypes.length; i++) {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
@@ -8717,7 +8759,7 @@ namespace ts {
             // The location isn't a reference to the given symbol, meaning we're being asked
             // a hypothetical question of what type the symbol would have if there was a reference
             // to it at the given location. Since we have no control flow information for the
-            // hypotherical reference (control flow information is created and attached by the
+            // hypothetical reference (control flow information is created and attached by the
             // binder), we simply return the declared type of the symbol.
             return getTypeOfSymbol(symbol);
         }
@@ -9100,10 +9142,6 @@ namespace ts {
                         return getInferredClassType(classSymbol);
                     }
                 }
-                const type = getContextuallyTypedThisType(container);
-                if (type) {
-                    return type;
-                }
 
                 const thisType = getThisTypeOfDeclaration(container);
                 if (thisType) {
@@ -9344,11 +9382,11 @@ namespace ts {
             }
         }
 
-        function getContextuallyTypedThisType(func: FunctionLikeDeclaration): Type {
+        function getContextualThisParameter(func: FunctionLikeDeclaration): Symbol {
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
-                    return getThisTypeOfSignature(contextualSignature);
+                    return contextualSignature.thisParameter;
                 }
             }
 
@@ -9913,7 +9951,7 @@ namespace ts {
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
                 if (inDestructuringPattern && elementTypes.length) {
-                    const type = createNewTupleType(elementTypes);
+                    const type = cloneTypeReference(createTupleType(elementTypes));
                     type.pattern = node;
                     return type;
                 }
@@ -9927,7 +9965,7 @@ namespace ts {
                         for (let i = elementTypes.length; i < patternElements.length; i++) {
                             const patternElement = patternElements[i];
                             if (hasDefaultValue(patternElement)) {
-                                elementTypes.push((<TupleType>contextualType).elementTypes[i]);
+                                elementTypes.push((<TypeReference>contextualType).typeArguments[i]);
                             }
                             else {
                                 if (patternElement.kind !== SyntaxKind.OmittedExpression) {
@@ -11929,18 +11967,12 @@ namespace ts {
             // Function interface, since they have none by default. This is a bit of a leap of faith
             // that the user will not add any.
             const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-
             const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
-            // TS 1.0 spec: 4.12
-            // If FuncExpr is of type Any, or of an object type that has no call or construct signatures
-            // but is a subtype of the Function interface, the call is an untyped function call. In an
-            // untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
+
+            // TS 1.0 Spec: 4.12
+            // In an untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
             // types are provided for the argument expressions, and the result is always of type Any.
-            // We exclude union types because we may have a union of function types that happen to have
-            // no common signatures.
-            if (isTypeAny(funcType) ||
-                (isTypeAny(apparentType) && funcType.flags & TypeFlags.TypeParameter) ||
-                (!callSignatures.length && !constructSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
                 // The unknownType indicates that an error already occurred (and was reported).  No
                 // need to report another error in this case.
                 if (funcType !== unknownType && node.typeArguments) {
@@ -11961,6 +11993,29 @@ namespace ts {
                 return resolveErrorCall(node);
             }
             return resolveCall(node, callSignatures, candidatesOutArray);
+        }
+
+        /**
+         * TS 1.0 spec: 4.12
+         * If FuncExpr is of type Any, or of an object type that has no call or construct signatures
+         * but is a subtype of the Function interface, the call is an untyped function call.
+         */
+        function isUntypedFunctionCall(funcType: Type, apparentFuncType: Type, numCallSignatures: number, numConstructSignatures: number) {
+            if (isTypeAny(funcType)) {
+                return true;
+            }
+            if (isTypeAny(apparentFuncType) && funcType.flags & TypeFlags.TypeParameter) {
+                return true;
+            }
+            if (!numCallSignatures && !numConstructSignatures) {
+                // We exclude union types because we may have a union of function types that happen to have
+                // no common signatures.
+                if (funcType.flags & TypeFlags.Union) {
+                    return false;
+                }
+                return isTypeAssignableTo(funcType, globalFunctionType);
+            }
+            return false;
         }
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
@@ -12088,8 +12143,9 @@ namespace ts {
             }
 
             const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
 
-            if (isTypeAny(tagType) || (!callSignatures.length && !(tagType.flags & TypeFlags.Union) && isTypeAssignableTo(tagType, globalFunctionType))) {
+            if (isUntypedFunctionCall(tagType, apparentType, callSignatures.length, constructSignatures.length)) {
                 return resolveUntypedCall(node);
             }
 
@@ -12134,7 +12190,8 @@ namespace ts {
             }
 
             const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-            if (funcType === anyType || (!callSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
                 return resolveUntypedCall(node);
             }
 
@@ -12173,10 +12230,10 @@ namespace ts {
             // or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
             // to correctly fill the candidatesOutArray.
             const cached = links.resolvedSignature;
-            if (cached && cached !== anySignature && !candidatesOutArray) {
+            if (cached && cached !== resolvingSignature && !candidatesOutArray) {
                 return cached;
             }
-            links.resolvedSignature = anySignature;
+            links.resolvedSignature = resolvingSignature;
             const result = resolveSignature(node, candidatesOutArray);
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
@@ -12188,7 +12245,7 @@ namespace ts {
         function getResolvedOrAnySignature(node: CallLikeExpression) {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
-            return getNodeLinks(node).resolvedSignature === anySignature ? anySignature : getResolvedSignature(node);
+            return getNodeLinks(node).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(node);
         }
 
         function getInferredClassType(symbol: Symbol) {
@@ -12291,6 +12348,12 @@ namespace ts {
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
+            if (context.thisParameter) {
+                if (!signature.thisParameter) {
+                    signature.thisParameter = createTransientSymbol(context.thisParameter, undefined);
+                }
+                assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter), mapper);
+            }
             for (let i = 0; i < len; i++) {
                 const parameter = signature.parameters[i];
                 const contextualParameterType = getTypeAtPosition(context, i);
@@ -13038,7 +13101,7 @@ namespace ts {
                         // such as NodeCheckFlags.LexicalThis on "this"expression.
                         checkExpression(element);
                         if (isTupleType(sourceType)) {
-                            error(element, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(sourceType), (<TupleType>sourceType).elementTypes.length, elements.length);
+                            error(element, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(sourceType), getTypeReferenceArity(<TypeReference>sourceType), elements.length);
                         }
                         else {
                             error(element, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
@@ -18515,7 +18578,7 @@ namespace ts {
             else if (isTypeOfKind(type, TypeFlags.StringLike)) {
                 return TypeReferenceSerializationKind.StringLikeType;
             }
-            else if (isTypeOfKind(type, TypeFlags.Tuple)) {
+            else if (isTupleType(type)) {
                 return TypeReferenceSerializationKind.ArrayLikeType;
             }
             else if (isTypeOfKind(type, TypeFlags.ESSymbol)) {
@@ -18726,7 +18789,13 @@ namespace ts {
                     (augmentations || (augmentations = [])).push(file.moduleAugmentations);
                 }
                 if (file.symbol && file.symbol.globalExports) {
-                    mergeSymbolTable(globals, file.symbol.globalExports);
+                    // Merge in UMD exports with first-in-wins semantics (see #9771)
+                    const source = file.symbol.globalExports;
+                    for (const id in source) {
+                        if (!(id in globals)) {
+                            globals[id] = source[id];
+                        }
+                    }
                 }
             });
 

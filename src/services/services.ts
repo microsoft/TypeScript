@@ -7,6 +7,7 @@
 /// <reference path='navigationBar.ts' />
 /// <reference path='patternMatcher.ts' />
 /// <reference path='signatureHelp.ts' />
+/// <reference path='types.ts' />
 /// <reference path='utilities.ts' />
 /// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
@@ -15,123 +16,6 @@
 namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.5";
-
-    export interface Node {
-        getSourceFile(): SourceFile;
-        getChildCount(sourceFile?: SourceFile): number;
-        getChildAt(index: number, sourceFile?: SourceFile): Node;
-        getChildren(sourceFile?: SourceFile): Node[];
-        getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
-        getFullStart(): number;
-        getEnd(): number;
-        getWidth(sourceFile?: SourceFile): number;
-        getFullWidth(): number;
-        getLeadingTriviaWidth(sourceFile?: SourceFile): number;
-        getFullText(sourceFile?: SourceFile): string;
-        getText(sourceFile?: SourceFile): string;
-        getFirstToken(sourceFile?: SourceFile): Node;
-        getLastToken(sourceFile?: SourceFile): Node;
-    }
-
-    export interface Symbol {
-        getFlags(): SymbolFlags;
-        getName(): string;
-        getDeclarations(): Declaration[];
-        getDocumentationComment(): SymbolDisplayPart[];
-    }
-
-    export interface Type {
-        getFlags(): TypeFlags;
-        getSymbol(): Symbol;
-        getProperties(): Symbol[];
-        getProperty(propertyName: string): Symbol;
-        getApparentProperties(): Symbol[];
-        getCallSignatures(): Signature[];
-        getConstructSignatures(): Signature[];
-        getStringIndexType(): Type;
-        getNumberIndexType(): Type;
-        getBaseTypes(): ObjectType[];
-        getNonNullableType(): Type;
-    }
-
-    export interface Signature {
-        getDeclaration(): SignatureDeclaration;
-        getTypeParameters(): Type[];
-        getParameters(): Symbol[];
-        getReturnType(): Type;
-        getDocumentationComment(): SymbolDisplayPart[];
-    }
-
-    export interface SourceFile {
-        /* @internal */ version: string;
-        /* @internal */ scriptSnapshot: IScriptSnapshot;
-        /* @internal */ nameTable: Map<number>;
-
-        /* @internal */ getNamedDeclarations(): Map<Declaration[]>;
-
-        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
-        getLineStarts(): number[];
-        getPositionOfLineAndCharacter(line: number, character: number): number;
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
-    }
-
-    /**
-     * Represents an immutable snapshot of a script at a specified time.Once acquired, the
-     * snapshot is observably immutable. i.e. the same calls with the same parameters will return
-     * the same values.
-     */
-    export interface IScriptSnapshot {
-        /** Gets a portion of the script snapshot specified by [start, end). */
-        getText(start: number, end: number): string;
-
-        /** Gets the length of this script snapshot. */
-        getLength(): number;
-
-        /**
-         * Gets the TextChangeRange that describe how the text changed between this text and
-         * an older version.  This information is used by the incremental parser to determine
-         * what sections of the script need to be re-parsed.  'undefined' can be returned if the
-         * change range cannot be determined.  However, in that case, incremental parsing will
-         * not happen and the entire document will be re - parsed.
-         */
-        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
-
-        /** Releases all resources held by this script snapshot */
-        dispose?(): void;
-    }
-
-    export namespace ScriptSnapshot {
-        class StringScriptSnapshot implements IScriptSnapshot {
-
-            constructor(private text: string) {
-            }
-
-            public getText(start: number, end: number): string {
-                return this.text.substring(start, end);
-            }
-
-            public getLength(): number {
-                return this.text.length;
-            }
-
-            public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
-                // Text-based snapshots do not support incremental parsing. Return undefined
-                // to signal that to the caller.
-                return undefined;
-            }
-        }
-
-        export function fromString(text: string): IScriptSnapshot {
-            return new StringScriptSnapshot(text);
-        }
-    }
-    export interface PreProcessedFileInfo {
-        referencedFiles: FileReference[];
-        typeReferenceDirectives: FileReference[];
-        importedFiles: FileReference[];
-        ambientExternalModules: string[];
-        isLibFile: boolean;
-    }
 
     const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
@@ -280,11 +164,14 @@ namespace ts {
                 let pos = this.pos;
                 const useJSDocScanner = this.kind >= SyntaxKind.FirstJSDocTagNode && this.kind <= SyntaxKind.LastJSDocTagNode;
                 const processNode = (node: Node) => {
-                    if (pos < node.pos) {
+                    const isJSDocTagNode = isJSDocTag(node);
+                    if (!isJSDocTagNode && pos < node.pos) {
                         pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);
                     }
                     children.push(node);
-                    pos = node.end;
+                    if (!isJSDocTagNode) {
+                        pos = node.end;
+                    }
                 };
                 const processNodes = (nodes: NodeArray<Node>) => {
                     if (pos < nodes.pos) {
@@ -984,8 +871,7 @@ namespace ts {
             function addDeclaration(declaration: Declaration) {
                 const name = getDeclarationName(declaration);
                 if (name) {
-                    const declarations = getDeclarations(name);
-                    declarations.push(declaration);
+                    multiMapAdd(result, name, declaration);
                 }
             }
 
@@ -1132,691 +1018,6 @@ namespace ts {
                 }
             }
         }
-    }
-
-    export interface HostCancellationToken {
-        isCancellationRequested(): boolean;
-    }
-
-    //
-    // Public interface of the host of a language service instance.
-    //
-    export interface LanguageServiceHost {
-        getCompilationSettings(): CompilerOptions;
-        getNewLine?(): string;
-        getProjectVersion?(): string;
-        getScriptFileNames(): string[];
-        getScriptKind?(fileName: string): ScriptKind;
-        getScriptVersion(fileName: string): string;
-        getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
-        getLocalizedDiagnosticMessages?(): any;
-        getCancellationToken?(): HostCancellationToken;
-        getCurrentDirectory(): string;
-        getDefaultLibFileName(options: CompilerOptions): string;
-        log?(s: string): void;
-        trace?(s: string): void;
-        error?(s: string): void;
-        useCaseSensitiveFileNames?(): boolean;
-
-        /*
-         * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
-         * if implementation is omitted then language service will use built-in module resolution logic and get answers to
-         * host specific questions using 'getScriptSnapshot'.
-         */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
-        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-        directoryExists?(directoryName: string): boolean;
-        getDirectories?(directoryName: string): string[];
-    }
-
-    //
-    // Public services of a language service instance associated
-    // with a language service host instance
-    //
-    export interface LanguageService {
-        cleanupSemanticCache(): void;
-
-        getSyntacticDiagnostics(fileName: string): Diagnostic[];
-        getSemanticDiagnostics(fileName: string): Diagnostic[];
-
-        // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
-        // diagnostics present for the program level, and not just 'options' diagnostics.
-        getCompilerOptionsDiagnostics(): Diagnostic[];
-
-        /**
-         * @deprecated Use getEncodedSyntacticClassifications instead.
-         */
-        getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
-
-        /**
-         * @deprecated Use getEncodedSemanticClassifications instead.
-         */
-        getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
-
-        // Encoded as triples of [start, length, ClassificationType].
-        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
-        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
-
-        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
-
-        getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
-
-        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
-
-        getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan;
-
-        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems;
-
-        getRenameInfo(fileName: string, position: number): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
-
-        getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
-        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
-
-        getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        findReferences(fileName: string, position: number): ReferencedSymbol[];
-        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[];
-
-        /** @deprecated */
-        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-
-        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
-        getNavigationBarItems(fileName: string): NavigationBarItem[];
-
-        getOutliningSpans(fileName: string): OutliningSpan[];
-        getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
-        getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
-        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
-
-        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
-
-        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
-
-        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
-
-        getEmitOutput(fileName: string): EmitOutput;
-
-        getProgram(): Program;
-
-        /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
-
-        dispose(): void;
-    }
-
-    export interface Classifications {
-        spans: number[];
-        endOfLineState: EndOfLineState;
-    }
-
-    export interface ClassifiedSpan {
-        textSpan: TextSpan;
-        classificationType: string; // ClassificationTypeNames
-    }
-
-    export interface NavigationBarItem {
-        text: string;
-        kind: string;
-        kindModifiers: string;
-        spans: TextSpan[];
-        childItems: NavigationBarItem[];
-        indent: number;
-        bolded: boolean;
-        grayed: boolean;
-    }
-
-    export interface TodoCommentDescriptor {
-        text: string;
-        priority: number;
-    }
-
-    export interface TodoComment {
-        descriptor: TodoCommentDescriptor;
-        message: string;
-        position: number;
-    }
-
-    export class TextChange {
-        span: TextSpan;
-        newText: string;
-    }
-
-    export interface TextInsertion {
-        newText: string;
-        /** The position in newText the caret should point to after the insertion. */
-        caretOffset: number;
-    }
-
-    export interface RenameLocation {
-        textSpan: TextSpan;
-        fileName: string;
-    }
-
-    export interface ReferenceEntry {
-        textSpan: TextSpan;
-        fileName: string;
-        isWriteAccess: boolean;
-        isDefinition: boolean;
-    }
-
-    export interface DocumentHighlights {
-        fileName: string;
-        highlightSpans: HighlightSpan[];
-    }
-
-    export namespace HighlightSpanKind {
-        export const none = "none";
-        export const definition = "definition";
-        export const reference = "reference";
-        export const writtenReference = "writtenReference";
-    }
-
-    export interface HighlightSpan {
-        fileName?: string;
-        textSpan: TextSpan;
-        kind: string;
-    }
-
-    export interface NavigateToItem {
-        name: string;
-        kind: string;
-        kindModifiers: string;
-        matchKind: string;
-        isCaseSensitive: boolean;
-        fileName: string;
-        textSpan: TextSpan;
-        containerName: string;
-        containerKind: string;
-    }
-
-    export interface EditorOptions {
-        BaseIndentSize?: number;
-        IndentSize: number;
-        TabSize: number;
-        NewLineCharacter: string;
-        ConvertTabsToSpaces: boolean;
-        IndentStyle: IndentStyle;
-    }
-
-    export enum IndentStyle {
-        None = 0,
-        Block = 1,
-        Smart = 2,
-    }
-
-    export interface FormatCodeOptions extends EditorOptions {
-        InsertSpaceAfterCommaDelimiter: boolean;
-        InsertSpaceAfterSemicolonInForStatements: boolean;
-        InsertSpaceBeforeAndAfterBinaryOperators: boolean;
-        InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
-        InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
-        InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
-        InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
-        InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
-        InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
-        InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
-        PlaceOpenBraceOnNewLineForFunctions: boolean;
-        PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string | undefined;
-    }
-
-    export interface DefinitionInfo {
-        fileName: string;
-        textSpan: TextSpan;
-        kind: string;
-        name: string;
-        containerKind: string;
-        containerName: string;
-    }
-
-    export interface ReferencedSymbol {
-        definition: DefinitionInfo;
-        references: ReferenceEntry[];
-    }
-
-    export enum SymbolDisplayPartKind {
-        aliasName,
-        className,
-        enumName,
-        fieldName,
-        interfaceName,
-        keyword,
-        lineBreak,
-        numericLiteral,
-        stringLiteral,
-        localName,
-        methodName,
-        moduleName,
-        operator,
-        parameterName,
-        propertyName,
-        punctuation,
-        space,
-        text,
-        typeParameterName,
-        enumMemberName,
-        functionName,
-        regularExpressionLiteral,
-    }
-
-    export interface SymbolDisplayPart {
-        text: string;
-        kind: string;
-    }
-
-    export interface QuickInfo {
-        kind: string;
-        kindModifiers: string;
-        textSpan: TextSpan;
-        displayParts: SymbolDisplayPart[];
-        documentation: SymbolDisplayPart[];
-    }
-
-    export interface RenameInfo {
-        canRename: boolean;
-        localizedErrorMessage: string;
-        displayName: string;
-        fullDisplayName: string;
-        kind: string;
-        kindModifiers: string;
-        triggerSpan: TextSpan;
-    }
-
-    export interface SignatureHelpParameter {
-        name: string;
-        documentation: SymbolDisplayPart[];
-        displayParts: SymbolDisplayPart[];
-        isOptional: boolean;
-    }
-
-    /**
-     * Represents a single signature to show in signature help.
-     * The id is used for subsequent calls into the language service to ask questions about the
-     * signature help item in the context of any documents that have been updated.  i.e. after
-     * an edit has happened, while signature help is still active, the host can ask important
-     * questions like 'what parameter is the user currently contained within?'.
-     */
-    export interface SignatureHelpItem {
-        isVariadic: boolean;
-        prefixDisplayParts: SymbolDisplayPart[];
-        suffixDisplayParts: SymbolDisplayPart[];
-        separatorDisplayParts: SymbolDisplayPart[];
-        parameters: SignatureHelpParameter[];
-        documentation: SymbolDisplayPart[];
-    }
-
-    /**
-     * Represents a set of signature help items, and the preferred item that should be selected.
-     */
-    export interface SignatureHelpItems {
-        items: SignatureHelpItem[];
-        applicableSpan: TextSpan;
-        selectedItemIndex: number;
-        argumentIndex: number;
-        argumentCount: number;
-    }
-
-    export interface CompletionInfo {
-        isMemberCompletion: boolean;
-        isNewIdentifierLocation: boolean;  // true when the current location also allows for a new identifier
-        entries: CompletionEntry[];
-    }
-
-    export interface CompletionEntry {
-        name: string;
-        kind: string;            // see ScriptElementKind
-        kindModifiers: string;   // see ScriptElementKindModifier, comma separated
-        sortText: string;
-    }
-
-    export interface CompletionEntryDetails {
-        name: string;
-        kind: string;            // see ScriptElementKind
-        kindModifiers: string;   // see ScriptElementKindModifier, comma separated
-        displayParts: SymbolDisplayPart[];
-        documentation: SymbolDisplayPart[];
-    }
-
-    export interface OutliningSpan {
-        /** The span of the document to actually collapse. */
-        textSpan: TextSpan;
-
-        /** The span of the document to display when the user hovers over the collapsed span. */
-        hintSpan: TextSpan;
-
-        /** The text to display in the editor for the collapsed region. */
-        bannerText: string;
-
-        /**
-          * Whether or not this region should be automatically collapsed when
-          * the 'Collapse to Definitions' command is invoked.
-          */
-        autoCollapse: boolean;
-    }
-
-    export interface EmitOutput {
-        outputFiles: OutputFile[];
-        emitSkipped: boolean;
-    }
-
-    export const enum OutputFileType {
-        JavaScript,
-        SourceMap,
-        Declaration
-    }
-
-    export interface OutputFile {
-        name: string;
-        writeByteOrderMark: boolean;
-        text: string;
-    }
-
-    export const enum EndOfLineState {
-        None,
-        InMultiLineCommentTrivia,
-        InSingleQuoteStringLiteral,
-        InDoubleQuoteStringLiteral,
-        InTemplateHeadOrNoSubstitutionTemplate,
-        InTemplateMiddleOrTail,
-        InTemplateSubstitutionPosition,
-    }
-
-    export enum TokenClass {
-        Punctuation,
-        Keyword,
-        Operator,
-        Comment,
-        Whitespace,
-        Identifier,
-        NumberLiteral,
-        StringLiteral,
-        RegExpLiteral,
-    }
-
-    export interface ClassificationResult {
-        finalLexState: EndOfLineState;
-        entries: ClassificationInfo[];
-    }
-
-    export interface ClassificationInfo {
-        length: number;
-        classification: TokenClass;
-    }
-
-    export interface Classifier {
-        /**
-         * Gives lexical classifications of tokens on a line without any syntactic context.
-         * For instance, a token consisting of the text 'string' can be either an identifier
-         * named 'string' or the keyword 'string', however, because this classifier is not aware,
-         * it relies on certain heuristics to give acceptable results. For classifications where
-         * speed trumps accuracy, this function is preferable; however, for true accuracy, the
-         * syntactic classifier is ideal. In fact, in certain editing scenarios, combining the
-         * lexical, syntactic, and semantic classifiers may issue the best user experience.
-         *
-         * @param text                      The text of a line to classify.
-         * @param lexState                  The state of the lexical classifier at the end of the previous line.
-         * @param syntacticClassifierAbsent Whether the client is *not* using a syntactic classifier.
-         *                                  If there is no syntactic classifier (syntacticClassifierAbsent=true),
-         *                                  certain heuristics may be used in its place; however, if there is a
-         *                                  syntactic classifier (syntacticClassifierAbsent=false), certain
-         *                                  classifications which may be incorrectly categorized will be given
-         *                                  back as Identifiers in order to allow the syntactic classifier to
-         *                                  subsume the classification.
-         * @deprecated Use getLexicalClassifications instead.
-         */
-        getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
-        getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
-    }
-
-    /**
-      * The document registry represents a store of SourceFile objects that can be shared between
-      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
-      * of files in the context.
-      * SourceFile objects account for most of the memory usage by the language service. Sharing
-      * the same DocumentRegistry instance between different instances of LanguageService allow
-      * for more efficient memory utilization since all projects will share at least the library
-      * file (lib.d.ts).
-      *
-      * A more advanced use of the document registry is to serialize sourceFile objects to disk
-      * and re-hydrate them when needed.
-      *
-      * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
-      * to all subsequent createLanguageService calls.
-      */
-    export interface DocumentRegistry {
-        /**
-          * Request a stored SourceFile with a given fileName and compilationSettings.
-          * The first call to acquire will call createLanguageServiceSourceFile to generate
-          * the SourceFile if was not found in the registry.
-          *
-          * @param fileName The name of the file requested
-          * @param compilationSettings Some compilation settings like target affects the
-          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
-          * multiple copies of the same file for different compilation settings.
-          * @parm scriptSnapshot Text of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @parm version Current version of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          */
-        acquireDocument(
-            fileName: string,
-            compilationSettings: CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
-            version: string,
-            scriptKind?: ScriptKind): SourceFile;
-
-        acquireDocumentWithKey(
-            fileName: string,
-            path: Path,
-            compilationSettings: CompilerOptions,
-            key: DocumentRegistryBucketKey,
-            scriptSnapshot: IScriptSnapshot,
-            version: string,
-            scriptKind?: ScriptKind): SourceFile;
-
-        /**
-          * Request an updated version of an already existing SourceFile with a given fileName
-          * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
-          * to get an updated SourceFile.
-          *
-          * @param fileName The name of the file requested
-          * @param compilationSettings Some compilation settings like target affects the
-          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
-          * multiple copies of the same file for different compilation settings.
-          * @param scriptSnapshot Text of the file.
-          * @param version Current version of the file.
-          */
-        updateDocument(
-            fileName: string,
-            compilationSettings: CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
-            version: string,
-            scriptKind?: ScriptKind): SourceFile;
-
-        updateDocumentWithKey(
-            fileName: string,
-            path: Path,
-            compilationSettings: CompilerOptions,
-            key: DocumentRegistryBucketKey,
-            scriptSnapshot: IScriptSnapshot,
-            version: string,
-            scriptKind?: ScriptKind): SourceFile;
-
-        getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
-        /**
-          * Informs the DocumentRegistry that a file is not needed any longer.
-          *
-          * Note: It is not allowed to call release on a SourceFile that was not acquired from
-          * this registry originally.
-          *
-          * @param fileName The name of the file to be released
-          * @param compilationSettings The compilation settings used to acquire the file
-          */
-        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
-
-        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
-
-        reportStats(): string;
-    }
-
-    export type DocumentRegistryBucketKey = string & { __bucketKey: any };
-
-    // TODO: move these to enums
-    export namespace ScriptElementKind {
-        export const unknown = "";
-        export const warning = "warning";
-
-        /** predefined type (void) or keyword (class) */
-        export const keyword = "keyword";
-
-        /** top level script node */
-        export const scriptElement = "script";
-
-        /** module foo {} */
-        export const moduleElement = "module";
-
-        /** class X {} */
-        export const classElement = "class";
-
-        /** var x = class X {} */
-        export const localClassElement = "local class";
-
-        /** interface Y {} */
-        export const interfaceElement = "interface";
-
-        /** type T = ... */
-        export const typeElement = "type";
-
-        /** enum E */
-        export const enumElement = "enum";
-        // TODO: GH#9983
-        export const enumMemberElement = "const";
-
-        /**
-         * Inside module and script only
-         * const v = ..
-         */
-        export const variableElement = "var";
-
-        /** Inside function */
-        export const localVariableElement = "local var";
-
-        /**
-         * Inside module and script only
-         * function f() { }
-         */
-        export const functionElement = "function";
-
-        /** Inside function */
-        export const localFunctionElement = "local function";
-
-        /** class X { [public|private]* foo() {} } */
-        export const memberFunctionElement = "method";
-
-        /** class X { [public|private]* [get|set] foo:number; } */
-        export const memberGetAccessorElement = "getter";
-        export const memberSetAccessorElement = "setter";
-
-        /**
-         * class X { [public|private]* foo:number; }
-         * interface Y { foo:number; }
-         */
-        export const memberVariableElement = "property";
-
-        /** class X { constructor() { } } */
-        export const constructorImplementationElement = "constructor";
-
-        /** interface Y { ():number; } */
-        export const callSignatureElement = "call";
-
-        /** interface Y { []:number; } */
-        export const indexSignatureElement = "index";
-
-        /** interface Y { new():Y; } */
-        export const constructSignatureElement = "construct";
-
-        /** function foo(*Y*: string) */
-        export const parameterElement = "parameter";
-
-        export const typeParameterElement = "type parameter";
-
-        export const primitiveType = "primitive type";
-
-        export const label = "label";
-
-        export const alias = "alias";
-
-        export const constElement = "const";
-
-        export const letElement = "let";
-    }
-
-    export namespace ScriptElementKindModifier {
-        export const none = "";
-        export const publicMemberModifier = "public";
-        export const privateMemberModifier = "private";
-        export const protectedMemberModifier = "protected";
-        export const exportedModifier = "export";
-        export const ambientModifier = "declare";
-        export const staticModifier = "static";
-        export const abstractModifier = "abstract";
-    }
-
-    export class ClassificationTypeNames {
-        public static comment = "comment";
-        public static identifier = "identifier";
-        public static keyword = "keyword";
-        public static numericLiteral = "number";
-        public static operator = "operator";
-        public static stringLiteral = "string";
-        public static whiteSpace = "whitespace";
-        public static text = "text";
-
-        public static punctuation = "punctuation";
-
-        public static className = "class name";
-        public static enumName = "enum name";
-        public static interfaceName = "interface name";
-        public static moduleName = "module name";
-        public static typeParameterName = "type parameter name";
-        public static typeAliasName = "type alias name";
-        public static parameterName = "parameter name";
-        public static docCommentTagName = "doc comment tag name";
-        public static jsxOpenTagName = "jsx open tag name";
-        public static jsxCloseTagName = "jsx close tag name";
-        public static jsxSelfClosingTagName = "jsx self closing tag name";
-        public static jsxAttribute = "jsx attribute";
-        public static jsxText = "jsx text";
-        public static jsxAttributeStringLiteralValue = "jsx attribute string literal value";
-    }
-
-    export const enum ClassificationType {
-        comment = 1,
-        identifier = 2,
-        keyword = 3,
-        numericLiteral = 4,
-        operator = 5,
-        stringLiteral = 6,
-        regularExpressionLiteral = 7,
-        whiteSpace = 8,
-        text = 9,
-        punctuation = 10,
-        className = 11,
-        enumName = 12,
-        interfaceName = 13,
-        moduleName = 14,
-        typeParameterName = 15,
-        typeAliasName = 16,
-        parameterName = 17,
-        docCommentTagName = 18,
-        jsxOpenTagName = 19,
-        jsxCloseTagName = 20,
-        jsxSelfClosingTagName = 21,
-        jsxAttribute = 22,
-        jsxText = 23,
-        jsxAttributeStringLiteralValue = 24,
     }
 
     /// Language Service
@@ -2786,18 +1987,42 @@ namespace ts {
         return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
     }
 
+    function climbPastPropertyAccess(node: Node) {
+        return isRightSideOfPropertyAccess(node) ? node.parent : node;
+    }
+
+    /** Get `C` given `N` if `N` is in the position `class C extends N` or `class C extends foo.N` where `N` is an identifier. */
+    function tryGetClassByExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
+        return tryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).parent);
+    }
+
     function isCallExpressionTarget(node: Node): boolean {
-        if (isRightSideOfPropertyAccess(node)) {
-            node = node.parent;
-        }
-        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
+        return isCallOrNewExpressionTarget(node, SyntaxKind.CallExpression);
     }
 
     function isNewExpressionTarget(node: Node): boolean {
-        if (isRightSideOfPropertyAccess(node)) {
-            node = node.parent;
-        }
-        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).expression === node;
+        return isCallOrNewExpressionTarget(node, SyntaxKind.NewExpression);
+    }
+
+    function isCallOrNewExpressionTarget(node: Node, kind: SyntaxKind) {
+        const target = climbPastPropertyAccess(node);
+        return target && target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
+    }
+
+    function climbPastManyPropertyAccesses(node: Node): Node {
+        return isRightSideOfPropertyAccess(node) ? climbPastManyPropertyAccesses(node.parent) : node;
+    }
+
+    /** Returns a CallLikeExpression where `node` is the target being invoked. */
+    function getAncestorCallLikeExpression(node: Node): CallLikeExpression | undefined {
+        const target = climbPastManyPropertyAccesses(node);
+        const callLike = target.parent;
+        return callLike && isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target && callLike;
+    }
+
+    function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
+        const callLike = getAncestorCallLikeExpression(node);
+        return callLike && typeChecker.getResolvedSignature(callLike).declaration;
     }
 
     function isNameOfModuleDeclaration(node: Node) {
@@ -4603,7 +3828,7 @@ namespace ts {
             const symbolFlags = symbol.flags;
             let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, location);
             let hasAddedSymbolInfo: boolean;
-            const isThisExpression: boolean = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
+            const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
             let type: Type;
 
             // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -5066,14 +4291,25 @@ namespace ts {
             };
         }
 
+        function getSymbolInfo(typeChecker: TypeChecker, symbol: Symbol, node: Node) {
+            return {
+                symbolName: typeChecker.symbolToString(symbol), // Do not get scoped name, just the name of the symbol
+                symbolKind: getSymbolKind(symbol, node),
+                containerName: symbol.parent ? typeChecker.symbolToString(symbol.parent, node) : ""
+            };
+        }
+
+        function createDefinitionFromSignatureDeclaration(decl: SignatureDeclaration): DefinitionInfo {
+            const typeChecker = program.getTypeChecker();
+            const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, decl.symbol, decl);
+            return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
+        }
+
         function getDefinitionFromSymbol(symbol: Symbol, node: Node): DefinitionInfo[] {
             const typeChecker = program.getTypeChecker();
             const result: DefinitionInfo[] = [];
             const declarations = symbol.getDeclarations();
-            const symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            const symbolKind = getSymbolKind(symbol, node);
-            const containerSymbol = symbol.parent;
-            const containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, symbol, node);
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
@@ -5199,6 +4435,12 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
+
+            const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
+            if (calledDeclaration) {
+                return [createDefinitionFromSignatureDeclaration(calledDeclaration)];
+            }
+
             let symbol = typeChecker.getSymbolAtLocation(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
@@ -6006,6 +5248,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.ThisKeyword:
                 // case SyntaxKind.SuperKeyword: TODO:GH#9268
+                case SyntaxKind.ConstructorKeyword:
                 case SyntaxKind.StringLiteral:
                     return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
             }
@@ -6050,6 +5293,8 @@ namespace ts {
                 return getReferencesForSuperKeyword(node);
             }
 
+            // `getSymbolAtLocation` normally returns the symbol of the class when given the constructor keyword,
+            // so we have to specify that we want the constructor symbol.
             const symbol = typeChecker.getSymbolAtLocation(node);
 
             if (!symbol && node.kind === SyntaxKind.StringLiteral) {
@@ -6105,7 +5350,7 @@ namespace ts {
 
             return result;
 
-            function getDefinition(symbol: Symbol): DefinitionInfo {
+            function getDefinition(symbol: Symbol): ReferencedSymbolDefinitionInfo {
                 const info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), node);
                 const name = map(info.displayParts, p => p.text).join("");
                 const declarations = symbol.declarations;
@@ -6119,11 +5364,12 @@ namespace ts {
                     name,
                     kind: info.symbolKind,
                     fileName: declarations[0].getSourceFile().fileName,
-                    textSpan: createTextSpan(declarations[0].getStart(), 0)
+                    textSpan: createTextSpan(declarations[0].getStart(), 0),
+                    displayParts: info.displayParts
                 };
             }
 
-            function getAliasSymbolForPropertyNameSymbol(symbol: Symbol, location: Node): Symbol {
+            function getAliasSymbolForPropertyNameSymbol(symbol: Symbol, location: Node): Symbol | undefined {
                 if (symbol.flags & SymbolFlags.Alias) {
                     // Default import get alias
                     const defaultImport = getDeclarationOfKind(symbol, SyntaxKind.ImportClause);
@@ -6147,6 +5393,10 @@ namespace ts {
                     }
                 }
                 return undefined;
+            }
+
+            function followAliasIfNecessary(symbol: Symbol, location: Node): Symbol {
+                return getAliasSymbolForPropertyNameSymbol(symbol, location) || symbol;
             }
 
             function getPropertySymbolOfDestructuringAssignment(location: Node) {
@@ -6314,13 +5564,14 @@ namespace ts {
                     }
                 });
 
-                const definition: DefinitionInfo = {
+                const definition: ReferencedSymbolDefinitionInfo = {
                     containerKind: "",
                     containerName: "",
                     fileName: targetLabel.getSourceFile().fileName,
                     kind: ScriptElementKind.label,
                     name: labelName,
-                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd())
+                    textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd()),
+                    displayParts: [displayPart(labelName, SymbolDisplayPartKind.text)]
                 };
 
                 return [{ definition, references }];
@@ -6412,7 +5663,8 @@ namespace ts {
                         if (referenceSymbol) {
                             const referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
                             const shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                            const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation);
+                            const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation,
+                                /*searchLocationIsConstructor*/ searchLocation.kind === SyntaxKind.ConstructorKeyword);
 
                             if (relatedSymbol) {
                                 const referencedSymbol = getReferencedSymbol(relatedSymbol);
@@ -6428,11 +5680,93 @@ namespace ts {
                                 const referencedSymbol = getReferencedSymbol(shorthandValueSymbol);
                                 referencedSymbol.references.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
                             }
+                            else if (searchLocation.kind === SyntaxKind.ConstructorKeyword) {
+                                findAdditionalConstructorReferences(referenceSymbol, referenceLocation);
+                            }
                         }
                     });
                 }
 
                 return;
+
+                /** Adds references when a constructor is used with `new this()` in its own class and `super()` calls in subclasses.  */
+                function findAdditionalConstructorReferences(referenceSymbol: Symbol, referenceLocation: Node): void {
+                    Debug.assert(isClassLike(searchSymbol.valueDeclaration));
+
+                    const referenceClass = referenceLocation.parent;
+                    if (referenceSymbol === searchSymbol && isClassLike(referenceClass)) {
+                        Debug.assert(referenceClass.name === referenceLocation);
+                        // This is the class declaration containing the constructor.
+                        addReferences(findOwnConstructorCalls(searchSymbol));
+                    }
+                    else {
+                        // If this class appears in `extends C`, then the extending class' "super" calls are references.
+                        const classExtending = tryGetClassByExtendingIdentifier(referenceLocation);
+                        if (classExtending && isClassLike(classExtending) && followAliasIfNecessary(referenceSymbol, referenceLocation) === searchSymbol) {
+                            addReferences(superConstructorAccesses(classExtending));
+                        }
+                    }
+                }
+
+                function addReferences(references: Node[]): void {
+                    if (references.length) {
+                        const referencedSymbol = getReferencedSymbol(searchSymbol);
+                        addRange(referencedSymbol.references, map(references, getReferenceEntryFromNode));
+                    }
+                }
+
+                /** `classSymbol` is the class where the constructor was defined.
+                 * Reference the constructor and all calls to `new this()`.
+                 */
+                function findOwnConstructorCalls(classSymbol: Symbol): Node[] {
+                    const result: Node[] = [];
+
+                    for (const decl of classSymbol.members["__constructor"].declarations) {
+                        Debug.assert(decl.kind === SyntaxKind.Constructor);
+                        const ctrKeyword = decl.getChildAt(0);
+                        Debug.assert(ctrKeyword.kind === SyntaxKind.ConstructorKeyword);
+                        result.push(ctrKeyword);
+                    }
+
+                    forEachProperty(classSymbol.exports, member => {
+                        const decl = member.valueDeclaration;
+                        if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
+                            const body = (<MethodDeclaration>decl).body;
+                            if (body) {
+                                forEachDescendantOfKind(body, SyntaxKind.ThisKeyword, thisKeyword => {
+                                    if (isNewExpressionTarget(thisKeyword)) {
+                                        result.push(thisKeyword);
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    return result;
+                }
+
+                /** Find references to `super` in the constructor of an extending class.  */
+                function superConstructorAccesses(cls: ClassLikeDeclaration): Node[] {
+                    const symbol = cls.symbol;
+                    const ctr = symbol.members["__constructor"];
+                    if (!ctr) {
+                        return [];
+                    }
+
+                    const result: Node[] = [];
+                    for (const decl of ctr.declarations) {
+                        Debug.assert(decl.kind === SyntaxKind.Constructor);
+                        const body = (<ConstructorDeclaration>decl).body;
+                        if (body) {
+                            forEachDescendantOfKind(body, SyntaxKind.SuperKeyword, node => {
+                                if (isCallExpressionTarget(node)) {
+                                    result.push(node);
+                                }
+                            });
+                        }
+                    };
+                    return result;
+                }
 
                 function getReferencedSymbol(symbol: Symbol): ReferencedSymbol {
                     const symbolId = getSymbolId(symbol);
@@ -6560,6 +5894,11 @@ namespace ts {
                     getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
                 }
 
+                const thisOrSuperSymbol = typeChecker.getSymbolAtLocation(thisOrSuperKeyword);
+
+                const displayParts = thisOrSuperSymbol && getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    thisOrSuperSymbol, thisOrSuperKeyword.getSourceFile(), getContainerNode(thisOrSuperKeyword), thisOrSuperKeyword).displayParts;
+
                 return [{
                     definition: {
                         containerKind: "",
@@ -6567,7 +5906,8 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: "this",
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                        displayParts
                     },
                     references: references
                 }];
@@ -6638,7 +5978,8 @@ namespace ts {
                         fileName: node.getSourceFile().fileName,
                         kind: ScriptElementKind.variableElement,
                         name: type.text,
-                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                        displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
                     },
                     references: references
                 }];
@@ -6807,16 +6148,17 @@ namespace ts {
                 }
             }
 
-            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): Symbol {
-                if (searchSymbols.indexOf(referenceSymbol) >= 0) {
-                    return referenceSymbol;
+            function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node, searchLocationIsConstructor: boolean): Symbol | undefined {
+                if (contains(searchSymbols, referenceSymbol)) {
+                    // If we are searching for constructor uses, they must be 'new' expressions.
+                    return (!searchLocationIsConstructor || isNewExpressionTarget(referenceLocation)) && referenceSymbol;
                 }
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols but by looking up for related symbol of this alias so it can handle multiple level of indirectness.
                 const aliasSymbol = getAliasSymbolForPropertyNameSymbol(referenceSymbol, referenceLocation);
                 if (aliasSymbol) {
-                    return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation);
+                    return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation, searchLocationIsConstructor);
                 }
 
                 // If the reference location is in an object literal, try to get the contextual type for the
@@ -7597,6 +6939,10 @@ namespace ts {
              * False will mean that node is not classified and traverse routine should recurse into node contents.
              */
             function tryClassifyNode(node: Node): boolean {
+                if (isJSDocTag(node)) {
+                    return true;
+                }
+
                 if (nodeIsMissing(node)) {
                     return true;
                 }
@@ -8334,6 +7680,15 @@ namespace ts {
             getNonBoundSourceFile,
             getProgram
         };
+    }
+
+    function forEachDescendantOfKind(node: Node, kind: SyntaxKind, action: (node: Node) => void) {
+        forEachChild(node, child => {
+            if (child.kind === kind) {
+                action(child);
+            }
+            forEachDescendantOfKind(child, kind, action);
+        });
     }
 
     /* @internal */

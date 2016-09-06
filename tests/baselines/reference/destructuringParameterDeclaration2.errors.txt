@@ -1,6 +1,5 @@
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(7,4): error TS2345: Argument of type '[number, string, string[][]]' is not assignable to parameter of type '[number, number, string[][]]'.
-  Types of property '1' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(7,29): error TS1005: ',' expected.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(8,4): error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
   Types of property 'pop' are incompatible.
@@ -32,12 +31,9 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
   Types of property '2' are incompatible.
     Type 'boolean' is not assignable to type '[[any]]'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(40,4): error TS2345: Argument of type '[number, number, [[string]]]' is not assignable to parameter of type '[any, any, [[number]]]'.
-  Types of property '2' are incompatible.
-    Type '[[string]]' is not assignable to type '[[number]]'.
-      Types of property '0' are incompatible.
-        Type '[string]' is not assignable to type '[number]'.
-          Types of property '0' are incompatible.
-            Type 'string' is not assignable to type 'number'.
+  Type '[[string]]' is not assignable to type '[[number]]'.
+    Type '[string]' is not assignable to type '[number]'.
+      Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(46,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(47,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(55,7): error TS2420: Class 'C4' incorrectly implements interface 'F2'.
@@ -62,8 +58,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     a0([1, "string", [["world"]]);      // Error
        ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, string, string[][]]' is not assignable to parameter of type '[number, number, string[][]]'.
-!!! error TS2345:   Types of property '1' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
                                 ~
 !!! error TS1005: ',' expected.
     a0([1, 2, [["world"]], "string"]);  // Error
@@ -142,12 +137,9 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
        ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, number, [[string]]]' is not assignable to parameter of type '[any, any, [[number]]]'.
-!!! error TS2345:   Types of property '2' are incompatible.
-!!! error TS2345:     Type '[[string]]' is not assignable to type '[[number]]'.
-!!! error TS2345:       Types of property '0' are incompatible.
-!!! error TS2345:         Type '[string]' is not assignable to type '[number]'.
-!!! error TS2345:           Types of property '0' are incompatible.
-!!! error TS2345:             Type 'string' is not assignable to type 'number'.
+!!! error TS2345:   Type '[[string]]' is not assignable to type '[[number]]'.
+!!! error TS2345:     Type '[string]' is not assignable to type '[number]'.
+!!! error TS2345:       Type 'string' is not assignable to type 'number'.
     
     // A parameter can be marked optional by following its name or binding pattern with a question mark (?)
     // or by including an initializer.  Initializers (including binding property or element initializers) are
