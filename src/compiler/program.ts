@@ -225,7 +225,7 @@ namespace ts {
             traceEnabled
         };
 
-        const typeRoots = getEffectiveTypeRoots(options, host.getCurrentDirectory && host.getCurrentDirectory());
+        const typeRoots = getEffectiveTypeRoots(options, host);
         if (traceEnabled) {
             if (containingFile === undefined) {
                 if (typeRoots === undefined) {
@@ -1086,7 +1086,7 @@ namespace ts {
         // Walk the primary type lookup locations
         const result: string[] = [];
         if (host.directoryExists && host.getDirectories) {
-            const typeRoots = getEffectiveTypeRoots(options, host.getCurrentDirectory && host.getCurrentDirectory());
+            const typeRoots = getEffectiveTypeRoots(options, host);
             if (typeRoots) {
                 for (const root of typeRoots) {
                     if (host.directoryExists(root)) {
