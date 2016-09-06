@@ -121,7 +121,7 @@ declare namespace FourSlashInterface {
         constructor(negative?: boolean);
         memberListContains(symbol: string, text?: string, documenation?: string, kind?: string): void;
         memberListCount(expectedCount: number): void;
-        completionListContains(symbol: string, text?: string, documentation?: string, kind?: string): void;
+        completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListAllowsNewIdentifier(): void;
