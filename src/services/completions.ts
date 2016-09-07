@@ -578,8 +578,8 @@ namespace ts.Completions {
 
             if (host.getDirectories) {
                 // Also get all @types typings installed in visible node_modules directories
-                for (const package of findPackageJsons(scriptPath)) {
-                    const typesDir = combinePaths(getDirectoryPath(package), "node_modules/@types");
+                for (const packageJson of findPackageJsons(scriptPath)) {
+                    const typesDir = combinePaths(getDirectoryPath(packageJson), "node_modules/@types");
                     getCompletionEntriesFromDirectories(host, options, typesDir, span, result);
                 }
             }
@@ -625,8 +625,8 @@ namespace ts.Completions {
 
             if (host.readFile && host.fileExists) {
                 for (const packageJson of findPackageJsons(scriptPath)) {
-                    const package = tryReadingPackageJson(packageJson);
-                    if (!package) {
+                    const contents = tryReadingPackageJson(packageJson);
+                    if (!contents) {
                         return;
                     }
 
@@ -635,7 +635,7 @@ namespace ts.Completions {
 
                     // Provide completions for all non @types dependencies
                     for (const key of nodeModulesDependencyKeys) {
-                        addPotentialPackageNames(package[key], foundModuleNames);
+                        addPotentialPackageNames(contents[key], foundModuleNames);
                     }
 
                     for (const moduleName of foundModuleNames) {

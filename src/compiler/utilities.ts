@@ -596,60 +596,6 @@ namespace ts {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }
 
-    function walkUpBindingElementsAndPatterns(node: Node): Node {
-        while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
-            node = node.parent;
-        }
-
-        return node;
-    }
-
-    export function getCombinedModifierFlags(node: Node): ModifierFlags {
-        node = walkUpBindingElementsAndPatterns(node);
-        let flags = getModifierFlags(node);
-        if (node.kind === SyntaxKind.VariableDeclaration) {
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= getModifierFlags(node);
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableStatement) {
-            flags |= getModifierFlags(node);
-        }
-
-        return flags;
-    }
-
-    // Returns the node flags for this node and all relevant parent nodes.  This is done so that
-    // nodes like variable declarations and binding elements can returned a view of their flags
-    // that includes the modifiers from their container.  i.e. flags like export/declare aren't
-    // stored on the variable declaration directly, but on the containing variable statement
-    // (if it has one).  Similarly, flags for let/const are store on the variable declaration
-    // list.  By calling this function, all those flags are combined so that the client can treat
-    // the node as if it actually had those flags.
-    export function getCombinedNodeFlags(node: Node): NodeFlags {
-        node = walkUpBindingElementsAndPatterns(node);
-
-        let flags = node.flags;
-        if (node.kind === SyntaxKind.VariableDeclaration) {
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= node.flags;
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableStatement) {
-            flags |= node.flags;
-        }
-
-        return flags;
-    }
-
     export function isConst(node: Node): boolean {
         return !!(getCombinedNodeFlags(node) & NodeFlags.Const)
             || !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
@@ -4369,5 +4315,59 @@ namespace ts {
 
     export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
         return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+    }
+
+    function walkUpBindingElementsAndPatterns(node: Node): Node {
+        while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
+            node = node.parent;
+        }
+
+        return node;
+    }
+
+    export function getCombinedModifierFlags(node: Node): ModifierFlags {
+        node = walkUpBindingElementsAndPatterns(node);
+        let flags = getModifierFlags(node);
+        if (node.kind === SyntaxKind.VariableDeclaration) {
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+            flags |= getModifierFlags(node);
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableStatement) {
+            flags |= getModifierFlags(node);
+        }
+
+        return flags;
+    }
+
+    // Returns the node flags for this node and all relevant parent nodes.  This is done so that
+    // nodes like variable declarations and binding elements can returned a view of their flags
+    // that includes the modifiers from their container.  i.e. flags like export/declare aren't
+    // stored on the variable declaration directly, but on the containing variable statement
+    // (if it has one).  Similarly, flags for let/const are store on the variable declaration
+    // list.  By calling this function, all those flags are combined so that the client can treat
+    // the node as if it actually had those flags.
+    export function getCombinedNodeFlags(node: Node): NodeFlags {
+        node = walkUpBindingElementsAndPatterns(node);
+
+        let flags = node.flags;
+        if (node.kind === SyntaxKind.VariableDeclaration) {
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+            flags |= node.flags;
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableStatement) {
+            flags |= node.flags;
+        }
+
+        return flags;
     }
 }
