@@ -48,6 +48,7 @@
         "services.ts",
         "shims.ts",
         "signatureHelp.ts",
+        "types.ts",
         "utilities.ts",
         "jsTyping.ts",
         "formatting/formatting.ts",

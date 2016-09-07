@@ -8,11 +8,9 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    const defaultTypeRoots = ["node_modules/@types"];
-
-    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
+    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
-            const fileName = combinePaths(searchPath, "tsconfig.json");
+            const fileName = combinePaths(searchPath, configName);
             if (fileExists(fileName)) {
                 return fileName;
             }
@@ -168,7 +166,7 @@ namespace ts {
 
     const typeReferenceExtensions = [".d.ts"];
 
-    function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost) {
+    export function getEffectiveTypeRoots(options: CompilerOptions, host: { directoryExists?: (directoryName: string) => boolean, getCurrentDirectory?: () => string }): string[] | undefined  {
         if (options.typeRoots) {
             return options.typeRoots;
         }
@@ -181,11 +179,37 @@ namespace ts {
             currentDirectory = host.getCurrentDirectory();
         }
 
-        if (!currentDirectory) {
-            return undefined;
-        }
-        return map(defaultTypeRoots, d => combinePaths(currentDirectory, d));
+        return currentDirectory && getDefaultTypeRoots(currentDirectory, host);
     }
+
+    /**
+     * Returns the path to every node_modules/@types directory from some ancestor directory.
+     * Returns undefined if there are none.
+     */
+    function getDefaultTypeRoots(currentDirectory: string,  host: { directoryExists?: (directoryName: string) => boolean }): string[] | undefined {
+        if (!host.directoryExists) {
+            return [combinePaths(currentDirectory, nodeModulesAtTypes)];
+            // And if it doesn't exist, tough.
+        }
+
+        let typeRoots: string[];
+
+        while (true) {
+            const atTypes = combinePaths(currentDirectory, nodeModulesAtTypes);
+            if (host.directoryExists(atTypes)) {
+                (typeRoots || (typeRoots = [])).push(atTypes);
+            }
+
+            const parent = getDirectoryPath(currentDirectory);
+            if (parent === currentDirectory) {
+                break;
+            }
+            currentDirectory = parent;
+        }
+
+        return typeRoots;
+    }
+    const nodeModulesAtTypes = combinePaths("node_modules", "@types");
 
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
@@ -1102,7 +1126,7 @@ namespace ts {
         // - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
         // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
         // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
-        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 2;
+        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 0;
         let currentNodeModulesDepth = 0;
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track

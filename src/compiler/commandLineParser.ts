@@ -858,14 +858,13 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
             }
             else {
-                // By default, exclude common package folders
+                // By default, exclude common package folders and the outDir
                 excludeSpecs = ["node_modules", "bower_components", "jspm_packages"];
-            }
 
-            // Always exclude the output directory unless explicitly included
-            const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
-            if (outDir) {
-                excludeSpecs.push(outDir);
+                const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+                if (outDir) {
+                    excludeSpecs.push(outDir);
+                }
             }
 
             if (fileNames === undefined && includeSpecs === undefined) {
@@ -891,7 +890,7 @@ namespace ts {
     function convertCompilerOptionsFromJsonWorker(jsonOptions: any,
         basePath: string, errors: Diagnostic[], configFileName?: string): CompilerOptions {
 
-        const options: CompilerOptions = getBaseFileName(configFileName) === "jsconfig.json" ? { allowJs: true } : {};
+        const options: CompilerOptions = getBaseFileName(configFileName) === "jsconfig.json" ? { allowJs: true, maxNodeModuleJsDepth: 2 } : {};
         convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
         return options;
     }

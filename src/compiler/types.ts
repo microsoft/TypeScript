@@ -435,6 +435,8 @@ namespace ts {
         TypeExcludesFlags = YieldContext | AwaitContext,
     }
 
+    export type ModifiersArray = NodeArray<Modifier>;
+
     export const enum ModifierFlags {
         None =               0,
         Export =             1 << 0,  // Declarations
@@ -480,7 +482,7 @@ namespace ts {
         /* @internal */ modifierFlagsCache?: ModifierFlags;
         /* @internal */ transformFlags?: TransformFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
-        modifiers?: NodeArray<Modifier>;                // Array of modifiers
+        modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding)
         /* @internal */ original?: Node;                // The original node if this is an updated node.
@@ -1965,6 +1967,7 @@ namespace ts {
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        getAmbientModules(): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
