@@ -23,8 +23,8 @@ var CtorDtor = (function () {
 var C = (function () {
     function C() {
     }
-    C = __decorate([
-        CtorDtor
-    ], C);
     return C;
 }());
+C = __decorate([
+    CtorDtor
+], C);

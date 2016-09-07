@@ -52,9 +52,9 @@ var B = (function (_super) {
         var x = 1; // should not error
         _super.call(this);
     }
-    B.s = 9;
     return B;
 }(A));
+B.s = 9;
 var C = (function (_super) {
     __extends(C, _super);
     function C() {

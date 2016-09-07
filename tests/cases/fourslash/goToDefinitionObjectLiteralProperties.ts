@@ -14,16 +14,4 @@
 ////o./*methodReference*/method;
 ////o./*es6StyleMethodReference*/es6StyleMethod;
 
-var markerList = [
-    "value",
-    "getter",
-    "setter",
-    "method",
-    "es6StyleMethod",
-];
-
-markerList.forEach((marker) => {
-    goTo.marker(marker + 'Reference');
-    goTo.definition();
-    verify.caretAtMarker(marker + 'Definition');
-});
+verify.goToDefinitionForMarkers("value", "getter", "setter", "method", "es6StyleMethod");

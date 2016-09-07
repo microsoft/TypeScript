@@ -9,6 +9,4 @@
 ////     }
 //// }
 
-goTo.marker('ref');
-goTo.definition();
-verify.caretAtMarker('def');
+verify.goToDefinition("ref", "def");

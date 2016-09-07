@@ -6,6 +6,7 @@ function f(x: string) {
 }
 
 //// [templateStringInFunctionParameterTypeES6.js]
+function f() { }
 `hello`;
 ;
 function f(x) {

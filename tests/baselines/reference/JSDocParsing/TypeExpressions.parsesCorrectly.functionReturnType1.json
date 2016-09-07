@@ -1,0 +1,30 @@
+{
+    "kind": "JSDocFunctionType",
+    "pos": 1,
+    "end": 26,
+    "parameters": {
+        "0": {
+            "kind": "Parameter",
+            "pos": 10,
+            "end": 16,
+            "type": {
+                "kind": "StringKeyword",
+                "pos": 10,
+                "end": 16
+            }
+        },
+        "1": {
+            "kind": "Parameter",
+            "pos": 17,
+            "end": 25,
+            "type": {
+                "kind": "BooleanKeyword",
+                "pos": 17,
+                "end": 25
+            }
+        },
+        "length": 2,
+        "pos": 10,
+        "end": 25
+    }
+}

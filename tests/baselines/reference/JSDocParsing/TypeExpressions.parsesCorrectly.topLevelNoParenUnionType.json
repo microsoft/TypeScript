@@ -1,0 +1,20 @@
+{
+    "kind": "JSDocUnionType",
+    "pos": 1,
+    "end": 14,
+    "types": {
+        "0": {
+            "kind": "NumberKeyword",
+            "pos": 1,
+            "end": 7
+        },
+        "1": {
+            "kind": "StringKeyword",
+            "pos": 8,
+            "end": 14
+        },
+        "length": 2,
+        "pos": 1,
+        "end": 14
+    }
+}

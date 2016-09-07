@@ -14,13 +14,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-System.register("ref/a", [], function(exports_1, context_1) {
+System.register("ref/a", [], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var A;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             A = (function () {
                 function A() {
                 }
@@ -28,19 +28,19 @@ System.register("ref/a", [], function(exports_1, context_1) {
             }());
             exports_1("A", A);
         }
-    }
+    };
 });
-System.register("b", ["ref/a"], function(exports_2, context_2) {
+System.register("b", ["ref/a"], function (exports_2, context_2) {
     "use strict";
     var __moduleName = context_2 && context_2.id;
-    var a_1;
-    var B;
+    var a_1, B;
     return {
-        setters:[
+        setters: [
             function (a_1_1) {
                 a_1 = a_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             B = (function (_super) {
                 __extends(B, _super);
                 function B() {
@@ -50,7 +50,7 @@ System.register("b", ["ref/a"], function(exports_2, context_2) {
             }(a_1.A));
             exports_2("B", B);
         }
-    }
+    };
 });
 //# sourceMappingURL=all.js.map
 

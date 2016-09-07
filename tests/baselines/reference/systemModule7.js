@@ -11,18 +11,18 @@ export module M {
 }
 
 //// [systemModule7.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var M;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             // filename: instantiatedModule.ts
             (function (M) {
                 var x = 1;
             })(M = M || (M = {}));
             exports_1("M", M);
         }
-    }
+    };
 });

@@ -12,7 +12,8 @@ class C
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () { };
-    C.z = 1;
+    C.prototype.foo = function () {
+    };
     return C;
 }());
+C.z = 1;

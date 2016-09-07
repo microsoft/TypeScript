@@ -11,10 +11,7 @@
 ////    constructor() { }
 ////}
 
-goTo.marker('staticFunctionOverload');
-goTo.definition();
-verify.caretAtMarker('staticFunctionOverloadDefinition');
-
-goTo.marker('functionOverload');
-goTo.definition();
-verify.caretAtMarker('functionOverloadDefinition');
+verify.goToDefinition({
+    staticFunctionOverload: "staticFunctionOverloadDefinition",
+    functionOverload: "functionOverloadDefinition"
+});

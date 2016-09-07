@@ -10,5 +10,5 @@ export type MyClass = typeof myClass;
 //// [declarationEmit_invalidExport.js]
 "use strict";
 if (false) {
-    exports.myClass = 0;
+    export var myClass = 0;
 }
