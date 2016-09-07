@@ -45,7 +45,7 @@ function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
 //function foo<T, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
 
 foo(1, 2, 3);
->foo(1, 2, 3) : number
+>foo(1, 2, 3) : 3
 >foo : <T, U, V>(x: T, y: U, z: V) => V
 >1 : 1
 >2 : 2

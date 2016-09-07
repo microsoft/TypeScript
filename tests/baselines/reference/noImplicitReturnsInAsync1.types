@@ -14,8 +14,8 @@ async function test(isError: boolean = false) {
     }
     let x = await Promise.resolve("The test is passed without an error.");
 >x : string
->await Promise.resolve("The test is passed without an error.") : "The test is passed without an error."
->Promise.resolve("The test is passed without an error.") : Promise<"The test is passed without an error.">
+>await Promise.resolve("The test is passed without an error.") : string
+>Promise.resolve("The test is passed without an error.") : Promise<string>
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }

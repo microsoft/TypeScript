@@ -94,7 +94,7 @@ module G {
 
     var r4 = a(1, true);
 >r4 : number
->a(1, true) : number
+>a(1, true) : 1
 >a : A<boolean>
 >1 : 1
 >true : true

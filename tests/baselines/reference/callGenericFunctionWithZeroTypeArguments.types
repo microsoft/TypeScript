@@ -11,7 +11,7 @@ function f<T>(x: T): T { return null; }
 
 var r = f(1);
 >r : number
->f(1) : number
+>f(1) : 1
 >f : <T>(x: T) => T
 >1 : 1
 
@@ -26,7 +26,7 @@ var f2 = <T>(x: T): T => { return null; }
 
 var r2 = f2(1);
 >r2 : number
->f2(1) : number
+>f2(1) : 1
 >f2 : <T>(x: T) => T
 >1 : 1
 
@@ -39,7 +39,7 @@ var f3: { <T>(x: T): T; }
 
 var r3 = f3(1);
 >r3 : number
->f3(1) : number
+>f3(1) : 1
 >f3 : <T>(x: T) => T
 >1 : 1
 
@@ -59,7 +59,7 @@ class C {
 }
 var r4 = (new C()).f(1);
 >r4 : number
->(new C()).f(1) : number
+>(new C()).f(1) : 1
 >(new C()).f : <T>(x: T) => T
 >(new C()) : C
 >new C() : C
@@ -83,7 +83,7 @@ var i: I;
 
 var r5 = i.f(1);
 >r5 : number
->i.f(1) : number
+>i.f(1) : 1
 >i.f : <T>(x: T) => T
 >i : I
 >f : <T>(x: T) => T

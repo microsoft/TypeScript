@@ -54,7 +54,7 @@ function foo4<T>(x: T) {
 }
 var r4 = foo4(1);
 >r4 : number
->foo4(1) : number
+>foo4(1) : 1
 >foo4 : <T>(x: T) => T
 >1 : 1
 

@@ -16,14 +16,14 @@ function foo<T, U extends T>(x: T, y: U): U { return y; }
 
 var r = foo(1, 2);
 >r : number
->foo(1, 2) : number
+>foo(1, 2) : 2
 >foo : <T, U extends T>(x: T, y: U) => U
 >1 : 1
 >2 : 2
 
 var r = foo({}, 1);
 >r : number
->foo({}, 1) : number
+>foo({}, 1) : 1
 >foo : <T, U extends T>(x: T, y: U) => U
 >{} : {}
 >1 : 1
@@ -82,7 +82,7 @@ function foo2<T, U extends { length: T }>(x: T, y: U) { return y; }
 >y : U
 
 foo2(1, '');
->foo2(1, '') : string
+>foo2(1, '') : ""
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
 >1 : 1
 >'' : ""

@@ -56,7 +56,7 @@ var r = c.foo({ length: 3, charAt: (x: number) => { '' } });
 
 var r2 = r('');
 >r2 : string
->r('') : string
+>r('') : ""
 >r : <V extends { length: number; charAt: (x: number) => void; }>(x: V) => V
 >'' : ""
 

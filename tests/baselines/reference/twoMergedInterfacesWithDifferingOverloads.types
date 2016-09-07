@@ -106,7 +106,7 @@ var c: C<boolean, Date>;
 
 var r2 = c.foo(1, 2); // number
 >r2 : number
->c.foo(1, 2) : number
+>c.foo(1, 2) : 1 | 2
 >c.foo : { (x: boolean, y: Date): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
 >c : C<boolean, Date>
 >foo : { (x: boolean, y: Date): string; (x: string, y: string): number; <W>(x: W, y: W): W; }

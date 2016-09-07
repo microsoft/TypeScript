@@ -20,7 +20,7 @@ export default async(() => await(Promise.resolve(1)));
 >() => await(Promise.resolve(1)) : () => any
 >await(Promise.resolve(1)) : any
 >await : (...args: any[]) => any
->Promise.resolve(1) : Promise<1>
+>Promise.resolve(1) : Promise<number>
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }

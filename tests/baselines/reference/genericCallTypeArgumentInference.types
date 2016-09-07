@@ -13,7 +13,7 @@ function foo<T>(t: T) {
 
 var r = foo(''); // string
 >r : string
->foo('') : string
+>foo('') : ""
 >foo : <T>(t: T) => T
 >'' : ""
 
@@ -47,7 +47,7 @@ function foo2b<T, U>(u: U) {
 
 var r2 = foo2('', 1); // number
 >r2 : number
->foo2('', 1) : number
+>foo2('', 1) : 1
 >foo2 : <T, U>(t: T, u: U) => U
 >'' : ""
 >1 : 1
@@ -198,7 +198,7 @@ var r5 = c.foo2('', 1); // number
 
 var r6 = c.foo3(true, 1); // boolean
 >r6 : boolean
->c.foo3(true, 1) : boolean
+>c.foo3(true, 1) : true
 >c.foo3 : <T>(t: T, u: number) => T
 >c : C<string, number>
 >foo3 : <T>(t: T, u: number) => T
@@ -216,7 +216,7 @@ var r7 = c.foo4('', true); // string
 
 var r8 = c.foo5(true, 1); // boolean
 >r8 : boolean
->c.foo5(true, 1) : boolean
+>c.foo5(true, 1) : true
 >c.foo5 : <T, U>(t: T, u: U) => T
 >c : C<string, number>
 >foo5 : <T, U>(t: T, u: U) => T
@@ -345,7 +345,7 @@ var r5 = i.foo2('', 1); // number
 
 var r6 = i.foo3(true, 1); // boolean
 >r6 : boolean
->i.foo3(true, 1) : boolean
+>i.foo3(true, 1) : true
 >i.foo3 : <T>(t: T, u: number) => T
 >i : I<string, number>
 >foo3 : <T>(t: T, u: number) => T
@@ -363,7 +363,7 @@ var r7 = i.foo4('', true); // string
 
 var r8 = i.foo5(true, 1); // boolean
 >r8 : boolean
->i.foo5(true, 1) : boolean
+>i.foo5(true, 1) : true
 >i.foo5 : <T, U>(t: T, u: U) => T
 >i : I<string, number>
 >foo5 : <T, U>(t: T, u: U) => T
