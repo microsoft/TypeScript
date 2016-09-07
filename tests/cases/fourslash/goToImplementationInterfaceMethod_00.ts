@@ -7,6 +7,7 @@
 //// }
 ////
 //// var bar: Foo = { [|hello: helloImpl|] };
+//// var baz: Foo = { [|"hello": helloImpl|] };
 ////
 //// function helloImpl () {}
 ////

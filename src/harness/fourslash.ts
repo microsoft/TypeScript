@@ -3017,7 +3017,7 @@ namespace FourSlashInterface {
         public typeDefinitionCountIs(expectedCount: number) {
             this.state.verifyTypeDefinitionsCount(this.negative, expectedCount);
         }
-	
+
         public implementationCountIs(expectedCount: number) {
             this.state.verifyImplementationsCount(this.negative, expectedCount);
         }

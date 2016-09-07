@@ -5010,38 +5010,25 @@ namespace ts {
         function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
             synchronizeHostData();
 
-            const entries: ImplementationLocation[] = [];
             const node = getTouchingPropertyName(getValidSourceFile(fileName), position);
             const typeChecker = program.getTypeChecker();
 
             // If invoked directly on a shorthand property assignment, then return
             // the declaration of the symbol being assigned (not the symbol being assigned to).
             if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                const entry = getReferenceEntryForShorthandPropertyAssignment(node, typeChecker);
-                entries.push({
-                    textSpan: entry.textSpan,
-                    fileName: entry.fileName
-                });
+                return getReferenceEntryForShorthandPropertyAssignment(node, typeChecker);
             }
-
-            // For most symbols, the definition is the same as the implementation so we can just
-            // call "Go to Definition". This case should handle anything that is not a type
-            // reference to or member of an interface, class, or union/intersection type.
-            else if (definitionIsImplementation(node, typeChecker)) {
-                const definitions = getDefinitionAtPosition(fileName, position);
-                forEach(definitions, (definition: DefinitionInfo) => {
-                    entries.push({
-                        textSpan: definition.textSpan,
-                        fileName: definition.fileName
-                    });
-                });
+            else if (node.kind === SyntaxKind.SuperKeyword || isSuperPropertyOrElementAccess(node.parent)) {
+                // References to and accesses on the super keyword only have one possible implementation, so no
+                // need to "Find all References"
+                const symbol = typeChecker.getSymbolAtLocation(node);
+                if (symbol.valueDeclaration) {
+                    return [getReferenceEntryFromNode(symbol.valueDeclaration)];
+                }
             }
-
-            // Interfaces, classes, and unions/intersection types separate the implementation and
-            // definition so "Go to Definition" is not sufficient. This case handles invocations
-            // on type references and members of those types.
             else {
-                // Perform "Find all References" and filter them down to implementations only
+                const entries: ImplementationLocation[] = [];
+                // Perform "Find all References" and retrieve only those that are implementations
                 const result = getReferencedSymbolsForNode(node, program.getSourceFiles(), /*findInStrings*/false, /*findInComments*/false, /*implementations*/true);
 
                 forEach(result, referencedSymbol => {
@@ -5054,44 +5041,8 @@ namespace ts {
                         });
                     }
                 });
+                return entries;
             }
-
-            return entries;
-        }
-
-        /**
-         * Returns true if the implementation for this node is the same as its definition
-         */
-        function definitionIsImplementation(node: Node, typeChecker: TypeChecker) {
-            if (node.kind === SyntaxKind.SuperKeyword || node.kind === SyntaxKind.ThisKeyword) {
-                return true;
-            }
-
-            if (node.parent.kind === SyntaxKind.PropertyAccessExpression || node.parent.kind === SyntaxKind.ElementAccessExpression) {
-                const expression = (<ElementAccessExpression | PropertyAccessExpression>node.parent).expression;
-
-                // Members of "this" and "super" only have one possible implementation, so no need to find
-                // all references. Similarly, for the left hand side of the expression it only really
-                // makes sense to return the definition
-                if (node === expression || expression.kind === SyntaxKind.SuperKeyword || expression.kind === SyntaxKind.ThisKeyword) {
-                    return true;
-                }
-
-                // Check to see if this is a property that can have multiple implementations by determining
-                // if the parent is an interface (or class, or union/intersection)
-                const expressionType = typeChecker.getTypeAtLocation(expression);
-                if (expressionType && expressionType.getFlags() & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.UnionOrIntersection)) {
-                    return false;
-                }
-
-                // Also check the right hand side to see if this is a type being accessed on a namespace/module.
-                // For example, SomeModule.SomeType
-                const rightHandType = typeChecker.getTypeAtLocation(node);
-                return rightHandType && !(rightHandType.getFlags() & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.UnionOrIntersection));
-            }
-
-            const symbol = typeChecker.getSymbolAtLocation(node);
-            return symbol && !isClassOrInterfaceReference(symbol) && !(symbol.parent && isClassOrInterfaceReference(symbol.parent));
         }
 
         function getReferenceEntryForShorthandPropertyAssignment(node: Node, typeChecker: TypeChecker) {
@@ -5099,21 +5050,15 @@ namespace ts {
             const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(refSymbol.valueDeclaration);
 
             if (shorthandSymbol) {
-                const shorthandDeclarations = shorthandSymbol.getDeclarations();
-                if (shorthandDeclarations.length === 1) {
-                    return getReferenceEntryFromNode(shorthandDeclarations[0]);
-                }
-                else if (shorthandDeclarations.length > 1) {
-                    // This can happen when the property being assigned is a constructor for a
-                    // class that also has interface declarations with the same name. We just want
-                    // the class itself
+                const result: ReferenceEntry[] = [];
 
-                    return forEach(shorthandDeclarations, declaration => {
-                        if (declaration.kind === SyntaxKind.ClassDeclaration)  {
-                            return getReferenceEntryFromNode(declaration);
-                        }
-                    });
+                for (const declaration of shorthandSymbol.getDeclarations()) {
+                    if (getMeaningFromDeclaration(declaration) & SemanticMeaning.Value) {
+                        result.push(getReferenceEntryFromNode(declaration));
+                    }
                 }
+
+                return result;
             }
         }
 
@@ -5121,11 +5066,14 @@ namespace ts {
             return toCheck.getFlags() & (SymbolFlags.Class | SymbolFlags.Interface);
         }
 
-        function isIdentifierOfImplementation(node: Identifier): boolean {
+        function isNameOfImplementation(node: Node): boolean {
             const parent = node.parent;
 
-            if (isIdentifierName(node) || isFunctionDeclarationIdentifierName(node)) {
-                // PropertyAccessExpression?
+            if (isDeclarationName(node)) {
+                if (isVariableLike(parent)) {
+                    return !!parent.initializer;
+                }
+
                 switch (parent.kind) {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
@@ -5134,31 +5082,15 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         return !!(<FunctionLikeDeclaration>parent).body;
-                    case SyntaxKind.PropertyDeclaration:
-                        return !!(<PropertyDeclaration>parent).initializer;
                     case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.EnumDeclaration:
                         return true;
                 }
             }
-            else if (isVariableLike(parent) && parent.name === node) {
-                return !!parent.initializer;
-            }
 
-            return isIdentifierOfClass(node) || isIdentifierOfEnumDeclaration(node);
-        }
-
-        function isFunctionDeclarationIdentifierName(node: Identifier): boolean {
-            return node.parent.kind === SyntaxKind.FunctionDeclaration &&
-                (<FunctionDeclaration>node.parent).name === node;
-        }
-
-        function isIdentifierOfClass(node: Identifier) {
-            return (node.parent.kind === SyntaxKind.ClassDeclaration || node.parent.kind === SyntaxKind.ClassExpression) &&
-                (<ClassLikeDeclaration>node.parent).name === node;
-        }
-
-        function isIdentifierOfEnumDeclaration(node: Identifier) {
-            return node.parent.kind === SyntaxKind.EnumDeclaration && (<EnumDeclaration>node.parent).name === node;
+            return false;
         }
 
         function isTypeAssertionExpression(node: Node): node is TypeAssertion {
@@ -5927,12 +5859,11 @@ namespace ts {
                 if (node.kind === SyntaxKind.SuperKeyword) {
                     return getReferencesForSuperKeyword(node);
                 }
-
             }
 
 	    // `getSymbolAtLocation` normally returns the symbol of the class when given the constructor keyword,
-            // so we have to specify that we want the constructor symbol.
-	    const symbol = typeChecker.getSymbolAtLocation(node);
+        // so we have to specify that we want the constructor symbol.
+        const symbol = typeChecker.getSymbolAtLocation(node);
 
             if (!implementations && !symbol && node.kind === SyntaxKind.StringLiteral) {
                 return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles);
@@ -6325,12 +6256,7 @@ namespace ts {
                                 /*searchLocationIsConstructor*/ searchLocation.kind === SyntaxKind.ConstructorKeyword, parentSymbols);
 
                             if (relatedSymbol) {
-                                const referenceEntry = implementations ? getImplementationReferenceEntryForNode(referenceLocation) : getReferenceEntryFromNode(referenceLocation);
-
-                                if (referenceEntry) {
-                                    const referencedSymbol = getReferencedSymbol(relatedSymbol);
-                                    referencedSymbol.references.push(referenceEntry);
-                                }
+                                addReferenceToRelatedSymbol(referenceLocation, relatedSymbol);
                             }
                             /* Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
                              * has two meaning : property name and property value. Therefore when we do findAllReference at the position where
@@ -6339,11 +6265,7 @@ namespace ts {
                              * position of property accessing, the referenceEntry of such position will be handled in the first case.
                              */
                             else if (!(referenceSymbol.flags & SymbolFlags.Transient) && searchSymbols.indexOf(shorthandValueSymbol) >= 0) {
-                                const referenceEntry = implementations ? getImplementationReferenceEntryForNode(referenceSymbolDeclaration.name) : getReferenceEntryFromNode(referenceSymbolDeclaration.name);
-                                if (referenceEntry) {
-                                    const referencedSymbol = getReferencedSymbol(shorthandValueSymbol);
-                                    referencedSymbol.references.push(referenceEntry);
-                                }
+                                addReferenceToRelatedSymbol(referenceSymbolDeclaration.name, shorthandValueSymbol);
                             }
                             else if (searchLocation.kind === SyntaxKind.ConstructorKeyword) {
                                 findAdditionalConstructorReferences(referenceSymbol, referenceLocation);
@@ -6448,25 +6370,43 @@ namespace ts {
 
                     return result[index];
                 }
+
+                function addReferenceToRelatedSymbol(node: Node, relatedSymbol: Symbol) {
+                    if (implementations) {
+                        const referenceEntries = getImplementationReferenceEntryForNode(node);
+                        if (referenceEntries && referenceEntries.length) {
+                            const referencedSymbol = getReferencedSymbol(relatedSymbol);
+                            for (const referenceEntry of referenceEntries) {
+                                referencedSymbol.references.push(referenceEntry);
+                            }
+                        }
+                    }
+                    else {
+                        const referenceEntry = getReferenceEntryFromNode(node);
+                        if (referenceEntry) {
+                            getReferencedSymbol(relatedSymbol).references.push(referenceEntry);
+                        }
+                    }
+                }
             }
 
-            function getImplementationReferenceEntryForNode(refNode: Node): ReferenceEntry {
-                // Check to make sure this reference is either part of a sub class or a class that we explicitly
-                // inherit from in the class hierarchy
+            function getImplementationReferenceEntryForNode(refNode: Node): ReferenceEntry[] {
+                // Check if we found a function/propertyAssignment/method with an implementation or initializer
+                if (isNameOfImplementation(<Identifier>refNode)) {
+                    return [getReferenceEntryFromNode(refNode.parent)];
+                }
+
                 if (refNode.kind === SyntaxKind.Identifier) {
-                    // Check if we found a function/propertyAssignment/method with an implementation or initializer
-                    if (isIdentifierOfImplementation(<Identifier>refNode)) {
-                        return getReferenceEntryFromNode(refNode.parent);
-                    }
-                    else if (refNode.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                    if (refNode.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         // Go ahead and dereference the shorthand assignment by going to its definition
-                        return getReferenceEntryForShorthandPropertyAssignment(refNode, typeChecker);
+                        const referenceEntries = getReferenceEntryForShorthandPropertyAssignment(refNode, typeChecker);
+                        return referenceEntries && referenceEntries.length ? referenceEntries : undefined;
                     }
 
                     // Check if the node is within an extends or implements clause
                     const containingHeritageClause = getContainingClassHeritageClause(refNode);
                     if (containingHeritageClause) {
-                        return getReferenceEntryFromNode(containingHeritageClause.parent);
+                        return [getReferenceEntryFromNode(containingHeritageClause.parent)];
                     }
 
                     // If we got a type reference, try and see if the reference applies to any expressions that can implement an interface
@@ -6474,17 +6414,17 @@ namespace ts {
                     if (containingTypeReference) {
                         const parent = containingTypeReference.parent;
                         if (isVariableLike(parent) && parent.type === containingTypeReference && parent.initializer && isImplementationExpression(parent.initializer)) {
-                            return getReferenceEntryFromNode(parent.initializer);
+                            return [getReferenceEntryFromNode(parent.initializer)];
                         }
                         else if (isFunctionLike(parent) && parent.type === containingTypeReference && parent.body && parent.body.kind === SyntaxKind.Block) {
-                            return forEachReturnStatement(<Block>parent.body, (returnStatement) => {
+                            return [forEachReturnStatement(<Block>parent.body, (returnStatement) => {
                                 if (returnStatement.expression && isImplementationExpression(returnStatement.expression)) {
                                     return getReferenceEntryFromNode(returnStatement.expression);
                                 }
-                            });
+                            })];
                         }
                         else if (isTypeAssertionExpression(parent) && isImplementationExpression(parent.expression)) {
-                            return getReferenceEntryFromNode(parent.expression);
+                            return [getReferenceEntryFromNode(parent.expression)];
                         }
                     }
                 }

@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
-// Should handle calls on modules
+// Should handle property access expressions on namespaces
 
-//// [|module Foo {
-////     export function hello() {}
-//// }|]
+//// namespace Foo {
+////     [|export function hello() {}|]
+//// }
 //// 
-//// let x = Fo/*reference*/o;
+//// Foo.hell/*reference*/o();
 
 goTo.marker("reference");
 verify.allRangesAppearInImplementationList();

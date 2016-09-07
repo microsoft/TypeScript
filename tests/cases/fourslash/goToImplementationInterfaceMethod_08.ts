@@ -15,7 +15,7 @@
 //// }
 ////
 //// class SubBar extends Bar {
-////    hello() {}
+////    [|hello() {}|]
 //// }
 
 

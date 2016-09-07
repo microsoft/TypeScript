@@ -2,7 +2,7 @@
 
 // Should handle property access expressions on namespaces
 
-//// namespace Foo {
+//// module Foo {
 ////     [|export function hello() {}|]
 //// }
 //// 

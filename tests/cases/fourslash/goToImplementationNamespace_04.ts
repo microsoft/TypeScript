@@ -1,26 +1,28 @@
 /// <reference path='fourslash.ts'/>
 
-// Should handle sub-namespaces
+// Should handle types that are members of a module in type references and heritage clauses
 
-//// /*parentNamespace*/namespace Foo {
-////     export function hello() {}
+//// module Foo {
+////     export interface Bar {
+////         hello(): void;
+////     }
+////
+////     [|class BarImpl implements Bar {
+////         hello() {}
+////     }|]
 //// }
 ////
-//// /*parentNamespace2*/namespace Foo./*childNamespace*/Bar {
-////    export function okay() {}
-//// }
+//// [|class Baz implements Foo.Bar {
+////     hello() {}
+//// }|]
 ////
-//// Fo/*parentReference*/o.hello();
-//// Foo.Ba/*childReference*/r.okay();
+//// var someVar1 : Foo.Bar = [|{ hello: () => {/**1*/} }|];
+////
+//// var someVar2 = <Foo.Bar> [|{ hello: () => {/**2*/} }|];
+////
+//// function whatever(x: Foo.Ba/*reference*/r) {
+////
+//// }
 
-goTo.marker("parentReference");
-goTo.implementation(0);
-verify.caretAtMarker("parentNamespace");
-
-goTo.marker("parentReference");
-goTo.implementation(1);
-verify.caretAtMarker("parentNamespace2");
-
-goTo.marker("childReference");
-goTo.implementation();
-verify.caretAtMarker("childNamespace")
+goTo.marker("reference");
+verify.allRangesAppearInImplementationList();

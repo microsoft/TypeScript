@@ -15,6 +15,7 @@
 ////
 ////     whatever() {
 ////         super.he/*function_call*/llo();
+////         super["hel/*element_access*/lo"]();
 ////     }
 //// }
 ////
@@ -27,4 +28,7 @@
 //// }
 
 goTo.marker("function_call");
+verify.allRangesAppearInImplementationList();
+
+goTo.marker("element_access");
 verify.allRangesAppearInImplementationList();
