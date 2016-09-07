@@ -4,7 +4,14 @@
 
 //// interface Fo/*interface_definition*/o { hello: () => void }
 ////
+//// let x: number = 9;
+////
 //// function createFoo(): Foo {
+////     if (x === 2) {
+////         return [|{
+////             hello() {}
+////         }|];
+////     }
 ////     return [|{
 ////         hello() {}
 ////     }|];

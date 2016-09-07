@@ -6417,11 +6417,15 @@ namespace ts {
                             return [getReferenceEntryFromNode(parent.initializer)];
                         }
                         else if (isFunctionLike(parent) && parent.type === containingTypeReference && parent.body && parent.body.kind === SyntaxKind.Block) {
-                            return [forEachReturnStatement(<Block>parent.body, (returnStatement) => {
+                            let result: ReferenceEntry[];
+
+                            forEachReturnStatement(<Block>parent.body, (returnStatement) => {
                                 if (returnStatement.expression && isImplementationExpression(returnStatement.expression)) {
-                                    return getReferenceEntryFromNode(returnStatement.expression);
+                                    (result || (result = [])).push(getReferenceEntryFromNode(returnStatement.expression));
                                 }
-                            })];
+                            });
+
+                            return result;
                         }
                         else if (isTypeAssertionExpression(parent) && isImplementationExpression(parent.expression)) {
                             return [getReferenceEntryFromNode(parent.expression)];
