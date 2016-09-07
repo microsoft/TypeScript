@@ -2,7 +2,7 @@
 
 describe("PreProcessFile:", function () {
     function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
-        const resultPreProcess = ts.preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
+        const resultPreProcess = ts.PreProcess.preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
 
         assert.equal(resultPreProcess.isLibFile, expectedPreProcess.isLibFile, "Pre-processed file has different value for isLibFile. Expected: " + expectedPreProcess.isLibFile + ". Actual: " + resultPreProcess.isLibFile);
 
