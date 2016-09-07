@@ -23,3 +23,7 @@ declare var React: any;
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 
+<div>&#0123;&#123;braces&#x7d;&#x7D;</div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+

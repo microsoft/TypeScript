@@ -210,15 +210,21 @@ namespace ts {
         }
 
         /**
-         * Decodes JSX entities.
+         * Replace entities like "&nbsp;", "&#123;", and "&#xDEADBEEF;" with the characters they encode.
+         * See https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
          */
         function decodeEntities(text: string) {
-            return text.replace(/&(\w+);/g, function(s: any, m: string) {
-                if (entities[m] !== undefined) {
-                    return String.fromCharCode(entities[m]);
+            return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
+                if (decimal) {
+                    return String.fromCharCode(parseInt(decimal, 10));
+                }
+                else if (hex) {
+                    return String.fromCharCode(parseInt(hex, 16));
                 }
                 else {
-                    return s;
+                    const ch = entities[word];
+                    // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
+                    return ch ? String.fromCharCode(ch) : match;
                 }
             });
         }
