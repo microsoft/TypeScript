@@ -10034,7 +10034,7 @@ namespace ts {
         }
 
         function isInfinityOrNaNString(name: string) : boolean {
-            return name === 'Infinity' || name === 'NaN';
+            return name === 'Infinity' || name === '-Infinity' || name === 'NaN';
         }
 
         function isNumericLiteralName(name: string) {
