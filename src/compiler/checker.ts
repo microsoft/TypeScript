@@ -10033,8 +10033,8 @@ namespace ts {
             return isTypeAny(type) || isTypeOfKind(type, kind);
         }
 
-        function isInfinityOrNaNString(name: string) : boolean {
-            return name === 'Infinity' || name === '-Infinity' || name === 'NaN';
+        function isInfinityOrNaNString(name: string): boolean {
+            return name === "Infinity" || name === "-Infinity" || name === "NaN";
         }
 
         function isNumericLiteralName(name: string) {
