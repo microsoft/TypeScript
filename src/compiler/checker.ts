@@ -5715,7 +5715,7 @@ namespace ts {
         function getInferenceMapper(context: InferenceContext): TypeMapper {
             if (!context.mapper) {
                 const mapper: TypeMapper = t => {
-                    const typeParameters = context.typeParameters;
+                    const typeParameters = context.signature.typeParameters;
                     for (let i = 0; i < typeParameters.length; i++) {
                         if (t === typeParameters[i]) {
                             context.inferences[i].isFixed = true;
@@ -5724,7 +5724,7 @@ namespace ts {
                     }
                     return t;
                 };
-                mapper.mappedTypes = context.typeParameters;
+                mapper.mappedTypes = context.signature.typeParameters;
                 mapper.context = context;
                 context.mapper = mapper;
             }
@@ -7508,15 +7508,12 @@ namespace ts {
         }
 
         function createInferenceContext(signature: Signature, inferUnionTypes: boolean): InferenceContext {
-            const typeParameters = signature.typeParameters;
-            const returnType = getReturnTypeOfSignature(signature);
             const inferences = map(signature.typeParameters, createTypeInferencesObject);
             return {
-                typeParameters,
-                returnType,
+                signature,
                 inferUnionTypes,
                 inferences,
-                inferredTypes: new Array(typeParameters.length),
+                inferredTypes: new Array(signature.typeParameters.length),
             };
         }
 
@@ -7547,6 +7544,7 @@ namespace ts {
         }
 
         function inferTypes(context: InferenceContext, source: Type, target: Type) {
+            const typeParameters = context.signature.typeParameters;
             let sourceStack: Type[];
             let targetStack: Type[];
             let depth = 0;
@@ -7606,7 +7604,6 @@ namespace ts {
                     if (source.flags & TypeFlags.ContainsAnyFunctionType) {
                         return;
                     }
-                    const typeParameters = context.typeParameters;
                     for (let i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
                             const inferences = context.inferences[i];
@@ -7646,7 +7643,7 @@ namespace ts {
                     let typeParameter: TypeParameter;
                     // First infer to each type in union or intersection that isn't a type parameter
                     for (const t of targetTypes) {
-                        if (t.flags & TypeFlags.TypeParameter && contains(context.typeParameters, t)) {
+                        if (t.flags & TypeFlags.TypeParameter && contains(typeParameters, t)) {
                             typeParameter = <TypeParameter>t;
                             typeParameterCount++;
                         }
@@ -7805,10 +7802,11 @@ namespace ts {
                     // we made at least one inference that wasn't shallow, or
                     // the type parameter has a primitive type constraint, or
                     // the type parameter wasn't fixed and is referenced at top level in the return type.
-                    const keepLiteralTypes = !context.inferences[index].shallow ||
-                        hasPrimitiveConstraint(context.typeParameters[index]) ||
-                        !context.inferences[index].isFixed && hasTypeParameterAtTopLevel(context.returnType, context.typeParameters[index]);
-                    const baseInferences = keepLiteralTypes ? inferences : map(inferences, getBaseTypeOfLiteralType);
+                    const signature = context.signature;
+                    const widenLiteralTypes = context.inferences[index].shallow &&
+                        !hasPrimitiveConstraint(signature.typeParameters[index]) &&
+                        (context.inferences[index].isFixed || !hasTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
+                    const baseInferences = widenLiteralTypes ? map(inferences, getBaseTypeOfLiteralType) : inferences;
                     // Infer widened union or supertype, or the unknown type for no common supertype
                     const unionOrSuperType = context.inferUnionTypes ? getUnionType(baseInferences, /*subtypeReduction*/ true) : getCommonSupertype(baseInferences);
                     inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
@@ -7826,7 +7824,7 @@ namespace ts {
 
                 // Only do the constraint check if inference succeeded (to prevent cascading errors)
                 if (inferenceSucceeded) {
-                    const constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
+                    const constraint = getConstraintOfTypeParameter(context.signature.typeParameters[index]);
                     if (constraint) {
                         const instantiatedConstraint = instantiateType(constraint, getInferenceMapper(context));
                         if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {

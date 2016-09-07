@@ -2590,8 +2590,7 @@ namespace ts {
 
     /* @internal */
     export interface InferenceContext {
-        typeParameters: TypeParameter[];    // Type parameters for which inferences are made
-        returnType: Type;                   // Return type used when determining whether to widen literal types
+        signature: Signature;               // Generic signature for which inferences are made
         inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
         inferences: TypeInferences[];       // Inferences made for each type parameter
         inferredTypes: Type[];              // Inferred type for each type parameter
