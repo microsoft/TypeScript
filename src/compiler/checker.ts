@@ -10033,6 +10033,10 @@ namespace ts {
             return isTypeAny(type) || isTypeOfKind(type, kind);
         }
 
+        function isInfinityOrNaNString(name: string) : boolean {
+            return name === 'Infinity' || name === 'NaN';
+        }
+
         function isNumericLiteralName(name: string) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
@@ -16848,7 +16852,7 @@ namespace ts {
                     }
                     else {
                         const text = getTextOfPropertyName(<PropertyName>member.name);
-                        if (isNumericLiteralName(text)) {
+                        if (isNumericLiteralName(text) && !isInfinityOrNaNString(text)) {
                             error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                         }
                     }
