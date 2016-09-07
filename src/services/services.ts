@@ -192,8 +192,8 @@ namespace ts {
                     }
                 }
                 // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
-                // For that to work, the jsdoc comments should still be the leading trivia of the first child. 
-                // Restoring the scanner position ensures that. 
+                // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+                // Restoring the scanner position ensures that.
                 pos = this.pos;
                 forEachChild(this, processNode, processNodes);
                 if (pos < this.end) {
@@ -5027,7 +5027,7 @@ namespace ts {
             if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 return getReferenceEntryForShorthandPropertyAssignment(node, typeChecker);
             }
-            else if (node.kind === SyntaxKind.SuperKeyword || isSuperPropertyOrElementAccess(node.parent)) {
+            else if (node.kind === SyntaxKind.SuperKeyword || isSuperProperty(node.parent)) {
                 // References to and accesses on the super keyword only have one possible implementation, so no
                 // need to "Find all References"
                 const symbol = typeChecker.getSymbolAtLocation(node);
