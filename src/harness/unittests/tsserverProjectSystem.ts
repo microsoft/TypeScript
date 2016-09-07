@@ -263,6 +263,8 @@ namespace ts {
         readonly write = (s: string) => notImplemented();
         readonly createDirectory = (s: string) => notImplemented();
         readonly exit = () => notImplemented();
+        readonly getEnvironmentVariable = (s: string) => notImplemented();
+        readonly tryEnableSourceMapsForHost = () => notImplemented();
     }
 
     describe("tsserver-project-system", () => {

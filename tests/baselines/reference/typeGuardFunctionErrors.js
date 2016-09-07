@@ -171,6 +171,7 @@ var C = (function (_super) {
 function hasANonBooleanReturnStatement(x) {
     return '';
 }
+function hasTypeGuardTypeInsideTypeGuardType(x) { }
 is;
 A;
 {
@@ -231,6 +232,7 @@ function b2(a, A) {
     if (a === void 0) { a = is; }
 }
 ;
+function b3() { }
 is;
 A;
 {

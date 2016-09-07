@@ -6,9 +6,8 @@ declare var Something: any;
 export class Testing123 { }
 
 //// [a.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,18 +17,19 @@ System.register([], function(exports_1, context_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var Testing123;
+    var __moduleName = context_1 && context_1.id;
+    var Testing123_1, Testing123;
     return {
-        setters:[],
-        execute: function() {
-            let Testing123_1 = class Testing123 {
+        setters: [],
+        execute: function () {
+            Testing123_1 = class Testing123 {
             };
-            let Testing123 = Testing123_1;
+            Testing123 = Testing123_1;
             Testing123 = Testing123_1 = __decorate([
-                Something({ v: () => Testing123 }), 
-                __metadata('design:paramtypes', [])
+                Something({ v: () => Testing123_1 }),
+                __metadata("design:paramtypes", [])
             ], Testing123);
             exports_1("Testing123", Testing123);
         }
-    }
+    };
 });

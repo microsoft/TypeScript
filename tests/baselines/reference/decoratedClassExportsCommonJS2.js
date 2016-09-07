@@ -20,7 +20,7 @@ let Testing123_1 = class Testing123 {
 };
 let Testing123 = Testing123_1;
 Testing123 = Testing123_1 = __decorate([
-    Something({ v: () => Testing123 }), 
-    __metadata('design:paramtypes', [])
+    Something({ v: () => Testing123_1 }),
+    __metadata("design:paramtypes", [])
 ], Testing123);
 exports.Testing123 = Testing123;

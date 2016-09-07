@@ -591,15 +591,15 @@ namespace ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        const flags = getCombinedNodeFlags(node);
+        const flags = getCombinedModifierFlags(node);
         const result: string[] = [];
 
-        if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
-        if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
-        if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-        if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
-        if (flags & NodeFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
-        if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+        if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+        if (flags & ModifierFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
+        if (flags & ModifierFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
+        if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
+        if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
 
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;

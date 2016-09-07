@@ -1,0 +1,27 @@
+{
+    "kind": "JSDocConstructorType",
+    "pos": 1,
+    "end": 8,
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 5,
+        "end": 8,
+        "name": {
+            "kind": "FirstNode",
+            "pos": 5,
+            "end": 8,
+            "left": {
+                "kind": "Identifier",
+                "pos": 5,
+                "end": 6,
+                "text": "a"
+            },
+            "right": {
+                "kind": "Identifier",
+                "pos": 7,
+                "end": 8,
+                "text": "b"
+            }
+        }
+    }
+}
