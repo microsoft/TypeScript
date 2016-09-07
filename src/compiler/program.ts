@@ -987,6 +987,7 @@ namespace ts {
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
+            getEnvironmentVariable: name => getEnvironmentVariable(name, /*host*/ undefined),
             getDirectories: (path: string) => sys.getDirectories(path),
             realpath
         };
@@ -1730,7 +1731,7 @@ namespace ts {
                     return false;
                 }
 
-                function checkModifiers(modifiers: ModifiersArray): boolean {
+                function checkModifiers(modifiers: NodeArray<Modifier>): boolean {
                     if (modifiers) {
                         for (const modifier of modifiers) {
                             switch (modifier.kind) {
@@ -1814,6 +1815,17 @@ namespace ts {
             let imports: LiteralExpression[];
             let moduleAugmentations: LiteralExpression[];
 
+            // If we are importing helpers, we need to add a synthetic reference to resolve the
+            // helpers library.
+            if (options.importHelpers
+                && (options.isolatedModules || isExternalModuleFile)
+                && !file.isDeclarationFile) {
+                const externalHelpersModuleReference = <StringLiteral>createNode(SyntaxKind.StringLiteral);
+                externalHelpersModuleReference.text = externalHelpersModuleNameText;
+                externalHelpersModuleReference.parent = file;
+                imports = [externalHelpersModuleReference];
+            }
+
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
                 if (isJavaScriptFile) {
@@ -1847,7 +1859,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.ModuleDeclaration:
-                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
+                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || isDeclarationFile(file))) {
                             const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
@@ -2330,7 +2342,7 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
 
-            if (options.reactNamespace && !isIdentifier(options.reactNamespace, languageVersion)) {
+            if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
             }
 

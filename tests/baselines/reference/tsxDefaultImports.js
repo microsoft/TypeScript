@@ -23,11 +23,11 @@ var SomeEnum;
 var SomeClass = (function () {
     function SomeClass() {
     }
-    SomeClass.E = SomeEnum;
     return SomeClass;
 }());
 exports.__esModule = true;
 exports["default"] = SomeClass;
+SomeClass.E = SomeEnum;
 //// [b.js]
 "use strict";
 var a_1 = require("./a");

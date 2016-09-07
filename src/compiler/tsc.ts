@@ -6,6 +6,11 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
+    interface Statistic {
+        name: string;
+        value: string;
+    }
+
     const defaultFormatDiagnosticsHost: FormatDiagnosticsHost = {
         getCurrentDirectory: () => sys.getCurrentDirectory(),
         getNewLine: () => sys.newLine,
@@ -228,18 +233,6 @@ namespace ts {
         }
 
         return s;
-    }
-
-    function reportStatisticalValue(name: string, value: string) {
-        sys.write(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
-    }
-
-    function reportCountStatistic(name: string, count: number) {
-        reportStatisticalValue(name, "" + count);
-    }
-
-    function reportTimeStatistic(name: string, time: number) {
-        reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
     function isJSONSupported() {
@@ -547,7 +540,11 @@ namespace ts {
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
         const hasDiagnostics = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
-        if (hasDiagnostics) performance.enable();
+        let statistics: Statistic[];
+        if (hasDiagnostics) {
+            performance.enable();
+            statistics = [];
+        }
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -591,6 +588,7 @@ namespace ts {
                 reportTimeStatistic("Emit time", emitTime);
             }
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            reportStatistics();
 
             performance.disable();
         }
@@ -631,6 +629,36 @@ namespace ts {
                 return ExitStatus.DiagnosticsPresent_OutputsGenerated;
             }
             return ExitStatus.Success;
+        }
+
+        function reportStatistics() {
+            let nameSize = 0;
+            let valueSize = 0;
+            for (const { name, value } of statistics) {
+                if (name.length > nameSize) {
+                    nameSize = name.length;
+                }
+
+                if (value.length > valueSize) {
+                    valueSize = value.length;
+                }
+            }
+
+            for (const { name, value } of statistics) {
+                sys.write(padRight(name + ":", nameSize + 2) + padLeft(value.toString(), valueSize) + sys.newLine);
+            }
+        }
+
+        function reportStatisticalValue(name: string, value: string) {
+            statistics.push({ name, value });
+        }
+
+        function reportCountStatistic(name: string, count: number) {
+            reportStatisticalValue(name, "" + count);
+        }
+
+        function reportTimeStatistic(name: string, time: number) {
+            reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
         }
     }
 
@@ -766,6 +794,10 @@ namespace ts {
 
         return;
     }
+}
+
+if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+    ts.sys.tryEnableSourceMapsForHost();
 }
 
 ts.executeCommandLine(ts.sys.args);

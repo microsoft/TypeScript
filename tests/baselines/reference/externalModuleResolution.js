@@ -25,5 +25,5 @@ var M2;
 module.exports = M2;
 //// [consumer.js]
 "use strict";
-var x = require('./foo');
+var x = require("./foo");
 x.Y; // .ts should be picked

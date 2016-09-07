@@ -79,12 +79,17 @@ namespace ts {
         public flags: NodeFlags;
         public parent: Node;
         public jsDocComments: JSDocComment[];
+        public original: Node;
+        public transformFlags: TransformFlags;
+        public excludeTransformFlags: TransformFlags;
         private _children: Node[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
+            this.transformFlags = undefined;
+            this.excludeTransformFlags = undefined;
             this.parent = undefined;
             this.kind = kind;
         }
@@ -186,6 +191,10 @@ namespace ts {
                         processNode(jsDocComment);
                     }
                 }
+                // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
+                // For that to work, the jsdoc comments should still be the leading trivia of the first child. 
+                // Restoring the scanner position ensures that. 
+                pos = this.pos;
                 forEachChild(this, processNode, processNodes);
                 if (pos < this.end) {
                     this.addSyntheticNodes(children, pos, this.end);
@@ -962,7 +971,7 @@ namespace ts {
 
                     case SyntaxKind.Parameter:
                         // Only consider parameter properties
-                        if (!(node.flags & NodeFlags.ParameterPropertyModifier)) {
+                        if (!hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                             break;
                         }
                     // fall through
@@ -2233,7 +2242,7 @@ namespace ts {
             case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.enumMemberElement;
-            case SyntaxKind.Parameter: return (node.flags & NodeFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+            case SyntaxKind.Parameter: return hasModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ImportClause:
@@ -2602,7 +2611,7 @@ namespace ts {
             // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
             // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
             if (performCharacterChecks) {
-                if (!isIdentifier(name, target)) {
+                if (!isIdentifierText(name, target)) {
                     return undefined;
                 }
             }
@@ -5430,14 +5439,14 @@ namespace ts {
                     }
 
                     const keywords: Node[] = [];
-                    const modifierFlag: NodeFlags = getFlagFromModifier(modifier);
+                    const modifierFlag: ModifierFlags = getFlagFromModifier(modifier);
 
                     let nodes: Node[];
                     switch (container.kind) {
                         case SyntaxKind.ModuleBlock:
                         case SyntaxKind.SourceFile:
                             // Container is either a class declaration or the declaration is a classDeclaration
-                            if (modifierFlag & NodeFlags.Abstract) {
+                            if (modifierFlag & ModifierFlags.Abstract) {
                                 nodes = (<Node[]>(<ClassDeclaration>declaration).members).concat(declaration);
                             }
                             else {
@@ -5454,7 +5463,7 @@ namespace ts {
 
                             // If we're an accessibility modifier, we're in an instance member and should search
                             // the constructor's parameter list for instance members as well.
-                            if (modifierFlag & NodeFlags.AccessibilityModifier) {
+                            if (modifierFlag & ModifierFlags.AccessibilityModifier) {
                                 const constructor = forEach((<ClassLikeDeclaration>container).members, member => {
                                     return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
                                 });
@@ -5463,7 +5472,7 @@ namespace ts {
                                     nodes = nodes.concat(constructor.parameters);
                                 }
                             }
-                            else if (modifierFlag & NodeFlags.Abstract) {
+                            else if (modifierFlag & ModifierFlags.Abstract) {
                                 nodes = nodes.concat(container);
                             }
                             break;
@@ -5472,7 +5481,7 @@ namespace ts {
                     }
 
                     forEach(nodes, node => {
-                        if (node.modifiers && node.flags & modifierFlag) {
+                        if (getModifierFlags(node) & modifierFlag) {
                             forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
                         }
                     });
@@ -5482,19 +5491,19 @@ namespace ts {
                     function getFlagFromModifier(modifier: SyntaxKind) {
                         switch (modifier) {
                             case SyntaxKind.PublicKeyword:
-                                return NodeFlags.Public;
+                                return ModifierFlags.Public;
                             case SyntaxKind.PrivateKeyword:
-                                return NodeFlags.Private;
+                                return ModifierFlags.Private;
                             case SyntaxKind.ProtectedKeyword:
-                                return NodeFlags.Protected;
+                                return ModifierFlags.Protected;
                             case SyntaxKind.StaticKeyword:
-                                return NodeFlags.Static;
+                                return ModifierFlags.Static;
                             case SyntaxKind.ExportKeyword:
-                                return NodeFlags.Export;
+                                return ModifierFlags.Export;
                             case SyntaxKind.DeclareKeyword:
-                                return NodeFlags.Ambient;
+                                return ModifierFlags.Ambient;
                             case SyntaxKind.AbstractKeyword:
-                                return NodeFlags.Abstract;
+                                return ModifierFlags.Abstract;
                             default:
                                 Debug.fail();
                         }
@@ -6024,7 +6033,7 @@ namespace ts {
 
                 // If this is private property or method, the scope is the containing class
                 if (symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-                    const privateDeclaration = forEach(symbol.getDeclarations(), d => (d.flags & NodeFlags.Private) ? d : undefined);
+                    const privateDeclaration = forEach(symbol.getDeclarations(), d => (getModifierFlags(d) & ModifierFlags.Private) ? d : undefined);
                     if (privateDeclaration) {
                         return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                     }
@@ -6565,7 +6574,7 @@ namespace ts {
                     return undefined;
                 }
                 // Whether 'super' occurs in a static context within a class.
-                let staticFlag = NodeFlags.Static;
+                let staticFlag = ModifierFlags.Static;
 
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.PropertyDeclaration:
@@ -6575,7 +6584,7 @@ namespace ts {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        staticFlag &= searchSpaceNode.flags;
+                        staticFlag &= getModifierFlags(searchSpaceNode);
                         searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                         break;
                     default:
@@ -6600,7 +6609,7 @@ namespace ts {
                     // If we have a 'super' container, we must have an enclosing class.
                     // Now make sure the owning class is the same as the search-space
                     // and has the same static qualifier as the original 'super's owner.
-                    if (container && (NodeFlags.Static & container.flags) === staticFlag && container.parent.symbol === searchSpaceNode.symbol) {
+                    if (container && (ModifierFlags.Static & getModifierFlags(container)) === staticFlag && container.parent.symbol === searchSpaceNode.symbol) {
                         references.push(getReferenceEntryFromNode(node));
                     }
                 });
@@ -6613,7 +6622,7 @@ namespace ts {
                 let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
 
                 // Whether 'this' occurs in a static context within a class.
-                let staticFlag = NodeFlags.Static;
+                let staticFlag = ModifierFlags.Static;
 
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.MethodDeclaration:
@@ -6627,7 +6636,7 @@ namespace ts {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        staticFlag &= searchSpaceNode.flags;
+                        staticFlag &= getModifierFlags(searchSpaceNode);
                         searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                         break;
                     case SyntaxKind.SourceFile:
@@ -6705,7 +6714,7 @@ namespace ts {
                             case SyntaxKind.ClassDeclaration:
                                 // Make sure the container belongs to the same class
                                 // and has the appropriate static modifier from the original container.
-                                if (container.parent && searchSpaceNode.symbol === container.parent.symbol && (container.flags & NodeFlags.Static) === staticFlag) {
+                                if (container.parent && searchSpaceNode.symbol === container.parent.symbol && (getModifierFlags(container) & ModifierFlags.Static) === staticFlag) {
                                     result.push(getReferenceEntryFromNode(node));
                                 }
                                 break;
@@ -7184,7 +7193,7 @@ namespace ts {
 
             return node.parent.kind === SyntaxKind.TypeReference ||
                 (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
-                (node.kind === SyntaxKind.ThisKeyword && !isExpression(node)) ||
+                (node.kind === SyntaxKind.ThisKeyword && !isPartOfExpression(node)) ||
                 node.kind === SyntaxKind.ThisType;
         }
 

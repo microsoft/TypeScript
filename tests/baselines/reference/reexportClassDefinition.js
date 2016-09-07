@@ -27,7 +27,7 @@ var x = (function () {
 module.exports = x;
 //// [foo2.js]
 "use strict";
-var foo1 = require('./foo1');
+var foo1 = require("./foo1");
 module.exports = {
     x: foo1
 };
@@ -38,7 +38,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var foo2 = require('./foo2');
+var foo2 = require("./foo2");
 var x = (function (_super) {
     __extends(x, _super);
     function x() {

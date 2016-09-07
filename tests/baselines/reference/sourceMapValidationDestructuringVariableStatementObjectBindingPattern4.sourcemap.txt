@@ -21,9 +21,9 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
 10>                                                                              ^
 11>                                                                               ^^^^^^^^^^^^^^^^^^->
 1 >
-  >
+  >var 
 2 >
-3 >    var {x = 500,
+3 >    {x = 500,
   >         y} = { x: 20, y: "hi" }
 4 >                           
 5 >                             x = 500
@@ -33,8 +33,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
   >                                                                         
 9 >                                                                      y
 10>                                                                              } = { x: 20, y: "hi" };
-1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(2, 1) + SourceIndex(0)
+1 >Emitted(1, 1) Source(2, 5) + SourceIndex(0)
+2 >Emitted(1, 5) Source(2, 5) + SourceIndex(0)
 3 >Emitted(1, 28) Source(3, 29) + SourceIndex(0)
 4 >Emitted(1, 30) Source(2, 6) + SourceIndex(0)
 5 >Emitted(1, 39) Source(2, 13) + SourceIndex(0)

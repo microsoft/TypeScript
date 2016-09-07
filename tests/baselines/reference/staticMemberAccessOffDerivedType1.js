@@ -28,6 +28,6 @@ var P = (function (_super) {
     function P() {
         _super.apply(this, arguments);
     }
-    P.SomeNumber = P.GetNumber();
     return P;
 }(SomeBase));
+P.SomeNumber = P.GetNumber();
