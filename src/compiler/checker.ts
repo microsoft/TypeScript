@@ -9215,12 +9215,16 @@ namespace ts {
             let container = getSuperContainer(node, /*stopOnFunctions*/ true);
             let needToCaptureLexicalThis = false;
 
+            // adjust the container reference in case if super is used inside arrow functions with arbitrarily deep nesting
             if (!isCallExpression) {
-                // adjust the container reference in case if super is used inside arrow functions with arbitrary deep nesting
                 while (container && container.kind === SyntaxKind.ArrowFunction) {
                     container = getSuperContainer(container, /*stopOnFunctions*/ true);
                     needToCaptureLexicalThis = languageVersion < ScriptTarget.ES6;
                 }
+            }
+
+            if (languageVersion < ScriptTarget.ES6 && container && container.kind === SyntaxKind.Constructor) {
+                needToCaptureLexicalThis = needToCaptureLexicalThis || !!getClassExtendsHeritageClauseElement(getContainingClass(container));
             }
 
             const canUseSuperExpression = isLegalUsageOfSuperExpression(container);
