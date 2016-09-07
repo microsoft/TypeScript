@@ -8,9 +8,9 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
+    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
-            const fileName = combinePaths(searchPath, "tsconfig.json");
+            const fileName = combinePaths(searchPath, configName);
             if (fileExists(fileName)) {
                 return fileName;
             }
@@ -166,7 +166,7 @@ namespace ts {
 
     const typeReferenceExtensions = [".d.ts"];
 
-    function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost): string[] | undefined {
+    export function getEffectiveTypeRoots(options: CompilerOptions, host: { directoryExists?: (directoryName: string) => boolean, getCurrentDirectory?: () => string }): string[] | undefined  {
         if (options.typeRoots) {
             return options.typeRoots;
         }
@@ -186,7 +186,7 @@ namespace ts {
      * Returns the path to every node_modules/@types directory from some ancestor directory.
      * Returns undefined if there are none.
      */
-    function getDefaultTypeRoots(currentDirectory: string, host: ModuleResolutionHost): string[] | undefined {
+    function getDefaultTypeRoots(currentDirectory: string,  host: { directoryExists?: (directoryName: string) => boolean }): string[] | undefined {
         if (!host.directoryExists) {
             return [combinePaths(currentDirectory, nodeModulesAtTypes)];
             // And if it doesn't exist, tough.
