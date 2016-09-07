@@ -2859,7 +2859,6 @@ namespace ts {
                 const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
                 statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
-
             addRange(statements, endLexicalEnvironment());
 
             currentNamespaceContainerName = savedCurrentNamespaceContainerName;
@@ -2872,6 +2871,30 @@ namespace ts {
                 /*location*/ blockLocation,
                 /*multiLine*/ true
             );
+
+            // namespace hello.hi.world {
+            //      function foo() {}
+            //
+            //      // TODO, blah
+            // }
+            //
+            // should be emitted as
+            //
+            // var hello;
+            // (function (hello) {
+            //     var hi;
+            //     (function (hi) {
+            //         var world;
+            //         (function (world) {
+            //             function foo() { }
+            //             // TODO, blah
+            //         })(world = hi.world || (hi.world = {}));
+            //     })(hi = hello.hi || (hello.hi = {}));
+            // })(hello || (hello = {}));
+            // so if the block is a transformed module declaration, turn off the comment emit
+            if (body.kind !== SyntaxKind.ModuleBlock) {
+                setNodeEmitFlags(block, block.emitFlags | NodeEmitFlags.NoComments);
+            }
             return block;
         }
 
