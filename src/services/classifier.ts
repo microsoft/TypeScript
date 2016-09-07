@@ -498,7 +498,7 @@ namespace ts.Classifier {
             result.push(type);
         }
 
-        function classifySymbol(symbol: Symbol, meaningAtPosition: Meaning.SemanticMeaning): ClassificationType {
+        function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning): ClassificationType {
             const flags = symbol.getFlags();
             if ((flags & SymbolFlags.Classifiable) === SymbolFlags.None) {
                 return;
@@ -513,7 +513,7 @@ namespace ts.Classifier {
             else if (flags & SymbolFlags.TypeAlias) {
                 return ClassificationType.typeAliasName;
             }
-            else if (meaningAtPosition & Meaning.SemanticMeaning.Type) {
+            else if (meaningAtPosition & SemanticMeaning.Type) {
                 if (flags & SymbolFlags.Interface) {
                     return ClassificationType.interfaceName;
                 }
@@ -525,8 +525,8 @@ namespace ts.Classifier {
                 // Only classify a module as such if
                 //  - It appears in a namespace context.
                 //  - There exists a module declaration which actually impacts the value side.
-                if (meaningAtPosition & Meaning.SemanticMeaning.Namespace ||
-                    (meaningAtPosition & Meaning.SemanticMeaning.Value && hasValueSideModule(symbol))) {
+                if (meaningAtPosition & SemanticMeaning.Namespace ||
+                    (meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol))) {
                     return ClassificationType.moduleName;
                 }
             }
@@ -559,7 +559,7 @@ namespace ts.Classifier {
                     if (classifiableNames[identifier.text]) {
                         const symbol = typeChecker.getSymbolAtLocation(node);
                         if (symbol) {
-                            const type = classifySymbol(symbol, Meaning.getMeaningFromLocation(node));
+                            const type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
                                 pushClassification(node.getStart(), node.getWidth(), type);
                             }

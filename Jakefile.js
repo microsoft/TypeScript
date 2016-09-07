@@ -122,7 +122,6 @@ var servicesSources = [
 }).concat([
     "types.ts",
     "utilities.ts",
-    "allocators.ts",
     "breakpoints.ts",
     "classifier.ts",
     "completions.ts",
@@ -131,7 +130,6 @@ var servicesSources = [
     "goToDefinition.ts",
     "jsDoc.ts",
     "jsTyping.ts",
-    "meaning.ts",
     "navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
@@ -142,6 +140,7 @@ var servicesSources = [
     "shims.ts",
     "signatureHelp.ts",
     "symbolDisplay.ts",
+    "transpile.ts",
     "formatting/formatting.ts",
     "formatting/formattingContext.ts",
     "formatting/formattingRequestKind.ts",

@@ -85,7 +85,7 @@ namespace ts.SymbolDisplay {
 
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
     export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
-        location: Node, semanticMeaning = Meaning.getMeaningFromLocation(location)) {
+        location: Node, semanticMeaning = getMeaningFromLocation(location)) {
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[];
@@ -229,7 +229,7 @@ namespace ts.SymbolDisplay {
             addFullSymbolName(symbol);
             writeTypeParametersOfSymbol(symbol, sourceFile);
         }
-        if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & Meaning.SemanticMeaning.Type)) {
+        if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
             addNewLineIfDisplayPartsExist();
             displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
             displayParts.push(spacePart());
@@ -265,7 +265,7 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
         }
-        if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & Meaning.SemanticMeaning.Type)) {
+        if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
             addNewLineIfDisplayPartsExist();
             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
             displayParts.push(textPart("type parameter"));

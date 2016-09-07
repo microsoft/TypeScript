@@ -69,7 +69,7 @@ namespace ts.FindAllReferences {
         let result: ReferencedSymbol[];
 
         // Compute the meaning from the location and the symbol it references
-        const searchMeaning = getIntersectingMeaningFromDeclarations(Meaning.getMeaningFromLocation(node), declarations);
+        const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
         // Get the text to search for.
         // Note: if this is an external module symbol, the name doesn't include quotes.
@@ -363,7 +363,7 @@ namespace ts.FindAllReferences {
             searchSymbol: Symbol,
             searchText: string,
             searchLocation: Node,
-            searchMeaning: Meaning.SemanticMeaning,
+            searchMeaning: SemanticMeaning,
             findInStrings: boolean,
             findInComments: boolean,
             result: ReferencedSymbol[],
@@ -406,7 +406,7 @@ namespace ts.FindAllReferences {
                         return;
                     }
 
-                    if (!(Meaning.getMeaningFromLocation(referenceLocation) & searchMeaning)) {
+                    if (!(getMeaningFromLocation(referenceLocation) & searchMeaning)) {
                         return;
                     }
 
@@ -995,9 +995,9 @@ namespace ts.FindAllReferences {
             * module, we want to keep the search limited to only types, as the two declarations (interface and uninstantiated module)
             * do not intersect in any of the three spaces.
             */
-        function getIntersectingMeaningFromDeclarations(meaning: Meaning.SemanticMeaning, declarations: Declaration[]): Meaning.SemanticMeaning {
+        function getIntersectingMeaningFromDeclarations(meaning: SemanticMeaning, declarations: Declaration[]): SemanticMeaning {
             if (declarations) {
-                let lastIterationMeaning: Meaning.SemanticMeaning;
+                let lastIterationMeaning: SemanticMeaning;
                 do {
                     // The result is order-sensitive, for instance if initialMeaning === Namespace, and declarations = [class, instantiated module]
                     // we need to consider both as they initialMeaning intersects with the module in the namespace space, and the module
@@ -1008,7 +1008,7 @@ namespace ts.FindAllReferences {
                     lastIterationMeaning = meaning;
 
                     for (const declaration of declarations) {
-                        const declarationMeaning = Meaning.getMeaningFromDeclaration(declaration);
+                        const declarationMeaning = getMeaningFromDeclaration(declaration);
 
                         if (declarationMeaning & meaning) {
                             meaning |= declarationMeaning;
