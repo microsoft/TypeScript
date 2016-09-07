@@ -7521,7 +7521,7 @@ namespace ts {
             return {
                 primary: undefined,
                 secondary: undefined,
-                shallow: true,
+                topLevel: true,
                 isFixed: false,
             };
         }
@@ -7543,14 +7543,18 @@ namespace ts {
             return type.couldContainTypeParameters;
         }
 
-        function inferTypes(context: InferenceContext, source: Type, target: Type) {
+        function isTypeParameterAtTopLevel(type: Type, typeParameter: TypeParameter): boolean {
+            return type === typeParameter || type.flags & TypeFlags.UnionOrIntersection && forEach((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter));
+        }
+
+        function inferTypes(context: InferenceContext, originalSource: Type, originalTarget: Type) {
             const typeParameters = context.signature.typeParameters;
             let sourceStack: Type[];
             let targetStack: Type[];
             let depth = 0;
             let inferiority = 0;
             const visited = createMap<boolean>();
-            inferFromTypes(source, target, /*nested*/ false);
+            inferFromTypes(originalSource, originalTarget);
 
             function isInProcess(source: Type, target: Type) {
                 for (let i = 0; i < depth; i++) {
@@ -7561,7 +7565,7 @@ namespace ts {
                 return false;
             }
 
-            function inferFromTypes(source: Type, target: Type, nested: boolean) {
+            function inferFromTypes(source: Type, target: Type) {
                 if (!couldContainTypeParameters(target)) {
                     return;
                 }
@@ -7571,7 +7575,7 @@ namespace ts {
                     // are the same type, just relate each constituent type to itself.
                     if (source === target) {
                         for (const t of (<UnionOrIntersectionType>source).types) {
-                            inferFromTypes(t, t, /*nested*/ false);
+                            inferFromTypes(t, t);
                         }
                         return;
                     }
@@ -7583,7 +7587,7 @@ namespace ts {
                     for (const t of (<UnionOrIntersectionType>target).types) {
                         if (typeIdenticalToSomeType(t, (<UnionOrIntersectionType>source).types)) {
                             (matchingTypes || (matchingTypes = [])).push(t);
-                            inferFromTypes(t, t, /*nested*/ false);
+                            inferFromTypes(t, t);
                         }
                     }
                     // Next, to improve the quality of inferences, reduce the source and target types by
@@ -7620,8 +7624,8 @@ namespace ts {
                                 if (!contains(candidates, source)) {
                                     candidates.push(source);
                                 }
-                                if (nested) {
-                                    inferences.shallow = false;
+                                if (!isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                                    inferences.topLevel = false;
                                 }
                             }
                             return;
@@ -7634,7 +7638,7 @@ namespace ts {
                     const targetTypes = (<TypeReference>target).typeArguments || emptyArray;
                     const count = sourceTypes.length < targetTypes.length ? sourceTypes.length : targetTypes.length;
                     for (let i = 0; i < count; i++) {
-                        inferFromTypes(sourceTypes[i], targetTypes[i], /*nested*/ true);
+                        inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
@@ -7648,7 +7652,7 @@ namespace ts {
                             typeParameterCount++;
                         }
                         else {
-                            inferFromTypes(source, t, /*nested*/ false);
+                            inferFromTypes(source, t);
                         }
                     }
                     // Next, if target containings a single naked type parameter, make a secondary inference to that type
@@ -7656,7 +7660,7 @@ namespace ts {
                     // types in contra-variant positions (such as callback parameters).
                     if (typeParameterCount === 1) {
                         inferiority++;
-                        inferFromTypes(source, typeParameter, /*nested*/ false);
+                        inferFromTypes(source, typeParameter);
                         inferiority--;
                     }
                 }
@@ -7664,7 +7668,7 @@ namespace ts {
                     // Source is a union or intersection type, infer from each constituent type
                     const sourceTypes = (<UnionOrIntersectionType>source).types;
                     for (const sourceType of sourceTypes) {
-                        inferFromTypes(sourceType, target, /*nested*/ false);
+                        inferFromTypes(sourceType, target);
                     }
                 }
                 else {
@@ -7702,7 +7706,7 @@ namespace ts {
                 for (const targetProp of properties) {
                     const sourceProp = getPropertyOfObjectType(source, targetProp.name);
                     if (sourceProp) {
-                        inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), /*nested*/ true);
+                        inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
                     }
                 }
             }
@@ -7719,17 +7723,17 @@ namespace ts {
             }
 
             function inferFromParameterTypes(source: Type, target: Type) {
-                return inferFromTypes(source, target, /*nested*/ true);
+                return inferFromTypes(source, target);
             }
 
             function inferFromSignature(source: Signature, target: Signature) {
                 forEachMatchingParameterType(source, target, inferFromParameterTypes);
 
                 if (source.typePredicate && target.typePredicate && source.typePredicate.kind === target.typePredicate.kind) {
-                    inferFromTypes(source.typePredicate.type, target.typePredicate.type, /*nested*/ true);
+                    inferFromTypes(source.typePredicate.type, target.typePredicate.type);
                 }
                 else {
-                    inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target), /*nested*/ true);
+                    inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
                 }
             }
 
@@ -7739,7 +7743,7 @@ namespace ts {
                     const sourceIndexType = getIndexTypeOfType(source, IndexKind.String) ||
                         getImplicitIndexTypeOfType(source, IndexKind.String);
                     if (sourceIndexType) {
-                        inferFromTypes(sourceIndexType, targetStringIndexType, /*nested*/ true);
+                        inferFromTypes(sourceIndexType, targetStringIndexType);
                     }
                 }
                 const targetNumberIndexType = getIndexTypeOfType(target, IndexKind.Number);
@@ -7748,7 +7752,7 @@ namespace ts {
                         getIndexTypeOfType(source, IndexKind.String) ||
                         getImplicitIndexTypeOfType(source, IndexKind.Number);
                     if (sourceIndexType) {
-                        inferFromTypes(sourceIndexType, targetNumberIndexType, /*nested*/ true);
+                        inferFromTypes(sourceIndexType, targetNumberIndexType);
                     }
                 }
             }
@@ -7787,25 +7791,20 @@ namespace ts {
             return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive);
         }
 
-        function hasTypeParameterAtTopLevel(type: Type, typeParameter: TypeParameter): boolean {
-            return type === typeParameter || type.flags & TypeFlags.UnionOrIntersection && forEach((<UnionOrIntersectionType>type).types, t => hasTypeParameterAtTopLevel(t, typeParameter));
-        }
-
-
         function getInferredType(context: InferenceContext, index: number): Type {
             let inferredType = context.inferredTypes[index];
             let inferenceSucceeded: boolean;
             if (!inferredType) {
                 const inferences = getInferenceCandidates(context, index);
                 if (inferences.length) {
-                    // We keep inferences of literal types if
-                    // we made at least one inference that wasn't shallow, or
-                    // the type parameter has a primitive type constraint, or
-                    // the type parameter wasn't fixed and is referenced at top level in the return type.
+                    // We widen inferred literal types if
+                    // all inferences were made to top-level ocurrences of the type parameter, and
+                    // the type parameter has no constraint or its constraint includes no primitive or literal types, and
+                    // the type parameter was fixed during inference or does not occur at top-level in the return type.
                     const signature = context.signature;
-                    const widenLiteralTypes = context.inferences[index].shallow &&
+                    const widenLiteralTypes = context.inferences[index].topLevel &&
                         !hasPrimitiveConstraint(signature.typeParameters[index]) &&
-                        (context.inferences[index].isFixed || !hasTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
+                        (context.inferences[index].isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
                     const baseInferences = widenLiteralTypes ? map(inferences, getBaseTypeOfLiteralType) : inferences;
                     // Infer widened union or supertype, or the unknown type for no common supertype
                     const unionOrSuperType = context.inferUnionTypes ? getUnionType(baseInferences, /*subtypeReduction*/ true) : getCommonSupertype(baseInferences);
