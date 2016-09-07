@@ -39,6 +39,8 @@ const gulp = helpMaker(originalGulp);
 const mochaParallel = require("./scripts/mocha-parallel.js");
 const {runTestsInParallel} = mochaParallel;
 
+Error.stackTraceLimit = 1000;
+
 const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "light", "colors", "lint", "soft"],
     string: ["browser", "tests", "host", "reporter"],
@@ -727,6 +729,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
                         sourcemaps: {
                             "built/local/_stream_0.js": originalMap,
                             "built/local/bundle.js": maps,
+                            "node_modules/source-map-support/source-map-support.js": null,
                         }
                     });
                     const finalMap = chain.apply();
