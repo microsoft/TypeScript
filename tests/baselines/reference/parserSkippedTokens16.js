@@ -12,6 +12,7 @@ var x       =
 foo();
 Bar;
 { }
+function Foo() { }
 { }
 4 + ;
 5;

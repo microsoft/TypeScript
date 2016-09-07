@@ -1,0 +1,164 @@
+=== tests/cases/compiler/es5-asyncFunctionSwitchStatements.ts ===
+declare var x, y, z, a, b, c;
+>x : any
+>y : any
+>z : any
+>a : any
+>b : any
+>c : any
+
+async function switchStatement0() {
+>switchStatement0 : () => Promise<void>
+
+    switch (x) {
+>x : any
+
+        case y: a; break;
+>y : any
+>a : any
+
+        default: b; break;
+>b : any
+    }
+}
+
+async function switchStatement1() {
+>switchStatement1 : () => Promise<void>
+
+    switch (await x) {
+>await x : any
+>x : any
+
+        case y: a; break;
+>y : any
+>a : any
+
+        default: b; break;
+>b : any
+    }
+}
+
+async function switchStatement2() {
+>switchStatement2 : () => Promise<void>
+
+    switch (x) {
+>x : any
+
+        case await y: a; break;
+>await y : any
+>y : any
+>a : any
+
+        default: b; break;
+>b : any
+    }
+}
+
+async function switchStatement3() {
+>switchStatement3 : () => Promise<void>
+
+    switch (x) {
+>x : any
+
+        case y: await a; break;
+>y : any
+>await a : any
+>a : any
+
+        default: b; break;
+>b : any
+    }
+}
+
+async function switchStatement4() {
+>switchStatement4 : () => Promise<void>
+
+    switch (x) {
+>x : any
+
+        case y: a; break;
+>y : any
+>a : any
+
+        default: await b; break;
+>await b : any
+>b : any
+    }
+}
+
+async function switchStatement5() {
+>switchStatement5 : () => Promise<void>
+
+    switch (x) {
+>x : any
+
+        case y: a; break;
+>y : any
+>a : any
+
+        case await z: b; break;
+>await z : any
+>z : any
+>b : any
+    }
+}
+
+async function switchStatement6() {
+>switchStatement6 : () => Promise<void>
+
+    switch (x) {
+>x : any
+
+        default: c; break;
+>c : any
+
+        case await y: a; break;
+>await y : any
+>y : any
+>a : any
+
+        case z: b; break;
+>z : any
+>b : any
+    }
+}
+
+async function switchStatement7() {
+>switchStatement7 : () => Promise<void>
+
+    switch (x) {
+>x : any
+
+        default: c; break;
+>c : any
+
+        case y: a; break;
+>y : any
+>a : any
+
+        case await z: b; break;
+>await z : any
+>z : any
+>b : any
+    }
+}
+
+async function switchStatement8() {
+>switchStatement8 : () => Promise<void>
+
+    switch (x) {
+>x : any
+
+        default: c;
+>c : any
+
+        case y: a; break;
+>y : any
+>a : any
+
+        case await z: b; break;
+>await z : any
+>z : any
+>b : any
+    }
+}

@@ -26,7 +26,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var React = require('react');
+var React = require("react");
 var Text = (function (_super) {
     __extends(Text, _super);
     function Text() {

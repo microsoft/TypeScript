@@ -1,0 +1,152 @@
+=== tests/cases/compiler/es5-asyncFunctionWhileStatements.ts ===
+declare var x, y, z, a, b, c;
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionWhileStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionWhileStatements.ts, 0, 20))
+>b : Symbol(b, Decl(es5-asyncFunctionWhileStatements.ts, 0, 23))
+>c : Symbol(c, Decl(es5-asyncFunctionWhileStatements.ts, 0, 26))
+
+async function whileStatement0() {
+>whileStatement0 : Symbol(whileStatement0, Decl(es5-asyncFunctionWhileStatements.ts, 0, 29))
+
+    while (x) { y; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement1() {
+>whileStatement1 : Symbol(whileStatement1, Decl(es5-asyncFunctionWhileStatements.ts, 4, 1))
+
+    while (await x) { y; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement2() {
+>whileStatement2 : Symbol(whileStatement2, Decl(es5-asyncFunctionWhileStatements.ts, 8, 1))
+
+    while (x) { await y; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement3() {
+>whileStatement3 : Symbol(whileStatement3, Decl(es5-asyncFunctionWhileStatements.ts, 12, 1))
+
+    while (x) { continue; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+}
+
+async function whileStatement4() {
+>whileStatement4 : Symbol(whileStatement4, Decl(es5-asyncFunctionWhileStatements.ts, 16, 1))
+
+    while (await x) { continue; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+}
+
+async function whileStatement5() {
+>whileStatement5 : Symbol(whileStatement5, Decl(es5-asyncFunctionWhileStatements.ts, 20, 1))
+
+    while (x) { await y; continue; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement6() {
+>whileStatement6 : Symbol(whileStatement6, Decl(es5-asyncFunctionWhileStatements.ts, 24, 1))
+
+    while (x) { if (1) continue; await y; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement7() {
+>whileStatement7 : Symbol(whileStatement7, Decl(es5-asyncFunctionWhileStatements.ts, 28, 1))
+
+    A: while (x) { continue A; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+}
+
+async function whileStatement8() {
+>whileStatement8 : Symbol(whileStatement8, Decl(es5-asyncFunctionWhileStatements.ts, 32, 1))
+
+    B: while (await x) { continue B; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+}
+
+async function whileStatement9() {
+>whileStatement9 : Symbol(whileStatement9, Decl(es5-asyncFunctionWhileStatements.ts, 36, 1))
+
+    C: while (x) { await y; continue C; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement10() {
+>whileStatement10 : Symbol(whileStatement10, Decl(es5-asyncFunctionWhileStatements.ts, 40, 1))
+
+    D: while (x) { if (1) continue D; await y; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement11() {
+>whileStatement11 : Symbol(whileStatement11, Decl(es5-asyncFunctionWhileStatements.ts, 44, 1))
+
+    while (x) { break; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+}
+
+async function whileStatement12() {
+>whileStatement12 : Symbol(whileStatement12, Decl(es5-asyncFunctionWhileStatements.ts, 48, 1))
+
+    while (await x) { break; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+}
+
+async function whileStatement13() {
+>whileStatement13 : Symbol(whileStatement13, Decl(es5-asyncFunctionWhileStatements.ts, 52, 1))
+
+    while (x) { await y; break; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement14() {
+>whileStatement14 : Symbol(whileStatement14, Decl(es5-asyncFunctionWhileStatements.ts, 56, 1))
+
+    while (x) { if (1) break; await y; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement15() {
+>whileStatement15 : Symbol(whileStatement15, Decl(es5-asyncFunctionWhileStatements.ts, 60, 1))
+
+    E: while (x) { break E; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+}
+
+async function whileStatement16() {
+>whileStatement16 : Symbol(whileStatement16, Decl(es5-asyncFunctionWhileStatements.ts, 64, 1))
+
+    F: while (await x) { break F; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+}
+
+async function whileStatement17() {
+>whileStatement17 : Symbol(whileStatement17, Decl(es5-asyncFunctionWhileStatements.ts, 68, 1))
+
+    G: while (x) { await y; break G; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}
+
+async function whileStatement18() {
+>whileStatement18 : Symbol(whileStatement18, Decl(es5-asyncFunctionWhileStatements.ts, 72, 1))
+
+    H: while (x) { if (1) break H; await y; }
+>x : Symbol(x, Decl(es5-asyncFunctionWhileStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionWhileStatements.ts, 0, 14))
+}

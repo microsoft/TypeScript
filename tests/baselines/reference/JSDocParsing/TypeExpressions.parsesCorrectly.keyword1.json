@@ -1,0 +1,12 @@
+{
+    "kind": "JSDocTypeReference",
+    "pos": 1,
+    "end": 4,
+    "name": {
+        "kind": "Identifier",
+        "pos": 1,
+        "end": 4,
+        "originalKeywordKind": "VarKeyword",
+        "text": "var"
+    }
+}

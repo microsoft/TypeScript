@@ -827,10 +827,6 @@
         "category": "Error",
         "code": 1308
     },
-    "Async functions are only available when targeting ECMAScript 2015 or higher.": {
-        "category": "Error",
-        "code": 1311
-    },
     "'=' can only be used in an object literal property inside a destructuring assignment.": {
         "category": "Error",
         "code": 1312
@@ -1695,7 +1691,7 @@
         "category": "Error",
         "code": 2521
     },
-    "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.": {
+    "The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.": {
         "category": "Error",
         "code": 2522
     },
@@ -2832,6 +2828,10 @@
         "category": "Error",
         "code": 6138
     },
+    "Import emit helpers from 'tslib'.": {
+        "category": "Message",
+        "code": 6139
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2863,11 +2863,7 @@
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
-    },
-    "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
-        "category": "Error",
-        "code": 7016
-    },
+    }, 
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
         "code": 7017
@@ -2923,6 +2919,14 @@
     "Binding element '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7031
+    },
+    "Property '{0}' implicitly has type 'any', because its set accessor lacks a parameter type annotation.": {
+        "category": "Error",
+        "code": 7032
+    },
+    "Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.": {
+        "category": "Error",
+        "code": 7033
     },
     "You cannot rename this element.": {
         "category": "Error",

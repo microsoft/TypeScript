@@ -1,5 +1,5 @@
 "use strict";
-var db_1 = require('./db');
+var db_1 = require("./db");
 function someDecorator(target) {
     return target;
 }
@@ -8,12 +8,12 @@ var MyClass = (function () {
         this.db = db;
         this.db.doSomething();
     }
-    MyClass = __decorate([
-        someDecorator, 
-        __metadata('design:paramtypes', [(typeof (_a = typeof db_1.db !== 'undefined' && db_1.db) === 'function' && _a) || Object])
-    ], MyClass);
     return MyClass;
-    var _a;
 }());
+MyClass = __decorate([
+    someDecorator,
+    __metadata("design:paramtypes", [typeof (_a = typeof db_1.db !== "undefined" && db_1.db) === "function" && _a || Object])
+], MyClass);
 exports.MyClass = MyClass;
+var _a;
 //# sourceMappingURL=file.js.map

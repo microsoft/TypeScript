@@ -48,7 +48,6 @@ module;
         }
         return XDate;
     }());
-    exports.XDate = XDate;
 }
 var d = new XDate();
 d.getDay();
