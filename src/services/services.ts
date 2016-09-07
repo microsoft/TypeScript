@@ -127,7 +127,10 @@ namespace ts {
         }
 
         public getText(sourceFile?: SourceFile): string {
-            return (sourceFile || this.getSourceFile()).text.substring(this.getStart(), this.getEnd());
+            if (!sourceFile) {
+                sourceFile = this.getSourceFile();
+            }
+            return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
         }
 
         private addSyntheticNodes(nodes: Node[], pos: number, end: number, useJSDocScanner?: boolean): number {
@@ -192,8 +195,8 @@ namespace ts {
                     }
                 }
                 // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
-                // For that to work, the jsdoc comments should still be the leading trivia of the first child. 
-                // Restoring the scanner position ensures that. 
+                // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+                // Restoring the scanner position ensures that.
                 pos = this.pos;
                 forEachChild(this, processNode, processNodes);
                 if (pos < this.end) {
