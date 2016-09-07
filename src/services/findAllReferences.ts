@@ -1114,4 +1114,12 @@ namespace ts.FindAllReferences {
     function tryGetClassByExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
         return tryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).parent);
     }
+
+    function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
+        if (node.kind === SyntaxKind.StringLiteral) {
+            return isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node);
+        }
+
+        return false;
+    }
 }

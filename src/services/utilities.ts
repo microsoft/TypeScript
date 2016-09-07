@@ -87,14 +87,6 @@ namespace ts {
         return false;
     }
 
-    export function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
-        if (node.kind === SyntaxKind.StringLiteral) {
-            return isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node);
-        }
-
-        return false;
-    }
-
     export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
         return isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
             getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;

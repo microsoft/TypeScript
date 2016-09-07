@@ -56,6 +56,7 @@
         "outliningElementsCollector.ts",
         "patternMatcher.ts",
         "preProcess.ts",
+        "rename.ts",
         "services.ts",
         "shims.ts",
         "signatureHelp.ts",
