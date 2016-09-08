@@ -2656,10 +2656,10 @@ namespace ts {
                     createLogicalOr(
                         resultingCall,
                         actualThis
-                    )
+                    );
                 return assignToCapturedThis
                     ? createAssignment(createIdentifier("_this"), initializer)
-                    : initializer
+                    : initializer;
             }
             return resultingCall;
         }
