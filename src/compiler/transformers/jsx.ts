@@ -153,7 +153,7 @@ namespace ts {
 
         function visitJsxText(node: JsxText): StringLiteral | undefined {
             const fixed = fixupWhitespaceAndDecodeEntities(getTextOfNode(node, /*includeTrivia*/ true));
-            return fixed !== undefined && createLiteral(fixed);
+            return fixed === undefined ? undefined : createLiteral(fixed);
         }
 
         /**
