@@ -729,7 +729,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
                         sourcemaps: {
                             "built/local/_stream_0.js": originalMap,
                             "built/local/bundle.js": maps,
-                            "node_modules/source-map-support/source-map-support.js": null,
+                            "node_modules/source-map-support/source-map-support.js": undefined,
                         }
                     });
                     const finalMap = chain.apply();
