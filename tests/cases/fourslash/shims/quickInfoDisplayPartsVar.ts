@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @BaselineFile: quickInfoDisplayPartsVar.shims.baseline
+
 ////var /*1*/a = 10;
 ////function foo() {
 ////    var /*2*/b = /*3*/a;
