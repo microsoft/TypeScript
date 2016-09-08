@@ -13,14 +13,6 @@ function isBindingPattern(node: ts.Node): node is ts.BindingPattern {
     return !!node && (node.kind === ts.SyntaxKind.ArrayBindingPattern || node.kind === ts.SyntaxKind.ObjectBindingPattern);
 }
 
-function walkUpBindingElementsAndPatterns(node: ts.Node): ts.Node {
-    while (node && (node.kind === ts.SyntaxKind.BindingElement || isBindingPattern(node))) {
-        node = node.parent;
-    }
-
-    return node;
-}
-
 function isLet(node: ts.Node) {
     return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Let);
 }
