@@ -77,7 +77,7 @@
         "ts-node": "latest",
         "tsd": "latest",
         "tslint": "next",
-        "typescript": "2.1.0-dev.20160906"
+        "typescript": "next"
     },
     "scripts": {
         "pretest": "jake tests",
