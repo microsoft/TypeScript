@@ -9,10 +9,6 @@ export class Rule extends Lint.Rules.AbstractRule {
     }
 }
 
-function isBindingPattern(node: ts.Node): node is ts.BindingPattern {
-    return !!node && (node.kind === ts.SyntaxKind.ArrayBindingPattern || node.kind === ts.SyntaxKind.ObjectBindingPattern);
-}
-
 function isLet(node: ts.Node) {
     return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Let);
 }
