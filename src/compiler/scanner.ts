@@ -27,6 +27,7 @@ namespace ts {
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
+        scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): SyntaxKind;
         scanJsxToken(): SyntaxKind;
         scanJSDocToken(): SyntaxKind;
@@ -817,6 +818,7 @@ namespace ts {
             reScanSlashToken,
             reScanTemplateToken,
             scanJsxIdentifier,
+            scanJsxAttributeValue,
             reScanJsxToken,
             scanJsxToken,
             scanJSDocToken,
@@ -911,7 +913,7 @@ namespace ts {
             return value;
         }
 
-        function scanString(): string {
+        function scanString(allowEscapes = true): string {
             const quote = text.charCodeAt(pos);
             pos++;
             let result = "";
@@ -929,7 +931,7 @@ namespace ts {
                     pos++;
                     break;
                 }
-                if (ch === CharacterCodes.backslash) {
+                if (ch === CharacterCodes.backslash && allowEscapes) {
                     result += text.substring(start, pos);
                     result += scanEscapeSequence();
                     start = pos;
@@ -1735,6 +1737,20 @@ namespace ts {
                 tokenValue += text.substr(firstCharPosition, pos - firstCharPosition);
             }
             return token;
+        }
+
+        function scanJsxAttributeValue(): SyntaxKind {
+            startPos = pos;
+
+            switch (text.charCodeAt(pos)) {
+                case CharacterCodes.doubleQuote:
+                case CharacterCodes.singleQuote:
+                    tokenValue = scanString(/*allowEscapes*/ false);
+                    return token = SyntaxKind.StringLiteral;
+                default:
+                    // If this scans anything other than `{`, it's a parse error.
+                    return scan();
+            }
         }
 
         function scanJSDocToken(): SyntaxKind {

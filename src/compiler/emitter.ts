@@ -2030,7 +2030,7 @@ const _super = (function (geti, seti) {
                 emitTrailingCommentsOfPosition(commentRange.pos);
             }
 
-            emitExpression(node.initializer);
+            emitExpression(initializer);
         }
 
         function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
