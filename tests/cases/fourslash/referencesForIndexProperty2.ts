@@ -6,4 +6,4 @@
 ////a[/**/"blah"];
 
 goTo.marker("");
-verify.referencesAre([]);
+verify.referencesAre(test.ranges());
