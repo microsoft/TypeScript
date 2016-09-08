@@ -6224,7 +6224,9 @@ namespace ts {
                 if (source.flags & (TypeFlags.Number | TypeFlags.NumberLiteral) &&
                     target.flags & TypeFlags.Union &&
                     forEach((target as UnionType).types, t => t.flags & TypeFlags.EnumLike)) return true;
-                if (source.flags & TypeFlags.NumberLiteral && target.flags & TypeFlags.EnumLiteral && (<LiteralType>source).text === (<LiteralType>target).text) return true;
+                if (source.flags & (TypeFlags.NumberLiteral | TypeFlags.EnumLiteral) &&
+                    target.flags & TypeFlags.EnumLiteral &&
+                    (<LiteralType>source).text === (<LiteralType>target).text) return true;
             }
             return false;
         }
