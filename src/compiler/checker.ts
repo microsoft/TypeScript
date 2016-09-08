@@ -6226,13 +6226,15 @@ namespace ts {
             if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
-                if (source.flags & (TypeFlags.Number | TypeFlags.NumberLiteral) && target.flags & TypeFlags.Enum) return true;
-                if (source.flags & (TypeFlags.Number | TypeFlags.NumberLiteral) &&
-                    target.flags & TypeFlags.Union &&
-                    forEach((target as UnionType).types, t => t.flags & TypeFlags.EnumLike)) return true;
-                if (source.flags & (TypeFlags.NumberLiteral | TypeFlags.EnumLiteral) &&
+                if (source.flags & (TypeFlags.Number | TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
+                if (source.flags & TypeFlags.NumberLiteral && target.flags & TypeFlags.EnumLiteral && (<LiteralType>source).text === (<LiteralType>target).text) return true;
+                if (source.flags & TypeFlags.EnumLiteral &&
                     target.flags & TypeFlags.EnumLiteral &&
-                    (<LiteralType>source).text === (<LiteralType>target).text) return true;
+                    (<LiteralType>source).text === (<LiteralType>target).text &&
+                    (<EnumLiteralType>source).baseType.symbol.name === (<EnumLiteralType>target).baseType.symbol.name &&
+                    !isConstEnumSymbol((<EnumLiteralType>source).baseType.symbol) && !isConstEnumSymbol((<EnumLiteralType>target).baseType.symbol)) {
+                    return true;
+                }
             }
             return false;
         }
