@@ -1294,6 +1294,22 @@ namespace FourSlash {
                 });
         }
 
+        public baselineQuickInfo() {
+            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            if (!baselineFile) {
+                baselineFile = ts.getBaseFileName(this.activeFile.fileName).replace(".ts", ".baseline");
+            }
+
+            Harness.Baseline.runBaseline(
+                baselineFile,
+                () => stringify(
+                    this.testData.markers.map(marker => ({
+                        marker,
+                        quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
+                    }))
+                ));
+        }
+
         public printBreakpointLocation(pos: number) {
             Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(pos, this.getBreakpointStatementLocation(pos), "  "));
         }
@@ -3101,6 +3117,10 @@ namespace FourSlashInterface {
 
         public baselineGetEmitOutput() {
             this.state.baselineGetEmitOutput();
+        }
+
+        public baselineQuickInfo() {
+            this.state.baselineQuickInfo();
         }
 
         public nameOrDottedNameSpanTextIs(text: string) {
