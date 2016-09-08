@@ -1,7 +1,6 @@
 tests/cases/compiler/enumAssignmentCompat3.ts(68,1): error TS2322: Type 'Abcd.E' is not assignable to type 'First.E'.
   Property 'd' is missing in type 'First.E'.
-tests/cases/compiler/enumAssignmentCompat3.ts(70,1): error TS2322: Type 'Cd.E' is not assignable to type 'First.E'.
-  Property 'd' is missing in type 'First.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(70,1): error TS2324: Property 'd' is missing in type 'First.E'.
 tests/cases/compiler/enumAssignmentCompat3.ts(71,1): error TS2322: Type 'Nope' is not assignable to type 'E'.
 tests/cases/compiler/enumAssignmentCompat3.ts(75,1): error TS2322: Type 'First.E' is not assignable to type 'Ab.E'.
   Property 'c' is missing in type 'Ab.E'.
@@ -89,8 +88,7 @@ tests/cases/compiler/enumAssignmentCompat3.ts(86,1): error TS2322: Type 'Merged.
     abc = secondAb; // ok
     abc = secondCd; // missing 'd'
     ~~~
-!!! error TS2322: Type 'Cd.E' is not assignable to type 'First.E'.
-!!! error TS2322:   Property 'd' is missing in type 'First.E'.
+!!! error TS2324: Property 'd' is missing in type 'First.E'.
     abc = nope; // nope!
     ~~~
 !!! error TS2322: Type 'Nope' is not assignable to type 'E'.
