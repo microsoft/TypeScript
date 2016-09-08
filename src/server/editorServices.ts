@@ -1566,7 +1566,7 @@ namespace ts.server {
                 this.setCompilerOptions(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
-            this.classifier = ts.createClassifier();
+            this.classifier = ts.Classifier.createClassifier();
         }
 
         setCompilerOptions(opt: ts.CompilerOptions) {

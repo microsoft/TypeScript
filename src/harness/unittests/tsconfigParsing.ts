@@ -151,7 +151,7 @@ namespace ts {
             );
         });
 
-        it("always exclude outDir", () => {
+        it("exclude outDir unless overridden", () => {
             const tsconfigWithoutExclude =
             `{
                 "compilerOptions": {
@@ -169,7 +169,7 @@ namespace ts {
             const allFiles = ["/bin/a.ts", "/b.ts"];
             const expectedFiles = ["/b.ts"];
             assertParseFileList(tsconfigWithoutExclude, "tsconfig.json", rootDir, allFiles, expectedFiles);
-            assertParseFileList(tsconfigWithExclude, "tsconfig.json", rootDir, allFiles, expectedFiles);
+            assertParseFileList(tsconfigWithExclude, "tsconfig.json", rootDir, allFiles, allFiles);
         });
 
         it("implicitly exclude common package folders", () => {
