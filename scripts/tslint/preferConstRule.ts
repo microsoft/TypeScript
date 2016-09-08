@@ -21,32 +21,12 @@ function walkUpBindingElementsAndPatterns(node: ts.Node): ts.Node {
     return node;
 }
 
-function getCombinedNodeFlags(node: ts.Node): ts.NodeFlags {
-    node = walkUpBindingElementsAndPatterns(node);
-
-    let flags = node.flags;
-    if (node.kind === ts.SyntaxKind.VariableDeclaration) {
-        node = node.parent;
-    }
-
-    if (node && node.kind === ts.SyntaxKind.VariableDeclarationList) {
-        flags |= node.flags;
-        node = node.parent;
-    }
-
-    if (node && node.kind === ts.SyntaxKind.VariableStatement) {
-        flags |= node.flags;
-    }
-
-    return flags;
-}
-
 function isLet(node: ts.Node) {
-    return !!(getCombinedNodeFlags(node) & ts.NodeFlags.Let);
+    return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Let);
 }
 
 function isExported(node: ts.Node) {
-    return !!(getCombinedNodeFlags(node) & ts.NodeFlags.Export);
+    return !!(ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export);
 }
 
 function isAssignmentOperator(token: ts.SyntaxKind): boolean {
