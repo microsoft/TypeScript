@@ -1304,7 +1304,7 @@ namespace FourSlash {
                 baselineFile,
                 () => stringify(
                     this.testData.markers.map(marker => ({
-                        marker: marker,
+                        marker,
                         quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
                     }))
                 ));
