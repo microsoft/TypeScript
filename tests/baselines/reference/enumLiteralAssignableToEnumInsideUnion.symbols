@@ -1,0 +1,33 @@
+=== tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts ===
+module X {
+>X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
+
+    export enum Foo {
+>Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 10))
+
+        A, B
+>A : Symbol(Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 1, 21))
+>B : Symbol(Foo.B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 2, 10))
+    }
+}
+module Y {
+>Y : Symbol(Y, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 4, 1))
+
+    export enum Foo {
+>Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 5, 10))
+
+        A, B
+>A : Symbol(Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 6, 21))
+>B : Symbol(Foo.B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 7, 10))
+    }
+}
+const y: X.Foo | boolean = Y.Foo.A;
+>y : Symbol(y, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 5))
+>X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
+>Foo : Symbol(X.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 10))
+>Y.Foo.A : Symbol(Y.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 6, 21))
+>Y.Foo : Symbol(Y.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 5, 10))
+>Y : Symbol(Y, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 4, 1))
+>Foo : Symbol(Y.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 5, 10))
+>A : Symbol(Y.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 6, 21))
+

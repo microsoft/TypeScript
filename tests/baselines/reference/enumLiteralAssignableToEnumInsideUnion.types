@@ -1,0 +1,33 @@
+=== tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts ===
+module X {
+>X : typeof X
+
+    export enum Foo {
+>Foo : Foo
+
+        A, B
+>A : Foo
+>B : Foo
+    }
+}
+module Y {
+>Y : typeof Y
+
+    export enum Foo {
+>Foo : Foo
+
+        A, B
+>A : Foo
+>B : Foo
+    }
+}
+const y: X.Foo | boolean = Y.Foo.A;
+>y : boolean | X.Foo
+>X : any
+>Foo : X.Foo
+>Y.Foo.A : Y.Foo
+>Y.Foo : typeof Y.Foo
+>Y : typeof Y
+>Foo : typeof Y.Foo
+>A : Y.Foo
+
