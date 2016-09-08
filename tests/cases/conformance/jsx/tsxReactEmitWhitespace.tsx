@@ -42,7 +42,7 @@ var p = 0;
 <div>   
    </div>;
 
-// Emit "foo" + ' ' + "bar"
+// Emit "foo bar"
 <div>  
 
    foo

@@ -41,7 +41,7 @@ var p = 0;
 <div>   
    </div>;
 
-// Emit "foo" + ' ' + "bar"
+// Emit "foo bar"
 <div>  
 
    foo
@@ -75,5 +75,5 @@ React.createElement("div", null, "  3  ");
 React.createElement("div", null, "3");
 // Emit no args
 React.createElement("div", null);
-// Emit "foo" + ' ' + "bar"
-React.createElement("div", null, "foo" + " " + "bar");
+// Emit "foo bar"
+React.createElement("div", null, "foo bar");
