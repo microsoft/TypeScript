@@ -232,7 +232,7 @@ namespace Harness.LanguageService {
         }
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
-        getClassifier(): ts.Classifier { return ts.Classifier.createClassifier(); }
+        getClassifier(): ts.Classifier { return ts.createClassifier(); }
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJavaScriptFileExtension(fileName)); }
     }
 
