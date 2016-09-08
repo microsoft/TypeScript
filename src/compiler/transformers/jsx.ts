@@ -140,7 +140,8 @@ namespace ts {
                 return createLiteral(true);
             }
             else if (node.kind === SyntaxKind.StringLiteral) {
-                return node;
+                const decoded = tryDecodeEntities((<StringLiteral>node).text);
+                return decoded ? createLiteral(decoded, /*location*/ node) : node;
             }
             else if (node.kind === SyntaxKind.JsxExpression) {
                 return visitJsxExpression(<JsxExpression>node);
@@ -213,7 +214,7 @@ namespace ts {
          * Replace entities like "&nbsp;", "&#123;", and "&#xDEADBEEF;" with the characters they encode.
          * See https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
          */
-        function decodeEntities(text: string) {
+        function decodeEntities(text: string): string {
             return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
                 if (decimal) {
                     return String.fromCharCode(parseInt(decimal, 10));
@@ -227,6 +228,12 @@ namespace ts {
                     return ch ? String.fromCharCode(ch) : match;
                 }
             });
+        }
+
+        /** Like `decodeEntities` but returns `undefined` if there were no entities to decode. */
+        function tryDecodeEntities(text: string): string | undefined {
+            const decoded = decodeEntities(text);
+            return decoded === text ? undefined : decoded;
         }
 
         function getTagName(node: JsxElement | JsxOpeningLikeElement): Expression {

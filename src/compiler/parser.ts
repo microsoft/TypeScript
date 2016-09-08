@@ -905,6 +905,10 @@ namespace ts {
             return currentToken = scanner.scanJsxToken();
         }
 
+        function scanJsxAttributeValue(): SyntaxKind {
+            return currentToken = scanner.scanJsxAttributeValue();
+        }
+
         function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
@@ -3831,8 +3835,8 @@ namespace ts {
             scanJsxIdentifier();
             const node = <JsxAttribute>createNode(SyntaxKind.JsxAttribute);
             node.name = parseIdentifierName();
-            if (parseOptional(SyntaxKind.EqualsToken)) {
-                switch (token()) {
+            if (token() === SyntaxKind.EqualsToken) {
+                switch (scanJsxAttributeValue()) {
                     case SyntaxKind.StringLiteral:
                         node.initializer = parseLiteralNode();
                         break;
