@@ -1,4 +1,5 @@
 /// <reference path="../../compiler/core.ts" />
+/// <reference path="../../compiler/moduleNameResolver.ts" />
 /// <reference path="../../services/jsTyping.ts"/>
 /// <reference path="../types.d.ts"/>
 
