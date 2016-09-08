@@ -1,4 +1,5 @@
 /// <reference path="utilities.ts"/>
+/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="parser.ts"/>
 
 /* @internal */
