@@ -1,0 +1,12 @@
+=== tests/cases/compiler/commentOnExportEnumDeclaration.ts ===
+/**
+ * comment
+ */
+export enum Color {
+>Color : Color
+
+    r, g, b
+>r : Color
+>g : Color
+>b : Color
+}
