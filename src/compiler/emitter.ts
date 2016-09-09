@@ -554,9 +554,9 @@ const _super = (function (geti, seti) {
 
                 // Binding patterns
                 case SyntaxKind.ObjectBindingPattern:
-                    return emitObjectBindingPattern(<BindingPattern>node);
+                    return emitObjectBindingPattern(<ObjectBindingPattern>node);
                 case SyntaxKind.ArrayBindingPattern:
-                    return emitArrayBindingPattern(<BindingPattern>node);
+                    return emitArrayBindingPattern(<ArrayBindingPattern>node);
                 case SyntaxKind.BindingElement:
                     return emitBindingElement(<BindingElement>node);
 

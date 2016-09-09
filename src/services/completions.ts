@@ -1192,7 +1192,7 @@ namespace ts.Completions {
                     }
                     if (canGetType) {
                         typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
-                        existingMembers = (<BindingPattern>objectLikeContainer).elements;
+                        existingMembers = (<ObjectBindingPattern>objectLikeContainer).elements;
                     }
                 }
                 else {

@@ -4815,9 +4815,9 @@ namespace ts {
 
         // DECLARATIONS
 
-        function parseArrayBindingElement(): BindingElement {
+        function parseArrayBindingElement(): ArrayBindingElement {
             if (token() === SyntaxKind.CommaToken) {
-                return <BindingElement>createNode(SyntaxKind.OmittedExpression);
+                return <OmittedExpression>createNode(SyntaxKind.OmittedExpression);
             }
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
@@ -4842,16 +4842,16 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseObjectBindingPattern(): BindingPattern {
-            const node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
+        function parseObjectBindingPattern(): ObjectBindingPattern {
+            const node = <ObjectBindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             parseExpected(SyntaxKind.OpenBraceToken);
             node.elements = parseDelimitedList(ParsingContext.ObjectBindingElements, parseObjectBindingElement);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
 
-        function parseArrayBindingPattern(): BindingPattern {
-            const node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
+        function parseArrayBindingPattern(): ArrayBindingPattern {
+            const node = <ArrayBindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             parseExpected(SyntaxKind.OpenBracketToken);
             node.elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement);
             parseExpected(SyntaxKind.CloseBracketToken);

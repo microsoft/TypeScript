@@ -3701,6 +3701,12 @@ namespace ts {
         return node.kind === SyntaxKind.BindingElement;
     }
 
+    export function isArrayBindingElement(node: Node): node is ArrayBindingElement {
+        const kind = node.kind;
+        return kind === SyntaxKind.BindingElement
+            || kind === SyntaxKind.OmittedExpression;
+    }
+
     // Expression
 
     export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
@@ -3815,6 +3821,10 @@ namespace ts {
     export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedStatement | PartiallyEmittedExpression {
         return isNotEmittedStatement(node)
             || isPartiallyEmittedExpression(node);
+    }
+
+    export function isOmittedExpression(node: Node): node is OmittedExpression {
+        return node.kind === SyntaxKind.OmittedExpression;
     }
 
     // Misc
