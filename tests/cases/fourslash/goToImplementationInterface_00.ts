@@ -9,6 +9,7 @@
 //// interface Baz extends Foo {}
 ////
 //// var bar: Foo = [|{ hello: helloImpl /**0*/ }|];
+//// var baz: Foo[] = [|[{ hello: helloImpl /**4*/ }]|];
 ////
 //// function helloImpl () {}
 ////

@@ -88,6 +88,10 @@ namespace FourSlash {
         marker?: Marker;
     }
 
+    interface ImplementationLocationInformation extends ts.ImplementationLocation {
+        matched?: boolean;
+    }
+
     export interface TextSpan {
         start: number;
         end: number;
@@ -1693,25 +1697,39 @@ namespace FourSlash {
             assert.equal(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
         }
 
-        public goToImplementation(implIndex: number) {
+        public goToImplementation(implIndex?: number) {
             const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!implementations || !implementations.length) {
                 this.raiseError("goToImplementation failed - expected to at least one implementation location but got 0");
+            }
+
+            if (implIndex === undefined && implementations.length > 1) {
+                this.raiseError(`goToImplementation failed - no index given but more than 1 implementation returned (${implementations.length})`);
             }
 
             if (implIndex >= implementations.length) {
                 this.raiseError(`goToImplementation failed - implIndex value (${implIndex}) exceeds implementation list size (${implementations.length})`);
             }
 
-            const implementation = implementations[implIndex];
+            const implementation = implementations[implIndex || 0];
             this.openFile(implementation.fileName);
             this.currentCaretPosition = implementation.textSpan.start;
         }
 
         public verifyRangesInImplementationList() {
-            const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            const implementations: ImplementationLocationInformation[] = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!implementations || !implementations.length) {
                 this.raiseError("verifyRangesInImplementationList failed - expected to at least one implementation location but got 0");
+            }
+
+            for (let i = 0; i < implementations.length; i++) {
+                for (let j = 0; j < implementations.length; j++) {
+                    if (i !== j && implementationsAreEqual(implementations[i], implementations[j])) {
+                        const { textSpan, fileName } = implementations[i];
+                        const end = textSpan.start + textSpan.length;
+                        this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${end}) in ${fileName}`);
+                    }
+                }
             }
 
             const ranges = this.getRanges();
@@ -1720,18 +1738,46 @@ namespace FourSlash {
                 this.raiseError("verifyRangesInImplementationList failed - expected to at least one range in test source");
             }
 
+            const unsatisfiedRanges: Range[] = [];
+
             for (const range of ranges) {
                 let rangeIsPresent = false;
                 const length = range.end - range.start;
                 for (const impl of implementations) {
                     if (range.fileName === impl.fileName && range.start === impl.textSpan.start && length === impl.textSpan.length) {
+                        impl.matched = true;
                         rangeIsPresent = true;
                         break;
                     }
                 }
-                assert.isTrue(rangeIsPresent, `No implementation found for range ${range.start}, ${range.end} in ${range.fileName}: ${this.rangeText(range)}`);
+                if (!rangeIsPresent) {
+                    unsatisfiedRanges.push(range);
+                }
             }
-            assert.equal(implementations.length, ranges.length, `Different number of implementations (${implementations.length}) and ranges (${ranges.length})`);
+
+            const unmatchedImplementations = implementations.filter(impl => !impl.matched);
+            if (unmatchedImplementations.length || unsatisfiedRanges.length) {
+                let error = "Not all ranges or implementations are satisfied";
+                if (unsatisfiedRanges.length) {
+                    error += "\nUnsatisfied ranges:";
+                    for (const range of unsatisfiedRanges) {
+                        error += `\n    (${range.start}, ${range.end}) in ${range.fileName}: ${this.rangeText(range)}`;
+                    }
+                }
+
+                if (unsatisfiedRanges.length) {
+                    error += "\nUnmatched implementations:";
+                    for (const impl of unmatchedImplementations) {
+                        const end = impl.textSpan.start + impl.textSpan.length;
+                        error += `\n    (${impl.textSpan.start}, ${end}) in ${impl.fileName}: ${this.getFileContent(impl.fileName).slice(impl.textSpan.start, end)}`;
+                    }
+                }
+                this.raiseError(error);
+            }
+
+            function implementationsAreEqual(a: ImplementationLocationInformation, b: ImplementationLocationInformation) {
+                return a.fileName === b.fileName && TestState.textSpansEqual(a.textSpan, b.textSpan);
+            }
         }
 
         public getMarkers(): Marker[] {
@@ -2911,7 +2957,7 @@ namespace FourSlashInterface {
             this.state.goToTypeDefinition(definitionIndex);
         }
 
-        public implementation(implementationIndex = 0) {
+        public implementation(implementationIndex?: number) {
             this.state.goToImplementation(implementationIndex);
         }
 
