@@ -1,5 +1,4 @@
-/* @internal */
-namespace ts.PreProcess {
+namespace ts {
     export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         const referencedFiles: FileReference[] = [];
         const typeReferenceDirectives: FileReference[] = [];

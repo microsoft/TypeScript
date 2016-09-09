@@ -986,7 +986,7 @@ namespace ts {
 
         constructor(factory: ShimFactory, private logger: Logger) {
             super(factory);
-            this.classifier = Classifier.createClassifier();
+            this.classifier = createClassifier();
         }
 
         public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
@@ -1047,7 +1047,7 @@ namespace ts {
                 `getPreProcessedFileInfo('${fileName}')`,
                 () => {
                     // for now treat files as JavaScript
-                    const result = PreProcess.preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                    const result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                     return {
                         referencedFiles: this.convertFileReferences(result.referencedFiles),
                         importedFiles: this.convertFileReferences(result.importedFiles),

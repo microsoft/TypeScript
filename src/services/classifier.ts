@@ -1,5 +1,4 @@
-/* @internal */
-namespace ts.Classifier {
+namespace ts {
     /// Classifier
     export function createClassifier(): Classifier {
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
@@ -462,6 +461,7 @@ namespace ts.Classifier {
         };
     }
 
+    /* @internal */
     export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: Map<string>, span: TextSpan): ClassifiedSpan[] {
         return convertClassifications(getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span));
     }
@@ -486,6 +486,7 @@ namespace ts.Classifier {
         }
     }
 
+    /* @internal */
     export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: Map<string>, span: TextSpan): Classifications {
         const result: number[] = [];
         processNode(sourceFile);
@@ -614,10 +615,12 @@ namespace ts.Classifier {
         return result;
     }
 
+    /* @internal */
     export function getSyntacticClassifications(cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan[] {
         return convertClassifications(getEncodedSyntacticClassifications(cancellationToken, sourceFile, span));
     }
 
+    /* @internal */
     export function getEncodedSyntacticClassifications(cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
         const spanStart = span.start;
         const spanLength = span.length;

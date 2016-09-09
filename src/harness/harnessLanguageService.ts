@@ -232,8 +232,8 @@ namespace Harness.LanguageService {
         }
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
-        getClassifier(): ts.Classifier { return ts.Classifier.createClassifier(); }
-        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.PreProcess.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJavaScriptFileExtension(fileName)); }
+        getClassifier(): ts.Classifier { return ts.createClassifier(); }
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJavaScriptFileExtension(fileName)); }
     }
 
     /// Shim adapter
@@ -258,7 +258,7 @@ namespace Harness.LanguageService {
                 };
                 this.getModuleResolutionsForFile = (fileName) => {
                     const scriptInfo = this.getScriptInfo(fileName);
-                    const preprocessInfo = ts.PreProcess.preProcessFile(scriptInfo.content, /*readImportFiles*/ true);
+                    const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ true);
                     const imports = ts.createMap<string>();
                     for (const module of preprocessInfo.importedFiles) {
                         const resolutionInfo = ts.resolveModuleName(module.fileName, fileName, compilerOptions, moduleResolutionHost);
@@ -271,7 +271,7 @@ namespace Harness.LanguageService {
                 this.getTypeReferenceDirectiveResolutionsForFile = (fileName) => {
                     const scriptInfo = this.getScriptInfo(fileName);
                     if (scriptInfo) {
-                        const preprocessInfo = ts.PreProcess.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
+                        const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
                         const resolutions = ts.createMap<ts.ResolvedTypeReferenceDirective>();
                         const settings = this.nativeHost.getCompilationSettings();
                         for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
