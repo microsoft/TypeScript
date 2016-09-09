@@ -1945,7 +1945,9 @@ namespace ts {
                 }
                 else {
                     for (const element of (<BindingPattern>node).elements) {
-                        visit(element.name);
+                        if (!isOmittedExpression(element)) {
+                            visit(element.name);
+                        }
                     }
                 }
             }
@@ -2289,7 +2291,9 @@ namespace ts {
             const name = decl.name;
             if (isBindingPattern(name)) {
                 for (const element of name.elements) {
-                    processLoopVariableDeclaration(element, loopParameters, loopOutParameters);
+                    if (!isOmittedExpression(element)) {
+                        processLoopVariableDeclaration(element, loopParameters, loopOutParameters);
+                    }
                 }
             }
             else {
