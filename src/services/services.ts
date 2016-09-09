@@ -1918,6 +1918,7 @@ namespace ts {
             getEncodedSemanticClassifications,
             getCompletionsAtPosition,
             getCompletionEntryDetails,
+            getCompletionEntrySymbol,
             getSignatureHelpItems,
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
