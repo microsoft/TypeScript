@@ -126,6 +126,7 @@ var servicesSources = [
     "classifier.ts",
     "completions.ts",
     "documentHighlights.ts",
+    "documentRegistry.ts",
     "findAllReferences.ts",
     "goToDefinition.ts",
     "jsDoc.ts",

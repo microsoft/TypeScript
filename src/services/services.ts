@@ -7,6 +7,7 @@
 /// <reference path='classifier.ts' />
 /// <reference path='completions.ts' />
 /// <reference path='documentHighlights.ts' />
+/// <reference path='documentRegistry.ts' />
 /// <reference path='findAllReferences.ts' />
 /// <reference path='goToDefinition.ts' />
 /// <reference path='jsDoc.ts' />
@@ -668,16 +669,6 @@ namespace ts {
         scriptKind: ScriptKind;
     }
 
-    interface DocumentRegistryEntry {
-        sourceFile: SourceFile;
-
-        // The number of language services that this source file is referenced in.   When no more
-        // language services are referencing the file, then the file can be removed from the
-        // registry.
-        languageServiceRefCount: number;
-        owners: string[];
-    }
-
     export interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
     }
@@ -897,142 +888,6 @@ namespace ts {
 
         // Otherwise, just create a new source file.
         return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, sourceFile.scriptKind);
-    }
-
-    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
-        // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
-        // for those settings.
-        const buckets = createMap<FileMap<DocumentRegistryEntry>>();
-        const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
-
-        function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${JSON.stringify(settings.typeRoots)}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
-        }
-
-        function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
-            let bucket = buckets[key];
-            if (!bucket && createIfMissing) {
-                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
-            }
-            return bucket;
-        }
-
-        function reportStats() {
-            const bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === "_").map(name => {
-                const entries = buckets[name];
-                const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
-                entries.forEachValue((key, entry) => {
-                    sourceFiles.push({
-                        name: key,
-                        refCount: entry.languageServiceRefCount,
-                        references: entry.owners.slice(0)
-                    });
-                });
-                sourceFiles.sort((x, y) => y.refCount - x.refCount);
-                return {
-                    bucket: name,
-                    sourceFiles
-                };
-            });
-            return JSON.stringify(bucketInfoArray, undefined, 2);
-        }
-
-        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            const key = getKeyForCompilationSettings(compilationSettings);
-            return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind);
-        }
-
-        function acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind);
-        }
-
-        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            const key = getKeyForCompilationSettings(compilationSettings);
-            return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind);
-        }
-
-        function updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ false, scriptKind);
-        }
-
-        function acquireOrUpdateDocument(
-            fileName: string,
-            path: Path,
-            compilationSettings: CompilerOptions,
-            key: DocumentRegistryBucketKey,
-            scriptSnapshot: IScriptSnapshot,
-            version: string,
-            acquiring: boolean,
-            scriptKind?: ScriptKind): SourceFile {
-
-            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ true);
-            let entry = bucket.get(path);
-            if (!entry) {
-                Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
-
-                // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false, scriptKind);
-
-                entry = {
-                    sourceFile: sourceFile,
-                    languageServiceRefCount: 0,
-                    owners: []
-                };
-                bucket.set(path, entry);
-            }
-            else {
-                // We have an entry for this file.  However, it may be for a different version of
-                // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
-                // return it as is.
-                if (entry.sourceFile.version !== version) {
-                    entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
-                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
-                }
-            }
-
-            // If we're acquiring, then this is the first time this LS is asking for this document.
-            // Increase our ref count so we know there's another LS using the document.  If we're
-            // not acquiring, then that means the LS is 'updating' the file instead, and that means
-            // it has already acquired the document previously.  As such, we do not need to increase
-            // the ref count.
-            if (acquiring) {
-                entry.languageServiceRefCount++;
-            }
-
-            return entry.sourceFile;
-        }
-
-        function releaseDocument(fileName: string, compilationSettings: CompilerOptions): void {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            const key = getKeyForCompilationSettings(compilationSettings);
-            return releaseDocumentWithKey(path, key);
-        }
-
-        function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void {
-            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/false);
-            Debug.assert(bucket !== undefined);
-
-            const entry = bucket.get(path);
-            entry.languageServiceRefCount--;
-
-            Debug.assert(entry.languageServiceRefCount >= 0);
-            if (entry.languageServiceRefCount === 0) {
-                bucket.remove(path);
-            }
-        }
-
-        return {
-            acquireDocument,
-            acquireDocumentWithKey,
-            updateDocument,
-            updateDocumentWithKey,
-            releaseDocument,
-            releaseDocumentWithKey,
-            reportStats,
-            getKeyForCompilationSettings
-        };
     }
 
     class CancellationTokenObject implements CancellationToken {
