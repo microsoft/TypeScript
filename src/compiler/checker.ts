@@ -2066,6 +2066,7 @@ namespace ts {
                 // up front (for example, during checking) could determine if we need to emit the imports
                 // and we could then access that data during declaration emit.
                 writer.trackSymbol(symbol, enclosingDeclaration, meaning);
+                /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
                 function walkSymbol(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): void {
                     const accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning, !!(flags & SymbolFormatFlags.UseOnlyExternalAliasing));
 
