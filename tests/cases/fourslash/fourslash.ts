@@ -130,7 +130,6 @@ declare namespace FourSlashInterface {
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
-        quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
         quickInfoExists(): void;
         typeDefinitionCountIs(expectedCount: number): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
@@ -233,6 +232,16 @@ declare namespace FourSlashInterface {
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string): void;
         renameInfoFailed(message?: string): void;
         renameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]): void;
+
+        /** Verify the quick info available at the current marker. */
+        quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
+        /** Goto a marker and call `quickInfoIs`. */
+        quickInfoAt(markerName: string, expectedText?: string, expectedDocumentation?: string): void;
+        /**
+         * Call `quickInfoAt` for each pair in the object.
+         * (If the value is an array, it is [expectedText, expectedDocumentation].)
+         */
+        quickInfos(namesAndTexts: { [name: string]: string | [string, string] }): void;
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;

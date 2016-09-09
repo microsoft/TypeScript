@@ -2,5 +2,4 @@
 
 ////const /**/c = 0 ;
 
-goTo.marker();
-verify.quickInfoIs("const c: 0");
+verify.quickInfoAt("", "const c: 0");

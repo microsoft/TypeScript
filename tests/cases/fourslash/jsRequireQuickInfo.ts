@@ -7,5 +7,4 @@
 // @Filename: b.js
 ////exports.x = 0;
 
-goTo.marker();
-verify.quickInfoIs('const x: typeof "/tests/cases/fourslash/b"');
+verify.quickInfoAt("",'const x: typeof "/tests/cases/fourslash/b"');
