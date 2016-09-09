@@ -62,13 +62,13 @@ foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true });
 >1 : number
 >y : string
 >'' : string
->{ x: 2, y: '', z: true } : { x: number; y: string; z: boolean; }
+>{ x: 2, y: '', z: true } : { x: number; y: string; z: true; }
 >x : number
 >2 : number
 >y : string
 >'' : string
->z : boolean
->true : boolean
+>z : true
+>true : true
 
 foo(a, b, c);
 >foo(a, b, c) : C
@@ -82,13 +82,13 @@ foo(a, b, { foo: 1, bar: '', hm: true });
 >foo : <T, U, V>(x: T, y: U, z: V) => V
 >a : A
 >b : B
->{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: boolean; }
+>{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: true; }
 >foo : number
 >1 : number
 >bar : string
 >'' : string
->hm : boolean
->true : boolean
+>hm : true
+>true : true
 
 foo((x: number, y) => { }, (x) => { }, () => { });
 >foo((x: number, y) => { }, (x) => { }, () => { }) : () => void

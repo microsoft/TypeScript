@@ -3,7 +3,7 @@
 async function test(isError: boolean = false) {
 >test : (isError?: boolean) => Promise<void>
 >isError : boolean
->false : boolean
+>false : false
 
     if (isError === true) {
 >isError === true : boolean

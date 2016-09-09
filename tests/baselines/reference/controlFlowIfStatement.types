@@ -12,12 +12,12 @@ x = /a/;
 >/a/ : RegExp
 
 if (x /* RegExp */, (x = true)) {
->x /* RegExp */, (x = true) : boolean
+>x /* RegExp */, (x = true) : true
 >x : RegExp
->(x = true) : boolean
->x = true : boolean
+>(x = true) : true
+>x = true : true
 >x : string | number | boolean | RegExp
->true : boolean
+>true : true
 
     x; // boolean
 >x : true
@@ -29,7 +29,7 @@ if (x /* RegExp */, (x = true)) {
 }
 else {
     x; // boolean
->x : boolean
+>x : true
 
     x = 42;
 >x = 42 : number

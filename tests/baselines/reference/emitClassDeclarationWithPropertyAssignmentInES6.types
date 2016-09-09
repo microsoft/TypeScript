@@ -33,7 +33,7 @@ class E extends D{
 
     z: boolean = true;
 >z : boolean
->true : boolean
+>true : true
 }
 
 class F extends D{
@@ -42,7 +42,7 @@ class F extends D{
 
     z: boolean = true;
 >z : boolean
->true : boolean
+>true : true
 
     j: string;
 >j : string

@@ -58,7 +58,7 @@ function getFalsyPrimitive(x: PrimitiveName): number | string | boolean {
 >"boolean" : "boolean"
 
         return false;
->false : boolean
+>false : false
     }
 
     // Should be unreachable.

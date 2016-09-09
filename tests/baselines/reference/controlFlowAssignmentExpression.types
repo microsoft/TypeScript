@@ -21,9 +21,9 @@ x; // number
 >x : number
 
 x = true;
->x = true : boolean
+>x = true : true
 >x : string | number | boolean
->true : boolean
+>true : true
 
 (x = "", obj).foo = (x = x.length);
 >(x = "", obj).foo = (x = x.length) : number
