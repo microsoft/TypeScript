@@ -22,6 +22,10 @@ var jquery_1 = require("jquery");
 exports.x = jquery_1.x;
 //// [reExportAll.js]
 "use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+__export(require("jquery"));
 //// [reExportUser.js]
 "use strict";
 var reExportX_1 = require("./reExportX");
