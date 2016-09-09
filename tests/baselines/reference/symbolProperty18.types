@@ -40,11 +40,11 @@ var str = i[Symbol.toStringTag]();
 >toStringTag : symbol
 
 i[Symbol.toPrimitive] = false;
->i[Symbol.toPrimitive] = false : boolean
+>i[Symbol.toPrimitive] = false : false
 >i[Symbol.toPrimitive] : boolean
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
->false : boolean
+>false : false
 

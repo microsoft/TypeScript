@@ -10,24 +10,24 @@ import * as a from "a";
 
 
 //// [a.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var a;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             a = 10;
         }
-    }
+    };
 });
 //// [b.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
         }
-    }
+    };
 });

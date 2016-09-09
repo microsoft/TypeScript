@@ -56,8 +56,6 @@ var x = (_a = {
         enumerable: true,
         configurable: true
     }),
-    ,
     _a.p2 = 20,
-    _a
-);
+    _a);
 var _a;

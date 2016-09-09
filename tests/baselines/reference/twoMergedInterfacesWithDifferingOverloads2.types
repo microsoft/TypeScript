@@ -83,13 +83,13 @@ module G {
 >r2 : boolean
 >a(true) : boolean
 >a : A<boolean>
->true : boolean
+>true : true
 
     var r3 = a(true, 2);
 >r3 : boolean
 >a(true, 2) : boolean
 >a : A<boolean>
->true : boolean
+>true : true
 >2 : number
 
     var r4 = a(1, true);
@@ -97,5 +97,5 @@ module G {
 >a(1, true) : number
 >a : A<boolean>
 >1 : number
->true : boolean
+>true : true
 }

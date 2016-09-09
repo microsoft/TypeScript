@@ -473,7 +473,6 @@ class ProjectRunner extends RunnerBase {
                         }
                     });
 
-
                     it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
                             const errs: Error[] = [];
@@ -500,18 +499,16 @@ class ProjectRunner extends RunnerBase {
                         }
                     });
 
-
-                    it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
-                        if (compilerResult.sourceMapData) {
-                            Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
-                                return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
-                                    ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
-                            });
-                        }
-                    });
+                    // it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
+                    //     if (compilerResult.sourceMapData) {
+                    //         Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
+                    //             return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
+                    //                 ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
+                    //         });
+                    //     }
+                    // });
 
                     // Verify that all the generated .d.ts files compile
-
                     it("Errors in generated Dts files for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (!compilerResult.errors.length && testCase.declaration) {
                             const dTsCompileResult = compileCompileDTsFiles(compilerResult);

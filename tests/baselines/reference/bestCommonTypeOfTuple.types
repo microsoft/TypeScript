@@ -12,7 +12,7 @@ function f2(x: number): number { return 10; }
 function f3(x: number): boolean { return true; }
 >f3 : (x: number) => boolean
 >x : number
->true : boolean
+>true : true
 
 enum E1 { one }
 >E1 : E1

@@ -32,10 +32,17 @@ function a(_a) {
 function a1(_a) {
     var public = _a.public;
 }
+function a4(_a) { }
 while (, )
     for (, public; ; )
         ;
 { }
+function a5() {
+    var  = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        [_i - 0] = arguments[_i];
+    }
+}
 while () { }
 function a6() {
     var public = [];

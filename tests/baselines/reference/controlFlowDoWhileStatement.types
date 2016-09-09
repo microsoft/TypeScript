@@ -155,9 +155,9 @@ function f() {
 >cond : boolean
 
             x = true;
->x = true : boolean
+>x = true : true
 >x : string | number | boolean | Function | RegExp
->true : boolean
+>true : true
 
             continue;
         }
@@ -170,7 +170,7 @@ function f() {
 >cond : boolean
 
     x; // number | boolean | RegExp
->x : number | boolean | RegExp
+>x : number | true | RegExp
 }
 function g() {
 >g : () => void
@@ -200,9 +200,9 @@ function g() {
 >cond : boolean
 
             x = true;
->x = true : boolean
+>x = true : true
 >x : string | number | boolean | Function | RegExp
->true : boolean
+>true : true
 
             continue;
         }

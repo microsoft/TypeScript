@@ -198,22 +198,12 @@ namespace ts {
 
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories[path] || (this.watchedDirectories[path] = []);
-            callbacks.push({ cb: callback, recursive });
+            const cbWithRecursive = { cb: callback, recursive };
+            multiMapAdd(this.watchedDirectories, path, cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
-                close: () => {
-                    for (let i = 0; i < callbacks.length; i++) {
-                        if (callbacks[i].cb === callback) {
-                            callbacks.splice(i, 1);
-                            break;
-                        }
-                    }
-                    if (!callbacks.length) {
-                        delete this.watchedDirectories[path];
-                    }
-                }
+                close: () => multiMapRemove(this.watchedDirectories, path, cbWithRecursive)
             };
         }
 
@@ -239,17 +229,8 @@ namespace ts {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles[path] || (this.watchedFiles[path] = []);
-            callbacks.push(callback);
-            return {
-                close: () => {
-                    const i = callbacks.indexOf(callback);
-                    callbacks.splice(i, 1);
-                    if (!callbacks.length) {
-                        delete this.watchedFiles[path];
-                    }
-                }
-            };
+            multiMapAdd(this.watchedFiles, path, callback);
+            return { close: () => multiMapRemove(this.watchedFiles, path, callback) };
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
@@ -259,7 +240,7 @@ namespace ts {
         };
         readonly clearTimeout = (timeoutId: any): void => {
             if (typeof timeoutId === "number") {
-                this.callbackQueue.splice(timeoutId, 1);
+                orderedRemoveItemAt(this.callbackQueue, timeoutId);
             }
         };
 
@@ -282,6 +263,8 @@ namespace ts {
         readonly write = (s: string) => notImplemented();
         readonly createDirectory = (s: string) => notImplemented();
         readonly exit = () => notImplemented();
+        readonly getEnvironmentVariable = (s: string) => notImplemented();
+        readonly tryEnableSourceMapsForHost = () => notImplemented();
     }
 
     describe("tsserver-project-system", () => {

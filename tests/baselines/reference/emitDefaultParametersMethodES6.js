@@ -18,18 +18,15 @@ class E {
 
 //// [emitDefaultParametersMethodES6.js]
 class C {
-    constructor(t, z, x, y = "hello") {
-    }
+    constructor(t, z, x, y = "hello") { }
     foo(x, t = false) { }
     foo1(x, t = false, ...rest) { }
     bar(t = false) { }
     boo(t = false, ...rest) { }
 }
 class D {
-    constructor(y = "hello") {
-    }
+    constructor(y = "hello") { }
 }
 class E {
-    constructor(y = "hello", ...rest) {
-    }
+    constructor(y = "hello", ...rest) { }
 }

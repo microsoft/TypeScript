@@ -64,7 +64,20 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "factory.ts",
+    "visitor.ts",
+    "transformers/destructuring.ts",
+    "transformers/ts.ts",
+    "transformers/module/es6.ts",
+    "transformers/module/system.ts",
+    "transformers/module/module.ts",
+    "transformers/jsx.ts",
+    "transformers/es7.ts",
+    "transformers/generators.ts",
+    "transformers/es6.ts",
+    "transformer.ts",
     "sourcemap.ts",
+    "comments.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -85,7 +98,20 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "factory.ts",
+    "visitor.ts",
+    "transformers/destructuring.ts",
+    "transformers/ts.ts",
+    "transformers/module/es6.ts",
+    "transformers/module/system.ts",
+    "transformers/module/module.ts",
+    "transformers/jsx.ts",
+    "transformers/es7.ts",
+    "transformers/generators.ts",
+    "transformers/es6.ts",
+    "transformer.ts",
     "sourcemap.ts",
+    "comments.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -94,15 +120,27 @@ var servicesSources = [
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
+    "types.ts",
+    "utilities.ts",
     "breakpoints.ts",
+    "classifier.ts",
+    "completions.ts",
+    "documentHighlights.ts",
+    "findAllReferences.ts",
+    "goToDefinition.ts",
+    "jsDoc.ts",
+    "jsTyping.ts",
     "navigateTo.ts",
     "navigationBar.ts",
     "outliningElementsCollector.ts",
     "patternMatcher.ts",
+    "preProcess.ts",
+    "rename.ts",
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",
-    "utilities.ts",
+    "symbolDisplay.ts",
+    "transpile.ts",
     "formatting/formatting.ts",
     "formatting/formattingContext.ts",
     "formatting/formattingRequestKind.ts",
@@ -307,7 +345,10 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param callback: a function to execute after the compilation process ends
     */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
-    file(outFile, prereqs, function () {
+    file(outFile, prereqs, function() {
+        if (process.env.USE_TRANSFORMS === "false") {
+            useBuiltCompiler = false;
+        }
         var startCompileTime = mark();
         opts = opts || {};
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
@@ -745,8 +786,14 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount) {
-    var testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit) {
+    var testConfigContents = JSON.stringify({ 
+        test: tests ? [tests] : undefined,
+        light: light,
+        workerCount: workerCount,
+        taskConfigsFolder: taskConfigsFolder,
+        stackTraceLimit: stackTraceLimit
+    });
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -757,10 +804,15 @@ function deleteTemporaryProjectOutput() {
 }
 
 function runConsoleTests(defaultReporter, runInParallel) {
-    cleanTestDirs();
+    var dirty = process.env.dirty;
+    if (!dirty) {
+        cleanTestDirs();
+    }
+
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
+    var stackTraceLimit = process.env.stackTraceLimit;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
@@ -780,7 +832,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     if (tests || light || taskConfigsFolder) {
-        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount);
+        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -849,7 +901,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
         }
     }
     function runLinter() {
-        if (!lintFlag) {
+        if (!lintFlag || dirty) {
             return;
         }
         var lint = jake.Task['lint'];
@@ -866,8 +918,8 @@ task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], functio
     runConsoleTests('min', /*runInParallel*/ true);
 }, { async: true });
 
-desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true bail=false.");
-task("runtests", ["build-rules", "tests", builtLocalDirectory], function () {
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true bail=false dirty=false.");
+task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
 }, { async: true });
 
@@ -884,8 +936,8 @@ var nodeServerInFile = "tests/webTestServer.ts";
 compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true });
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
-task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function () {
-    var cmd = 'browserify built/local/run.js -d -o built/local/bundle.js';
+task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
+    var cmd = 'browserify built/local/run.js -t ./scripts/browserify-optional -d -o built/local/bundle.js';
     exec(cmd);
 }, { async: true });
 
@@ -951,15 +1003,18 @@ function acceptBaseline(containerFolder) {
     var deleteEnding = '.delete';
     for (var i in files) {
         var filename = files[i];
-        if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
-            filename = filename.substr(0, filename.length - deleteEnding.length);
-            fs.unlinkSync(path.join(targetFolder, filename));
-        } else {
-            var target = path.join(targetFolder, filename);
-            if (fs.existsSync(target)) {
-                fs.unlinkSync(target);
+        var fullLocalPath = path.join(sourceFolder, filename);
+        if (fs.statSync(fullLocalPath).isFile()) {
+            if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
+                filename = filename.substr(0, filename.length - deleteEnding.length);
+                fs.unlinkSync(path.join(targetFolder, filename));
+            } else {
+                var target = path.join(targetFolder, filename);
+                if (fs.existsSync(target)) {
+                    fs.unlinkSync(target);
+                }
+                fs.renameSync(path.join(sourceFolder, filename), target);
             }
-            fs.renameSync(path.join(sourceFolder, filename), target);
         }
     }
 }

@@ -97,9 +97,9 @@ true, 1;
 
 BOOLEAN = false, 1;
 >BOOLEAN = false, 1 : number
->BOOLEAN = false : boolean
+>BOOLEAN = false : false
 >BOOLEAN : boolean
->false : boolean
+>false : false
 >1 : number
 
 "", NUMBER = 1;
@@ -146,9 +146,9 @@ var resultIsNumber9 = (BOOLEAN = false, 1);
 >resultIsNumber9 : number
 >(BOOLEAN = false, 1) : number
 >BOOLEAN = false, 1 : number
->BOOLEAN = false : boolean
+>BOOLEAN = false : false
 >BOOLEAN : boolean
->false : boolean
+>false : false
 >1 : number
 
 var resultIsNumber10 = ("", NUMBER = 1);

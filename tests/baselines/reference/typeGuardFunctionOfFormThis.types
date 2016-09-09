@@ -259,13 +259,13 @@ if (crate.isSundries()) {
 >isSundries : () => this is Crate<Sundries>
 
     crate.contents.broken = true;
->crate.contents.broken = true : boolean
+>crate.contents.broken = true : true
 >crate.contents.broken : boolean
 >crate.contents : Sundries
 >crate : Crate<Sundries>
 >contents : Sundries
 >broken : boolean
->true : boolean
+>true : true
 }
 else if (crate.isSupplies()) {
 >crate.isSupplies() : boolean
@@ -274,13 +274,13 @@ else if (crate.isSupplies()) {
 >isSupplies : () => this is Crate<Supplies>
 
     crate.contents.spoiled = true;
->crate.contents.spoiled = true : boolean
+>crate.contents.spoiled = true : true
 >crate.contents.spoiled : boolean
 >crate.contents : Supplies
 >crate : Crate<Supplies>
 >contents : Supplies
 >spoiled : boolean
->true : boolean
+>true : true
 }
 
 // Matching guards should be assignable

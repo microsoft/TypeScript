@@ -32,7 +32,7 @@ define(["require", "exports"], function (require, exports) {
     exports.MyClass = MyClass;
 });
 //// [file2.js]
-define(["require", "exports", 'react', './file1'], function (require, exports, React, file1_1) {
+define(["require", "exports", "react", "./file1"], function (require, exports, React, file1_1) {
     "use strict";
     React.createElement(file1_1.MyClass, null);
 });

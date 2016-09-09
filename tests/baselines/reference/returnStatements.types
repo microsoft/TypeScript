@@ -17,7 +17,7 @@ function fn4(): void { return; }
 
 function fn5(): boolean { return true; }
 >fn5 : () => boolean
->true : boolean
+>true : true
 
 function fn6(): Date { return new Date(12); }
 >fn6 : () => Date
