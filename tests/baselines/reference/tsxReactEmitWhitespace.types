@@ -111,3 +111,12 @@ world
 </div>;
 >div : any
 
+// Emit "  a b  c d  "
+<div>  a
+><div>  a    b  c    d  </div> : JSX.Element
+>div : any
+
+    b  c
+    d  </div>;
+>div : any
+

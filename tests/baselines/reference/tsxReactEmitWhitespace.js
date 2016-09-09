@@ -58,6 +58,11 @@ var p = 0;
 world
 </div>;
 
+// Emit "  a b  c d  "
+<div>  a
+    b  c
+    d  </div>;
+
 
 //// [file.js]
 // THIS FILE HAS TEST-SIGNIFICANT LEADING/TRAILING
@@ -86,3 +91,5 @@ React.createElement("div", null);
 React.createElement("div", null, "foo bar");
 // Emit "hello\\ world"
 React.createElement("div", null, "hello\\ world");
+// Emit "  a b  c d  "
+React.createElement("div", null, "  a b  c d  ");

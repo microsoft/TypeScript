@@ -58,3 +58,8 @@ var p = 0;
 
 world
 </div>;
+
+// Emit "  a b  c d  "
+<div>  a
+    b  c
+    d  </div>;

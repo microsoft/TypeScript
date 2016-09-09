@@ -162,23 +162,39 @@ namespace ts {
          * on the same line as the closing tag. See examples in
          * tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx
          * See also https://www.w3.org/TR/html4/struct/text.html#h-9.1 and https://www.w3.org/TR/CSS2/text.html#white-space-model
+         *
+         * An equivalent algorithm would be:
+         * - If there is only one line, return it.
+         * - If there is only whitespace (but multiple lines), return `undefined`.
+         * - Split the text into lines.
+         * - 'trimRight' the first line, 'trimLeft' the last line, 'trim' middle lines.
+         * - Decode entities on each line (individually).
+         * - Remove empty lines and join the rest with " ".
          */
         function fixupWhitespaceAndDecodeEntities(text: string): string | undefined {
             let acc: string | undefined;
+            // First non-whitespace character on this line.
             let firstNonWhitespace = 0;
+            // Last non-whitespace character on this line.
             let lastNonWhitespace = -1;
+            // These initial values are special because the first line is:
+            // firstNonWhitespace = 0 to indicate that we want leading whitsepace,
+            // but lastNonWhitespace = -1 as a special flag to indicate that we *don't* include the line if it's all whitespace.
 
             for (let i = 0; i < text.length; i++) {
                 const c = text.charCodeAt(i);
                 if (isLineBreak(c)) {
-                    if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
-                        const part = decodeEntities(text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
-                        acc = acc === undefined ? part : acc + " " + part;
+                    // If we've seen any non-whitespace characters on this line, add the 'trim' of the line.
+                    // (lastNonWhitespace === -1 is a special flag to detect whether the first line is all whitespace.)
+                    if (firstNonWhitespace !== -1 && lastNonWhitespace !== -1) {
+                        acc = addLineOfJsxText(acc, text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
                     }
 
+                    // Reset firstNonWhitespace for the next line.
+                    // Don't bother to reset lastNonWhitespace because we ignore it if firstNonWhitespace = -1.
                     firstNonWhitespace = -1;
                 }
-                else if (!isWhiteSpace(c)) {
+                else if (!isWhiteSpaceSingleLine(c)) {
                     lastNonWhitespace = i;
                     if (firstNonWhitespace === -1) {
                         firstNonWhitespace = i;
@@ -186,13 +202,18 @@ namespace ts {
                 }
             }
 
-            if (firstNonWhitespace !== -1) {
-                const lastPart = decodeEntities(text.substr(firstNonWhitespace));
-                return acc ? acc + lastPart : lastPart;
-            }
-            else {
-                return acc;
-            }
+            return firstNonWhitespace !== -1
+                // Last line had a non-whitespace character. Emit the 'trimLeft', meaning keep trailing whitespace.
+                ? addLineOfJsxText(acc, text.substr(firstNonWhitespace))
+                // Last line was all whitespace, so ignore it
+                : acc;
+        }
+
+        function addLineOfJsxText(acc: string | undefined, trimmedLine: string): string {
+            // We do not escape the string here as that is handled by the printer
+            // when it emits the literal. We do, however, need to decode JSX entities.
+            const decoded = decodeEntities(trimmedLine);
+            return acc === undefined ? decoded : acc + " " + decoded;
         }
 
         /**
