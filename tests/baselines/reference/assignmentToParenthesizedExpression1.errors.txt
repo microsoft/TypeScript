@@ -1,8 +1,11 @@
 tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,2): error TS2693: Left operand of comma operator may not be a side-effect free expression.
 
 
-==== tests/cases/compiler/assignmentToParenthesizedExpression1.ts (1 errors) ====
+==== tests/cases/compiler/assignmentToParenthesizedExpression1.ts (2 errors) ====
     var x;
     (1, x)=0;
     ~~~~~~
 !!! error TS2364: Invalid left-hand side of assignment expression.
+     ~
+!!! error TS2693: Left operand of comma operator may not be a side-effect free expression.

@@ -13209,6 +13209,82 @@ namespace ts {
             return sourceType;
         }
 
+        function isSideEffectFree(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    return true;
+
+                case SyntaxKind.BinaryExpression:
+                    if (isAssignmentOperator((node as BinaryExpression).operatorToken.kind)) {
+                        return false;
+                    }
+                    return isSideEffectFree((node as BinaryExpression).left) &&
+                            isSideEffectFree((node as BinaryExpression).right);
+
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                    switch ((node as PrefixUnaryExpression).operator) {
+                        case SyntaxKind.ExclamationToken:
+                        case SyntaxKind.PlusToken:
+                        case SyntaxKind.MinusToken:
+                        case SyntaxKind.TildeToken:
+                            return isSideEffectFree((node as PrefixUnaryExpression).operand);
+                    }
+                    return false;
+
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.NonNullExpression:
+                    // All the nodes which just have a .expression we should check
+                    return isSideEffectFree((node as ParenthesizedExpression).expression);
+
+                case SyntaxKind.ConditionalExpression:
+                    return isSideEffectFree((node as ConditionalExpression).condition) &&
+                        isSideEffectFree((node as ConditionalExpression).whenTrue) &&
+                        isSideEffectFree((node as ConditionalExpression).whenFalse);
+                
+                case SyntaxKind.ObjectLiteralExpression:
+                    // Note: negated forEach condition since we want to bail early to 'true',
+                    // in other words the callback is computing "Could have side effects?"
+                    return !forEach((node as ObjectLiteralExpression).properties, prop => {
+                        if (isComputedPropertyName(prop.name) && !isSideEffectFree((prop.name as ComputedPropertyName).expression)) {
+                            return true;
+                        }
+
+                        switch (prop.kind) {
+                            case SyntaxKind.ShorthandPropertyAssignment:
+                            case SyntaxKind.MethodDeclaration:
+                                return false;
+                            case SyntaxKind.PropertyAssignment:
+                                return !isSideEffectFree((prop as PropertyAssignment).initializer);
+                            default:
+                                Debug.fail('Unhandled object literal property kind ' + prop.kind); 
+                        }
+                    });
+
+                case SyntaxKind.ArrayLiteralExpression:
+                    // See previous comment about negated callback values 
+                    return !forEach((node as ArrayLiteralExpression).elements, elem => !isSideEffectFree(elem));
+
+                case SyntaxKind.VoidExpression:
+                    // Explicit opt-out case (listed here to avoid accidental duplication above): 'void x'
+                default:
+                    return false;
+            }
+        }
+
         function isTypeEqualityComparableTo(source: Type, target: Type) {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
@@ -13370,6 +13446,9 @@ namespace ts {
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
+                    if (isSideEffectFree(left) && !compilerOptions.allowUnreachableCode) {
+                        error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
+                    }
                     return rightType;
             }
 
