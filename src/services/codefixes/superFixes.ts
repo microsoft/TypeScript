@@ -10,7 +10,10 @@ namespace ts.codefix {
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const token = getTokenAtPosition(sourceFile, context.span.start);
-            Debug.assert(token.kind === SyntaxKind.ConstructorKeyword, "Failed to find the constructor.");
+
+            if (token.kind !== SyntaxKind.ConstructorKeyword) {
+                return undefined;
+            }
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>token.parent, sourceFile);
             return [{
@@ -26,14 +29,18 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
 
             const token = getTokenAtPosition(sourceFile, context.span.start);
-            const constructor = getContainingFunction(token);
-            Debug.assert(constructor.kind === SyntaxKind.Constructor, "Failed to find the constructor.");
+            if (token.kind !== SyntaxKind.ConstructorKeyword) {
+                return undefined;
+            }
 
+            const constructor = getContainingFunction(token);
             const superCall = findSuperCall((<ConstructorDeclaration>constructor).body);
-            Debug.assert(!!superCall, "Failed to find super call.");
+            if (!superCall) {
+                return undefined;
+            }
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>constructor, sourceFile);
-            const changes =  [{
+            const changes = [{
                 fileName: sourceFile.fileName, textChanges: [{
                     newText: superCall.getText(sourceFile),
                     span: { start: newPosition, length: 0 }
