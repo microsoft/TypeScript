@@ -1206,6 +1206,11 @@ namespace ts {
             return Completions.getCompletionEntryDetails(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName);
         }
 
+        function getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
+            synchronizeHostData();
+            return Completions.getCompletionEntrySymbol(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName);
+        }
+
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
 
@@ -1768,6 +1773,7 @@ namespace ts {
             getEncodedSemanticClassifications,
             getCompletionsAtPosition,
             getCompletionEntryDetails,
+            getCompletionEntrySymbol,
             getSignatureHelpItems,
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
