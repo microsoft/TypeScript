@@ -757,7 +757,7 @@ namespace ts {
 
             case SyntaxKind.ArrayBindingPattern:
                 return updateArrayBindingPattern(<ArrayBindingPattern>node,
-                    visitNodes((<ArrayBindingPattern>node).elements, visitor, isBindingElement));
+                    visitNodes((<ArrayBindingPattern>node).elements, visitor, isArrayBindingElement));
 
             case SyntaxKind.BindingElement:
                 return updateBindingElement(<BindingElement>node,

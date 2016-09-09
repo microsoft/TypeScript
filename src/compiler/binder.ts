@@ -1150,8 +1150,8 @@ namespace ts {
             currentFlow = finishFlowLabel(postExpressionLabel);
         }
 
-        function bindInitializedVariableFlow(node: VariableDeclaration | BindingElement) {
-            const name = node.name;
+        function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {
+            const name = !isOmittedExpression(node) ? node.name : undefined;
             if (isBindingPattern(name)) {
                 for (const child of name.elements) {
                     bindInitializedVariableFlow(child);
