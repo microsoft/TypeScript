@@ -13,7 +13,7 @@
 //// let x1: Foo            = [|{ hello ()          { /**typeReference*/ } }|];
 //// let x2: () => Foo      = [|(() => { hello ()   { /**functionType*/} })|];
 //// let x3: Foo | Bar      = [|{ hello ()          { /**unionType*/} }|];
-//// let x4: Foo & Bar      = [|{ hello ()          { /**intersectionType*/} }|];
+//// let x4: Foo & (Foo & Bar)      = [|{ hello ()          { /**intersectionType*/} }|];
 //// let x5: [Foo]          = [|[{ hello ()         { /**tupleType*/} }]|];
 //// let x6: (Foo)          = [|{ hello ()          { /**parenthesizedType*/} }|];
 //// let x7: (new() => Foo) = [|class { hello ()    { /**constructorType*/} }|];

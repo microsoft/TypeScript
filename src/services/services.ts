@@ -6408,18 +6408,29 @@ namespace ts {
                     if (containingTypeReference) {
                         const parent = containingTypeReference.parent;
                         if (isVariableLike(parent) && parent.type === containingTypeReference && parent.initializer && isImplementationExpression(parent.initializer)) {
-                            result.push(getReferenceEntryFromNode(parent.initializer));
+                            maybeAdd(getReferenceEntryFromNode(parent.initializer));
                         }
                         else if (isFunctionLike(parent) && parent.type === containingTypeReference && parent.body && parent.body.kind === SyntaxKind.Block) {
                             forEachReturnStatement(<Block>parent.body, (returnStatement) => {
                                 if (returnStatement.expression && isImplementationExpression(returnStatement.expression)) {
-                                    result.push(getReferenceEntryFromNode(returnStatement.expression));
+                                    maybeAdd(getReferenceEntryFromNode(returnStatement.expression));
                                 }
                             });
                         }
                         else if (isTypeAssertionExpression(parent) && isImplementationExpression(parent.expression)) {
-                            result.push(getReferenceEntryFromNode(parent.expression));
+                            maybeAdd(getReferenceEntryFromNode(parent.expression));
                         }
+                    }
+                }
+
+                // Type nodes can contain multiple references to the same type. For example:
+                //      let x: Foo & (Foo & Bar) = ...
+                // Because we are returning the implementation locations and not the identifier locations,
+                // duplicate entries would be returned here as each of the type references is part of
+                // the same implementation. For that reason, check before we add a new entry
+                function maybeAdd(a: ReferenceEntry) {
+                    if (!forEach(result, b => a.fileName === b.fileName && a.textSpan.start === b.textSpan.start && a.textSpan.length === b.textSpan.length)) {
+                        result.push(a);
                     }
                 }
             }
