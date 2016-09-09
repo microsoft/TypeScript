@@ -735,6 +735,26 @@ namespace ts.Completions {
 
         return undefined;
     }
+        
+    export function getCompletionEntrySymbol(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string): Symbol {
+        // Compute all the completion symbols again.
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position);
+        if (completionData) {
+            const { symbols, location } = completionData;
+
+            // Find the symbol with the matching entry name.
+            // We don't need to perform character checks here because we're only comparing the
+            // name against 'entryName' (which is known to be good), not building a new
+            // completion entry.
+            const symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location) === entryName ? s : undefined);
+
+            if (symbol) {
+                return symbol;
+            }
+        }
+
+        return undefined;
+    }
 
     function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number) {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
