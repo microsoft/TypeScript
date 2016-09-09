@@ -100,4 +100,14 @@ var p = 0;
   </div>;
 >div : any
 
+// Emit "hello\\ world"
+<div>
+><div>    hello\world</div> : JSX.Element
+>div : any
+
+    hello\
+
+world
+</div>;
+>div : any
 

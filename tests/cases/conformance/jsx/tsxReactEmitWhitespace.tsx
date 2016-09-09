@@ -51,3 +51,10 @@ var p = 0;
 
   </div>;
 
+// Emit "hello\\ world"
+<div>
+
+    hello\
+
+world
+</div>;

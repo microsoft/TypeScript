@@ -50,6 +50,13 @@ var p = 0;
 
   </div>;
 
+// Emit "hello\\ world"
+<div>
+
+    hello\
+
+world
+</div>;
 
 
 //// [file.js]
@@ -77,3 +84,5 @@ React.createElement("div", null, "3");
 React.createElement("div", null);
 // Emit "foo bar"
 React.createElement("div", null, "foo bar");
+// Emit "hello\\ world"
+React.createElement("div", null, "hello\\ world");
