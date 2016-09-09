@@ -107,55 +107,55 @@
 ////function /*l*/l(param1: string) { /*9*/param1 = "hello"; }
 
 goTo.marker('a');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n\nThis is fourth Line");
+verify.quickInfoIs("var a: string", "This is firstLine\nThis is second Line\n\nThis is fourth Line");
 
 goTo.marker('b');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n\nThis is fourth Line");
+verify.quickInfoIs("var b: string", "This is firstLine\nThis is second Line\n\nThis is fourth Line");
 
 goTo.marker('c');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n\nThis is fourth Line");
+verify.quickInfoIs("var c: string", "This is firstLine\nThis is second Line\n\nThis is fourth Line");
 
 goTo.marker('d');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@random tag This should be third line");
+verify.quickInfoIs("function d(param: string): void", "This is firstLine\nThis is second Line\n@random tag This should be third line");
 goTo.marker('1');
-verify.quickInfoIs(undefined, "");
+verify.quickInfoIs("(parameter) param: string", "");
 
 goTo.marker('e');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line");
+verify.quickInfoIs("function e(param: string): void", "This is firstLine\nThis is second Line");
 goTo.marker('2');
-verify.quickInfoIs(undefined, "");
+verify.quickInfoIs("(parameter) param: string", "");
 
 goTo.marker('f');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@random tag This should be third line");
+verify.quickInfoIs("function f(param1: string): void", "This is firstLine\nThis is second Line\n@random tag This should be third line");
 goTo.marker('3');
-verify.quickInfoIs(undefined, "first line of param\n\nparam information third line");
+verify.quickInfoIs("(parameter) param1: string", "first line of param\n\nparam information third line");
 
 goTo.marker('g');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@random tag This should be third line");
+verify.quickInfoIs("function g(param1: string): void", "This is firstLine\nThis is second Line\n@random tag This should be third line");
 goTo.marker('4');
-verify.quickInfoIs(undefined, "param information first line");
+verify.quickInfoIs("(parameter) param1: string", "param information first line");
 
 goTo.marker('h');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@random tag This should be third line");
+verify.quickInfoIs("function h(param1: string): void", "This is firstLine\nThis is second Line\n@random tag This should be third line");
 goTo.marker('5');
-verify.quickInfoIs(undefined, "param information first line\n\nparam information third line");
+verify.quickInfoIs("(parameter) param1: string", "param information first line\n\nparam information third line");
 
 goTo.marker('i');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line");
+verify.quickInfoIs("function i(param1: string): void", "This is firstLine\nThis is second Line");
 goTo.marker('6');
-verify.quickInfoIs(undefined, "param information first line\n\nparam information third line");
+verify.quickInfoIs("(parameter) param1: string", "param information first line\n\nparam information third line");
 
 goTo.marker('j');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line");
+verify.quickInfoIs("function j(param1: string): void", "This is firstLine\nThis is second Line");
 goTo.marker('7');
-verify.quickInfoIs(undefined, "param information first line\n\nparam information third line");
+verify.quickInfoIs("(parameter) param1: string", "param information first line\n\nparam information third line");
 
 goTo.marker('k');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line\n@randomtag \n\n random information first line\n\n random information third line");
+verify.quickInfoIs("function k(param1: string): void", "This is firstLine\nThis is second Line\n@randomtag \n\n random information first line\n\n random information third line");
 goTo.marker('8');
-verify.quickInfoIs(undefined, "hello   ");
+verify.quickInfoIs("(parameter) param1: string", "hello   ");
 
 goTo.marker('l');
-verify.quickInfoIs(undefined, "This is firstLine\nThis is second Line");
+verify.quickInfoIs("function l(param1: string): void", "This is firstLine\nThis is second Line");
 goTo.marker('9');
-verify.quickInfoIs(undefined, "first Line text\nblank line that shouldnt be shown when starting this \nsecond time information about the param again");
+verify.quickInfoIs("(parameter) param1: string", "first Line text\nblank line that shouldnt be shown when starting this \nsecond time information about the param again");
