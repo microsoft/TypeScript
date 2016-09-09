@@ -29,7 +29,7 @@ class D extends C<IHasVisualizationModel> {
 >IHasVisualizationModel : IHasVisualizationModel
 
     x = moduleA;
->x : typeof moduleA
+>x : IHasVisualizationModel
 >moduleA : typeof moduleA
 }
 === tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_backbone.ts ===

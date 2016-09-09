@@ -216,7 +216,7 @@ class Derived extends Base {
 >Base : Base
 
     a = 1;
->a : number
+>a : number | undefined
 >1 : number
 
     f(): number { return 1; }
