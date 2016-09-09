@@ -180,6 +180,7 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         OfKeyword, // LastKeyword and LastToken
+        KeysOfKeyword,
 
         // Parse tree nodes
 
@@ -207,6 +208,7 @@ namespace ts {
         FunctionType,
         ConstructorType,
         TypeQuery,
+        KeysQuery,
         TypeLiteral,
         ArrayType,
         TupleType,
@@ -815,6 +817,12 @@ namespace ts {
     // @kind(SyntaxKind.TypeQuery)
     export interface TypeQueryNode extends TypeNode {
         exprName: EntityName;
+    }
+
+    // @kind(SyntaxKind.KeysQuery)
+    export interface KeysQueryNode extends TypeNode {
+        " keys query brand ": never;
+        type: TypeNode;
     }
 
     // A TypeLiteral is the declaration node for an anonymous symbol.
@@ -2360,19 +2368,20 @@ namespace ts {
         Union                   = 1 << 19,  // Union (T | U)
         Intersection            = 1 << 20,  // Intersection (T & U)
         Anonymous               = 1 << 21,  // Anonymous
-        Instantiated            = 1 << 22,  // Instantiated anonymous type
+        KeysQuery               = 1 << 22,  // keysof <type expr> type
+        Instantiated            = 1 << 23,  // Instantiated anonymous type
         /* @internal */
-        ObjectLiteral           = 1 << 23,  // Originates in an object literal
+        ObjectLiteral           = 1 << 24,  // Originates in an object literal
         /* @internal */
-        FreshObjectLiteral      = 1 << 24,  // Fresh object literal type
+        FreshObjectLiteral      = 1 << 25,  // Fresh object literal type
         /* @internal */
-        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 26,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 27,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
-        ThisType                = 1 << 28,  // This type
-        ObjectLiteralPatternWithComputedProperties = 1 << 29,  // Object literal type implied by binding pattern has computed properties
+        ContainsAnyFunctionType = 1 << 28,  // Type is or contains object literal type
+        ThisType                = 1 << 29,  // This type
+        ObjectLiteralPatternWithComputedProperties = 1 << 30,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2384,7 +2393,7 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
-        StringLike = String | StringLiteral,
+        StringLike = String | StringLiteral | KeysQuery,
         NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -2438,6 +2447,14 @@ namespace ts {
 
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type { }
+
+    // KeysOf Query types (TypeFlags.KeysQuery)
+    export interface KeysQueryType extends Type {
+        baseType: Type;
+        /* @internal */
+        // Do not access directly. Use resolveKeysQueryType.
+        resolvedBaseUnion?: Type;
+    }
 
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {

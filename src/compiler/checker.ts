@@ -2171,6 +2171,11 @@ namespace ts {
                     else if (type.flags & TypeFlags.NumberLiteral) {
                         writer.writeStringLiteral((<LiteralType>type).text);
                     }
+                    else if (type.flags & TypeFlags.KeysQuery) {
+                        writer.writeKeyword("keysof");
+                        writeSpace(writer);
+                        writeType((<KeysQueryType>type).baseType, flags);
+                    }
                     else {
                         // Should never get here
                         // { ... }
@@ -5161,6 +5166,34 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function resolveKeysQueryType(type: KeysQueryType): Type {
+            if (!type.resolvedBaseUnion) {
+                // Skip any essymbol members and remember to unescape the identifier before making a type from it
+                const memberTypes = map(filter(getPropertiesOfType(type.baseType),
+                    symbol => !startsWith(symbol.name, "__@")),
+                    symbol => getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(symbol.name))
+                );
+                type.resolvedBaseUnion = memberTypes ? getUnionType(memberTypes) : neverType;
+            }
+            return type.resolvedBaseUnion;
+        }
+
+        function getKeysQueryType(type: Type): KeysQueryType {
+            const queryType = createType(TypeFlags.KeysQuery) as KeysQueryType;
+            queryType.baseType = type;
+            return queryType;
+        }
+
+        function getTypeFromKeysQueryNode(node: KeysQueryNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                // The expression is processed as an identifier expression, which we
+                // then store the resulting type of into a "KeysQuery" type
+                links.resolvedType = getKeysQueryType(getTypeFromTypeNode(node.type));
+            }
+            return links.resolvedType;
+        }
+
         function getTypeOfGlobalSymbol(symbol: Symbol, arity: number): ObjectType {
 
             function getTypeDeclaration(symbol: Symbol): Declaration {
@@ -5627,6 +5660,8 @@ namespace ts {
                     return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.TypeQuery:
                     return getTypeFromTypeQueryNode(<TypeQueryNode>node);
+                case SyntaxKind.KeysQuery:
+                    return getTypeFromKeysQueryNode(<KeysQueryNode>node);
                 case SyntaxKind.ArrayType:
                 case SyntaxKind.JSDocArrayType:
                     return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
@@ -5909,6 +5944,9 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType), type.aliasSymbol, mapper.targetTypes);
+                }
+                if (type.flags & TypeFlags.KeysQuery) {
+                    return getKeysQueryType(instantiateType((<KeysQueryType>type).baseType, mapper));
                 }
             }
             return type;
@@ -6240,6 +6278,8 @@ namespace ts {
                 if (source.flags & (TypeFlags.Number | TypeFlags.NumberLiteral) && target.flags & TypeFlags.Enum) return true;
                 if (source.flags & TypeFlags.NumberLiteral && target.flags & TypeFlags.EnumLiteral && (<LiteralType>source).text === (<LiteralType>target).text) return true;
             }
+            if (source.flags & TypeFlags.KeysQuery) return isTypeRelatedTo(resolveKeysQueryType(source as KeysQueryType), target, relation);
+            if (target.flags & TypeFlags.KeysQuery) return isTypeRelatedTo(source, resolveKeysQueryType(target as KeysQueryType), relation);
             return false;
         }
 
@@ -13526,6 +13566,9 @@ namespace ts {
                         return true;
                     }
                     contextualType = apparentType;
+                }
+                if (contextualType.flags & TypeFlags.KeysQuery) {
+                    return type === stringType;
                 }
                 if (type.flags & TypeFlags.String) {
                     return maybeTypeOfKind(contextualType, TypeFlags.StringLiteral);
