@@ -2472,6 +2472,10 @@
         "category": "Message",
         "code": 6038
     },
+    "STRATEGY": {
+        "category": "Message",
+        "code": 6039
+    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -2871,7 +2875,7 @@
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
-    }, 
+    },
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
         "code": 7017
