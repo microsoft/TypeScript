@@ -3117,7 +3117,8 @@ namespace ts {
         // pattern. Otherwise, it is the type any.
         function getTypeFromBindingElement(element: BindingElement, includePatternInType?: boolean, reportErrors?: boolean): Type {
             if (element.initializer) {
-                return getBaseTypeOfLiteralType(checkExpressionCached(element.initializer));
+                const exprType = checkExpressionCached(element.initializer);
+                return getCombinedNodeFlags(element) & NodeFlags.Const ? exprType : getBaseTypeOfLiteralType(exprType);
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(<BindingPattern>element.name, includePatternInType, reportErrors);
