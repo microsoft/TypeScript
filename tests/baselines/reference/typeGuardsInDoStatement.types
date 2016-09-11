@@ -64,9 +64,9 @@ function c(x: string | number) {
 >x : string | number
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
 
     do {
         x; // string

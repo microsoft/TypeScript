@@ -45,29 +45,29 @@ function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
 //function foo<T, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
 
 foo(1, 2, 3);
->foo(1, 2, 3) : number
+>foo(1, 2, 3) : 3
 >foo : <T, U, V>(x: T, y: U, z: V) => V
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true });
 >foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true }) : { x: number; y: string; z: boolean; }
 >foo : <T, U, V>(x: T, y: U, z: V) => V
 >{ x: 1 } : { x: number; }
 >x : number
->1 : number
+>1 : 1
 >{ x: 1, y: '' } : { x: number; y: string; }
 >x : number
->1 : number
+>1 : 1
 >y : string
->'' : string
+>'' : ""
 >{ x: 2, y: '', z: true } : { x: number; y: string; z: true; }
 >x : number
->2 : number
+>2 : 2
 >y : string
->'' : string
->z : true
+>'' : ""
+>z : boolean
 >true : true
 
 foo(a, b, c);
@@ -84,10 +84,10 @@ foo(a, b, { foo: 1, bar: '', hm: true });
 >b : B
 >{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: true; }
 >foo : number
->1 : number
+>1 : 1
 >bar : string
->'' : string
->hm : true
+>'' : ""
+>hm : boolean
 >true : true
 
 foo((x: number, y) => { }, (x) => { }, () => { });
@@ -137,9 +137,9 @@ foo(b, b, { foo: 1, bar: '', hm: '' });
 >b : B
 >{ foo: 1, bar: '', hm: '' } : { foo: number; bar: string; hm: string; }
 >foo : number
->1 : number
+>1 : 1
 >bar : string
->'' : string
+>'' : ""
 >hm : string
->'' : string
+>'' : ""
 

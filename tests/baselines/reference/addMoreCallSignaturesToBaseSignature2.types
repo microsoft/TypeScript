@@ -22,5 +22,5 @@ var kitty = a(1);
 >kitty : string
 >a(1) : string
 >a : Bar
->1 : number
+>1 : 1
 

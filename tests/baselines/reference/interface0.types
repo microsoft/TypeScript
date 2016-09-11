@@ -13,5 +13,5 @@ var y: Generic<number> = { x: 3 };
 >Generic : Generic<T>
 >{ x: 3 } : { x: number; }
 >x : number
->3 : number
+>3 : 3
 

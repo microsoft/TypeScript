@@ -9,7 +9,7 @@ function f(x: "foo"): number {
 >x : "foo"
 
     return 0;
->0 : number
+>0 : 0
 }
 
 function g(x: "foo"): number;
@@ -21,7 +21,7 @@ function g(x: "foo"): number {
 >x : "foo"
 
     return 0;
->0 : number
+>0 : 0
 }
 
 let a = f;

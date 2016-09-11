@@ -68,5 +68,5 @@ var Obj3: Obj3;
 ><Obj3 x={42} /> : JSX.Element
 >Obj3 : Obj3
 >x : any
->42 : number
+>42 : 42
 

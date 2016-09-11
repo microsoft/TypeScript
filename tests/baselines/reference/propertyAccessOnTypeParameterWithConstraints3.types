@@ -6,7 +6,7 @@ class A {
 
     foo(): string { return ''; }
 >foo : () => string
->'' : string
+>'' : ""
 }
 
 class B extends A {
@@ -17,7 +17,7 @@ class B extends A {
 >bar : () => string
 
         return '';
->'' : string
+>'' : ""
     }
 }
 
@@ -41,7 +41,7 @@ class C<U extends A, T extends U> {
 >x['foo']() : string
 >x['foo'] : () => string
 >x : T
->'foo' : string
+>'foo' : "foo"
 
         return a + x.foo();
 >a + x.foo() : string
@@ -63,7 +63,7 @@ class C<U extends A, T extends U> {
 >x['foo']() : string
 >x['foo'] : () => string
 >x : U
->'foo' : string
+>'foo' : "foo"
 
         return a + x.foo();
 >a + x.foo() : string
@@ -132,7 +132,7 @@ var r2b = i.foo['foo']();
 >i.foo : B
 >i : I<A, B>
 >foo : B
->'foo' : string
+>'foo' : "foo"
 
 var a: {
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
@@ -167,7 +167,7 @@ var r3b = a()['foo']();
 >a()['foo'] : () => string
 >a() : A
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->'foo' : string
+>'foo' : "foo"
 
 // parameter supplied for type argument inference for U
 var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred as B, which has a foo
@@ -188,7 +188,7 @@ var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferr
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
 >new B() : B
 >B : typeof B
->'foo' : string
+>'foo' : "foo"
 
 var b = {
 >b : { foo: <U extends A, T extends U>(x: T) => string; }
@@ -210,7 +210,7 @@ var b = {
 >x['foo']() : string
 >x['foo'] : () => string
 >x : T
->'foo' : string
+>'foo' : "foo"
 
         return a + x.foo();
 >a + x.foo() : string

@@ -22,7 +22,7 @@ var s1 = s1 + '';
 >s1 : any
 >s1 + '' : string
 >s1 : any
->'' : string
+>'' : ""
 
 var s2 /* any */ = s2 + s2;
 >s2 : any
@@ -39,7 +39,7 @@ var s3 : string = s3 + s3;
 var s4 = '' + s4;
 >s4 : any
 >'' + s4 : string
->'' : string
+>'' : ""
 >s4 : any
 
 // boolean unless otherwise specified

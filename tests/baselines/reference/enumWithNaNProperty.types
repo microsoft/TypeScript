@@ -4,6 +4,6 @@ enum A {
 
     NaN = 1
 >NaN : A
->1 : number
+>1 : 1
 }
 

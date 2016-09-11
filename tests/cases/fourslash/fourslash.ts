@@ -166,7 +166,6 @@ declare namespace FourSlashInterface {
         goToDefinitionForMarkers(...markerNames: string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        referencesCountIs(count: number): void;
         /**
          * Asserts that the given ranges are the references from the current position.
          * If ranges have markers, those markers may have "isDefinition" and "isWriteAccess" data

@@ -62,7 +62,7 @@ async function whileStatement6() {
 
     while (x) { if (1) continue; await y; }
 >x : any
->1 : number
+>1 : 1
 >await y : any
 >y : any
 }
@@ -103,7 +103,7 @@ async function whileStatement10() {
     D: while (x) { if (1) continue D; await y; }
 >D : any
 >x : any
->1 : number
+>1 : 1
 >D : any
 >await y : any
 >y : any
@@ -138,7 +138,7 @@ async function whileStatement14() {
 
     while (x) { if (1) break; await y; }
 >x : any
->1 : number
+>1 : 1
 >await y : any
 >y : any
 }
@@ -179,7 +179,7 @@ async function whileStatement18() {
     H: while (x) { if (1) break H; await y; }
 >H : any
 >x : any
->1 : number
+>1 : 1
 >H : any
 >await y : any
 >y : any

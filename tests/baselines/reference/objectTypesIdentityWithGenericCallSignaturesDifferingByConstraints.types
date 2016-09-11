@@ -77,7 +77,7 @@ var b = { foo<T extends RegExp>(x: T) { return ''; } };
 >RegExp : RegExp
 >x : T
 >T : T
->'' : string
+>'' : ""
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

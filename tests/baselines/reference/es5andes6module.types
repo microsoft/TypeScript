@@ -12,7 +12,7 @@ export default class A
 >B : () => number
     {
         return 42;
->42 : number
+>42 : 42
     }
 }
 
