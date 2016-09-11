@@ -170,6 +170,7 @@ namespace ts.server {
         readonly openFiles: ScriptInfo[] = [];
 
         private compilerOptionsForInferredProjects: CompilerOptions;
+        private compileOnSaveForInferredProjects: boolean;
         private readonly directoryWatchers: DirectoryWatchers;
         private readonly throttledOperations: ThrottledOperations;
 
@@ -228,10 +229,12 @@ namespace ts.server {
             }
         }
 
-        setCompilerOptionsForInferredProjects(compilerOptions: CompilerOptions): void {
-            this.compilerOptionsForInferredProjects = compilerOptions;
+        setCompilerOptionsForInferredProjects(vsProjectCompilerOptions: protocol.VSProjectCompilerOptions): void {
+            this.compilerOptionsForInferredProjects = vsProjectCompilerOptions;
+            this.compileOnSaveForInferredProjects = vsProjectCompilerOptions.compileOnSave;
             for (const proj of this.inferredProjects) {
-                proj.setCompilerOptions(compilerOptions);
+                proj.setCompilerOptions(vsProjectCompilerOptions);
+                proj.compileOnSaveEnabled = vsProjectCompilerOptions.compileOnSave;
             }
             this.updateProjectGraphs(this.inferredProjects);
         }
@@ -724,7 +727,7 @@ namespace ts.server {
             return false;
         }
 
-        private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typingOptions: TypingOptions) {
+        private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.VSProjectCompilerOptions, typingOptions: TypingOptions) {
             const project = new ExternalProject(
                 projectFileName,
                 this,
@@ -919,7 +922,7 @@ namespace ts.server {
             const useExistingProject = this.useSingleInferredProject && this.inferredProjects.length;
             const project = useExistingProject
                 ? this.inferredProjects[0]
-                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects, /*compileOnSaveEnabled*/ false);
+                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects, /*compileOnSaveEnabled*/ this.compileOnSaveForInferredProjects);
 
             project.addRoot(root);
 
