@@ -359,6 +359,10 @@ namespace ts {
                     fd = _fs.openSync(fileName, "w");
                     _fs.writeSync(fd, data, undefined, "utf8");
                 }
+                catch (e) {
+                    createDirectory(_path.dirname(fileName));
+                    writeFile(fileName, data, writeByteOrderMark);
+                }
                 finally {
                     if (fd !== undefined) {
                         _fs.closeSync(fd);
@@ -435,6 +439,17 @@ namespace ts {
                 return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
             }
 
+            function createDirectory(directoryName: string) {
+                const basePath = _path.dirname(directoryName);
+                const shouldCreateParent = directoryName !== basePath && !nodeSystem.directoryExists(basePath);
+                if (shouldCreateParent) {
+                    createDirectory(basePath);
+                }
+                if (shouldCreateParent || !directoryExists(directoryName)) {
+                    _fs.mkdirSync(directoryName);
+                }
+            }
+
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -496,11 +511,7 @@ namespace ts {
                 },
                 fileExists,
                 directoryExists,
-                createDirectory(directoryName: string) {
-                    if (!nodeSystem.directoryExists(directoryName)) {
-                        _fs.mkdirSync(directoryName);
-                    }
-                },
+                createDirectory,
                 getExecutingFilePath() {
                     return __filename;
                 },
