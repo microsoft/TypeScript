@@ -130,7 +130,7 @@ declare namespace FourSlashInterface {
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
-        quickInfoIs(expectedText?: string, expectedDocumentation?: string): void;
+        quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
         quickInfoExists(): void;
         typeDefinitionCountIs(expectedCount: number): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;

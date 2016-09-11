@@ -954,26 +954,20 @@ namespace FourSlash {
             assert.equal(actual, expected);
         }
 
-        public verifyQuickInfoString(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
+        public verifyQuickInfoString(negative: boolean, expectedText: string, expectedDocumentation?: string) {
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             const actualQuickInfoText = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.displayParts) : "";
             const actualQuickInfoDocumentation = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.documentation) : "";
 
             if (negative) {
-                if (expectedText !== undefined) {
-                    assert.notEqual(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
-                }
-                // TODO: should be '==='?
-                if (expectedDocumentation != undefined) {
+                assert.notEqual(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
+                if (expectedDocumentation !== undefined) {
                     assert.notEqual(actualQuickInfoDocumentation, expectedDocumentation, this.messageAtLastKnownMarker("quick info doc comment"));
                 }
             }
             else {
-                if (expectedText !== undefined) {
-                    assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
-                }
-                // TODO: should be '==='?
-                if (expectedDocumentation != undefined) {
+                assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
+                if (expectedDocumentation !== undefined) {
                     assert.equal(actualQuickInfoDocumentation, expectedDocumentation, this.assertionMessageAtLastKnownMarker("quick info doc"));
                 }
             }
@@ -2969,7 +2963,7 @@ namespace FourSlashInterface {
             this.state.verifyErrorExistsAfterMarker(markerName, !this.negative, /*after*/ false);
         }
 
-        public quickInfoIs(expectedText?: string, expectedDocumentation?: string) {
+        public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
             this.state.verifyQuickInfoString(this.negative, expectedText, expectedDocumentation);
         }
 

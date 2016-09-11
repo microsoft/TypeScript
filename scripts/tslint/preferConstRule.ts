@@ -93,11 +93,16 @@ class PreferConstWalker extends Lint.RuleWalker {
 
     private visitBindingPatternIdentifiers(pattern: ts.BindingPattern) {
         for (const element of pattern.elements) {
-            if (element.name.kind === ts.SyntaxKind.Identifier) {
-                this.markAssignment(element.name as ts.Identifier);
+            if (element.kind !== ts.SyntaxKind.BindingElement) {
+                continue;
+            }
+
+            const name = (<ts.BindingElement>element).name;
+            if (name.kind === ts.SyntaxKind.Identifier) {
+                this.markAssignment(name as ts.Identifier);
             }
             else {
-                this.visitBindingPatternIdentifiers(element.name as ts.BindingPattern);
+                this.visitBindingPatternIdentifiers(name as ts.BindingPattern);
             }
         }
     }
@@ -191,7 +196,9 @@ class PreferConstWalker extends Lint.RuleWalker {
 
     private collectBindingPatternIdentifiers(value: ts.VariableDeclaration, pattern: ts.BindingPattern, table: ts.MapLike<DeclarationUsages>) {
         for (const element of pattern.elements) {
-            this.collectNameIdentifiers(value, element.name, table);
+            if (element.kind === ts.SyntaxKind.BindingElement) {
+                this.collectNameIdentifiers(value, (<ts.BindingElement>element).name, table);
+            }
         }
     }
 }

@@ -10,13 +10,13 @@
 ////var max2: Comparer = (x/*1*/x, y/*2*/y) => { return x/*3*/x.compareTo(y/*4*/y) };
 
 goTo.marker('1');
-verify.quickInfoIs('(parameter) xx: any', null);
+verify.quickInfoIs('(parameter) xx: any');
 
 goTo.marker('2');
-verify.quickInfoIs('(parameter) yy: any', null);
+verify.quickInfoIs('(parameter) yy: any');
 
 goTo.marker('3');
-verify.quickInfoIs('(parameter) xx: any', null);
+verify.quickInfoIs('(parameter) xx: any');
 
 goTo.marker('4');
-verify.quickInfoIs('(parameter) yy: any', null);
+verify.quickInfoIs('(parameter) yy: any');

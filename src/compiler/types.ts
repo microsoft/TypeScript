@@ -688,14 +688,20 @@ namespace ts {
     }
 
     export interface BindingPattern extends Node {
-        elements: NodeArray<BindingElement>;
+        elements: NodeArray<BindingElement | ArrayBindingElement>;
     }
 
     // @kind(SyntaxKind.ObjectBindingPattern)
-    export interface ObjectBindingPattern extends BindingPattern { }
+    export interface ObjectBindingPattern extends BindingPattern {
+        elements: NodeArray<BindingElement>;
+    }
+
+    export type ArrayBindingElement = BindingElement | OmittedExpression;
 
     // @kind(SyntaxKind.ArrayBindingPattern)
-    export interface ArrayBindingPattern extends BindingPattern { }
+    export interface ArrayBindingPattern extends BindingPattern {
+        elements: NodeArray<ArrayBindingElement>;
+    }
 
     /**
      * Several node kinds share function-like features such as a signature,
@@ -868,7 +874,9 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.OmittedExpression)
-    export interface OmittedExpression extends Expression { }
+    export interface OmittedExpression extends Expression {
+        _omittedExpressionBrand: any;
+    }
 
     // Represents an expression that is elided as part of a transformation to emit comments on a
     // not-emitted node. The 'expression' property of a NotEmittedExpression should be emitted.

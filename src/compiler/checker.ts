@@ -1043,7 +1043,7 @@ namespace ts {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
 
             if (moduleSymbol) {
-                const exportDefaultSymbol = isShorthandAmbientModule(moduleSymbol.valueDeclaration) ?
+                const exportDefaultSymbol = isShorthandAmbientModuleSymbol(moduleSymbol) ?
                     moduleSymbol :
                     moduleSymbol.exports["export="] ?
                         getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
@@ -1119,7 +1119,7 @@ namespace ts {
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
-                    if (isShorthandAmbientModule(moduleSymbol.valueDeclaration)) {
+                    if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
                         return moduleSymbol;
                     }
 
@@ -2505,8 +2505,8 @@ namespace ts {
                 }
             }
 
-            function buildBindingElementDisplay(bindingElement: BindingElement, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                if (bindingElement.kind === SyntaxKind.OmittedExpression) {
+            function buildBindingElementDisplay(bindingElement: ArrayBindingElement, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+                if (isOmittedExpression(bindingElement)) {
                     return;
                 }
                 Debug.assert(bindingElement.kind === SyntaxKind.BindingElement);
@@ -3129,7 +3129,7 @@ namespace ts {
         }
 
         // Return the type implied by an object binding pattern
-        function getTypeFromObjectBindingPattern(pattern: BindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
+        function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const members = createMap<Symbol>();
             let hasComputedProperties = false;
             forEach(pattern.elements, e => {
@@ -3160,11 +3160,12 @@ namespace ts {
         // Return the type implied by an array binding pattern
         function getTypeFromArrayBindingPattern(pattern: BindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const elements = pattern.elements;
-            if (elements.length === 0 || elements[elements.length - 1].dotDotDotToken) {
+            const lastElement = lastOrUndefined(elements);
+            if (elements.length === 0 || (!isOmittedExpression(lastElement) && lastElement.dotDotDotToken)) {
                 return languageVersion >= ScriptTarget.ES6 ? createIterableType(anyType) : anyArrayType;
             }
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
-            const elementTypes = map(elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
+            const elementTypes = map(elements, e => isOmittedExpression(e) ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
             let result = createTupleType(elementTypes);
             if (includePatternInType) {
                 result = cloneTypeReference(result);
@@ -3182,8 +3183,8 @@ namespace ts {
         // the parameter.
         function getTypeFromBindingPattern(pattern: BindingPattern, includePatternInType?: boolean, reportErrors?: boolean): Type {
             return pattern.kind === SyntaxKind.ObjectBindingPattern
-                ? getTypeFromObjectBindingPattern(pattern, includePatternInType, reportErrors)
-                : getTypeFromArrayBindingPattern(pattern, includePatternInType, reportErrors);
+                ? getTypeFromObjectBindingPattern(<ObjectBindingPattern>pattern, includePatternInType, reportErrors)
+                : getTypeFromArrayBindingPattern(<ArrayBindingPattern>pattern, includePatternInType, reportErrors);
         }
 
         // Return the type associated with a variable, parameter, or property declaration. In the simple case this is the type
@@ -3385,7 +3386,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (symbol.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && isShorthandAmbientModule(<ModuleDeclaration>symbol.valueDeclaration)) {
+                if (symbol.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && isShorthandAmbientModuleSymbol(symbol)) {
                     links.type = anyType;
                 }
                 else {
@@ -8970,6 +8971,7 @@ namespace ts {
             const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
             const declarationContainer = getControlFlowContainer(declaration);
             let flowContainer = getControlFlowContainer(node);
+            const isOuterVariable = flowContainer !== declarationContainer;
             // When the control flow originates in a function expression or arrow function and we are referencing
             // a const variable or parameter from an outer function, we extend the origin of the control flow
             // analysis to include the immediately enclosing function.
@@ -8982,7 +8984,7 @@ namespace ts {
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
             const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isParameter ||
-                flowContainer !== declarationContainer || isInAmbientContext(declaration);
+                isOuterVariable || isInAmbientContext(declaration);
             const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
@@ -12437,7 +12439,7 @@ namespace ts {
         function assignBindingElementTypes(node: VariableLikeDeclaration) {
             if (isBindingPattern(node.name)) {
                 for (const element of (<BindingPattern>node.name).elements) {
-                    if (element.kind !== SyntaxKind.OmittedExpression) {
+                    if (!isOmittedExpression(element)) {
                         if (element.name.kind === SyntaxKind.Identifier) {
                             getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
                         }
@@ -13880,7 +13882,12 @@ namespace ts {
             pattern: BindingPattern,
             predicateVariableNode: Node,
             predicateVariableName: string) {
-            for (const { name } of pattern.elements) {
+            for (const element of pattern.elements) {
+                if (isOmittedExpression(element)) {
+                    continue;
+                }
+
+                const name = element.name;
                 if (name.kind === SyntaxKind.Identifier &&
                     (<Identifier>name).text === predicateVariableName) {
                     error(predicateVariableNode,
@@ -18356,8 +18363,8 @@ namespace ts {
 
         function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
             let moduleSymbol = resolveExternalModuleName(moduleReferenceExpression.parent, moduleReferenceExpression);
-            if (!moduleSymbol) {
-                // module not found - be conservative
+            if (!moduleSymbol || isShorthandAmbientModuleSymbol(moduleSymbol)) {
+                // If the module is not found or is shorthand, assume that it may export a value.
                 return true;
             }
 
@@ -19990,7 +19997,7 @@ namespace ts {
             else {
                 const elements = (<BindingPattern>name).elements;
                 for (const element of elements) {
-                    if (element.kind !== SyntaxKind.OmittedExpression) {
+                    if (!isOmittedExpression(element)) {
                         checkGrammarNameInLetOrConstDeclarations(element.name);
                     }
                 }

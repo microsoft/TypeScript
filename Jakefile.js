@@ -126,6 +126,7 @@ var servicesSources = [
     "classifier.ts",
     "completions.ts",
     "documentHighlights.ts",
+    "documentRegistry.ts",
     "findAllReferences.ts",
     "goToDefinition.ts",
     "jsDoc.ts",
@@ -1003,15 +1004,18 @@ function acceptBaseline(containerFolder) {
     var deleteEnding = '.delete';
     for (var i in files) {
         var filename = files[i];
-        if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
-            filename = filename.substr(0, filename.length - deleteEnding.length);
-            fs.unlinkSync(path.join(targetFolder, filename));
-        } else {
-            var target = path.join(targetFolder, filename);
-            if (fs.existsSync(target)) {
-                fs.unlinkSync(target);
+        var fullLocalPath = path.join(sourceFolder, filename);
+        if (fs.statSync(fullLocalPath).isFile()) {
+            if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
+                filename = filename.substr(0, filename.length - deleteEnding.length);
+                fs.unlinkSync(path.join(targetFolder, filename));
+            } else {
+                var target = path.join(targetFolder, filename);
+                if (fs.existsSync(target)) {
+                    fs.unlinkSync(target);
+                }
+                fs.renameSync(path.join(sourceFolder, filename), target);
             }
-            fs.renameSync(path.join(sourceFolder, filename), target);
         }
     }
 }
