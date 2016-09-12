@@ -1,5 +1,5 @@
 tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,2): error TS2693: Left operand of comma operator may not be a side-effect free expression.
+tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,2): error TS2693: Left side of comma operator is unused and has no side effects.
 
 
 ==== tests/cases/compiler/assignmentToParenthesizedExpression1.ts (2 errors) ====
@@ -8,4 +8,4 @@ tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,2): error TS2693:
     ~~~~~~
 !!! error TS2364: Invalid left-hand side of assignment expression.
      ~
-!!! error TS2693: Left operand of comma operator may not be a side-effect free expression.
+!!! error TS2693: Left side of comma operator is unused and has no side effects.

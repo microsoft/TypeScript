@@ -1,4 +1,5 @@
 === tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
+
 let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp
 >RegExp : RegExp

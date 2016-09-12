@@ -1,4 +1,5 @@
 === tests/cases/compiler/inferentialTypingWithFunctionTypeSyntacticScenarios.ts ===
+
 declare function map<T, U>(array: T, func: (x: T) => U): U;
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >T : T

@@ -13209,7 +13209,16 @@ namespace ts {
             return sourceType;
         }
 
+        /**
+         * This is a *shallow* check: An expression is side-effect-free if the
+         * evaluation of the expression *itself* cannot produce side effects.
+         * For example, x++ / 3 is side-effect free because the / operator
+         * does not have side effects.
+         * The intent is to "smell test" an expression for correctness in positions where
+         * its value is discarded (e.g. the left side of the comma operator).
+         */
         function isSideEffectFree(node: Node): boolean {
+            node = skipParentheses(node);
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.StringLiteral:
@@ -13222,7 +13231,15 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.NonNullExpression:
                     return true;
+
+                case SyntaxKind.ConditionalExpression:
+                    return isSideEffectFree((node as ConditionalExpression).whenTrue) &&
+                        isSideEffectFree((node as ConditionalExpression).whenFalse);
 
                 case SyntaxKind.BinaryExpression:
                     if (isAssignmentOperator((node as BinaryExpression).operatorToken.kind)) {
@@ -13233,53 +13250,21 @@ namespace ts {
 
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
+                    // Unary operators ~, !, +, and - have no side effects.
+                    // The rest do.
                     switch ((node as PrefixUnaryExpression).operator) {
                         case SyntaxKind.ExclamationToken:
                         case SyntaxKind.PlusToken:
                         case SyntaxKind.MinusToken:
                         case SyntaxKind.TildeToken:
-                            return isSideEffectFree((node as PrefixUnaryExpression).operand);
+                            return true;
                     }
                     return false;
-
-                case SyntaxKind.ParenthesizedExpression:
-                case SyntaxKind.TypeAssertionExpression:
-                case SyntaxKind.TypeOfExpression:
-                case SyntaxKind.AsExpression:
-                case SyntaxKind.NonNullExpression:
-                    // All the nodes which just have a .expression we should check
-                    return isSideEffectFree((node as ParenthesizedExpression).expression);
-
-                case SyntaxKind.ConditionalExpression:
-                    return isSideEffectFree((node as ConditionalExpression).condition) &&
-                        isSideEffectFree((node as ConditionalExpression).whenTrue) &&
-                        isSideEffectFree((node as ConditionalExpression).whenFalse);
                 
-                case SyntaxKind.ObjectLiteralExpression:
-                    // Note: negated forEach condition since we want to bail early to 'true',
-                    // in other words the callback is computing "Could have side effects?"
-                    return !forEach((node as ObjectLiteralExpression).properties, prop => {
-                        if (isComputedPropertyName(prop.name) && !isSideEffectFree((prop.name as ComputedPropertyName).expression)) {
-                            return true;
-                        }
-
-                        switch (prop.kind) {
-                            case SyntaxKind.ShorthandPropertyAssignment:
-                            case SyntaxKind.MethodDeclaration:
-                                return false;
-                            case SyntaxKind.PropertyAssignment:
-                                return !isSideEffectFree((prop as PropertyAssignment).initializer);
-                            default:
-                                Debug.fail('Unhandled object literal property kind ' + prop.kind); 
-                        }
-                    });
-
-                case SyntaxKind.ArrayLiteralExpression:
-                    // See previous comment about negated callback values 
-                    return !forEach((node as ArrayLiteralExpression).elements, elem => !isSideEffectFree(elem));
-
-                case SyntaxKind.VoidExpression:
-                    // Explicit opt-out case (listed here to avoid accidental duplication above): 'void x'
+                // Some forms listed here for clarity
+                case SyntaxKind.VoidExpression: // Explicit opt-out
+                case SyntaxKind.TypeAssertionExpression: // Not SEF, but can produce useful type warnings
+                case SyntaxKind.AsExpression: // Not SEF, but can produce useful type warnings
                 default:
                     return false;
             }
