@@ -6425,9 +6425,9 @@ namespace ts {
                         }
                         if (source.flags & TypeFlags.Enum) {
                             // 1. look through the target union for a literal whose base type is related to the source
-                            let lit = find((<UnionType>target).types, t => t.flags & TypeFlags.EnumLiteral && isEnumTypeRelatedTo(<EnumType>source, (<EnumLiteralType>t).baseType));
+                            const lit = find((<UnionType>target).types, t => t.flags & TypeFlags.EnumLiteral && isEnumTypeRelatedTo(<EnumType>source, (<EnumLiteralType>t).baseType));
                             // 2. if found, the base type is only assignable to source if all its literals are in the target union.
-                            if (lit && (result = isRelatedTo((lit as EnumLiteralType).baseType, target, false))) {
+                            if (lit && (result = isRelatedTo((lit as EnumLiteralType).baseType, target, /*reportErrors*/ false))) {
                                 return result;
                             }
                         }
