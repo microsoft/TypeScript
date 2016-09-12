@@ -130,7 +130,7 @@ declare namespace FourSlashInterface {
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
-        quickInfoIs(expectedText?: string, expectedDocumentation?: string): void;
+        quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
         quickInfoExists(): void;
         typeDefinitionCountIs(expectedCount: number): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
@@ -166,7 +166,6 @@ declare namespace FourSlashInterface {
         goToDefinitionForMarkers(...markerNames: string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        referencesCountIs(count: number): void;
         /**
          * Asserts that the given ranges are the references from the current position.
          * If ranges have markers, those markers may have "isDefinition" and "isWriteAccess" data
@@ -199,6 +198,7 @@ declare namespace FourSlashInterface {
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(): void;
+        baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: TextSpan[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;

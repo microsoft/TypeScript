@@ -33,7 +33,7 @@ function f1(s: Set<string> | Set<number>) {
 >s.add : (value: number) => Set<number>
 >s : Set<number>
 >add : (value: number) => Set<number>
->42 : number
+>42 : 42
 }
 
 function f2(s: Set<string> | Set<number>) {
@@ -67,7 +67,7 @@ function f2(s: Set<string> | Set<number>) {
 >s.add : (value: number) => Set<number>
 >s : Set<number>
 >add : (value: number) => Set<number>
->42 : number
+>42 : 42
 }
 
 function f3(s: Set<string> | Set<number>) {

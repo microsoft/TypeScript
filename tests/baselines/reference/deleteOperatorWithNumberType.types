@@ -6,12 +6,12 @@ var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : number[]
 >[1, 2] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 function foo(): number { return 1; }
 >foo : () => number
->1 : number
+>1 : 1
 
 class A {
 >A : A
@@ -21,7 +21,7 @@ class A {
 
     static foo() { return 1; }
 >foo : () => number
->1 : number
+>1 : 1
 }
 module M {
 >M : typeof M
@@ -50,23 +50,23 @@ var ResultIsBoolean2 = delete NUMBER1;
 var ResultIsBoolean3 = delete 1;
 >ResultIsBoolean3 : boolean
 >delete 1 : boolean
->1 : number
+>1 : 1
 
 var ResultIsBoolean4 = delete { x: 1, y: 2};
 >ResultIsBoolean4 : boolean
 >delete { x: 1, y: 2} : boolean
 >{ x: 1, y: 2} : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 
 var ResultIsBoolean5 = delete { x: 1, y: (n: number) => { return n; } };
 >ResultIsBoolean5 : boolean
 >delete { x: 1, y: (n: number) => { return n; } } : boolean
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
 >x : number
->1 : number
+>1 : 1
 >y : (n: number) => number
 >(n: number) => { return n; } : (n: number) => number
 >n : number
@@ -92,7 +92,7 @@ var ResultIsBoolean8 = delete NUMBER1[0];
 >delete NUMBER1[0] : boolean
 >NUMBER1[0] : number
 >NUMBER1 : number[]
->0 : number
+>0 : 0
 
 var ResultIsBoolean9 = delete foo();
 >ResultIsBoolean9 : boolean
@@ -136,7 +136,7 @@ var ResultIsBoolean13 = delete delete delete (NUMBER + NUMBER);
 // miss assignment operators
 delete 1;
 >delete 1 : boolean
->1 : number
+>1 : 1
 
 delete NUMBER;
 >delete NUMBER : boolean

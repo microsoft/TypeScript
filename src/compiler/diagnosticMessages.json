@@ -1063,10 +1063,6 @@
         "category": "Error",
         "code": 2353
     },
-    "No best common type exists among return expressions.": {
-        "category": "Error",
-        "code": 2354
-    },
     "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
@@ -1630,10 +1626,6 @@
     "Cannot find namespace '{0}'.": {
         "category": "Error",
         "code": 2503
-    },
-    "No best common type exists among yield expressions.": {
-        "category": "Error",
-        "code": 2504
     },
     "A generator cannot have a 'void' type annotation.": {
         "category": "Error",

@@ -18,5 +18,5 @@ function foo(x: any) {
 	print('1');
 >print('1') : void
 >print : (s: string) => void
->'1' : string
+>'1' : "1"
 }

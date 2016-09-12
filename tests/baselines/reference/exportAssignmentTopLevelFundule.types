@@ -20,14 +20,14 @@ function foo() {
 >foo : typeof foo
 
 	return "test";
->"test" : string
+>"test" : "test"
 }
 module foo {
 >foo : typeof foo
 
 	export var answer = 42;
 >answer : number
->42 : number
+>42 : 42
 }
 export = foo;
 >foo : typeof foo

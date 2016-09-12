@@ -11,63 +11,63 @@ function CreateTypedArrayTypes() {
 >typedArrays[0] = Int8Array : Int8ArrayConstructor
 >typedArrays[0] : any
 >typedArrays : any[]
->0 : number
+>0 : 0
 >Int8Array : Int8ArrayConstructor
 
     typedArrays[1] = Uint8Array;
 >typedArrays[1] = Uint8Array : Uint8ArrayConstructor
 >typedArrays[1] : any
 >typedArrays : any[]
->1 : number
+>1 : 1
 >Uint8Array : Uint8ArrayConstructor
 
     typedArrays[2] = Int16Array;
 >typedArrays[2] = Int16Array : Int16ArrayConstructor
 >typedArrays[2] : any
 >typedArrays : any[]
->2 : number
+>2 : 2
 >Int16Array : Int16ArrayConstructor
 
     typedArrays[3] = Uint16Array;
 >typedArrays[3] = Uint16Array : Uint16ArrayConstructor
 >typedArrays[3] : any
 >typedArrays : any[]
->3 : number
+>3 : 3
 >Uint16Array : Uint16ArrayConstructor
 
     typedArrays[4] = Int32Array;
 >typedArrays[4] = Int32Array : Int32ArrayConstructor
 >typedArrays[4] : any
 >typedArrays : any[]
->4 : number
+>4 : 4
 >Int32Array : Int32ArrayConstructor
 
     typedArrays[5] = Uint32Array;
 >typedArrays[5] = Uint32Array : Uint32ArrayConstructor
 >typedArrays[5] : any
 >typedArrays : any[]
->5 : number
+>5 : 5
 >Uint32Array : Uint32ArrayConstructor
 
     typedArrays[6] = Float32Array;
 >typedArrays[6] = Float32Array : Float32ArrayConstructor
 >typedArrays[6] : any
 >typedArrays : any[]
->6 : number
+>6 : 6
 >Float32Array : Float32ArrayConstructor
 
     typedArrays[7] = Float64Array;
 >typedArrays[7] = Float64Array : Float64ArrayConstructor
 >typedArrays[7] : any
 >typedArrays : any[]
->7 : number
+>7 : 7
 >Float64Array : Float64ArrayConstructor
 
     typedArrays[8] = Uint8ClampedArray;
 >typedArrays[8] = Uint8ClampedArray : Uint8ClampedArrayConstructor
 >typedArrays[8] : any
 >typedArrays : any[]
->8 : number
+>8 : 8
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 
     return typedArrays;
@@ -86,7 +86,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >typedArrays[0] = new Int8Array(obj) : Int8Array
 >typedArrays[0] : any
 >typedArrays : any[]
->0 : number
+>0 : 0
 >new Int8Array(obj) : Int8Array
 >Int8Array : Int8ArrayConstructor
 >obj : number
@@ -95,7 +95,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >typedArrays[1] = new Uint8Array(obj) : Uint8Array
 >typedArrays[1] : any
 >typedArrays : any[]
->1 : number
+>1 : 1
 >new Uint8Array(obj) : Uint8Array
 >Uint8Array : Uint8ArrayConstructor
 >obj : number
@@ -104,7 +104,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >typedArrays[2] = new Int16Array(obj) : Int16Array
 >typedArrays[2] : any
 >typedArrays : any[]
->2 : number
+>2 : 2
 >new Int16Array(obj) : Int16Array
 >Int16Array : Int16ArrayConstructor
 >obj : number
@@ -113,7 +113,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >typedArrays[3] = new Uint16Array(obj) : Uint16Array
 >typedArrays[3] : any
 >typedArrays : any[]
->3 : number
+>3 : 3
 >new Uint16Array(obj) : Uint16Array
 >Uint16Array : Uint16ArrayConstructor
 >obj : number
@@ -122,7 +122,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >typedArrays[4] = new Int32Array(obj) : Int32Array
 >typedArrays[4] : any
 >typedArrays : any[]
->4 : number
+>4 : 4
 >new Int32Array(obj) : Int32Array
 >Int32Array : Int32ArrayConstructor
 >obj : number
@@ -131,7 +131,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >typedArrays[5] = new Uint32Array(obj) : Uint32Array
 >typedArrays[5] : any
 >typedArrays : any[]
->5 : number
+>5 : 5
 >new Uint32Array(obj) : Uint32Array
 >Uint32Array : Uint32ArrayConstructor
 >obj : number
@@ -140,7 +140,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >typedArrays[6] = new Float32Array(obj) : Float32Array
 >typedArrays[6] : any
 >typedArrays : any[]
->6 : number
+>6 : 6
 >new Float32Array(obj) : Float32Array
 >Float32Array : Float32ArrayConstructor
 >obj : number
@@ -149,7 +149,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >typedArrays[7] = new Float64Array(obj) : Float64Array
 >typedArrays[7] : any
 >typedArrays : any[]
->7 : number
+>7 : 7
 >new Float64Array(obj) : Float64Array
 >Float64Array : Float64ArrayConstructor
 >obj : number
@@ -158,7 +158,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >typedArrays[8] = new Uint8ClampedArray(obj) : Uint8ClampedArray
 >typedArrays[8] : any
 >typedArrays : any[]
->8 : number
+>8 : 8
 >new Uint8ClampedArray(obj) : Uint8ClampedArray
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >obj : number
@@ -179,7 +179,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >typedArrays[0] = new Int8Array(obj) : Int8Array
 >typedArrays[0] : any
 >typedArrays : any[]
->0 : number
+>0 : 0
 >new Int8Array(obj) : Int8Array
 >Int8Array : Int8ArrayConstructor
 >obj : number[]
@@ -188,7 +188,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >typedArrays[1] = new Uint8Array(obj) : Uint8Array
 >typedArrays[1] : any
 >typedArrays : any[]
->1 : number
+>1 : 1
 >new Uint8Array(obj) : Uint8Array
 >Uint8Array : Uint8ArrayConstructor
 >obj : number[]
@@ -197,7 +197,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >typedArrays[2] = new Int16Array(obj) : Int16Array
 >typedArrays[2] : any
 >typedArrays : any[]
->2 : number
+>2 : 2
 >new Int16Array(obj) : Int16Array
 >Int16Array : Int16ArrayConstructor
 >obj : number[]
@@ -206,7 +206,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >typedArrays[3] = new Uint16Array(obj) : Uint16Array
 >typedArrays[3] : any
 >typedArrays : any[]
->3 : number
+>3 : 3
 >new Uint16Array(obj) : Uint16Array
 >Uint16Array : Uint16ArrayConstructor
 >obj : number[]
@@ -215,7 +215,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >typedArrays[4] = new Int32Array(obj) : Int32Array
 >typedArrays[4] : any
 >typedArrays : any[]
->4 : number
+>4 : 4
 >new Int32Array(obj) : Int32Array
 >Int32Array : Int32ArrayConstructor
 >obj : number[]
@@ -224,7 +224,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >typedArrays[5] = new Uint32Array(obj) : Uint32Array
 >typedArrays[5] : any
 >typedArrays : any[]
->5 : number
+>5 : 5
 >new Uint32Array(obj) : Uint32Array
 >Uint32Array : Uint32ArrayConstructor
 >obj : number[]
@@ -233,7 +233,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >typedArrays[6] = new Float32Array(obj) : Float32Array
 >typedArrays[6] : any
 >typedArrays : any[]
->6 : number
+>6 : 6
 >new Float32Array(obj) : Float32Array
 >Float32Array : Float32ArrayConstructor
 >obj : number[]
@@ -242,7 +242,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >typedArrays[7] = new Float64Array(obj) : Float64Array
 >typedArrays[7] : any
 >typedArrays : any[]
->7 : number
+>7 : 7
 >new Float64Array(obj) : Float64Array
 >Float64Array : Float64ArrayConstructor
 >obj : number[]
@@ -251,7 +251,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >typedArrays[8] = new Uint8ClampedArray(obj) : Uint8ClampedArray
 >typedArrays[8] : any
 >typedArrays : any[]
->8 : number
+>8 : 8
 >new Uint8ClampedArray(obj) : Uint8ClampedArray
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >obj : number[]
@@ -272,7 +272,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >typedArrays[0] = Int8Array.from(obj) : Int8Array
 >typedArrays[0] : any
 >typedArrays : any[]
->0 : number
+>0 : 0
 >Int8Array.from(obj) : Int8Array
 >Int8Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
 >Int8Array : Int8ArrayConstructor
@@ -283,7 +283,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >typedArrays[1] = Uint8Array.from(obj) : Uint8Array
 >typedArrays[1] : any
 >typedArrays : any[]
->1 : number
+>1 : 1
 >Uint8Array.from(obj) : Uint8Array
 >Uint8Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
 >Uint8Array : Uint8ArrayConstructor
@@ -294,7 +294,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >typedArrays[2] = Int16Array.from(obj) : Int16Array
 >typedArrays[2] : any
 >typedArrays : any[]
->2 : number
+>2 : 2
 >Int16Array.from(obj) : Int16Array
 >Int16Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
 >Int16Array : Int16ArrayConstructor
@@ -305,7 +305,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >typedArrays[3] = Uint16Array.from(obj) : Uint16Array
 >typedArrays[3] : any
 >typedArrays : any[]
->3 : number
+>3 : 3
 >Uint16Array.from(obj) : Uint16Array
 >Uint16Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
 >Uint16Array : Uint16ArrayConstructor
@@ -316,7 +316,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >typedArrays[4] = Int32Array.from(obj) : Int32Array
 >typedArrays[4] : any
 >typedArrays : any[]
->4 : number
+>4 : 4
 >Int32Array.from(obj) : Int32Array
 >Int32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
 >Int32Array : Int32ArrayConstructor
@@ -327,7 +327,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >typedArrays[5] = Uint32Array.from(obj) : Uint32Array
 >typedArrays[5] : any
 >typedArrays : any[]
->5 : number
+>5 : 5
 >Uint32Array.from(obj) : Uint32Array
 >Uint32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
 >Uint32Array : Uint32ArrayConstructor
@@ -338,7 +338,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >typedArrays[6] = Float32Array.from(obj) : Float32Array
 >typedArrays[6] : any
 >typedArrays : any[]
->6 : number
+>6 : 6
 >Float32Array.from(obj) : Float32Array
 >Float32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
 >Float32Array : Float32ArrayConstructor
@@ -349,7 +349,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >typedArrays[7] = Float64Array.from(obj) : Float64Array
 >typedArrays[7] : any
 >typedArrays : any[]
->7 : number
+>7 : 7
 >Float64Array.from(obj) : Float64Array
 >Float64Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
 >Float64Array : Float64ArrayConstructor
@@ -360,7 +360,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >typedArrays[8] = Uint8ClampedArray.from(obj) : Uint8ClampedArray
 >typedArrays[8] : any
 >typedArrays : any[]
->8 : number
+>8 : 8
 >Uint8ClampedArray.from(obj) : Uint8ClampedArray
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
@@ -384,7 +384,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays[0] = Int8Array.from(obj) : Int8Array
 >typedArrays[0] : any
 >typedArrays : any[]
->0 : number
+>0 : 0
 >Int8Array.from(obj) : Int8Array
 >Int8Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
 >Int8Array : Int8ArrayConstructor
@@ -395,7 +395,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays[1] = Uint8Array.from(obj) : Uint8Array
 >typedArrays[1] : any
 >typedArrays : any[]
->1 : number
+>1 : 1
 >Uint8Array.from(obj) : Uint8Array
 >Uint8Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
 >Uint8Array : Uint8ArrayConstructor
@@ -406,7 +406,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays[2] = Int16Array.from(obj) : Int16Array
 >typedArrays[2] : any
 >typedArrays : any[]
->2 : number
+>2 : 2
 >Int16Array.from(obj) : Int16Array
 >Int16Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
 >Int16Array : Int16ArrayConstructor
@@ -417,7 +417,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays[3] = Uint16Array.from(obj) : Uint16Array
 >typedArrays[3] : any
 >typedArrays : any[]
->3 : number
+>3 : 3
 >Uint16Array.from(obj) : Uint16Array
 >Uint16Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
 >Uint16Array : Uint16ArrayConstructor
@@ -428,7 +428,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays[4] = Int32Array.from(obj) : Int32Array
 >typedArrays[4] : any
 >typedArrays : any[]
->4 : number
+>4 : 4
 >Int32Array.from(obj) : Int32Array
 >Int32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
 >Int32Array : Int32ArrayConstructor
@@ -439,7 +439,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays[5] = Uint32Array.from(obj) : Uint32Array
 >typedArrays[5] : any
 >typedArrays : any[]
->5 : number
+>5 : 5
 >Uint32Array.from(obj) : Uint32Array
 >Uint32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
 >Uint32Array : Uint32ArrayConstructor
@@ -450,7 +450,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays[6] = Float32Array.from(obj) : Float32Array
 >typedArrays[6] : any
 >typedArrays : any[]
->6 : number
+>6 : 6
 >Float32Array.from(obj) : Float32Array
 >Float32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
 >Float32Array : Float32ArrayConstructor
@@ -461,7 +461,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays[7] = Float64Array.from(obj) : Float64Array
 >typedArrays[7] : any
 >typedArrays : any[]
->7 : number
+>7 : 7
 >Float64Array.from(obj) : Float64Array
 >Float64Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
 >Float64Array : Float64ArrayConstructor
@@ -472,7 +472,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays[8] = Uint8ClampedArray.from(obj) : Uint8ClampedArray
 >typedArrays[8] : any
 >typedArrays : any[]
->8 : number
+>8 : 8
 >Uint8ClampedArray.from(obj) : Uint8ClampedArray
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
@@ -495,7 +495,7 @@ function CreateTypedArraysOf(obj) {
 >typedArrays[0] = Int8Array.of(...obj) : Int8Array
 >typedArrays[0] : any
 >typedArrays : any[]
->0 : number
+>0 : 0
 >Int8Array.of(...obj) : Int8Array
 >Int8Array.of : (...items: number[]) => Int8Array
 >Int8Array : Int8ArrayConstructor
@@ -507,7 +507,7 @@ function CreateTypedArraysOf(obj) {
 >typedArrays[1] = Uint8Array.of(...obj) : Uint8Array
 >typedArrays[1] : any
 >typedArrays : any[]
->1 : number
+>1 : 1
 >Uint8Array.of(...obj) : Uint8Array
 >Uint8Array.of : (...items: number[]) => Uint8Array
 >Uint8Array : Uint8ArrayConstructor
@@ -519,7 +519,7 @@ function CreateTypedArraysOf(obj) {
 >typedArrays[2] = Int16Array.of(...obj) : Int16Array
 >typedArrays[2] : any
 >typedArrays : any[]
->2 : number
+>2 : 2
 >Int16Array.of(...obj) : Int16Array
 >Int16Array.of : (...items: number[]) => Int16Array
 >Int16Array : Int16ArrayConstructor
@@ -531,7 +531,7 @@ function CreateTypedArraysOf(obj) {
 >typedArrays[3] = Uint16Array.of(...obj) : Uint16Array
 >typedArrays[3] : any
 >typedArrays : any[]
->3 : number
+>3 : 3
 >Uint16Array.of(...obj) : Uint16Array
 >Uint16Array.of : (...items: number[]) => Uint16Array
 >Uint16Array : Uint16ArrayConstructor
@@ -543,7 +543,7 @@ function CreateTypedArraysOf(obj) {
 >typedArrays[4] = Int32Array.of(...obj) : Int32Array
 >typedArrays[4] : any
 >typedArrays : any[]
->4 : number
+>4 : 4
 >Int32Array.of(...obj) : Int32Array
 >Int32Array.of : (...items: number[]) => Int32Array
 >Int32Array : Int32ArrayConstructor
@@ -555,7 +555,7 @@ function CreateTypedArraysOf(obj) {
 >typedArrays[5] = Uint32Array.of(...obj) : Uint32Array
 >typedArrays[5] : any
 >typedArrays : any[]
->5 : number
+>5 : 5
 >Uint32Array.of(...obj) : Uint32Array
 >Uint32Array.of : (...items: number[]) => Uint32Array
 >Uint32Array : Uint32ArrayConstructor
@@ -567,7 +567,7 @@ function CreateTypedArraysOf(obj) {
 >typedArrays[6] = Float32Array.of(...obj) : Float32Array
 >typedArrays[6] : any
 >typedArrays : any[]
->6 : number
+>6 : 6
 >Float32Array.of(...obj) : Float32Array
 >Float32Array.of : (...items: number[]) => Float32Array
 >Float32Array : Float32ArrayConstructor
@@ -579,7 +579,7 @@ function CreateTypedArraysOf(obj) {
 >typedArrays[7] = Float64Array.of(...obj) : Float64Array
 >typedArrays[7] : any
 >typedArrays : any[]
->7 : number
+>7 : 7
 >Float64Array.of(...obj) : Float64Array
 >Float64Array.of : (...items: number[]) => Float64Array
 >Float64Array : Float64ArrayConstructor
@@ -591,7 +591,7 @@ function CreateTypedArraysOf(obj) {
 >typedArrays[8] = Uint8ClampedArray.of(...obj) : Uint8ClampedArray
 >typedArrays[8] : any
 >typedArrays : any[]
->8 : number
+>8 : 8
 >Uint8ClampedArray.of(...obj) : Uint8ClampedArray
 >Uint8ClampedArray.of : (...items: number[]) => Uint8ClampedArray
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
@@ -614,127 +614,127 @@ function CreateTypedArraysOf2() {
 >typedArrays[0] = Int8Array.of(1,2,3,4) : Int8Array
 >typedArrays[0] : any
 >typedArrays : any[]
->0 : number
+>0 : 0
 >Int8Array.of(1,2,3,4) : Int8Array
 >Int8Array.of : (...items: number[]) => Int8Array
 >Int8Array : Int8ArrayConstructor
 >of : (...items: number[]) => Int8Array
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
     typedArrays[1] = Uint8Array.of(1,2,3,4);
 >typedArrays[1] = Uint8Array.of(1,2,3,4) : Uint8Array
 >typedArrays[1] : any
 >typedArrays : any[]
->1 : number
+>1 : 1
 >Uint8Array.of(1,2,3,4) : Uint8Array
 >Uint8Array.of : (...items: number[]) => Uint8Array
 >Uint8Array : Uint8ArrayConstructor
 >of : (...items: number[]) => Uint8Array
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
     typedArrays[2] = Int16Array.of(1,2,3,4);
 >typedArrays[2] = Int16Array.of(1,2,3,4) : Int16Array
 >typedArrays[2] : any
 >typedArrays : any[]
->2 : number
+>2 : 2
 >Int16Array.of(1,2,3,4) : Int16Array
 >Int16Array.of : (...items: number[]) => Int16Array
 >Int16Array : Int16ArrayConstructor
 >of : (...items: number[]) => Int16Array
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
     typedArrays[3] = Uint16Array.of(1,2,3,4);
 >typedArrays[3] = Uint16Array.of(1,2,3,4) : Uint16Array
 >typedArrays[3] : any
 >typedArrays : any[]
->3 : number
+>3 : 3
 >Uint16Array.of(1,2,3,4) : Uint16Array
 >Uint16Array.of : (...items: number[]) => Uint16Array
 >Uint16Array : Uint16ArrayConstructor
 >of : (...items: number[]) => Uint16Array
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
     typedArrays[4] = Int32Array.of(1,2,3,4);
 >typedArrays[4] = Int32Array.of(1,2,3,4) : Int32Array
 >typedArrays[4] : any
 >typedArrays : any[]
->4 : number
+>4 : 4
 >Int32Array.of(1,2,3,4) : Int32Array
 >Int32Array.of : (...items: number[]) => Int32Array
 >Int32Array : Int32ArrayConstructor
 >of : (...items: number[]) => Int32Array
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
     typedArrays[5] = Uint32Array.of(1,2,3,4);
 >typedArrays[5] = Uint32Array.of(1,2,3,4) : Uint32Array
 >typedArrays[5] : any
 >typedArrays : any[]
->5 : number
+>5 : 5
 >Uint32Array.of(1,2,3,4) : Uint32Array
 >Uint32Array.of : (...items: number[]) => Uint32Array
 >Uint32Array : Uint32ArrayConstructor
 >of : (...items: number[]) => Uint32Array
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
     typedArrays[6] = Float32Array.of(1,2,3,4);
 >typedArrays[6] = Float32Array.of(1,2,3,4) : Float32Array
 >typedArrays[6] : any
 >typedArrays : any[]
->6 : number
+>6 : 6
 >Float32Array.of(1,2,3,4) : Float32Array
 >Float32Array.of : (...items: number[]) => Float32Array
 >Float32Array : Float32ArrayConstructor
 >of : (...items: number[]) => Float32Array
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
     typedArrays[7] = Float64Array.of(1,2,3,4);
 >typedArrays[7] = Float64Array.of(1,2,3,4) : Float64Array
 >typedArrays[7] : any
 >typedArrays : any[]
->7 : number
+>7 : 7
 >Float64Array.of(1,2,3,4) : Float64Array
 >Float64Array.of : (...items: number[]) => Float64Array
 >Float64Array : Float64ArrayConstructor
 >of : (...items: number[]) => Float64Array
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
     typedArrays[8] = Uint8ClampedArray.of(1,2,3,4);
 >typedArrays[8] = Uint8ClampedArray.of(1,2,3,4) : Uint8ClampedArray
 >typedArrays[8] : any
 >typedArrays : any[]
->8 : number
+>8 : 8
 >Uint8ClampedArray.of(1,2,3,4) : Uint8ClampedArray
 >Uint8ClampedArray.of : (...items: number[]) => Uint8ClampedArray
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >of : (...items: number[]) => Uint8ClampedArray
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
     return typedArrays;
 >typedArrays : any[]
@@ -756,7 +756,7 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >typedArrays[0] = Int8Array.from(obj, mapFn) : Int8Array
 >typedArrays[0] : any
 >typedArrays : any[]
->0 : number
+>0 : 0
 >Int8Array.from(obj, mapFn) : Int8Array
 >Int8Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
 >Int8Array : Int8ArrayConstructor
@@ -768,7 +768,7 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >typedArrays[1] = Uint8Array.from(obj, mapFn) : Uint8Array
 >typedArrays[1] : any
 >typedArrays : any[]
->1 : number
+>1 : 1
 >Uint8Array.from(obj, mapFn) : Uint8Array
 >Uint8Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
 >Uint8Array : Uint8ArrayConstructor
@@ -780,7 +780,7 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >typedArrays[2] = Int16Array.from(obj, mapFn) : Int16Array
 >typedArrays[2] : any
 >typedArrays : any[]
->2 : number
+>2 : 2
 >Int16Array.from(obj, mapFn) : Int16Array
 >Int16Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
 >Int16Array : Int16ArrayConstructor
@@ -792,7 +792,7 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >typedArrays[3] = Uint16Array.from(obj, mapFn) : Uint16Array
 >typedArrays[3] : any
 >typedArrays : any[]
->3 : number
+>3 : 3
 >Uint16Array.from(obj, mapFn) : Uint16Array
 >Uint16Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
 >Uint16Array : Uint16ArrayConstructor
@@ -804,7 +804,7 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >typedArrays[4] = Int32Array.from(obj, mapFn) : Int32Array
 >typedArrays[4] : any
 >typedArrays : any[]
->4 : number
+>4 : 4
 >Int32Array.from(obj, mapFn) : Int32Array
 >Int32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
 >Int32Array : Int32ArrayConstructor
@@ -816,7 +816,7 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >typedArrays[5] = Uint32Array.from(obj, mapFn) : Uint32Array
 >typedArrays[5] : any
 >typedArrays : any[]
->5 : number
+>5 : 5
 >Uint32Array.from(obj, mapFn) : Uint32Array
 >Uint32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
 >Uint32Array : Uint32ArrayConstructor
@@ -828,7 +828,7 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >typedArrays[6] = Float32Array.from(obj, mapFn) : Float32Array
 >typedArrays[6] : any
 >typedArrays : any[]
->6 : number
+>6 : 6
 >Float32Array.from(obj, mapFn) : Float32Array
 >Float32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
 >Float32Array : Float32ArrayConstructor
@@ -840,7 +840,7 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >typedArrays[7] = Float64Array.from(obj, mapFn) : Float64Array
 >typedArrays[7] : any
 >typedArrays : any[]
->7 : number
+>7 : 7
 >Float64Array.from(obj, mapFn) : Float64Array
 >Float64Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
 >Float64Array : Float64ArrayConstructor
@@ -852,7 +852,7 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >typedArrays[8] = Uint8ClampedArray.from(obj, mapFn) : Uint8ClampedArray
 >typedArrays[8] : any
 >typedArrays : any[]
->8 : number
+>8 : 8
 >Uint8ClampedArray.from(obj, mapFn) : Uint8ClampedArray
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
@@ -881,7 +881,7 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >typedArrays[0] = Int8Array.from(obj, mapFn, thisArg) : Int8Array
 >typedArrays[0] : any
 >typedArrays : any[]
->0 : number
+>0 : 0
 >Int8Array.from(obj, mapFn, thisArg) : Int8Array
 >Int8Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
 >Int8Array : Int8ArrayConstructor
@@ -894,7 +894,7 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >typedArrays[1] = Uint8Array.from(obj, mapFn, thisArg) : Uint8Array
 >typedArrays[1] : any
 >typedArrays : any[]
->1 : number
+>1 : 1
 >Uint8Array.from(obj, mapFn, thisArg) : Uint8Array
 >Uint8Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
 >Uint8Array : Uint8ArrayConstructor
@@ -907,7 +907,7 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >typedArrays[2] = Int16Array.from(obj, mapFn, thisArg) : Int16Array
 >typedArrays[2] : any
 >typedArrays : any[]
->2 : number
+>2 : 2
 >Int16Array.from(obj, mapFn, thisArg) : Int16Array
 >Int16Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
 >Int16Array : Int16ArrayConstructor
@@ -920,7 +920,7 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >typedArrays[3] = Uint16Array.from(obj, mapFn, thisArg) : Uint16Array
 >typedArrays[3] : any
 >typedArrays : any[]
->3 : number
+>3 : 3
 >Uint16Array.from(obj, mapFn, thisArg) : Uint16Array
 >Uint16Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
 >Uint16Array : Uint16ArrayConstructor
@@ -933,7 +933,7 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >typedArrays[4] = Int32Array.from(obj, mapFn, thisArg) : Int32Array
 >typedArrays[4] : any
 >typedArrays : any[]
->4 : number
+>4 : 4
 >Int32Array.from(obj, mapFn, thisArg) : Int32Array
 >Int32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
 >Int32Array : Int32ArrayConstructor
@@ -946,7 +946,7 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >typedArrays[5] = Uint32Array.from(obj, mapFn, thisArg) : Uint32Array
 >typedArrays[5] : any
 >typedArrays : any[]
->5 : number
+>5 : 5
 >Uint32Array.from(obj, mapFn, thisArg) : Uint32Array
 >Uint32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
 >Uint32Array : Uint32ArrayConstructor
@@ -959,7 +959,7 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >typedArrays[6] = Float32Array.from(obj, mapFn, thisArg) : Float32Array
 >typedArrays[6] : any
 >typedArrays : any[]
->6 : number
+>6 : 6
 >Float32Array.from(obj, mapFn, thisArg) : Float32Array
 >Float32Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
 >Float32Array : Float32ArrayConstructor
@@ -972,7 +972,7 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >typedArrays[7] = Float64Array.from(obj, mapFn, thisArg) : Float64Array
 >typedArrays[7] : any
 >typedArrays : any[]
->7 : number
+>7 : 7
 >Float64Array.from(obj, mapFn, thisArg) : Float64Array
 >Float64Array.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
 >Float64Array : Float64ArrayConstructor
@@ -985,7 +985,7 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >typedArrays[8] = Uint8ClampedArray.from(obj, mapFn, thisArg) : Uint8ClampedArray
 >typedArrays[8] : any
 >typedArrays : any[]
->8 : number
+>8 : 8
 >Uint8ClampedArray.from(obj, mapFn, thisArg) : Uint8ClampedArray
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
 >Uint8ClampedArray : Uint8ClampedArrayConstructor

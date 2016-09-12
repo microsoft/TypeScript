@@ -4,7 +4,7 @@ class C {
 
     x: string = "Hello world";
 >x : string
->"Hello world" : string
+>"Hello world" : "Hello world"
 }
 
 class D {
@@ -12,18 +12,18 @@ class D {
 
     x: string = "Hello world";
 >x : string
->"Hello world" : string
+>"Hello world" : "Hello world"
 
     y: number;
 >y : number
 
     constructor() {
         this.y = 10;
->this.y = 10 : number
+>this.y = 10 : 10
 >this.y : number
 >this : this
 >y : number
->10 : number
+>10 : 10
     }
 }
 
@@ -33,7 +33,7 @@ class E extends D{
 
     z: boolean = true;
 >z : boolean
->true : boolean
+>true : true
 }
 
 class F extends D{
@@ -42,7 +42,7 @@ class F extends D{
 
     z: boolean = true;
 >z : boolean
->true : boolean
+>true : true
 
     j: string;
 >j : string
@@ -53,10 +53,10 @@ class F extends D{
 >super : typeof D
 
         this.j = "HI";
->this.j = "HI" : string
+>this.j = "HI" : "HI"
 >this.j : string
 >this : this
 >j : string
->"HI" : string
+>"HI" : "HI"
     }
 }

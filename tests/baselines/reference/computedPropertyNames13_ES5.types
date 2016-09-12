@@ -32,17 +32,17 @@ class C {
 >s : string
 
     static [""]() { }
->"" : string
+>"" : ""
 
     [0]() { }
->0 : number
+>0 : 0
 
     [a]() { }
 >a : any
 
     static [<any>true]() { }
 ><any>true : any
->true : boolean
+>true : true
 
     [`hello bye`]() { }
 >`hello bye` : string

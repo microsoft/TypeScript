@@ -7,7 +7,7 @@ var obj = {
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->0 : number
+>0 : 0
 
 };
 

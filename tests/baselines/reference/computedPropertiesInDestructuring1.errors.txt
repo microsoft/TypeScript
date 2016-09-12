@@ -1,7 +1,7 @@
 tests/cases/compiler/computedPropertiesInDestructuring1.ts(20,8): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/compiler/computedPropertiesInDestructuring1.ts(21,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
 tests/cases/compiler/computedPropertiesInDestructuring1.ts(33,4): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(34,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
+tests/cases/compiler/computedPropertiesInDestructuring1.ts(34,5): error TS2365: Operator '+' cannot be applied to types '1' and '{}'.
 
 
 ==== tests/cases/compiler/computedPropertiesInDestructuring1.ts (4 errors) ====
@@ -46,7 +46,7 @@ tests/cases/compiler/computedPropertiesInDestructuring1.ts(34,5): error TS2365: 
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     [{[(1 + {})]: bar4}] = [{bar: "bar"}];
         ~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
+!!! error TS2365: Operator '+' cannot be applied to types '1' and '{}'.
     
     
     

@@ -35,7 +35,7 @@ var a = Color.namedColors["azure"];
 >Color.namedColors : NamedColors
 >Color : typeof Color
 >namedColors : NamedColors
->"azure" : string
+>"azure" : "azure"
 
 var a = Color.namedColors.blue; // Should not error
 >a : _Color
@@ -51,5 +51,5 @@ var a = Color.namedColors["pale blue"]; // should not error
 >Color.namedColors : NamedColors
 >Color : typeof Color
 >namedColors : NamedColors
->"pale blue" : string
+>"pale blue" : "pale blue"
 
