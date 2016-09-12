@@ -252,7 +252,9 @@ const _super = (function (geti, seti) {
 
             // Emit helpers from all the files
             if (isBundledEmit && moduleKind) {
-                forEach(sourceFiles, emitEmitHelpers);
+                for (const sourceFile of sourceFiles) {
+                    emitEmitHelpers(sourceFile);
+                }
             }
 
             // Print each transformed source file.
