@@ -6194,9 +6194,10 @@ namespace ts {
             if (enumRelation[id] !== undefined) {
                 return enumRelation[id];
             }
-            if (source.symbol.name !== target.symbol.name || !(source.symbol.flags & SymbolFlags.RegularEnum) || !(target.symbol.flags & SymbolFlags.RegularEnum)) {
-                enumRelation[id] = false;
-                return false;
+            if (source.symbol.name !== target.symbol.name ||
+                !(source.symbol.flags & SymbolFlags.RegularEnum) || !(target.symbol.flags & SymbolFlags.RegularEnum) ||
+                !(source.flags & TypeFlags.Union) || !(target.flags & TypeFlags.Union)) {
+                return (enumRelation[id] = false);
             }
             const targetEnumType = getTypeOfSymbol(target.symbol);
             for (const property of getPropertiesOfType(getTypeOfSymbol(source.symbol))) {
@@ -6207,13 +6208,11 @@ namespace ts {
                             errorReporter(Diagnostics.Property_0_is_missing_in_type_1, property.name,
                                 typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
                         }
-                        enumRelation[id] = false;
-                        return false;
+                        return (enumRelation[id] = false);
                     }
                 }
             }
-            enumRelation[id] = true;
-            return true;
+            return (enumRelation[id] = true);
         }
 
         function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorReporter?: ErrorReporter) {
@@ -6228,9 +6227,7 @@ namespace ts {
             if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
-                if (source.flags & TypeFlags.Number && target.flags & TypeFlags.EnumLike) return true;
-                if (source.flags & TypeFlags.NumberLiteral && target.flags & TypeFlags.Enum) return true;
-                if (source.flags & TypeFlags.NumberLiteral && target.flags & TypeFlags.EnumLiteral && (<LiteralType>source).text === (<LiteralType>target).text) return true;
+                if ((source.flags & TypeFlags.Number | source.flags & TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
                 if (source.flags & TypeFlags.EnumLiteral &&
                     target.flags & TypeFlags.EnumLiteral &&
                     (<LiteralType>source).text === (<LiteralType>target).text &&
@@ -6416,14 +6413,6 @@ namespace ts {
                     if (target.flags & TypeFlags.Union) {
                         if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive))) {
                             return result;
-                        }
-                        if (source.flags & TypeFlags.Enum) {
-                            // 1. look through the target union for a literal whose base type is related to the source
-                            const lit = find((<UnionType>target).types, t => t.flags & TypeFlags.EnumLiteral && isEnumTypeRelatedTo(<EnumType>source, (<EnumLiteralType>t).baseType));
-                            // 2. if found, the base type is only assignable to source if all its literals are in the target union.
-                            if (lit && (result = isRelatedTo((lit as EnumLiteralType).baseType, target, /*reportErrors*/ false))) {
-                                return result;
-                            }
                         }
                     }
                 }
