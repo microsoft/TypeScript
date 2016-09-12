@@ -8,4 +8,4 @@
 ////exports.x = 0;
 
 goTo.marker();
-verify.quickInfoIs('const x: typeof "tests/cases/fourslash/b"');
+verify.quickInfoIs('const x: typeof "/tests/cases/fourslash/b"');
