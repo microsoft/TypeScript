@@ -402,26 +402,26 @@ namespace ts.server {
         constructor(
             public projectService: ProjectService,
             public projectOptions?: ProjectOptions,
-            public languageServiceDiabled = false) {
+            public languageServiceDisabled = false) {
             if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
             }
-            if (!languageServiceDiabled) {
+            if (!languageServiceDisabled) {
                 this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
             }
         }
 
         enableLanguageService() {
             // if the language service was disabled, we should re-initiate the compiler service
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 this.compilerService = new CompilerService(this, this.projectOptions && this.projectOptions.compilerOptions);
             }
-            this.languageServiceDiabled = false;
+            this.languageServiceDisabled = false;
         }
 
         disableLanguageService() {
-            this.languageServiceDiabled = true;
+            this.languageServiceDisabled = true;
         }
 
         addOpenRef() {
@@ -438,7 +438,7 @@ namespace ts.server {
         }
 
         getRootFiles() {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 // When the languageService was disabled, only return file list if it is a configured project
                 return this.projectOptions ? this.projectOptions.files : undefined;
             }
@@ -447,7 +447,7 @@ namespace ts.server {
         }
 
         getFileNames() {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 if (!this.projectOptions) {
                     return undefined;
                 }
@@ -465,7 +465,7 @@ namespace ts.server {
         }
 
         getSourceFile(info: ScriptInfo) {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 return undefined;
             }
 
@@ -473,7 +473,7 @@ namespace ts.server {
         }
 
         getSourceFileFromName(filename: string, requireOpen?: boolean) {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 return undefined;
             }
 
@@ -486,7 +486,7 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 return undefined;
             }
 
@@ -494,7 +494,7 @@ namespace ts.server {
         }
 
         removeReferencedFile(info: ScriptInfo) {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 return;
             }
 
@@ -503,7 +503,7 @@ namespace ts.server {
         }
 
         updateFileMap() {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 return;
             }
 
@@ -516,7 +516,7 @@ namespace ts.server {
         }
 
         finishGraph() {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 return;
             }
 
@@ -525,7 +525,7 @@ namespace ts.server {
         }
 
         updateGraph() {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 return;
             }
 
@@ -539,7 +539,7 @@ namespace ts.server {
 
         // add a root file to project
         addRoot(info: ScriptInfo) {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 return;
             }
 
@@ -548,7 +548,7 @@ namespace ts.server {
 
         // remove a root file from project
         removeRoot(info: ScriptInfo) {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 return;
             }
 
@@ -556,7 +556,7 @@ namespace ts.server {
         }
 
         filesToString() {
-            if (this.languageServiceDiabled) {
+            if (this.languageServiceDisabled) {
                 if (this.projectOptions) {
                     let strBuilder = "";
                     ts.forEach(this.projectOptions.files,
@@ -575,7 +575,7 @@ namespace ts.server {
             this.projectOptions = projectOptions;
             if (projectOptions.compilerOptions) {
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
-                if (!this.languageServiceDiabled) {
+                if (!this.languageServiceDisabled) {
                     this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
                 }
             }
@@ -1461,7 +1461,7 @@ namespace ts.server {
                 else {
                     if (projectOptions.compilerOptions && !projectOptions.compilerOptions.disableSizeLimit && this.exceedTotalNonTsFileSizeLimit(projectOptions.files)) {
                         project.setProjectOptions(projectOptions);
-                        if (project.languageServiceDiabled) {
+                        if (project.languageServiceDisabled) {
                             return errors;
                         }
 
@@ -1473,7 +1473,7 @@ namespace ts.server {
                         return errors;
                     }
 
-                    if (project.languageServiceDiabled) {
+                    if (project.languageServiceDisabled) {
                         project.setProjectOptions(projectOptions);
                         project.enableLanguageService();
                         project.directoryWatcher = this.host.watchDirectory(
