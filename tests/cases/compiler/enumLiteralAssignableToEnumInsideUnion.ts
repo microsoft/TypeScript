@@ -20,8 +20,9 @@ module Ka {
         B = 1 << 11,
     }
 }
-const e1: X.Foo | boolean = Z.Foo.A; // ok
-const e2: X.Foo.A | X.Foo.B | boolean = Z.Foo.A; // ok, X.Foo is equivalent to X.Foo.A | X.Foo.B
+const e0: X.Foo | boolean = Y.Foo.A; // ok
+const e1: X.Foo | boolean = Z.Foo.A; // not legal, Z is computed
+const e2: X.Foo.A | X.Foo.B | boolean = Z.Foo.A; // still not legal
 const e3: X.Foo.B | boolean = Z.Foo.A; // not legal
 const e4: X.Foo.A | boolean = Z.Foo.A; // not legal either because Z.Foo is computed and Z.Foo.A is not necessarily assignable to X.Foo.A
 const e5: Ka.Foo | boolean = Z.Foo.A; // ok

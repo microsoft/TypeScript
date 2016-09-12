@@ -1,8 +1,7 @@
-tests/cases/compiler/enumAssignmentCompat5.ts(14,1): error TS2322: Type '2' is not assignable to type 'E.A'.
 tests/cases/compiler/enumAssignmentCompat5.ts(20,9): error TS2535: Enum type 'Computed' has members with initializers that are not literals.
 
 
-==== tests/cases/compiler/enumAssignmentCompat5.ts (2 errors) ====
+==== tests/cases/compiler/enumAssignmentCompat5.ts (1 errors) ====
     enum E {
         A, B, C
     }
@@ -17,8 +16,6 @@ tests/cases/compiler/enumAssignmentCompat5.ts(20,9): error TS2535: Enum type 'Co
     e = 4; // ok, out of range, but allowed computed enums don't have all members
     let a: E.A = 0; // ok, A === 0
     a = 2; // error, 2 !== 0
-    ~
-!!! error TS2322: Type '2' is not assignable to type 'E.A'.
     a = n; // ok
     
     let c: Computed = n; // ok
