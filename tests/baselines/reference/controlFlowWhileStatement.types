@@ -9,9 +9,9 @@ function a() {
 >x : string | number
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
 
     while (cond) {
 >cond : boolean
@@ -27,9 +27,9 @@ function b() {
 >x : string | number
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
 
     while (cond) {
 >cond : boolean
@@ -38,9 +38,9 @@ function b() {
 >x : string
 
         x = 42;
->x = 42 : number
+>x = 42 : 42
 >x : string | number
->42 : number
+>42 : 42
 
         break;
     }
@@ -52,9 +52,9 @@ function c() {
 >x : string | number
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
 
     while (cond) {
 >cond : boolean
@@ -83,9 +83,9 @@ function d() {
 >x : string | number
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
 
     while (x = x.length) {
 >x = x.length : number
@@ -98,9 +98,9 @@ function d() {
 >x : number
 
         x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
     }
 }
 function e() {
@@ -110,9 +110,9 @@ function e() {
 >x : string | number
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
 
     while (cond) {
 >cond : boolean
@@ -121,9 +121,9 @@ function e() {
 >x : string | number
 
         x = 42;
->x = 42 : number
+>x = 42 : 42
 >x : string | number
->42 : number
+>42 : 42
 
         x; // number
 >x : number
@@ -140,9 +140,9 @@ function f() {
 >Function : Function
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean | Function | RegExp
->"" : string
+>"" : ""
 
     while (cond) {
 >cond : boolean
@@ -151,9 +151,9 @@ function f() {
 >cond : true
 
             x = 42;
->x = 42 : number
+>x = 42 : 42
 >x : string | number | boolean | Function | RegExp
->42 : number
+>42 : 42
 
             break;
         }
@@ -184,20 +184,20 @@ function g() {
 >Function : Function
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean | Function | RegExp
->"" : string
+>"" : ""
 
     while (true) {
->true : boolean
+>true : true
 
         if (cond) {
 >cond : boolean
 
             x = 42;
->x = 42 : number
+>x = 42 : 42
 >x : string | number | boolean | Function | RegExp
->42 : number
+>42 : 42
 
             break;
         }
@@ -226,22 +226,22 @@ function h1() {
 >x : string | number | boolean
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
+>"" : ""
 
     while (x > 1) {
 >x > 1 : boolean
 >x : string | number
->1 : number
+>1 : 1
 
         x; // string | number
 >x : string | number
 
         x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : string | number | boolean
->1 : number
+>1 : 1
 
         x; // number
 >x : number
@@ -260,9 +260,9 @@ function h2() {
 >x : string | number | boolean
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
+>"" : ""
 
     while (cond) {
 >cond : boolean
@@ -287,9 +287,9 @@ function h3() {
 >x : string | number | boolean
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
+>"" : ""
 
     while (cond) {
 >cond : boolean

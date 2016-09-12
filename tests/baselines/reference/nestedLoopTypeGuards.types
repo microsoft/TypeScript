@@ -16,19 +16,19 @@ function f1() {
         // a is narrowed to "number | string"
         for (var i = 0; i < 1; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
             for (var j = 0; j < 1; j++) {}
 >j : number
->0 : number
+>0 : 0
 >j < 1 : boolean
 >j : number
->1 : number
+>1 : 1
 >j++ : number
 >j : number
 
@@ -41,10 +41,10 @@ function f1() {
                 // a is narrowed to "string'
                 for (var j = 0; j < 1; j++) {
 >j : number
->0 : number
+>0 : 0
 >j < 1 : boolean
 >j : number
->1 : number
+>1 : 1
 >j++ : number
 >j : number
 
@@ -71,10 +71,10 @@ function f2() {
 >'string' : "string"
 
         while (1) {
->1 : number
+>1 : 1
 
             while (1) {}
->1 : number
+>1 : 1
 
             if (typeof a === 'string') {
 >typeof a === 'string' : boolean
@@ -83,7 +83,7 @@ function f2() {
 >'string' : "string"
 
                 while (1) {
->1 : number
+>1 : 1
 
                     a.length; // Should not error here
 >a.length : number

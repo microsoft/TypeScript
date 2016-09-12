@@ -5,9 +5,9 @@ function f0() {
     var a = [1, 2, 3];
 >a : number[]
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
     var a1 = [...a];
 >a1 : number[]
@@ -18,15 +18,15 @@ function f0() {
     var a2 = [1, ...a];
 >a2 : number[]
 >[1, ...a] : number[]
->1 : number
+>1 : 1
 >...a : number
 >a : number[]
 
     var a3 = [1, 2, ...a];
 >a3 : number[]
 >[1, 2, ...a] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 >...a : number
 >a : number[]
 
@@ -35,33 +35,33 @@ function f0() {
 >[...a, 1] : number[]
 >...a : number
 >a : number[]
->1 : number
+>1 : 1
 
     var a5 = [...a, 1, 2];
 >a5 : number[]
 >[...a, 1, 2] : number[]
 >...a : number
 >a : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
     var a6 = [1, 2, ...a, 1, 2];
 >a6 : number[]
 >[1, 2, ...a, 1, 2] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 >...a : number
 >a : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
     var a7 = [1, ...a, 2, ...a];
 >a7 : number[]
 >[1, ...a, 2, ...a] : number[]
->1 : number
+>1 : 1
 >...a : number
 >a : number[]
->2 : number
+>2 : 2
 >...a : number
 >a : number[]
 
@@ -82,17 +82,17 @@ function f1() {
     var a = [1, 2, 3];
 >a : number[]
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
     var b = ["hello", ...a, true];
 >b : (string | number | boolean)[]
 >["hello", ...a, true] : (string | number | boolean)[]
->"hello" : string
+>"hello" : "hello"
 >...a : number
 >a : number[]
->true : boolean
+>true : true
 
     var b: (string | number | boolean)[];
 >b : (string | number | boolean)[]
@@ -128,6 +128,6 @@ function f2() {
 >[...[5]] : number[]
 >...[5] : number
 >[5] : number[]
->5 : number
+>5 : 5
 }
 

@@ -6,4 +6,4 @@
 ////};
 
 goTo.marker();
-verify.quickInfoIs('(local var) xx: T', null);
+verify.quickInfoIs('(local var) xx: T');

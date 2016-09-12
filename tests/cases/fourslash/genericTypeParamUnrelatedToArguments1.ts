@@ -11,19 +11,19 @@
 ////var f/*6*/6: Foo<number> = new Foo<number>(3);
 
 goTo.marker('1');
-verify.quickInfoIs('var f1: Foo<number>', null);
+verify.quickInfoIs('var f1: Foo<number>');
 
 goTo.marker('2');
-verify.quickInfoIs('var f2: Foo<number>', null);
+verify.quickInfoIs('var f2: Foo<number>');
 
 goTo.marker('3');
-verify.quickInfoIs('var f3: any', null);
+verify.quickInfoIs('var f3: any');
 
 goTo.marker('4');
-verify.quickInfoIs('var f4: Foo<number>', null);
+verify.quickInfoIs('var f4: Foo<number>');
 
 goTo.marker('5');
-verify.quickInfoIs('var f5: any', null);
+verify.quickInfoIs('var f5: any');
 
 goTo.marker('6');
-verify.quickInfoIs('var f6: Foo<number>', null);
+verify.quickInfoIs('var f6: Foo<number>');

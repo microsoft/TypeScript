@@ -1282,8 +1282,8 @@
           "kind": "punctuation"
         },
         {
-          "text": "string",
-          "kind": "keyword"
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
         },
         {
           "text": ">",
@@ -1306,8 +1306,8 @@
           "kind": "space"
         },
         {
-          "text": "string",
-          "kind": "keyword"
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
         },
         {
           "text": ",",
@@ -1346,8 +1346,8 @@
           "kind": "space"
         },
         {
-          "text": "string",
-          "kind": "keyword"
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
         }
       ],
       "documentation": []

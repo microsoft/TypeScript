@@ -406,8 +406,8 @@
           "kind": "punctuation"
         },
         {
-          "text": "string",
-          "kind": "keyword"
+          "text": "\"Hello\"",
+          "kind": "stringLiteral"
         },
         {
           "text": ">",
@@ -430,8 +430,8 @@
           "kind": "space"
         },
         {
-          "text": "string",
-          "kind": "keyword"
+          "text": "\"Hello\"",
+          "kind": "stringLiteral"
         },
         {
           "text": ")",
@@ -446,8 +446,8 @@
           "kind": "space"
         },
         {
-          "text": "string",
-          "kind": "keyword"
+          "text": "\"Hello\"",
+          "kind": "stringLiteral"
         }
       ],
       "documentation": []

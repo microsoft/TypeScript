@@ -7,7 +7,7 @@ class A {
 
         var x = 10;
 >x : number
->10 : number
+>10 : 10
     }
 }
 
@@ -21,7 +21,7 @@ class B {
 
         var y = 10;
 >y : number
->10 : number
+>10 : 10
     }
 }
 
@@ -34,7 +34,7 @@ class C {
 
         var x = 10;
 >x : number
->10 : number
+>10 : 10
     }
 }
 
@@ -49,6 +49,6 @@ class D {
 
         var y = 10;
 >y : number
->10 : number
+>10 : 10
     }
 }

@@ -68,13 +68,13 @@ var n1 = f1(42);             // number
 >n1 : number
 >f1(42) : number
 >f1 : A | B | C
->42 : number
+>42 : 42
 
 var s1 = f1("abc");          // boolean | string | number
 >s1 : string | number | boolean
 >f1("abc") : string | number | boolean
 >f1 : A | B | C
->"abc" : string
+>"abc" : "abc"
 
 var a1 = f1([true, false]);  // boolean[]
 >a1 : boolean[]
@@ -94,13 +94,13 @@ var n2 = f2(42);             // number
 >n2 : number
 >f2(42) : number
 >f2 : A | B | C
->42 : number
+>42 : 42
 
 var s2 = f2("abc");          // number | string | boolean
 >s2 : string | number | boolean
 >f2("abc") : string | number | boolean
 >f2 : A | B | C
->"abc" : string
+>"abc" : "abc"
 
 var a2 = f2([true, false]);  // boolean[]
 >a2 : boolean[]
@@ -120,13 +120,13 @@ var n3 = f3(42);             // number
 >n3 : number
 >f3(42) : number
 >f3 : A | B | C
->42 : number
+>42 : 42
 
 var s3 = f3("abc");          // string | boolean | number
 >s3 : string | number | boolean
 >f3("abc") : string | number | boolean
 >f3 : A | B | C
->"abc" : string
+>"abc" : "abc"
 
 var a3 = f3([true, false]);  // boolean[]
 >a3 : boolean[]

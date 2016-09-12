@@ -5,14 +5,14 @@ var map = new Map([["", true]]);
 >Map : MapConstructor
 >[["", true]] : [string, true][]
 >["", true] : [string, true]
->"" : string
+>"" : ""
 >true : true
 
 for (var [k = "", v = false] of map) {
 >k : string
->"" : string
+>"" : ""
 >v : boolean
->false : boolean
+>false : false
 >map : Map<string, boolean>
 
     k;

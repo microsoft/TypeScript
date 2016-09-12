@@ -2,7 +2,7 @@
 
 let as = 100;
 >as : number
->100 : number
+>100 : 100
 
 export { as as return, as };
 >as : number

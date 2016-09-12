@@ -28,9 +28,9 @@ for (let y in obj) {
 >cond : boolean
 
         x = 42;
->x = 42 : number
+>x = 42 : 42
 >x : string | number | boolean | Function | RegExp
->42 : number
+>42 : 42
 
         continue;
     }

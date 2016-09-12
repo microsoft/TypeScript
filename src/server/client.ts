@@ -246,6 +246,10 @@ namespace ts.server {
             return response.body[0];
         }
 
+        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
+            throw new Error("Not Implemented Yet.");
+        }
+
         getNavigateToItems(searchValue: string): NavigateToItem[] {
             const args: protocol.NavtoRequestArgs = {
                 searchValue,

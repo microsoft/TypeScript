@@ -10,5 +10,5 @@ var x = foo<number>(5); // 'x' should be number
 >x : number
 >foo<number>(5) : number
 >foo : <T>(x: T) => T
->5 : number
+>5 : 5
 

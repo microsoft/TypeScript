@@ -8,9 +8,9 @@ const [[k1, v1], [k2, v2]] = new Map([["", true], ["hello", true]])
 >Map : MapConstructor
 >[["", true], ["hello", true]] : [string, true][]
 >["", true] : [string, true]
->"" : string
+>"" : ""
 >true : true
 >["hello", true] : [string, true]
->"hello" : string
+>"hello" : "hello"
 >true : true
 

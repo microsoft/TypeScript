@@ -1,19 +1,19 @@
 === tests/cases/conformance/types/primitives/boolean/booleanPropertyAccess.ts ===
 var x = true;
 >x : boolean
->true : boolean
+>true : true
 
 var a = x.toString();
 >a : string
 >x.toString() : string
 >x.toString : () => string
->x : boolean
+>x : true
 >toString : () => string
 
 var b = x['toString']();
 >b : string
 >x['toString']() : string
 >x['toString'] : () => string
->x : boolean
->'toString' : string
+>x : true
+>'toString' : "toString"
 

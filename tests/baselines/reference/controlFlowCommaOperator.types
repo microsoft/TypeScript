@@ -13,9 +13,9 @@ function f(x: string | number | boolean) {
 
     if (y = "", typeof x === "string") {
 >y = "", typeof x === "string" : boolean
->y = "" : string
+>y = "" : ""
 >y : string | number | boolean
->"" : string
+>"" : ""
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
@@ -32,9 +32,9 @@ function f(x: string | number | boolean) {
     }
     else if (z = 1, typeof x === "number") {
 >z = 1, typeof x === "number" : boolean
->z = 1 : number
+>z = 1 : 1
 >z : string | number | boolean
->1 : number
+>1 : 1
 >typeof x === "number" : boolean
 >typeof x : string
 >x : number | boolean

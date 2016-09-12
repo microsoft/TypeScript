@@ -42,11 +42,11 @@ class X {
 >this : this
 
         this.mistake = 'frankly, complete nonsense';
->this.mistake = 'frankly, complete nonsense' : string
+>this.mistake = 'frankly, complete nonsense' : "frankly, complete nonsense"
 >this.mistake : () => void
 >this : this
 >mistake : () => void
->'frankly, complete nonsense' : string
+>'frankly, complete nonsense' : "frankly, complete nonsense"
     }
     m() {
 >m : () => void
@@ -61,13 +61,13 @@ let x = new X();
 >X : typeof X
 
 X.prototype.mistake = false;
->X.prototype.mistake = false : boolean
+>X.prototype.mistake = false : false
 >X.prototype.mistake : () => void
 >X.prototype : X
 >X : typeof X
 >prototype : X
 >mistake : () => void
->false : boolean
+>false : false
 
 x.m();
 >x.m() : void
@@ -104,21 +104,21 @@ class Y {
 >this : this
 
         this.mistake = 'even more nonsense';
->this.mistake = 'even more nonsense' : string
+>this.mistake = 'even more nonsense' : "even more nonsense"
 >this.mistake : any
 >this : this
 >mistake : any
->'even more nonsense' : string
+>'even more nonsense' : "even more nonsense"
     }
 }
 Y.prototype.mistake = true;
->Y.prototype.mistake = true : boolean
+>Y.prototype.mistake = true : true
 >Y.prototype.mistake : any
 >Y.prototype : Y
 >Y : typeof Y
 >prototype : Y
 >mistake : any
->true : boolean
+>true : true
 
 let y = new Y();
 >y : Y

@@ -2,9 +2,9 @@
 for (var v of ['a', 'b', 'c'])
 >v : string
 >['a', 'b', 'c'] : string[]
->'a' : string
->'b' : string
->'c' : string
+>'a' : "a"
+>'b' : "b"
+>'c' : "c"
 
     var x = v;
 >x : string

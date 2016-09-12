@@ -48,7 +48,7 @@ function f1(x: A | B) {
 >B : B
 
     while (true) {
->true : boolean
+>true : true
 
         if (x instanceof A) {
 >x instanceof A : boolean
@@ -84,7 +84,7 @@ function f2(x: A | B) {
 >B : B
 
     while (true) {
->true : boolean
+>true : true
 
         if (isA(x)) {
 >isA(x) : boolean

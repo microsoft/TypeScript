@@ -7,7 +7,7 @@ var x = {
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->0 : number
+>0 : 0
 
     [Symbol.toPrimitive]() { },
 >Symbol.toPrimitive : symbol
@@ -20,6 +20,6 @@ var x = {
 >toStringTag : symbol
 
         return 0;
->0 : number
+>0 : 0
     }
 }

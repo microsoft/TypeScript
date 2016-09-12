@@ -23,7 +23,7 @@ var s = map("", () => { return { x: identity }; });
 >s : string
 >map("", () => { return { x: identity }; }) : string
 >map : <T, U>(x: T, f: () => { x: (s: T) => U; }) => U
->"" : string
+>"" : ""
 >() => { return { x: identity }; } : () => { x: (y: string) => string; }
 >{ x: identity } : { x: <V>(y: V) => V; }
 >x : <V>(y: V) => V
