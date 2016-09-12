@@ -2,10 +2,9 @@ tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(24,7): error TS23
 tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(25,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
 tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(26,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo.B'.
 tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(27,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo.A'.
-tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(28,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
 
 
-==== tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts (5 errors) ====
+==== tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts (4 errors) ====
     module X {
         export enum Foo {
             A, B
@@ -42,6 +41,4 @@ tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(28,7): error TS23
           ~~
 !!! error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo.A'.
     const e5: Ka.Foo | boolean = Z.Foo.A; // ok
-          ~~
-!!! error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
     
