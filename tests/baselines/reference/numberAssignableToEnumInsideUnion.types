@@ -1,8 +1,8 @@
 === tests/cases/compiler/numberAssignableToEnumInsideUnion.ts ===
 enum E { A, B }
 >E : E
->A : E
->B : E
+>A : E.A
+>B : E.B
 
 let n: number;
 >n : number
