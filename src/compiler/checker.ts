@@ -6196,7 +6196,7 @@ namespace ts {
             }
             if (source.symbol.name !== target.symbol.name ||
                 !(source.symbol.flags & SymbolFlags.RegularEnum) || !(target.symbol.flags & SymbolFlags.RegularEnum) ||
-                !(source.flags & TypeFlags.Union) || !(target.flags & TypeFlags.Union)) {
+                (source.flags & TypeFlags.Union) !== (target.flags & TypeFlags.Union)) {
                 return (enumRelation[id] = false);
             }
             const targetEnumType = getTypeOfSymbol(target.symbol);
