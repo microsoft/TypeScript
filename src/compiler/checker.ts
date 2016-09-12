@@ -2068,7 +2068,7 @@ namespace ts {
                     parentSymbol = symbol;
                 }
 
-                // const the writer know we just wrote out a symbol.  The declaration emitter writer uses
+                // Let the writer know we just wrote out a symbol.  The declaration emitter writer uses
                 // this to determine if an import it has previously seen (and not written out) needs
                 // to be written to the file once the walk of the tree is complete.
                 //
@@ -2076,37 +2076,34 @@ namespace ts {
                 // up front (for example, during checking) could determine if we need to emit the imports
                 // and we could then access that data during declaration emit.
                 writer.trackSymbol(symbol, enclosingDeclaration, meaning);
-                function walkSymbol(symbol: Symbol, meaning: SymbolFlags): void {
-                    if (symbol) {
-                        const accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning, !!(flags & SymbolFormatFlags.UseOnlyExternalAliasing));
+                /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
+                function walkSymbol(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): void {
+                    const accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning, !!(flags & SymbolFormatFlags.UseOnlyExternalAliasing));
 
-                        if (!accessibleSymbolChain ||
-                            needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
+                    if (!accessibleSymbolChain ||
+                        needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
 
-                            // Go up and add our parent.
-                            walkSymbol(
-                                getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol),
-                                getQualifiedLeftMeaning(meaning));
+                        // Go up and add our parent.
+                        const parent = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
+                        if (parent) {
+                            walkSymbol(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
                         }
+                    }
 
-                        if (accessibleSymbolChain) {
-                            for (const accessibleSymbol of accessibleSymbolChain) {
-                                appendParentTypeArgumentsAndSymbolName(accessibleSymbol);
-                            }
+                    if (accessibleSymbolChain) {
+                        for (const accessibleSymbol of accessibleSymbolChain) {
+                            appendParentTypeArgumentsAndSymbolName(accessibleSymbol);
                         }
-                        else {
-                            // If we didn't find accessible symbol chain for this symbol, break if this is external module
-                            if (!parentSymbol && ts.forEach(symbol.declarations, hasExternalModuleSymbol)) {
-                                return;
-                            }
+                    }
+                    else if (
+                        // If this is the last part of outputting the symbol, always output. The cases apply only to parent symbols.
+                        endOfChain ||
+                        // If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
+                        !(!parentSymbol && ts.forEach(symbol.declarations, hasExternalModuleSymbol)) &&
+                        // If a parent symbol is an anonymous type, don't write it.
+                        !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral))) {
 
-                            // if this is anonymous type break
-                            if (symbol.flags & SymbolFlags.TypeLiteral || symbol.flags & SymbolFlags.ObjectLiteral) {
-                                return;
-                            }
-
-                            appendParentTypeArgumentsAndSymbolName(symbol);
-                        }
+                        appendParentTypeArgumentsAndSymbolName(symbol);
                     }
                 }
 
@@ -2116,11 +2113,11 @@ namespace ts {
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
                 const typeFormatFlag = TypeFormatFlags.UseFullyQualifiedType & typeFlags;
                 if (!isTypeParameter && (enclosingDeclaration || typeFormatFlag)) {
-                    walkSymbol(symbol, meaning);
-                    return;
+                    walkSymbol(symbol, meaning, /*endOfChain*/ true);
                 }
-
-                return appendParentTypeArgumentsAndSymbolName(symbol);
+                else {
+                    appendParentTypeArgumentsAndSymbolName(symbol);
+                }
             }
 
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {

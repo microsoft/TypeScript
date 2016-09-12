@@ -1,10 +1,10 @@
 === tests/cases/compiler/file1.d.ts ===
 declare module "file1" {
     function foo(): void;
->foo : typeof 
+>foo : typeof foo
 
     namespace foo {
->foo : typeof 
+>foo : typeof foo
 
         export var v: number;
 >v : number
