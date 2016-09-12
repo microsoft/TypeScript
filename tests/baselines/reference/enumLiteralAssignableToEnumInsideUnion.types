@@ -21,6 +21,25 @@ module Y {
 >B : Foo
     }
 }
+module Z {
+>Z : typeof Z
+
+    export enum Foo {
+>Foo : Foo
+
+        A = 1 << 1,
+>A : Foo
+>1 << 1 : number
+>1 : number
+>1 : number
+
+        B = 1 << 2,
+>B : Foo
+>1 << 2 : number
+>1 : number
+>2 : number
+    }
+}
 const y: X.Foo | boolean = Y.Foo.A;
 >y : boolean | X.Foo
 >X : any
@@ -30,4 +49,24 @@ const y: X.Foo | boolean = Y.Foo.A;
 >Y : typeof Y
 >Foo : typeof Y.Foo
 >A : Y.Foo
+
+const z: X.Foo | boolean = Z.Foo.A;
+>z : boolean | X.Foo
+>X : any
+>Foo : X.Foo
+>Z.Foo.A : Z.Foo
+>Z.Foo : typeof Z.Foo
+>Z : typeof Z
+>Foo : typeof Z.Foo
+>A : Z.Foo
+
+const x: Z.Foo | boolean = X.Foo.A;
+>x : boolean | Z.Foo
+>Z : any
+>Foo : Z.Foo
+>X.Foo.A : X.Foo
+>X.Foo : typeof X.Foo
+>X : typeof X
+>Foo : typeof X.Foo
+>A : X.Foo
 
