@@ -143,6 +143,7 @@ namespace ts.server {
         }
 
         abstract getProjectName(): string;
+        abstract getProjectRootPath(): string;
         abstract getTypingOptions(): TypingOptions;
 
         getSourceFile(path: Path) {
@@ -537,6 +538,11 @@ namespace ts.server {
             return this.inferredProjectName;
         }
 
+        getProjectRootPath() {
+            const rootFiles = this.getRootFiles();
+            return getDirectoryPath(rootFiles[0]);
+        }
+
         close() {
             super.close();
 
@@ -572,6 +578,10 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+        }
+
+        getProjectRootPath() {
+            return getDirectoryPath(this.configFileName);
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {
@@ -662,8 +672,16 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
-            public compileOnSaveEnabled: boolean) {
+            public compileOnSaveEnabled: boolean,
+            readonly projectFilePath?: string) {
             super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+        }
+
+        getProjectRootPath() {
+            if (this.projectFilePath) {
+                return getDirectoryPath(this.projectFilePath);
+            }
+            return getDirectoryPath(this.externalProjectName);
         }
 
         getTypingOptions() {
