@@ -294,6 +294,7 @@ namespace ts {
                 "classic": ModuleResolutionKind.Classic,
             }),
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
+            paramType: Diagnostics.STRATEGY,
         },
         {
             name: "allowUnusedLabels",
