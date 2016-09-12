@@ -21,8 +21,21 @@ module Y {
 >B : Symbol(Foo.B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 7, 10))
     }
 }
+module Z {
+>Z : Symbol(Z, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 9, 1))
+
+    export enum Foo {
+>Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
+
+        A = 1 << 1,
+>A : Symbol(Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
+
+        B = 1 << 2,
+>B : Symbol(Foo.B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 12, 19))
+    }
+}
 const y: X.Foo | boolean = Y.Foo.A;
->y : Symbol(y, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 5))
+>y : Symbol(y, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 16, 5))
 >X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
 >Foo : Symbol(X.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 10))
 >Y.Foo.A : Symbol(Y.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 6, 21))
@@ -30,4 +43,24 @@ const y: X.Foo | boolean = Y.Foo.A;
 >Y : Symbol(Y, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 4, 1))
 >Foo : Symbol(Y.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 5, 10))
 >A : Symbol(Y.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 6, 21))
+
+const z: X.Foo | boolean = Z.Foo.A;
+>z : Symbol(z, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 17, 5))
+>X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
+>Foo : Symbol(X.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 10))
+>Z.Foo.A : Symbol(Z.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
+>Z.Foo : Symbol(Z.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
+>Z : Symbol(Z, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 9, 1))
+>Foo : Symbol(Z.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
+>A : Symbol(Z.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
+
+const x: Z.Foo | boolean = X.Foo.A;
+>x : Symbol(x, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 18, 5))
+>Z : Symbol(Z, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 9, 1))
+>Foo : Symbol(Z.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
+>X.Foo.A : Symbol(X.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 1, 21))
+>X.Foo : Symbol(X.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 10))
+>X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
+>Foo : Symbol(X.Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 10))
+>A : Symbol(X.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 1, 21))
 
