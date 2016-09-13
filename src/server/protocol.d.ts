@@ -709,7 +709,7 @@ declare namespace ts.server.protocol {
     }
 
     export interface SetCompilerOptionsForInferredProjectsArgs {
-        options: CompilerOptions;
+        options: ExternalProjectCompilerOptions;
     }
 
     export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
