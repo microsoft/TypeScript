@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.NavigateTo {
     type RawNavigateToItem = { name: string; fileName: string; matchKind: PatternMatchKind; isCaseSensitive: boolean; declaration: Declaration };
 

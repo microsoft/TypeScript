@@ -1,4 +1,4 @@
-﻿namespace ts {
+namespace ts {
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
