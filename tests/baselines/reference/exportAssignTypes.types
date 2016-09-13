@@ -57,7 +57,7 @@ var v7: {<x>(p1: x): x} = iGeneric;
 === tests/cases/conformance/externalModules/expString.ts ===
 var x = "test";
 >x : string
->"test" : string
+>"test" : "test"
 
 export = x;
 >x : string
@@ -65,7 +65,7 @@ export = x;
 === tests/cases/conformance/externalModules/expNumber.ts ===
 var x = 42;
 >x : number
->42 : number
+>42 : 42
 
 export = x;
 >x : number
@@ -73,7 +73,7 @@ export = x;
 === tests/cases/conformance/externalModules/expBoolean.ts ===
 var x = true;
 >x : boolean
->true : boolean
+>true : true
 
 export = x;
 >x : boolean
@@ -82,8 +82,8 @@ export = x;
 var x = [1,2];
 >x : number[]
 >[1,2] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 export = x;
 >x : number[]
@@ -93,9 +93,9 @@ var x = { answer: 42, when: 1776};
 >x : { answer: number; when: number; }
 >{ answer: 42, when: 1776} : { answer: number; when: number; }
 >answer : number
->42 : number
+>42 : 42
 >when : number
->1776 : number
+>1776 : 1776
 
 export = x;
 >x : { answer: number; when: number; }

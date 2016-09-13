@@ -541,7 +541,7 @@ namespace ts {
          *
          * @param node A ClassDeclaration node.
          */
-        function visitClassDeclaration(node: ClassDeclaration): Statement {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             // [source]
             //      class C { }
             //
@@ -552,8 +552,17 @@ namespace ts {
             //          return C;
             //      }());
 
+            const modifierFlags = getModifierFlags(node);
+            const isExported = modifierFlags & ModifierFlags.Export;
+            const isDefault = modifierFlags & ModifierFlags.Default;
+
+            // Add an `export` modifier to the statement if needed (for `--target es5 --module es6`)
+            const modifiers = isExported && !isDefault
+                ? filter(node.modifiers, isExportModifier)
+                : undefined;
+
             const statement = createVariableStatement(
-                /*modifiers*/ undefined,
+                modifiers,
                 createVariableDeclarationList([
                     createVariableDeclaration(
                         getDeclarationName(node, /*allowComments*/ true),
@@ -566,7 +575,24 @@ namespace ts {
 
             setOriginalNode(statement, node);
             startOnNewLine(statement);
+
+            // Add an `export default` statement for default exports (for `--target es5 --module es6`)
+            if (isExported && isDefault) {
+                const statements: Statement[] = [statement];
+                statements.push(createExportAssignment(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*isExportEquals*/ false,
+                    getDeclarationName(node, /*allowComments*/ false)
+                ));
+                return statements;
+            }
+
             return statement;
+        }
+
+        function isExportModifier(node: Modifier) {
+            return node.kind === SyntaxKind.ExportKeyword;
         }
 
         /**

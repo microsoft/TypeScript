@@ -17,8 +17,8 @@ module M {
 >I : I
 >{salt:2,pepper:0} : { salt: number; pepper: number; }
 >salt : number
->2 : number
+>2 : 2
 >pepper : number
->0 : number
+>0 : 0
 }
 

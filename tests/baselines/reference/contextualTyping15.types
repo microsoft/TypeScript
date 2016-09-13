@@ -4,5 +4,5 @@ class foo { public bar: { (): number; (i: number): number; } = function() { retu
 >bar : { (): number; (i: number): number; }
 >i : number
 >function() { return 1 } : () => number
->1 : number
+>1 : 1
 

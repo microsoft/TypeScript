@@ -4,6 +4,6 @@ declare enum E {
 
  e = -3 // Negative
 >e : E
->-3 : number
->3 : number
+>-3 : -3
+>3 : 3
 }

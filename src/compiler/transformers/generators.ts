@@ -2629,7 +2629,7 @@ namespace ts {
          * Flush the final label of the generator function body.
          */
         function flushFinalLabel(operationIndex: number): void {
-            if (!lastOperationWasCompletion) {
+            if (isFinalLabelReachable(operationIndex)) {
                 tryEnterLabel(operationIndex);
                 withBlockStack = undefined;
                 writeReturn(/*expression*/ undefined, /*operationLocation*/ undefined);
@@ -2640,6 +2640,34 @@ namespace ts {
             }
 
             updateLabelExpressions();
+        }
+
+        /**
+         * Tests whether the final label of the generator function body
+         * is reachable by user code.
+         */
+        function isFinalLabelReachable(operationIndex: number) {
+            // if the last operation was *not* a completion (return/throw) then
+            // the final label is reachable.
+            if (!lastOperationWasCompletion) {
+                return true;
+            }
+
+            // if there are no labels defined or referenced, then the final label is
+            // not reachable.
+            if (!labelOffsets || !labelExpressions) {
+                return false;
+            }
+
+            // if the label for this offset is referenced, then the final label
+            // is reachable.
+            for (let label = 0; label < labelOffsets.length; label++) {
+                if (labelOffsets[label] === operationIndex && labelExpressions[label]) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /**

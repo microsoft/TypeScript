@@ -3,4 +3,4 @@
 ////const /**/c = 0 ;
 
 goTo.marker();
-verify.quickInfoIs("const c: number");
+verify.quickInfoIs("const c: 0");

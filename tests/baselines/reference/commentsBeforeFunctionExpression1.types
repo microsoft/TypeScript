@@ -7,6 +7,6 @@ var v = {
 >f : (a: any) => number
 >(a) => 0 : (a: any) => number
 >a : any
->0 : number
+>0 : 0
 }
 

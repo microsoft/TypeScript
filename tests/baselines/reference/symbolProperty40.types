@@ -37,7 +37,7 @@ c[Symbol.iterator]("");
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->"" : string
+>"" : ""
 
 c[Symbol.iterator](0);
 >c[Symbol.iterator](0) : number
@@ -46,5 +46,5 @@ c[Symbol.iterator](0);
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->0 : number
+>0 : 0
 

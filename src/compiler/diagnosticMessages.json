@@ -1063,10 +1063,6 @@
         "category": "Error",
         "code": 2353
     },
-    "No best common type exists among return expressions.": {
-        "category": "Error",
-        "code": 2354
-    },
     "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
@@ -1630,10 +1626,6 @@
     "Cannot find namespace '{0}'.": {
         "category": "Error",
         "code": 2503
-    },
-    "No best common type exists among yield expressions.": {
-        "category": "Error",
-        "code": 2504
     },
     "A generator cannot have a 'void' type annotation.": {
         "category": "Error",
@@ -2476,6 +2468,10 @@
         "category": "Message",
         "code": 6038
     },
+    "STRATEGY": {
+        "category": "Message",
+        "code": 6039
+    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -2875,7 +2871,7 @@
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
-    }, 
+    },
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
         "code": 7017

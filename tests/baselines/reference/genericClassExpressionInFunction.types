@@ -86,23 +86,23 @@ var s = new S();
 >S : typeof S
 
 c.genericVar = 12;
->c.genericVar = 12 : number
+>c.genericVar = 12 : 12
 >c.genericVar : number
 >c : C
 >genericVar : number
->12 : number
+>12 : 12
 
 k.genericVar = 12;
->k.genericVar = 12 : number
+>k.genericVar = 12 : 12
 >k.genericVar : number
 >k : K
 >genericVar : number
->12 : number
+>12 : 12
 
 s.genericVar = 12;
->s.genericVar = 12 : number
+>s.genericVar = 12 : 12
 >s.genericVar : number
 >s : S
 >genericVar : number
->12 : number
+>12 : 12
 

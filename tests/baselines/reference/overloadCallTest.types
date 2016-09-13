@@ -13,13 +13,13 @@ class foo {
         function bar(foo?: string) { return "foo" };
 >bar : { (): string; (s: string): any; }
 >foo : string
->"foo" : string
+>"foo" : "foo"
 
         var test = bar("test");
 >test : any
 >bar("test") : any
 >bar : { (): string; (s: string): any; }
->"test" : string
+>"test" : "test"
 
         var goo = bar();
 >goo : string
@@ -31,7 +31,7 @@ class foo {
 >goo : string
 >bar("test") : any
 >bar : { (): string; (s: string): any; }
->"test" : string
+>"test" : "test"
     }
  
 }

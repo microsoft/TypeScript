@@ -335,10 +335,11 @@ namespace ts.Completions {
             const baseDirectory = getDirectoryPath(absolutePath);
             const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
 
-            if (directoryProbablyExists(baseDirectory, host)) {
-                if (host.readDirectory) {
-                    // Enumerate the available files if possible
-                    const files = host.readDirectory(baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
+            if (tryDirectoryExists(host, baseDirectory)) {
+                // Enumerate the available files if possible
+                const files = tryReadDirectory(host, baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
+
+                if (files) {
                     const foundFiles = createMap<boolean>();
                     for (let filePath of files) {
                         filePath = normalizePath(filePath);
@@ -359,8 +360,9 @@ namespace ts.Completions {
                 }
 
                 // If possible, get folder completion as well
-                if (host.getDirectories) {
-                    const directories = host.getDirectories(baseDirectory);
+                const directories = tryGetDirectories(host, baseDirectory);
+
+                if (directories) {
                     for (const directory of directories) {
                         const directoryName = getBaseFileName(normalizePath(directory));
 
@@ -449,22 +451,24 @@ namespace ts.Completions {
                     // doesn't support. For now, this is safer but slower
                     const includeGlob = normalizedSuffix ? "**/*" : "./*";
 
-                    const matches = host.readDirectory(baseDirectory, fileExtensions, undefined, [includeGlob]);
-                    const result: string[] = [];
+                    const matches = tryReadDirectory(host, baseDirectory, fileExtensions, undefined, [includeGlob]);
+                    if (matches) {
+                        const result: string[] = [];
 
-                    // Trim away prefix and suffix
-                    for (const match of matches) {
-                        const normalizedMatch = normalizePath(match);
-                        if (!endsWith(normalizedMatch, normalizedSuffix) || !startsWith(normalizedMatch, completePrefix)) {
-                            continue;
+                        // Trim away prefix and suffix
+                        for (const match of matches) {
+                            const normalizedMatch = normalizePath(match);
+                            if (!endsWith(normalizedMatch, normalizedSuffix) || !startsWith(normalizedMatch, completePrefix)) {
+                                continue;
+                            }
+
+                            const start = completePrefix.length;
+                            const length = normalizedMatch.length - start - normalizedSuffix.length;
+
+                            result.push(removeFileExtension(normalizedMatch.substr(start, length)));
                         }
-
-                        const start = completePrefix.length;
-                        const length = normalizedMatch.length - start - normalizedSuffix.length;
-
-                        result.push(removeFileExtension(normalizedMatch.substr(start, length)));
+                        return result;
                     }
-                    return result;
                 }
             }
 
@@ -499,13 +503,14 @@ namespace ts.Completions {
                     if (!isNestedModule) {
                         nonRelativeModules.push(visibleModule.moduleName);
                     }
-                    else if (host.readDirectory && startsWith(visibleModule.moduleName, moduleNameFragment)) {
-                        const nestedFiles = host.readDirectory(visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
-
-                        for (let f of nestedFiles) {
-                            f = normalizePath(f);
-                            const nestedModule = removeFileExtension(getBaseFileName(f));
-                            nonRelativeModules.push(nestedModule);
+                    else if (startsWith(visibleModule.moduleName, moduleNameFragment)) {
+                        const nestedFiles = tryReadDirectory(host, visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
+                        if (nestedFiles) {
+                            for (let f of nestedFiles) {
+                                f = normalizePath(f);
+                                const nestedModule = removeFileExtension(getBaseFileName(f));
+                                nonRelativeModules.push(nestedModule);
+                            }
                         }
                     }
                 }
@@ -570,9 +575,17 @@ namespace ts.Completions {
                 }
             }
             else if (host.getDirectories) {
-                const typeRoots = getEffectiveTypeRoots(options, host);
-                for (const root of typeRoots) {
-                    getCompletionEntriesFromDirectories(host, options, root, span, result);
+                let typeRoots: string[];
+                try {
+                    // Wrap in try catch because getEffectiveTypeRoots touches the filesystem
+                    typeRoots = getEffectiveTypeRoots(options, host);
+                }
+                catch (e) {}
+
+                if (typeRoots) {
+                    for (const root of typeRoots) {
+                        getCompletionEntriesFromDirectories(host, options, root, span, result);
+                    }
                 }
             }
 
@@ -588,10 +601,13 @@ namespace ts.Completions {
         }
 
         function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, span: TextSpan, result: CompletionEntry[]) {
-            if (host.getDirectories && directoryProbablyExists(directory, host)) {
-                for (let typeDirectory of host.getDirectories(directory)) {
-                    typeDirectory = normalizePath(typeDirectory);
-                    result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName, span));
+            if (host.getDirectories && tryDirectoryExists(host, directory)) {
+                const directories = tryGetDirectories(host, directory);
+                if (directories) {
+                    for (let typeDirectory of directories) {
+                        typeDirectory = normalizePath(typeDirectory);
+                        result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName, span));
+                    }
                 }
             }
         }
@@ -600,7 +616,7 @@ namespace ts.Completions {
             const paths: string[] = [];
             let currentConfigPath: string;
             while (true) {
-                currentConfigPath = findConfigFile(currentDir, (f) => host.fileExists(f), "package.json");
+                currentConfigPath = findConfigFile(currentDir, (f) => tryFileExists(host, f), "package.json");
                 if (currentConfigPath) {
                     paths.push(currentConfigPath);
 
@@ -652,8 +668,8 @@ namespace ts.Completions {
 
             function tryReadingPackageJson(filePath: string) {
                 try {
-                    const fileText = host.readFile(filePath);
-                    return JSON.parse(fileText);
+                    const fileText = tryReadFile(host, filePath);
+                    return fileText ? JSON.parse(fileText) : undefined;
                 }
                 catch (e) {
                     return undefined;
@@ -731,6 +747,22 @@ namespace ts.Completions {
                 displayParts: [displayPart(entryName, SymbolDisplayPartKind.keyword)],
                 documentation: undefined
             };
+        }
+
+        return undefined;
+    }
+
+    export function getCompletionEntrySymbol(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string): Symbol {
+        // Compute all the completion symbols again.
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position);
+        if (completionData) {
+            const { symbols, location } = completionData;
+
+            // Find the symbol with the matching entry name.
+            // We don't need to perform character checks here because we're only comparing the
+            // name against 'entryName' (which is known to be good), not building a new
+            // completion entry.
+            return forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location) === entryName ? s : undefined);
         }
 
         return undefined;
@@ -1644,4 +1676,36 @@ namespace ts.Completions {
     }
 
     const nodeModulesDependencyKeys = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
+
+    function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
+        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName);
+    }
+
+    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include);
+    }
+
+    function tryReadFile(host: LanguageServiceHost, path: string): string {
+        return tryIOAndConsumeErrors(host, host.readFile, path);
+    }
+
+    function tryFileExists(host: LanguageServiceHost, path: string): boolean {
+        return tryIOAndConsumeErrors(host, host.fileExists, path);
+    }
+
+    function tryDirectoryExists(host: LanguageServiceHost, path: string): boolean {
+        try {
+            return directoryProbablyExists(path, host);
+        }
+        catch (e) {}
+        return undefined;
+    }
+
+    function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: (...a: any[]) => T, ...args: any[]) {
+        try {
+            return toApply && toApply.apply(host, args);
+        }
+        catch (e) {}
+        return undefined;
+    }
 }

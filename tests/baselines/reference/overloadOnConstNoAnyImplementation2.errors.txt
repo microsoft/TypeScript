@@ -1,4 +1,4 @@
-tests/cases/compiler/overloadOnConstNoAnyImplementation2.ts(12,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/overloadOnConstNoAnyImplementation2.ts(12,18): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
 tests/cases/compiler/overloadOnConstNoAnyImplementation2.ts(18,9): error TS2345: Argument of type '(x: "bye") => number' is not assignable to parameter of type '(x: "hi") => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '"hi"' is not assignable to type '"bye"'.
@@ -21,7 +21,7 @@ tests/cases/compiler/overloadOnConstNoAnyImplementation2.ts(21,9): error TS2345:
             callback(hm);
             callback(1); // error
                      ~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
         }
     }
     

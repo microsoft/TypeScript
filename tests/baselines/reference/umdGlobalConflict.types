@@ -7,7 +7,7 @@ export var x: string;
 
 === tests/cases/compiler/v2/index.d.ts ===
 export as namespace Alpha;
->Alpha : typeof 
+>Alpha : typeof "tests/cases/compiler/v2/index"
 
 export var y: number;
 >y : number

@@ -11,7 +11,7 @@ async function func(): Promise<void> {
 >Promise : Promise<T>
 
     "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
     var b = await p || a;
 >b : boolean

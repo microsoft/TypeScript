@@ -705,7 +705,7 @@ namespace ts {
                         createFunctionDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            /*asteriskToken*/ undefined,
+                            node.asteriskToken,
                             name,
                             /*typeParameters*/ undefined,
                             node.parameters,

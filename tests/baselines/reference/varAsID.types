@@ -8,7 +8,7 @@ class Foo {
 
     x=1;
 >x : number
->1 : number
+>1 : 1
 }
 
 var f = new Foo();
@@ -25,7 +25,7 @@ class Foo2 {
 
     x=1;
 >x : number
->1 : number
+>1 : 1
 }
 
 var f2 = new Foo2();

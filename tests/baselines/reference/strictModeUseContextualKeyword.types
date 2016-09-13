@@ -1,10 +1,10 @@
 === tests/cases/compiler/strictModeUseContextualKeyword.ts ===
 "use strict"
->"use strict" : string
+>"use strict" : "use strict"
 
 var as = 0;
 >as : number
->0 : number
+>0 : 0
 
 function foo(as: string) { }
 >foo : (as: string) => void
@@ -29,6 +29,6 @@ function H() {
 >as : number
 >{ as: 1 } : { as: number; }
 >as : number
->1 : number
+>1 : 1
 }
 

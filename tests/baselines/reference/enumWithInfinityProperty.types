@@ -4,6 +4,6 @@ enum A {
 
     Infinity = 1
 >Infinity : A
->1 : number
+>1 : 1
 }
 
