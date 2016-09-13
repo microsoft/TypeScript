@@ -3047,5 +3047,14 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+
+    "Circularity detected while resolving configuration: {0}": {
+        "category": "Error",
+        "code": 18000
+    },
+    "The path in an 'extends' options must be relative or rooted.": {
+        "category": "Error",
+        "code": 18001
     }
 }
