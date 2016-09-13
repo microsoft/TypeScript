@@ -143,7 +143,7 @@ namespace ts.server {
         }
 
         abstract getProjectName(): string;
-        abstract getProjectRootPath(): string;
+        abstract getProjectRootPath(): string | undefined;
         abstract getTypingOptions(): TypingOptions;
 
         getSourceFile(path: Path) {

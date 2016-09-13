@@ -435,17 +435,6 @@ namespace ts {
                 return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
             }
 
-            function createDirectory(directoryName: string) {
-                const basePath = _path.dirname(directoryName);
-                const shouldCreateParent = directoryName !== basePath && !nodeSystem.directoryExists(basePath);
-                if (shouldCreateParent) {
-                    createDirectory(basePath);
-                }
-                if (shouldCreateParent || !directoryExists(directoryName)) {
-                    _fs.mkdirSync(directoryName);
-                }
-            }
-
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -507,7 +496,11 @@ namespace ts {
                 },
                 fileExists,
                 directoryExists,
-                createDirectory,
+                createDirectory(directoryName: string) {
+                    if (!nodeSystem.directoryExists(directoryName)) {
+                        _fs.mkdirSync(directoryName);
+                    }
+                },
                 getExecutingFilePath() {
                     return __filename;
                 },
@@ -590,6 +583,17 @@ namespace ts {
             };
         }
 
+        function recursiveCreateDirectory(directoryPath: string, sys: System) {
+            const basePath = getDirectoryPath(directoryPath);
+            const shouldCreateParent = directoryPath !== basePath && !sys.directoryExists(basePath);
+            if (shouldCreateParent) {
+                recursiveCreateDirectory(basePath, sys);
+            }
+            if (shouldCreateParent || !sys.directoryExists(directoryPath)) {
+                sys.createDirectory(directoryPath);
+            }
+        }
+
         let sys: System;
         if (typeof ChakraHost !== "undefined") {
             sys = getChakraSystem();
@@ -608,7 +612,7 @@ namespace ts {
             sys.writeFile = function(path, data, writeBom) {
                 const directoryPath = getDirectoryPath(normalizeSlashes(path));
                 if (!sys.directoryExists(directoryPath)) {
-                    sys.createDirectory(directoryPath);
+                    recursiveCreateDirectory(directoryPath, sys);
                 }
                 originalWriteFile.call(sys, path, data, writeBom);
             };
