@@ -1947,9 +1947,13 @@
         "category": "Error",
         "code": 2692
     },
-    "Left side of comma operator is unused and has no side effects.": {
+    "'{0}' only refers to a type, but is being used as a value here.": {
         "category": "Error",
         "code": 2693
+    },
+    "Left side of comma operator is unused and has no side effects.": {
+        "category": "Error",
+        "code": 2694
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3047,5 +3051,14 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+
+    "Circularity detected while resolving configuration: {0}": {
+        "category": "Error",
+        "code": 18000
+    },
+    "The path in an 'extends' options must be relative or rooted.": {
+        "category": "Error",
+        "code": 18001
     }
 }
