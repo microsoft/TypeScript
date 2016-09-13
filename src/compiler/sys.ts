@@ -360,8 +360,11 @@ namespace ts {
                     _fs.writeSync(fd, data, undefined, "utf8");
                 }
                 catch (e) {
-                    createDirectory(_path.dirname(fileName));
-                    writeFile(fileName, data, writeByteOrderMark);
+                    const directory = _path.dirname(fileName);
+                    if (!directoryExists(directory)) {
+                        createDirectory(directory);
+                        writeFile(fileName, data, writeByteOrderMark);
+                    }
                 }
                 finally {
                     if (fd !== undefined) {

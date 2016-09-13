@@ -681,7 +681,7 @@ namespace ts.server {
             if (this.projectFilePath) {
                 return getDirectoryPath(this.projectFilePath);
             }
-            return getDirectoryPath(this.externalProjectName);
+            return getDirectoryPath(normalizeSlashes(this.externalProjectName));
         }
 
         getTypingOptions() {
