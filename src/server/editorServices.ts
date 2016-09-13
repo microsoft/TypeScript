@@ -229,12 +229,12 @@ namespace ts.server {
             }
         }
 
-        setCompilerOptionsForInferredProjects(vsProjectCompilerOptions: protocol.VSProjectCompilerOptions): void {
-            this.compilerOptionsForInferredProjects = vsProjectCompilerOptions;
-            this.compileOnSaveForInferredProjects = vsProjectCompilerOptions.compileOnSave;
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions): void {
+            this.compilerOptionsForInferredProjects = projectCompilerOptions;
+            this.compileOnSaveForInferredProjects = projectCompilerOptions.compileOnSave;
             for (const proj of this.inferredProjects) {
-                proj.setCompilerOptions(vsProjectCompilerOptions);
-                proj.compileOnSaveEnabled = vsProjectCompilerOptions.compileOnSave;
+                proj.setCompilerOptions(projectCompilerOptions);
+                proj.compileOnSaveEnabled = projectCompilerOptions.compileOnSave;
             }
             this.updateProjectGraphs(this.inferredProjects);
         }
@@ -727,7 +727,7 @@ namespace ts.server {
             return false;
         }
 
-        private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.VSProjectCompilerOptions, typingOptions: TypingOptions) {
+        private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typingOptions: TypingOptions) {
             const project = new ExternalProject(
                 projectFileName,
                 this,

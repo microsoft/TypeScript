@@ -498,7 +498,7 @@ declare namespace ts.server.protocol {
     export interface ExternalProject {
         projectFileName: string;
         rootFiles: ExternalFile[];
-        options: VSProjectCompilerOptions;
+        options: ExternalProjectCompilerOptions;
         typingOptions?: TypingOptions;
     }
 
@@ -506,7 +506,7 @@ declare namespace ts.server.protocol {
      * For external projects, some of the project settings are sent together with
      * compiler settings.
      */
-    export interface VSProjectCompilerOptions extends CompilerOptions {
+    export interface ExternalProjectCompilerOptions extends CompilerOptions {
         compileOnSave?: boolean;
     }
 
@@ -709,7 +709,7 @@ declare namespace ts.server.protocol {
     }
 
     export interface SetCompilerOptionsForInferredProjectsArgs {
-        options: VSProjectCompilerOptions;
+        options: ExternalProjectCompilerOptions;
     }
 
     export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
