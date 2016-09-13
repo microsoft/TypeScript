@@ -359,13 +359,6 @@ namespace ts {
                     fd = _fs.openSync(fileName, "w");
                     _fs.writeSync(fd, data, undefined, "utf8");
                 }
-                catch (e) {
-                    const directory = _path.dirname(fileName);
-                    if (!directoryExists(directory)) {
-                        createDirectory(directory);
-                        writeFile(fileName, data, writeByteOrderMark);
-                    }
-                }
                 finally {
                     if (fd !== undefined) {
                         _fs.closeSync(fd);
@@ -597,19 +590,29 @@ namespace ts {
             };
         }
 
+        let sys: System;
         if (typeof ChakraHost !== "undefined") {
-            return getChakraSystem();
+            sys = getChakraSystem();
         }
         else if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
-            return getWScriptSystem();
+            sys = getWScriptSystem();
         }
         else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like
             // process.browser check excludes webpack and browserify
-            return getNodeSystem();
+            sys = getNodeSystem();
         }
-        else {
-            return undefined; // Unsupported host
+        if (sys) {
+            // patch writefile to create folder before writing the file
+            const originalWriteFile = sys.writeFile;
+            sys.writeFile = function(path, data, writeBom) {
+                const directoryPath = getDirectoryPath(normalizeSlashes(path));
+                if (!sys.directoryExists(directoryPath)) {
+                    sys.createDirectory(directoryPath);
+                }
+                originalWriteFile.call(sys, path, data, writeBom);
+            };
         }
+        return sys;
     })();
 }

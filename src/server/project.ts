@@ -539,6 +539,10 @@ namespace ts.server {
         }
 
         getProjectRootPath() {
+            // Single inferred project does not have a project root.
+            if (this.projectService.useSingleInferredProject) {
+                return undefined;
+            }
             const rootFiles = this.getRootFiles();
             return getDirectoryPath(rootFiles[0]);
         }
@@ -673,7 +677,7 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,
-            readonly projectFilePath?: string) {
+            private readonly projectFilePath?: string) {
             super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
         }
 
@@ -681,6 +685,9 @@ namespace ts.server {
             if (this.projectFilePath) {
                 return getDirectoryPath(this.projectFilePath);
             }
+            // if the projectFilePath is not given, we make the assumption that the project name
+            // is the path of the project file. AS the project name is provided by VS, we need to
+            // normalize slashes before using it as a file name.
             return getDirectoryPath(normalizeSlashes(this.externalProjectName));
         }
 
