@@ -183,7 +183,7 @@ namespace ts.server {
         constructor(public readonly host: ServerHost,
             public readonly logger: Logger,
             public readonly cancellationToken: HostCancellationToken,
-            private readonly useSingleInferredProject: boolean,
+            public readonly useSingleInferredProject: boolean,
             readonly typingsInstaller: ITypingsInstaller = nullTypingsInstaller,
             private readonly eventHandler?: ProjectServiceEventHandler) {
 

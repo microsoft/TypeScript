@@ -143,6 +143,7 @@ namespace ts.server {
         }
 
         abstract getProjectName(): string;
+        abstract getProjectRootPath(): string | undefined;
         abstract getTypingOptions(): TypingOptions;
 
         getSourceFile(path: Path) {
@@ -537,6 +538,15 @@ namespace ts.server {
             return this.inferredProjectName;
         }
 
+        getProjectRootPath() {
+            // Single inferred project does not have a project root.
+            if (this.projectService.useSingleInferredProject) {
+                return undefined;
+            }
+            const rootFiles = this.getRootFiles();
+            return getDirectoryPath(rootFiles[0]);
+        }
+
         close() {
             super.close();
 
@@ -572,6 +582,10 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+        }
+
+        getProjectRootPath() {
+            return getDirectoryPath(this.configFileName);
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {
@@ -662,8 +676,19 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
-            public compileOnSaveEnabled: boolean) {
+            public compileOnSaveEnabled: boolean,
+            private readonly projectFilePath?: string) {
             super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+        }
+
+        getProjectRootPath() {
+            if (this.projectFilePath) {
+                return getDirectoryPath(this.projectFilePath);
+            }
+            // if the projectFilePath is not given, we make the assumption that the project name
+            // is the path of the project file. AS the project name is provided by VS, we need to
+            // normalize slashes before using it as a file name.
+            return getDirectoryPath(normalizeSlashes(this.externalProjectName));
         }
 
         getTypingOptions() {
