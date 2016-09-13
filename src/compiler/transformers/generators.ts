@@ -906,7 +906,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitYieldExpression(node: YieldExpression) {
+        function visitYieldExpression(node: YieldExpression): LeftHandSideExpression {
             // [source]
             //      x = yield a();
             //
@@ -917,7 +917,14 @@ namespace ts {
 
             // NOTE: we are explicitly not handling YieldStar at this time.
             const resumeLabel = defineLabel();
-            emitYield(visitNode(node.expression, visitor, isExpression), /*location*/ node);
+            const expression = visitNode(node.expression, visitor, isExpression);
+            if (node.asteriskToken) {
+                emitYieldStar(expression, /*location*/ node);
+            }
+            else {
+                emitYield(expression, /*location*/ node);
+            }
+
             markLabel(resumeLabel);
             return createGeneratorResume();
         }
@@ -2478,6 +2485,16 @@ namespace ts {
          */
         function emitBreakWhenFalse(label: Label, condition: Expression, location?: TextRange): void {
             emitWorker(OpCode.BreakWhenFalse, [label, condition], location);
+        }
+
+        /**
+         * Emits a YieldStar operation for the provided expression.
+         *
+         * @param expression An optional value for the yield operation.
+         * @param location An optional source map location for the assignment.
+         */
+        function emitYieldStar(expression?: Expression, location?: TextRange): void {
+            emitWorker(OpCode.YieldStar, [expression], location);
         }
 
         /**
