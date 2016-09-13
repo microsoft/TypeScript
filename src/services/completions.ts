@@ -575,9 +575,17 @@ namespace ts.Completions {
                 }
             }
             else if (host.getDirectories) {
-                const typeRoots = getEffectiveTypeRoots(options, host);
-                for (const root of typeRoots) {
-                    getCompletionEntriesFromDirectories(host, options, root, span, result);
+                let typeRoots: string[];
+                try {
+                    // Wrap in try catch because getEffectiveTypeRoots touches the filesystem
+                    typeRoots = getEffectiveTypeRoots(options, host);
+                }
+                catch (e) {}
+
+                if (typeRoots) {
+                    for (const root of typeRoots) {
+                        getCompletionEntriesFromDirectories(host, options, root, span, result);
+                    }
                 }
             }
 
