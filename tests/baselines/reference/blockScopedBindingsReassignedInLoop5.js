@@ -9,7 +9,7 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 
 
 //// [blockScopedBindingsReassignedInLoop5.js]
-var _loop_1 = function(x, y) {
+var _loop_1 = function (x, y) {
     var a = function () { return x++ + y++; };
     if (x == 1)
         return out_x_1 = x, out_y_1 = y, "break";
@@ -23,5 +23,6 @@ for (var x = 1, y = 2; x < y; ++x, --y) {
     var state_1 = _loop_1(x, y);
     x = out_x_1;
     y = out_y_1;
-    if (state_1 === "break") break;
+    if (state_1 === "break")
+        break;
 }

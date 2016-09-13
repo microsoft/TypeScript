@@ -34,9 +34,9 @@ c.m(function(n) { return "hello: "+n; },18);
 >function(n) { return "hello: "+n; } : (n: number) => string
 >n : number
 >"hello: "+n : string
->"hello: " : string
+>"hello: " : "hello: "
 >n : number
->18 : number
+>18 : 18
 
 
 

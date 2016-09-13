@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/spread/iteratorSpreadInCall5.ts ===
 foo(...new SymbolIterator, ...new StringIterator);
 >foo(...new SymbolIterator, ...new StringIterator) : void
->foo : (...s: (symbol | string)[]) => void
+>foo : (...s: (string | symbol)[]) => void
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator
 >SymbolIterator : typeof SymbolIterator
@@ -10,8 +10,8 @@ foo(...new SymbolIterator, ...new StringIterator);
 >StringIterator : typeof StringIterator
 
 function foo(...s: (symbol | string)[]) { }
->foo : (...s: (symbol | string)[]) => void
->s : (symbol | string)[]
+>foo : (...s: (string | symbol)[]) => void
+>s : (string | symbol)[]
 
 class SymbolIterator {
 >SymbolIterator : SymbolIterator
@@ -29,7 +29,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }
@@ -55,11 +55,11 @@ class StringIterator {
 
             value: "",
 >value : string
->"" : string
+>"" : ""
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }

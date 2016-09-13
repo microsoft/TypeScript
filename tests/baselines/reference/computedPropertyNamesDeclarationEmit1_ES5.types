@@ -4,18 +4,18 @@ class C {
 
     ["" + ""]() { }
 >"" + "" : string
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 
     get ["" + ""]() { return 0; }
 >"" + "" : string
->"" : string
->"" : string
->0 : number
+>"" : ""
+>"" : ""
+>0 : 0
 
     set ["" + ""](x) { }
 >"" + "" : string
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 >x : any
 }

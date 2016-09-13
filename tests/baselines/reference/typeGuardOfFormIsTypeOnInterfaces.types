@@ -54,7 +54,7 @@ function isC1(x: any): x is C1 {
 >C1 : C1
 
     return true;
->true : boolean
+>true : true
 }
 
 function isC2(x: any): x is C2 {
@@ -64,7 +64,7 @@ function isC2(x: any): x is C2 {
 >C2 : C2
 
     return true;
->true : boolean
+>true : true
 }
 
 function isD1(x: any): x is D1 {
@@ -74,7 +74,7 @@ function isD1(x: any): x is D1 {
 >D1 : D1
 
     return true;
->true : boolean
+>true : true
 }
 
 var c1: C1;
@@ -111,7 +111,7 @@ num = isC2(c1Orc2) && c1Orc2.p2; // C2
 >isC2(c1Orc2) && c1Orc2.p2 : number
 >isC2(c1Orc2) : boolean
 >isC2 : (x: any) => x is C2
->c1Orc2 : C2 | C1
+>c1Orc2 : C1 | C2
 >c1Orc2.p2 : number
 >c1Orc2 : C2
 >p2 : number
@@ -160,7 +160,7 @@ num = isD1(c2Ord1) && c2Ord1.p3; // D1
 >isD1(c2Ord1) && c2Ord1.p3 : number
 >isD1(c2Ord1) : boolean
 >isD1 : (x: any) => x is D1
->c2Ord1 : D1 | C2
+>c2Ord1 : C2 | D1
 >c2Ord1.p3 : number
 >c2Ord1 : D1
 >p3 : number

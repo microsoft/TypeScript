@@ -6,6 +6,11 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
+    interface Statistic {
+        name: string;
+        value: string;
+    }
+
     const defaultFormatDiagnosticsHost: FormatDiagnosticsHost = {
         getCurrentDirectory: () => sys.getCurrentDirectory(),
         getNewLine: () => sys.newLine,
@@ -122,11 +127,11 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap: Map<string> = {
+    const categoryFormatMap = createMap<string>({
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
         [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
-    };
+    });
 
     function formatAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
@@ -228,18 +233,6 @@ namespace ts {
         }
 
         return s;
-    }
-
-    function reportStatisticalValue(name: string, value: string) {
-        sys.write(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
-    }
-
-    function reportCountStatistic(name: string, count: number) {
-        reportStatisticalValue(name, "" + count);
-    }
-
-    function reportTimeStatistic(name: string, time: number) {
-        reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
     function isJSONSupported() {
@@ -432,7 +425,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = {};
+            cachedExistingFiles = createMap<boolean>();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -445,10 +438,9 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            if (hasProperty(cachedExistingFiles, fileName)) {
-                return cachedExistingFiles[fileName];
-            }
-            return cachedExistingFiles[fileName] = hostFileExists(fileName);
+            return fileName in cachedExistingFiles
+                ? cachedExistingFiles[fileName]
+                : cachedExistingFiles[fileName] = hostFileExists(fileName);
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -490,10 +482,7 @@ namespace ts {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             if (removed) {
-                const index = rootFileNames.indexOf(sourceFile.fileName);
-                if (index >= 0) {
-                    rootFileNames.splice(index, 1);
-                }
+                unorderedRemoveItem(rootFileNames, sourceFile.fileName);
             }
             startTimerForRecompilation();
         }
@@ -551,7 +540,11 @@ namespace ts {
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
         const hasDiagnostics = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
-        if (hasDiagnostics) performance.enable();
+        let statistics: Statistic[];
+        if (hasDiagnostics) {
+            performance.enable();
+            statistics = [];
+        }
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -595,6 +588,7 @@ namespace ts {
                 reportTimeStatistic("Emit time", emitTime);
             }
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            reportStatistics();
 
             performance.disable();
         }
@@ -636,6 +630,36 @@ namespace ts {
             }
             return ExitStatus.Success;
         }
+
+        function reportStatistics() {
+            let nameSize = 0;
+            let valueSize = 0;
+            for (const { name, value } of statistics) {
+                if (name.length > nameSize) {
+                    nameSize = name.length;
+                }
+
+                if (value.length > valueSize) {
+                    valueSize = value.length;
+                }
+            }
+
+            for (const { name, value } of statistics) {
+                sys.write(padRight(name + ":", nameSize + 2) + padLeft(value.toString(), valueSize) + sys.newLine);
+            }
+        }
+
+        function reportStatisticalValue(name: string, value: string) {
+            statistics.push({ name, value });
+        }
+
+        function reportCountStatistic(name: string, count: number) {
+            reportStatisticalValue(name, "" + count);
+        }
+
+        function reportTimeStatistic(name: string, time: number) {
+            reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
+        }
     }
 
     function printVersion() {
@@ -676,7 +700,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap: Map<string[]> = {};  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -704,9 +728,10 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                forEachKey(<Map<number | string>>element.type, key => {
+                const typeMap = <Map<number | string>>element.type;
+                for (const key in typeMap) {
                     options.push(`'${key}'`);
-                });
+                }
                 optionsDescriptionMap[description] = options;
             }
             else {
@@ -763,69 +788,16 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
         }
         else {
-            const compilerOptions = extend(options, defaultInitCompilerOptions);
-            const configurations: any = {
-                compilerOptions: serializeCompilerOptions(compilerOptions)
-            };
-
-            if (fileNames && fileNames.length) {
-                // only set the files property if we have at least one file
-                configurations.files = fileNames;
-            }
-            else {
-                configurations.exclude = ["node_modules"];
-                if (compilerOptions.outDir) {
-                    configurations.exclude.push(compilerOptions.outDir);
-                }
-            }
-
-            sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
+            sys.writeFile(file, JSON.stringify(generateTSConfig(options, fileNames), undefined, 4));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
         }
 
         return;
-
-        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
-            const result: Map<string | number | boolean> = {};
-            const optionsNameMap = getOptionNameMap().optionNameMap;
-
-            for (const name in options) {
-                if (hasProperty(options, name)) {
-                    // tsconfig only options cannot be specified via command line,
-                    // so we can assume that only types that can appear here string | number | boolean
-                    const value = <string | number | boolean>options[name];
-                    switch (name) {
-                        case "init":
-                        case "watch":
-                        case "version":
-                        case "help":
-                        case "project":
-                            break;
-                        default:
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
-                            if (optionDefinition) {
-                                if (typeof optionDefinition.type === "string") {
-                                    // string, number or boolean
-                                    result[name] = value;
-                                }
-                                else {
-                                    // Enum
-                                    const typeMap = <Map<number>>optionDefinition.type;
-                                    for (const key in typeMap) {
-                                        if (hasProperty(typeMap, key)) {
-                                            if (typeMap[key] === value)
-                                                result[name] = key;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
-            return result;
-        }
     }
+}
+
+if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+    ts.sys.tryEnableSourceMapsForHost();
 }
 
 ts.executeCommandLine(ts.sys.args);

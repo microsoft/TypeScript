@@ -18,8 +18,8 @@ var o: I = {
 
     ["" + 0](y) { return y.length; },
 >"" + 0 : string
->"" : string
->0 : number
+>"" : ""
+>0 : 0
 >y : string
 >y.length : number
 >y : string
@@ -27,8 +27,8 @@ var o: I = {
 
     ["" + 1]: y => y.length
 >"" + 1 : string
->"" : string
->1 : number
+>"" : ""
+>1 : 1
 >y => y.length : (y: string) => number
 >y : string
 >y.length : number

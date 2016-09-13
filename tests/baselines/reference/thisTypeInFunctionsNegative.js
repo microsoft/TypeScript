@@ -333,18 +333,19 @@ var ThisConstructor = (function () {
     return ThisConstructor;
 }());
 var thisConstructorType;
-function notFirst(a, this) { return this.n; }
+function notFirst(a) { return this.n; }
 ///// parse errors /////
 function modifiers(, C) {
     if ( === void 0) {  = this; }
     return this.n;
 }
-function restParam(, C) { return this.n; }
+function restParam(C) { return this.n; }
 function optional(C) { return this.n; }
 function decorated(, C) {
     if ( === void 0) {  = this; }
     return this.n;
 }
+function initializer() { }
 new C();
 number;
 {

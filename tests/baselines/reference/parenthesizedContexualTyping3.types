@@ -62,7 +62,7 @@ var a = tempFun `${ x => x }  ${ 10 }`
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var b = tempFun `${ (x => x) }  ${ 10 }`
 >b : number
@@ -73,7 +73,7 @@ var b = tempFun `${ (x => x) }  ${ 10 }`
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var c = tempFun `${ ((x => x)) } ${ 10 }`
 >c : number
@@ -85,7 +85,7 @@ var c = tempFun `${ ((x => x)) } ${ 10 }`
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var d = tempFun `${ x => x } ${ x => x } ${ 10 }`
 >d : number
@@ -98,7 +98,7 @@ var d = tempFun `${ x => x } ${ x => x } ${ 10 }`
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var e = tempFun `${ x => x } ${ (x => x) } ${ 10 }`
 >e : number
@@ -112,7 +112,7 @@ var e = tempFun `${ x => x } ${ (x => x) } ${ 10 }`
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var f = tempFun `${ x => x } ${ ((x => x)) } ${ 10 }`
 >f : number
@@ -127,7 +127,7 @@ var f = tempFun `${ x => x } ${ ((x => x)) } ${ 10 }`
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var g = tempFun `${ (x => x) } ${ (((x => x))) } ${ 10 }`
 >g : number
@@ -144,7 +144,7 @@ var g = tempFun `${ (x => x) } ${ (((x => x))) } ${ 10 }`
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var h = tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }`
 >h : any

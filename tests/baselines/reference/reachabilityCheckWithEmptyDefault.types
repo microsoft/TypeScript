@@ -11,12 +11,12 @@ function foo(x: any) {
 >x : any
 
 		case 1: return;
->1 : number
+>1 : 1
 
 		default:
 	}
 	print('1');
 >print('1') : void
 >print : (s: string) => void
->'1' : string
+>'1' : "1"
 }

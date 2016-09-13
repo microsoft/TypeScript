@@ -4,9 +4,9 @@ var array: symbol[];
 
 array.concat([...new SymbolIterator]);
 >array.concat([...new SymbolIterator]) : symbol[]
->array.concat : (...items: (symbol | symbol[])[]) => symbol[]
+>array.concat : { (...items: symbol[][]): symbol[]; (...items: (symbol | symbol[])[]): symbol[]; }
 >array : symbol[]
->concat : (...items: (symbol | symbol[])[]) => symbol[]
+>concat : { (...items: symbol[][]): symbol[]; (...items: (symbol | symbol[])[]): symbol[]; }
 >[...new SymbolIterator] : symbol[]
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator
@@ -28,7 +28,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }

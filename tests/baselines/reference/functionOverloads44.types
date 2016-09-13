@@ -27,8 +27,8 @@ function foo1(bar: { a:string }[]): Animal;
 
 function foo1([x]: { a:number | string }[]): Dog {
 >foo1 : { (bar: { a: number; }[]): Dog; (bar: { a: string; }[]): Animal; }
->x : { a: number | string; }
->a : number | string
+>x : { a: string | number; }
+>a : string | number
 >Dog : Dog
 
     return undefined;
@@ -36,22 +36,22 @@ function foo1([x]: { a:number | string }[]): Dog {
 }
 
 function foo2(bar: { a:number }[]): Cat;
->foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Cat | Dog; }
+>foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
 >bar : { a: number; }[]
 >a : number
 >Cat : Cat
 
 function foo2(bar: { a:string }[]): Cat | Dog;
->foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Cat | Dog; }
+>foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
 >bar : { a: string; }[]
 >a : string
 >Cat : Cat
 >Dog : Dog
 
 function foo2([x]: { a:number | string }[]): Cat {
->foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Cat | Dog; }
->x : { a: number | string; }
->a : number | string
+>foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
+>x : { a: string | number; }
+>a : string | number
 >Cat : Cat
 
     return undefined;
@@ -66,7 +66,7 @@ var x1 = foo1([{a: "str"}]);
 >[{a: "str"}] : { a: string; }[]
 >{a: "str"} : { a: string; }
 >a : string
->"str" : string
+>"str" : "str"
 
 var y1 = foo1([{a: 100}]);
 >y1 : Dog
@@ -75,23 +75,23 @@ var y1 = foo1([{a: 100}]);
 >[{a: 100}] : { a: number; }[]
 >{a: 100} : { a: number; }
 >a : number
->100 : number
+>100 : 100
 
 var x2 = foo2([{a: "str"}]);
->x2 : Cat | Dog
->foo2([{a: "str"}]) : Cat | Dog
->foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Cat | Dog; }
+>x2 : Dog | Cat
+>foo2([{a: "str"}]) : Dog | Cat
+>foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
 >[{a: "str"}] : { a: string; }[]
 >{a: "str"} : { a: string; }
 >a : string
->"str" : string
+>"str" : "str"
 
 var y2 = foo2([{a: 100}]);
 >y2 : Cat
 >foo2([{a: 100}]) : Cat
->foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Cat | Dog; }
+>foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
 >[{a: 100}] : { a: number; }[]
 >{a: 100} : { a: number; }
 >a : number
->100 : number
+>100 : 100
 

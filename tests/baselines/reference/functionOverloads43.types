@@ -11,16 +11,16 @@ function foo(bar: { a:string }[]): string;
 
 function foo([x]: { a:number | string }[]): string | number {
 >foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
->x : { a: number | string; }
->a : number | string
+>x : { a: string | number; }
+>a : string | number
 
     if (x) {
->x : { a: number | string; }
+>x : { a: string | number; }
 
         return x.a;
->x.a : number | string
->x : { a: number | string; }
->a : number | string
+>x.a : string | number
+>x : { a: string | number; }
+>a : string | number
     }
     
     return undefined;
@@ -34,7 +34,7 @@ var x = foo([{a: "str"}]);
 >[{a: "str"}] : { a: string; }[]
 >{a: "str"} : { a: string; }
 >a : string
->"str" : string
+>"str" : "str"
 
 var y = foo([{a: 100}]);
 >y : number
@@ -43,5 +43,5 @@ var y = foo([{a: 100}]);
 >[{a: 100}] : { a: number; }[]
 >{a: 100} : { a: number; }
 >a : number
->100 : number
+>100 : 100
 

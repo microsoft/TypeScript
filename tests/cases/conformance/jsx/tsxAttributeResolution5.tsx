@@ -29,4 +29,4 @@ function make3<T extends {y: string}> (obj: T) {
 
 
 <test1 {...{}} />; // Error, missing x
-<test2 {...{}} />; // OK
+<test2 {...{}} />; // Error, missing toString

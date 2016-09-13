@@ -29,16 +29,16 @@ var derived2: Derived2;
 >Derived2 : Derived2
 
 var r2 = true ? 1 : '';
->r2 : number | string
->true ? 1 : '' : number | string
->true : boolean
->1 : number
->'' : string
+>r2 : string | number
+>true ? 1 : '' : "" | 1
+>true : true
+>1 : 1
+>'' : ""
 
 var r9 = true ? derived : derived2;
 >r9 : Derived | Derived2
 >true ? derived : derived2 : Derived | Derived2
->true : boolean
+>true : true
 >derived : Derived
 >derived2 : Derived2
 
@@ -53,7 +53,7 @@ function foo<T, U>(t: T, u: U) {
 
     return true ? t : u;
 >true ? t : u : T | U
->true : boolean
+>true : true
 >t : T
 >u : U
 }
@@ -70,7 +70,7 @@ function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type pa
 
     return true ? t : u; // Ok because BCT(T, U) = U
 >true ? t : u : U
->true : boolean
+>true : true
 >t : T
 >u : U
 }
@@ -89,7 +89,7 @@ function foo3<T extends U, U extends V, V>(t: T, u: U) {
 
     return true ? t : u;
 >true ? t : u : U
->true : boolean
+>true : true
 >t : T
 >u : U
 }

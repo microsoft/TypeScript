@@ -54,8 +54,9 @@ var RegisteredUser = (function (_super) {
     };
     RegisteredUser.prototype.g = function () {
         function inner() {
+            var _this = this;
             (function () {
-                _super.sayHello.call(this);
+                _super.sayHello.call(_this);
             });
         }
     };

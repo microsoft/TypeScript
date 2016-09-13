@@ -1006,7 +1006,12 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[]): T[];
+    concat(...items: T[][]): T[];
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: (T | T[])[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1055,6 +1060,12 @@ interface ReadonlyArray<T> {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
     map<U>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => U, thisArg?: any): U[];
+    /**
+     * Returns the elements of an array that meet the condition specified in a callback function.
+     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
+    filter<S extends T>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => value is S, thisArg?: any): S[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
@@ -1108,6 +1119,11 @@ interface Array<T> {
       * Removes the last element from an array and returns it.
       */
     pop(): T | undefined;
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: T[][]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.

@@ -12,28 +12,25 @@
 
 goTo.marker("useFoo");
 verify.quickInfoIs("import foo");
-goTo.definition();
-verify.caretAtMarker("importFoo");
-goTo.definition();
-verify.caretAtMarker("module");
+verify.goToDefinition({
+    useFoo: "importFoo",
+    importFoo: "module"
+});
 
 goTo.marker("useBar");
 verify.quickInfoIs("import bar");
-goTo.definition();
-verify.caretAtMarker("module");
+verify.goToDefinition("useBar", "module");
 
 goTo.marker("useBaz");
 verify.quickInfoIs("import baz");
-goTo.definition();
-verify.caretAtMarker("importBaz");
-goTo.marker("idBaz");
-goTo.definition();
-verify.caretAtMarker("module");
+verify.goToDefinition({
+    useBaz: "importBaz",
+    idBaz: "module"
+});
 
 goTo.marker("useBang");
 verify.quickInfoIs("import bang = require(\"jquery\")");
-goTo.definition();
-verify.caretAtMarker("importBang");
-goTo.marker("idBang");
-goTo.definition();
-verify.caretAtMarker("module");
+verify.goToDefinition({
+    useBang: "importBang",
+    idBang: "module"
+});

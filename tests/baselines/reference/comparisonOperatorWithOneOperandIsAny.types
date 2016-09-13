@@ -4,9 +4,9 @@ var x: any;
 
 enum E { a, b, c }
 >E : E
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void

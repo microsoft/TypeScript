@@ -9,9 +9,9 @@ var color: foo;
 if(color === foo.green){
 >color === foo.green : boolean
 >color : foo
->foo.green : foo
+>foo.green : foo.green
 >foo : typeof foo
->green : foo
+>green : foo.green
 
 	color = foo.answer;
 >color = foo.answer : number
@@ -26,16 +26,16 @@ enum foo {
 >foo : foo
 
 	red, green, blue
->red : foo
->green : foo
->blue : foo
+>red : foo.red
+>green : foo.green
+>blue : foo.blue
 }
 module foo {
 >foo : typeof foo
 
 	export var answer = 42;
 >answer : number
->42 : number
+>42 : 42
 }
 export = foo;
 >foo : foo

@@ -1,0 +1,36 @@
+error TS2305: Module 'tslib' has no exported member '__decorate'.
+error TS2305: Module 'tslib' has no exported member '__extends'.
+error TS2305: Module 'tslib' has no exported member '__metadata'.
+error TS2305: Module 'tslib' has no exported member '__param'.
+
+
+!!! error TS2305: Module 'tslib' has no exported member '__decorate'.
+!!! error TS2305: Module 'tslib' has no exported member '__extends'.
+!!! error TS2305: Module 'tslib' has no exported member '__metadata'.
+!!! error TS2305: Module 'tslib' has no exported member '__param'.
+==== tests/cases/compiler/external.ts (0 errors) ====
+    export class A { }
+    export class B extends A { }
+    
+    declare var dec: any;
+    
+    @dec
+    class C {
+        method(@dec x: number) {
+        }
+    }
+    
+==== tests/cases/compiler/script.ts (0 errors) ====
+    class A { }
+    class B extends A { }
+    
+    declare var dec: any;
+    
+    @dec
+    class C {
+        method(@dec x: number) {
+        }
+    }
+    
+==== tests/cases/compiler/tslib.d.ts (0 errors) ====
+    export {}

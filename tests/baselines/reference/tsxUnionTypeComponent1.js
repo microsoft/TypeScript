@@ -31,7 +31,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var React = require('react');
+var React = require("react");
 var MyComponent = (function (_super) {
     __extends(MyComponent, _super);
     function MyComponent() {
@@ -44,7 +44,7 @@ var MyComponent = (function (_super) {
     return MyComponent;
 }(React.Component));
 // Stateless Component As Props
-React.createElement(MyComponent, {AnyComponent: function () { return React.createElement("button", null, "test"); }});
+React.createElement(MyComponent, { AnyComponent: function () { return React.createElement("button", null, "test"); } });
 // Component Class as Props
 var MyButtonComponent = (function (_super) {
     __extends(MyButtonComponent, _super);
@@ -53,4 +53,4 @@ var MyButtonComponent = (function (_super) {
     }
     return MyButtonComponent;
 }(React.Component));
-React.createElement(MyComponent, {AnyComponent: MyButtonComponent});
+React.createElement(MyComponent, { AnyComponent: MyButtonComponent });

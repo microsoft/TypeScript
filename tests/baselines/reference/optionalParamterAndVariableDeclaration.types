@@ -10,7 +10,7 @@ class C {
 >(options || 0) : number
 >options || 0 : number
 >options : number
->0 : number
+>0 : 0
     }
 }
 

@@ -9,12 +9,12 @@ var a: any;
 >a : any
 
 var v = {
->v : { [x: string]: number | string; [x: number]: number | string; [0]: number; [""]: number; }
->{    [s]: 0,    [n]: n,    [s + s]: 1,    [s + n]: 2,    [+s]: s,    [""]: 0,    [0]: 0,    [a]: 1,    [<any>true]: 0,    [`hello bye`]: 0,    [`hello ${a} bye`]: 0} : { [x: string]: number | string; [x: number]: number | string; [0]: number; [""]: number; }
+>v : { [x: string]: string | number; [x: number]: string | number; [0]: number; [""]: number; }
+>{    [s]: 0,    [n]: n,    [s + s]: 1,    [s + n]: 2,    [+s]: s,    [""]: 0,    [0]: 0,    [a]: 1,    [<any>true]: 0,    [`hello bye`]: 0,    [`hello ${a} bye`]: 0} : { [x: string]: string | number; [x: number]: string | number; [0]: number; [""]: number; }
 
     [s]: 0,
 >s : string
->0 : number
+>0 : 0
 
     [n]: n,
 >n : number
@@ -24,13 +24,13 @@ var v = {
 >s + s : string
 >s : string
 >s : string
->1 : number
+>1 : 1
 
     [s + n]: 2,
 >s + n : string
 >s : string
 >n : number
->2 : number
+>2 : 2
 
     [+s]: s,
 >+s : number
@@ -38,28 +38,28 @@ var v = {
 >s : string
 
     [""]: 0,
->"" : string
->0 : number
+>"" : ""
+>0 : 0
 
     [0]: 0,
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
     [a]: 1,
 >a : any
->1 : number
+>1 : 1
 
     [<any>true]: 0,
 ><any>true : any
->true : boolean
->0 : number
+>true : true
+>0 : 0
 
     [`hello bye`]: 0,
 >`hello bye` : string
->0 : number
+>0 : 0
 
     [`hello ${a} bye`]: 0
 >`hello ${a} bye` : string
 >a : any
->0 : number
+>0 : 0
 }

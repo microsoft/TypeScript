@@ -3,7 +3,7 @@
 // This is pre comment
 var y = 10;
 >y : number
->10 : number
+>10 : 10
 
 /**
 * @name Foo

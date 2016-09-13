@@ -10,9 +10,9 @@ function a() {
 >a : () => void
 
     x = true;
->x = true : boolean
+>x = true : true
 >x : string | number | boolean | RegExp
->true : boolean
+>true : true
 
     for (x of obj) {
 >x : string | number | boolean | RegExp
@@ -27,6 +27,6 @@ function a() {
 >toExponential : (fractionDigits?: number) => string
     }
     x; // string | boolean
->x : boolean | string
+>x : string | true
 }
 

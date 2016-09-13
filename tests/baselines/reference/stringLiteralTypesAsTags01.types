@@ -1,14 +1,14 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts ===
 
 type Kind = "A" | "B"
->Kind : "A" | "B"
+>Kind : Kind
 
 interface Entity {
 >Entity : Entity
 
     kind: Kind;
->kind : "A" | "B"
->Kind : "A" | "B"
+>kind : Kind
+>Kind : Kind
 }
 
 interface A extends Entity {
@@ -34,7 +34,7 @@ interface B extends Entity {
 }
 
 function hasKind(entity: Entity, kind: "A"): entity is A;
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: "A" | "B"): entity is Entity; }
+>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >entity : Entity
 >Entity : Entity
 >kind : "A"
@@ -42,7 +42,7 @@ function hasKind(entity: Entity, kind: "A"): entity is A;
 >A : A
 
 function hasKind(entity: Entity, kind: "B"): entity is B;
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: "A" | "B"): entity is Entity; }
+>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >entity : Entity
 >Entity : Entity
 >kind : "B"
@@ -50,27 +50,27 @@ function hasKind(entity: Entity, kind: "B"): entity is B;
 >B : B
 
 function hasKind(entity: Entity, kind: Kind): entity is Entity;
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: "A" | "B"): entity is Entity; }
+>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >entity : Entity
 >Entity : Entity
->kind : "A" | "B"
->Kind : "A" | "B"
+>kind : Kind
+>Kind : Kind
 >entity : any
 >Entity : Entity
 
 function hasKind(entity: Entity, kind: Kind): boolean {
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: "A" | "B"): entity is Entity; }
+>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >entity : Entity
 >Entity : Entity
->kind : "A" | "B"
->Kind : "A" | "B"
+>kind : Kind
+>Kind : Kind
 
     return entity.kind === kind;
 >entity.kind === kind : boolean
->entity.kind : "A" | "B"
+>entity.kind : Kind
 >entity : Entity
->kind : "A" | "B"
->kind : "A" | "B"
+>kind : Kind
+>kind : Kind
 }
 
 let x: A = {
@@ -79,17 +79,17 @@ let x: A = {
 >{    kind: "A",    a: 100,} : { kind: "A"; a: number; }
 
     kind: "A",
->kind : "A"
+>kind : string
 >"A" : "A"
 
     a: 100,
 >a : number
->100 : number
+>100 : 100
 }
 
 if (hasKind(x, "A")) {
 >hasKind(x, "A") : boolean
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: "A" | "B"): entity is Entity; }
+>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >x : A
 >"A" : "A"
 
@@ -99,14 +99,14 @@ if (hasKind(x, "A")) {
 }
 else {
     let b = x;
->b : A
->x : A
+>b : never
+>x : never
 }
 
 if (!hasKind(x, "B")) {
 >!hasKind(x, "B") : boolean
 >hasKind(x, "B") : boolean
->hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: "A" | "B"): entity is Entity; }
+>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: Kind): entity is Entity; }
 >x : A
 >"B" : "B"
 

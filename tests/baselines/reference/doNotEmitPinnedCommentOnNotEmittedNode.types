@@ -17,7 +17,7 @@ class C {
 
 var x = 10;
 >x : number
->10 : number
+>10 : 10
 
 /*! remove pinned comment anywhere else */
 declare var OData: any;

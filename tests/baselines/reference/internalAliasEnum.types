@@ -6,13 +6,13 @@ module a {
 >weekend : weekend
 
         Friday,
->Friday : weekend
+>Friday : weekend.Friday
 
         Saturday,
->Saturday : weekend
+>Saturday : weekend.Saturday
 
         Sunday
->Sunday : weekend
+>Sunday : weekend.Sunday
     }
 }
 
@@ -27,8 +27,8 @@ module c {
     export var bVal: b = b.Sunday;
 >bVal : b
 >b : b
->b.Sunday : b
+>b.Sunday : b.Sunday
 >b : typeof b
->Sunday : b
+>Sunday : b.Sunday
 }
 

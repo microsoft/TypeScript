@@ -7,9 +7,9 @@ function f1() {
 >E : E
 
         A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
     }
     class C {
 >C : C
@@ -37,15 +37,15 @@ function f1() {
 >C : typeof C
 
     a[0].x = E.B;
->a[0].x = E.B : E
+>a[0].x = E.B : E.B
 >a[0].x : E
 >a[0] : I
 >a : I[]
->0 : number
+>0 : 0
 >x : E
->E.B : E
+>E.B : E.B
 >E : typeof E
->B : E
+>B : E.B
 
     return a;
 >a : I[]
@@ -61,9 +61,9 @@ function f2() {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
@@ -91,15 +91,15 @@ function f2() {
 >C : typeof C
 
         a[0].x = E.B;
->a[0].x = E.B : E
+>a[0].x = E.B : E.B
 >a[0].x : E
 >a[0] : I
 >a : I[]
->0 : number
+>0 : 0
 >x : E
->E.B : E
+>E.B : E.B
 >E : typeof E
->B : E
+>B : E.B
 
         return a;
 >a : I[]
@@ -114,15 +114,15 @@ function f3(b: boolean) {
 >b : boolean
 
     if (true) {
->true : boolean
+>true : true
 
         enum E {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         if (b) {
 >b : boolean
@@ -153,15 +153,15 @@ function f3(b: boolean) {
 >C : typeof C
 
             a[0].x = E.B;
->a[0].x = E.B : E
+>a[0].x = E.B : E.B
 >a[0].x : E
 >a[0] : I
 >a : I[]
->0 : number
+>0 : 0
 >x : E
->E.B : E
+>E.B : E.B
 >E : typeof E
->B : E
+>B : E.B
 
             return a;
 >a : I[]
@@ -193,15 +193,15 @@ function f3(b: boolean) {
 >A : typeof A
 
             c[0].x = E.B;
->c[0].x = E.B : E
+>c[0].x = E.B : E.B
 >c[0].x : E
 >c[0] : J
 >c : J[]
->0 : number
+>0 : 0
 >x : E
->E.B : E
+>E.B : E.B
 >E : typeof E
->B : E
+>B : E.B
 
             return c;
 >c : J[]
@@ -220,9 +220,9 @@ function f5() {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
@@ -243,9 +243,9 @@ function f5() {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
@@ -268,9 +268,9 @@ class A {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
@@ -287,9 +287,9 @@ class A {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
@@ -309,9 +309,9 @@ class A {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
@@ -361,25 +361,25 @@ function f6() {
 >C : typeof C
 
             x.a = "a";
->x.a = "a" : string
+>x.a = "a" : "a"
 >x.a : string
 >x : C
 >a : string
->"a" : string
+>"a" : "a"
 
             x.b = "b";
->x.b = "b" : string
+>x.b = "b" : "b"
 >x.b : string
 >x : C
 >b : string
->"b" : string
+>"b" : "b"
 
             x.c = "c";
->x.c = "c" : string
+>x.c = "c" : "c"
 >x.c : string
 >x : C
 >c : string
->"c" : string
+>"c" : "c"
 
             return x;
 >x : C

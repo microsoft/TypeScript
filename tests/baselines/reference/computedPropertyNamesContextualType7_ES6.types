@@ -33,30 +33,30 @@ declare function g<T>(obj: J<T>): T;
 >T : T
 
 foo({
->foo({    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : (() => void) | number | number[]
+>foo({    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : number | (() => void) | number[]
 >foo : <T>(obj: I<T>) => T
->{    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: (() => void) | boolean | number | number[]; [x: number]: (() => void) | number | number[]; 0: () => void; }
+>{    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: number | boolean | (() => void) | number[]; [x: number]: number | (() => void) | number[]; 0: () => void; }
 
     0: () => { },
 >() => { } : () => void
 
     ["hi" + "bye"]: true,
 >"hi" + "bye" : string
->"hi" : string
->"bye" : string
->true : boolean
+>"hi" : "hi"
+>"bye" : "bye"
+>true : true
 
     [0 + 1]: 0,
 >0 + 1 : number
->0 : number
->1 : number
->0 : number
+>0 : 0
+>1 : 1
+>0 : 0
 
     [+"hi"]: [0]
 >+"hi" : number
->"hi" : string
+>"hi" : "hi"
 >[0] : number[]
->0 : number
+>0 : 0
 
 });
 
@@ -65,5 +65,5 @@ g({ p: "" });
 >g : <T>(obj: J<T>) => T
 >{ p: "" } : { p: string; }
 >p : string
->"" : string
+>"" : ""
 

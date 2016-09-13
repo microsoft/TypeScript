@@ -319,7 +319,7 @@ var TypeScript;
     var StringHashTable = (function () {
         function StringHashTable() {
             this.itemCount = 0;
-            this.table = (new BlockIntrinsics());
+            this.table = new BlockIntrinsics();
         }
         StringHashTable.prototype.getAllKeys = function () {
             var result = [];

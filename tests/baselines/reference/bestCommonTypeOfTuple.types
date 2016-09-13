@@ -2,17 +2,17 @@
 function f1(x: number): string { return "foo"; }
 >f1 : (x: number) => string
 >x : number
->"foo" : string
+>"foo" : "foo"
 
 function f2(x: number): number { return 10; }
 >f2 : (x: number) => number
 >x : number
->10 : number
+>10 : 10
 
 function f3(x: number): boolean { return true; }
 >f3 : (x: number) => boolean
 >x : number
->true : boolean
+>true : true
 
 enum E1 { one }
 >E1 : E1
@@ -64,7 +64,7 @@ t3 = [5, undefined];
 >t3 = [5, undefined] : [number, undefined]
 >t3 : [number, any]
 >[5, undefined] : [number, undefined]
->5 : number
+>5 : 5
 >undefined : undefined
 
 t4 = [E1.one, E2.two, 20];
@@ -77,29 +77,29 @@ t4 = [E1.one, E2.two, 20];
 >E2.two : E2
 >E2 : typeof E2
 >two : E2
->20 : number
+>20 : 20
 
 var e1 = t1[2];  // {}
 >e1 : ((x: number) => string) | ((x: number) => number)
 >t1[2] : ((x: number) => string) | ((x: number) => number)
 >t1 : [(x: number) => string, (x: number) => number]
->2 : number
+>2 : 2
 
 var e2 = t2[2];  // {}
 >e2 : E1 | E2
 >t2[2] : E1 | E2
 >t2 : [E1, E2]
->2 : number
+>2 : 2
 
 var e3 = t3[2];  // any
 >e3 : any
 >t3[2] : any
 >t3 : [number, any]
->2 : number
+>2 : 2
 
 var e4 = t4[3];  // number
->e4 : E1 | E2 | number
->t4[3] : E1 | E2 | number
+>e4 : number | E1 | E2
+>t4[3] : number | E1 | E2
 >t4 : [E1, E2, number]
->3 : number
+>3 : 3
 
