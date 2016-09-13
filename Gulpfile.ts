@@ -890,7 +890,7 @@ gulp.task(loggedIOJsPath, false, [], (done) => {
     const temp = path.join(builtLocalDirectory, "temp");
     mkdirP(temp, (err) => {
         if (err) { console.error(err); done(err); process.exit(1); };
-        exec(host, [LKGCompiler, "--outdir", temp, loggedIOpath], () => {
+        exec(host, [LKGCompiler, "--types --outdir", temp, loggedIOpath], () => {
             fs.renameSync(path.join(temp, "/harness/loggedIO.js"), loggedIOJsPath);
             del(temp).then(() => done(), done);
         }, done);
@@ -911,8 +911,8 @@ gulp.task(instrumenterJsPath, false, [servicesFile], () => {
         .pipe(gulp.dest("."));
 });
 
-gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", [loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
-    exec(host, [instrumenterJsPath, "record", "iocapture", builtLocalDirectory, compilerFilename], done, done);
+gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
+    exec(host, [instrumenterJsPath, "record", "iocapture", builtLocalCompiler], done, done);
 });
 
 gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", serverFile], () => {
