@@ -14,6 +14,6 @@ class Camera implements iface{
     }
     foo() {  return "s";   }
 >foo : () => string
->"s" : string
+>"s" : "s"
 }
 

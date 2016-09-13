@@ -2,11 +2,11 @@
 
 export var x = "x";
 >x : string
->"x" : string
+>"x" : "x"
 
 export var y = "y";
 >y : string
->"y" : string
+>"y" : "y"
 
 === tests/cases/conformance/es6/modules/t2.ts ===
 export { x as y, y as x } from "./t1";

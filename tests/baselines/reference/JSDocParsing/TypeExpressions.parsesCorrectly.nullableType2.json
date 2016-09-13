@@ -1,0 +1,10 @@
+{
+    "kind": "JSDocNullableType",
+    "pos": 1,
+    "end": 8,
+    "type": {
+        "kind": "NumberKeyword",
+        "pos": 1,
+        "end": 7
+    }
+}

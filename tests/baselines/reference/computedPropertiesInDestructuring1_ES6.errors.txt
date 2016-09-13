@@ -1,7 +1,7 @@
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(22,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cannot be applied to types '1' and '{}'.
 
 
 ==== tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts (4 errors) ====
@@ -47,5 +47,5 @@ tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS23
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     [{[(1 + {})]: bar4}] = [{bar: "bar"}];
         ~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
+!!! error TS2365: Operator '+' cannot be applied to types '1' and '{}'.
     

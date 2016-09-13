@@ -26,7 +26,7 @@ let f = foo((y: "foo" | "bar") => y === "foo" ? y : "foo");
 >"foo" : "foo"
 
 let fResult = f("foo");
->fResult : "foo"
+>fResult : string
 >f("foo") : "foo"
 >f : (x: "foo") => "foo"
 >"foo" : "foo"

@@ -7,12 +7,12 @@ function foo(a = v[0]) { }
 >a : any
 >v[0] : any
 >v : any[]
->0 : number
+>0 : 0
 
 function bar(a = v[0]) {
 >bar : (a?: any) => void
 >a : any
 >v[0] : any
 >v : any[]
->0 : number
+>0 : 0
 }

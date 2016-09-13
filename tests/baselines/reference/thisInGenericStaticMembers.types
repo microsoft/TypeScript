@@ -30,7 +30,7 @@ class A {
 >one : <T>(source: T, value: number) => T
 >T : T
 >source : T
->42 : number
+>42 : 42
     }
 }
 
@@ -60,7 +60,7 @@ class B {
 >this : typeof B
 >one : (source: B, value: number) => B
 >source : B
->42 : number
+>42 : 42
     }
 }
 

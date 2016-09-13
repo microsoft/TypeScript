@@ -43,5 +43,5 @@ var r2b = i.get(1);
 >i.get : (key: number) => string
 >i : BiMap<number, string>
 >get : (key: number) => string
->1 : number
+>1 : 1
 

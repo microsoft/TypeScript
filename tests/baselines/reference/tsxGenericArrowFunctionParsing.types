@@ -51,7 +51,7 @@ var x4 = <T extends={true}>() => {}</T>;
 ><T extends={true}>() => {}</T> : JSX.Element
 >T : any
 >extends : any
->true : boolean
+>true : true
 >T : any
 
 x4.isElement;

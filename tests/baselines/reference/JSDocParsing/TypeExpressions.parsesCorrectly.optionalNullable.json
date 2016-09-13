@@ -1,0 +1,10 @@
+{
+    "kind": "JSDocOptionalType",
+    "pos": 1,
+    "end": 3,
+    "type": {
+        "kind": "JSDocUnknownType",
+        "pos": 1,
+        "end": 2
+    }
+}

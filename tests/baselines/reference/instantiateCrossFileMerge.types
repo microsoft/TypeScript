@@ -22,5 +22,5 @@ new P<string>(r => { r('foo') });
 >r : (value: string) => void
 >r('foo') : void
 >r : (value: string) => void
->'foo' : string
+>'foo' : "foo"
 

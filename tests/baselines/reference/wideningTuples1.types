@@ -17,5 +17,5 @@ y = [""];
 >y = [""] : [string]
 >y : [any]
 >[""] : [string]
->"" : string
+>"" : ""
 

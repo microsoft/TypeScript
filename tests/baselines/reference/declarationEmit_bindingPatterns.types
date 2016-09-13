@@ -5,7 +5,7 @@ const k = ({x: z = 'y'}) => { }
 >({x: z = 'y'}) => { } : ({x: z}: { x?: string; }) => void
 >x : any
 >z : string
->'y' : string
+>'y' : "y"
 
 var a;
 >a : any

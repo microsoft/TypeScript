@@ -91,6 +91,17 @@ verify.navigationBar([
         "indent": 2
     },
     {
+        "text": "y",
+        "kind": "const",
+        "childItems": [
+            {
+                "text": "foo",
+                "kind": "function"
+            }
+        ],
+        "indent": 2
+    },
+    {
         "text": "<function>",
         "kind": "function",
         "childItems": [

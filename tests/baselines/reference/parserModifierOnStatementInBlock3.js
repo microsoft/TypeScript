@@ -10,6 +10,5 @@ export function foo() {
 function foo() {
     function bar() {
     }
-    exports.bar = bar;
 }
 exports.foo = foo;

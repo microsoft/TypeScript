@@ -397,7 +397,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                if (node.flags & NodeFlags.Default) {
+                if (getModifierFlags(node) & ModifierFlags.Default) {
                     return "default";
                 }
                 return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node);
@@ -466,6 +466,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.VariableDeclaration:
                     return hasSomeImportantChild(item);
 
                 case SyntaxKind.ArrowFunction:
@@ -595,7 +596,7 @@ namespace ts.NavigationBar {
             return nodeText((node.parent as PropertyAssignment).name);
         }
         // Default exports are named "default"
-        else if (node.flags & NodeFlags.Default) {
+        else if (getModifierFlags(node) & ModifierFlags.Default) {
             return "default";
         }
         else {

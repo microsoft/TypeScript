@@ -7,8 +7,8 @@ enum ENUM { };
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
->A : ENUM1
->B : ENUM1
+>A : ENUM1.A
+>B : ENUM1.B
 
 // enum type var
 var ResultIsString1 = typeof ENUM;
@@ -25,9 +25,9 @@ var ResultIsString2 = typeof ENUM1;
 var ResultIsString3 = typeof ENUM1["A"];
 >ResultIsString3 : string
 >typeof ENUM1["A"] : string
->ENUM1["A"] : ENUM1
+>ENUM1["A"] : ENUM1.A
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
 >ResultIsString4 : string
@@ -36,10 +36,10 @@ var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
 >ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->0 : number
->ENUM1["B"] : ENUM1
+>0 : 0
+>ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // multiple typeof  operators
 var ResultIsString5 = typeof typeof ENUM;
@@ -57,10 +57,10 @@ var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1.B);
 >ENUM[0] + ENUM1.B : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->0 : number
->ENUM1.B : ENUM1
+>0 : 0
+>ENUM1.B : ENUM1.B
 >ENUM1 : typeof ENUM1
->B : ENUM1
+>B : ENUM1.B
 
 // miss assignment operators
 typeof ENUM;
@@ -73,9 +73,9 @@ typeof ENUM1;
 
 typeof ENUM1["B"];
 >typeof ENUM1["B"] : string
->ENUM1["B"] : ENUM1
+>ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 typeof ENUM, ENUM1;
 >typeof ENUM, ENUM1 : typeof ENUM1

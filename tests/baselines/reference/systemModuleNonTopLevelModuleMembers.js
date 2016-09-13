@@ -13,15 +13,15 @@ export module TopLevelModule2 {
 }
 
 //// [systemModuleNonTopLevelModuleMembers.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
     function TopLevelFunction() { }
+    var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
     exports_1("TopLevelFunction", TopLevelFunction);
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             TopLevelClass = (function () {
                 function TopLevelClass() {
                 }
@@ -56,5 +56,5 @@ System.register([], function(exports_1, context_1) {
             })(TopLevelModule2 = TopLevelModule2 || (TopLevelModule2 = {}));
             exports_1("TopLevelModule2", TopLevelModule2);
         }
-    }
+    };
 });
