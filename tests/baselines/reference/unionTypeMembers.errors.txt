@@ -1,8 +1,12 @@
 tests/cases/conformance/types/union/unionTypeMembers.ts(44,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/types/union/unionTypeMembers.ts(51,3): error TS2339: Property 'propertyOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
+  Property 'propertyOnlyInI1' does not exist on type 'I2<number>'.
 tests/cases/conformance/types/union/unionTypeMembers.ts(52,3): error TS2339: Property 'propertyOnlyInI2' does not exist on type 'I1<number> | I2<number>'.
+  Property 'propertyOnlyInI2' does not exist on type 'I1<number>'.
 tests/cases/conformance/types/union/unionTypeMembers.ts(53,3): error TS2339: Property 'methodOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
+  Property 'methodOnlyInI1' does not exist on type 'I2<number>'.
 tests/cases/conformance/types/union/unionTypeMembers.ts(54,3): error TS2339: Property 'methodOnlyInI2' does not exist on type 'I1<number> | I2<number>'.
+  Property 'methodOnlyInI2' does not exist on type 'I1<number>'.
 
 
 ==== tests/cases/conformance/types/union/unionTypeMembers.ts (5 errors) ====
@@ -61,12 +65,16 @@ tests/cases/conformance/types/union/unionTypeMembers.ts(54,3): error TS2339: Pro
     x.propertyOnlyInI1; // error
       ~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'propertyOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
+!!! error TS2339:   Property 'propertyOnlyInI1' does not exist on type 'I2<number>'.
     x.propertyOnlyInI2; // error
       ~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'propertyOnlyInI2' does not exist on type 'I1<number> | I2<number>'.
+!!! error TS2339:   Property 'propertyOnlyInI2' does not exist on type 'I1<number>'.
     x.methodOnlyInI1("hello"); // error
       ~~~~~~~~~~~~~~
 !!! error TS2339: Property 'methodOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
+!!! error TS2339:   Property 'methodOnlyInI1' does not exist on type 'I2<number>'.
     x.methodOnlyInI2(10); // error
       ~~~~~~~~~~~~~~
 !!! error TS2339: Property 'methodOnlyInI2' does not exist on type 'I1<number> | I2<number>'.
+!!! error TS2339:   Property 'methodOnlyInI2' does not exist on type 'I1<number>'.

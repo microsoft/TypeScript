@@ -10869,7 +10869,7 @@ namespace ts {
             const prop = getPropertyOfType(apparentType, right.text);
             if (!prop) {
                 if (right.text && !checkAndReportErrorForExtendingInterface(node)) {
-                    error(right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(right), typeToString(type.flags & TypeFlags.ThisType ? apparentType : type));
+                    reportNonexistentProperty(right, type.flags & TypeFlags.ThisType ? apparentType : type);
                 }
                 return unknownType;
             }
@@ -10903,6 +10903,20 @@ namespace ts {
                 return propType;
             }
             return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+
+            function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
+                let errorInfo: DiagnosticMessageChain;
+                if (containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
+                    for (const subtype of (containingType as UnionType).types) {
+                        if (!getPropertyOfType(subtype, propNode.text)) {
+                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(subtype));
+                            break;
+                        }
+                    }
+                }
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
+            }
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
