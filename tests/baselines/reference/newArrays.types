@@ -14,11 +14,11 @@ module M {
 
 		public x = 10;
 >x : number
->10 : number
+>10 : 10
 
 		public y = 10;
 >y : number
->10 : number
+>10 : 10
 
 		public m () {
 >m : () => void

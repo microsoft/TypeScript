@@ -41,7 +41,7 @@ export class C3 {
 
     get C3() { return 0; } // has to be the same as the class name
 >C3 : number
->0 : number
+>0 : 0
 
     bar() {
 >bar : () => (t: typeof C3) => void

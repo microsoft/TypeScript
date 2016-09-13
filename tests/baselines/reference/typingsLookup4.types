@@ -6,14 +6,14 @@ import { k } from "kquery";
 >k : number
 
 import { l } from "lquery";
->l : number
+>l : 2
 
 j + k + l;
 >j + k + l : number
 >j + k : number
 >j : number
 >k : number
->l : number
+>l : 2
 
 === /node_modules/@types/jquery/jquery.d.ts ===
 export const j: number;
@@ -25,6 +25,6 @@ export const k: number;
 
 === /node_modules/@types/lquery/lquery.ts ===
 export const l = 2;
->l : number
->2 : number
+>l : 2
+>2 : 2
 

@@ -2,11 +2,11 @@
 
 var t1 = 10;
 >t1 : number
->10 : number
+>10 : 10
 
 var t2 = 10;
 >t2 : number
->10 : number
+>10 : 10
 
 var s;
 >s : any
@@ -65,7 +65,7 @@ var s;
 `${1 + typeof (t1 ** t2 ** t1) }`;
 >`${1 + typeof (t1 ** t2 ** t1) }` : string
 >1 + typeof (t1 ** t2 ** t1) : string
->1 : number
+>1 : 1
 >typeof (t1 ** t2 ** t1) : string
 >(t1 ** t2 ** t1) : number
 >t1 ** t2 ** t1 : number

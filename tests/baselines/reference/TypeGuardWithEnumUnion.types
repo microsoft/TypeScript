@@ -1,9 +1,9 @@
 === tests/cases/conformance/expressions/typeGuards/TypeGuardWithEnumUnion.ts ===
 enum Color { R, G, B }
 >Color : Color
->R : Color
->G : Color
->B : Color
+>R : Color.R
+>G : Color.G
+>B : Color.B
 
 function f1(x: Color | string) {
 >f1 : (x: string | Color) => void

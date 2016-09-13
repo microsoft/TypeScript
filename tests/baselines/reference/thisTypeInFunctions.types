@@ -58,7 +58,7 @@ class C {
         return m + 1;
 >m + 1 : number
 >m : number
->1 : number
+>1 : 1
     }
 }
 class D extends C { }
@@ -127,7 +127,7 @@ function implicitThis(n: number): number {
 >this : any
 >m : any
 >n : number
->12 : number
+>12 : 12
 }
 let impl: I = {
 >impl : I
@@ -136,7 +136,7 @@ let impl: I = {
 
     a: 12,
 >a : number
->12 : number
+>12 : 12
 
     explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)
 >explicitVoid2 : () => any
@@ -147,7 +147,7 @@ let impl: I = {
 
     explicitVoid1() { return 12; },
 >explicitVoid1 : (this: void) => number
->12 : number
+>12 : 12
 
     explicitStructural() {
 >explicitStructural : (this: { a: number; }) => number
@@ -183,7 +183,7 @@ impl.explicitVoid1 = function () { return 12; };
 >impl : I
 >explicitVoid1 : (this: void) => number
 >function () { return 12; } : (this: void) => number
->12 : number
+>12 : 12
 
 impl.explicitVoid2 = () => 12;
 >impl.explicitVoid2 = () => 12 : () => number
@@ -191,7 +191,7 @@ impl.explicitVoid2 = () => 12;
 >impl : I
 >explicitVoid2 : (this: void) => number
 >() => 12 : () => number
->12 : number
+>12 : 12
 
 impl.explicitStructural = function() { return this.a; };
 >impl.explicitStructural = function() { return this.a; } : (this: { a: number; }) => number
@@ -219,7 +219,7 @@ impl.explicitStructural = () => 12;
 >impl : I
 >explicitStructural : (this: { a: number; }) => number
 >() => 12 : () => number
->12 : number
+>12 : 12
 
 impl.explicitInterface = () => 12;
 >impl.explicitInterface = () => 12 : () => number
@@ -227,7 +227,7 @@ impl.explicitInterface = () => 12;
 >impl : I
 >explicitInterface : (this: I) => number
 >() => 12 : () => number
->12 : number
+>12 : 12
 
 impl.explicitThis = function () { return this.a; };
 >impl.explicitThis = function () { return this.a; } : (this: I) => number
@@ -249,7 +249,7 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, f:
 >x : number
 >{ y: 12, f: explicitStructural } : { y: number; f: (this: { y: number; }, x: number) => number; }
 >y : number
->12 : number
+>12 : 12
 >f : (this: { y: number; }, x: number) => number
 >explicitStructural : (this: { y: number; }, x: number) => number
 
@@ -260,7 +260,7 @@ let implicitAnyOk: {notSpecified: number, f: (x: number) => number} = { notSpeci
 >x : number
 >{ notSpecified: 12, f: implicitThis } : { notSpecified: number; f: (n: number) => number; }
 >notSpecified : number
->12 : number
+>12 : 12
 >f : (n: number) => number
 >implicitThis : (n: number) => number
 
@@ -269,19 +269,19 @@ ok.f(13);
 >ok.f : (this: { y: number; }, x: number) => number
 >ok : { y: number; f: (this: { y: number; }, x: number) => number; }
 >f : (this: { y: number; }, x: number) => number
->13 : number
+>13 : 13
 
 implicitThis(12);
 >implicitThis(12) : number
 >implicitThis : (n: number) => number
->12 : number
+>12 : 12
 
 implicitAnyOk.f(12);
 >implicitAnyOk.f(12) : number
 >implicitAnyOk.f : (x: number) => number
 >implicitAnyOk : { notSpecified: number; f: (x: number) => number; }
 >f : (x: number) => number
->12 : number
+>12 : 12
 
 let c = new C();
 >c : C
@@ -304,42 +304,42 @@ c.explicitC(12);
 >c.explicitC : (this: C, m: number) => number
 >c : C
 >explicitC : (this: C, m: number) => number
->12 : number
+>12 : 12
 
 c.explicitProperty(12);
 >c.explicitProperty(12) : number
 >c.explicitProperty : (this: { n: number; }, m: number) => number
 >c : C
 >explicitProperty : (this: { n: number; }, m: number) => number
->12 : number
+>12 : 12
 
 c.explicitThis(12);
 >c.explicitThis(12) : number
 >c.explicitThis : (this: C, m: number) => number
 >c : C
 >explicitThis : (this: C, m: number) => number
->12 : number
+>12 : 12
 
 d.explicitC(12);
 >d.explicitC(12) : number
 >d.explicitC : (this: C, m: number) => number
 >d : D
 >explicitC : (this: C, m: number) => number
->12 : number
+>12 : 12
 
 d.explicitProperty(12);
 >d.explicitProperty(12) : number
 >d.explicitProperty : (this: { n: number; }, m: number) => number
 >d : D
 >explicitProperty : (this: { n: number; }, m: number) => number
->12 : number
+>12 : 12
 
 d.explicitThis(12);
 >d.explicitThis(12) : number
 >d.explicitThis : (this: D, m: number) => number
 >d : D
 >explicitThis : (this: D, m: number) => number
->12 : number
+>12 : 12
 
 let reconstructed: { 
 >reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
@@ -375,7 +375,7 @@ let reconstructed: {
 
     n: 12,
 >n : number
->12 : number
+>12 : 12
 
     explicitThis: c.explicitThis,
 >explicitThis : (this: C, m: number) => number
@@ -407,14 +407,14 @@ reconstructed.explicitThis(10);
 >reconstructed.explicitThis : (this: C, m: number) => number
 >reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
 >explicitThis : (this: C, m: number) => number
->10 : number
+>10 : 10
 
 reconstructed.explicitProperty(11);
 >reconstructed.explicitProperty(11) : number
 >reconstructed.explicitProperty : (this: { n: number; }, m: number) => number
 >reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
 >explicitProperty : (this: { n: number; }, m: number) => number
->11 : number
+>11 : 11
 
 let explicitVoid = reconstructed.explicitVoid;
 >explicitVoid : (this: void, m: number) => number
@@ -425,7 +425,7 @@ let explicitVoid = reconstructed.explicitVoid;
 explicitVoid(12);
 >explicitVoid(12) : number
 >explicitVoid : (this: void, m: number) => number
->12 : number
+>12 : 12
 
 // assignment checking
 let unboundToSpecified: (this: { y: number }, x: number) => number = x => x + this.y; // ok, this:any
@@ -457,7 +457,7 @@ let anyToSpecified: (this: { y: number }, x: number) => number = function(x: num
 >x : number
 >x + 12 : number
 >x : number
->12 : number
+>12 : 12
 
 let unspecifiedLambda: (x: number) => number = x => x + 12;
 >unspecifiedLambda : (x: number) => number
@@ -466,7 +466,7 @@ let unspecifiedLambda: (x: number) => number = x => x + 12;
 >x : number
 >x + 12 : number
 >x : number
->12 : number
+>12 : 12
 
 let specifiedLambda: (this: void, x: number) => number = x => x + 12;
 >specifiedLambda : (this: void, x: number) => number
@@ -476,7 +476,7 @@ let specifiedLambda: (this: void, x: number) => number = x => x + 12;
 >x : number
 >x + 12 : number
 >x : number
->12 : number
+>12 : 12
 
 let unspecifiedLambdaToSpecified: (this: {y: number}, x: number) => number = unspecifiedLambda;
 >unspecifiedLambdaToSpecified : (this: { y: number; }, x: number) => number
@@ -881,11 +881,11 @@ function InterfaceThis(this: I) {
 >I : I
 
     this.a = 12;
->this.a = 12 : number
+>this.a = 12 : 12
 >this.a : number
 >this : I
 >a : number
->12 : number
+>12 : 12
 }
 function LiteralTypeThis(this: {x: string}) {
 >LiteralTypeThis : (this: { x: string; }) => void
@@ -893,22 +893,22 @@ function LiteralTypeThis(this: {x: string}) {
 >x : string
 
     this.x = "ok";
->this.x = "ok" : string
+>this.x = "ok" : "ok"
 >this.x : string
 >this : { x: string; }
 >x : string
->"ok" : string
+>"ok" : "ok"
 }
 function AnyThis(this: any) {
 >AnyThis : (this: any) => void
 >this : any
 
     this.x = "ok";
->this.x = "ok" : string
+>this.x = "ok" : "ok"
 >this.x : any
 >this : any
 >x : any
->"ok" : string
+>"ok" : "ok"
 }
 let interfaceThis = new InterfaceThis();
 >interfaceThis : any
@@ -949,7 +949,7 @@ let n: number = f.call(12);
 >f.call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
 >f : { (this: void, x: number): number; call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U; }
 >call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
->12 : number
+>12 : 12
 
 function missingTypeIsImplicitAny(this, a: number) { return this.anything + a; } 
 >missingTypeIsImplicitAny : (this: any, a: number) => any

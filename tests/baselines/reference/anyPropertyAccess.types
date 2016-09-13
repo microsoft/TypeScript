@@ -12,14 +12,14 @@ var b = x['foo'];
 >b : any
 >x['foo'] : any
 >x : any
->'foo' : string
+>'foo' : "foo"
 
 var c = x['fn']();
 >c : any
 >x['fn']() : any
 >x['fn'] : any
 >x : any
->'fn' : string
+>'fn' : "fn"
 
 var d = x.bar.baz;
 >d : any
@@ -34,7 +34,7 @@ var e = x[0].foo;
 >x[0].foo : any
 >x[0] : any
 >x : any
->0 : number
+>0 : 0
 >foo : any
 
 var f = x['0'].bar;
@@ -42,6 +42,6 @@ var f = x['0'].bar;
 >x['0'].bar : any
 >x['0'] : any
 >x : any
->'0' : string
+>'0' : "0"
 >bar : any
 

@@ -5,5 +5,5 @@ interface I {}
 
 var x = 0;
 >x : number
->0 : number
+>0 : 0
 

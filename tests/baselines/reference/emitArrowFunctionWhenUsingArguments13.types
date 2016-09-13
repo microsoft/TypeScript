@@ -5,7 +5,7 @@ function f() {
 
     var _arguments = 10;
 >_arguments : number
->10 : number
+>10 : 10
 
     var a = (arguments) => () => _arguments;
 >a : (arguments: any) => () => number

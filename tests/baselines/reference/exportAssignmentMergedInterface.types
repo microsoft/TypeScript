@@ -9,12 +9,12 @@ var x: foo;
 x("test");
 >x("test") : void
 >x : foo
->"test" : string
+>"test" : "test"
 
 x(42);
 >x(42) : number
 >x : foo
->42 : number
+>42 : 42
 
 var y: string = x.b;
 >y : string
@@ -33,9 +33,9 @@ var z = {x: 1, y: 2};
 >z : { x: number; y: number; }
 >{x: 1, y: 2} : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 
 z = x.d;
 >z = x.d : { x: number; y: number; }
