@@ -32,7 +32,7 @@ define(["require", "exports", "./foo_2"], function (require, exports, foo2) {
     return Foo;
 });
 //// [foo_0.js]
-define(["require", "exports", './foo_1'], function (require, exports, foo1) {
+define(["require", "exports", "./foo_1"], function (require, exports, foo1) {
     "use strict";
     var Foo;
     (function (Foo) {

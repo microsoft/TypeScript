@@ -26,7 +26,7 @@ function apply(func, thisArg, args) {
 >length : number
 
         case 0: return func.call(thisArg);
->0 : number
+>0 : 0
 >func.call(thisArg) : any
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >func : Function
@@ -34,7 +34,7 @@ function apply(func, thisArg, args) {
 >thisArg : any
 
         case 1: return func.call(thisArg, args[0]);
->1 : number
+>1 : 1
 >func.call(thisArg, args[0]) : any
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >func : Function
@@ -42,10 +42,10 @@ function apply(func, thisArg, args) {
 >thisArg : any
 >args[0] : any
 >args : any[]
->0 : number
+>0 : 0
 
         case 2: return func.call(thisArg, args[0], args[1]);
->2 : number
+>2 : 2
 >func.call(thisArg, args[0], args[1]) : any
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >func : Function
@@ -53,13 +53,13 @@ function apply(func, thisArg, args) {
 >thisArg : any
 >args[0] : any
 >args : any[]
->0 : number
+>0 : 0
 >args[1] : any
 >args : any[]
->1 : number
+>1 : 1
 
         case 3: return func.call(thisArg, args[0], args[1], args[2]);
->3 : number
+>3 : 3
 >func.call(thisArg, args[0], args[1], args[2]) : any
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >func : Function
@@ -67,13 +67,13 @@ function apply(func, thisArg, args) {
 >thisArg : any
 >args[0] : any
 >args : any[]
->0 : number
+>0 : 0
 >args[1] : any
 >args : any[]
->1 : number
+>1 : 1
 >args[2] : any
 >args : any[]
->2 : number
+>2 : 2
     }
     return func.apply(thisArg, args);
 >func.apply(thisArg, args) : any

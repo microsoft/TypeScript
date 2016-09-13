@@ -4,7 +4,7 @@ var x = `abc${0}abc` === `abc` ||
 >`abc${0}abc` === `abc` ||        `abc` !== `abc${0}abc` &&        `abc${0}abc` == "abc0abc" &&        "abc0abc" !== `abc${0}abc` : boolean
 >`abc${0}abc` === `abc` : boolean
 >`abc${0}abc` : string
->0 : number
+>0 : 0
 >`abc` : string
 
         `abc` !== `abc${0}abc` &&
@@ -13,17 +13,17 @@ var x = `abc${0}abc` === `abc` ||
 >`abc` !== `abc${0}abc` : boolean
 >`abc` : string
 >`abc${0}abc` : string
->0 : number
+>0 : 0
 
         `abc${0}abc` == "abc0abc" &&
 >`abc${0}abc` == "abc0abc" : boolean
 >`abc${0}abc` : string
->0 : number
->"abc0abc" : string
+>0 : 0
+>"abc0abc" : "abc0abc"
 
         "abc0abc" !== `abc${0}abc`;
 >"abc0abc" !== `abc${0}abc` : boolean
->"abc0abc" : string
+>"abc0abc" : "abc0abc"
 >`abc${0}abc` : string
->0 : number
+>0 : 0
 

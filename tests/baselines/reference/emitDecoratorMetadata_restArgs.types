@@ -1,15 +1,15 @@
 === tests/cases/compiler/emitDecoratorMetadata_restArgs.ts ===
 
 declare const MyClassDecorator: ClassDecorator;
->MyClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
->ClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>MyClassDecorator : ClassDecorator
+>ClassDecorator : ClassDecorator
 
 declare const MyMethodDecorator: MethodDecorator;
->MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
->MethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+>MyMethodDecorator : MethodDecorator
+>MethodDecorator : MethodDecorator
 
 @MyClassDecorator
->MyClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>MyClassDecorator : ClassDecorator
 
 class A {
 >A : A
@@ -18,7 +18,7 @@ class A {
 >args : any[]
 
     @MyMethodDecorator
->MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+>MyMethodDecorator : MethodDecorator
 
     method(...args) {}
 >method : (...args: any[]) => void
@@ -26,7 +26,7 @@ class A {
 }
 
 @MyClassDecorator
->MyClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>MyClassDecorator : ClassDecorator
 
 class B {
 >B : B
@@ -35,10 +35,11 @@ class B {
 >args : number[]
 
     @MyMethodDecorator
->MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+>MyMethodDecorator : MethodDecorator
 
-    method(...args: string[]) {}
->method : (...args: string[]) => void
+    method(this: this, ...args: string[]) {}
+>method : (this: this, ...args: string[]) => void
+>this : this
 >args : string[]
 }
 

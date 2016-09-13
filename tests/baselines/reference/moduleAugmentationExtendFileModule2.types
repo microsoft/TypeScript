@@ -79,7 +79,7 @@ let y = x.map(x => x + 1);
 >x : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
 
 let z1 = Observable.someValue.toFixed();
 >z1 : string

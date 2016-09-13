@@ -37,8 +37,9 @@ class B {
     @MyMethodDecorator
 >MyMethodDecorator : Symbol(MyMethodDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 2, 13))
 
-    method(...args: string[]) {}
+    method(this: this, ...args: string[]) {}
 >method : Symbol(B.method, Decl(emitDecoratorMetadata_restArgs.ts, 13, 37))
->args : Symbol(args, Decl(emitDecoratorMetadata_restArgs.ts, 15, 11))
+>this : Symbol(this, Decl(emitDecoratorMetadata_restArgs.ts, 15, 11))
+>args : Symbol(args, Decl(emitDecoratorMetadata_restArgs.ts, 15, 22))
 }
 

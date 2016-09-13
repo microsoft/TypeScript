@@ -1,0 +1,28 @@
+error TS2307: Cannot find module 'tslib'.
+
+
+!!! error TS2307: Cannot find module 'tslib'.
+==== tests/cases/compiler/external.ts (0 errors) ====
+    export class A { }
+    export class B extends A { }
+    
+    declare var dec: any;
+    
+    @dec
+    class C {
+        method(@dec x: number) {
+        }
+    }
+    
+==== tests/cases/compiler/script.ts (0 errors) ====
+    class A { }
+    class B extends A { }
+    
+    declare var dec: any;
+    
+    @dec
+    class C {
+        method(@dec x: number) {
+        }
+    }
+    

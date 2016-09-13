@@ -14,7 +14,7 @@ class A {
 class B {
     constructor(...args: number[]) {}
     @MyMethodDecorator
-    method(...args: string[]) {}
+    method(this: this, ...args: string[]) {}
 }
 
 
@@ -41,18 +41,18 @@ var A = (function () {
             args[_i - 0] = arguments[_i];
         }
     };
-    __decorate([
-        MyMethodDecorator, 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', [Object]), 
-        __metadata('design:returntype', void 0)
-    ], A.prototype, "method", null);
-    A = __decorate([
-        MyClassDecorator, 
-        __metadata('design:paramtypes', [Object])
-    ], A);
     return A;
 }());
+__decorate([
+    MyMethodDecorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], A.prototype, "method", null);
+A = __decorate([
+    MyClassDecorator,
+    __metadata("design:paramtypes", [Object])
+], A);
 var B = (function () {
     function B() {
         var args = [];
@@ -66,15 +66,15 @@ var B = (function () {
             args[_i - 0] = arguments[_i];
         }
     };
-    __decorate([
-        MyMethodDecorator, 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', [String]), 
-        __metadata('design:returntype', void 0)
-    ], B.prototype, "method", null);
-    B = __decorate([
-        MyClassDecorator, 
-        __metadata('design:paramtypes', [Number])
-    ], B);
     return B;
 }());
+__decorate([
+    MyMethodDecorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], B.prototype, "method", null);
+B = __decorate([
+    MyClassDecorator,
+    __metadata("design:paramtypes", [Number])
+], B);

@@ -1,0 +1,48 @@
+tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(13,1): error TS2322: Type 'A[]' is not assignable to type 'ReadonlyArray<B>'.
+  Types of property 'concat' are incompatible.
+    Type '{ (this: A[], ...items: A[][]): A[]; (this: A[], ...items: (A | A[])[]): A[]; }' is not assignable to type '{ <U extends ReadonlyArray<B>>(this: ReadonlyArray<B>, ...items: U[]): B[]; (this: ReadonlyArray<B>, ...items: B[][]): B[]; (this: ReadonlyArray<B>, ...items: (B | B[])[]): B[]; }'.
+      Type 'A[]' is not assignable to type 'B[]'.
+        Type 'A' is not assignable to type 'B'.
+          Property 'b' is missing in type 'A'.
+tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error TS2322: Type 'C<A>' is not assignable to type 'ReadonlyArray<B>'.
+  Types of property 'toString' are incompatible.
+    Type '(this: A[]) => string' is not assignable to type '(this: ReadonlyArray<B>) => string'.
+      The 'this' types of each signature are incompatible.
+        Type 'ReadonlyArray<B>' is not assignable to type 'A[]'.
+          Property 'push' is missing in type 'ReadonlyArray<B>'.
+
+
+==== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts (2 errors) ====
+    class A { a }
+    class B extends A { b }
+    class C<T> extends Array<T> { c }
+    declare var ara: A[];
+    declare var arb: B[];
+    declare var cra: C<A>;
+    declare var crb: C<B>;
+    declare var rra: ReadonlyArray<A>;
+    declare var rrb: ReadonlyArray<B>;
+    rra = ara;
+    rrb = arb; // OK, Array<B> is assignable to ReadonlyArray<A>
+    rra = arb;
+    rrb = ara; // error: 'A' is not assignable to 'B'
+    ~~~
+!!! error TS2322: Type 'A[]' is not assignable to type 'ReadonlyArray<B>'.
+!!! error TS2322:   Types of property 'concat' are incompatible.
+!!! error TS2322:     Type '{ (this: A[], ...items: A[][]): A[]; (this: A[], ...items: (A | A[])[]): A[]; }' is not assignable to type '{ <U extends ReadonlyArray<B>>(this: ReadonlyArray<B>, ...items: U[]): B[]; (this: ReadonlyArray<B>, ...items: B[][]): B[]; (this: ReadonlyArray<B>, ...items: (B | B[])[]): B[]; }'.
+!!! error TS2322:       Type 'A[]' is not assignable to type 'B[]'.
+!!! error TS2322:         Type 'A' is not assignable to type 'B'.
+!!! error TS2322:           Property 'b' is missing in type 'A'.
+    
+    rra = cra;
+    rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
+    rrb = crb;
+    rrb = cra; // error: 'A' is not assignable to 'B'
+    ~~~
+!!! error TS2322: Type 'C<A>' is not assignable to type 'ReadonlyArray<B>'.
+!!! error TS2322:   Types of property 'toString' are incompatible.
+!!! error TS2322:     Type '(this: A[]) => string' is not assignable to type '(this: ReadonlyArray<B>) => string'.
+!!! error TS2322:       The 'this' types of each signature are incompatible.
+!!! error TS2322:         Type 'ReadonlyArray<B>' is not assignable to type 'A[]'.
+!!! error TS2322:           Property 'push' is missing in type 'ReadonlyArray<B>'.
+    

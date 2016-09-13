@@ -7,13 +7,13 @@ function a(x: string | number | boolean) {
 >x : string | number | boolean
 
     x = true;
->x = true : boolean
+>x = true : true
 >x : string | number | boolean
->true : boolean
+>true : true
 
     do {
         x; // boolean | string
->x : boolean | string
+>x : string | true
 
         x = undefined;
 >x = undefined : undefined
@@ -24,7 +24,7 @@ function a(x: string | number | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
->"string" : string
+>"string" : "string"
 
     x; // number | boolean
 >x : number | boolean
@@ -34,13 +34,13 @@ function b(x: string | number | boolean) {
 >x : string | number | boolean
 
     x = true;
->x = true : boolean
+>x = true : true
 >x : string | number | boolean
->true : boolean
+>true : true
 
     do {
         x; // boolean | string
->x : boolean | string
+>x : string | true
 
         if (cond) continue;
 >cond : boolean
@@ -54,7 +54,7 @@ function b(x: string | number | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
->"string" : string
+>"string" : "string"
 
     x; // number | boolean
 >x : number | boolean
@@ -64,9 +64,9 @@ function c(x: string | number) {
 >x : string | number
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
 
     do {
         x; // string
@@ -84,7 +84,7 @@ function c(x: string | number) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 
     x; // string | number
 >x : string | number

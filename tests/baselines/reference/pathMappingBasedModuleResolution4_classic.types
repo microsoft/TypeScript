@@ -32,10 +32,10 @@ export var x = a + b;
 === c:/root/folder2/file3.ts ===
 export var x = 1;
 >x : number
->1 : number
+>1 : 1
 
 === c:/file4.ts ===
 export var y = 100;
 >y : number
->100 : number
+>100 : 100
 

@@ -62,17 +62,11 @@ sourceFile:tests/cases/compiler/ref/a.ts
 ---
 >>>    exports.A = A;
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^
-4 >                 ^
+2 >    ^^^^^^^^^^^^^^
 1->
-2 >    A
-3 >              { }
-4 >                 
-1->Emitted(13, 5) Source(2, 14) + SourceIndex(0)
-2 >Emitted(13, 14) Source(2, 15) + SourceIndex(0)
-3 >Emitted(13, 18) Source(2, 19) + SourceIndex(0)
-4 >Emitted(13, 19) Source(2, 19) + SourceIndex(0)
+2 >    export class A { }
+1->Emitted(13, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(13, 19) Source(2, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:all.js
@@ -150,17 +144,11 @@ sourceFile:tests/cases/compiler/b.ts
 ---
 >>>    exports.B = B;
 1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^^
-4 >                 ^
+2 >    ^^^^^^^^^^^^^^
 1->
-2 >    B
-3 >              extends A { }
-4 >                 
-1->Emitted(24, 5) Source(2, 14) + SourceIndex(1)
-2 >Emitted(24, 14) Source(2, 15) + SourceIndex(1)
-3 >Emitted(24, 18) Source(2, 29) + SourceIndex(1)
-4 >Emitted(24, 19) Source(2, 29) + SourceIndex(1)
+2 >    export class B extends A { }
+1->Emitted(24, 5) Source(2, 1) + SourceIndex(1)
+2 >Emitted(24, 19) Source(2, 29) + SourceIndex(1)
 ---
 >>>});
 >>>//# sourceMappingURL=all.js.map

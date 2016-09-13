@@ -3,5 +3,5 @@ function* g() {
 >g : () => IterableIterator<any>
 
     return "";
->"" : string
+>"" : ""
 }

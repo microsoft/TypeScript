@@ -64,7 +64,7 @@ var r1e = i['hm']; // should be Object
 >r1e : any
 >i['hm'] : any
 >i : I
->'hm' : string
+>'hm' : "hm"
 
 var x: {
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
@@ -113,5 +113,5 @@ var r2e = x['hm']; // should be Object
 >r2e : any
 >x['hm'] : any
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
->'hm' : string
+>'hm' : "hm"
 

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/functionWithNoBestCommonType2.ts ===
+
+var v = function () {
+>v : Symbol(v, Decl(functionWithNoBestCommonType2.ts, 1, 3))
+
+   return true;
+   return bar();
+>bar : Symbol(bar, Decl(functionWithNoBestCommonType2.ts, 4, 2))
+
+};
+
+function bar(): void {
+>bar : Symbol(bar, Decl(functionWithNoBestCommonType2.ts, 4, 2))
+}

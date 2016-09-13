@@ -9,8 +9,8 @@ let v = new m.Vector(3, 2);
 >m.Vector : typeof m.Vector
 >m : typeof m
 >Vector : typeof m.Vector
->3 : number
->2 : number
+>3 : 3
+>2 : 2
 
 let magnitude = m.getLength(v);
 >magnitude : number
@@ -28,8 +28,8 @@ let p: m.Point = v.translate(5, 5);
 >v.translate : (dx: number, dy: number) => m.Vector
 >v : m.Vector
 >translate : (dx: number, dy: number) => m.Vector
->5 : number
->5 : number
+>5 : 5
+>5 : 5
 
 p = v.reverse();
 >p = v.reverse() : m.Point
@@ -48,7 +48,7 @@ var t = p.x;
 === tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
 
 export as namespace Math2d;
->Math2d : any
+>Math2d : typeof Math2d
 
 export = M2D;
 >M2D : typeof M2D

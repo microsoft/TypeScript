@@ -15,9 +15,9 @@ function f2({ a, b }: { a: number, b: number } = { a: 0, b: 0 }) {
 >b : number
 >{ a: 0, b: 0 } : { a: number; b: number; }
 >a : number
->0 : number
+>0 : 0
 >b : number
->0 : number
+>0 : 0
 
     a;
 >a : number
@@ -40,7 +40,7 @@ interface QueryMetadataFactory {
 >QueryMetadataFactory : QueryMetadataFactory
 
     (selector: Type | string, {descendants, read}?: {
->selector : Type | string
+>selector : string | Type
 >Type : Type
 >descendants : boolean | undefined
 >read : any
@@ -52,10 +52,10 @@ interface QueryMetadataFactory {
 >read : any
 
     }): ParameterDecorator;
->ParameterDecorator : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>ParameterDecorator : ParameterDecorator
 
     new (selector: Type | string, {descendants, read}?: {
->selector : Type | string
+>selector : string | Type
 >Type : Type
 >descendants : boolean | undefined
 >read : any

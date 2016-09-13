@@ -29,7 +29,7 @@
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "<function>",
@@ -85,6 +85,17 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "xx",
+                "kind": "function"
+            }
+        ],
+        "indent": 2
+    },
+    {
+        "text": "y",
+        "kind": "const",
+        "childItems": [
+            {
+                "text": "foo",
                 "kind": "function"
             }
         ],

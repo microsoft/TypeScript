@@ -171,7 +171,7 @@ module f {
 
     export var bar = 1;
 >bar : number
->1 : number
+>1 : 1
 }
 class D12 extends Base {
 >D12 : D12
@@ -192,7 +192,7 @@ module c {
 
     export var bar = 1;
 >bar : number
->1 : number
+>1 : 1
 }
 class D13 extends Base {
 >D13 : D13

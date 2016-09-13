@@ -9,7 +9,7 @@ const enum E {
 
     a = 10,
 >a : E
->10 : number
+>10 : 10
 
     b = a,
 >b : E
@@ -20,7 +20,7 @@ const enum E {
 >(a+1) : number
 >a+1 : number
 >a : E
->1 : number
+>1 : 1
 
     e,
 >e : E
@@ -35,16 +35,16 @@ const enum E {
 >a << 2 >> 1 : number
 >a << 2 : number
 >a : E
->2 : number
->1 : number
+>2 : 2
+>1 : 1
 
     g = a << 2 >>> 1,
 >g : E
 >a << 2 >>> 1 : number
 >a << 2 : number
 >a : E
->2 : number
->1 : number
+>2 : 2
+>1 : 1
 
     h = a | b
 >h : E

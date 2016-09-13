@@ -45,8 +45,8 @@ namespace N {
 }
 
 let broken = [
->broken : ({ foo: N.MyEnum; } | { foo: M.MyEnum; })[]
->[    N.object1,    M.object2] : ({ foo: N.MyEnum; } | { foo: M.MyEnum; })[]
+>broken : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
+>[    N.object1,    M.object2] : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
 
     N.object1,
 >N.object1 : { foo: N.MyEnum; }

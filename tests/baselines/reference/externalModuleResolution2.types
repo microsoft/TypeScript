@@ -13,7 +13,7 @@ module M2 {
 
     export var X = 1;
 >X : number
->1 : number
+>1 : 1
 }
 export = M2
 >M2 : typeof M2

@@ -153,16 +153,22 @@ namespace ts.server {
             private logger: Logger
         ) {
             this.projectService =
-                new ProjectService(host, logger, (eventName, project, fileName) => {
-                    this.handleEvent(eventName, project, fileName);
+                new ProjectService(host, logger, event => {
+                    this.handleEvent(event);
                 });
         }
 
-        private handleEvent(eventName: string, project: Project, fileName: string) {
-            if (eventName == "context") {
-                this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
-                this.updateErrorCheck([{ fileName, project }], this.changeSeq,
-                    (n) => n === this.changeSeq, 100);
+        private handleEvent(event: ProjectServiceEvent) {
+            switch (event.eventName) {
+                case "context":
+                    const { project, fileName } = event.data;
+                    this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
+                    this.updateErrorCheck([{ fileName, project }], this.changeSeq,
+                        (n) => n === this.changeSeq, 100);
+                    break;
+                case "configFileDiag":
+                    const { triggerFile, configFileName, diagnostics } = event.data;
+                    this.configFileDiagnosticEvent(triggerFile, configFileName, diagnostics);
             }
         }
 
@@ -772,7 +778,17 @@ namespace ts.server {
 
             return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                 if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                    result.push(entry);
+                    const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+
+                    let convertedSpan: protocol.TextSpan = undefined;
+                    if (replacementSpan) {
+                        convertedSpan = {
+                            start: compilerService.host.positionToLineOffset(fileName, replacementSpan.start),
+                            end: compilerService.host.positionToLineOffset(fileName, replacementSpan.start + replacementSpan.length)
+                        };
+                    }
+
+                    result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
                 }
                 return result;
             }, []).sort((a, b) => a.name.localeCompare(b.name));
@@ -1061,7 +1077,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
+        private handlers = createMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.Exit]: () => {
                 this.exit();
                 return { responseRequired: false };
@@ -1198,9 +1214,10 @@ namespace ts.server {
                 this.reloadProjects();
                 return { responseRequired: false };
             }
-        };
+        });
+
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
-            if (this.handlers[command]) {
+            if (command in this.handlers) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
             this.handlers[command] = handler;

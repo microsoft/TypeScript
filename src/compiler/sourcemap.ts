@@ -3,19 +3,211 @@
 /* @internal */
 namespace ts {
     export interface SourceMapWriter {
-        getSourceMapData(): SourceMapData;
-        setSourceFile(sourceFile: SourceFile): void;
-        emitPos(pos: number): void;
-        emitStart(range: TextRange): void;
-        emitEnd(range: TextRange, stopOverridingSpan?: boolean): void;
-        changeEmitSourcePos(): void;
-        getText(): string;
-        getSourceMappingURL(): string;
+        /**
+         * Initialize the SourceMapWriter for a new output file.
+         *
+         * @param filePath The path to the generated output file.
+         * @param sourceMapFilePath The path to the output source map file.
+         * @param sourceFiles The input source files for the program.
+         * @param isBundledEmit A value indicating whether the generated output file is a bundle.
+         */
         initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
+
+        /**
+         * Reset the SourceMapWriter to an empty state.
+         */
         reset(): void;
+
+        /**
+         * Gets test data for source maps.
+         */
+        getSourceMapData(): SourceMapData;
+
+        /**
+         * Set the current source file.
+         *
+         * @param sourceFile The source file.
+         */
+        setSourceFile(sourceFile: SourceFile): void;
+
+        /**
+         * Emits a mapping.
+         *
+         * If the position is synthetic (undefined or a negative value), no mapping will be
+         * created.
+         *
+         * @param pos The position.
+         */
+        emitPos(pos: number): void;
+
+        /**
+         * Emits a mapping for the start of a range.
+         *
+         * If the range's start position is synthetic (undefined or a negative value), no mapping
+         * will be created. Any trivia at the start position in the original source will be
+         * skipped.
+         *
+         * @param range The range to emit.
+         */
+        emitStart(range: TextRange): void;
+
+        /**
+         * Emits a mapping for the start of a range.
+         *
+         * If the node's start position is synthetic (undefined or a negative value), no mapping
+         * will be created. Any trivia at the start position in the original source will be
+         * skipped.
+         *
+         * @param range The range to emit.
+         * @param contextNode The node for the current range.
+         * @param ignoreNodeCallback A callback used to determine whether to skip source map
+         *        emit for the start position of this node.
+         * @param ignoreChildrenCallback A callback used to determine whether to skip source
+         *        map emit for all children of this node.
+         * @param getTextRangeCallbackCallback A callback used to get a custom source map
+         *        range for this node.
+         */
+        emitStart(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallbackCallback: (node: Node) => TextRange): void;
+
+        /**
+         * Emits a mapping for the end of a range.
+         *
+         * If the range's end position is synthetic (undefined or a negative value), no mapping
+         * will be created.
+         *
+         * @param range The range to emit.
+         */
+        emitEnd(range: TextRange): void;
+
+        /**
+         * Emits a mapping for the end of a range.
+         *
+         * If the node's end position is synthetic (undefined or a negative value), no mapping
+         * will be created.
+         *
+         * @param range The range to emit.
+         * @param contextNode The node for the current range.
+         * @param ignoreNodeCallback A callback used to determine whether to skip source map
+         *        emit for the end position of this node.
+         * @param ignoreChildrenCallback A callback used to determine whether to skip source
+         *        map emit for all children of this node.
+         * @param getTextRangeCallbackCallback A callback used to get a custom source map
+         *        range for this node.
+         */
+        emitEnd(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallbackCallback: (node: Node) => TextRange): void;
+
+        /**
+         * Emits a mapping for the start position of a token.
+         *
+         * If the token's start position is synthetic (undefined or a negative value), no mapping
+         * will be created. Any trivia at the start position in the original source will be
+         * skipped.
+         *
+         * @param token The token to emit.
+         * @param tokenStartPos The start position of the token.
+         * @returns The start position of the token, following any trivia.
+         */
+        emitTokenStart(token: SyntaxKind, tokenStartPos: number): number;
+
+        /**
+         * Emits a mapping for the start position of a token.
+         *
+         * If the token's start position is synthetic (undefined or a negative value), no mapping
+         * will be created. Any trivia at the start position in the original source will be
+         * skipped.
+         *
+         * @param token The token to emit.
+         * @param tokenStartPos The start position of the token.
+         * @param contextNode The node containing this token.
+         * @param ignoreTokenCallback A callback used to determine whether to skip source map
+         *        emit for the start position of this token.
+         * @param getTokenTextRangeCallback A callback used to get a custom source
+         *        map range for this node.
+         * @returns The start position of the token, following any trivia.
+         */
+        emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+
+        /**
+         * Emits a mapping for the end position of a token.
+         *
+         * If the token's end position is synthetic (undefined or a negative value), no mapping
+         * will be created.
+         *
+         * @param token The token to emit.
+         * @param tokenEndPos The end position of the token.
+         * @returns The end position of the token.
+         */
+        emitTokenEnd(token: SyntaxKind, tokenEndPos: number): number;
+
+        /**
+         * Emits a mapping for the end position of a token.
+         *
+         * If the token's end position is synthetic (undefined or a negative value), no mapping
+         * will be created.
+         *
+         * @param token The token to emit.
+         * @param tokenEndPos The end position of the token.
+         * @param contextNode The node containing this token.
+         * @param ignoreTokenCallback A callback used to determine whether to skip source map
+         *        emit for the end position of this token.
+         * @param getTokenTextRangeCallback A callback used to get a custom source
+         *        map range for this node.
+         * @returns The end position of the token.
+         */
+        emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+
+        /*@deprecated*/ changeEmitSourcePos(): void;
+        /*@deprecated*/ stopOverridingSpan(): void;
+
+        /**
+         * Gets the text for the source map.
+         */
+        getText(): string;
+
+        /**
+         * Gets the SourceMappingURL for the source map.
+         */
+        getSourceMappingURL(): string;
+    }
+
+    export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
+        const compilerOptions = host.getCompilerOptions();
+        if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
+            if (compilerOptions.extendedDiagnostics) {
+                return createSourceMapWriterWithExtendedDiagnostics(host, writer);
+            }
+
+            return createSourceMapWriterWorker(host, writer);
+        }
+        else {
+            return getNullSourceMapWriter();
+        }
     }
 
     let nullSourceMapWriter: SourceMapWriter;
+
+    export function getNullSourceMapWriter(): SourceMapWriter {
+        if (nullSourceMapWriter === undefined) {
+            nullSourceMapWriter = {
+                initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
+                reset(): void { },
+                getSourceMapData(): SourceMapData { return undefined; },
+                setSourceFile(sourceFile: SourceFile): void { },
+                emitPos(pos: number): void { },
+                emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void { },
+                emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void { },
+                emitTokenStart(token: SyntaxKind, pos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number { return -1; },
+                emitTokenEnd(token: SyntaxKind, end: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number { return -1; },
+                changeEmitSourcePos(): void { },
+                stopOverridingSpan(): void { },
+                getText(): string { return undefined; },
+                getSourceMappingURL(): string { return undefined; }
+            };
+        }
+
+        return nullSourceMapWriter;
+    }
+
     // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
     const defaultLastEncodedSourceMapSpan: SourceMapSpan = {
         emittedLine: 1,
@@ -25,28 +217,11 @@ namespace ts {
         sourceIndex: 0
     };
 
-    export function getNullSourceMapWriter(): SourceMapWriter {
-        if (nullSourceMapWriter === undefined) {
-            nullSourceMapWriter = {
-                getSourceMapData(): SourceMapData { return undefined; },
-                setSourceFile(sourceFile: SourceFile): void { },
-                emitStart(range: TextRange): void { },
-                emitEnd(range: TextRange, stopOverridingSpan?: boolean): void { },
-                emitPos(pos: number): void { },
-                changeEmitSourcePos(): void { },
-                getText(): string { return undefined; },
-                getSourceMappingURL(): string { return undefined; },
-                initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
-                reset(): void { },
-            };
-        }
-
-        return nullSourceMapWriter;
-    }
-
-    export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
+    function createSourceMapWriterWorker(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
+        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
         let currentSourceFile: SourceFile;
+        let currentSourceText: string;
         let sourceMapDir: string; // The directory in which sourcemap will be
         let stopOverridingSpan = false;
         let modifyLastSourcePos = false;
@@ -62,25 +237,45 @@ namespace ts {
         // Source map data
         let sourceMapData: SourceMapData;
 
+        // This keeps track of the number of times `disable` has been called without a
+        // corresponding call to `enable`. As long as this value is non-zero, mappings will not
+        // be recorded.
+        // This is primarily used to provide a better experience when debugging binding
+        // patterns and destructuring assignments for simple expressions.
+        let disableDepth: number;
+
         return {
+            initialize,
+            reset,
             getSourceMapData: () => sourceMapData,
             setSourceFile,
             emitPos,
             emitStart,
             emitEnd,
+            emitTokenStart,
+            emitTokenEnd,
             changeEmitSourcePos,
+            stopOverridingSpan: () => stopOverridingSpan = true,
             getText,
             getSourceMappingURL,
-            initialize,
-            reset,
         };
 
+        /**
+         * Initialize the SourceMapWriter for a new output file.
+         *
+         * @param filePath The path to the generated output file.
+         * @param sourceMapFilePath The path to the output source map file.
+         * @param sourceFiles The input source files for the program.
+         * @param isBundledEmit A value indicating whether the generated output file is a bundle.
+         */
         function initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
             if (sourceMapData) {
                 reset();
             }
 
             currentSourceFile = undefined;
+            currentSourceText = undefined;
+            disableDepth = 0;
 
             // Current source map file and its index in the sources list
             sourceMapSourceIndex = -1;
@@ -139,6 +334,9 @@ namespace ts {
             }
         }
 
+        /**
+         * Reset the SourceMapWriter to an empty state.
+         */
         function reset() {
             currentSourceFile = undefined;
             sourceMapDir = undefined;
@@ -147,6 +345,23 @@ namespace ts {
             lastEncodedSourceMapSpan = undefined;
             lastEncodedNameIndex = undefined;
             sourceMapData = undefined;
+            disableDepth = 0;
+        }
+
+        /**
+         * Re-enables the recording of mappings.
+         */
+        function enable() {
+            if (disableDepth > 0) {
+                disableDepth--;
+            }
+        }
+
+        /**
+         * Disables the recording of mappings.
+         */
+        function disable() {
+            disableDepth++;
         }
 
         function updateLastEncodedAndRecordedSpans() {
@@ -235,9 +450,21 @@ namespace ts {
             sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
         }
 
+        /**
+         * Emits a mapping.
+         *
+         * If the position is synthetic (undefined or a negative value), no mapping will be
+         * created.
+         *
+         * @param pos The position.
+         */
         function emitPos(pos: number) {
-            if (pos === -1) {
+            if (positionIsSynthesized(pos) || disableDepth > 0) {
                 return;
+            }
+
+            if (extendedDiagnostics) {
+                performance.mark("beforeSourcemap");
             }
 
             const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
@@ -279,29 +506,208 @@ namespace ts {
             }
 
             updateLastEncodedAndRecordedSpans();
+
+            if (extendedDiagnostics) {
+                performance.mark("afterSourcemap");
+                performance.measure("Source Map", "beforeSourcemap", "afterSourcemap");
+            }
         }
 
-        function getStartPos(range: TextRange) {
+        function getStartPosPastDecorators(range: TextRange) {
             const rangeHasDecorators = !!(range as Node).decorators;
-            return range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1;
+            return skipTrivia(currentSourceText, rangeHasDecorators ? (range as Node).decorators.end : range.pos);
         }
 
-        function emitStart(range: TextRange) {
-            emitPos(getStartPos(range));
+        /**
+         * Emits a mapping for the start of a range.
+         *
+         * If the range's start position is synthetic (undefined or a negative value), no mapping
+         * will be created. Any trivia at the start position in the original source will be
+         * skipped.
+         *
+         * @param range The range to emit.0
+         */
+        function emitStart(range: TextRange): void;
+        /**
+         * Emits a mapping for the start of a range.
+         *
+         * If the node's start position is synthetic (undefined or a negative value), no mapping
+         * will be created. Any trivia at the start position in the original source will be
+         * skipped.
+         *
+         * @param range The range to emit.
+         * @param contextNode The node for the current range.
+         * @param ignoreNodeCallback A callback used to determine whether to skip source map
+         *        emit for the start position of this node.
+         * @param ignoreChildrenCallback A callback used to determine whether to skip source
+         *        map emit for all children of this node.
+         * @param getTextRangeCallbackCallback A callback used to get a custom source map
+         *        range for this node.
+         */
+        function emitStart(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallback: (node: Node) => TextRange): void;
+        function emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange) {
+            if (contextNode) {
+                if (!ignoreNodeCallback(contextNode)) {
+                    range = getTextRangeCallback(contextNode) || range;
+                    emitPos(getStartPosPastDecorators(range));
+                }
+
+                if (ignoreChildrenCallback(contextNode)) {
+                    disable();
+                }
+            }
+            else {
+                emitPos(getStartPosPastDecorators(range));
+            }
         }
 
-        function emitEnd(range: TextRange, stopOverridingEnd?: boolean) {
-            emitPos(range.end);
-            stopOverridingSpan = stopOverridingEnd;
+        /**
+         * Emits a mapping for the end of a range.
+         *
+         * If the range's end position is synthetic (undefined or a negative value), no mapping
+         * will be created.
+         *
+         * @param range The range to emit.
+         */
+        function emitEnd(range: TextRange): void;
+        /**
+         * Emits a mapping for the end of a range.
+         *
+         * If the node's end position is synthetic (undefined or a negative value), no mapping
+         * will be created.
+         *
+         * @param range The range to emit.
+         * @param contextNode The node for the current range.
+         * @param ignoreNodeCallback A callback used to determine whether to skip source map
+         *        emit for the end position of this node.
+         * @param ignoreChildrenCallback A callback used to determine whether to skip source
+         *        map emit for all children of this node.
+         * @param getTextRangeCallbackCallback A callback used to get a custom source map
+         *        range for this node.
+         */
+        function emitEnd(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallback: (node: Node) => TextRange): void;
+        function emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange) {
+            if (contextNode) {
+                if (ignoreChildrenCallback(contextNode)) {
+                    enable();
+                }
+
+                if (!ignoreNodeCallback(contextNode)) {
+                    range = getTextRangeCallback(contextNode) || range;
+                    emitPos(range.end);
+                }
+            }
+            else {
+                emitPos(range.end);
+            }
+
+            stopOverridingSpan = false;
         }
 
+        /**
+         * Emits a mapping for the start position of a token.
+         *
+         * If the token's start position is synthetic (undefined or a negative value), no mapping
+         * will be created. Any trivia at the start position in the original source will be
+         * skipped.
+         *
+         * @param token The token to emit.
+         * @param tokenStartPos The start position of the token.
+         * @returns The start position of the token, following any trivia.
+         */
+        function emitTokenStart(token: SyntaxKind, tokenStartPos: number): number;
+        /**
+         * Emits a mapping for the start position of a token.
+         *
+         * If the token's start position is synthetic (undefined or a negative value), no mapping
+         * will be created. Any trivia at the start position in the original source will be
+         * skipped.
+         *
+         * @param token The token to emit.
+         * @param tokenStartPos The start position of the token.
+         * @param contextNode The node containing this token.
+         * @param ignoreTokenCallback A callback used to determine whether to skip source map
+         *        emit for the start position of this token.
+         * @param getTokenTextRangeCallback A callback used to get a custom source
+         *        map range for this node.
+         * @returns The start position of the token, following any trivia.
+         */
+        function emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+        function emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+            if (contextNode) {
+                if (ignoreTokenCallback(contextNode, token)) {
+                    return skipTrivia(currentSourceText, tokenStartPos);
+                }
+
+                const range = getTokenTextRangeCallback(contextNode, token);
+                if (range) {
+                    tokenStartPos = range.pos;
+                }
+            }
+
+            tokenStartPos = skipTrivia(currentSourceText, tokenStartPos);
+            emitPos(tokenStartPos);
+            return tokenStartPos;
+        }
+
+        /**
+         * Emits a mapping for the end position of a token.
+         *
+         * If the token's end position is synthetic (undefined or a negative value), no mapping
+         * will be created.
+         *
+         * @param token The token to emit.
+         * @param tokenEndPos The end position of the token.
+         * @returns The end position of the token.
+         */
+        function emitTokenEnd(token: SyntaxKind, tokenEndPos: number): number;
+        /**
+         * Emits a mapping for the end position of a token.
+         *
+         * If the token's end position is synthetic (undefined or a negative value), no mapping
+         * will be created.
+         *
+         * @param token The token to emit.
+         * @param tokenEndPos The end position of the token.
+         * @param contextNode The node containing this token.
+         * @param ignoreTokenCallback A callback used to determine whether to skip source map
+         *        emit for the end position of this token.
+         * @param getTokenTextRangeCallback A callback used to get a custom source
+         *        map range for this node.
+         * @returns The end position of the token.
+         */
+        function emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+        function emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+            if (contextNode) {
+                if (ignoreTokenCallback(contextNode, token)) {
+                    return tokenEndPos;
+                }
+
+                const range = getTokenTextRangeCallback(contextNode, token);
+                if (range) {
+                    tokenEndPos = range.end;
+                }
+            }
+
+            emitPos(tokenEndPos);
+            return tokenEndPos;
+        }
+
+
+        // @deprecated
         function changeEmitSourcePos() {
             Debug.assert(!modifyLastSourcePos);
             modifyLastSourcePos = true;
         }
 
+        /**
+         * Set the current source file.
+         *
+         * @param sourceFile The source file.
+         */
         function setSourceFile(sourceFile: SourceFile) {
             currentSourceFile = sourceFile;
+            currentSourceText = currentSourceFile.text;
 
             // Add the file to tsFilePaths
             // If sourceroot option: Use the relative path corresponding to the common directory path
@@ -320,14 +726,17 @@ namespace ts {
                 sourceMapData.sourceMapSources.push(source);
 
                 // The one that can be used from program to get the actual source file
-                sourceMapData.inputSourceFileNames.push(sourceFile.fileName);
+                sourceMapData.inputSourceFileNames.push(currentSourceFile.fileName);
 
                 if (compilerOptions.inlineSources) {
-                    sourceMapData.sourceMapSourcesContent.push(sourceFile.text);
+                    sourceMapData.sourceMapSourcesContent.push(currentSourceFile.text);
                 }
             }
         }
 
+        /**
+         * Gets the text for the source map.
+         */
         function getText() {
             encodeLastRecordedSourceMapSpan();
 
@@ -342,6 +751,9 @@ namespace ts {
             });
         }
 
+        /**
+         * Gets the SourceMappingURL for the source map.
+         */
         function getSourceMappingURL() {
             if (compilerOptions.inlineSourceMap) {
                 // Encode the sourceMap into the sourceMap url
@@ -352,6 +764,61 @@ namespace ts {
                 return sourceMapData.jsSourceMappingURL;
             }
         }
+    }
+
+    function createSourceMapWriterWithExtendedDiagnostics(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
+        const {
+            initialize,
+            reset,
+            getSourceMapData,
+            setSourceFile,
+            emitPos,
+            emitStart,
+            emitEnd,
+            emitTokenStart,
+            emitTokenEnd,
+            changeEmitSourcePos,
+            stopOverridingSpan,
+            getText,
+            getSourceMappingURL,
+        } = createSourceMapWriterWorker(host, writer);
+        return {
+            initialize,
+            reset,
+            getSourceMapData,
+            setSourceFile,
+            emitPos(pos: number): void {
+                 performance.mark("sourcemapStart");
+                emitPos(pos);
+                performance.measure("sourceMapTime", "sourcemapStart");
+            },
+            emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
+                performance.mark("emitSourcemap:emitStart");
+                emitStart(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
+                performance.measure("sourceMapTime", "emitSourcemap:emitStart");
+            },
+            emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
+                performance.mark("emitSourcemap:emitEnd");
+                emitEnd(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
+                performance.measure("sourceMapTime", "emitSourcemap:emitEnd");
+            },
+            emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+                performance.mark("emitSourcemap:emitTokenStart");
+                tokenStartPos = emitTokenStart(token, tokenStartPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
+                performance.measure("sourceMapTime", "emitSourcemap:emitTokenStart");
+                return tokenStartPos;
+            },
+            emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+                performance.mark("emitSourcemap:emitTokenEnd");
+                tokenEndPos = emitTokenEnd(token, tokenEndPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
+                performance.measure("sourceMapTime", "emitSourcemap:emitTokenEnd");
+                return tokenEndPos;
+            },
+            changeEmitSourcePos,
+            stopOverridingSpan,
+            getText,
+            getSourceMappingURL,
+        };
     }
 
     const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

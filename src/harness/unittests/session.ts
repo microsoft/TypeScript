@@ -18,6 +18,7 @@ namespace ts.server {
         createDirectory(): void {},
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
+        getEnvironmentVariable(name: string): string { return ""; },
         readDirectory(): string[] { return []; },
         exit(): void { },
         setTimeout(callback, ms, ...args) { return 0; },
@@ -106,7 +107,7 @@ namespace ts.server {
         describe("onMessage", () => {
             it("should not throw when commands are executed with invalid arguments", () => {
                 let i = 0;
-                for (name in CommandNames) {
+                for (const name in CommandNames) {
                     if (!Object.prototype.hasOwnProperty.call(CommandNames, name)) {
                         continue;
                     }
@@ -362,13 +363,13 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks: ts.Map<(resp: protocol.Response) => void> = {};
-            private eventHandlers: ts.Map<(args: any) => void> = {};
+            private callbacks = createMap<(resp: protocol.Response) => void>();
+            private eventHandlers = createMap<(args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {
                     const response = <protocol.Response>msg;
-                    if (this.callbacks[response.request_seq]) {
+                    if (response.request_seq in this.callbacks) {
                         this.callbacks[response.request_seq](response);
                         delete this.callbacks[response.request_seq];
                     }
@@ -380,7 +381,7 @@ namespace ts.server {
             }
 
             emit(name: string, args: any): void {
-                if (this.eventHandlers[name]) {
+                if (name in this.eventHandlers) {
                     this.eventHandlers[name](args);
                 }
             }

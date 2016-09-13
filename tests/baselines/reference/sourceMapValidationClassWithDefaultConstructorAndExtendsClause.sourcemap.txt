@@ -82,27 +82,20 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 1 >Emitted(13, 5) Source(4, 1) + SourceIndex(0)
 ---
 >>>        _super.apply(this, arguments);
-1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->class Greeter extends 
-2 >        AbstractGreeter
-1->Emitted(14, 9) Source(4, 23) + SourceIndex(0)
-2 >Emitted(14, 39) Source(4, 38) + SourceIndex(0)
----
 >>>        this.a = 10;
-1 >^^^^^^^^
+1->^^^^^^^^
 2 >        ^^^^^^
 3 >              ^^^
 4 >                 ^^
 5 >                   ^
 6 >                    ^^^^^^^^->
-1 > {
+1->class Greeter extends AbstractGreeter {
   >    public 
 2 >        a
 3 >               = 
 4 >                 10
 5 >                   ;
-1 >Emitted(15, 9) Source(5, 12) + SourceIndex(0)
+1->Emitted(15, 9) Source(5, 12) + SourceIndex(0)
 2 >Emitted(15, 15) Source(5, 13) + SourceIndex(0)
 3 >Emitted(15, 18) Source(5, 16) + SourceIndex(0)
 4 >Emitted(15, 20) Source(5, 18) + SourceIndex(0)

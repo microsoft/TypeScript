@@ -3,5 +3,5 @@ export default function foo() {
 >foo : () => string
 
     return ""
->"" : string
+>"" : ""
 }

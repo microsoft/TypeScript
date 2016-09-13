@@ -6,5 +6,5 @@ class C {
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
->"" : string
+>"" : ""
 }

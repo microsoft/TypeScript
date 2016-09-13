@@ -4,6 +4,8 @@
 // @traceResolution: true
 // @out: output.js
 
+// @currentDirectory: /
+
 // @filename: /types/lib/index.d.ts
 
 interface Lib { x }

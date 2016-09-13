@@ -20,7 +20,7 @@ var r2 = c.hasOwnProperty('');
 >c.hasOwnProperty : (this: Object, v: string) => boolean
 >c : C
 >hasOwnProperty : (this: Object, v: string) => boolean
->'' : string
+>'' : ""
 
 var o: Object = c;
 >o : Object

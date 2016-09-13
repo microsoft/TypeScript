@@ -11,7 +11,7 @@ module M {
 
     export var Point = 1;
 >Point : number
->1 : number
+>1 : 1
 }
 
 // primary expression
@@ -69,9 +69,9 @@ module M2 {
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
         }
     }
 }
@@ -141,8 +141,8 @@ module M3 {
 
     export enum Color { Blue, Red }
 >Color : Color
->Blue : Color
->Red : Color
+>Blue : Color.Blue
+>Red : Color.Red
 }
 
 var m3: typeof M3;
@@ -175,9 +175,9 @@ var blue: M3.Color = a3.Blue;
 >blue : M3.Color
 >M3 : any
 >Color : M3.Color
->a3.Blue : M3.Color
+>a3.Blue : M3.Color.Blue
 >a3 : typeof M3.Color
->Blue : M3.Color
+>Blue : M3.Color.Blue
 
 var p3: M3.Color;
 >p3 : M3.Color
@@ -186,17 +186,17 @@ var p3: M3.Color;
 
 var p3 = M3.Color.Red;
 >p3 : M3.Color
->M3.Color.Red : M3.Color
+>M3.Color.Red : M3.Color.Red
 >M3.Color : typeof M3.Color
 >M3 : typeof M3
 >Color : typeof M3.Color
->Red : M3.Color
+>Red : M3.Color.Red
 
 var p3 = m3.Color.Blue;
 >p3 : M3.Color
->m3.Color.Blue : M3.Color
+>m3.Color.Blue : M3.Color.Blue
 >m3.Color : typeof M3.Color
 >m3 : typeof M3
 >Color : typeof M3.Color
->Blue : M3.Color
+>Blue : M3.Color.Blue
 
