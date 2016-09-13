@@ -71,49 +71,92 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };`;
 
+        // The __generator helper is used by down-level transformations to emulate the runtime
+        // semantics of an ES2015 generator function. When called, this helper returns an
+        // object that implements the Iterator protocol, in that it has `next`, `return`, and
+        // `throw` methods that step through the generator when invoked.
+        //
+        // parameters:
+        //  thisArg  The value to use as the `this` binding for the transformed generator body.
+        //  body     A function that acts as the transformed generator body.
+        //
+        // variables:
+        //  _       Persistent state for the generator that is shared between the helper and the
+        //          generator body. The state object has the following members:
+        //            sent() - A method that returns or throws the current completion value.
+        //            label  - The next point at which to resume evaluation of the generator body.
+        //            trys   - A stack of protected regions (try/catch/finally blocks).
+        //            ops    - A stack of pending instructions when inside of a finally block.
+        //  f       A value indicating whether the generator is executing.
+        //  y       An iterator to delegate for a yield*.
+        //  t       A temporary variable that holds one of the following values (note that these
+        //          cases do not overlap):
+        //          - The completion value when resuming from a `yield` or `yield*`.
+        //          - The error value for a catch block.
+        //          - The current protected region (array of try/catch/finally/end labels).
+        //          - The verb (`next`, `throw`, or `return` method) to delegate to the expression
+        //            of a `yield*`.
+        //          - The result of evaluating the verb delegated to the expression of a `yield*`.
+        //
+        // functions:
+        //  verb(n)     Creates a bound callback to the `step` function for opcode `n`.
+        //  step(op)    Evaluates opcodes in a generator body until execution is suspended or
+        //              completed.
+        //
+        // The __generator helper understands a limited set of instructions:
+        //  0: next(value?)     - Start or resume the generator with the specified value.
+        //  1: throw(error)     - Resume the generator with an exception. If the generator is
+        //                        suspended inside of one or more protected regions, evaluates
+        //                        any intervening finally blocks between the current label and
+        //                        the nearest catch block or function boundary. If uncaught, the
+        //                        exception is thrown to the caller.
+        //  2: return(value?)   - Resume the generator as if with a return. If the generator is
+        //                        suspended inside of one or more protected regions, evaluates any
+        //                        intervening finally blocks.
+        //  3: break(label)     - Jump to the specified label. If the label is outside of the
+        //                        current protected region, evaluates any intervening finally
+        //                        blocks.
+        //  4: yield(value?)    - Yield execution to the caller with an optional value. When
+        //                        resumed, the generator will continue at the next label.
+        //  5: yield*(value)    - Delegates evaluation to the supplied iterator. When
+        //                        delegation completes, the generator will continue at the next
+        //                        label.
+        //  6: catch(error)     - Handles an exception thrown from within the generator body. If
+        //                        the current label is inside of one or more protected regions,
+        //                        evaluates any intervening finally blocks between the current
+        //                        label and the nearest catch block or function boundary. If
+        //                        uncaught, the exception is thrown to the caller.
+        //  7: endfinally       - Ends a finally block, resuming the last instruction prior to
+        //                        entering a finally block.
+        //
+        // For examples of how these are used, see the comments in ./transformers/generators.ts
         const generatorHelper = `
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (sent[0] === 1) throw sent[1]; return sent[1]; }, trys: [], stack: [] }, sent, y, f, v, r;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
+    return { next: verb(0), "throw": verb(1), "return": verb(2) };
+    function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (1) {
-            if (_.done) switch (op[0]) {
-                case 0: return { value: void 0, done: true };
-                case 1: case 6: throw op[1];
-                case 2: return { value: op[1], done: true };
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
             }
-            try {
-                if (f = 1, y) {
-                    v = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"];
-                    if (v && !(v = v.call(y, op[1])).done) return v;
-                    if (y = void 0, v) op[0] = 0, op[1] = v.value; continue;
-                }
-                switch (op[0]) {
-                    case 0: case 1: sent = op; break;
-                    case 4: return _.label++, { value: op[1], done: false };
-                    case 5: _.label++, y = op[1], op = [0]; continue;
-                    case 7: op = _.stack.pop(), _.trys.pop(); continue;
-                    default:
-                        r = _.trys.length > 0 && _.trys[_.trys.length - 1];
-                        if (!r && (op[0] === 6 || op[0] === 2)) { _.done = 1; continue; }
-                        if (op[0] === 3 && (!r || (op[1] > r[0] && op[1] < r[3]))) { _.label = op[1]; break; }
-                        if (op[0] === 6 && _.label < r[1]) { _.label = r[1], sent = op; break; }
-                        if (r && _.label < r[2]) { _.label = r[2], _.stack.push(op); break; }
-                        if (r[2]) { _.stack.pop(); }
-                        _.trys.pop();
-                        continue;
-                }
-                op = body.call(thisArg, _);
-            }
-            catch (e) { op = [6, e], y = void 0; }
-            finally { f = 0, sent = v = r = void 0; }
-        }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
-    return {
-        next: function (v) { return step([0, v]); },
-        "throw": function (v) { return step([1, v]); },
-        "return": function (v) { return step([2, v]); }
-    };
 };`;
 
         // emit output for the __export helper function

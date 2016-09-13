@@ -21,10 +21,11 @@
 //  .brfalse LABEL, (x)             - Jump to a label IIF the expression `x` is falsey.
 //                                    If jumping out of a protected region, all .finally
 //                                    blocks are executed.
-//  .yield RESUME, (x)              - Yield the value of the optional expression `x`.
-//                                    Resume at the label RESUME.
-//  .yieldstar RESUME, (x)          - Delegate yield to the value of the optional
-//                                    expression `x`. Resume at the label RESUME.
+//  .yield (x)                      - Yield the value of the optional expression `x`.
+//                                    Resume at the next label.
+//  .yieldstar (x)                  - Delegate yield to the value of the optional
+//                                    expression `x`. Resume at the next label.
+//                                    NOTE: `x` must be an Iterator, not an Iterable.
 //  .loop CONTINUE, BREAK           - Marks the beginning of a loop. Any "continue" or
 //                                    "break" abrupt completions jump to the CONTINUE or
 //                                    BREAK labels, respectively.
@@ -80,13 +81,13 @@
 // -------------------------------|----------------------------------------------
 //  .brfalse LABEL, (x)           |     if (!(x)) return [3, /*break*/, LABEL];
 // -------------------------------|----------------------------------------------
-//  .yield RESUME, (x)            |     return [4 /*yield*/, x];
+//  .yield (x)                    |     return [4 /*yield*/, x];
 //  .mark RESUME                  | case RESUME:
-//      a = %sent%;             |     a = state.sent();
+//      a = %sent%;               |     a = state.sent();
 // -------------------------------|----------------------------------------------
-//  .yieldstar RESUME, (X)        |     return [5 /*yield**/, x];
+//  .yieldstar (x)                |     return [5 /*yield**/, x];
 //  .mark RESUME                  | case RESUME:
-//      a = %sent%;             |     a = state.sent();
+//      a = %sent%;               |     a = state.sent();
 // -------------------------------|----------------------------------------------
 //  .with (_a)                    |     with (_a) {
 //      a();                      |         a();
@@ -109,7 +110,7 @@
 //  .br END                       |     return [3 /*break*/, END];
 //  .catch (e)                    |
 //  .mark CATCH                   | case CATCH:
-//                                |     e = state.error;
+//                                |     e = state.sent();
 //      b();                      |     b();
 //  .br END                       |     return [3 /*break*/, END];
 //  .finally                      |
