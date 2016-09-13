@@ -3,32 +3,32 @@ let fooOrBar: "foo" | "bar";
 >fooOrBar : "foo" | "bar"
 
 let a = "foo" as "bar";
->a : string
+>a : "bar"
 >"foo" as "bar" : "bar"
 >"foo" : "foo"
 
 let b = "bar" as "foo";
->b : string
+>b : "foo"
 >"bar" as "foo" : "foo"
 >"bar" : "bar"
 
 let c = fooOrBar as "foo";
->c : string
+>c : "foo"
 >fooOrBar as "foo" : "foo"
 >fooOrBar : "foo" | "bar"
 
 let d = fooOrBar as "bar";
->d : string
+>d : "bar"
 >fooOrBar as "bar" : "bar"
 >fooOrBar : "foo" | "bar"
 
 let e = fooOrBar as "baz";
->e : string
+>e : "baz"
 >fooOrBar as "baz" : "baz"
 >fooOrBar : "foo" | "bar"
 
 let f = "baz" as typeof fooOrBar;
->f : string
+>f : "foo" | "bar"
 >"baz" as typeof fooOrBar : "foo" | "bar"
 >"baz" : "baz"
 >fooOrBar : "foo" | "bar"
