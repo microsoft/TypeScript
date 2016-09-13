@@ -877,7 +877,8 @@ namespace ts {
                 if (nameNotFoundMessage) {
                     if (!errorLocation ||
                         !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
-                        !checkAndReportErrorForExtendingInterface(errorLocation)) {
+                        !checkAndReportErrorForExtendingInterface(errorLocation) &&
+                        !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning)) {
                         error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     }
                 }
@@ -987,6 +988,16 @@ namespace ts {
             }
         }
 
+        function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: string, meaning: SymbolFlags): boolean {
+            if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
+                if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
+                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, name);
+                    return true;
+                }
+            }
+            return false;
+        }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert((result.flags & SymbolFlags.BlockScopedVariable) !== 0);
