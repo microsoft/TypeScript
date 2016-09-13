@@ -121,7 +121,7 @@ declare namespace FourSlashInterface {
         constructor(negative?: boolean);
         memberListContains(symbol: string, text?: string, documenation?: string, kind?: string): void;
         memberListCount(expectedCount: number): void;
-        completionListContains(symbol: string, text?: string, documentation?: string, kind?: string): void;
+        completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListAllowsNewIdentifier(): void;
@@ -171,6 +171,7 @@ declare namespace FourSlashInterface {
          * If `ranges` is omitted, this is `test.ranges()`.
          */
         rangesReferenceEachOther(ranges?: Range[]): void;
+        findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
         rangesWithSameTextReferenceEachOther(): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;

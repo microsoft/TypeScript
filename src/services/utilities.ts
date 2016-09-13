@@ -1,6 +1,9 @@
 // These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
+    // Matches the beginning of a triple slash directive
+    const tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
+
     export interface ListItemInfo {
         listItemIndex: number;
         list: Node;
@@ -703,6 +706,29 @@ namespace ts {
         }
 
         return false;
+    }
+
+    export function hasTrailingDirectorySeparator(path: string) {
+        const lastCharacter = path.charAt(path.length - 1);
+        return lastCharacter === "/" || lastCharacter === "\\";
+    }
+
+    export function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
+        return isInCommentHelper(sourceFile, position, isReferenceComment);
+
+        function isReferenceComment(c: CommentRange): boolean {
+            const commentText = sourceFile.text.substring(c.pos, c.end);
+            return tripleSlashDirectivePrefixRegex.test(commentText);
+        }
+    }
+
+    export function isInNonReferenceComment(sourceFile: SourceFile, position: number): boolean {
+        return isInCommentHelper(sourceFile, position, isNonReferenceComment);
+
+        function isNonReferenceComment(c: CommentRange): boolean {
+            const commentText = sourceFile.text.substring(c.pos, c.end);
+            return !tripleSlashDirectivePrefixRegex.test(commentText);
+        }
     }
 }
 

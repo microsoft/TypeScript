@@ -15,9 +15,6 @@
 ////var /*3*/z = new /*2*/Foo();
 ////var /*5*/r2 = Foo./*4*/x;
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker('1');
 verify.quickInfoIs("import Foo = require('./mergedDeclarationsWithExportAssignment1_file0')");
 

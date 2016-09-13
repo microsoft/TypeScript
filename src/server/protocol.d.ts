@@ -965,6 +965,11 @@ declare namespace ts.server.protocol {
          * is often the same as the name but may be different in certain circumstances.
          */
         sortText: string;
+        /**
+         * An optional span that indicates the text to be replaced by this completion item. If present,
+         * this span should be used instead of the default one.
+         */
+        replacementSpan?: TextSpan;
     }
 
     /**

@@ -923,7 +923,17 @@ namespace ts.server {
             if (simplifiedResult) {
                 return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        result.push(entry);
+                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+
+                        let convertedSpan: protocol.TextSpan = undefined;
+                        if (replacementSpan) {
+                            convertedSpan = {
+                                start: scriptInfo.positionToLineOffset(replacementSpan.start),
+                                end: scriptInfo.positionToLineOffset(replacementSpan.start + replacementSpan.length)
+                            };
+                        }
+
+                        result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
                     }
                     return result;
                 }, []).sort((a, b) => a.name.localeCompare(b.name));

@@ -146,7 +146,7 @@ namespace ts.server {
         }
 
         getCurrentDirectory(): string {
-            return "";
+            return this.host.getCurrentDirectory();
         }
 
         resolvePath(path: string): string {

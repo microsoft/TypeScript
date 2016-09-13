@@ -341,6 +341,7 @@ namespace ts.server {
 
                 // capture list of projects since detachAllProjects will wipe out original list 
                 const containingProjects = info.containingProjects.slice();
+
                 info.detachAllProjects();
 
                 // update projects to make sure that set of referenced files is correct

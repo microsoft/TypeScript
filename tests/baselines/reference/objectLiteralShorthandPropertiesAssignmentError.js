@@ -3,7 +3,7 @@ var id: number = 10000;
 var name: string = "my name";
 
 var person: { b: string; id: number } = { name, id };  // error
-var person1: { name, id };  // error: can't use short-hand property assignment in type position
+var person1: { name, id };  // ok
 function foo(name: string, id: number): { id: string, name: number } { return { name, id }; }  // error
 function bar(obj: { name: string; id: boolean }) { }
 bar({ name, id });  // error
@@ -14,8 +14,7 @@ bar({ name, id });  // error
 var id = 10000;
 var name = "my name";
 var person = { name: name, id: id }; // error
-var person1 = name, id;
-; // error: can't use short-hand property assignment in type position
+var person1; // ok
 function foo(name, id) { return { name: name, id: id }; } // error
 function bar(obj) { }
 bar({ name: name, id: id }); // error
