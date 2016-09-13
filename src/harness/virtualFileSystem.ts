@@ -199,14 +199,14 @@ namespace Utils {
             super(currentDirectory, ignoreCase);
             const fileNames = (files instanceof Array) ? files : ts.getOwnKeys(files);
             for (const file of fileNames) {
-                this.addFile(file, (files as any)[file]);
+                this.addFile(file, new  Harness.LanguageService.ScriptInfo(file, (files as ts.MapLike<string>)[file], /*isRootFile*/false));
             }
         }
 
         readFile(path: string): string {
             const value = this.traversePath(path);
             if (value && value.isFile()) {
-                return value.content;
+                return value.content.content;
             }
         }
 
