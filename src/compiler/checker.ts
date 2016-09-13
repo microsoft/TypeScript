@@ -13272,6 +13272,8 @@ namespace ts {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.NonNullExpression:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxElement:
                     return true;
 
                 case SyntaxKind.ConditionalExpression:
