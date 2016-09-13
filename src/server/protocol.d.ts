@@ -1,4 +1,4 @@
-/**
+﻿/**
   * Declaration module describing the TypeScript Server protocol
   */
 declare namespace ts.server.protocol {
@@ -1141,6 +1141,11 @@ declare namespace ts.server.protocol {
           *  Optional limit on the number of items to return.
           */
         maxResultCount?: number;
+        /**
+          * Optional flag to indicate we want results for just the current file
+          * or the entire project.
+          */
+        currentFileOnly?: boolean;
     }
 
     /**
