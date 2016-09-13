@@ -13257,6 +13257,8 @@ namespace ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.TemplateExpression:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.TrueKeyword:
@@ -13264,6 +13266,7 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ObjectLiteralExpression:
@@ -13465,7 +13468,7 @@ namespace ts {
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
-                    if (isSideEffectFree(left) && !compilerOptions.allowUnreachableCode) {
+                    if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left)) {
                         error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
                     return rightType;
