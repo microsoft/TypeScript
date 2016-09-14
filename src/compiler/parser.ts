@@ -6183,6 +6183,7 @@ namespace ts {
                     let advanceToken = true;
                     let state = JSDocState.SawAsterisk;
                     let margin: number | undefined = undefined;
+                    // + 4 for leading '/** '
                     let indent = start - Math.max(content.lastIndexOf("\n", start), 0) + 4;
                     function pushComment(text: string) {
                         if (!margin) {
