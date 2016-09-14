@@ -33,15 +33,15 @@ function foo(x: number | string | boolean) {
 
                 ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string
+>x.toString : (this: Boolean) => string
 >x : boolean
->toString : () => string
+>toString : (this: Boolean) => string
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (this: Number, radix?: number) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 
         } ();
 }
@@ -78,15 +78,15 @@ function foo2(x: number | string | boolean) {
 
                 ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string
+>x.toString : (this: Boolean) => string
 >x : boolean
->toString : () => string
+>toString : (this: Boolean) => string
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (this: Number, radix?: number) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 
         } (x); // x here is narrowed to number | boolean
 >x : number | boolean
@@ -123,15 +123,15 @@ function foo3(x: number | string | boolean) {
 
                 ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string
+>x.toString : (this: Boolean) => string
 >x : boolean
->toString : () => string
+>toString : (this: Boolean) => string
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (this: Number, radix?: number) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 
         })();
 }
@@ -168,15 +168,15 @@ function foo4(x: number | string | boolean) {
 
                 ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string
+>x.toString : (this: Boolean) => string
 >x : boolean
->toString : () => string
+>toString : (this: Boolean) => string
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (this: Number, radix?: number) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 
         })(x); // x here is narrowed to number | boolean
 >x : number | boolean
@@ -244,15 +244,15 @@ module m {
 
             ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string
+>x.toString : (this: Boolean) => string
 >x : boolean
->toString : () => string
+>toString : (this: Boolean) => string
 
             : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (this: Number, radix?: number) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
         }
     }
 }
@@ -296,15 +296,15 @@ module m1 {
 
             ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string
+>x.toString : (this: Boolean) => string
 >x : boolean
->toString : () => string
+>toString : (this: Boolean) => string
 
             : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (this: Number, radix?: number) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
         }
     }
 }

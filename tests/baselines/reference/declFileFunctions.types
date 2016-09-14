@@ -26,9 +26,9 @@ export function fooWithRestParameters(a: string, ...rests: string[]) {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: string[], separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: string[], separator?: string) => string
 >"" : ""
 }
 
@@ -124,9 +124,9 @@ function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: string[], separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: string[], separator?: string) => string
 >"" : ""
 }
 
@@ -173,9 +173,9 @@ function globalfooWithRestParameters(a: string, ...rests: string[]) {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: string[], separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: string[], separator?: string) => string
 >"" : ""
 }
 function globalfooWithOverloads(a: string): string;

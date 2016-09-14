@@ -50,9 +50,9 @@ var complicatedArrayVar: { x: number; y: string; }[] ;
 
 complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >complicatedArrayVar.push({ x: 30, y : 'hello world' }) : number
->complicatedArrayVar.push : (...items: { x: number; y: string; }[]) => number
+>complicatedArrayVar.push : (this: { x: number; y: string; }[], ...items: { x: number; y: string; }[]) => number
 >complicatedArrayVar : { x: number; y: string; }[]
->push : (...items: { x: number; y: string; }[]) => number
+>push : (this: { x: number; y: string; }[], ...items: { x: number; y: string; }[]) => number
 >{ x: 30, y : 'hello world' } : { x: number; y: string; }
 >x : number
 >30 : 30

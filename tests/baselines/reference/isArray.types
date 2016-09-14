@@ -18,7 +18,7 @@ if (Array.isArray(maybeArray)) {
 else {
     maybeArray.toFixed(); // OK
 >maybeArray.toFixed() : string
->maybeArray.toFixed : (fractionDigits?: number) => string
+>maybeArray.toFixed : (this: Number, fractionDigits?: number) => string
 >maybeArray : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
 }

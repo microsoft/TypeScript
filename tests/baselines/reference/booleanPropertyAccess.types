@@ -6,14 +6,14 @@ var x = true;
 var a = x.toString();
 >a : string
 >x.toString() : string
->x.toString : () => string
+>x.toString : (this: Boolean) => string
 >x : true
->toString : () => string
+>toString : (this: Boolean) => string
 
 var b = x['toString']();
 >b : string
 >x['toString']() : string
->x['toString'] : () => string
+>x['toString'] : (this: Boolean) => string
 >x : true
 >'toString' : "toString"
 

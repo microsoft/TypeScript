@@ -21,9 +21,9 @@ async function fn1() {
 
         ar.push(() => i);
 >ar.push(() => i) : number
->ar.push : (...items: any[]) => number
+>ar.push : (this: any[], ...items: any[]) => number
 >ar : any[]
->push : (...items: any[]) => number
+>push : (this: any[], ...items: any[]) => number
 >() => i : () => number
 >i : number
     }
@@ -51,9 +51,9 @@ async function fn2() {
 
         ar.push(() => i);
 >ar.push(() => i) : number
->ar.push : (...items: any[]) => number
+>ar.push : (this: any[], ...items: any[]) => number
 >ar : any[]
->push : (...items: any[]) => number
+>push : (this: any[], ...items: any[]) => number
 >() => i : () => number
 >i : number
 
@@ -83,9 +83,9 @@ async function fn3() {
 
         ar.push(() => i);
 >ar.push(() => i) : number
->ar.push : (...items: any[]) => number
+>ar.push : (this: any[], ...items: any[]) => number
 >ar : any[]
->push : (...items: any[]) => number
+>push : (this: any[], ...items: any[]) => number
 >() => i : () => number
 >i : number
 
@@ -116,9 +116,9 @@ async function fn4(): Promise<number> {
 
         ar.push(() => i);
 >ar.push(() => i) : number
->ar.push : (...items: any[]) => number
+>ar.push : (this: any[], ...items: any[]) => number
 >ar : any[]
->push : (...items: any[]) => number
+>push : (this: any[], ...items: any[]) => number
 >() => i : () => number
 >i : number
 

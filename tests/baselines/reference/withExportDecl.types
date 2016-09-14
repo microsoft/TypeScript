@@ -70,9 +70,9 @@ export var exportedArrayVar: { x: number; y: string; }[] ;
 
 exportedArrayVar.push({ x: 30, y : 'hello world' });
 >exportedArrayVar.push({ x: 30, y : 'hello world' }) : number
->exportedArrayVar.push : (...items: { x: number; y: string; }[]) => number
+>exportedArrayVar.push : (this: { x: number; y: string; }[], ...items: { x: number; y: string; }[]) => number
 >exportedArrayVar : { x: number; y: string; }[]
->push : (...items: { x: number; y: string; }[]) => number
+>push : (this: { x: number; y: string; }[], ...items: { x: number; y: string; }[]) => number
 >{ x: 30, y : 'hello world' } : { x: number; y: string; }
 >x : number
 >30 : 30

@@ -14,14 +14,14 @@ var c: C;
 var r1 = c.toString();
 >r1 : string
 >c.toString() : string
->c.toString : () => string
+>c.toString : (this: Object) => string
 >c : C
->toString : () => string
+>toString : (this: Object) => string
 
 var r2 = c['toString']();
 >r2 : string
 >c['toString']() : string
->c['toString'] : () => string
+>c['toString'] : (this: Object) => string
 >c : C
 >'toString' : "toString"
 
@@ -50,14 +50,14 @@ var i: I;
 var r4 = i.toString();
 >r4 : string
 >i.toString() : string
->i.toString : () => string
+>i.toString : (this: Object) => string
 >i : I
->toString : () => string
+>toString : (this: Object) => string
 
 var r5 = i['toString']();
 >r5 : string
 >i['toString']() : string
->i['toString'] : () => string
+>i['toString'] : (this: Object) => string
 >i : I
 >'toString' : "toString"
 
@@ -85,14 +85,14 @@ var a = {
 var r8 = a.toString();
 >r8 : string
 >a.toString() : string
->a.toString : () => string
+>a.toString : (this: Object) => string
 >a : { foo: string; }
->toString : () => string
+>toString : (this: Object) => string
 
 var r9 = a['toString']();
 >r9 : string
 >a['toString']() : string
->a['toString'] : () => string
+>a['toString'] : (this: Object) => string
 >a : { foo: string; }
 >'toString' : "toString"
 

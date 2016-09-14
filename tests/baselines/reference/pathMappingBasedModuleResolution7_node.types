@@ -13,17 +13,17 @@ use(x.toFixed());
 >use(x.toFixed()) : any
 >use : (x: string) => any
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
+>x.toFixed : (this: Number, fractionDigits?: number) => string
 >x : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
 
 use(y.toFixed());
 >use(y.toFixed()) : any
 >use : (x: string) => any
 >y.toFixed() : string
->y.toFixed : (fractionDigits?: number) => string
+>y.toFixed : (this: Number, fractionDigits?: number) => string
 >y : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
 
 === c:/root/generated/src/project/file2.ts ===
 import {a} from "module1";

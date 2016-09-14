@@ -39,14 +39,14 @@ $.each(lines, function(dit) {
     return dit.charAt(0) + this.charAt(1);
 >dit.charAt(0) + this.charAt(1) : string
 >dit.charAt(0) : string
->dit.charAt : (pos: number) => string
+>dit.charAt : (this: String, pos: number) => string
 >dit : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : 0
 >this.charAt(1) : string
->this.charAt : (pos: number) => string
+>this.charAt : (this: String, pos: number) => string
 >this : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >1 : 1
 
 });

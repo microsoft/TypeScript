@@ -167,11 +167,11 @@ let foo: Maybe<string>;
 
 get(foo).toUpperCase(); // Ok
 >get(foo).toUpperCase() : string
->get(foo).toUpperCase : () => string
+>get(foo).toUpperCase : (this: String) => string
 >get(foo) : string
 >get : <U>(x: void | U) => U
 >foo : Maybe<string>
->toUpperCase : () => string
+>toUpperCase : (this: String) => string
 
 // Repro from #5456
 

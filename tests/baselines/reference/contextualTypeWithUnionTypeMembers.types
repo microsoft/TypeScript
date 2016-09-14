@@ -347,9 +347,9 @@ var i11Ori21: I11 | I21 = {
         var z = a.charAt(b);
 >z : string
 >a.charAt(b) : string
->a.charAt : (pos: number) => string
+>a.charAt : (this: String, pos: number) => string
 >a : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >b : number
 
         return z;  
@@ -377,9 +377,9 @@ var i11Ori21: I11 | I21 = {
         var z = a.charCodeAt(b);
 >z : number
 >a.charCodeAt(b) : number
->a.charCodeAt : (index: number) => number
+>a.charCodeAt : (this: String, index: number) => number
 >a : string
->charCodeAt : (index: number) => number
+>charCodeAt : (this: String, index: number) => number
 >b : number
 
         return z;
@@ -414,9 +414,9 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
             var z = a.charAt(b);
 >z : string
 >a.charAt(b) : string
->a.charAt : (pos: number) => string
+>a.charAt : (this: String, pos: number) => string
 >a : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >b : number
 
             return z;
@@ -440,9 +440,9 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
             var z = a.charCodeAt(b);
 >z : number
 >a.charCodeAt(b) : number
->a.charCodeAt : (index: number) => number
+>a.charCodeAt : (this: String, index: number) => number
 >a : string
->charCodeAt : (index: number) => number
+>charCodeAt : (this: String, index: number) => number
 >b : number
 
             return z;

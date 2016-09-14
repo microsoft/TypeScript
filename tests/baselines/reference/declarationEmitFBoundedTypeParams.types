@@ -15,9 +15,9 @@ function append<a, b extends a>(result: a[], value: b): a[] {
 
     result.push(value);
 >result.push(value) : number
->result.push : (...items: a[]) => number
+>result.push : (this: a[], ...items: a[]) => number
 >result : a[]
->push : (...items: a[]) => number
+>push : (this: a[], ...items: a[]) => number
 >value : b
 
     return result;

@@ -133,9 +133,9 @@ while ((match = re.exec("xxx")) != null) {
 >match = re.exec("xxx") : RegExpExecArray | null
 >match : RegExpExecArray | null
 >re.exec("xxx") : RegExpExecArray | null
->re.exec : (string: string) => RegExpExecArray | null
+>re.exec : (this: RegExp, string: string) => RegExpExecArray | null
 >re : RegExp
->exec : (string: string) => RegExpExecArray | null
+>exec : (this: RegExp, string: string) => RegExpExecArray | null
 >"xxx" : "xxx"
 >null : null
 

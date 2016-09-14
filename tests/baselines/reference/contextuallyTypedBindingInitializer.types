@@ -12,9 +12,9 @@ function f({ show = v => v.toString() }: Show) {}
 >v => v.toString() : (v: number) => string
 >v : number
 >v.toString() : string
->v.toString : (radix?: number) => string
+>v.toString : (this: Number, radix?: number) => string
 >v : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 >Show : Show
 
 function f2({ "show": showRename = v => v.toString() }: Show) {}
@@ -23,9 +23,9 @@ function f2({ "show": showRename = v => v.toString() }: Show) {}
 >v => v.toString() : (v: number) => string
 >v : number
 >v.toString() : string
->v.toString : (radix?: number) => string
+>v.toString : (this: Number, radix?: number) => string
 >v : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 >Show : Show
 
 function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
@@ -35,9 +35,9 @@ function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >v => v.toString() : (v: number) => string
 >v : number
 >v.toString() : string
->v.toString : (radix?: number) => string
+>v.toString : (this: Number, radix?: number) => string
 >v : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 >Show : Show
 
 interface Nested {
@@ -55,9 +55,9 @@ function ff({ nested = { show: v => v.toString() } }: Nested) {}
 >v => v.toString() : (v: number) => string
 >v : number
 >v.toString() : string
->v.toString : (radix?: number) => string
+>v.toString : (this: Number, radix?: number) => string
 >v : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 >Nested : Nested
 
 interface Tuples {

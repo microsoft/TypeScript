@@ -60,9 +60,9 @@ function c() {
 >x = x.toExponential() : string
 >x : string | number | boolean
 >x.toExponential() : string
->x.toExponential : (fractionDigits?: number) => string
+>x.toExponential : (this: Number, fractionDigits?: number) => string
 >x : number
->toExponential : (fractionDigits?: number) => string
+>toExponential : (this: Number, fractionDigits?: number) => string
 >x = 5 : 5
 >x : string | number | boolean
 >5 : 5

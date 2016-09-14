@@ -204,13 +204,13 @@ declare function f15(a: Meters): string;
 
 f15(E.x).toLowerCase();
 >f15(E.x).toLowerCase() : string
->f15(E.x).toLowerCase : () => string
+>f15(E.x).toLowerCase : (this: String) => string
 >f15(E.x) : string
 >f15 : { (a: string): boolean; (a: number): string; }
 >E.x : E
 >E : typeof E
 >x : E
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 
 type StringAndBoolean = [string, boolean]
 >StringAndBoolean : [string, boolean]
@@ -237,9 +237,9 @@ var y: StringAndBoolean = ["1", false];
 
 y[0].toLowerCase();
 >y[0].toLowerCase() : string
->y[0].toLowerCase : () => string
+>y[0].toLowerCase : (this: String) => string
 >y[0] : string
 >y : [string, boolean]
 >0 : 0
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 

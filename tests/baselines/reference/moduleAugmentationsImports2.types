@@ -85,24 +85,24 @@ let a: A;
 let b = a.getB().x.toFixed();
 >b : string
 >a.getB().x.toFixed() : string
->a.getB().x.toFixed : (fractionDigits?: number) => string
+>a.getB().x.toFixed : (this: Number, fractionDigits?: number) => string
 >a.getB().x : number
 >a.getB() : B
 >a.getB : () => B
 >a : A
 >getB : () => B
 >x : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
 
 let c = a.getCls().y.toLowerCase();
 >c : string
 >a.getCls().y.toLowerCase() : string
->a.getCls().y.toLowerCase : () => string
+>a.getCls().y.toLowerCase : (this: String) => string
 >a.getCls().y : string
 >a.getCls() : Cls
 >a.getCls : () => Cls
 >a : A
 >getCls : () => Cls
 >y : string
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 

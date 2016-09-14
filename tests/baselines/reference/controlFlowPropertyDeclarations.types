@@ -40,9 +40,9 @@ for (var propname in HTMLDOMPropertyConfig.Properties) {
 >DOMAttributeNames : any
 >propname : string
 >propname.toLowerCase() : string
->propname.toLowerCase : () => string
+>propname.toLowerCase : (this: String) => string
 >propname : string
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 }
 
 /**
@@ -202,9 +202,9 @@ function isEmpty(string) {
    return !/[^\s]/.test(string);
 >!/[^\s]/.test(string) : boolean
 >/[^\s]/.test(string) : boolean
->/[^\s]/.test : (string: string) => boolean
+>/[^\s]/.test : (this: RegExp, string: string) => boolean
 >/[^\s]/ : RegExp
->test : (string: string) => boolean
+>test : (this: RegExp, string: string) => boolean
 >string : any
 }
 
@@ -221,9 +221,9 @@ function isConvertiblePixelValue(value) {
 
   return /^\d+px$/.test(value);
 >/^\d+px$/.test(value) : boolean
->/^\d+px$/.test : (string: string) => boolean
+>/^\d+px$/.test : (this: RegExp, string: string) => boolean
 >/^\d+px$/ : RegExp
->test : (string: string) => boolean
+>test : (this: RegExp, string: string) => boolean
 >value : any
 }
 
@@ -295,18 +295,18 @@ export class HTMLtoJSX {
 >text = text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
 >text : string
 >text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
->text        .replace(/\r/g, '')        .replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text        .replace(/\r/g, '')        .replace : { (this: String, searchValue: string, replaceValue: string): string; (this: String, searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (this: String, searchValue: RegExp, replaceValue: string): string; (this: String, searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >text        .replace(/\r/g, '') : string
->text        .replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text        .replace : { (this: String, searchValue: string, replaceValue: string): string; (this: String, searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (this: String, searchValue: RegExp, replaceValue: string): string; (this: String, searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >text : string
 
         .replace(/\r/g, '')
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (this: String, searchValue: string, replaceValue: string): string; (this: String, searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (this: String, searchValue: RegExp, replaceValue: string): string; (this: String, searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >/\r/g : RegExp
 >'' : ""
 
         .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (this: String, searchValue: string, replaceValue: string): string; (this: String, searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (this: String, searchValue: RegExp, replaceValue: string): string; (this: String, searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >/( {2,}|\n|\t|\{|\})/g : RegExp
 >function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        } : (whitespace: string) => string
 >whitespace : string
@@ -316,9 +316,9 @@ export class HTMLtoJSX {
 >'{' + JSON.stringify(whitespace) : string
 >'{' : "{"
 >JSON.stringify(whitespace) : string
->JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>JSON.stringify : { (this: JSON, value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (this: JSON, value: any, replacer?: (string | number)[], space?: string | number): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>stringify : { (this: JSON, value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (this: JSON, value: any, replacer?: (string | number)[], space?: string | number): string; }
 >whitespace : string
 >'}' : "}"
 
@@ -328,9 +328,9 @@ export class HTMLtoJSX {
       if (text.indexOf('\n') > -1) {
 >text.indexOf('\n') > -1 : boolean
 >text.indexOf('\n') : number
->text.indexOf : (searchString: string, position?: number) => number
+>text.indexOf : (this: String, searchString: string, position?: number) => number
 >text : string
->indexOf : (searchString: string, position?: number) => number
+>indexOf : (this: String, searchString: string, position?: number) => number
 >'\n' : "\n"
 >-1 : -1
 >1 : 1
@@ -371,11 +371,11 @@ export class StyleParser {
       if (!this.styles.hasOwnProperty(key)) {
 >!this.styles.hasOwnProperty(key) : boolean
 >this.styles.hasOwnProperty(key) : boolean
->this.styles.hasOwnProperty : (v: string) => boolean
+>this.styles.hasOwnProperty : (this: Object, v: string) => boolean
 >this.styles : {}
 >this : this
 >styles : {}
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (this: Object, v: string) => boolean
 >key : string
       }
     }

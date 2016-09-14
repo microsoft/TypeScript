@@ -120,9 +120,9 @@ var ResultIsBoolean12 = delete STRING.charAt(0);
 >ResultIsBoolean12 : boolean
 >delete STRING.charAt(0) : boolean
 >STRING.charAt(0) : string
->STRING.charAt : (pos: number) => string
+>STRING.charAt : (this: String, pos: number) => string
 >STRING : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : 0
 
 // multiple delete  operator

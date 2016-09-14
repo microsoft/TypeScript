@@ -14,7 +14,7 @@ verify.quickInfos({
     1: "(parameter) value: number",
     2: "(parameter) value: number",
     3: [
-        "(method) Number.toExponential(fractionDigits?: number): string",
+        "(method) Number.toExponential(this: Number, fractionDigits?: number): string",
         "Returns a string containing a number represented in exponential notation."
     ]
 });

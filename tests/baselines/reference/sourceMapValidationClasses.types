@@ -84,9 +84,9 @@ module Foo.Bar {
 
             greeters.push(new Greeter(restGreetings[i]));
 >greeters.push(new Greeter(restGreetings[i])) : number
->greeters.push : (...items: Greeter[]) => number
+>greeters.push : (this: Greeter[], ...items: Greeter[]) => number
 >greeters : Greeter[]
->push : (...items: Greeter[]) => number
+>push : (this: Greeter[], ...items: Greeter[]) => number
 >new Greeter(restGreetings[i]) : Greeter
 >Greeter : typeof Greeter
 >restGreetings[i] : string

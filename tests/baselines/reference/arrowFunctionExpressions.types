@@ -199,13 +199,13 @@ function someFn() {
 
     arr(3)(4).toExponential();
 >arr(3)(4).toExponential() : string
->arr(3)(4).toExponential : (fractionDigits?: number) => string
+>arr(3)(4).toExponential : (this: Number, fractionDigits?: number) => string
 >arr(3)(4) : number
 >arr(3) : (p: number) => number
 >arr : (n: number) => (p: number) => number
 >3 : 3
 >4 : 4
->toExponential : (fractionDigits?: number) => string
+>toExponential : (this: Number, fractionDigits?: number) => string
 }
 
 // Arrow function used in function
@@ -222,11 +222,11 @@ function someOtherFn() {
 
     arr(4).charAt(0);
 >arr(4).charAt(0) : string
->arr(4).charAt : (pos: number) => string
+>arr(4).charAt : (this: String, pos: number) => string
 >arr(4) : string
 >arr : (n: number) => string
 >4 : 4
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : 0
 }
 
@@ -318,9 +318,9 @@ var h = someOuterFn()('')()();
 
 h.toExponential();
 >h.toExponential() : string
->h.toExponential : (fractionDigits?: number) => string
+>h.toExponential : (this: Number, fractionDigits?: number) => string
 >h : number
->toExponential : (fractionDigits?: number) => string
+>toExponential : (this: Number, fractionDigits?: number) => string
 
 // Arrow function used in try/catch/finally in function
 function tryCatchFn() {

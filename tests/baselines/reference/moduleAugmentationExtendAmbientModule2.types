@@ -25,20 +25,20 @@ let y = x.map(x => x + 1);
 let z1 = Observable.someValue.toFixed();
 >z1 : string
 >Observable.someValue.toFixed() : string
->Observable.someValue.toFixed : (fractionDigits?: number) => string
+>Observable.someValue.toFixed : (this: Number, fractionDigits?: number) => string
 >Observable.someValue : number
 >Observable : typeof Observable
 >someValue : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
 
 let z2 = Observable.someAnotherValue.toLowerCase();
 >z2 : string
 >Observable.someAnotherValue.toLowerCase() : string
->Observable.someAnotherValue.toLowerCase : () => string
+>Observable.someAnotherValue.toLowerCase : (this: String) => string
 >Observable.someAnotherValue : string
 >Observable : typeof Observable
 >someAnotherValue : string
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 
 === tests/cases/compiler/map.ts ===
 

@@ -8,12 +8,12 @@ tests/cases/compiler/tupleTypes.ts(17,1): error TS2322: Type '[string, number]' 
 tests/cases/compiler/tupleTypes.ts(41,1): error TS2322: Type 'undefined[]' is not assignable to type '[number, string]'.
 tests/cases/compiler/tupleTypes.ts(47,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
   Types of property 'pop' are incompatible.
-    Type '() => string | number' is not assignable to type '() => number'.
+    Type '(this: [number, string]) => string | number' is not assignable to type '(this: number[]) => number'.
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/tupleTypes.ts(49,1): error TS2322: Type '[number, {}]' is not assignable to type 'number[]'.
   Types of property 'pop' are incompatible.
-    Type '() => number | {}' is not assignable to type '() => number'.
+    Type '(this: [number, {}]) => number | {}' is not assignable to type '(this: number[]) => number'.
       Type 'number | {}' is not assignable to type 'number'.
         Type '{}' is not assignable to type 'number'.
 tests/cases/compiler/tupleTypes.ts(50,1): error TS2322: Type '[number, number]' is not assignable to type '[number, string]'.
@@ -86,7 +86,7 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     ~
 !!! error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
 !!! error TS2322:   Types of property 'pop' are incompatible.
-!!! error TS2322:     Type '() => string | number' is not assignable to type '() => number'.
+!!! error TS2322:     Type '(this: [number, string]) => string | number' is not assignable to type '(this: number[]) => number'.
 !!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
     a = a2;
@@ -94,7 +94,7 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     ~
 !!! error TS2322: Type '[number, {}]' is not assignable to type 'number[]'.
 !!! error TS2322:   Types of property 'pop' are incompatible.
-!!! error TS2322:     Type '() => number | {}' is not assignable to type '() => number'.
+!!! error TS2322:     Type '(this: [number, {}]) => number | {}' is not assignable to type '(this: number[]) => number'.
 !!! error TS2322:       Type 'number | {}' is not assignable to type 'number'.
 !!! error TS2322:         Type '{}' is not assignable to type 'number'.
     a1 = a2;  // Error

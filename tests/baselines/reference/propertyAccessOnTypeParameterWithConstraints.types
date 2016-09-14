@@ -17,7 +17,7 @@ class C<T extends Date> {
         var a = x['getDate'](); // number
 >a : number
 >x['getDate']() : number
->x['getDate'] : () => number
+>x['getDate'] : (this: Date) => number
 >x : T
 >'getDate' : "getDate"
 
@@ -25,9 +25,9 @@ class C<T extends Date> {
 >a + x.getDate() : number
 >a : number
 >x.getDate() : number
->x.getDate : () => number
+>x.getDate : (this: Date) => number
 >x : T
->getDate : () => number
+>getDate : (this: Date) => number
     }
 }
 
@@ -58,16 +58,16 @@ var i: I<Date>;
 var r2 = i.foo.getDate();
 >r2 : number
 >i.foo.getDate() : number
->i.foo.getDate : () => number
+>i.foo.getDate : (this: Date) => number
 >i.foo : Date
 >i : I<Date>
 >foo : Date
->getDate : () => number
+>getDate : (this: Date) => number
 
 var r2b = i.foo['getDate']();
 >r2b : number
 >i.foo['getDate']() : number
->i.foo['getDate'] : () => number
+>i.foo['getDate'] : (this: Date) => number
 >i.foo : Date
 >i : I<Date>
 >foo : Date
@@ -84,16 +84,16 @@ var a: {
 var r3 = a<Date>().getDate();
 >r3 : number
 >a<Date>().getDate() : number
->a<Date>().getDate : () => number
+>a<Date>().getDate : (this: Date) => number
 >a<Date>() : Date
 >a : <T extends Date>() => T
 >Date : Date
->getDate : () => number
+>getDate : (this: Date) => number
 
 var r3b = a()['getDate']();
 >r3b : number
 >a()['getDate']() : number
->a()['getDate'] : () => number
+>a()['getDate'] : (this: Date) => number
 >a() : Date
 >a : <T extends Date>() => T
 >'getDate' : "getDate"
@@ -113,7 +113,7 @@ var b = {
         var a = x['getDate'](); // number
 >a : number
 >x['getDate']() : number
->x['getDate'] : () => number
+>x['getDate'] : (this: Date) => number
 >x : T
 >'getDate' : "getDate"
 
@@ -121,9 +121,9 @@ var b = {
 >a + x.getDate() : number
 >a : number
 >x.getDate() : number
->x.getDate : () => number
+>x.getDate : (this: Date) => number
 >x : T
->getDate : () => number
+>getDate : (this: Date) => number
     }
 }
 

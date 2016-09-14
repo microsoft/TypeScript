@@ -4,7 +4,7 @@ var foo: string;
 
 foo.toUpperCase();
 >foo.toUpperCase() : string
->foo.toUpperCase : () => string
+>foo.toUpperCase : (this: String) => string
 >foo : string
->toUpperCase : () => string
+>toUpperCase : (this: String) => string
 

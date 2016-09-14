@@ -6,8 +6,8 @@ var a = "Hello";
 var b = a.match(/\/ver=([^/]+)/);
 >b : RegExpMatchArray
 >a.match(/\/ver=([^/]+)/) : RegExpMatchArray
->a.match : { (regexp: string): RegExpMatchArray; (regexp: RegExp): RegExpMatchArray; }
+>a.match : { (this: String, regexp: string): RegExpMatchArray; (this: String, regexp: RegExp): RegExpMatchArray; }
 >a : string
->match : { (regexp: string): RegExpMatchArray; (regexp: RegExp): RegExpMatchArray; }
+>match : { (this: String, regexp: string): RegExpMatchArray; (this: String, regexp: RegExp): RegExpMatchArray; }
 >/\/ver=([^/]+)/ : RegExp
 
