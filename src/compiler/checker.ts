@@ -7608,10 +7608,17 @@ namespace ts {
                     // itself. When inferring from a type to itself we effectively find all type parameter
                     // occurrences within that type and infer themselves as their type arguments.
                     let matchingTypes: Type[];
-                    for (const t of (<UnionOrIntersectionType>target).types) {
-                        if (typeIdenticalToSomeType(t, (<UnionOrIntersectionType>source).types)) {
+                    for (const t of (<UnionOrIntersectionType>source).types) {
+                        if (typeIdenticalToSomeType(t, (<UnionOrIntersectionType>target).types)) {
                             (matchingTypes || (matchingTypes = [])).push(t);
                             inferFromTypes(t, t);
+                        }
+                        else if (t.flags & (TypeFlags.NumberLiteral | TypeFlags.StringLiteral)) {
+                            const b = getBaseTypeOfLiteralType(t);
+                            if (typeIdenticalToSomeType(b, (<UnionOrIntersectionType>target).types)) {
+                                (matchingTypes || (matchingTypes = [])).push(t);
+                                matchingTypes.push(b);
+                            }
                         }
                     }
                     // Next, to improve the quality of inferences, reduce the source and target types by
