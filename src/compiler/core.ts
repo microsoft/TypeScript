@@ -1018,7 +1018,8 @@ namespace ts {
         return 0;
     }
 
-    export let directorySeparator = "/";
+    export const directorySeparator = "/";
+    const directorySeparatorCharCode = CharacterCodes.slash;
     function getNormalizedParts(normalizedSlashedPath: string, rootLength: number) {
         const parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
         const normalized: string[] = [];
@@ -1047,7 +1048,7 @@ namespace ts {
         const normalized = getNormalizedParts(path, rootLength);
         if (normalized.length) {
             const joinedParts = root + normalized.join(directorySeparator);
-            return isPathToDirectory(path) ? joinedParts + "/" : joinedParts;
+            return pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts;
         }
         else {
             return root;
@@ -1055,8 +1056,8 @@ namespace ts {
     }
 
     /** A path ending with '/' refers to a directory only, never a file. */
-    export function isPathToDirectory(path: string): boolean {
-        return path.charCodeAt(path.length - 1) === CharacterCodes.slash;
+    export function pathEndsWithDirectorySeparator(path: string): boolean {
+        return path.charCodeAt(path.length - 1) === directorySeparatorCharCode;
     }
 
     export function getDirectoryPath(path: Path): Path;
