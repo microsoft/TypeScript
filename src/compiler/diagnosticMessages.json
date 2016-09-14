@@ -1043,7 +1043,7 @@
         "category": "Error",
         "code": 2348
     },
-    "Cannot invoke an expression whose type lacks a call signature.": {
+    "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": {
         "category": "Error",
         "code": 2349
     },
@@ -1951,10 +1951,15 @@
         "category": "Error",
         "code": 2693
     },
-    "Left side of comma operator is unused and has no side effects.": {
+    "Namespace '{0}' has no exported member '{1}'.": {
         "category": "Error",
         "code": 2694
     },
+    "Left side of comma operator is unused and has no side effects.": {
+        "category": "Error",
+        "code": 2695
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
