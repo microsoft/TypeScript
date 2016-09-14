@@ -21,8 +21,5 @@
 ////     constructor(public f: Foo = { [|hello() {/**3*/}|] } ) {}
 //// }
 
-goTo.marker("function_call");
-verify.allRangesAppearInImplementationList();
-
-goTo.marker("declaration");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("function_call");
+verify.allRangesAppearInImplementationList("declaration");

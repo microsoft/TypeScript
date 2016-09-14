@@ -8,5 +8,5 @@
 ////
 //// var [|someVar = new Bar()|];
 //// someVa/*reference*/r.hello();
-goTo.marker("reference");
-verify.allRangesAppearInImplementationList();
+
+verify.allRangesAppearInImplementationList("reference");

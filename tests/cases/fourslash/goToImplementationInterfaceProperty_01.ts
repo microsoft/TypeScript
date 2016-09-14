@@ -12,5 +12,4 @@
 ////     foo.he/*reference*/llo;
 //// }
 
-goTo.marker("reference");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("reference");

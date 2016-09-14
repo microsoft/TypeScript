@@ -6,5 +6,5 @@
 ////
 //// hello();
 ////
-goTo.marker("local_var");
-verify.allRangesAppearInImplementationList();
+
+verify.allRangesAppearInImplementationList("local_var");

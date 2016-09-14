@@ -25,5 +25,4 @@
 ////     return true;
 //// }
 
-goTo.marker("interface_definition");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("interface_definition");

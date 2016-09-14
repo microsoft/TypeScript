@@ -24,5 +24,4 @@
 ////
 //// }
 
-goTo.marker("reference");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("reference");

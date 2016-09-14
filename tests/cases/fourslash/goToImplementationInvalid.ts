@@ -8,5 +8,5 @@
 
 for(var i = 0; i < 3; i++) {
     goTo.marker("" + i);
-    verify.implementationCountIs(0);
+    verify.implementationListIsEmpty();
 }

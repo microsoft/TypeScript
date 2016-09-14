@@ -4,5 +4,5 @@
 
 //// declare var [|someVar: string|];
 //// someVa/*reference*/r
-goTo.marker("reference");
-verify.allRangesAppearInImplementationList();
+
+verify.allRangesAppearInImplementationList("reference");

@@ -21,5 +21,4 @@
 //// new Bar().hel/*function_call*/lo();
 //// new Bar()["hello"]();
 
-goTo.marker("function_call");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("function_call");

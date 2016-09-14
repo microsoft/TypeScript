@@ -8,5 +8,4 @@
 ////     }
 //// }|]
 
-goTo.marker("this_type");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("this_type");

@@ -45,5 +45,4 @@
 ////     x.he/*function_call*/llo()
 //// }
 
-goTo.marker("function_call");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("function_call");

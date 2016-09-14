@@ -17,11 +17,12 @@
 ////     }|];
 //// }
 ////
+//// let createFoo2 = (): Foo => [|({hello() {}})|];
+////
 //// function createFooLike() {
 ////     return {
 ////         hello() {}
 ////     };
 //// }
 
-goTo.marker("interface_definition");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("interface_definition");

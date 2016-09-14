@@ -19,5 +19,4 @@
 ////     constructor(public f: Foo = { [|hello: 7|] } ) {}
 //// }
 
-goTo.marker("reference");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("reference");

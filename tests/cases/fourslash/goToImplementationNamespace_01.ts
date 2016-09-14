@@ -5,8 +5,7 @@
 //// namespace Foo {
 ////     [|export function hello() {}|]
 //// }
-//// 
+////
 //// Foo.hell/*reference*/o();
 
-goTo.marker("reference");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("reference");

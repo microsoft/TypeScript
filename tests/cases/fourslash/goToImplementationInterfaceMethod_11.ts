@@ -8,5 +8,5 @@
 ////
 //// var x = <Foo> { [|hello: () => {}|] };
 //// var y = <Foo> (((({ [|hello: () => {}|] }))));
-goTo.marker("reference");
-verify.allRangesAppearInImplementationList();
+
+verify.allRangesAppearInImplementationList("reference");

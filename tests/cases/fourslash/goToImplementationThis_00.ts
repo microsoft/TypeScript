@@ -10,5 +10,4 @@
 ////     whatever() {}
 //// }|]
 
-goTo.marker("this_call");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("this_call");

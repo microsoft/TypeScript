@@ -11,6 +11,4 @@
 //// let x: Foo = [|class { constructor (a: number) {} }|];
 //// let y = <Foo> [|class { constructor (a: number) {} }|];
 
-
-goTo.marker("interface_definition");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("interface_definition");

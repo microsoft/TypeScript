@@ -179,7 +179,7 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
+         * { fileName: string; textSpan: { start: number; length: number}; }[]
          */
         getImplementationAtPosition(fileName: string, position: number): string;
 

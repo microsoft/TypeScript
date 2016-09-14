@@ -17,6 +17,4 @@
 ////     constructor(public f: Foo = [|function(a) {}|] ) {}
 //// }
 
-
-goTo.marker("interface_definition");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("interface_definition");

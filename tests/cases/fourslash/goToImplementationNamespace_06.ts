@@ -9,5 +9,4 @@
 ////
 //// let x: typeof Foo = [|{ hello() {} }|];
 
-goTo.marker("declaration");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("declaration");

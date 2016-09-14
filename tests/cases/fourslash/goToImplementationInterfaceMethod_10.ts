@@ -44,6 +44,5 @@
 //// }
 
 for (var i = 0; i < 2; i++) {
-    goTo.marker("function_call" + i);
-    verify.allRangesAppearInImplementationList();
+    verify.allRangesAppearInImplementationList("function_call" + i);
 }

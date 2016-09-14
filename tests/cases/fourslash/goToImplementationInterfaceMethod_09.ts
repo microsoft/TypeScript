@@ -27,8 +27,5 @@
 ////     hello() {}
 //// }
 
-goTo.marker("function_call");
-verify.allRangesAppearInImplementationList();
-
-goTo.marker("element_access");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("function_call");
+verify.allRangesAppearInImplementationList("element_access");

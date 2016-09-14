@@ -12,5 +12,4 @@
 ////     }
 //// }
 
-goTo.marker("super_call");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("super_call");

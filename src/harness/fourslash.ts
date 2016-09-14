@@ -1680,13 +1680,13 @@ namespace FourSlash {
             assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Type definitions Count"));
         }
 
-        public verifyImplementationsCount(negative: boolean, expectedCount: number) {
+        public verifyImplementationListIsEmpty(negative: boolean) {
             const assertFn = negative ? assert.notEqual : assert.equal;
 
             const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             const actualCount = implementations && implementations.length || 0;
 
-            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Implementations Count"));
+            assertFn(actualCount, 0, this.messageAtLastKnownMarker("Implementations Count"));
         }
 
         public verifyGoToDefinitionName(expectedName: string, expectedContainerName: string) {
@@ -1697,26 +1697,22 @@ namespace FourSlash {
             assert.equal(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
         }
 
-        public goToImplementation(implIndex?: number) {
+        public goToImplementation() {
             const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!implementations || !implementations.length) {
                 this.raiseError("goToImplementation failed - expected to find at least one implementation location but got 0");
             }
-
-            if (implIndex === undefined && implementations.length > 1) {
-                this.raiseError(`goToImplementation failed - no index given but more than 1 implementation returned (${implementations.length})`);
+            if (implementations.length > 1) {
+                this.raiseError(`goToImplementation failed - more than 1 implementation returned (${implementations.length})`);
             }
 
-            if (implIndex >= implementations.length) {
-                this.raiseError(`goToImplementation failed - implIndex value (${implIndex}) exceeds implementation list size (${implementations.length})`);
-            }
-
-            const implementation = implementations[implIndex || 0];
+            const implementation = implementations[0];
             this.openFile(implementation.fileName);
             this.currentCaretPosition = implementation.textSpan.start;
         }
 
-        public verifyRangesInImplementationList() {
+        public verifyRangesInImplementationList(markerName: string) {
+            this.goToMarker(markerName);
             const implementations: ImplementationLocationInformation[] = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!implementations || !implementations.length) {
                 this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
@@ -2954,8 +2950,8 @@ namespace FourSlashInterface {
             this.state.goToTypeDefinition(definitionIndex);
         }
 
-        public implementation(implementationIndex?: number) {
-            this.state.goToImplementation(implementationIndex);
+        public implementation() {
+            this.state.goToImplementation();
         }
 
         public position(position: number, fileIndex?: number): void;
@@ -3062,8 +3058,8 @@ namespace FourSlashInterface {
             this.state.verifyTypeDefinitionsCount(this.negative, expectedCount);
         }
 
-        public implementationCountIs(expectedCount: number) {
-            this.state.verifyImplementationsCount(this.negative, expectedCount);
+        public implementationListIsEmpty() {
+            this.state.verifyImplementationListIsEmpty(this.negative);
         }
 
         public isValidBraceCompletionAtPosition(openingBrace: string) {
@@ -3319,8 +3315,8 @@ namespace FourSlashInterface {
             this.state.verifyProjectInfo(expected);
         }
 
-        public allRangesAppearInImplementationList() {
-            this.state.verifyRangesInImplementationList();
+        public allRangesAppearInImplementationList(markerName: string) {
+            this.state.verifyRangesInImplementationList(markerName);
         }
     }
 

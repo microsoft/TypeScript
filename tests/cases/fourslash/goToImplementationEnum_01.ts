@@ -9,5 +9,4 @@
 ////
 //// Fo/*reference*/o;
 
-goTo.marker("reference");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("reference");

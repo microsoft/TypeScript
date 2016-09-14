@@ -22,6 +22,4 @@
 ////     constructor(public f: Foo = [|{ hello() {/**3*/} }|] ) {}
 //// }
 
-
-goTo.marker("interface_definition");
-verify.allRangesAppearInImplementationList();
+verify.allRangesAppearInImplementationList("interface_definition");
