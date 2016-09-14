@@ -6,7 +6,6 @@
 ////}
 
 verify.quickInfos({
-    ref2: "(local var) y1: string",
     ref1: "(local var) y1: string",
     ref2: "(local var) y1: string"
 });
