@@ -217,7 +217,7 @@ namespace ts {
         /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
 
-        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
 
         getOutliningSpans(fileName: string): OutliningSpan[];

@@ -2038,11 +2038,12 @@ namespace FourSlash {
         }
 
         /*
-            Check number of navigationItems which match both searchValue and matchKind.
+            Check number of navigationItems which match both searchValue and matchKind,
+            if a filename is passed in, limit the results to that file.
             Report an error if expected value and actual value do not match.
         */
-        public verifyNavigationItemsCount(expected: number, searchValue: string, matchKind?: string) {
-            const items = this.languageService.getNavigateToItems(searchValue);
+        public verifyNavigationItemsCount(expected: number, searchValue: string, matchKind?: string, fileName?: string) {
+            const items = this.languageService.getNavigateToItems(searchValue, /*maxResultCount*/ undefined, fileName);
             let actual = 0;
             let item: ts.NavigateToItem;
 
@@ -3170,8 +3171,8 @@ namespace FourSlashInterface {
             this.state.verifyNavigationBar(json);
         }
 
-        public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
-            this.state.verifyNavigationItemsCount(count, searchValue, matchKind);
+        public navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string) {
+            this.state.verifyNavigationItemsCount(count, searchValue, matchKind, fileName);
         }
 
         public navigationItemsListContains(
