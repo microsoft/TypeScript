@@ -1319,6 +1319,7 @@ declare namespace ts {
         UseFullyQualifiedType = 128,
         InFirstTypeArgument = 256,
         InTypeAlias = 512,
+        UseTypeAliasValue = 1024,
     }
     const enum SymbolFormatFlags {
         None = 0,
