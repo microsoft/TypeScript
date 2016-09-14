@@ -2,45 +2,45 @@
 
 1 ** -2;
 >1 ** -2 : number
->1 : number
->-2 : number
->2 : number
+>1 : 1
+>-2 : -2
+>2 : 2
 
 1 ** 2;
 >1 ** 2 : number
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 (-1) ** 2
 >(-1) ** 2 : number
->(-1) : number
->-1 : number
->1 : number
->2 : number
+>(-1) : -1
+>-1 : -1
+>1 : 1
+>2 : 2
 
 1 ** 2 ** 3;
 >1 ** 2 ** 3 : number
->1 : number
+>1 : 1
 >2 ** 3 : number
->2 : number
->3 : number
+>2 : 2
+>3 : 3
 
 1 ** 2 ** -3;
 >1 ** 2 ** -3 : number
->1 : number
+>1 : 1
 >2 ** -3 : number
->2 : number
->-3 : number
->3 : number
+>2 : 2
+>-3 : -3
+>3 : 3
 
 1 ** -(2 ** 3);
 >1 ** -(2 ** 3) : number
->1 : number
+>1 : 1
 >-(2 ** 3) : number
 >(2 ** 3) : number
 >2 ** 3 : number
->2 : number
->3 : number
+>2 : 2
+>3 : 3
 
 (-(1 ** 2)) ** 3;
 >(-(1 ** 2)) ** 3 : number
@@ -48,9 +48,9 @@
 >-(1 ** 2) : number
 >(1 ** 2) : number
 >1 ** 2 : number
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 (-(1 ** 2)) ** -3;
 >(-(1 ** 2)) ** -3 : number
@@ -58,150 +58,150 @@
 >-(1 ** 2) : number
 >(1 ** 2) : number
 >1 ** 2 : number
->1 : number
->2 : number
->-3 : number
->3 : number
+>1 : 1
+>2 : 2
+>-3 : -3
+>3 : 3
 
 1 ** 2 + 3;
 >1 ** 2 + 3 : number
 >1 ** 2 : number
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 1 ** 2 - 3;
 >1 ** 2 - 3 : number
 >1 ** 2 : number
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 1 ** 2 * 3;
 >1 ** 2 * 3 : number
 >1 ** 2 : number
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 1 ** 2 / 3;
 >1 ** 2 / 3 : number
 >1 ** 2 : number
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 1 ** 2 % 3;
 >1 ** 2 % 3 : number
 >1 ** 2 : number
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 1 ** -2 + 3;
 >1 ** -2 + 3 : number
 >1 ** -2 : number
->1 : number
->-2 : number
->2 : number
->3 : number
+>1 : 1
+>-2 : -2
+>2 : 2
+>3 : 3
 
 1 ** -2 - 3;
 >1 ** -2 - 3 : number
 >1 ** -2 : number
->1 : number
->-2 : number
->2 : number
->3 : number
+>1 : 1
+>-2 : -2
+>2 : 2
+>3 : 3
 
 1 ** -2 * 3;
 >1 ** -2 * 3 : number
 >1 ** -2 : number
->1 : number
->-2 : number
->2 : number
->3 : number
+>1 : 1
+>-2 : -2
+>2 : 2
+>3 : 3
 
 1 ** -2 / 3;
 >1 ** -2 / 3 : number
 >1 ** -2 : number
->1 : number
->-2 : number
->2 : number
->3 : number
+>1 : 1
+>-2 : -2
+>2 : 2
+>3 : 3
 
 1 ** -2 % 3;
 >1 ** -2 % 3 : number
 >1 ** -2 : number
->1 : number
->-2 : number
->2 : number
->3 : number
+>1 : 1
+>-2 : -2
+>2 : 2
+>3 : 3
 
 2 + 3 ** 3;
 >2 + 3 ** 3 : number
->2 : number
+>2 : 2
 >3 ** 3 : number
->3 : number
->3 : number
+>3 : 3
+>3 : 3
 
 2 - 3 ** 3;
 >2 - 3 ** 3 : number
->2 : number
+>2 : 2
 >3 ** 3 : number
->3 : number
->3 : number
+>3 : 3
+>3 : 3
 
 2 * 3 ** 3;
 >2 * 3 ** 3 : number
->2 : number
+>2 : 2
 >3 ** 3 : number
->3 : number
->3 : number
+>3 : 3
+>3 : 3
 
 2 / 3 ** 3;
 >2 / 3 ** 3 : number
->2 : number
+>2 : 2
 >3 ** 3 : number
->3 : number
->3 : number
+>3 : 3
+>3 : 3
 
 2 % 3 ** 3;
 >2 % 3 ** 3 : number
->2 : number
+>2 : 2
 >3 ** 3 : number
->3 : number
->3 : number
+>3 : 3
+>3 : 3
 
 (2 + 3) ** 4;
 >(2 + 3) ** 4 : number
 >(2 + 3) : number
 >2 + 3 : number
->2 : number
->3 : number
->4 : number
+>2 : 2
+>3 : 3
+>4 : 4
 
 (2 - 3) ** 4;
 >(2 - 3) ** 4 : number
 >(2 - 3) : number
 >2 - 3 : number
->2 : number
->3 : number
->4 : number
+>2 : 2
+>3 : 3
+>4 : 4
 
 (2 * 3) ** 4;
 >(2 * 3) ** 4 : number
 >(2 * 3) : number
 >2 * 3 : number
->2 : number
->3 : number
->4 : number
+>2 : 2
+>3 : 3
+>4 : 4
 
 (2 / 3) ** 4;
 >(2 / 3) ** 4 : number
 >(2 / 3) : number
 >2 / 3 : number
->2 : number
->3 : number
->4 : number
+>2 : 2
+>3 : 3
+>4 : 4
 

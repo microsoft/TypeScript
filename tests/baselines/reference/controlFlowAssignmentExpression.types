@@ -1,18 +1,18 @@
 === tests/cases/conformance/controlFlow/controlFlowAssignmentExpression.ts ===
 let x: string | boolean | number;
->x : string | boolean | number
+>x : string | number | boolean
 
 let obj: any;
 >obj : any
 
 x = "";
->x = "" : string
->x : string | boolean | number
->"" : string
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
 
 x = x.length;
 >x = x.length : number
->x : string | boolean | number
+>x : string | number | boolean
 >x.length : number
 >x : string
 >length : number
@@ -21,23 +21,23 @@ x; // number
 >x : number
 
 x = true;
->x = true : boolean
->x : string | boolean | number
->true : boolean
+>x = true : true
+>x : string | number | boolean
+>true : true
 
 (x = "", obj).foo = (x = x.length);
 >(x = "", obj).foo = (x = x.length) : number
 >(x = "", obj).foo : any
 >(x = "", obj) : any
 >x = "", obj : any
->x = "" : string
->x : string | boolean | number
->"" : string
+>x = "" : ""
+>x : string | number | boolean
+>"" : ""
 >obj : any
 >foo : any
 >(x = x.length) : number
 >x = x.length : number
->x : string | boolean | number
+>x : string | number | boolean
 >x.length : number
 >x : string
 >length : number

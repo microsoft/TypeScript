@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 let x: string | number | boolean | RegExp;
 let cond: boolean;
 
@@ -33,4 +35,20 @@ function b() {
         x = "";
     }
     x; // string
+}
+function c<T>(data: string | T): T {
+    if (typeof data === 'string') {
+        return JSON.parse(data);
+    }
+    else {
+        return data;
+    }
+}
+function d<T extends string>(data: string | T): never {
+    if (typeof data === 'string') {
+        throw new Error('will always happen');
+    }
+    else {
+        return data;
+    }
 }

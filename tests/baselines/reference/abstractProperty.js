@@ -30,12 +30,6 @@ var __extends = (this && this.__extends) || function (d, b) {
 var B = (function () {
     function B() {
     }
-    Object.defineProperty(B.prototype, "readonlyProp", {
-        get: function () { },
-        set: function (val) { },
-        enumerable: true,
-        configurable: true
-    });
     return B;
 }());
 var C = (function (_super) {

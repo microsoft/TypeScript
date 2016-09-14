@@ -16,31 +16,31 @@ var varWithArrayType: number[];
 
 var varWithInitialValue = 30;
 >varWithInitialValue : number
->30 : number
+>30 : 30
 
 export var exportedVarWithInitialValue = 70;
 >exportedVarWithInitialValue : number
->70 : number
+>70 : 70
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 >withComplicatedValue : { x: number; y: number; desc: string; }
 >{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
 >x : number
->30 : number
+>30 : 30
 >y : number
->70 : number
+>70 : 70
 >desc : string
->"position" : string
+>"position" : "position"
 
 export var exportedWithComplicatedValue = { x: 30, y: 70, desc: "position" };
 >exportedWithComplicatedValue : { x: number; y: number; desc: string; }
 >{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
 >x : number
->30 : number
+>30 : 30
 >y : number
->70 : number
+>70 : 70
 >desc : string
->"position" : string
+>"position" : "position"
 
 declare var declaredVar;
 >declaredVar : any
@@ -60,8 +60,8 @@ export declare var exportedDeclaredVar: number;
 var arrayVar: string[] = ['a', 'b'];
 >arrayVar : string[]
 >['a', 'b'] : string[]
->'a' : string
->'b' : string
+>'a' : "a"
+>'b' : "b"
 
 export var exportedArrayVar: { x: number; y: string; }[] ;
 >exportedArrayVar : { x: number; y: string; }[]
@@ -75,9 +75,9 @@ exportedArrayVar.push({ x: 30, y : 'hello world' });
 >push : (...items: { x: number; y: string; }[]) => number
 >{ x: 30, y : 'hello world' } : { x: number; y: string; }
 >x : number
->30 : number
+>30 : 30
 >y : string
->'hello world' : string
+>'hello world' : "hello world"
 
 function simpleFunction() {
 >simpleFunction : () => { x: string; y: string; n: number; }
@@ -87,15 +87,15 @@ function simpleFunction() {
 
         x: "Hello",
 >x : string
->"Hello" : string
+>"Hello" : "Hello"
 
         y: "word",
 >y : string
->"word" : string
+>"word" : "word"
 
         n: 2
 >n : number
->2 : number
+>2 : 2
 
     };
 }
@@ -115,7 +115,7 @@ module m1 {
 >foo : () => string
 
         return "Hello";
->"Hello" : string
+>"Hello" : "Hello"
     }
 }
 export declare module m2 {
@@ -143,14 +143,14 @@ export module m3 {
 export var eVar1, eVar2 = 10;
 >eVar1 : any
 >eVar2 : number
->10 : number
+>10 : 10
 
 var eVar22;
 >eVar22 : any
 
 export var eVar3 = 10, eVar4, eVar5;
 >eVar3 : number
->10 : number
+>10 : 10
 >eVar4 : any
 >eVar5 : any
 

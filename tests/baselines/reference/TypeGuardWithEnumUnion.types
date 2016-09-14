@@ -1,20 +1,20 @@
 === tests/cases/conformance/expressions/typeGuards/TypeGuardWithEnumUnion.ts ===
 enum Color { R, G, B }
 >Color : Color
->R : Color
->G : Color
->B : Color
+>R : Color.R
+>G : Color.G
+>B : Color.B
 
 function f1(x: Color | string) {
->f1 : (x: Color | string) => void
->x : Color | string
+>f1 : (x: string | Color) => void
+>x : string | Color
 >Color : Color
 
     if (typeof x === "number") {
 >typeof x === "number" : boolean
 >typeof x : string
->x : Color | string
->"number" : string
+>x : string | Color
+>"number" : "number"
 
         var y = x;
 >y : Color
@@ -35,15 +35,15 @@ function f1(x: Color | string) {
 }
 
 function f2(x: Color | string | string[]) {
->f2 : (x: Color | string | string[]) => void
->x : Color | string | string[]
+>f2 : (x: string | Color | string[]) => void
+>x : string | Color | string[]
 >Color : Color
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
 >typeof x : string
->x : Color | string | string[]
->"object" : string
+>x : string | Color | string[]
+>"object" : "object"
 
         var y = x;
 >y : string[]
@@ -55,8 +55,8 @@ function f2(x: Color | string | string[]) {
     if (typeof x === "number") {
 >typeof x === "number" : boolean
 >typeof x : string
->x : string[] | Color | string
->"number" : string
+>x : string | Color | string[]
+>"number" : "number"
 
         var z = x;
 >z : Color
@@ -68,17 +68,17 @@ function f2(x: Color | string | string[]) {
     }
     else {
         var w = x;
->w : string[] | string
->x : string[] | string
+>w : string | string[]
+>x : string | string[]
 
         var w: string | string[];
->w : string[] | string
+>w : string | string[]
     }
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : Color | string[] | string
->"string" : string
+>x : string | Color | string[]
+>"string" : "string"
 
         var a = x;
 >a : string

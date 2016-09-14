@@ -44,7 +44,7 @@ module m2 {
     }
     export var b10 = 10;
 >b10 : number
->10 : number
+>10 : 10
 
     var x = new c1();
 >x : c1

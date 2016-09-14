@@ -5,7 +5,7 @@ export namespace N {
 
     var x = 0;
 >x : number
->0 : number
+>0 : 0
 }
 
 export namespace N2 {

@@ -121,7 +121,7 @@ if (isC_multipleParams(a, 0)) {
 >isC_multipleParams(a, 0) : boolean
 >isC_multipleParams : (p1: any, p2: any) => p1 is C
 >a : A
->0 : number
+>0 : 0
 
     a.propC;
 >a.propC : number
@@ -151,7 +151,7 @@ class D {
 >C : C
 
         return true;
->true : boolean
+>true : true
     }
 }
 
@@ -163,7 +163,7 @@ let f1 = (p1: A): p1 is C => false;
 >A : A
 >p1 : any
 >C : C
->false : boolean
+>false : false
 
 // Function type
 declare function f2(p1: (p1: A) => p1 is C);
@@ -185,7 +185,7 @@ f2(function(p1: A): p1 is C {
 >C : C
 
     return true;
->true : boolean
+>true : true
 
 });
 
@@ -216,16 +216,16 @@ acceptingTypeGuardFunction(isA);
 
 // Binary expressions
 let union2: C | B;
->union2 : C | B
+>union2 : B | C
 >C : C
 >B : B
 
 let union3: boolean | B = isA(union2) || union2;
 >union3 : boolean | B
 >B : B
->isA(union2) || union2 : boolean | B
+>isA(union2) || union2 : true | B
 >isA(union2) : boolean
 >isA : (p1: any) => p1 is A
->union2 : C | B
+>union2 : B | C
 >union2 : B
 

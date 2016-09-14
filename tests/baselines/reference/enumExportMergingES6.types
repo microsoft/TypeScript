@@ -4,14 +4,14 @@ export enum Animals {
 
 	Cat = 1
 >Cat : Animals
->1 : number
+>1 : 1
 }
 export enum Animals {
 >Animals : Animals
 
 	Dog = 2
 >Dog : Animals
->2 : number
+>2 : 2
 }
 export enum Animals {
 >Animals : Animals

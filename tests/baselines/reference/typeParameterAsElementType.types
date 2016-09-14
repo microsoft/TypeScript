@@ -8,8 +8,8 @@ function fee<T>() {
 >T : T
 
     var arr = [t, ""];
->arr : (T | string)[]
->[t, ""] : (T | string)[]
+>arr : (string | T)[]
+>[t, ""] : (string | T)[]
 >t : T
->"" : string
+>"" : ""
 }

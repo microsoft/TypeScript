@@ -1,6 +1,6 @@
 === tests/cases/conformance/controlFlow/controlFlowForInStatement.ts ===
 let x: string | number | boolean | RegExp | Function;
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >RegExp : RegExp
 >Function : Function
 
@@ -12,7 +12,7 @@ let cond: boolean;
 
 x = /a/;
 >x = /a/ : RegExp
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >/a/ : RegExp
 
 for (let y in obj) {
@@ -21,16 +21,16 @@ for (let y in obj) {
 
     x = y;
 >x = y : string
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >y : string
 
     if (cond) {
 >cond : boolean
 
         x = 42;
->x = 42 : number
->x : string | number | boolean | RegExp | Function
->42 : number
+>x = 42 : 42
+>x : string | number | boolean | Function | RegExp
+>42 : 42
 
         continue;
     }
@@ -38,13 +38,13 @@ for (let y in obj) {
 >cond : boolean
 
         x = true;
->x = true : boolean
->x : string | number | boolean | RegExp | Function
->true : boolean
+>x = true : true
+>x : string | number | boolean | Function | RegExp
+>true : true
 
         break;
     }
 }
 x; // RegExp | string | number | boolean
->x : RegExp | number | string | boolean
+>x : string | number | true | RegExp
 

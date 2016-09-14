@@ -1,8 +1,8 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(7,9): error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and 'number'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(8,9): error TS2365: Operator '+' cannot be applied to types 'number' and '"ABC" | "XYZ" | number'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(9,9): error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and '"ABC" | "XYZ" | number'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(10,9): error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and 'boolean'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(11,9): error TS2365: Operator '+' cannot be applied to types 'boolean' and '"ABC" | "XYZ" | number'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(7,9): error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and '100'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(8,9): error TS2365: Operator '+' cannot be applied to types '100' and 'number | "ABC" | "XYZ"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(9,9): error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'number | "ABC" | "XYZ"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(10,9): error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'true'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(11,9): error TS2365: Operator '+' cannot be applied to types 'false' and 'number | "ABC" | "XYZ"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(12,9): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(13,11): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(14,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -21,19 +21,19 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperato
     
     let a = abcOrXyzOrNumber + 100;
             ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and 'number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and '100'.
     let b = 100 + abcOrXyzOrNumber;
             ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'number' and '"ABC" | "XYZ" | number'.
+!!! error TS2365: Operator '+' cannot be applied to types '100' and 'number | "ABC" | "XYZ"'.
     let c = abcOrXyzOrNumber + abcOrXyzOrNumber;
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and '"ABC" | "XYZ" | number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'number | "ABC" | "XYZ"'.
     let d = abcOrXyzOrNumber + true;
             ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'true'.
     let e = false + abcOrXyzOrNumber;
             ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and '"ABC" | "XYZ" | number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'false' and 'number | "ABC" | "XYZ"'.
     let f = abcOrXyzOrNumber++;
             ~~~~~~~~~~~~~~~~
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.

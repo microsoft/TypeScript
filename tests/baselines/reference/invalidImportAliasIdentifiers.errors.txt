@@ -1,10 +1,9 @@
 tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(5,12): error TS2503: Cannot find namespace 'V'.
 tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(11,12): error TS2503: Cannot find namespace 'C'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(17,12): error TS2503: Cannot find namespace 'E'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,12): error TS2503: Cannot find namespace 'I'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,12): error TS2693: 'I' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts (4 errors) ====
+==== tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts (3 errors) ====
     // none of these should work, since non are actually modules
     
     var V = 12;
@@ -26,8 +25,6 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     }
     
     import e = E;
-               ~
-!!! error TS2503: Cannot find namespace 'E'.
     
     interface I {
         id: number;
@@ -35,5 +32,5 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     
     import i = I;
                ~
-!!! error TS2503: Cannot find namespace 'I'.
+!!! error TS2693: 'I' only refers to a type, but is being used as a value here.
     

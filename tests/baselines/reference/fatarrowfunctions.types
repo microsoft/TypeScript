@@ -79,7 +79,7 @@ foo(()=>{return 0;});
 >foo(()=>{return 0;}) : any
 >foo : (x: any) => any
 >()=>{return 0;} : () => number
->0 : number
+>0 : 0
 
 foo((x:number,y,z)=>x+y+z);
 >foo((x:number,y,z)=>x+y+z) : any
@@ -150,7 +150,7 @@ foo(()=>{return 0;});
 >foo(()=>{return 0;}) : any
 >foo : (x: any) => any
 >()=>{return 0;} : () => number
->0 : number
+>0 : 0
 
 
 foo(((x) => x));
@@ -189,7 +189,7 @@ var z = (x:number) => x*x;
 var w = () => 3;
 >w : () => number
 >() => 3 : () => number
->3 : number
+>3 : 3
 
 function ternaryTest(isWhile:boolean) {
 >ternaryTest : (isWhile: boolean) => void
@@ -203,12 +203,12 @@ function ternaryTest(isWhile:boolean) {
 >n : any
 >n > 0 : boolean
 >n : any
->0 : number
+>0 : 0
 >function (n) { return n === 0; } : (n: any) => boolean
 >n : any
 >n === 0 : boolean
 >n : any
->0 : number
+>0 : 0
 
 }
 
@@ -224,7 +224,7 @@ var messenger = {
 
     message: "Hello World",
 >message : string
->"Hello World" : string
+>"Hello World" : "Hello World"
 
     start: function() {
 >start : () => void
@@ -240,7 +240,7 @@ var messenger = {
 >this : any
 >message : any
 >toString : any
->3000 : number
+>3000 : 3000
     }
 };
 

@@ -7,16 +7,16 @@ module M {
 
    public n = 42;
 >n : number
->42 : number
+>42 : 42
 
    public foo() { [1,2,3].map((x) => { return this.n * x; })}
 >foo : () => void
 >[1,2,3].map((x) => { return this.n * x; }) : number[]
 >[1,2,3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >[1,2,3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >(x) => { return this.n * x; } : (x: number) => number
 >x : number

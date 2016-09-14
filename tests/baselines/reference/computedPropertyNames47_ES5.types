@@ -19,6 +19,6 @@ var o = {
 >E2.x : E2
 >E2 : typeof E2
 >x : E2
->0 : number
+>0 : 0
 
 };

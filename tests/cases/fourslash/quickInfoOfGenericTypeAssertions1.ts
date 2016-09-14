@@ -7,11 +7,8 @@
 ////var a;
 ////var /*3*/r3 = < <T>(x: <A>(y: A) => A) => T>a;
 
-goTo.marker('1');
-verify.quickInfoIs('var r: <T>(x: T) => T');
-
-goTo.marker('2');
-verify.quickInfoIs('var r2: <T>(x: T) => T');
-
-goTo.marker('3');
-verify.quickInfoIs('var r3: <T>(x: <A>(y: A) => A) => T');
+verify.quickInfos({
+    1: "var r: <T>(x: T) => T",
+    2: "var r2: <T>(x: T) => T",
+    3: "var r3: <T>(x: <A>(y: A) => A) => T"
+});

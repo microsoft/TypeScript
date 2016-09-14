@@ -12,5 +12,4 @@
 //// let x = new Person(100);
 //// x.canVote/**/;
 
-goTo.marker();
-verify.quickInfoIs('(property) Person.canVote: boolean | number');
+verify.quickInfoAt("", "(property) Person.canVote: true | 23");

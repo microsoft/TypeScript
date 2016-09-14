@@ -18,9 +18,9 @@ function f(x: number, y: number, z: number) {
 f(1, 2, 3);  // no error
 >f(1, 2, 3) : any[]
 >f : (x: number, y: number, z: number) => any[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 // Using ES6 collection
 var m = new Map<string, number>();
@@ -56,7 +56,7 @@ Math.sign(1);
 >Math.sign : (x: number) => number
 >Math : Math
 >sign : (x: number) => number
->1 : number
+>1 : 1
 
 // Using ES6 object
 var o = {
@@ -65,7 +65,7 @@ var o = {
 
     a: 2,
 >a : number
->2 : number
+>2 : 2
 
     [Symbol.hasInstance](value: any) {
 >Symbol.hasInstance : symbol
@@ -74,14 +74,14 @@ var o = {
 >value : any
 
         return false;
->false : boolean
+>false : false
     }
 };
 o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
->o.hasOwnProperty : { (v: string): boolean; (v: string | number | symbol): boolean; }
+>o.hasOwnProperty : { (v: string): boolean; (v: PropertyKey): boolean; }
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->hasOwnProperty : { (v: string): boolean; (v: string | number | symbol): boolean; }
+>hasOwnProperty : { (v: string): boolean; (v: PropertyKey): boolean; }
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
@@ -111,7 +111,7 @@ var reg = new RegExp("/s");
 >reg : RegExp
 >new RegExp("/s") : RegExp
 >RegExp : RegExpConstructor
->"/s" : string
+>"/s" : "/s"
 
 reg.flags;
 >reg.flags : string
@@ -121,15 +121,15 @@ reg.flags;
 // Using ES6 string
 var str = "Hello world";
 >str : string
->"Hello world" : string
+>"Hello world" : "Hello world"
 
 str.includes("hello", 0);
 >str.includes("hello", 0) : boolean
 >str.includes : (searchString: string, position?: number) => boolean
 >str : string
 >includes : (searchString: string, position?: number) => boolean
->"hello" : string
->0 : number
+>"hello" : "hello"
+>0 : 0
 
 // Using ES6 symbol
 var s = Symbol();
@@ -149,6 +149,6 @@ const o1 = {
 >value : any
 
         return false;
->false : boolean
+>false : false
     }
 }

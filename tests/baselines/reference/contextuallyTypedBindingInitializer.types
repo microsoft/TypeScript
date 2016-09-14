@@ -30,7 +30,7 @@ function f2({ "show": showRename = v => v.toString() }: Show) {}
 
 function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >f3 : ({["show"]: showRename}: Show) => void
->"show" : string
+>"show" : "show"
 >showRename : (x: number) => string
 >v => v.toString() : (v: number) => string
 >v : number
@@ -70,8 +70,8 @@ function g({ prop = ["hello", 1234] }: Tuples) {}
 >g : ({prop}: Tuples) => void
 >prop : [string, number]
 >["hello", 1234] : [string, number]
->"hello" : string
->1234 : number
+>"hello" : "hello"
+>1234 : 1234
 >Tuples : Tuples
 
 interface StringUnion {

@@ -109,7 +109,7 @@ function f4() {
 >x : string | number | null
 >getStringOrNumberOrNull() : string | number | null
 >getStringOrNumberOrNull : () => string | number | null
->"number" : string
+>"number" : "number"
 
         x;
 >x : number
@@ -136,7 +136,7 @@ while ((match = re.exec("xxx")) != null) {
 >re.exec : (string: string) => RegExpExecArray | null
 >re : RegExp
 >exec : (string: string) => RegExpExecArray | null
->"xxx" : string
+>"xxx" : "xxx"
 >null : null
 
     const length = match[1].length + match[2].length
@@ -145,11 +145,11 @@ while ((match = re.exec("xxx")) != null) {
 >match[1].length : number
 >match[1] : string
 >match : RegExpExecArray
->1 : number
+>1 : 1
 >length : number
 >match[2].length : number
 >match[2] : string
 >match : RegExpExecArray
->2 : number
+>2 : 2
 >length : number
 }

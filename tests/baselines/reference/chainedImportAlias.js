@@ -20,6 +20,6 @@ var m;
 })(m = exports.m || (exports.m = {}));
 //// [chainedImportAlias_file1.js]
 "use strict";
-var x = require('./chainedImportAlias_file0');
+var x = require("./chainedImportAlias_file0");
 var y = x;
 y.m.foo();

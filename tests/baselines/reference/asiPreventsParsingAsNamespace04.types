@@ -2,7 +2,7 @@
 
 let module = 10;
 >module : number
->10 : number
+>10 : 10
 
 module in {}
 >module in {} : boolean

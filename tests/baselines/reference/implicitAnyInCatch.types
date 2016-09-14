@@ -8,8 +8,8 @@ try { } catch (error) {
 >error.number : any
 >error : any
 >number : any
->-2147024809 : number
->2147024809 : number
+>-2147024809 : -2147024809
+>2147024809 : 2147024809
 }
 for (var key in this) { }
 >key : string

@@ -26,28 +26,14 @@
 ////}
 ////new /*7*/mu/*8*/ltiM.d();
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
+const comment = "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment";
+
 goTo.marker('1');
-verify.completionListContains("multiM", "namespace multiM", "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment");
+verify.completionListContains("multiM", "namespace multiM", comment);
 
-goTo.marker('2');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment");
-
-goTo.marker('3');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment");
-
-goTo.marker('4');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment");
-
-goTo.marker('5');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment");
-
-goTo.marker('6');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment");
+for (const marker of ["2", "3", "4", "5", "6", "8"]) {
+    verify.quickInfoAt(marker, "namespace multiM", comment);
+}
 
 goTo.marker('7');
-verify.completionListContains("multiM", "namespace multiM", "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment");
-
-goTo.marker('8');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment");
+verify.completionListContains("multiM", "namespace multiM", comment);

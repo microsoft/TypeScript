@@ -105,18 +105,18 @@ var Bs = (function (_super) {
         "use strict"; // No error
         _super.call(this);
     }
-    Bs.s = 9;
     return Bs;
 }(A));
+Bs.s = 9;
 var Cs = (function (_super) {
     __extends(Cs, _super);
     function Cs() {
         _super.call(this); // No error
         "use strict";
     }
-    Cs.s = 9;
     return Cs;
 }(A));
+Cs.s = 9;
 var Ds = (function (_super) {
     __extends(Ds, _super);
     function Ds() {
@@ -124,6 +124,6 @@ var Ds = (function (_super) {
         _super.call(this);
         "use strict";
     }
-    Ds.s = 9;
     return Ds;
 }(A));
+Ds.s = 9;

@@ -22,7 +22,7 @@ switch (y) {
 >y : string
 
     case 'a':
->'a' : string
+>'a' : "a"
 
         throw y;
 >y : string
@@ -34,12 +34,12 @@ switch (y) {
 
 var z = 0;
 >z : number
->0 : number
+>0 : 0
 
 while (z < 10) {
 >z < 10 : boolean
 >z : number
->10 : number
+>10 : 10
 
     throw z;
 >z : number
@@ -47,7 +47,7 @@ while (z < 10) {
 
 for (var i = 0; ;) { throw i; }
 >i : number
->0 : number
+>0 : 0
 >i : number
 
 for (var idx in {}) { throw idx; }
@@ -57,16 +57,16 @@ for (var idx in {}) { throw idx; }
 
 do { throw null; }while(true)
 >null : null
->true : boolean
+>true : true
 
 var j = 0;
 >j : number
->0 : number
+>0 : 0
 
 while (j < 0) { throw j; }
 >j < 0 : boolean
 >j : number
->0 : number
+>0 : 0
 >j : number
 
 class C<T> {
@@ -98,7 +98,7 @@ var aa = {
 
     id:12,
 >id : number
->12 : number
+>12 : 12
 
     biz() {
 >biz : () => void

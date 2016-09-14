@@ -1,0 +1,117 @@
+=== tests/cases/compiler/discriminantsAndPrimitives.ts ===
+
+// Repro from #10257 plus other tests
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+
+    kind: "foo";
+>kind : Symbol(Foo.kind, Decl(discriminantsAndPrimitives.ts, 3, 15))
+
+    name: string;
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 4, 16))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 6, 1))
+
+    kind: "bar";
+>kind : Symbol(Bar.kind, Decl(discriminantsAndPrimitives.ts, 8, 15))
+
+    length: string;
+>length : Symbol(Bar.length, Decl(discriminantsAndPrimitives.ts, 9, 16))
+}
+
+function f1(x: Foo | Bar | string) {
+>f1 : Symbol(f1, Decl(discriminantsAndPrimitives.ts, 11, 1))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 13, 12))
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 6, 1))
+
+    if (typeof x !== 'string') {
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 13, 12))
+
+        switch(x.kind) {
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 3, 15), Decl(discriminantsAndPrimitives.ts, 8, 15))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 13, 12))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 3, 15), Decl(discriminantsAndPrimitives.ts, 8, 15))
+
+            case 'foo':
+                x.name;
+>x.name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 4, 16))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 13, 12))
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 4, 16))
+        }
+    }
+}
+
+function f2(x: Foo | Bar | string | undefined) {
+>f2 : Symbol(f2, Decl(discriminantsAndPrimitives.ts, 20, 1))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 22, 12))
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 6, 1))
+
+    if (typeof x === "object") {
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 22, 12))
+
+        switch(x.kind) {
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 3, 15), Decl(discriminantsAndPrimitives.ts, 8, 15))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 22, 12))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 3, 15), Decl(discriminantsAndPrimitives.ts, 8, 15))
+
+            case 'foo':
+                x.name;
+>x.name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 4, 16))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 22, 12))
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 4, 16))
+        }
+    }
+}
+
+function f3(x: Foo | Bar | string | null) {
+>f3 : Symbol(f3, Decl(discriminantsAndPrimitives.ts, 29, 1))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 31, 12))
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 6, 1))
+
+    if (x && typeof x !== "string") {
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 31, 12))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 31, 12))
+
+        switch(x.kind) {
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 3, 15), Decl(discriminantsAndPrimitives.ts, 8, 15))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 31, 12))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 3, 15), Decl(discriminantsAndPrimitives.ts, 8, 15))
+
+            case 'foo':
+                x.name;
+>x.name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 4, 16))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 31, 12))
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 4, 16))
+        }
+    }
+}
+
+function f4(x: Foo | Bar | string | number | null) {
+>f4 : Symbol(f4, Decl(discriminantsAndPrimitives.ts, 38, 1))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 40, 12))
+>Foo : Symbol(Foo, Decl(discriminantsAndPrimitives.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(discriminantsAndPrimitives.ts, 6, 1))
+
+    if (x && typeof x === "object") {
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 40, 12))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 40, 12))
+
+        switch(x.kind) {
+>x.kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 3, 15), Decl(discriminantsAndPrimitives.ts, 8, 15))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 40, 12))
+>kind : Symbol(kind, Decl(discriminantsAndPrimitives.ts, 3, 15), Decl(discriminantsAndPrimitives.ts, 8, 15))
+
+            case 'foo':
+                x.name;
+>x.name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 4, 16))
+>x : Symbol(x, Decl(discriminantsAndPrimitives.ts, 40, 12))
+>name : Symbol(Foo.name, Decl(discriminantsAndPrimitives.ts, 4, 16))
+        }
+    }
+}

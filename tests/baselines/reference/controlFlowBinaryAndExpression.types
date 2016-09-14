@@ -6,31 +6,31 @@ let cond: boolean;
 >cond : boolean
 
 (x = "") && (x = 0);
->(x = "") && (x = 0) : number
->(x = "") : string
->x = "" : string
+>(x = "") && (x = 0) : ""
+>(x = "") : ""
+>x = "" : ""
 >x : string | number | boolean
->"" : string
->(x = 0) : number
->x = 0 : number
+>"" : ""
+>(x = 0) : 0
+>x = 0 : 0
 >x : string | number | boolean
->0 : number
+>0 : 0
 
 x; // string | number
 >x : string | number
 
 x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
+>"" : ""
 
 cond && (x = 0);
->cond && (x = 0) : number
+>cond && (x = 0) : 0
 >cond : boolean
->(x = 0) : number
->x = 0 : number
+>(x = 0) : 0
+>x = 0 : 0
 >x : string | number | boolean
->0 : number
+>0 : 0
 
 x; // string | number
 >x : string | number
