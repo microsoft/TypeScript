@@ -40,7 +40,6 @@
         "../compiler/emitter.ts",
         "../compiler/program.ts",
         "../compiler/commandLineParser.ts",
-        "../compiler/tsc.ts",
         "../compiler/diagnosticInformationMap.generated.ts",
         "../services/breakpoints.ts",
         "../services/navigateTo.ts",
