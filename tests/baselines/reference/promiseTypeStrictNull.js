@@ -1,4 +1,4 @@
-//// [promiseType.ts]
+//// [promiseTypeStrictNull.ts]
 declare var p: Promise<boolean>;
 
 const a = p.then();
@@ -155,7 +155,7 @@ const p83 = p.then(() => Promise.reject(1), () => {throw 1});
 const p84 = p.then(() => Promise.reject(1), () => Promise.resolve(1));
 const p85 = p.then(() => Promise.reject(1), () => Promise.reject(1));
 
-//// [promiseType.js]
+//// [promiseTypeStrictNull.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }

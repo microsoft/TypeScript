@@ -1,108 +1,108 @@
-=== tests/cases/compiler/promiseType.ts ===
+=== tests/cases/compiler/promiseTypeStrictNull.ts ===
 declare var p: Promise<boolean>;
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 
 const a = p.then();
->a : Symbol(a, Decl(promiseType.ts, 2, 5))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 2, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const b = p.then(b => 1);
->b : Symbol(b, Decl(promiseType.ts, 3, 5))
+>b : Symbol(b, Decl(promiseTypeStrictNull.ts, 3, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->b : Symbol(b, Decl(promiseType.ts, 3, 17))
+>b : Symbol(b, Decl(promiseTypeStrictNull.ts, 3, 17))
 
 const c = p.then(b => 1, e => 'error');
->c : Symbol(c, Decl(promiseType.ts, 4, 5))
+>c : Symbol(c, Decl(promiseTypeStrictNull.ts, 4, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->b : Symbol(b, Decl(promiseType.ts, 4, 17))
->e : Symbol(e, Decl(promiseType.ts, 4, 24))
+>b : Symbol(b, Decl(promiseTypeStrictNull.ts, 4, 17))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 4, 24))
 
 const d = p.then(b => 1, e => { });
->d : Symbol(d, Decl(promiseType.ts, 5, 5))
+>d : Symbol(d, Decl(promiseTypeStrictNull.ts, 5, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->b : Symbol(b, Decl(promiseType.ts, 5, 17))
->e : Symbol(e, Decl(promiseType.ts, 5, 24))
+>b : Symbol(b, Decl(promiseTypeStrictNull.ts, 5, 17))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 5, 24))
 
 const e = p.then(b => 1, e => { throw Error(); });
->e : Symbol(e, Decl(promiseType.ts, 6, 5))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 6, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->b : Symbol(b, Decl(promiseType.ts, 6, 17))
->e : Symbol(e, Decl(promiseType.ts, 6, 24))
+>b : Symbol(b, Decl(promiseTypeStrictNull.ts, 6, 17))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 6, 24))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 const f = p.then(b => 1, e => Promise.reject(Error()));
->f : Symbol(f, Decl(promiseType.ts, 7, 5))
+>f : Symbol(f, Decl(promiseTypeStrictNull.ts, 7, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->b : Symbol(b, Decl(promiseType.ts, 7, 17))
->e : Symbol(e, Decl(promiseType.ts, 7, 24))
+>b : Symbol(b, Decl(promiseTypeStrictNull.ts, 7, 17))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 7, 24))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 const g = p.catch(e => 'error');
->g : Symbol(g, Decl(promiseType.ts, 8, 5))
+>g : Symbol(g, Decl(promiseTypeStrictNull.ts, 8, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->e : Symbol(e, Decl(promiseType.ts, 8, 18))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 8, 18))
 
 const h = p.catch(e => { });
->h : Symbol(h, Decl(promiseType.ts, 9, 5))
+>h : Symbol(h, Decl(promiseTypeStrictNull.ts, 9, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->e : Symbol(e, Decl(promiseType.ts, 9, 18))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 9, 18))
 
 const i = p.catch(e => { throw Error(); });
->i : Symbol(i, Decl(promiseType.ts, 10, 5))
+>i : Symbol(i, Decl(promiseTypeStrictNull.ts, 10, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->e : Symbol(e, Decl(promiseType.ts, 10, 18))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 10, 18))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 const j = p.catch(e => Promise.reject(Error()));
->j : Symbol(j, Decl(promiseType.ts, 11, 5))
+>j : Symbol(j, Decl(promiseTypeStrictNull.ts, 11, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->e : Symbol(e, Decl(promiseType.ts, 11, 18))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 11, 18))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 async function A() {
->A : Symbol(A, Decl(promiseType.ts, 11, 48))
+>A : Symbol(A, Decl(promiseTypeStrictNull.ts, 11, 48))
 
     const a = await p;
->a : Symbol(a, Decl(promiseType.ts, 14, 9))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 14, 9))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 
     return a;
->a : Symbol(a, Decl(promiseType.ts, 14, 9))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 14, 9))
 }
 
 async function B() {
->B : Symbol(B, Decl(promiseType.ts, 16, 1))
+>B : Symbol(B, Decl(promiseTypeStrictNull.ts, 16, 1))
 
     const a = await p;
->a : Symbol(a, Decl(promiseType.ts, 19, 9))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 19, 9))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 
     return 1;
 }
@@ -120,32 +120,32 @@ async function B() {
 // }
 
 async function D() {
->D : Symbol(D, Decl(promiseType.ts, 21, 1))
+>D : Symbol(D, Decl(promiseTypeStrictNull.ts, 21, 1))
 
     try {
         const a = await p;
->a : Symbol(a, Decl(promiseType.ts, 37, 13))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 37, 13))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 
         return 1;
     }
     catch (e) {
->e : Symbol(e, Decl(promiseType.ts, 40, 11))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 40, 11))
     }
 }
 
 async function E() {
->E : Symbol(E, Decl(promiseType.ts, 42, 1))
+>E : Symbol(E, Decl(promiseTypeStrictNull.ts, 42, 1))
 
     try {
         const a = await p;
->a : Symbol(a, Decl(promiseType.ts, 46, 13))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 46, 13))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 
         return 1;
     }
     catch (e) {
->e : Symbol(e, Decl(promiseType.ts, 49, 11))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 49, 11))
 
         throw Error();
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -153,17 +153,17 @@ async function E() {
 }
 
 async function F() {
->F : Symbol(F, Decl(promiseType.ts, 52, 1))
+>F : Symbol(F, Decl(promiseTypeStrictNull.ts, 52, 1))
 
     try {
         const a = await p;
->a : Symbol(a, Decl(promiseType.ts, 56, 13))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 56, 13))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 
         return 1;
     }
     catch (e) {
->e : Symbol(e, Decl(promiseType.ts, 59, 11))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 59, 11))
 
         return Promise.reject(Error());
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -174,36 +174,36 @@ async function F() {
 }
 
 async function G() {
->G : Symbol(G, Decl(promiseType.ts, 62, 1))
+>G : Symbol(G, Decl(promiseTypeStrictNull.ts, 62, 1))
 
     try {
         const a = await p;
->a : Symbol(a, Decl(promiseType.ts, 66, 13))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 66, 13))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 
         return a;
->a : Symbol(a, Decl(promiseType.ts, 66, 13))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 66, 13))
     }
     catch (e) {
->e : Symbol(e, Decl(promiseType.ts, 69, 11))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 69, 11))
 
         return;
     }
 }
 
 async function H() {
->H : Symbol(H, Decl(promiseType.ts, 72, 1))
+>H : Symbol(H, Decl(promiseTypeStrictNull.ts, 72, 1))
 
     try {
         const a = await p;
->a : Symbol(a, Decl(promiseType.ts, 76, 13))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 76, 13))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 
         return a;
->a : Symbol(a, Decl(promiseType.ts, 76, 13))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 76, 13))
     }
     catch (e) {
->e : Symbol(e, Decl(promiseType.ts, 79, 11))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 79, 11))
 
         throw Error();
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -211,18 +211,18 @@ async function H() {
 }
 
 async function I() {
->I : Symbol(I, Decl(promiseType.ts, 82, 1))
+>I : Symbol(I, Decl(promiseTypeStrictNull.ts, 82, 1))
 
     try {
         const a = await p;
->a : Symbol(a, Decl(promiseType.ts, 86, 13))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 86, 13))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 
         return a;
->a : Symbol(a, Decl(promiseType.ts, 86, 13))
+>a : Symbol(a, Decl(promiseTypeStrictNull.ts, 86, 13))
     }
     catch (e) {
->e : Symbol(e, Decl(promiseType.ts, 89, 11))
+>e : Symbol(e, Decl(promiseTypeStrictNull.ts, 89, 11))
 
         return Promise.reject(Error());
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -235,142 +235,142 @@ async function I() {
 // addresses github issue #4903:
 
 const p00 = p.catch();
->p00 : Symbol(p00, Decl(promiseType.ts, 96, 5))
+>p00 : Symbol(p00, Decl(promiseTypeStrictNull.ts, 96, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p01 = p.catch(undefined);
->p01 : Symbol(p01, Decl(promiseType.ts, 97, 5))
+>p01 : Symbol(p01, Decl(promiseTypeStrictNull.ts, 97, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 const p07 = p.catch(null);
->p07 : Symbol(p07, Decl(promiseType.ts, 98, 5))
+>p07 : Symbol(p07, Decl(promiseTypeStrictNull.ts, 98, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p02 = p.catch(() => 1);
->p02 : Symbol(p02, Decl(promiseType.ts, 99, 5))
+>p02 : Symbol(p02, Decl(promiseTypeStrictNull.ts, 99, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p03 = p.catch(() => {});
->p03 : Symbol(p03, Decl(promiseType.ts, 100, 5))
+>p03 : Symbol(p03, Decl(promiseTypeStrictNull.ts, 100, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p04 = p.catch(() => {throw 1});
->p04 : Symbol(p04, Decl(promiseType.ts, 101, 5))
+>p04 : Symbol(p04, Decl(promiseTypeStrictNull.ts, 101, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p05 = p.catch(() => Promise.reject(1));
->p05 : Symbol(p05, Decl(promiseType.ts, 102, 5))
+>p05 : Symbol(p05, Decl(promiseTypeStrictNull.ts, 102, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p06 = p.catch(() => Promise.resolve(1));
->p06 : Symbol(p06, Decl(promiseType.ts, 103, 5))
+>p06 : Symbol(p06, Decl(promiseTypeStrictNull.ts, 103, 5))
 >p.catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >catch : Symbol(Promise.catch, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p10 = p.then();
->p10 : Symbol(p10, Decl(promiseType.ts, 105, 5))
+>p10 : Symbol(p10, Decl(promiseTypeStrictNull.ts, 105, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p20 = p.then(undefined);
->p20 : Symbol(p20, Decl(promiseType.ts, 107, 5))
+>p20 : Symbol(p20, Decl(promiseTypeStrictNull.ts, 107, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 const p21 = p.then(() => 1);
->p21 : Symbol(p21, Decl(promiseType.ts, 108, 5))
+>p21 : Symbol(p21, Decl(promiseTypeStrictNull.ts, 108, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p22 = p.then(() => {});
->p22 : Symbol(p22, Decl(promiseType.ts, 109, 5))
+>p22 : Symbol(p22, Decl(promiseTypeStrictNull.ts, 109, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p23 = p.then(() => {throw 1});
->p23 : Symbol(p23, Decl(promiseType.ts, 110, 5))
+>p23 : Symbol(p23, Decl(promiseTypeStrictNull.ts, 110, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p24 = p.then(() => Promise.resolve(1));
->p24 : Symbol(p24, Decl(promiseType.ts, 111, 5))
+>p24 : Symbol(p24, Decl(promiseTypeStrictNull.ts, 111, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p25 = p.then(() => Promise.reject(1));
->p25 : Symbol(p25, Decl(promiseType.ts, 112, 5))
+>p25 : Symbol(p25, Decl(promiseTypeStrictNull.ts, 112, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p30 = p.then(undefined, undefined);
->p30 : Symbol(p30, Decl(promiseType.ts, 114, 5))
+>p30 : Symbol(p30, Decl(promiseTypeStrictNull.ts, 114, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 >undefined : Symbol(undefined)
 
 const p31 = p.then(undefined, () => 1);
->p31 : Symbol(p31, Decl(promiseType.ts, 115, 5))
+>p31 : Symbol(p31, Decl(promiseTypeStrictNull.ts, 115, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 const p32 = p.then(undefined, () => {});
->p32 : Symbol(p32, Decl(promiseType.ts, 116, 5))
+>p32 : Symbol(p32, Decl(promiseTypeStrictNull.ts, 116, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 const p33 = p.then(undefined, () => {throw 1});
->p33 : Symbol(p33, Decl(promiseType.ts, 117, 5))
+>p33 : Symbol(p33, Decl(promiseTypeStrictNull.ts, 117, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 const p34 = p.then(undefined, () => Promise.resolve(1));
->p34 : Symbol(p34, Decl(promiseType.ts, 118, 5))
+>p34 : Symbol(p34, Decl(promiseTypeStrictNull.ts, 118, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -378,9 +378,9 @@ const p34 = p.then(undefined, () => Promise.resolve(1));
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p35 = p.then(undefined, () => Promise.reject(1));
->p35 : Symbol(p35, Decl(promiseType.ts, 119, 5))
+>p35 : Symbol(p35, Decl(promiseTypeStrictNull.ts, 119, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -388,138 +388,138 @@ const p35 = p.then(undefined, () => Promise.reject(1));
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p40 = p.then(() => "1", undefined);
->p40 : Symbol(p40, Decl(promiseType.ts, 121, 5))
+>p40 : Symbol(p40, Decl(promiseTypeStrictNull.ts, 121, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 const p41 = p.then(() => "1", () => 1);
->p41 : Symbol(p41, Decl(promiseType.ts, 122, 5))
+>p41 : Symbol(p41, Decl(promiseTypeStrictNull.ts, 122, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p42 = p.then(() => "1", () => {});
->p42 : Symbol(p42, Decl(promiseType.ts, 123, 5))
+>p42 : Symbol(p42, Decl(promiseTypeStrictNull.ts, 123, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p43 = p.then(() => "1", () => {throw 1});
->p43 : Symbol(p43, Decl(promiseType.ts, 124, 5))
+>p43 : Symbol(p43, Decl(promiseTypeStrictNull.ts, 124, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p44 = p.then(() => "1", () => Promise.resolve(1));
->p44 : Symbol(p44, Decl(promiseType.ts, 125, 5))
+>p44 : Symbol(p44, Decl(promiseTypeStrictNull.ts, 125, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p45 = p.then(() => "1", () => Promise.reject(1));
->p45 : Symbol(p45, Decl(promiseType.ts, 126, 5))
+>p45 : Symbol(p45, Decl(promiseTypeStrictNull.ts, 126, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p50 = p.then(() => {}, undefined);
->p50 : Symbol(p50, Decl(promiseType.ts, 128, 5))
+>p50 : Symbol(p50, Decl(promiseTypeStrictNull.ts, 128, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 const p51 = p.then(() => {}, () => 1);
->p51 : Symbol(p51, Decl(promiseType.ts, 129, 5))
+>p51 : Symbol(p51, Decl(promiseTypeStrictNull.ts, 129, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p52 = p.then(() => {}, () => {});
->p52 : Symbol(p52, Decl(promiseType.ts, 130, 5))
+>p52 : Symbol(p52, Decl(promiseTypeStrictNull.ts, 130, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p53 = p.then(() => {}, () => {throw 1});
->p53 : Symbol(p53, Decl(promiseType.ts, 131, 5))
+>p53 : Symbol(p53, Decl(promiseTypeStrictNull.ts, 131, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p54 = p.then(() => {}, () => Promise.resolve(1));
->p54 : Symbol(p54, Decl(promiseType.ts, 132, 5))
+>p54 : Symbol(p54, Decl(promiseTypeStrictNull.ts, 132, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p55 = p.then(() => {}, () => Promise.reject(1));
->p55 : Symbol(p55, Decl(promiseType.ts, 133, 5))
+>p55 : Symbol(p55, Decl(promiseTypeStrictNull.ts, 133, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p60 = p.then(() => {throw 1}, undefined);
->p60 : Symbol(p60, Decl(promiseType.ts, 135, 5))
+>p60 : Symbol(p60, Decl(promiseTypeStrictNull.ts, 135, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 const p61 = p.then(() => {throw 1}, () => 1);
->p61 : Symbol(p61, Decl(promiseType.ts, 136, 5))
+>p61 : Symbol(p61, Decl(promiseTypeStrictNull.ts, 136, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p62 = p.then(() => {throw 1}, () => {});
->p62 : Symbol(p62, Decl(promiseType.ts, 137, 5))
+>p62 : Symbol(p62, Decl(promiseTypeStrictNull.ts, 137, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p63 = p.then(() => {throw 1}, () => {throw 1});
->p63 : Symbol(p63, Decl(promiseType.ts, 138, 5))
+>p63 : Symbol(p63, Decl(promiseTypeStrictNull.ts, 138, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p64 = p.then(() => {throw 1}, () => Promise.resolve(1));
->p64 : Symbol(p64, Decl(promiseType.ts, 139, 5))
+>p64 : Symbol(p64, Decl(promiseTypeStrictNull.ts, 139, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p65 = p.then(() => {throw 1}, () => Promise.reject(1));
->p65 : Symbol(p65, Decl(promiseType.ts, 140, 5))
+>p65 : Symbol(p65, Decl(promiseTypeStrictNull.ts, 140, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p70 = p.then(() => Promise.resolve("1"), undefined);
->p70 : Symbol(p70, Decl(promiseType.ts, 142, 5))
+>p70 : Symbol(p70, Decl(promiseTypeStrictNull.ts, 142, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -527,36 +527,36 @@ const p70 = p.then(() => Promise.resolve("1"), undefined);
 >undefined : Symbol(undefined)
 
 const p71 = p.then(() => Promise.resolve("1"), () => 1);
->p71 : Symbol(p71, Decl(promiseType.ts, 143, 5))
+>p71 : Symbol(p71, Decl(promiseTypeStrictNull.ts, 143, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p72 = p.then(() => Promise.resolve("1"), () => {});
->p72 : Symbol(p72, Decl(promiseType.ts, 144, 5))
+>p72 : Symbol(p72, Decl(promiseTypeStrictNull.ts, 144, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p73 = p.then(() => Promise.resolve("1"), () => {throw 1});
->p73 : Symbol(p73, Decl(promiseType.ts, 145, 5))
+>p73 : Symbol(p73, Decl(promiseTypeStrictNull.ts, 145, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p74 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
->p74 : Symbol(p74, Decl(promiseType.ts, 146, 5))
+>p74 : Symbol(p74, Decl(promiseTypeStrictNull.ts, 146, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -566,9 +566,9 @@ const p74 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p75 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
->p75 : Symbol(p75, Decl(promiseType.ts, 147, 5))
+>p75 : Symbol(p75, Decl(promiseTypeStrictNull.ts, 147, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -578,9 +578,9 @@ const p75 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p80 = p.then(() => Promise.reject(1), undefined);
->p80 : Symbol(p80, Decl(promiseType.ts, 149, 5))
+>p80 : Symbol(p80, Decl(promiseTypeStrictNull.ts, 149, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -588,36 +588,36 @@ const p80 = p.then(() => Promise.reject(1), undefined);
 >undefined : Symbol(undefined)
 
 const p81 = p.then(() => Promise.reject(1), () => 1);
->p81 : Symbol(p81, Decl(promiseType.ts, 150, 5))
+>p81 : Symbol(p81, Decl(promiseTypeStrictNull.ts, 150, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p82 = p.then(() => Promise.reject(1), () => {});
->p82 : Symbol(p82, Decl(promiseType.ts, 151, 5))
+>p82 : Symbol(p82, Decl(promiseTypeStrictNull.ts, 151, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p83 = p.then(() => Promise.reject(1), () => {throw 1});
->p83 : Symbol(p83, Decl(promiseType.ts, 152, 5))
+>p83 : Symbol(p83, Decl(promiseTypeStrictNull.ts, 152, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p84 = p.then(() => Promise.reject(1), () => Promise.resolve(1));
->p84 : Symbol(p84, Decl(promiseType.ts, 153, 5))
+>p84 : Symbol(p84, Decl(promiseTypeStrictNull.ts, 153, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -627,9 +627,9 @@ const p84 = p.then(() => Promise.reject(1), () => Promise.resolve(1));
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const p85 = p.then(() => Promise.reject(1), () => Promise.reject(1));
->p85 : Symbol(p85, Decl(promiseType.ts, 154, 5))
+>p85 : Symbol(p85, Decl(promiseTypeStrictNull.ts, 154, 5))
 >p.then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->p : Symbol(p, Decl(promiseType.ts, 0, 11))
+>p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
