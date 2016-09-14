@@ -1540,7 +1540,7 @@ interface Int8Array {
     find(this: Int8Array, predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -1813,7 +1813,7 @@ interface Uint8Array {
     find(this: Uint8Array, predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2087,7 +2087,7 @@ interface Uint8ClampedArray {
     find(this: Uint8ClampedArray, predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2360,7 +2360,7 @@ interface Int16Array {
     find(this: Int16Array, predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2634,7 +2634,7 @@ interface Uint16Array {
     find(this: Uint16Array, predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2907,7 +2907,7 @@ interface Int32Array {
     find(this: Int32Array, predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3180,7 +3180,7 @@ interface Uint32Array {
     find(this: Uint32Array, predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3453,7 +3453,7 @@ interface Float32Array {
     find(this: Float32Array, predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3727,7 +3727,7 @@ interface Float64Array {
     find(this: Float64Array, predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
