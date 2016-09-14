@@ -1,6 +1,6 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(17,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
   Types of property 'pop' are incompatible.
-    Type '(this: (string | number)[]) => string | number' is not assignable to type '(this: number[]) => number'.
+    Type '(this: [number, string]) => string | number' is not assignable to type '(this: number[]) => number'.
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(18,1): error TS2322: Type '{}[]' is not assignable to type '[{}]'.
@@ -28,7 +28,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     ~~~~~~~~
 !!! error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
 !!! error TS2322:   Types of property 'pop' are incompatible.
-!!! error TS2322:     Type '(this: (string | number)[]) => string | number' is not assignable to type '(this: number[]) => number'.
+!!! error TS2322:     Type '(this: [number, string]) => string | number' is not assignable to type '(this: number[]) => number'.
 !!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
     emptyObjTuple = emptyObjArray;

@@ -83,9 +83,9 @@ function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
 
         zipResult.push([array1[i], array2[i]]);
 >zipResult.push([array1[i], array2[i]]) : number
->zipResult.push : (this: [T, U][], ...items: [T, U][]) => number
+>zipResult.push : (this: [[T, U]], ...items: [T, U][]) => number
 >zipResult : [[T, U]]
->push : (this: [T, U][], ...items: [T, U][]) => number
+>push : (this: [[T, U]], ...items: [T, U][]) => number
 >[array1[i], array2[i]] : [T, U]
 >array1[i] : T
 >array1 : T[]

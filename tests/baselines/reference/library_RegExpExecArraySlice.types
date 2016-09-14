@@ -6,22 +6,22 @@ var regExpExecArrayValue: RegExpExecArray;
 
 regExpExecArrayValue.slice();
 >regExpExecArrayValue.slice() : string[]
->regExpExecArrayValue.slice : (this: string[], start?: number, end?: number) => string[]
+>regExpExecArrayValue.slice : (this: RegExpExecArray, start?: number, end?: number) => string[]
 >regExpExecArrayValue : RegExpExecArray
->slice : (this: string[], start?: number, end?: number) => string[]
+>slice : (this: RegExpExecArray, start?: number, end?: number) => string[]
 
 regExpExecArrayValue.slice(0);
 >regExpExecArrayValue.slice(0) : string[]
->regExpExecArrayValue.slice : (this: string[], start?: number, end?: number) => string[]
+>regExpExecArrayValue.slice : (this: RegExpExecArray, start?: number, end?: number) => string[]
 >regExpExecArrayValue : RegExpExecArray
->slice : (this: string[], start?: number, end?: number) => string[]
+>slice : (this: RegExpExecArray, start?: number, end?: number) => string[]
 >0 : 0
 
 regExpExecArrayValue.slice(0,1);
 >regExpExecArrayValue.slice(0,1) : string[]
->regExpExecArrayValue.slice : (this: string[], start?: number, end?: number) => string[]
+>regExpExecArrayValue.slice : (this: RegExpExecArray, start?: number, end?: number) => string[]
 >regExpExecArrayValue : RegExpExecArray
->slice : (this: string[], start?: number, end?: number) => string[]
+>slice : (this: RegExpExecArray, start?: number, end?: number) => string[]
 >0 : 0
 >1 : 1
 
