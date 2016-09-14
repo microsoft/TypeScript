@@ -1951,7 +1951,7 @@
         "category": "Error",
         "code": 2693
     },
-    "Module or namespace '{0}' has no exported member '{1}'.": {
+    "Namespace '{0}' has no exported member '{1}'.": {
         "category": "Error",
         "code": 2694
     },
