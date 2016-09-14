@@ -1,0 +1,48 @@
+tests/cases/compiler/checkGrammarStaticMemberName_es6.ts(3,5): error TS2697: 'length' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+tests/cases/compiler/checkGrammarStaticMemberName_es6.ts(4,5): error TS2697: 'name' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+tests/cases/compiler/checkGrammarStaticMemberName_es6.ts(5,5): error TS2697: 'arguments' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+tests/cases/compiler/checkGrammarStaticMemberName_es6.ts(6,5): error TS2697: 'caller' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+tests/cases/compiler/checkGrammarStaticMemberName_es6.ts(8,9): error TS2697: 'length' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+tests/cases/compiler/checkGrammarStaticMemberName_es6.ts(9,9): error TS2697: 'name' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+tests/cases/compiler/checkGrammarStaticMemberName_es6.ts(10,9): error TS2697: 'arguments' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+tests/cases/compiler/checkGrammarStaticMemberName_es6.ts(11,9): error TS2697: 'caller' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+
+
+==== tests/cases/compiler/checkGrammarStaticMemberName_es6.ts (8 errors) ====
+    
+    class static_property {
+        static length = 1;
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2697: 'length' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+        static name = 1;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2697: 'name' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+        static arguments = 1;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2697: 'arguments' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+        static caller = 1;
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2697: 'caller' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+        static foo = {
+            ["length"]: 1,
+            ~~~~~~~~~~
+!!! error TS2697: 'length' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+            ["name"]: 1,
+            ~~~~~~~~
+!!! error TS2697: 'name' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+            ["arguments"]: 1,
+            ~~~~~~~~~~~~~
+!!! error TS2697: 'arguments' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+            ["caller"]: 1,
+            ~~~~~~~~~~
+!!! error TS2697: 'caller' is not allowed to be used as a name of a static property in a class for target ES6 and higher.
+        };
+    }
+    
+    class static_method {
+        static length() { return 1; }
+        static name() { return 1; }
+        static arguments() { return 1; }
+        static caller() { return 1; }
+    }
+    

@@ -1,3 +1,4 @@
+tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(8,19): error TS2696: 'name' is not allowed to be used as a name of a static property or method in a class for target ES5.
 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(12,1): error TS2322: Type 'C' is not assignable to type 'A'.
   Property 'name' is missing in type 'C'.
 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(13,1): error TS2322: Type 'typeof B' is not assignable to type 'A'.
@@ -8,7 +9,7 @@ tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.
   Property 'name' is missing in type 'typeof B'.
 
 
-==== tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts (4 errors) ====
+==== tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts (5 errors) ====
     interface A {
         name();
     }
@@ -17,6 +18,8 @@ tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.
     }
     class C {
         public static name() { }
+                      ~~~~
+!!! error TS2696: 'name' is not allowed to be used as a name of a static property or method in a class for target ES5.
     }
     
     var a: A = new B();

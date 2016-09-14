@@ -14217,14 +14217,14 @@ namespace ts {
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name) || checkGrammarStaticPropertyOrMethodName(node);
 
             checkVariableLikeDeclaration(node);
         }
 
         function checkMethodDeclaration(node: MethodDeclaration) {
             // Grammar checking
-            checkGrammarMethod(node) || checkGrammarComputedPropertyName(node.name);
+            checkGrammarMethod(node) || checkGrammarComputedPropertyName(node.name) || checkGrammarStaticPropertyOrMethodName(node);
 
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkFunctionOrMethodDeclaration(node);
@@ -14234,6 +14234,35 @@ namespace ts {
             if (getModifierFlags(node) & ModifierFlags.Abstract && node.body) {
                 error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
             }
+        }
+
+        function checkGrammarStaticPropertyOrMethodName(node: ClassElement) {
+            if (node.flags & NodeFlags.Static) {
+                if (node.kind === SyntaxKind.PropertyDeclaration) {
+                    return checkGrammarStaticMemberName(node, ((node as ClassElement).name as Identifier).text);
+                }
+                else if (node.kind === SyntaxKind.MethodDeclaration) {
+                    if (languageVersion < ScriptTarget.ES6) {
+                        return checkGrammarStaticMemberName(node, ((node as ClassElement).name as Identifier).text);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        function checkGrammarStaticMemberName(node: Node, name: string) {
+            // see: https://github.com/Microsoft/TypeScript/issues/442
+            const forbiddenNames = ["length", "name", "arguments", "caller"];
+            if (forbiddenNames.indexOf(name) !== -1) {
+                if (languageVersion < ScriptTarget.ES6) {
+                    return grammarErrorOnNode(node, Diagnostics._0_is_not_allowed_to_be_used_as_a_name_of_a_static_property_or_method_in_a_class_for_target_es5_2696, name);
+                } else {
+                    return grammarErrorOnNode(node, Diagnostics._0_is_not_allowed_to_be_used_as_a_name_of_a_static_property_in_a_class_for_target_es6_and_higher_2697, name);
+                }
+            }
+
+            return false;
         }
 
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
@@ -19713,6 +19742,13 @@ namespace ts {
             const computedPropertyName = <ComputedPropertyName>node;
             if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operatorToken.kind === SyntaxKind.CommaToken) {
                 return grammarErrorOnNode(computedPropertyName.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
+            }
+
+            if (computedPropertyName.expression.kind === SyntaxKind.StringLiteral) {
+                const member = computedPropertyName.parent.parent.parent;
+                if (member.flags & NodeFlags.Static && member.kind === SyntaxKind.PropertyDeclaration) {
+                    return checkGrammarStaticMemberName(computedPropertyName, (computedPropertyName.expression as StringLiteral).text);
+                }
             }
         }
 

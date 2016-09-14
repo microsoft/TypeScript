@@ -1959,6 +1959,14 @@
         "category": "Error",
         "code": 2695
     },
+    "'{0}' is not allowed to be used as a name of a static property or method in a class for target ES5.": {
+        "category": "Error",
+        "code": 2696
+    },
+    "'{0}' is not allowed to be used as a name of a static property in a class for target ES6 and higher.": {
+        "category": "Error",
+        "code": 2697
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
