@@ -955,23 +955,35 @@ namespace FourSlash {
             assert.equal(actual, expected);
         }
 
-        public verifyQuickInfoString(negative: boolean, expectedText: string, expectedDocumentation?: string) {
+        public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
+            this.goToMarker(markerName);
+            this.verifyQuickInfoString(expectedText, expectedDocumentation);
+        }
+
+        public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
+            ts.forEachProperty(ts.createMap(namesAndTexts), (text, name) => {
+                if (text instanceof Array) {
+                    assert(text.length === 2);
+                    const [expectedText, expectedDocumentation] = text;
+                    this.verifyQuickInfoAt(name, expectedText, expectedDocumentation);
+                }
+                else {
+                    this.verifyQuickInfoAt(name, text);
+                }
+            });
+        }
+
+        public verifyQuickInfoString(expectedText: string, expectedDocumentation?: string) {
+            if (expectedDocumentation === "") {
+                throw new Error("Use 'undefined' instead");
+            }
+
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             const actualQuickInfoText = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.displayParts) : "";
             const actualQuickInfoDocumentation = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.documentation) : "";
 
-            if (negative) {
-                assert.notEqual(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
-                if (expectedDocumentation !== undefined) {
-                    assert.notEqual(actualQuickInfoDocumentation, expectedDocumentation, this.messageAtLastKnownMarker("quick info doc comment"));
-                }
-            }
-            else {
-                assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
-                if (expectedDocumentation !== undefined) {
-                    assert.equal(actualQuickInfoDocumentation, expectedDocumentation, this.assertionMessageAtLastKnownMarker("quick info doc"));
-                }
-            }
+            assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
+            assert.equal(actualQuickInfoDocumentation, expectedDocumentation || "", this.assertionMessageAtLastKnownMarker("quick info doc"));
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
@@ -2964,10 +2976,6 @@ namespace FourSlashInterface {
             this.state.verifyErrorExistsAfterMarker(markerName, !this.negative, /*after*/ false);
         }
 
-        public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
-            this.state.verifyQuickInfoString(this.negative, expectedText, expectedDocumentation);
-        }
-
         public quickInfoExists() {
             this.state.verifyQuickInfoExists(this.negative);
         }
@@ -2984,6 +2992,18 @@ namespace FourSlashInterface {
     export class Verify extends VerifyNegatable {
         constructor(state: FourSlash.TestState) {
             super(state);
+        }
+
+        public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
+            this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
+        }
+
+        public quickInfoAt(markerName: string, expectedText?: string, expectedDocumentation?: string) {
+            this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation);
+        }
+
+        public quickInfos(namesAndTexts: { [name: string]: string }) {
+            this.state.verifyQuickInfos(namesAndTexts);
         }
 
         public caretAtMarker(markerName?: string) {

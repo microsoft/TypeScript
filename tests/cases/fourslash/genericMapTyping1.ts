@@ -21,29 +21,14 @@
 ////var d/*6*/dd = aaa.map(xx => xx.length);     // should not error, should be any[]
 
 verify.numberOfErrorsInCurrentFile(0);
-goTo.marker('1');
-verify.quickInfoIs('var bb: number[]');
-
-goTo.marker('2');
-verify.quickInfoIs('var cc: number[]');
-
-goTo.marker('3');
-verify.quickInfoIs('var dd: number[]');
-
-goTo.marker('4');
-verify.quickInfoIs('var bbb: any[]');
-
-goTo.marker('5');
-verify.quickInfoIs('var ccc: any[]');
-
-goTo.marker('6');
-verify.quickInfoIs('var ddd: any[]');
-
-goTo.marker('7');
-verify.quickInfoIs('(parameter) xx: string');
-
-goTo.marker('8');
-verify.quickInfoIs('(parameter) xx: string');
-
-goTo.marker('9');
-verify.quickInfoIs('(parameter) xx: string');
+verify.quickInfos({
+    1: "var bb: number[]",
+    2: "var cc: number[]",
+    3: "var dd: number[]",
+    4: "var bbb: any[]",
+    5: "var ccc: any[]",
+    6: "var ddd: any[]",
+    7: "(parameter) xx: string",
+    8: "(parameter) xx: string",
+    9: "(parameter) xx: string"
+});

@@ -29,52 +29,34 @@
 ////// Explicit initialization value
 ////var t9: (a1: string[], a2: string[]) => void = (/*t91*/f1 = 4, /*t92*/f2 = [false, true]) => { };
 
-goTo.marker("1");
-verify.quickInfoIs("(parameter) restArgs: any[]", "");
-goTo.marker("2");
-verify.quickInfoIs("(parameter) restArgs: any[]", "");
+verify.quickInfos({
+    1: "(parameter) restArgs: any[]",
+    2: "(parameter) restArgs: any[]",
 
-goTo.marker("3");
-verify.quickInfoIs("(parameter) y: string[]", "");
+    3: "(parameter) y: string[]",
 
-goTo.marker("4");
-verify.quickInfoIs("(parameter) y1: string[]", "");
-goTo.marker("5");
-verify.quickInfoIs("(parameter) y2: string", "");
+    4: "(parameter) y1: string[]",
+    5: "(parameter) y2: string",
 
-goTo.marker("t1");
-verify.quickInfoIs("(parameter) f1: any[]", "");
+    t1: "(parameter) f1: any[]",
 
-goTo.marker("t2");
-verify.quickInfoIs("(parameter) f1: any[]", "");
+    t2: "(parameter) f1: any[]",
 
-goTo.marker("t31");
-verify.quickInfoIs("(parameter) f1: number", "");
-goTo.marker("t32");
-verify.quickInfoIs("(parameter) f2: any[]", "");
+    t31: "(parameter) f1: number",
+    t32: "(parameter) f2: any[]",
 
-goTo.marker("t4");
-verify.quickInfoIs("(parameter) f1: string[]", "");
+    t4: "(parameter) f1: string[]",
+    t5: "(parameter) f1: string",
 
-goTo.marker("t5");
-verify.quickInfoIs("(parameter) f1: string", "");
+    t61: "(parameter) f1: string",
+    t62: "(parameter) f2: string[]",
 
-goTo.marker("t61");
-verify.quickInfoIs("(parameter) f1: string", "");
-goTo.marker("t62");
-verify.quickInfoIs("(parameter) f2: string[]", "");
+    t71: "(parameter) f1: string",
+    t72: "(parameter) f2: string",
+    t73: "(parameter) f3: string",
 
-goTo.marker("t71");
-verify.quickInfoIs("(parameter) f1: string", "");
-goTo.marker("t72");
-verify.quickInfoIs("(parameter) f2: string", "");
-goTo.marker("t73");
-verify.quickInfoIs("(parameter) f3: string", "");
+    t8: "(parameter) f1: number[]",
 
-goTo.marker("t8");
-verify.quickInfoIs("(parameter) f1: number[]", "");
-
-goTo.marker("t91");
-verify.quickInfoIs("(parameter) f1: string[]", "");
-goTo.marker("t92");
-verify.quickInfoIs("(parameter) f2: string[]", "");
+    t91: "(parameter) f1: string[]",
+    t92: "(parameter) f2: string[]"
+});
