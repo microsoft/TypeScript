@@ -31,27 +31,21 @@
 ////     }
 //// }
 
-goTo.marker("1");
-verify.quickInfoIs("(method) Crate<T>.isSundries(): this is Crate<Sundries>");
-goTo.marker("2");
-verify.quickInfoIs("(method) Crate<T>.isSupplies(): this is Crate<Supplies>");
-goTo.marker("3");
-verify.quickInfoIs(`(method) Crate<T>.isPackedTight(): this is this & {
+verify.quickInfos({
+    1: "(method) Crate<T>.isSundries(): this is Crate<Sundries>",
+    2: "(method) Crate<T>.isSupplies(): this is Crate<Supplies>",
+    3: `(method) Crate<T>.isPackedTight(): this is this & {
     extraContents: T;
-}`);
-goTo.marker("4");
-verify.quickInfoIs(`(method) Crate<any>.isPackedTight(): this is Crate<any> & {
+}`,
+    4: `(method) Crate<any>.isPackedTight(): this is Crate<any> & {
     extraContents: any;
-}`);
-goTo.marker("5");
-verify.quickInfoIs("(method) Crate<any>.isSundries(): this is Crate<Sundries>");
-goTo.marker("6");
-verify.quickInfoIs(`(method) Crate<Sundries>.isPackedTight(): this is Crate<Sundries> & {
+}`,
+    5: "(method) Crate<any>.isSundries(): this is Crate<Sundries>",
+    6: `(method) Crate<Sundries>.isPackedTight(): this is Crate<Sundries> & {
     extraContents: Sundries;
-}`);
-goTo.marker("7");
-verify.quickInfoIs("(method) Crate<any>.isSupplies(): this is Crate<Supplies>");
-goTo.marker("8");
-verify.quickInfoIs(`(method) Crate<Supplies>.isPackedTight(): this is Crate<Supplies> & {
+}`,
+    7: "(method) Crate<any>.isSupplies(): this is Crate<Supplies>",
+    8: `(method) Crate<Supplies>.isPackedTight(): this is Crate<Supplies> & {
     extraContents: Supplies;
-}`);
+}`
+});
