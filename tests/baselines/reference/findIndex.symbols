@@ -1,0 +1,11 @@
+=== tests/cases/conformance/es6/arrayMethods/findIndex.ts ===
+
+[].findIndex(function(elem, i, arr) {
+>[].findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>elem : Symbol(elem, Decl(findIndex.ts, 1, 22))
+>i : Symbol(i, Decl(findIndex.ts, 1, 27))
+>arr : Symbol(arr, Decl(findIndex.ts, 1, 30))
+
+    return true;
+});

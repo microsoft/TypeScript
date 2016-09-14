@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/arrayMethods/findIndex.ts ===
+
+[].findIndex(function(elem, i, arr) {
+>[].findIndex(function(elem, i, arr) {    return true;}) : number
+>[].findIndex : (predicate: (value: any, index: number, obj: any[]) => boolean, thisArg?: any) => number
+>[] : undefined[]
+>findIndex : (predicate: (value: any, index: number, obj: any[]) => boolean, thisArg?: any) => number
+>function(elem, i, arr) {    return true;} : (elem: any, i: number, arr: any[]) => boolean
+>elem : any
+>i : number
+>arr : any[]
+
+    return true;
+>true : boolean
+
+});
