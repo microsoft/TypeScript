@@ -4927,7 +4927,7 @@ namespace ts {
                     }
                 }
                 else if (host.getDirectories) {
-                    const typeRoots = getEffectiveTypeRoots(options, host.getCurrentDirectory());
+                    const typeRoots = getEffectiveTypeRoots(options, host);
                     for (const root of typeRoots) {
                         getCompletionEntriesFromDirectories(host, options, root, span, result);
                     }

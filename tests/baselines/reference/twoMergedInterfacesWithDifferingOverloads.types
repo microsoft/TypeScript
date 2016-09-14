@@ -63,7 +63,7 @@ var r = b.foo(true); // returns Date
 >b.foo : { (x: boolean): number; (x: string): string; (x: boolean): Date; (x: Date): string; }
 >b : B<boolean>
 >foo : { (x: boolean): number; (x: string): string; (x: boolean): Date; (x: Date): string; }
->true : boolean
+>true : true
 
 // add generic overload
 interface C<T, U> {

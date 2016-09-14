@@ -146,6 +146,7 @@ namespace ts {
 
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
@@ -911,8 +912,8 @@ namespace ts {
                     }
                 }
 
-                // If we're in an external module, we can't reference symbols created from UMD export declarations
-                if (result && isInExternalModule) {
+                // If we're in an external module, we can't reference value symbols created from UMD export declarations
+                if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
                     const decls = result.declarations;
                     if (decls && decls.length === 1 && decls[0].kind === SyntaxKind.NamespaceExportDeclaration) {
                         error(errorLocation, Diagnostics.Identifier_0_must_be_imported_from_a_module, name);
@@ -1042,7 +1043,7 @@ namespace ts {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
 
             if (moduleSymbol) {
-                const exportDefaultSymbol = isShorthandAmbientModule(moduleSymbol.valueDeclaration) ?
+                const exportDefaultSymbol = isShorthandAmbientModuleSymbol(moduleSymbol) ?
                     moduleSymbol :
                     moduleSymbol.exports["export="] ?
                         getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
@@ -1118,7 +1119,7 @@ namespace ts {
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
-                    if (isShorthandAmbientModule(moduleSymbol.valueDeclaration)) {
+                    if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
                         return moduleSymbol;
                     }
 
@@ -2152,8 +2153,13 @@ namespace ts {
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
                     else if (!(flags & TypeFormatFlags.InTypeAlias) && type.flags & (TypeFlags.Anonymous | TypeFlags.UnionOrIntersection) && type.aliasSymbol) {
-                        const typeArguments = type.aliasTypeArguments;
-                        writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
+                        if (type.flags & TypeFlags.Anonymous || !(flags & TypeFormatFlags.UseTypeAliasValue)) {
+                            const typeArguments = type.aliasTypeArguments;
+                            writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
+                        }
+                        else {
+                            writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
+                        }
                     }
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
@@ -2978,7 +2984,9 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return type;
+            return declaration.initializer ?
+                getUnionType([type, checkExpressionCached(declaration.initializer)], /*subtypeReduction*/ true) :
+                type;
         }
 
         function getTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration) {
@@ -3378,7 +3386,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (symbol.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && isShorthandAmbientModule(<ModuleDeclaration>symbol.valueDeclaration)) {
+                if (symbol.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && isShorthandAmbientModuleSymbol(symbol)) {
                     links.type = anyType;
                 }
                 else {
@@ -8545,6 +8553,9 @@ namespace ts {
             }
 
             function narrowTypeByEquality(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
+                if (type.flags & TypeFlags.Any) {
+                    return type;
+                }
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
@@ -8688,7 +8699,7 @@ namespace ts {
                 // type. Otherwise, the types are completely unrelated, so narrow to an intersection of the
                 // two types.
                 const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
-                return isTypeSubtypeOf(candidate, targetType) ? candidate :
+                return isTypeSubtypeOf(candidate, type) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
                     isTypeAssignableTo(candidate, targetType) ? candidate :
                     getIntersectionType([type, candidate]);
@@ -8906,6 +8917,7 @@ namespace ts {
             const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
             const declarationContainer = getControlFlowContainer(declaration);
             let flowContainer = getControlFlowContainer(node);
+            const isOuterVariable = flowContainer !== declarationContainer;
             // When the control flow originates in a function expression or arrow function and we are referencing
             // a const variable or parameter from an outer function, we extend the origin of the control flow
             // analysis to include the immediately enclosing function.
@@ -8918,7 +8930,7 @@ namespace ts {
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
             const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isParameter ||
-                flowContainer !== declarationContainer || isInAmbientContext(declaration);
+                isOuterVariable || isInAmbientContext(declaration);
             const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
@@ -12250,10 +12262,10 @@ namespace ts {
             // or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
             // to correctly fill the candidatesOutArray.
             const cached = links.resolvedSignature;
-            if (cached && cached !== anySignature && !candidatesOutArray) {
+            if (cached && cached !== resolvingSignature && !candidatesOutArray) {
                 return cached;
             }
-            links.resolvedSignature = anySignature;
+            links.resolvedSignature = resolvingSignature;
             const result = resolveSignature(node, candidatesOutArray);
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
@@ -12265,7 +12277,7 @@ namespace ts {
         function getResolvedOrAnySignature(node: CallLikeExpression) {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
-            return getNodeLinks(node).resolvedSignature === anySignature ? anySignature : getResolvedSignature(node);
+            return getNodeLinks(node).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(node);
         }
 
         function getInferredClassType(symbol: Symbol) {
@@ -13508,7 +13520,7 @@ namespace ts {
                     return maybeTypeOfKind(contextualType, (TypeFlags.NumberLiteral | TypeFlags.EnumLiteral));
                 }
                 if (type.flags & TypeFlags.Boolean) {
-                    return maybeTypeOfKind(contextualType, TypeFlags.BooleanLiteral) && !isTypeAssignableTo(booleanType, contextualType);
+                    return maybeTypeOfKind(contextualType, TypeFlags.BooleanLiteral);
                 }
                 if (type.flags & TypeFlags.Enum) {
                     return typeContainsLiteralFromEnum(contextualType, <EnumType>type);
@@ -18336,8 +18348,8 @@ namespace ts {
 
         function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
             let moduleSymbol = resolveExternalModuleName(moduleReferenceExpression.parent, moduleReferenceExpression);
-            if (!moduleSymbol) {
-                // module not found - be conservative
+            if (!moduleSymbol || isShorthandAmbientModuleSymbol(moduleSymbol)) {
+                // If the module is not found or is shorthand, assume that it may export a value.
                 return true;
             }
 

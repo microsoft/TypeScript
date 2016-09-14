@@ -108,16 +108,16 @@ function e() {
 >0 : number
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : string | number | true
 >"string" : "string"
->x = "" || true : string | boolean
+>x = "" || true : string | true
 >x : string | number | boolean | RegExp
->"" || true : string | boolean
+>"" || true : string | true
 >"" : string
->true : boolean
+>true : true
 
         x; // number | boolean
->x : number | boolean
+>x : number | true
     }
 }
 function f() {

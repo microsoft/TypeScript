@@ -5,11 +5,11 @@ function f(x: string | number | boolean) {
 
     let y: string | number | boolean = false;
 >y : string | number | boolean
->false : boolean
+>false : false
 
     let z: string | number | boolean = false;
 >z : string | number | boolean
->false : boolean
+>false : false
 
     if (y = "", typeof x === "string") {
 >y = "", typeof x === "string" : boolean
@@ -28,7 +28,7 @@ function f(x: string | number | boolean) {
 >y : string
 
         z; // boolean
->z : boolean
+>z : false
     }
     else if (z = 1, typeof x === "number") {
 >z = 1, typeof x === "number" : boolean
@@ -66,6 +66,6 @@ function f(x: string | number | boolean) {
 >y : string
 
     z; // number | boolean
->z : number | boolean
+>z : number | false
 }
 

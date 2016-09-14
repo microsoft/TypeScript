@@ -1,0 +1,30 @@
+=== tests/cases/compiler/0.ts ===
+
+{
+    type Data = string | boolean;
+>Data : Data
+
+    let obj: Data = true;
+>obj : Data
+>Data : Data
+>true : true
+}
+export { }
+
+=== tests/cases/compiler/1.ts ===
+let v = "str" || true;
+>v : Data
+>"str" || true : Data
+>"str" : string
+>true : boolean
+
+function bar () {
+>bar : () => Data
+
+    return v;
+>v : Data
+}
+export { v, bar }
+>v : Data
+>bar : () => Data
+

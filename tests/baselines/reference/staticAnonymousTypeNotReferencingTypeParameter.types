@@ -471,10 +471,10 @@ class ListWrapper {
 >1 : number
 
       return true;
->true : boolean
+>true : true
     }
     return false;
->false : boolean
+>false : false
   }
   static clear(dit: typeof ListWrapper, list: any[]) { list.length = 0; }
 >clear : (dit: typeof ListWrapper, list: any[]) => void
@@ -540,7 +540,7 @@ class ListWrapper {
 >b.length : number
 >b : any[]
 >length : number
->false : boolean
+>false : false
 
     for (var i = 0; i < a.length; ++i) {
 >i : number
@@ -561,10 +561,10 @@ class ListWrapper {
 >b[i] : any
 >b : any[]
 >i : number
->false : boolean
+>false : false
     }
     return true;
->true : boolean
+>true : true
   }
   static slice<T>(dit: typeof ListWrapper, l: T[], from: number = 0, to: number = null): T[] {
 >slice : <T>(dit: typeof ListWrapper, l: T[], from?: number, to?: number) => T[]
