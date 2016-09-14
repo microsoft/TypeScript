@@ -1,26 +1,26 @@
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(8,10): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(16,19): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(19,21): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(22,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(23,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(24,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(25,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(26,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(27,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(28,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(29,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(30,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(31,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(32,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(33,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(34,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(35,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(36,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(37,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(38,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(39,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(40,7): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperatorLeftSideUnused.ts(41,7): error TS2693: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(8,10): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(16,19): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(19,21): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(22,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(23,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(24,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(25,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(26,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(27,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(28,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(29,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(30,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(31,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(32,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(33,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(34,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(35,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(36,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(37,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(38,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(39,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(40,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(41,7): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
 ==== tests/cases/compiler/commaOperatorLeftSideUnused.ts (23 errors) ====
@@ -33,7 +33,7 @@ tests/cases/compiler/commaOperatorLeftSideUnused.ts(41,7): error TS2693: Left si
         // Should error
         case 0, 1:
              ~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
           return 'zero or one';
         default:
           return 'more than one';
@@ -43,74 +43,74 @@ tests/cases/compiler/commaOperatorLeftSideUnused.ts(41,7): error TS2693: Left si
     // Should error
     let x = Math.pow((3, 5), 2);
                       ~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     // Should error
     let a = [(3 + 4), ((1 + 1, 8) * 4)];
                         ~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     // Error cases
     xx = (1, 2);
           ~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = ('', xx);
           ~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (/323/, 5);
           ~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (`wat`, 'ok'),
           ~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (true, false);
           ~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (false, true);
           ~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (null, xx);
           ~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (undefined, 10);
           ~~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (() => {}, 'no');
           ~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (function() { }, 100);
           ~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = ({}, {});
           ~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (typeof xx, 'unused');
           ~~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = ([1, 2, x++], xx);
           ~~~~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (xx!, xx);
           ~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (xx ? 3 : 4, 10);
           ~~~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (3 + 4, 10);
           ~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (!xx, 10);
           ~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (~xx, 10);
           ~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (-xx, 10);
           ~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     xx = (+xx, 10);
           ~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     // OK cases
     xx = (xx ? x++ : 4, 10);

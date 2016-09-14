@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression4.ts(1,1): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression4.ts(1,6): error TS2693: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression4.ts(1,6): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression4.ts(1,17): error TS2304: Cannot find name 'a'.
 
 
@@ -8,6 +8,6 @@ tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowF
     ~
 !!! error TS2304: Cannot find name 'a'.
          ~~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
                     ~
 !!! error TS2304: Cannot find name 'a'.

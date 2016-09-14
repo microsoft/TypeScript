@@ -4,10 +4,10 @@ tests/cases/compiler/systemModule16.ts(4,15): error TS2307: Cannot find module '
 tests/cases/compiler/systemModule16.ts(5,15): error TS2307: Cannot find module 'bar'.
 tests/cases/compiler/systemModule16.ts(8,32): error TS2307: Cannot find module 'foo'.
 tests/cases/compiler/systemModule16.ts(9,32): error TS2307: Cannot find module 'bar'.
-tests/cases/compiler/systemModule16.ts(11,1): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/systemModule16.ts(11,1): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/systemModule16.ts(11,1): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/systemModule16.ts(11,1): error TS2693: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(11,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(11,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(11,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(11,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
 ==== tests/cases/compiler/systemModule16.ts (10 errors) ====
@@ -35,11 +35,11 @@ tests/cases/compiler/systemModule16.ts(11,1): error TS2693: Left side of comma o
     
     x,y,a1,b1,d1;
     ~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     ~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     ~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     ~~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     

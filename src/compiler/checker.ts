@@ -13321,7 +13321,7 @@ namespace ts {
                             return true;
                     }
                     return false;
-                
+
                 // Some forms listed here for clarity
                 case SyntaxKind.VoidExpression: // Explicit opt-out
                 case SyntaxKind.TypeAssertionExpression: // Not SEF, but can produce useful type warnings

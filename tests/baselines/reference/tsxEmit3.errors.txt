@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(19,2): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/jsx/file.tsx(23,3): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/jsx/file.tsx(26,3): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/jsx/file.tsx(39,2): error TS2693: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/file.tsx(19,2): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/file.tsx(23,3): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/file.tsx(26,3): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/file.tsx(39,2): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
@@ -25,18 +25,18 @@ tests/cases/conformance/jsx/file.tsx(39,2): error TS2693: Left side of comma ope
     	// Emit M.Foo
     	Foo, <Foo />;
     	~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     	export module S {
     		// Emit M.Foo
     		Foo, <Foo />;
     		~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     		// Emit S.Bar
     		Bar, <Bar />;
     		~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     	}
     
     }
@@ -51,6 +51,6 @@ tests/cases/conformance/jsx/file.tsx(39,2): error TS2693: Left side of comma ope
     	// Emit M_1.Foo
     	Foo, <Foo />;
     	~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     }
     

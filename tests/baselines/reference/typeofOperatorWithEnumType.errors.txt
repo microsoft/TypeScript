@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithEnumType.ts(23,1): error TS2693: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithEnumType.ts(23,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
 ==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithEnumType.ts (1 errors) ====
@@ -26,7 +26,7 @@ tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperator
     typeof ENUM1["B"];
     typeof ENUM, ENUM1;
     ~~~~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     // use typeof in type query
     enum z { };

@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithNumberType.ts(45,1): error TS2693: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
 ==== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithNumberType.ts (1 errors) ====
@@ -48,4 +48,4 @@ tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNot
     !M.n;
     !objA.a, M.n;
     ~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.

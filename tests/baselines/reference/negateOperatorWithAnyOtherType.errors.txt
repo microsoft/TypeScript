@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(51,1): error TS2693: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
 ==== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts (1 errors) ====
@@ -54,6 +54,6 @@ tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperator
     -ANY2[0];
     -ANY, ANY1;
     ~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     -objA.a;
     -M.n;

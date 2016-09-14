@@ -1,6 +1,6 @@
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(2,54): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(2,56): error TS2693: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(2,56): error TS2693: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(2,56): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(2,56): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts(2,105): error TS1005: ';' expected.
 
 
@@ -10,9 +10,9 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions
                                                          ~
 !!! error TS1005: ',' expected.
                                                            ~~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2693: Left side of comma operator is unused and has no side effects.
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
                                                                                                             ~
 !!! error TS1005: ';' expected.
     
