@@ -5031,9 +5031,10 @@ namespace ts {
             else {
                 // Perform "Find all References" and retrieve only those that are implementations
                 const referencedSymbols = getReferencedSymbolsForNode(node, program.getSourceFiles(), /*findInStrings*/false, /*findInComments*/false, /*implementations*/true);
-
-                return flatMap(referencedSymbols, symbol =>
+                const result = flatMap(referencedSymbols, symbol =>
                     map(symbol.references, ({ textSpan, fileName }) => ({ textSpan, fileName })));
+
+                return result && result.length > 0 ? result : undefined;
             }
         }
 
@@ -5060,9 +5061,7 @@ namespace ts {
                 }
                 else if (node.kind === SyntaxKind.VariableDeclaration) {
                     const parentStatement = getParentStatementOfVariableDeclaration(<VariableDeclaration>node);
-                    if (parentStatement && hasModifier(parentStatement, ModifierFlags.Ambient)) {
-                        return true;
-                    }
+                    return parentStatement && hasModifier(parentStatement, ModifierFlags.Ambient);
                 }
             }
             else if (isFunctionLike(node)) {
@@ -5081,8 +5080,10 @@ namespace ts {
         }
 
         function getParentStatementOfVariableDeclaration(node: VariableDeclaration): VariableStatement {
-            return node.parent && node.parent.kind === SyntaxKind.VariableDeclarationList && node.parent.parent
-                && node.parent.parent.kind === SyntaxKind.VariableStatement && <VariableStatement>node.parent.parent;
+            if (node.parent && node.parent.parent && node.parent.parent.kind === SyntaxKind.VariableStatement) {
+                Debug.assert(node.parent.kind === SyntaxKind.VariableDeclarationList);
+                return <VariableStatement>node.parent.parent;
+            }
         }
 
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
@@ -6491,16 +6492,23 @@ namespace ts {
             /**
              * Determines if the parent symbol occurs somewhere in the child's ancestry. If the parent symbol
              * is an interface, determines if some ancestor of the child symbol extends or inherits from it.
-             * This also takes in a cache of previous results which makes this slightly more efficient and is
+             * Also takes in a cache of previous results which makes this slightly more efficient and is
              * necessary to avoid potential loops like so:
              *     class A extends B { }
              *     class B extends A { }
              *
+             * We traverse the AST rather than using the type checker because users are typically only interested
+             * in explicit implementations of an interface/class when calling "Go to Implementation". Sibling
+             * implementations of types that share a common ancestor with the type whose implementation we are
+             * searching for need to be filtered out of the results. The type checker doesn't let us make the
+             * distinction between structurally compatible implementations and explicit implementations, so we
+             * must use the AST.
+             *
              * @param child         A class or interface Symbol
              * @param parent        Another class or interface Symbol
-             * @param cachedResults A map of symbol names to booleans indicating previous results
+             * @param cachedResults A map of symbol id pairs (i.e. "child,parent") to booleans indicating previous results
              */
-            function inheritsFrom(child: Symbol, parent: Symbol, cachedResults: Map<boolean>): boolean {
+            function explicitlyInheritsFrom(child: Symbol, parent: Symbol, cachedResults: Map<boolean>): boolean {
                 const parentIsInterface = parent.getFlags() & SymbolFlags.Interface;
                 return searchHierarchy(child);
 
@@ -6966,7 +6974,7 @@ namespace ts {
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         // Parents will only be defined if implementations is true
                         if (parents) {
-                            if (!forEach(parents, parent => inheritsFrom(rootSymbol.parent, parent, cache))) {
+                            if (!forEach(parents, parent => explicitlyInheritsFrom(rootSymbol.parent, parent, cache))) {
                                 return undefined;
                             }
                         }

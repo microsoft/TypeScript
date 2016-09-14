@@ -1681,12 +1681,14 @@ namespace FourSlash {
         }
 
         public verifyImplementationListIsEmpty(negative: boolean) {
-            const assertFn = negative ? assert.notEqual : assert.equal;
-
             const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-            const actualCount = implementations && implementations.length || 0;
 
-            assertFn(actualCount, 0, this.messageAtLastKnownMarker("Implementations Count"));
+            if (negative) {
+                assert.isTrue(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
+            }
+            else {
+                assert.isUndefined(implementations, "Expected implementation list to be empty but implementations returned");
+            }
         }
 
         public verifyGoToDefinitionName(expectedName: string, expectedContainerName: string) {
