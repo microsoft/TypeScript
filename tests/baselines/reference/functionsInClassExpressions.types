@@ -12,7 +12,7 @@ let Foo = class {
     }
     bar = 0;
 >bar : number
->0 : number
+>0 : 0
 
     inc = () => {
 >inc : () => void

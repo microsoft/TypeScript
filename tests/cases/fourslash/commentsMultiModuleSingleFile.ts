@@ -16,17 +16,11 @@
 ////new /*1*/mu/*4*/ltiM.b();
 ////new mu/*5*/ltiM.c();
 
+const comment = "this is multi declare namespace\nthi is multi namespace 2";
+
 goTo.marker('1');
-verify.completionListContains("multiM", "namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
+verify.completionListContains("multiM", "namespace multiM", comment);
 
-goTo.marker('2');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
-
-goTo.marker('3');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
-
-goTo.marker('4');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
-
-goTo.marker('5');
-verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
+for (const marker of ["2", "3", "4", "5"]) {
+    verify.quickInfoAt(marker, "namespace multiM", comment);
+}

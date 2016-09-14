@@ -1,9 +1,10 @@
 tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(45,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
 tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(47,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(57,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts (3 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts (4 errors) ====
     // ! operator on any type
     
     var ANY: any;
@@ -67,5 +68,7 @@ tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNot
     !ANY1;
     !ANY2[0];
     !ANY, ANY1;
+    ~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     !objA.a;
     !M.n;

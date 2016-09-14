@@ -1,4 +1,4 @@
-tests/cases/compiler/importAnImport.ts(6,23): error TS2305: Module 'c.a.b' has no exported member 'ma'.
+tests/cases/compiler/importAnImport.ts(6,23): error TS2694: Namespace 'c.a.b' has no exported member 'ma'.
 
 
 ==== tests/cases/compiler/importAnImport.ts (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/compiler/importAnImport.ts(6,23): error TS2305: Module 'c.a.b' has n
     module m0 {
         import m8 = c.a.b.ma;
                           ~~
-!!! error TS2305: Module 'c.a.b' has no exported member 'ma'.
+!!! error TS2694: Namespace 'c.a.b' has no exported member 'ma'.
     }

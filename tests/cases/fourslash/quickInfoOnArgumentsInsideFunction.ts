@@ -4,5 +4,4 @@
 ////    return /*1*/arguments;
 ////}
 
-goTo.marker('1');
-verify.quickInfoIs('(local var) arguments: IArguments');
+verify.quickInfoAt("1", "(local var) arguments: IArguments");

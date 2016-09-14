@@ -120,8 +120,8 @@ var x =
 
       "foo" + "bar"
 >"foo" + "bar" : string
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
     }
     attr2={
 >attr2 : any
@@ -130,12 +130,12 @@ var x =
 >"foo" + "bar" +            "baz" + "bug" : string
 >"foo" + "bar" +            "baz" : string
 >"foo" + "bar" : string
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
       
       "baz" + "bug"
->"baz" : string
->"bug" : string
+>"baz" : "baz"
+>"bug" : "bug"
     }
     attr3={
 >attr3 : any
@@ -144,12 +144,12 @@ var x =
 >"foo" + "bar" +      "baz" + "bug" : string
 >"foo" + "bar" +      "baz" : string
 >"foo" + "bar" : string
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
 
       "baz" + "bug"
->"baz" : string
->"bug" : string
+>"baz" : "baz"
+>"bug" : "bug"
 
       // Extra line here.
     }
@@ -254,7 +254,7 @@ var x =
 >y : any
 
 ={2 } z />;
->2 : number
+>2 : 2
 >z : any
 
 <Component
@@ -291,21 +291,21 @@ var x =
 >Component : any
 >x : any
 >y : any
->2 : number
+>2 : 2
 
 <Component { ... x } y={2} z />;
 ><Component { ... x } y={2} z /> : any
 >Component : any
 >x : any
 >y : any
->2 : number
+>2 : 2
 >z : any
 
 <Component x={1} {...y} />;
 ><Component x={1} {...y} /> : any
 >Component : any
 >x : any
->1 : number
+>1 : 1
 >y : any
 
 
@@ -313,7 +313,7 @@ var x =
 ><Component x={1} y="2" {...z} {...z}><Child /></Component> : any
 >Component : any
 >x : any
->1 : number
+>1 : 1
 >y : any
 >z : any
 >z : any
@@ -331,10 +331,10 @@ var x =
 >z : any
 >{ y: 2 } : { y: number; }
 >y : number
->2 : number
+>2 : 2
 >z : any
 >z : any
->3 : number
+>3 : 3
 >Component : any
 
 

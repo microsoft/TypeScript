@@ -53,7 +53,7 @@ async function doStatement5() {
 >doStatement5 : () => Promise<void>
 
     do { if (1) continue; await x; } while (y);
->1 : number
+>1 : 1
 >await x : any
 >x : any
 >y : any
@@ -92,7 +92,7 @@ async function doStatement9() {
 
     C: do { if (1) continue C; await x; } while (y);
 >C : any
->1 : number
+>1 : 1
 >C : any
 >await x : any
 >x : any
@@ -129,7 +129,7 @@ async function doStatement13() {
 >doStatement13 : () => Promise<void>
 
     do { if (1) break; await x; } while (y);
->1 : number
+>1 : 1
 >await x : any
 >x : any
 >y : any
@@ -168,7 +168,7 @@ async function doStatement17() {
 
     G: do { if (1) break G; await x; } while (y);
 >G : any
->1 : number
+>1 : 1
 >G : any
 >await x : any
 >x : any

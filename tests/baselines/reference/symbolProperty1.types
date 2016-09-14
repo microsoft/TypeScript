@@ -8,7 +8,7 @@ var x = {
 
     [s]: 0,
 >s : symbol
->0 : number
+>0 : 0
 
     [s]() { },
 >s : symbol
@@ -17,6 +17,6 @@ var x = {
 >s : symbol
 
         return 0;
->0 : number
+>0 : 0
     }
 }

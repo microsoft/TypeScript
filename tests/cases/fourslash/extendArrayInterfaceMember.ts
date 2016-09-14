@@ -10,13 +10,11 @@ verify.numberOfErrorsInCurrentFile(1);
 // - Supplied parameters do not match any signature of call target.
 // - Could not select overload for 'call' expression.
 
-goTo.marker("y");
-verify.quickInfoIs("var y: any");
+verify.quickInfoAt("y", "var y: any");
 
 goTo.eof();
 edit.insert("interface Array<T> { pop(def: T): T; }");
 
 verify.not.errorExistsBetweenMarkers("1", "2");
-goTo.marker("y");
-verify.quickInfoIs("var y: number");
+verify.quickInfoAt("y", "var y: number");
 verify.numberOfErrorsInCurrentFile(0);

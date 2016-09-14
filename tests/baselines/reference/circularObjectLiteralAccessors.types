@@ -33,6 +33,6 @@ const a = {
     },
     foo: ''
 >foo : string
->'' : string
+>'' : ""
 
 };

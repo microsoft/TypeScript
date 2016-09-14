@@ -3,10 +3,10 @@ var map = new Map([["", true]]);
 >map : Map<string, boolean>
 >new Map([["", true]]) : Map<string, boolean>
 >Map : MapConstructor
->[["", true]] : [string, boolean][]
->["", true] : [string, boolean]
->"" : string
->true : boolean
+>[["", true]] : [string, true][]
+>["", true] : [string, true]
+>"" : ""
+>true : true
 
 for (var v of map) {
 >v : [string, boolean]

@@ -9,7 +9,7 @@ module M {
 
     export var a = 1;
 >a : number
->1 : number
+>1 : 1
 }
 
 // primary expression
@@ -52,9 +52,9 @@ module M2 {
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
         }
     }
 

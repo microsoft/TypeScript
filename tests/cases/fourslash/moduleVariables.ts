@@ -13,11 +13,8 @@
 ////    console.log(/*3*/x); // 3
 ////}
 
-goTo.marker('1');
-verify.quickInfoIs("var M.x: number", undefined);
-
-goTo.marker('2');
-verify.quickInfoIs("var M.x: number", undefined);
-
-goTo.marker('3');
-verify.quickInfoIs("var x: number", undefined);
+verify.quickInfos({
+    1: "var M.x: number",
+    2: "var M.x: number",
+    3: "var x: number"
+});

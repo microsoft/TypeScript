@@ -19,7 +19,7 @@ foo((y): (y2: number) => void => {
 >y.charAt : (pos: number) => string
 >y : string
 >charAt : (pos: number) => string
->0 : number
+>0 : 0
 
     return null;
 >null : null
@@ -44,7 +44,7 @@ foo((y: string) => {
 >toFixed : (fractionDigits?: number) => string
 
         return 0;
->0 : number
+>0 : 0
 
     };
 });

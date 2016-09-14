@@ -377,6 +377,20 @@ namespace ts {
         return result;
     }
 
+    export function mapObject<T, U>(object: MapLike<T>, f: (key: string, x: T) => [string, U]): MapLike<U> {
+        let result: MapLike<U>;
+        if (object) {
+            result = {};
+            for (const v of getOwnKeys(object)) {
+                const [key, value]: [string, U] = f(v, object[v]) || [undefined, undefined];
+                if (key !== undefined) {
+                    result[key] = value;
+                }
+            }
+        }
+        return result;
+    }
+
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
@@ -637,6 +651,18 @@ namespace ts {
         for (const key in source) {
             target[key] = source[key];
         }
+    }
+
+    export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
+    export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
+    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
+    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
+        for (const arg of args) {
+            for (const p of getOwnKeys(arg)) {
+                t[p] = arg[p];
+            }
+        }
+        return t;
     }
 
     /**

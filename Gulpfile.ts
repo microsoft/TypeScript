@@ -39,9 +39,11 @@ const gulp = helpMaker(originalGulp);
 const mochaParallel = require("./scripts/mocha-parallel.js");
 const {runTestsInParallel} = mochaParallel;
 
+Error.stackTraceLimit = 1000;
+
 const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "light", "colors", "lint", "soft"],
-    string: ["browser", "tests", "host", "reporter"],
+    string: ["browser", "tests", "host", "reporter", "stackTraceLimit"],
     alias: {
         d: "debug",
         t: "tests",
@@ -559,6 +561,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         const debug = cmdLineOptions["debug"];
         const tests = cmdLineOptions["tests"];
         const light = cmdLineOptions["light"];
+        const stackTraceLimit = cmdLineOptions["stackTraceLimit"];
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
@@ -578,7 +581,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         }
 
         if (tests || light || taskConfigsFolder) {
-            writeTestConfigFile(tests, light, taskConfigsFolder, workerCount);
+            writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
         }
 
         if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -727,6 +730,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
                         sourcemaps: {
                             "built/local/_stream_0.js": originalMap,
                             "built/local/bundle.js": maps,
+                            "node_modules/source-map-support/source-map-support.js": undefined,
                         }
                     });
                     const finalMap = chain.apply();
@@ -756,8 +760,8 @@ function cleanTestDirs(done: (e?: any) => void) {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
+function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
+    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
@@ -887,7 +891,7 @@ gulp.task(loggedIOJsPath, false, [], (done) => {
     const temp = path.join(builtLocalDirectory, "temp");
     mkdirP(temp, (err) => {
         if (err) { console.error(err); done(err); process.exit(1); };
-        exec(host, [LKGCompiler, "--outdir", temp, loggedIOpath], () => {
+        exec(host, [LKGCompiler, "--types --outdir", temp, loggedIOpath], () => {
             fs.renameSync(path.join(temp, "/harness/loggedIO.js"), loggedIOJsPath);
             del(temp).then(() => done(), done);
         }, done);
@@ -908,8 +912,8 @@ gulp.task(instrumenterJsPath, false, [servicesFile], () => {
         .pipe(gulp.dest("."));
 });
 
-gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", [loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
-    exec(host, [instrumenterJsPath, "record", "iocapture", builtLocalDirectory, compilerFilename], done, done);
+gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
+    exec(host, [instrumenterJsPath, "record", "iocapture", builtLocalCompiler], done, done);
 });
 
 gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", serverFile], () => {

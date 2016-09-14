@@ -4,7 +4,7 @@ enum E {
 
     A = 1,
 >A : E
->1 : number
+>1 : 1
 
     B,
 >B : E
@@ -12,8 +12,8 @@ enum E {
     C = 1 << 1,
 >C : E
 >1 << 1 : number
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     D,
 >D : E
