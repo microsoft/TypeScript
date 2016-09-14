@@ -15,6 +15,21 @@ interface MapConstructor {
 }
 declare var Map: MapConstructor;
 
+interface ReadonlyMap<K, V> {
+  forEach(
+      callbackfn: (value: V, index: K, map: ReadonlyMap<K, V>) => void,
+      thisArg?: any): void;
+  get(key: K): V|undefined;
+  has(key: K): boolean;
+  readonly size: number;
+}
+
+interface ReadonlyMapConstructor {
+  new<K, V>(entries?: [K, V][]): ReadonlyMap<K, V>;
+  readonly prototype: ReadonlyMap<any, any>;
+}
+declare var ReadonlyMap: ReadonlyMapConstructor;
+
 interface WeakMap<K, V> {
     delete(key: K): boolean;
     get(key: K): V | undefined;
@@ -44,6 +59,19 @@ interface SetConstructor {
     readonly prototype: Set<any>;
 }
 declare var Set: SetConstructor;
+
+interface ReadonlySet<T> {
+  forEach(callbackfn: (value: T, index: T, set: ReadonlySet<T>) => void, thisArg?: any):
+      void;
+  has(value: T): boolean;
+  readonly size: number;
+}
+
+interface ReadonlySetConstructor {
+  new<T>(values?: T[]): ReadonlySet<T>;
+  readonly prototype: ReadonlySet<any>;
+}
+declare var ReadonlySet: ReadonlySetConstructor;
 
 interface WeakSet<T> {
     add(value: T): this;
