@@ -9,5 +9,4 @@
 {
     function bar() {
     }
-    exports.bar = bar;
 }

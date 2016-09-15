@@ -42,6 +42,6 @@ function f(foo: T) {
         return foo[0];
 >foo[0] : S
 >foo : S[]
->0 : number
+>0 : 0
     }
 }

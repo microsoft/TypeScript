@@ -8,18 +8,9 @@
 /////*functionOverloadReference2*/functionOverload("123");
 /////*brokenOverload*/functionOverload({});
 
-goTo.marker('functionOverloadReference1');
-goTo.definition();
-verify.caretAtMarker('functionOverload1');
-
-goTo.marker('functionOverloadReference2');
-goTo.definition();
-verify.caretAtMarker('functionOverload2');
-
-goTo.marker('brokenOverload');
-goTo.definition();
-verify.caretAtMarker('functionOverload1');
-
-goTo.marker('functionOverload');
-goTo.definition();
-verify.caretAtMarker('functionOverloadDefinition');
+verify.goToDefinition({
+    functionOverloadReference1: "functionOverload1",
+    functionOverloadReference2: "functionOverload2",
+    brokenOverload: "functionOverload1",
+    functionOverload: "functionOverloadDefinition"
+});

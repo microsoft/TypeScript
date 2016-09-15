@@ -77,6 +77,6 @@ var Derived = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Derived.a = _super.call(this);
     return Derived;
 }(Base));
+Derived.a = _super.call(this);

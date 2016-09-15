@@ -2,9 +2,9 @@
 var a = [1, 2, 3];
 >a : number[]
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 for (var v of a) {
 >v : number
@@ -12,5 +12,5 @@ for (var v of a) {
 
     let a = 0;
 >a : number
->0 : number
+>0 : 0
 }

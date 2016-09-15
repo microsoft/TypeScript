@@ -4,5 +4,5 @@ declare enum E {
 
  e = 3.3 // Decimal
 >e : E
->3.3 : number
+>3.3 : 3.3
 }

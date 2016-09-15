@@ -5,5 +5,5 @@ v;
 for (var v of [0]) { }
 >v : number
 >[0] : number[]
->0 : number
+>0 : 0
 

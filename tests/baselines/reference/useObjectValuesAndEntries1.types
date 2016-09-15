@@ -4,9 +4,9 @@ var o = { a: 1, b: 2 };
 >o : { a: number; b: number; }
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
->1 : number
+>1 : 1
 >b : number
->2 : number
+>2 : 2
 
 for (var x of Object.values(o)) {
 >x : number
@@ -35,5 +35,5 @@ var entries1 = Object.entries(1); // <-- entries: [string, any][]
 >Object.entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
->1 : number
+>1 : 1
 

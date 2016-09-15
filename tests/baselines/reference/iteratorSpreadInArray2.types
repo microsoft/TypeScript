@@ -25,7 +25,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }
@@ -51,11 +51,11 @@ class NumberIterator {
 
             value: 0,
 >value : number
->0 : number
+>0 : 0
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }

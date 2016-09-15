@@ -6,7 +6,7 @@ class A extends Z { private x = 1 }
 >A : A
 >Z : Z
 >x : number
->1 : number
+>1 : 1
 
 class B extends A {}
 >B : B

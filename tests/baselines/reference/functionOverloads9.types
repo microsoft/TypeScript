@@ -6,11 +6,11 @@ function foo(foo:string);
 function foo(foo?:string){ return '' };
 >foo : (foo: string) => any
 >foo : string
->'' : string
+>'' : ""
 
 var x = foo('foo');
 >x : any
 >foo('foo') : any
 >foo : (foo: string) => any
->'foo' : string
+>'foo' : "foo"
 

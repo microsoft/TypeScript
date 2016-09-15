@@ -64,7 +64,7 @@ module TypeScript {
 >findToken : (position: number, includeSkippedTokens?: boolean) => PositionedToken
 >position : number
 >includeSkippedTokens : boolean
->false : boolean
+>false : false
 >PositionedToken : PositionedToken
 
             var positionedToken = this.findTokenInternal(null, position, 0);
@@ -75,7 +75,7 @@ module TypeScript {
 >findTokenInternal : (x: any, y: any, z: any) => any
 >null : null
 >position : number
->0 : number
+>0 : 0
 
             return null;
 >null : null

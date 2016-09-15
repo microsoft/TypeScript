@@ -1,8 +1,8 @@
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(10,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(19,4): error TS2339: Property 'foo' does not exist on type 'Date'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(45,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(63,9): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(64,18): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(63,9): error TS2345: Argument of type 'true' is not assignable to parameter of type 'number'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(64,18): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(70,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
 
 
@@ -77,10 +77,10 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
     // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
     fn4 `${ true }${ null }`;
             ~~~~
-!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'number'.
     fn4 `${ null }${ true }`;
                      ~~~~
-!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
     
     // Non - generic overloads where contextual typing of function arguments has errors
     function fn5(strs: TemplateStringsArray, f: (n: string) => void): string;

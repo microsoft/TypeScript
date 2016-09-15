@@ -778,7 +778,17 @@ namespace ts.server {
 
             return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                 if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                    result.push(entry);
+                    const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+
+                    let convertedSpan: protocol.TextSpan = undefined;
+                    if (replacementSpan) {
+                        convertedSpan = {
+                            start: compilerService.host.positionToLineOffset(fileName, replacementSpan.start),
+                            end: compilerService.host.positionToLineOffset(fileName, replacementSpan.start + replacementSpan.length)
+                        };
+                    }
+
+                    result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
                 }
                 return result;
             }, []).sort((a, b) => a.name.localeCompare(b.name));
@@ -930,7 +940,7 @@ namespace ts.server {
             return this.decorateNavigationBarItem(project, fileName, items, compilerService.host.getLineIndex(fileName));
         }
 
-        private getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number): protocol.NavtoItem[] {
+        private getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number, currentFileOnly?: boolean): protocol.NavtoItem[] {
             const file = ts.normalizePath(fileName);
             const info = this.projectService.getScriptInfo(file);
             const projects = this.projectService.findReferencingProjects(info);
@@ -943,7 +953,7 @@ namespace ts.server {
                 projectsWithLanguageServiceEnabeld,
                 (project: Project) => {
                     const compilerService = project.compilerService;
-                    const navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);
+                    const navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount, currentFileOnly ? fileName : undefined);
                     if (!navItems) {
                         return [];
                     }
@@ -1178,7 +1188,7 @@ namespace ts.server {
             },
             [CommandNames.Navto]: (request: protocol.Request) => {
                 const navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
-                return { response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount), responseRequired: true };
+                return { response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount, navtoArgs.currentFileOnly), responseRequired: true };
             },
             [CommandNames.Brace]: (request: protocol.Request) => {
                 const braceArguments = <protocol.FileLocationRequestArgs>request.arguments;

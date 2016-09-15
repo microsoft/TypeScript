@@ -827,10 +827,6 @@
         "category": "Error",
         "code": 1308
     },
-    "Async functions are only available when targeting ECMAScript 2015 or higher.": {
-        "category": "Error",
-        "code": 1311
-    },
     "'=' can only be used in an object literal property inside a destructuring assignment.": {
         "category": "Error",
         "code": 1312
@@ -1047,7 +1043,7 @@
         "category": "Error",
         "code": 2348
     },
-    "Cannot invoke an expression whose type lacks a call signature.": {
+    "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": {
         "category": "Error",
         "code": 2349
     },
@@ -1066,10 +1062,6 @@
     "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
         "category": "Error",
         "code": 2353
-    },
-    "No best common type exists among return expressions.": {
-        "category": "Error",
-        "code": 2354
     },
     "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
@@ -1635,10 +1627,6 @@
         "category": "Error",
         "code": 2503
     },
-    "No best common type exists among yield expressions.": {
-        "category": "Error",
-        "code": 2504
-    },
     "A generator cannot have a 'void' type annotation.": {
         "category": "Error",
         "code": 2505
@@ -1703,7 +1691,7 @@
         "category": "Error",
         "code": 2521
     },
-    "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.": {
+    "The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.": {
         "category": "Error",
         "code": 2522
     },
@@ -1959,6 +1947,19 @@
         "category": "Error",
         "code": 2692
     },
+    "'{0}' only refers to a type, but is being used as a value here.": {
+        "category": "Error",
+        "code": 2693
+    },
+    "Namespace '{0}' has no exported member '{1}'.": {
+        "category": "Error",
+        "code": 2694
+    },
+    "Left side of comma operator is unused and has no side effects.": {
+        "category": "Error",
+        "code": 2695
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2476,6 +2477,10 @@
         "category": "Message",
         "code": 6038
     },
+    "STRATEGY": {
+        "category": "Message",
+        "code": 6039
+    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -2840,6 +2845,10 @@
         "category": "Error",
         "code": 6138
     },
+    "Import emit helpers from 'tslib'.": {
+        "category": "Message",
+        "code": 6139
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2871,7 +2880,7 @@
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
-    }, 
+    },
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
         "code": 7017
@@ -3047,5 +3056,14 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+
+    "Circularity detected while resolving configuration: {0}": {
+        "category": "Error",
+        "code": 18000
+    },
+    "The path in an 'extends' options must be relative or rooted.": {
+        "category": "Error",
+        "code": 18001
     }
 }

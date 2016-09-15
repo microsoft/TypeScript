@@ -6,6 +6,6 @@ function f() {
 >f : () => string
 
     return "";
->"" : string
+>"" : ""
 }
 

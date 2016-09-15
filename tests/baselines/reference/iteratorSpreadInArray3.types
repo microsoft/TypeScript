@@ -4,8 +4,8 @@ var array = [...[0, 1], ...new SymbolIterator];
 >[...[0, 1], ...new SymbolIterator] : (number | symbol)[]
 >...[0, 1] : number
 >[0, 1] : number[]
->0 : number
->1 : number
+>0 : 0
+>1 : 1
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator
 >SymbolIterator : typeof SymbolIterator
@@ -26,7 +26,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }

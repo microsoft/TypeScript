@@ -2,7 +2,7 @@
 enum Enum { None = 0 }
 >Enum : Enum
 >None : Enum
->0 : number
+>0 : 0
 
 var enumType: Enum = Enum.None;
 >enumType : Enum
@@ -13,11 +13,11 @@ var enumType: Enum = Enum.None;
 
 var numberType: number = 0;
 >numberType : number
->0 : number
+>0 : 0
 
 var anyType: any = 0;
 >anyType : any
->0 : number
+>0 : 0
  
 enumType ^ numberType;
 >enumType ^ numberType : number

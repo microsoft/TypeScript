@@ -1,5 +1,5 @@
 tests/cases/compiler/importDeclWithExportModifier.ts(5,19): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/importDeclWithExportModifier.ts(5,21): error TS2305: Module 'x' has no exported member 'c'.
+tests/cases/compiler/importDeclWithExportModifier.ts(5,21): error TS2694: Namespace 'x' has no exported member 'c'.
 
 
 ==== tests/cases/compiler/importDeclWithExportModifier.ts (2 errors) ====
@@ -11,6 +11,6 @@ tests/cases/compiler/importDeclWithExportModifier.ts(5,21): error TS2305: Module
                       ~
 !!! error TS2304: Cannot find name 'x'.
                         ~
-!!! error TS2305: Module 'x' has no exported member 'c'.
+!!! error TS2694: Namespace 'x' has no exported member 'c'.
     var b: a;
     

@@ -17,17 +17,17 @@ module M {
   
 
 //// [aliasesInSystemModule1.js]
-System.register(['foo'], function(exports_1, context_1) {
+System.register(["foo"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var alias;
-    var cls, cls2, x, y, z, M;
+    var alias, cls, cls2, x, y, z, M;
     return {
-        setters:[
+        setters: [
             function (alias_1) {
                 alias = alias_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             cls = alias.Class;
             exports_1("cls2", cls2 = alias.Class);
             x = new alias.Class();
@@ -40,5 +40,5 @@ System.register(['foo'], function(exports_1, context_1) {
                 var z = new cls2();
             })(M || (M = {}));
         }
-    }
+    };
 });

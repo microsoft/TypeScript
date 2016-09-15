@@ -199,16 +199,11 @@ namespace ts {
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
             const cbWithRecursive = { cb: callback, recursive };
-            const callbacks = multiMapAdd(this.watchedDirectories, path, cbWithRecursive);
+            multiMapAdd(this.watchedDirectories, path, cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
-                close: () => {
-                    unorderedRemoveItem(callbacks, cbWithRecursive);
-                    if (!callbacks.length) {
-                        delete this.watchedDirectories[path];
-                    }
-                }
+                close: () => multiMapRemove(this.watchedDirectories, path, cbWithRecursive)
             };
         }
 
@@ -234,15 +229,8 @@ namespace ts {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            const callbacks = multiMapAdd(this.watchedFiles, path, callback);
-            return {
-                close: () => {
-                    unorderedRemoveItem(callbacks, callback);
-                    if (!callbacks.length) {
-                        delete this.watchedFiles[path];
-                    }
-                }
-            };
+            multiMapAdd(this.watchedFiles, path, callback);
+            return { close: () => multiMapRemove(this.watchedFiles, path, callback) };
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
@@ -275,6 +263,8 @@ namespace ts {
         readonly write = (s: string) => notImplemented();
         readonly createDirectory = (s: string) => notImplemented();
         readonly exit = () => notImplemented();
+        readonly getEnvironmentVariable = (s: string) => notImplemented();
+        readonly tryEnableSourceMapsForHost = () => notImplemented();
     }
 
     describe("tsserver-project-system", () => {

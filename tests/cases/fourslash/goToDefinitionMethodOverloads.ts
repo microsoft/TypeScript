@@ -18,27 +18,11 @@
 ////methodOverload./*instanceMethodReference1*/method();
 ////methodOverload./*instanceMethodReference2*/method("456");
 
-goTo.marker('staticMethodReference1');
-goTo.definition();
-verify.caretAtMarker('staticMethodOverload1');
-
-goTo.marker('staticMethodReference2');
-goTo.definition();
-verify.caretAtMarker('staticMethodOverload2');
-
-goTo.marker('instanceMethodReference1');
-goTo.definition();
-verify.caretAtMarker('instanceMethodOverload1');
-
-goTo.marker('instanceMethodReference2');
-goTo.definition();
-verify.caretAtMarker('instanceMethodOverload2');
-
-goTo.marker('staticMethodOverload1Name');
-goTo.definition();
-verify.caretAtMarker('staticMethodDefinition');
-
-goTo.marker('instanceMethodOverload1Name');
-goTo.definition();
-verify.caretAtMarker('instanceMethodDefinition');
-
+verify.goToDefinition({
+    staticMethodReference1: "staticMethodOverload1",
+    staticMethodReference2: "staticMethodOverload2",
+    instanceMethodReference1: "instanceMethodOverload1",
+    instanceMethodReference2: "instanceMethodOverload2",
+    staticMethodOverload1Name: "staticMethodDefinition",
+    instanceMethodOverload1Name: "instanceMethodDefinition"
+});

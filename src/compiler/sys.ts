@@ -32,6 +32,8 @@ namespace ts {
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
         realpath?(path: string): string;
+        /*@internal*/ getEnvironmentVariable(name: string): string;
+        /*@internal*/ tryEnableSourceMapsForHost?(): void;
     }
 
     export interface FileWatcher {
@@ -78,6 +80,7 @@ namespace ts {
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         realpath(path: string): string;
+        getEnvironmentVariable?(name: string): string;
     };
 
     export var sys: System = (function() {
@@ -212,6 +215,9 @@ namespace ts {
                     return shell.CurrentDirectory;
                 },
                 getDirectories,
+                getEnvironmentVariable(name: string) {
+                    return new ActiveXObject("WScript.Shell").ExpandEnvironmentStrings(`%${name}%`);
+                },
                 readDirectory,
                 exit(exitCode?: number): void {
                     try {
@@ -283,13 +289,7 @@ namespace ts {
                 }
 
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
-                    const callbacks = fileWatcherCallbacks[filePath];
-                    if (callbacks) {
-                        unorderedRemoveItem(callbacks, callback);
-                        if (callbacks.length === 0) {
-                            delete fileWatcherCallbacks[filePath];
-                        }
-                    }
+                    multiMapRemove(fileWatcherCallbacks, filePath, callback);
                 }
 
                 function fileEventHandler(eventName: string, relativeFileName: string, baseDirPath: string) {
@@ -429,7 +429,7 @@ namespace ts {
             }
 
             function getDirectories(path: string): string[] {
-                return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
+                return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
 
             const nodeSystem: System = {
@@ -505,6 +505,9 @@ namespace ts {
                     return process.cwd();
                 },
                 getDirectories,
+                getEnvironmentVariable(name: string) {
+                    return process.env[name] || "";
+                },
                 readDirectory,
                 getModifiedTime(path) {
                     try {
@@ -540,6 +543,14 @@ namespace ts {
                 },
                 realpath(path: string): string {
                     return _fs.realpathSync(path);
+                },
+                tryEnableSourceMapsForHost() {
+                    try {
+                        require("source-map-support").install();
+                    }
+                    catch (e) {
+                        // Could not enable source maps.
+                    }
                 }
             };
             return nodeSystem;
@@ -571,6 +582,7 @@ namespace ts {
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,
+                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || ((name: string) => ""),
                 readDirectory: (path: string, extensions?: string[], excludes?: string[], includes?: string[]) => {
                     const pattern = getFileMatcherPatterns(path, extensions, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
                     return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);

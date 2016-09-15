@@ -15,10 +15,10 @@ module TypeScript2 {
 >PullSymbolVisibility : PullSymbolVisibility
 
     Private,
->Private : PullSymbolVisibility
+>Private : PullSymbolVisibility.Private
 
     Public
->Public : PullSymbolVisibility
+>Public : PullSymbolVisibility.Public
   }
 　
   export class PullSymbol {

@@ -35,9 +35,9 @@ var M;
             _super.apply(this, arguments);
         }
         C.prototype.method = function () { };
-        __decorate([
-            _super.decorator
-        ], C.prototype, "method", null);
         return C;
     }(S));
+    __decorate([
+        _super.decorator
+    ], C.prototype, "method", null);
 })(M || (M = {}));

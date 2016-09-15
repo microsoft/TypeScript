@@ -36,6 +36,6 @@ function f(foo: T) {
 >foo as S[] : S[]
 >foo : S[]
 >S : S
->0 : number
+>0 : 0
     }
 }
