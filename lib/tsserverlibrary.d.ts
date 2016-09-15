@@ -1,3 +1,4 @@
+/// <reference path="../../src/server/types.d.ts" />
 /// <reference path="../../src/server/protocol.d.ts" />
 declare namespace ts {
     interface MapLike<T> {
@@ -15,6 +16,7 @@ declare namespace ts {
         contains(fileName: Path): boolean;
         remove(fileName: Path): void;
         forEachValue(f: (key: Path, v: T) => void): void;
+        getKeys(): Path[];
         clear(): void;
     }
     interface TextRange {
@@ -1180,7 +1182,7 @@ declare namespace ts {
     interface Program extends ScriptReferenceHost {
         getRootFileNames(): string[];
         getSourceFiles(): SourceFile[];
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult;
         getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
         getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -1189,6 +1191,7 @@ declare namespace ts {
         getTypeChecker(): TypeChecker;
         getCommonSourceDirectory(): string;
         getDiagnosticsProducingTypeChecker(): TypeChecker;
+        dropDiagnosticsProducingTypeChecker(): void;
         getClassifiableNames(): Map<string>;
         getNodeCount(): number;
         getIdentifierCount(): number;
@@ -1272,6 +1275,7 @@ declare namespace ts {
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        getAmbientModules(): Symbol[];
         getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
@@ -1905,6 +1909,7 @@ declare namespace ts {
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
+        compileOnSave?: boolean;
     }
     const enum WatchDirectoryFlags {
         None = 0,
@@ -2166,7 +2171,7 @@ declare namespace ts {
     function addRange<T>(to: T[], from: T[]): void;
     function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number): boolean;
     function lastOrUndefined<T>(array: T[]): T;
-    function binarySearch(array: number[], value: number): number;
+    function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number): number;
     function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
     function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
@@ -2241,6 +2246,8 @@ declare namespace ts {
     const supportedTypescriptExtensionsForExtractExtension: string[];
     const supportedJavascriptExtensions: string[];
     function getSupportedExtensions(options?: CompilerOptions): string[];
+    function hasJavaScriptFileExtension(fileName: string): boolean;
+    function hasTypeScriptFileExtension(fileName: string): boolean;
     function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions): boolean;
     const enum ExtensionPriority {
         TypeScriptFiles = 0,
@@ -2280,6 +2287,24 @@ declare namespace ts {
     }
     function copyListRemovingItem<T>(item: T, list: T[]): T[];
     function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string;
+    function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
+    function isTraceEnabled(compilerOptions: CompilerOptions, host: ModuleResolutionHost): boolean;
+    function hasZeroOrOneAsteriskCharacter(str: string): boolean;
+    function createResolvedModule(resolvedFileName: string, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations;
+    function isExternalModuleNameRelative(moduleName: string): boolean;
+    interface ModuleResolutionState {
+        host: ModuleResolutionHost;
+        compilerOptions: CompilerOptions;
+        traceEnabled: boolean;
+        skipTsx: boolean;
+    }
+    function readJson(path: string, host: ModuleResolutionHost): {
+        typings?: string;
+        types?: string;
+        main?: string;
+    };
+    function getEmitModuleKind(compilerOptions: CompilerOptions): ModuleKind;
+    function getEmitScriptTarget(compilerOptions: CompilerOptions): ScriptTarget;
 }
 declare namespace ts {
     type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
@@ -6584,6 +6609,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Variable_0_implicitly_has_an_1_type: {
             code: number;
             category: DiagnosticCategory;
@@ -6627,12 +6658,6 @@ declare namespace ts {
             message: string;
         };
         Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number: {
-            code: number;
-            category: DiagnosticCategory;
-            key: string;
-            message: string;
-        };
-        Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_type_annotation: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -6717,6 +6742,18 @@ declare namespace ts {
             message: string;
         };
         Binding_element_0_implicitly_has_an_1_type: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -6954,6 +6991,7 @@ declare namespace ts {
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
 declare namespace ts {
+    const compileOnSaveCommandLineOption: CommandLineOption;
     const optionDeclarations: CommandLineOption[];
     let typingOptionDeclarations: CommandLineOption[];
     interface OptionNameMap {
@@ -6970,7 +7008,7 @@ declare namespace ts {
         config?: any;
         error?: Diagnostic;
     };
-    function parseConfigFileTextToJson(fileName: string, jsonText: string): {
+    function parseConfigFileTextToJson(fileName: string, jsonText: string, stripComments?: boolean): {
         config?: any;
         error?: Diagnostic;
     };
@@ -6978,14 +7016,111 @@ declare namespace ts {
         compilerOptions: Map<CompilerOptionsValue>;
     };
     function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string): ParsedCommandLine;
+    function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean;
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
         errors: Diagnostic[];
     };
     function convertTypingOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
-        options: CompilerOptions;
+        options: TypingOptions;
         errors: Diagnostic[];
     };
+}
+declare namespace ts.JsTyping {
+    interface TypingResolutionHost {
+        directoryExists: (path: string) => boolean;
+        fileExists: (fileName: string) => boolean;
+        readFile: (path: string, encoding?: string) => string;
+        readDirectory: (rootDir: string, extensions: string[], excludes: string[], includes: string[], depth?: number) => string[];
+    }
+    function discoverTypings(host: TypingResolutionHost, fileNames: string[], projectRootPath: Path, safeListPath: Path, packageNameToTypingLocation: Map<string>, typingOptions: TypingOptions, compilerOptions: CompilerOptions): {
+        cachedTypingPaths: string[];
+        newTypingNames: string[];
+        filesToWatch: string[];
+    };
+}
+declare namespace ts.server {
+    enum LogLevel {
+        terse = 0,
+        normal = 1,
+        requestTime = 2,
+        verbose = 3,
+    }
+    const emptyArray: ReadonlyArray<any>;
+    interface Logger {
+        close(): void;
+        hasLevel(level: LogLevel): boolean;
+        loggingEnabled(): boolean;
+        perftrc(s: string): void;
+        info(s: string): void;
+        startGroup(): void;
+        endGroup(): void;
+        msg(s: string, type?: Msg.Types): void;
+        getLogFileName(): string;
+    }
+    namespace Msg {
+        type Err = "Err";
+        const Err: Err;
+        type Info = "Info";
+        const Info: Info;
+        type Perf = "Perf";
+        const Perf: Perf;
+        type Types = Err | Info | Perf;
+    }
+    function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, cachePath?: string): DiscoverTypings;
+    namespace Errors {
+        function ThrowNoProject(): never;
+        function ThrowProjectLanguageServiceDisabled(): never;
+        function ThrowProjectDoesNotContainDocument(fileName: string, project: Project): never;
+    }
+    function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings;
+    function mergeMaps(target: MapLike<any>, source: MapLike<any>): void;
+    function removeItemFromSet<T>(items: T[], itemToRemove: T): void;
+    type NormalizedPath = string & {
+        __normalizedPathTag: any;
+    };
+    function toNormalizedPath(fileName: string): NormalizedPath;
+    function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path;
+    function asNormalizedPath(fileName: string): NormalizedPath;
+    interface NormalizedPathMap<T> {
+        get(path: NormalizedPath): T;
+        set(path: NormalizedPath, value: T): void;
+        contains(path: NormalizedPath): boolean;
+        remove(path: NormalizedPath): void;
+    }
+    function createNormalizedPathMap<T>(): NormalizedPathMap<T>;
+    const nullLanguageService: LanguageService;
+    interface ServerLanguageServiceHost {
+        setCompilationSettings(options: CompilerOptions): void;
+        notifyFileRemoved(info: ScriptInfo): void;
+    }
+    const nullLanguageServiceHost: ServerLanguageServiceHost;
+    interface ProjectOptions {
+        configHasFilesProperty?: boolean;
+        files?: string[];
+        wildcardDirectories?: Map<WatchDirectoryFlags>;
+        compilerOptions?: CompilerOptions;
+        typingOptions?: TypingOptions;
+        compileOnSave?: boolean;
+    }
+    function isInferredProjectName(name: string): boolean;
+    function makeInferredProjectName(counter: number): string;
+    class ThrottledOperations {
+        private readonly host;
+        private pendingTimeouts;
+        constructor(host: ServerHost);
+        schedule(operationId: string, delay: number, cb: () => void): void;
+        private static run(self, operationId, cb);
+    }
+    class GcTimer {
+        private readonly host;
+        private readonly delay;
+        private readonly logger;
+        private timerId;
+        constructor(host: ServerHost, delay: number, logger: Logger);
+        scheduleCollect(): void;
+        private static run(self);
+    }
 }
 declare namespace ts {
     interface ReferencePathMatchResult {
@@ -7015,7 +7150,7 @@ declare namespace ts {
     function getSingleLineStringWriter(): StringSymbolWriter;
     function releaseStringWriter(writer: StringSymbolWriter): void;
     function getFullWidth(node: Node): number;
-    function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean;
+    function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equaler?: (a: T, b: T) => boolean): boolean;
     function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean;
     function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule;
     function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void;
@@ -7098,7 +7233,6 @@ declare namespace ts {
     function isElementAccessExpression(node: Node): node is ElementAccessExpression;
     function isJSXTagName(node: Node): boolean;
     function isExpression(node: Node): boolean;
-    function isExternalModuleNameRelative(moduleName: string): boolean;
     function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
     function isExternalModuleImportEqualsDeclaration(node: Node): boolean;
     function getExternalModuleImportEqualsDeclarationExpression(node: Node): Expression;
@@ -7187,14 +7321,12 @@ declare namespace ts {
     function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string;
     function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string): string;
     function getDeclarationEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost): string;
-    function getEmitScriptTarget(compilerOptions: CompilerOptions): ScriptTarget;
-    function getEmitModuleKind(compilerOptions: CompilerOptions): ModuleKind;
     interface EmitFileNames {
         jsFilePath: string;
         sourceMapFilePath: string;
         declarationFilePath: string;
     }
-    function forEachExpectedEmitFile(host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void, targetSourceFile?: SourceFile): void;
+    function forEachExpectedEmitFile(host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) => void, targetSourceFile?: SourceFile, emitOnlyDtsFiles?: boolean): void;
     function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string): string;
     function writeFile(host: EmitHost, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles?: SourceFile[]): void;
     function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number): number;
@@ -7222,8 +7354,6 @@ declare namespace ts {
     function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean;
     function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean;
     function getLocalSymbolForExportDefault(symbol: Symbol): Symbol;
-    function hasJavaScriptFileExtension(fileName: string): boolean;
-    function hasTypeScriptFileExtension(fileName: string): boolean;
     function tryExtractTypeScriptExtension(fileName: string): string | undefined;
     const stringify: (value: any) => string;
     function convertToBase64(input: string): string;
@@ -7255,6 +7385,19 @@ declare namespace ts {
     function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean;
 }
 declare namespace ts {
+    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string;
+    function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, checkOneLevel: boolean): string;
+    function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined;
+    function tryParsePattern(pattern: string): Pattern | undefined;
+    function directoryProbablyExists(directoryName: string, host: {
+        directoryExists?: (directoryName: string) => boolean;
+    }): boolean;
+    function pathToPackageJson(directory: string): string;
+}
+declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
@@ -7268,6 +7411,7 @@ declare namespace ts {
         jsDocTypeExpression: JSDocTypeExpression;
         diagnostics: Diagnostic[];
     };
+    function fixupParentReferences(rootNode: Node): void;
 }
 declare namespace ts {
     const enum ModuleInstanceState {
@@ -7301,28 +7445,23 @@ declare namespace ts {
 }
 declare namespace ts {
     function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[];
-    function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection): boolean;
+    function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, emitOnlyDtsFiles: boolean): boolean;
 }
 declare namespace ts {
     function getResolvedExternalModuleName(host: EmitHost, file: SourceFile): string;
     function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string;
-    function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult;
+    function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult;
 }
 declare namespace ts {
     const version: string;
-    function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string;
+    function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: (fileName: string) => string): string;
-    function hasZeroOrOneAsteriskCharacter(str: string): boolean;
+    function getEffectiveTypeRoots(options: CompilerOptions, host: {
+        directoryExists?(directoryName: string): boolean;
+        getCurrentDirectory?(): string;
+    }): string[] | undefined;
     function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
-    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
-    function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined;
-    function tryParsePattern(pattern: string): Pattern | undefined;
-    function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
-    function directoryProbablyExists(directoryName: string, host: {
-        directoryExists?: (directoryName: string) => boolean;
-    }): boolean;
-    function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
     interface FormatDiagnosticsHost {
@@ -7342,7 +7481,7 @@ declare namespace ts.OutliningElementsCollector {
     function collectElements(sourceFile: SourceFile): OutliningSpan[];
 }
 declare namespace ts.NavigateTo {
-    function getNavigateToItems(program: Program, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[];
+    function getNavigateToItems(program: Program, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number, excludeDts: boolean): NavigateToItem[];
 }
 declare namespace ts.NavigationBar {
     function getNavigationBarItems(sourceFile: SourceFile): NavigationBarItem[];
@@ -7427,6 +7566,9 @@ declare namespace ts {
     function isAccessibilityModifier(kind: SyntaxKind): boolean;
     function compareDataObjects(dst: any, src: any): boolean;
     function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node): boolean;
+    function hasTrailingDirectorySeparator(path: string): boolean;
+    function isInReferenceComment(sourceFile: SourceFile, position: number): boolean;
+    function isInNonReferenceComment(sourceFile: SourceFile, position: number): boolean;
 }
 declare namespace ts {
     function isFirstDeclarationOfSymbolParameter(symbol: Symbol): boolean;
@@ -7449,22 +7591,9 @@ declare namespace ts {
     function stripQuotes(name: string): string;
     function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean;
     function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind;
-    function parseAndReEmitConfigJSONFile(content: string): {
+    function sanitizeConfigFile(configFileName: string, content: string): {
         configJsonObject: any;
         diagnostics: Diagnostic[];
-    };
-}
-declare namespace ts.JsTyping {
-    interface TypingResolutionHost {
-        directoryExists: (path: string) => boolean;
-        fileExists: (fileName: string) => boolean;
-        readFile: (path: string, encoding?: string) => string;
-        readDirectory: (rootDir: string, extensions: string[], excludes: string[], includes: string[], depth?: number) => string[];
-    }
-    function discoverTypings(host: TypingResolutionHost, fileNames: string[], projectRootPath: Path, safeListPath: Path, packageNameToTypingLocation: Map<string>, typingOptions: TypingOptions, compilerOptions: CompilerOptions): {
-        cachedTypingPaths: string[];
-        newTypingNames: string[];
-        filesToWatch: string[];
     };
 }
 declare namespace ts.formatting {
@@ -7835,7 +7964,7 @@ declare namespace ts.formatting {
         getRuleName(rule: Rule): string;
         getRuleByName(name: string): Rule;
         getRulesMap(): RulesMap;
-        ensureUpToDate(options: ts.FormatCodeOptions): void;
+        ensureUpToDate(options: ts.FormatCodeSettings): void;
         private createActiveRules(options);
     }
 }
@@ -7848,24 +7977,24 @@ declare namespace ts.formatting {
         token: TextRangeWithKind;
         trailingTrivia: TextRangeWithKind[];
     }
-    function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[];
-    function formatOnSemicolon(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[];
-    function formatOnClosingCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[];
-    function formatDocument(sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[];
-    function formatSelection(start: number, end: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[];
-    function getIndentationString(indentation: number, options: FormatCodeOptions): string;
+    function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[];
+    function formatOnSemicolon(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[];
+    function formatOnClosingCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[];
+    function formatDocument(sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[];
+    function formatSelection(start: number, end: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[];
+    function getIndentationString(indentation: number, options: EditorSettings): string;
 }
 declare namespace ts.formatting {
     namespace SmartIndenter {
-        function getIndentation(position: number, sourceFile: SourceFile, options: EditorOptions): number;
-        function getBaseIndentation(options: EditorOptions): number;
-        function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number;
+        function getIndentation(position: number, sourceFile: SourceFile, options: EditorSettings): number;
+        function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: EditorSettings): number;
+        function getBaseIndentation(options: EditorSettings): number;
         function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFile): boolean;
-        function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): {
+        function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorSettings): {
             column: number;
             character: number;
         };
-        function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number;
+        function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorSettings): number;
         function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean): boolean;
         function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind): boolean;
     }
@@ -7940,6 +8069,20 @@ declare namespace ts {
         ambientExternalModules: string[];
         isLibFile: boolean;
     }
+    function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): {
+        message: string;
+        start: number;
+        length: number;
+        category: string;
+        code: number;
+    }[];
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): {
+        message: string;
+        start: number;
+        length: number;
+        category: string;
+        code: number;
+    };
     interface HostCancellationToken {
         isCancellationRequested(): boolean;
     }
@@ -7959,6 +8102,9 @@ declare namespace ts {
         trace?(s: string): void;
         error?(s: string): void;
         useCaseSensitiveFileNames?(): boolean;
+        readDirectory?(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
+        readFile?(path: string, encoding?: string): string;
+        fileExists?(path: string): boolean;
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
@@ -7987,18 +8133,18 @@ declare namespace ts {
         findReferences(fileName: string, position: number): ReferencedSymbol[];
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number, excludeDts?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
-        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
-        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
+        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions | EditorSettings): number;
+        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
-        getEmitOutput(fileName: string): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         getNonBoundSourceFile(fileName: string): SourceFile;
         dispose(): void;
@@ -8082,6 +8228,14 @@ declare namespace ts {
         ConvertTabsToSpaces: boolean;
         IndentStyle: IndentStyle;
     }
+    interface EditorSettings {
+        baseIndentSize?: number;
+        indentSize: number;
+        tabSize: number;
+        newLineCharacter: string;
+        convertTabsToSpaces: boolean;
+        indentStyle: IndentStyle;
+    }
     enum IndentStyle {
         None = 0,
         Block = 1,
@@ -8099,8 +8253,22 @@ declare namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string | undefined;
     }
+    interface FormatCodeSettings extends EditorSettings {
+        insertSpaceAfterCommaDelimiter: boolean;
+        insertSpaceAfterSemicolonInForStatements: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: boolean;
+        placeOpenBraceOnNewLineForFunctions: boolean;
+        placeOpenBraceOnNewLineForControlBlocks: boolean;
+    }
+    function toEditorSettings(options: FormatCodeOptions | FormatCodeSettings): FormatCodeSettings;
+    function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
     interface DefinitionInfo {
         fileName: string;
         textSpan: TextSpan;
@@ -8109,8 +8277,11 @@ declare namespace ts {
         containerKind: string;
         containerName: string;
     }
+    interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
+        displayParts: SymbolDisplayPart[];
+    }
     interface ReferencedSymbol {
-        definition: DefinitionInfo;
+        definition: ReferencedSymbolDefinitionInfo;
         references: ReferenceEntry[];
     }
     enum SymbolDisplayPartKind {
@@ -8188,6 +8359,7 @@ declare namespace ts {
         kind: string;
         kindModifiers: string;
         sortText: string;
+        replacementSpan?: TextSpan;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -8292,6 +8464,8 @@ declare namespace ts {
         const alias: string;
         const constElement: string;
         const letElement: string;
+        const directory: string;
+        const externalModuleName: string;
     }
     namespace ScriptElementKindModifier {
         const none: string;
@@ -8386,99 +8560,490 @@ declare namespace ts {
     function getDefaultLibFilePath(options: CompilerOptions): string;
 }
 declare namespace ts.server {
-    function generateSpaces(n: number): string;
-    function generateIndentString(n: number, editorOptions: EditorOptions): string;
+    class ScriptInfo {
+        private readonly host;
+        readonly fileName: NormalizedPath;
+        readonly scriptKind: ScriptKind;
+        isOpen: boolean;
+        hasMixedContent: boolean;
+        readonly containingProjects: Project[];
+        readonly formatCodeSettings: ts.FormatCodeSettings;
+        readonly path: Path;
+        private fileWatcher;
+        private svc;
+        constructor(host: ServerHost, fileName: NormalizedPath, content: string, scriptKind: ScriptKind, isOpen?: boolean, hasMixedContent?: boolean);
+        attachToProject(project: Project): boolean;
+        isAttached(project: Project): boolean;
+        detachFromProject(project: Project): void;
+        detachAllProjects(): void;
+        getDefaultProject(): Project;
+        setFormatOptions(formatSettings: protocol.FormatOptions): void;
+        setWatcher(watcher: FileWatcher): void;
+        stopWatcher(): void;
+        getLatestVersion(): string;
+        reload(script: string): void;
+        saveTo(fileName: string): void;
+        reloadFromFile(): void;
+        snap(): LineIndexSnapshot;
+        getLineInfo(line: number): ILineInfo;
+        editContent(start: number, end: number, newText: string): void;
+        markContainingProjectsAsDirty(): void;
+        lineToTextSpan(line: number): TextSpan;
+        lineOffsetToPosition(line: number, offset: number): number;
+        positionToLineOffset(position: number): ILineInfo;
+    }
+}
+declare namespace ts.server {
+    class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost, ServerLanguageServiceHost {
+        private readonly host;
+        private readonly project;
+        private readonly cancellationToken;
+        private compilationSettings;
+        private readonly resolvedModuleNames;
+        private readonly resolvedTypeReferenceDirectives;
+        private readonly getCanonicalFileName;
+        private readonly resolveModuleName;
+        readonly trace: (s: string) => void;
+        constructor(host: ServerHost, project: Project, cancellationToken: HostCancellationToken);
+        private resolveNamesWithLocalCache<T, R>(names, containingFile, cache, loader, getResult);
+        getProjectVersion(): string;
+        getCompilationSettings(): CompilerOptions;
+        useCaseSensitiveFileNames(): boolean;
+        getCancellationToken(): HostCancellationToken;
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[];
+        getDefaultLibFileName(): string;
+        getScriptSnapshot(filename: string): ts.IScriptSnapshot;
+        getScriptFileNames(): string[];
+        getScriptKind(fileName: string): ScriptKind;
+        getScriptVersion(filename: string): string;
+        getCurrentDirectory(): string;
+        resolvePath(path: string): string;
+        fileExists(path: string): boolean;
+        directoryExists(path: string): boolean;
+        readFile(fileName: string): string;
+        getDirectories(path: string): string[];
+        notifyFileRemoved(info: ScriptInfo): void;
+        setCompilationSettings(opt: ts.CompilerOptions): void;
+    }
+}
+declare namespace ts.server {
+    interface ITypingsInstaller {
+        enqueueInstallTypingsRequest(p: Project, typingOptions: TypingOptions): void;
+        attach(projectService: ProjectService): void;
+        onProjectClosed(p: Project): void;
+        readonly globalTypingsCacheLocation: string;
+    }
+    const nullTypingsInstaller: ITypingsInstaller;
+    interface TypingsArray extends ReadonlyArray<string> {
+        " __typingsArrayBrand": any;
+    }
+    class TypingsCache {
+        private readonly installer;
+        private readonly perProjectCache;
+        constructor(installer: ITypingsInstaller);
+        getTypingsForProject(project: Project, forceRefresh: boolean): TypingsArray;
+        invalidateCachedTypingsForProject(project: Project): void;
+        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, newTypings: string[]): void;
+        onProjectClosed(project: Project): void;
+    }
+}
+declare namespace ts.server {
+    function shouldEmitFile(scriptInfo: ScriptInfo): boolean;
+    class BuilderFileInfo {
+        readonly scriptInfo: ScriptInfo;
+        readonly project: Project;
+        private lastCheckedShapeSignature;
+        constructor(scriptInfo: ScriptInfo, project: Project);
+        isExternalModuleOrHasOnlyAmbientExternalModules(): boolean;
+        private containsOnlyAmbientModules(sourceFile);
+        private computeHash(text);
+        private getSourceFile();
+        updateShapeSignature(): boolean;
+    }
+    interface Builder {
+        readonly project: Project;
+        getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
+        onProjectUpdateGraph(): void;
+        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
+    }
+    function createBuilder(project: Project): Builder;
+}
+declare namespace ts.server {
+    enum ProjectKind {
+        Inferred = 0,
+        Configured = 1,
+        External = 2,
+    }
+    function allRootFilesAreJsOrDts(project: Project): boolean;
+    function allFilesAreJsOrDts(project: Project): boolean;
+    interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
+        projectErrors: Diagnostic[];
+    }
+    abstract class Project {
+        readonly projectKind: ProjectKind;
+        readonly projectService: ProjectService;
+        private documentRegistry;
+        languageServiceEnabled: boolean;
+        private compilerOptions;
+        compileOnSaveEnabled: boolean;
+        private rootFiles;
+        private rootFilesMap;
+        private lsHost;
+        private program;
+        private languageService;
+        builder: Builder;
+        private lastReportedFileNames;
+        private lastReportedVersion;
+        private projectStructureVersion;
+        private projectStateVersion;
+        private typingFiles;
+        protected projectErrors: Diagnostic[];
+        isJsOnlyProject(): boolean;
+        constructor(projectKind: ProjectKind, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, hasExplicitListOfFiles: boolean, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, compileOnSaveEnabled: boolean);
+        getProjectErrors(): Diagnostic[];
+        getLanguageService(ensureSynchronized?: boolean): LanguageService;
+        getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
+        getProjectVersion(): string;
+        enableLanguageService(): void;
+        disableLanguageService(): void;
+        abstract getProjectName(): string;
+        abstract getProjectRootPath(): string | undefined;
+        abstract getTypingOptions(): TypingOptions;
+        getSourceFile(path: Path): SourceFile;
+        close(): void;
+        getCompilerOptions(): CompilerOptions;
+        hasRoots(): boolean;
+        getRootFiles(): NormalizedPath[];
+        getRootFilesLSHost(): string[];
+        getRootScriptInfos(): ScriptInfo[];
+        getScriptInfos(): ScriptInfo[];
+        getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles: boolean): EmitOutput;
+        getFileNames(): NormalizedPath[];
+        getAllEmittableFiles(): string[];
+        containsScriptInfo(info: ScriptInfo): boolean;
+        containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean;
+        isRoot(info: ScriptInfo): boolean;
+        addRoot(info: ScriptInfo): void;
+        removeFile(info: ScriptInfo, detachFromProject?: boolean): void;
+        markAsDirty(): void;
+        updateGraph(): boolean;
+        private setTypings(typings);
+        private updateGraphWorker();
+        getScriptInfoLSHost(fileName: string): ScriptInfo;
+        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo;
+        getScriptInfo(uncheckedFileName: string): ScriptInfo;
+        filesToString(): string;
+        setCompilerOptions(compilerOptions: CompilerOptions): void;
+        reloadScript(filename: NormalizedPath): boolean;
+        getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics;
+        getReferencedFiles(path: Path): Path[];
+        private removeRootFileIfNecessary(info);
+    }
+    class InferredProject extends Project {
+        compileOnSaveEnabled: boolean;
+        private static NextId;
+        private readonly inferredProjectName;
+        directoriesWatchedForTsconfig: string[];
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, compileOnSaveEnabled: boolean);
+        getProjectName(): string;
+        getProjectRootPath(): string;
+        close(): void;
+        getTypingOptions(): TypingOptions;
+    }
+    class ConfiguredProject extends Project {
+        readonly configFileName: NormalizedPath;
+        private wildcardDirectories;
+        compileOnSaveEnabled: boolean;
+        private typingOptions;
+        private projectFileWatcher;
+        private directoryWatcher;
+        private directoriesWatchedForWildcards;
+        openRefCount: number;
+        constructor(configFileName: NormalizedPath, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, hasExplicitListOfFiles: boolean, compilerOptions: CompilerOptions, wildcardDirectories: Map<WatchDirectoryFlags>, languageServiceEnabled: boolean, compileOnSaveEnabled: boolean);
+        getProjectRootPath(): string;
+        setProjectErrors(projectErrors: Diagnostic[]): void;
+        setTypingOptions(newTypingOptions: TypingOptions): void;
+        getTypingOptions(): TypingOptions;
+        getProjectName(): string & {
+            __normalizedPathTag: any;
+        };
+        watchConfigFile(callback: (project: ConfiguredProject) => void): void;
+        watchConfigDirectory(callback: (project: ConfiguredProject, path: string) => void): void;
+        watchWildcards(callback: (project: ConfiguredProject, path: string) => void): void;
+        stopWatchingDirectory(): void;
+        close(): void;
+        addOpenRef(): void;
+        deleteOpenRef(): number;
+    }
+    class ExternalProject extends Project {
+        readonly externalProjectName: string;
+        compileOnSaveEnabled: boolean;
+        private readonly projectFilePath;
+        private typingOptions;
+        constructor(externalProjectName: string, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, compilerOptions: CompilerOptions, languageServiceEnabled: boolean, compileOnSaveEnabled: boolean, projectFilePath?: string);
+        getProjectRootPath(): string;
+        getTypingOptions(): TypingOptions;
+        setProjectErrors(projectErrors: Diagnostic[]): void;
+        setTypingOptions(newTypingOptions: TypingOptions): void;
+        getProjectName(): string;
+    }
+}
+declare namespace ts.server {
+    const maxProgramSizeForNonTsFiles: number;
+    type ProjectServiceEvent = {
+        eventName: "context";
+        data: {
+            project: Project;
+            fileName: NormalizedPath;
+        };
+    } | {
+        eventName: "configFileDiag";
+        data: {
+            triggerFile?: string;
+            configFileName: string;
+            diagnostics: Diagnostic[];
+        };
+    };
+    interface ProjectServiceEventHandler {
+        (event: ProjectServiceEvent): void;
+    }
+    function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean): T[];
+    interface HostConfiguration {
+        formatCodeOptions: FormatCodeSettings;
+        hostInfo: string;
+    }
+    interface OpenConfiguredProjectResult {
+        configFileName?: string;
+        configFileErrors?: Diagnostic[];
+    }
+    class ProjectService {
+        readonly host: ServerHost;
+        readonly logger: Logger;
+        readonly cancellationToken: HostCancellationToken;
+        readonly useSingleInferredProject: boolean;
+        readonly typingsInstaller: ITypingsInstaller;
+        private readonly eventHandler;
+        readonly typingsCache: TypingsCache;
+        private readonly documentRegistry;
+        private readonly filenameToScriptInfo;
+        private readonly externalProjectToConfiguredProjectMap;
+        readonly externalProjects: ExternalProject[];
+        readonly inferredProjects: InferredProject[];
+        readonly configuredProjects: ConfiguredProject[];
+        readonly openFiles: ScriptInfo[];
+        private compilerOptionsForInferredProjects;
+        private compileOnSaveForInferredProjects;
+        private readonly directoryWatchers;
+        private readonly throttledOperations;
+        private readonly hostConfiguration;
+        private changedFiles;
+        private toCanonicalFileName;
+        constructor(host: ServerHost, logger: Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller?: ITypingsInstaller, eventHandler?: ProjectServiceEventHandler);
+        getChangedFiles_TestOnly(): ScriptInfo[];
+        ensureInferredProjectsUpToDate_TestOnly(): void;
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void;
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions): void;
+        stopWatchingDirectory(directory: string): void;
+        findProject(projectName: string): Project;
+        getDefaultProjectForFile(fileName: NormalizedPath, refreshInferredProjects: boolean): Project;
+        private ensureInferredProjectsUpToDate();
+        private findContainingExternalProject(fileName);
+        getFormatCodeOptions(file?: NormalizedPath): FormatCodeSettings;
+        private updateProjectGraphs(projects);
+        private onSourceFileChanged(fileName);
+        private handleDeletedFile(info);
+        private onSourceFileInDirectoryChangedForConfiguredProject(project, fileName);
+        private handleChangeInSourceFileForConfiguredProject(project);
+        private onConfigChangedForConfiguredProject(project);
+        private onConfigFileAddedForInferredProject(fileName);
+        private getCanonicalFileName(fileName);
+        private removeProject(project);
+        private assignScriptInfoToInferredProjectIfNecessary(info, addToListOfOpenFiles);
+        private closeOpenFile(info);
+        private openOrUpdateConfiguredProjectForFile(fileName);
+        private findConfigFile(searchPath);
+        private printProjects();
+        private findConfiguredProjectByProjectName(configFileName);
+        private findExternalProjectByProjectName(projectFileName);
+        private convertConfigFileContentToProjectOptions(configFilename);
+        private exceededTotalSizeLimitForNonTsFiles<T>(options, fileNames, propertyReader);
+        private createAndAddExternalProject(projectFileName, files, options, typingOptions);
+        private reportConfigFileDiagnostics(configFileName, diagnostics, triggerFile?);
+        private createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, clientFileName?);
+        private watchConfigDirectoryForProject(project, options);
+        private addFilesToProjectAndUpdateGraph<T>(project, files, propertyReader, clientFileName, typingOptions, configFileErrors);
+        private openConfigFile(configFileName, clientFileName?);
+        private updateNonInferredProject<T>(project, newUncheckedFiles, propertyReader, newOptions, newTypingOptions, compileOnSave, configFileErrors);
+        private updateConfiguredProject(project);
+        createInferredProjectWithRootFileIfNecessary(root: ScriptInfo): InferredProject;
+        getOrCreateScriptInfo(uncheckedFileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind): ScriptInfo;
+        getScriptInfo(uncheckedFileName: string): ScriptInfo;
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): ScriptInfo;
+        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo;
+        setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
+        closeLog(): void;
+        reloadProjects(): void;
+        refreshInferredProjects(): void;
+        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): OpenConfiguredProjectResult;
+        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): OpenConfiguredProjectResult;
+        closeClientFile(uncheckedFileName: string): void;
+        private collectChanges(lastKnownProjectVersions, currentProjects, result);
+        synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[]): ProjectFilesWithTSDiagnostics[];
+        applyChangesInOpenFiles(openFiles: protocol.ExternalFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void;
+        closeExternalProject(uncheckedFileName: string): void;
+        openExternalProject(proj: protocol.ExternalProject): void;
+    }
+}
+declare namespace ts.server {
     interface PendingErrorCheck {
-        fileName: string;
+        fileName: NormalizedPath;
         project: Project;
     }
     namespace CommandNames {
         const Brace: string;
+        const BraceFull: string;
+        const BraceCompletion: string;
         const Change: string;
         const Close: string;
         const Completions: string;
+        const CompletionsFull: string;
         const CompletionDetails: string;
+        const CompileOnSaveAffectedFileList: string;
+        const CompileOnSaveEmitFile: string;
         const Configure: string;
         const Definition: string;
+        const DefinitionFull: string;
         const Exit: string;
         const Format: string;
         const Formatonkey: string;
+        const FormatFull: string;
+        const FormatonkeyFull: string;
+        const FormatRangeFull: string;
         const Geterr: string;
         const GeterrForProject: string;
         const SemanticDiagnosticsSync: string;
         const SyntacticDiagnosticsSync: string;
         const NavBar: string;
+        const NavBarFull: string;
         const Navto: string;
+        const NavtoFull: string;
         const Occurrences: string;
         const DocumentHighlights: string;
+        const DocumentHighlightsFull: string;
         const Open: string;
         const Quickinfo: string;
+        const QuickinfoFull: string;
         const References: string;
+        const ReferencesFull: string;
         const Reload: string;
         const Rename: string;
+        const RenameInfoFull: string;
+        const RenameLocationsFull: string;
         const Saveto: string;
         const SignatureHelp: string;
+        const SignatureHelpFull: string;
         const TypeDefinition: string;
         const ProjectInfo: string;
         const ReloadProjects: string;
         const Unknown: string;
+        const OpenExternalProject: string;
+        const OpenExternalProjects: string;
+        const CloseExternalProject: string;
+        const SynchronizeProjectList: string;
+        const ApplyChangedToOpenFiles: string;
+        const EncodedSemanticClassificationsFull: string;
+        const Cleanup: string;
+        const OutliningSpans: string;
+        const TodoComments: string;
+        const Indentation: string;
+        const DocCommentTemplate: string;
+        const CompilerOptionsDiagnosticsFull: string;
+        const NameOrDottedNameSpan: string;
+        const BreakpointStatement: string;
+        const CompilerOptionsForInferredProjects: string;
     }
-    interface ServerHost extends ts.System {
-        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
-        clearTimeout(timeoutId: any): void;
-    }
+    function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
     class Session {
         private host;
+        protected readonly typingsInstaller: ITypingsInstaller;
         private byteLength;
         private hrtime;
-        private logger;
+        protected logger: Logger;
+        protected readonly canUseEvents: boolean;
+        private readonly gcTimer;
         protected projectService: ProjectService;
         private errorTimer;
         private immediateId;
         private changeSeq;
-        constructor(host: ServerHost, byteLength: (buf: string, encoding?: string) => number, hrtime: (start?: number[]) => number[], logger: Logger);
+        constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ITypingsInstaller, byteLength: (buf: string, encoding?: string) => number, hrtime: (start?: number[]) => number[], logger: Logger, canUseEvents: boolean);
         private handleEvent(event);
         logError(err: Error, cmd: string): void;
-        private sendLineToClient(line);
         send(msg: protocol.Message): void;
         configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ts.Diagnostic[]): void;
         event(info: any, eventName: string): void;
-        private response(info, cmdName, reqSeq?, errorMsg?);
-        output(body: any, commandName: string, requestSequence?: number, errorMessage?: string): void;
+        output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
+        private getLocation(position, scriptInfo);
         private semanticCheck(file, project);
         private syntacticCheck(file, project);
-        private reloadProjects();
         private updateProjectStructure(seq, matchSeq, ms?);
         private updateErrorCheck(checkList, seq, matchSeq, ms?, followMs?, requireOpen?);
-        private getDefinition(line, offset, fileName);
-        private getTypeDefinition(line, offset, fileName);
-        private getOccurrences(line, offset, fileName);
-        private getDiagnosticsWorker(args, selector);
+        private cleanProjects(caption, projects);
+        private cleanup();
+        private getEncodedSemanticClassifications(args);
+        private getProject(projectFileName);
+        private getCompilerOptionsDiagnostics(args);
+        private convertToDiagnosticsWithLinePosition(diagnostics, scriptInfo);
+        private getDiagnosticsWorker(args, selector, includeLinePosition);
+        private getDefinition(args, simplifiedResult);
+        private getTypeDefinition(args);
+        private getOccurrences(args);
         private getSyntacticDiagnosticsSync(args);
         private getSemanticDiagnosticsSync(args);
-        private getDocumentHighlights(line, offset, fileName, filesToSearch);
-        private getProjectInfo(fileName, needFileNameList);
-        private getRenameLocations(line, offset, fileName, findInComments, findInStrings);
-        private getReferences(line, offset, fileName);
+        private getDocumentHighlights(args, simplifiedResult);
+        private setCompilerOptionsForInferredProjects(args);
+        private getProjectInfo(args);
+        private getProjectInfoWorker(uncheckedFileName, projectFileName, needFileNameList);
+        private getRenameInfo(args);
+        private getProjects(args);
+        private getRenameLocations(args, simplifiedResult);
+        private getReferences(args, simplifiedResult);
         private openClientFile(fileName, fileContent?, scriptKind?);
-        private getQuickInfo(line, offset, fileName);
-        private getFormattingEditsForRange(line, offset, endLine, endOffset, fileName);
-        private getFormattingEditsAfterKeystroke(line, offset, key, fileName);
-        private getCompletions(line, offset, prefix, fileName);
-        private getCompletionEntryDetails(line, offset, entryNames, fileName);
-        private getSignatureHelpItems(line, offset, fileName);
+        private getPosition(args, scriptInfo);
+        private getFileAndProject(args, errorOnMissingProject?);
+        private getFileAndProjectWithoutRefreshingInferredProjects(args, errorOnMissingProject?);
+        private getFileAndProjectWorker(uncheckedFileName, projectFileName, refreshInferredProjects, errorOnMissingProject);
+        private getOutliningSpans(args);
+        private getTodoComments(args);
+        private getDocCommentTemplate(args);
+        private getIndentation(args);
+        private getBreakpointStatement(args);
+        private getNameOrDottedNameSpan(args);
+        private isValidBraceCompletion(args);
+        private getQuickInfoWorker(args, simplifiedResult);
+        private getFormattingEditsForRange(args);
+        private getFormattingEditsForRangeFull(args);
+        private getFormattingEditsForDocumentFull(args);
+        private getFormattingEditsAfterKeystrokeFull(args);
+        private getFormattingEditsAfterKeystroke(args);
+        private getCompletions(args, simplifiedResult);
+        private getCompletionEntryDetails(args);
+        private getCompileOnSaveAffectedFileList(args);
+        private emitFile(args);
+        private getSignatureHelpItems(args, simplifiedResult);
         private getDiagnostics(delay, fileNames);
-        private change(line, offset, endLine, endOffset, insertString, fileName);
-        private reload(fileName, tempFileName, reqSeq?);
+        private change(args);
+        private reload(args, reqSeq);
         private saveToTmp(fileName, tempFileName);
         private closeClientFile(fileName);
-        private decorateNavigationBarItem(project, fileName, items, lineIndex);
-        private getNavigationBarItems(fileName);
-        private getNavigateToItems(searchValue, fileName, maxResultCount?);
-        private getBraceMatching(line, offset, fileName);
+        private decorateNavigationBarItem(project, fileName, items);
+        private getNavigationBarItems(args, simplifiedResult);
+        private getNavigateToItems(args, simplifiedResult);
+        private getBraceMatching(args, simplifiedResult);
         getDiagnosticsForProject(delay: number, fileName: string): void;
         getCanonicalFileName(fileName: string): string;
         exit(): void;
+        private notRequired();
         private requiredResponse(response);
         private handlers;
         addProtocolHandler(command: string, handler: (request: protocol.Request) => {
@@ -8493,226 +9058,6 @@ declare namespace ts.server {
     }
 }
 declare namespace ts.server {
-    interface Logger {
-        close(): void;
-        isVerbose(): boolean;
-        loggingEnabled(): boolean;
-        perftrc(s: string): void;
-        info(s: string): void;
-        startGroup(): void;
-        endGroup(): void;
-        msg(s: string, type?: string): void;
-    }
-    const maxProgramSizeForNonTsFiles: number;
-    class ScriptInfo {
-        private host;
-        fileName: string;
-        isOpen: boolean;
-        svc: ScriptVersionCache;
-        children: ScriptInfo[];
-        defaultProject: Project;
-        fileWatcher: FileWatcher;
-        formatCodeOptions: FormatCodeOptions;
-        path: Path;
-        scriptKind: ScriptKind;
-        constructor(host: ServerHost, fileName: string, content: string, isOpen?: boolean);
-        setFormatOptions(formatOptions: protocol.FormatOptions): void;
-        close(): void;
-        addChild(childInfo: ScriptInfo): void;
-        snap(): LineIndexSnapshot;
-        getText(): string;
-        getLineInfo(line: number): ILineInfo;
-        editContent(start: number, end: number, newText: string): void;
-        getTextChangeRangeBetweenVersions(startVersion: number, endVersion: number): ts.TextChangeRange;
-        getChangeRange(oldSnapshot: ts.IScriptSnapshot): ts.TextChangeRange;
-    }
-    class LSHost implements ts.LanguageServiceHost {
-        host: ServerHost;
-        project: Project;
-        ls: ts.LanguageService;
-        compilationSettings: ts.CompilerOptions;
-        filenameToScript: ts.FileMap<ScriptInfo>;
-        roots: ScriptInfo[];
-        private resolvedModuleNames;
-        private resolvedTypeReferenceDirectives;
-        private moduleResolutionHost;
-        private getCanonicalFileName;
-        constructor(host: ServerHost, project: Project);
-        private resolveNamesWithLocalCache<T, R>(names, containingFile, cache, loader, getResult);
-        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[];
-        getDefaultLibFileName(): string;
-        getScriptSnapshot(filename: string): ts.IScriptSnapshot;
-        setCompilationSettings(opt: ts.CompilerOptions): void;
-        lineAffectsRefs(filename: string, line: number): boolean;
-        getCompilationSettings(): CompilerOptions;
-        getScriptFileNames(): string[];
-        getScriptKind(fileName: string): ScriptKind;
-        getScriptVersion(filename: string): string;
-        getCurrentDirectory(): string;
-        getScriptIsOpen(filename: string): boolean;
-        removeReferencedFile(info: ScriptInfo): void;
-        getScriptInfo(filename: string): ScriptInfo;
-        addRoot(info: ScriptInfo): void;
-        removeRoot(info: ScriptInfo): void;
-        saveTo(filename: string, tmpfilename: string): void;
-        reloadScript(filename: string, tmpfilename: string, cb: () => any): void;
-        editScript(filename: string, start: number, end: number, newText: string): void;
-        resolvePath(path: string): string;
-        fileExists(path: string): boolean;
-        directoryExists(path: string): boolean;
-        getDirectories(path: string): string[];
-        lineToTextSpan(filename: string, line: number): ts.TextSpan;
-        lineOffsetToPosition(filename: string, line: number, offset: number): number;
-        positionToLineOffset(filename: string, position: number, lineIndex?: LineIndex): ILineInfo;
-        getLineIndex(filename: string): LineIndex;
-    }
-    interface ProjectOptions {
-        files?: string[];
-        wildcardDirectories?: ts.MapLike<ts.WatchDirectoryFlags>;
-        compilerOptions?: ts.CompilerOptions;
-    }
-    class Project {
-        projectService: ProjectService;
-        projectOptions: ProjectOptions;
-        languageServiceDiabled: boolean;
-        compilerService: CompilerService;
-        projectFilename: string;
-        projectFileWatcher: FileWatcher;
-        directoryWatcher: FileWatcher;
-        directoriesWatchedForWildcards: Map<FileWatcher>;
-        directoriesWatchedForTsconfig: string[];
-        program: ts.Program;
-        filenameToSourceFile: Map<SourceFile>;
-        updateGraphSeq: number;
-        openRefCount: number;
-        constructor(projectService: ProjectService, projectOptions?: ProjectOptions, languageServiceDiabled?: boolean);
-        enableLanguageService(): void;
-        disableLanguageService(): void;
-        addOpenRef(): void;
-        deleteOpenRef(): number;
-        openReferencedFile(filename: string): ScriptInfo;
-        getRootFiles(): string[];
-        getFileNames(): string[];
-        getSourceFile(info: ScriptInfo): SourceFile;
-        getSourceFileFromName(filename: string, requireOpen?: boolean): SourceFile;
-        isRoot(info: ScriptInfo): boolean;
-        removeReferencedFile(info: ScriptInfo): void;
-        updateFileMap(): void;
-        finishGraph(): void;
-        updateGraph(): void;
-        isConfiguredProject(): string;
-        addRoot(info: ScriptInfo): void;
-        removeRoot(info: ScriptInfo): void;
-        filesToString(): string;
-        setProjectOptions(projectOptions: ProjectOptions): void;
-    }
-    interface ProjectOpenResult {
-        success?: boolean;
-        errorMsg?: string;
-        project?: Project;
-    }
-    function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean): T[];
-    type ProjectServiceEvent = {
-        eventName: "context";
-        data: {
-            project: Project;
-            fileName: string;
-        };
-    } | {
-        eventName: "configFileDiag";
-        data: {
-            triggerFile?: string;
-            configFileName: string;
-            diagnostics: Diagnostic[];
-        };
-    };
-    interface ProjectServiceEventHandler {
-        (event: ProjectServiceEvent): void;
-    }
-    interface HostConfiguration {
-        formatCodeOptions: ts.FormatCodeOptions;
-        hostInfo: string;
-    }
-    class ProjectService {
-        host: ServerHost;
-        psLogger: Logger;
-        eventHandler: ProjectServiceEventHandler;
-        filenameToScriptInfo: Map<ScriptInfo>;
-        openFileRoots: ScriptInfo[];
-        inferredProjects: Project[];
-        configuredProjects: Project[];
-        openFilesReferenced: ScriptInfo[];
-        openFileRootsConfigured: ScriptInfo[];
-        directoryWatchersForTsconfig: Map<FileWatcher>;
-        directoryWatchersRefCount: Map<number>;
-        hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFileListChanges: Map<any>;
-        constructor(host: ServerHost, psLogger: Logger, eventHandler?: ProjectServiceEventHandler);
-        addDefaultHostConfiguration(): void;
-        getFormatCodeOptions(file?: string): FormatCodeOptions;
-        watchedFileChanged(fileName: string): void;
-        directoryWatchedForSourceFilesChanged(project: Project, fileName: string): void;
-        startTimerForDetectingProjectFileListChanges(project: Project): void;
-        handleProjectFileListChanges(project: Project): void;
-        reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile?: string): void;
-        directoryWatchedForTsconfigChanged(fileName: string): void;
-        getCanonicalFileName(fileName: string): string;
-        watchedProjectConfigFileChanged(project: Project): void;
-        log(msg: string, type?: string): void;
-        setHostConfiguration(args: ts.server.protocol.ConfigureRequestArguments): void;
-        closeLog(): void;
-        createInferredProject(root: ScriptInfo): Project;
-        fileDeletedInFilesystem(info: ScriptInfo): void;
-        updateConfiguredProjectList(): void;
-        removeProject(project: Project): void;
-        setConfiguredProjectRoot(info: ScriptInfo): boolean;
-        addOpenFile(info: ScriptInfo): void;
-        closeOpenFile(info: ScriptInfo): void;
-        findReferencingProjects(info: ScriptInfo, excludedProject?: Project): Project[];
-        reloadProjects(): void;
-        updateProjectStructure(): void;
-        getScriptInfo(filename: string): ScriptInfo;
-        openFile(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind): ScriptInfo;
-        findConfigFile(searchPath: string): string;
-        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): {
-            configFileName?: string;
-            configFileErrors?: Diagnostic[];
-        };
-        openOrUpdateConfiguredProjectForFile(fileName: string): {
-            configFileName?: string;
-            configFileErrors?: Diagnostic[];
-        };
-        closeClientFile(filename: string): void;
-        getProjectForFile(filename: string): Project;
-        printProjectsForFile(filename: string): void;
-        printProjects(): void;
-        configProjectIsActive(fileName: string): boolean;
-        findConfiguredProjectByConfigFile(configFileName: string): Project;
-        configFileToProjectOptions(configFilename: string): {
-            projectOptions?: ProjectOptions;
-            errors: Diagnostic[];
-        };
-        private exceedTotalNonTsFileSizeLimit(fileNames);
-        openConfigFile(configFilename: string, clientFileName?: string): {
-            project?: Project;
-            errors: Diagnostic[];
-        };
-        updateConfiguredProject(project: Project): Diagnostic[];
-        createProject(projectFilename: string, projectOptions?: ProjectOptions, languageServiceDisabled?: boolean): Project;
-    }
-    class CompilerService {
-        project: Project;
-        host: LSHost;
-        languageService: ts.LanguageService;
-        classifier: ts.Classifier;
-        settings: ts.CompilerOptions;
-        documentRegistry: DocumentRegistry;
-        constructor(project: Project, opt?: ts.CompilerOptions);
-        setCompilerOptions(opt: ts.CompilerOptions): void;
-        isExternalModule(filename: string): boolean;
-        static getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions;
-    }
     interface LineCollection {
         charCount(): number;
         lineCount(): number;
@@ -8751,15 +9096,17 @@ declare namespace ts.server {
         changes: TextChange[];
         versions: LineIndexSnapshot[];
         minVersion: number;
-        private currentVersion;
         private host;
+        private currentVersion;
         static changeNumberThreshold: number;
         static changeLengthThreshold: number;
         static maxVersions: number;
+        private versionToIndex(version);
+        private currentVersionToIndex();
         edit(pos: number, deleteLen: number, insertedText?: string): void;
         latest(): LineIndexSnapshot;
         latestVersion(): number;
-        reloadFromFile(filename: string, cb?: () => any): void;
+        reloadFromFile(filename: string): void;
         reload(script: string): void;
         getSnapshot(): LineIndexSnapshot;
         getTextChangesBetweenVersions(oldVersion: number, newVersion: number): TextChangeRange;
@@ -8828,10 +9175,7 @@ declare namespace ts.server {
     }
     class LineLeaf implements LineCollection {
         text: string;
-        udata: any;
         constructor(text: string);
-        setUdata(data: any): void;
-        getUdata(): any;
         isLeaf(): boolean;
         walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker): void;
         charCount(): number;
@@ -8865,6 +9209,9 @@ declare namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
+        readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
+        readFile(path: string, encoding?: string): string;
+        fileExists(path: string): boolean;
         getModuleResolutionsForFile?(fileName: string): string;
         getTypeReferenceDirectiveResolutionsForFile?(fileName: string): string;
         directoryExists(directoryName: string): boolean;
@@ -8967,6 +9314,9 @@ declare namespace ts {
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
         getDefaultLibFileName(options: CompilerOptions): string;
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[];
+        readFile(path: string, encoding?: string): string;
+        fileExists(path: string): boolean;
     }
     class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
         private shimHost;
@@ -8980,13 +9330,6 @@ declare namespace ts {
         private readDirectoryFallback(rootDir, extension, exclude);
         getDirectories(path: string): string[];
     }
-    function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): {
-        message: string;
-        start: number;
-        length: number;
-        category: string;
-        code: number;
-    }[];
     class TypeScriptServicesFactory implements ShimFactory {
         private _shims;
         private documentRegistry;

@@ -29,6 +29,7 @@ declare namespace ts {
         contains(fileName: Path): boolean;
         remove(fileName: Path): void;
         forEachValue(f: (key: Path, v: T) => void): void;
+        getKeys(): Path[];
         clear(): void;
     }
     interface TextRange {
@@ -1202,7 +1203,7 @@ declare namespace ts {
          * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the JavaScript and declaration files.
          */
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult;
         getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
         getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -1288,6 +1289,7 @@ declare namespace ts {
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        getAmbientModules(): Symbol[];
     }
     interface SymbolDisplayBuilder {
         buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -1695,6 +1697,7 @@ declare namespace ts {
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
+        compileOnSave?: boolean;
     }
     enum WatchDirectoryFlags {
         None = 0,
@@ -1889,9 +1892,14 @@ declare namespace ts {
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
 }
 declare namespace ts {
+    function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+}
+declare namespace ts {
     /** The version of the TypeScript compiler release */
     const version: string;
-    function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string;
+    function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
@@ -1899,9 +1907,6 @@ declare namespace ts {
      * is assumed to be the same as root directory of the project.
      */
     function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
-    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
-    function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
-    function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
     interface FormatDiagnosticsHost {
@@ -1936,7 +1941,7 @@ declare namespace ts {
       * @param fileName The path to the config file
       * @param jsonText The text of the config file
       */
-    function parseConfigFileTextToJson(fileName: string, jsonText: string): {
+    function parseConfigFileTextToJson(fileName: string, jsonText: string, stripComments?: boolean): {
         config?: any;
         error?: Diagnostic;
     };
@@ -1948,12 +1953,13 @@ declare namespace ts {
       *    file to. e.g. outDir
       */
     function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string): ParsedCommandLine;
+    function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean;
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
         errors: Diagnostic[];
     };
     function convertTypingOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
-        options: CompilerOptions;
+        options: TypingOptions;
         errors: Diagnostic[];
     };
 }
@@ -2039,6 +2045,20 @@ declare namespace ts {
         ambientExternalModules: string[];
         isLibFile: boolean;
     }
+    function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): {
+        message: string;
+        start: number;
+        length: number;
+        category: string;
+        code: number;
+    }[];
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): {
+        message: string;
+        start: number;
+        length: number;
+        category: string;
+        code: number;
+    };
     interface HostCancellationToken {
         isCancellationRequested(): boolean;
     }
@@ -2058,6 +2078,9 @@ declare namespace ts {
         trace?(s: string): void;
         error?(s: string): void;
         useCaseSensitiveFileNames?(): boolean;
+        readDirectory?(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
+        readFile?(path: string, encoding?: string): string;
+        fileExists?(path: string): boolean;
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
@@ -2093,18 +2116,18 @@ declare namespace ts {
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[];
         /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number, excludeDts?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
-        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
-        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
+        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions | EditorSettings): number;
+        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
-        getEmitOutput(fileName: string): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
     }
@@ -2188,6 +2211,14 @@ declare namespace ts {
         ConvertTabsToSpaces: boolean;
         IndentStyle: IndentStyle;
     }
+    interface EditorSettings {
+        baseIndentSize?: number;
+        indentSize: number;
+        tabSize: number;
+        newLineCharacter: string;
+        convertTabsToSpaces: boolean;
+        indentStyle: IndentStyle;
+    }
     enum IndentStyle {
         None = 0,
         Block = 1,
@@ -2205,8 +2236,21 @@ declare namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string | undefined;
     }
+    interface FormatCodeSettings extends EditorSettings {
+        insertSpaceAfterCommaDelimiter: boolean;
+        insertSpaceAfterSemicolonInForStatements: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: boolean;
+        placeOpenBraceOnNewLineForFunctions: boolean;
+        placeOpenBraceOnNewLineForControlBlocks: boolean;
+    }
+    function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
     interface DefinitionInfo {
         fileName: string;
         textSpan: TextSpan;
@@ -2215,8 +2259,11 @@ declare namespace ts {
         containerKind: string;
         containerName: string;
     }
+    interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
+        displayParts: SymbolDisplayPart[];
+    }
     interface ReferencedSymbol {
-        definition: DefinitionInfo;
+        definition: ReferencedSymbolDefinitionInfo;
         references: ReferenceEntry[];
     }
     enum SymbolDisplayPartKind {
@@ -2304,6 +2351,12 @@ declare namespace ts {
         kind: string;
         kindModifiers: string;
         sortText: string;
+        /**
+          * An optional span that indicates the text to be replaced by this completion item. It will be
+          * set if the required span differs from the one generated by the default replacement behavior and should
+          * be used in that case
+          */
+        replacementSpan?: TextSpan;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -2514,6 +2567,8 @@ declare namespace ts {
         const alias: string;
         const constElement: string;
         const letElement: string;
+        const directory: string;
+        const externalModuleName: string;
     }
     namespace ScriptElementKindModifier {
         const none: string;
