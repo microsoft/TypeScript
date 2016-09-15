@@ -603,10 +603,6 @@
         "category": "Error",
         "code": 1194
     },
-    "Catch clause variable name must be an identifier.": {
-        "category": "Error",
-        "code": 1195
-    },
     "Catch clause variable cannot have a type annotation.": {
         "category": "Error",
         "code": 1196
