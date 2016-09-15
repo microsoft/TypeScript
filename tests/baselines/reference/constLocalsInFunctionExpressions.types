@@ -138,7 +138,7 @@ function f6() {
 >x.a : string | number
 >x : { readonly a: string | number; }
 >a : string | number
->'string' : string
+>'string' : "string"
 
         const f: () => number = () => x.a.length;
 >f : () => number
