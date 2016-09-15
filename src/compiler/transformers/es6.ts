@@ -10,6 +10,7 @@ namespace ts {
         /** Enables substitutions for block-scoped bindings. */
         BlockScopedBindings = 1 << 1,
     }
+
     /**
      * If loop contains block scoped binding captured in some function then loop body is converted to a function.
      * Lexical bindings declared in loop initializer will be passed into the loop body function as parameters,
@@ -166,6 +167,9 @@ namespace ts {
         let enclosingBlockScopeContainerParent: Node;
         let containingNonArrowFunction: FunctionLikeDeclaration | ClassElement;
 
+        /** Tracks the container that determines whether `super.x` is a static. */
+        let superScopeContainer: FunctionLikeDeclaration | ClassElement;
+
         /**
          * Used to track if we are emitting body of the converted loop
          */
@@ -203,6 +207,7 @@ namespace ts {
 
         function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             const savedContainingNonArrowFunction = containingNonArrowFunction;
+            const savedSuperScopeContainer = superScopeContainer;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
             const savedEnclosingBlockScopeContainer = enclosingBlockScopeContainer;
@@ -219,6 +224,7 @@ namespace ts {
 
             convertedLoopState = savedConvertedLoopState;
             containingNonArrowFunction = savedContainingNonArrowFunction;
+            superScopeContainer = savedSuperScopeContainer;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
             enclosingBlockScopeContainer = savedEnclosingBlockScopeContainer;
@@ -414,13 +420,16 @@ namespace ts {
                 }
 
                 switch (currentParent.kind) {
+                    case SyntaxKind.FunctionExpression:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
                         containingNonArrowFunction = <FunctionLikeDeclaration>currentParent;
+                        if (!(containingNonArrowFunction.emitFlags & NodeEmitFlags.AsyncFunctionBody)) {
+                            superScopeContainer = containingNonArrowFunction;
+                        }
                         break;
                 }
             }
@@ -2820,9 +2829,9 @@ namespace ts {
          * Visits the `super` keyword
          */
         function visitSuperKeyword(node: PrimaryExpression): LeftHandSideExpression {
-            return containingNonArrowFunction
-                && isClassElement(containingNonArrowFunction)
-                && !hasModifier(containingNonArrowFunction, ModifierFlags.Static)
+            return superScopeContainer
+                && isClassElement(superScopeContainer)
+                && !hasModifier(superScopeContainer, ModifierFlags.Static)
                 && currentParent.kind !== SyntaxKind.CallExpression
                     ? createPropertyAccess(createIdentifier("_super"), "prototype")
                     : createIdentifier("_super");
