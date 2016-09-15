@@ -42,7 +42,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
-        public jsDocComments: JSDocComment[];
+        public jsDocComments: JSDoc[];
         public original: Node;
         public transformFlags: TransformFlags;
         public excludeTransformFlags: TransformFlags;
@@ -215,7 +215,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
-        public jsDocComments: JSDocComment[];
+        public jsDocComments: JSDoc[];
         public __tokenTag: any;
 
         constructor(pos: number, end: number) {

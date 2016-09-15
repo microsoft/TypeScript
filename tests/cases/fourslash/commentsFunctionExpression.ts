@@ -60,23 +60,23 @@ verify.currentParameterHelpArgumentDocCommentIs("param b");
 verify.quickInfos({
     7: "function anotherFunc(a: number): string",
     8: ["(local var) lambdaVar: (b: string) => string", "documentation\ninner docs "],
-    9: ["(parameter) b: string", "{string} inner parameter "],
+    9: ["(parameter) b: string", "inner parameter "],
     10: "(local var) localVar: string",
     11: "(local var) localVar: string",
-    12: ["(parameter) b: string", "{string} inner parameter "],
+    12: ["(parameter) b: string", "inner parameter "],
     13: ["(local var) lambdaVar: (b: string) => string", "documentation\ninner docs "],
     14: [
         "var assigned: (s: string) => number",
-        "On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression"
+        "On variable\nSummary on expression"
     ]
 });
 
 goTo.marker('15');
 verify.completionListContains('s', '(parameter) s: string', "the first parameter!\nparam on expression\nOn parameter ");
-verify.quickInfoAt("16", "var assigned: (s: string) => number", "On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression");
+verify.quickInfoAt("16", "var assigned: (s: string) => number", "On variable\nSummary on expression");
 goTo.marker('17');
-verify.completionListContains("assigned", "var assigned: (s: string) => number", "On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression");
+verify.completionListContains("assigned", "var assigned: (s: string) => number", "On variable\nSummary on expression");
 goTo.marker('18');
-verify.currentSignatureHelpDocCommentIs("On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression");
+verify.currentSignatureHelpDocCommentIs("On variable\nSummary on expression");
 verify.currentParameterHelpArgumentDocCommentIs("the first parameter!\nparam on expression\nOn parameter ");
 
