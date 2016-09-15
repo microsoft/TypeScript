@@ -1,0 +1,70 @@
+=== tests/cases/compiler/declarationEmitClassMemberNameConflict.ts ===
+
+export class C1 {
+>C1 : Symbol(C1, Decl(declarationEmitClassMemberNameConflict.ts, 0, 0))
+
+    C1() { } // has to be the same as the class name
+>C1 : Symbol(C1.C1, Decl(declarationEmitClassMemberNameConflict.ts, 1, 17))
+
+    bar() {
+>bar : Symbol(C1.bar, Decl(declarationEmitClassMemberNameConflict.ts, 2, 12))
+
+        return function (t: typeof C1) {
+>t : Symbol(t, Decl(declarationEmitClassMemberNameConflict.ts, 5, 25))
+>C1 : Symbol(C1, Decl(declarationEmitClassMemberNameConflict.ts, 0, 0))
+
+        };
+    }
+}
+
+export class C2 {
+>C2 : Symbol(C2, Decl(declarationEmitClassMemberNameConflict.ts, 8, 1))
+
+    C2: any // has to be the same as the class name
+>C2 : Symbol(C2.C2, Decl(declarationEmitClassMemberNameConflict.ts, 10, 17))
+
+    bar() {
+>bar : Symbol(C2.bar, Decl(declarationEmitClassMemberNameConflict.ts, 11, 11))
+
+        return function (t: typeof C2) {
+>t : Symbol(t, Decl(declarationEmitClassMemberNameConflict.ts, 14, 25))
+>C2 : Symbol(C2, Decl(declarationEmitClassMemberNameConflict.ts, 8, 1))
+
+        };
+    }
+}
+
+export class C3 {
+>C3 : Symbol(C3, Decl(declarationEmitClassMemberNameConflict.ts, 17, 1))
+
+    get C3() { return 0; } // has to be the same as the class name
+>C3 : Symbol(C3.C3, Decl(declarationEmitClassMemberNameConflict.ts, 19, 17))
+
+    bar() {
+>bar : Symbol(C3.bar, Decl(declarationEmitClassMemberNameConflict.ts, 20, 26))
+
+        return function (t: typeof C3) {
+>t : Symbol(t, Decl(declarationEmitClassMemberNameConflict.ts, 23, 25))
+>C3 : Symbol(C3, Decl(declarationEmitClassMemberNameConflict.ts, 17, 1))
+
+        };
+    }
+}
+
+export class C4 {
+>C4 : Symbol(C4, Decl(declarationEmitClassMemberNameConflict.ts, 26, 1))
+
+    set C4(v) { } // has to be the same as the class name
+>C4 : Symbol(C4.C4, Decl(declarationEmitClassMemberNameConflict.ts, 28, 17))
+>v : Symbol(v, Decl(declarationEmitClassMemberNameConflict.ts, 29, 11))
+
+    bar() {
+>bar : Symbol(C4.bar, Decl(declarationEmitClassMemberNameConflict.ts, 29, 17))
+
+        return function (t: typeof C4) {
+>t : Symbol(t, Decl(declarationEmitClassMemberNameConflict.ts, 32, 25))
+>C4 : Symbol(C4, Decl(declarationEmitClassMemberNameConflict.ts, 26, 1))
+
+        };
+    }
+}
