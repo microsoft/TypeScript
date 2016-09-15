@@ -1,0 +1,51 @@
+=== tests/cases/compiler/checkGrammarStaticMemberName_es5.ts ===
+
+class static_property {
+>static_property : Symbol(static_property, Decl(checkGrammarStaticMemberName_es5.ts, 0, 0))
+
+    static length = 1;
+>length : Symbol(static_property.length, Decl(checkGrammarStaticMemberName_es5.ts, 1, 23))
+
+    static name = 1;
+>name : Symbol(static_property.name, Decl(checkGrammarStaticMemberName_es5.ts, 2, 22))
+
+    static arguments = 1;
+>arguments : Symbol(static_property.arguments, Decl(checkGrammarStaticMemberName_es5.ts, 3, 20))
+
+    static caller = 1;
+>caller : Symbol(static_property.caller, Decl(checkGrammarStaticMemberName_es5.ts, 4, 25))
+
+    static foo = {
+>foo : Symbol(static_property.foo, Decl(checkGrammarStaticMemberName_es5.ts, 5, 22))
+
+        ["length"]: 1,
+>"length" : Symbol(["length"], Decl(checkGrammarStaticMemberName_es5.ts, 6, 18))
+
+        ["name"]: 1,
+>"name" : Symbol(["name"], Decl(checkGrammarStaticMemberName_es5.ts, 7, 22))
+
+        ["arguments"]: 1,
+>"arguments" : Symbol(["arguments"], Decl(checkGrammarStaticMemberName_es5.ts, 8, 20))
+
+        ["caller"]: 1,
+>"caller" : Symbol(["caller"], Decl(checkGrammarStaticMemberName_es5.ts, 9, 25))
+
+    };
+}
+
+class static_method {
+>static_method : Symbol(static_method, Decl(checkGrammarStaticMemberName_es5.ts, 12, 1))
+
+    static length() { return 1; }
+>length : Symbol(static_method.length, Decl(checkGrammarStaticMemberName_es5.ts, 14, 21))
+
+    static name() { return 1; }
+>name : Symbol(static_method.name, Decl(checkGrammarStaticMemberName_es5.ts, 15, 33))
+
+    static arguments() { return 1; }
+>arguments : Symbol(static_method.arguments, Decl(checkGrammarStaticMemberName_es5.ts, 16, 31))
+
+    static caller() { return 1; }
+>caller : Symbol(static_method.caller, Decl(checkGrammarStaticMemberName_es5.ts, 17, 36))
+}
+

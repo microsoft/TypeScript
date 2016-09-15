@@ -25,20 +25,18 @@ class static_method {
 var static_property = (function () {
     function static_property() {
     }
-    static_property.length = 1;
-    static_property.name = 1;
-    static_property.arguments = 1;
-    static_property.caller = 1;
-    static_property.foo = (_a = {},
-        _a["length"] = 1,
-        _a["name"] = 1,
-        _a["arguments"] = 1,
-        _a["caller"] = 1,
-        _a
-    );
     return static_property;
-    var _a;
 }());
+static_property.length = 1;
+static_property.name = 1;
+static_property.arguments = 1;
+static_property.caller = 1;
+static_property.foo = (_a = {},
+    _a["length"] = 1,
+    _a["name"] = 1,
+    _a["arguments"] = 1,
+    _a["caller"] = 1,
+    _a);
 var static_method = (function () {
     function static_method() {
     }
@@ -48,3 +46,4 @@ var static_method = (function () {
     static_method.caller = function () { return 1; };
     return static_method;
 }());
+var _a;

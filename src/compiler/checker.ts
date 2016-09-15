@@ -14237,7 +14237,7 @@ namespace ts {
         }
 
         function checkGrammarStaticPropertyOrMethodName(node: ClassElement) {
-            if (node.flags & NodeFlags.Static) {
+            if (node.flags & ModifierFlags.Static) {
                 if (node.kind === SyntaxKind.PropertyDeclaration) {
                     return checkGrammarStaticMemberName(node, ((node as ClassElement).name as Identifier).text);
                 }
@@ -14256,9 +14256,10 @@ namespace ts {
             const forbiddenNames = ["length", "name", "arguments", "caller"];
             if (forbiddenNames.indexOf(name) !== -1) {
                 if (languageVersion < ScriptTarget.ES6) {
-                    return grammarErrorOnNode(node, Diagnostics._0_is_not_allowed_to_be_used_as_a_name_of_a_static_property_or_method_in_a_class_for_target_es5_2696, name);
-                } else {
-                    return grammarErrorOnNode(node, Diagnostics._0_is_not_allowed_to_be_used_as_a_name_of_a_static_property_in_a_class_for_target_es6_and_higher_2697, name);
+                    return grammarErrorOnNode(node, Diagnostics._0_is_not_allowed_to_be_used_as_a_name_of_a_static_property_or_method_in_a_class_for_target_ES5, name);
+                }
+                else {
+                    return grammarErrorOnNode(node, Diagnostics._0_is_not_allowed_to_be_used_as_a_name_of_a_static_property_in_a_class_for_target_ES6_and_higher, name);
                 }
             }
 
@@ -19746,7 +19747,7 @@ namespace ts {
 
             if (computedPropertyName.expression.kind === SyntaxKind.StringLiteral) {
                 const member = computedPropertyName.parent.parent.parent;
-                if (member.flags & NodeFlags.Static && member.kind === SyntaxKind.PropertyDeclaration) {
+                if (member.flags & ModifierFlags.Static && member.kind === SyntaxKind.PropertyDeclaration) {
                     return checkGrammarStaticMemberName(computedPropertyName, (computedPropertyName.expression as StringLiteral).text);
                 }
             }

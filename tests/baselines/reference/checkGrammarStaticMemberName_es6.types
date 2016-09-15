@@ -1,0 +1,64 @@
+=== tests/cases/compiler/checkGrammarStaticMemberName_es6.ts ===
+
+class static_property {
+>static_property : static_property
+
+    static length = 1;
+>length : number
+>1 : 1
+
+    static name = 1;
+>name : number
+>1 : 1
+
+    static arguments = 1;
+>arguments : number
+>1 : 1
+
+    static caller = 1;
+>caller : number
+>1 : 1
+
+    static foo = {
+>foo : { ["length"]: number; ["name"]: number; ["arguments"]: number; ["caller"]: number; }
+>{        ["length"]: 1,        ["name"]: 1,        ["arguments"]: 1,        ["caller"]: 1,    } : { ["length"]: number; ["name"]: number; ["arguments"]: number; ["caller"]: number; }
+
+        ["length"]: 1,
+>"length" : "length"
+>1 : 1
+
+        ["name"]: 1,
+>"name" : "name"
+>1 : 1
+
+        ["arguments"]: 1,
+>"arguments" : "arguments"
+>1 : 1
+
+        ["caller"]: 1,
+>"caller" : "caller"
+>1 : 1
+
+    };
+}
+
+class static_method {
+>static_method : static_method
+
+    static length() { return 1; }
+>length : () => number
+>1 : 1
+
+    static name() { return 1; }
+>name : () => number
+>1 : 1
+
+    static arguments() { return 1; }
+>arguments : () => number
+>1 : 1
+
+    static caller() { return 1; }
+>caller : () => number
+>1 : 1
+}
+
