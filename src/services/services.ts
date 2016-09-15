@@ -10,6 +10,7 @@
 /// <reference path='documentRegistry.ts' />
 /// <reference path='findAllReferences.ts' />
 /// <reference path='goToDefinition.ts' />
+/// <reference path='goToImplementation.ts' />
 /// <reference path='jsDoc.ts' />
 /// <reference path='jsTyping.ts' />
 /// <reference path='navigateTo.ts' />
@@ -1271,6 +1272,13 @@ namespace ts {
             return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
         }
 
+        /// Goto implementation
+        function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
+            synchronizeHostData();
+            return GoToImplementation.getImplementationAtPosition(program.getTypeChecker(), cancellationToken,
+                program.getSourceFiles(), getTouchingPropertyName(getValidSourceFile(fileName), position));
+        }
+
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
             return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
@@ -1781,6 +1789,7 @@ namespace ts {
             getSignatureHelpItems,
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
+            getImplementationAtPosition,
             getTypeDefinitionAtPosition,
             getReferencesAtPosition,
             findReferences,

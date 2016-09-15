@@ -179,6 +179,12 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; }[]
+         */
+        getImplementationAtPosition(fileName: string, position: number): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
@@ -795,6 +801,19 @@ namespace ts {
             return this.forwardJSONCall(
                 `getTypeDefinitionAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getTypeDefinitionAtPosition(fileName, position)
+            );
+        }
+
+        /// GOTO Implementation
+
+        /**
+         * Computes the implementation location of the symbol
+         * at the requested position.
+         */
+        public getImplementationAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getImplementationAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getImplementationAtPosition(fileName, position)
             );
         }
 
