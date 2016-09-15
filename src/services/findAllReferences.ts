@@ -359,9 +359,9 @@ namespace ts.FindAllReferences {
         }
 
         /** Search within node "container" for references for a search value, where the search value is defined as a
-             * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
-            * searchLocation: a node where the search value
-            */
+          * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
+          * searchLocation: a node where the search value
+          */
         function getReferencesInNode(container: Node,
             searchSymbol: Symbol,
             searchText: string,
@@ -444,10 +444,10 @@ namespace ts.FindAllReferences {
             return;
 
             /* If we are just looking for implementations and this is a property access expression, we need to get the
-                * symbol of the local type of the symbol the property is being accessed on. This is because our search
-                * symbol may have a different parent symbol if the local type's symbol does not declare the property
-                * being accessed (i.e. it is declared in some parent class or interface)
-                */
+             * symbol of the local type of the symbol the property is being accessed on. This is because our search
+             * symbol may have a different parent symbol if the local type's symbol does not declare the property
+             * being accessed (i.e. it is declared in some parent class or interface)
+             */
             function getParentSymbolsOfPropertyAccess(): Symbol[] | undefined {
                 if (implementations) {
                     const propertyAccessExpression = getPropertyAccessExpressionFromRightHandSide(searchLocation);
@@ -722,7 +722,7 @@ namespace ts.FindAllReferences {
                 // Set the key so that we don't infinitely recurse
                 cachedResults[key] = false;
 
-                const inherits = forEach(symbol.getDeclarations(), (declaration) => {
+                const inherits = forEach(symbol.getDeclarations(), declaration => {
                     if (isClassLike(declaration)) {
                         if (parentIsInterface) {
                             const interfaceReferences = getClassImplementsHeritageClauseElements(declaration);
