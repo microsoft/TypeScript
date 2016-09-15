@@ -15,7 +15,7 @@ export module Foo {
 >C : C
 
 		if (true) { return Bar();}
->true : boolean
+>true : true
 >Bar() : C
 >Bar : () => C
 

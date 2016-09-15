@@ -13,5 +13,5 @@ interface F { }
 
 var x = 10
 >x : number
->10 : number
+>10 : 10
 

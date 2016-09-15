@@ -591,6 +591,9 @@ namespace ts {
                 case SyntaxKind.PrefixUnaryExpression:
                     bindPrefixUnaryExpressionFlow(<PrefixUnaryExpression>node);
                     break;
+                case SyntaxKind.PostfixUnaryExpression:
+                    bindPostfixUnaryExpressionFlow(<PostfixUnaryExpression>node);
+                    break;
                 case SyntaxKind.BinaryExpression:
                     bindBinaryExpressionFlow(<BinaryExpression>node);
                     break;
@@ -1106,6 +1109,16 @@ namespace ts {
             }
             else {
                 forEachChild(node, bind);
+                if (node.operator === SyntaxKind.PlusEqualsToken || node.operator === SyntaxKind.MinusMinusToken) {
+                    bindAssignmentTargetFlow(node.operand);
+                }
+            }
+        }
+
+        function bindPostfixUnaryExpressionFlow(node: PostfixUnaryExpression) {
+            forEachChild(node, bind);
+            if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
+                bindAssignmentTargetFlow(node.operand);
             }
         }
 
@@ -1150,8 +1163,8 @@ namespace ts {
             currentFlow = finishFlowLabel(postExpressionLabel);
         }
 
-        function bindInitializedVariableFlow(node: VariableDeclaration | BindingElement) {
-            const name = node.name;
+        function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {
+            const name = !isOmittedExpression(node) ? node.name : undefined;
             if (isBindingPattern(name)) {
                 for (const child of name.elements) {
                     bindInitializedVariableFlow(child);

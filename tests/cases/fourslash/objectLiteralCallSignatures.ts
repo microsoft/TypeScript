@@ -21,9 +21,7 @@
 ////y.func5 = y.func4;
 
 verify.not.errorExistsAfterMarker('1');
-goTo.marker('1');
-verify.quickInfoIs('var x: {\n    func1(x: number): number;\n    func2: (x: number) => number;\n    func3: (x: number) => number;\n}');
-
-goTo.marker('2');
-verify.quickInfoIs('var y: {\n    func4(x: number): number;\n    func4(s: string): string;\n    func5: {\n        (x: number): number;\n        (s: string): string;\n    };\n}');
-
+verify.quickInfos({
+    1: "var x: {\n    func1(x: number): number;\n    func2: (x: number) => number;\n    func3: (x: number) => number;\n}",
+    2: "var y: {\n    func4(x: number): number;\n    func4(s: string): string;\n    func5: {\n        (x: number): number;\n        (s: string): string;\n    };\n}"
+});

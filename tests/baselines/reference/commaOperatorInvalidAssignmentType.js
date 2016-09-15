@@ -1,4 +1,5 @@
 //// [commaOperatorInvalidAssignmentType.ts]
+
 var BOOLEAN: boolean;
 var NUMBER: number;
 var STRING: string;

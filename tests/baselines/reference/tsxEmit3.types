@@ -77,7 +77,7 @@ module M {
 
 	var M = 100;
 >M : number
->100 : number
+>100 : 100
 
 	// Emit M_1.Foo
 	Foo, <Foo />;

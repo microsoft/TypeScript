@@ -1,0 +1,26 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes01.ts(16,9): error TS2322: Type 'string' is not assignable to type '"foo" | "bar" | "baz"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes01.ts (1 errors) ====
+    
+    type T = "foo" | "bar" | "baz";
+    
+    var x: "foo" | "bar" | "baz" = undefined;
+    var y: T = undefined;
+    
+    if (x === "foo") {
+        let a = x;
+    }
+    else if (x !== "bar") {
+        let b = x || y;
+    }
+    else {
+        let c = x;
+        let d = y;
+        let e: (typeof x) | (typeof y) = c || d;
+            ~
+!!! error TS2322: Type 'string' is not assignable to type '"foo" | "bar" | "baz"'.
+    }
+    
+    x = y;
+    y = x;

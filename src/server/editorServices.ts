@@ -1597,6 +1597,7 @@ namespace ts.server {
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
                 InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
                 InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+                InsertSpaceAfterTypeAssertion: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             });

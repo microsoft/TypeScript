@@ -905,6 +905,10 @@ namespace ts {
             return currentToken = scanner.scanJsxToken();
         }
 
+        function scanJsxAttributeValue(): SyntaxKind {
+            return currentToken = scanner.scanJsxAttributeValue();
+        }
+
         function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
@@ -3831,8 +3835,8 @@ namespace ts {
             scanJsxIdentifier();
             const node = <JsxAttribute>createNode(SyntaxKind.JsxAttribute);
             node.name = parseIdentifierName();
-            if (parseOptional(SyntaxKind.EqualsToken)) {
-                switch (token()) {
+            if (token() === SyntaxKind.EqualsToken) {
+                switch (scanJsxAttributeValue()) {
                     case SyntaxKind.StringLiteral:
                         node.initializer = parseLiteralNode();
                         break;
@@ -4811,9 +4815,9 @@ namespace ts {
 
         // DECLARATIONS
 
-        function parseArrayBindingElement(): BindingElement {
+        function parseArrayBindingElement(): ArrayBindingElement {
             if (token() === SyntaxKind.CommaToken) {
-                return <BindingElement>createNode(SyntaxKind.OmittedExpression);
+                return <OmittedExpression>createNode(SyntaxKind.OmittedExpression);
             }
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
@@ -4838,16 +4842,16 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseObjectBindingPattern(): BindingPattern {
-            const node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
+        function parseObjectBindingPattern(): ObjectBindingPattern {
+            const node = <ObjectBindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             parseExpected(SyntaxKind.OpenBraceToken);
             node.elements = parseDelimitedList(ParsingContext.ObjectBindingElements, parseObjectBindingElement);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
 
-        function parseArrayBindingPattern(): BindingPattern {
-            const node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
+        function parseArrayBindingPattern(): ArrayBindingPattern {
+            const node = <ArrayBindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             parseExpected(SyntaxKind.OpenBracketToken);
             node.elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement);
             parseExpected(SyntaxKind.CloseBracketToken);

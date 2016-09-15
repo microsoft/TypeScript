@@ -10,26 +10,22 @@
 /////*importBang*/import /*idBang*/bang = require("jquery");
 ////foo/*useFoo*/(bar/*useBar*/, baz/*useBaz*/, bang/*useBang*/);
 
-goTo.marker("useFoo");
-verify.quickInfoIs("import foo");
+verify.quickInfoAt("useFoo", "import foo");
 verify.goToDefinition({
     useFoo: "importFoo",
     importFoo: "module"
 });
 
-goTo.marker("useBar");
-verify.quickInfoIs("import bar");
+verify.quickInfoAt("useBar", "import bar");
 verify.goToDefinition("useBar", "module");
 
-goTo.marker("useBaz");
-verify.quickInfoIs("import baz");
+verify.quickInfoAt("useBaz", "import baz");
 verify.goToDefinition({
     useBaz: "importBaz",
     idBaz: "module"
 });
 
-goTo.marker("useBang");
-verify.quickInfoIs("import bang = require(\"jquery\")");
+verify.quickInfoAt("useBang", "import bang = require(\"jquery\")");
 verify.goToDefinition({
     useBang: "importBang",
     idBang: "module"

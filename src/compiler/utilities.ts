@@ -414,7 +414,11 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
-    export function isShorthandAmbientModule(node: Node): boolean {
+    export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
+        return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
+    }
+
+    function isShorthandAmbientModule(node: Node): boolean {
         // The only kind of module that can be missing a body is a shorthand ambient module.
         return node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
     }
@@ -594,60 +598,6 @@ namespace ts {
 
     export function isConstEnumDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
-    }
-
-    function walkUpBindingElementsAndPatterns(node: Node): Node {
-        while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
-            node = node.parent;
-        }
-
-        return node;
-    }
-
-    export function getCombinedModifierFlags(node: Node): ModifierFlags {
-        node = walkUpBindingElementsAndPatterns(node);
-        let flags = getModifierFlags(node);
-        if (node.kind === SyntaxKind.VariableDeclaration) {
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= getModifierFlags(node);
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableStatement) {
-            flags |= getModifierFlags(node);
-        }
-
-        return flags;
-    }
-
-    // Returns the node flags for this node and all relevant parent nodes.  This is done so that
-    // nodes like variable declarations and binding elements can returned a view of their flags
-    // that includes the modifiers from their container.  i.e. flags like export/declare aren't
-    // stored on the variable declaration directly, but on the containing variable statement
-    // (if it has one).  Similarly, flags for let/const are store on the variable declaration
-    // list.  By calling this function, all those flags are combined so that the client can treat
-    // the node as if it actually had those flags.
-    export function getCombinedNodeFlags(node: Node): NodeFlags {
-        node = walkUpBindingElementsAndPatterns(node);
-
-        let flags = node.flags;
-        if (node.kind === SyntaxKind.VariableDeclaration) {
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
-            flags |= node.flags;
-            node = node.parent;
-        }
-
-        if (node && node.kind === SyntaxKind.VariableStatement) {
-            flags |= node.flags;
-        }
-
-        return flags;
     }
 
     export function isConst(node: Node): boolean {
@@ -3755,6 +3705,12 @@ namespace ts {
         return node.kind === SyntaxKind.BindingElement;
     }
 
+    export function isArrayBindingElement(node: Node): node is ArrayBindingElement {
+        const kind = node.kind;
+        return kind === SyntaxKind.BindingElement
+            || kind === SyntaxKind.OmittedExpression;
+    }
+
     // Expression
 
     export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
@@ -3869,6 +3825,10 @@ namespace ts {
     export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedStatement | PartiallyEmittedExpression {
         return isNotEmittedStatement(node)
             || isPartiallyEmittedExpression(node);
+    }
+
+    export function isOmittedExpression(node: Node): node is OmittedExpression {
+        return node.kind === SyntaxKind.OmittedExpression;
     }
 
     // Misc
@@ -4369,5 +4329,59 @@ namespace ts {
 
     export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
         return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+    }
+
+    function walkUpBindingElementsAndPatterns(node: Node): Node {
+        while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
+            node = node.parent;
+        }
+
+        return node;
+    }
+
+    export function getCombinedModifierFlags(node: Node): ModifierFlags {
+        node = walkUpBindingElementsAndPatterns(node);
+        let flags = getModifierFlags(node);
+        if (node.kind === SyntaxKind.VariableDeclaration) {
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+            flags |= getModifierFlags(node);
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableStatement) {
+            flags |= getModifierFlags(node);
+        }
+
+        return flags;
+    }
+
+    // Returns the node flags for this node and all relevant parent nodes.  This is done so that
+    // nodes like variable declarations and binding elements can returned a view of their flags
+    // that includes the modifiers from their container.  i.e. flags like export/declare aren't
+    // stored on the variable declaration directly, but on the containing variable statement
+    // (if it has one).  Similarly, flags for let/const are store on the variable declaration
+    // list.  By calling this function, all those flags are combined so that the client can treat
+    // the node as if it actually had those flags.
+    export function getCombinedNodeFlags(node: Node): NodeFlags {
+        node = walkUpBindingElementsAndPatterns(node);
+
+        let flags = node.flags;
+        if (node.kind === SyntaxKind.VariableDeclaration) {
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+            flags |= node.flags;
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableStatement) {
+            flags |= node.flags;
+        }
+
+        return flags;
     }
 }

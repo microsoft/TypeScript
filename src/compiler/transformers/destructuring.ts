@@ -326,12 +326,15 @@ namespace ts {
                 }
                 for (let i = 0; i < numElements; i++) {
                     const element = elements[i];
-                    if (name.kind === SyntaxKind.ObjectBindingPattern) {
+                    if (isOmittedExpression(element)) {
+                        continue;
+                    }
+                    else if (name.kind === SyntaxKind.ObjectBindingPattern) {
                         // Rewrite element to a declaration with an initializer that fetches property
                         const propName = element.propertyName || <Identifier>element.name;
                         emitBindingElement(element, createDestructuringPropertyAccess(value, propName));
                     }
-                    else if (element.kind !== SyntaxKind.OmittedExpression) {
+                    else {
                         if (!element.dotDotDotToken) {
                             // Rewrite element to a declaration that accesses array element at index i
                             emitBindingElement(element, createElementAccess(value, i));

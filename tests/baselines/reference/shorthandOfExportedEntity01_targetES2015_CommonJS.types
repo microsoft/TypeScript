@@ -1,8 +1,8 @@
 === tests/cases/compiler/shorthandOfExportedEntity01_targetES2015_CommonJS.ts ===
 
 export const test = "test";
->test : string
->"test" : string
+>test : "test"
+>"test" : "test"
 
 export function foo () {
 >foo : () => void
@@ -10,6 +10,6 @@ export function foo () {
   const x = { test };
 >x : { test: string; }
 >{ test } : { test: string; }
->test : string
+>test : "test"
 }
 

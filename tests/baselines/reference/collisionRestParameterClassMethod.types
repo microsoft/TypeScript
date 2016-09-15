@@ -9,7 +9,7 @@ class c1 {
 
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
     public fooNoError(_i: number) { // no error
 >fooNoError : (_i: number) => void
@@ -17,7 +17,7 @@ class c1 {
 
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
     public f4(_i: number, ...rest); // no codegen no error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
@@ -95,13 +95,13 @@ class c3 {
 
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
     public fooNoError() {
 >fooNoError : () => void
 
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
 }

@@ -47,7 +47,7 @@ var b = { new(x: RegExp) { return ''; } }; // not a construct signature, functio
 >new : (x: RegExp) => string
 >x : RegExp
 >RegExp : RegExp
->'' : string
+>'' : ""
 
 function foo1b(x: B);
 >foo1b : { (x: B): any; (x: B): any; }

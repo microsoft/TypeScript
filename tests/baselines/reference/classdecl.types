@@ -24,7 +24,7 @@ class a {
 >d : number
 
         return 30;
->30 : number
+>30 : 30
     }
     public set d(a: number) {
 >d : number
@@ -37,9 +37,9 @@ class a {
         return { x: 30, y: 40 };
 >{ x: 30, y: 40 } : { x: number; y: number; }
 >x : number
->30 : number
+>30 : 30
 >y : number
->40 : number
+>40 : 40
     }
 
     private static d2() {
@@ -49,7 +49,7 @@ class a {
 >p3 : string
 
         return "string";
->"string" : string
+>"string" : "string"
     }
     private pv3;
 >pv3 : any

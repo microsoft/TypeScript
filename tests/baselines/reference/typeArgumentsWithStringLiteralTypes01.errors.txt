@@ -11,21 +11,17 @@ tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes0
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(55,43): error TS2345: Argument of type '"World"' is not assignable to parameter of type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(57,52): error TS2345: Argument of type '"World"' is not assignable to parameter of type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(58,43): error TS2345: Argument of type '"World"' is not assignable to parameter of type '"Hello"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(61,5): error TS2322: Type 'string' is not assignable to type '"Hello"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(63,5): error TS2322: Type 'string' is not assignable to type '"Hello"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(75,5): error TS2322: Type '"Hello" | "World"' is not assignable to type '"Hello"'.
-  Type '"World"' is not assignable to type '"Hello"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(77,5): error TS2322: Type '"Hello" | "World"' is not assignable to type '"Hello"'.
-  Type '"World"' is not assignable to type '"Hello"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(68,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(70,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(75,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello" | "World"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(77,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello" | "World"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(87,43): error TS2345: Argument of type '"World"' is not assignable to parameter of type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(88,43): error TS2345: Argument of type '"Hello"' is not assignable to parameter of type '"World"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(89,52): error TS2345: Argument of type '"World"' is not assignable to parameter of type '"Hello"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(93,5): error TS2322: Type 'string' is not assignable to type '"Hello" | "World"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(97,5): error TS2322: Type 'string' is not assignable to type '"Hello" | "World"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(100,25): error TS2345: Argument of type '"Hello" | "World"' is not assignable to parameter of type '"Hello"'.
-  Type '"World"' is not assignable to type '"Hello"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(104,25): error TS2345: Argument of type '"Hello" | "World"' is not assignable to parameter of type '"Hello"'.
-  Type '"World"' is not assignable to type '"Hello"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(100,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(104,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(107,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello" | "World"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(111,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello" | "World"'.
 
 
 ==== tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts (24 errors) ====
@@ -116,32 +112,30 @@ tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes0
     
         // Assignment from the returned value should cause an error.
         a = takeReturnString(a);
-        ~
-!!! error TS2322: Type 'string' is not assignable to type '"Hello"'.
         b = takeReturnString(b);
         c = takeReturnString(c);
-        ~
-!!! error TS2322: Type 'string' is not assignable to type '"Hello"'.
         d = takeReturnString(d);
         e = takeReturnString(e);
     
         // Should be valid
         a = takeReturnHello(a);
+                            ~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
         b = takeReturnHello(b);
         c = takeReturnHello(c);
+                            ~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
         d = takeReturnHello(d);
         e = takeReturnHello(e);
     
         // Assignment from the returned value should cause an error.
         a = takeReturnHelloWorld(a);
-        ~
-!!! error TS2322: Type '"Hello" | "World"' is not assignable to type '"Hello"'.
-!!! error TS2322:   Type '"World"' is not assignable to type '"Hello"'.
+                                 ~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello" | "World"'.
         b = takeReturnHelloWorld(b);
         c = takeReturnHelloWorld(c);
-        ~
-!!! error TS2322: Type '"Hello" | "World"' is not assignable to type '"Hello"'.
-!!! error TS2322:   Type '"World"' is not assignable to type '"Hello"'.
+                                 ~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello" | "World"'.
         d = takeReturnHelloWorld(d);
         e = takeReturnHelloWorld(e);
     }
@@ -164,32 +158,30 @@ tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes0
     
         // Assignment from the returned value should cause an error.
         a = takeReturnString(a);
-        ~
-!!! error TS2322: Type 'string' is not assignable to type '"Hello" | "World"'.
         b = takeReturnString(b);
         c = takeReturnString(c);
         d = takeReturnString(d);
         e = takeReturnString(e);
-        ~
-!!! error TS2322: Type 'string' is not assignable to type '"Hello" | "World"'.
     
         // Passing these as arguments should cause an error.
         a = takeReturnHello(a);
                             ~
-!!! error TS2345: Argument of type '"Hello" | "World"' is not assignable to parameter of type '"Hello"'.
-!!! error TS2345:   Type '"World"' is not assignable to type '"Hello"'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
         b = takeReturnHello(b);
         c = takeReturnHello(c);
         d = takeReturnHello(d);
         e = takeReturnHello(e);
                             ~
-!!! error TS2345: Argument of type '"Hello" | "World"' is not assignable to parameter of type '"Hello"'.
-!!! error TS2345:   Type '"World"' is not assignable to type '"Hello"'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
     
         // Both should be valid.
         a = takeReturnHelloWorld(a);
+                                 ~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello" | "World"'.
         b = takeReturnHelloWorld(b);
         c = takeReturnHelloWorld(c);
         d = takeReturnHelloWorld(d);
         e = takeReturnHelloWorld(e);
+                                 ~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello" | "World"'.
     }

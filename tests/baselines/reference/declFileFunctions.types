@@ -29,7 +29,7 @@ export function fooWithRestParameters(a: string, ...rests: string[]) {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
->"" : string
+>"" : ""
 }
 
 export function fooWithOverloads(a: string): string;
@@ -66,7 +66,7 @@ export function fooWithTypePredicate(a: any): a is number {
 >a : any
 
     return true;
->true : boolean
+>true : true
 }
 export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number {
 >fooWithTypePredicateAndMulitpleParams : (a: any, b: any, c: any) => a is number
@@ -76,7 +76,7 @@ export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a
 >a : any
 
     return true;
->true : boolean
+>true : true
 }
 export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
 >fooWithTypeTypePredicateAndGeneric : <T>(a: any) => a is T
@@ -86,7 +86,7 @@ export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
 >T : T
 
     return true;
->true : boolean
+>true : true
 }
 export function fooWithTypeTypePredicateAndRestParam(a: any, ...rest): a is number {
 >fooWithTypeTypePredicateAndRestParam : (a: any, ...rest: any[]) => a is number
@@ -95,7 +95,7 @@ export function fooWithTypeTypePredicateAndRestParam(a: any, ...rest): a is numb
 >a : any
 
     return true;
->true : boolean
+>true : true
 }
 
 /** This comment should appear for nonExportedFoo*/
@@ -127,7 +127,7 @@ function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
->"" : string
+>"" : ""
 }
 
 function nonExportedFooWithOverloads(a: string): string;
@@ -176,7 +176,7 @@ function globalfooWithRestParameters(a: string, ...rests: string[]) {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
->"" : string
+>"" : ""
 }
 function globalfooWithOverloads(a: string): string;
 >globalfooWithOverloads : { (a: string): string; (a: number): number; }

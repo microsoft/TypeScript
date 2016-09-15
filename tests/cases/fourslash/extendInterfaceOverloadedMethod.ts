@@ -11,6 +11,5 @@
 ////var b: B<number>;
 ////var /**/x = b.foo2().foo(5).foo(); // 'x' is of type 'void'
 
-goTo.marker();
-verify.quickInfoIs('var x: void');
+verify.quickInfoAt("", "var x: void");
 verify.numberOfErrorsInCurrentFile(0);

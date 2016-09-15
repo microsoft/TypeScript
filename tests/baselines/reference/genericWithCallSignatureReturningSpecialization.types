@@ -18,5 +18,5 @@ var x: B<boolean>;
 x(true); // was error
 >x(true) : void
 >x : B<boolean>
->true : boolean
+>true : true
 

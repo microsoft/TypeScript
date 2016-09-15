@@ -408,6 +408,9 @@ namespace Harness.LanguageService {
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): ts.CompletionEntryDetails {
             return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName));
         }
+        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): ts.Symbol {
+            throw new Error("getCompletionEntrySymbol not implemented across the shim layer.");
+        }
         getQuickInfoAtPosition(fileName: string, position: number): ts.QuickInfo {
             return unwrapJSONCallResult(this.shim.getQuickInfoAtPosition(fileName, position));
         }
