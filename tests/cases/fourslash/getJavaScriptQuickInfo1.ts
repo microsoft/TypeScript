@@ -5,4 +5,4 @@
 /////** @type {function(new:string,number)} */
 ////var /**/v;
 
-verify.quickInfoAt("", "var v: new (p1: number) => string", "@type {function(new:string,number)} ");
+verify.quickInfoAt("", "var v: new (arg1: number) => string", undefined);

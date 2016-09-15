@@ -1271,13 +1271,44 @@ declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | P
 
 interface PromiseLike<T> {
     /**
-    * Attaches callbacks for the resolution and/or rejection of the Promise.
-    * @param onfulfilled The callback to execute when the Promise is resolved.
-    * @param onrejected The callback to execute when the Promise is rejected.
-    * @returns A Promise for the completion of which ever callback is executed.
-    */
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then(
+        onfulfilled?: ((value: T) => T | PromiseLike<T>) | undefined | null,
+        onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): PromiseLike<T>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(
+        onfulfilled: ((value: T) => T | PromiseLike<T>) | undefined | null,
+        onrejected: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<T | TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(
+        onfulfilled: (value: T) => TResult | PromiseLike<TResult>,
+        onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): PromiseLike<TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1, TResult2>(
+        onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>,
+        onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): PromiseLike<TResult1 | TResult2>;
 }
 
 interface ArrayLike<T> {
@@ -1545,7 +1576,7 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1818,7 +1849,7 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2092,7 +2123,7 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2365,7 +2396,7 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2639,7 +2670,7 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2912,7 +2943,7 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3185,7 +3216,7 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3458,7 +3489,7 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3732,7 +3763,7 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.

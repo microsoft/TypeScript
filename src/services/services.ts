@@ -42,7 +42,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
-        public jsDocComments: JSDocComment[];
+        public jsDocComments: JSDoc[];
         public original: Node;
         public transformFlags: TransformFlags;
         public excludeTransformFlags: TransformFlags;
@@ -215,7 +215,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
-        public jsDocComments: JSDocComment[];
+        public jsDocComments: JSDoc[];
         public __tokenTag: any;
 
         constructor(pos: number, end: number) {
@@ -1347,10 +1347,11 @@ namespace ts {
         }
 
         /// NavigateTo
-        function getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[] {
+        function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): NavigateToItem[] {
             synchronizeHostData();
-            const checker = getProgram().getTypeChecker();
-            return ts.NavigateTo.getNavigateToItems(program, checker, cancellationToken, searchValue, maxResultCount);
+
+            const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
+            return ts.NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount);
         }
 
         function getEmitOutput(fileName: string): EmitOutput {

@@ -33,7 +33,14 @@
                 "pos": 24,
                 "end": 29,
                 "text": "name1"
-            }
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
+            },
+            "comment": ""
         },
         "1": {
             "kind": "JSDocParameterTag",
@@ -65,7 +72,14 @@
                 "pos": 50,
                 "end": 55,
                 "text": "name2"
-            }
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 50,
+                "end": 55,
+                "text": "name2"
+            },
+            "comment": ""
         },
         "length": 2,
         "pos": 8,

@@ -16,32 +16,32 @@ import a from ".";
 >a : { a: number; }
 
 import aIndex from "./";
->aIndex : { a: number; }
+>aIndex : { aIndex: number; }
 
 a.a;
 >a.a : number
 >a : { a: number; }
 >a : number
 
-aIndex.a; //aIndex.aIndex; See GH#9690
->aIndex.a : number
->aIndex : { a: number; }
->a : number
+aIndex.aIndex;
+>aIndex.aIndex : number
+>aIndex : { aIndex: number; }
+>aIndex : number
 
 === /a/b/test.ts ===
 import a from "..";
 >a : { a: number; }
 
 import aIndex from "../";
->aIndex : { a: number; }
+>aIndex : { aIndex: number; }
 
 a.a;
 >a.a : number
 >a : { a: number; }
 >a : number
 
-aIndex.a; //aIndex.aIndex;
->aIndex.a : number
->aIndex : { a: number; }
->a : number
+aIndex.aIndex;
+>aIndex.aIndex : number
+>aIndex : { aIndex: number; }
+>aIndex : number
 

@@ -1759,40 +1759,46 @@ namespace ts {
             }
 
             startPos = pos;
-
-            // Eat leading whitespace
-            let ch = text.charCodeAt(pos);
-            while (pos < end) {
-                ch = text.charCodeAt(pos);
-                if (isWhiteSpaceSingleLine(ch)) {
-                    pos++;
-                }
-                else {
-                    break;
-                }
-            }
             tokenPos = pos;
 
+            const ch = text.charCodeAt(pos);
             switch (ch) {
+                case CharacterCodes.tab:
+                case CharacterCodes.verticalTab:
+                case CharacterCodes.formFeed:
+                case CharacterCodes.space:
+                    while (pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos))) {
+                        pos++;
+                    }
+                    return token = SyntaxKind.WhitespaceTrivia;
                 case CharacterCodes.at:
-                    return pos += 1, token = SyntaxKind.AtToken;
+                    pos++;
+                    return token = SyntaxKind.AtToken;
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
-                    return pos += 1, token = SyntaxKind.NewLineTrivia;
+                    pos++;
+                    return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:
-                    return pos += 1, token = SyntaxKind.AsteriskToken;
+                    pos++;
+                    return token = SyntaxKind.AsteriskToken;
                 case CharacterCodes.openBrace:
-                    return pos += 1, token = SyntaxKind.OpenBraceToken;
+                    pos++;
+                    return token = SyntaxKind.OpenBraceToken;
                 case CharacterCodes.closeBrace:
-                    return pos += 1, token = SyntaxKind.CloseBraceToken;
+                    pos++;
+                    return token = SyntaxKind.CloseBraceToken;
                 case CharacterCodes.openBracket:
-                    return pos += 1, token = SyntaxKind.OpenBracketToken;
+                    pos++;
+                    return token = SyntaxKind.OpenBracketToken;
                 case CharacterCodes.closeBracket:
-                    return pos += 1, token = SyntaxKind.CloseBracketToken;
+                    pos++;
+                    return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.equals:
-                    return pos += 1, token = SyntaxKind.EqualsToken;
+                    pos++;
+                    return token = SyntaxKind.EqualsToken;
                 case CharacterCodes.comma:
-                    return pos += 1, token = SyntaxKind.CommaToken;
+                    pos++;
+                    return token = SyntaxKind.CommaToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {

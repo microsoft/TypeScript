@@ -19,10 +19,10 @@ a.a;
 >a : Symbol(a, Decl(test.ts, 0, 6))
 >a : Symbol(a, Decl(a.ts, 1, 16))
 
-aIndex.a; //aIndex.aIndex; See GH#9690
->aIndex.a : Symbol(a, Decl(a.ts, 1, 16))
+aIndex.aIndex;
+>aIndex.aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
 >aIndex : Symbol(aIndex, Decl(test.ts, 1, 6))
->a : Symbol(a, Decl(a.ts, 1, 16))
+>aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
 
 === /a/b/test.ts ===
 import a from "..";
@@ -36,8 +36,8 @@ a.a;
 >a : Symbol(a, Decl(test.ts, 0, 6))
 >a : Symbol(a, Decl(a.ts, 1, 16))
 
-aIndex.a; //aIndex.aIndex;
->aIndex.a : Symbol(a, Decl(a.ts, 1, 16))
+aIndex.aIndex;
+>aIndex.aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
 >aIndex : Symbol(aIndex, Decl(test.ts, 1, 6))
->a : Symbol(a, Decl(a.ts, 1, 16))
+>aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
 
