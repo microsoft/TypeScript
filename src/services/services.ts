@@ -695,7 +695,7 @@ namespace ts {
     }
 
     export function getSupportedCodeFixes() {
-        return codefix.CodeFixProvider.getSupportedErrorCodes();
+        return codefix.getSupportedErrorCodes();
     }
 
     // Cache host information about script Should be refreshed
@@ -918,7 +918,6 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        const codeFixProvider: codefix.CodeFixProvider = new codefix.CodeFixProvider();
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
@@ -1588,7 +1587,6 @@ namespace ts {
         function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            const checker = program.getTypeChecker();
             let allFixes: CodeAction[] = [];
 
             forEach(errorCodes, error => {
@@ -1596,11 +1594,11 @@ namespace ts {
                     errorCode: error,
                     sourceFile: sourceFile,
                     span: { start, length: end - start },
-                    checker: checker,
+                    program: program,
                     newLineCharacter: getNewLineOrDefaultFromHost(host)
                 };
 
-                const fixes = codeFixProvider.getFixes(context);
+                const fixes = codefix.getFixes(context);
                 if (fixes) {
                     allFixes = allFixes.concat(fixes);
                 }
