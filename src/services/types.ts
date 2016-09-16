@@ -209,6 +209,7 @@ namespace ts {
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[];
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         findReferences(fileName: string, position: number): ReferencedSymbol[];
@@ -295,6 +296,11 @@ namespace ts {
         fileName: string;
         isWriteAccess: boolean;
         isDefinition: boolean;
+    }
+
+    export interface ImplementationLocation {
+        textSpan: TextSpan;
+        fileName: string;
     }
 
     export interface DocumentHighlights {

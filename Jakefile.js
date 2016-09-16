@@ -129,6 +129,7 @@ var servicesSources = [
     "documentRegistry.ts",
     "findAllReferences.ts",
     "goToDefinition.ts",
+    "goToImplementation.ts",
     "jsDoc.ts",
     "jsTyping.ts",
     "navigateTo.ts",
@@ -789,7 +790,7 @@ function cleanTestDirs() {
 
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit) {
-    var testConfigContents = JSON.stringify({ 
+    var testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         light: light,
         workerCount: workerCount,

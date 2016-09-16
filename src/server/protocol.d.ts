@@ -194,6 +194,14 @@ declare namespace ts.server.protocol {
     }
 
     /**
+      * Go to implementation request; value of command field is
+      * "implementation". Return response giving the file locations that
+      * implement the symbol found in file at location line, col.
+      */
+    export interface ImplementationRequest extends FileLocationRequest {
+    }
+
+    /**
       * Location in source code expressed as (one-based) line and character offset.
       */
     export interface Location {
@@ -237,6 +245,13 @@ declare namespace ts.server.protocol {
       * Definition response message.  Gives text range for definition.
       */
     export interface TypeDefinitionResponse extends Response {
+        body?: FileSpan[];
+    }
+
+    /**
+      * Implementation response message.  Gives text range for implementations.
+      */
+    export interface ImplementationResponse extends Response {
         body?: FileSpan[];
     }
 
