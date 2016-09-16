@@ -9,7 +9,7 @@ declare function decorator(x: string): any;
 @decorator("hello")
 >decorator("hello") : any
 >decorator : (x: string) => any
->"hello" : string
+>"hello" : "hello"
 
 class Remote { }
 >Remote : Remote
@@ -21,7 +21,7 @@ class Remote { }
 @decorator("hi")
 >decorator("hi") : any
 >decorator : (x: string) => any
->"hi" : string
+>"hi" : "hi"
 
 class AnotherRomote {
 >AnotherRomote : AnotherRomote

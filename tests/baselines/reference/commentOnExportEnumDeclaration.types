@@ -6,7 +6,7 @@ export enum Color {
 >Color : Color
 
     r, g, b
->r : Color
->g : Color
->b : Color
+>r : Color.r
+>g : Color.g
+>b : Color.b
 }
