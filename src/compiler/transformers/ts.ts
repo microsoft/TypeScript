@@ -694,19 +694,21 @@ namespace ts {
 
             //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
             //                                         or decoratedClassAlias if the class contain self-reference.
+            const transformedClassExpression = createVariableStatement(
+                /*modifiers*/ undefined,
+                createLetDeclarationList([
+                    createVariableDeclaration(
+                        classAlias || declaredName,
+                        /*type*/ undefined,
+                        classExpression
+                    )
+                ]),
+                /*location*/ location
+            );
+            setCommentRange(transformedClassExpression, node);
             statements.push(
                 setOriginalNode(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createLetDeclarationList([
-                            createVariableDeclaration(
-                                classAlias || declaredName,
-                                /*type*/ undefined,
-                                classExpression
-                            )
-                        ]),
-                        /*location*/ location
-                    ),
+                    /*node*/ transformedClassExpression,
                     /*original*/ node
                 )
             );
