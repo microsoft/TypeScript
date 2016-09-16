@@ -804,17 +804,17 @@ namespace ts {
          * Adds a trailing VariableStatement for an enum or module declaration.
          */
         function addVarForExportedEnumOrNamespaceDeclaration(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
-            statements.push(
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    [createVariableDeclaration(
-                        getDeclarationName(node),
+            const transformedStatement = createVariableStatement(
+                /*modifiers*/ undefined,
+                [createVariableDeclaration(
+                    getDeclarationName(node),
                         /*type*/ undefined,
-                        createPropertyAccess(createIdentifier("exports"), getDeclarationName(node))
-                    )],
+                    createPropertyAccess(createIdentifier("exports"), getDeclarationName(node))
+                )],
                     /*location*/ node
-                )
             );
+            setNodeEmitFlags(transformedStatement, NodeEmitFlags.NoComments);
+            statements.push(transformedStatement);
         }
 
         function getDeclarationName(node: DeclarationStatement) {
