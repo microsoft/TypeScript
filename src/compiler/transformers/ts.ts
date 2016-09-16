@@ -2891,7 +2891,7 @@ namespace ts {
             //         })(world = hi.world || (hi.world = {}));
             //     })(hi = hello.hi || (hello.hi = {}));
             // })(hello || (hello = {}));
-            // so if the block is a transformed module declaration, turn off the comment emit
+            // We only want to emit comment on the namespace which contains block body itself, not the containing namespaces.
             if (body.kind !== SyntaxKind.ModuleBlock) {
                 setNodeEmitFlags(block, block.emitFlags | NodeEmitFlags.NoComments);
             }
