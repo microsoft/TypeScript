@@ -1747,4 +1747,138 @@ namespace ts.projectSystem {
             assert.isTrue(containsNavToItem(items2, "foo", "function"), `Cannot find function symbol "foo".`);
         });
     });
+
+    describe("external projects", () => {
+        it("correctly handling add/remove tsconfig - 1", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1;"
+            };
+            const f2 = {
+                path: "/a/b/lib.ts",
+                content: ""
+            };
+            const tsconfig = {
+                path: "/a/b/tsconfig.json",
+                content: ""
+            };
+            const host = createServerHost([f1, f2]);
+            const projectService = createProjectService(host);
+
+            // open external project
+            const projectName = "/a/b/proj1";
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([f1.path, f2.path]),
+                options: {}
+            });
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            checkProjectActualFiles(projectService.externalProjects[0], [f1.path, f2.path]);
+
+            // rename lib.ts to tsconfig.json
+            host.reloadFS([f1, tsconfig]);
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([f1.path, tsconfig.path]),
+                options: {}
+            });
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path]);
+
+            // rename tsconfig.json back to lib.ts
+            host.reloadFS([f1, f2]);
+            host.triggerFileWatcherCallback(tsconfig.path, /*removed*/ true);
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([f1.path, f2.path]),
+                options: {}
+            });
+
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            checkProjectActualFiles(projectService.externalProjects[0], [f1.path, f2.path]);
+        });
+
+
+        it("correctly handling add/remove tsconfig - 2", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1;"
+            };
+            const cLib = {
+                path: "/a/b/c/lib.ts",
+                content: ""
+            };
+            const cTsconfig = {
+                path: "/a/b/c/tsconfig.json",
+                content: "{}"
+            };
+            const dLib = {
+                path: "/a/b/d/lib.ts",
+                content: ""
+            };
+            const dTsconfig = {
+                path: "/a/b/d/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, cLib, cTsconfig, dLib, dTsconfig]);
+            const projectService = createProjectService(host);
+
+            // open external project
+            const projectName = "/a/b/proj1";
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([f1.path]),
+                options: {}
+            });
+
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            checkProjectActualFiles(projectService.externalProjects[0], [f1.path]);
+
+            // add two config file as root files
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([f1.path, cTsconfig.path, dTsconfig.path]),
+                options: {}
+            });
+            projectService.checkNumberOfProjects({ configuredProjects: 2 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [cLib.path]);
+            checkProjectActualFiles(projectService.configuredProjects[1], [dLib.path]);
+
+            // remove one config file
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([f1.path, dTsconfig.path]),
+                options: {}
+            });
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [dLib.path]);
+
+            // remove second config file
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([f1.path]),
+                options: {}
+            });
+
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            checkProjectActualFiles(projectService.externalProjects[0], [f1.path]);
+
+            // open two config files
+            // add two config file as root files
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([f1.path, cTsconfig.path, dTsconfig.path]),
+                options: {}
+            });
+            projectService.checkNumberOfProjects({ configuredProjects: 2 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [cLib.path]);
+            checkProjectActualFiles(projectService.configuredProjects[1], [dLib.path]);
+
+            // close all projects - no projects should be opened
+            projectService.closeExternalProject(projectName);
+            projectService.checkNumberOfProjects({});
+        });
+    });
 }
