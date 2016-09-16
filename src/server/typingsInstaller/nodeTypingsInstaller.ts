@@ -1,8 +1,14 @@
-/// <reference path="typingsInstaller.ts"/>
+﻿/// <reference path="typingsInstaller.ts"/>
 /// <reference types="node" />
 
 namespace ts.server.typingsInstaller {
+    interface RunInstallRequest {
+        readonly cachePath: string;
+        readonly typingsToInstall: string[];
+        readonly postInstallAction: (installedTypings: string[]) => void;
+    }
 
+    const throttleLimit = 5;
     const fs: {
         appendFileSync(file: string, content: string): void
     } = require("fs");
@@ -25,6 +31,8 @@ namespace ts.server.typingsInstaller {
         private npmBinPath: string;
 
         private installRunCount = 1;
+        private throttleCount = 0;
+        private delayedRunInstallRequests: RunInstallRequest[] = [];
         readonly installTypingHost: InstallTypingHost = sys;
 
         constructor(globalTypingsCacheLocation: string, log: Log) {
@@ -90,24 +98,55 @@ namespace ts.server.typingsInstaller {
         }
 
         protected runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
+            if (this.throttleCount === throttleLimit) {
+                const request = {
+                    cachePath: cachePath,
+                    typingsToInstall: typingsToInstall,
+                    postInstallAction: postInstallAction
+                };
+                this.delayedRunInstallRequests.push(request);
+                return;
+            }
             const id = this.installRunCount;
             this.installRunCount++;
             let execInstallCmdCount = 0;
             const filteredTypings: string[] = [];
+            const delayedTypingsToInstall: string[] = [];
             for (const typing of typingsToInstall) {
-                const command = `npm view @types/${typing} --silent name`;
-                this.execAsync("npm view", command, cachePath, id, (err, stdout, stderr) => {
-                    if (stdout) {
-                        filteredTypings.push(typing);
-                    }
-                    execInstallCmdCount++;
-                    if (execInstallCmdCount === typingsToInstall.length) {
-                        installFilteredTypings(this, filteredTypings);
-                    }
+                if (this.throttleCount === throttleLimit) {
+                    delayedTypingsToInstall.push(typing);
+                    continue;
+                }
+                execNpmViewTyping(this, typing);
+            }
+
+           function execNpmViewTyping(self: NodeTypingsInstaller, typing: string) {
+               self.throttleCount++;
+               const command = `npm view @types/${typing} --silent name`;
+               self.execAsync("npm view", command, cachePath, id, (err, stdout, stderr) => {
+                   if (stdout) {
+                       filteredTypings.push(typing);
+                   }
+                   execInstallCmdCount++;
+                   self.throttleCount--;
+                   if (delayedTypingsToInstall.length > 0) {
+                       return execNpmViewTyping(self, delayedTypingsToInstall.pop());
+                   }
+                   if (execInstallCmdCount === typingsToInstall.length) {
+                       installFilteredTypings(self, filteredTypings);
+                       if (self.delayedRunInstallRequests.length > 0) {
+                           const request = self.delayedRunInstallRequests.pop();
+                           return self.runInstall(request.cachePath, request.typingsToInstall, request.postInstallAction);
+                       }
+                   }
                 });
             }
 
             function installFilteredTypings(self: NodeTypingsInstaller, filteredTypings: string[]) {
+                if (filteredTypings.length === 0) {
+                    reportInstalledTypings(self);
+                    return;
+                }
                 const command = `npm install ${filteredTypings.map(t => "@types/" + t).join(" ")} --save-dev`;
                 self.execAsync("npm install", command, cachePath, id, (err, stdout, stderr) => {
                     if (stdout) {
