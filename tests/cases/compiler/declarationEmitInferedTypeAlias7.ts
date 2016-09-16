@@ -2,11 +2,8 @@
 // @skipDefaultLibCheck: true
 
 // @Filename: 0.ts
-{
-    type Data = string | boolean;
-    let obj: Data = true;
-}
-export { }
+export type Data = string | boolean;
+let obj: Data = true;
 
 // @Filename: 1.ts
 let v = "str" || true;
