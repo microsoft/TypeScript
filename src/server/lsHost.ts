@@ -24,8 +24,15 @@ namespace ts.server {
             this.resolveModuleName = (moduleName, containingFile, compilerOptions, host) => {
                 const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
                 if (primaryResult.resolvedModule) {
-                    return primaryResult;
+                    // return result immediately only if it is .ts, .tsx or .d.ts
+                    // otherwise try to load typings from @types
+                    if (fileExtensionIsAny(primaryResult.resolvedModule.resolvedFileName, supportedTypeScriptExtensions)) {
+                        return primaryResult;
+                    }
                 }
+                // create different collection of failed lookup locations for second pass
+                // if it will fail and we've already found something during the first pass - we don't want to pollute its results 
+                const secondaryLookupFailedLookupLocations: string[] = [];
                 const globalCache = this.project.projectService.typingsInstaller.globalTypingsCacheLocation;
                 if (this.project.getTypingOptions().enableAutoDiscovery && globalCache) {
                     const traceEnabled = isTraceEnabled(compilerOptions, host);
@@ -33,10 +40,13 @@ namespace ts.server {
                         trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, this.project.getProjectName(), moduleName, globalCache);
                     }
                     const state: ModuleResolutionState = { compilerOptions, host, skipTsx: false, traceEnabled };
-                    const resolvedName = loadModuleFromNodeModules(moduleName, globalCache, primaryResult.failedLookupLocations, state, /*checkOneLevel*/ true);
+                    const resolvedName = loadModuleFromNodeModules(moduleName, globalCache, secondaryLookupFailedLookupLocations, state, /*checkOneLevel*/ true);
                     if (resolvedName) {
-                        return createResolvedModule(resolvedName, /*isExternalLibraryImport*/ true, primaryResult.failedLookupLocations);
+                        return createResolvedModule(resolvedName, /*isExternalLibraryImport*/ true, primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations));
                     }
+                }
+                if (!primaryResult.resolvedModule && secondaryLookupFailedLookupLocations) {
+                    primaryResult.failedLookupLocations = primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations);
                 }
                 return primaryResult;
             };
