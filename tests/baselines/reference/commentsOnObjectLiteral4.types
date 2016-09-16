@@ -11,7 +11,7 @@ var v = {
 >bar : number
 
   return 12;
->12 : number
+>12 : 12
  }
 }
 

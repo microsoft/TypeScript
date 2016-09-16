@@ -6,6 +6,6 @@ var foo = <{ id: number; }[]>[{ foo: "s" }, {  }];
 >[{ foo: "s" }, {  }] : ({ foo: string; } | {})[]
 >{ foo: "s" } : { foo: string; }
 >foo : string
->"s" : string
+>"s" : "s"
 >{  } : {}
 

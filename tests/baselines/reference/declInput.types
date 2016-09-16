@@ -9,7 +9,7 @@ class bar {
 
   public f() { return ''; }
 >f : () => string
->'' : string
+>'' : ""
 
   public g() { return {a: <bar>null, b: undefined, c: void 4 }; }
 >g : () => { a: bar; b: any; c: any; }
@@ -22,16 +22,16 @@ class bar {
 >undefined : undefined
 >c : undefined
 >void 4 : undefined
->4 : number
+>4 : 4
 
   public h(x = 4, y = null, z = '') { x++; }
 >h : (x?: number, y?: any, z?: string) => void
 >x : number
->4 : number
+>4 : 4
 >y : any
 >null : null
 >z : string
->'' : string
+>'' : ""
 >x++ : number
 >x : number
 }

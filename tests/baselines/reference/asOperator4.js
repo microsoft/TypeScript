@@ -18,7 +18,7 @@ function foo() { }
 exports.foo = foo;
 //// [bar.js]
 "use strict";
-var foo_1 = require('./foo');
+var foo_1 = require("./foo");
 // These should emit identically
 foo_1.foo;
 foo_1.foo;

@@ -30,7 +30,7 @@ class D {
 >data.join : (separator?: string) => string
 >data : string[]
 >join : (separator?: string) => string
->" " : string
+>" " : " "
     }
 
     getData1() {
@@ -53,7 +53,7 @@ class D {
 >this : this
 >data : string[]
 >join : (separator?: string) => string
->" " : string
+>" " : " "
     }
 }
 
@@ -67,15 +67,15 @@ var o: {
 >prop2 : string | boolean
 
 } = {
->{        prop1: "string" ,        prop2: true    } : { prop1: string; prop2: boolean; }
+>{        prop1: "string" ,        prop2: true    } : { prop1: string; prop2: true; }
 
         prop1: "string" ,
 >prop1 : string
->"string" : string
+>"string" : "string"
 
         prop2: true
 >prop2 : boolean
->true : boolean
+>true : true
     }
 
 if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}

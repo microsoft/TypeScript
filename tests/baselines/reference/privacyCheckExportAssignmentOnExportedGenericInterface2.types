@@ -24,6 +24,6 @@ module Foo {
 
     export var x = "hello";
 >x : string
->"hello" : string
+>"hello" : "hello"
 }
 

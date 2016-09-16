@@ -8,10 +8,9 @@
 ////function f ({ /*1*/next: { /*2*/next: x} }) {
 ////}
 
-goTo.marker("1");
-verify.quickInfoIs(`(property) next: {
+verify.quickInfos({
+    1: `(property) next: {
     next: any;
-}`);
-
-goTo.marker("2");
-verify.quickInfoIs("(property) next: any");
+}`,
+    2: "(property) next: any"
+});

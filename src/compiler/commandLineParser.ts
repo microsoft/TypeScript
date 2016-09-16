@@ -30,6 +30,7 @@ namespace ts {
         {
             name: "extendedDiagnostics",
             type: "boolean",
+            experimental: true
         },
         {
             name: "emitBOM",
@@ -293,6 +294,7 @@ namespace ts {
                 "classic": ModuleResolutionKind.Classic,
             }),
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
+            paramType: Diagnostics.STRATEGY,
         },
         {
             name: "allowUnusedLabels",
@@ -433,6 +435,11 @@ namespace ts {
             name: "strictNullChecks",
             type: "boolean",
             description: Diagnostics.Enable_strict_null_checks
+        },
+        {
+            name: "importHelpers",
+            type: "boolean",
+            description: Diagnostics.Import_emit_helpers_from_tslib
         }
     ];
 
@@ -799,12 +806,45 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = []): ParsedCommandLine {
         const errors: Diagnostic[] = [];
-        const compilerOptions: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
-        const options = extend(existingOptions, compilerOptions);
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        const resolvedPath = toPath(configFileName || "", basePath, getCanonicalFileName);
+        if (resolutionStack.indexOf(resolvedPath) >= 0) {
+            return {
+                options: {},
+                fileNames: [],
+                typingOptions: {},
+                raw: json,
+                errors: [createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> "))],
+                wildcardDirectories: {}
+            };
+        }
+
+        let options: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
         const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
 
+        if (json["extends"]) {
+            let [include, exclude, files, baseOptions]: [string[], string[], string[], CompilerOptions] = [undefined, undefined, undefined, {}];
+            if (typeof json["extends"] === "string") {
+                [include, exclude, files, baseOptions] = (tryExtendsName(json["extends"]) || [include, exclude, files, baseOptions]);
+            }
+            else {
+                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
+            }
+            if (include && !json["include"]) {
+                json["include"] = include;
+            }
+            if (exclude && !json["exclude"]) {
+                json["exclude"] = exclude;
+            }
+            if (files && !json["files"]) {
+                json["files"] = files;
+            }
+            options = assign({}, baseOptions, options);
+        }
+
+        options = extend(existingOptions, options);
         options.configFilePath = configFileName;
 
         const { fileNames, wildcardDirectories } = getFileNames(errors);
@@ -817,6 +857,39 @@ namespace ts {
             errors,
             wildcardDirectories
         };
+
+        function tryExtendsName(extendedConfig: string): [string[], string[], string[], CompilerOptions] {
+            // If the path isn't a rooted or relative path, don't try to resolve it (we reserve the right to special case module-id like paths in the future)
+            if (!(isRootedDiskPath(extendedConfig) || startsWith(normalizeSlashes(extendedConfig), "./") || startsWith(normalizeSlashes(extendedConfig), "../"))) {
+                errors.push(createCompilerDiagnostic(Diagnostics.The_path_in_an_extends_options_must_be_relative_or_rooted));
+                return;
+            }
+            let extendedConfigPath = toPath(extendedConfig, basePath, getCanonicalFileName);
+            if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, ".json")) {
+                extendedConfigPath = `${extendedConfigPath}.json` as Path;
+                if (!host.fileExists(extendedConfigPath)) {
+                    errors.push(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
+                    return;
+                }
+            }
+            const extendedResult = readConfigFile(extendedConfigPath, path => host.readFile(path));
+            if (extendedResult.error) {
+                errors.push(extendedResult.error);
+                return;
+            }
+            const extendedDirname = getDirectoryPath(extendedConfigPath);
+            const relativeDifference = convertToRelativePath(extendedDirname, basePath, getCanonicalFileName);
+            const updatePath: (path: string) => string = path => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
+            // Merge configs (copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios)
+            const result = parseJsonConfigFileContent(extendedResult.config, host, extendedDirname, /*existingOptions*/undefined, getBaseFileName(extendedConfigPath), resolutionStack.concat([resolvedPath]));
+            errors.push(...result.errors);
+            const [include, exclude, files] = map(["include", "exclude", "files"], key => {
+                if (!json[key] && extendedResult.config[key]) {
+                    return map(extendedResult.config[key], updatePath);
+                }
+            });
+            return [include, exclude, files, result.options];
+        }
 
         function getFileNames(errors: Diagnostic[]): ExpandResult {
             let fileNames: string[];
@@ -852,14 +925,13 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
             }
             else {
-                // By default, exclude common package folders
+                // By default, exclude common package folders and the outDir
                 excludeSpecs = ["node_modules", "bower_components", "jspm_packages"];
-            }
 
-            // Always exclude the output directory unless explicitly included
-            const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
-            if (outDir) {
-                excludeSpecs.push(outDir);
+                const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+                if (outDir) {
+                    excludeSpecs.push(outDir);
+                }
             }
 
             if (fileNames === undefined && includeSpecs === undefined) {

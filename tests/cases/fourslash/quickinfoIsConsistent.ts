@@ -6,7 +6,6 @@
 ////    /*3*/f(3);
 ////}
 
-[1, 2, 3].forEach((val) => {
-    goTo.marker("" + val);
-    verify.quickInfoIs("var f: (x: number) => number", "");
-} );
+for (const val of [1, 2, 3]) {
+    verify.quickInfoAt("" + val, "var f: (x: number) => number");
+}

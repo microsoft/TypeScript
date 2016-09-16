@@ -154,7 +154,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 if (options.sourceMap || options.inlineSourceMap) {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
                         const record = result.getSourceMapRecord();
-                        if (options.noEmitOnError && result.errors.length !== 0 && record === undefined) {
+                        if ((options.noEmitOnError && result.errors.length !== 0) || record === undefined) {
                             // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
                             /* tslint:disable:no-null-keyword */
                             return null;

@@ -20,7 +20,7 @@ declare var React: any;
 
 var p = 0;
 >p : number
->0 : number
+>0 : 0
 
 // Emit "   "
 <div>   </div>;

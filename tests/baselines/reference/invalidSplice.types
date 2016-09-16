@@ -5,8 +5,8 @@ var arr = [].splice(0,3,4,5);
 >[].splice : { (start: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }
 >[] : undefined[]
 >splice : { (start: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }
->0 : number
->3 : number
->4 : number
->5 : number
+>0 : 0
+>3 : 3
+>4 : 4
+>5 : 5
 

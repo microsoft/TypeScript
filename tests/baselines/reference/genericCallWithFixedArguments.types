@@ -18,6 +18,6 @@ g<A, B>(7) // the parameter list is fixed, so this should not error
 >g : <T, U>(x: any) => void
 >A : A
 >B : B
->7 : number
+>7 : 7
  
 

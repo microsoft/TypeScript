@@ -4,12 +4,12 @@ function a0() {
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
     }
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
     }
 }
 
@@ -22,7 +22,7 @@ function a1() {
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
     }
 }
 
@@ -31,7 +31,7 @@ function a2() {
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
     }
     {
         let x;
@@ -44,10 +44,10 @@ function a3() {
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
 >1 : 1
@@ -67,14 +67,14 @@ function a4() {
 >x : any
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
 >1 : 1
 
             let x = 1;
 >x : number
->1 : number
+>1 : 1
 
             break;
     }

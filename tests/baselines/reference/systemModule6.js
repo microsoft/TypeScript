@@ -7,16 +7,16 @@ function foo() {
 
 
 //// [systemModule6.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var C;
     function foo() {
         new C();
     }
+    var C;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             C = (function () {
                 function C() {
                 }
@@ -24,5 +24,5 @@ System.register([], function(exports_1, context_1) {
             }());
             exports_1("C", C);
         }
-    }
+    };
 });

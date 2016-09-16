@@ -10,7 +10,7 @@ tests/cases/compiler/intTypeCheck.ts(103,5): error TS2322: Type '() => void' is 
   Property 'p' is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(106,5): error TS2322: Type 'boolean' is not assignable to type 'i1'.
 tests/cases/compiler/intTypeCheck.ts(106,20): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(106,21): error TS2304: Cannot find name 'i1'.
+tests/cases/compiler/intTypeCheck.ts(106,21): error TS2693: 'i1' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(107,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(112,5): error TS2322: Type '{}' is not assignable to type 'i2'.
   Type '{}' provides no match for the signature '(): any'
@@ -21,7 +21,7 @@ tests/cases/compiler/intTypeCheck.ts(115,5): error TS2322: Type 'Base' is not as
   Type 'Base' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(120,5): error TS2322: Type 'boolean' is not assignable to type 'i2'.
 tests/cases/compiler/intTypeCheck.ts(120,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(120,22): error TS2304: Cannot find name 'i2'.
+tests/cases/compiler/intTypeCheck.ts(120,22): error TS2693: 'i2' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(121,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(126,5): error TS2322: Type '{}' is not assignable to type 'i3'.
   Type '{}' provides no match for the signature 'new (): any'
@@ -33,12 +33,12 @@ tests/cases/compiler/intTypeCheck.ts(131,5): error TS2322: Type '() => void' is 
   Type '() => void' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(134,5): error TS2322: Type 'boolean' is not assignable to type 'i3'.
 tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(134,22): error TS2304: Cannot find name 'i3'.
+tests/cases/compiler/intTypeCheck.ts(134,22): error TS2693: 'i3' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(135,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(142,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(148,22): error TS2304: Cannot find name 'i4'.
+tests/cases/compiler/intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(149,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(154,5): error TS2322: Type '{}' is not assignable to type 'i5'.
   Property 'p' is missing in type '{}'.
@@ -51,7 +51,7 @@ tests/cases/compiler/intTypeCheck.ts(159,5): error TS2322: Type '() => void' is 
   Property 'p' is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(162,5): error TS2322: Type 'boolean' is not assignable to type 'i5'.
 tests/cases/compiler/intTypeCheck.ts(162,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(162,22): error TS2304: Cannot find name 'i5'.
+tests/cases/compiler/intTypeCheck.ts(162,22): error TS2693: 'i5' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(163,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(168,5): error TS2322: Type '{}' is not assignable to type 'i6'.
   Type '{}' provides no match for the signature '(): any'
@@ -64,7 +64,7 @@ tests/cases/compiler/intTypeCheck.ts(173,5): error TS2322: Type '() => void' is 
   Type 'void' is not assignable to type 'number'.
 tests/cases/compiler/intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
 tests/cases/compiler/intTypeCheck.ts(176,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(176,22): error TS2304: Cannot find name 'i6'.
+tests/cases/compiler/intTypeCheck.ts(176,22): error TS2693: 'i6' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(177,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(182,5): error TS2322: Type '{}' is not assignable to type 'i7'.
   Type '{}' provides no match for the signature 'new (): any'
@@ -76,12 +76,12 @@ tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is 
   Type '() => void' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
 tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(190,22): error TS2304: Cannot find name 'i7'.
+tests/cases/compiler/intTypeCheck.ts(190,22): error TS2693: 'i7' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(191,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(198,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
 tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(204,22): error TS2304: Cannot find name 'i8'.
+tests/cases/compiler/intTypeCheck.ts(204,22): error TS2693: 'i8' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
@@ -214,7 +214,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                        ~
 !!! error TS1109: Expression expected.
                         ~~
-!!! error TS2304: Cannot find name 'i1'.
+!!! error TS2693: 'i1' only refers to a type, but is being used as a value here.
     var obj10: i1 = new {};
                     ~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -247,7 +247,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2304: Cannot find name 'i2'.
+!!! error TS2693: 'i2' only refers to a type, but is being used as a value here.
     var obj21: i2 = new {};
                     ~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -281,7 +281,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2304: Cannot find name 'i3'.
+!!! error TS2693: 'i3' only refers to a type, but is being used as a value here.
     var obj32: i3 = new {};
                     ~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -305,7 +305,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2304: Cannot find name 'i4'.
+!!! error TS2693: 'i4' only refers to a type, but is being used as a value here.
     var obj43: i4 = new {};
                     ~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -341,7 +341,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2304: Cannot find name 'i5'.
+!!! error TS2693: 'i5' only refers to a type, but is being used as a value here.
     var obj54: i5 = new {};
                     ~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -377,7 +377,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2304: Cannot find name 'i6'.
+!!! error TS2693: 'i6' only refers to a type, but is being used as a value here.
     var obj65: i6 = new {};
                     ~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -411,7 +411,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2304: Cannot find name 'i7'.
+!!! error TS2693: 'i7' only refers to a type, but is being used as a value here.
     var obj76: i7 = new {};
                     ~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -435,7 +435,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2304: Cannot find name 'i8'.
+!!! error TS2693: 'i8' only refers to a type, but is being used as a value here.
     var obj87: i8 = new {};
                     ~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.

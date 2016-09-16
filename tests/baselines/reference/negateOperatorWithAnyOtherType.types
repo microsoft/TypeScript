@@ -10,8 +10,8 @@ var ANY1;
 var ANY2: any[] = ["", ""];
 >ANY2 : any[]
 >["", ""] : string[]
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 
 var obj: () => {}
 >obj : () => {}
@@ -20,7 +20,7 @@ var obj1 = { x: "", y: () => { }};
 >obj1 : { x: string; y: () => void; }
 >{ x: "", y: () => { }} : { x: string; y: () => void; }
 >x : string
->"" : string
+>"" : ""
 >y : () => void
 >() => { } : () => void
 
@@ -108,7 +108,7 @@ var ResultIsNumber8 = -ANY2[0];
 >-ANY2[0] : number
 >ANY2[0] : any
 >ANY2 : any[]
->0 : number
+>0 : 0
 
 var ResultIsNumber9 = -obj1.x;
 >ResultIsNumber9 : number
@@ -173,7 +173,7 @@ var ResultIsNumber15 = -(ANY - ANY1);
 >-ANY2[0] : number
 >ANY2[0] : any
 >ANY2 : any[]
->0 : number
+>0 : 0
 
 -ANY, ANY1;
 >-ANY, ANY1 : any

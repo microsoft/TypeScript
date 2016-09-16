@@ -19,9 +19,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 let C_1 = class C {
     static x() { return C_1.y; }
 };
-export let C = C_1;
+let C = C_1;
 C.y = 1;
 C = C_1 = __decorate([
     dec
 ], C);
+export { C };
 let c = new C();

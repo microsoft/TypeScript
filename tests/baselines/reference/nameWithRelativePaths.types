@@ -30,14 +30,14 @@ if(foo2.M2.x){
 === tests/cases/conformance/externalModules/foo_0.ts ===
 export var foo = 42;
 >foo : number
->42 : number
+>42 : 42
 
 === tests/cases/conformance/externalModules/test/test/foo_1.ts ===
 export function f(){
 >f : () => number
 
 	return 42;
->42 : number
+>42 : 42
 }
 
 === tests/cases/conformance/externalModules/test/foo_2.ts ===
@@ -46,6 +46,6 @@ export module M2 {
 
 	export var x = true;
 >x : boolean
->true : boolean
+>true : true
 }
 

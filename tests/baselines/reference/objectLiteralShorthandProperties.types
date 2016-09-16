@@ -27,7 +27,7 @@ var x3 = {
 
     a: 0,
 >a : number
->0 : number
+>0 : 0
 
     b,
 >b : any

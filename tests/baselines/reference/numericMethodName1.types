@@ -3,6 +3,6 @@ class C {
 >C : C
 
   1 = 2;
->2 : number
+>2 : 2
 }
 
