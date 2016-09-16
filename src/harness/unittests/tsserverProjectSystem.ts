@@ -1881,4 +1881,32 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({});
         });
     });
+
+    describe("prefer typings to js", () => {
+        it("during second resolution pass", () => {
+            const typingsCacheLocation = "/a/typings";
+            const f1 = {
+                path: "/a/b/app.js",
+                content: "var x = require('bar')"
+            };
+            const barjs = {
+                path: "/a/b/node_modules/bar/index.js",
+                content: "export let x = 1"
+            };
+            const barTypings = {
+                path: `${typingsCacheLocation}/node_modules/@types/bar/index.d.ts`,
+                content: "export let y: number"
+            };
+            const config = {
+                path: "/a/b/jsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] })
+            };
+            const host = createServerHost([f1, barjs, barTypings, config]);
+            const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, host) });
+
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, barTypings.path]);
+        });
+    });
 }
