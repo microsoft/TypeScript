@@ -45,7 +45,7 @@ namespace ts.server {
                         return createResolvedModule(resolvedName, /*isExternalLibraryImport*/ true, primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations));
                     }
                 }
-                if (!primaryResult.resolvedModule && secondaryLookupFailedLookupLocations) {
+                if (!primaryResult.resolvedModule && secondaryLookupFailedLookupLocations.length) {
                     primaryResult.failedLookupLocations = primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations);
                 }
                 return primaryResult;
