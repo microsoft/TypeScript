@@ -1748,9 +1748,9 @@ namespace ts {
          * Check if the given symbol in given enclosing declaration is accessible and mark all associated alias to be visible if requested
          *
          * @param symbol a Symbol to check if accessible
-         * @param enclosingDeclaration a Node containing the symbol
+         * @param enclosingDeclaration a Node containing reference to the symbol
          * @param meaning a SymbolFlags to check if such meaning of the symbol is accessible
-         * @param shouldComputeAliasToMarkVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
+         * @param shouldComputeAliasToMakeVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
          */
         function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult {
             if (symbol && enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter)) {
@@ -1824,7 +1824,7 @@ namespace ts {
             return isAmbientModule(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>declaration));
         }
 
-        function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMarkVisible: boolean): SymbolVisibilityResult {
+        function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult {
             let aliasesToMakeVisible: AnyImportSyntax[];
             if (forEach(symbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
                 return undefined;
@@ -1840,7 +1840,10 @@ namespace ts {
                     if (anyImportSyntax &&
                         !(anyImportSyntax.flags & NodeFlags.Export) && // import clause without export
                         isDeclarationVisible(<Declaration>anyImportSyntax.parent)) {
-                        if (shouldComputeAliasToMarkVisible) {
+                        // In function "buildTypeDisplay" where we decide whether to write type-alias or serialize types,
+                        // we want to just check if type- alias is accessible or not but we don't care about emitting those alias at that time
+                        // since we will do the emitting later in trackSymbol.
+                        if (shouldComputeAliasToMakeVisible) {
                             getNodeLinks(declaration).isVisible = true;
                             if (aliasesToMakeVisible) {
                                 if (!contains(aliasesToMakeVisible, anyImportSyntax)) {
@@ -1884,7 +1887,7 @@ namespace ts {
             const symbol = resolveName(enclosingDeclaration, (<Identifier>firstIdentifier).text, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
 
             // Verify if the symbol is accessible
-            return (symbol && hasVisibleDeclarations(symbol, /*shouldComputeAliasToMarkVisible*/ true)) || <SymbolVisibilityResult>{
+            return (symbol && hasVisibleDeclarations(symbol, /*shouldComputeAliasToMakeVisible*/ true)) || <SymbolVisibilityResult>{
                 accessibility: SymbolAccessibility.NotAccessible,
                 errorSymbolName: getTextOfNode(firstIdentifier),
                 errorNode: firstIdentifier
