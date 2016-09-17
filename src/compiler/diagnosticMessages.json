@@ -1959,6 +1959,10 @@
         "category": "Error",
         "code": 2695
     },
+    "The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?": {
+        "category": "Error",
+        "code": 2696
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
