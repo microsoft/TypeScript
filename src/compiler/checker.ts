@@ -19,7 +19,7 @@ namespace ts {
 
     export function getSymbolId(symbol: Symbol): number {
         if (!symbol.id) {
-            symbol.id = nextSymbolId;       
+            symbol.id = nextSymbolId;
             nextSymbolId++;
         }
 
@@ -6365,7 +6365,7 @@ namespace ts {
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
-                const sourceType = typeToString(source);    
+                const sourceType = typeToString(source);
                 const targetType = typeToString(target);
 
                 if ((globalStringType === source && stringType === target) ||
@@ -6501,7 +6501,8 @@ namespace ts {
                 if (reportErrors) {
                     if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
-                    } else if (source.symbol && source.flags & TypeFlags.ObjectType && globalObjectType === source) {
+                    }
+                    else if (source.symbol && source.flags & TypeFlags.ObjectType && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
                     reportRelationError(headMessage, source, target);
