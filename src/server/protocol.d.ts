@@ -194,6 +194,14 @@ declare namespace ts.server.protocol {
     }
 
     /**
+      * Go to implementation request; value of command field is
+      * "implementation". Return response giving the file locations that
+      * implement the symbol found in file at location line, col.
+      */
+    export interface ImplementationRequest extends FileLocationRequest {
+    }
+
+    /**
       * Location in source code expressed as (one-based) line and character offset.
       */
     export interface Location {
@@ -237,6 +245,13 @@ declare namespace ts.server.protocol {
       * Definition response message.  Gives text range for definition.
       */
     export interface TypeDefinitionResponse extends Response {
+        body?: FileSpan[];
+    }
+
+    /**
+      * Implementation response message.  Gives text range for implementations.
+      */
+    export interface ImplementationResponse extends Response {
         body?: FileSpan[];
     }
 
@@ -773,6 +788,11 @@ declare namespace ts.server.protocol {
          * is often the same as the name but may be different in certain circumstances.
          */
         sortText: string;
+        /**
+         * An optional span that indicates the text to be replaced by this completion item. If present,
+         * this span should be used instead of the default one.
+         */
+        replacementSpan?: TextSpan;
     }
 
     /**
@@ -1136,6 +1156,11 @@ declare namespace ts.server.protocol {
           *  Optional limit on the number of items to return.
           */
         maxResultCount?: number;
+        /**
+          * Optional flag to indicate we want results for just the current file
+          * or the entire project.
+          */
+        currentFileOnly?: boolean;
     }
 
     /**

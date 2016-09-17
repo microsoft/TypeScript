@@ -22,5 +22,5 @@ var x = foo([{a:1}]);
 >[{a:1}] : { a: number; }[]
 >{a:1} : { a: number; }
 >a : number
->1 : number
+>1 : 1
 

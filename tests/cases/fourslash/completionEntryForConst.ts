@@ -4,4 +4,4 @@
 /////**/
 
 goTo.marker();
-verify.completionListContains("c", "const c: string", /*documentation*/ undefined, "const");
+verify.completionListContains("c", "const c: \"s\"", /*documentation*/ undefined, "const");

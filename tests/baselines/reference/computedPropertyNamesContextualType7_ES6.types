@@ -42,21 +42,21 @@ foo({
 
     ["hi" + "bye"]: true,
 >"hi" + "bye" : string
->"hi" : string
->"bye" : string
->true : boolean
+>"hi" : "hi"
+>"bye" : "bye"
+>true : true
 
     [0 + 1]: 0,
 >0 + 1 : number
->0 : number
->1 : number
->0 : number
+>0 : 0
+>1 : 1
+>0 : 0
 
     [+"hi"]: [0]
 >+"hi" : number
->"hi" : string
+>"hi" : "hi"
 >[0] : number[]
->0 : number
+>0 : 0
 
 });
 
@@ -65,5 +65,5 @@ g({ p: "" });
 >g : <T>(obj: J<T>) => T
 >{ p: "" } : { p: string; }
 >p : string
->"" : string
+>"" : ""
 

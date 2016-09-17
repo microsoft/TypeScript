@@ -204,7 +204,7 @@ namespace ts.server {
     // average async stat takes about 30 microseconds
     // set chunk size to do 30 files in < 1 millisecond
     function createPollingWatchedFileSet(interval = 2500, chunkSize = 30) {
-        let watchedFiles: WatchedFile[] = [];
+        const watchedFiles: WatchedFile[] = [];
         let nextFileToCheck = 0;
         let watchTimer: any;
 
@@ -267,7 +267,7 @@ namespace ts.server {
         }
 
         function removeFile(file: WatchedFile) {
-            watchedFiles = copyListRemovingItem(file, watchedFiles);
+            unorderedRemoveItem(watchedFiles, file);
         }
 
         return {

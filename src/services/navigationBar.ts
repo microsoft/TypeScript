@@ -234,7 +234,7 @@ namespace ts.NavigationBar {
 
     /** Merge declarations of the same kind. */
     function mergeChildren(children: NavigationBarNode[]): void {
-        const nameToItems: Map<NavigationBarNode | NavigationBarNode[]> = {};
+        const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, child => {
             const decl = <Declaration>child.node;
             const name = decl.name && nodeText(decl.name);
@@ -243,7 +243,7 @@ namespace ts.NavigationBar {
                 return true;
             }
 
-            const itemsWithSameName = getProperty(nameToItems, name);
+            const itemsWithSameName = nameToItems[name];
             if (!itemsWithSameName) {
                 nameToItems[name] = child;
                 return true;
@@ -466,6 +466,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.VariableDeclaration:
                     return hasSomeImportantChild(item);
 
                 case SyntaxKind.ArrowFunction:

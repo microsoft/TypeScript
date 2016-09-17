@@ -21,10 +21,11 @@
 //  .brfalse LABEL, (x)             - Jump to a label IIF the expression `x` is falsey.
 //                                    If jumping out of a protected region, all .finally
 //                                    blocks are executed.
-//  .yield RESUME, (x)              - Yield the value of the optional expression `x`.
-//                                    Resume at the label RESUME.
-//  .yieldstar RESUME, (x)          - Delegate yield to the value of the optional
-//                                    expression `x`. Resume at the label RESUME.
+//  .yield (x)                      - Yield the value of the optional expression `x`.
+//                                    Resume at the next label.
+//  .yieldstar (x)                  - Delegate yield to the value of the optional
+//                                    expression `x`. Resume at the next label.
+//                                    NOTE: `x` must be an Iterator, not an Iterable.
 //  .loop CONTINUE, BREAK           - Marks the beginning of a loop. Any "continue" or
 //                                    "break" abrupt completions jump to the CONTINUE or
 //                                    BREAK labels, respectively.
@@ -80,13 +81,13 @@
 // -------------------------------|----------------------------------------------
 //  .brfalse LABEL, (x)           |     if (!(x)) return [3, /*break*/, LABEL];
 // -------------------------------|----------------------------------------------
-//  .yield RESUME, (x)            |     return [4 /*yield*/, x];
+//  .yield (x)                    |     return [4 /*yield*/, x];
 //  .mark RESUME                  | case RESUME:
-//      a = %sent%;             |     a = state.sent();
+//      a = %sent%;               |     a = state.sent();
 // -------------------------------|----------------------------------------------
-//  .yieldstar RESUME, (X)        |     return [5 /*yield**/, x];
+//  .yieldstar (x)                |     return [5 /*yield**/, x];
 //  .mark RESUME                  | case RESUME:
-//      a = %sent%;             |     a = state.sent();
+//      a = %sent%;               |     a = state.sent();
 // -------------------------------|----------------------------------------------
 //  .with (_a)                    |     with (_a) {
 //      a();                      |         a();
@@ -109,7 +110,7 @@
 //  .br END                       |     return [3 /*break*/, END];
 //  .catch (e)                    |
 //  .mark CATCH                   | case CATCH:
-//                                |     e = state.error;
+//                                |     e = state.sent();
 //      b();                      |     b();
 //  .br END                       |     return [3 /*break*/, END];
 //  .finally                      |
@@ -216,13 +217,13 @@ namespace ts {
         Endfinally = 7,
     }
 
-    const instructionNames: Map<string> = {
+    const instructionNames = createMap<string>({
         [Instruction.Return]: "return",
         [Instruction.Break]: "break",
         [Instruction.Yield]: "yield",
         [Instruction.YieldStar]: "yield*",
         [Instruction.Endfinally]: "endfinally",
-    };
+    });
 
     export function transformGenerators(context: TransformationContext) {
         const {
@@ -1923,7 +1924,7 @@ namespace ts {
         function cacheExpression(node: Expression): Identifier {
             let temp: Identifier;
             if (isGeneratedIdentifier(node)) {
-                return node;
+                return <Identifier>node;
             }
 
             temp = createTempVariable(hoistVariableDeclaration);
@@ -2071,8 +2072,8 @@ namespace ts {
             const name = declareLocal(text);
 
             if (!renamedCatchVariables) {
-                renamedCatchVariables = {};
-                renamedCatchVariableDeclarations = {};
+                renamedCatchVariables = createMap<boolean>();
+                renamedCatchVariableDeclarations = createMap<Identifier>();
                 context.enableSubstitution(SyntaxKind.Identifier);
             }
 
@@ -2492,6 +2493,16 @@ namespace ts {
         }
 
         /**
+         * Emits a YieldStar operation for the provided expression.
+         *
+         * @param expression An optional value for the yield operation.
+         * @param location An optional source map location for the assignment.
+         */
+        function emitYieldStar(expression?: Expression, location?: TextRange): void {
+            emitWorker(OpCode.YieldStar, [expression], location);
+        }
+
+        /**
          * Emits a Yield operation for the provided expression.
          *
          * @param expression An optional value for the yield operation.
@@ -2650,7 +2661,7 @@ namespace ts {
          * Flush the final label of the generator function body.
          */
         function flushFinalLabel(operationIndex: number): void {
-            if (!lastOperationWasCompletion) {
+            if (isFinalLabelReachable(operationIndex)) {
                 tryEnterLabel(operationIndex);
                 withBlockStack = undefined;
                 writeReturn(/*expression*/ undefined, /*operationLocation*/ undefined);
@@ -2661,6 +2672,34 @@ namespace ts {
             }
 
             updateLabelExpressions();
+        }
+
+        /**
+         * Tests whether the final label of the generator function body
+         * is reachable by user code.
+         */
+        function isFinalLabelReachable(operationIndex: number) {
+            // if the last operation was *not* a completion (return/throw) then
+            // the final label is reachable.
+            if (!lastOperationWasCompletion) {
+                return true;
+            }
+
+            // if there are no labels defined or referenced, then the final label is
+            // not reachable.
+            if (!labelOffsets || !labelExpressions) {
+                return false;
+            }
+
+            // if the label for this offset is referenced, then the final label
+            // is reachable.
+            for (let label = 0; label < labelOffsets.length; label++) {
+                if (labelOffsets[label] === operationIndex && labelExpressions[label]) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /**

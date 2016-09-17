@@ -1,0 +1,9 @@
+tests/cases/compiler/errorForConflictingExportEqualsValue.ts(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== tests/cases/compiler/errorForConflictingExportEqualsValue.ts (1 errors) ====
+    export var x;
+    export = {};
+    ~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    

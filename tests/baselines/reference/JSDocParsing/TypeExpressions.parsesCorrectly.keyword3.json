@@ -1,12 +1,5 @@
 {
-    "kind": "JSDocTypeReference",
+    "kind": "UndefinedKeyword",
     "pos": 1,
-    "end": 10,
-    "name": {
-        "kind": "Identifier",
-        "pos": 1,
-        "end": 10,
-        "originalKeywordKind": "UndefinedKeyword",
-        "text": "undefined"
-    }
+    "end": 10
 }

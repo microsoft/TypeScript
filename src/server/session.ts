@@ -111,6 +111,7 @@ namespace ts.server {
         export const Formatonkey = "formatonkey";
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
+        export const Implementation = "implementation";
         export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
         export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
         export const NavBar = "navbar";
@@ -153,16 +154,22 @@ namespace ts.server {
             private logger: Logger
         ) {
             this.projectService =
-                new ProjectService(host, logger, (eventName, project, fileName) => {
-                    this.handleEvent(eventName, project, fileName);
+                new ProjectService(host, logger, event => {
+                    this.handleEvent(event);
                 });
         }
 
-        private handleEvent(eventName: string, project: Project, fileName: string) {
-            if (eventName == "context") {
-                this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
-                this.updateErrorCheck([{ fileName, project }], this.changeSeq,
-                    (n) => n === this.changeSeq, 100);
+        private handleEvent(event: ProjectServiceEvent) {
+            switch (event.eventName) {
+                case "context":
+                    const { project, fileName } = event.data;
+                    this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
+                    this.updateErrorCheck([{ fileName, project }], this.changeSeq,
+                        (n) => n === this.changeSeq, 100);
+                    break;
+                case "configFileDiag":
+                    const { triggerFile, configFileName, diagnostics } = event.data;
+                    this.configFileDiagnosticEvent(triggerFile, configFileName, diagnostics);
             }
         }
 
@@ -354,6 +361,28 @@ namespace ts.server {
                 file: def.fileName,
                 start: compilerService.host.positionToLineOffset(def.fileName, def.textSpan.start),
                 end: compilerService.host.positionToLineOffset(def.fileName, ts.textSpanEnd(def.textSpan))
+            }));
+        }
+
+        private getImplementation(line: number, offset: number, fileName: string): protocol.FileSpan[] {
+            const file = ts.normalizePath(fileName);
+            const project = this.projectService.getProjectForFile(file);
+            if (!project || project.languageServiceDiabled) {
+                throw Errors.NoProject;
+            }
+
+            const compilerService = project.compilerService;
+            const implementations = compilerService.languageService.getImplementationAtPosition(file,
+                compilerService.host.lineOffsetToPosition(file, line, offset));
+
+            if (!implementations) {
+                return undefined;
+            }
+
+            return implementations.map(impl => ({
+                file: impl.fileName,
+                start: compilerService.host.positionToLineOffset(impl.fileName, impl.textSpan.start),
+                end: compilerService.host.positionToLineOffset(impl.fileName, ts.textSpanEnd(impl.textSpan))
             }));
         }
 
@@ -772,7 +801,17 @@ namespace ts.server {
 
             return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                 if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                    result.push(entry);
+                    const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+
+                    let convertedSpan: protocol.TextSpan = undefined;
+                    if (replacementSpan) {
+                        convertedSpan = {
+                            start: compilerService.host.positionToLineOffset(fileName, replacementSpan.start),
+                            end: compilerService.host.positionToLineOffset(fileName, replacementSpan.start + replacementSpan.length)
+                        };
+                    }
+
+                    result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
                 }
                 return result;
             }, []).sort((a, b) => a.name.localeCompare(b.name));
@@ -924,7 +963,7 @@ namespace ts.server {
             return this.decorateNavigationBarItem(project, fileName, items, compilerService.host.getLineIndex(fileName));
         }
 
-        private getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number): protocol.NavtoItem[] {
+        private getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number, currentFileOnly?: boolean): protocol.NavtoItem[] {
             const file = ts.normalizePath(fileName);
             const info = this.projectService.getScriptInfo(file);
             const projects = this.projectService.findReferencingProjects(info);
@@ -937,7 +976,7 @@ namespace ts.server {
                 projectsWithLanguageServiceEnabeld,
                 (project: Project) => {
                     const compilerService = project.compilerService;
-                    const navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);
+                    const navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount, currentFileOnly ? fileName : undefined);
                     if (!navItems) {
                         return [];
                     }
@@ -1061,7 +1100,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
+        private handlers = createMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.Exit]: () => {
                 this.exit();
                 return { responseRequired: false };
@@ -1073,6 +1112,10 @@ namespace ts.server {
             [CommandNames.TypeDefinition]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                 return { response: this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
+            },
+            [CommandNames.Implementation]: (request: protocol.Request) => {
+                const implArgs = <protocol.FileLocationRequestArgs>request.arguments;
+                return { response: this.getImplementation(implArgs.line, implArgs.offset, implArgs.file), responseRequired: true };
             },
             [CommandNames.References]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
@@ -1172,7 +1215,7 @@ namespace ts.server {
             },
             [CommandNames.Navto]: (request: protocol.Request) => {
                 const navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
-                return { response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount), responseRequired: true };
+                return { response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount, navtoArgs.currentFileOnly), responseRequired: true };
             },
             [CommandNames.Brace]: (request: protocol.Request) => {
                 const braceArguments = <protocol.FileLocationRequestArgs>request.arguments;
@@ -1198,9 +1241,10 @@ namespace ts.server {
                 this.reloadProjects();
                 return { responseRequired: false };
             }
-        };
+        });
+
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
-            if (this.handlers[command]) {
+            if (command in this.handlers) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
             this.handlers[command] = handler;

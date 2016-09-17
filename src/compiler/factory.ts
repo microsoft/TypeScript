@@ -368,13 +368,13 @@ namespace ts {
         return node;
     }
 
-    export function createArrayBindingPattern(elements: BindingElement[], location?: TextRange) {
+    export function createArrayBindingPattern(elements: ArrayBindingElement[], location?: TextRange) {
         const node = <ArrayBindingPattern>createNode(SyntaxKind.ArrayBindingPattern, location);
         node.elements = createNodeArray(elements);
         return node;
     }
 
-    export function updateArrayBindingPattern(node: ArrayBindingPattern, elements: BindingElement[]) {
+    export function updateArrayBindingPattern(node: ArrayBindingPattern, elements: ArrayBindingElement[]) {
         if (node.elements !== elements) {
             return updateNode(createArrayBindingPattern(elements, node), node);
         }

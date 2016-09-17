@@ -46,7 +46,7 @@ namespace ts {
      *       supplant the existing `forEachChild` implementation if performance is not
      *       significantly impacted.
      */
-    const nodeEdgeTraversalMap: Map<NodeTraversalPath> = {
+    const nodeEdgeTraversalMap = createMap<NodeTraversalPath>({
         [SyntaxKind.QualifiedName]: [
             { name: "left", test: isEntityName },
             { name: "right", test: isIdentifier }
@@ -93,7 +93,7 @@ namespace ts {
             { name: "name", test: isPropertyName },
             { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList }
         ]
-    };
+    });
 
     function reduceNode<T>(node: Node, f: (memo: T, node: Node) => T, initial: T) {
         return node ? f(initial, node) : initial;
@@ -523,7 +523,7 @@ namespace ts {
                 const edgeTraversalPath = nodeEdgeTraversalMap[kind];
                 if (edgeTraversalPath) {
                     for (const edge of edgeTraversalPath) {
-                        const value = (<Map<any>>node)[edge.name];
+                        const value = (<MapLike<any>>node)[edge.name];
                         if (value !== undefined) {
                             result = isArray(value)
                                 ? reduceLeft(<NodeArray<Node>>value, f, result)
@@ -757,7 +757,7 @@ namespace ts {
 
             case SyntaxKind.ArrayBindingPattern:
                 return updateArrayBindingPattern(<ArrayBindingPattern>node,
-                    visitNodes((<ArrayBindingPattern>node).elements, visitor, isBindingElement));
+                    visitNodes((<ArrayBindingPattern>node).elements, visitor, isArrayBindingElement));
 
             case SyntaxKind.BindingElement:
                 return updateBindingElement(<BindingElement>node,
@@ -1140,7 +1140,7 @@ namespace ts {
                     visitNode((<PartiallyEmittedExpression>node).expression, visitor, isExpression));
 
             default:
-                let updated: Node & Map<any>;
+                let updated: Node & MapLike<any>;
                 const edgeTraversalPath = nodeEdgeTraversalMap[kind];
                 if (edgeTraversalPath) {
                     for (const edge of edgeTraversalPath) {

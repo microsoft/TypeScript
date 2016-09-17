@@ -8,7 +8,7 @@ export class Promise {
 }
 
 //// [staticInstanceResolution5_1.ts]
-import WinJS = require('staticInstanceResolution5_0.ts');
+import WinJS = require('staticInstanceResolution5_0');
 
 // these 3 should be errors
 var x = (w1: WinJS) => { };

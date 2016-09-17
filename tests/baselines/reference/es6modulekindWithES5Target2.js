@@ -15,4 +15,5 @@ var C = (function () {
     C.prototype.method = function () { };
     return C;
 }());
+export default C;
 C.s = 0;

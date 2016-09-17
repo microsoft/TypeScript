@@ -1039,7 +1039,7 @@
         "category": "Error",
         "code": 2348
     },
-    "Cannot invoke an expression whose type lacks a call signature.": {
+    "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": {
         "category": "Error",
         "code": 2349
     },
@@ -1058,10 +1058,6 @@
     "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
         "category": "Error",
         "code": 2353
-    },
-    "No best common type exists among return expressions.": {
-        "category": "Error",
-        "code": 2354
     },
     "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
@@ -1627,10 +1623,6 @@
         "category": "Error",
         "code": 2503
     },
-    "No best common type exists among yield expressions.": {
-        "category": "Error",
-        "code": 2504
-    },
     "A generator cannot have a 'void' type annotation.": {
         "category": "Error",
         "code": 2505
@@ -1947,6 +1939,27 @@
         "category": "Error",
         "code": 2690
     },
+    "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
+        "category": "Error",
+        "code": 2691
+    },
+    "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
+        "category": "Error",
+        "code": 2692
+    },
+    "'{0}' only refers to a type, but is being used as a value here.": {
+        "category": "Error",
+        "code": 2693
+    },
+    "Namespace '{0}' has no exported member '{1}'.": {
+        "category": "Error",
+        "code": 2694
+    },
+    "Left side of comma operator is unused and has no side effects.": {
+        "category": "Error",
+        "code": 2695
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2227,7 +2240,7 @@
         "category": "Error",
         "code": 4082
     },
-    "Conflicting library definitions for '{0}' found at '{1}' and '{2}'. Copy the correct file to the 'typings' folder to resolve this conflict.": {
+    "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Message",
         "code": 4090
     },
@@ -2463,6 +2476,10 @@
     "DIRECTORY": {
         "category": "Message",
         "code": 6038
+    },
+    "STRATEGY": {
+        "category": "Message",
+        "code": 6039
     },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
@@ -2824,9 +2841,13 @@
         "category": "Message",
         "code": 6137
     },
+    "Property '{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6138
+    },
     "Import emit helpers from 'tslib'.": {
         "category": "Message",
-        "code": 6138
+        "code": 6139
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2859,10 +2880,6 @@
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
-    },
-    "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
-        "category": "Error",
-        "code": 7016
     },
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
@@ -2919,6 +2936,14 @@
     "Binding element '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7031
+    },
+    "Property '{0}' implicitly has type 'any', because its set accessor lacks a parameter type annotation.": {
+        "category": "Error",
+        "code": 7032
+    },
+    "Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.": {
+        "category": "Error",
+        "code": 7033
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -3031,5 +3056,14 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+
+    "Circularity detected while resolving configuration: {0}": {
+        "category": "Error",
+        "code": 18000
+    },
+    "The path in an 'extends' options must be relative or rooted.": {
+        "category": "Error",
+        "code": 18001
     }
 }

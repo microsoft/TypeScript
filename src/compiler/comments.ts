@@ -53,9 +53,8 @@ namespace ts {
                     }
                 }
                 else {
-                    let commentStart: number;
                     if (extendedDiagnostics) {
-                        commentStart = performance.mark();
+                        performance.mark("preEmitNodeWithComment");
                     }
 
                     const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
@@ -88,7 +87,7 @@ namespace ts {
                     }
 
                     if (extendedDiagnostics) {
-                        performance.measure("commentTime", commentStart);
+                        performance.measure("commentTime", "preEmitNodeWithComment");
                     }
 
                     if (emitFlags & NodeEmitFlags.NoNestedComments) {
@@ -99,7 +98,7 @@ namespace ts {
                     }
 
                     if (extendedDiagnostics) {
-                        commentStart = performance.mark();
+                        performance.mark("beginEmitNodeWithComment");
                     }
 
                     // Restore previous container state.
@@ -114,16 +113,15 @@ namespace ts {
                     }
 
                     if (extendedDiagnostics) {
-                        performance.measure("commentTime", commentStart);
+                        performance.measure("commentTime", "beginEmitNodeWithComment");
                     }
                 }
             }
         }
 
         function emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void) {
-            let commentStart: number;
             if (extendedDiagnostics) {
-                commentStart = performance.mark();
+                performance.mark("preEmitBodyWithDetachedComments");
             }
 
             const { pos, end } = detachedRange;
@@ -136,7 +134,7 @@ namespace ts {
             }
 
             if (extendedDiagnostics) {
-                performance.measure("commentTime", commentStart);
+                performance.measure("commentTime", "preEmitBodyWithDetachedComments");
             }
 
             if (emitFlags & NodeEmitFlags.NoNestedComments) {
@@ -147,7 +145,7 @@ namespace ts {
             }
 
             if (extendedDiagnostics) {
-                commentStart = performance.mark();
+                performance.mark("beginEmitBodyWithDetachedCommetns");
             }
 
             if (!skipTrailingComments) {
@@ -155,7 +153,7 @@ namespace ts {
             }
 
             if (extendedDiagnostics) {
-                performance.measure("commentTime", commentStart);
+                performance.measure("commentTime", "beginEmitBodyWithDetachedCommetns");
             }
         }
 
@@ -227,15 +225,14 @@ namespace ts {
                 return;
             }
 
-            let commentStart: number;
             if (extendedDiagnostics) {
-                commentStart = performance.mark();
+                performance.mark("beforeEmitTrailingCommentsOfPosition");
             }
 
             forEachTrailingCommentToEmit(pos, emitTrailingCommentOfPosition);
 
             if (extendedDiagnostics) {
-                performance.measure("commentTime", commentStart);
+                performance.measure("commentTime", "beforeEmitTrailingCommentsOfPosition");
             }
         }
 

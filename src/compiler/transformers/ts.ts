@@ -694,19 +694,21 @@ namespace ts {
 
             //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
             //                                         or decoratedClassAlias if the class contain self-reference.
+            const transformedClassExpression = createVariableStatement(
+                /*modifiers*/ undefined,
+                createLetDeclarationList([
+                    createVariableDeclaration(
+                        classAlias || declaredName,
+                        /*type*/ undefined,
+                        classExpression
+                    )
+                ]),
+                /*location*/ location
+            );
+            setCommentRange(transformedClassExpression, node);
             statements.push(
                 setOriginalNode(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createLetDeclarationList([
-                            createVariableDeclaration(
-                                classAlias || declaredName,
-                                /*type*/ undefined,
-                                classExpression
-                            )
-                        ]),
-                        /*location*/ location
-                    ),
+                    /*node*/ transformedClassExpression,
                     /*original*/ node
                 )
             );
@@ -821,7 +823,7 @@ namespace ts {
                 return visitEachChild(constructor, visitor, context);
             }
 
-            const parameters = transformConstructorParameters(constructor, hasExtendsClause);
+            const parameters = transformConstructorParameters(constructor);
             const body = transformConstructorBody(node, constructor, hasExtendsClause, parameters);
 
             //  constructor(${parameters}) {
@@ -848,10 +850,25 @@ namespace ts {
          * @param constructor The constructor declaration.
          * @param hasExtendsClause A value indicating whether the class has an extends clause.
          */
-        function transformConstructorParameters(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
+        function transformConstructorParameters(constructor: ConstructorDeclaration) {
+            // The ES2015 spec specifies in 14.5.14. Runtime Semantics: ClassDefinitionEvaluation:
+            // If constructor is empty, then
+            //     If ClassHeritag_eopt is present and protoParent is not null, then
+            //          Let constructor be the result of parsing the source text
+            //              constructor(...args) { super (...args);}
+            //          using the syntactic grammar with the goal symbol MethodDefinition[~Yield].
+            //      Else,
+            //           Let constructor be the result of parsing the source text
+            //               constructor( ){ }
+            //           using the syntactic grammar with the goal symbol MethodDefinition[~Yield].
+            //
+            // While we could emit the '...args' rest parameter, certain later tools in the pipeline might
+            // downlevel the '...args' portion less efficiently by naively copying the contents of 'arguments' to an array.
+            // Instead, we'll avoid using a rest parameter and spread into the super call as
+            // 'super(...arguments)' instead of 'super(...args)', as you can see in "transformConstructorBody".
             return constructor
                 ? visitNodes(constructor.parameters, visitor, isParameter)
-                : hasExtendsClause ? [createRestParameter("args")] : [];
+                : <ParameterDeclaration[]>[];
         }
 
         /**
@@ -889,18 +906,16 @@ namespace ts {
                 addRange(statements, map(propertyAssignments, transformParameterWithPropertyAssignment));
             }
             else if (hasExtendsClause) {
-                Debug.assert(parameters.length === 1 && isIdentifier(parameters[0].name));
-
                 // Add a synthetic `super` call:
                 //
-                //  super(...args);
+                //  super(...arguments);
                 //
                 statements.push(
                     createStatement(
                         createCall(
                             createSuper(),
                             /*typeArguments*/ undefined,
-                            [createSpread(<Identifier>parameters[0].name)]
+                            [createSpread(createIdentifier("arguments"))]
                         )
                     )
                 );
@@ -2174,7 +2189,7 @@ namespace ts {
          *
          * @param node The function expression node.
          */
-        function visitFunctionExpression(node: FunctionExpression) {
+        function visitFunctionExpression(node: FunctionExpression): Expression {
             if (nodeIsMissing(node.body)) {
                 return createOmittedExpression();
             }
@@ -2846,7 +2861,6 @@ namespace ts {
                 const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
                 statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
-
             addRange(statements, endLexicalEnvironment());
 
             currentNamespaceContainerName = savedCurrentNamespaceContainerName;
@@ -2859,6 +2873,30 @@ namespace ts {
                 /*location*/ blockLocation,
                 /*multiLine*/ true
             );
+
+            // namespace hello.hi.world {
+            //      function foo() {}
+            //
+            //      // TODO, blah
+            // }
+            //
+            // should be emitted as
+            //
+            // var hello;
+            // (function (hello) {
+            //     var hi;
+            //     (function (hi) {
+            //         var world;
+            //         (function (world) {
+            //             function foo() { }
+            //             // TODO, blah
+            //         })(world = hi.world || (hi.world = {}));
+            //     })(hi = hello.hi || (hello.hi = {}));
+            // })(hello || (hello = {}));
+            // We only want to emit comment on the namespace which contains block body itself, not the containing namespaces.
+            if (body.kind !== SyntaxKind.ModuleBlock) {
+                setNodeEmitFlags(block, block.emitFlags | NodeEmitFlags.NoComments);
+            }
             return block;
         }
 
@@ -3152,7 +3190,7 @@ namespace ts {
                 context.enableSubstitution(SyntaxKind.Identifier);
 
                 // Keep track of class aliases.
-                classAliases = {};
+                classAliases = createMap<Identifier>();
             }
         }
 

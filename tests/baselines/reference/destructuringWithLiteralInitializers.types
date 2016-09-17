@@ -10,40 +10,40 @@ f1({ x: 1, y: 1 });
 >f1 : ({x, y}: { x: any; y: any; }) => void
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->1 : number
+>1 : 1
 
 // (arg: { x: any, y?: number }) => void
 function f2({ x, y = 0 }) { }
 >f2 : ({x, y}: { x: any; y?: number; }) => void
 >x : any
 >y : number
->0 : number
+>0 : 0
 
 f2({ x: 1 });
 >f2({ x: 1 }) : void
 >f2 : ({x, y}: { x: any; y?: number; }) => void
 >{ x: 1 } : { x: number; }
 >x : number
->1 : number
+>1 : 1
 
 f2({ x: 1, y: 1 });
 >f2({ x: 1, y: 1 }) : void
 >f2 : ({x, y}: { x: any; y?: number; }) => void
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->1 : number
+>1 : 1
 
 // (arg: { x?: number, y?: number }) => void
 function f3({ x = 0, y = 0 }) { }
 >f3 : ({x, y}: { x?: number; y?: number; }) => void
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
 
 f3({});
 >f3({}) : void
@@ -55,23 +55,23 @@ f3({ x: 1 });
 >f3 : ({x, y}: { x?: number; y?: number; }) => void
 >{ x: 1 } : { x: number; }
 >x : number
->1 : number
+>1 : 1
 
 f3({ y: 1 });
 >f3({ y: 1 }) : void
 >f3 : ({x, y}: { x?: number; y?: number; }) => void
 >{ y: 1 } : { y: number; }
 >y : number
->1 : number
+>1 : 1
 
 f3({ x: 1, y: 1 });
 >f3({ x: 1, y: 1 }) : void
 >f3 : ({x, y}: { x?: number; y?: number; }) => void
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->1 : number
+>1 : 1
 
 // (arg?: { x: number, y: number }) => void
 function f4({ x, y } = { x: 0, y: 0 }) { }
@@ -80,9 +80,9 @@ function f4({ x, y } = { x: 0, y: 0 }) { }
 >y : number
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
 
 f4();
 >f4() : void
@@ -93,19 +93,19 @@ f4({ x: 1, y: 1 });
 >f4 : ({x, y}?: { x: number; y: number; }) => void
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->1 : number
+>1 : 1
 
 // (arg?: { x: number, y?: number }) => void
 function f5({ x, y = 0 } = { x: 0 }) { }
 >f5 : ({x, y}?: { x: number; y?: number; }) => void
 >x : number
 >y : number
->0 : number
+>0 : 0
 >{ x: 0 } : { x: number; y?: number; }
 >x : number
->0 : number
+>0 : 0
 
 f5();
 >f5() : void
@@ -116,24 +116,24 @@ f5({ x: 1 });
 >f5 : ({x, y}?: { x: number; y?: number; }) => void
 >{ x: 1 } : { x: number; }
 >x : number
->1 : number
+>1 : 1
 
 f5({ x: 1, y: 1 });
 >f5({ x: 1, y: 1 }) : void
 >f5 : ({x, y}?: { x: number; y?: number; }) => void
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->1 : number
+>1 : 1
 
 // (arg?: { x?: number, y?: number }) => void
 function f6({ x = 0, y = 0 } = {}) { }
 >f6 : ({x, y}?: { x?: number; y?: number; }) => void
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
 >{} : { x?: number; y?: number; }
 
 f6();
@@ -150,32 +150,32 @@ f6({ x: 1 });
 >f6 : ({x, y}?: { x?: number; y?: number; }) => void
 >{ x: 1 } : { x: number; }
 >x : number
->1 : number
+>1 : 1
 
 f6({ y: 1 });
 >f6({ y: 1 }) : void
 >f6 : ({x, y}?: { x?: number; y?: number; }) => void
 >{ y: 1 } : { y: number; }
 >y : number
->1 : number
+>1 : 1
 
 f6({ x: 1, y: 1 });
 >f6({ x: 1, y: 1 }) : void
 >f6 : ({x, y}?: { x?: number; y?: number; }) => void
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->1 : number
+>1 : 1
 
 // (arg?: { a: { x?: number, y?: number } }) => void
 function f7({ a: { x = 0, y = 0 } } = { a: {} }) { }
 >f7 : ({a: {x, y}}?: { a: { x?: number; y?: number; }; }) => void
 >a : any
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
 >{ a: {} } : { a: { x?: number; y?: number; }; }
 >a : { x?: number; y?: number; }
 >{} : { x?: number; y?: number; }
@@ -198,7 +198,7 @@ f7({ a: { x: 1 } });
 >a : { x: number; }
 >{ x: 1 } : { x: number; }
 >x : number
->1 : number
+>1 : 1
 
 f7({ a: { y: 1 } });
 >f7({ a: { y: 1 } }) : void
@@ -207,7 +207,7 @@ f7({ a: { y: 1 } });
 >a : { y: number; }
 >{ y: 1 } : { y: number; }
 >y : number
->1 : number
+>1 : 1
 
 f7({ a: { x: 1, y: 1 } });
 >f7({ a: { x: 1, y: 1 } }) : void
@@ -216,9 +216,9 @@ f7({ a: { x: 1, y: 1 } });
 >a : { x: number; y: number; }
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->1 : number
+>1 : 1
 
 // (arg: [any, any]) => void
 function g1([x, y]) { }
@@ -230,23 +230,23 @@ g1([1, 1]);
 >g1([1, 1]) : void
 >g1 : ([x, y]: [any, any]) => void
 >[1, 1] : [number, number]
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 // (arg: [number, number]) => void
 function g2([x = 0, y = 0]) { }
 >g2 : ([x, y]: [number, number]) => void
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
 
 g2([1, 1]);
 >g2([1, 1]) : void
 >g2 : ([x, y]: [number, number]) => void
 >[1, 1] : [number, number]
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 // (arg?: [number, number]) => void
 function g3([x, y] = [0, 0]) { }
@@ -254,8 +254,8 @@ function g3([x, y] = [0, 0]) { }
 >x : number
 >y : number
 >[0, 0] : [number, number]
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
 g3();
 >g3() : void
@@ -265,17 +265,17 @@ g3([1, 1]);
 >g3([1, 1]) : void
 >g3 : ([x, y]?: [number, number]) => void
 >[1, 1] : [number, number]
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 // (arg?: [number, number]) => void
 function g4([x, y = 0] = [0]) { }
 >g4 : ([x, y]?: [number, number]) => void
 >x : number
 >y : number
->0 : number
+>0 : 0
 >[0] : [number, number]
->0 : number
+>0 : 0
 
 g4();
 >g4() : void
@@ -285,16 +285,16 @@ g4([1, 1]);
 >g4([1, 1]) : void
 >g4 : ([x, y]?: [number, number]) => void
 >[1, 1] : [number, number]
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 // (arg?: [number, number]) => void
 function g5([x = 0, y = 0] = []) { }
 >g5 : ([x, y]?: [number, number]) => void
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
 >[] : [number, number]
 
 g5();
@@ -305,6 +305,6 @@ g5([1, 1]);
 >g5([1, 1]) : void
 >g5 : ([x, y]?: [number, number]) => void
 >[1, 1] : [number, number]
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 

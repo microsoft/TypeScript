@@ -18,7 +18,7 @@ class Comment {
 >comments[0].getDocCommentText : () => void
 >comments[0] : Comment
 >comments : Comment[]
->0 : number
+>0 : 0
 >getDocCommentText : () => void
 
         var c: Comment;

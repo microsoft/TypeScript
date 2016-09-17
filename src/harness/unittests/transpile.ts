@@ -61,8 +61,8 @@ namespace ts {
                     oldTranspileDiagnostics = undefined;
                 });
 
-                it("Correct errors", () => {
-                    Harness.Baseline.runBaseline("Correct errors", justName.replace(/\.tsx?$/, ".errors.txt"), () => {
+                it("Correct errors for " + justName, () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), () => {
                         if (transpileResult.diagnostics.length === 0) {
                             /* tslint:disable:no-null-keyword */
                             return null;
@@ -74,8 +74,8 @@ namespace ts {
                 });
 
                 if (canUseOldTranspile) {
-                    it("Correct errors (old transpile)", () => {
-                        Harness.Baseline.runBaseline("Correct errors", justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"), () => {
+                    it("Correct errors (old transpile) for " + justName, () => {
+                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"), () => {
                             if (oldTranspileDiagnostics.length === 0) {
                                 /* tslint:disable:no-null-keyword */
                                 return null;
@@ -87,8 +87,8 @@ namespace ts {
                     });
                 }
 
-                it("Correct output", () => {
-                    Harness.Baseline.runBaseline("Correct output", justName.replace(/\.tsx?$/, ".js"), () => {
+                it("Correct output for " + justName, () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".js"), () => {
                         if (transpileResult.outputText) {
                             return transpileResult.outputText;
                         }
@@ -102,8 +102,8 @@ namespace ts {
                 });
 
                 if (canUseOldTranspile) {
-                    it("Correct output (old transpile)", () => {
-                        Harness.Baseline.runBaseline("Correct output", justName.replace(/\.tsx?$/, ".oldTranspile.js"), () => {
+                    it("Correct output (old transpile) for " + justName, () => {
+                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), () => {
                             return oldTranspileResult;
                         });
                     });

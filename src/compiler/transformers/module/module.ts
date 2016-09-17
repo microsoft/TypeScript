@@ -4,12 +4,12 @@
 /*@internal*/
 namespace ts {
     export function transformModule(context: TransformationContext) {
-        const transformModuleDelegates: Map<(node: SourceFile) => SourceFile> = {
+        const transformModuleDelegates = createMap<(node: SourceFile) => SourceFile>({
             [ModuleKind.None]: transformCommonJSModule,
             [ModuleKind.CommonJS]: transformCommonJSModule,
             [ModuleKind.AMD]: transformAMDModule,
             [ModuleKind.UMD]: transformUMDModule,
-        };
+        });
 
         const {
             startLexicalEnvironment,
@@ -43,7 +43,7 @@ namespace ts {
         let bindingNameExportSpecifiersMap: Map<ExportSpecifier[]>;
         // Subset of exportSpecifiers that is a binding-name.
         // This is to reduce amount of memory we have to keep around even after we done with module-transformer
-        const bindingNameExportSpecifiersForFileMap: Map<Map<ExportSpecifier[]>> = {};
+        const bindingNameExportSpecifiersForFileMap = createMap<Map<ExportSpecifier[]>>();
         let hasExportStarsToExportValues: boolean;
 
         return transformSourceFile;
@@ -660,14 +660,16 @@ namespace ts {
         function addExportMemberAssignmentsForBindingName(resultStatements: Statement[], name: BindingName): void {
             if (isBindingPattern(name)) {
                 for (const element of name.elements) {
-                    addExportMemberAssignmentsForBindingName(resultStatements, element.name);
+                    if (!isOmittedExpression(element)) {
+                        addExportMemberAssignmentsForBindingName(resultStatements, element.name);
+                    }
                 }
             }
             else {
                 if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
                     const sourceFileId = getOriginalNodeId(currentSourceFile);
                     if (!bindingNameExportSpecifiersForFileMap[sourceFileId]) {
-                        bindingNameExportSpecifiersForFileMap[sourceFileId] = {};
+                        bindingNameExportSpecifiersForFileMap[sourceFileId] = createMap<ExportSpecifier[]>();
                     }
                     bindingNameExportSpecifiersForFileMap[sourceFileId][name.text] = exportSpecifiers[name.text];
                     addExportMemberAssignments(resultStatements, name);
@@ -703,7 +705,7 @@ namespace ts {
                         createFunctionDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            /*asteriskToken*/ undefined,
+                            node.asteriskToken,
                             name,
                             /*typeParameters*/ undefined,
                             node.parameters,
@@ -802,17 +804,17 @@ namespace ts {
          * Adds a trailing VariableStatement for an enum or module declaration.
          */
         function addVarForExportedEnumOrNamespaceDeclaration(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
-            statements.push(
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    [createVariableDeclaration(
-                        getDeclarationName(node),
+            const transformedStatement = createVariableStatement(
+                /*modifiers*/ undefined,
+                [createVariableDeclaration(
+                    getDeclarationName(node),
                         /*type*/ undefined,
-                        createPropertyAccess(createIdentifier("exports"), getDeclarationName(node))
-                    )],
+                    createPropertyAccess(createIdentifier("exports"), getDeclarationName(node))
+                )],
                     /*location*/ node
-                )
             );
+            setNodeEmitFlags(transformedStatement, NodeEmitFlags.NoComments);
+            statements.push(transformedStatement);
         }
 
         function getDeclarationName(node: DeclarationStatement) {

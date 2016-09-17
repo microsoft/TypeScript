@@ -17,7 +17,7 @@ module Foo {
 
 	export var answer = 42;
 >answer : number
->42 : number
+>42 : 42
 }
 export = Foo;
 >Foo : typeof Foo

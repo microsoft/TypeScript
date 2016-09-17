@@ -39,7 +39,7 @@ Object.prototype.hasOwnProperty("string");
 >Object : ObjectConstructor
 >prototype : Object
 >hasOwnProperty : (v: string) => boolean
->"string" : string
+>"string" : "string"
 
 Object.prototype.isPrototypeOf(Object);
 >Object.prototype.isPrototypeOf(Object) : boolean
@@ -57,5 +57,5 @@ Object.prototype.propertyIsEnumerable("string");
 >Object : ObjectConstructor
 >prototype : Object
 >propertyIsEnumerable : (v: string) => boolean
->"string" : string
+>"string" : "string"
 

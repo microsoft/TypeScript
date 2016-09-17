@@ -19,8 +19,28 @@ namespace ts {
         True = -1
     }
 
+    const createObject = Object.create;
+
+    export function createMap<T>(template?: MapLike<T>): Map<T> {
+        const map: Map<T> = createObject(null); // tslint:disable-line:no-null-keyword
+
+        // Using 'delete' on an object causes V8 to put the object in dictionary mode.
+        // This disables creation of hidden classes, which are expensive when an object is
+        // constantly changing shape.
+        map["__"] = undefined;
+        delete map["__"];
+
+        // Copies keys/values from template. Note that for..in will not throw if
+        // template is undefined, and instead will just exit the loop.
+        for (const key in template) if (hasOwnProperty.call(template, key)) {
+            map[key] = template[key];
+        }
+
+        return map;
+    }
+
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files: Map<T> = {};
+        let files = createMap<T>();
         return {
             get,
             set,
@@ -46,7 +66,7 @@ namespace ts {
         }
 
         function contains(path: Path) {
-            return hasProperty(files, toKey(path));
+            return toKey(path) in files;
         }
 
         function remove(path: Path) {
@@ -55,7 +75,7 @@ namespace ts {
         }
 
         function clear() {
-            files = {};
+            files = createMap<T>();
         }
 
         function toKey(path: Path): string {
@@ -81,7 +101,7 @@ namespace ts {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
+    export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
                 const result = callback(array[i], i);
@@ -108,6 +128,31 @@ namespace ts {
         }
 
         return true;
+    }
+
+    /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
+    export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const value = array[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    /**
+     * Returns the first truthy result of `callback`, or else fails.
+     * This is like `forEach`, but never returns undefined.
+     */
+    export function findMap<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const result = callback(array[i], i);
+            if (result) {
+                return result;
+            }
+        }
+        Debug.fail();
     }
 
     export function contains<T>(array: T[], value: T): boolean {
@@ -154,20 +199,46 @@ namespace ts {
         return count;
     }
 
-    export function filter<T, U extends T>(array: T[], f: (x: T, i: number) => x is U): U[];
-    export function filter<T>(array: T[], f: (x: T, i: number) => boolean): T[];
-    export function filter<T>(array: T[], f: (x: T, i: number) => boolean): T[] {
-        let result: T[];
+    /**
+     * Filters an array by a predicate function. Returns the same array instance if the predicate is
+     * true for all elements, otherwise returns a new array instance containing the filtered subset.
+     */
+    export function filter<T, U extends T>(array: T[], f: (x: T) => x is U): U[];
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[]
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         if (array) {
-            result = [];
-            for (let i = 0; i < array.length; i++) {
-                const v = array[i];
-                if (f(v, i)) {
-                    result.push(v);
+            const len = array.length;
+            let i = 0;
+            while (i < len && f(array[i])) i++;
+            if (i < len) {
+                const result = array.slice(0, i);
+                i++;
+                while (i < len) {
+                    const item = array[i];
+                    if (f(item)) {
+                        result.push(item);
+                    }
+                    i++;
                 }
+                return result;
             }
         }
-        return result;
+        return array;
+    }
+
+    export function removeWhere<T>(array: T[], f: (x: T) => boolean): boolean {
+        let outIndex = 0;
+        for (const item of array) {
+            if (!f(item)) {
+                array[outIndex] = item;
+                outIndex++;
+            }
+        }
+        if (outIndex !== array.length) {
+            array.length = outIndex;
+            return true;
+        }
+        return false;
     }
 
     export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
@@ -303,6 +374,20 @@ namespace ts {
             }
         }
 
+        return result;
+    }
+
+    export function mapObject<T, U>(object: MapLike<T>, f: (key: string, x: T) => [string, U]): MapLike<U> {
+        let result: MapLike<U>;
+        if (object) {
+            result = {};
+            for (const v of getOwnKeys(object)) {
+                const [key, value]: [string, U] = f(v, object[v]) || [undefined, undefined];
+                if (key !== undefined) {
+                    result[key] = value;
+                }
+            }
+        }
         return result;
     }
 
@@ -487,76 +572,152 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    export function hasProperty<T>(map: Map<T>, key: string): boolean {
+    /**
+     * Indicates whether a map-like contains an own property with the specified key.
+     *
+     * NOTE: This is intended for use only with MapLike<T> objects. For Map<T> objects, use
+     *       the 'in' operator.
+     *
+     * @param map A map-like.
+     * @param key A property key.
+     */
+    export function hasProperty<T>(map: MapLike<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
-    export function getKeys<T>(map: Map<T>): string[] {
+    /**
+     * Gets the value of an owned property in a map-like.
+     *
+     * NOTE: This is intended for use only with MapLike<T> objects. For Map<T> objects, use
+     *       an indexer.
+     *
+     * @param map A map-like.
+     * @param key A property key.
+     */
+    export function getProperty<T>(map: MapLike<T>, key: string): T | undefined {
+        return hasOwnProperty.call(map, key) ? map[key] : undefined;
+    }
+
+    /**
+     * Gets the owned, enumerable property keys of a map-like.
+     *
+     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
+     *       Object.keys instead as it offers better performance.
+     *
+     * @param map A map-like.
+     */
+    export function getOwnKeys<T>(map: MapLike<T>): string[] {
         const keys: string[] = [];
-        for (const key in map) {
+        for (const key in map) if (hasOwnProperty.call(map, key)) {
             keys.push(key);
         }
         return keys;
     }
 
-    export function getProperty<T>(map: Map<T>, key: string): T {
-        return hasOwnProperty.call(map, key) ? map[key] : undefined;
+    /**
+     * Enumerates the properties of a Map<T>, invoking a callback and returning the first truthy result.
+     *
+     * @param map A map for which properties should be enumerated.
+     * @param callback A callback to invoke for each property.
+     */
+    export function forEachProperty<T, U>(map: Map<T>, callback: (value: T, key: string) => U): U {
+        let result: U;
+        for (const key in map) {
+            if (result = callback(map[key], key)) break;
+        }
+        return result;
     }
 
-    export function isEmpty<T>(map: Map<T>) {
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                return false;
+    /**
+     * Returns true if a Map<T> has some matching property.
+     *
+     * @param map A map whose properties should be tested.
+     * @param predicate An optional callback used to test each property.
+     */
+    export function someProperties<T>(map: Map<T>, predicate?: (value: T, key: string) => boolean) {
+        for (const key in map) {
+            if (!predicate || predicate(map[key], key)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Performs a shallow copy of the properties from a source Map<T> to a target MapLike<T>
+     *
+     * @param source A map from which properties should be copied.
+     * @param target A map to which properties should be copied.
+     */
+    export function copyProperties<T>(source: Map<T>, target: MapLike<T>): void {
+        for (const key in source) {
+            target[key] = source[key];
+        }
+    }
+
+    export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
+    export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
+    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
+    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
+        for (const arg of args) {
+            for (const p of getOwnKeys(arg)) {
+                t[p] = arg[p];
             }
+        }
+        return t;
+    }
+
+    /**
+     * Reduce the properties of a map.
+     *
+     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
+     *       reduceOwnProperties instead as it offers better runtime safety.
+     *
+     * @param map The map to reduce
+     * @param callback An aggregation function that is called for each entry in the map
+     * @param initial The initial value for the reduction.
+     */
+    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
+        let result = initial;
+        for (const key in map) {
+            result = callback(result, map[key], String(key));
+        }
+        return result;
+    }
+
+    /**
+     * Reduce the properties defined on a map-like (but not from its prototype chain).
+     *
+     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
+     *       reduceProperties instead as it offers better performance.
+     *
+     * @param map The map-like to reduce
+     * @param callback An aggregation function that is called for each entry in the map
+     * @param initial The initial value for the reduction.
+     */
+    export function reduceOwnProperties<T, U>(map: MapLike<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
+        let result = initial;
+        for (const key in map) if (hasOwnProperty.call(map, key)) {
+            result = callback(result, map[key], String(key));
+        }
+        return result;
+    }
+
+    /**
+     * Performs a shallow equality comparison of the contents of two map-likes.
+     *
+     * @param left A map-like whose properties should be compared.
+     * @param right A map-like whose properties should be compared.
+     */
+    export function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>, equalityComparer?: (left: T, right: T) => boolean) {
+        if (left === right) return true;
+        if (!left || !right) return false;
+        for (const key in left) if (hasOwnProperty.call(left, key)) {
+            if (!hasOwnProperty.call(right, key) === undefined) return false;
+            if (equalityComparer ? !equalityComparer(left[key], right[key]) : left[key] !== right[key]) return false;
+        }
+        for (const key in right) if (hasOwnProperty.call(right, key)) {
+            if (!hasOwnProperty.call(left, key)) return false;
         }
         return true;
-    }
-
-    export function clone<T>(object: T): T {
-        const result: any = {};
-        for (const id in object) {
-            result[id] = (<any>object)[id];
-        }
-        return <T>result;
-    }
-
-    export function extend<T1 extends Map<{}>, T2 extends Map<{}>>(first: T1 , second: T2): T1 & T2 {
-        const result: T1 & T2 = <any>{};
-        for (const id in first) {
-            (result as any)[id] = first[id];
-        }
-        for (const id in second) {
-            if (!hasProperty(result, id)) {
-                (result as any)[id] = second[id];
-            }
-        }
-        return result;
-    }
-
-    export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
-        let result: U;
-        for (const id in map) {
-            if (result = callback(map[id])) break;
-        }
-        return result;
-    }
-
-    export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
-        let result: U;
-        for (const id in map) {
-            if (result = callback(id)) break;
-        }
-        return result;
-    }
-
-    export function lookUp<T>(map: Map<T>, key: string): T {
-        return hasProperty(map, key) ? map[key] : undefined;
-    }
-
-    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
-        for (const p in source) {
-            target[p] = source[p];
-        }
     }
 
     /**
@@ -569,34 +730,80 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
-        const result: Map<T> = {};
+    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T>;
+    export function arrayToMap<T, U>(array: T[], makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
+    export function arrayToMap<T, U>(array: T[], makeKey: (value: T) => string, makeValue?: (value: T) => U): Map<T | U> {
+        const result = createMap<T | U>();
+        for (const value of array) {
+            result[makeKey(value)] = makeValue ? makeValue(value) : value;
+        }
+        return result;
+    }
 
-        forEach(array, value => {
-            result[makeKey(value)] = value;
-        });
+    export function isEmpty<T>(map: Map<T>) {
+        for (const id in map) {
+            if (hasProperty(map, id)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    export function cloneMap<T>(map: Map<T>) {
+        const clone = createMap<T>();
+        copyProperties(map, clone);
+        return clone;
+    }
+
+    export function clone<T>(object: T): T {
+        const result: any = {};
+        for (const id in object) {
+            if (hasOwnProperty.call(object, id)) {
+                result[id] = (<any>object)[id];
+            }
+        }
+        return result;
+    }
+
+    export function extend<T1, T2>(first: T1 , second: T2): T1 & T2 {
+        const result: T1 & T2 = <any>{};
+        for (const id in second) if (hasOwnProperty.call(second, id)) {
+            (result as any)[id] = (second as any)[id];
+        }
+        for (const id in first) if (hasOwnProperty.call(first, id)) {
+            (result as any)[id] = (first as any)[id];
+        }
         return result;
     }
 
     /**
-     * Reduce the properties of a map.
-     *
-     * @param map The map to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
+     * Adds the value to an array of values associated with the key, and returns the array.
+     * Creates the array if it does not already exist.
      */
-    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        if (map) {
-            for (const key in map) {
-                if (hasProperty(map, key)) {
-                    result = callback(result, map[key], String(key));
-                }
+    export function multiMapAdd<V>(map: Map<V[]>, key: string, value: V): V[] {
+        const values = map[key];
+        if (values) {
+            values.push(value);
+            return values;
+        }
+        else {
+            return map[key] = [value];
+        }
+    }
+
+    /**
+     * Removes a value from an array of values associated with the key.
+     * Does not preserve the order of those values.
+     * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
+     */
+    export function multiMapRemove<V>(map: Map<V[]>, key: string, value: V): void {
+        const values = map[key];
+        if (values) {
+            unorderedRemoveItem(values, value);
+            if (!values.length) {
+                delete map[key];
             }
         }
-
-        return result;
     }
 
     /**
@@ -626,9 +833,7 @@ namespace ts {
     export let localizedDiagnosticMessages: Map<string> = undefined;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
-        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]
-            ? localizedDiagnosticMessages[message.key]
-            : message.message;
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -839,7 +1044,8 @@ namespace ts {
         return 0;
     }
 
-    export let directorySeparator = "/";
+    export const directorySeparator = "/";
+    const directorySeparatorCharCode = CharacterCodes.slash;
     function getNormalizedParts(normalizedSlashedPath: string, rootLength: number) {
         const parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
         const normalized: string[] = [];
@@ -864,8 +1070,20 @@ namespace ts {
     export function normalizePath(path: string): string {
         path = normalizeSlashes(path);
         const rootLength = getRootLength(path);
+        const root = path.substr(0, rootLength);
         const normalized = getNormalizedParts(path, rootLength);
-        return path.substr(0, rootLength) + normalized.join(directorySeparator);
+        if (normalized.length) {
+            const joinedParts = root + normalized.join(directorySeparator);
+            return pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts;
+        }
+        else {
+            return root;
+        }
+    }
+
+    /** A path ending with '/' refers to a directory only, never a file. */
+    export function pathEndsWithDirectorySeparator(path: string): boolean {
+        return path.charCodeAt(path.length - 1) === directorySeparatorCharCode;
     }
 
     export function getDirectoryPath(path: Path): Path;
@@ -1364,6 +1582,8 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
+    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
@@ -1446,8 +1666,12 @@ namespace ts {
         return path;
     }
 
-    export function tryRemoveExtension(path: string, extension: string): string {
-        return fileExtensionIs(path, extension) ? path.substring(0, path.length - extension.length) : undefined;
+    export function tryRemoveExtension(path: string, extension: string): string | undefined {
+        return fileExtensionIs(path, extension) ? removeExtension(path, extension) : undefined;
+    }
+
+    export function removeExtension(path: string, extension: string): string {
+        return path.substring(0, path.length - extension.length);
     }
 
     export function isJsxOrTsxExtension(ext: string): boolean {
@@ -1566,20 +1790,39 @@ namespace ts {
         return "";
     }
 
-    export function copyListRemovingItem<T>(item: T, list: T[]) {
-        const copiedList: T[] = [];
-        for (const e of list) {
-            if (e !== item) {
-                copiedList.push(e);
-            }
+    /** Remove an item from an array, moving everything to its right one space left. */
+    export function orderedRemoveItemAt<T>(array: T[], index: number): void {
+        // This seems to be faster than either `array.splice(i, 1)` or `array.copyWithin(i, i+ 1)`.
+        for (let i = index; i < array.length - 1; i++) {
+            array[i] = array[i + 1];
         }
-        return copiedList;
+        array.pop();
     }
 
-    export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
-        return useCaseSensitivefileNames
+    export function unorderedRemoveItemAt<T>(array: T[], index: number): void {
+        // Fill in the "hole" left at `index`.
+        array[index] = array[array.length - 1];
+        array.pop();
+    }
+
+    /** Remove the *first* occurrence of `item` from the array. */
+    export function unorderedRemoveItem<T>(array: T[], item: T): void {
+        unorderedRemoveFirstItemWhere(array, element => element === item);
+    }
+
+    /** Remove the *first* element satisfying `predicate`. */
+    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): void {
+        for (let i = 0; i < array.length; i++) {
+            if (predicate(array[i])) {
+                unorderedRemoveItemAt(array, i);
+                break;
+            }
+        }
+    }
+
+    export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): (fileName: string) => string {
+        return useCaseSensitiveFileNames
             ? ((fileName) => fileName)
             : ((fileName) => fileName.toLowerCase());
     }
-
 }

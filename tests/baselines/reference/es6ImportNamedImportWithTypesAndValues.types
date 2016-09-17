@@ -18,7 +18,7 @@ export class C implements I {
 
     prop = "hello";
 >prop : string
->"hello" : string
+>"hello" : "hello"
 }
 export class C2 implements I2 {
 >C2 : C2
@@ -26,7 +26,7 @@ export class C2 implements I2 {
 
     prop2 = "world";
 >prop2 : string
->"world" : string
+>"world" : "world"
 }
 
 === tests/cases/compiler/client.ts ===

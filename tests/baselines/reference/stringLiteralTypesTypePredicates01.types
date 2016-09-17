@@ -42,12 +42,12 @@ if (kindIs(x, "A")) {
 >"A" : "A"
 
     let a = x;
->a : "A"
+>a : string
 >x : "A"
 }
 else {
     let b = x;
->b : "B"
+>b : string
 >x : "B"
 }
 
@@ -59,11 +59,11 @@ if (!kindIs(x, "B")) {
 >"B" : "B"
 
     let c = x;
->c : "A"
+>c : string
 >x : "A"
 }
 else {
     let d = x;
->d : "B"
+>d : string
 >x : "B"
 }

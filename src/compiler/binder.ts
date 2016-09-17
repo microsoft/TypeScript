@@ -89,9 +89,10 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        const start = performance.mark();
+        performance.mark("beforeBind");
         binder(file, options);
-        performance.measure("Bind", start);
+        performance.mark("afterBind");
+        performance.measure("Bind", "beforeBind", "afterBind");
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -139,7 +140,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
-            classifiableNames = {};
+            classifiableNames = createMap<string>();
             symbolCount = 0;
             skipTransformFlagAggregation = isDeclarationFile(file);
 
@@ -189,11 +190,11 @@ namespace ts {
             symbol.declarations.push(node);
 
             if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
-                symbol.exports = {};
+                symbol.exports = createMap<Symbol>();
             }
 
             if (symbolFlags & SymbolFlags.HasMembers && !symbol.members) {
-                symbol.members = {};
+                symbol.members = createMap<Symbol>();
             }
 
             if (symbolFlags & SymbolFlags.Value) {
@@ -267,7 +268,7 @@ namespace ts {
                     Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
                     let functionType = <JSDocFunctionType>node.parent;
                     let index = indexOf(functionType.parameters, node);
-                    return "p" + index;
+                    return "arg" + index;
                 case SyntaxKind.JSDocTypedefTag:
                     const parentNode = node.parent && node.parent.parent;
                     let nameFromParentNode: string;
@@ -304,8 +305,10 @@ namespace ts {
             const name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
-            if (name !== undefined) {
-
+            if (name === undefined) {
+                symbol = createSymbol(SymbolFlags.None, "__missing");
+            }
+            else {
                 // Check and see if the symbol table already has a symbol with this name.  If not,
                 // create a new symbol with this name and add it to the table.  Note that we don't
                 // give the new symbol any flags *yet*.  This ensures that it will not conflict
@@ -317,6 +320,11 @@ namespace ts {
                 // declaration we have for this symbol, and then create a new symbol for this
                 // declaration.
                 //
+                // Note that when properties declared in Javascript constructors
+                // (marked by isReplaceableByMethod) conflict with another symbol, the property loses.
+                // Always. This allows the common Javascript pattern of overwriting a prototype method
+                // with an bound instance method of the same type: `this.method = this.method.bind(this)`
+                //
                 // If we created a new symbol, either because we didn't have a symbol with this name
                 // in the symbol table, or we conflicted with an existing symbol, then just add this
                 // node as the sole declaration of the new symbol.
@@ -324,41 +332,43 @@ namespace ts {
                 // Otherwise, we'll be merging into a compatible existing symbol (for example when
                 // you have multiple 'vars' with the same name in the same container).  In this case
                 // just add this node into the declarations list of the symbol.
-                symbol = hasProperty(symbolTable, name)
-                    ? symbolTable[name]
-                    : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                symbol = symbolTable[name] || (symbolTable[name] = createSymbol(SymbolFlags.None, name));
 
                 if (name && (includes & SymbolFlags.Classifiable)) {
                     classifiableNames[name] = name;
                 }
 
                 if (symbol.flags & excludes) {
-                    if (node.name) {
-                        node.name.parent = node;
+                    if (symbol.isReplaceableByMethod) {
+                        // Javascript constructor-declared symbols can be discarded in favor of
+                        // prototype symbols like methods.
+                        symbol = symbolTable[name] = createSymbol(SymbolFlags.None, name);
                     }
-
-                    // Report errors every position with duplicate declaration
-                    // Report errors on previous encountered declarations
-                    let message = symbol.flags & SymbolFlags.BlockScopedVariable
-                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
-                        : Diagnostics.Duplicate_identifier_0;
-
-                    forEach(symbol.declarations, declaration => {
-                        if (hasModifier(declaration, ModifierFlags.Default)) {
-                            message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                    else {
+                        if (node.name) {
+                            node.name.parent = node;
                         }
-                    });
 
-                    forEach(symbol.declarations, declaration => {
-                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
-                    });
-                    file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
+                        // Report errors every position with duplicate declaration
+                        // Report errors on previous encountered declarations
+                        let message = symbol.flags & SymbolFlags.BlockScopedVariable
+                            ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
+                            : Diagnostics.Duplicate_identifier_0;
 
-                    symbol = createSymbol(SymbolFlags.None, name);
+                        forEach(symbol.declarations, declaration => {
+                            if (hasModifier(declaration, ModifierFlags.Default)) {
+                                message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                            }
+                        });
+
+                        forEach(symbol.declarations, declaration => {
+                            file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
+                        });
+                        file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
+
+                        symbol = createSymbol(SymbolFlags.None, name);
+                    }
                 }
-            }
-            else {
-                symbol = createSymbol(SymbolFlags.None, "__missing");
             }
 
             addDeclarationToSymbol(symbol, node, includes);
@@ -440,7 +450,7 @@ namespace ts {
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
                 if (containerFlags & ContainerFlags.HasLocals) {
-                    container.locals = {};
+                    container.locals = createMap<Symbol>();
                 }
                 addToContainerChain(container);
             }
@@ -530,9 +540,7 @@ namespace ts {
             // because the scope of JsDocComment should not be affected by whether the current node is a
             // container or not.
             if (isInJavaScriptFile(node) && node.jsDocComments) {
-                for (const jsDocComment of node.jsDocComments) {
-                    bind(jsDocComment);
-                }
+                forEach(node.jsDocComments, bind);
             }
             if (checkUnreachable(node)) {
                 forEachChild(node, bind);
@@ -580,6 +588,9 @@ namespace ts {
                     break;
                 case SyntaxKind.PrefixUnaryExpression:
                     bindPrefixUnaryExpressionFlow(<PrefixUnaryExpression>node);
+                    break;
+                case SyntaxKind.PostfixUnaryExpression:
+                    bindPostfixUnaryExpressionFlow(<PostfixUnaryExpression>node);
                     break;
                 case SyntaxKind.BinaryExpression:
                     bindBinaryExpressionFlow(<BinaryExpression>node);
@@ -1096,6 +1107,16 @@ namespace ts {
             }
             else {
                 forEachChild(node, bind);
+                if (node.operator === SyntaxKind.PlusEqualsToken || node.operator === SyntaxKind.MinusMinusToken) {
+                    bindAssignmentTargetFlow(node.operand);
+                }
+            }
+        }
+
+        function bindPostfixUnaryExpressionFlow(node: PostfixUnaryExpression) {
+            forEachChild(node, bind);
+            if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
+                bindAssignmentTargetFlow(node.operand);
             }
         }
 
@@ -1140,8 +1161,8 @@ namespace ts {
             currentFlow = finishFlowLabel(postExpressionLabel);
         }
 
-        function bindInitializedVariableFlow(node: VariableDeclaration | BindingElement) {
-            const name = node.name;
+        function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {
+            const name = !isOmittedExpression(node) ? node.name : undefined;
             if (isBindingPattern(name)) {
                 for (const child of name.elements) {
                     bindInitializedVariableFlow(child);
@@ -1422,7 +1443,8 @@ namespace ts {
 
             const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = { [symbol.name]: symbol };
+            typeLiteralSymbol.members = createMap<Symbol>();
+            typeLiteralSymbol.members[symbol.name] = symbol;
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
@@ -1432,7 +1454,7 @@ namespace ts {
             }
 
             if (inStrictMode) {
-                const seen: Map<ElementKind> = {};
+                const seen = createMap<ElementKind>();
 
                 for (const prop of node.properties) {
                     if (prop.name.kind !== SyntaxKind.Identifier) {
@@ -1488,7 +1510,7 @@ namespace ts {
                 // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
-                        blockScopeContainer.locals = {};
+                        blockScopeContainer.locals = createMap<Symbol>();
                         addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
@@ -1913,18 +1935,17 @@ namespace ts {
         }
 
         function bindExportAssignment(node: ExportAssignment | BinaryExpression) {
-            const boundExpression = node.kind === SyntaxKind.ExportAssignment ? (<ExportAssignment>node).expression : (<BinaryExpression>node).right;
             if (!container.symbol || !container.symbol.exports) {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
-            else if (boundExpression.kind === SyntaxKind.Identifier && node.kind === SyntaxKind.ExportAssignment) {
-                // An export default clause with an identifier exports all meanings of that identifier
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
-            }
             else {
-                // An export default clause with an expression exports a value
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
+                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node)
+                    // An export default clause with an EntityNameExpression exports all meanings of that identifier
+                    ? SymbolFlags.Alias
+                    // An export default clause with any other expression exports a value
+                    : SymbolFlags.Property;
+                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
         }
 
@@ -1951,7 +1972,7 @@ namespace ts {
                 }
             }
 
-            file.symbol.globalExports = file.symbol.globalExports || {};
+            file.symbol.globalExports = file.symbol.globalExports || createMap<Symbol>();
             declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
@@ -1993,20 +2014,25 @@ namespace ts {
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
-            // Declare a 'member' in case it turns out the container was an ES5 class or ES6 constructor
-            let assignee: Node;
+            Debug.assert(isInJavaScriptFile(node));
+            // Declare a 'member' if the container is an ES5 class or ES6 constructor
             if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
-                assignee = container;
+                container.symbol.members = container.symbol.members || createMap<Symbol>();
+                // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
             }
             else if (container.kind === SyntaxKind.Constructor) {
-                assignee = container.parent;
+                // this.foo assignment in a JavaScript class
+                // Bind this property to the containing class
+                const saveContainer = container;
+                container = container.parent;
+                const symbol = bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property, SymbolFlags.None);
+                if (symbol) {
+                    // constructor-declared symbols can be overwritten by subsequent method declarations
+                    (symbol as Symbol).isReplaceableByMethod = true;
+                }
+                container = saveContainer;
             }
-            else {
-                return;
-            }
-            assignee.symbol.members = assignee.symbol.members || {};
-            // It's acceptable for multiple 'this' assignments of the same identifier to occur
-            declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
@@ -2030,7 +2056,7 @@ namespace ts {
 
             // Set up the members collection if it doesn't exist already
             if (!funcSymbol.members) {
-                funcSymbol.members = {};
+                funcSymbol.members = createMap<Symbol>();
             }
 
             // Declare the method/property
@@ -2079,7 +2105,7 @@ namespace ts {
             // module might have an exported variable called 'prototype'.  We can't allow that as
             // that would clash with the built-in 'prototype' for the class.
             const prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
-            if (hasProperty(symbol.exports, prototypeSymbol.name)) {
+            if (symbol.exports[prototypeSymbol.name]) {
                 if (node.name) {
                     node.name.parent = node;
                 }

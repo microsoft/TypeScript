@@ -1,7 +1,11 @@
-
 namespace ts {
-    export interface Map<T> {
+
+    export interface MapLike<T> {
         [index: string]: T;
+    }
+
+    export interface Map<T> extends MapLike<T> {
+        __mapBrand: any;
     }
 
     // branded string type used to store absolute, normalized and canonicalized paths
@@ -346,6 +350,10 @@ namespace ts {
         JSDocTypedefTag,
         JSDocPropertyTag,
         JSDocTypeLiteral,
+        JSDocLiteralType,
+        JSDocNullKeyword,
+        JSDocUndefinedKeyword,
+        JSDocNeverKeyword,
 
         // Synthesized list
         SyntaxList,
@@ -383,9 +391,9 @@ namespace ts {
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocTypeLiteral,
+        LastJSDocNode = JSDocLiteralType,
         FirstJSDocTagNode = JSDocComment,
-        LastJSDocTagNode = JSDocTypeLiteral
+        LastJSDocTagNode = JSDocNeverKeyword
     }
 
     export const enum NodeFlags {
@@ -427,6 +435,8 @@ namespace ts {
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
     }
+
+    export type ModifiersArray = NodeArray<Modifier>;
 
     export const enum ModifierFlags {
         None =               0,
@@ -473,12 +483,12 @@ namespace ts {
         /* @internal */ modifierFlagsCache?: ModifierFlags;
         /* @internal */ transformFlags?: TransformFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
-        modifiers?: NodeArray<Modifier>;                // Array of modifiers
+        modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding)
         /* @internal */ original?: Node;                // The original node if this is an updated node.
         /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
-        /* @internal */ jsDocComments?: JSDocComment[]; // JSDoc for the node, if it has any.  Only for .js files.
+        /* @internal */ jsDocComments?: JSDoc[];        // JSDoc for the node, if it has any.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
@@ -586,7 +596,7 @@ namespace ts {
     // @kind(SyntaxKind.ConstructSignature)
     export interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement { }
 
-    export type BindingName = Identifier | ObjectBindingPattern | ArrayBindingPattern;
+    export type BindingName = Identifier | BindingPattern;
 
     // @kind(SyntaxKind.VariableDeclaration)
     export interface VariableDeclaration extends Declaration {
@@ -679,14 +689,20 @@ namespace ts {
     }
 
     export interface BindingPattern extends Node {
-        elements: NodeArray<BindingElement>;
+        elements: NodeArray<BindingElement | ArrayBindingElement>;
     }
 
     // @kind(SyntaxKind.ObjectBindingPattern)
-    export interface ObjectBindingPattern extends BindingPattern { }
+    export interface ObjectBindingPattern extends BindingPattern {
+        elements: NodeArray<BindingElement>;
+    }
+
+    export type ArrayBindingElement = BindingElement | OmittedExpression;
 
     // @kind(SyntaxKind.ArrayBindingPattern)
-    export interface ArrayBindingPattern extends BindingPattern { }
+    export interface ArrayBindingPattern extends BindingPattern {
+        elements: NodeArray<ArrayBindingElement>;
+    }
 
     /**
      * Several node kinds share function-like features such as a signature,
@@ -859,7 +875,9 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.OmittedExpression)
-    export interface OmittedExpression extends Expression { }
+    export interface OmittedExpression extends Expression {
+        _omittedExpressionBrand: any;
+    }
 
     // Represents an expression that is elided as part of a transformation to emit comments on a
     // not-emitted node. The 'expression' property of a NotEmittedExpression should be emitted.
@@ -1039,13 +1057,19 @@ namespace ts {
         multiLine?: boolean;
     }
 
+    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
+    export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
+
     // @kind(SyntaxKind.PropertyAccessExpression)
     export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         name: Identifier;
     }
-
-    export type IdentifierOrPropertyAccess = Identifier | PropertyAccessExpression;
+    /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
+    export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
+        _propertyAccessExpressionLikeQualifiedNameBrand?: any;
+        expression: EntityNameExpression;
+    }
 
     // @kind(SyntaxKind.ElementAccessExpression)
     export interface ElementAccessExpression extends MemberExpression {
@@ -1532,7 +1556,7 @@ namespace ts {
 
     // @kind(SyntaxKind.JSDocRecordType)
     export interface JSDocRecordType extends JSDocType, TypeLiteralNode {
-        members: NodeArray<JSDocRecordMember>;
+        literal: TypeLiteralNode;
     }
 
     // @kind(SyntaxKind.JSDocTypeReference)
@@ -1567,6 +1591,10 @@ namespace ts {
         type: JSDocType;
     }
 
+    export interface JSDocLiteralType extends JSDocType {
+        literal: LiteralTypeNode;
+    }
+
     export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
     // @kind(SyntaxKind.JSDocRecordMember)
@@ -1576,14 +1604,16 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.JSDocComment)
-    export interface JSDocComment extends Node {
+    export interface JSDoc extends Node {
         tags: NodeArray<JSDocTag>;
+        comment: string | undefined;
     }
 
     // @kind(SyntaxKind.JSDocTag)
     export interface JSDocTag extends Node {
         atToken: Node;
         tagName: Identifier;
+        comment: string | undefined;
     }
 
     // @kind(SyntaxKind.JSDocTemplateTag)
@@ -1622,9 +1652,13 @@ namespace ts {
 
     // @kind(SyntaxKind.JSDocParameterTag)
     export interface JSDocParameterTag extends JSDocTag {
+        /** the parameter name, if provided *before* the type (TypeScript-style) */
         preParameterName?: Identifier;
         typeExpression?: JSDocTypeExpression;
+        /** the parameter name, if provided *after* the type (JSDoc-standard) */
         postParameterName?: Identifier;
+        /** the parameter name, regardless of the location it was provided */
+        parameterName: Identifier;
         isBracketed: boolean;
     }
 
@@ -1679,6 +1713,16 @@ namespace ts {
         clauseStart: number;   // Start index of case/default clause range
         clauseEnd: number;     // End index of case/default clause range
         antecedent: FlowNode;
+    }
+
+    export type FlowType = Type | IncompleteType;
+
+    // Incomplete types occur during control flow analysis of loops. An IncompleteType
+    // is distinguished from a regular type by a flags value of zero. Incomplete type
+    // objects are internal to the getFlowTypeOfRefecence function and never escape it.
+    export interface IncompleteType {
+        flags: TypeFlags;  // No flags set
+        type: Type;        // The type marked incomplete
     }
 
     export interface AmdDependency {
@@ -1770,6 +1814,8 @@ namespace ts {
           * @param path The path to test.
           */
         fileExists(path: string): boolean;
+
+        readFile(path: string): string;
     }
 
     export interface WriteFileCallback {
@@ -1938,6 +1984,7 @@ namespace ts {
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        getAmbientModules(): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -2098,8 +2145,8 @@ namespace ts {
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult;
-        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
+        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
+        isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
@@ -2108,7 +2155,7 @@ namespace ts {
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
-        getTypeReferenceDirectivesForEntityName(name: EntityName | PropertyAccessExpression): string[];
+        getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
     }
 
@@ -2215,6 +2262,8 @@ namespace ts {
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
+        /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
+        /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
     }
 
     /* @internal */
@@ -2228,6 +2277,8 @@ namespace ts {
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
+        hasCommonType?: boolean;            // True if constituents of synthetic property all have same type
+        isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
@@ -2238,9 +2289,7 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
-    export interface SymbolTable {
-        [index: string]: Symbol;
-    }
+    export type SymbolTable = Map<Symbol>;
 
     /** Represents a "prefix*suffix" pattern. */
     /* @internal */
@@ -2267,23 +2316,26 @@ namespace ts {
         AsyncMethodWithSuper                = 0x00000800,  // An async method that reads a value from a member of 'super'.
         AsyncMethodWithSuperBinding         = 0x00001000,  // An async method that assigns a value to a member of 'super'.
         CaptureArguments                    = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
-        EnumValuesComputed                  = 0x00004000, // Values for enum members have been computed, and any errors have been reported for them.
-        LexicalModuleMergesWithClass        = 0x00008000, // Instantiated lexical module declaration is merged with a previous class declaration.
-        LoopWithCapturedBlockScopedBinding  = 0x00010000, // Loop that contains block scoped variable captured in closure
-        CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
-        BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
-        ClassWithConstructorReference       = 0x00080000, // Class that contains a binding to its constructor inside of the class body.
-        ConstructorReferenceInClass         = 0x00100000, // Binding to a class constructor inside of the class's body.
-        NeedsLoopOutParameter               = 0x00200000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        EnumValuesComputed                  = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
+        LexicalModuleMergesWithClass        = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithCapturedBlockScopedBinding  = 0x00010000,  // Loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding          = 0x00020000,  // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop            = 0x00040000,  // Block-scoped binding with declaration nested inside iteration statement
+        ClassWithBodyScopedClassBinding     = 0x00080000,  // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding              = 0x00100000,  // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter               = 0x00200000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        AssignmentsMarked                   = 0x00400000,  // Parameter assignments have been marked
+        ClassWithConstructorReference       = 0x00800000,  // Class that contains a binding to its constructor inside of the class body.
+        ConstructorReferenceInClass         = 0x01000000,  // Binding to a class constructor inside of the class's body.
     }
 
     /* @internal */
     export interface NodeLinks {
+        flags?: NodeCheckFlags;           // Set of flags specific to Node
         resolvedType?: Type;              // Cached type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
-        flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
@@ -2313,7 +2365,7 @@ namespace ts {
         Class                   = 1 << 15,  // Class
         Interface               = 1 << 16,  // Interface
         Reference               = 1 << 17,  // Generic type reference
-        Tuple                   = 1 << 18,  // Tuple
+        Tuple                   = 1 << 18,  // Synthesized generic tuple type
         Union                   = 1 << 19,  // Union (T | U)
         Intersection            = 1 << 20,  // Intersection (T & U)
         Anonymous               = 1 << 21,  // Anonymous
@@ -2435,10 +2487,6 @@ namespace ts {
         instantiations: Map<TypeReference>;   // Generic instantiation cache
     }
 
-    export interface TupleType extends ObjectType {
-        elementTypes: Type[];  // Element types
-    }
-
     export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
         /* @internal */
@@ -2554,13 +2602,14 @@ namespace ts {
     export interface TypeInferences {
         primary: Type[];    // Inferences made directly to a type parameter
         secondary: Type[];  // Inferences made to a type parameter in a union type
+        topLevel: boolean;  // True if all inferences were made from top-level (not nested in object type) locations
         isFixed: boolean;   // Whether the type parameter is fixed, as defined in section 4.12.2 of the TypeScript spec
                             // If a type parameter is fixed, no more inferences can be made for the type parameter
     }
 
     /* @internal */
     export interface InferenceContext {
-        typeParameters: TypeParameter[];    // Type parameters for which inferences are made
+        signature: Signature;               // Generic signature for which inferences are made
         inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
         inferences: TypeInferences[];       // Inferences made for each type parameter
         inferredTypes: Type[];              // Inferred type for each type parameter
@@ -2623,7 +2672,7 @@ namespace ts {
     }
 
     export type RootPaths = string[];
-    export type PathSubstitutions = Map<string[]>;
+    export type PathSubstitutions = MapLike<string[]>;
     export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
@@ -2784,7 +2833,7 @@ namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
+        wildcardDirectories?: MapLike<WatchDirectoryFlags>;
     }
 
     export const enum WatchDirectoryFlags {
@@ -2794,7 +2843,7 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
-        wildcardDirectories: Map<WatchDirectoryFlags>;
+        wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
 
     /* @internal */
@@ -2816,7 +2865,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<number | string>;             // an object literal mapping named values to actual values
+        type: Map<number | string>;  // an object literal mapping named values to actual values
     }
 
     /* @internal */
@@ -2979,6 +3028,7 @@ namespace ts {
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
+        getDirectories?(path: string): string[];
     }
 
     export interface ResolvedModule {

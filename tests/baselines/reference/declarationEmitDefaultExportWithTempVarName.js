@@ -15,5 +15,5 @@ System.register([], function (exports_1, context_1) {
 
 
 //// [pi.d.ts]
-declare var _default: number;
+declare var _default: 3.14159;
 export default _default;

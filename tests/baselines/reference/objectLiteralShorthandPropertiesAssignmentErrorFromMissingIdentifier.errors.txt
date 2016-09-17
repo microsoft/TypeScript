@@ -3,15 +3,12 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(5,79): error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ name: number; id: string; }'.
   Types of property 'name' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(7,16): error TS1131: Property or signature expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(7,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'id' must be of type 'number', but here has type 'any'.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(7,25): error TS1128: Declaration or statement expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(8,5): error TS2322: Type '{ name: number; id: string; }' is not assignable to type '{ name: string; id: number; }'.
   Types of property 'name' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts (6 errors) ====
+==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts (3 errors) ====
     var id: number = 10000;
     var name: string = "my name";
     
@@ -25,15 +22,10 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
 !!! error TS2322:   Types of property 'name' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     function foo(name: string, id: number): { name: string, id: number } { return { name, id }; }  // error
-    var person1: { name, id };  // error : Can't use shorthand in the type position
-                   ~~~~
-!!! error TS1131: Property or signature expected.
-                         ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'id' must be of type 'number', but here has type 'any'.
-                            ~
-!!! error TS1128: Declaration or statement expected.
+    var person1: { name, id }; // ok
     var person2: { name: string, id: number } = bar("hello", 5);
         ~~~~~~~
 !!! error TS2322: Type '{ name: number; id: string; }' is not assignable to type '{ name: string; id: number; }'.
 !!! error TS2322:   Types of property 'name' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    

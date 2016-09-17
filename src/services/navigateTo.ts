@@ -2,7 +2,7 @@
 namespace ts.NavigateTo {
     type RawNavigateToItem = { name: string; fileName: string; matchKind: PatternMatchKind; isCaseSensitive: boolean; declaration: Declaration };
 
-    export function getNavigateToItems(program: Program, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[] {
+    export function getNavigateToItems(sourceFiles: SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
         let rawItems: RawNavigateToItem[] = [];
 
@@ -10,12 +10,12 @@ namespace ts.NavigateTo {
         const baseSensitivity: Intl.CollatorOptions = { sensitivity: "base" };
 
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
-        forEach(program.getSourceFiles(), sourceFile => {
+        forEach(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
 
             const nameToDeclarations = sourceFile.getNamedDeclarations();
             for (const name in nameToDeclarations) {
-                const declarations = getProperty(nameToDeclarations, name);
+                const declarations = nameToDeclarations[name];
                 if (declarations) {
                     // First do a quick check to see if the name of the declaration matches the
                     // last portion of the (possibly) dotted name they're searching for.

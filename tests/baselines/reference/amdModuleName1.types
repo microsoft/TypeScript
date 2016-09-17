@@ -8,11 +8,11 @@ class Foo {
 
     constructor() {
         this.x = 5;
->this.x = 5 : number
+>this.x = 5 : 5
 >this.x : number
 >this : this
 >x : number
->5 : number
+>5 : 5
     }
 }
 export = Foo;

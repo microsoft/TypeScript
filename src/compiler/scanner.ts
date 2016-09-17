@@ -27,6 +27,7 @@ namespace ts {
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
+        scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): SyntaxKind;
         scanJsxToken(): SyntaxKind;
         scanJSDocToken(): SyntaxKind;
@@ -55,7 +56,7 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken: Map<SyntaxKind> = {
+    const textToToken = createMap({
         "abstract": SyntaxKind.AbstractKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
@@ -179,7 +180,7 @@ namespace ts {
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
         "@": SyntaxKind.AtToken,
-    };
+    });
 
     /*
         As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers
@@ -274,9 +275,7 @@ namespace ts {
     function makeReverseMap(source: Map<number>): string[] {
         const result: string[] = [];
         for (const name in source) {
-            if (source.hasOwnProperty(name)) {
-                result[source[name]] = name;
-            }
+            result[source[name]] = name;
         }
         return result;
     }
@@ -819,6 +818,7 @@ namespace ts {
             reScanSlashToken,
             reScanTemplateToken,
             scanJsxIdentifier,
+            scanJsxAttributeValue,
             reScanJsxToken,
             scanJsxToken,
             scanJSDocToken,
@@ -913,7 +913,7 @@ namespace ts {
             return value;
         }
 
-        function scanString(): string {
+        function scanString(allowEscapes = true): string {
             const quote = text.charCodeAt(pos);
             pos++;
             let result = "";
@@ -931,7 +931,7 @@ namespace ts {
                     pos++;
                     break;
                 }
-                if (ch === CharacterCodes.backslash) {
+                if (ch === CharacterCodes.backslash && allowEscapes) {
                     result += text.substring(start, pos);
                     result += scanEscapeSequence();
                     start = pos;
@@ -1739,46 +1739,66 @@ namespace ts {
             return token;
         }
 
+        function scanJsxAttributeValue(): SyntaxKind {
+            startPos = pos;
+
+            switch (text.charCodeAt(pos)) {
+                case CharacterCodes.doubleQuote:
+                case CharacterCodes.singleQuote:
+                    tokenValue = scanString(/*allowEscapes*/ false);
+                    return token = SyntaxKind.StringLiteral;
+                default:
+                    // If this scans anything other than `{`, it's a parse error.
+                    return scan();
+            }
+        }
+
         function scanJSDocToken(): SyntaxKind {
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
 
             startPos = pos;
-
-            // Eat leading whitespace
-            let ch = text.charCodeAt(pos);
-            while (pos < end) {
-                ch = text.charCodeAt(pos);
-                if (isWhiteSpaceSingleLine(ch)) {
-                    pos++;
-                }
-                else {
-                    break;
-                }
-            }
             tokenPos = pos;
 
+            const ch = text.charCodeAt(pos);
             switch (ch) {
+                case CharacterCodes.tab:
+                case CharacterCodes.verticalTab:
+                case CharacterCodes.formFeed:
+                case CharacterCodes.space:
+                    while (pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos))) {
+                        pos++;
+                    }
+                    return token = SyntaxKind.WhitespaceTrivia;
                 case CharacterCodes.at:
-                    return pos += 1, token = SyntaxKind.AtToken;
+                    pos++;
+                    return token = SyntaxKind.AtToken;
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
-                    return pos += 1, token = SyntaxKind.NewLineTrivia;
+                    pos++;
+                    return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:
-                    return pos += 1, token = SyntaxKind.AsteriskToken;
+                    pos++;
+                    return token = SyntaxKind.AsteriskToken;
                 case CharacterCodes.openBrace:
-                    return pos += 1, token = SyntaxKind.OpenBraceToken;
+                    pos++;
+                    return token = SyntaxKind.OpenBraceToken;
                 case CharacterCodes.closeBrace:
-                    return pos += 1, token = SyntaxKind.CloseBraceToken;
+                    pos++;
+                    return token = SyntaxKind.CloseBraceToken;
                 case CharacterCodes.openBracket:
-                    return pos += 1, token = SyntaxKind.OpenBracketToken;
+                    pos++;
+                    return token = SyntaxKind.OpenBracketToken;
                 case CharacterCodes.closeBracket:
-                    return pos += 1, token = SyntaxKind.CloseBracketToken;
+                    pos++;
+                    return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.equals:
-                    return pos += 1, token = SyntaxKind.EqualsToken;
+                    pos++;
+                    return token = SyntaxKind.EqualsToken;
                 case CharacterCodes.comma:
-                    return pos += 1, token = SyntaxKind.CommaToken;
+                    pos++;
+                    return token = SyntaxKind.CommaToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
