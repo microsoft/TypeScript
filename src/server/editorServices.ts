@@ -290,13 +290,14 @@ namespace ts.server {
         }
 
         getFormatCodeOptions(file?: NormalizedPath) {
+            let formatCodeSettings: FormatCodeSettings;
             if (file) {
                 const info = this.getScriptInfoForNormalizedPath(file);
                 if (info) {
-                    return info.formatCodeSettings;
+                    formatCodeSettings = info.getFormatCodeSettings();
                 }
             }
-            return this.hostConfiguration.formatCodeOptions;
+            return formatCodeSettings || this.hostConfiguration.formatCodeOptions;
         }
 
         private updateProjectGraphs(projects: Project[]) {
@@ -969,7 +970,6 @@ namespace ts.server {
                 }
                 if (content !== undefined) {
                     info = new ScriptInfo(this.host, fileName, content, scriptKind, openedByClient, hasMixedContent);
-                    info.setFormatOptions(toEditorSettings(this.getFormatCodeOptions()));
                     // do not watch files with mixed content - server doesn't know how to interpret it
                     this.filenameToScriptInfo.set(info.path, info);
                     if (!info.isOpen && !hasMixedContent) {
