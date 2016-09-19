@@ -1604,7 +1604,7 @@ namespace ts {
 
     // @kind(SyntaxKind.JSDocComment)
     export interface JSDoc extends Node {
-        tags: NodeArray<JSDocTag>;
+        tags: NodeArray<JSDocTag> | undefined;
         comment: string | undefined;
     }
 
