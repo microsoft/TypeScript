@@ -156,7 +156,7 @@ module m1 {
 >d : () => string
 
             return "Hello";
->"Hello" : string
+>"Hello" : "Hello"
         }
 
         public e: { x: number; y: string; };
@@ -220,7 +220,7 @@ module m {
 
         var a = 10;
 >a : number
->10 : number
+>10 : 10
 
         export var b: number;
 >b : number
@@ -270,7 +270,7 @@ module m13 {
 >f : () => number
 
             return 20;
->20 : number
+>20 : 20
         }
     }
 }
@@ -318,14 +318,14 @@ module exportTests {
 >f2 : () => number
 
             return 30;
->30 : number
+>30 : 30
         }
 
         public f3() {
 >f3 : () => string
 
             return "string";
->"string" : string
+>"string" : "string"
         }
     }
     class C2_private {
@@ -335,14 +335,14 @@ module exportTests {
 >f2 : () => number
 
             return 30;
->30 : number
+>30 : 30
         }
 
         public f3() {
 >f3 : () => string
 
             return "string";
->"string" : string
+>"string" : "string"
         }
     }
 

@@ -688,14 +688,20 @@ namespace ts {
     }
 
     export interface BindingPattern extends Node {
-        elements: NodeArray<BindingElement>;
+        elements: NodeArray<BindingElement | ArrayBindingElement>;
     }
 
     // @kind(SyntaxKind.ObjectBindingPattern)
-    export interface ObjectBindingPattern extends BindingPattern { }
+    export interface ObjectBindingPattern extends BindingPattern {
+        elements: NodeArray<BindingElement>;
+    }
+
+    export type ArrayBindingElement = BindingElement | OmittedExpression;
 
     // @kind(SyntaxKind.ArrayBindingPattern)
-    export interface ArrayBindingPattern extends BindingPattern { }
+    export interface ArrayBindingPattern extends BindingPattern {
+        elements: NodeArray<ArrayBindingElement>;
+    }
 
     /**
      * Several node kinds share function-like features such as a signature,
@@ -868,7 +874,9 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.OmittedExpression)
-    export interface OmittedExpression extends Expression { }
+    export interface OmittedExpression extends Expression {
+        _omittedExpressionBrand: any;
+    }
 
     // Represents an expression that is elided as part of a transformation to emit comments on a
     // not-emitted node. The 'expression' property of a NotEmittedExpression should be emitted.
@@ -1799,6 +1807,8 @@ namespace ts {
           * @param path The path to test.
           */
         fileExists(path: string): boolean;
+
+        readFile(path: string): string;
     }
 
     export interface WriteFileCallback {
@@ -2585,13 +2595,14 @@ namespace ts {
     export interface TypeInferences {
         primary: Type[];    // Inferences made directly to a type parameter
         secondary: Type[];  // Inferences made to a type parameter in a union type
+        topLevel: boolean;  // True if all inferences were made from top-level (not nested in object type) locations
         isFixed: boolean;   // Whether the type parameter is fixed, as defined in section 4.12.2 of the TypeScript spec
                             // If a type parameter is fixed, no more inferences can be made for the type parameter
     }
 
     /* @internal */
     export interface InferenceContext {
-        typeParameters: TypeParameter[];    // Type parameters for which inferences are made
+        signature: Signature;               // Generic signature for which inferences are made
         inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
         inferences: TypeInferences[];       // Inferences made for each type parameter
         inferredTypes: Type[];              // Inferred type for each type parameter

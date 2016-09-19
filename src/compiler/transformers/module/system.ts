@@ -1368,7 +1368,11 @@ namespace ts {
             exportedFunctionDeclarations.push(createDeclarationExport(node));
         }
 
-        function hoistBindingElement(node: VariableDeclaration | BindingElement, isExported: boolean): void {
+        function hoistBindingElement(node: VariableDeclaration | ArrayBindingElement, isExported: boolean): void {
+            if (isOmittedExpression(node)) {
+                return;
+            }
+
             const name = node.name;
             if (isIdentifier(name)) {
                 hoistVariableDeclaration(getSynthesizedClone(name));
@@ -1381,11 +1385,11 @@ namespace ts {
             }
         }
 
-        function hoistExportedBindingElement(node: VariableDeclaration | BindingElement) {
+        function hoistExportedBindingElement(node: VariableDeclaration | ArrayBindingElement) {
             hoistBindingElement(node, /*isExported*/ true);
         }
 
-        function hoistNonExportedBindingElement(node: VariableDeclaration | BindingElement) {
+        function hoistNonExportedBindingElement(node: VariableDeclaration | ArrayBindingElement) {
             hoistBindingElement(node, /*isExported*/ false);
         }
 

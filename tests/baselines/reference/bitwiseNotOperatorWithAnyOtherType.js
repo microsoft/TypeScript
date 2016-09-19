@@ -1,4 +1,5 @@
 //// [bitwiseNotOperatorWithAnyOtherType.ts]
+
 // ~ operator on any type
 
 var ANY: any;

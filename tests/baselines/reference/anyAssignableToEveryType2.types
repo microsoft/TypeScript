@@ -187,7 +187,7 @@ module f {
 
     export var bar = 1;
 >bar : number
->1 : number
+>1 : 1
 }
 interface I15 {
 >I15 : I15
@@ -210,7 +210,7 @@ module c {
 
     export var bar = 1;
 >bar : number
->1 : number
+>1 : 1
 }
 interface I16 {
 >I16 : I16

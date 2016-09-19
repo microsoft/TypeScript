@@ -45,13 +45,13 @@ var f1 = new Foo("hey");
 >f1 : Foo
 >new Foo("hey") : Foo
 >Foo : typeof Foo
->"hey" : string
+>"hey" : "hey"
 
 var f2 = new Foo(0);
 >f2 : Foo
 >new Foo(0) : Foo
 >Foo : typeof Foo
->0 : number
+>0 : 0
 
 var f3 = new Foo(f1);
 >f3 : Foo

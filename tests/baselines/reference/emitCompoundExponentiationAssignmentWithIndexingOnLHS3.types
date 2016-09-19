@@ -6,7 +6,7 @@ var object = {
 
     _0: 2,
 >_0 : number
->2 : number
+>2 : 2
 
     get 0() {
         return this._0;
@@ -31,30 +31,30 @@ object[0] **= object[0];
 >object[0] **= object[0] : number
 >object[0] : number
 >object : { 0: number; _0: number; }
->0 : number
+>0 : 0
 >object[0] : number
 >object : { 0: number; _0: number; }
->0 : number
+>0 : 0
 
 object[0] **= object[0] **= 2;
 >object[0] **= object[0] **= 2 : number
 >object[0] : number
 >object : { 0: number; _0: number; }
->0 : number
+>0 : 0
 >object[0] **= 2 : number
 >object[0] : number
 >object : { 0: number; _0: number; }
->0 : number
->2 : number
+>0 : 0
+>2 : 2
 
 object[0] **= object[0] ** 2;
 >object[0] **= object[0] ** 2 : number
 >object[0] : number
 >object : { 0: number; _0: number; }
->0 : number
+>0 : 0
 >object[0] ** 2 : number
 >object[0] : number
 >object : { 0: number; _0: number; }
->0 : number
->2 : number
+>0 : 0
+>2 : 2
 

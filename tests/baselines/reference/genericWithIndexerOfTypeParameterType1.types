@@ -31,5 +31,5 @@ var value: string = lazyArray.array()["test"]; // used to be an error
 >lazyArray.array : () => { [objectId: string]: string; }
 >lazyArray : LazyArray<string>
 >array : () => { [objectId: string]: string; }
->"test" : string
+>"test" : "test"
 

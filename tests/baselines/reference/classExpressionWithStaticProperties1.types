@@ -6,11 +6,11 @@ var v = class C {
 
     static a = 1;
 >a : number
->1 : number
+>1 : 1
 
     static b = 2;
 >b : number
->2 : number
+>2 : 2
 
     static c = C.a + C.b;
 >c : number

@@ -39,7 +39,7 @@ var r2 = r[1];
 >r2 : Date
 >r[1] : Date
 >r : C
->1 : number
+>1 : 1
 
 var r3 = r.a
 >r3 : {}

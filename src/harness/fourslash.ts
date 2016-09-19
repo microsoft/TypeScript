@@ -363,6 +363,7 @@ namespace FourSlash {
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
                 InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
                 InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+                InsertSpaceAfterTypeAssertion: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
@@ -954,29 +955,35 @@ namespace FourSlash {
             assert.equal(actual, expected);
         }
 
-        public verifyQuickInfoString(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
+        public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
+            this.goToMarker(markerName);
+            this.verifyQuickInfoString(expectedText, expectedDocumentation);
+        }
+
+        public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
+            ts.forEachProperty(ts.createMap(namesAndTexts), (text, name) => {
+                if (text instanceof Array) {
+                    assert(text.length === 2);
+                    const [expectedText, expectedDocumentation] = text;
+                    this.verifyQuickInfoAt(name, expectedText, expectedDocumentation);
+                }
+                else {
+                    this.verifyQuickInfoAt(name, text);
+                }
+            });
+        }
+
+        public verifyQuickInfoString(expectedText: string, expectedDocumentation?: string) {
+            if (expectedDocumentation === "") {
+                throw new Error("Use 'undefined' instead");
+            }
+
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             const actualQuickInfoText = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.displayParts) : "";
             const actualQuickInfoDocumentation = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.documentation) : "";
 
-            if (negative) {
-                if (expectedText !== undefined) {
-                    assert.notEqual(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
-                }
-                // TODO: should be '==='?
-                if (expectedDocumentation != undefined) {
-                    assert.notEqual(actualQuickInfoDocumentation, expectedDocumentation, this.messageAtLastKnownMarker("quick info doc comment"));
-                }
-            }
-            else {
-                if (expectedText !== undefined) {
-                    assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
-                }
-                // TODO: should be '==='?
-                if (expectedDocumentation != undefined) {
-                    assert.equal(actualQuickInfoDocumentation, expectedDocumentation, this.assertionMessageAtLastKnownMarker("quick info doc"));
-                }
-            }
+            assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
+            assert.equal(actualQuickInfoDocumentation, expectedDocumentation || "", this.assertionMessageAtLastKnownMarker("quick info doc"));
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
@@ -1292,6 +1299,22 @@ namespace FourSlash {
 
                     return resultString;
                 });
+        }
+
+        public baselineQuickInfo() {
+            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            if (!baselineFile) {
+                baselineFile = ts.getBaseFileName(this.activeFile.fileName).replace(".ts", ".baseline");
+            }
+
+            Harness.Baseline.runBaseline(
+                baselineFile,
+                () => stringify(
+                    this.testData.markers.map(marker => ({
+                        marker,
+                        quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
+                    }))
+                ));
         }
 
         public printBreakpointLocation(pos: number) {
@@ -2015,11 +2038,12 @@ namespace FourSlash {
         }
 
         /*
-            Check number of navigationItems which match both searchValue and matchKind.
+            Check number of navigationItems which match both searchValue and matchKind,
+            if a filename is passed in, limit the results to that file.
             Report an error if expected value and actual value do not match.
         */
-        public verifyNavigationItemsCount(expected: number, searchValue: string, matchKind?: string) {
-            const items = this.languageService.getNavigateToItems(searchValue);
+        public verifyNavigationItemsCount(expected: number, searchValue: string, matchKind?: string, fileName?: string) {
+            const items = this.languageService.getNavigateToItems(searchValue, /*maxResultCount*/ undefined, fileName);
             let actual = 0;
             let item: ts.NavigateToItem;
 
@@ -2953,10 +2977,6 @@ namespace FourSlashInterface {
             this.state.verifyErrorExistsAfterMarker(markerName, !this.negative, /*after*/ false);
         }
 
-        public quickInfoIs(expectedText?: string, expectedDocumentation?: string) {
-            this.state.verifyQuickInfoString(this.negative, expectedText, expectedDocumentation);
-        }
-
         public quickInfoExists() {
             this.state.verifyQuickInfoExists(this.negative);
         }
@@ -2973,6 +2993,18 @@ namespace FourSlashInterface {
     export class Verify extends VerifyNegatable {
         constructor(state: FourSlash.TestState) {
             super(state);
+        }
+
+        public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
+            this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
+        }
+
+        public quickInfoAt(markerName: string, expectedText?: string, expectedDocumentation?: string) {
+            this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation);
+        }
+
+        public quickInfos(namesAndTexts: { [name: string]: string }) {
+            this.state.verifyQuickInfos(namesAndTexts);
         }
 
         public caretAtMarker(markerName?: string) {
@@ -3103,6 +3135,10 @@ namespace FourSlashInterface {
             this.state.baselineGetEmitOutput();
         }
 
+        public baselineQuickInfo() {
+            this.state.baselineQuickInfo();
+        }
+
         public nameOrDottedNameSpanTextIs(text: string) {
             this.state.verifyCurrentNameOrDottedNameSpanText(text);
         }
@@ -3135,8 +3171,8 @@ namespace FourSlashInterface {
             this.state.verifyNavigationBar(json);
         }
 
-        public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
-            this.state.verifyNavigationItemsCount(count, searchValue, matchKind);
+        public navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string) {
+            this.state.verifyNavigationItemsCount(count, searchValue, matchKind, fileName);
         }
 
         public navigationItemsListContains(

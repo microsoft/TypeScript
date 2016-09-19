@@ -10,17 +10,17 @@ if (typeof x !== "string") {
 >"string" : "string"
 
     x[0] = "";
->x[0] = "" : string
+>x[0] = "" : ""
 >x[0] : StringTree
 >x : StringTreeCollection
->0 : number
->"" : string
+>0 : 0
+>"" : ""
 
     x[0] = new StringTreeCollection;
 >x[0] = new StringTreeCollection : StringTreeCollection
 >x[0] : StringTree
 >x : StringTreeCollection
->0 : number
+>0 : 0
 >new StringTreeCollection : StringTreeCollection
 >StringTreeCollection : typeof StringTreeCollection
 }

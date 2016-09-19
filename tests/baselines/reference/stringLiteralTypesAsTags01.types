@@ -79,12 +79,12 @@ let x: A = {
 >{    kind: "A",    a: 100,} : { kind: "A"; a: number; }
 
     kind: "A",
->kind : "A"
+>kind : string
 >"A" : "A"
 
     a: 100,
 >a : number
->100 : number
+>100 : 100
 }
 
 if (hasKind(x, "A")) {

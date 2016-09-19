@@ -209,7 +209,7 @@ namespace ts {
          * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
-        getNavigateToItems(searchValue: string, maxResultCount?: number): string;
+        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -930,10 +930,10 @@ namespace ts {
         /// NAVIGATE TO
 
         /** Return a list of symbols that are interesting to navigate to */
-        public getNavigateToItems(searchValue: string, maxResultCount?: number): string {
+        public getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): string {
             return this.forwardJSONCall(
-                `getNavigateToItems('${searchValue}', ${maxResultCount})`,
-                () => this.languageService.getNavigateToItems(searchValue, maxResultCount)
+                `getNavigateToItems('${searchValue}', ${maxResultCount}, ${fileName})`,
+                () => this.languageService.getNavigateToItems(searchValue, maxResultCount, fileName)
             );
         }
 

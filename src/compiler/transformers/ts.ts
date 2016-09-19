@@ -2187,7 +2187,7 @@ namespace ts {
          *
          * @param node The function expression node.
          */
-        function visitFunctionExpression(node: FunctionExpression) {
+        function visitFunctionExpression(node: FunctionExpression): Expression {
             if (nodeIsMissing(node.body)) {
                 return createOmittedExpression();
             }

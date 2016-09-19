@@ -3,7 +3,6 @@
 ////namespace bar { }
 ////import bar = bar/**/;
 
-goTo.marker();
-verify.quickInfoIs(
+verify.quickInfoAt("",
 `namespace bar
 import bar = bar`);

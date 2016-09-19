@@ -83,6 +83,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
+        InsertSpaceAfterTypeAssertion: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         [s: string]: boolean | number | string | undefined;
@@ -130,7 +131,6 @@ declare namespace FourSlashInterface {
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
-        quickInfoIs(expectedText?: string, expectedDocumentation?: string): void;
         quickInfoExists(): void;
         typeDefinitionCountIs(expectedCount: number): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
@@ -166,7 +166,6 @@ declare namespace FourSlashInterface {
         goToDefinitionForMarkers(...markerNames: string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        referencesCountIs(count: number): void;
         /**
          * Asserts that the given ranges are the references from the current position.
          * If ranges have markers, those markers may have "isDefinition" and "isWriteAccess" data
@@ -199,6 +198,7 @@ declare namespace FourSlashInterface {
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(): void;
+        baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: TextSpan[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
@@ -208,7 +208,7 @@ declare namespace FourSlashInterface {
         noDocCommentTemplate(): void;
 
         navigationBar(json: any): void;
-        navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;
+        navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
@@ -233,6 +233,16 @@ declare namespace FourSlashInterface {
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string): void;
         renameInfoFailed(message?: string): void;
         renameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]): void;
+
+        /** Verify the quick info available at the current marker. */
+        quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
+        /** Goto a marker and call `quickInfoIs`. */
+        quickInfoAt(markerName: string, expectedText?: string, expectedDocumentation?: string): void;
+        /**
+         * Call `quickInfoAt` for each pair in the object.
+         * (If the value is an array, it is [expectedText, expectedDocumentation].)
+         */
+        quickInfos(namesAndTexts: { [name: string]: string | [string, string] }): void;
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;

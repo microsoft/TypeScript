@@ -3,13 +3,13 @@
 // Repro from #8967
 
 const LANG = "Turbo Pascal"
->LANG : string
->"Turbo Pascal" : string
+>LANG : "Turbo Pascal"
+>"Turbo Pascal" : "Turbo Pascal"
 
 class BestLanguage {
 >BestLanguage : BestLanguage
 
     name = LANG;
 >name : string
->LANG : string
+>LANG : "Turbo Pascal"
 }

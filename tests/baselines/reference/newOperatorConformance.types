@@ -110,7 +110,7 @@ function newFn2<T extends { new (s: number): string}>(s: T) {
 >p : string
 >new s(32) : string
 >s : T
->32 : number
+>32 : 32
 
     var p: string;
 >p : string

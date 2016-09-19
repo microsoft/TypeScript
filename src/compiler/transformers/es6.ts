@@ -10,6 +10,7 @@ namespace ts {
         /** Enables substitutions for block-scoped bindings. */
         BlockScopedBindings = 1 << 1,
     }
+
     /**
      * If loop contains block scoped binding captured in some function then loop body is converted to a function.
      * Lexical bindings declared in loop initializer will be passed into the loop body function as parameters,
@@ -166,6 +167,9 @@ namespace ts {
         let enclosingBlockScopeContainerParent: Node;
         let containingNonArrowFunction: FunctionLikeDeclaration | ClassElement;
 
+        /** Tracks the container that determines whether `super.x` is a static. */
+        let superScopeContainer: FunctionLikeDeclaration | ClassElement;
+
         /**
          * Used to track if we are emitting body of the converted loop
          */
@@ -203,6 +207,7 @@ namespace ts {
 
         function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             const savedContainingNonArrowFunction = containingNonArrowFunction;
+            const savedSuperScopeContainer = superScopeContainer;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
             const savedEnclosingBlockScopeContainer = enclosingBlockScopeContainer;
@@ -219,6 +224,7 @@ namespace ts {
 
             convertedLoopState = savedConvertedLoopState;
             containingNonArrowFunction = savedContainingNonArrowFunction;
+            superScopeContainer = savedSuperScopeContainer;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
             enclosingBlockScopeContainer = savedEnclosingBlockScopeContainer;
@@ -414,13 +420,16 @@ namespace ts {
                 }
 
                 switch (currentParent.kind) {
+                    case SyntaxKind.FunctionExpression:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
                         containingNonArrowFunction = <FunctionLikeDeclaration>currentParent;
+                        if (!(containingNonArrowFunction.emitFlags & NodeEmitFlags.AsyncFunctionBody)) {
+                            superScopeContainer = containingNonArrowFunction;
+                        }
                         break;
                 }
             }
@@ -541,7 +550,7 @@ namespace ts {
          *
          * @param node A ClassDeclaration node.
          */
-        function visitClassDeclaration(node: ClassDeclaration): Statement {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             // [source]
             //      class C { }
             //
@@ -552,8 +561,17 @@ namespace ts {
             //          return C;
             //      }());
 
+            const modifierFlags = getModifierFlags(node);
+            const isExported = modifierFlags & ModifierFlags.Export;
+            const isDefault = modifierFlags & ModifierFlags.Default;
+
+            // Add an `export` modifier to the statement if needed (for `--target es5 --module es6`)
+            const modifiers = isExported && !isDefault
+                ? filter(node.modifiers, isExportModifier)
+                : undefined;
+
             const statement = createVariableStatement(
-                /*modifiers*/ undefined,
+                modifiers,
                 createVariableDeclarationList([
                     createVariableDeclaration(
                         getDeclarationName(node, /*allowComments*/ true),
@@ -566,7 +584,24 @@ namespace ts {
 
             setOriginalNode(statement, node);
             startOnNewLine(statement);
+
+            // Add an `export default` statement for default exports (for `--target es5 --module es6`)
+            if (isExported && isDefault) {
+                const statements: Statement[] = [statement];
+                statements.push(createExportAssignment(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*isExportEquals*/ false,
+                    getDeclarationName(node, /*allowComments*/ false)
+                ));
+                return statements;
+            }
+
             return statement;
+        }
+
+        function isExportModifier(node: Modifier) {
+            return node.kind === SyntaxKind.ExportKeyword;
         }
 
         /**
@@ -2069,7 +2104,9 @@ namespace ts {
                 }
                 else {
                     for (const element of (<BindingPattern>node).elements) {
-                        visit(element.name);
+                        if (!isOmittedExpression(element)) {
+                            visit(element.name);
+                        }
                     }
                 }
             }
@@ -2151,9 +2188,24 @@ namespace ts {
             if (!isBlock(loopBody)) {
                 loopBody = createBlock([loopBody], /*location*/ undefined, /*multiline*/ true);
             }
+
+            const isAsyncBlockContainingAwait =
+                containingNonArrowFunction
+                && (containingNonArrowFunction.emitFlags & NodeEmitFlags.AsyncFunctionBody) !== 0
+                && (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
+
+            let loopBodyFlags: NodeEmitFlags = 0;
+            if (currentState.containsLexicalThis) {
+                loopBodyFlags |= NodeEmitFlags.CapturesThis;
+            }
+
+            if (isAsyncBlockContainingAwait) {
+                loopBodyFlags |= NodeEmitFlags.AsyncFunctionBody;
+            }
+
             const convertedLoopVariable =
                 createVariableStatement(
-                /*modifiers*/ undefined,
+                    /*modifiers*/ undefined,
                     createVariableDeclarationList(
                         [
                             createVariableDeclaration(
@@ -2161,16 +2213,14 @@ namespace ts {
                                 /*type*/ undefined,
                                 setNodeEmitFlags(
                                     createFunctionExpression(
-                                        /*asteriskToken*/ undefined,
+                                        isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
                                         /*name*/ undefined,
                                         /*typeParameters*/ undefined,
                                         loopParameters,
                                         /*type*/ undefined,
                                         <Block>loopBody
                                     ),
-                                    currentState.containsLexicalThis
-                                        ? NodeEmitFlags.CapturesThis
-                                        : 0
+                                    loopBodyFlags
                                 )
                             )
                         ]
@@ -2256,7 +2306,7 @@ namespace ts {
                 ));
             }
 
-            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState);
+            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState, isAsyncBlockContainingAwait);
             let loop: IterationStatement;
             if (convert) {
                 loop = convert(node, convertedLoopBodyStatements);
@@ -2269,11 +2319,16 @@ namespace ts {
                 loop = visitEachChild(loop, visitor, context);
                 // set loop statement
                 loop.statement = createBlock(
-                    generateCallToConvertedLoop(functionName, loopParameters, currentState),
+                    convertedLoopBodyStatements,
                     /*location*/ undefined,
                     /*multiline*/ true
                 );
+
+                // reset and re-aggregate the transform flags
+                loop.transformFlags = 0;
+                aggregateTransformFlags(loop);
             }
+
 
             statements.push(
                 currentParent.kind === SyntaxKind.LabeledStatement
@@ -2295,7 +2350,7 @@ namespace ts {
             }
         }
 
-        function generateCallToConvertedLoop(loopFunctionExpressionName: Identifier, parameters: ParameterDeclaration[], state: ConvertedLoopState): Statement[] {
+        function generateCallToConvertedLoop(loopFunctionExpressionName: Identifier, parameters: ParameterDeclaration[], state: ConvertedLoopState, isAsyncBlockContainingAwait: boolean): Statement[] {
             const outerConvertedLoopState = convertedLoopState;
 
             const statements: Statement[] = [];
@@ -2308,8 +2363,9 @@ namespace ts {
                 !state.labeledNonLocalContinues;
 
             const call = createCall(loopFunctionExpressionName, /*typeArguments*/ undefined, map(parameters, p => <Identifier>p.name));
+            const callResult = isAsyncBlockContainingAwait ? createYield(createToken(SyntaxKind.AsteriskToken), call) : call;
             if (isSimpleLoop) {
-                statements.push(createStatement(call));
+                statements.push(createStatement(callResult));
                 copyOutParameters(state.loopOutParameters, CopyDirection.ToOriginal, statements);
             }
             else {
@@ -2317,7 +2373,7 @@ namespace ts {
                 const stateVariable = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList(
-                        [createVariableDeclaration(loopResultName, /*type*/ undefined, call)]
+                        [createVariableDeclaration(loopResultName, /*type*/ undefined, callResult)]
                     )
                 );
                 statements.push(stateVariable);
@@ -2413,7 +2469,9 @@ namespace ts {
             const name = decl.name;
             if (isBindingPattern(name)) {
                 for (const element of name.elements) {
-                    processLoopVariableDeclaration(element, loopParameters, loopOutParameters);
+                    if (!isOmittedExpression(element)) {
+                        processLoopVariableDeclaration(element, loopParameters, loopOutParameters);
+                    }
                 }
             }
             else {
@@ -2921,9 +2979,9 @@ namespace ts {
          * Visits the `super` keyword
          */
         function visitSuperKeyword(node: PrimaryExpression): LeftHandSideExpression {
-            return containingNonArrowFunction
-                && isClassElement(containingNonArrowFunction)
-                && !hasModifier(containingNonArrowFunction, ModifierFlags.Static)
+            return superScopeContainer
+                && isClassElement(superScopeContainer)
+                && !hasModifier(superScopeContainer, ModifierFlags.Static)
                 && currentParent.kind !== SyntaxKind.CallExpression
                     ? createPropertyAccess(createIdentifier("_super"), "prototype")
                     : createIdentifier("_super");

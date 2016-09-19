@@ -13,7 +13,7 @@ function f<A extends Number>(A: A): A {
 >A.toExponential : (fractionDigits?: number) => string
 >A : A
 >toExponential : (fractionDigits?: number) => string
->123 : number
+>123 : 123
 
     return null;
 >null : null

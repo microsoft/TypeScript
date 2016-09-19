@@ -3,6 +3,7 @@ tests/cases/conformance/types/union/unionTypeReadonly.ts(19,1): error TS2450: Le
 tests/cases/conformance/types/union/unionTypeReadonly.ts(21,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
 tests/cases/conformance/types/union/unionTypeReadonly.ts(23,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
 tests/cases/conformance/types/union/unionTypeReadonly.ts(25,15): error TS2339: Property 'value' does not exist on type 'Base | DifferentName'.
+  Property 'value' does not exist on type 'DifferentName'.
 
 
 ==== tests/cases/conformance/types/union/unionTypeReadonly.ts (5 errors) ====
@@ -41,5 +42,6 @@ tests/cases/conformance/types/union/unionTypeReadonly.ts(25,15): error TS2339: P
     differentName.value = 12; // error, property 'value' doesn't exist
                   ~~~~~
 !!! error TS2339: Property 'value' does not exist on type 'Base | DifferentName'.
+!!! error TS2339:   Property 'value' does not exist on type 'DifferentName'.
     
     

@@ -1,8 +1,8 @@
 === tests/cases/compiler/declarationEmit_classMemberNameConflict2.ts ===
 
 const Bar = 'bar';
->Bar : string
->'bar' : string
+>Bar : "bar"
+>'bar' : "bar"
 
 enum Hello {
 >Hello : Hello
@@ -24,7 +24,7 @@ class Foo {
     // Same names + string => OK
     Bar = Bar;
 >Bar : string
->Bar : string
+>Bar : "bar"
 
     // Same names + enum => OK
     Hello = Hello;

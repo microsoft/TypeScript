@@ -180,8 +180,8 @@ declare function fail(): never;
 declare function failOrThrow(shouldFail: boolean): never;
 declare function infiniteLoop1(): void;
 declare function infiniteLoop2(): never;
-declare function move1(direction: "up" | "down"): number;
-declare function move2(direction: "up" | "down"): number;
+declare function move1(direction: "up" | "down"): 1 | -1;
+declare function move2(direction: "up" | "down"): 1 | -1;
 declare function check<T>(x: T | undefined): T;
 declare class C {
     void1(): void;

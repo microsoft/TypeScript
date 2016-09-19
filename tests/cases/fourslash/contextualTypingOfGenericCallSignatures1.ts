@@ -6,6 +6,5 @@
 ////// x should not be contextually typed 
 ////var f24 = (/**/x) => { return 1 };
 
-goTo.marker();
-verify.quickInfoIs('(parameter) x: any');
+verify.quickInfoAt("", "(parameter) x: any");
 

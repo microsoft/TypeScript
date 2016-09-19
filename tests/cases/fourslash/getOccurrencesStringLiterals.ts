@@ -6,5 +6,5 @@
 const ranges = test.ranges();
 for (let r of ranges) {
     goTo.position(r.start);
-    verify.occurrencesAtPositionCount(0);
+    verify.occurrencesAtPositionCount(1);
 }
