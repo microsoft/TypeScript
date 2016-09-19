@@ -9322,6 +9322,7 @@ namespace ts {
                 }
             }
 
+            // Even if 'super' isn't ever actually called, we may need to capture 'this' for a derived class.
             if (languageVersion < ScriptTarget.ES6 && container && container.kind === SyntaxKind.Constructor) {
                 needToCaptureLexicalThis = needToCaptureLexicalThis || !!getClassExtendsHeritageClauseElement(getContainingClass(container));
             }
