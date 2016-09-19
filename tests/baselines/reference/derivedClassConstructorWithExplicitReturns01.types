@@ -5,11 +5,11 @@ class C {
 
     cProp = 10;
 >cProp : number
->10 : number
+>10 : 10
 
     foo() { return "this never gets used."; }
 >foo : () => string
->"this never gets used." : string
+>"this never gets used." : "this never gets used."
 
     constructor(value: number) {
 >value : number
@@ -25,7 +25,7 @@ class C {
 >foo : () => string
 
                 return "well this looks kinda C-ish.";
->"well this looks kinda C-ish." : string
+>"well this looks kinda C-ish." : "well this looks kinda C-ish."
             }
         }
     }
@@ -42,7 +42,7 @@ class D extends C {
 
     constructor(a = 100) {
 >a : number
->100 : number
+>100 : 100
 
         super(a);
 >super(a) : void
@@ -55,17 +55,17 @@ class D extends C {
 >Math.random : () => number
 >Math : Math
 >random : () => number
->0.5 : number
+>0.5 : 0.5
 
             "You win!"
->"You win!" : string
+>"You win!" : "You win!"
 
             return {
 >{                cProp: 1,                dProp: () => this,                foo() { return "You win!!!!!" }            } : { cProp: number; dProp: () => this; foo(): string; }
 
                 cProp: 1,
 >cProp : number
->1 : number
+>1 : 1
 
                 dProp: () => this,
 >dProp : () => this
@@ -74,7 +74,7 @@ class D extends C {
 
                 foo() { return "You win!!!!!" }
 >foo : () => string
->"You win!!!!!" : string
+>"You win!!!!!" : "You win!!!!!"
 
             };
         }
