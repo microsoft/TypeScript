@@ -8001,6 +8001,7 @@ declare namespace ts {
         getEmitOutput(fileName: string): EmitOutput;
         getProgram(): Program;
         getNonBoundSourceFile(fileName: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile;
         dispose(): void;
     }
     interface Classifications {
