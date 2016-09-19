@@ -8071,7 +8071,7 @@ namespace ts {
         function getAssignmentReducedType(declaredType: UnionType, assignedType: Type) {
             if (declaredType !== assignedType) {
                 const reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
-                if (reducedType !== neverType) {
+                if (!(reducedType.flags & TypeFlags.Never)) {
                     return reducedType;
                 }
             }
@@ -8351,7 +8351,7 @@ namespace ts {
             const visitedFlowStart = visitedFlowCount;
             const result = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
-            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull) === neverType) {
+            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
             return result;
@@ -8440,7 +8440,7 @@ namespace ts {
             function getTypeAtFlowCondition(flow: FlowCondition): FlowType {
                 const flowType = getTypeAtFlowNode(flow.antecedent);
                 let type = getTypeFromFlowType(flowType);
-                if (type !== neverType) {
+                if (!(type.flags & TypeFlags.Never)) {
                     // If we have an antecedent type (meaning we're reachable in some way), we first
                     // attempt to narrow the antecedent type. If that produces the never type, and if
                     // the antecedent type is incomplete (i.e. a transient type in a loop), then we
@@ -8449,7 +8449,7 @@ namespace ts {
                     // narrow that.
                     const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
                     type = narrowType(type, flow.expression, assumeTrue);
-                    if (type === neverType && isIncomplete(flowType)) {
+                    if (type.flags & TypeFlags.Never && isIncomplete(flowType)) {
                         type = narrowType(declaredType, flow.expression, assumeTrue);
                     }
                 }
@@ -8659,7 +8659,7 @@ namespace ts {
                 }
                 if (assumeTrue) {
                     const narrowedType = filterType(type, t => areTypesComparable(t, valueType));
-                    return narrowedType !== neverType ? narrowedType : type;
+                    return narrowedType.flags & TypeFlags.Never ? type : narrowedType;
                 }
                 return isUnitType(valueType) ? filterType(type, t => t !== valueType) : type;
             }
@@ -8702,12 +8702,12 @@ namespace ts {
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
                 const discriminantType = getUnionType(clauseTypes);
-                const caseType = discriminantType === neverType ? neverType : filterType(type, t => isTypeComparableTo(discriminantType, t));
+                const caseType = discriminantType.flags & TypeFlags.Never ? neverType : filterType(type, t => isTypeComparableTo(discriminantType, t));
                 if (!hasDefaultClause) {
                     return caseType;
                 }
                 const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, t)));
-                return caseType === neverType ? defaultType : getUnionType([caseType, defaultType]);
+                return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -8771,7 +8771,7 @@ namespace ts {
                 // the candidate type. If one or more constituents remain, return a union of those.
                 if (type.flags & TypeFlags.Union) {
                     const assignableType = filterType(type, t => isTypeInstanceOf(t, candidate));
-                    if (assignableType !== neverType) {
+                    if (!(assignableType.flags & TypeFlags.Never)) {
                         return assignableType;
                     }
                 }
@@ -12718,7 +12718,7 @@ namespace ts {
                         // the native Promise<T> type by the caller.
                         type = checkAwaitedType(type, func, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
                     }
-                    if (type === neverType) {
+                    if (type.flags & TypeFlags.Never) {
                         hasReturnOfTypeNever = true;
                     }
                     else if (!contains(aggregatedTypes, type)) {
@@ -12768,7 +12768,7 @@ namespace ts {
 
             const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
 
-            if (returnType === neverType) {
+            if (returnType && returnType.flags & TypeFlags.Never) {
                 error(func.type, Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
             }
             else if (returnType && !hasExplicitReturn) {
@@ -16265,7 +16265,7 @@ namespace ts {
 
                 // Now that we've removed all the StringLike types, if no constituents remain, then the entire
                 // arrayOrStringType was a string.
-                if (arrayType === neverType) {
+                if (arrayType.flags & TypeFlags.Never) {
                     return stringType;
                 }
             }
@@ -16326,7 +16326,7 @@ namespace ts {
             if (func) {
                 const signature = getSignatureFromDeclaration(func);
                 const returnType = getReturnTypeOfSignature(signature);
-                if (strictNullChecks || node.expression || returnType === neverType) {
+                if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
                     const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
 
                     if (func.asteriskToken) {
