@@ -248,11 +248,6 @@ namespace ts.server {
             this.send(res);
         }
 
-        private getLocation(position: number, scriptInfo: ScriptInfo): protocol.Location {
-            const { line, offset } = scriptInfo.positionToLineOffset(position);
-            return { line, offset: offset + 1 };
-        }
-
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
                 const diags = project.getLanguageService().getSemanticDiagnostics(file);
@@ -366,8 +361,8 @@ namespace ts.server {
                 length: d.length,
                 category: DiagnosticCategory[d.category].toLowerCase(),
                 code: d.code,
-                startLocation: scriptInfo && this.getLocation(d.start, scriptInfo),
-                endLocation: scriptInfo && this.getLocation(d.start + d.length, scriptInfo)
+                startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start),
+                endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start + d.length)
             });
         }
 
