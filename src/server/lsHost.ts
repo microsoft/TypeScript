@@ -145,6 +145,17 @@ namespace ts.server {
             return this.project.getRootFilesLSHost();
         }
 
+        getTypeRootsVersion() {
+            const roots = ts.getEffectiveTypeRoots(this.project.getCompilerOptions(), this);
+            if (roots && roots.length > 0) {
+                return Math.max.apply(Math, roots.map(root => {
+                    return +this.host.getModifiedTime(root);
+                }));
+            } else {
+                return 0;
+            }
+        }
+
         getScriptKind(fileName: string) {
             const info = this.project.getScriptInfoLSHost(fileName);
             return info && info.scriptKind;

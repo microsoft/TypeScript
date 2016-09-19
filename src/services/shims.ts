@@ -67,6 +67,7 @@ namespace ts {
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
 
+        getTypeRootsVersion?(): number;
         readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
         readFile(path: string, encoding?: string): string;
         fileExists(path: string): boolean;
@@ -356,6 +357,10 @@ namespace ts {
             }
 
             return this.shimHost.getProjectVersion();
+        }
+
+        public getTypeRootsVersion(): number {
+            return this.shimHost.getTypeRootsVersion();
         }
 
         public useCaseSensitiveFileNames(): boolean {

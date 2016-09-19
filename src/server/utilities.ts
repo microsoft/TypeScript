@@ -217,6 +217,10 @@ namespace ts.server {
          **/
         configHasFilesProperty?: boolean;
         /**
+         * true if config file explicitly listed type names
+         **/
+        configHasTypesProperty?: boolean;
+        /**
          * these fields can be present in the project file
          **/
         files?: string[];

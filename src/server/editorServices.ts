@@ -363,6 +363,10 @@ namespace ts.server {
             this.printProjects();
         }
 
+        private onTypeRootFileChanged(project: ConfiguredProject, fileName: string) {
+            this.onSourceFileInDirectoryChangedForConfiguredProject(project, fileName);
+        }
+
         /**
          * This is the callback function when a watched directory has added or removed source code files.
          * @param project the project that associates with this directory watcher
@@ -389,17 +393,29 @@ namespace ts.server {
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
+            const lastUpdateTypesRoot: number = Math.max.apply(Math, project.getEffectiveTypeRoots().map(root => {
+               this.logger.info('Compute for ' + root);
+               if (this.host.directoryExists(root)) {
+                   return +this.host.getModifiedTime(root);
+               }
+               return 0;
+            }));
+            this.logger.info('Last type roots update = ' + lastUpdateTypesRoot + ', last was ' + project.lastUpdatedTypesRootTime);
 
             // We check if the project file list has changed. If so, we update the project.
-            if (!arrayIsEqualTo(currentRootFiles.sort(), newRootFiles.sort())) {
+            if (!arrayIsEqualTo(currentRootFiles.sort(), newRootFiles.sort()) || (lastUpdateTypesRoot > project.lastUpdatedTypesRootTime)) {
                 // For configured projects, the change is made outside the tsconfig file, and
                 // it is not likely to affect the project for other files opened by the client. We can
                 // just update the current project.
+
+                this.logger.info('Updating configured project');
                 this.updateConfiguredProject(project);
 
                 // Call refreshInferredProjects to clean up inferred projects we may have
                 // created for the new files
                 this.refreshInferredProjects();
+
+                project.lastUpdatedTypesRootTime = lastUpdateTypesRoot;
             }
         }
 
@@ -771,13 +787,14 @@ namespace ts.server {
                 this.watchConfigDirectoryForProject(project, projectOptions);
             }
             project.watchWildcards((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
+            project.watchTypeRoots((project, path) => this.onTypeRootFileChanged(project, path));
 
             this.configuredProjects.push(project);
             return project;
         }
 
         private watchConfigDirectoryForProject(project: ConfiguredProject, options: ProjectOptions): void {
-            if (!options.configHasFilesProperty) {
+            if (!options.configHasFilesProperty || (options.compilerOptions.types === undefined)) {
                 project.watchConfigDirectory((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
             }
         }
