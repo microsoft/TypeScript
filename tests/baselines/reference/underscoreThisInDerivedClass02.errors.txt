@@ -1,7 +1,8 @@
 tests/cases/compiler/underscoreThisInDerivedClass02.ts(14,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+tests/cases/compiler/underscoreThisInDerivedClass02.ts(15,13): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
 
 
-==== tests/cases/compiler/underscoreThisInDerivedClass02.ts (1 errors) ====
+==== tests/cases/compiler/underscoreThisInDerivedClass02.ts (2 errors) ====
     // @target es5
     
     // Original test intent:
@@ -19,6 +20,8 @@ tests/cases/compiler/underscoreThisInDerivedClass02.ts(14,5): error TS2377: Cons
         ~~~~~~~~~~~~~~~
             var _this = "uh-oh?";
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
         }
     ~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
