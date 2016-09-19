@@ -1246,6 +1246,12 @@ namespace ts {
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 
+        /**
+         * @internal
+         * @deprecated Use ts.createSourceFile instead.
+         */
+        getSourceFile(fileName: string): SourceFile;
+
         dispose(): void;
     }
 
@@ -7174,6 +7180,10 @@ namespace ts {
             return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
+        function getSourceFile(fileName: string): SourceFile {
+            return getNonBoundSourceFile(fileName);
+        }
+
         function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
@@ -8338,6 +8348,7 @@ namespace ts {
             isValidBraceCompletionAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
+            getSourceFile,
             getProgram
         };
     }

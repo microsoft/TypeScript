@@ -462,6 +462,9 @@ namespace Harness.LanguageService {
         getNonBoundSourceFile(fileName: string): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
+        getSourceFile(fileName: string): ts.SourceFile {
+            throw new Error("SourceFile can not be marshaled across the shim layer.");
+        }
         dispose(): void { this.shim.dispose({}); }
     }
 

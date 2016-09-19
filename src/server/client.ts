@@ -641,6 +641,10 @@ namespace ts.server {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 
+        getSourceFile(fileName: string): SourceFile {
+            throw new Error("SourceFile objects are not serializable through the server protocol.");
+        }
+
         cleanupSemanticCache(): void {
             throw new Error("cleanupSemanticCache is not available through the server layer.");
         }
