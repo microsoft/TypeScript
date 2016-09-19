@@ -9322,11 +9322,6 @@ namespace ts {
                 }
             }
 
-            // Even if 'super' isn't ever actually called, we may need to capture 'this' for a derived class.
-            if (languageVersion < ScriptTarget.ES6 && container && container.kind === SyntaxKind.Constructor) {
-                needToCaptureLexicalThis = needToCaptureLexicalThis || !!getClassExtendsHeritageClauseElement(getContainingClass(container));
-            }
-
             const canUseSuperExpression = isLegalUsageOfSuperExpression(container);
             let nodeCheckFlag: NodeCheckFlags = 0;
 
@@ -14312,6 +14307,7 @@ namespace ts {
             // constructors of derived classes must contain at least one super call somewhere in their function body.
             const containingClassDecl = <ClassDeclaration>node.parent;
             if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
+                captureLexicalThis(node.parent, containingClassDecl);
                 const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
                 const superCall = getSuperCallInConstructor(node);
                 if (superCall) {
