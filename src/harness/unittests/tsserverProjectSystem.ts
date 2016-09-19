@@ -1909,4 +1909,45 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, barTypings.path]);
         });
     });
+
+    describe("format settings", () => {
+        it("can be set globally", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x;"
+            };
+            const host = createServerHost([f1]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(f1.path);
+
+            const defaultSettings = projectService.getFormatCodeOptions();
+
+            // set global settings
+            const newGlobalSettings1 = clone(defaultSettings);
+            newGlobalSettings1.placeOpenBraceOnNewLineForControlBlocks = !newGlobalSettings1.placeOpenBraceOnNewLineForControlBlocks;
+            projectService.setHostConfiguration({ formatOptions: newGlobalSettings1 });
+
+            // get format options for file - should be equal to new global settings
+            const s1 = projectService.getFormatCodeOptions(server.toNormalizedPath(f1.path));
+            assert.deepEqual(s1, newGlobalSettings1, "file settings should be the same with global settings");
+
+            // set per file format options
+            const newPerFileSettings = clone(defaultSettings);
+            newPerFileSettings.insertSpaceAfterCommaDelimiter = !newPerFileSettings.insertSpaceAfterCommaDelimiter;
+            projectService.setHostConfiguration({ formatOptions: newPerFileSettings, file: f1.path });
+
+            // get format options for file - should be equal to new per-file settings
+            const s2 = projectService.getFormatCodeOptions(server.toNormalizedPath(f1.path));
+            assert.deepEqual(s2, newPerFileSettings, "file settings should be the same with per-file settings");
+
+            // set new global settings - they should not affect ones that were set per-file
+            const newGlobalSettings2 = clone(defaultSettings);
+            newGlobalSettings2.insertSpaceAfterSemicolonInForStatements = !newGlobalSettings2.insertSpaceAfterSemicolonInForStatements;
+            projectService.setHostConfiguration({ formatOptions: newGlobalSettings2 });
+
+            // get format options for file - should be equal to new per-file settings
+            const s3 = projectService.getFormatCodeOptions(server.toNormalizedPath(f1.path));
+            assert.deepEqual(s3, newPerFileSettings, "file settings should still be the same with per-file settings");
+        });
+    });
 }

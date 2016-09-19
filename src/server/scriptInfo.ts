@@ -7,7 +7,7 @@ namespace ts.server {
          * All projects that include this file 
          */
         readonly containingProjects: Project[] = [];
-        readonly formatCodeSettings: ts.FormatCodeSettings;
+        private formatCodeSettings: ts.FormatCodeSettings;
         readonly path: Path;
 
         private fileWatcher: FileWatcher;
@@ -24,10 +24,13 @@ namespace ts.server {
 
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);
-            this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
             this.scriptKind = scriptKind
                 ? scriptKind
                 : getScriptKindFromFileName(fileName);
+        }
+
+        getFormatCodeSettings() {
+            return this.formatCodeSettings;
         }
 
         attachToProject(project: Project): boolean {
@@ -90,6 +93,9 @@ namespace ts.server {
 
         setFormatOptions(formatSettings: protocol.FormatOptions): void {
             if (formatSettings) {
+                if (!this.formatCodeSettings) {
+                    this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
+                }
                 mergeMaps(this.formatCodeSettings, formatSettings);
             }
         }
