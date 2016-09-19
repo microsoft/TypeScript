@@ -13,6 +13,13 @@ namespace ts.projectSystem {
         })
     };
 
+    export interface PostExecAction {
+        readonly error: Error;
+        readonly stdout: string;
+        readonly stderr: string;
+        readonly callback: (err: Error, stdout: string, stderr: string) => void;
+    }
+
     export function notImplemented(): any {
         throw new Error("Not yet implemented");
     }
@@ -47,13 +54,13 @@ namespace ts.projectSystem {
         }
 
         safeFileList = safeList.path;
-        postInstallActions: ((map: (t: string[]) => string[]) => void)[] = [];
+        protected postExecActions: PostExecAction[] = [];
 
-        runPostInstallActions(map: (t: string[]) => string[]) {
-            for (const f of this.postInstallActions) {
-                f(map);
+        runPostExecActions() {
+            for (const action of this.postExecActions) {
+                action.callback(action.error, action.stdout, action.stderr);
             }
-            this.postInstallActions = [];
+            this.postExecActions = [];
         }
 
         onProjectClosed(p: server.Project) {
@@ -67,14 +74,16 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        isPackageInstalled(packageName: string) {
-            return true;
-        }
-
-        runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void) {
-            this.postInstallActions.push(map => {
-                postInstallAction(map(typingsToInstall));
-            });
+        execAsync(prefix: string, command: string, cwd: string, requestId: number, cb: (err: Error, stdout: string, stderr: string) => void): void {
+            switch (prefix) {
+                case "npm view":
+                case "npm install":
+                case "npm ls":
+                    break;
+                default:
+                    throw new Error("TypingsInstaller: execAsync command not yet implemented");
+            }
+            this.addPostExecAction("success", cb);
         }
 
         sendResponse(response: server.SetTypings | server.InvalidateCachedTypings) {
@@ -85,6 +94,25 @@ namespace ts.projectSystem {
             const request = server.createInstallTypingsRequest(project, typingOptions, this.globalTypingsCacheLocation);
             this.install(request);
         }
+
+        addPostExecAction(stdout: string | string[], cb: (err: Error, stdout: string, stderr: string) => void) {
+            const out = typeof stdout === "string" ? stdout : createNpmPackageJsonString(stdout);
+            const action: PostExecAction = {
+                error: undefined,
+                stdout: out,
+                stderr: "",
+                callback: cb
+            };
+            this.postExecActions.push(action);
+        }
+    }
+
+    function createNpmPackageJsonString(installedTypings: string[]): string {
+        const dependencies: MapLike<any> = {};
+        for (const typing of installedTypings) {
+            dependencies[typing] = "1.0.0";
+        }
+        return JSON.stringify({ dependencies: dependencies });
     }
 
     export function getExecutingFilePathFromLibFile(libFilePath: string): string {
