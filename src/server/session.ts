@@ -361,14 +361,9 @@ namespace ts.server {
                 length: d.length,
                 category: DiagnosticCategory[d.category].toLowerCase(),
                 code: d.code,
-                startLocation: scriptInfo && toLocation(d.start, scriptInfo),
-                endLocation: scriptInfo && toLocation(d.start + d.length, scriptInfo)
+                startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start),
+                endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start + d.length)
             });
-
-            function toLocation(position: number, scriptInfo: ScriptInfo): protocol.Location {
-                const { line, offset } = scriptInfo.positionToLineOffset(position);
-                return { line, offset };
-            }
         }
 
         private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
