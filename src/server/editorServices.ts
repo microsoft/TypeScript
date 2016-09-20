@@ -364,7 +364,8 @@ namespace ts.server {
         }
 
         private onTypeRootFileChanged(project: ConfiguredProject, fileName: string) {
-            this.onSourceFileInDirectoryChangedForConfiguredProject(project, fileName);
+            this.updateConfiguredProject(project);
+            this.refreshInferredProjects();
         }
 
         /**
@@ -387,18 +388,27 @@ namespace ts.server {
                 () => this.handleChangeInSourceFileForConfiguredProject(project));
         }
 
+        getTypeRootsVersion(project: ConfiguredProject) {
+            const roots = project.getEffectiveTypeRoots();
+            if (roots === undefined) {
+                return 0;
+            }
+
+            return Math.max.apply(Math, project.getEffectiveTypeRoots().map(root => {
+               if (this.host.directoryExists(root)) {
+                   return +this.host.getModifiedTime(root);
+               }
+               return 0;
+            }));
+        }
+
         private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject) {
             const { projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.configFileName);
             this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
-            const lastUpdateTypesRoot: number = Math.max.apply(Math, project.getEffectiveTypeRoots().map(root => {
-               if (this.host.directoryExists(root)) {
-                   return +this.host.getModifiedTime(root);
-               }
-               return 0;
-            }));
+            const lastUpdateTypesRoot: number = this.getTypeRootsVersion(project);
 
             // We check if the project file list has changed. If so, we update the project.
             if (!arrayIsEqualTo(currentRootFiles.sort(), newRootFiles.sort()) || (lastUpdateTypesRoot > project.lastUpdatedTypesRootTime)) {
