@@ -2667,8 +2667,7 @@ var TypeScript;
     var MissingIdentifier = (function (_super) {
         __extends(MissingIdentifier, _super);
         function MissingIdentifier() {
-            var _this = _super.call(this, "__missing") || this;
-            return _this;
+            return _super.call(this, "__missing") || this;
         }
         MissingIdentifier.prototype.isMissing = function () {
             return true;
@@ -2707,8 +2706,7 @@ var TypeScript;
     var Expression = (function (_super) {
         __extends(Expression, _super);
         function Expression(nodeType) {
-            var _this = _super.call(this, nodeType) || this;
-            return _this;
+            return _super.call(this, nodeType) || this;
         }
         Expression.prototype.isExpression = function () { return true; };
         Expression.prototype.isStatementOrExpression = function () { return true; };
@@ -3165,8 +3163,7 @@ var TypeScript;
     var ModuleElement = (function (_super) {
         __extends(ModuleElement, _super);
         function ModuleElement(nodeType) {
-            var _this = _super.call(this, nodeType) || this;
-            return _this;
+            return _super.call(this, nodeType) || this;
         }
         return ModuleElement;
     }(AST));
@@ -3259,8 +3256,7 @@ var TypeScript;
     var VarDecl = (function (_super) {
         __extends(VarDecl, _super);
         function VarDecl(id, nest) {
-            var _this = _super.call(this, id, NodeType.VarDecl, nest) || this;
-            return _this;
+            return _super.call(this, id, NodeType.VarDecl, nest) || this;
         }
         VarDecl.prototype.isAmbient = function () { return hasFlag(this.varFlags, VarFlags.Ambient); };
         VarDecl.prototype.isExported = function () { return hasFlag(this.varFlags, VarFlags.Exported); };
@@ -3597,8 +3593,7 @@ var TypeScript;
     var InterfaceDeclaration = (function (_super) {
         __extends(InterfaceDeclaration, _super);
         function InterfaceDeclaration(name, members, extendsList, implementsList) {
-            var _this = _super.call(this, NodeType.InterfaceDeclaration, name, extendsList, implementsList, members) || this;
-            return _this;
+            return _super.call(this, NodeType.InterfaceDeclaration, name, extendsList, implementsList, members) || this;
         }
         InterfaceDeclaration.prototype.typeCheck = function (typeFlow) {
             return typeFlow.typeCheckInterface(this);
@@ -3992,8 +3987,7 @@ var TypeScript;
     var EndCode = (function (_super) {
         __extends(EndCode, _super);
         function EndCode() {
-            var _this = _super.call(this, NodeType.EndCode) || this;
-            return _this;
+            return _super.call(this, NodeType.EndCode) || this;
         }
         return EndCode;
     }(AST));
@@ -4650,8 +4644,7 @@ var TypeScript;
     var DebuggerStatement = (function (_super) {
         __extends(DebuggerStatement, _super);
         function DebuggerStatement() {
-            var _this = _super.call(this, NodeType.Debugger) || this;
-            return _this;
+            return _super.call(this, NodeType.Debugger) || this;
         }
         DebuggerStatement.prototype.emit = function (emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);

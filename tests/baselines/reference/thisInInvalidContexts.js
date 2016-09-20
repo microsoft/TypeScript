@@ -70,8 +70,7 @@ var ClassWithNoInitializer = (function (_super) {
     __extends(ClassWithNoInitializer, _super);
     //'this' in optional super call
     function ClassWithNoInitializer() {
-        var _this = _super.call(this, _this) || this;
-        return _this;
+        return _super.call(this, _this) || this;
     }
     return ClassWithNoInitializer;
 }(BaseErrClass));

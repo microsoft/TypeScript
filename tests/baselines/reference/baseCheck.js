@@ -43,16 +43,14 @@ var C = (function () {
 var ELoc = (function (_super) {
     __extends(ELoc, _super);
     function ELoc(x) {
-        var _this = _super.call(this, 0, x) || this;
-        return _this;
+        return _super.call(this, 0, x) || this;
     }
     return ELoc;
 }(C));
 var ELocVar = (function (_super) {
     __extends(ELocVar, _super);
     function ELocVar(x) {
-        var _this = _super.call(this, 0, loc) || this;
-        return _this;
+        return _super.call(this, 0, loc) || this;
     }
     ELocVar.prototype.m = function () {
         var loc = 10;

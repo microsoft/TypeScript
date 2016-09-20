@@ -94,8 +94,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(a) {
-        var _this = _super.call(this, a) || this;
-        return _this;
+        return _super.call(this, a) || this;
     }
     Derived.prototype.b = function (a) { };
     Object.defineProperty(Derived.prototype, "c", {

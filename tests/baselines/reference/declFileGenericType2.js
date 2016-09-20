@@ -58,8 +58,7 @@ var templa;
             var AbstractElementController = (function (_super) {
                 __extends(AbstractElementController, _super);
                 function AbstractElementController() {
-                    var _this = _super.call(this) || this;
-                    return _this;
+                    return _super.call(this) || this;
                 }
                 return AbstractElementController;
             }(templa.mvc.AbstractController));

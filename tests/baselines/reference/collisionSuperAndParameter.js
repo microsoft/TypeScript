@@ -124,8 +124,7 @@ var Foo2 = (function (_super) {
 var Foo4 = (function (_super) {
     __extends(Foo4, _super);
     function Foo4(_super) {
-        var _this = _super.call(this) || this;
-        return _this;
+        return _super.call(this) || this;
     }
     Foo4.prototype.y = function (_super) {
         var _this = this;

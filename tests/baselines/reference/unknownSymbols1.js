@@ -63,8 +63,7 @@ var C3 = (function () {
 var C4 = (function (_super) {
     __extends(C4, _super);
     function C4() {
-        var _this = _super.call(this, asdf) || this;
-        return _this;
+        return _super.call(this, asdf) || this;
     }
     return C4;
 }(C3));
