@@ -95,14 +95,14 @@ namespace ts.server {
             return 0;
         }
 
-        return Math.max.apply(Math, paths.map(path => {
+        return Math.max(...paths.map(path => {
             if (host.directoryExists(path)) {
-                return host.getModifiedTime(path);
+                return +host.getModifiedTime(path);
             }
             else {
                 return 0;
             }
-        }));
+        });
     }
 
     export function mergeMaps(target: MapLike<any>, source: MapLike <any>): void {
