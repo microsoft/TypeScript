@@ -611,13 +611,11 @@ namespace ts.server {
         }
 
         watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void) {
-            const roots = ts.getEffectiveTypeRoots(this.getCompilerOptions(), this.projectService.host);
+            const roots = this.getEffectiveTypeRoots();
             const watchers: FileWatcher[] = [];
-            if (roots) {
-                for (const root of roots) {
-                    this.projectService.logger.info(`Add type root watcher for: ${root}`);
-                    watchers.push(this.projectService.host.watchDirectory(root, path => callback(this, path), true));
-                }
+            for (const root of roots) {
+                this.projectService.logger.info(`Add type root watcher for: ${root}`);
+                watchers.push(this.projectService.host.watchDirectory(root, path => callback(this, path), /*recursive*/ false));
             }
             this.typeRootsWatchers = watchers;
         }
