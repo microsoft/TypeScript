@@ -389,7 +389,7 @@ namespace ts.server {
         }
 
         getTypeRootsVersion(project: ConfiguredProject) {
-            return getLatestDirectoryChangeTime(project.getEffectiveTypeRoots(), this.host);
+            return server.getLatestDirectoryChangeTime(project.getEffectiveTypeRoots(), this.host);
         }
 
         private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject) {

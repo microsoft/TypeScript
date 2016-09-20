@@ -94,7 +94,7 @@ namespace ts.server {
         if (!host.getModifiedTime || !host.directoryExists || !paths) {
             return 0;
         }
-        
+
         return Math.max.apply(Math, paths.map(path => {
             if (host.directoryExists(path)) {
                 return host.getModifiedTime(path);
