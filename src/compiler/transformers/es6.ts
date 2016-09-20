@@ -838,7 +838,7 @@ namespace ts {
             startLexicalEnvironment();
 
             let statementOffset = -1;
-            let thisCaptureStatus: SuperCaptureResult | undefined;
+            let thisCaptureStatus = SuperCaptureResult.NoReplacement;
             if (hasSynthesizedSuper) {
                 // If a super call has already been synthesized,
                 // we're going to assume that we should just transform everything after that.
