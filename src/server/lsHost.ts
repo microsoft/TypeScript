@@ -146,8 +146,7 @@ namespace ts.server {
         }
 
         getTypeRootsVersion() {
-            const roots = ts.getEffectiveTypeRoots(this.project.getCompilerOptions(), this);
-            return server.getLatestDirectoryChangeTime(roots, this.host);
+            return this.project.typesVersion;
         }
 
         getScriptKind(fileName: string) {

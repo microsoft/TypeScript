@@ -69,6 +69,8 @@ namespace ts.server {
 
         protected projectErrors: Diagnostic[];
 
+        public typesVersion = 0;
+
         public isJsOnlyProject() {
             this.updateGraph();
             return allFilesAreJsOrDts(this);
@@ -151,6 +153,12 @@ namespace ts.server {
                 return undefined;
             }
             return this.program.getSourceFileByPath(path);
+        }
+
+        updateTypes() {
+            this.typesVersion++;
+            this.markAsDirty();
+            this.updateGraph();
         }
 
         close() {
@@ -573,7 +581,6 @@ namespace ts.server {
 
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
-        lastUpdatedTypesRootTime = 0;
 
         constructor(readonly configFileName: NormalizedPath,
             projectService: ProjectService,

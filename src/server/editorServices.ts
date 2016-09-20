@@ -365,7 +365,8 @@ namespace ts.server {
 
         private onTypeRootFileChanged(project: ConfiguredProject, fileName: string) {
             this.logger.info(`Type root file ${fileName} changed`);
-            this.throttledOperations.schedule(project.configFileName, /*delay*/ 250, () => {
+            this.throttledOperations.schedule(project.configFileName + ' * type root', /*delay*/ 250, () => {
+                project.updateTypes();
                 this.updateConfiguredProject(project);
                 this.refreshInferredProjects();
             });
@@ -391,20 +392,15 @@ namespace ts.server {
                 () => this.handleChangeInSourceFileForConfiguredProject(project));
         }
 
-        getTypeRootsVersion(project: ConfiguredProject) {
-            return server.getLatestDirectoryChangeTime(project.getEffectiveTypeRoots(), this.host);
-        }
-
         private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject) {
             const { projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.configFileName);
             this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
-            const lastUpdateTypesRoot: number = this.getTypeRootsVersion(project);
 
             // We check if the project file list has changed. If so, we update the project.
-            if (!arrayIsEqualTo(currentRootFiles.sort(), newRootFiles.sort()) || (lastUpdateTypesRoot > project.lastUpdatedTypesRootTime)) {
+            if (!arrayIsEqualTo(currentRootFiles.sort(), newRootFiles.sort())) {
                 // For configured projects, the change is made outside the tsconfig file, and
                 // it is not likely to affect the project for other files opened by the client. We can
                 // just update the current project.
@@ -415,8 +411,6 @@ namespace ts.server {
                 // Call refreshInferredProjects to clean up inferred projects we may have
                 // created for the new files
                 this.refreshInferredProjects();
-
-                project.lastUpdatedTypesRootTime = lastUpdateTypesRoot;
             }
         }
 
