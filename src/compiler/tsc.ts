@@ -667,7 +667,7 @@ namespace ts {
     }
 
     function printHelp() {
-        const output: any = [];
+        const output: string[] = [];
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
         const syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length;
@@ -765,9 +765,10 @@ namespace ts {
                 output.push(sys.newLine);
             }
         }
-        output.forEach(function (val: any) {
-            sys.write(val);
-        });
+
+        for (const line of output) {
+            sys.write(line);
+        }
         return;
 
         function getParamType(option: CommandLineOption) {
