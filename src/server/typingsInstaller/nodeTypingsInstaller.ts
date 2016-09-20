@@ -6,6 +6,11 @@ namespace ts.server.typingsInstaller {
         appendFileSync(file: string, content: string): void
     } = require("fs");
 
+    const path: {
+        join(...parts: string[]): string;
+        dirname(path: string): string;
+    } = require("path");
+
     class FileLog implements Log {
         constructor(private readonly logFile?: string) {
         }
@@ -19,12 +24,17 @@ namespace ts.server.typingsInstaller {
     }
 
     export class NodeTypingsInstaller extends TypingsInstaller {
-        private exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
+        private readonly exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
 
         readonly installTypingHost: InstallTypingHost = sys;
 
-        constructor(globalTypingsCacheLocation: string, log: Log) {
-            super(globalTypingsCacheLocation, toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)), log);
+        constructor(globalTypingsCacheLocation: string, throttleLimit: number, log: Log) {
+            super(
+                globalTypingsCacheLocation,
+                /*npmPath*/ `"${path.join(path.dirname(process.argv[0]), "npm")}"`,
+                toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+                throttleLimit,
+                log);
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
             }
@@ -55,16 +65,16 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected execAsync(prefix: string, command: string, cwd: string, requestId: number, cb: (err: Error, stdout: string, stderr: string) => void) {
+        protected runCommand(requestKind: RequestKind, requestId: number, command: string, cwd: string, onRequestCompleted: RequestCompletedAction): void {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} running command '${command}'.`);
             }
             this.exec(command, { cwd }, (err, stdout, stderr) => {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`${prefix} #${requestId} stdout: ${stdout}`);
-                    this.log.writeLine(`${prefix} #${requestId} stderr: ${stderr}`);
+                    this.log.writeLine(`${requestKind} #${requestId} stdout: ${stdout}`);
+                    this.log.writeLine(`${requestKind} #${requestId} stderr: ${stderr}`);
                 }
-                cb(err, stdout, stderr);
+                onRequestCompleted(err, stdout, stderr);
             });
         }
     }
@@ -90,6 +100,6 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, log);
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, /*throttleLimit*/5, log);
     installer.init();
 }
