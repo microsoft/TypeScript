@@ -389,17 +389,7 @@ namespace ts.server {
         }
 
         getTypeRootsVersion(project: ConfiguredProject) {
-            const roots = project.getEffectiveTypeRoots();
-            if (roots === undefined) {
-                return 0;
-            }
-
-            return Math.max.apply(Math, project.getEffectiveTypeRoots().map(root => {
-               if (this.host.directoryExists(root)) {
-                   return +this.host.getModifiedTime(root);
-               }
-               return 0;
-            }));
+            return getLatestDirectoryChangeTime(project.getEffectiveTypeRoots(), this.host);
         }
 
         private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject) {

@@ -147,13 +147,7 @@ namespace ts.server {
 
         getTypeRootsVersion() {
             const roots = ts.getEffectiveTypeRoots(this.project.getCompilerOptions(), this);
-            if (roots && roots.length > 0) {
-                return Math.max.apply(Math, roots.map(root => {
-                    return +this.host.getModifiedTime(root);
-                }));
-            } else {
-                return 0;
-            }
+            return getLatestChangeTime(roots, this.host);
         }
 
         getScriptKind(fileName: string) {

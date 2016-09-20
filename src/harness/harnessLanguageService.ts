@@ -370,7 +370,7 @@ namespace Harness.LanguageService {
     function unwrapJSONCallResult(result: string): any {
         const parsedResult = JSON.parse(result);
         if (parsedResult.error) {
-            throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult));
+            throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
         }
         else if (parsedResult.canceled) {
             throw new ts.OperationCanceledException();

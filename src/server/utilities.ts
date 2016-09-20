@@ -90,6 +90,21 @@ namespace ts.server {
         };
     }
 
+    export function getLatestDirectoryChangeTime(paths: string[] | undefined, host: System) {
+        if (!host.getModifiedTime || !host.directoryExists || !paths) {
+            return 0;
+        }
+        
+        return Math.max.apply(Math, paths.map(path => {
+            if (host.directoryExists(path)) {
+                return host.getModifiedTime(path);
+            }
+            else {
+                return 0;
+            }
+        }));
+    }
+
     export function mergeMaps(target: MapLike<any>, source: MapLike <any>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
