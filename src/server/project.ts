@@ -690,7 +690,7 @@ namespace ts.server {
         }
 
         getEffectiveTypeRoots() {
-            return ts.getEffectiveTypeRoots(this.getCompilerOptions(), this.projectService.host);
+            return ts.getEffectiveTypeRoots(this.getCompilerOptions(), this.projectService.host) || [];
         }
     }
 
