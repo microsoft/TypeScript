@@ -254,6 +254,7 @@ namespace ts {
         let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
         let cachedProgram: Program;                                 // Program cached from last compilation
         let rootFileNames: string[];                                // Root fileNames for compilation
+        let typeNames: string[];                                    // Type directive names (inferred, or from config file/commandline)
         let compilerOptions: CompilerOptions;                       // Compiler options for compilation
         let compilerHost: CompilerHost;                             // Compiler host
         let hostGetSourceFile: typeof compilerHost.getSourceFile;   // getSourceFile method from default host
@@ -408,7 +409,6 @@ namespace ts {
 
         // Invoked to perform initial compilation or re-compilation in watch mode
         function performCompilation() {
-
             if (!cachedProgram) {
                 if (configFileName) {
                     const configParseResult = parseConfigFile();
@@ -425,6 +425,7 @@ namespace ts {
 
                 hostFileExists = compilerHost.fileExists;
                 compilerHost.fileExists = cachedFileExists;
+                typeNames = getTypeNames(compilerOptions);
             }
 
             if (compilerOptions.pretty) {
@@ -504,8 +505,16 @@ namespace ts {
             startTimerForRecompilation();
         }
 
+        function getTypeNames(options: CompilerOptions) {
+            if (options.types) {
+                return options.types;
+            }
+            const roots = getEffectiveTypeRoots(options, compilerHost) || [];
+            return [].concat(...roots.map(root => compilerHost.getDirectories(root))).sort();
+        }
+
         function watchedDirectoryChanged(fileName: string) {
-            if (fileName && !ts.isSupportedSourceFileName(fileName, compilerOptions)) {
+            if (fileName && !compilerHost.directoryExists(fileName) && !ts.isSupportedSourceFileName(fileName, compilerOptions)) {
                 return;
             }
 
@@ -523,9 +532,11 @@ namespace ts {
             const parsedCommandLine = parseConfigFile();
             const newFileNames = ts.map(parsedCommandLine.fileNames, compilerHost.getCanonicalFileName);
             const canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
+            const newTypeNames = getTypeNames(parsedCommandLine.options);
 
             // We check if the project file list has changed. If so, we just throw away the old program and start fresh.
-            if (!arrayIsEqualTo(newFileNames && newFileNames.sort(), canonicalRootFileNames && canonicalRootFileNames.sort())) {
+            if (!arrayIsEqualTo(newFileNames && newFileNames.sort(), canonicalRootFileNames && canonicalRootFileNames.sort()) ||
+                !arrayIsEqualTo(newTypeNames, typeNames)) {
                 setCachedProgram(undefined);
                 startTimerForRecompilation();
             }
