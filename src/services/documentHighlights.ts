@@ -27,7 +27,7 @@ namespace ts.DocumentHighlights {
                 node.kind === SyntaxKind.StringLiteral ||
                 isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
 
-                const referencedSymbols = FindAllReferences.getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFilesToSearch, /*findInStrings*/ false, /*findInComments*/ false);
+                const referencedSymbols = FindAllReferences.getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFilesToSearch, /*findInStrings*/ false, /*findInComments*/ false, /*implementations*/false);
                 return convertReferencedSymbols(referencedSymbols);
 
             }

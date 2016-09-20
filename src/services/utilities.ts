@@ -953,9 +953,11 @@ namespace ts {
         if (node) {
             if (node.jsDocComments) {
                 for (const jsDocComment of node.jsDocComments) {
-                    for (const tag of jsDocComment.tags) {
-                        if (tag.pos <= position && position <= tag.end) {
-                            return tag;
+                    if (jsDocComment.tags) {
+                        for (const tag of jsDocComment.tags) {
+                            if (tag.pos <= position && position <= tag.end) {
+                                return tag;
+                            }
                         }
                     }
                 }

@@ -268,7 +268,7 @@ namespace ts {
                     Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
                     let functionType = <JSDocFunctionType>node.parent;
                     let index = indexOf(functionType.parameters, node);
-                    return "p" + index;
+                    return "arg" + index;
                 case SyntaxKind.JSDocTypedefTag:
                     const parentNode = node.parent && node.parent.parent;
                     let nameFromParentNode: string;
@@ -540,9 +540,7 @@ namespace ts {
             // because the scope of JsDocComment should not be affected by whether the current node is a
             // container or not.
             if (isInJavaScriptFile(node) && node.jsDocComments) {
-                for (const jsDocComment of node.jsDocComments) {
-                    bind(jsDocComment);
-                }
+                forEach(node.jsDocComments, bind);
             }
             if (checkUnreachable(node)) {
                 forEachChild(node, bind);

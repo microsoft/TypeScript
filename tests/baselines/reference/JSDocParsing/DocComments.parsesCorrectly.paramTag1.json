@@ -33,7 +33,14 @@
                 "pos": 24,
                 "end": 29,
                 "text": "name1"
-            }
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
+            },
+            "comment": "Description text follows"
         },
         "length": 1,
         "pos": 8,

@@ -698,9 +698,9 @@ namespace ts {
                 // See if this is a doc comment.  If so, we'll classify certain portions of it
                 // specially.
                 const docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
-                if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDocComment) {
-                    docCommentAndDiagnostics.jsDocComment.parent = token;
-                    classifyJSDocComment(docCommentAndDiagnostics.jsDocComment);
+                if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDoc) {
+                    docCommentAndDiagnostics.jsDoc.parent = token;
+                    classifyJSDocComment(docCommentAndDiagnostics.jsDoc);
                     return;
                 }
             }
@@ -713,37 +713,39 @@ namespace ts {
             pushClassification(start, width, ClassificationType.comment);
         }
 
-        function classifyJSDocComment(docComment: JSDocComment) {
+        function classifyJSDocComment(docComment: JSDoc) {
             let pos = docComment.pos;
 
-            for (const tag of docComment.tags) {
-                // As we walk through each tag, classify the portion of text from the end of
-                // the last tag (or the start of the entire doc comment) as 'comment'.
-                if (tag.pos !== pos) {
-                    pushCommentRange(pos, tag.pos - pos);
+            if (docComment.tags) {
+                for (const tag of docComment.tags) {
+                    // As we walk through each tag, classify the portion of text from the end of
+                    // the last tag (or the start of the entire doc comment) as 'comment'.
+                    if (tag.pos !== pos) {
+                        pushCommentRange(pos, tag.pos - pos);
+                    }
+
+                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation);
+                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName);
+
+                    pos = tag.tagName.end;
+
+                    switch (tag.kind) {
+                        case SyntaxKind.JSDocParameterTag:
+                            processJSDocParameterTag(<JSDocParameterTag>tag);
+                            break;
+                        case SyntaxKind.JSDocTemplateTag:
+                            processJSDocTemplateTag(<JSDocTemplateTag>tag);
+                            break;
+                        case SyntaxKind.JSDocTypeTag:
+                            processElement((<JSDocTypeTag>tag).typeExpression);
+                            break;
+                        case SyntaxKind.JSDocReturnTag:
+                            processElement((<JSDocReturnTag>tag).typeExpression);
+                            break;
+                    }
+
+                    pos = tag.end;
                 }
-
-                pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation);
-                pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName);
-
-                pos = tag.tagName.end;
-
-                switch (tag.kind) {
-                    case SyntaxKind.JSDocParameterTag:
-                        processJSDocParameterTag(<JSDocParameterTag>tag);
-                        break;
-                    case SyntaxKind.JSDocTemplateTag:
-                        processJSDocTemplateTag(<JSDocTemplateTag>tag);
-                        break;
-                    case SyntaxKind.JSDocTypeTag:
-                        processElement((<JSDocTypeTag>tag).typeExpression);
-                        break;
-                    case SyntaxKind.JSDocReturnTag:
-                        processElement((<JSDocReturnTag>tag).typeExpression);
-                        break;
-                }
-
-                pos = tag.end;
             }
 
             if (pos !== docComment.end) {

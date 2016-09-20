@@ -21,7 +21,7 @@ interface Array<T> {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): number;
 
     /**
       * Returns the this object after filling the section identified by start and end with value
@@ -368,7 +368,7 @@ interface ReadonlyArray<T> {
     * @param thisArg If provided, it will be used as the this value for each invocation of
     * predicate. If it is not provided, undefined is used instead.
     */
-  findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
+  findIndex(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): number;
 }
 
 interface RegExp {

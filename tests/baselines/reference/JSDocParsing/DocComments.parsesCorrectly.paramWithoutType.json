@@ -23,7 +23,14 @@
                 "pos": 15,
                 "end": 18,
                 "text": "foo"
-            }
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 15,
+                "end": 18,
+                "text": "foo"
+            },
+            "comment": ""
         },
         "length": 1,
         "pos": 8,

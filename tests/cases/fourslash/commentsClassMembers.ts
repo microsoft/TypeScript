@@ -8,11 +8,11 @@
 ////    public p/*3*/2(/** number to add*/b: number) {
 ////        return this./*4*/p1 + /*5*/b;
 ////    }
-////    /** getter property*/
+////    /** getter property 1*/
 ////    public get p/*6*/3() {
 ////        return this./*7*/p/*8q*/2(/*8*/this./*9*/p1);
 ////    }
-////    /** setter property*/
+////    /** setter property 1*/
 ////    public set p/*10*/3(/** this is value*/value: number) {
 ////        this./*11*/p1 = this./*12*/p/*13q*/2(/*13*/value);
 ////    }
@@ -22,11 +22,11 @@
 ////    private p/*15*/p2(/** number to add*/b: number) {
 ////        return this./*16*/p1 + /*17*/b;
 ////    }
-////    /** getter property*/
+////    /** getter property 2*/
 ////    private get p/*18*/p3() {
 ////        return this./*19*/p/*20q*/p2(/*20*/this./*21*/pp1);
 ////    }
-////    /** setter property*/
+////    /** setter property 2*/
 ////    private set p/*22*/p3( /** this is value*/value: number) {
 ////        this./*23*/pp1 = this./*24*/p/*25q*/p2(/*25*/value);
 ////    }
@@ -43,7 +43,7 @@
 ////    static get s/*32*/3() {
 ////        return /*33*/c1./*34*/s/*35q*/2(/*35*/c1./*36*/s1);
 ////    }
-////    /** setter property*/
+////    /** setter property 3*/
 ////    static set s/*37*/3( /** this is value*/value: number) {
 ////        /*38*/c1./*39*/s1 = /*40*/c1./*41*/s/*42q*/2(/*42*/value);
 ////    }
@@ -141,10 +141,10 @@ verify.quickInfos({
 goTo.marker('4');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -155,15 +155,15 @@ verify.memberListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 goTo.marker('5');
 verify.completionListContains("b", "(parameter) b: number", "number to add");
 
-verify.quickInfoAt("6", "(property) c1.p3: number", "getter property\nsetter property");
+verify.quickInfoAt("6", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 
 goTo.marker('7');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -179,10 +179,10 @@ verify.quickInfoAt("8q", "(method) c1.p2(b: number): number", "sum with property
 goTo.marker('9');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -190,15 +190,15 @@ verify.memberListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
 verify.memberListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
 verify.memberListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 
-verify.quickInfoAt("10", "(property) c1.p3: number", "getter property\nsetter property");
+verify.quickInfoAt("10", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 
 goTo.marker('11');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -209,10 +209,10 @@ verify.memberListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 goTo.marker('12');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -234,10 +234,10 @@ verify.quickInfos({
 goTo.marker('16');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -248,15 +248,15 @@ verify.memberListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 goTo.marker('17');
 verify.completionListContains("b", "(parameter) b: number", "number to add");
 
-verify.quickInfoAt("18", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.quickInfoAt("18", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 
 goTo.marker('19');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -272,10 +272,10 @@ verify.quickInfoAt("20q", "(method) c1.pp2(b: number): number", "sum with proper
 goTo.marker('21');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -283,15 +283,15 @@ verify.memberListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
 verify.memberListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
 verify.memberListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 
-verify.quickInfoAt("22", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.quickInfoAt("22", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 
 goTo.marker('23');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -302,10 +302,10 @@ verify.memberListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 goTo.marker('24');
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
 verify.memberListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property\nsetter property");
+verify.memberListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -331,7 +331,7 @@ verify.completionListContains("c1", "class c1", "This is comment for c1");
 goTo.marker('30');
 verify.memberListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
 verify.memberListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property");
+verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
 verify.memberListContains("nc_s1", "(property) c1.nc_s1: number", "");
 verify.memberListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
 verify.memberListContains("nc_s3", "(property) c1.nc_s3: number", "");
@@ -339,7 +339,7 @@ verify.memberListContains("nc_s3", "(property) c1.nc_s3: number", "");
 goTo.marker('31');
 verify.completionListContains("b", "(parameter) b: number", "number to add");
 
-verify.quickInfoAt("32", "(property) c1.s3: number", "static getter property\nsetter property");
+verify.quickInfoAt("32", "(property) c1.s3: number", "static getter property\nsetter property 3");
 
 goTo.marker('33');
 verify.completionListContains("c1", "class c1", "This is comment for c1");
@@ -347,7 +347,7 @@ verify.completionListContains("c1", "class c1", "This is comment for c1");
 goTo.marker('34');
 verify.memberListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
 verify.memberListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property");
+verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
 verify.memberListContains("nc_s1", "(property) c1.nc_s1: number", "");
 verify.memberListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
 verify.memberListContains("nc_s3", "(property) c1.nc_s3: number", "");
@@ -361,12 +361,12 @@ verify.quickInfoAt("35q", "(method) c1.s2(b: number): number", "static sum with 
 goTo.marker('36');
 verify.memberListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
 verify.memberListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property");
+verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
 verify.memberListContains("nc_s1", "(property) c1.nc_s1: number", "");
 verify.memberListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
 verify.memberListContains("nc_s3", "(property) c1.nc_s3: number", "");
 
-verify.quickInfoAt("37", "(property) c1.s3: number", "static getter property\nsetter property");
+verify.quickInfoAt("37", "(property) c1.s3: number", "static getter property\nsetter property 3");
 
 goTo.marker('38');
 verify.completionListContains("c1", "class c1", "This is comment for c1");
@@ -374,7 +374,7 @@ verify.completionListContains("c1", "class c1", "This is comment for c1");
 goTo.marker('39');
 verify.memberListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
 verify.memberListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property");
+verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
 verify.memberListContains("nc_s1", "(property) c1.nc_s1: number", "");
 verify.memberListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
 verify.memberListContains("nc_s3", "(property) c1.nc_s3: number", "");
@@ -385,7 +385,7 @@ verify.completionListContains("c1", "class c1", "This is comment for c1");
 goTo.marker('41');
 verify.memberListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
 verify.memberListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property");
+verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
 verify.memberListContains("nc_s1", "(property) c1.nc_s1: number", "");
 verify.memberListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
 verify.memberListContains("nc_s3", "(property) c1.nc_s3: number", "");
@@ -479,7 +479,7 @@ goTo.marker("67");
 verify.quickInfoIs("(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
 verify.memberListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.memberListContains("p3", "(property) c1.p3: number", "getter property\nsetter property");
+verify.memberListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
 verify.memberListContains("nc_p1", "(property) c1.nc_p1: number", "");
 verify.memberListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
 verify.memberListContains("nc_p3", "(property) c1.nc_p3: number", "");
@@ -497,8 +497,8 @@ verify.currentParameterHelpArgumentDocCommentIs("number to add");
 verify.quickInfos({
     "71q": ["(method) c1.p2(b: number): number", "sum with property"],
     72: "var i1_prop: number",
-    73: ["(property) c1.p3: number", "getter property\nsetter property"],
-    74: ["(property) c1.p3: number", "getter property\nsetter property"],
+    73: ["(property) c1.p3: number", "getter property 1\nsetter property 1"],
+    74: ["(property) c1.p3: number", "getter property 1\nsetter property 1"],
     75: "var i1_prop: number",
     76: "var i1_nc_p: number",
     77: "(property) c1.nc_p1: number",
@@ -528,7 +528,7 @@ goTo.marker('88');
 verify.quickInfoIs("(property) c1.s1: number", "s1 is static property of c1");
 verify.memberListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
 verify.memberListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property");
+verify.memberListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
 verify.memberListContains("nc_s1", "(property) c1.nc_s1: number", "");
 verify.memberListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
 verify.memberListContains("nc_s3", "(property) c1.nc_s3: number", "");
@@ -546,8 +546,8 @@ verify.currentParameterHelpArgumentDocCommentIs("number to add");
 verify.quickInfos({
     "92q": ["(method) c1.s2(b: number): number", "static sum with property"],
     93: "var i1_s_prop: number",
-    94: ["(property) c1.s3: number", "static getter property\nsetter property"],
-    95: ["(property) c1.s3: number", "static getter property\nsetter property"],
+    94: ["(property) c1.s3: number", "static getter property\nsetter property 3"],
+    95: ["(property) c1.s3: number", "static getter property\nsetter property 3"],
     96: "var i1_s_prop: number",
     97: "var i1_s_nc_p: number",
     98: "(property) c1.nc_s1: number",
@@ -605,8 +605,8 @@ verify.quickInfos({
 });
 
 goTo.marker('114');
-verify.memberListContains("a", "(property) cWithConstructorProperty.a: number", "more info about a");
-verify.quickInfoIs("(property) cWithConstructorProperty.a: number", "more info about a");
+verify.memberListContains("a", "(property) cWithConstructorProperty.a: number", "this is first parameter a\nmore info about a");
+verify.quickInfoIs("(property) cWithConstructorProperty.a: number", "this is first parameter a\nmore info about a");
 
 goTo.marker('115');
 verify.completionListContains("a", "(parameter) a: number", "this is first parameter a\nmore info about a");

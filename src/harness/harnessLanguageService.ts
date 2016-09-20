@@ -435,6 +435,9 @@ namespace Harness.LanguageService {
         getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getTypeDefinitionAtPosition(fileName, position));
         }
+        getImplementationAtPosition(fileName: string, position: number): ts.ImplementationLocation[] {
+            return unwrapJSONCallResult(this.shim.getImplementationAtPosition(fileName, position));
+        }
         getReferencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getReferencesAtPosition(fileName, position));
         }
@@ -487,6 +490,9 @@ namespace Harness.LanguageService {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
         getNonBoundSourceFile(fileName: string): ts.SourceFile {
+            throw new Error("SourceFile can not be marshaled across the shim layer.");
+        }
+        getSourceFile(fileName: string): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
         dispose(): void { this.shim.dispose({}); }
