@@ -394,13 +394,11 @@ namespace ts.server {
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
             const lastUpdateTypesRoot: number = Math.max.apply(Math, project.getEffectiveTypeRoots().map(root => {
-               this.logger.info('Compute for ' + root);
                if (this.host.directoryExists(root)) {
                    return +this.host.getModifiedTime(root);
                }
                return 0;
             }));
-            this.logger.info('Last type roots update = ' + lastUpdateTypesRoot + ', last was ' + project.lastUpdatedTypesRootTime);
 
             // We check if the project file list has changed. If so, we update the project.
             if (!arrayIsEqualTo(currentRootFiles.sort(), newRootFiles.sort()) || (lastUpdateTypesRoot > project.lastUpdatedTypesRootTime)) {
@@ -794,7 +792,7 @@ namespace ts.server {
         }
 
         private watchConfigDirectoryForProject(project: ConfiguredProject, options: ProjectOptions): void {
-            if (!options.configHasFilesProperty || (options.compilerOptions.types === undefined)) {
+            if (!options.configHasFilesProperty) {
                 project.watchConfigDirectory((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
             }
         }

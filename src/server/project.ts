@@ -612,7 +612,6 @@ namespace ts.server {
 
         watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void) {
             const roots = ts.getEffectiveTypeRoots(this.getCompilerOptions(), this.projectService.host);
-            this.projectService.logger.info(`Add type roots watchers for: ${roots}`);
             const watchers: FileWatcher[] = [];
             if (roots) {
                 for (const root of roots) {
