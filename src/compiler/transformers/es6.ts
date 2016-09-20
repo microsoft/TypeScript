@@ -139,6 +139,30 @@ namespace ts {
         loopOutParameters?: LoopOutParameter[];
     }
 
+    const enum SuperCaptureResult {
+        /**
+         * A capture may have been added for calls to 'super', but
+         * the caller should emit subsequent statements normally.
+         */
+        NoReplacement,
+        /**
+         * A call to 'super()' got replaced with a capturing statement like:
+         *
+         *  var _this = _super.call(...) || this;
+         *
+         * Callers should skip the current statement.
+         */
+        ReplaceSuperCapture,
+        /**
+         * A call to 'super()' got replaced with a capturing statement like:
+         *
+         *  return _super.call(...) || this;
+         *
+         * Callers should skip the current statement and avoid any returns of '_this'.
+         */
+        ReplaceWithReturn,
+}
+
     export function transformES6(context: TransformationContext) {
         const {
             startLexicalEnvironment,
@@ -814,6 +838,7 @@ namespace ts {
             startLexicalEnvironment();
 
             let statementOffset = -1;
+            let thisCaptureStatus: SuperCaptureResult | undefined;
             if (hasSynthesizedSuper) {
                 // If a super call has already been synthesized,
                 // we're going to assume that we should just transform everything after that.
@@ -829,7 +854,11 @@ namespace ts {
                 addDefaultValueAssignmentsIfNeeded(statements, constructor);
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
                 Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
-                statementOffset = declareOrCaptureThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, statementOffset);
+
+                thisCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, statementOffset);
+                if (thisCaptureStatus === SuperCaptureResult.ReplaceSuperCapture || thisCaptureStatus === SuperCaptureResult.ReplaceWithReturn) {
+                    statementOffset++;
+                }
             }
 
             addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
@@ -841,7 +870,9 @@ namespace ts {
 
             // Return `_this` unless we're sure enough that it would be pointless to add a return statement.
             // If there's a constructor that we can tell returns in enough places, then we *do not* want to add a return.
-            if (extendsClauseElement && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
+            if (extendsClauseElement
+                && thisCaptureStatus !== SuperCaptureResult.ReplaceWithReturn
+                && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
                 statements.push(
                     createReturn(
                         createIdentifier("_this")
@@ -1190,45 +1221,61 @@ namespace ts {
          *
          * @returns The new statement offset into the `statements` array.
          */
-        function declareOrCaptureThisForConstructorIfNeeded(statements: Statement[], ctor: ConstructorDeclaration, hasExtendsClause: boolean, firstNonPrologue: number) {
-            if (hasExtendsClause) {
-                // Most of the time, a 'super' call will be the first real statement in a constructor body.
-                // In these cases, we'd like to transform these into a *single* statement instead of a declaration
-                // followed by an assignment statement for '_this'. For instance, if we emitted without an initializer,
-                // we'd get:
-                //
-                //      var _this;
-                //      _this = super();
-                //
-                // instead of
-                //
-                //      var _this = super();
-                //
-                let initializer: Expression = undefined;
-                let firstStatement: Statement;
-                if (firstNonPrologue < ctor.body.statements.length) {
-                    firstStatement = ctor.body.statements[firstNonPrologue];
-
-                    if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
-                        const superCall = (firstStatement as ExpressionStatement).expression as CallExpression;
-                        initializer = setOriginalNode(
-                            saveStateAndInvoke(superCall, visitImmediateSuperCallInBody),
-                            superCall
-                        );
-                    }
-                }
-                captureThisForNode(statements, ctor, /*initializer*/ initializer, firstStatement);
-
-                // We're actually skipping an extra statement. Signal this to the caller.
-                if (initializer) {
-                    return firstNonPrologue + 1;
-                }
-            }
-            else {
+        function declareOrCaptureOrReturnThisForConstructorIfNeeded(statements: Statement[], ctor: ConstructorDeclaration, hasExtendsClause: boolean, statementOffset: number) {
+            // If this isn't a derived class, just capture 'this' for arrow functions if necessary.
+            if (!hasExtendsClause) {
                 addCaptureThisForNodeIfNeeded(statements, ctor);
+                return SuperCaptureResult.NoReplacement;
             }
 
-            return firstNonPrologue;
+            // Most of the time, a 'super' call will be the first real statement in a constructor body.
+            // In these cases, we'd like to transform these into a *single* statement instead of a declaration
+            // followed by an assignment statement for '_this'. For instance, if we emitted without an initializer,
+            // we'd get:
+            //
+            //      var _this;
+            //      _this = _super.call(...) || this;
+            //
+            // instead of
+            //
+            //      var _this = _super.call(...) || this;
+            //
+            // Additionally, if the 'super()' call is the last statement, we should just avoid capturing
+            // entirely and immediately return the result like so:
+            //
+            //      return _super.call(...) || this;
+            //
+            let firstStatement: Statement;
+            let superCallExpression: Expression;
+
+            const ctorStatements = ctor.body.statements;
+            if (statementOffset < ctorStatements.length) {
+                firstStatement = ctorStatements[statementOffset];
+
+                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
+                    const superCall = (firstStatement as ExpressionStatement).expression as CallExpression;
+                    superCallExpression = setOriginalNode(
+                        saveStateAndInvoke(superCall, visitImmediateSuperCallInBody),
+                        superCall
+                    );
+                }
+            }
+
+            // Return the result if we have an immediate super() call on the last statement.
+            if (superCallExpression && statementOffset === ctorStatements.length - 1) {
+                statements.push(createReturn(superCallExpression));
+                return SuperCaptureResult.ReplaceWithReturn;
+            }
+
+            // Perform the capture.
+            captureThisForNode(statements, ctor, superCallExpression, firstStatement);
+
+            // If we're actually replacing the original statement, we need to signal this to the caller.
+            if (superCallExpression) {
+                return SuperCaptureResult.ReplaceSuperCapture;
+            }
+
+            return SuperCaptureResult.NoReplacement;
         }
 
         /**
