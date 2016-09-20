@@ -1,11 +1,15 @@
-/// <reference path="typingsInstaller.ts"/>
+﻿/// <reference path="typingsInstaller.ts"/>
 /// <reference types="node" />
 
 namespace ts.server.typingsInstaller {
-
     const fs: {
         appendFileSync(file: string, content: string): void
     } = require("fs");
+
+    const path: {
+        join(...parts: string[]): string;
+        dirname(path: string): string;
+    } = require("path");
 
     class FileLog implements Log {
         constructor(private readonly logFile?: string) {
@@ -20,37 +24,26 @@ namespace ts.server.typingsInstaller {
     }
 
     export class NodeTypingsInstaller extends TypingsInstaller {
-        private execSync: { (command: string, options: { stdio: "ignore" | "pipe", cwd?: string }): Buffer | string };
-        private exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
-        private npmBinPath: string;
+        private readonly exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
 
-        private installRunCount = 1;
         readonly installTypingHost: InstallTypingHost = sys;
 
-        constructor(globalTypingsCacheLocation: string, log: Log) {
-            super(globalTypingsCacheLocation, toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)), log);
+        constructor(globalTypingsCacheLocation: string, throttleLimit: number, log: Log) {
+            super(
+                globalTypingsCacheLocation,
+                /*npmPath*/ `"${path.join(path.dirname(process.argv[0]), "npm")}"`,
+                toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+                throttleLimit,
+                log);
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
             }
-            const { exec, execSync } = require("child_process");
-            this.execSync = execSync;
+            const { exec } = require("child_process");
             this.exec = exec;
         }
 
         init() {
             super.init();
-            try {
-                this.npmBinPath = this.execSync("npm -g bin", { stdio: "pipe" }).toString().trim();
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`Global npm bin path '${this.npmBinPath}'`);
-                }
-            }
-            catch (e) {
-                this.npmBinPath = "";
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`Error when getting npm bin path: ${e}. Set bin path to ""`);
-                }
-            }
             process.on("message", (req: DiscoverTypings | CloseProject) => {
                 switch (req.kind) {
                     case "discover":
@@ -60,23 +53,6 @@ namespace ts.server.typingsInstaller {
                         this.closeProject(req);
                 }
             });
-        }
-
-        protected isPackageInstalled(packageName: string) {
-            try {
-                const output = this.execSync(`npm list --silent --global --depth=1 ${packageName}`, { stdio: "pipe" }).toString();
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`IsPackageInstalled::stdout '${output}'`);
-                }
-                return true;
-            }
-            catch (e) {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`IsPackageInstalled::err::stdout '${e.stdout && e.stdout.toString()}'`);
-                    this.log.writeLine(`IsPackageInstalled::err::stderr '${e.stdout && e.stderr.toString()}'`);
-                }
-                return false;
-            }
         }
 
         protected sendResponse(response: SetTypings | InvalidateCachedTypings) {
@@ -89,61 +65,16 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
-            const id = this.installRunCount;
-            this.installRunCount++;
-            let execInstallCmdCount = 0;
-            const filteredTypings: string[] = [];
-            for (const typing of typingsToInstall) {
-                const command = `npm view @types/${typing} --silent name`;
-                this.execAsync("npm view", command, cachePath, id, (err, stdout, stderr) => {
-                    if (stdout) {
-                        filteredTypings.push(typing);
-                    }
-                    execInstallCmdCount++;
-                    if (execInstallCmdCount === typingsToInstall.length) {
-                        installFilteredTypings(this, filteredTypings);
-                    }
-                });
-            }
-
-            function installFilteredTypings(self: NodeTypingsInstaller, filteredTypings: string[]) {
-                const command = `npm install ${filteredTypings.map(t => "@types/" + t).join(" ")} --save-dev`;
-                self.execAsync("npm install", command, cachePath, id, (err, stdout, stderr) => {
-                    if (stdout) {
-                        reportInstalledTypings(self);
-                    }
-                });
-            }
-
-            function reportInstalledTypings(self: NodeTypingsInstaller) {
-                const command = "npm ls -json";
-                self.execAsync("npm ls", command, cachePath, id, (err, stdout, stderr) => {
-                    let installedTypings: string[];
-                    try {
-                        const response = JSON.parse(stdout);
-                        if (response.dependencies) {
-                            installedTypings = getOwnKeys(response.dependencies);
-                        }
-                    }
-                    catch (e) {
-                        self.log.writeLine(`Error parsing installed @types dependencies. Error details: ${e.message}`);
-                    }
-                    postInstallAction(installedTypings || []);
-                });
-            }
-        }
-
-        private execAsync(prefix: string, command: string, cwd: string, requestId: number, cb: (err: Error, stdout: string, stderr: string) => void) {
+        protected runCommand(requestKind: RequestKind, requestId: number, command: string, cwd: string, onRequestCompleted: RequestCompletedAction): void {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} running command '${command}'.`);
             }
             this.exec(command, { cwd }, (err, stdout, stderr) => {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`${prefix} #${requestId} stdout: ${stdout}`);
-                    this.log.writeLine(`${prefix} #${requestId} stderr: ${stderr}`);
+                    this.log.writeLine(`${requestKind} #${requestId} stdout: ${stdout}`);
+                    this.log.writeLine(`${requestKind} #${requestId} stderr: ${stderr}`);
                 }
-                cb(err, stdout, stderr);
+                onRequestCompleted(err, stdout, stderr);
             });
         }
     }
@@ -169,6 +100,6 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, log);
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, /*throttleLimit*/5, log);
     installer.init();
 }

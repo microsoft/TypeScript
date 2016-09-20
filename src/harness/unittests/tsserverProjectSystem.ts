@@ -2,6 +2,8 @@
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
+    import TI = server.typingsInstaller;
+
     const safeList = {
         path: <Path>"/safeList.json",
         content: JSON.stringify({
@@ -12,6 +14,14 @@ namespace ts.projectSystem {
             moment: "moment"
         })
     };
+
+    export interface PostExecAction {
+        readonly requestKind: TI.RequestKind;
+        readonly error: Error;
+        readonly stdout: string;
+        readonly stderr: string;
+        readonly callback: (err: Error, stdout: string, stderr: string) => void;
+    }
 
     export function notImplemented(): any {
         throw new Error("Not yet implemented");
@@ -39,21 +49,27 @@ namespace ts.projectSystem {
         content: libFileContent
     };
 
-    export class TestTypingsInstaller extends server.typingsInstaller.TypingsInstaller implements server.ITypingsInstaller {
+    export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
-        constructor(readonly globalTypingsCacheLocation: string, readonly installTypingHost: server.ServerHost) {
-            super(globalTypingsCacheLocation, safeList.path);
+        constructor(readonly globalTypingsCacheLocation: string, throttleLimit: number, readonly installTypingHost: server.ServerHost) {
+            super(globalTypingsCacheLocation, "npm", safeList.path, throttleLimit);
             this.init();
         }
 
         safeFileList = safeList.path;
-        postInstallActions: ((map: (t: string[]) => string[]) => void)[] = [];
+        protected postExecActions: PostExecAction[] = [];
 
-        runPostInstallActions(map: (t: string[]) => string[]) {
-            for (const f of this.postInstallActions) {
-                f(map);
+        executePendingCommands() {
+            const actionsToRun = this.postExecActions;
+            this.postExecActions = [];
+            for (const action of actionsToRun) {
+                action.callback(action.error, action.stdout, action.stderr);
             }
-            this.postInstallActions = [];
+        }
+
+        checkPendingCommands(expected: TI.RequestKind[]) {
+            assert.equal(this.postExecActions.length, expected.length, `Expected ${expected.length} post install actions`);
+            this.postExecActions.forEach((act, i) => assert.equal(act.requestKind, expected[i], "Unexpected post install action"));
         }
 
         onProjectClosed(p: server.Project) {
@@ -67,14 +83,15 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        isPackageInstalled(packageName: string) {
-            return true;
-        }
-
-        runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void) {
-            this.postInstallActions.push(map => {
-                postInstallAction(map(typingsToInstall));
-            });
+        runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: (err: Error, stdout: string, stderr: string) => void): void {
+            switch (requestKind) {
+                case TI.NpmViewRequest:
+                case TI.NpmInstallRequest:
+                    break;
+                default:
+                    assert.isTrue(false, `request ${requestKind} is not supported`);
+            }
+            this.addPostExecAction(requestKind, "success", cb);
         }
 
         sendResponse(response: server.SetTypings | server.InvalidateCachedTypings) {
@@ -85,6 +102,26 @@ namespace ts.projectSystem {
             const request = server.createInstallTypingsRequest(project, typingOptions, this.globalTypingsCacheLocation);
             this.install(request);
         }
+
+        addPostExecAction(requestKind: TI.RequestKind, stdout: string | string[], cb: TI.RequestCompletedAction) {
+            const out = typeof stdout === "string" ? stdout : createNpmPackageJsonString(stdout);
+            const action: PostExecAction = {
+                error: undefined,
+                stdout: out,
+                stderr: "",
+                callback: cb,
+                requestKind
+            };
+            this.postExecActions.push(action);
+        }
+    }
+
+    function createNpmPackageJsonString(installedTypings: string[]): string {
+        const dependencies: MapLike<any> = {};
+        for (const typing of installedTypings) {
+            dependencies[typing] = "1.0.0";
+        }
+        return JSON.stringify({ dependencies: dependencies });
     }
 
     export function getExecutingFilePathFromLibFile(libFilePath: string): string {
@@ -124,7 +161,7 @@ namespace ts.projectSystem {
 
     export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller) {
         if (typingsInstaller === undefined) {
-            typingsInstaller = new TestTypingsInstaller("/a/data/", host);
+            typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
         return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
     }
@@ -1615,7 +1652,7 @@ namespace ts.projectSystem {
             const host: TestServerHost & ModuleResolutionHost = createServerHost([file1, lib]);
             const resolutionTrace: string[] = [];
             host.trace = resolutionTrace.push.bind(resolutionTrace);
-            const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller("/a/cache", host) });
+            const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host) });
 
             projectService.setCompilerOptionsForInferredProjects({ traceResolution: true, allowJs: true });
             projectService.openClientFile(file1.path);

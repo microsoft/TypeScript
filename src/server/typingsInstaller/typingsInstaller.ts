@@ -1,4 +1,4 @@
-/// <reference path="../../compiler/core.ts" />
+﻿/// <reference path="../../compiler/core.ts" />
 /// <reference path="../../compiler/moduleNameResolver.ts" />
 /// <reference path="../../services/jsTyping.ts"/>
 /// <reference path="../types.d.ts"/>
@@ -23,15 +23,38 @@ namespace ts.server.typingsInstaller {
         return result.resolvedModule && result.resolvedModule.resolvedFileName;
     }
 
+    export const NpmViewRequest: "npm view" = "npm view";
+    export const NpmInstallRequest: "npm install" = "npm install";
+
+    export type RequestKind = typeof NpmViewRequest | typeof NpmInstallRequest;
+
+    export type RequestCompletedAction = (err: Error, stdout: string, stderr: string) => void;
+    type PendingRequest = {
+        requestKind: RequestKind;
+        requestId: number;
+        command: string;
+        cwd: string;
+        onRequestCompleted: RequestCompletedAction
+    };
+
     export abstract class TypingsInstaller {
-        private packageNameToTypingLocation: Map<string> = createMap<string>();
-        private missingTypingsSet: Map<true> = createMap<true>();
-        private knownCachesSet: Map<true> = createMap<true>();
-        private projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
+        private readonly packageNameToTypingLocation: Map<string> = createMap<string>();
+        private readonly missingTypingsSet: Map<true> = createMap<true>();
+        private readonly knownCachesSet: Map<true> = createMap<true>();
+        private readonly projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
+        readonly pendingRunRequests: PendingRequest[] = [];
+
+        private installRunCount = 1;
+        private inFlightRequestCount = 0;
 
         abstract readonly installTypingHost: InstallTypingHost;
 
-        constructor(readonly globalCachePath: string, readonly safeListPath: Path, protected readonly log = nullLog) {
+        constructor(
+            readonly globalCachePath: string,
+            readonly npmPath: string,
+            readonly safeListPath: Path,
+            readonly throttleLimit: number,
+            protected readonly log = nullLog) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}'`);
             }
@@ -224,6 +247,42 @@ namespace ts.server.typingsInstaller {
             });
         }
 
+        private runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
+            const requestId = this.installRunCount;
+
+            this.installRunCount++;
+            let execInstallCmdCount = 0;
+            const filteredTypings: string[] = [];
+            for (const typing of typingsToInstall) {
+                execNpmViewTyping(this, typing);
+            }
+
+            function execNpmViewTyping(self: TypingsInstaller, typing: string) {
+                const command = `${self.npmPath} view @types/${typing} --silent name`;
+                self.execAsync(NpmViewRequest, requestId, command, cachePath, (err, stdout, stderr) => {
+                    if (stdout) {
+                        filteredTypings.push(typing);
+                    }
+                    execInstallCmdCount++;
+                    if (execInstallCmdCount === typingsToInstall.length) {
+                        installFilteredTypings(self, filteredTypings);
+                    }
+                });
+            }
+
+            function installFilteredTypings(self: TypingsInstaller, filteredTypings: string[]) {
+                if (filteredTypings.length === 0) {
+                    postInstallAction([]);
+                    return;
+                }
+                const scopedTypings = filteredTypings.map(t => "@types/" + t);
+                const command = `${self.npmPath} install ${scopedTypings.join(" ")} --save-dev`;
+                self.execAsync(NpmInstallRequest, requestId, command, cachePath, (err, stdout, stderr) => {
+                    postInstallAction(stdout ? scopedTypings : []);
+                });
+            }
+        }
+
         private ensureDirectoryExists(directory: string, host: InstallTypingHost): void {
             const directoryName = getDirectoryPath(directory);
             if (!host.directoryExists(directoryName)) {
@@ -267,8 +326,24 @@ namespace ts.server.typingsInstaller {
             };
         }
 
-        protected abstract isPackageInstalled(packageName: string): boolean;
+        private execAsync(requestKind: RequestKind, requestId: number, command: string, cwd: string, onRequestCompleted: RequestCompletedAction): void {
+            this.pendingRunRequests.unshift({ requestKind, requestId, command, cwd, onRequestCompleted });
+            this.executeWithThrottling();
+        }
+
+        private executeWithThrottling() {
+            while (this.inFlightRequestCount < this.throttleLimit && this.pendingRunRequests.length) {
+                this.inFlightRequestCount++;
+                const request = this.pendingRunRequests.pop();
+                this.runCommand(request.requestKind, request.requestId, request.command, request.cwd, (err, stdout, stderr) => {
+                    this.inFlightRequestCount--;
+                    request.onRequestCompleted(err, stdout, stderr);
+                    this.executeWithThrottling();
+                });
+            }
+        }
+
+        protected abstract runCommand(requestKind: RequestKind, requestId: number, command: string, cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings): void;
-        protected abstract runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void;
     }
 }
