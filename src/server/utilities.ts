@@ -102,7 +102,7 @@ namespace ts.server {
             else {
                 return 0;
             }
-        });
+        }));
     }
 
     export function mergeMaps(target: MapLike<any>, source: MapLike <any>): void {
