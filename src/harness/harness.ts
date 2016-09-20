@@ -1932,5 +1932,5 @@ namespace Harness {
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 
-    if (Error) (<any>Error).stackTraceLimit = 1;
+    if (Error) (<any>Error).stackTraceLimit = 25;
 }

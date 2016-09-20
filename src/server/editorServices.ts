@@ -416,7 +416,7 @@ namespace ts.server {
                 // it is not likely to affect the project for other files opened by the client. We can
                 // just update the current project.
 
-                this.logger.info('Updating configured project');
+                this.logger.info("Updating configured project");
                 this.updateConfiguredProject(project);
 
                 // Call refreshInferredProjects to clean up inferred projects we may have

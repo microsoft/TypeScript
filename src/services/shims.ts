@@ -360,6 +360,9 @@ namespace ts {
         }
 
         public getTypeRootsVersion(): number {
+            if (!this.shimHost.getTypeRootsVersion) {
+                return 0;
+            }
             return this.shimHost.getTypeRootsVersion();
         }
 
