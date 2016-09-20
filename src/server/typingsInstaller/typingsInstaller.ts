@@ -8,18 +8,10 @@ namespace ts.server.typingsInstaller {
         devDependencies: MapLike<any>;
     }
 
-    interface RunInstallRequest {
-        readonly cachePath: string;
-        readonly typingsToInstall: string[];
-        readonly postInstallAction: (installedTypings: string[]) => void;
-    }
-
     export interface Log {
         isEnabled(): boolean;
         writeLine(text: string): void;
     }
-
-    const throttleLimit = 5;
 
     const nullLog: Log = {
         isEnabled: () => false,
@@ -31,27 +23,44 @@ namespace ts.server.typingsInstaller {
         return result.resolvedModule && result.resolvedModule.resolvedFileName;
     }
 
+    export const NpmViewRequest: "npm view" = "npm view";
+    export const NpmInstallRequest: "npm install" = "npm install";
+
+    export type RequestKind = typeof NpmViewRequest | typeof NpmInstallRequest;
+
+    export type RequestCompletedAction = (err: Error, stdout: string, stderr: string) => void;
+    type PendingRequest = {
+        requestKind: RequestKind;
+        requestId: number;
+        command: string;
+        cwd: string;
+        onRequestCompleted: RequestCompletedAction
+    };
+
     export abstract class TypingsInstaller {
+        private readonly packageNameToTypingLocation: Map<string> = createMap<string>();
+        private readonly missingTypingsSet: Map<true> = createMap<true>();
+        private readonly knownCachesSet: Map<true> = createMap<true>();
+        private readonly projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
+        readonly pendingRunRequests: PendingRequest[] = [];
+
         private installRunCount = 1;
-        private throttleCount = 0;
-        private packageNameToTypingLocation: Map<string> = createMap<string>();
-        private missingTypingsSet: Map<true> = createMap<true>();
-        private knownCachesSet: Map<true> = createMap<true>();
-        private projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
-        private delayedRunInstallRequests: RunInstallRequest[] = [];
-        private npmPath: string;
+        private inFlightRequestCount = 0;
 
         abstract readonly installTypingHost: InstallTypingHost;
 
-        constructor(readonly globalCachePath: string, readonly safeListPath: Path, protected readonly log = nullLog) {
+        constructor(
+            readonly globalCachePath: string,
+            readonly npmPath: string,
+            readonly safeListPath: Path,
+            readonly throttleLimit: number,
+            protected readonly log = nullLog) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}'`);
             }
         }
 
         init() {
-            const path = require("path");
-            this.npmPath = `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
             this.processCacheLocation(this.globalCachePath);
         }
 
@@ -239,77 +248,37 @@ namespace ts.server.typingsInstaller {
         }
 
         private runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
-            if (this.throttleCount === throttleLimit) {
-                const request = {
-                    cachePath: cachePath,
-                    typingsToInstall: typingsToInstall,
-                    postInstallAction: postInstallAction
-                };
-                this.delayedRunInstallRequests.push(request);
-                return;
-            }
-            const id = this.installRunCount;
+            const requestId = this.installRunCount;
+
             this.installRunCount++;
             let execInstallCmdCount = 0;
             const filteredTypings: string[] = [];
-            const delayedTypingsToInstall: string[] = [];
             for (const typing of typingsToInstall) {
-                if (this.throttleCount === throttleLimit) {
-                    delayedTypingsToInstall.push(typing);
-                    continue;
-                }
                 execNpmViewTyping(this, typing);
             }
 
             function execNpmViewTyping(self: TypingsInstaller, typing: string) {
-                self.throttleCount++;
                 const command = `${self.npmPath} view @types/${typing} --silent name`;
-                self.execAsync("npm view", command, cachePath, id, (err, stdout, stderr) => {
+                self.execAsync(NpmViewRequest, requestId, command, cachePath, (err, stdout, stderr) => {
                     if (stdout) {
                         filteredTypings.push(typing);
                     }
                     execInstallCmdCount++;
-                    self.throttleCount--;
-                    if (delayedTypingsToInstall.length > 0) {
-                        return execNpmViewTyping(self, delayedTypingsToInstall.pop());
-                    }
                     if (execInstallCmdCount === typingsToInstall.length) {
                         installFilteredTypings(self, filteredTypings);
-                        if (self.delayedRunInstallRequests.length > 0) {
-                            const request = self.delayedRunInstallRequests.pop();
-                            return self.runInstall(request.cachePath, request.typingsToInstall, request.postInstallAction);
-                        }
                     }
                 });
             }
 
             function installFilteredTypings(self: TypingsInstaller, filteredTypings: string[]) {
                 if (filteredTypings.length === 0) {
-                    reportInstalledTypings(self);
+                    postInstallAction([]);
                     return;
                 }
-                const command = `${self.npmPath} install ${filteredTypings.map(t => "@types/" + t).join(" ")} --save-dev`;
-                self.execAsync("npm install", command, cachePath, id, (err, stdout, stderr) => {
-                    if (stdout) {
-                        reportInstalledTypings(self);
-                    }
-                });
-            }
-
-            function reportInstalledTypings(self: TypingsInstaller) {
-                const command = `${self.npmPath} ls -json`;
-                self.execAsync("npm ls", command, cachePath, id, (err, stdout, stderr) => {
-                    let installedTypings: string[];
-                    try {
-                        const response = JSON.parse(stdout);
-                        if (response.dependencies) {
-                            installedTypings = getOwnKeys(response.dependencies);
-                        }
-                    }
-                    catch (e) {
-                        self.log.writeLine(`Error parsing installed @types dependencies. Error details: ${e.message}`);
-                    }
-                    postInstallAction(installedTypings || []);
+                const scopedTypings = filteredTypings.map(t => "@types/" + t);
+                const command = `${self.npmPath} install ${scopedTypings.join(" ")} --save-dev`;
+                self.execAsync(NpmInstallRequest, requestId, command, cachePath, (err, stdout, stderr) => {
+                    postInstallAction(stdout ? scopedTypings : []);
                 });
             }
         }
@@ -357,7 +326,24 @@ namespace ts.server.typingsInstaller {
             };
         }
 
-        protected abstract execAsync(prefix: string, command: string, cwd: string, requestId: number, cb: (err: Error, stdout: string, stderr: string) => void): void;
+        private execAsync(requestKind: RequestKind, requestId: number, command: string, cwd: string, onRequestCompleted: RequestCompletedAction): void {
+            this.pendingRunRequests.unshift({ requestKind, requestId, command, cwd, onRequestCompleted });
+            this.executeWithThrottling();
+        }
+
+        private executeWithThrottling() {
+            while (this.inFlightRequestCount < this.throttleLimit && this.pendingRunRequests.length) {
+                this.inFlightRequestCount++;
+                const request = this.pendingRunRequests.pop();
+                this.runCommand(request.requestKind, request.requestId, request.command, request.cwd, (err, stdout, stderr) => {
+                    this.inFlightRequestCount--;
+                    request.onRequestCompleted(err, stdout, stderr);
+                    this.executeWithThrottling();
+                });
+            }
+        }
+
+        protected abstract runCommand(requestKind: RequestKind, requestId: number, command: string, cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings): void;
     }
 }
