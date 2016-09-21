@@ -367,7 +367,7 @@ namespace ts.server {
             this.logger.info(`Type root file ${fileName} changed`);
             this.throttledOperations.schedule(project.configFileName + " * type root", /*delay*/ 250, () => {
                 project.updateTypes();
-                this.updateConfiguredProject(project);
+                this.updateConfiguredProject(project); // TODO: Figure out why this is needed (should be redundant?)
                 this.refreshInferredProjects();
             });
         }
