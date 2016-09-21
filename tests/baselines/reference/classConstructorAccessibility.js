@@ -90,7 +90,7 @@ declare class C {
 }
 declare class D {
     x: number;
-    private constructor(x);
+    private constructor();
 }
 declare class E {
     x: number;
