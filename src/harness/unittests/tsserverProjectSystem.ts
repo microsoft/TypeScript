@@ -2009,7 +2009,6 @@ namespace ts.projectSystem {
                     exclude: ["node_modules"]
                 })
             };
-            debugger
             const host = createServerHost([f1, t1, tsconfig]);
             const projectService = createProjectService(host);
 
@@ -2034,6 +2033,6 @@ namespace ts.projectSystem {
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t2.path]);
-        })
-    })
+        });
+    });
 }
