@@ -1,0 +1,106 @@
+=== tests/cases/compiler/declarationEmitPrivateMembers.ts ===
+
+class A {
+>A : A
+
+    // private fields
+    private field1: number;
+>field1 : number
+
+    private static field1: number;
+>field1 : number
+
+    private readonly field2: number;
+>field2 : number
+
+    private static readonly field2: number;
+>field2 : number
+
+    // private properties
+    private get prop1(): string { return "string"; }
+>prop1 : string
+>"string" : "string"
+
+    private set prop1(v: string) { }
+>prop1 : string
+>v : string
+
+    private get prop2(): string { return "string"; }
+>prop2 : string
+>"string" : "string"
+
+    private set prop3(v: string) { }
+>prop3 : string
+>v : string
+
+    private static get prop1(): string { return "string"; }
+>prop1 : string
+>"string" : "string"
+
+    private static set prop1(v: string) { }
+>prop1 : string
+>v : string
+
+    private static get prop2(): string { return "string"; }
+>prop2 : string
+>"string" : "string"
+
+    private static set prop3(v: string) { }
+>prop3 : string
+>v : string
+
+    // private methods
+    private method1(a: number): string { return "string"; }
+>method1 : (a: number) => string
+>a : number
+>"string" : "string"
+
+    private static method1(a: number): string { return "string"; }
+>method1 : (a: number) => string
+>a : number
+>"string" : "string"
+
+    // private methods with overloads
+    private method2(a: string): void;
+>method2 : { (a: string): void; (a: number): void; }
+>a : string
+
+    private method2(a: number): void;
+>method2 : { (a: string): void; (a: number): void; }
+>a : number
+
+    private method2(a: string | number): void { }
+>method2 : { (a: string): void; (a: number): void; }
+>a : string | number
+
+    private static method2(a: string): void;
+>method2 : { (a: string): void; (a: number): void; }
+>a : string
+
+    private static method2(a: number): void;
+>method2 : { (a: string): void; (a: number): void; }
+>a : number
+
+    private static method2(a: string | number): void { }
+>method2 : { (a: string): void; (a: number): void; }
+>a : string | number
+
+    // private methods as fields
+    private method3: (a: number) => string;
+>method3 : (a: number) => string
+>a : number
+
+    private static method3: (a: number) => string;
+>method3 : (a: number) => string
+>a : number
+
+    // private constructors with overloads
+    private constructor(a: number);
+>a : number
+
+    private constructor(a: string);
+>a : string
+
+    private constructor(a: number | string) { }
+>a : string | number
+}
