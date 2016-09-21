@@ -643,13 +643,15 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface ObjectLiteralElement extends Declaration {
+    export interface ObjectLiteralElementLike extends Declaration {
         _objectLiteralBrandBrand: any;
         name?: PropertyName;
    }
 
+    export type ObjectLiteralElement = PropertyAssignment | ShorthandPropertyAssignment | SpreadObjectLiteralAssignment | MethodDeclaration | AccessorDeclaration;
+
     // @kind(SyntaxKind.PropertyAssignment)
-    export interface PropertyAssignment extends ObjectLiteralElement {
+    export interface PropertyAssignment extends ObjectLiteralElementLike {
         _propertyAssignmentBrand: any;
         name: PropertyName;
         questionToken?: Node;
@@ -657,7 +659,7 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.ShorthandPropertyAssignment)
-    export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
+    export interface ShorthandPropertyAssignment extends ObjectLiteralElementLike {
         name: Identifier;
         questionToken?: Node;
         // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
@@ -740,7 +742,7 @@ namespace ts {
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
     // @kind(SyntaxKind.MethodDeclaration)
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElementLike {
         name: PropertyName;
         body?: FunctionBody;
     }
@@ -758,7 +760,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElementLike {
         _accessorDeclarationBrand: any;
         name: PropertyName;
         body: FunctionBody;
@@ -1048,10 +1050,16 @@ namespace ts {
         expression: Expression;
     }
 
+    // The reason we create this interface so that JSXAttributes and ObjectLiteralExpression interface can extend out of it.
+    // JSXAttributes differs from normal ObjectLiteralExpression in that JSXAttributes can only take JSXAttribute or JSXSpreadAttribute
+    // but not ShortHandPropertyAssignment, methodDeclaration or other ObjectLiteralElementLike acceptable by ObjectLiteralExpression.
+    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElementLike> extends PrimaryExpression, Declaration {
+        properties: NodeArray<T>;
+    }
+
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     // @kind(SyntaxKind.ObjectLiteralExpression)
-    export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
-        properties: NodeArray<ObjectLiteralElement>;
+    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElement>{
         /* @internal */
         multiLine?: boolean;
     }
@@ -1195,7 +1203,7 @@ namespace ts {
     export interface DebuggerStatement extends Statement { }
 
     // @kind(SyntaxKind.MissingDeclaration)
-    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElementLike, TypeElement {
         name?: Identifier;
     }
 
