@@ -6502,6 +6502,9 @@ namespace ts {
                     if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
                     }
+                    else if (source.symbol && source.flags & TypeFlags.ObjectType && globalObjectType === source) {
+                        reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
+                    }
                     reportRelationError(headMessage, source, target);
                 }
                 return Ternary.False;
