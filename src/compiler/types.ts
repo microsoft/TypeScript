@@ -316,6 +316,7 @@ namespace ts {
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
+        SpreadObjectLiteralAssignment,
 
         // Enum
         EnumMember,
@@ -666,6 +667,12 @@ namespace ts {
         // it is grammar error to appear in actual object initializer
         equalsToken?: Node;
         objectAssignmentInitializer?: Expression;
+    }
+
+    // @kind(SyntaxKind.SpreadObjectLiteralAssignment)
+    export interface SpreadObjectLiteralAssignment extends ObjectLiteralElementLike, SpreadElementExpression {
+        _spreadObjectLiteralAssignmentBrand: any;
+        dotDotDotToken?: Node;
     }
 
     // SyntaxKind.VariableDeclaration
