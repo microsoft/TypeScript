@@ -66,6 +66,8 @@ namespace ts {
         const emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
         const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
         let noDeclare: boolean;
+        let enclosingDeclarationEmittedPrivateInstanceMembers: Map<boolean>;
+        let enclosingDeclarationEmittedPrivateStaticMembers: Map<boolean>;
 
         let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
@@ -1073,6 +1075,10 @@ namespace ts {
             writeTextOfNode(currentText, node.name);
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
+            const prevEnclosingDeclarationEmittedPrivateInstanceMembers = enclosingDeclarationEmittedPrivateInstanceMembers;
+            enclosingDeclarationEmittedPrivateInstanceMembers = ts.createMap<boolean>();
+            const prevEnclosingDeclarationEmittedPrivateStaticMembers = enclosingDeclarationEmittedPrivateStaticMembers;
+            enclosingDeclarationEmittedPrivateStaticMembers = ts.createMap<boolean>();
             emitTypeParameters(node.typeParameters);
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
@@ -1088,6 +1094,8 @@ namespace ts {
             write("}");
             writeLine();
             enclosingDeclaration = prevEnclosingDeclaration;
+            enclosingDeclarationEmittedPrivateInstanceMembers = prevEnclosingDeclarationEmittedPrivateInstanceMembers;
+            enclosingDeclarationEmittedPrivateStaticMembers = prevEnclosingDeclarationEmittedPrivateStaticMembers;
         }
 
         function writeInterfaceDeclaration(node: InterfaceDeclaration) {
@@ -1352,6 +1360,15 @@ namespace ts {
             // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
             // so no need to verify if the declaration is visible
             if (!resolver.isImplementationOfOverload(node)) {
+                // If we are emitting a private method or constructor it might be already emitted with an overloaded signature
+                if ((node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.Constructor) && hasModifier(node, ModifierFlags.Private)) {
+                    const emitted = hasModifier(node, ModifierFlags.Static) ? enclosingDeclarationEmittedPrivateStaticMembers : enclosingDeclarationEmittedPrivateInstanceMembers;
+                    const name = node.kind === SyntaxKind.Constructor ? "constructor" : getTextOfNode(node.name);
+                    if (emitted[name] === true)
+                        return;
+                    emitted[name] = true;
+                }
+
                 emitJsDocComments(node);
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     emitModuleElementDeclarationFlags(node);
@@ -1385,6 +1402,7 @@ namespace ts {
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             let closeParenthesizedFunctionType = false;
+            let emitParameters = true;
 
             if (node.kind === SyntaxKind.IndexSignature) {
                 // Index signature can have readonly modifier
@@ -1406,18 +1424,28 @@ namespace ts {
                         write("(");
                     }
                 }
-                emitTypeParameters(node.typeParameters);
-                write("(");
+                if (hasModifier(node, ModifierFlags.Private)) {
+                    emitParameters = false;
+                }
+                else {
+                    emitTypeParameters(node.typeParameters);
+                    write("(");
+                }
             }
 
             // Parameters
-            emitCommaList(node.parameters, emitParameterDeclaration);
+            if (emitParameters) {
+                emitCommaList(node.parameters, emitParameterDeclaration);
 
-            if (node.kind === SyntaxKind.IndexSignature) {
-                write("]");
+                if (node.kind === SyntaxKind.IndexSignature) {
+                    write("]");
+                }
+                else {
+                    write(")");
+                }
             }
-            else {
-                write(")");
+            else if (node.kind == SyntaxKind.Constructor) {
+                write("()");
             }
 
             // If this is not a constructor and is not private, emit the return type
