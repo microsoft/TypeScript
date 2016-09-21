@@ -15806,6 +15806,10 @@ namespace ts {
             }
         }
 
+        function convertAutoToAny(type: Type) {
+            return type === autoType ? anyType : type;
+        }
+
         // Check variable, parameter, or property declaration
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkDecorators(node);
@@ -15856,7 +15860,7 @@ namespace ts {
                 return;
             }
             const symbol = getSymbolOfNode(node);
-            const type = getTypeOfVariableOrParameterOrProperty(symbol);
+            const type = convertAutoToAny(getTypeOfVariableOrParameterOrProperty(symbol));
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 // Don't validate for-in initializer as it is already an error
@@ -15868,7 +15872,7 @@ namespace ts {
             else {
                 // Node is a secondary declaration, check that type is identical to primary declaration and check that
                 // initializer is consistent with type associated with the node
-                const declarationType = getWidenedTypeForVariableLikeDeclaration(node);
+                const declarationType = convertAutoToAny(getWidenedTypeForVariableLikeDeclaration(node));
                 if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
                     error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
                 }
