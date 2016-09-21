@@ -83,22 +83,22 @@ use(x);
 use(z0);
 >use(z0) : any
 >use : (a: any) => any
->z0 : any
+>z0 : undefined
 
 use(z1);
 >use(z1) : any
 >use : (a: any) => any
->z1 : any
+>z1 : undefined
 
 use(z2);
 >use(z2) : any
 >use : (a: any) => any
->z2 : any
+>z2 : undefined
 
 use(z3);
 >use(z3) : any
 >use : (a: any) => any
->z3 : any
+>z3 : undefined
 
 var z6;
 >z6 : any
@@ -155,7 +155,7 @@ use(y);
 use(z6);
 >use(z6) : any
 >use : (a: any) => any
->z6 : any
+>z6 : undefined
 
 var z = false;
 >z : boolean
