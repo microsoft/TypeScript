@@ -145,6 +145,10 @@ namespace ts.server {
             return this.project.getRootFilesLSHost();
         }
 
+        getTypeRootsVersion() {
+            return this.project.typesVersion;
+        }
+
         getScriptKind(fileName: string) {
             const info = this.project.getScriptInfoLSHost(fileName);
             return info && info.scriptKind;

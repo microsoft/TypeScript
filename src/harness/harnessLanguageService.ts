@@ -218,6 +218,9 @@ namespace Harness.LanguageService {
             const snapshot = this.getScriptSnapshot(path);
             return snapshot.getText(0, snapshot.getLength());
         }
+        getTypeRootsVersion() {
+            return 0;
+        }
 
 
         log(s: string): void { }

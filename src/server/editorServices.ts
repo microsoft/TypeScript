@@ -363,6 +363,15 @@ namespace ts.server {
             this.printProjects();
         }
 
+        private onTypeRootFileChanged(project: ConfiguredProject, fileName: string) {
+            this.logger.info(`Type root file ${fileName} changed`);
+            this.throttledOperations.schedule(project.configFileName + " * type root", /*delay*/ 250, () => {
+                project.updateTypes();
+                this.updateConfiguredProject(project); // TODO: Figure out why this is needed (should be redundant?)
+                this.refreshInferredProjects();
+            });
+        }
+
         /**
          * This is the callback function when a watched directory has added or removed source code files.
          * @param project the project that associates with this directory watcher
@@ -395,6 +404,8 @@ namespace ts.server {
                 // For configured projects, the change is made outside the tsconfig file, and
                 // it is not likely to affect the project for other files opened by the client. We can
                 // just update the current project.
+
+                this.logger.info("Updating configured project");
                 this.updateConfiguredProject(project);
 
                 // Call refreshInferredProjects to clean up inferred projects we may have
@@ -771,6 +782,7 @@ namespace ts.server {
                 this.watchConfigDirectoryForProject(project, projectOptions);
             }
             project.watchWildcards((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
+            project.watchTypeRoots((project, path) => this.onTypeRootFileChanged(project, path));
 
             this.configuredProjects.push(project);
             return project;

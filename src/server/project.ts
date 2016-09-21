@@ -69,6 +69,8 @@ namespace ts.server {
 
         protected projectErrors: Diagnostic[];
 
+        public typesVersion = 0;
+
         public isJsOnlyProject() {
             this.updateGraph();
             return allFilesAreJsOrDts(this);
@@ -151,6 +153,12 @@ namespace ts.server {
                 return undefined;
             }
             return this.program.getSourceFileByPath(path);
+        }
+
+        updateTypes() {
+            this.typesVersion++;
+            this.markAsDirty();
+            this.updateGraph();
         }
 
         close() {
@@ -569,6 +577,7 @@ namespace ts.server {
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<FileWatcher>;
+        private typeRootsWatchers: FileWatcher[];
 
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
@@ -606,6 +615,16 @@ namespace ts.server {
 
         watchConfigFile(callback: (project: ConfiguredProject) => void) {
             this.projectFileWatcher = this.projectService.host.watchFile(this.configFileName, _ => callback(this));
+        }
+
+        watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void) {
+            const roots = this.getEffectiveTypeRoots();
+            const watchers: FileWatcher[] = [];
+            for (const root of roots) {
+                this.projectService.logger.info(`Add type root watcher for: ${root}`);
+                watchers.push(this.projectService.host.watchDirectory(root, path => callback(this, path), /*recursive*/ false));
+            }
+            this.typeRootsWatchers = watchers;
         }
 
         watchConfigDirectory(callback: (project: ConfiguredProject, path: string) => void) {
@@ -651,6 +670,13 @@ namespace ts.server {
                 this.projectFileWatcher.close();
             }
 
+            if (this.typeRootsWatchers) {
+                for (const watcher of this.typeRootsWatchers) {
+                    watcher.close();
+                }
+                this.typeRootsWatchers = undefined;
+            }
+
             for (const id in this.directoriesWatchedForWildcards) {
                 this.directoriesWatchedForWildcards[id].close();
             }
@@ -666,6 +692,10 @@ namespace ts.server {
         deleteOpenRef() {
             this.openRefCount--;
             return this.openRefCount;
+        }
+
+        getEffectiveTypeRoots() {
+            return ts.getEffectiveTypeRoots(this.getCompilerOptions(), this.projectService.host) || [];
         }
     }
 
