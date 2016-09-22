@@ -1407,7 +1407,7 @@ namespace Harness {
 
         export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[]) {
             Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string => {
-                if (errors.length === 0) {
+                if (!errors || (errors.length === 0)) {
                     /* tslint:disable:no-null-keyword */
                     return null;
                     /* tslint:enable:no-null-keyword */
