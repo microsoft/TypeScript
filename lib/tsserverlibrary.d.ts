@@ -8105,6 +8105,7 @@ declare namespace ts {
         readDirectory?(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
         readFile?(path: string, encoding?: string): string;
         fileExists?(path: string): boolean;
+        getTypeRootsVersion?(): number;
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
@@ -8567,11 +8568,12 @@ declare namespace ts.server {
         isOpen: boolean;
         hasMixedContent: boolean;
         readonly containingProjects: Project[];
-        readonly formatCodeSettings: ts.FormatCodeSettings;
+        private formatCodeSettings;
         readonly path: Path;
         private fileWatcher;
         private svc;
         constructor(host: ServerHost, fileName: NormalizedPath, content: string, scriptKind: ScriptKind, isOpen?: boolean, hasMixedContent?: boolean);
+        getFormatCodeSettings(): FormatCodeSettings;
         attachToProject(project: Project): boolean;
         isAttached(project: Project): boolean;
         detachFromProject(project: Project): void;
@@ -8615,6 +8617,7 @@ declare namespace ts.server {
         getDefaultLibFileName(): string;
         getScriptSnapshot(filename: string): ts.IScriptSnapshot;
         getScriptFileNames(): string[];
+        getTypeRootsVersion(): number;
         getScriptKind(fileName: string): ScriptKind;
         getScriptVersion(filename: string): string;
         getCurrentDirectory(): string;
@@ -8699,6 +8702,7 @@ declare namespace ts.server {
         private projectStateVersion;
         private typingFiles;
         protected projectErrors: Diagnostic[];
+        typesVersion: number;
         isJsOnlyProject(): boolean;
         constructor(projectKind: ProjectKind, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, hasExplicitListOfFiles: boolean, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, compileOnSaveEnabled: boolean);
         getProjectErrors(): Diagnostic[];
@@ -8711,6 +8715,7 @@ declare namespace ts.server {
         abstract getProjectRootPath(): string | undefined;
         abstract getTypingOptions(): TypingOptions;
         getSourceFile(path: Path): SourceFile;
+        updateTypes(): void;
         close(): void;
         getCompilerOptions(): CompilerOptions;
         hasRoots(): boolean;
@@ -8759,6 +8764,7 @@ declare namespace ts.server {
         private projectFileWatcher;
         private directoryWatcher;
         private directoriesWatchedForWildcards;
+        private typeRootsWatchers;
         openRefCount: number;
         constructor(configFileName: NormalizedPath, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, hasExplicitListOfFiles: boolean, compilerOptions: CompilerOptions, wildcardDirectories: Map<WatchDirectoryFlags>, languageServiceEnabled: boolean, compileOnSaveEnabled: boolean);
         getProjectRootPath(): string;
@@ -8769,12 +8775,14 @@ declare namespace ts.server {
             __normalizedPathTag: any;
         };
         watchConfigFile(callback: (project: ConfiguredProject) => void): void;
+        watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void): void;
         watchConfigDirectory(callback: (project: ConfiguredProject, path: string) => void): void;
         watchWildcards(callback: (project: ConfiguredProject, path: string) => void): void;
         stopWatchingDirectory(): void;
         close(): void;
         addOpenRef(): void;
         deleteOpenRef(): number;
+        getEffectiveTypeRoots(): string[];
     }
     class ExternalProject extends Project {
         readonly externalProjectName: string;
@@ -8853,6 +8861,7 @@ declare namespace ts.server {
         private updateProjectGraphs(projects);
         private onSourceFileChanged(fileName);
         private handleDeletedFile(info);
+        private onTypeRootFileChanged(project, fileName);
         private onSourceFileInDirectoryChangedForConfiguredProject(project, fileName);
         private handleChangeInSourceFileForConfiguredProject(project);
         private onConfigChangedForConfiguredProject(project);
@@ -8891,7 +8900,8 @@ declare namespace ts.server {
         private collectChanges(lastKnownProjectVersions, currentProjects, result);
         synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[]): ProjectFilesWithTSDiagnostics[];
         applyChangesInOpenFiles(openFiles: protocol.ExternalFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void;
-        closeExternalProject(uncheckedFileName: string): void;
+        private closeConfiguredProject(configFile);
+        closeExternalProject(uncheckedFileName: string, suppressRefresh?: boolean): void;
         openExternalProject(proj: protocol.ExternalProject): void;
     }
 }
@@ -8983,7 +8993,6 @@ declare namespace ts.server {
         configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ts.Diagnostic[]): void;
         event(info: any, eventName: string): void;
         output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
-        private getLocation(position, scriptInfo);
         private semanticCheck(file, project);
         private syntacticCheck(file, project);
         private updateProjectStructure(seq, matchSeq, ms?);
@@ -9209,6 +9218,7 @@ declare namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
+        getTypeRootsVersion?(): number;
         readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
         readFile(path: string, encoding?: string): string;
         fileExists(path: string): boolean;
@@ -9303,6 +9313,7 @@ declare namespace ts {
         trace(s: string): void;
         error(s: string): void;
         getProjectVersion(): string;
+        getTypeRootsVersion(): number;
         useCaseSensitiveFileNames(): boolean;
         getCompilationSettings(): CompilerOptions;
         getScriptFileNames(): string[];

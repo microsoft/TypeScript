@@ -2081,6 +2081,7 @@ declare namespace ts {
         readDirectory?(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
         readFile?(path: string, encoding?: string): string;
         fileExists?(path: string): boolean;
+        getTypeRootsVersion?(): number;
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
