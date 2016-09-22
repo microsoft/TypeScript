@@ -9,6 +9,7 @@ namespace ts.server.typingsInstaller {
     const path: {
         join(...parts: string[]): string;
         dirname(path: string): string;
+        basename(path: string, extension?: string): string;
     } = require("path");
 
     class FileLog implements Log {
@@ -23,6 +24,15 @@ namespace ts.server.typingsInstaller {
         }
     }
 
+    function getNPMLocation(processName: string) {
+        if (path.basename(processName).indexOf("node") == 0) {
+            return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+        }
+        else {
+            return "npm";
+        }
+    }
+
     export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
 
@@ -31,7 +41,7 @@ namespace ts.server.typingsInstaller {
         constructor(globalTypingsCacheLocation: string, throttleLimit: number, log: Log) {
             super(
                 globalTypingsCacheLocation,
-                /*npmPath*/ `"${path.join(path.dirname(process.argv[0]), "npm")}"`,
+                /*npmPath*/ getNPMLocation(process.argv[0]),
                 toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
                 log);

@@ -1939,7 +1939,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] })
             };
             const host = createServerHost([f1, barjs, barTypings, config]);
-            const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, host) });
+            const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, 5, host) });
 
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
