@@ -526,7 +526,7 @@ namespace ts.server {
             }
             if (this.root.charCount() === 0) {
                 // TODO: assert deleteLength === 0
-                if (newText) {
+                if (newText !== undefined) {
                     this.load(LineIndex.linesFromText(newText).lines);
                     return this;
                 }

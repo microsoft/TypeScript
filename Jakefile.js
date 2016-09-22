@@ -937,7 +937,7 @@ desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is
 task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function () {
     cleanTestDirs();
     host = "node";
-    browser = process.env.browser || process.env.b || "IE";
+    browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';

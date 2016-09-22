@@ -1939,7 +1939,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] })
             };
             const host = createServerHost([f1, barjs, barTypings, config]);
-            const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, 5, host) });
+            const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, /*throttleLimit*/ 5, host) });
 
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
@@ -1985,6 +1985,54 @@ namespace ts.projectSystem {
             // get format options for file - should be equal to new per-file settings
             const s3 = projectService.getFormatCodeOptions(server.toNormalizedPath(f1.path));
             assert.deepEqual(s3, newPerFileSettings, "file settings should still be the same with per-file settings");
+        });
+    });
+
+    describe("watching @types", () => {
+        it("works correctly when typings are added or removed", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1;"
+            };
+            const t1 = {
+                path: "/a/b/node_modules/@types/lib1/index.d.ts",
+                content: "export let a: number"
+            };
+            const t2 = {
+                path: "/a/b/node_modules/@types/lib2/index.d.ts",
+                content: "export let b: number"
+            };
+            const tsconfig = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {},
+                    exclude: ["node_modules"]
+                })
+            };
+            const host = createServerHost([f1, t1, tsconfig]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t1.path]);
+
+            // delete t1
+            host.reloadFS([f1, tsconfig]);
+            host.triggerDirectoryWatcherCallback("/a/b/node_modules/@types", "lib1");
+            // run throttled operation
+            host.runQueuedTimeoutCallbacks();
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path]);
+
+            // create t2
+            host.reloadFS([f1, tsconfig, t2]);
+            host.triggerDirectoryWatcherCallback("/a/b/node_modules/@types", "lib2");
+            // run throttled operation
+            host.runQueuedTimeoutCallbacks();
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t2.path]);
         });
     });
 }
