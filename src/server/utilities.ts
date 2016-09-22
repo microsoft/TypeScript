@@ -35,7 +35,7 @@ namespace ts.server {
     function getProjectRootPath(project: Project): Path {
         switch (project.projectKind) {
             case ProjectKind.Configured:
-                return <Path>project.getProjectName();
+                return <Path>getDirectoryPath(project.getProjectName());
             case ProjectKind.Inferred:
                 // TODO: fixme
                 return <Path>"";

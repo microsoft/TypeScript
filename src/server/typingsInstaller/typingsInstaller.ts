@@ -150,7 +150,7 @@ namespace ts.server.typingsInstaller {
             if (this.installTypingHost.fileExists(packageJson)) {
                 const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson));
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Loaded content of '${npmConfig}': ${JSON.stringify(npmConfig)}`);
+                    this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
                 }
                 if (npmConfig.devDependencies) {
                     for (const key in npmConfig.devDependencies) {

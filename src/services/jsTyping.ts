@@ -187,7 +187,7 @@ namespace ts.JsTyping {
             }
 
             const typingNames: string[] = [];
-            const fileNames = host.readDirectory(nodeModulesPath, ["*.json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
+            const fileNames = host.readDirectory(nodeModulesPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
                 if (getBaseFileName(normalizedFileName) !== "package.json") {

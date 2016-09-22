@@ -627,5 +627,97 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path ]);
         });
+
+        it("configured projects discover from node_modules", () => {
+            const app = {
+                path: "/app.js",
+                content: ""
+            };
+            const jsconfig = {
+                path: "/jsconfig.json",
+                content: JSON.stringify({})
+            };
+            const jquery = {
+                path: "/node_modules/jquery/index.js",
+                content: ""
+            };
+            const jqueryPackage = {
+                path: "/node_modules/jquery/package.json",
+                content: JSON.stringify({ name: "jquery" })
+            };
+            const jqueryDTS = {
+                path: "/tmp/node_modules/@types/jquery/index.d.ts",
+                content: ""
+            };
+            const host = createServerHost([app, jsconfig, jquery, jqueryPackage]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: "/tmp" });
+                }
+                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/jquery"];
+                    const typingFiles = [jqueryDTS];
+                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                }
+            })();
+
+            const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            projectService.openClientFile(app.path);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const p = projectService.configuredProjects[0];
+            checkProjectActualFiles(p, [app.path]);
+
+            installer.installAll([TI.NpmViewRequest], [TI.NpmInstallRequest]);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+        });
+
+        it("configured projects discover from bower.josn", () => {
+            const app = {
+                path: "/app.js",
+                content: ""
+            };
+            const jsconfig = {
+                path: "/jsconfig.json",
+                content: JSON.stringify({})
+            };
+            const bowerJson = {
+                path: "/bower.json",
+                content: JSON.stringify({
+                        "dependencies": {
+                            "jquery": "^3.1.0"
+                        }
+                    })
+            };
+            const jqueryDTS = {
+                path: "/tmp/node_modules/@types/jquery/index.d.ts",
+                content: ""
+            };
+            const host = createServerHost([app, jsconfig, bowerJson]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: "/tmp" });
+                }
+                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/jquery"];
+                    const typingFiles = [jqueryDTS];
+                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                }
+            })();
+
+            const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            projectService.openClientFile(app.path);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const p = projectService.configuredProjects[0];
+            checkProjectActualFiles(p, [app.path]);
+
+            installer.installAll([TI.NpmViewRequest], [TI.NpmInstallRequest]);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+        });
     });
 }
