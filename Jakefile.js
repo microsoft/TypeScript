@@ -12,6 +12,7 @@ var compilerDirectory = "src/compiler/";
 var servicesDirectory = "src/services/";
 var serverDirectory = "src/server/";
 var typingsInstallerDirectory = "src/server/typingsInstaller";
+var cancellationTokenDirectory = "src/server/cancellationToken";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
@@ -143,7 +144,7 @@ var serverCoreSources = [
 var cancellationTokenSources = [
     "cancellationToken.ts"
 ].map(function (f) {
-    return path.join(serverDirectory, f);
+    return path.join(cancellationTokenDirectory, f);
 });
 
 var typingsInstallerSources = [
