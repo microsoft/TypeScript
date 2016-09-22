@@ -3154,6 +3154,13 @@ namespace ts {
                 }
             }
 
+            const typeRootsVersion = host.getTypeRootsVersion ? host.getTypeRootsVersion() : 0;
+            if (lastTypesRootVersion !== typeRootsVersion) {
+                log("TypeRoots version has changed; provide new program");
+                program = undefined;
+                lastTypesRootVersion = typeRootsVersion;
+            }
+
             // Get a fresh cache of the host information
             let hostCache = new HostCache(host, getCanonicalFileName);
 
@@ -3219,13 +3226,6 @@ namespace ts {
                 compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
                     return host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
                 };
-            }
-
-            const typeRootsVersion = host.getTypeRootsVersion ? host.getTypeRootsVersion() : 0;
-            if (lastTypesRootVersion !== typeRootsVersion) {
-                log("TypeRoots version has changed; provide new program");
-                program = undefined;
-                lastTypesRootVersion = typeRootsVersion;
             }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
