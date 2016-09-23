@@ -990,7 +990,7 @@ namespace ts.server {
                 }
             }
             if (info) {
-                if (fileContent) {
+                if (fileContent !== undefined) {
                     info.reload(fileContent);
                 }
                 if (openedByClient) {
