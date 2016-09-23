@@ -2035,4 +2035,33 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t2.path]);
         });
     });
+
+    describe("Open-file", () => {
+        it("can be reloaded with empty content", () => {
+            const f = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const projectFileName = "externalProject";
+            const host = createServerHost([f]);
+            const projectService = createProjectService(host);
+            // create a project 
+            projectService.openExternalProject({ projectFileName, rootFiles: [toExternalFile(f.path)], options: {} });
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+
+            const p = projectService.externalProjects[0];
+            // force to load the content of the file
+            p.updateGraph();
+
+            const scriptInfo = p.getScriptInfo(f.path);
+            checkSnapLength(scriptInfo.snap(), f.content.length);
+
+            // open project and replace its content with empty string
+            projectService.openClientFile(f.path, "");
+            checkSnapLength(scriptInfo.snap(), 0);
+        });
+        function checkSnapLength(snap: server.LineIndexSnapshot, expectedLength: number) {
+            assert.equal(snap.getLength(), expectedLength, "Incorrect snapshot size");
+        }
+    });
 }
