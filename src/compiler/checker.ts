@@ -3838,6 +3838,14 @@ namespace ts {
             return true;
         }
 
+        function createEnumLiteralType(symbol: Symbol, baseType: EnumType, text: string) {
+            const type = <EnumLiteralType>createType(TypeFlags.EnumLiteral);
+            type.symbol = symbol;
+            type.baseType = <EnumType & UnionType>baseType;
+            type.text = text;
+            return type;
+        }
+
         function getDeclaredTypeOfEnum(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.declaredType) {
@@ -3853,10 +3861,7 @@ namespace ts {
                                 const memberSymbol = getSymbolOfNode(member);
                                 const value = getEnumMemberValue(member);
                                 if (!memberTypes[value]) {
-                                    const memberType = memberTypes[value] = <EnumLiteralType>createType(TypeFlags.EnumLiteral);
-                                    memberType.symbol = memberSymbol;
-                                    memberType.baseType = <EnumType & UnionType>enumType;
-                                    memberType.text = "" + value;
+                                    const memberType = memberTypes[value] = createEnumLiteralType(memberSymbol, enumType, "" + value);
                                     memberTypeList.push(memberType);
                                 }
                             }
@@ -5335,6 +5340,7 @@ namespace ts {
             containsUndefined?: boolean;
             containsNull?: boolean;
             containsNonWideningType?: boolean;
+            containsStringOrNumberLiteral?: boolean;
         }
 
         function binarySearchTypes(types: Type[], type: Type): number {
@@ -5374,6 +5380,7 @@ namespace ts {
                 if (!(type.flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
             }
             else if (!(type.flags & TypeFlags.Never)) {
+                if (type.flags & TypeFlags.StringOrNumberLiteral) typeSet.containsStringOrNumberLiteral = true;
                 const len = typeSet.length;
                 const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearchTypes(typeSet, type);
                 if (index < 0) {
@@ -5420,6 +5427,19 @@ namespace ts {
             }
         }
 
+        function removeFreshLiteralTypes(types: Type[]) {
+            let i = types.length;
+            while (i > 1) {
+                i--;
+                const t = types[i];
+                if (t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral) {
+                    if (types[i - 1] === (<LiteralType>t).regularType) {
+                        orderedRemoveItemAt(types, i);
+                    }
+                }
+            }
+        }
+
         // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
         // flag is specified we also reduce the constituent type set to only include types that aren't subtypes
         // of other types. Subtype reduction is expensive for large union types and is possible only when union
@@ -5441,6 +5461,9 @@ namespace ts {
             }
             if (subtypeReduction) {
                 removeSubtypes(typeSet);
+            }
+            else if (typeSet.containsStringOrNumberLiteral) {
+                removeFreshLiteralTypes(typeSet);
             }
             if (typeSet.length === 0) {
                 return typeSet.containsNull ? typeSet.containsNonWideningType ? nullType : nullWideningType :
@@ -5549,8 +5572,19 @@ namespace ts {
 
         function createLiteralType(flags: TypeFlags, text: string) {
             const type = <LiteralType>createType(flags);
-            type.text = text;
+            const freshType = <LiteralType>createType(flags | TypeFlags.FreshLiteral);
+            type.text = freshType.text = text;
+            type.freshType = freshType;
+            freshType.regularType = type;
             return type;
+        }
+
+        function getFreshTypeOfLiteralType(type: Type) {
+            return type.flags & TypeFlags.StringOrNumberLiteral && !(type.flags & TypeFlags.FreshLiteral) ? (<LiteralType>type).freshType : type;
+        }
+
+        function getRegularTypeOfLiteralType(type: Type) {
+            return type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType : type;
         }
 
         function getLiteralTypeForText(flags: TypeFlags, text: string) {
@@ -5561,7 +5595,7 @@ namespace ts {
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = checkExpression(node.literal);
+                links.resolvedType = getRegularTypeOfLiteralType(checkExpression(node.literal));
             }
             return links.resolvedType;
         }
@@ -6273,7 +6307,7 @@ namespace ts {
                 if ((source.flags & TypeFlags.Number | source.flags & TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
                 if (source.flags & TypeFlags.EnumLiteral &&
                     target.flags & TypeFlags.EnumLiteral &&
-                    (<LiteralType>source).text === (<LiteralType>target).text &&
+                    (<EnumLiteralType>source).text === (<EnumLiteralType>target).text &&
                     isEnumTypeRelatedTo((<EnumLiteralType>source).baseType, (<EnumLiteralType>target).baseType, errorReporter)) {
                     return true;
                 }
@@ -6287,6 +6321,12 @@ namespace ts {
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            if (source.flags & TypeFlags.Literal && source.flags & TypeFlags.FreshLiteral) {
+                source = (<LiteralType>source).regularType;
+            }
+            if (target.flags & TypeFlags.Literal && target.flags & TypeFlags.FreshLiteral) {
+                target = (<LiteralType>target).regularType;
+            }
             if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
             }
@@ -6384,6 +6424,12 @@ namespace ts {
             // Ternary.False if they are not related.
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 let result: Ternary;
+                if (source.flags & TypeFlags.Literal && source.flags & TypeFlags.FreshLiteral) {
+                    source = (<LiteralType>source).regularType;
+                }
+                if (target.flags & TypeFlags.Literal && target.flags & TypeFlags.FreshLiteral) {
+                    target = (<LiteralType>target).regularType;
+                }
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
 
@@ -6393,7 +6439,7 @@ namespace ts {
 
                 if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
-                if (source.flags & TypeFlags.FreshObjectLiteral) {
+                if (source.flags & TypeFlags.ObjectLiteral && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
@@ -7323,8 +7369,8 @@ namespace ts {
         // no flags for all other types (including non-falsy literal types).
         function getFalsyFlags(type: Type): TypeFlags {
             return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((<UnionType>type).types) :
-                type.flags & TypeFlags.StringLiteral ? type === emptyStringType ? TypeFlags.StringLiteral : 0 :
-                type.flags & TypeFlags.NumberLiteral ? type === zeroType ? TypeFlags.NumberLiteral : 0 :
+                type.flags & TypeFlags.StringLiteral ? (<LiteralType>type).text === "" ? TypeFlags.StringLiteral : 0 :
+                type.flags & TypeFlags.NumberLiteral ? (<LiteralType>type).text === "0" ? TypeFlags.NumberLiteral : 0 :
                 type.flags & TypeFlags.BooleanLiteral ? type === falseType ? TypeFlags.BooleanLiteral : 0 :
                 type.flags & TypeFlags.PossiblyFalsy;
         }
@@ -7391,7 +7437,7 @@ namespace ts {
          * Leave signatures alone since they are not subject to the check.
          */
         function getRegularTypeOfObjectLiteral(type: Type): Type {
-            if (!(type.flags & TypeFlags.FreshObjectLiteral)) {
+            if (!(type.flags & TypeFlags.ObjectLiteral && type.flags & TypeFlags.FreshLiteral)) {
                 return type;
             }
             const regularType = (<FreshObjectLiteralType>type).regularType;
@@ -7407,7 +7453,7 @@ namespace ts {
                 resolved.constructSignatures,
                 resolved.stringIndexInfo,
                 resolved.numberIndexInfo);
-            regularNew.flags = resolved.flags & ~TypeFlags.FreshObjectLiteral;
+            regularNew.flags = resolved.flags & ~TypeFlags.FreshLiteral;
             (<FreshObjectLiteralType>type).regularType = regularNew;
             return regularNew;
         }
@@ -8109,14 +8155,14 @@ namespace ts {
             }
             if (flags & TypeFlags.StringLiteral) {
                 return strictNullChecks ?
-                    type === emptyStringType ? TypeFacts.EmptyStringStrictFacts : TypeFacts.NonEmptyStringStrictFacts :
-                    type === emptyStringType ? TypeFacts.EmptyStringFacts : TypeFacts.NonEmptyStringFacts;
+                    (<LiteralType>type).text === "" ? TypeFacts.EmptyStringStrictFacts : TypeFacts.NonEmptyStringStrictFacts :
+                    (<LiteralType>type).text === "" ? TypeFacts.EmptyStringFacts : TypeFacts.NonEmptyStringFacts;
             }
             if (flags & (TypeFlags.Number | TypeFlags.Enum)) {
                 return strictNullChecks ? TypeFacts.NumberStrictFacts : TypeFacts.NumberFacts;
             }
             if (flags & (TypeFlags.NumberLiteral | TypeFlags.EnumLiteral)) {
-                const isZero = type === zeroType || type.flags & TypeFlags.EnumLiteral && (<LiteralType>type).text === "0";
+                const isZero = (<LiteralType>type).text === "0";
                 return strictNullChecks ?
                     isZero ? TypeFacts.ZeroStrictFacts : TypeFacts.NonZeroStrictFacts :
                     isZero ? TypeFacts.ZeroFacts : TypeFacts.NonZeroFacts;
@@ -8289,7 +8335,7 @@ namespace ts {
 
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
             if (clause.kind === SyntaxKind.CaseClause) {
-                const caseType = checkExpression((<CaseClause>clause).expression);
+                const caseType = getRegularTypeOfLiteralType(checkExpression((<CaseClause>clause).expression));
                 return isUnitType(caseType) ? caseType : undefined;
             }
             return neverType;
@@ -8670,7 +8716,11 @@ namespace ts {
                     const narrowedType = filterType(type, t => areTypesComparable(t, valueType));
                     return narrowedType.flags & TypeFlags.Never ? type : narrowedType;
                 }
-                return isUnitType(valueType) ? filterType(type, t => t !== valueType) : type;
+                if (isUnitType(valueType)) {
+                    const regularType = getRegularTypeOfLiteralType(valueType);
+                    return filterType(type, t => getRegularTypeOfLiteralType(t) !== regularType);
+                }
+                return type;
             }
 
             function narrowTypeByTypeof(type: Type, typeOfExpr: TypeOfExpression, operator: SyntaxKind, literal: LiteralExpression, assumeTrue: boolean): Type {
@@ -8715,7 +8765,7 @@ namespace ts {
                 if (!hasDefaultClause) {
                     return caseType;
                 }
-                const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, t)));
+                const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, getRegularTypeOfLiteralType(t))));
                 return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
             }
 
@@ -10289,7 +10339,7 @@ namespace ts {
             const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.String) : undefined;
             const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.Number) : undefined;
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
-            const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
+            const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags) | (patternWithComputedProperties ? TypeFlags.ObjectLiteralPatternWithComputedProperties : 0);
             if (inDestructuringPattern) {
                 result.pattern = node;
@@ -13682,12 +13732,13 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.StringLiteral:
-                    return getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text);
+                    return getFreshTypeOfLiteralType(getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text));
                 case SyntaxKind.NumericLiteral:
-                    return getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text);
+                    return getFreshTypeOfLiteralType(getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text));
                 case SyntaxKind.TrueKeyword:
+                    return trueType;
                 case SyntaxKind.FalseKeyword:
-                    return node.kind === SyntaxKind.TrueKeyword ? trueType : falseType;
+                    return falseType;
             }
         }
 
@@ -18472,7 +18523,7 @@ namespace ts {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
                 expr = <Expression>expr.parent;
             }
-            return checkExpression(expr);
+            return getRegularTypeOfLiteralType(checkExpression(expr));
         }
 
         /**

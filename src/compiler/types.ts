@@ -2372,7 +2372,7 @@ namespace ts {
         /* @internal */
         ObjectLiteral           = 1 << 23,  // Originates in an object literal
         /* @internal */
-        FreshObjectLiteral      = 1 << 24,  // Fresh object literal type
+        FreshLiteral            = 1 << 24,  // Fresh literal type
         /* @internal */
         ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
         /* @internal */
@@ -2385,6 +2385,7 @@ namespace ts {
         /* @internal */
         Nullable = Undefined | Null,
         Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral,
+        StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
@@ -2426,12 +2427,15 @@ namespace ts {
     /* @internal */
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
-        intrinsicName: string;  // Name of intrinsic type
+        intrinsicName: string;        // Name of intrinsic type
     }
 
     // String literal types (TypeFlags.StringLiteral)
+    // Numeric literal types (TypeFlags.NumberLiteral)
     export interface LiteralType extends Type {
-        text: string;  // Text of string literal
+        text: string;               // Text of literal
+        freshType?: LiteralType;    // Fresh version of type
+        regularType?: LiteralType;  // Regular version of type
     }
 
     // Enum types (TypeFlags.Enum)
@@ -2441,7 +2445,7 @@ namespace ts {
 
     // Enum types (TypeFlags.EnumLiteral)
     export interface EnumLiteralType extends LiteralType {
-        baseType: EnumType & UnionType;
+        baseType: EnumType & UnionType;  // Base enum type
     }
 
     // Object types (TypeFlags.ObjectType)
