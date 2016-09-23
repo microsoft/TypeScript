@@ -5340,6 +5340,8 @@ namespace ts {
             containsUndefined?: boolean;
             containsNull?: boolean;
             containsNonWideningType?: boolean;
+            containsString?: boolean;
+            containsNumber?: boolean;
             containsStringOrNumberLiteral?: boolean;
         }
 
@@ -5368,23 +5370,26 @@ namespace ts {
         }
 
         function addTypeToUnion(typeSet: TypeSet, type: Type) {
-            if (type.flags & TypeFlags.Union) {
+            const flags = type.flags;
+            if (flags & TypeFlags.Union) {
                 addTypesToUnion(typeSet, (<UnionType>type).types);
             }
-            else if (type.flags & TypeFlags.Any) {
+            else if (flags & TypeFlags.Any) {
                 typeSet.containsAny = true;
             }
-            else if (!strictNullChecks && type.flags & TypeFlags.Nullable) {
-                if (type.flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
-                if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
-                if (!(type.flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
+            else if (!strictNullChecks && flags & TypeFlags.Nullable) {
+                if (flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
+                if (flags & TypeFlags.Null) typeSet.containsNull = true;
+                if (!(flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
             }
-            else if (!(type.flags & TypeFlags.Never)) {
-                if (type.flags & TypeFlags.StringOrNumberLiteral) typeSet.containsStringOrNumberLiteral = true;
+            else if (!(flags & TypeFlags.Never)) {
+                if (flags & TypeFlags.String) typeSet.containsString = true;
+                if (flags & TypeFlags.Number) typeSet.containsNumber = true;
+                if (flags & TypeFlags.StringOrNumberLiteral) typeSet.containsStringOrNumberLiteral = true;
                 const len = typeSet.length;
                 const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearchTypes(typeSet, type);
                 if (index < 0) {
-                    if (!(type.flags & TypeFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
+                    if (!(flags & TypeFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
                         typeSet.splice(~index, 0, type);
                     }
                 }
@@ -5417,7 +5422,7 @@ namespace ts {
             return false;
         }
 
-        function removeSubtypes(types: Type[]) {
+        function removeSubtypes(types: TypeSet) {
             let i = types.length;
             while (i > 0) {
                 i--;
@@ -5427,15 +5432,17 @@ namespace ts {
             }
         }
 
-        function removeFreshLiteralTypes(types: Type[]) {
+        function removeRedundantLiteralTypes(types: TypeSet) {
             let i = types.length;
-            while (i > 1) {
+            while (i > 0) {
                 i--;
                 const t = types[i];
-                if (t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral) {
-                    if (types[i - 1] === (<LiteralType>t).regularType) {
-                        orderedRemoveItemAt(types, i);
-                    }
+                const remove =
+                    t.flags & TypeFlags.StringLiteral && types.containsString ||
+                    t.flags & TypeFlags.NumberLiteral && types.containsNumber ||
+                    t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral && i > 0 && types[i - 1] === (<LiteralType>t).regularType;
+                if (remove) {
+                    orderedRemoveItemAt(types, i);
                 }
             }
         }
@@ -5463,7 +5470,7 @@ namespace ts {
                 removeSubtypes(typeSet);
             }
             else if (typeSet.containsStringOrNumberLiteral) {
-                removeFreshLiteralTypes(typeSet);
+                removeRedundantLiteralTypes(typeSet);
             }
             if (typeSet.length === 0) {
                 return typeSet.containsNull ? typeSet.containsNonWideningType ? nullType : nullWideningType :
@@ -7348,6 +7355,15 @@ namespace ts {
                 type;
         }
 
+        function getWidenedLiteralType(type: Type): Type {
+            return type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
+                type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
+                type.flags & TypeFlags.BooleanLiteral ? booleanType :
+                type.flags & TypeFlags.EnumLiteral ? (<EnumLiteralType>type).baseType :
+                type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum) ? getUnionType(map((<UnionType>type).types, getWidenedLiteralType)) :
+                type;
+        }
+
         /**
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
@@ -7904,7 +7920,7 @@ namespace ts {
                     const widenLiteralTypes = context.inferences[index].topLevel &&
                         !hasPrimitiveConstraint(signature.typeParameters[index]) &&
                         (context.inferences[index].isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
-                    const baseInferences = widenLiteralTypes ? map(inferences, getBaseTypeOfLiteralType) : inferences;
+                    const baseInferences = widenLiteralTypes ? map(inferences, getWidenedLiteralType) : inferences;
                     // Infer widened union or supertype, or the unknown type for no common supertype
                     const unionOrSuperType = context.inferUnionTypes ? getUnionType(baseInferences, /*subtypeReduction*/ true) : getCommonSupertype(baseInferences);
                     inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
@@ -9600,14 +9616,14 @@ namespace ts {
                         if (parameter.dotDotDotToken) {
                             const restTypes: Type[] = [];
                             for (let i = indexOfParameter; i < iife.arguments.length; i++) {
-                                restTypes.push(getBaseTypeOfLiteralType(checkExpression(iife.arguments[i])));
+                                restTypes.push(getWidenedLiteralType(checkExpression(iife.arguments[i])));
                             }
                             return createArrayType(getUnionType(restTypes));
                         }
                         const links = getNodeLinks(iife);
                         const cached = links.resolvedSignature;
                         links.resolvedSignature = anySignature;
-                        const type = getBaseTypeOfLiteralType(checkExpression(iife.arguments[indexOfParameter]));
+                        const type = getWidenedLiteralType(checkExpression(iife.arguments[indexOfParameter]));
                         links.resolvedSignature = cached;
                         return type;
                     }
@@ -12709,7 +12725,7 @@ namespace ts {
                 reportErrorsFromWidening(func, type);
             }
             if (isUnitType(type) && !(contextualSignature && isLiteralContextualType(getReturnTypeOfSignature(contextualSignature)))) {
-                type = getBaseTypeOfLiteralType(type);
+                type = getWidenedLiteralType(type);
             }
 
             const widenedType = getWidenedType(type);
@@ -13093,7 +13109,7 @@ namespace ts {
                 return silentNeverType;
             }
             if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral) {
-                return getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>node.operand).text);
+                return getFreshTypeOfLiteralType(getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>node.operand).text));
             }
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
@@ -13786,7 +13802,7 @@ namespace ts {
             const type = checkExpressionCached(declaration.initializer);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 getCombinedModifierFlags(declaration) & ModifierFlags.Readonly ||
-                isTypeAssertion(declaration.initializer) ? type : getBaseTypeOfLiteralType(type);
+                isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
         }
 
         function isLiteralContextualType(contextualType: Type) {
@@ -13808,7 +13824,7 @@ namespace ts {
 
         function checkExpressionForMutableLocation(node: Expression, contextualMapper?: TypeMapper): Type {
             const type = checkExpression(node, contextualMapper);
-            return isTypeAssertion(node) || isLiteralContextualType(getContextualType(node)) ? type : getBaseTypeOfLiteralType(type);
+            return isTypeAssertion(node) || isLiteralContextualType(getContextualType(node)) ? type : getWidenedLiteralType(type);
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, contextualMapper?: TypeMapper): Type {
