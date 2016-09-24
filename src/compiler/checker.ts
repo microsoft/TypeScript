@@ -5440,7 +5440,7 @@ namespace ts {
                 const remove =
                     t.flags & TypeFlags.StringLiteral && types.containsString ||
                     t.flags & TypeFlags.NumberLiteral && types.containsNumber ||
-                    t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral && i > 0 && types[i - 1] === (<LiteralType>t).regularType;
+                    t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
                 }
@@ -5579,15 +5579,20 @@ namespace ts {
 
         function createLiteralType(flags: TypeFlags, text: string) {
             const type = <LiteralType>createType(flags);
-            const freshType = <LiteralType>createType(flags | TypeFlags.FreshLiteral);
-            type.text = freshType.text = text;
-            type.freshType = freshType;
-            freshType.regularType = type;
+            type.text = text;
             return type;
         }
 
         function getFreshTypeOfLiteralType(type: Type) {
-            return type.flags & TypeFlags.StringOrNumberLiteral && !(type.flags & TypeFlags.FreshLiteral) ? (<LiteralType>type).freshType : type;
+            if (type.flags & TypeFlags.StringOrNumberLiteral && !(type.flags & TypeFlags.FreshLiteral)) {
+                if (!(<LiteralType>type).freshType) {
+                    const freshType = <LiteralType>createLiteralType(type.flags | TypeFlags.FreshLiteral, (<LiteralType>type).text);
+                    freshType.regularType = <LiteralType>type;
+                    (<LiteralType>type).freshType = freshType;
+                }
+                return (<LiteralType>type).freshType;
+            }
+            return type;
         }
 
         function getRegularTypeOfLiteralType(type: Type) {
@@ -6328,10 +6333,10 @@ namespace ts {
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            if (source.flags & TypeFlags.Literal && source.flags & TypeFlags.FreshLiteral) {
+            if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
                 source = (<LiteralType>source).regularType;
             }
-            if (target.flags & TypeFlags.Literal && target.flags & TypeFlags.FreshLiteral) {
+            if (target.flags & TypeFlags.StringOrNumberLiteral && target.flags & TypeFlags.FreshLiteral) {
                 target = (<LiteralType>target).regularType;
             }
             if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
@@ -6431,10 +6436,10 @@ namespace ts {
             // Ternary.False if they are not related.
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 let result: Ternary;
-                if (source.flags & TypeFlags.Literal && source.flags & TypeFlags.FreshLiteral) {
+                if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
                     source = (<LiteralType>source).regularType;
                 }
-                if (target.flags & TypeFlags.Literal && target.flags & TypeFlags.FreshLiteral) {
+                if (target.flags & TypeFlags.StringOrNumberLiteral && target.flags & TypeFlags.FreshLiteral) {
                     target = (<LiteralType>target).regularType;
                 }
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
