@@ -573,10 +573,10 @@ namespace ts {
             operationLocations = undefined;
             state = createTempVariable(/*recordTempVariable*/ undefined);
 
-            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
-
             // Build the generator
             startLexicalEnvironment();
+
+            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
             transformAndEmitStatements(body.statements, statementOffset);
 
@@ -615,6 +615,11 @@ namespace ts {
                 return undefined;
             }
             else {
+                // Do not hoist custom prologues.
+                if (node.emitFlags & NodeEmitFlags.CustomPrologue) {
+                    return node;
+                }
+
                 for (const variable of node.declarationList.declarations) {
                     hoistVariableDeclaration(<Identifier>variable.name);
                 }
