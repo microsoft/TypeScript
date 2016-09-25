@@ -45,7 +45,7 @@ function blah() {
         return C;
     }());
     export default C;
-    function bee() { }
+    export function bee() { }
     import I2 = require("foo");
     import * as Foo from "ambient";
     import bar from "ambient";

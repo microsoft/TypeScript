@@ -126,14 +126,22 @@ namespace ts {
         context: TransformationContext,
         node: VariableDeclaration,
         value?: Expression,
-        visitor?: (node: Node) => VisitResult<Node>) {
+        visitor?: (node: Node) => VisitResult<Node>,
+        recordTempVariable?: (node: Identifier) => void) {
         const declarations: VariableDeclaration[] = [];
 
+        let pendingAssignments: Expression[];
         flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
+            if (pendingAssignments) {
+                pendingAssignments.push(value);
+                value = inlineExpressions(pendingAssignments);
+                pendingAssignments = undefined;
+            }
+
             const declaration = createVariableDeclaration(name, /*type*/ undefined, value, location);
             declaration.original = original;
 
@@ -146,8 +154,19 @@ namespace ts {
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(/*recordTempVariable*/ undefined);
-            emitAssignment(name, value, location, /*original*/ undefined);
+            const name = createTempVariable(recordTempVariable);
+            if (recordTempVariable) {
+                const assignment = createAssignment(name, value, location);
+                if (pendingAssignments) {
+                    pendingAssignments.push(assignment);
+                }
+                else {
+                    pendingAssignments = [assignment];
+                }
+            }
+            else {
+                emitAssignment(name, value, location, /*original*/ undefined);
+            }
             return name;
         }
     }
