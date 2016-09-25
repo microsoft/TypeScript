@@ -163,6 +163,7 @@ namespace ts {
         let currentText: string;
         let currentParent: Node;
         let currentNode: Node;
+        let enclosingVariableStatement: VariableStatement;
         let enclosingBlockScopeContainer: Node;
         let enclosingBlockScopeContainerParent: Node;
         let enclosingFunction: FunctionLikeDeclaration;
@@ -205,6 +206,7 @@ namespace ts {
             const savedEnclosingNonAsyncFunctionBody = enclosingNonAsyncFunctionBody;
             const savedEnclosingBlockScopeContainer = enclosingBlockScopeContainer;
             const savedEnclosingBlockScopeContainerParent = enclosingBlockScopeContainerParent;
+            const savedEnclosingVariableStatement = enclosingVariableStatement;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
             const savedConvertedLoopState = convertedLoopState;
@@ -222,6 +224,7 @@ namespace ts {
             enclosingNonAsyncFunctionBody = savedEnclosingNonAsyncFunctionBody;
             enclosingBlockScopeContainer = savedEnclosingBlockScopeContainer;
             enclosingBlockScopeContainerParent = savedEnclosingBlockScopeContainerParent;
+            enclosingVariableStatement = savedEnclosingVariableStatement;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
             return visited;
@@ -306,7 +309,7 @@ namespace ts {
                     return visitFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.VariableDeclaration:
-                    return visitVariableDeclaration(<VariableDeclaration>node, /*offset*/ undefined);
+                    return visitVariableDeclaration(<VariableDeclaration>node);
 
                 case SyntaxKind.Identifier:
                     return visitIdentifier(<Identifier>node);
@@ -409,6 +412,25 @@ namespace ts {
                             enclosingNonAsyncFunctionBody = currentNode;
                         }
                     }
+                }
+
+                // keep track of the enclosing variable statement when in the context of
+                // variable statements, variable declarations, binding elements, and binding
+                // patterns.
+                switch (currentNode.kind) {
+                    case SyntaxKind.VariableStatement:
+                        enclosingVariableStatement = <VariableStatement>currentNode;
+                        break;
+
+                    case SyntaxKind.VariableDeclarationList:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                        break;
+
+                    default:
+                        enclosingVariableStatement = undefined;
                 }
             }
 
@@ -1309,7 +1331,7 @@ namespace ts {
             return setOriginalNode(
                 createFunctionDeclaration(
                     /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
+                    node.modifiers,
                     node.asteriskToken,
                     node.name,
                     /*typeParameters*/ undefined,
@@ -1638,13 +1660,13 @@ namespace ts {
          *
          * @param node A VariableDeclaration node.
          */
-        function visitVariableDeclarationInLetDeclarationList(node: VariableDeclaration, offset: number) {
+        function visitVariableDeclarationInLetDeclarationList(node: VariableDeclaration) {
             // For binding pattern names that lack initializers there is no point to emit
             // explicit initializer since downlevel codegen for destructuring will fail
             // in the absence of initializer so all binding elements will say uninitialized
             const name = node.name;
             if (isBindingPattern(name)) {
-                return visitVariableDeclaration(node, offset);
+                return visitVariableDeclaration(node);
             }
 
             if (!node.initializer && shouldEmitExplicitInitializerForLetDeclaration(node)) {
@@ -1661,10 +1683,13 @@ namespace ts {
          *
          * @param node A VariableDeclaration node.
          */
-        function visitVariableDeclaration(node: VariableDeclaration, offset: number): VisitResult<VariableDeclaration> {
+        function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern.
             if (isBindingPattern(node.name)) {
-                return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor);
+                const recordTempVariablesInLine = !enclosingVariableStatement
+                    || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
+                return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor,
+                    recordTempVariablesInLine ? undefined : hoistVariableDeclaration);
             }
 
             return visitEachChild(node, visitor, context);
@@ -1740,7 +1765,7 @@ namespace ts {
             // Note also that because an extra statement is needed to assign to the LHS,
             // for-of bodies are always emitted as blocks.
 
-            const expression = node.expression;
+            const expression = visitNode(node.expression, visitor, isExpression);
             const initializer = node.initializer;
             const statements: Statement[] = [];
 
@@ -1989,7 +2014,7 @@ namespace ts {
                 case SyntaxKind.ForOfStatement:
                     const initializer = (<ForStatement | ForInStatement | ForOfStatement>node).initializer;
                     if (initializer && initializer.kind === SyntaxKind.VariableDeclarationList) {
-                        loopInitializer = <VariableDeclarationList>(<ForStatement | ForInStatement | ForOfStatement>node).initializer;
+                        loopInitializer = <VariableDeclarationList>initializer;
                     }
                     break;
             }
