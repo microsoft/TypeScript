@@ -1790,7 +1790,7 @@ namespace ts {
             // Note also that because an extra statement is needed to assign to the LHS,
             // for-of bodies are always emitted as blocks.
 
-            const expression = node.expression;
+            const expression = visitNode(node.expression, visitor, isExpression);
             const initializer = node.initializer;
             const statements: Statement[] = [];
 
@@ -2039,7 +2039,7 @@ namespace ts {
                 case SyntaxKind.ForOfStatement:
                     const initializer = (<ForStatement | ForInStatement | ForOfStatement>node).initializer;
                     if (initializer && initializer.kind === SyntaxKind.VariableDeclarationList) {
-                        loopInitializer = <VariableDeclarationList>(<ForStatement | ForInStatement | ForOfStatement>node).initializer;
+                        loopInitializer = <VariableDeclarationList>initializer;
                     }
                     break;
             }
