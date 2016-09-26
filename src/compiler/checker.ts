@@ -2746,8 +2746,9 @@ namespace ts {
 
                     // Type parameters are always visible
                     case SyntaxKind.TypeParameter:
-                    // Source file is always visible
+                    // Source file and namespace export are always visible
                     case SyntaxKind.SourceFile:
+                    case SyntaxKind.NamespaceExportDeclaration:
                         return true;
 
                     // Export assignments do not create name bindings outside the module
