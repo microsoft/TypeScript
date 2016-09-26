@@ -2716,8 +2716,8 @@ namespace ts {
      * Here we check if alternative name was provided for a given moduleName and return it if possible.
      */
     function tryRenameExternalModule(moduleName: LiteralExpression, sourceFile: SourceFile) {
-        if (sourceFile.renamedDependencies && hasProperty(sourceFile.renamedDependencies, moduleName.text)) {
-            return createLiteral(sourceFile.renamedDependencies[moduleName.text]);
+        if (sourceFile.renamedDependencies && _has(sourceFile.renamedDependencies, moduleName.text)) {
+            return createLiteral(_g(sourceFile.renamedDependencies, moduleName.text));
         }
         return undefined;
     }

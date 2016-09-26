@@ -93,7 +93,7 @@ namespace ts {
             return false;
         }
         try {
-            ts.localizedDiagnosticMessages = JSON.parse(fileContents);
+            ts.localizedDiagnosticMessages = createMapFromMapLike<string>(JSON.parse(fileContents));
         }
         catch (e) {
             errors.push(createCompilerDiagnostic(Diagnostics.Corrupted_locale_file_0, filePath));
@@ -127,7 +127,7 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap = createMap<string>({
+    const categoryFormatMap = createMapFromMapLike<string>({
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
         [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
@@ -199,7 +199,7 @@ namespace ts {
             output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
 
-        const categoryColor = categoryFormatMap[diagnostic.category];
+        const categoryColor = _getWakka(categoryFormatMap, diagnostic.category);
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
         output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
         output += sys.newLine + sys.newLine;
@@ -438,9 +438,12 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            return fileName in cachedExistingFiles
-                ? cachedExistingFiles[fileName]
-                : cachedExistingFiles[fileName] = hostFileExists(fileName);
+            return _has(cachedExistingFiles, fileName)
+                ? _g(cachedExistingFiles, fileName)
+                : _s(cachedExistingFiles, fileName, hostFileExists(fileName));
+            //return fileName in cachedExistingFiles
+            //     ? cachedExistingFiles[fileName]
+            //    : cachedExistingFiles[fileName] = hostFileExists(fileName);
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -729,10 +732,10 @@ namespace ts {
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
                 const typeMap = <Map<number | string>>element.type;
-                for (const key in typeMap) {
+                _eachKey(typeMap, key => {
                     options.push(`'${key}'`);
-                }
-                optionsDescriptionMap[description] = options;
+                });
+                _s(optionsDescriptionMap, description, options);
             }
             else {
                 description = getDiagnosticText(option.description);
@@ -754,7 +757,7 @@ namespace ts {
         for (let i = 0; i < usageColumn.length; i++) {
             const usage = usageColumn[i];
             const description = descriptionColumn[i];
-            const kindsList = optionsDescriptionMap[description];
+            const kindsList = _g(optionsDescriptionMap, description);
             output.push(usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine);
 
             if (kindsList) {

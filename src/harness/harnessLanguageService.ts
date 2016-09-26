@@ -247,7 +247,7 @@ namespace Harness.LanguageService {
             super(cancellationToken, options);
             this.nativeHost = new NativeLanguageServiceHost(cancellationToken, options);
 
-            if (preprocessToResolve) {
+            if (preprocessToResolve) { //??? shims-pp has this turned on
                 const compilerOptions = this.nativeHost.getCompilationSettings();
                 const moduleResolutionHost: ts.ModuleResolutionHost = {
                     fileExists: fileName => this.getScriptInfo(fileName) !== undefined,
@@ -259,7 +259,7 @@ namespace Harness.LanguageService {
                 this.getModuleResolutionsForFile = (fileName) => {
                     const scriptInfo = this.getScriptInfo(fileName);
                     const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ true);
-                    const imports = ts.createMap<string>();
+                    const imports: ts.MapLike<string> = {};//ts.createMap<string>();
                     for (const module of preprocessInfo.importedFiles) {
                         const resolutionInfo = ts.resolveModuleName(module.fileName, fileName, compilerOptions, moduleResolutionHost);
                         if (resolutionInfo.resolvedModule) {
@@ -272,7 +272,7 @@ namespace Harness.LanguageService {
                     const scriptInfo = this.getScriptInfo(fileName);
                     if (scriptInfo) {
                         const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
-                        const resolutions = ts.createMap<ts.ResolvedTypeReferenceDirective>();
+                        const resolutions: ts.MapLike<ts.ResolvedTypeReferenceDirective> = {}; //ts.createMap<ts.ResolvedTypeReferenceDirective>();
                         const settings = this.nativeHost.getCompilationSettings();
                         for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
                             const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, settings, moduleResolutionHost);

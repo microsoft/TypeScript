@@ -7,16 +7,16 @@ namespace ts {
     }
 
     function createDefaultServerHost(fileMap: Map<File>): server.ServerHost {
-        const existingDirectories = createMap<boolean>();
-        for (const name in fileMap) {
+        const existingDirectories = createSet();
+        _eachKey(fileMap, name => {
             let dir = getDirectoryPath(name);
             let previous: string;
             do {
-                existingDirectories[dir] = true;
+                _add(existingDirectories, dir);
                 previous = dir;
                 dir = getDirectoryPath(dir);
             } while (dir !== previous);
-        }
+        });
         return {
             args: <string[]>[],
             newLine: "\r\n",
@@ -24,7 +24,7 @@ namespace ts {
             write: (s: string) => {
             },
             readFile: (path: string, encoding?: string): string => {
-                return path in fileMap ? fileMap[path].content : undefined;
+                return _has(fileMap, path) ? _g(fileMap, path).content : undefined;
             },
             writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => {
                 throw new Error("NYI");
@@ -33,10 +33,10 @@ namespace ts {
                 throw new Error("NYI");
             },
             fileExists: (path: string): boolean => {
-                return path in fileMap;
+                return _has(fileMap, path);
             },
             directoryExists: (path: string): boolean => {
-                return existingDirectories[path] || false;
+                return _setHas(existingDirectories, path);
             },
             createDirectory: (path: string) => {
             },
@@ -102,7 +102,7 @@ namespace ts {
                 content: `foo()`
             };
 
-            const serverHost = createDefaultServerHost(createMap({ [root.name]: root, [imported.name]: imported }));
+            const serverHost = createDefaultServerHost(createMapFromMapLike({ [root.name]: root, [imported.name]: imported }));
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             // ensure that imported file was found
@@ -194,7 +194,7 @@ namespace ts {
                 content: `export var y = 1`
             };
 
-            const fileMap = createMap({ [root.name]: root });
+            const fileMap = createMapFromMapLike({ [root.name]: root });
             const serverHost = createDefaultServerHost(fileMap);
             const originalFileExists = serverHost.fileExists;
 
@@ -218,7 +218,7 @@ namespace ts {
             assert.isTrue(typeof diags[0].messageText === "string" && ((<string>diags[0].messageText).indexOf("Cannot find module") === 0), "should be 'cannot find module' message");
 
             // assert that import will success once file appear on disk
-            fileMap[imported.name] = imported;
+            _s(fileMap, imported.name, imported);
             fileExistsCalledForBar = false;
             rootScriptInfo.editContent(0, content.length, `import {y} from "bar"`);
 

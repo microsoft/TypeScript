@@ -113,16 +113,16 @@ namespace ts {
         }
 
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
-            let bucket = buckets[key];
+            let bucket = _g(buckets, key);
             if (!bucket && createIfMissing) {
-                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
+                _s(buckets, key, bucket = createFileMap<DocumentRegistryEntry>());
             }
             return bucket;
         }
 
         function reportStats() {
             const bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === "_").map(name => {
-                const entries = buckets[name];
+                const entries = _g(buckets, name);
                 const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 entries.forEachValue((key, entry) => {
                     sourceFiles.push({

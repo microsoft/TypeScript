@@ -15,6 +15,7 @@ namespace ts.JsTyping {
 
     interface PackageJson {
         _requiredBy?: string[];
+        //Is this a real Mpa, or a MapLike?
         dependencies?: Map<string>;
         devDependencies?: Map<string>;
         name?: string;
@@ -58,7 +59,7 @@ namespace ts.JsTyping {
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            safeList = createMap<string>(result.config);
+            safeList = createMapFromMapLike<string>(result.config);
         }
 
         const filesToWatch: string[] = [];
@@ -87,27 +88,28 @@ namespace ts.JsTyping {
         getTypingNamesFromSourceFileNames(fileNames);
 
         // Add the cached typing locations for inferred typings that are already installed
-        for (const name in packageNameToTypingLocation) {
-            if (name in inferredTypings && !inferredTypings[name]) {
-                inferredTypings[name] = packageNameToTypingLocation[name];
+        _each(packageNameToTypingLocation, (name, typingLocation) => {
+            if (_has(inferredTypings, name) && !_g(inferredTypings, name)) {
+                _s(inferredTypings, name, typingLocation);
             }
-        }
+        });
 
         // Remove typings that the user has added to the exclude list
         for (const excludeTypingName of exclude) {
-            delete inferredTypings[excludeTypingName];
+            _delete(inferredTypings, excludeTypingName);
         }
 
         const newTypingNames: string[] = [];
         const cachedTypingPaths: string[] = [];
-        for (const typing in inferredTypings) {
-            if (inferredTypings[typing] !== undefined) {
-                cachedTypingPaths.push(inferredTypings[typing]);
+
+        _each(inferredTypings, (typing, inferredTyping) => {
+            if (inferredTyping !== undefined) {
+                cachedTypingPaths.push(inferredTyping);
             }
             else {
                 newTypingNames.push(typing);
             }
-        }
+        });
         return { cachedTypingPaths, newTypingNames, filesToWatch };
 
         /**
@@ -119,8 +121,8 @@ namespace ts.JsTyping {
             }
 
             for (const typing of typingNames) {
-                if (!(typing in inferredTypings)) {
-                    inferredTypings[typing] = undefined;
+                if (!_has(inferredTypings, typing)) {
+                    _s(inferredTypings, typing, undefined);
                 }
             }
         }
@@ -134,16 +136,16 @@ namespace ts.JsTyping {
                 const jsonConfig: PackageJson = result.config;
                 filesToWatch.push(jsonPath);
                 if (jsonConfig.dependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.dependencies));
+                    mergeTypings(_ownKeys(jsonConfig.dependencies));
                 }
                 if (jsonConfig.devDependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.devDependencies));
+                    mergeTypings(_ownKeys(jsonConfig.devDependencies));
                 }
                 if (jsonConfig.optionalDependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.optionalDependencies));
+                    mergeTypings(_ownKeys(jsonConfig.optionalDependencies));
                 }
                 if (jsonConfig.peerDependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.peerDependencies));
+                    mergeTypings(_ownKeys(jsonConfig.peerDependencies));
                 }
             }
         }
@@ -162,7 +164,7 @@ namespace ts.JsTyping {
                 mergeTypings(cleanedTypingNames);
             }
             else {
-                mergeTypings(filter(cleanedTypingNames, f => f in safeList));
+                mergeTypings(filter(cleanedTypingNames, f => _has(safeList, f)));
             }
 
             const hasJsxFile = forEach(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));
@@ -209,7 +211,7 @@ namespace ts.JsTyping {
                 }
                 if (packageJson.typings) {
                     const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
-                    inferredTypings[packageJson.name] = absolutePath;
+                    _s(inferredTypings, packageJson.name, absolutePath);
                 }
                 else {
                     typingNames.push(packageJson.name);

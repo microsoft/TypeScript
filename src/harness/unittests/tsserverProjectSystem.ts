@@ -71,7 +71,7 @@ namespace ts {
     function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
         assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
+            assert.isTrue(_has(map, name), `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
         }
     }
 
@@ -209,7 +209,7 @@ namespace ts {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories[path];
+            const callbacks = _g(this.watchedDirectories, path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -219,7 +219,7 @@ namespace ts {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles[path];
+            const callbacks = _g(this.watchedFiles, path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);

@@ -46,7 +46,7 @@ namespace ts {
      *       supplant the existing `forEachChild` implementation if performance is not
      *       significantly impacted.
      */
-    const nodeEdgeTraversalMap = createMap<NodeTraversalPath>({
+    const nodeEdgeTraversalMap = createMapFromMapLike<NodeTraversalPath>({
         [SyntaxKind.QualifiedName]: [
             { name: "left", test: isEntityName },
             { name: "right", test: isIdentifier }
@@ -520,7 +520,7 @@ namespace ts {
                 break;
 
             default:
-                const edgeTraversalPath = nodeEdgeTraversalMap[kind];
+                const edgeTraversalPath = _getWakka(nodeEdgeTraversalMap, kind);
                 if (edgeTraversalPath) {
                     for (const edge of edgeTraversalPath) {
                         const value = (<MapLike<any>>node)[edge.name];
@@ -1141,10 +1141,10 @@ namespace ts {
 
             default:
                 let updated: Node & MapLike<any>;
-                const edgeTraversalPath = nodeEdgeTraversalMap[kind];
+                const edgeTraversalPath = _getWakka(nodeEdgeTraversalMap, kind);
                 if (edgeTraversalPath) {
                     for (const edge of edgeTraversalPath) {
-                        const value = <Node | NodeArray<Node>>(<Node & Map<any>>node)[edge.name];
+                        const value = <Node | NodeArray<Node>>(<Node & MapLike<any>>node)[edge.name];
                         if (value !== undefined) {
                             const visited = isArray(value)
                                 ? visitNodes(value, visitor, edge.test, 0, value.length, edge.parenthesize, node)

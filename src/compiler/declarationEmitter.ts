@@ -75,7 +75,7 @@ namespace ts {
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencesOutput = "";
 
-        let usedTypeDirectiveReferences: Map<string>;
+        let usedTypeDirectiveReferences: Set;
 
         // Emit references corresponding to each file
         const emittedReferencedFiles: SourceFile[] = [];
@@ -156,9 +156,9 @@ namespace ts {
         });
 
         if (usedTypeDirectiveReferences) {
-            for (const directive in usedTypeDirectiveReferences) {
+            _eachInSet(usedTypeDirectiveReferences, directive => {
                 referencesOutput += `/// <reference types="${directive}" />${newLine}`;
-            }
+            });
         }
 
         return {
@@ -267,11 +267,11 @@ namespace ts {
             }
 
             if (!usedTypeDirectiveReferences) {
-                usedTypeDirectiveReferences = createMap<string>();
+                usedTypeDirectiveReferences = createSet();
             }
             for (const directive of typeReferenceDirectives) {
-                if (!(directive in usedTypeDirectiveReferences)) {
-                    usedTypeDirectiveReferences[directive] = directive;
+                if (!_setHas(usedTypeDirectiveReferences, directive)) {
+                    _add(usedTypeDirectiveReferences, directive);
                 }
             }
         }
@@ -535,14 +535,14 @@ namespace ts {
         // do not need to keep track of created temp names.
         function getExportDefaultTempVariableName(): string {
             const baseName = "_default";
-            if (!(baseName in currentIdentifiers)) {
+            if (!_has(currentIdentifiers, baseName)) {
                 return baseName;
             }
             let count = 0;
             while (true) {
                 count++;
                 const name = baseName + "_" + count;
-                if (!(name in currentIdentifiers)) {
+                if (!_has(currentIdentifiers, name)) {
                     return name;
                 }
             }

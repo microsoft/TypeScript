@@ -500,7 +500,7 @@ namespace ts {
                 //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
-                    (node.label && convertedLoopState.labels && convertedLoopState.labels[node.label.text]) ||
+                    (node.label && convertedLoopState.labels && _g(convertedLoopState.labels, node.label.text)) ||
                     (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
 
                 if (!canUseBreakOrContinue) {
@@ -1700,7 +1700,7 @@ namespace ts {
                 if (!convertedLoopState.labels) {
                     convertedLoopState.labels = createMap<string>();
                 }
-                convertedLoopState.labels[node.label.text] = node.label.text;
+                _s(convertedLoopState.labels, node.label.text, node.label.text);
             }
 
             let result: VisitResult<Statement>;
@@ -1712,7 +1712,7 @@ namespace ts {
             }
 
             if (convertedLoopState) {
-                convertedLoopState.labels[node.label.text] = undefined;
+                _s(convertedLoopState.labels, node.label.text, undefined);
             }
 
             return result;
@@ -2157,8 +2157,7 @@ namespace ts {
                         extraVariableDeclarations = [];
                     }
                     // hoist collected variable declarations
-                    for (const name in currentState.hoistedLocalVariables) {
-                        const identifier = currentState.hoistedLocalVariables[name];
+                    for (const identifier of currentState.hoistedLocalVariables) {
                         extraVariableDeclarations.push(createVariableDeclaration(identifier));
                     }
                 }
@@ -2309,13 +2308,13 @@ namespace ts {
                 if (!state.labeledNonLocalBreaks) {
                     state.labeledNonLocalBreaks = createMap<string>();
                 }
-                state.labeledNonLocalBreaks[labelText] = labelMarker;
+                _s(state.labeledNonLocalBreaks, labelText, labelMarker);
             }
             else {
                 if (!state.labeledNonLocalContinues) {
                     state.labeledNonLocalContinues = createMap<string>();
                 }
-                state.labeledNonLocalContinues[labelText] = labelMarker;
+                _s(state.labeledNonLocalContinues, labelText, labelMarker);
             }
         }
 
@@ -2323,13 +2322,12 @@ namespace ts {
             if (!table) {
                 return;
             }
-            for (const labelText in table) {
-                const labelMarker = table[labelText];
+            _each(table, (labelText, labelMarker) => {
                 const statements: Statement[] = [];
                 // if there are no outer converted loop or outer label in question is located inside outer converted loop
                 // then emit labeled break\continue
                 // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do
-                if (!outerLoop || (outerLoop.labels && outerLoop.labels[labelText])) {
+                if (!outerLoop || (outerLoop.labels && _g(outerLoop.labels, labelText))) {
                     const label = createIdentifier(labelText);
                     statements.push(isBreak ? createBreak(label) : createContinue(label));
                 }
@@ -2338,7 +2336,7 @@ namespace ts {
                     statements.push(createReturn(loopResultName));
                 }
                 caseClauses.push(createCaseClause(createLiteral(labelMarker), statements));
-            }
+            });
         }
 
         function processLoopVariableDeclaration(decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[]) {

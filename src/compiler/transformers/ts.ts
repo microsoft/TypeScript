@@ -687,7 +687,7 @@ namespace ts {
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                 enableSubstitutionForClassAliases();
                 classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
-                classAliases[getOriginalNodeId(node)] = classAlias;
+                _setWakka(classAliases, getOriginalNodeId(node), classAlias);
             }
 
             const declaredName = getDeclarationName(node, /*allowComments*/ true);
@@ -771,7 +771,7 @@ namespace ts {
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
-                    classAliases[getOriginalNodeId(node)] = getSynthesizedClone(temp);
+                    _setWakka(classAliases, getOriginalNodeId(node), getSynthesizedClone(temp));
                 }
 
                 // To preserve the behavior of the old emitter, we explicitly indent
@@ -3326,7 +3326,7 @@ namespace ts {
                     // constructor references in static property initializers.
                     const declaration = resolver.getReferencedValueDeclaration(node);
                     if (declaration) {
-                        const classAlias = classAliases[declaration.id];
+                        const classAlias = _getWakka(classAliases, declaration.id);
                         if (classAlias) {
                             const clone = getSynthesizedClone(classAlias);
                             setSourceMapRange(clone, node);

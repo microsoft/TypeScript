@@ -91,7 +91,7 @@ namespace Playback {
     }
 
     function memoize<T>(func: (s: string) => T): Memoized<T> {
-        let lookup: { [s: string]: T } = {};
+        let lookup: { [s: string]: T } = {}; //TODO: use a Map
         const run: Memoized<T> = <Memoized<T>>((s: string) => {
             if (lookup.hasOwnProperty(s)) return lookup[s];
             return lookup[s] = func(s);
