@@ -323,12 +323,12 @@ namespace ts.Completions {
         }
 
         function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
-            fragment = getDirectoryPath(fragment);
+            fragment = getDirectoryPath(fragment); // TODO: modify fragment so it respects our internal path representation?
             if (!fragment) {
-                fragment = "./";
+                fragment = "." + directorySeparator;
             }
             else {
-                fragment = ensureTrailingDirectorySeparator(fragment);
+                fragment = ensureTrailingDirectorySeparator(fragment); // TODO: why is this necessary?
             }
 
             const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment));
@@ -544,7 +544,7 @@ namespace ts.Completions {
                 const kind = match[2];
                 const toComplete = match[3];
 
-                const scriptPath = getDirectoryPath(sourceFile.path);
+                const scriptPath = getDirectoryPath(sourceFile.path); // TODO: normalize for win10?
                 let entries: CompletionEntry[];
                 if (kind === "path") {
                     // Give completions for a relative path
