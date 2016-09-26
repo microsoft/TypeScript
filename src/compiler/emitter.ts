@@ -203,10 +203,8 @@ const _super = (function (geti, seti) {
 
         const sourceMap = createSourceMapWriter(host, writer);
         const {
-            emitStart,
-            emitEnd,
-            emitTokenStart,
-            emitTokenEnd
+            emitNodeWithSourceMap,
+            emitTokenWithSourceMap
         } = sourceMap;
 
         const comments = createCommentWriter(host, writer, sourceMap);
@@ -244,10 +242,8 @@ const _super = (function (geti, seti) {
 
         // Extract helpers from the result
         const {
-            isSubstitutionEnabled,
-            isEmitNotificationEnabled,
-            onSubstituteNode,
-            onEmitNode
+            emitNodeWithSubstitution,
+            emitNodeWithNotification
         } = transformed;
 
         performance.mark("beforePrint");
@@ -449,101 +445,6 @@ const _super = (function (geti, seti) {
         }
 
         /**
-         * Emits a node with possible emit notification.
-         */
-        // TODO(rbuckton): Move this into transformer.ts
-        function emitNodeWithNotification(node: Node, emitCallback: (node: Node) => void) {
-            if (node) {
-                if (isEmitNotificationEnabled(node)) {
-                    onEmitNode(node, emitCallback);
-                }
-                else {
-                    emitCallback(node);
-                }
-            }
-        }
-
-        /**
-         * Emits a node with possible source maps.
-         */
-        // TODO(rbuckton): Move this into sourcemap.ts
-        function emitNodeWithSourceMap(node: Node, emitCallback: (node: Node) => void) {
-            if (node) {
-                emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
-                emitCallback(node);
-                emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
-            }
-        }
-
-        /**
-         * Determines whether to skip leading comment emit for a node.
-         *
-         * We do not emit comments for NotEmittedStatement nodes or any node that has
-         * NodeEmitFlags.NoLeadingComments.
-         *
-         * @param node A Node.
-         */
-        // TODO(rbuckton): Move this into comments.ts
-        function shouldSkipLeadingCommentsForNode(node: Node) {
-            return isNotEmittedStatement(node)
-                || (getEmitFlags(node) & EmitFlags.NoLeadingComments) !== 0;
-        }
-
-        /**
-         * Determines whether to skip source map emit for the start position of a node.
-         *
-         * We do not emit source maps for NotEmittedStatement nodes or any node that
-         * has NodeEmitFlags.NoLeadingSourceMap.
-         *
-         * @param node A Node.
-         */
-        // TODO(rbuckton): Move this into sourcemap.ts
-        function shouldSkipLeadingSourceMapForNode(node: Node) {
-            return isNotEmittedStatement(node)
-                || (getEmitFlags(node) & EmitFlags.NoLeadingSourceMap) !== 0;
-        }
-
-        /**
-         * Determines whether to skip source map emit for the end position of a node.
-         *
-         * We do not emit source maps for NotEmittedStatement nodes or any node that
-         * has NodeEmitFlags.NoTrailingSourceMap.
-         *
-         * @param node A Node.
-         */
-        // TODO(rbuckton): Move this into sourcemap.ts
-        function shouldSkipTrailingSourceMapForNode(node: Node) {
-            return isNotEmittedStatement(node)
-                || (getEmitFlags(node) & EmitFlags.NoTrailingSourceMap) !== 0;
-        }
-
-        /**
-         * Determines whether to skip source map emit for a node and its children.
-         *
-         * We do not emit source maps for a node that has NodeEmitFlags.NoNestedSourceMaps.
-         */
-        // TODO(rbuckton): Move this into sourcemap.ts
-        function shouldSkipSourceMapForChildren(node: Node) {
-            return (getEmitFlags(node) & EmitFlags.NoNestedSourceMaps) !== 0;
-        }
-
-        /**
-         * Emits a node with possible substitution.
-         */
-        // TODO(rbuckton): Move this into transformer.ts
-        function emitNodeWithSubstitution(node: Node, isExpression: boolean, emitCallback: (node: Node) => void) {
-            if (isSubstitutionEnabled(node) && (getEmitFlags(node) & EmitFlags.NoSubstitution) === 0) {
-                const substitute = onSubstituteNode(node, isExpression);
-                if (substitute !== node) {
-                    emitCallback(substitute);
-                    return;
-                }
-            }
-
-            emitCallback(node);
-        }
-
-        /**
          * Emits a node.
          *
          * NOTE: Do not call this method directly. It is part of the emit pipeline
@@ -585,7 +486,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.GlobalKeyword:
-                    return writeTokenNode(node);
+                    return emitTokenNode(node);
 
                 // Parse tree nodes
 
@@ -832,7 +733,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.ThisKeyword:
-                    return writeTokenNode(node);
+                    return emitTokenNode(node);
 
                 // Expressions
                 case SyntaxKind.ArrayLiteralExpression:
@@ -2129,7 +2030,7 @@ const _super = (function (geti, seti) {
             // "comment1" is not considered to be leading comment for node.initializer
             // but rather a trailing comment on the previous node.
             const initializer = node.initializer;
-            if (!shouldSkipLeadingCommentsForNode(initializer)) {
+            if ((getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
                 const commentRange = getCommentRange(initializer);
                 emitTrailingCommentsOfPosition(commentRange.pos);
             }
@@ -2537,17 +2438,7 @@ const _super = (function (geti, seti) {
         }
 
         function writeToken(token: SyntaxKind, pos: number, contextNode?: Node) {
-            const tokenStartPos = emitTokenStart(token, pos, contextNode, shouldSkipLeadingSourceMapForToken, getTokenSourceMapRange);
-            const tokenEndPos = writeTokenText(token, tokenStartPos);
-            return emitTokenEnd(token, tokenEndPos, contextNode, shouldSkipTrailingSourceMapForToken, getTokenSourceMapRange);
-        }
-
-        function shouldSkipLeadingSourceMapForToken(contextNode: Node) {
-            return (getEmitFlags(contextNode) & EmitFlags.NoTokenLeadingSourceMaps) !== 0;
-        }
-
-        function shouldSkipTrailingSourceMapForToken(contextNode: Node) {
-            return (getEmitFlags(contextNode) & EmitFlags.NoTokenTrailingSourceMaps) !== 0;
+            return emitTokenWithSourceMap(contextNode, token, pos, writeTokenText);
         }
 
         function writeTokenText(token: SyntaxKind, pos?: number) {
@@ -2556,12 +2447,12 @@ const _super = (function (geti, seti) {
             return positionIsSynthesized(pos) ? -1 : pos + tokenString.length;
         }
 
-        function writeTokenNode(node: Node) {
-            if (node) {
-                emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
-                writeTokenText(node.kind);
-                emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
-            }
+        function emitTokenNode(node: Node) {
+            emitNodeWithSourceMap(node, emitTokenNodeWorker);
+        }
+
+        function emitTokenNodeWorker(node: Node) {
+            writeTokenText(node.kind);
         }
 
         function increaseIndentIf(value: boolean, valueToWriteWhenNotIndenting?: string) {

@@ -31,33 +31,21 @@ namespace ts {
         getSourceFiles(): SourceFile[];
 
         /**
-         * Determines whether expression substitutions are enabled for the provided node.
-         */
-        isSubstitutionEnabled(node: Node): boolean;
-
-        /**
-         * Determines whether before/after emit notifications should be raised in the pretty
-         * printer when it emits a node.
-         */
-        isEmitNotificationEnabled(node: Node): boolean;
-
-        /**
-         * Hook used by transformers to substitute expressions just before they
-         * are emitted by the pretty printer.
+         * Emits the substitute for a node, if one is available; otherwise, emits the node.
          *
          * @param node The node to substitute.
          * @param isExpression A value indicating whether the node is in an expression context.
+         * @param emitCallback A callback used to emit the node or its substitute.
          */
-        onSubstituteNode(node: Node, isExpression: boolean): Node;
+        emitNodeWithSubstitution(node: Node, isExpression: boolean, emitCallback: (node: Node) => void): void;
 
         /**
-         * Hook used to allow transformers to capture state before or after
-         * the printer emits a node.
+         * Emits a node with possible notification.
          *
          * @param node The node to emit.
          * @param emitCallback A callback used to emit the node.
          */
-        onEmitNode(node: Node, emitCallback: (node: Node) => void): void;
+        emitNodeWithNotification(node: Node, emitCallback: (node: Node) => void): void;
 
         /**
          * Reset transient transformation properties on parse tree nodes.
@@ -302,10 +290,10 @@ namespace ts {
             hoistFunctionDeclaration,
             startLexicalEnvironment,
             endLexicalEnvironment,
-            onSubstituteNode,
+            onSubstituteNode: (node, isExpression) => node,
             enableSubstitution,
             isSubstitutionEnabled,
-            onEmitNode,
+            onEmitNode: (node, emitCallback) => emitCallback(node),
             enableEmitNotification,
             isEmitNotificationEnabled
         };
@@ -321,10 +309,8 @@ namespace ts {
 
         return {
             getSourceFiles: () => transformed,
-            isSubstitutionEnabled,
-            isEmitNotificationEnabled,
-            onSubstituteNode: context.onSubstituteNode,
-            onEmitNode: context.onEmitNode,
+            emitNodeWithSubstitution,
+            emitNodeWithNotification,
             dispose() {
                 // During transformation we may need to annotate a parse tree node with transient
                 // transformation properties. As parse tree nodes live longer than transformation
@@ -362,18 +348,29 @@ namespace ts {
          * Determines whether expression substitutions are enabled for the provided node.
          */
         function isSubstitutionEnabled(node: Node) {
-            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.Substitution) !== 0;
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.Substitution) !== 0
+                && (getEmitFlags(node) & EmitFlags.NoSubstitution) === 0;
         }
 
         /**
-         * Default hook for node substitutions.
+         * Emits a node with possible substitution.
          *
-         * @param node The node to substitute.
-         * @param isExpression A value indicating whether the node is to be used in an expression
-         *                     position.
+         * @param node The node to emit.
+         * @param isExpression Whether the node represents an expression.
+         * @param emitCallback The callback used to emit the node or its substitute.
          */
-        function onSubstituteNode(node: Node, isExpression: boolean) {
-            return node;
+        function emitNodeWithSubstitution(node: Node, isExpression: boolean, emitCallback: (node: Node) => void) {
+            if (node) {
+                if (isSubstitutionEnabled(node)) {
+                    const substitute = context.onSubstituteNode(node, isExpression);
+                    if (substitute && substitute !== node) {
+                        emitCallback(substitute);
+                        return;
+                    }
+                }
+
+                emitCallback(node);
+            }
         }
 
         /**
@@ -393,13 +390,17 @@ namespace ts {
         }
 
         /**
-         * Default hook for node emit.
-         *
-         * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * Emits a node with possible emit notification.
          */
-        function onEmitNode(node: Node, emit: (node: Node) => void) {
-            emit(node);
+        function emitNodeWithNotification(node: Node, emitCallback: (node: Node) => void) {
+            if (node) {
+                if (isEmitNotificationEnabled(node)) {
+                    context.onEmitNode(node, emitCallback);
+                }
+                else {
+                    emitCallback(node);
+                }
+            }
         }
 
         /**
