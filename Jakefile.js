@@ -6,6 +6,7 @@ var path = require("path");
 var child_process = require("child_process");
 var fold = require("travis-fold");
 var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
+var uglify = require('uglify-js');
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -697,9 +698,20 @@ desc("Generates a Markdown version of the Language Specification");
 task("generate-spec", [specMd]);
 
 
+var minifiedServicesFile = path.join(builtLocalDirectory, "typescriptServices.min.js");
+var minifiedNodePackageFile = path.join(builtLocalDirectory, "typescript.min.js");
+
+desc("Generate minified version of the services and package files");
+task("minify", ["local"], function () {
+// /    var text = fs.readFileSync(servicesFile).toString();
+    var result = uglify.minify(servicesFile);
+    fs.writeFileSync(minifiedServicesFile, result);
+    fs.writeFileSync(minifiedNodePackageFile, result);
+});
+
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
+task("LKG", ["clean", "release", "local", "minify"].concat(libraryTargets), function () {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
