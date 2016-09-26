@@ -824,8 +824,8 @@ const _super = (function (geti, seti) {
                     return emitTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.YieldExpression:
                     return emitYieldExpression(<YieldExpression>node);
-                case SyntaxKind.SpreadElementExpression:
-                    return emitSpreadElementExpression(<SpreadElementExpression>node);
+                case SyntaxKind.SpreadExpression:
+                    return emitSpreadExpression(<SpreadExpression>node);
                 case SyntaxKind.ClassExpression:
                     return emitClassExpression(<ClassExpression>node);
                 case SyntaxKind.OmittedExpression:
@@ -1365,7 +1365,7 @@ const _super = (function (geti, seti) {
             emitExpressionWithPrefix(" ", node.expression);
         }
 
-        function emitSpreadElementExpression(node: SpreadElementExpression) {
+        function emitSpreadExpression(node: SpreadExpression) {
             write("...");
             emitExpression(node.expression);
         }

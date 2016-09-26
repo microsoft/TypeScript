@@ -267,9 +267,9 @@ namespace ts {
             case SyntaxKind.VoidExpression:
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.YieldExpression:
-            case SyntaxKind.SpreadElementExpression:
+            case SyntaxKind.SpreadExpression:
             case SyntaxKind.NonNullExpression:
-                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElementExpression | NonNullExpression>node).expression, f, result);
+                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadExpression | NonNullExpression>node).expression, f, result);
                 break;
 
             case SyntaxKind.PrefixUnaryExpression:
@@ -869,9 +869,9 @@ namespace ts {
                 return updateYield(<YieldExpression>node,
                     visitNode((<YieldExpression>node).expression, visitor, isExpression));
 
-            case SyntaxKind.SpreadElementExpression:
-                return updateSpread(<SpreadElementExpression>node,
-                    visitNode((<SpreadElementExpression>node).expression, visitor, isExpression));
+            case SyntaxKind.SpreadExpression:
+                return updateSpread(<SpreadExpression>node,
+                    visitNode((<SpreadExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.ClassExpression:
                 return updateClassExpression(<ClassExpression>node,

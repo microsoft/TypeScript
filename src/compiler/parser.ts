@@ -74,9 +74,8 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
-            case SyntaxKind.SpreadElement:
-                return visitNode(cbNode, (<SpreadElement>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<SpreadElement>node).target);
+            case SyntaxKind.SpreadElementExpression:
+                return visitNode(cbNode, (<SpreadElementExpression>node).expression);
             case SyntaxKind.SpreadTypeElement:
                 return visitNode(cbNode, (node as SpreadTypeElement).type);
             case SyntaxKind.Parameter:
@@ -198,8 +197,8 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
                     visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
-            case SyntaxKind.SpreadElementExpression:
-                return visitNode(cbNode, (<SpreadElementExpression>node).expression);
+            case SyntaxKind.SpreadExpression:
+                return visitNode(cbNode, (<SpreadExpression>node).expression);
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
                 return visitNodes(cbNodes, (<Block>node).statements);
@@ -4102,15 +4101,15 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseSpreadElement(): Expression {
-            const node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
+        function parseSpreadExpression(): Expression {
+            const node = <SpreadExpression>createNode(SyntaxKind.SpreadExpression);
             parseExpected(SyntaxKind.DotDotDotToken);
             node.expression = parseAssignmentExpressionOrHigher();
             return finishNode(node);
         }
 
         function parseArgumentOrArrayLiteralElement(): Expression {
-            return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
+            return token() === SyntaxKind.DotDotDotToken ? parseSpreadExpression() :
                 token() === SyntaxKind.CommaToken ? <Expression>createNode(SyntaxKind.OmittedExpression) :
                     parseAssignmentExpressionOrHigher();
         }
@@ -4145,9 +4144,8 @@ namespace ts {
             const fullStart = scanner.getStartPos();
             const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             if (dotDotDotToken) {
-                const spreadElement = <SpreadElement>createNode(SyntaxKind.SpreadElement, fullStart);
-                spreadElement.dotDotDotToken = dotDotDotToken;
-                spreadElement.target = parseAssignmentExpressionOrHigher();
+                const spreadElement = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression, fullStart);
+                spreadElement.expression = parseAssignmentExpressionOrHigher();
                 return addJSDocComment(finishNode(spreadElement));
             }
             const decorators = parseDecorators();

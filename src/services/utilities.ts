@@ -530,8 +530,8 @@ namespace ts {
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.YieldExpression:
-            case SyntaxKind.SpreadElementExpression:
-                const unaryWordExpression = (<TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElementExpression>n);
+            case SyntaxKind.SpreadExpression:
+                const unaryWordExpression = n as (TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadExpression);
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:

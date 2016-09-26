@@ -241,7 +241,7 @@ namespace ts {
         ConditionalExpression,
         TemplateExpression,
         YieldExpression,
-        SpreadElementExpression,
+        SpreadExpression,
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
@@ -316,8 +316,8 @@ namespace ts {
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
-        SpreadElement, // maybe name it SpreadProperty?
-        SpreadTypeElement, // maybe name it SpreadTypeNode?
+        SpreadElementExpression,
+        SpreadTypeElement,
 
 
         // Enum
@@ -674,9 +674,7 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.SpreadElementExpression)
-    export interface SpreadElement extends ObjectLiteralElement {
-        dotDotDotToken: Node;
-        target: Expression;
+    export interface SpreadElementExpression extends ObjectLiteralElement, SpreadExpression {
     }
 
     // SyntaxKind.VariableDeclaration
@@ -1056,8 +1054,8 @@ namespace ts {
         multiLine?: boolean;
     }
 
-    // @kind(SyntaxKind.SpreadElementExpression)
-    export interface SpreadElementExpression extends Expression {
+    // @kind(SyntaxKind.SpreadExpression)
+    export interface SpreadExpression extends Expression {
         expression: Expression;
     }
 
@@ -3140,7 +3138,7 @@ namespace ts {
         ContainsLexicalThisInComputedPropertyName = 1 << 17,
         ContainsDefaultValueAssignments = 1 << 18,
         ContainsParameterPropertyAssignments = 1 << 19,
-        ContainsSpreadElementExpression = 1 << 20,
+        ContainsSpreadExpression = 1 << 20,
         ContainsComputedPropertyName = 1 << 21,
         ContainsBlockScopedBinding = 1 << 22,
         ContainsBindingPattern = 1 << 23,
@@ -3170,7 +3168,7 @@ namespace ts {
         ModuleExcludes = NodeExcludes | ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
         TypeExcludes = ~ContainsTypeScript,
         ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
-        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpreadElementExpression,
+        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpreadExpression,
         VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern,
         ParameterExcludes = NodeExcludes | ContainsBindingPattern,
 

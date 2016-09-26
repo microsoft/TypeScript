@@ -1120,7 +1120,7 @@ namespace ts {
         }
 
         function hasExportedReferenceInArrayDestructuringElement(node: Expression): boolean {
-            if (isSpreadElementExpression(node)) {
+            if (isSpreadExpression(node)) {
                 const expression = node.expression;
                 return isIdentifier(expression) && isExportedBinding(expression);
             }
@@ -1139,7 +1139,7 @@ namespace ts {
             else if (isIdentifier(node)) {
                 return isExportedBinding(node);
             }
-            else if (isSpreadElementExpression(node)) {
+            else if (isSpreadExpression(node)) {
                 const expression = node.expression;
                 return isIdentifier(expression) && isExportedBinding(expression);
             }

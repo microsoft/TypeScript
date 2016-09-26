@@ -704,12 +704,12 @@ namespace ts {
     }
 
     export function createSpread(expression: Expression, location?: TextRange) {
-        const node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression, location);
+        const node = <SpreadExpression>createNode(SyntaxKind.SpreadExpression, location);
         node.expression = parenthesizeExpressionForList(expression);
         return node;
     }
 
-    export function updateSpread(node: SpreadElementExpression, expression: Expression) {
+    export function updateSpread(node: SpreadExpression, expression: Expression) {
         if (node.expression !== expression) {
             return updateNode(createSpread(expression, node), node);
         }

@@ -2556,7 +2556,7 @@ namespace ts {
             // because we contain a SpreadElementExpression.
 
             const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
-            if (node.transformFlags & TransformFlags.ContainsSpreadElementExpression) {
+            if (node.transformFlags & TransformFlags.ContainsSpreadExpression) {
                 // [source]
                 //      f(...a, b)
                 //      x.m(...a, b)
@@ -2604,7 +2604,7 @@ namespace ts {
          */
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
             // We are here because we contain a SpreadElementExpression.
-            Debug.assert((node.transformFlags & TransformFlags.ContainsSpreadElementExpression) !== 0);
+            Debug.assert((node.transformFlags & TransformFlags.ContainsSpreadExpression) !== 0);
 
             // [source]
             //      new C(...a)
@@ -2625,7 +2625,7 @@ namespace ts {
         }
 
         /**
-         * Transforms an array of Expression nodes that contains a SpreadElementExpression.
+         * Transforms an array of Expression nodes that contains a SpreadExpression.
          *
          * @param elements The array of Expression nodes.
          * @param needsUniqueCopy A value indicating whether to ensure that the result is a fresh array.
@@ -2642,14 +2642,14 @@ namespace ts {
             // expressions into an array literal.
             const numElements = elements.length;
             const segments = flatten(
-                spanMap(elements, partitionSpreadElement, (partition, visitPartition, start, end) =>
+                spanMap(elements, partitionSpread, (partition, visitPartition, start, end) =>
                     visitPartition(partition, multiLine, hasTrailingComma && end === numElements)
                 )
             );
 
             if (segments.length === 1) {
                 const firstElement = elements[0];
-                return needsUniqueCopy && isSpreadElementExpression(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
+                return needsUniqueCopy && isSpreadExpression(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
                     ? createArraySlice(segments[0])
                     : segments[0];
             }
@@ -2658,17 +2658,17 @@ namespace ts {
             return createArrayConcat(segments.shift(), segments);
         }
 
-        function partitionSpreadElement(node: Expression) {
-            return isSpreadElementExpression(node)
-                ? visitSpanOfSpreadElements
-                : visitSpanOfNonSpreadElements;
+        function partitionSpread(node: Expression) {
+            return isSpreadExpression(node)
+                ? visitSpanOfSpreads
+                : visitSpanOfNonSpreads;
         }
 
-        function visitSpanOfSpreadElements(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
-            return map(chunk, visitExpressionOfSpreadElement);
+        function visitSpanOfSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
+            return map(chunk, visitExpressionOfSpread);
         }
 
-        function visitSpanOfNonSpreadElements(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
+        function visitSpanOfNonSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
             return createArrayLiteral(
                 visitNodes(createNodeArray(chunk, /*location*/ undefined, hasTrailingComma), visitor, isExpression),
                 /*location*/ undefined,
@@ -2677,11 +2677,11 @@ namespace ts {
         }
 
         /**
-         * Transforms the expression of a SpreadElementExpression node.
+         * Transforms the expression of a SpreadExpression node.
          *
-         * @param node A SpreadElementExpression node.
+         * @param node A SpreadExpression node.
          */
-        function visitExpressionOfSpreadElement(node: SpreadElementExpression) {
+        function visitExpressionOfSpread(node: SpreadExpression) {
             return visitNode(node.expression, visitor, isExpression);
         }
 
@@ -3096,11 +3096,11 @@ namespace ts {
             }
 
             const callArgument = singleOrUndefined((<CallExpression>statementExpression).arguments);
-            if (!callArgument || !nodeIsSynthesized(callArgument) || callArgument.kind !== SyntaxKind.SpreadElementExpression) {
+            if (!callArgument || !nodeIsSynthesized(callArgument) || callArgument.kind !== SyntaxKind.SpreadExpression) {
                 return false;
             }
 
-            const expression = (<SpreadElementExpression>callArgument).expression;
+            const expression = (<SpreadExpression>callArgument).expression;
             return isIdentifier(expression) && expression === parameter.name;
         }
     }
