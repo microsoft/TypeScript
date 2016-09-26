@@ -46,54 +46,54 @@ namespace ts {
      *       supplant the existing `forEachChild` implementation if performance is not
      *       significantly impacted.
      */
-    const nodeEdgeTraversalMap = createMap<NodeTraversalPath>({
-        [SyntaxKind.QualifiedName]: [
+    const nodeEdgeTraversalMap = new NumberMap<SyntaxKind, NodeTraversalPath>([
+        [SyntaxKind.QualifiedName, [
             { name: "left", test: isEntityName },
             { name: "right", test: isIdentifier }
-        ],
-        [SyntaxKind.Decorator]: [
+        ]],
+        [SyntaxKind.Decorator, [
             { name: "expression", test: isLeftHandSideExpression }
-        ],
-        [SyntaxKind.TypeAssertionExpression]: [
+        ]],
+        [SyntaxKind.TypeAssertionExpression, [
             { name: "type", test: isTypeNode },
             { name: "expression", test: isUnaryExpression }
-        ],
-        [SyntaxKind.AsExpression]: [
+        ]],
+        [SyntaxKind.AsExpression, [
             { name: "expression", test: isExpression },
             { name: "type", test: isTypeNode }
-        ],
-        [SyntaxKind.NonNullExpression]: [
+        ]],
+        [SyntaxKind.NonNullExpression, [
             { name: "expression", test: isLeftHandSideExpression }
-        ],
-        [SyntaxKind.EnumDeclaration]: [
+        ]],
+        [SyntaxKind.EnumDeclaration, [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "name", test: isIdentifier },
             { name: "members", test: isEnumMember }
-        ],
-        [SyntaxKind.ModuleDeclaration]: [
+        ]],
+        [SyntaxKind.ModuleDeclaration, [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "name", test: isModuleName },
             { name: "body", test: isModuleBody }
-        ],
-        [SyntaxKind.ModuleBlock]: [
+        ]],
+        [SyntaxKind.ModuleBlock, [
             { name: "statements", test: isStatement }
-        ],
-        [SyntaxKind.ImportEqualsDeclaration]: [
+        ]],
+        [SyntaxKind.ImportEqualsDeclaration, [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "name", test: isIdentifier },
             { name: "moduleReference", test: isModuleReference }
-        ],
-        [SyntaxKind.ExternalModuleReference]: [
+        ]],
+        [SyntaxKind.ExternalModuleReference, [
             { name: "expression", test: isExpression, optional: true }
-        ],
-        [SyntaxKind.EnumMember]: [
+        ]],
+        [SyntaxKind.EnumMember, [
             { name: "name", test: isPropertyName },
             { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList }
-        ]
-    });
+        ]]
+    ]);
 
     function reduceNode<T>(node: Node, f: (memo: T, node: Node) => T, initial: T) {
         return node ? f(initial, node) : initial;
@@ -520,7 +520,7 @@ namespace ts {
                 break;
 
             default:
-                const edgeTraversalPath = nodeEdgeTraversalMap[kind];
+                const edgeTraversalPath = nodeEdgeTraversalMap.get(kind);
                 if (edgeTraversalPath) {
                     for (const edge of edgeTraversalPath) {
                         const value = (<MapLike<any>>node)[edge.name];
@@ -1141,10 +1141,10 @@ namespace ts {
 
             default:
                 let updated: Node & MapLike<any>;
-                const edgeTraversalPath = nodeEdgeTraversalMap[kind];
+                const edgeTraversalPath = nodeEdgeTraversalMap.get(kind);
                 if (edgeTraversalPath) {
                     for (const edge of edgeTraversalPath) {
-                        const value = <Node | NodeArray<Node>>(<Node & Map<any>>node)[edge.name];
+                        const value = <Node | NodeArray<Node>>(<Node & MapLike<any>>node)[edge.name];
                         if (value !== undefined) {
                             const visited = isArray(value)
                                 ? visitNodes(value, visitor, edge.test, 0, value.length, edge.parenthesize, node)

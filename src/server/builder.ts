@@ -347,25 +347,26 @@ namespace ts.server {
 
             // Use slice to clone the array to avoid manipulating in place
             const queue = fileInfo.referencedBy.slice(0);
-            const fileNameSet = createMap<ScriptInfo>();
-            fileNameSet[scriptInfo.fileName] = scriptInfo;
+            const fileNameSet = new StringMap<ScriptInfo>();
+            fileNameSet.set(scriptInfo.fileName, scriptInfo);
             while (queue.length > 0) {
                 const processingFileInfo = queue.pop();
                 if (processingFileInfo.updateShapeSignature() && processingFileInfo.referencedBy.length > 0) {
                     for (const potentialFileInfo of processingFileInfo.referencedBy) {
-                        if (!fileNameSet[potentialFileInfo.scriptInfo.fileName]) {
+                        if (!fileNameSet.get(potentialFileInfo.scriptInfo.fileName)) {
                             queue.push(potentialFileInfo);
                         }
                     }
                 }
-                fileNameSet[processingFileInfo.scriptInfo.fileName] = processingFileInfo.scriptInfo;
+                fileNameSet.set(processingFileInfo.scriptInfo.fileName, processingFileInfo.scriptInfo);
             }
+
             const result: string[] = [];
-            for (const fileName in fileNameSet) {
-                if (shouldEmitFile(fileNameSet[fileName])) {
+            fileNameSet.forEach((scriptInfo, fileName) => {
+                if (shouldEmitFile(scriptInfo)) {
                     result.push(fileName);
                 }
-            }
+            });
             return result;
         }
     }

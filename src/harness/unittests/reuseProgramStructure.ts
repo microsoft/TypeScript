@@ -106,7 +106,7 @@ namespace ts {
 
         return {
             getSourceFile(fileName): SourceFile {
-                return files[fileName];
+                return files.get(fileName);
             },
             getDefaultLibFileName(): string {
                 return "lib.d.ts";
@@ -129,9 +129,10 @@ namespace ts {
             getNewLine(): string {
                 return sys ? sys.newLine : newLine;
             },
-            fileExists: fileName => fileName in files,
+            fileExists: fileName => files.has(fileName),
             readFile: fileName => {
-                return fileName in files ? files[fileName].text : undefined;
+                const file = files.get(fileName);
+                return file !== undefined ? file.text : undefined;
             }
         };
     }
@@ -174,7 +175,7 @@ namespace ts {
         return false;
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T>, getCache: (f: SourceFile) => Map<T>, entryChecker: (expected: T, original: T) => boolean): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<string, T>, getCache: (f: SourceFile) => Map<string, T>, entryChecker: (expected: T, original: T) => boolean): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file);
@@ -183,15 +184,15 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            assert.isTrue(equalOwnProperties(expectedContent, cache, entryChecker), `contents of ${caption} did not match the expected contents.`);
+            assert.isTrue(mapsAreEqual(expectedContent, cache, entryChecker), `contents of ${caption} did not match the expected contents.`);
         }
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule>): void {
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<string, ResolvedModule>): void {
         checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
     }
 
-    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<ResolvedTypeReferenceDirective>): void {
+    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<string, ResolvedTypeReferenceDirective>): void {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
@@ -306,7 +307,7 @@ namespace ts {
             const options: CompilerOptions = { target };
 
             const program_1 = newProgram(files, ["a.ts"], options);
-            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": { resolvedFileName: "b.ts" } }));
+            checkResolvedModulesCache(program_1, "a.ts", mapOfMapLike({ "b": { resolvedFileName: "b.ts" } }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
@@ -315,7 +316,7 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": { resolvedFileName: "b.ts" } }));
+            checkResolvedModulesCache(program_1, "a.ts", mapOfMapLike({ "b": { resolvedFileName: "b.ts" } }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             // imports has changed - program is not reused
@@ -332,7 +333,7 @@ namespace ts {
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedModulesCache(program_4, "a.ts", createMap({ "b": { resolvedFileName: "b.ts" }, "c": undefined }));
+            checkResolvedModulesCache(program_4, "a.ts", mapOfMapLike({ "b": { resolvedFileName: "b.ts" }, "c": undefined }));
         });
 
         it("resolved type directives cache follows type directives", () => {
@@ -343,7 +344,7 @@ namespace ts {
             const options: CompilerOptions = { target, typeRoots: ["/types"] };
 
             const program_1 = newProgram(files, ["/a.ts"], options);
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMap({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", mapOfMapLike({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
             checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
 
             const program_2 = updateProgram(program_1, ["/a.ts"], options, files => {
@@ -352,7 +353,7 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMap({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", mapOfMapLike({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
             checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
 
             // type reference directives has changed - program is not reused
@@ -370,7 +371,7 @@ namespace ts {
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMap({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", mapOfMapLike({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
         });
     });
 

@@ -112,9 +112,6 @@ namespace ts.server {
             it("should not throw when commands are executed with invalid arguments", () => {
                 let i = 0;
                 for (const name in CommandNames) {
-                    if (!Object.prototype.hasOwnProperty.call(CommandNames, name)) {
-                        continue;
-                    }
                     const req: protocol.Request = {
                         command: name,
                         seq: i,
@@ -367,15 +364,15 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks = createMap<(resp: protocol.Response) => void>();
-            private eventHandlers = createMap<(args: any) => void>();
+            private callbacks = new NumberMap<number, (resp: protocol.Response) => void>();
+            private eventHandlers = new StringMap<(args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {
                     const response = <protocol.Response>msg;
-                    if (response.request_seq in this.callbacks) {
-                        this.callbacks[response.request_seq](response);
-                        delete this.callbacks[response.request_seq];
+                    const callback = tryDelete(this.callbacks, response.request_seq);
+                    if (callback !== undefined) {
+                        callback(response);
                     }
                 }
                 else if (msg.type === "event") {
@@ -385,13 +382,14 @@ namespace ts.server {
             }
 
             emit(name: string, args: any): void {
-                if (name in this.eventHandlers) {
-                    this.eventHandlers[name](args);
+                const handler = this.eventHandlers.get(name);
+                if (handler !== undefined) {
+                    handler(args);
                 }
             }
 
             on(name: string, handler: (args: any) => void): void {
-                this.eventHandlers[name] = handler;
+                this.eventHandlers.set(name, handler);
             }
 
             connect(session: InProcSession): void {
@@ -409,7 +407,7 @@ namespace ts.server {
                     command,
                     arguments: args
                 });
-                this.callbacks[this.seq] = callback;
+                this.callbacks.set(this.seq, callback);
             }
         };
 

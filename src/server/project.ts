@@ -47,7 +47,7 @@ namespace ts.server {
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
-        private lastReportedFileNames: Map<string>;
+        private lastReportedFileNames: Map<string, string>;
         /**
          * Last version that was reported.
          */
@@ -437,16 +437,16 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                for (const id in currentFiles) {
-                    if (!hasProperty(lastReportedFileNames, id)) {
+                forEachKeyInMap(currentFiles, id => {
+                    if (!lastReportedFileNames.has(id)) {
                         added.push(id);
                     }
-                }
-                for (const id in lastReportedFileNames) {
-                    if (!hasProperty(currentFiles, id)) {
+                });
+                forEachKeyInMap(lastReportedFileNames, id => {
+                    if (!currentFiles.has(id)) {
                         removed.push(id);
                     }
-                }
+                });
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, changes: { added, removed }, projectErrors: this.projectErrors };
@@ -472,7 +472,7 @@ namespace ts.server {
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
             // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            const referencedFiles = createMap<boolean>();
+            const referencedFiles = new StringSet();
             if (sourceFile.imports && sourceFile.imports.length > 0) {
                 const checker: TypeChecker = this.program.getTypeChecker();
                 for (const importName of sourceFile.imports) {
@@ -480,7 +480,7 @@ namespace ts.server {
                     if (symbol && symbol.declarations && symbol.declarations[0]) {
                         const declarationSourceFile = symbol.declarations[0].getSourceFile();
                         if (declarationSourceFile) {
-                            referencedFiles[declarationSourceFile.path] = true;
+                            referencedFiles.add(declarationSourceFile.path);
                         }
                     }
                 }
@@ -492,26 +492,24 @@ namespace ts.server {
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
                     const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles[referencedPath] = true;
+                    referencedFiles.add(referencedPath);
                 }
             }
 
             // Handle type reference directives
             if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                for (const typeName in sourceFile.resolvedTypeReferenceDirectiveNames) {
-                    const resolvedTypeReferenceDirective = sourceFile.resolvedTypeReferenceDirectiveNames[typeName];
+                sourceFile.resolvedTypeReferenceDirectiveNames.forEach(resolvedTypeReferenceDirective => {
                     if (!resolvedTypeReferenceDirective) {
-                        continue;
+                        return;
                     }
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles[typeFilePath] = true;
-                }
+                    referencedFiles.add(typeFilePath);
+                });
             }
 
-            const allFileNames = map(Object.keys(referencedFiles), key => <Path>key);
-            return filter(allFileNames, file => this.projectService.host.fileExists(file));
+            return filterSetToArray(referencedFiles, file => this.projectService.host.fileExists(file)) as Path[];
         }
 
         // remove a root file from project
@@ -582,7 +580,7 @@ namespace ts.server {
         private typingOptions: TypingOptions;
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
-        private directoriesWatchedForWildcards: Map<FileWatcher>;
+        private directoriesWatchedForWildcards: Map<string, FileWatcher>;
         private typeRootsWatchers: FileWatcher[];
 
         /** Used for configured projects which may have multiple open roots */
@@ -593,7 +591,7 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
-            private wildcardDirectories: Map<WatchDirectoryFlags>,
+            private wildcardDirectories: Map<string, WatchDirectoryFlags>,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
@@ -648,18 +646,19 @@ namespace ts.server {
                 return;
             }
             const configDirectoryPath = getDirectoryPath(this.configFileName);
-            this.directoriesWatchedForWildcards = reduceProperties(this.wildcardDirectories, (watchers, flag, directory) => {
+
+            this.directoriesWatchedForWildcards = new StringMap<FileWatcher>();
+            this.wildcardDirectories.forEach((flag, directory) => {
                 if (comparePaths(configDirectoryPath, directory, ".", !this.projectService.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                     this.projectService.logger.info(`Add ${recursive ? "recursive " : ""}watcher for: ${directory}`);
-                    watchers[directory] = this.projectService.host.watchDirectory(
+                    this.directoriesWatchedForWildcards.set(directory, this.projectService.host.watchDirectory(
                         directory,
                         path => callback(this, path),
                         recursive
-                    );
+                    ));
                 }
-                return watchers;
-            }, <Map<FileWatcher>>{});
+            });
         }
 
         stopWatchingDirectory() {
@@ -683,9 +682,7 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            for (const id in this.directoriesWatchedForWildcards) {
-                this.directoriesWatchedForWildcards[id].close();
-            }
+            this.directoriesWatchedForWildcards.forEach(watcher => { watcher.close(); });
             this.directoriesWatchedForWildcards = undefined;
 
             this.stopWatchingDirectory();

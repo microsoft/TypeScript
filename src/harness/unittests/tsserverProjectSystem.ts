@@ -238,10 +238,10 @@ namespace ts.projectSystem {
         return entry;
     }
 
-    export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
-        assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
+    export function checkMapKeys(caption: string, map: Map<string, any>, expectedKeys: string[]) {
+        assert.equal(mapSize(map), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
+            assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${keysOfMap(map)}`);
         }
     }
 
@@ -287,38 +287,28 @@ namespace ts.projectSystem {
     }
 
     export class Callbacks {
-        private map: { [n: number]: TimeOutCallback } = {};
+        private map = new NumberMap<number, TimeOutCallback>();
         private nextId = 1;
 
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
             this.nextId++;
-            this.map[timeoutId] = cb.bind(undefined, ...args);
+            this.map.set(timeoutId, cb.bind(undefined, ...args));
             return timeoutId;
         }
         unregister(id: any) {
             if (typeof id === "number") {
-                delete this.map[id];
+                this.map.delete(id);
             }
         }
 
         count() {
-            let n = 0;
-/* tslint:disable:no-unused-variable */
-            for (const _ in this.map) {
-/* tslint:enable:no-unused-variable */
-                n++;
-            }
-            return n;
+            return mapSize(this.map);
         }
 
         invoke() {
-            for (const id in this.map) {
-                if (hasProperty(this.map, id)) {
-                    this.map[id]();
-                }
-            }
-            this.map = {};
+            this.map.forEach(callback => { callback(); });
+            this.map.clear();
         }
     }
 
@@ -334,8 +324,9 @@ namespace ts.projectSystem {
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories = createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
-        readonly watchedFiles = createMap<FileWatcherCallback[]>();
+        readonly watchedDirectories = new StringMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
+        readonly watchedFiles = new StringMap<FileWatcherCallback[]>();
+
 
         private filesOrFolders: FileOrFolder[];
 
@@ -430,7 +421,7 @@ namespace ts.projectSystem {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories[path];
+            const callbacks = this.watchedDirectories.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -440,7 +431,7 @@ namespace ts.projectSystem {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles[path];
+            const callbacks = this.watchedFiles.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);
@@ -2084,7 +2075,7 @@ namespace ts.projectSystem {
             const projectFileName = "externalProject";
             const host = createServerHost([f]);
             const projectService = createProjectService(host);
-            // create a project 
+            // create a project
             projectService.openExternalProject({ projectFileName, rootFiles: [toExternalFile(f.path)], options: {} });
             projectService.checkNumberOfProjects({ externalProjects: 1 });
 

@@ -29,21 +29,22 @@ namespace ts.server {
         if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
             return true;
         }
-        const set: Map<boolean> = createMap<boolean>();
+        const set = new StringMap<boolean>();
         let unique = 0;
 
         for (const v of arr1) {
-            if (set[v] !== true) {
-                set[v] = true;
+            if (set.get(v) !== true) {
+                set.set(v, true);
                 unique++;
             }
         }
         for (const v of arr2) {
-            if (!hasProperty(set, v)) {
+            const isSet = set.get(v);
+            if (isSet === undefined) {
                 return false;
             }
-            if (set[v] === true) {
-                set[v] = false;
+            if (isSet === true) {
+                set.set(v, false);
                 unique--;
             }
         }
@@ -71,7 +72,7 @@ namespace ts.server {
     }
 
     export class TypingsCache {
-        private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
+        private readonly perProjectCache = new StringMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
         }
@@ -83,17 +84,17 @@ namespace ts.server {
                 return <any>emptyArray;
             }
 
-            const entry = this.perProjectCache[project.getProjectName()];
+            const entry = this.perProjectCache.get(project.getProjectName());
             const result: TypingsArray = entry ? entry.typings : <any>emptyArray;
             if (forceRefresh || !entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
                 // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
                 // instead it acts as a placeholder to prevent issuing multiple requests
-                this.perProjectCache[project.getProjectName()] = {
+                this.perProjectCache.set(project.getProjectName(), {
                     compilerOptions: project.getCompilerOptions(),
                     typingOptions,
                     typings: result,
                     poisoned: true
-                };
+                });
                 // something has been changed, issue a request to update typings
                 this.installer.enqueueInstallTypingsRequest(project, typingOptions);
             }
@@ -109,16 +110,16 @@ namespace ts.server {
         }
 
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, newTypings: string[]) {
-            this.perProjectCache[projectName] = {
+            this.perProjectCache.set(projectName, {
                 compilerOptions,
                 typingOptions,
                 typings: toTypingsArray(newTypings),
                 poisoned: false
-            };
+            });
         }
 
         onProjectClosed(project: Project) {
-            delete this.perProjectCache[project.getProjectName()];
+            this.perProjectCache.delete(project.getProjectName());
             this.installer.onProjectClosed(project);
         }
     }

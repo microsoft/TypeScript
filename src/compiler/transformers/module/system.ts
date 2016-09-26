@@ -33,7 +33,7 @@ namespace ts {
         const exportFunctionForFileMap: Identifier[] = [];
         let currentSourceFile: SourceFile;
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
-        let exportSpecifiers: Map<ExportSpecifier[]>;
+        let exportSpecifiers: Map<string, ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
         let hasExportStarsToExportValues: boolean;
         let exportFunctionForFile: Identifier;
@@ -273,7 +273,7 @@ namespace ts {
             // this set is used to filter names brought by star expors.
 
             // local names set should only be added if we have anything exported
-            if (!exportedLocalNames && isEmpty(exportSpecifiers)) {
+            if (!exportedLocalNames && mapIsEmpty(exportSpecifiers)) {
                 // no exported declarations (export var ...) or export specifiers (export {x})
                 // check if we have any non star export declarations.
                 let hasExportDeclarationWithExportClause = false;
@@ -1326,20 +1326,20 @@ namespace ts {
         }
 
         function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {
-            const groupIndices = createMap<number>();
+            const groupIndices = new StringMap<number>();
             const dependencyGroups: DependencyGroup[] = [];
             for (let i = 0; i < externalImports.length; i++) {
                 const externalImport = externalImports[i];
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
                 const text = externalModuleName.text;
-                if (hasProperty(groupIndices, text)) {
+                const groupIndex = groupIndices.get(text);
+                if (groupIndex !== undefined) {
                     // deduplicate/group entries in dependency list by the dependency name
-                    const groupIndex = groupIndices[text];
                     dependencyGroups[groupIndex].externalImports.push(externalImport);
                     continue;
                 }
                 else {
-                    groupIndices[text] = dependencyGroups.length;
+                    groupIndices.set(text, dependencyGroups.length);
                     dependencyGroups.push({
                         name: externalModuleName,
                         externalImports: [externalImport]

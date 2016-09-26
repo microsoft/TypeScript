@@ -925,19 +925,18 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap = ts.createMap<ts.SourceFile>({
-            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
-        });
+        const libFileNameSourceFileMap = ts.createMapWithEntry<ts.SourceFile>(defaultLibFileName,
+            createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest));
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
                 return undefined;
             }
 
-            if (!libFileNameSourceFileMap[fileName]) {
-                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
+            if (!libFileNameSourceFileMap.get(fileName)) {
+                libFileNameSourceFileMap.set(fileName, createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
             }
-            return libFileNameSourceFileMap[fileName];
+            return libFileNameSourceFileMap.get(fileName);
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
@@ -1079,16 +1078,16 @@ namespace Harness {
             { name: "symlink", type: "string" }
         ];
 
-        let optionsIndex: ts.Map<ts.CommandLineOption>;
+        let optionsIndex: ts.Map<string, ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
-                optionsIndex = ts.createMap<ts.CommandLineOption>();
+                optionsIndex = new ts.StringMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
-                    optionsIndex[option.name.toLowerCase()] = option;
+                    optionsIndex.set(option.name.toLowerCase(), option);
                 }
             }
-            return optionsIndex[name.toLowerCase()];
+            return optionsIndex.get(name.toLowerCase());
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1439,10 +1438,10 @@ namespace Harness {
 
             const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-            const fullResults = ts.createMap<TypeWriterResult[]>();
+            const fullResults = new ts.StringMap<TypeWriterResult[]>();
 
             for (const sourceFile of allFiles) {
-                fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
             }
 
             // Produce baselines.  The first gives the types for all expressions.
@@ -1489,13 +1488,13 @@ namespace Harness {
                 Harness.Baseline.runBaseline(outputFileName, () => fullBaseLine, opts);
             }
 
-            function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+            function generateBaseLine(typeWriterResults: ts.Map<string, TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                 const typeLines: string[] = [];
                 const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 
                 allFiles.forEach(file => {
                     const codeLines = file.content.split("\n");
-                    typeWriterResults[file.unitName].forEach(result => {
+                    typeWriterResults.get(file.unitName).forEach(result => {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
                         }

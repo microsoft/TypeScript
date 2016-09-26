@@ -1157,7 +1157,7 @@ namespace ts {
                     info.fileNames,
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
                     toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
-                    info.packageNameToTypingLocation,
+                    mapOfMapLike(info.packageNameToTypingLocation),
                     info.typingOptions,
                     info.compilerOptions);
             });

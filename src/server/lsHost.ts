@@ -5,8 +5,8 @@
 namespace ts.server {
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost, ServerLanguageServiceHost {
         private compilationSettings: ts.CompilerOptions;
-        private readonly resolvedModuleNames: ts.FileMap<Map<ResolvedModuleWithFailedLookupLocations>>;
-        private readonly resolvedTypeReferenceDirectives: ts.FileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
+        private readonly resolvedModuleNames: ts.FileMap<Map<string, ResolvedModuleWithFailedLookupLocations>>;
+        private readonly resolvedTypeReferenceDirectives: ts.FileMap<Map<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
         private readonly getCanonicalFileName: (fileName: string) => string;
 
         private readonly resolveModuleName: typeof resolveModuleName;
@@ -14,8 +14,8 @@ namespace ts.server {
 
         constructor(private readonly host: ServerHost, private readonly project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
-            this.resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
-            this.resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+            this.resolvedModuleNames = createFileMap<Map<string, ResolvedModuleWithFailedLookupLocations>>();
+            this.resolvedTypeReferenceDirectives = createFileMap<Map<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
 
             if (host.trace) {
                 this.trace = s => host.trace(s);
@@ -31,7 +31,7 @@ namespace ts.server {
                     }
                 }
                 // create different collection of failed lookup locations for second pass
-                // if it will fail and we've already found something during the first pass - we don't want to pollute its results 
+                // if it will fail and we've already found something during the first pass - we don't want to pollute its results
                 const secondaryLookupFailedLookupLocations: string[] = [];
                 const globalCache = this.project.projectService.typingsInstaller.globalTypingsCacheLocation;
                 if (this.project.getTypingOptions().enableAutoDiscovery && globalCache) {
@@ -55,28 +55,28 @@ namespace ts.server {
         private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
-            cache: ts.FileMap<Map<T>>,
+            cache: ts.FileMap<Map<string, T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R): R[] {
 
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions: Map<T> = createMap<T>();
+            const newResolutions = new StringMap<T>();
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = newResolutions[name];
+                let resolution = newResolutions.get(name);
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile[name];
+                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile.get(name);
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
                     }
                     else {
-                        newResolutions[name] = resolution = loader(name, containingFile, compilerOptions, this);
+                        newResolutions.set(name, resolution = loader(name, containingFile, compilerOptions, this));
                     }
                 }
 

@@ -4,12 +4,12 @@
 /*@internal*/
 namespace ts {
     export function transformModule(context: TransformationContext) {
-        const transformModuleDelegates = createMap<(node: SourceFile) => SourceFile>({
-            [ModuleKind.None]: transformCommonJSModule,
-            [ModuleKind.CommonJS]: transformCommonJSModule,
-            [ModuleKind.AMD]: transformAMDModule,
-            [ModuleKind.UMD]: transformUMDModule,
-        });
+        const transformModuleDelegates = new NumberMap<ModuleKind, (node: SourceFile) => SourceFile>([
+            [ModuleKind.None, transformCommonJSModule],
+            [ModuleKind.CommonJS, transformCommonJSModule],
+            [ModuleKind.AMD, transformAMDModule],
+            [ModuleKind.UMD, transformUMDModule],
+        ]);
 
         const {
             startLexicalEnvironment,
@@ -35,12 +35,12 @@ namespace ts {
 
         let currentSourceFile: SourceFile;
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
-        let exportSpecifiers: Map<ExportSpecifier[]>;
+        let exportSpecifiers: Map<string, ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
-        let bindingNameExportSpecifiersMap: Map<ExportSpecifier[]>;
+        let bindingNameExportSpecifiersMap: Map<string, ExportSpecifier[]>;
         // Subset of exportSpecifiers that is a binding-name.
         // This is to reduce amount of memory we have to keep around even after we done with module-transformer
-        const bindingNameExportSpecifiersForFileMap = createMap<Map<ExportSpecifier[]>>();
+        const bindingNameExportSpecifiersForFileMap = new NumberMap<number, Map<string, ExportSpecifier[]>>();
         let hasExportStarsToExportValues: boolean;
 
         return transformSourceFile;
@@ -62,7 +62,7 @@ namespace ts {
                 ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
 
                 // Perform the transformation.
-                const transformModule = transformModuleDelegates[moduleKind] || transformModuleDelegates[ModuleKind.None];
+                const transformModule = transformModuleDelegates.get(moduleKind) || transformModuleDelegates.get(ModuleKind.None);
                 const updated = transformModule(node);
                 aggregateTransformFlags(updated);
 
@@ -524,7 +524,7 @@ namespace ts {
             const original = getOriginalNode(currentSourceFile);
             Debug.assert(original.kind === SyntaxKind.SourceFile);
 
-            if (!original.symbol.exports["___esModule"]) {
+            if (!original.symbol.exports.get("___esModule")) {
                 if (languageVersion === ScriptTarget.ES3) {
                     statements.push(
                         createStatement(
@@ -579,8 +579,9 @@ namespace ts {
         }
 
         function addExportMemberAssignments(statements: Statement[], name: Identifier): void {
-            if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
-                for (const specifier of exportSpecifiers[name.text]) {
+            const specifiers = !exportEquals && exportSpecifiers && exportSpecifiers.get(name.text);
+            if (specifiers) {
+                for (const specifier of exportSpecifiers.get(name.text)) {
                     statements.push(
                         startOnNewLine(
                             createStatement(
@@ -667,12 +668,11 @@ namespace ts {
                 }
             }
             else {
-                if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
+                const specifiers = !exportEquals && exportSpecifiers && exportSpecifiers.get(name.text);
+                if (specifiers) {
                     const sourceFileId = getOriginalNodeId(currentSourceFile);
-                    if (!bindingNameExportSpecifiersForFileMap[sourceFileId]) {
-                        bindingNameExportSpecifiersForFileMap[sourceFileId] = createMap<ExportSpecifier[]>();
-                    }
-                    bindingNameExportSpecifiersForFileMap[sourceFileId][name.text] = exportSpecifiers[name.text];
+                    const bindingNameExportSpecifiers = getOrUpdate(bindingNameExportSpecifiersForFileMap, sourceFileId, () => new StringMap());
+                    bindingNameExportSpecifiers.set(name.text, exportSpecifiers.get(name.text));
                     addExportMemberAssignments(resultStatements, name);
                 }
             }
@@ -824,7 +824,7 @@ namespace ts {
 
         function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
-                bindingNameExportSpecifiersMap = bindingNameExportSpecifiersForFileMap[getOriginalNodeId(node)];
+                bindingNameExportSpecifiersMap = bindingNameExportSpecifiersForFileMap.get(getOriginalNodeId(node));
                 previousOnEmitNode(emitContext, node, emitCallback);
                 bindingNameExportSpecifiersMap = undefined;
             }
@@ -890,10 +890,11 @@ namespace ts {
             const left = node.left;
             // If the left-hand-side of the binaryExpression is an identifier and its is export through export Specifier
             if (isIdentifier(left) && isAssignmentOperator(node.operatorToken.kind)) {
-                if (bindingNameExportSpecifiersMap && hasProperty(bindingNameExportSpecifiersMap, left.text)) {
+                const bindingNameExportSpecifiers = bindingNameExportSpecifiersMap && bindingNameExportSpecifiersMap.get(left.text);
+                if (bindingNameExportSpecifiers) {
                     setEmitFlags(node, EmitFlags.NoSubstitution);
                     let nestedExportAssignment: BinaryExpression;
-                    for (const specifier of bindingNameExportSpecifiersMap[left.text]) {
+                    for (const specifier of bindingNameExportSpecifiers) {
                         nestedExportAssignment = nestedExportAssignment ?
                             createExportAssignment(specifier.name, nestedExportAssignment) :
                             createExportAssignment(specifier.name, node);
@@ -910,7 +911,8 @@ namespace ts {
             const operator = node.operator;
             const operand = node.operand;
             if (isIdentifier(operand) && bindingNameExportSpecifiersForFileMap) {
-                if (bindingNameExportSpecifiersMap && hasProperty(bindingNameExportSpecifiersMap, operand.text)) {
+                const bindingNameExportSpecifiers = bindingNameExportSpecifiersMap && bindingNameExportSpecifiersMap.get(operand.text);
+                if (bindingNameExportSpecifiers) {
                     setEmitFlags(node, EmitFlags.NoSubstitution);
                     let transformedUnaryExpression: BinaryExpression;
                     if (node.kind === SyntaxKind.PostfixUnaryExpression) {
@@ -924,7 +926,7 @@ namespace ts {
                         setEmitFlags(transformedUnaryExpression, EmitFlags.NoSubstitution);
                     }
                     let nestedExportAssignment: BinaryExpression;
-                    for (const specifier of bindingNameExportSpecifiersMap[operand.text]) {
+                    for (const specifier of bindingNameExportSpecifiersMap.get(operand.text)) {
                         nestedExportAssignment = nestedExportAssignment ?
                             createExportAssignment(specifier.name, nestedExportAssignment) :
                             createExportAssignment(specifier.name, transformedUnaryExpression || node);

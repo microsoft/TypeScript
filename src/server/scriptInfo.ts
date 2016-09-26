@@ -4,7 +4,7 @@ namespace ts.server {
 
     export class ScriptInfo {
         /**
-         * All projects that include this file 
+         * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
         private formatCodeSettings: ts.FormatCodeSettings;
@@ -96,7 +96,7 @@ namespace ts.server {
                 if (!this.formatCodeSettings) {
                     this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
                 }
-                mergeMaps(this.formatCodeSettings, formatSettings);
+                mergeMapLikes(this.formatCodeSettings, formatSettings);
             }
         }
 

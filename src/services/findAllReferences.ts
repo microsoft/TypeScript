@@ -96,7 +96,7 @@ namespace ts.FindAllReferences {
 
                 const nameTable = getNameTable(sourceFile);
 
-                if (nameTable[internedName] !== undefined) {
+                if (nameTable.get(internedName) !== undefined) {
                     result = result || [];
                     getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
                 }
@@ -378,7 +378,7 @@ namespace ts.FindAllReferences {
             const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, start, container.getEnd());
 
             const parents = getParentSymbolsOfPropertyAccess();
-            const inheritsFromCache: Map<boolean> = createMap<boolean>();
+            const inheritsFromCache = new StringMap<boolean>();
 
             if (possiblePositions.length) {
                 // Build the set of symbols to search for, initially it has only the current symbol
@@ -501,14 +501,14 @@ namespace ts.FindAllReferences {
             function findOwnConstructorCalls(classSymbol: Symbol): Node[] {
                 const result: Node[] = [];
 
-                for (const decl of classSymbol.members["__constructor"].declarations) {
+                for (const decl of classSymbol.members.get("__constructor").declarations) {
                     Debug.assert(decl.kind === SyntaxKind.Constructor);
                     const ctrKeyword = decl.getChildAt(0);
                     Debug.assert(ctrKeyword.kind === SyntaxKind.ConstructorKeyword);
                     result.push(ctrKeyword);
                 }
 
-                forEachProperty(classSymbol.exports, member => {
+                classSymbol.exports.forEach(member => {
                     const decl = member.valueDeclaration;
                     if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
                         const body = (<MethodDeclaration>decl).body;
@@ -528,7 +528,7 @@ namespace ts.FindAllReferences {
             /** Find references to `super` in the constructor of an extending class.  */
             function superConstructorAccesses(cls: ClassLikeDeclaration): Node[] {
                 const symbol = cls.symbol;
-                const ctr = symbol.members["__constructor"];
+                const ctr = symbol.members.get("__constructor");
                 if (!ctr) {
                     return [];
                 }
@@ -705,7 +705,7 @@ namespace ts.FindAllReferences {
          * @param parent        Another class or interface Symbol
          * @param cachedResults A map of symbol id pairs (i.e. "child,parent") to booleans indicating previous results
          */
-        function explicitlyInheritsFrom(child: Symbol, parent: Symbol, cachedResults: Map<boolean>): boolean {
+        function explicitlyInheritsFrom(child: Symbol, parent: Symbol, cachedResults: Map<string, boolean>): boolean {
             const parentIsInterface = parent.getFlags() & SymbolFlags.Interface;
             return searchHierarchy(child);
 
@@ -715,12 +715,13 @@ namespace ts.FindAllReferences {
                 }
 
                 const key = getSymbolId(symbol) + "," + getSymbolId(parent);
-                if (key in cachedResults) {
-                    return cachedResults[key];
+                const cachedResult = cachedResults.get(key);
+                if (cachedResult !== undefined) {
+                    return cachedResult;
                 }
 
                 // Set the key so that we don't infinitely recurse
-                cachedResults[key] = false;
+                cachedResults.set(key, false);
 
                 const inherits = forEach(symbol.getDeclarations(), declaration => {
                     if (isClassLike(declaration)) {
@@ -744,7 +745,7 @@ namespace ts.FindAllReferences {
                     return false;
                 });
 
-                cachedResults[key] = inherits;
+                cachedResults.set(key, inherits);
                 return inherits;
             }
 
@@ -1046,7 +1047,7 @@ namespace ts.FindAllReferences {
 
                 // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                 if (!implementations && rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ createMap<Symbol>());
+                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new StringMap<Symbol>());
                 }
             });
 
@@ -1078,7 +1079,7 @@ namespace ts.FindAllReferences {
             // the function will add any found symbol of the property-name, then its sub-routine will call
             // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
             // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-            if (symbol.name in previousIterationSymbolsCache) {
+            if (previousIterationSymbolsCache.has(symbol.name)) {
                 return;
             }
 
@@ -1105,14 +1106,14 @@ namespace ts.FindAllReferences {
                         }
 
                         // Visit the typeReference as well to see if it directly or indirectly use that property
-                        previousIterationSymbolsCache[symbol.name] = symbol;
+                        previousIterationSymbolsCache.set(symbol.name, symbol);
                         getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache);
                     }
                 }
             }
         }
 
-        function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node, searchLocationIsConstructor: boolean, parents: Symbol[] | undefined, cache: Map<boolean>): Symbol {
+        function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node, searchLocationIsConstructor: boolean, parents: Symbol[] | undefined, cache: Map<string, boolean>): Symbol {
             if (contains(searchSymbols, referenceSymbol)) {
                 // If we are searching for constructor uses, they must be 'new' expressions.
                 return (!searchLocationIsConstructor || isNewExpressionTarget(referenceLocation)) && referenceSymbol;
@@ -1176,7 +1177,7 @@ namespace ts.FindAllReferences {
                     }
 
                     const result: Symbol[] = [];
-                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ createMap<Symbol>());
+                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new StringMap<Symbol>());
                     return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                 }
 

@@ -65,7 +65,7 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: createMap({
+            type: mapOfMapLike({
                 "preserve": JsxEmit.Preserve,
                 "react": JsxEmit.React
             }),
@@ -95,7 +95,7 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: createMap({
+            type: mapOfMapLike({
                 "none": ModuleKind.None,
                 "commonjs": ModuleKind.CommonJS,
                 "amd": ModuleKind.AMD,
@@ -109,7 +109,7 @@ namespace ts {
         },
         {
             name: "newLine",
-            type: createMap({
+            type: mapOfMapLike({
                 "crlf": NewLineKind.CarriageReturnLineFeed,
                 "lf": NewLineKind.LineFeed
             }),
@@ -258,7 +258,7 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: createMap({
+            type: mapOfMapLike({
                 "es3": ScriptTarget.ES3,
                 "es5": ScriptTarget.ES5,
                 "es6": ScriptTarget.ES6,
@@ -292,7 +292,7 @@ namespace ts {
         },
         {
             name: "moduleResolution",
-            type: createMap({
+            type: mapOfMapLike({
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic,
             }),
@@ -401,7 +401,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: createMap({
+                type: mapOfMapLike({
                     // JavaScript only
                     "es5": "lib.es5.d.ts",
                     "es6": "lib.es2015.d.ts",
@@ -473,8 +473,8 @@ namespace ts {
 
     /* @internal */
     export interface OptionNameMap {
-        optionNameMap: Map<CommandLineOption>;
-        shortOptionNames: Map<string>;
+        optionNameMap: Map<string, CommandLineOption>;
+        shortOptionNames: Map<string, string>;
     }
 
     /* @internal */
@@ -493,12 +493,12 @@ namespace ts {
             return optionNameMapCache;
         }
 
-        const optionNameMap = createMap<CommandLineOption>();
-        const shortOptionNames = createMap<string>();
+        const optionNameMap = new StringMap<CommandLineOption>();
+        const shortOptionNames = new StringMap<string>();
         forEach(optionDeclarations, option => {
-            optionNameMap[option.name.toLowerCase()] = option;
+            optionNameMap.set(option.name.toLowerCase(), option);
             if (option.shortName) {
-                shortOptionNames[option.shortName] = option.name;
+                shortOptionNames.set(option.shortName, option.name);
             }
         });
 
@@ -509,18 +509,16 @@ namespace ts {
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
         const namesOfType: string[] = [];
-        for (const key in opt.type) {
-            namesOfType.push(` '${key}'`);
-        }
+        forEachKeyInMap(opt.type, key => namesOfType.push(` '${key}'`));
         return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 
     /* @internal */
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = trimString((value || "")).toLowerCase();
-        const map = opt.type;
-        if (key in map) {
-            return map[key];
+        const customType = opt.type.get(key);
+        if (customType !== undefined) {
+            return customType;
         }
         else {
             errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
@@ -573,13 +571,13 @@ namespace ts {
                     s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
 
                     // Try to translate short option names to their full equivalents.
-                    if (s in shortOptionNames) {
-                        s = shortOptionNames[s];
+                    const short = shortOptionNames.get(s);
+                    if (short !== undefined) {
+                        s = short;
                     }
 
-                    if (s in optionNameMap) {
-                        const opt = optionNameMap[s];
-
+                    const opt = optionNameMap.get(s);
+                    if (opt !== undefined) {
                         if (opt.isTSConfigOnly) {
                             errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
                         }
@@ -696,7 +694,7 @@ namespace ts {
      * @param fileNames array of filenames to be generated into tsconfig.json
      */
     /* @internal */
-    export function generateTSConfig(options: CompilerOptions, fileNames: string[]): { compilerOptions: Map<CompilerOptionsValue> } {
+    export function generateTSConfig(options: CompilerOptions, fileNames: string[]): { compilerOptions: MapLike<CompilerOptionsValue> } {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
         const configurations: any = {
             compilerOptions: serializeCompilerOptions(compilerOptions)
@@ -708,7 +706,7 @@ namespace ts {
 
         return configurations;
 
-        function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
+        function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string, string | number> | undefined {
             if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
                 // this is of a type CommandLineOptionOfPrimitiveType
                 return undefined;
@@ -721,18 +719,17 @@ namespace ts {
             }
         }
 
-        function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: MapLike<string | number>): string | undefined {
+        function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string, string | number>): string | undefined {
             // There is a typeMap associated with this command-line option so use it to map value back to its name
-            for (const key in customTypeMap) {
-                if (customTypeMap[key] === value) {
+            return findInMap(customTypeMap, (customValue, key) => {
+                if (customValue === value) {
                     return key;
                 }
-            }
-            return undefined;
+            });
         }
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<CompilerOptionsValue> {
-            const result = createMap<CompilerOptionsValue>();
+        function serializeCompilerOptions(options: CompilerOptions): MapLike<CompilerOptionsValue> {
+            const result = new StringMap<CompilerOptionsValue>();
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {
@@ -748,13 +745,13 @@ namespace ts {
                             break;
                         default:
                             const value = options[name];
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
+                            let optionDefinition = optionsNameMap.get(name.toLowerCase());
                             if (optionDefinition) {
                                 const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
                                 if (!customTypeMap) {
                                     // There is no map associated with this compiler option then use the value as-is
                                     // This is the case if the value is expect to be string, number, boolean or list of string
-                                    result[name] = value;
+                                    result.set(name, value);
                                 }
                                 else {
                                     if (optionDefinition.type === "list") {
@@ -762,11 +759,11 @@ namespace ts {
                                         for (const element of value as (string | number)[]) {
                                             convertedValue.push(getNameOfCompilerOptionValue(element, customTypeMap));
                                         }
-                                        result[name] = convertedValue;
+                                        result.set(name, convertedValue);
                                     }
                                     else {
                                         // There is a typeMap associated with this command-line option so use it to map value back to its name
-                                        result[name] = getNameOfCompilerOptionValue(value, customTypeMap);
+                                        result.set(name, getNameOfCompilerOptionValue(value, customTypeMap));
                                     }
                                 }
                             }
@@ -774,7 +771,7 @@ namespace ts {
                     }
                 }
             }
-            return result;
+            return mapLikeOfMap(result);
         }
     }
 
@@ -1001,8 +998,8 @@ namespace ts {
         const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
 
         for (const id in jsonOptions) {
-            if (id in optionNameMap) {
-                const opt = optionNameMap[id];
+            const opt = optionNameMap.get(id);
+            if (opt !== undefined) {
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
             else {
@@ -1038,8 +1035,9 @@ namespace ts {
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = value.toLowerCase();
-        if (key in opt.type) {
-            return opt.type[key];
+        const val = opt.type.get(key);
+        if (val !== undefined) {
+            return val;
         }
         else {
             errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
@@ -1148,12 +1146,12 @@ namespace ts {
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
-        const literalFileMap = createMap<string>();
+        const literalFileMap = new StringMap<string>();
 
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap = createMap<string>();
+        const wildcardFileMap = new StringMap<string>();
 
         if (include) {
             include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false);
@@ -1167,7 +1165,7 @@ namespace ts {
         // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
         // or a recursive directory. This information is used by filesystem watchers to monitor for
         // new entries in these paths.
-        const wildcardDirectories: Map<WatchDirectoryFlags> = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
+        const wildcardDirectories: Map<string, WatchDirectoryFlags> = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -1178,7 +1176,7 @@ namespace ts {
         if (fileNames) {
             for (const fileName of fileNames) {
                 const file = combinePaths(basePath, fileName);
-                literalFileMap[keyMapper(file)] = file;
+                literalFileMap.set(keyMapper(file), file);
             }
         }
 
@@ -1201,18 +1199,17 @@ namespace ts {
                 removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
 
                 const key = keyMapper(file);
-                if (!(key in literalFileMap) && !(key in wildcardFileMap)) {
-                    wildcardFileMap[key] = file;
+                if (!literalFileMap.has(key)) {
+                    setIfNotSet(wildcardFileMap, key, file);
                 }
             }
         }
 
-        const literalFiles = reduceProperties(literalFileMap, addFileToOutput, []);
-        const wildcardFiles = reduceProperties(wildcardFileMap, addFileToOutput, []);
-        wildcardFiles.sort(host.useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
+        const literalFiles = valuesOfMap(literalFileMap);
+        const wildcardFiles = valuesOfMap(wildcardFileMap).sort(host.useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
         return {
             fileNames: literalFiles.concat(wildcardFiles),
-            wildcardDirectories
+            wildcardDirectories: mapLikeOfMap(wildcardDirectories)
         };
     }
 
@@ -1253,7 +1250,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories = createMap<WatchDirectoryFlags>();
+        const wildcardDirectories = new StringMap<WatchDirectoryFlags>();
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
@@ -1266,9 +1263,9 @@ namespace ts {
                 if (match) {
                     const key = useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase();
                     const flags = watchRecursivePattern.test(name) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None;
-                    const existingFlags = wildcardDirectories[key];
+                    const existingFlags = wildcardDirectories.get(key);
                     if (existingFlags === undefined || existingFlags < flags) {
-                        wildcardDirectories[key] = flags;
+                        wildcardDirectories.set(key, flags);
                         if (flags === WatchDirectoryFlags.Recursive) {
                             recursiveKeys.push(key);
                         }
@@ -1277,13 +1274,13 @@ namespace ts {
             }
 
             // Remove any subpaths under an existing recursively watched directory.
-            for (const key in wildcardDirectories) {
+            forEachKeyInMap(wildcardDirectories, key => {
                 for (const recursiveKey of recursiveKeys) {
                     if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                        delete wildcardDirectories[key];
+                        wildcardDirectories.delete(key);
                     }
                 }
-            }
+            });
         }
 
         return wildcardDirectories;
@@ -1297,13 +1294,13 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string, string>, wildcardFiles: Map<string, string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority);
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
             const higherPriorityExtension = extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
-            if (higherPriorityPath in literalFiles || higherPriorityPath in wildcardFiles) {
+            if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
                 return true;
             }
         }
@@ -1319,25 +1316,14 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string, string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority);
         for (let i = nextExtensionPriority; i < extensions.length; i++) {
             const lowerPriorityExtension = extensions[i];
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
-            delete wildcardFiles[lowerPriorityPath];
+            wildcardFiles.delete(lowerPriorityPath);
         }
-    }
-
-    /**
-     * Adds a file to an array of files.
-     *
-     * @param output The output array.
-     * @param file The file path.
-     */
-    function addFileToOutput(output: string[], file: string) {
-        output.push(file);
-        return output;
     }
 
     /**

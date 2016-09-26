@@ -91,13 +91,11 @@ namespace Playback {
     }
 
     function memoize<T>(func: (s: string) => T): Memoized<T> {
-        let lookup: { [s: string]: T } = {};
-        const run: Memoized<T> = <Memoized<T>>((s: string) => {
-            if (lookup.hasOwnProperty(s)) return lookup[s];
-            return lookup[s] = func(s);
-        });
+        const lookup = new ts.StringMap<T>();
+        const run: Memoized<T> = <Memoized<T>>((s: string) =>
+            ts.getOrUpdateAndAllowUndefined(lookup, s, func));
         run.reset = () => {
-            lookup = undefined;
+            lookup.clear();
         };
 
         return run;

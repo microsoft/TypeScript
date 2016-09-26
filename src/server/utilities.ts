@@ -90,7 +90,7 @@ namespace ts.server {
         };
     }
 
-    export function mergeMaps(target: MapLike<any>, source: MapLike <any>): void {
+    export function mergeMapLikes(target: MapLike<any>, source: MapLike <any>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
@@ -131,32 +131,6 @@ namespace ts.server {
         return <NormalizedPath>fileName;
     }
 
-    export interface NormalizedPathMap<T> {
-        get(path: NormalizedPath): T;
-        set(path: NormalizedPath, value: T): void;
-        contains(path: NormalizedPath): boolean;
-        remove(path: NormalizedPath): void;
-    }
-
-    export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-/* tslint:disable:no-null-keyword */
-        const map: Map<T> = Object.create(null);
-/* tslint:enable:no-null-keyword */
-        return {
-            get(path) {
-                return map[path];
-            },
-            set(path, value) {
-                map[path] = value;
-            },
-            contains(path) {
-                return hasProperty(map, path);
-            },
-            remove(path) {
-                delete map[path];
-            }
-        };
-    }
     function throwLanguageServiceIsDisabledError() {
         throw new Error("LanguageService is disabled");
     }
@@ -223,7 +197,7 @@ namespace ts.server {
          * these fields can be present in the project file
          **/
         files?: string[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
+        wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
         typingOptions?: TypingOptions;
         compileOnSave?: boolean;
@@ -239,21 +213,22 @@ namespace ts.server {
     }
 
     export class ThrottledOperations {
-        private pendingTimeouts: Map<any> = createMap<any>();
+        private pendingTimeouts = new StringMap<any>();
         constructor(private readonly host: ServerHost) {
         }
 
         public schedule(operationId: string, delay: number, cb: () => void) {
-            if (hasProperty(this.pendingTimeouts, operationId)) {
+            const pendingTimeout = this.pendingTimeouts.get(operationId);
+            if (pendingTimeout !== undefined) {
                 // another operation was already scheduled for this id - cancel it
-                this.host.clearTimeout(this.pendingTimeouts[operationId]);
+                this.host.clearTimeout(pendingTimeout);
             }
-            // schedule new operation, pass arguments  
-            this.pendingTimeouts[operationId] = this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb);
+            // schedule new operation, pass arguments
+            this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb));
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
-            delete self.pendingTimeouts[operationId];
+            self.pendingTimeouts.delete(operationId);
             cb();
         }
     }

@@ -105,7 +105,7 @@ namespace ts {
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets = createMap<FileMap<DocumentRegistryEntry>>();
+        const buckets = new StringMap<FileMap<DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
@@ -113,30 +113,35 @@ namespace ts {
         }
 
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
-            let bucket = buckets[key];
+            let bucket = buckets.get(key);
             if (!bucket && createIfMissing) {
-                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
+                buckets.set(key, bucket = createFileMap<DocumentRegistryEntry>());
             }
             return bucket;
         }
 
         function reportStats() {
-            const bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === "_").map(name => {
-                const entries = buckets[name];
-                const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
-                entries.forEachValue((key, entry) => {
-                    sourceFiles.push({
-                        name: key,
-                        refCount: entry.languageServiceRefCount,
-                        references: entry.owners.slice(0)
+            type Info = {
+                bucket: string;
+                sourceFiles: { name: string, refCount: number, references: string[] }[]
+            };
+
+            const bucketInfoArray: Info[] = [];
+            buckets.forEach((entries, name) => {
+                if (name && name.charAt(0) === "_") {
+                    const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
+                    entries.forEachValue((key, entry) => {
+                        sourceFiles.push({
+                            name: key,
+                            refCount: entry.languageServiceRefCount,
+                            references: entry.owners
+                        });
                     });
-                });
-                sourceFiles.sort((x, y) => y.refCount - x.refCount);
-                return {
-                    bucket: name,
-                    sourceFiles
-                };
+                    sourceFiles.sort((x, y) => y.refCount - x.refCount);
+                    bucketInfoArray.push({ bucket: name, sourceFiles });
+                }
             });
+
             return JSON.stringify(bucketInfoArray, undefined, 2);
         }
 

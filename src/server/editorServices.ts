@@ -98,23 +98,24 @@ namespace ts.server {
         /**
          * a path to directory watcher map that detects added tsconfig files
          **/
-        private readonly directoryWatchersForTsconfig: Map<FileWatcher> = createMap<FileWatcher>();
+        private readonly directoryWatchersForTsconfig = new StringMap<FileWatcher>();
         /**
          * count of how many projects are using the directory watcher.
          * If the number becomes 0 for a watcher, then we should close it.
          **/
-        private readonly directoryWatchersRefCount: Map<number> = createMap<number>();
+        private readonly directoryWatchersRefCount = new StringMap<number>();
 
         constructor(private readonly projectService: ProjectService) {
         }
 
         stopWatchingDirectory(directory: string) {
             // if the ref count for this directory watcher drops to 0, it's time to close it
-            this.directoryWatchersRefCount[directory]--;
-            if (this.directoryWatchersRefCount[directory] === 0) {
+            const refCount = this.directoryWatchersRefCount.get(directory) - 1;
+            this.directoryWatchersRefCount.set(directory, refCount);
+            if (refCount === 0) {
                 this.projectService.logger.info(`Close directory watcher for: ${directory}`);
-                this.directoryWatchersForTsconfig[directory].close();
-                delete this.directoryWatchersForTsconfig[directory];
+                this.directoryWatchersForTsconfig.get(directory).close();
+                this.directoryWatchersForTsconfig.delete(directory);
             }
         }
 
@@ -122,13 +123,13 @@ namespace ts.server {
             let currentPath = getDirectoryPath(fileName);
             let parentPath = getDirectoryPath(currentPath);
             while (currentPath != parentPath) {
-                if (!this.directoryWatchersForTsconfig[currentPath]) {
+                if (!this.directoryWatchersForTsconfig.get(currentPath)) {
                     this.projectService.logger.info(`Add watcher for: ${currentPath}`);
-                    this.directoryWatchersForTsconfig[currentPath] = this.projectService.host.watchDirectory(currentPath, callback);
-                    this.directoryWatchersRefCount[currentPath] = 1;
+                    this.directoryWatchersForTsconfig.set(currentPath, this.projectService.host.watchDirectory(currentPath, callback));
+                    this.directoryWatchersRefCount.set(currentPath, 1);
                 }
                 else {
-                    this.directoryWatchersRefCount[currentPath] += 1;
+                    modifyValue(this.directoryWatchersRefCount, currentPath, count => count + 1);
                 }
                 project.directoriesWatchedForTsconfig.push(currentPath);
                 currentPath = parentPath;
@@ -150,7 +151,7 @@ namespace ts.server {
         /**
          * maps external project file name to list of config files that were the part of this project
          */
-        private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]> = createMap<NormalizedPath[]>();
+        private readonly externalProjectToConfiguredProjectMap = new StringMap<NormalizedPath[]>();
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
@@ -325,7 +326,7 @@ namespace ts.server {
             }
             else {
                 if (info && (!info.isOpen)) {
-                    // file has been changed which might affect the set of referenced files in projects that include 
+                    // file has been changed which might affect the set of referenced files in projects that include
                     // this file and set of inferred projects
                     info.reloadFromFile();
                     this.updateProjectGraphs(info.containingProjects);
@@ -343,7 +344,7 @@ namespace ts.server {
             if (!info.isOpen) {
                 this.filenameToScriptInfo.remove(info.path);
 
-                // capture list of projects since detachAllProjects will wipe out original list 
+                // capture list of projects since detachAllProjects will wipe out original list
                 const containingProjects = info.containingProjects.slice();
 
                 info.detachAllProjects();
@@ -493,7 +494,7 @@ namespace ts.server {
                 const inferredProject = this.createInferredProjectWithRootFileIfNecessary(info);
                 if (!this.useSingleInferredProject) {
                     // if useOneInferredProject is not set then try to fixup ownership of open files
-                    // check 'defaultProject !== inferredProject' is necessary to handle cases 
+                    // check 'defaultProject !== inferredProject' is necessary to handle cases
                     // when creation inferred project for some file has added other open files into this project (i.e. as referenced files)
                     // we definitely don't want to delete the project that was just created
                     for (const f of this.openFiles) {
@@ -503,7 +504,7 @@ namespace ts.server {
                         }
                         const defaultProject = f.getDefaultProject();
                         if (isRootFileInInferredProject(info) && defaultProject !== inferredProject && inferredProject.containsScriptInfo(f)) {
-                            // open file used to be root in inferred project, 
+                            // open file used to be root in inferred project,
                             // this inferred project is different from the one we've just created for current file
                             // and new inferred project references this open file.
                             // We should delete old inferred project and attach open file to the new one
@@ -715,7 +716,7 @@ namespace ts.server {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
                 configHasFilesProperty: config["files"] !== undefined,
-                wildcardDirectories: createMap(parsedCommandLine.wildcardDirectories),
+                wildcardDirectories: parsedCommandLine.wildcardDirectories,
                 typingOptions: parsedCommandLine.typingOptions,
                 compileOnSave: parsedCommandLine.compileOnSave
             };
@@ -771,7 +772,7 @@ namespace ts.server {
                 this.documentRegistry,
                 projectOptions.configHasFilesProperty,
                 projectOptions.compilerOptions,
-                projectOptions.wildcardDirectories,
+                mapOfMapLike(projectOptions.wildcardDirectories),
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave);
 
@@ -829,7 +830,7 @@ namespace ts.server {
         private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypingOptions: TypingOptions, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
             const oldRootScriptInfos = project.getRootScriptInfos();
             const newRootScriptInfos: ScriptInfo[] = [];
-            const newRootScriptInfoMap: NormalizedPathMap<ScriptInfo> = createNormalizedPathMap<ScriptInfo>();
+            const newRootScriptInfoMap: Map<NormalizedPath, ScriptInfo> = new StringMap<ScriptInfo>();
 
             let projectErrors: Diagnostic[];
             let rootFilesChanged = false;
@@ -857,7 +858,7 @@ namespace ts.server {
                 let toAdd: ScriptInfo[];
                 let toRemove: ScriptInfo[];
                 for (const oldFile of oldRootScriptInfos) {
-                    if (!newRootScriptInfoMap.contains(oldFile.fileName)) {
+                    if (!newRootScriptInfoMap.has(oldFile.fileName)) {
                         (toRemove || (toRemove = [])).push(oldFile);
                     }
                 }
@@ -874,7 +875,7 @@ namespace ts.server {
                 if (toAdd) {
                     for (const f of toAdd) {
                         if (f.isOpen && isRootFileInInferredProject(f)) {
-                            // if file is already root in some inferred project 
+                            // if file is already root in some inferred project
                             // - remove the file from that project and delete the project if necessary
                             const inferredProject = f.containingProjects[0];
                             inferredProject.removeFile(f);
@@ -1023,7 +1024,7 @@ namespace ts.server {
                     this.logger.info(`Host information ${args.hostInfo}`);
                 }
                 if (args.formatOptions) {
-                    mergeMaps(this.hostConfiguration.formatCodeOptions, args.formatOptions);
+                    mergeMapLikes(this.hostConfiguration.formatCodeOptions, args.formatOptions);
                     this.logger.info("Format host information updated");
                 }
             }
@@ -1145,7 +1146,7 @@ namespace ts.server {
                 for (const file of changedFiles) {
                     const scriptInfo = this.getScriptInfo(file.fileName);
                     Debug.assert(!!scriptInfo);
-                    // apply changes in reverse order 
+                    // apply changes in reverse order
                     for (let i = file.changes.length - 1; i >= 0; i--) {
                         const change = file.changes[i];
                         scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
@@ -1182,7 +1183,7 @@ namespace ts.server {
 
         closeExternalProject(uncheckedFileName: string, suppressRefresh = false): void {
             const fileName = toNormalizedPath(uncheckedFileName);
-            const configFiles = this.externalProjectToConfiguredProjectMap[fileName];
+            const configFiles = this.externalProjectToConfiguredProjectMap.get(fileName);
             if (configFiles) {
                 let shouldRefreshInferredProjects = false;
                 for (const configFile of configFiles) {
@@ -1190,7 +1191,7 @@ namespace ts.server {
                         shouldRefreshInferredProjects = true;
                     }
                 }
-                delete this.externalProjectToConfiguredProjectMap[fileName];
+                this.externalProjectToConfiguredProjectMap.delete(fileName);
                 if (shouldRefreshInferredProjects && !suppressRefresh) {
                     this.refreshInferredProjects();
                 }
@@ -1237,7 +1238,7 @@ namespace ts.server {
                 // close existing project and later we'll open a set of configured projects for these files
                 this.closeExternalProject(proj.projectFileName, /*suppressRefresh*/ true);
             }
-            else if (this.externalProjectToConfiguredProjectMap[proj.projectFileName]) {
+            else if (this.externalProjectToConfiguredProjectMap.get(proj.projectFileName)) {
                 // this project used to include config files
                 if (!tsConfigFiles) {
                     // config files were removed from the project - close existing external project which in turn will close configured projects
@@ -1245,7 +1246,7 @@ namespace ts.server {
                 }
                 else {
                     // project previously had some config files - compare them with new set of files and close all configured projects that correspond to unused files
-                    const oldConfigFiles = this.externalProjectToConfiguredProjectMap[proj.projectFileName];
+                    const oldConfigFiles = this.externalProjectToConfiguredProjectMap.get(proj.projectFileName);
                     let iNew = 0;
                     let iOld = 0;
                     while (iNew < tsConfigFiles.length && iOld < oldConfigFiles.length) {
@@ -1273,7 +1274,7 @@ namespace ts.server {
             }
             if (tsConfigFiles) {
                 // store the list of tsconfig files that belong to the external project
-                this.externalProjectToConfiguredProjectMap[proj.projectFileName] = tsConfigFiles;
+                this.externalProjectToConfiguredProjectMap.set(proj.projectFileName, tsConfigFiles);
                 for (const tsconfigFile of tsConfigFiles) {
                     let project = this.findConfiguredProjectByProjectName(tsconfigFile);
                     if (!project) {
@@ -1289,7 +1290,7 @@ namespace ts.server {
             }
             else {
                 // no config files - remove the item from the collection
-                delete this.externalProjectToConfiguredProjectMap[proj.projectFileName];
+                this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
                 this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typingOptions);
             }
             this.refreshInferredProjects();

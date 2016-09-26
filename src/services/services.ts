@@ -456,13 +456,13 @@ namespace ts {
         public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
-        public identifiers: Map<string>;
-        public nameTable: Map<number>;
-        public resolvedModules: Map<ResolvedModule>;
-        public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
+        public identifiers: Map<string, string>;
+        public nameTable: Map<string, number>;
+        public resolvedModules: Map<string, ResolvedModule>;
+        public resolvedTypeReferenceDirectiveNames: Map<string, ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
-        private namedDeclarations: Map<Declaration[]>;
+        private namedDeclarations: Map<string, Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -484,7 +484,7 @@ namespace ts {
             return ts.getPositionOfLineAndCharacter(this, line, character);
         }
 
-        public getNamedDeclarations(): Map<Declaration[]> {
+        public getNamedDeclarations(): Map<string, Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
             }
@@ -492,8 +492,8 @@ namespace ts {
             return this.namedDeclarations;
         }
 
-        private computeNamedDeclarations(): Map<Declaration[]> {
-            const result = createMap<Declaration[]>();
+        private computeNamedDeclarations(): Map<string, Declaration[]> {
+            const result = new StringMap<Declaration[]>();
 
             forEachChild(this, visit);
 
@@ -507,7 +507,7 @@ namespace ts {
             }
 
             function getDeclarations(name: string) {
-                return result[name] || (result[name] = []);
+                return getOrUpdate(result, name, () => []);
             }
 
             function getDeclarationName(declaration: Declaration) {
@@ -953,7 +953,7 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
-            localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
+            localizedDiagnosticMessages = mapOfMapLike<string>(host.getLocalizedDiagnosticMessages());
         }
 
         function log(message: string) {
@@ -1876,7 +1876,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getNameTable(sourceFile: SourceFile): Map<number> {
+    export function getNameTable(sourceFile: SourceFile): Map<string, number> {
         if (!sourceFile.nameTable) {
             initializeNameTable(sourceFile);
         }
@@ -1885,7 +1885,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = createMap<number>();
+        const nameTable = new StringMap<number>();
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;
@@ -1893,7 +1893,7 @@ namespace ts {
         function walk(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    nameTable[(<Identifier>node).text] = nameTable[(<Identifier>node).text] === undefined ? node.pos : -1;
+                    nameTable.set((<Identifier>node).text, nameTable.get((<Identifier>node).text) === undefined ? node.pos : -1);
                     break;
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -1906,7 +1906,7 @@ namespace ts {
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
 
-                        nameTable[(<LiteralExpression>node).text] = nameTable[(<LiteralExpression>node).text] === undefined ? node.pos : -1;
+                        nameTable.set((<LiteralExpression>node).text, nameTable.get((<LiteralExpression>node).text) === undefined ? node.pos : -1);
                     }
                     break;
                 default:

@@ -93,7 +93,7 @@ namespace ts {
             return false;
         }
         try {
-            ts.localizedDiagnosticMessages = JSON.parse(fileContents);
+            ts.localizedDiagnosticMessages = mapOfMapLike<string>(JSON.parse(fileContents));
         }
         catch (e) {
             errors.push(createCompilerDiagnostic(Diagnostics.Corrupted_locale_file_0, filePath));
@@ -127,11 +127,11 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap = createMap<string>({
-        [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
-        [DiagnosticCategory.Error]: redForegroundEscapeSequence,
-        [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
-    });
+    const categoryFormatMap = new NumberMap<DiagnosticCategory, string>([
+        [DiagnosticCategory.Warning, yellowForegroundEscapeSequence],
+        [DiagnosticCategory.Error, redForegroundEscapeSequence],
+        [DiagnosticCategory.Message, blueForegroundEscapeSequence],
+    ]);
 
     function formatAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
@@ -199,7 +199,7 @@ namespace ts {
             output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
 
-        const categoryColor = categoryFormatMap[diagnostic.category];
+        const categoryColor = categoryFormatMap.get(diagnostic.category);
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
         output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
         output += sys.newLine + sys.newLine;
@@ -255,7 +255,7 @@ namespace ts {
 
         // This map stores and reuses results of fileExists check that happen inside 'createProgram'
         // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
-        let cachedExistingFiles: Map<boolean>;
+        let cachedExistingFiles: Map<string, boolean>;
         let hostFileExists: typeof compilerHost.fileExists;
 
         if (commandLine.options.locale) {
@@ -425,7 +425,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = createMap<boolean>();
+            cachedExistingFiles = new StringMap<boolean>();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -438,9 +438,7 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            return fileName in cachedExistingFiles
-                ? cachedExistingFiles[fileName]
-                : cachedExistingFiles[fileName] = hostFileExists(fileName);
+            return getOrUpdate(cachedExistingFiles, fileName, hostFileExists);
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -700,7 +698,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = new StringMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -728,11 +726,11 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                const typeMap = <Map<number | string>>element.type;
-                for (const key in typeMap) {
+                const typeMap = <Map<string, number | string>>element.type;
+                forEachKeyInMap(typeMap, key => {
                     options.push(`'${key}'`);
-                }
-                optionsDescriptionMap[description] = options;
+                });
+                optionsDescriptionMap.set(description, options);
             }
             else {
                 description = getDiagnosticText(option.description);
@@ -754,7 +752,7 @@ namespace ts {
         for (let i = 0; i < usageColumn.length; i++) {
             const usage = usageColumn[i];
             const description = descriptionColumn[i];
-            const kindsList = optionsDescriptionMap[description];
+            const kindsList = optionsDescriptionMap.get(description);
             output.push(usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine);
 
             if (kindsList) {
