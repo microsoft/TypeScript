@@ -1,6 +1,7 @@
 /// <reference path="visitor.ts" />
 /// <reference path="transformers/ts.ts" />
 /// <reference path="transformers/jsx.ts" />
+/// <reference path="transformers/experimental.ts" />
 /// <reference path="transformers/es7.ts" />
 /// <reference path="transformers/es6.ts" />
 /// <reference path="transformers/generators.ts" />
@@ -176,6 +177,7 @@ namespace ts {
             transformers.push(transformJsx);
         }
 
+        transformers.push(transformExperimental);
         transformers.push(transformES7);
 
         if (languageVersion < ScriptTarget.ES6) {

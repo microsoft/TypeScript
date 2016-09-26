@@ -2195,7 +2195,7 @@ const _super = (function (geti, seti) {
                 helpersEmitted = true;
             }
 
-            if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasJsxSpreadAttributes)) {
+            if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasSpreadAttribute)) {
                 writeLines(assignHelper);
                 assignEmitted = true;
             }
