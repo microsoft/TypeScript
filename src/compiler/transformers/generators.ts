@@ -1025,7 +1025,7 @@ namespace ts {
             const temp = declareLocal();
             emitAssignment(temp,
                 createObjectLiteral(
-                    visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                    visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
                     /*location*/ undefined,
                     multiLine
                 )
@@ -1035,13 +1035,13 @@ namespace ts {
             expressions.push(multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
             return inlineExpressions(expressions);
 
-            function reduceProperty(expressions: Expression[], property: ObjectLiteralElement) {
+            function reduceProperty(expressions: Expression[], property: ObjectLiteralElementLike) {
                 if (containsYield(property) && expressions.length > 0) {
                     emitStatement(createStatement(inlineExpressions(expressions)));
                     expressions = [];
                 }
 
-                const expression = createExpressionForObjectLiteralElement(node, property, temp);
+                const expression = createExpressionForObjectLiteralElementLike(node, property, temp);
                 const visited = visitNode(expression, visitor, isExpression);
                 if (visited) {
                     if (multiLine) {

@@ -648,6 +648,8 @@ namespace ts {
         name?: PropertyName;
    }
 
+    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration;
+
     // @kind(SyntaxKind.PropertyAssignment)
     export interface PropertyAssignment extends ObjectLiteralElement {
         _propertyAssignmentBrand: any;
@@ -1048,10 +1050,19 @@ namespace ts {
         expression: Expression;
     }
 
+    /**
+      * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
+      * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
+      * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
+      * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
+     **/
+    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
+        properties: NodeArray<T>;
+    }
+
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     // @kind(SyntaxKind.ObjectLiteralExpression)
-    export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
-        properties: NodeArray<ObjectLiteralElement>;
+    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike> {
         /* @internal */
         multiLine?: boolean;
     }

@@ -1281,7 +1281,7 @@ namespace ts {
             setNodeEmitFlags(propertyName, NodeEmitFlags.NoComments | NodeEmitFlags.NoLeadingSourceMap);
             setSourceMapRange(propertyName, firstAccessor.name);
 
-            const properties: ObjectLiteralElement[] = [];
+            const properties: ObjectLiteralElementLike[] = [];
             if (getAccessor) {
                 const getterFunction = transformFunctionLikeToExpression(getAccessor, /*location*/ undefined, /*name*/ undefined);
                 setSourceMapRange(getterFunction, getSourceMapRange(getAccessor));
@@ -1965,7 +1965,7 @@ namespace ts {
                 temp,
                 setNodeEmitFlags(
                     createObjectLiteral(
-                        visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                        visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
                         /*location*/ undefined,
                         node.multiLine
                     ),
@@ -2499,7 +2499,7 @@ namespace ts {
          *
          * @param node A MethodDeclaration node.
          */
-        function visitMethodDeclaration(node: MethodDeclaration): ObjectLiteralElement {
+        function visitMethodDeclaration(node: MethodDeclaration): ObjectLiteralElementLike {
             // We should only get here for methods on an object literal with regular identifier names.
             // Methods on classes are handled in visitClassDeclaration/visitClassExpression.
             // Methods with computed property names are handled in visitObjectLiteralExpression.
@@ -2518,7 +2518,7 @@ namespace ts {
          *
          * @param node A ShorthandPropertyAssignment node.
          */
-        function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
+        function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
             return createPropertyAssignment(
                 node.name,
                 getSynthesizedClone(node.name),
