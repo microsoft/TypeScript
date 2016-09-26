@@ -26,6 +26,7 @@
         "../compiler/visitor.ts",
         "../compiler/transformers/ts.ts",
         "../compiler/transformers/jsx.ts",
+        "../compiler/transformers/experimental.ts",
         "../compiler/transformers/es7.ts",
         "../compiler/transformers/es6.ts",
         "../compiler/transformers/generators.ts",
