@@ -28,29 +28,25 @@ namespace ts {
         /**
          * Gets the transformed source files.
          */
-        getSourceFiles(): SourceFile[];
+        transformed: SourceFile[];
 
         /**
          * Emits the substitute for a node, if one is available; otherwise, emits the node.
          *
+         * @param emitContext The current emit context.
          * @param node The node to substitute.
-         * @param isExpression A value indicating whether the node is in an expression context.
          * @param emitCallback A callback used to emit the node or its substitute.
          */
-        emitNodeWithSubstitution(node: Node, isExpression: boolean, emitCallback: (node: Node) => void): void;
+        emitNodeWithSubstitution(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
 
         /**
          * Emits a node with possible notification.
          *
+         * @param emitContext The current emit context.
          * @param node The node to emit.
          * @param emitCallback A callback used to emit the node.
          */
-        emitNodeWithNotification(node: Node, emitCallback: (node: Node) => void): void;
-
-        /**
-         * Reset transient transformation properties on parse tree nodes.
-         */
-        dispose(): void;
+        emitNodeWithNotification(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
     }
 
     export interface TransformationContext extends LexicalEnvironment {
@@ -82,7 +78,7 @@ namespace ts {
          * Hook used by transformers to substitute expressions just before they
          * are emitted by the pretty printer.
          */
-        onSubstituteNode?: (node: Node, isExpression: boolean) => Node;
+        onSubstituteNode?: (emitContext: EmitContext, node: Node) => Node;
 
         /**
          * Enables before/after emit notifications in the pretty printer for the provided
@@ -100,7 +96,7 @@ namespace ts {
          * Hook used to allow transformers to capture state before or after
          * the printer emits a node.
          */
-        onEmitNode?: (node: Node, emit: (node: Node) => void) => void;
+        onEmitNode?: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
     }
 
     /* @internal */
@@ -127,139 +123,6 @@ namespace ts {
         }
 
         return transformers;
-    }
-
-    /**
-     * Clears any EmitNode entries from parse-tree nodes.
-     * @param sourceFile A source file.
-     */
-    export function disposeEmitNodes(sourceFile: SourceFile) {
-        // During transformation we may need to annotate a parse tree node with transient
-        // transformation properties. As parse tree nodes live longer than transformation
-        // nodes, we need to make sure we reclaim any memory allocated for custom ranges
-        // from these nodes to ensure we do not hold onto entire subtrees just for position
-        // information. We also need to reset these nodes to a pre-transformation state
-        // for incremental parsing scenarios so that we do not impact later emit.
-        sourceFile = getSourceFileOfNode(getParseTreeNode(sourceFile));
-        const emitNode = sourceFile && sourceFile.emitNode;
-        const annotatedNodes = emitNode && emitNode.annotatedNodes;
-        if (annotatedNodes) {
-            for (const node of annotatedNodes) {
-                node.emitNode = undefined;
-            }
-        }
-    }
-
-    /**
-     * Associates a node with the current transformation, initializing
-     * various transient transformation properties.
-     *
-     * @param node The node.
-     */
-    function getOrCreateEmitNode(node: Node) {
-        if (!node.emitNode) {
-            if (isParseTreeNode(node)) {
-                // To avoid holding onto transformation artifacts, we keep track of any
-                // parse tree node we are annotating. This allows us to clean them up after
-                // all transformations have completed.
-                if (node.kind === SyntaxKind.SourceFile) {
-                    return node.emitNode = { annotatedNodes: [node] };
-                }
-
-                const sourceFile = getSourceFileOfNode(node);
-                getOrCreateEmitNode(sourceFile).annotatedNodes.push(node);
-            }
-
-            node.emitNode = {};
-        }
-
-        return node.emitNode;
-    }
-
-    /**
-     * Gets flags that control emit behavior of a node.
-     *
-     * @param node The node.
-     */
-    export function getEmitFlags(node: Node) {
-        const emitNode = node.emitNode;
-        return emitNode && emitNode.flags;
-    }
-
-    /**
-     * Sets flags that control emit behavior of a node.
-     *
-     * @param node The node.
-     * @param emitFlags The NodeEmitFlags for the node.
-     */
-    export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
-        getOrCreateEmitNode(node).flags = emitFlags;
-        return node;
-    }
-
-    /**
-     * Sets a custom text range to use when emitting source maps.
-     *
-     * @param node The node.
-     * @param range The text range.
-     */
-    export function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
-        getOrCreateEmitNode(node).sourceMapRange = range;
-        return node;
-    }
-
-    /**
-     * Sets the TextRange to use for source maps for a token of a node.
-     *
-     * @param node The node.
-     * @param token The token.
-     * @param range The text range.
-     */
-    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
-        const emitNode = getOrCreateEmitNode(node);
-        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<TextRange>());
-        tokenSourceMapRanges[token] = range;
-        return node;
-    }
-
-    /**
-     * Sets a custom text range to use when emitting comments.
-     */
-    export function setCommentRange<T extends Node>(node: T, range: TextRange) {
-        getOrCreateEmitNode(node).commentRange = range;
-        return node;
-    }
-
-    /**
-     * Gets a custom text range to use when emitting comments.
-     *
-     * @param node The node.
-     */
-    export function getCommentRange(node: Node) {
-        const emitNode = node.emitNode;
-        return (emitNode && emitNode.commentRange) || node;
-    }
-
-    /**
-     * Gets a custom text range to use when emitting source maps.
-     *
-     * @param node The node.
-     */
-    export function getSourceMapRange(node: Node) {
-        const emitNode = node.emitNode;
-        return (emitNode && emitNode.sourceMapRange) || node;
-    }
-
-    /**
-     * Gets the TextRange to use for source maps for a token of a node.
-     *
-     * @param node The node.
-     * @param token The token.
-     */
-    export function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
-        const emitNode = node.emitNode;
-        const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
-        return tokenSourceMapRanges && tokenSourceMapRanges[token];
     }
 
     /**
@@ -290,10 +153,10 @@ namespace ts {
             hoistFunctionDeclaration,
             startLexicalEnvironment,
             endLexicalEnvironment,
-            onSubstituteNode: (node, isExpression) => node,
+            onSubstituteNode: (emitContext, node) => node,
             enableSubstitution,
             isSubstitutionEnabled,
-            onEmitNode: (node, emitCallback) => emitCallback(node),
+            onEmitNode: (node, emitContext, emitCallback) => emitCallback(node, emitContext),
             enableEmitNotification,
             isEmitNotificationEnabled
         };
@@ -308,20 +171,9 @@ namespace ts {
         lexicalEnvironmentDisabled = true;
 
         return {
-            getSourceFiles: () => transformed,
+            transformed,
             emitNodeWithSubstitution,
-            emitNodeWithNotification,
-            dispose() {
-                // During transformation we may need to annotate a parse tree node with transient
-                // transformation properties. As parse tree nodes live longer than transformation
-                // nodes, we need to make sure we reclaim any memory allocated for custom ranges
-                // from these nodes to ensure we do not hold onto entire subtrees just for position
-                // information. We also need to reset these nodes to a pre-transformation state
-                // for incremental parsing scenarios so that we do not impact later emit.
-                for (const sourceFile of sourceFiles) {
-                    disposeEmitNodes(sourceFile);
-                }
-            }
+            emitNodeWithNotification
         };
 
         /**
@@ -355,21 +207,21 @@ namespace ts {
         /**
          * Emits a node with possible substitution.
          *
+         * @param emitContext The current emit context.
          * @param node The node to emit.
-         * @param isExpression Whether the node represents an expression.
          * @param emitCallback The callback used to emit the node or its substitute.
          */
-        function emitNodeWithSubstitution(node: Node, isExpression: boolean, emitCallback: (node: Node) => void) {
+        function emitNodeWithSubstitution(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
             if (node) {
                 if (isSubstitutionEnabled(node)) {
-                    const substitute = context.onSubstituteNode(node, isExpression);
+                    const substitute = context.onSubstituteNode(emitContext, node);
                     if (substitute && substitute !== node) {
-                        emitCallback(substitute);
+                        emitCallback(emitContext, substitute);
                         return;
                     }
                 }
 
-                emitCallback(node);
+                emitCallback(emitContext, node);
             }
         }
 
@@ -391,14 +243,18 @@ namespace ts {
 
         /**
          * Emits a node with possible emit notification.
+         *
+         * @param emitContext The current emit context.
+         * @param node The node to emit.
+         * @param emitCallback The callback used to emit the node.
          */
-        function emitNodeWithNotification(node: Node, emitCallback: (node: Node) => void) {
+        function emitNodeWithNotification(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
             if (node) {
                 if (isEmitNotificationEnabled(node)) {
-                    context.onEmitNode(node, emitCallback);
+                    context.onEmitNode(emitContext, node, emitCallback);
                 }
                 else {
-                    emitCallback(node);
+                    emitCallback(emitContext, node);
                 }
             }
         }

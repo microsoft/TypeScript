@@ -2665,6 +2665,139 @@ namespace ts {
         return destRanges;
     }
 
+    /**
+     * Clears any EmitNode entries from parse-tree nodes.
+     * @param sourceFile A source file.
+     */
+    export function disposeEmitNodes(sourceFile: SourceFile) {
+        // During transformation we may need to annotate a parse tree node with transient
+        // transformation properties. As parse tree nodes live longer than transformation
+        // nodes, we need to make sure we reclaim any memory allocated for custom ranges
+        // from these nodes to ensure we do not hold onto entire subtrees just for position
+        // information. We also need to reset these nodes to a pre-transformation state
+        // for incremental parsing scenarios so that we do not impact later emit.
+        sourceFile = getSourceFileOfNode(getParseTreeNode(sourceFile));
+        const emitNode = sourceFile && sourceFile.emitNode;
+        const annotatedNodes = emitNode && emitNode.annotatedNodes;
+        if (annotatedNodes) {
+            for (const node of annotatedNodes) {
+                node.emitNode = undefined;
+            }
+        }
+    }
+
+    /**
+     * Associates a node with the current transformation, initializing
+     * various transient transformation properties.
+     *
+     * @param node The node.
+     */
+    function getOrCreateEmitNode(node: Node) {
+        if (!node.emitNode) {
+            if (isParseTreeNode(node)) {
+                // To avoid holding onto transformation artifacts, we keep track of any
+                // parse tree node we are annotating. This allows us to clean them up after
+                // all transformations have completed.
+                if (node.kind === SyntaxKind.SourceFile) {
+                    return node.emitNode = { annotatedNodes: [node] };
+                }
+
+                const sourceFile = getSourceFileOfNode(node);
+                getOrCreateEmitNode(sourceFile).annotatedNodes.push(node);
+            }
+
+            node.emitNode = {};
+        }
+
+        return node.emitNode;
+    }
+
+    /**
+     * Gets flags that control emit behavior of a node.
+     *
+     * @param node The node.
+     */
+    export function getEmitFlags(node: Node) {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.flags;
+    }
+
+    /**
+     * Sets flags that control emit behavior of a node.
+     *
+     * @param node The node.
+     * @param emitFlags The NodeEmitFlags for the node.
+     */
+    export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
+        getOrCreateEmitNode(node).flags = emitFlags;
+        return node;
+    }
+
+    /**
+     * Sets a custom text range to use when emitting source maps.
+     *
+     * @param node The node.
+     * @param range The text range.
+     */
+    export function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
+        getOrCreateEmitNode(node).sourceMapRange = range;
+        return node;
+    }
+
+    /**
+     * Sets the TextRange to use for source maps for a token of a node.
+     *
+     * @param node The node.
+     * @param token The token.
+     * @param range The text range.
+     */
+    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
+        const emitNode = getOrCreateEmitNode(node);
+        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<TextRange>());
+        tokenSourceMapRanges[token] = range;
+        return node;
+    }
+
+    /**
+     * Sets a custom text range to use when emitting comments.
+     */
+    export function setCommentRange<T extends Node>(node: T, range: TextRange) {
+        getOrCreateEmitNode(node).commentRange = range;
+        return node;
+    }
+
+    /**
+     * Gets a custom text range to use when emitting comments.
+     *
+     * @param node The node.
+     */
+    export function getCommentRange(node: Node) {
+        const emitNode = node.emitNode;
+        return (emitNode && emitNode.commentRange) || node;
+    }
+
+    /**
+     * Gets a custom text range to use when emitting source maps.
+     *
+     * @param node The node.
+     */
+    export function getSourceMapRange(node: Node) {
+        const emitNode = node.emitNode;
+        return (emitNode && emitNode.sourceMapRange) || node;
+    }
+
+    /**
+     * Gets the TextRange to use for source maps for a token of a node.
+     *
+     * @param node The node.
+     * @param token The token.
+     */
+    export function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
+        const emitNode = node.emitNode;
+        const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
+        return tokenSourceMapRanges && tokenSourceMapRanges[token];
+    }
+
     export function setTextRange<T extends TextRange>(node: T, location: TextRange): T {
         if (location) {
             node.pos = location.pos;
@@ -2706,7 +2839,7 @@ namespace ts {
         return undefined;
     }
 
-   /**
+    /**
      * Get the name of a target module from an import/export declaration as should be written in the emitted output.
      * The emitted output name can be different from the input if:
      *  1. The module has a /// <amd-module name="<new name>" />

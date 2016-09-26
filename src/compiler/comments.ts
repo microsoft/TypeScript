@@ -5,7 +5,7 @@ namespace ts {
     export interface CommentWriter {
         reset(): void;
         setSourceFile(sourceFile: SourceFile): void;
-        emitNodeWithComments(node: Node, emitCallback: (node: Node) => void): void;
+        emitNodeWithComments(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
         emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
         emitTrailingCommentsOfPosition(pos: number): void;
     }
@@ -34,9 +34,9 @@ namespace ts {
             emitTrailingCommentsOfPosition,
         };
 
-        function emitNodeWithComments(node: Node, emitCallback: (node: Node) => void) {
+        function emitNodeWithComments(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
             if (disabled) {
-                emitCallback(node);
+                emitCallback(emitContext, node);
                 return;
             }
 
@@ -46,10 +46,12 @@ namespace ts {
                 if ((pos < 0 && end < 0) || (pos === end)) {
                     // Both pos and end are synthesized, so just emit the node without comments.
                     if (emitFlags & EmitFlags.NoNestedComments) {
-                        disableCommentsAndEmit(node, emitCallback);
+                        disabled = true;
+                        emitCallback(emitContext, node);
+                        disabled = false;
                     }
                     else {
-                        emitCallback(node);
+                        emitCallback(emitContext, node);
                     }
                 }
                 else {
@@ -91,10 +93,12 @@ namespace ts {
                     }
 
                     if (emitFlags & EmitFlags.NoNestedComments) {
-                        disableCommentsAndEmit(node, emitCallback);
+                        disabled = true;
+                        emitCallback(emitContext, node);
+                        disabled = false;
                     }
                     else {
-                        emitCallback(node);
+                        emitCallback(emitContext, node);
                     }
 
                     if (extendedDiagnostics) {
@@ -137,8 +141,10 @@ namespace ts {
                 performance.measure("commentTime", "preEmitBodyWithDetachedComments");
             }
 
-            if (emitFlags & EmitFlags.NoNestedComments) {
-                disableCommentsAndEmit(node, emitCallback);
+            if (emitFlags & EmitFlags.NoNestedComments && !disabled) {
+                disabled = true;
+                emitCallback(node);
+                disabled = false;
             }
             else {
                 emitCallback(node);
@@ -282,17 +288,6 @@ namespace ts {
             currentText = currentSourceFile.text;
             currentLineMap = getLineStarts(currentSourceFile);
             detachedCommentsInfo = undefined;
-        }
-
-        function disableCommentsAndEmit(node: Node, emitCallback: (node: Node) => void): void {
-            if (disabled) {
-                emitCallback(node);
-            }
-            else {
-                disabled = true;
-                emitCallback(node);
-                disabled = false;
-            }
         }
 
         function hasDetachedComments(pos: number) {

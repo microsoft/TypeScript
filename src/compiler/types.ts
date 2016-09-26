@@ -3189,6 +3189,14 @@ namespace ts {
         CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
     }
 
+    /* @internal */
+    export const enum EmitContext {
+        SourceFile,         // Emitting a SourceFile
+        Expression,         // Emitting an Expression
+        IdentifierName,     // Emitting an IdentifierName
+        Unspecified,        // Emitting an otherwise unspecified node
+    }
+
     /** Additional context provided to `visitEachChild` */
     /* @internal */
     export interface LexicalEnvironment {

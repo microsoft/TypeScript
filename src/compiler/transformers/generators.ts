@@ -1883,9 +1883,9 @@ namespace ts {
             return -1;
         }
 
-        function onSubstituteNode(node: Node, isExpression: boolean): Node {
-            node = previousOnSubstituteNode(node, isExpression);
-            if (isExpression) {
+        function onSubstituteNode(emitContext: EmitContext, node: Node): Node {
+            node = previousOnSubstituteNode(emitContext, node);
+            if (emitContext === EmitContext.Expression) {
                 return substituteExpression(<Expression>node);
             }
             return node;

@@ -822,14 +822,14 @@ namespace ts {
             return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
         }
 
-        function onEmitNode(node: Node, emit: (node: Node) => void): void {
+        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
                 bindingNameExportSpecifiersMap = bindingNameExportSpecifiersForFileMap[getOriginalNodeId(node)];
-                previousOnEmitNode(node, emit);
+                previousOnEmitNode(emitContext, node, emitCallback);
                 bindingNameExportSpecifiersMap = undefined;
             }
             else {
-                previousOnEmitNode(node, emit);
+                previousOnEmitNode(emitContext, node, emitCallback);
             }
         }
 
@@ -840,9 +840,9 @@ namespace ts {
          * @param isExpression A value indicating whether the node is to be used in an expression
          *                     position.
          */
-        function onSubstituteNode(node: Node, isExpression: boolean) {
-            node = previousOnSubstituteNode(node, isExpression);
-            if (isExpression) {
+        function onSubstituteNode(emitContext: EmitContext, node: Node) {
+            node = previousOnSubstituteNode(emitContext, node);
+            if (emitContext === EmitContext.Expression) {
                 return substituteExpression(<Expression>node);
             }
             else if (isShorthandPropertyAssignment(node)) {

@@ -2852,7 +2852,7 @@ namespace ts {
          *
          * @param node The node to be printed.
          */
-        function onEmitNode(node: Node, emit: (node: Node) => void) {
+        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
             const savedUseCapturedThis = useCapturedThis;
 
             if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
@@ -2861,7 +2861,7 @@ namespace ts {
                 useCapturedThis = (getEmitFlags(node) & EmitFlags.CapturesThis) !== 0;
             }
 
-            previousOnEmitNode(node, emit);
+            previousOnEmitNode(emitContext, node, emitCallback);
 
             useCapturedThis = savedUseCapturedThis;
         }
@@ -2902,10 +2902,10 @@ namespace ts {
          * @param isExpression A value indicating whether the node is to be used in an expression
          *                     position.
          */
-        function onSubstituteNode(node: Node, isExpression: boolean) {
-            node = previousOnSubstituteNode(node, isExpression);
+        function onSubstituteNode(emitContext: EmitContext, node: Node) {
+            node = previousOnSubstituteNode(emitContext, node);
 
-            if (isExpression) {
+            if (emitContext === EmitContext.Expression) {
                 return substituteExpression(node);
             }
 

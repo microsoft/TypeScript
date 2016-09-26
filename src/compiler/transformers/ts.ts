@@ -3231,7 +3231,7 @@ namespace ts {
          * @param node The node to emit.
          * @param emit A callback used to emit the node in the printer.
          */
-        function onEmitNode(node: Node, emit: (node: Node) => void): void {
+        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
             const savedApplicableSubstitutions = applicableSubstitutions;
             const savedCurrentSuperContainer = currentSuperContainer;
             // If we need to support substitutions for `super` in an async method,
@@ -3248,7 +3248,7 @@ namespace ts {
                 applicableSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
             }
 
-            previousOnEmitNode(node, emit);
+            previousOnEmitNode(emitContext, node, emitCallback);
 
             applicableSubstitutions = savedApplicableSubstitutions;
             currentSuperContainer = savedCurrentSuperContainer;
@@ -3261,9 +3261,9 @@ namespace ts {
          * @param isExpression A value indicating whether the node is to be used in an expression
          *                     position.
          */
-        function onSubstituteNode(node: Node, isExpression: boolean) {
-            node = previousOnSubstituteNode(node, isExpression);
-            if (isExpression) {
+        function onSubstituteNode(emitContext: EmitContext, node: Node) {
+            node = previousOnSubstituteNode(emitContext, node);
+            if (emitContext === EmitContext.Expression) {
                 return substituteExpression(<Expression>node);
             }
             else if (isShorthandPropertyAssignment(node)) {

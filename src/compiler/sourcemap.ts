@@ -38,10 +38,11 @@ namespace ts {
         /**
          * Emits a node with possible leading and trailing source maps.
          *
+         * @param emitContext The current emit context
          * @param node The node to emit.
          * @param emitCallback The callback used to emit the node.
          */
-        emitNodeWithSourceMap(node: Node, emitCallback: (node: Node) => void): void;
+        emitNodeWithSourceMap(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
 
         /**
          * Emits a token of a node node with possible leading and trailing source maps.
@@ -313,9 +314,9 @@ namespace ts {
          * @param node The node to emit.
          * @param emitCallback The callback used to emit the node.
          */
-        function emitNodeWithSourceMap(node: Node, emitCallback: (node: Node) => void) {
+        function emitNodeWithSourceMap(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
             if (disabled) {
-                return emitCallback(node);
+                return emitCallback(emitContext, node);
             }
 
             if (node) {
@@ -331,11 +332,11 @@ namespace ts {
 
                 if (emitFlags & EmitFlags.NoNestedSourceMaps) {
                     disabled = true;
-                    emitCallback(node);
+                    emitCallback(emitContext, node);
                     disabled = false;
                 }
                 else {
-                    emitCallback(node);
+                    emitCallback(emitContext, node);
                 }
 
                 if (node.kind !== SyntaxKind.NotEmittedStatement

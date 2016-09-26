@@ -229,32 +229,26 @@ const _super = (function (geti, seti) {
         let isOwnFileEmit: boolean;
         let emitSkipped = false;
 
-        performance.mark("beforeTransform");
+        const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
 
         // Transform the source files
-        const transformed = transformFiles(
-            resolver,
-            host,
-            getSourceFilesToEmit(host, targetSourceFile),
-            transformers);
-
-        performance.measure("transformTime", "beforeTransform");
-
-        // Extract helpers from the result
+        performance.mark("beforeTransform");
         const {
+            transformed,
             emitNodeWithSubstitution,
             emitNodeWithNotification
-        } = transformed;
-
-        performance.mark("beforePrint");
+        } = transformFiles(resolver, host, sourceFiles, transformers);
+        performance.measure("transformTime", "beforeTransform");
 
         // Emit each output file
-        forEachTransformedEmitFile(host, transformed.getSourceFiles(), emitFile);
-
-        // Clean up after transformation
-        transformed.dispose();
-
+        performance.mark("beforePrint");
+        forEachTransformedEmitFile(host, transformed, emitFile);
         performance.measure("printTime", "beforePrint");
+
+        // Clean up emit nodes on parse tree
+        for (const sourceFile of sourceFiles) {
+            disposeEmitNodes(sourceFile);
+        }
 
         return {
             emitSkipped,
@@ -346,111 +340,137 @@ const _super = (function (geti, seti) {
             currentFileIdentifiers = node.identifiers;
             sourceMap.setSourceFile(node);
             comments.setSourceFile(node);
-            emitNodeWithNotification(node, emitWithSubstitution);
+            pipelineEmitWithNotification(EmitContext.SourceFile, node);
         }
 
         /**
          * Emits a node.
          */
         function emit(node: Node) {
-            emitNodeWithNotification(node, emitWithComments);
-        }
-
-        /**
-         * Emits a node with comments.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from emit.
-         */
-        function emitWithComments(node: Node) {
-            emitNodeWithComments(node, emitWithSourceMap);
-        }
-
-        /**
-         * Emits a node with source maps.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from emitWithComments.
-         */
-        function emitWithSourceMap(node: Node) {
-            emitNodeWithSourceMap(node, emitWithSubstitution);
-        }
-
-        /**
-         * Emits a node with possible substitution.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from emitWithSourceMap or
-         * emitIdentifierNameWithComments.
-         */
-        function emitWithSubstitution(node: Node) {
-            emitNodeWithSubstitution(node, /*isExpression*/ false, emitWorker);
+            pipelineEmitWithNotification(EmitContext.Unspecified, node);
         }
 
         /**
          * Emits an IdentifierName.
          */
         function emitIdentifierName(node: Identifier) {
-            if (node) {
-                emitNodeWithNotification(node, emitIdentifierNameWithComments);
-            }
-        }
-
-        /**
-         * Emits an IdentifierName with possible comments.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from emitIdentifierName.
-         */
-        function emitIdentifierNameWithComments(node: Identifier) {
-            emitNodeWithComments(node, emitWithSubstitution);
+            pipelineEmitWithNotification(EmitContext.IdentifierName, node);
         }
 
         /**
          * Emits an expression node.
          */
         function emitExpression(node: Expression) {
-            emitNodeWithNotification(node, emitExpressionWithComments);
+            pipelineEmitWithNotification(EmitContext.Expression, node);
         }
 
         /**
-         * Emits an expression with comments.
+         * Emits a node with possible notification.
          *
-         * NOTE: Do not call this method directly. It is part of the emitExpression pipeline
-         * and should only be called indirectly from emitExpression.
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called from printSourceFile, emit, emitExpression, or
+         * emitIdentifierName.
          */
-        function emitExpressionWithComments(node: Expression) {
-            emitNodeWithComments(node, emitExpressionWithSourceMap);
+        function pipelineEmitWithNotification(emitContext: EmitContext, node: Node) {
+            emitNodeWithNotification(emitContext, node, pipelineEmitWithComments);
         }
 
         /**
-         * Emits an expression with possible source maps.
+         * Emits a node with comments.
          *
-         * NOTE: Do not call this method directly. It is part of the emitExpression pipeline
-         * and should only be called indirectly from emitExpressionWithComments.
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from pipelineEmitWithNotification.
          */
-        function emitExpressionWithSourceMap(node: Expression) {
-            emitNodeWithSourceMap(node, emitExpressionWithSubstitution);
+        function pipelineEmitWithComments(emitContext: EmitContext, node: Node) {
+            // Do not emit comments for SourceFile
+            if (emitContext === EmitContext.SourceFile) {
+                pipelineEmitWithSourceMap(emitContext, node);
+                return;
+            }
+
+            emitNodeWithComments(emitContext, node, pipelineEmitWithSourceMap);
         }
 
         /**
-         * Emits an expression with possible substitution.
+         * Emits a node with source maps.
          *
-         * NOTE: Do not call this method directly. It is part of the emitExpression pipeline
-         * and should only be called indirectly from emitExpressionWithSourceMap or
-         * from emitWorker.
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from pipelineEmitWithComments.
          */
-        function emitExpressionWithSubstitution(node: Expression) {
-            emitNodeWithSubstitution(node, /*isExpression*/ true, emitExpressionWorker);
+        function pipelineEmitWithSourceMap(emitContext: EmitContext, node: Node) {
+            // Do not emit source mappings for SourceFile or IdentifierName
+            if (emitContext === EmitContext.SourceFile
+                || emitContext === EmitContext.IdentifierName) {
+                pipelineEmitWithSubstitution(emitContext, node);
+                return;
+            }
+
+            emitNodeWithSourceMap(emitContext, node, pipelineEmitWithSubstitution);
+        }
+
+        /**
+         * Emits a node with possible substitution.
+         *
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from pipelineEmitWithSourceMap or
+         * pipelineEmitInUnspecifiedContext (when pickign a more specific context).
+         */
+        function pipelineEmitWithSubstitution(emitContext: EmitContext, node: Node) {
+            emitNodeWithSubstitution(emitContext, node, pipelineEmitForContext);
         }
 
         /**
          * Emits a node.
          *
          * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from emitNodeWithSubstitution.
+         * and should only be called indirectly from pipelineEmitWithSubstitution.
          */
-        function emitWorker(node: Node): void {
+        function pipelineEmitForContext(emitContext: EmitContext, node: Node): void {
+            switch (emitContext) {
+                case EmitContext.SourceFile: return pipelineEmitInSourceFileContext(node);
+                case EmitContext.IdentifierName: return pipelineEmitInIdentifierNameContext(node);
+                case EmitContext.Unspecified: return pipelineEmitInUnspecifiedContext(node);
+                case EmitContext.Expression: return pipelineEmitInExpressionContext(node);
+            }
+        }
+
+        /**
+         * Emits a node in the SourceFile EmitContext.
+         *
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from pipelineEmitForContext.
+         */
+        function pipelineEmitInSourceFileContext(node: Node): void {
+            const kind = node.kind;
+            switch (kind) {
+                // Top-level nodes
+                case SyntaxKind.SourceFile:
+                    return emitSourceFile(<SourceFile>node);
+            }
+        }
+
+        /**
+         * Emits a node in the IdentifierName EmitContext.
+         *
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from pipelineEmitForContext.
+         */
+        function pipelineEmitInIdentifierNameContext(node: Node): void {
+            const kind = node.kind;
+            switch (kind) {
+                // Identifiers
+                case SyntaxKind.Identifier:
+                    return emitIdentifier(<Identifier>node);
+            }
+        }
+
+        /**
+         * Emits a node in the Unspecified EmitContext.
+         *
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from pipelineEmitForContext.
+         */
+        function pipelineEmitInUnspecifiedContext(node: Node): void {
             const kind = node.kind;
             switch (kind) {
                 // Pseudo-literals
@@ -486,7 +506,8 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.GlobalKeyword:
-                    return emitTokenNode(node);
+                    writeTokenText(kind);
+                    return;
 
                 // Parse tree nodes
 
@@ -691,27 +712,24 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.EnumMember:
                     return emitEnumMember(<EnumMember>node);
 
-                // Top-level nodes
-                case SyntaxKind.SourceFile:
-                    return emitSourceFile(<SourceFile>node);
-
                 // JSDoc nodes (ignored)
-
                 // Transformation nodes (ignored)
             }
 
+            // If the node is an expression, try to emit it as an expression with
+            // substitution.
             if (isExpression(node)) {
-                return emitExpressionWithSubstitution(node);
+                return pipelineEmitWithSubstitution(EmitContext.Expression, node);
             }
         }
 
         /**
-         * Emits an expression.
+         * Emits a node in the Expression EmitContext.
          *
-         * NOTE: Do not call this method directly. It is part of the emitExpression pipeline
-         * and should only be called indirectly from emitExpressionWithNotification.
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from pipelineEmitForContext.
          */
-        function emitExpressionWorker(node: Node) {
+        function pipelineEmitInExpressionContext(node: Node): void {
             const kind = node.kind;
             switch (kind) {
                 // Literals
@@ -733,7 +751,8 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.ThisKeyword:
-                    return emitTokenNode(node);
+                    writeTokenText(kind);
+                    return;
 
                 // Expressions
                 case SyntaxKind.ArrayLiteralExpression:
@@ -2444,15 +2463,7 @@ const _super = (function (geti, seti) {
         function writeTokenText(token: SyntaxKind, pos?: number) {
             const tokenString = tokenToString(token);
             write(tokenString);
-            return positionIsSynthesized(pos) ? -1 : pos + tokenString.length;
-        }
-
-        function emitTokenNode(node: Node) {
-            emitNodeWithSourceMap(node, emitTokenNodeWorker);
-        }
-
-        function emitTokenNodeWorker(node: Node) {
-            writeTokenText(node.kind);
+            return pos < 0 ? pos : pos + tokenString.length;
         }
 
         function increaseIndentIf(value: boolean, valueToWriteWhenNotIndenting?: string) {
