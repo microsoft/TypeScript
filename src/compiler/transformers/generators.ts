@@ -231,9 +231,6 @@ namespace ts {
             endLexicalEnvironment,
             hoistFunctionDeclaration,
             hoistVariableDeclaration,
-            setSourceMapRange,
-            setCommentRange,
-            setNodeEmitFlags
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -294,6 +291,10 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             if (node.transformFlags & TransformFlags.ContainsGenerator) {
                 currentSourceFile = node;
                 node = visitEachChild(node, visitor, context);
@@ -444,7 +445,7 @@ namespace ts {
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): Statement {
             // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionDeclaration(
                         /*decorators*/ undefined,
@@ -492,7 +493,7 @@ namespace ts {
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
             // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionExpression(
                         /*asteriskToken*/ undefined,
@@ -2580,7 +2581,7 @@ namespace ts {
                 /*typeArguments*/ undefined,
                 [
                     createThis(),
-                    setNodeEmitFlags(
+                    setEmitFlags(
                         createFunctionExpression(
                             /*asteriskToken*/ undefined,
                             /*name*/ undefined,
@@ -2593,7 +2594,7 @@ namespace ts {
                                 /*multiLine*/ buildResult.length > 0
                             )
                         ),
-                        NodeEmitFlags.ReuseTempVariableScope
+                        EmitFlags.ReuseTempVariableScope
                     )
                 ]
             );

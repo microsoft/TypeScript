@@ -76,7 +76,7 @@ namespace ts {
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
         const clone = <T>createNode(node.kind, /*location*/ undefined, node.flags);
-        clone.original = node;
+        setOriginalNode(clone, node);
 
         for (const key in node) {
             if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
@@ -435,7 +435,7 @@ namespace ts {
     export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange, flags?: NodeFlags) {
         const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location, flags);
         node.expression = parenthesizeForAccess(expression);
-        node.emitFlags = NodeEmitFlags.NoIndentation;
+        (node.emitNode || (node.emitNode = {})).flags |= EmitFlags.NoIndentation;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         return node;
     }
@@ -444,7 +444,7 @@ namespace ts {
         if (node.expression !== expression || node.name !== name) {
             const propertyAccess = createPropertyAccess(expression, name, /*location*/ node, node.flags);
             // Because we are updating existed propertyAccess we want to inherit its emitFlags instead of using default from createPropertyAccess
-            propertyAccess.emitFlags = node.emitFlags;
+            (propertyAccess.emitNode || (propertyAccess.emitNode = {})).flags = getEmitFlags(node);
             return updateNode(propertyAccess, node);
         }
         return node;
@@ -1551,7 +1551,7 @@ namespace ts {
         }
         else {
             const expression = isIdentifier(memberName) ? createPropertyAccess(target, memberName, location) : createElementAccess(target, memberName, location);
-            expression.emitFlags |= NodeEmitFlags.NoNestedSourceMaps;
+            (expression.emitNode || (expression.emitNode = {})).flags |= EmitFlags.NoNestedSourceMaps;
             return expression;
         }
     }
@@ -1744,7 +1744,7 @@ namespace ts {
         );
 
         // Mark this node as originally an async function
-        generatorFunc.emitFlags |= NodeEmitFlags.AsyncFunctionBody;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody;
 
         return createCall(
             createHelperName(externalHelpersModuleName, "__awaiter"),
@@ -2222,7 +2222,7 @@ namespace ts {
                     target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
                     foundUseStrict = true;
                 }
-                if (statement.emitFlags & NodeEmitFlags.CustomPrologue) {
+                if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
                     target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
                 }
                 else {
@@ -2643,12 +2643,26 @@ namespace ts {
     export function setOriginalNode<T extends Node>(node: T, original: Node): T {
         node.original = original;
         if (original) {
-            const { emitFlags, commentRange, sourceMapRange } = original;
-            if (emitFlags) node.emitFlags = emitFlags;
-            if (commentRange) node.commentRange = commentRange;
-            if (sourceMapRange) node.sourceMapRange = sourceMapRange;
+            const emitNode = original.emitNode;
+            if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
         }
         return node;
+    }
+
+    function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode) {
+        const { flags, commentRange, sourceMapRange, tokenSourceMapRanges } = sourceEmitNode;
+        if (!destEmitNode && (flags || commentRange || sourceMapRange || tokenSourceMapRanges)) destEmitNode = {};
+        if (flags) destEmitNode.flags = flags;
+        if (commentRange) destEmitNode.commentRange = commentRange;
+        if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
+        if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges);
+        return destEmitNode;
+    }
+
+    function mergeTokenSourceMapRanges(sourceRanges: Map<TextRange>, destRanges: Map<TextRange>) {
+        if (!destRanges) destRanges = createMap<TextRange>();
+        copyProperties(sourceRanges, destRanges);
+        return destRanges;
     }
 
     export function setTextRange<T extends TextRange>(node: T, location: TextRange): T {

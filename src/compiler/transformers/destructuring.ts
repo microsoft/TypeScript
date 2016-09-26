@@ -66,7 +66,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(expression);
             expressions.push(expression);
@@ -102,7 +102,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(declaration);
             declarations.push(declaration);
@@ -139,7 +139,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
 
             declarations.push(declaration);
             aggregateTransformFlags(declaration);
@@ -192,7 +192,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             pendingAssignments.push(expression);
             return expression;
@@ -252,8 +252,8 @@ namespace ts {
             }
             else {
                 const name = getMutableClone(<Identifier>target);
-                context.setSourceMapRange(name, target);
-                context.setCommentRange(name, target);
+                setSourceMapRange(name, target);
+                setCommentRange(name, target);
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
         }

@@ -493,10 +493,7 @@ namespace ts {
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
         /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
-        /* @internal */ transformId?: number;           // Associates transient transformation properties with a specific transformation (initialized by transformation).
-        /* @internal */ emitFlags?: NodeEmitFlags;      // Transient emit flags for a synthesized node (initialized by transformation).
-        /* @internal */ sourceMapRange?: TextRange;     // Transient custom sourcemap range for a synthesized node (initialized by transformation).
-        /* @internal */ commentRange?: TextRange;       // Transient custom comment range for a synthesized node (initialized by transformation).
+        /* @internal */ emitNode?: EmitNode;            // Associated EmitNode (initialized by transforms)
     }
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
@@ -3153,7 +3150,16 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum NodeEmitFlags {
+    export interface EmitNode {
+        flags?: EmitFlags;
+        commentRange?: TextRange;
+        sourceMapRange?: TextRange;
+        tokenSourceMapRanges?: Map<TextRange>;
+        annotatedNodes?: Node[];                // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
+    }
+
+    /* @internal */
+    export const enum EmitFlags {
         EmitEmitHelpers = 1 << 0,                // Any emit helpers should be written to this node.
         EmitExportStar = 1 << 1,                 // The export * helper should be written to this node.
         EmitSuperHelper = 1 << 2,                // Emit the basic _super helper for async methods.

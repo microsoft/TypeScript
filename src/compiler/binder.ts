@@ -2592,7 +2592,7 @@ namespace ts {
         }
 
         // Currently, we only support generators that were originally async function bodies.
-        if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+        if (asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 
@@ -2667,7 +2667,7 @@ namespace ts {
             // down-level generator.
             // Currently we do not support transforming any other generator fucntions
             // down level.
-            if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 transformFlags |= TransformFlags.AssertGenerator;
             }
         }
@@ -2698,7 +2698,7 @@ namespace ts {
         // down-level generator.
         // Currently we do not support transforming any other generator fucntions
         // down level.
-        if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+        if (asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 

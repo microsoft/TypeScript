@@ -41,11 +41,11 @@ namespace ts {
             }
 
             if (node) {
-                const { pos, end } = node.commentRange || node;
-                const emitFlags = node.emitFlags;
+                const { pos, end } = getCommentRange(node);
+                const emitFlags = getEmitFlags(node);
                 if ((pos < 0 && end < 0) || (pos === end)) {
                     // Both pos and end are synthesized, so just emit the node without comments.
-                    if (emitFlags & NodeEmitFlags.NoNestedComments) {
+                    if (emitFlags & EmitFlags.NoNestedComments) {
                         disableCommentsAndEmit(node, emitCallback);
                     }
                     else {
@@ -58,8 +58,8 @@ namespace ts {
                     }
 
                     const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
-                    const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
-                    const skipTrailingComments = end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0;
+                    const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
+                    const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
 
                     // Emit leading comments if the position is not synthesized and the node
                     // has not opted out from emitting leading comments.
@@ -90,7 +90,7 @@ namespace ts {
                         performance.measure("commentTime", "preEmitNodeWithComment");
                     }
 
-                    if (emitFlags & NodeEmitFlags.NoNestedComments) {
+                    if (emitFlags & EmitFlags.NoNestedComments) {
                         disableCommentsAndEmit(node, emitCallback);
                     }
                     else {
@@ -125,9 +125,9 @@ namespace ts {
             }
 
             const { pos, end } = detachedRange;
-            const emitFlags = node.emitFlags;
-            const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
-            const skipTrailingComments = disabled || end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0;
+            const emitFlags = getEmitFlags(node);
+            const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
+            const skipTrailingComments = disabled || end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
 
             if (!skipLeadingComments) {
                 emitDetachedCommentsAndUpdateCommentsInfo(detachedRange);
@@ -137,7 +137,7 @@ namespace ts {
                 performance.measure("commentTime", "preEmitBodyWithDetachedComments");
             }
 
-            if (emitFlags & NodeEmitFlags.NoNestedComments) {
+            if (emitFlags & EmitFlags.NoNestedComments) {
                 disableCommentsAndEmit(node, emitCallback);
             }
             else {

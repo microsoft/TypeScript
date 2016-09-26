@@ -244,7 +244,6 @@ const _super = (function (geti, seti) {
 
         // Extract helpers from the result
         const {
-            getTokenSourceMapRange,
             isSubstitutionEnabled,
             isEmitNotificationEnabled,
             onSubstituteNode,
@@ -351,7 +350,7 @@ const _super = (function (geti, seti) {
             currentFileIdentifiers = node.identifiers;
             sourceMap.setSourceFile(node);
             comments.setSourceFile(node);
-            emitNodeWithNotification(node, emitWorker);
+            emitNodeWithNotification(node, emitWithSubstitution);
         }
 
         /**
@@ -360,7 +359,6 @@ const _super = (function (geti, seti) {
         function emit(node: Node) {
             emitNodeWithNotification(node, emitWithComments);
         }
-
 
         /**
          * Emits a node with comments.
@@ -379,17 +377,37 @@ const _super = (function (geti, seti) {
          * and should only be called indirectly from emitWithComments.
          */
         function emitWithSourceMap(node: Node) {
-            emitNodeWithSourceMap(node, emitWorker);
+            emitNodeWithSourceMap(node, emitWithSubstitution);
         }
 
+        /**
+         * Emits a node with possible substitution.
+         *
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from emitWithSourceMap or
+         * emitIdentifierNameWithComments.
+         */
+        function emitWithSubstitution(node: Node) {
+            emitNodeWithSubstitution(node, /*isExpression*/ false, emitWorker);
+        }
+
+        /**
+         * Emits an IdentifierName.
+         */
         function emitIdentifierName(node: Identifier) {
             if (node) {
                 emitNodeWithNotification(node, emitIdentifierNameWithComments);
             }
         }
 
+        /**
+         * Emits an IdentifierName with possible comments.
+         *
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from emitIdentifierName.
+         */
         function emitIdentifierNameWithComments(node: Identifier) {
-            emitNodeWithComments(node, emitWorker);
+            emitNodeWithComments(node, emitWithSubstitution);
         }
 
         /**
@@ -410,18 +428,30 @@ const _super = (function (geti, seti) {
         }
 
         /**
-         * Emits an expression with source maps.
+         * Emits an expression with possible source maps.
          *
          * NOTE: Do not call this method directly. It is part of the emitExpression pipeline
          * and should only be called indirectly from emitExpressionWithComments.
          */
         function emitExpressionWithSourceMap(node: Expression) {
-            emitNodeWithSourceMap(node, emitExpressionWorker);
+            emitNodeWithSourceMap(node, emitExpressionWithSubstitution);
         }
 
         /**
-         * Emits a node with emit notification if available.
+         * Emits an expression with possible substitution.
+         *
+         * NOTE: Do not call this method directly. It is part of the emitExpression pipeline
+         * and should only be called indirectly from emitExpressionWithSourceMap or
+         * from emitWorker.
          */
+        function emitExpressionWithSubstitution(node: Expression) {
+            emitNodeWithSubstitution(node, /*isExpression*/ true, emitExpressionWorker);
+        }
+
+        /**
+         * Emits a node with possible emit notification.
+         */
+        // TODO(rbuckton): Move this into transformer.ts
         function emitNodeWithNotification(node: Node, emitCallback: (node: Node) => void) {
             if (node) {
                 if (isEmitNotificationEnabled(node)) {
@@ -433,16 +463,16 @@ const _super = (function (geti, seti) {
             }
         }
 
+        /**
+         * Emits a node with possible source maps.
+         */
+        // TODO(rbuckton): Move this into sourcemap.ts
         function emitNodeWithSourceMap(node: Node, emitCallback: (node: Node) => void) {
             if (node) {
                 emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                 emitCallback(node);
                 emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
             }
-        }
-
-        function getSourceMapRange(node: Node) {
-            return node.sourceMapRange || node;
         }
 
         /**
@@ -453,9 +483,10 @@ const _super = (function (geti, seti) {
          *
          * @param node A Node.
          */
+        // TODO(rbuckton): Move this into comments.ts
         function shouldSkipLeadingCommentsForNode(node: Node) {
             return isNotEmittedStatement(node)
-                || (node.emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
+                || (getEmitFlags(node) & EmitFlags.NoLeadingComments) !== 0;
         }
 
         /**
@@ -466,11 +497,11 @@ const _super = (function (geti, seti) {
          *
          * @param node A Node.
          */
+        // TODO(rbuckton): Move this into sourcemap.ts
         function shouldSkipLeadingSourceMapForNode(node: Node) {
             return isNotEmittedStatement(node)
-                || (node.emitFlags & NodeEmitFlags.NoLeadingSourceMap) !== 0;
+                || (getEmitFlags(node) & EmitFlags.NoLeadingSourceMap) !== 0;
         }
-
 
         /**
          * Determines whether to skip source map emit for the end position of a node.
@@ -480,9 +511,10 @@ const _super = (function (geti, seti) {
          *
          * @param node A Node.
          */
+        // TODO(rbuckton): Move this into sourcemap.ts
         function shouldSkipTrailingSourceMapForNode(node: Node) {
             return isNotEmittedStatement(node)
-                || (node.emitFlags & NodeEmitFlags.NoTrailingSourceMap) !== 0;
+                || (getEmitFlags(node) & EmitFlags.NoTrailingSourceMap) !== 0;
         }
 
         /**
@@ -490,15 +522,34 @@ const _super = (function (geti, seti) {
          *
          * We do not emit source maps for a node that has NodeEmitFlags.NoNestedSourceMaps.
          */
+        // TODO(rbuckton): Move this into sourcemap.ts
         function shouldSkipSourceMapForChildren(node: Node) {
-            return (node.emitFlags & NodeEmitFlags.NoNestedSourceMaps) !== 0;
+            return (getEmitFlags(node) & EmitFlags.NoNestedSourceMaps) !== 0;
         }
 
-        function emitWorker(node: Node): void {
-            if (tryEmitSubstitute(node, emitWorker, /*isExpression*/ false)) {
-                return;
+        /**
+         * Emits a node with possible substitution.
+         */
+        // TODO(rbuckton): Move this into transformer.ts
+        function emitNodeWithSubstitution(node: Node, isExpression: boolean, emitCallback: (node: Node) => void) {
+            if (isSubstitutionEnabled(node) && (getEmitFlags(node) & EmitFlags.NoSubstitution) === 0) {
+                const substitute = onSubstituteNode(node, isExpression);
+                if (substitute !== node) {
+                    emitCallback(substitute);
+                    return;
+                }
             }
 
+            emitCallback(node);
+        }
+
+        /**
+         * Emits a node.
+         *
+         * NOTE: Do not call this method directly. It is part of the emit pipeline
+         * and should only be called indirectly from emitNodeWithSubstitution.
+         */
+        function emitWorker(node: Node): void {
             const kind = node.kind;
             switch (kind) {
                 // Pseudo-literals
@@ -749,15 +800,17 @@ const _super = (function (geti, seti) {
             }
 
             if (isExpression(node)) {
-                return emitExpressionWorker(node);
+                return emitExpressionWithSubstitution(node);
             }
         }
 
+        /**
+         * Emits an expression.
+         *
+         * NOTE: Do not call this method directly. It is part of the emitExpression pipeline
+         * and should only be called indirectly from emitExpressionWithNotification.
+         */
         function emitExpressionWorker(node: Node) {
-            if (tryEmitSubstitute(node, emitExpressionWorker, /*isExpression*/ true)) {
-                return;
-            }
-
             const kind = node.kind;
             switch (kind) {
                 // Literals
@@ -881,7 +934,7 @@ const _super = (function (geti, seti) {
         //
 
         function emitIdentifier(node: Identifier) {
-            if (node.emitFlags & NodeEmitFlags.UMDDefine) {
+            if (getEmitFlags(node) & EmitFlags.UMDDefine) {
                 writeLines(umdHelper);
             }
             else {
@@ -1154,7 +1207,7 @@ const _super = (function (geti, seti) {
                 write("{}");
             }
             else {
-                const indentedFlag = node.emitFlags & NodeEmitFlags.Indented;
+                const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
                 if (indentedFlag) {
                     increaseIndent();
                 }
@@ -1176,7 +1229,7 @@ const _super = (function (geti, seti) {
 
             let indentBeforeDot = false;
             let indentAfterDot = false;
-            if (!(node.emitFlags & NodeEmitFlags.NoIndentation)) {
+            if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentText, node.expression.end) + 1;
                 const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
@@ -1419,7 +1472,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitBlockStatements(node: Block) {
-            if (node.emitFlags & NodeEmitFlags.SingleLine) {
+            if (getEmitFlags(node) & EmitFlags.SingleLine) {
                 emitList(node, node.statements, ListFormat.SingleLineBlockStatements);
             }
             else {
@@ -1623,12 +1676,12 @@ const _super = (function (geti, seti) {
             const body = node.body;
             if (body) {
                 if (isBlock(body)) {
-                    const indentedFlag = node.emitFlags & NodeEmitFlags.Indented;
+                    const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
                     if (indentedFlag) {
                         increaseIndent();
                     }
 
-                    if (node.emitFlags & NodeEmitFlags.ReuseTempVariableScope) {
+                    if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                         emitSignatureHead(node);
                         emitBlockFunctionBody(node, body);
                     }
@@ -1672,7 +1725,7 @@ const _super = (function (geti, seti) {
             // * A non-synthesized body's start and end position are on different lines.
             // * Any statement in the body starts on a new line.
 
-            if (body.emitFlags & NodeEmitFlags.SingleLine) {
+            if (getEmitFlags(body) & EmitFlags.SingleLine) {
                 return true;
             }
 
@@ -1743,7 +1796,7 @@ const _super = (function (geti, seti) {
             write("class");
             emitNodeWithPrefix(" ", node.name, emitIdentifierName);
 
-            const indentedFlag = node.emitFlags & NodeEmitFlags.Indented;
+            const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
             if (indentedFlag) {
                 increaseIndent();
             }
@@ -2077,7 +2130,7 @@ const _super = (function (geti, seti) {
             // but rather a trailing comment on the previous node.
             const initializer = node.initializer;
             if (!shouldSkipLeadingCommentsForNode(initializer)) {
-                const commentRange = initializer.commentRange || initializer;
+                const commentRange = getCommentRange(initializer);
                 emitTrailingCommentsOfPosition(commentRange.pos);
             }
 
@@ -2149,23 +2202,23 @@ const _super = (function (geti, seti) {
         }
 
         function emitHelpers(node: Node) {
-            const emitFlags = node.emitFlags;
+            const emitFlags = getEmitFlags(node);
             let helpersEmitted = false;
-            if (emitFlags & NodeEmitFlags.EmitEmitHelpers) {
+            if (emitFlags & EmitFlags.EmitEmitHelpers) {
                 helpersEmitted = emitEmitHelpers(currentSourceFile);
             }
 
-            if (emitFlags & NodeEmitFlags.EmitExportStar) {
+            if (emitFlags & EmitFlags.EmitExportStar) {
                 writeLines(exportStarHelper);
                 helpersEmitted = true;
             }
 
-            if (emitFlags & NodeEmitFlags.EmitSuperHelper) {
+            if (emitFlags & EmitFlags.EmitSuperHelper) {
                 writeLines(superHelper);
                 helpersEmitted = true;
             }
 
-            if (emitFlags & NodeEmitFlags.EmitAdvancedSuperHelper) {
+            if (emitFlags & EmitFlags.EmitAdvancedSuperHelper) {
                 writeLines(advancedSuperHelper);
                 helpersEmitted = true;
             }
@@ -2287,19 +2340,7 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function tryEmitSubstitute(node: Node, emitNode: (node: Node) => void, isExpression: boolean) {
-            if (isSubstitutionEnabled(node) && (node.emitFlags & NodeEmitFlags.NoSubstitution) === 0) {
-                const substitute = onSubstituteNode(node, isExpression);
-                if (substitute !== node) {
-                    substitute.emitFlags |= NodeEmitFlags.NoSubstitution;
-                    emitNode(substitute);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
+        // TODO(rbuckton): Move this into a transformer
         function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
             const constantValue = tryGetConstEnumValue(node);
             if (constantValue !== undefined) {
@@ -2440,7 +2481,7 @@ const _super = (function (geti, seti) {
                     }
 
                     if (shouldEmitInterveningComments) {
-                        const commentRange = child.commentRange || child;
+                        const commentRange = getCommentRange(child);
                         emitTrailingCommentsOfPosition(commentRange.pos);
                     }
                     else {
@@ -2502,11 +2543,11 @@ const _super = (function (geti, seti) {
         }
 
         function shouldSkipLeadingSourceMapForToken(contextNode: Node) {
-            return (contextNode.emitFlags & NodeEmitFlags.NoTokenLeadingSourceMaps) !== 0;
+            return (getEmitFlags(contextNode) & EmitFlags.NoTokenLeadingSourceMaps) !== 0;
         }
 
         function shouldSkipTrailingSourceMapForToken(contextNode: Node) {
-            return (contextNode.emitFlags & NodeEmitFlags.NoTokenTrailingSourceMaps) !== 0;
+            return (getEmitFlags(contextNode) & EmitFlags.NoTokenTrailingSourceMaps) !== 0;
         }
 
         function writeTokenText(token: SyntaxKind, pos?: number) {

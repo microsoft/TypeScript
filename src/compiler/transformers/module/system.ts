@@ -10,8 +10,6 @@ namespace ts {
         }
 
         const {
-            getNodeEmitFlags,
-            setNodeEmitFlags,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
@@ -50,6 +48,10 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
                 currentSourceFile = node;
                 currentNode = node;
@@ -116,9 +118,9 @@ namespace ts {
                     createParameter(contextObjectForFile)
                 ],
                 /*type*/ undefined,
-                setNodeEmitFlags(
+                setEmitFlags(
                     createBlock(statements, /*location*/ undefined, /*multiLine*/ true),
-                    NodeEmitFlags.EmitEmitHelpers
+                    EmitFlags.EmitEmitHelpers
                 )
             );
 
@@ -135,7 +137,7 @@ namespace ts {
                             : [dependencies, body]
                     )
                 )
-            ], /*nodeEmitFlags*/ ~NodeEmitFlags.EmitEmitHelpers & getNodeEmitFlags(node));
+            ], /*nodeEmitFlags*/ ~EmitFlags.EmitEmitHelpers & getEmitFlags(node));
         }
 
         /**
@@ -1053,7 +1055,7 @@ namespace ts {
         }
 
         function substituteAssignmentExpression(node: BinaryExpression): Expression {
-            setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
+            setEmitFlags(node, EmitFlags.NoSubstitution);
 
             const left = node.left;
             switch (left.kind) {
@@ -1176,7 +1178,7 @@ namespace ts {
                 const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>operand);
                 if (exportDeclaration) {
                     const expr = createPrefix(node.operator, operand, node);
-                    setNodeEmitFlags(expr, NodeEmitFlags.NoSubstitution);
+                    setEmitFlags(expr, EmitFlags.NoSubstitution);
                     const call = createExportExpression(<Identifier>operand, expr);
                     if (node.kind === SyntaxKind.PrefixUnaryExpression) {
                         return call;
@@ -1241,7 +1243,7 @@ namespace ts {
                             ]),
                             m,
                             createBlock([
-                                setNodeEmitFlags(
+                                setEmitFlags(
                                     createIf(
                                         condition,
                                         createStatement(
@@ -1251,7 +1253,7 @@ namespace ts {
                                             )
                                         )
                                     ),
-                                    NodeEmitFlags.SingleLine
+                                    EmitFlags.SingleLine
                                 )
                             ])
                         ),
@@ -1393,10 +1395,10 @@ namespace ts {
             hoistBindingElement(node, /*isExported*/ false);
         }
 
-        function updateSourceFile(node: SourceFile, statements: Statement[], nodeEmitFlags: NodeEmitFlags) {
+        function updateSourceFile(node: SourceFile, statements: Statement[], nodeEmitFlags: EmitFlags) {
             const updated = getMutableClone(node);
             updated.statements = createNodeArray(statements, node.statements);
-            setNodeEmitFlags(updated, nodeEmitFlags);
+            setEmitFlags(updated, nodeEmitFlags);
             return updated;
         }
     }
