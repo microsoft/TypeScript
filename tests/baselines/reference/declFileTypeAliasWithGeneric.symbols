@@ -1,0 +1,19 @@
+=== tests/cases/compiler/declFileTypeAliasWithGeneric.ts ===
+export type Bar<X, Y> = () => [X, Y];
+>Bar : Symbol(Bar, Decl(declFileTypeAliasWithGeneric.ts, 0, 0))
+>X : Symbol(X, Decl(declFileTypeAliasWithGeneric.ts, 0, 16))
+>Y : Symbol(Y, Decl(declFileTypeAliasWithGeneric.ts, 0, 18))
+>X : Symbol(X, Decl(declFileTypeAliasWithGeneric.ts, 0, 16))
+>Y : Symbol(Y, Decl(declFileTypeAliasWithGeneric.ts, 0, 18))
+
+export type Foo<Y> = Bar<any, Y>;
+>Foo : Symbol(Foo, Decl(declFileTypeAliasWithGeneric.ts, 0, 37))
+>Y : Symbol(Y, Decl(declFileTypeAliasWithGeneric.ts, 1, 16))
+>Bar : Symbol(Bar, Decl(declFileTypeAliasWithGeneric.ts, 0, 0))
+>Y : Symbol(Y, Decl(declFileTypeAliasWithGeneric.ts, 1, 16))
+
+export const y = (x: Foo<string>) => 1
+>y : Symbol(y, Decl(declFileTypeAliasWithGeneric.ts, 2, 12))
+>x : Symbol(x, Decl(declFileTypeAliasWithGeneric.ts, 2, 18))
+>Foo : Symbol(Foo, Decl(declFileTypeAliasWithGeneric.ts, 0, 37))
+
