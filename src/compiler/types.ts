@@ -316,7 +316,6 @@ namespace ts {
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
-        SpreadObjectLiteralAssignment,
 
         // Enum
         EnumMember,
@@ -644,15 +643,15 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface ObjectLiteralElementLike extends Declaration {
+    export interface ObjectLiteralElement extends Declaration {
         _objectLiteralBrandBrand: any;
         name?: PropertyName;
    }
 
-    export type ObjectLiteralElement = PropertyAssignment | ShorthandPropertyAssignment | SpreadObjectLiteralAssignment | MethodDeclaration | AccessorDeclaration;
+    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration;
 
     // @kind(SyntaxKind.PropertyAssignment)
-    export interface PropertyAssignment extends ObjectLiteralElementLike {
+    export interface PropertyAssignment extends ObjectLiteralElement {
         _propertyAssignmentBrand: any;
         name: PropertyName;
         questionToken?: Node;
@@ -660,19 +659,13 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.ShorthandPropertyAssignment)
-    export interface ShorthandPropertyAssignment extends ObjectLiteralElementLike {
+    export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
         name: Identifier;
         questionToken?: Node;
         // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
         // it is grammar error to appear in actual object initializer
         equalsToken?: Node;
         objectAssignmentInitializer?: Expression;
-    }
-
-    // @kind(SyntaxKind.SpreadObjectLiteralAssignment)
-    export interface SpreadObjectLiteralAssignment extends ObjectLiteralElementLike, SpreadElementExpression {
-        _spreadObjectLiteralAssignmentBrand: any;
-        dotDotDotToken?: Node;
     }
 
     // SyntaxKind.VariableDeclaration
@@ -749,7 +742,7 @@ namespace ts {
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
     // @kind(SyntaxKind.MethodDeclaration)
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElementLike {
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         name: PropertyName;
         body?: FunctionBody;
     }
@@ -767,7 +760,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElementLike {
+    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
         name: PropertyName;
         body: FunctionBody;
@@ -1063,13 +1056,13 @@ namespace ts {
       * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
       * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
      **/
-    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElementLike> extends PrimaryExpression, Declaration {
+    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         properties: NodeArray<T>;
     }
 
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     // @kind(SyntaxKind.ObjectLiteralExpression)
-    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElement> {
+    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike> {
         /* @internal */
         multiLine?: boolean;
     }
@@ -1213,7 +1206,7 @@ namespace ts {
     export interface DebuggerStatement extends Statement { }
 
     // @kind(SyntaxKind.MissingDeclaration)
-    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElementLike, TypeElement {
+    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
         name?: Identifier;
     }
 

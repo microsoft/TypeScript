@@ -5947,7 +5947,7 @@ namespace ts {
 
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
-        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElement): boolean {
+        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike): boolean {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
@@ -9792,7 +9792,7 @@ namespace ts {
             return getContextualTypeForObjectLiteralElement(node);
         }
 
-        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElement) {
+        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
             const type = getApparentTypeOfContextualType(objectLiteral);
             if (type) {
@@ -9909,7 +9909,7 @@ namespace ts {
                     return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return getContextualTypeForObjectLiteralElement(<ObjectLiteralElement>parent);
+                    return getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>parent);
                 case SyntaxKind.ArrayLiteralExpression:
                     return getContextualTypeForElementExpression(node);
                 case SyntaxKind.ConditionalExpression:
@@ -13185,7 +13185,7 @@ namespace ts {
             return sourceType;
         }
 
-        function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElement, contextualMapper?: TypeMapper) {
+        function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, contextualMapper?: TypeMapper) {
             if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const name = <PropertyName>(<PropertyAssignment>property).name;
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
@@ -18445,7 +18445,7 @@ namespace ts {
             //     for ({ skills: { primary, secondary } } = multiRobot, i = 0; i < 1; i++) {
             if (expr.parent.kind === SyntaxKind.PropertyAssignment) {
                 const typeOfParentObjectLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>expr.parent.parent);
-                return checkObjectLiteralDestructuringPropertyAssignment(typeOfParentObjectLiteral || unknownType, <ObjectLiteralElement>expr.parent);
+                return checkObjectLiteralDestructuringPropertyAssignment(typeOfParentObjectLiteral || unknownType, <ObjectLiteralElementLike>expr.parent);
             }
             // Array literal assignment - array destructuring pattern
             Debug.assert(expr.parent.kind === SyntaxKind.ArrayLiteralExpression);
