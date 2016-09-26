@@ -100,9 +100,9 @@ declare function getFalsyPrimitive(x: "number" | "string"): number | string;
 declare function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string | boolean;
 declare namespace Consts1 {
 }
-declare const string: string;
-declare const number: string;
-declare const boolean: string;
+declare const string = "string";
+declare const number = "number";
+declare const boolean = "boolean";
 declare const stringOrNumber: string;
 declare const stringOrBoolean: string;
 declare const booleanOrNumber: string;
