@@ -1044,9 +1044,14 @@ namespace ts {
         return 0;
     }
 
+    /**
+     * Internally, we represent paths as strings with '/' as the directory separator.
+     * When we make system calls (eg: LanguageServiceHost.getDirectory()),
+     * we expect the host to correctly handle paths in our specified format.
+     */
     export const directorySeparator = "/";
     const directorySeparatorCharCode = CharacterCodes.slash;
-    function getNormalizedParts(normalizedSlashedPath: string, rootLength: number) {
+    function getNormalizedParts(normalizedSlashedPath: string, rootLength: number): string[] {
         const parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
         const normalized: string[] = [];
         for (const part of parts) {
