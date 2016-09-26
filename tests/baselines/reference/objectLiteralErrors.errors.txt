@@ -1,6 +1,7 @@
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(3,18): error TS2300: Duplicate identifier 'a'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(4,19): error TS2300: Duplicate identifier 'a'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(5,18): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(5,18): error TS2698: Cannot change type of property 'a' from 'number' to 'string'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(6,21): error TS2300: Duplicate identifier 'a'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(7,19): error TS2300: Duplicate identifier 'a'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(8,18): error TS2300: Duplicate identifier ''a''.
@@ -78,7 +79,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,16)
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,55): error TS2380: 'get' and 'set' accessor must have the same type.
 
 
-==== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts (78 errors) ====
+==== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts (79 errors) ====
     
     // Multiple properties with the same name
     var e1 = { a: 0, a: 0 };
@@ -90,6 +91,8 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,55)
     var e3 = { a: 0, a: '' };
                      ~
 !!! error TS2300: Duplicate identifier 'a'.
+                     ~
+!!! error TS2698: Cannot change type of property 'a' from 'number' to 'string'.
     var e4 = { a: true, a: false };
                         ~
 !!! error TS2300: Duplicate identifier 'a'.

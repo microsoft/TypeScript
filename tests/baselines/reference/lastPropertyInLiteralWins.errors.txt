@@ -4,10 +4,12 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(7,6): error TS2345: Argument o
       Types of parameters 'num' and 'str' are incompatible.
         Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/lastPropertyInLiteralWins.ts(9,5): error TS2300: Duplicate identifier 'thunk'.
+tests/cases/compiler/lastPropertyInLiteralWins.ts(9,5): error TS2698: Cannot change type of property 'thunk' from '(str: string) => void' to '(num: number) => void'.
 tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate identifier 'thunk'.
+tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2698: Cannot change type of property 'thunk' from '(num: number) => void' to '(str: string) => void'.
 
 
-==== tests/cases/compiler/lastPropertyInLiteralWins.ts (3 errors) ====
+==== tests/cases/compiler/lastPropertyInLiteralWins.ts (5 errors) ====
     interface Thing {
         thunk: (str: string) => void;
     }
@@ -22,6 +24,8 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         ~~~~~
 !!! error TS2300: Duplicate identifier 'thunk'.
+        ~~~~~
+!!! error TS2698: Cannot change type of property 'thunk' from '(str: string) => void' to '(num: number) => void'.
     });
     ~
 !!! error TS2345: Argument of type '{ thunk: (num: number) => void; }' is not assignable to parameter of type 'Thing'.
@@ -35,5 +39,7 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate
         thunk: (str: string) => {}
         ~~~~~
 !!! error TS2300: Duplicate identifier 'thunk'.
+        ~~~~~
+!!! error TS2698: Cannot change type of property 'thunk' from '(num: number) => void' to '(str: string) => void'.
     });
     

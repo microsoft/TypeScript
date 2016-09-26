@@ -1,7 +1,8 @@
 tests/cases/compiler/memberOverride.ts(5,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/memberOverride.ts(5,5): error TS2698: Cannot change type of property 'a' from 'string' to 'number'.
 
 
-==== tests/cases/compiler/memberOverride.ts (1 errors) ====
+==== tests/cases/compiler/memberOverride.ts (2 errors) ====
     // An object initialiser accepts the first definition for the same property with a different type signature
     // Should compile, since the second declaration of a overrides the first
     var x = {
@@ -9,6 +10,8 @@ tests/cases/compiler/memberOverride.ts(5,5): error TS2300: Duplicate identifier 
         a: 5
         ~
 !!! error TS2300: Duplicate identifier 'a'.
+        ~
+!!! error TS2698: Cannot change type of property 'a' from 'string' to 'number'.
     }
     
     var n: number = x.a;
