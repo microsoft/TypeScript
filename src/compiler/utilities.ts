@@ -3740,6 +3740,7 @@ namespace ts {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAssignment
             || kind === SyntaxKind.ShorthandPropertyAssignment
+            || kind === SyntaxKind.SpreadElement
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor

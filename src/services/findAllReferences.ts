@@ -458,7 +458,7 @@ namespace ts.FindAllReferences {
                                 return [localParentType.symbol];
                             }
                             else if (localParentType.flags & TypeFlags.UnionOrIntersection) {
-                                return getSymbolsForClassAndInterfaceComponents(<UnionOrIntersectionType>localParentType);
+                                return getSymbolsForClassAndInterfaceComponents(<TypeOperatorType>localParentType);
                             }
                         }
                     }
@@ -630,13 +630,13 @@ namespace ts.FindAllReferences {
             }
         }
 
-        function getSymbolsForClassAndInterfaceComponents(type: UnionOrIntersectionType, result: Symbol[] = []): Symbol[] {
+        function getSymbolsForClassAndInterfaceComponents(type: TypeOperatorType, result: Symbol[] = []): Symbol[] {
             for (const componentType of type.types) {
                 if (componentType.symbol && componentType.symbol.getFlags() & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     result.push(componentType.symbol);
                 }
                 if (componentType.getFlags() & TypeFlags.UnionOrIntersection) {
-                    getSymbolsForClassAndInterfaceComponents(<UnionOrIntersectionType>componentType, result);
+                    getSymbolsForClassAndInterfaceComponents(<TypeOperatorType>componentType, result);
                 }
             }
             return result;
