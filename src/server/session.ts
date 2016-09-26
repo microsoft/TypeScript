@@ -144,7 +144,7 @@ namespace ts.server {
     export class Session {
         protected projectService: ProjectService;
         private errorTimer: any; /*NodeJS.Timer | number*/
-        private immediateId: any;
+        private setTimeoutId: any;
         private changeSeq = 0;
 
         constructor(
@@ -246,11 +246,20 @@ namespace ts.server {
 
         private semanticCheck(file: string, project: Project) {
             try {
+                let start: number[];
+                if (this.logger.isVerbose()) {
+                    start = this.hrtime();
+                }
+
                 const diags = project.compilerService.languageService.getSemanticDiagnostics(file);
 
                 if (diags) {
                     const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
                     this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                }
+
+                if (this.logger.isVerbose()) {
+                    this.logPerfMessurement(start, /*isAsync*/ false, /*isBackground*/true);
                 }
             }
             catch (err) {
@@ -260,10 +269,19 @@ namespace ts.server {
 
         private syntacticCheck(file: string, project: Project) {
             try {
+                let start: number[];
+                if (this.logger.isVerbose()) {
+                    start = this.hrtime();
+                }
+
                 const diags = project.compilerService.languageService.getSyntacticDiagnostics(file);
                 if (diags) {
                     const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
                     this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+                }
+
+                if (this.logger.isVerbose()) {
+                    this.logPerfMessurement(start, /*isAsync*/ false, /*isBackground*/ true);
                 }
             }
             catch (err) {
@@ -291,9 +309,9 @@ namespace ts.server {
             if (this.errorTimer) {
                 clearTimeout(this.errorTimer);
             }
-            if (this.immediateId) {
-                clearImmediate(this.immediateId);
-                this.immediateId = undefined;
+            if (this.setTimeoutId) {
+                clearTimeout(this.setTimeoutId);
+                this.setTimeoutId = undefined;
             }
             let index = 0;
             const checkOne = () => {
@@ -302,16 +320,16 @@ namespace ts.server {
                     index++;
                     if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
-                        this.immediateId = setImmediate(() => {
+                        this.setTimeoutId = setTimeout(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
-                            this.immediateId = undefined;
+                            this.setTimeoutId = undefined;
                             if (checkList.length > index) {
                                 this.errorTimer = setTimeout(checkOne, followMs);
                             }
                             else {
                                 this.errorTimer = undefined;
                             }
-                        });
+                        }, followMs);
                     }
                 }
             };
@@ -867,6 +885,9 @@ namespace ts.server {
         }
 
         private getDiagnostics(delay: number, fileNames: string[]) {
+            if (delay < 1000) {
+                delay = 1000;
+            }
             const checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
                 fileName = ts.normalizePath(fileName);
                 const project = this.projectService.getProjectForFile(fileName);
@@ -1262,6 +1283,12 @@ namespace ts.server {
             }
         }
 
+        private logPerfMessurement(start: number[], isAsync: boolean, isBackground: boolean) {
+            const [seconds, nanoseconds] = this.hrtime(start);
+            const elapsedMs = ((1e9 * seconds) + nanoseconds) / 1000000.0;
+            this.logger.msg(`${isAsync ? "Async " : isBackground ? "Background " : ""}Elapsed time (in milliseconds):  ${elapsedMs.toFixed(4).toString()}`, "Perf");
+        }
+
         public onMessage(message: string) {
             let start: number[];
             if (this.logger.isVerbose()) {
@@ -1274,15 +1301,7 @@ namespace ts.server {
                 const {response, responseRequired} = this.executeCommand(request);
 
                 if (this.logger.isVerbose()) {
-                    const elapsed = this.hrtime(start);
-                    const seconds = elapsed[0];
-                    const nanoseconds = elapsed[1];
-                    const elapsedMs = ((1e9 * seconds) + nanoseconds) / 1000000.0;
-                    let leader = "Elapsed time (in milliseconds)";
-                    if (!responseRequired) {
-                        leader = "Async elapsed time (in milliseconds)";
-                    }
-                    this.logger.msg(leader + ": " + elapsedMs.toFixed(4).toString(), "Perf");
+                    this.logPerfMessurement(start, /*isAsync*/ !responseRequired, /*isBackground*/ false);
                 }
                 if (response) {
                     this.output(response, request.command, request.seq);

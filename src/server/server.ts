@@ -116,9 +116,10 @@ namespace ts.server {
             }
             if (this.fd >= 0) {
                 s = s + "\n";
-                const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
-                if (this.firstInGroup) {
-                    s = prefix + s;
+                const now = new Date();
+                const timestamp = Logger.padStringRight(`${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}:${now.getMilliseconds()}`, "            ");
+                const prefix = Logger.padStringRight(` ${type} ${this.seq.toString()}`, "          ");                if (this.firstInGroup) {
+                    s = timestamp + prefix + s;
                     this.firstInGroup = false;
                 }
                 if (!this.inGroup) {
