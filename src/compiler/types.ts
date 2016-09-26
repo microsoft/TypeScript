@@ -2156,6 +2156,8 @@ namespace ts {
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
+        isLiteralConstDeclaration(node: VariableDeclaration): boolean;
+        writeLiteralConstValue(node: VariableDeclaration, writer: SymbolWriter): void;
     }
 
     export const enum SymbolFlags {
