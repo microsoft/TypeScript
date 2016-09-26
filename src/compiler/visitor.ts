@@ -772,7 +772,7 @@ namespace ts {
 
             case SyntaxKind.ObjectLiteralExpression:
                 return updateObjectLiteral(<ObjectLiteralExpression>node,
-                    visitNodes((<ObjectLiteralExpression>node).properties, visitor, isObjectLiteralElement));
+                    visitNodes((<ObjectLiteralExpression>node).properties, visitor, isObjectLiteralElementLike));
 
             case SyntaxKind.PropertyAccessExpression:
                 return updatePropertyAccess(<PropertyAccessExpression>node,

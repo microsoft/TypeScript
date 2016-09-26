@@ -1020,7 +1020,7 @@ namespace ts {
             const temp = declareLocal();
             emitAssignment(temp,
                 createObjectLiteral(
-                    visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                    visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
                     /*location*/ undefined,
                     multiLine
                 )

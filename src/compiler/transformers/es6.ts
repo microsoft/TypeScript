@@ -1940,7 +1940,7 @@ namespace ts {
                 temp,
                 setNodeEmitFlags(
                     createObjectLiteral(
-                        visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                        visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
                         /*location*/ undefined,
                         node.multiLine
                     ),
