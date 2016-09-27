@@ -510,6 +510,7 @@ namespace ts.projectSystem {
         readonly getCurrentDirectory = () => this.currentDirectory;
         readonly write = (s: string) => notImplemented();
         readonly exit = () => notImplemented();
+        readonly getEnvironmentVariable = (v: string) => notImplemented();
     }
 
     export function makeSessionRequest<T>(command: string, args: T) {

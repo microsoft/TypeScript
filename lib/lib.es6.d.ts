@@ -1077,6 +1077,12 @@ interface ReadonlyArray<T> {
       */
     map<U>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => U, thisArg?: any): U[];
     /**
+     * Returns the elements of an array that meet the condition specified in a callback function.
+     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
+    filter<S extends T>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => value is S, thisArg?: any): S[];
+    /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
@@ -1281,13 +1287,44 @@ declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | P
 
 interface PromiseLike<T> {
     /**
-    * Attaches callbacks for the resolution and/or rejection of the Promise.
-    * @param onfulfilled The callback to execute when the Promise is resolved.
-    * @param onrejected The callback to execute when the Promise is rejected.
-    * @returns A Promise for the completion of which ever callback is executed.
-    */
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then(
+        onfulfilled?: ((value: T) => T | PromiseLike<T>) | undefined | null,
+        onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): PromiseLike<T>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(
+        onfulfilled: ((value: T) => T | PromiseLike<T>) | undefined | null,
+        onrejected: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<T | TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(
+        onfulfilled: (value: T) => TResult | PromiseLike<TResult>,
+        onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): PromiseLike<TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1, TResult2>(
+        onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>,
+        onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): PromiseLike<TResult1 | TResult2>;
 }
 
 interface ArrayLike<T> {
@@ -1547,7 +1584,7 @@ interface Int8Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -1555,7 +1592,7 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1820,7 +1857,7 @@ interface Uint8Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -1828,7 +1865,7 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2094,7 +2131,7 @@ interface Uint8ClampedArray {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2102,7 +2139,7 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2367,7 +2404,7 @@ interface Int16Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2375,7 +2412,7 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2641,7 +2678,7 @@ interface Uint16Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2649,7 +2686,7 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2914,7 +2951,7 @@ interface Int32Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2922,7 +2959,7 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3187,7 +3224,7 @@ interface Uint32Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3195,7 +3232,7 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3460,7 +3497,7 @@ interface Float32Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3468,7 +3505,7 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3734,7 +3771,7 @@ interface Float64Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3742,7 +3779,7 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3959,12 +3996,9 @@ declare module Intl {
         resolvedOptions(): ResolvedCollatorOptions;
     }
     var Collator: {
-        new (locales?: string[], options?: CollatorOptions): Collator;
-        new (locale?: string, options?: CollatorOptions): Collator;
-        (locales?: string[], options?: CollatorOptions): Collator;
-        (locale?: string, options?: CollatorOptions): Collator;
-        supportedLocalesOf(locales: string[], options?: CollatorOptions): string[];
-        supportedLocalesOf(locale: string, options?: CollatorOptions): string[];
+        new (locales?: string | string[], options?: CollatorOptions): Collator;
+        (locales?: string | string[], options?: CollatorOptions): Collator;
+        supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
     }
 
     interface NumberFormatOptions {
@@ -3999,12 +4033,9 @@ declare module Intl {
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
     var NumberFormat: {
-        new (locales?: string[], options?: NumberFormatOptions): NumberFormat;
-        new (locale?: string, options?: NumberFormatOptions): NumberFormat;
-        (locales?: string[], options?: NumberFormatOptions): NumberFormat;
-        (locale?: string, options?: NumberFormatOptions): NumberFormat;
-        supportedLocalesOf(locales: string[], options?: NumberFormatOptions): string[];
-        supportedLocalesOf(locale: string, options?: NumberFormatOptions): string[];
+        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
     }
 
     interface DateTimeFormatOptions {
@@ -4045,90 +4076,51 @@ declare module Intl {
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
     var DateTimeFormat: {
-        new (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        new (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
-        (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
-        supportedLocalesOf(locales: string[], options?: DateTimeFormatOptions): string[];
-        supportedLocalesOf(locale: string, options?: DateTimeFormatOptions): string[];
+        new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
     }
 }
 
 interface String {
     /**
-      * Determines whether two strings are equivalent in the current locale.
+      * Determines whether two strings are equivalent in the current or specified locale.
       * @param that String to compare to target string
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
       * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
       */
-    localeCompare(that: string, locales: string[], options?: Intl.CollatorOptions): number;
-
-    /**
-      * Determines whether two strings are equivalent in the current locale.
-      * @param that String to compare to target string
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
-      * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
-      */
-    localeCompare(that: string, locale: string, options?: Intl.CollatorOptions): number;
+    localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number;
 }
 
 interface Number {
     /**
       * Converts a number to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locales?: string[], options?: Intl.NumberFormatOptions): string;
-
-    /**
-      * Converts a number to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleString(locale?: string, options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Date {
     /**
       * Converts a date and time to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
     /**
       * Converts a date to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleDateString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleDateString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 
     /**
       * Converts a time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleTimeString(locale?: string[], options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a date and time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a date to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleDateString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleTimeString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 }
 declare type PropertyKey = string | number | symbol;
 
@@ -4145,15 +4137,15 @@ interface Array<T> {
     find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): number;
 
     /**
       * Returns the this object after filling the section identified by start and end with value
@@ -4492,15 +4484,15 @@ interface ReadonlyArray<T> {
   find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): T | undefined;
 
   /**
-    * Returns the index of the first element in the array where predicate is true, and undefined
+    * Returns the index of the first element in the array where predicate is true, and -1
     * otherwise.
     * @param predicate find calls predicate once for each element of the array, in ascending
-    * order, until it finds one where predicate returns true. If such an element is found, 
+    * order, until it finds one where predicate returns true. If such an element is found,
     * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
     * @param thisArg If provided, it will be used as the this value for each invocation of
     * predicate. If it is not provided, undefined is used instead.
     */
-  findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
+  findIndex(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): number;
 }
 
 interface RegExp {
@@ -4657,7 +4649,7 @@ interface StringConstructor {
 interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
-    forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
     get(key: K): V | undefined;
     has(key: K): boolean;
     set(key: K, value?: V): this;
@@ -4670,6 +4662,13 @@ interface MapConstructor {
     readonly prototype: Map<any, any>;
 }
 declare var Map: MapConstructor;
+
+interface ReadonlyMap<K, V> {
+    forEach(callbackfn: (value: V, key: K, map: ReadonlyMap<K, V>) => void, thisArg?: any): void;
+    get(key: K): V|undefined;
+    has(key: K): boolean;
+    readonly size: number;
+}
 
 interface WeakMap<K, V> {
     delete(key: K): boolean;
@@ -4689,7 +4688,7 @@ interface Set<T> {
     add(value: T): this;
     clear(): void;
     delete(value: T): boolean;
-    forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
     readonly size: number;
 }
@@ -4700,6 +4699,12 @@ interface SetConstructor {
     readonly prototype: Set<any>;
 }
 declare var Set: SetConstructor;
+
+interface ReadonlySet<T> {
+    forEach(callbackfn: (value: T, value2: T, set: ReadonlySet<T>) => void, thisArg?: any): void;
+    has(value: T): boolean;
+    readonly size: number;
+}
 
 interface WeakSet<T> {
     add(value: T): this;
@@ -5179,7 +5184,7 @@ interface Promise<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1, TResult2>(onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>;
+    then(onfulfilled?: ((value: T) => T | PromiseLike<T>) | undefined | null, onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): Promise<T>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5187,20 +5192,30 @@ interface Promise<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
+    then<TResult>(onfulfilled: ((value: T) => T | PromiseLike<T>) | undefined | null, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>): Promise<TResult>;
+    then<TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>, onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<TResult>;
 
     /**
-     * Creates a new Promise with the same internal state of this Promise.
-     * @returns A Promise.
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
      */
-    then(): Promise<T>;
+    then<TResult1, TResult2>(onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>;
+
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch(onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): Promise<T>;
 
     /**
      * Attaches a callback for only the rejection of the Promise.
@@ -5208,13 +5223,6 @@ interface Promise<T> {
      * @returns A Promise for the completion of the callback.
      */
     catch<TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>;
-
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch(onrejected: (reason: any) => T | PromiseLike<T>): Promise<T>;
 }
 
 interface PromiseConstructor {
@@ -5312,6 +5320,86 @@ interface PromiseConstructor {
     all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 
     /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>, T10 | PromiseLike<T10>]): Promise<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9 | T10>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6, T7, T8, T9>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>]): Promise<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6, T7, T8>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>]): Promise<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6, T7>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>]): Promise<T1 | T2 | T3 | T4 | T5 | T6 | T7>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>]): Promise<T1 | T2 | T3 | T4 | T5 | T6>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>]): Promise<T1 | T2 | T3 | T4 | T5>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>]): Promise<T1 | T2 | T3 | T4>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<T1 | T2 | T3>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<T1 | T2>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T>(values: (T | PromiseLike<T>)[]): Promise<T>;
+
+    /**
      * Creates a new rejected promise for the provided reason.
      * @param reason The reason the promise was rejected.
      * @returns A new rejected Promise.
@@ -5368,8 +5456,7 @@ declare var Proxy: ProxyConstructor;declare namespace Reflect {
     function get(target: any, propertyKey: PropertyKey, receiver?: any): any;
     function getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
     function getPrototypeOf(target: any): any;
-    function has(target: any, propertyKey: string): boolean;
-    function has(target: any, propertyKey: symbol): boolean;
+    function has(target: any, propertyKey: PropertyKey): boolean;
     function isExtensible(target: any): boolean;
     function ownKeys(target: any): Array<PropertyKey>;
     function preventExtensions(target: any): boolean;
@@ -20657,7 +20744,7 @@ interface DateConstructor {
 interface Date {
     getVarDate: () => VarDate;
 }
-/// <reference path="lib.dom.generated.d.ts" />
+/// <reference path="lib.dom.d.ts" />
 
 interface DOMTokenList {
     [Symbol.iterator](): IterableIterator<string>;

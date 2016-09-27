@@ -2585,7 +2585,7 @@ namespace ts {
             }
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, extension);
             const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-            const declarationFilePath = !isSourceFileJavaScript(sourceFile) && emitOnlyDtsFiles ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
+            const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (options.declaration || emitOnlyDtsFiles) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
             action(jsFilePath, sourceMapFilePath, declarationFilePath, [sourceFile], /*isBundledEmit*/ false);
         }
 

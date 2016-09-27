@@ -92,6 +92,7 @@ namespace ts.server {
         export const FormatRangeFull = "formatRange-full";
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
+        export const Implementation = "implementation";
         export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
         export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
         export const NavBar = "navbar";
@@ -418,6 +419,21 @@ namespace ts.server {
                     end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
                 };
             });
+        }
+
+        private getImplementation(args: protocol.FileLocationRequestArgs): protocol.FileSpan[] {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const position = this.getPosition(args, scriptInfo);
+            const implementations = project.getLanguageService().getImplementationAtPosition(file, position);
+            if (!implementations) {
+                return [];
+            }
+            return implementations.map(impl => ({
+                file: impl.fileName,
+                start: scriptInfo.positionToLineOffset(impl.textSpan.start),
+                end: scriptInfo.positionToLineOffset(ts.textSpanEnd(impl.textSpan))
+            }));
         }
 
         private getOccurrences(args: protocol.FileLocationRequestArgs): protocol.OccurrencesResponseItem[] {
@@ -1312,6 +1328,9 @@ namespace ts.server {
             [CommandNames.TypeDefinition]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getTypeDefinition(request.arguments));
             },
+            [CommandNames.Implementation]: (request: protocol.Request) => {
+                return this.requiredResponse(this.getImplementation(request.arguments))
+            },            
             [CommandNames.References]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ true));
             },
