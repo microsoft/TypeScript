@@ -9,14 +9,14 @@ var map = new Map([["", true]]);
 >Map : MapConstructor
 >[["", true]] : [string, true][]
 >["", true] : [string, true]
->"" : string
+>"" : ""
 >true : true
 
 for ([k = "", v = false] of map) {
->[k = "", v = false] : [string, false]
->k = "" : string
+>[k = "", v = false] : [string, boolean]
+>k = "" : ""
 >k : string
->"" : string
+>"" : ""
 >v = false : false
 >v : boolean
 >false : false

@@ -121,6 +121,23 @@ namespace ts {
         return undefined;
     }
 
+    /**
+     * Iterates through `array` by index and performs the callback on each element of array until the callback
+     * returns a falsey value, then returns false.
+     * If no such value is found, the callback is applied to each element of array and `true` is returned.
+     */
+    export function every<T>(array: T[], callback: (element: T, index: number) => boolean): boolean {
+        if (array) {
+            for (let i = 0, len = array.length; i < len; i++) {
+                if (!callback(array[i], i)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
     export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = 0, len = array.length; i < len; i++) {
@@ -177,11 +194,12 @@ namespace ts {
         return -1;
     }
 
-    export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
+    export function countWhere<T>(array: T[], predicate: (x: T, i: number) => boolean): number {
         let count = 0;
         if (array) {
-            for (const v of array) {
-                if (predicate(v)) {
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (predicate(v, i)) {
                     count++;
                 }
             }
@@ -193,6 +211,8 @@ namespace ts {
      * Filters an array by a predicate function. Returns the same array instance if the predicate is
      * true for all elements, otherwise returns a new array instance containing the filtered subset.
      */
+    export function filter<T, U extends T>(array: T[], f: (x: T) => x is U): U[];
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[]
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         if (array) {
             const len = array.length;
@@ -240,12 +260,140 @@ namespace ts {
         array.length = outIndex;
     }
 
-    export function map<T, U>(array: T[], f: (x: T) => U): U[] {
+    export function map<T, U>(array: T[], f: (x: T, i: number) => U): U[] {
         let result: U[];
         if (array) {
             result = [];
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                result.push(f(v, i));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Flattens an array containing a mix of array or non-array elements.
+     *
+     * @param array The array to flatten.
+     */
+    export function flatten<T>(array: (T | T[])[]): T[] {
+        let result: T[];
+        if (array) {
+            result = [];
             for (const v of array) {
-                result.push(f(v));
+                if (v) {
+                    if (isArray(v)) {
+                        addRange(result, v);
+                    }
+                    else {
+                        result.push(v);
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Maps an array. If the mapped value is an array, it is spread into the result.
+     *
+     * @param array The array to map.
+     * @param mapfn The callback used to map the result into one or more values.
+     */
+    export function flatMap<T, U>(array: T[], mapfn: (x: T, i: number) => U | U[]): U[] {
+        let result: U[];
+        if (array) {
+            result = [];
+            for (let i = 0; i < array.length; i++) {
+                const v = mapfn(array[i], i);
+                if (v) {
+                    if (isArray(v)) {
+                        addRange(result, v);
+                    }
+                    else {
+                        result.push(v);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Computes the first matching span of elements and returns a tuple of the first span
+     * and the remaining elements.
+     */
+    export function span<T>(array: T[], f: (x: T, i: number) => boolean): [T[], T[]] {
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                if (!f(array[i], i)) {
+                    return [array.slice(0, i), array.slice(i)];
+                }
+            }
+            return [array.slice(0), []];
+        }
+
+        return undefined;
+    }
+
+    /**
+     * Maps contiguous spans of values with the same key.
+     *
+     * @param array The array to map.
+     * @param keyfn A callback used to select the key for an element.
+     * @param mapfn A callback used to map a contiguous chunk of values to a single value.
+     */
+    export function spanMap<T, K, U>(array: T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[] {
+        let result: U[];
+        if (array) {
+            result = [];
+            const len = array.length;
+            let previousKey: K;
+            let key: K;
+            let start = 0;
+            let pos = 0;
+            while (start < len) {
+                while (pos < len) {
+                    const value = array[pos];
+                    key = keyfn(value, pos);
+                    if (pos === 0) {
+                        previousKey = key;
+                    }
+                    else if (key !== previousKey) {
+                        break;
+                    }
+
+                    pos++;
+                }
+
+                if (start < pos) {
+                    const v = mapfn(array.slice(start, pos), previousKey, start, pos);
+                    if (v) {
+                        result.push(v);
+                    }
+
+                    start = pos;
+                }
+
+                previousKey = key;
+                pos++;
+            }
+        }
+
+        return result;
+    }
+
+    export function mapObject<T, U>(object: MapLike<T>, f: (key: string, x: T) => [string, U]): MapLike<U> {
+        let result: MapLike<U>;
+        if (object) {
+            result = {};
+            for (const v of getOwnKeys(object)) {
+                const [key, value]: [string, U] = f(v, object[v]) || [undefined, undefined];
+                if (key !== undefined) {
+                    result[key] = value;
+                }
             }
         }
         return result;
@@ -254,8 +402,7 @@ namespace ts {
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
-
-        return array1.concat(array2);
+        return [...array1, ...array2];
     }
 
     // TODO: fixme (N^2) - add optional comparer so collection can be sorted before deduplication.
@@ -275,6 +422,27 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Compacts an array, removing any falsey elements.
+     */
+    export function compact<T>(array: T[]): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (result || !v) {
+                    if (!result) {
+                        result = array.slice(0, i);
+                    }
+                    if (v) {
+                        result.push(v);
+                    }
+                }
+            }
+        }
+        return result || array;
+    }
+
     export function sum(array: any[], prop: string): number {
         let result = 0;
         for (const v of array) {
@@ -286,7 +454,9 @@ namespace ts {
     export function addRange<T>(to: T[], from: T[]): void {
         if (to && from) {
             for (const v of from) {
-                to.push(v);
+                if (v !== undefined) {
+                    to.push(v);
+                }
             }
         }
     }
@@ -301,15 +471,31 @@ namespace ts {
         return true;
     }
 
+    export function firstOrUndefined<T>(array: T[]): T {
+        return array && array.length > 0
+            ? array[0]
+            : undefined;
+    }
+
+    export function singleOrUndefined<T>(array: T[]): T {
+        return array && array.length === 1
+            ? array[0]
+            : undefined;
+    }
+
+    export function singleOrMany<T>(array: T[]): T | T[] {
+        return array && array.length === 1
+            ? array[0]
+            : array;
+    }
+
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
     export function lastOrUndefined<T>(array: T[]): T {
-        if (array.length === 0) {
-            return undefined;
-        }
-
-        return array[array.length - 1];
+        return array && array.length > 0
+            ? array[array.length - 1]
+            : undefined;
     }
 
     /**
@@ -348,14 +534,15 @@ namespace ts {
         return ~low;
     }
 
-    export function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
-        if (array) {
-            const count = array.length;
-            if (count > 0) {
-                let pos = 0;
-                let result: T | U;
+    export function reduceLeft<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T {
+        if (array && array.length > 0) {
+            const size = array.length;
+            if (size > 0) {
+                let pos = start === undefined || start < 0 ? 0 : start;
+                const end = count === undefined || pos + count > size - 1 ? size - 1 : pos + count;
+                let result: T;
                 if (arguments.length <= 2) {
                     result = array[pos];
                     pos++;
@@ -363,23 +550,25 @@ namespace ts {
                 else {
                     result = initial;
                 }
-                while (pos < count) {
-                    result = f(<U>result, array[pos]);
+                while (pos <= end) {
+                    result = f(result, array[pos], pos);
                     pos++;
                 }
-                return <U>result;
+                return result;
             }
         }
         return initial;
     }
 
-    export function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+    export function reduceRight<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T {
         if (array) {
-            let pos = array.length - 1;
-            if (pos >= 0) {
-                let result: T | U;
+            const size = array.length;
+            if (size > 0) {
+                let pos = start === undefined || start > size - 1 ? size - 1 : start;
+                const end = count === undefined || pos - count < 0 ? 0 : pos - count;
+                let result: T;
                 if (arguments.length <= 2) {
                     result = array[pos];
                     pos--;
@@ -387,11 +576,11 @@ namespace ts {
                 else {
                     result = initial;
                 }
-                while (pos >= 0) {
-                    result = f(<U>result, array[pos]);
+                while (pos >= end) {
+                    result = f(result, array[pos], pos);
                     pos--;
                 }
-                return <U>result;
+                return result;
             }
         }
         return initial;
@@ -480,6 +669,18 @@ namespace ts {
         }
     }
 
+    export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
+    export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
+    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
+    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
+        for (const arg of args) {
+            for (const p of getOwnKeys(arg)) {
+                t[p] = arg[p];
+            }
+        }
+        return t;
+    }
+
     /**
      * Reduce the properties of a map.
      *
@@ -555,6 +756,15 @@ namespace ts {
         return result;
     }
 
+    export function isEmpty<T>(map: Map<T>) {
+        for (const id in map) {
+            if (hasProperty(map, id)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     export function cloneMap<T>(map: Map<T>) {
         const clone = createMap<T>();
         copyProperties(map, clone);
@@ -580,6 +790,36 @@ namespace ts {
             (result as any)[id] = (first as any)[id];
         }
         return result;
+    }
+
+    /**
+     * Adds the value to an array of values associated with the key, and returns the array.
+     * Creates the array if it does not already exist.
+     */
+    export function multiMapAdd<V>(map: Map<V[]>, key: string, value: V): V[] {
+        const values = map[key];
+        if (values) {
+            values.push(value);
+            return values;
+        }
+        else {
+            return map[key] = [value];
+        }
+    }
+
+    /**
+     * Removes a value from an array of values associated with the key.
+     * Does not preserve the order of those values.
+     * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
+     */
+    export function multiMapRemove<V>(map: Map<V[]>, key: string, value: V): void {
+        const values = map[key];
+        if (values) {
+            unorderedRemoveItem(values, value);
+            if (!values.length) {
+                delete map[key];
+            }
+        }
     }
 
     /**
@@ -820,7 +1060,8 @@ namespace ts {
         return 0;
     }
 
-    export let directorySeparator = "/";
+    export const directorySeparator = "/";
+    const directorySeparatorCharCode = CharacterCodes.slash;
     function getNormalizedParts(normalizedSlashedPath: string, rootLength: number) {
         const parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
         const normalized: string[] = [];
@@ -845,8 +1086,20 @@ namespace ts {
     export function normalizePath(path: string): string {
         path = normalizeSlashes(path);
         const rootLength = getRootLength(path);
+        const root = path.substr(0, rootLength);
         const normalized = getNormalizedParts(path, rootLength);
-        return path.substr(0, rootLength) + normalized.join(directorySeparator);
+        if (normalized.length) {
+            const joinedParts = root + normalized.join(directorySeparator);
+            return pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts;
+        }
+        else {
+            return root;
+        }
+    }
+
+    /** A path ending with '/' refers to a directory only, never a file. */
+    export function pathEndsWithDirectorySeparator(path: string): boolean {
+        return path.charCodeAt(path.length - 1) === directorySeparatorCharCode;
     }
 
     export function getDirectoryPath(path: Path): Path;
@@ -859,8 +1112,47 @@ namespace ts {
         return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
     }
 
+    export function isExternalModuleNameRelative(moduleName: string): boolean {
+        // TypeScript 1.0 spec (April 2014): 11.2.1
+        // An external module name is "relative" if the first term is "." or "..".
+        return /^\.\.?($|[\\/])/.test(moduleName);
+    }
+
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
+        return compilerOptions.target || ScriptTarget.ES3;
+    }
+
+    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
+        return typeof compilerOptions.module === "number" ?
+            compilerOptions.module :
+            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
+    }
+
+    /* @internal */
+    export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
+        let seenAsterisk = false;
+        for (let i = 0; i < str.length; i++) {
+            if (str.charCodeAt(i) === CharacterCodes.asterisk) {
+                if (!seenAsterisk) {
+                    seenAsterisk = true;
+                }
+                else {
+                    // have already seen asterisk
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     export function isRootedDiskPath(path: string) {
         return getRootLength(path) !== 0;
+    }
+
+    export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
+        return !isRootedDiskPath(absoluteOrRelativePath)
+            ? absoluteOrRelativePath
+            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /* isAbsolutePathAnUrl */ false);
     }
 
     function normalizedPathComponents(path: string, rootLength: number) {
@@ -1477,11 +1769,16 @@ namespace ts {
     }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
+        this.id = 0;
         this.kind = kind;
         this.pos = pos;
         this.end = end;
         this.flags = NodeFlags.None;
+        this.modifierFlagsCache = ModifierFlags.None;
+        this.transformFlags = TransformFlags.None;
         this.parent = undefined;
+        this.original = undefined;
+        this.transformId = 0;
     }
 
     export let objectAllocator: ObjectAllocator = {
@@ -1502,10 +1799,13 @@ namespace ts {
     }
 
     export namespace Debug {
-        const currentAssertionLevel = AssertionLevel.None;
+        declare var process: any;
+        declare var require: any;
+
+        let currentAssertionLevel: AssertionLevel;
 
         export function shouldAssert(level: AssertionLevel): boolean {
-            return currentAssertionLevel >= level;
+            return getCurrentAssertionLevel() >= level;
         }
 
         export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
@@ -1522,97 +1822,76 @@ namespace ts {
         export function fail(message?: string): void {
             Debug.assert(/*expression*/ false, message);
         }
+
+        function getCurrentAssertionLevel() {
+            if (currentAssertionLevel !== undefined) {
+                return currentAssertionLevel;
+            }
+
+            if (sys === undefined) {
+                return AssertionLevel.None;
+            }
+
+            const developmentMode = /^development$/i.test(getEnvironmentVariable("NODE_ENV"));
+            currentAssertionLevel = developmentMode
+                ? AssertionLevel.Normal
+                : AssertionLevel.None;
+
+            return currentAssertionLevel;
+        }
     }
 
-    export function copyListRemovingItem<T>(item: T, list: T[]) {
-        const copiedList: T[] = [];
-        for (const e of list) {
-            if (e !== item) {
-                copiedList.push(e);
+    export function getEnvironmentVariable(name: string, host?: CompilerHost) {
+        if (host && host.getEnvironmentVariable) {
+            return host.getEnvironmentVariable(name);
+        }
+
+        if (sys && sys.getEnvironmentVariable) {
+            return sys.getEnvironmentVariable(name);
+        }
+
+        return "";
+    }
+
+    /** Remove an item from an array, moving everything to its right one space left. */
+    export function orderedRemoveItemAt<T>(array: T[], index: number): void {
+        // This seems to be faster than either `array.splice(i, 1)` or `array.copyWithin(i, i+ 1)`.
+        for (let i = index; i < array.length - 1; i++) {
+            array[i] = array[i + 1];
+        }
+        array.pop();
+    }
+
+    export function unorderedRemoveItemAt<T>(array: T[], index: number): void {
+        // Fill in the "hole" left at `index`.
+        array[index] = array[array.length - 1];
+        array.pop();
+    }
+
+    /** Remove the *first* occurrence of `item` from the array. */
+    export function unorderedRemoveItem<T>(array: T[], item: T): void {
+        unorderedRemoveFirstItemWhere(array, element => element === item);
+    }
+
+    /** Remove the *first* element satisfying `predicate`. */
+    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): void {
+        for (let i = 0; i < array.length; i++) {
+            if (predicate(array[i])) {
+                unorderedRemoveItemAt(array, i);
+                break;
             }
         }
-        return copiedList;
     }
 
-    export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
-        return useCaseSensitivefileNames
+    export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): (fileName: string) => string {
+        return useCaseSensitiveFileNames
             ? ((fileName) => fileName)
             : ((fileName) => fileName.toLowerCase());
     }
 
-
-    /* @internal */
-    export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
-    export function trace(host: ModuleResolutionHost, message: DiagnosticMessage): void {
-        host.trace(formatMessage.apply(undefined, arguments));
-    }
-
-    /* @internal */
-    export function isTraceEnabled(compilerOptions: CompilerOptions, host: ModuleResolutionHost): boolean {
-        return compilerOptions.traceResolution && host.trace !== undefined;
-    }
-
-    /* @internal */
-    export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
-        let seenAsterisk = false;
-        for (let i = 0; i < str.length; i++) {
-            if (str.charCodeAt(i) === CharacterCodes.asterisk) {
-                if (!seenAsterisk) {
-                    seenAsterisk = true;
-                }
-                else {
-                    // have already seen asterisk
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    /* @internal */
-    export function createResolvedModule(resolvedFileName: string, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
-        return { resolvedModule: resolvedFileName ? { resolvedFileName, isExternalLibraryImport } : undefined, failedLookupLocations };
-    }
-
-    /* @internal */
-    export function isExternalModuleNameRelative(moduleName: string): boolean {
-        // TypeScript 1.0 spec (April 2014): 11.2.1
-        // An external module name is "relative" if the first term is "." or "..".
-        return /^\.\.?($|[\\/])/.test(moduleName);
-    }
-
-    /* @internal */
-    export interface ModuleResolutionState {
-        host: ModuleResolutionHost;
-        compilerOptions: CompilerOptions;
-        traceEnabled: boolean;
-        // skip .tsx files if jsx is not enabled
-        skipTsx: boolean;
-    }
-
-
-
-    /* @internal */
-    export function readJson(path: string, host: ModuleResolutionHost): { typings?: string, types?: string, main?: string } {
-        try {
-            const jsonText = host.readFile(path);
-            return jsonText ? JSON.parse(jsonText) : {};
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            return {};
-        }
-    }
-
-    /* @internal */
-    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
-        return typeof compilerOptions.module === "number" ?
-            compilerOptions.module :
-            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
-    }
-
-    /* @internal */
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
-        return compilerOptions.target || ScriptTarget.ES3;
+    export function positionIsSynthesized(pos: number): boolean {
+        // This is a fast way of testing the following conditions:
+        //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
+        return !(pos >= 0);
     }
 }

@@ -1100,11 +1100,12 @@ namespace ts.server {
         private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): protocol.NavtoItem[] | NavigateToItem[] {
             const projects = this.getProjects(args);
 
+            const fileName = args.currentFileOnly ? args.file && normalizeSlashes(args.file) : undefined
             if (simplifiedResult) {
                 return combineProjectOutput(
                     projects,
                     project => {
-                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, /*excludeDts*/ project.isJsOnlyProject());
+                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isJsOnlyProject());
                         if (!navItems) {
                             return [];
                         }
@@ -1142,7 +1143,7 @@ namespace ts.server {
             else {
                 return combineProjectOutput(
                     projects,
-                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, /*excludeDts*/ project.isJsOnlyProject()),
+                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isJsOnlyProject()),
                     /*comparer*/ undefined,
                     navigateToItemIsEqualTo);
             }

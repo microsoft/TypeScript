@@ -1,7 +1,7 @@
 === tests/cases/compiler/getterSetterNonAccessor.ts ===
 function getFunc():any{return 0;}
 >getFunc : () => any
->0 : number
+>0 : 0
 
 function setFunc(v){}          
 >setFunc : (v: any) => void
@@ -13,7 +13,7 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
 >{} : {}
->"0" : string
+>"0" : "0"
 ><PropertyDescriptor>({          get: getFunc,          set: setFunc,          configurable: true      }) : PropertyDescriptor
 >PropertyDescriptor : PropertyDescriptor
 >({          get: getFunc,          set: setFunc,          configurable: true      }) : { get: () => any; set: (v: any) => void; configurable: true; }
@@ -28,7 +28,7 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 >setFunc : (v: any) => void
 
           configurable: true
->configurable : true
+>configurable : boolean
 >true : true
 
       }));

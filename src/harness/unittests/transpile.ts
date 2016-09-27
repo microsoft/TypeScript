@@ -101,7 +101,6 @@ namespace ts {
                     });
                 });
 
-
                 if (canUseOldTranspile) {
                     it("Correct output (old transpile) for " + justName, () => {
                         Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), () => {

@@ -54,14 +54,14 @@ x3['a'] *= value;
 >x3['a'] *= value : number
 >x3['a'] : number
 >x3 : { a: number; }
->'a' : string
+>'a' : "a"
 >value : any
 
 x3['a'] += value;
 >x3['a'] += value : any
 >x3['a'] : number
 >x3 : { a: number; }
->'a' : string
+>'a' : "a"
 >value : any
 
 // parentheses, the contained expression is reference
@@ -115,7 +115,7 @@ function fn2(x4: number) {
 >(x3['a']) : number
 >x3['a'] : number
 >x3 : { a: number; }
->'a' : string
+>'a' : "a"
 >value : any
 
 (x3['a']) += value;
@@ -123,6 +123,6 @@ function fn2(x4: number) {
 >(x3['a']) : number
 >x3['a'] : number
 >x3 : { a: number; }
->'a' : string
+>'a' : "a"
 >value : any
 

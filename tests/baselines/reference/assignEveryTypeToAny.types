@@ -5,13 +5,13 @@ var x: any;
 >x : any
 
 x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : any
->1 : number
+>1 : 1
 
 var a = 2;
 >a : number
->2 : number
+>2 : 2
 
 x = a;
 >x = a : number
@@ -19,27 +19,27 @@ x = a;
 >a : number
 
 x = true;
->x = true : boolean
+>x = true : true
 >x : any
->true : boolean
+>true : true
 
 var b = true;
 >b : boolean
->true : boolean
+>true : true
 
 x = b;
->x = b : boolean
+>x = b : true
 >x : any
->b : boolean
+>b : true
 
 x = "";
->x = "" : string
+>x = "" : ""
 >x : any
->"" : string
+>"" : ""
 
 var c = "";
 >c : string
->"" : string
+>"" : ""
 
 x = c;
 >x = c : string
@@ -142,7 +142,7 @@ x = { f() { return 1; } }
 >x : any
 >{ f() { return 1; } } : { f(): number; }
 >f : () => number
->1 : number
+>1 : 1
 
 x = { f<T>(x: T) { return x; } }
 >x = { f<T>(x: T) { return x; } } : { f<T>(x: T): T; }

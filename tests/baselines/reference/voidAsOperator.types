@@ -3,7 +3,7 @@ if (!void 0 !== true) {
 >!void 0 !== true : boolean
 >!void 0 : true
 >void 0 : undefined
->0 : number
+>0 : 0
 >true : true
  
 }

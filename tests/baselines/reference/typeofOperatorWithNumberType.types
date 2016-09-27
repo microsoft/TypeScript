@@ -6,12 +6,12 @@ var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : number[]
 >[1, 2] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 function foo(): number { return 1; }
 >foo : () => number
->1 : number
+>1 : 1
 
 class A {
 >A : A
@@ -21,7 +21,7 @@ class A {
 
     static foo() { return 1; }
 >foo : () => number
->1 : number
+>1 : 1
 }
 module M {
 >M : typeof M
@@ -50,23 +50,23 @@ var ResultIsString2 = typeof NUMBER1;
 var ResultIsString3 = typeof 1;
 >ResultIsString3 : string
 >typeof 1 : string
->1 : number
+>1 : 1
 
 var ResultIsString4 = typeof { x: 1, y: 2};
 >ResultIsString4 : string
 >typeof { x: 1, y: 2} : string
 >{ x: 1, y: 2} : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 
 var ResultIsString5 = typeof { x: 1, y: (n: number) => { return n; } };
 >ResultIsString5 : string
 >typeof { x: 1, y: (n: number) => { return n; } } : string
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
 >x : number
->1 : number
+>1 : 1
 >y : (n: number) => number
 >(n: number) => { return n; } : (n: number) => number
 >n : number
@@ -92,7 +92,7 @@ var ResultIsString8 = typeof NUMBER1[0];
 >typeof NUMBER1[0] : string
 >NUMBER1[0] : number
 >NUMBER1 : number[]
->0 : number
+>0 : 0
 
 var ResultIsString9 = typeof foo();
 >ResultIsString9 : string
@@ -136,7 +136,7 @@ var ResultIsString13 = typeof typeof typeof (NUMBER + NUMBER);
 // miss assignment operators
 typeof 1;
 >typeof 1 : string
->1 : number
+>1 : 1
 
 typeof NUMBER;
 >typeof NUMBER : string
@@ -199,9 +199,9 @@ var y = { a: 1, b: 2 };
 >y : { a: number; b: number; }
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
->1 : number
+>1 : 1
 >b : number
->2 : number
+>2 : 2
 
 z: typeof y.a;
 >z : any

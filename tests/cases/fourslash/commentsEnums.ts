@@ -10,17 +10,12 @@
 ////var /*4*/x = /*5*/Colors./*6*/Cornflower;
 ////x = Colors./*7*/FancyPink;
 
-goTo.marker('1');
-verify.quickInfoIs("enum Colors", "Enum of colors");
-
-goTo.marker('2');
-verify.quickInfoIs("(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'");
-
-goTo.marker('3');
-verify.quickInfoIs("(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
-
-goTo.marker('4');
-verify.quickInfoIs("var x: Colors", "");
+verify.quickInfos({
+    1: ["enum Colors", "Enum of colors"],
+    2: ["(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'"],
+    3: ["(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'"],
+    4: "var x: Colors"
+});
 
 goTo.marker('5');
 verify.completionListContains("Colors", "enum Colors", "Enum of colors");

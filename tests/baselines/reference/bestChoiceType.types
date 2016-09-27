@@ -9,7 +9,7 @@
 >''.match(/ /) || [] : RegExpMatchArray
 >''.match(/ /) : RegExpMatchArray | null
 >''.match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
->'' : string
+>'' : ""
 >match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
 >/ / : RegExp
 >[] : never[]
@@ -30,7 +30,7 @@ function f1() {
 >x : RegExpMatchArray | null
 >''.match(/ /) : RegExpMatchArray | null
 >''.match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
->'' : string
+>'' : ""
 >match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
 >/ / : RegExp
 
@@ -61,7 +61,7 @@ function f2() {
 >x : RegExpMatchArray | null
 >''.match(/ /) : RegExpMatchArray | null
 >''.match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
->'' : string
+>'' : ""
 >match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
 >/ / : RegExp
 

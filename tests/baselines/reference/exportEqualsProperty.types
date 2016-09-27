@@ -34,7 +34,7 @@ import fooLength = require("./b");
 fooLength + 1;
 >fooLength + 1 : number
 >fooLength : number
->1 : number
+>1 : 1
 
 === tests/cases/compiler/declarations.d.ts ===
 // This test is just like exportDefaultProperty, but with `export =`.
@@ -77,7 +77,7 @@ namespace A {
     export namespace B { export const b: number = 0; }
 >B : typeof B
 >b : number
->0 : number
+>0 : 0
 }
 export = A.B;
 >A.B : typeof A.B
@@ -87,6 +87,6 @@ export = A.B;
 === tests/cases/compiler/b.ts ===
 export = "foo".length;
 >"foo".length : number
->"foo" : string
+>"foo" : "foo"
 >length : number
 

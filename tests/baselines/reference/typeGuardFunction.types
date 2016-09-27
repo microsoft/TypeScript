@@ -121,7 +121,7 @@ if (isC_multipleParams(a, 0)) {
 >isC_multipleParams(a, 0) : boolean
 >isC_multipleParams : (p1: any, p2: any) => p1 is C
 >a : A
->0 : number
+>0 : 0
 
     a.propC;
 >a.propC : number

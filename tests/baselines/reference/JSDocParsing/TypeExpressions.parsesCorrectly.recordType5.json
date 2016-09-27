@@ -1,0 +1,42 @@
+{
+    "kind": "JSDocRecordType",
+    "pos": 1,
+    "end": 19,
+    "literal": {
+        "kind": "TypeLiteral",
+        "pos": 1,
+        "end": 19,
+        "members": {
+            "0": {
+                "kind": "PropertySignature",
+                "pos": 2,
+                "end": 14,
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 2,
+                    "end": 5,
+                    "text": "foo"
+                },
+                "type": {
+                    "kind": "NumberKeyword",
+                    "pos": 6,
+                    "end": 13
+                }
+            },
+            "1": {
+                "kind": "PropertySignature",
+                "pos": 14,
+                "end": 18,
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 14,
+                    "end": 18,
+                    "text": "bar"
+                }
+            },
+            "length": 2,
+            "pos": 2,
+            "end": 18
+        }
+    }
+}

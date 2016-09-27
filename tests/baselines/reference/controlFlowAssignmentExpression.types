@@ -6,9 +6,9 @@ let obj: any;
 >obj : any
 
 x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
+>"" : ""
 
 x = x.length;
 >x = x.length : number
@@ -30,9 +30,9 @@ x = true;
 >(x = "", obj).foo : any
 >(x = "", obj) : any
 >x = "", obj : any
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
+>"" : ""
 >obj : any
 >foo : any
 >(x = x.length) : number

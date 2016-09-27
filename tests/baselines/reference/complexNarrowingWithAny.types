@@ -136,7 +136,7 @@ namespace import49 {
 >NG_VALUE_ACCESSOR : String
 >new String('foo') : String
 >String : StringConstructor
->'foo' : string
+>'foo' : "foo"
 }
 
 //using a class - < 1 sec typecheck
@@ -2967,12 +2967,12 @@ class _View_AppComponent0 {
 >(1 <= requestNodeIndex) && (requestNodeIndex <= 62) : boolean
 >(1 <= requestNodeIndex) : boolean
 >1 <= requestNodeIndex : boolean
->1 : number
+>1 : 1
 >requestNodeIndex : number
 >(requestNodeIndex <= 62) : boolean
 >requestNodeIndex <= 62 : boolean
 >requestNodeIndex : number
->62 : number
+>62 : 62
 >this._FormGroupDirective_1_3 : import44.FormGroupDirective
 >this : this
 >_FormGroupDirective_1_3 : import44.FormGroupDirective
@@ -2990,12 +2990,12 @@ class _View_AppComponent0 {
 >(1 <= requestNodeIndex) && (requestNodeIndex <= 62) : boolean
 >(1 <= requestNodeIndex) : boolean
 >1 <= requestNodeIndex : boolean
->1 : number
+>1 : 1
 >requestNodeIndex : number
 >(requestNodeIndex <= 62) : boolean
 >requestNodeIndex <= 62 : boolean
 >requestNodeIndex : number
->62 : number
+>62 : 62
 >this._ControlContainer_1_4 : any
 >this : this
 >_ControlContainer_1_4 : any
@@ -3013,12 +3013,12 @@ class _View_AppComponent0 {
 >(1 <= requestNodeIndex) && (requestNodeIndex <= 62) : boolean
 >(1 <= requestNodeIndex) : boolean
 >1 <= requestNodeIndex : boolean
->1 : number
+>1 : 1
 >requestNodeIndex : number
 >(requestNodeIndex <= 62) : boolean
 >requestNodeIndex <= 62 : boolean
 >requestNodeIndex : number
->62 : number
+>62 : 62
 >this._NgControlStatusGroup_1_5 : import45.NgControlStatusGroup
 >this : this
 >_NgControlStatusGroup_1_5 : import45.NgControlStatusGroup

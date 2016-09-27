@@ -6,16 +6,16 @@ var x;
 >x : any
 
     x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : any
->1 : number
+>1 : 1
 }
 
 var y;
 >y : any
 
 switch (1) {
->1 : number
+>1 : 1
 
     case 1:
 >1 : 1
@@ -24,9 +24,9 @@ switch (1) {
 >y : any
 
         y = 1;
->y = 1 : number
+>y = 1 : 1
 >y : any
->1 : number
+>1 : 1
 
         break;
 }

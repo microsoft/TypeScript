@@ -112,7 +112,7 @@ var p2 = p.then(function (s) {
 >s : string
 
     return 34;
->34 : number
+>34 : 34
 
 } );
 

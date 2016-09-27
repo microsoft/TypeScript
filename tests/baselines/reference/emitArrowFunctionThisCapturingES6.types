@@ -4,11 +4,11 @@ var f1 = () => {
 >() => {    this.age = 10} : () => void
 
     this.age = 10
->this.age = 10 : number
+>this.age = 10 : 10
 >this.age : any
 >this : any
 >age : any
->10 : number
+>10 : 10
 
 };
 
@@ -35,11 +35,11 @@ foo(() => {
 >() => {    this.age = 100;    return true;} : () => true
 
     this.age = 100;
->this.age = 100 : number
+>this.age = 100 : 100
 >this.age : any
 >this : any
 >age : any
->100 : number
+>100 : 100
 
     return true;
 >true : true

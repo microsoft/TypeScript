@@ -75,153 +75,6 @@ namespace ts {
         return getNormalizedPathFromPathComponents(commonPathComponents);
     }
 
-    const typeReferenceExtensions = [".d.ts"];
-
-    // @internal
-    export function getEffectiveTypeRoots(options: CompilerOptions, host: { directoryExists?(directoryName: string): boolean; getCurrentDirectory?(): string; }): string[] | undefined {
-        if (options.typeRoots) {
-            return options.typeRoots;
-        }
-
-        let currentDirectory: string;
-        if (options.configFilePath) {
-            currentDirectory = getDirectoryPath(options.configFilePath);
-        }
-        else if (host.getCurrentDirectory) {
-            currentDirectory = host.getCurrentDirectory();
-        }
-
-        return currentDirectory && getDefaultTypeRoots(currentDirectory, host);
-    }
-
-    /**
-     * Returns the path to every node_modules/@types directory from some ancestor directory.
-     * Returns undefined if there are none.
-     */
-    function getDefaultTypeRoots(currentDirectory: string, host: { directoryExists?(directoryName: string): boolean; getCurrentDirectory?(): string; }): string[] | undefined {
-        if (!host.directoryExists) {
-            return [combinePaths(currentDirectory, nodeModulesAtTypes)];
-        }
-
-        let typeRoots: string[];
-
-        while (true) {
-            const atTypes = combinePaths(currentDirectory, nodeModulesAtTypes);
-            if (host.directoryExists(atTypes)) {
-                (typeRoots || (typeRoots = [])).push(atTypes);
-            }
-
-            const parent = getDirectoryPath(currentDirectory);
-            if (parent === currentDirectory) {
-                break;
-            }
-            currentDirectory = parent;
-        }
-
-        return typeRoots;
-    }
-
-    const nodeModulesAtTypes = combinePaths("node_modules", "@types");
-
-    /**
-     * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
-     * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
-     * is assumed to be the same as root directory of the project.
-     */
-    export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
-        const traceEnabled = isTraceEnabled(options, host);
-        const moduleResolutionState: ModuleResolutionState = {
-            compilerOptions: options,
-            host: host,
-            skipTsx: true,
-            traceEnabled
-        };
-
-        const typeRoots = getEffectiveTypeRoots(options, host);
-        if (traceEnabled) {
-            if (containingFile === undefined) {
-                if (typeRoots === undefined) {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_not_set, typeReferenceDirectiveName);
-                }
-                else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, typeRoots);
-                }
-            }
-            else {
-                if (typeRoots === undefined) {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_not_set, typeReferenceDirectiveName, containingFile);
-                }
-                else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, typeRoots);
-                }
-            }
-        }
-
-        const failedLookupLocations: string[] = [];
-
-        // Check primary library paths
-        if (typeRoots && typeRoots.length) {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
-            }
-            const primarySearchPaths = typeRoots;
-            for (const typeRoot of primarySearchPaths) {
-                const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
-                const candidateDirectory = getDirectoryPath(candidate);
-                const resolvedFile = loadNodeModuleFromDirectory(typeReferenceExtensions, candidate, failedLookupLocations,
-                    !directoryProbablyExists(candidateDirectory, host), moduleResolutionState);
-
-                if (resolvedFile) {
-                    if (traceEnabled) {
-                        trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, true);
-                    }
-                    return {
-                        resolvedTypeReferenceDirective: { primary: true, resolvedFileName: resolvedFile },
-                        failedLookupLocations
-                    };
-                }
-            }
-        }
-        else {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Root_directory_cannot_be_determined_skipping_primary_search_paths);
-            }
-        }
-
-        let resolvedFile: string;
-        let initialLocationForSecondaryLookup: string;
-        if (containingFile) {
-            initialLocationForSecondaryLookup = getDirectoryPath(containingFile);
-        }
-
-        if (initialLocationForSecondaryLookup !== undefined) {
-            // check secondary locations
-            if (traceEnabled) {
-                trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
-            }
-            resolvedFile = loadModuleFromNodeModules(typeReferenceDirectiveName, initialLocationForSecondaryLookup, failedLookupLocations, moduleResolutionState, /*checkOneLevel*/ false);
-            if (traceEnabled) {
-                if (resolvedFile) {
-                    trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, false);
-                }
-                else {
-                    trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
-                }
-            }
-        }
-        else {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_modules_folder);
-            }
-        }
-        return {
-            resolvedTypeReferenceDirective: resolvedFile
-                ? { primary: false, resolvedFileName: resolvedFile }
-                : undefined,
-            failedLookupLocations
-        };
-    }
-
     interface OutputFingerprint {
         hash: string;
         byteOrderMark: boolean;
@@ -353,6 +206,7 @@ namespace ts {
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
+            getEnvironmentVariable: name => getEnvironmentVariable(name, /*host*/ undefined),
             getDirectories: (path: string) => sys.getDirectories(path),
             realpath
         };
@@ -433,44 +287,6 @@ namespace ts {
             resolutions.push(result);
         }
         return resolutions;
-    }
-
-    /**
-      * Given a set of options, returns the set of type directive names
-      *   that should be included for this program automatically.
-      * This list could either come from the config file,
-      *   or from enumerating the types root + initial secondary types lookup location.
-      * More type directives might appear in the program later as a result of loading actual source files;
-      *   this list is only the set of defaults that are implicitly included.
-      */
-    export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[] {
-        // Use explicit type list from tsconfig.json
-        if (options.types) {
-            return options.types;
-        }
-
-        // Walk the primary type lookup locations
-        const result: string[] = [];
-        if (host.directoryExists && host.getDirectories) {
-            const typeRoots = getEffectiveTypeRoots(options, host);
-            if (typeRoots) {
-                for (const root of typeRoots) {
-                    if (host.directoryExists(root)) {
-                        for (const typeDirectivePath of host.getDirectories(root)) {
-                            const normalized = normalizePath(typeDirectivePath);
-                            const packageJsonPath = pathToPackageJson(combinePaths(root, normalized));
-                            // tslint:disable-next-line:no-null-keyword
-                            const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
-                            if (!isNotNeededPackage) {
-                                // Return just the type directive names
-                                result.push(getBaseFileName(normalized));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return result;
     }
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
@@ -1102,7 +918,7 @@ namespace ts {
                     return false;
                 }
 
-                function checkModifiers(modifiers: ModifiersArray): boolean {
+                function checkModifiers(modifiers: NodeArray<Modifier>): boolean {
                     if (modifiers) {
                         for (const modifier of modifiers) {
                             switch (modifier.kind) {
@@ -1186,6 +1002,17 @@ namespace ts {
             let imports: LiteralExpression[];
             let moduleAugmentations: LiteralExpression[];
 
+            // If we are importing helpers, we need to add a synthetic reference to resolve the
+            // helpers library.
+            if (options.importHelpers
+                && (options.isolatedModules || isExternalModuleFile)
+                && !file.isDeclarationFile) {
+                const externalHelpersModuleReference = <StringLiteral>createNode(SyntaxKind.StringLiteral);
+                externalHelpersModuleReference.text = externalHelpersModuleNameText;
+                externalHelpersModuleReference.parent = file;
+                imports = [externalHelpersModuleReference];
+            }
+
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
                 if (isJavaScriptFile) {
@@ -1219,7 +1046,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.ModuleDeclaration:
-                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
+                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || isDeclarationFile(file))) {
                             const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
@@ -1702,7 +1529,7 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
 
-            if (options.reactNamespace && !isIdentifier(options.reactNamespace, languageVersion)) {
+            if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
             }
 

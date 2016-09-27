@@ -81,6 +81,19 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceBetweenBrackets);
             }
 
+            // The default value of InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces is true
+            // so if the option is undefined, we should treat it as true as well
+            if (options.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces !== false) {
+                rules.push(this.globalRules.SpaceAfterOpenBrace);
+                rules.push(this.globalRules.SpaceBeforeCloseBrace);
+                rules.push(this.globalRules.NoSpaceBetweenEmptyBraceBrackets);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceAfterOpenBrace);
+                rules.push(this.globalRules.NoSpaceBeforeCloseBrace);
+                rules.push(this.globalRules.NoSpaceBetweenEmptyBraceBrackets);
+            }
+
             if (options.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces) {
                 rules.push(this.globalRules.SpaceAfterTemplateHeadAndMiddle);
                 rules.push(this.globalRules.SpaceBeforeTemplateMiddleAndTail);
@@ -122,6 +135,13 @@ namespace ts.formatting {
             if (options.placeOpenBraceOnNewLineForFunctions) {
                 rules.push(this.globalRules.NewLineBeforeOpenBraceInFunction);
                 rules.push(this.globalRules.NewLineBeforeOpenBraceInTypeScriptDeclWithBlock);
+            }
+
+            if (options.insertSpaceAfterTypeAssertion) {
+                rules.push(this.globalRules.SpaceAfterTypeAssertion);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceAfterTypeAssertion);
             }
 
             rules = rules.concat(this.globalRules.LowPriorityCommonRules);

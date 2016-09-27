@@ -8,7 +8,7 @@ const CONFIG = {
 
     foo: '',
 >foo : string
->'' : string
+>'' : ""
 
     setFoo: function(foo: string) {
 >setFoo : (foo: string) => void
@@ -38,5 +38,5 @@ const helper = function<T>(t: T[]) {
 >t.slice : (start?: number | undefined, end?: number | undefined) => T[]
 >t : T[]
 >slice : (start?: number | undefined, end?: number | undefined) => T[]
->1 : number
+>1 : 1
 }

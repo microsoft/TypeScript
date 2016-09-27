@@ -22,10 +22,10 @@ var C = (function () {
     }
     C.x = function () { return C.y; };
     C.prototype.method = function () { };
-    C.y = 1;
-    C = __decorate([
-        foo
-    ], C);
     return C;
 }());
+C.y = 1;
+C = __decorate([
+    foo
+], C);
 export default C;

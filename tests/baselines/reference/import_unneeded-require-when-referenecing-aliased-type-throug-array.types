@@ -12,7 +12,7 @@ var p = testData[0].name;
 >testData[0].name : string
 >testData[0] : ITest
 >testData : ITest[]
->0 : number
+>0 : 0
 >name : string
  
 === tests/cases/compiler/b.ts ===

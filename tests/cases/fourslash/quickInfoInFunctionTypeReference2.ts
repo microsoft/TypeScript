@@ -8,11 +8,10 @@
 ////var c: C<number>;
 ////c.map(/*3*/
 
-goTo.marker('1');
-verify.quickInfoIs('(parameter) k: string');
-
-goTo.marker('2');
-verify.quickInfoIs('(parameter) value: T');
+verify.quickInfos({
+    1: "(parameter) k: string",
+    2: "(parameter) value: T"
+});
 
 goTo.marker('3');
 verify.currentSignatureHelpIs('map(fn: (k: string, value: number, context: any) => void, context: any): void');

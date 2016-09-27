@@ -3,7 +3,7 @@ target:
 >target : any
 
 while (true) {
->true : boolean
+>true : true
 
   break target;
 >target : any

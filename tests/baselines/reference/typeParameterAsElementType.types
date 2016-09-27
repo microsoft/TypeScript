@@ -11,5 +11,5 @@ function fee<T>() {
 >arr : (string | T)[]
 >[t, ""] : (string | T)[]
 >t : T
->"" : string
+>"" : ""
 }

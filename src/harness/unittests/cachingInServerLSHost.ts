@@ -47,6 +47,7 @@ namespace ts {
                 return "";
             },
             getDirectories: (path: string) => [],
+            getEnvironmentVariable: (name: string) => "",
             readDirectory: (path: string, extension?: string[], exclude?: string[], include?: string[]): string[] => {
                 throw new Error("NYI");
             },

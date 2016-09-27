@@ -1,0 +1,98 @@
+=== tests/cases/conformance/expressions/assignmentOperator/assignmentTypeNarrowing.ts ===
+let x: string | number | boolean | RegExp;
+>x : string | number | boolean | RegExp
+>RegExp : RegExp
+
+x = "";
+>x = "" : string
+>x : string | number | boolean | RegExp
+>"" : string
+
+x; // string
+>x : string
+
+[x] = [true];
+>[x] = [true] : [boolean]
+>[x] : [string | number | boolean | RegExp]
+>x : string | number | boolean | RegExp
+>[true] : [boolean]
+>true : boolean
+
+x; // boolean
+>x : boolean
+
+[x = ""] = [1];
+>[x = ""] = [1] : [number]
+>[x = ""] : [string]
+>x = "" : string
+>x : string | number | boolean | RegExp
+>"" : string
+>[1] : [number]
+>1 : number
+
+x; // string | number
+>x : string | number
+
+({x} = {x: true});
+>({x} = {x: true}) : { x: boolean; }
+>{x} = {x: true} : { x: boolean; }
+>{x} : { x: string | number | boolean | RegExp; }
+>x : string | number | boolean | RegExp
+>{x: true} : { x: boolean; }
+>x : boolean
+>true : boolean
+
+x; // boolean
+>x : boolean
+
+({y: x} = {y: 1});
+>({y: x} = {y: 1}) : { y: number; }
+>{y: x} = {y: 1} : { y: number; }
+>{y: x} : { y: string | number | boolean | RegExp; }
+>y : string | number | boolean | RegExp
+>x : string | number | boolean | RegExp
+>{y: 1} : { y: number; }
+>y : number
+>1 : number
+
+x; // number
+>x : number
+
+({x = ""} = {x: true});
+>({x = ""} = {x: true}) : { x?: boolean; }
+>{x = ""} = {x: true} : { x?: boolean; }
+>{x = ""} : { x?: string | number | boolean | RegExp; }
+>x : string | number | boolean | RegExp
+>{x: true} : { x?: boolean; }
+>x : boolean
+>true : boolean
+
+x; // string | boolean
+>x : string | boolean
+
+({y: x = /a/} = {y: 1});
+>({y: x = /a/} = {y: 1}) : { y?: number; }
+>{y: x = /a/} = {y: 1} : { y?: number; }
+>{y: x = /a/} : { y?: RegExp; }
+>y : RegExp
+>x = /a/ : RegExp
+>x : string | number | boolean | RegExp
+>/a/ : RegExp
+>{y: 1} : { y?: number; }
+>y : number
+>1 : number
+
+x; // number | RegExp
+>x : number | RegExp
+
+let a: string[];
+>a : string[]
+
+for (x of a) {
+>x : string | number | boolean | RegExp
+>a : string[]
+
+    x; // string
+>x : string
+}
+
