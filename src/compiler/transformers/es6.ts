@@ -837,7 +837,7 @@ namespace ts {
             startLexicalEnvironment();
 
             let statementOffset = -1;
-            let thisCaptureStatus = SuperCaptureResult.NoReplacement;
+            let superCaptureStatus = SuperCaptureResult.NoReplacement;
             if (hasSynthesizedSuper) {
                 // If a super call has already been synthesized,
                 // we're going to assume that we should just transform everything after that.
@@ -854,13 +854,17 @@ namespace ts {
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
                 Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
 
-                thisCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, statementOffset);
-                if (thisCaptureStatus === SuperCaptureResult.ReplaceSuperCapture || thisCaptureStatus === SuperCaptureResult.ReplaceWithReturn) {
-                    statementOffset++;
-                }
+                superCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, statementOffset);
             }
 
-            addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
+            if (superCaptureStatus === SuperCaptureResult.NoReplacement) {
+                superCaptureStatus = addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
+            }
+
+            // The last statement expression was replaced. Skip it.
+            if (superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture || superCaptureStatus === SuperCaptureResult.ReplaceWithReturn) {
+                statementOffset++;
+            }
 
             if (constructor) {
                 const body = saveStateAndInvoke(constructor, makeTransformerForConstructorBodyAtOffset(statementOffset));
@@ -870,7 +874,7 @@ namespace ts {
             // Return `_this` unless we're sure enough that it would be pointless to add a return statement.
             // If there's a constructor that we can tell returns in enough places, then we *do not* want to add a return.
             if (extendsClauseElement
-                && thisCaptureStatus !== SuperCaptureResult.ReplaceWithReturn
+                && superCaptureStatus !== SuperCaptureResult.ReplaceWithReturn
                 && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
                 statements.push(
                     createReturn(
@@ -955,6 +959,16 @@ namespace ts {
                 );
                 const superReturnValueOrThis = createLogicalOr(superCall, actualThis);
 
+                if (!constructor) {
+                    // We must be here because the user didn't write a constructor
+                    // but we needed to call 'super()' anyway - but if that's the case,
+                    // we can just immediately return the result of a 'super()' call.
+                    statements.push(createReturn(superReturnValueOrThis));
+                    return SuperCaptureResult.ReplaceWithReturn;
+                }
+
+                // The constructor was generated for some reason.
+                // Create a captured '_this' variable.
                 statements.push(
                     createVariableStatement(
                         /*modifiers*/ undefined,
@@ -969,7 +983,11 @@ namespace ts {
                 );
 
                 enableSubstitutionsForCapturedThis();
+
+                return SuperCaptureResult.ReplaceSuperCapture;
             }
+
+            return SuperCaptureResult.NoReplacement;
         }
 
         /**
