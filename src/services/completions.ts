@@ -322,10 +322,22 @@ namespace ts.Completions {
             return result;
         }
 
+        /**
+         * Given a path ending at a directory, gets the completions for the path.
+         */
         function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
+            /*Debug.assert(fragment !== undefined);
+
+            if (fragment === "") {
+                fragment = ".";
+            } else {
+                fragment = getDirectoryPath(fragment);
+            }
+            */
+
             fragment = getDirectoryPath(fragment); // TODO: modify fragment so it respects our internal path representation?
             if (!fragment) {
-                fragment = "." + directorySeparator;
+                fragment = ".";
             }
             else {
                 fragment = ensureTrailingDirectorySeparator(fragment); // TODO: why is this necessary?

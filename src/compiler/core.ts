@@ -1015,7 +1015,9 @@ namespace ts {
         return path.replace(/\\/g, "/");
     }
 
-    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
+    /**
+     * Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
+    */
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -1074,7 +1076,7 @@ namespace ts {
 
     export function normalizePath(path: string): string {
         path = normalizeSlashes(path);
-        const rootLength = getRootLength(path);
+        const rootLength = getRootLength(path); // TODO: this expects un-slash-normalized strings. eg: 'x:\\...'
         const root = path.substr(0, rootLength);
         const normalized = getNormalizedParts(path, rootLength);
         if (normalized.length) {
@@ -1091,6 +1093,11 @@ namespace ts {
         return path.charCodeAt(path.length - 1) === directorySeparatorCharCode;
     }
 
+    /**
+     * Returns the path except for its basename. Eg:
+     * 
+     * /path/to/file.ext -> /path/to
+     */
     export function getDirectoryPath(path: Path): Path;
     export function getDirectoryPath(path: string): string;
     export function getDirectoryPath(path: string): any {
