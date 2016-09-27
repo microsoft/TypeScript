@@ -2321,6 +2321,8 @@ namespace ts {
                             printFollowingPunctuation = true;
                         }
                     }
+                    // TODO: Only print if this is directly on the type -- not on the subtype somewhere.
+                    // (This is not crucial, though, since the extra info *might* be nice.)
                     const resolved = resolveStructuredTypeMembers(type);
                     writeIndexSignature(resolved.stringIndexInfo, SyntaxKind.StringKeyword);
                     writeIndexSignature(resolved.numberIndexInfo, SyntaxKind.NumberKeyword);
@@ -4291,6 +4293,11 @@ namespace ts {
                 getIntersectionType([info1.type, info2.type]), info1.isReadonly && info2.isReadonly);
         }
 
+        function unionIndexInfos(info1: IndexInfo, info2: IndexInfo): IndexInfo {
+            return !info1 ? info2 : !info2 ? info1 : createIndexInfo(
+                getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
+        }
+
         function resolveIntersectionTypeMembers(type: IntersectionType) {
             // The members and properties collections are empty for intersection types. To get all properties of an
             // intersection type use getPropertiesOfType (only the language service uses this).
@@ -4315,8 +4322,8 @@ namespace ts {
             for (let i = type.types.length - 1; i > -1; i--) {
                 const t = type.types[i];
                 if (!t.isDeclaredProperty) {
-                    stringIndexInfo = intersectIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
-                    numberIndexInfo = intersectIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
+                    stringIndexInfo = unionIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
+                    numberIndexInfo = unionIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
                 }
             }
             setObjectTypeMembers(type, emptySymbols, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
@@ -16839,7 +16846,9 @@ namespace ts {
                 // perform property check if property or indexer is declared in 'type'
                 // this allows to rule out cases when both property and indexer are inherited from the base class
                 let errorNode: Node;
-                if (prop.valueDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol) {
+                    if (prop.valueDeclaration.name.kind === SyntaxKind.ComputedPropertyName ||
+                        prop.parent === containingType.symbol ||
+                        containingType.flags & TypeFlags.Spread) {
                     errorNode = prop.valueDeclaration;
                 }
                 else if (indexDeclaration) {
