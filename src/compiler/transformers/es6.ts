@@ -1290,8 +1290,6 @@ namespace ts {
             }
         }
 
-        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void;
-        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, originalStatement: Statement): void;
         function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, originalStatement?: Statement): void {
             enableSubstitutionsForCapturedThis();
             const captureThisStatement = createVariableStatement(
