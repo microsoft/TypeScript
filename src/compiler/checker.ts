@@ -2321,8 +2321,6 @@ namespace ts {
                             printFollowingPunctuation = true;
                         }
                     }
-                    // TODO: Only print if this is directly on the type -- not on the subtype somewhere.
-                    // (This is not crucial, though, since the extra info *might* be nice.)
                     const resolved = resolveStructuredTypeMembers(type);
                     writeIndexSignature(resolved.stringIndexInfo, SyntaxKind.StringKeyword);
                     writeIndexSignature(resolved.numberIndexInfo, SyntaxKind.NumberKeyword);
@@ -6656,23 +6654,42 @@ namespace ts {
                     }
                 }
 
-                if (source.flags & TypeFlags.Spread && target.flags & TypeFlags.Spread) {
-                    const sourceParameters = filter((source as SpreadType).types, t => !!(t.flags & TypeFlags.TypeParameter));
-                    const targetParameters = filter((target as SpreadType).types, t => !!(t.flags & TypeFlags.TypeParameter));
-                    if (sourceParameters.length !== targetParameters.length) {
-                        reportRelationError(headMessage, source, target);
-                        return Ternary.False;
+                if (source.flags & TypeFlags.Spread) {
+                    if (target.flags & TypeFlags.TypeParameter) {
+                        let hasTypeParameter = false;
+                        let typeParametersAreEqual = true;
+                        for (const t of (source as SpreadType).types) {
+                            if (t.flags & TypeFlags.TypeParameter) {
+                                hasTypeParameter = true;
+                                if (t !== target) {
+                                    typeParametersAreEqual = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (hasTypeParameter && typeParametersAreEqual) {
+                            errorInfo = saveErrorInfo;
+                            return Ternary.True;
+                        }
                     }
-                    for (let i = 0; i < sourceParameters.length; i++) {
-                        if (sourceParameters[i].symbol !== targetParameters[i].symbol) {
+                    else if (target.flags & TypeFlags.Spread) {
+                        const sourceParameters = filter((source as SpreadType).types, t => !!(t.flags & TypeFlags.TypeParameter));
+                        const targetParameters = filter((target as SpreadType).types, t => !!(t.flags & TypeFlags.TypeParameter));
+                        if (sourceParameters.length !== targetParameters.length) {
                             reportRelationError(headMessage, source, target);
                             return Ternary.False;
                         }
-                    }
-                    const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-                    if (result = objectTypeRelatedTo(source, source, target, reportStructuralErrors)) {
-                        errorInfo = saveErrorInfo;
-                        return result;
+                        for (let i = 0; i < sourceParameters.length; i++) {
+                            if (sourceParameters[i].symbol !== targetParameters[i].symbol) {
+                                reportRelationError(headMessage, source, target);
+                                return Ternary.False;
+                            }
+                        }
+                        const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
+                        if (result = objectTypeRelatedTo(source, source, target, reportStructuralErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
                     }
                 }
 
