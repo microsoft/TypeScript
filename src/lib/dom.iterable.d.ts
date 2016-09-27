@@ -5,9 +5,17 @@ interface DOMTokenList {
 }
 
 interface NodeList {
-    [Symbol.iterator](): IterableIterator<Node>
+    [Symbol.iterator](): IterableIterator<Node>;
 }
 
 interface NodeListOf<TNode extends Node> {
-    [Symbol.iterator](): IterableIterator<TNode>
+    [Symbol.iterator](): IterableIterator<TNode>;
+}
+
+interface HTMLCollection {
+    [Symbol.iterator](): IterableIterator<Element>;
+}
+
+interface HTMLCollectionOf<T extends Element> {
+    [Symbol.iterator](): IterableIterator<T>;
 }
