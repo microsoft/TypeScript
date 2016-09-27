@@ -224,7 +224,7 @@ namespace ts {
                 : visitorWorker(node);
         }
 
-        function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
+        function saveStateAndInvoke<T extends Node, U>(node: T, f: (node: T) => U): U {
             const savedEnclosingFunction = enclosingFunction;
             const savedEnclosingNonArrowFunction = enclosingNonArrowFunction;
             const savedEnclosingNonAsyncFunctionBody = enclosingNonAsyncFunctionBody;
@@ -867,7 +867,7 @@ namespace ts {
             }
 
             if (constructor) {
-                const body = saveStateAndInvoke(constructor, makeTransformerForConstructorBodyAtOffset(statementOffset));
+                const body = saveStateAndInvoke(constructor, constructor => visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
                 addRange(statements, body);
             }
 
@@ -898,10 +898,6 @@ namespace ts {
             }
 
             return block;
-        }
-
-        function makeTransformerForConstructorBodyAtOffset(offset: number): (c: ConstructorDeclaration) => NodeArray<Statement> {
-            return constructor => visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ offset);
         }
 
         /**
