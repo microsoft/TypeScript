@@ -161,7 +161,7 @@ namespace ts {
          * Callers should skip the current statement and avoid any returns of '_this'.
          */
         ReplaceWithReturn,
-}
+    }
 
     export function transformES6(context: TransformationContext) {
         const {
@@ -902,7 +902,7 @@ namespace ts {
 
         /**
          * We want to try to avoid emitting a return statement in certain cases if a user already returned something.
-         * It would be pointless and generate dead code, so we'll try to make things a little bit prettier
+         * It would generate obviously dead code, so we'll try to make things a little bit prettier
          * by doing a minimal check on whether some common patterns always explicitly return.
          */
         function isSufficientlyCoveredByReturnStatements(statement: Statement): boolean {
@@ -910,7 +910,6 @@ namespace ts {
             if (statement.kind === SyntaxKind.ReturnStatement) {
                 return true;
             }
-
             // An if-statement with two covered branches is covered.
             else if (statement.kind === SyntaxKind.IfStatement) {
                 const ifStatement = statement as IfStatement;
@@ -967,6 +966,68 @@ namespace ts {
                 // Create a captured '_this' variable.
                 captureThisForNode(statements, constructor, superReturnValueOrThis);
                 enableSubstitutionsForCapturedThis();
+                return SuperCaptureResult.ReplaceSuperCapture;
+            }
+
+            return SuperCaptureResult.NoReplacement;
+        }
+
+        /**
+         * Declares a `_this` variable for derived classes and for when arrow functions capture `this`.
+         *
+         * @returns The new statement offset into the `statements` array.
+         */
+        function declareOrCaptureOrReturnThisForConstructorIfNeeded(statements: Statement[], ctor: ConstructorDeclaration, hasExtendsClause: boolean, statementOffset: number) {
+            // If this isn't a derived class, just capture 'this' for arrow functions if necessary.
+            if (!hasExtendsClause) {
+                addCaptureThisForNodeIfNeeded(statements, ctor);
+                return SuperCaptureResult.NoReplacement;
+            }
+
+            // Most of the time, a 'super' call will be the first real statement in a constructor body.
+            // In these cases, we'd like to transform these into a *single* statement instead of a declaration
+            // followed by an assignment statement for '_this'. For instance, if we emitted without an initializer,
+            // we'd get:
+            //
+            //      var _this;
+            //      _this = _super.call(...) || this;
+            //
+            // instead of
+            //
+            //      var _this = _super.call(...) || this;
+            //
+            // Additionally, if the 'super()' call is the last statement, we should just avoid capturing
+            // entirely and immediately return the result like so:
+            //
+            //      return _super.call(...) || this;
+            //
+            let firstStatement: Statement;
+            let superCallExpression: Expression;
+
+            const ctorStatements = ctor.body.statements;
+            if (statementOffset < ctorStatements.length) {
+                firstStatement = ctorStatements[statementOffset];
+
+                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
+                    const superCall = (firstStatement as ExpressionStatement).expression as CallExpression;
+                    superCallExpression = setOriginalNode(
+                        saveStateAndInvoke(superCall, visitImmediateSuperCallInBody),
+                        superCall
+                    );
+                }
+            }
+
+            // Return the result if we have an immediate super() call on the last statement.
+            if (superCallExpression && statementOffset === ctorStatements.length - 1) {
+                statements.push(createReturn(superCallExpression));
+                return SuperCaptureResult.ReplaceWithReturn;
+            }
+
+            // Perform the capture.
+            captureThisForNode(statements, ctor, superCallExpression, firstStatement);
+
+            // If we're actually replacing the original statement, we need to signal this to the caller.
+            if (superCallExpression) {
                 return SuperCaptureResult.ReplaceSuperCapture;
             }
 
@@ -1214,68 +1275,6 @@ namespace ts {
             setNodeEmitFlags(forStatement, NodeEmitFlags.CustomPrologue);
             startOnNewLine(forStatement);
             statements.push(forStatement);
-        }
-
-        /**
-         * Declares a `_this` variable for derived classes and for when arrow functions capture `this`.
-         *
-         * @returns The new statement offset into the `statements` array.
-         */
-        function declareOrCaptureOrReturnThisForConstructorIfNeeded(statements: Statement[], ctor: ConstructorDeclaration, hasExtendsClause: boolean, statementOffset: number) {
-            // If this isn't a derived class, just capture 'this' for arrow functions if necessary.
-            if (!hasExtendsClause) {
-                addCaptureThisForNodeIfNeeded(statements, ctor);
-                return SuperCaptureResult.NoReplacement;
-            }
-
-            // Most of the time, a 'super' call will be the first real statement in a constructor body.
-            // In these cases, we'd like to transform these into a *single* statement instead of a declaration
-            // followed by an assignment statement for '_this'. For instance, if we emitted without an initializer,
-            // we'd get:
-            //
-            //      var _this;
-            //      _this = _super.call(...) || this;
-            //
-            // instead of
-            //
-            //      var _this = _super.call(...) || this;
-            //
-            // Additionally, if the 'super()' call is the last statement, we should just avoid capturing
-            // entirely and immediately return the result like so:
-            //
-            //      return _super.call(...) || this;
-            //
-            let firstStatement: Statement;
-            let superCallExpression: Expression;
-
-            const ctorStatements = ctor.body.statements;
-            if (statementOffset < ctorStatements.length) {
-                firstStatement = ctorStatements[statementOffset];
-
-                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
-                    const superCall = (firstStatement as ExpressionStatement).expression as CallExpression;
-                    superCallExpression = setOriginalNode(
-                        saveStateAndInvoke(superCall, visitImmediateSuperCallInBody),
-                        superCall
-                    );
-                }
-            }
-
-            // Return the result if we have an immediate super() call on the last statement.
-            if (superCallExpression && statementOffset === ctorStatements.length - 1) {
-                statements.push(createReturn(superCallExpression));
-                return SuperCaptureResult.ReplaceWithReturn;
-            }
-
-            // Perform the capture.
-            captureThisForNode(statements, ctor, superCallExpression, firstStatement);
-
-            // If we're actually replacing the original statement, we need to signal this to the caller.
-            if (superCallExpression) {
-                return SuperCaptureResult.ReplaceSuperCapture;
-            }
-
-            return SuperCaptureResult.NoReplacement;
         }
 
         /**
