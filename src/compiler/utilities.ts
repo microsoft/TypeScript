@@ -3700,7 +3700,7 @@ namespace ts {
             || kind === SyntaxKind.SemicolonClassElement;
     }
 
-    export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
+    export function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAssignment
             || kind === SyntaxKind.ShorthandPropertyAssignment

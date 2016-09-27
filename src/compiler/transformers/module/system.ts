@@ -288,7 +288,7 @@ namespace ts {
                 }
             }
 
-            const exportedNames: ObjectLiteralElement[] = [];
+            const exportedNames: ObjectLiteralElementLike[] = [];
             if (exportedLocalNames) {
                 for (const exportedLocalName of exportedLocalNames) {
                     // write name of exported declaration, i.e 'export var x...'
@@ -1107,7 +1107,7 @@ namespace ts {
             return false;
         }
 
-        function hasExportedReferenceInObjectDestructuringElement(node: ObjectLiteralElement): boolean {
+        function hasExportedReferenceInObjectDestructuringElement(node: ObjectLiteralElementLike): boolean {
             if (isShorthandPropertyAssignment(node)) {
                 return isExportedBinding(node.name);
             }
