@@ -482,7 +482,7 @@ function f6() {
     const { c1 = true, c2 = 0, c3 = "foo" } = { c1: false, c2: 1, c3: "bar" };
 >c1 : boolean
 >true : true
->c2 : 0 | 1
+>c2 : 1 | 0
 >0 : 0
 >c3 : "foo" | "bar"
 >"foo" : "foo"
@@ -552,10 +552,10 @@ class C2 {
 >0 : 0
     }
     bar() {
->bar : () => 0 | 1
+>bar : () => 1 | 0
 
         return cond ? 0 : 1;
->cond ? 0 : 1 : 0 | 1
+>cond ? 0 : 1 : 1 | 0
 >cond : boolean
 >0 : 0
 >1 : 1

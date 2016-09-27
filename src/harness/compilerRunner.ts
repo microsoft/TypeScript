@@ -136,9 +136,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // check errors
             it("Correct errors for " + fileName, () => {
-                if (this.errors) {
-                    Harness.Compiler.doErrorBaseline(justName, toBeCompiled.concat(otherFiles), result.errors);
-                }
+                 Harness.Compiler.doErrorBaseline(justName, toBeCompiled.concat(otherFiles), result.errors);
             });
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
