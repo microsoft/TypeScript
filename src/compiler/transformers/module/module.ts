@@ -851,7 +851,7 @@ namespace ts {
             return node;
         }
 
-        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
+        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
             const name = node.name;
             const exportedOrImportedName = substituteExpressionIdentifier(name);
             if (exportedOrImportedName !== name) {

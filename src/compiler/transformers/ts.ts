@@ -1564,7 +1564,7 @@ namespace ts {
 
         function addNewTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
-                let properties: ObjectLiteralElement[];
+                let properties: ObjectLiteralElementLike[];
                 if (shouldAddTypeMetadata(node)) {
                     (properties || (properties = [])).push(createPropertyAssignment("type", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, serializeTypeOfNode(node))));
                 }
@@ -3277,7 +3277,7 @@ namespace ts {
             return node;
         }
 
-        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
+        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) {
                 const name = node.name;
                 const exportedName = trySubstituteNamespaceExportedName(name);
