@@ -1,0 +1,51 @@
+=== tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts ===
+class C {
+>C : Symbol(C, Decl(objectSpreadIndexSignature.ts, 0, 0))
+
+    a: number;
+>a : Symbol(C.a, Decl(objectSpreadIndexSignature.ts, 0, 9))
+
+    c: boolean;
+>c : Symbol(C.c, Decl(objectSpreadIndexSignature.ts, 1, 14))
+}
+let c: { ...C, b: string, c?: string, [n: number]: string };
+>c : Symbol(c, Decl(objectSpreadIndexSignature.ts, 4, 3))
+>C : Symbol(C, Decl(objectSpreadIndexSignature.ts, 0, 0))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 4, 14))
+>c : Symbol(c, Decl(objectSpreadIndexSignature.ts, 4, 25))
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 4, 39))
+
+let n: number = c.a;
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 5, 3))
+>c.a : Symbol(C.a, Decl(objectSpreadIndexSignature.ts, 0, 9))
+>c : Symbol(c, Decl(objectSpreadIndexSignature.ts, 4, 3))
+>a : Symbol(C.a, Decl(objectSpreadIndexSignature.ts, 0, 9))
+
+let s: string = c[12];
+>s : Symbol(s, Decl(objectSpreadIndexSignature.ts, 6, 3))
+>c : Symbol(c, Decl(objectSpreadIndexSignature.ts, 4, 3))
+
+interface Indexed {
+>Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 6, 22))
+
+    [n: number]: string;
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 8, 5))
+
+    a: boolean;
+>a : Symbol(Indexed.a, Decl(objectSpreadIndexSignature.ts, 8, 24))
+}
+let i: { ...Indexed, b: string };
+>i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 11, 3))
+>Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 6, 22))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 11, 20))
+
+s = i[101];
+>s : Symbol(s, Decl(objectSpreadIndexSignature.ts, 6, 3))
+>i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 11, 3))
+
+s = i.b;
+>s : Symbol(s, Decl(objectSpreadIndexSignature.ts, 6, 3))
+>i.b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 11, 20))
+>i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 11, 3))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 11, 20))
+

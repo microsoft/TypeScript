@@ -1,0 +1,57 @@
+=== tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts ===
+class C {
+>C : C
+
+    a: number;
+>a : number
+
+    c: boolean;
+>c : boolean
+}
+let c: { ...C, b: string, c?: string, [n: number]: string };
+>c : { ...C; b: string; c?: string; [n: number]: string; }
+>C : C
+>b : string
+>c : string
+>n : number
+
+let n: number = c.a;
+>n : number
+>c.a : number
+>c : { ...C; b: string; c?: string; [n: number]: string; }
+>a : number
+
+let s: string = c[12];
+>s : string
+>c[12] : string
+>c : { ...C; b: string; c?: string; [n: number]: string; }
+>12 : 12
+
+interface Indexed {
+>Indexed : Indexed
+
+    [n: number]: string;
+>n : number
+
+    a: boolean;
+>a : boolean
+}
+let i: { ...Indexed, b: string };
+>i : { ...Indexed; b: string; [n: number]: string; }
+>Indexed : Indexed
+>b : string
+
+s = i[101];
+>s = i[101] : string
+>s : string
+>i[101] : string
+>i : { ...Indexed; b: string; [n: number]: string; }
+>101 : 101
+
+s = i.b;
+>s = i.b : string
+>s : string
+>i.b : string
+>i : { ...Indexed; b: string; [n: number]: string; }
+>b : string
+
