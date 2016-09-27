@@ -1143,10 +1143,6 @@ const _super = (function (geti, seti) {
         }
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
-            if (tryEmitConstantValue(node)) {
-                return;
-            }
-
             let indentBeforeDot = false;
             let indentAfterDot = false;
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
@@ -1156,11 +1152,13 @@ const _super = (function (geti, seti) {
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
             }
-            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
 
             emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot);
+
+            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
             write(shouldEmitDotDot ? ".." : ".");
+
             increaseIndentIf(indentAfterDot);
             emit(node.name);
             decreaseIndentIf(indentBeforeDot, indentAfterDot);
@@ -1176,17 +1174,15 @@ const _super = (function (geti, seti) {
             }
             else {
                 // check if constant enum value is integer
-                const constantValue = tryGetConstEnumValue(expression);
+                const constantValue = getConstantValue(expression);
                 // isFinite handles cases when constantValue is undefined
-                return isFinite(constantValue) && Math.floor(constantValue) === constantValue;
+                return isFinite(constantValue)
+                    && Math.floor(constantValue) === constantValue
+                    && compilerOptions.removeComments;
             }
         }
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
-            if (tryEmitConstantValue(node)) {
-                return;
-            }
-
             emitExpression(node.expression);
             write("[");
             emitExpression(node.argumentExpression);
@@ -2260,24 +2256,6 @@ const _super = (function (geti, seti) {
             }
         }
 
-        // TODO(rbuckton): Move this into a transformer
-        function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
-            const constantValue = tryGetConstEnumValue(node);
-            if (constantValue !== undefined) {
-                write(String(constantValue));
-                if (!compilerOptions.removeComments) {
-                    const propertyName = isPropertyAccessExpression(node)
-                        ? declarationNameToString(node.name)
-                        : getTextOfNode(node.argumentExpression);
-                    write(` /* ${propertyName} */`);
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
         function emitEmbeddedStatement(node: Statement) {
             if (isBlock(node)) {
                 write(" ");
@@ -2626,16 +2604,6 @@ const _super = (function (geti, seti) {
             }
 
             return getLiteralText(node, currentSourceFile, languageVersion);
-        }
-
-        function tryGetConstEnumValue(node: Node): number {
-            if (compilerOptions.isolatedModules) {
-                return undefined;
-            }
-
-            return isPropertyAccessExpression(node) || isElementAccessExpression(node)
-                ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
-                : undefined;
         }
 
         function isSingleLineEmptyBlock(block: Block) {

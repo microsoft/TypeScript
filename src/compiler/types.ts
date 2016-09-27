@@ -3156,6 +3156,7 @@ namespace ts {
         sourceMapRange?: TextRange;
         tokenSourceMapRanges?: Map<TextRange>;
         annotatedNodes?: Node[];                // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
+        constantValue?: number;
     }
 
     /* @internal */
@@ -3187,6 +3188,7 @@ namespace ts {
         AsyncFunctionBody = 1 << 21,
         ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
         CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        ConstantValue = 1 << 24,                 // The node was replaced with a constant value during substitution.
     }
 
     /* @internal */

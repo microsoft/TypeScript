@@ -42,6 +42,10 @@ namespace ts {
         context.onEmitNode = onEmitNode;
         context.onSubstituteNode = onSubstituteNode;
 
+        // Enable substitution for property/element access to emit const enum values.
+        context.enableSubstitution(SyntaxKind.PropertyAccessExpression);
+        context.enableSubstitution(SyntaxKind.ElementAccessExpression);
+
         // These variables contain state that changes as we descend into the tree.
         let currentSourceFile: SourceFile;
         let currentNamespace: ModuleDeclaration;
@@ -3294,17 +3298,15 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);
-            }
-
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) {
-                switch (node.kind) {
-                    case SyntaxKind.CallExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                    return substitutePropertyAccessExpression(<PropertyAccessExpression>node);
+                case SyntaxKind.ElementAccessExpression:
+                    return substituteElementAccessExpression(<ElementAccessExpression>node);
+                case SyntaxKind.CallExpression:
+                    if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) {
                         return substituteCallExpression(<CallExpression>node);
-                    case SyntaxKind.PropertyAccessExpression:
-                        return substitutePropertyAccessExpression(<PropertyAccessExpression>node);
-                    case SyntaxKind.ElementAccessExpression:
-                        return substituteElementAccessExpression(<ElementAccessExpression>node);
-                }
+                    }
+                    break;
             }
 
             return node;
@@ -3381,7 +3383,7 @@ namespace ts {
         }
 
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
-            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper && node.expression.kind === SyntaxKind.SuperKeyword) {
                 const flags = getSuperContainerAsyncMethodFlags();
                 if (flags) {
                     return createSuperAccessInAsyncMethod(
@@ -3392,11 +3394,11 @@ namespace ts {
                 }
             }
 
-            return node;
+            return substituteConstantValue(node);
         }
 
         function substituteElementAccessExpression(node: ElementAccessExpression) {
-            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper && node.expression.kind === SyntaxKind.SuperKeyword) {
                 const flags = getSuperContainerAsyncMethodFlags();
                 if (flags) {
                     return createSuperAccessInAsyncMethod(
@@ -3407,7 +3409,37 @@ namespace ts {
                 }
             }
 
+            return substituteConstantValue(node);
+        }
+
+        function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression): LeftHandSideExpression {
+            const constantValue = tryGetConstEnumValue(node);
+            if (constantValue !== undefined) {
+                const substitute = createLiteral(constantValue);
+                setSourceMapRange(substitute, node);
+                setCommentRange(substitute, node);
+                if (!compilerOptions.removeComments) {
+                    const propertyName = isPropertyAccessExpression(node)
+                        ? declarationNameToString(node.name)
+                        : getTextOfNode(node.argumentExpression);
+                    substitute.trailingComment = ` ${propertyName} `;
+                }
+
+                setConstantValue(node, constantValue);
+                return substitute;
+            }
+
             return node;
+        }
+
+        function tryGetConstEnumValue(node: Node): number {
+            if (compilerOptions.isolatedModules) {
+                return undefined;
+            }
+
+            return isPropertyAccessExpression(node) || isElementAccessExpression(node)
+                ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
+                : undefined;
         }
 
         function createSuperAccessInAsyncMethod(argumentExpression: Expression, flags: NodeCheckFlags, location: TextRange): LeftHandSideExpression {

@@ -2798,6 +2798,20 @@ namespace ts {
         return tokenSourceMapRanges && tokenSourceMapRanges[token];
     }
 
+    export function getConstantValue(node: Node) {
+        const emitNode = node.emitNode;
+        if (emitNode && emitNode.flags & EmitFlags.ConstantValue) {
+            return emitNode.constantValue;
+        }
+    }
+
+    export function setConstantValue(node: Node, value: number) {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.constantValue = value;
+        emitNode.flags |= EmitFlags.ConstantValue;
+        return node;
+    }
+
     export function setTextRange<T extends TextRange>(node: T, location: TextRange): T {
         if (location) {
             node.pos = location.pos;
