@@ -783,8 +783,6 @@ namespace ts {
         function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
             const constructor = getFirstConstructorWithBody(node);
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
-            const savedUseCapturedThis = useCapturedThis;
-            useCapturedThis = true;
 
             const constructorFunction =
                 createFunctionDeclaration(
@@ -802,7 +800,6 @@ namespace ts {
             if (extendsClauseElement) {
                 setNodeEmitFlags(constructorFunction, NodeEmitFlags.CapturesThis);
             }
-            useCapturedThis = savedUseCapturedThis;
             statements.push(constructorFunction);
         }
 
