@@ -30,28 +30,50 @@ let s: string = c[12];
 interface Indexed {
 >Indexed : Indexed
 
-    [n: number]: string;
->n : number
+    [n: string]: number;
+>n : string
 
-    a: boolean;
->a : boolean
+    a: number;
+>a : number
 }
-let i: { ...Indexed, b: string };
->i : { ...Indexed; b: string; [n: number]: string; }
+let i: { ...Indexed, b: number };
+>i : { ...Indexed; b: number; [n: string]: number; }
 >Indexed : Indexed
->b : string
+>b : number
 
-s = i[101];
->s = i[101] : string
->s : string
->i[101] : string
->i : { ...Indexed; b: string; [n: number]: string; }
+n = i[101];
+>n = i[101] : number
+>n : number
+>i[101] : number
+>i : { ...Indexed; b: number; [n: string]: number; }
 >101 : 101
 
-s = i.b;
->s = i.b : string
->s : string
->i.b : string
->i : { ...Indexed; b: string; [n: number]: string; }
->b : string
+n = i.b;
+>n = i.b : number
+>n : number
+>i.b : number
+>i : { ...Indexed; b: number; [n: string]: number; }
+>b : number
+
+interface Indexed2 {
+>Indexed2 : Indexed2
+
+    [n: string]: boolean;
+>n : string
+
+    c: boolean;
+>c : boolean
+}
+let ii: { ...Indexed, ...Indexed2, b: boolean, d: number };
+>ii : { ...Indexed; ...Indexed2; b: boolean; d: number; [x: string]: number | boolean; }
+>Indexed : Indexed
+>Indexed2 : Indexed2
+>b : boolean
+>d : number
+
+let nb: number | boolean = ii[1001];
+>nb : number | boolean
+>ii[1001] : number | boolean
+>ii : { ...Indexed; ...Indexed2; b: boolean; d: number; [x: string]: number | boolean; }
+>1001 : 1001
 

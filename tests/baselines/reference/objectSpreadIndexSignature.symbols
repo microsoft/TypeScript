@@ -28,24 +28,44 @@ let s: string = c[12];
 interface Indexed {
 >Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 6, 22))
 
-    [n: number]: string;
+    [n: string]: number;
 >n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 8, 5))
 
-    a: boolean;
+    a: number;
 >a : Symbol(Indexed.a, Decl(objectSpreadIndexSignature.ts, 8, 24))
 }
-let i: { ...Indexed, b: string };
+let i: { ...Indexed, b: number };
 >i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 11, 3))
 >Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 6, 22))
 >b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 11, 20))
 
-s = i[101];
->s : Symbol(s, Decl(objectSpreadIndexSignature.ts, 6, 3))
+n = i[101];
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 5, 3))
 >i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 11, 3))
 
-s = i.b;
->s : Symbol(s, Decl(objectSpreadIndexSignature.ts, 6, 3))
+n = i.b;
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 5, 3))
 >i.b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 11, 20))
 >i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 11, 3))
 >b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 11, 20))
+
+interface Indexed2 {
+>Indexed2 : Symbol(Indexed2, Decl(objectSpreadIndexSignature.ts, 13, 8))
+
+    [n: string]: boolean;
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 15, 5))
+
+    c: boolean;
+>c : Symbol(Indexed2.c, Decl(objectSpreadIndexSignature.ts, 15, 25))
+}
+let ii: { ...Indexed, ...Indexed2, b: boolean, d: number };
+>ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 18, 3))
+>Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 6, 22))
+>Indexed2 : Symbol(Indexed2, Decl(objectSpreadIndexSignature.ts, 13, 8))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 18, 34))
+>d : Symbol(d, Decl(objectSpreadIndexSignature.ts, 18, 46))
+
+let nb: number | boolean = ii[1001];
+>nb : Symbol(nb, Decl(objectSpreadIndexSignature.ts, 19, 3))
+>ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 18, 3))
 
