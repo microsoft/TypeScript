@@ -1116,7 +1116,7 @@ namespace ts.server {
         private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): protocol.NavtoItem[] | NavigateToItem[] {
             const projects = this.getProjects(args);
 
-            const fileName = args.currentFileOnly ? args.file && normalizeSlashes(args.file) : undefined
+            const fileName = args.currentFileOnly ? args.file && normalizeSlashes(args.file) : undefined;
             if (simplifiedResult) {
                 return combineProjectOutput(
                     projects,
@@ -1329,8 +1329,8 @@ namespace ts.server {
                 return this.requiredResponse(this.getTypeDefinition(request.arguments));
             },
             [CommandNames.Implementation]: (request: protocol.Request) => {
-                return this.requiredResponse(this.getImplementation(request.arguments))
-            },            
+                return this.requiredResponse(this.getImplementation(request.arguments));
+            },
             [CommandNames.References]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ true));
             },

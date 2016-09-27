@@ -1152,7 +1152,7 @@ namespace ts {
     export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
         return !isRootedDiskPath(absoluteOrRelativePath)
             ? absoluteOrRelativePath
-            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /* isAbsolutePathAnUrl */ false);
+            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
     }
 
     function normalizedPathComponents(path: string, rootLength: number) {
