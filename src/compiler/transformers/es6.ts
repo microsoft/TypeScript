@@ -965,21 +965,8 @@ namespace ts {
 
                 // The constructor was generated for some reason.
                 // Create a captured '_this' variable.
-                statements.push(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList([
-                            createVariableDeclaration(
-                                "_this",
-                                /*type*/ undefined,
-                                superReturnValueOrThis
-                            )
-                        ]),
-                    /*location*/ extendsClauseElement)
-                );
-
+                captureThisForNode(statements, constructor, superReturnValueOrThis);
                 enableSubstitutionsForCapturedThis();
-
                 return SuperCaptureResult.ReplaceSuperCapture;
             }
 
