@@ -149,6 +149,11 @@ namespace ts {
         fileExists?(path: string): boolean;
 
         /*
+         * LS host can optionally implement these methods to support automatic updating when new type libraries are installed
+         */
+        getTypeRootsVersion?(): number;
+ 
+        /*
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.

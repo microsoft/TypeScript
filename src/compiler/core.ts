@@ -1889,6 +1889,78 @@ namespace ts {
             : ((fileName) => fileName.toLowerCase());
     }
 
+    /**
+     * patternStrings contains both pattern strings (containing "*") and regular strings.
+     * Return an exact match if possible, or a pattern match, or undefined.
+     * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
+     */
+    /* @internal */
+    export function matchPatternOrExact(patternStrings: string[], candidate: string): string | Pattern | undefined {
+        const patterns: Pattern[] = [];
+        for (const patternString of patternStrings) {
+            const pattern = tryParsePattern(patternString);
+            if (pattern) {
+                patterns.push(pattern);
+            }
+            else if (patternString === candidate) {
+                // pattern was matched as is - no need to search further
+                return patternString;
+            }
+        }
+
+        return findBestPatternMatch(patterns, _ => _, candidate);
+    }
+
+    /* @internal */
+    export function patternText({prefix, suffix}: Pattern): string {
+        return `${prefix}*${suffix}`;
+    }
+
+    /**
+     * Given that candidate matches pattern, returns the text matching the '*'.
+     * E.g.: matchedText(tryParsePattern("foo*baz"), "foobarbaz") === "bar"
+     */
+    /* @internal */
+    export function matchedText(pattern: Pattern, candidate: string): string {
+        Debug.assert(isPatternMatch(pattern, candidate));
+        return candidate.substr(pattern.prefix.length, candidate.length - pattern.suffix.length);
+    }
+
+    /** Return the object corresponding to the best pattern to match `candidate`. */
+    /* @internal */
+    export function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined {
+        let matchedValue: T | undefined = undefined;
+        // use length of prefix as betterness criteria
+        let longestMatchPrefixLength = -1;
+
+        for (const v of values) {
+            const pattern = getPattern(v);
+            if (isPatternMatch(pattern, candidate) && pattern.prefix.length > longestMatchPrefixLength) {
+                longestMatchPrefixLength = pattern.prefix.length;
+                matchedValue = v;
+            }
+        }
+
+        return matchedValue;
+    }
+
+    function isPatternMatch({prefix, suffix}: Pattern, candidate: string) {
+        return candidate.length >= prefix.length + suffix.length &&
+            startsWith(candidate, prefix) &&
+            endsWith(candidate, suffix);
+    }
+
+    /* @internal */
+    export function tryParsePattern(pattern: string): Pattern | undefined {
+        // This should be verified outside of here and a proper error thrown.
+        Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
+        const indexOfStar = pattern.indexOf("*");
+        return indexOfStar === -1 ? undefined : {
+            prefix: pattern.substr(0, indexOfStar),
+            suffix: pattern.substr(indexOfStar + 1)
+        };
+    }
+
     export function positionIsSynthesized(pos: number): boolean {
         // This is a fast way of testing the following conditions:
         //  pos === undefined || pos === null || isNaN(pos) || pos < 0;

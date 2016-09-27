@@ -945,6 +945,8 @@ namespace ts {
         let program: Program;
         let lastProjectVersion: string;
 
+        let lastTypesRootVersion = 0;
+
         const useCaseSensitivefileNames = false;
         const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
@@ -991,6 +993,13 @@ namespace ts {
 
                     lastProjectVersion = hostProjectVersion;
                 }
+            }
+
+            const typeRootsVersion = host.getTypeRootsVersion ? host.getTypeRootsVersion() : 0;
+            if (lastTypesRootVersion !== typeRootsVersion) {
+                log("TypeRoots version has changed; provide new program");
+                program = undefined;
+                lastTypesRootVersion = typeRootsVersion;
             }
 
             // Get a fresh cache of the host information
