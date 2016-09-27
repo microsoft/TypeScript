@@ -44,8 +44,7 @@ var Shape;
 var Path = (function (_super) {
     __extends(Path, _super);
     function Path() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Path;
 }(Shape));

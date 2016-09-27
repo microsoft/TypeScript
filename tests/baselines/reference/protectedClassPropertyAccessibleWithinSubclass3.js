@@ -30,8 +30,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Derived.prototype.method1 = function () {
         this.x; // OK, accessed within a subclass of the declaring class

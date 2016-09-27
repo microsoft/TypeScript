@@ -43,8 +43,7 @@ var Base = (function () {
 var A = (function (_super) {
     __extends(A, _super);
     function A() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return A;
 }(Base));

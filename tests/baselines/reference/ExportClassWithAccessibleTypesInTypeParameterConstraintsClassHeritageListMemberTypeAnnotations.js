@@ -38,8 +38,7 @@ var A;
     var Point3d = (function (_super) {
         __extends(Point3d, _super);
         function Point3d() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return Point3d;
     }(Point));

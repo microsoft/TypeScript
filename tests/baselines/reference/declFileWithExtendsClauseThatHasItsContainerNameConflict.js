@@ -45,8 +45,7 @@ var A;
             var ContextMenu = (function (_super) {
                 __extends(ContextMenu, _super);
                 function ContextMenu() {
-                    var _this = _super.apply(this, arguments) || this;
-                    return _this;
+                    return _super.apply(this, arguments) || this;
                 }
                 return ContextMenu;
             }(B.EventManager));

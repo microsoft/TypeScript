@@ -13,8 +13,7 @@ var X;
     var MyPromise = (function (_super) {
         __extends(MyPromise, _super);
         function MyPromise() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return MyPromise;
     }(Promise));

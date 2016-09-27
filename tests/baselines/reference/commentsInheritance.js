@@ -258,8 +258,7 @@ c2_i = c3_i;
 var c4 = (function (_super) {
     __extends(c4, _super);
     function c4() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return c4;
 }(c2));

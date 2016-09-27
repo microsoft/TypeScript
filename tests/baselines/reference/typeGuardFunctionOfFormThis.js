@@ -161,8 +161,7 @@ var RoyalGuard = (function () {
 var LeadGuard = (function (_super) {
     __extends(LeadGuard, _super);
     function LeadGuard() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     LeadGuard.prototype.lead = function () { };
     ;
@@ -171,8 +170,7 @@ var LeadGuard = (function (_super) {
 var FollowerGuard = (function (_super) {
     __extends(FollowerGuard, _super);
     function FollowerGuard() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     FollowerGuard.prototype.follow = function () { };
     ;
@@ -226,8 +224,7 @@ var ArrowGuard = (function () {
 var ArrowElite = (function (_super) {
     __extends(ArrowElite, _super);
     function ArrowElite() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     ArrowElite.prototype.defend = function () { };
     return ArrowElite;
@@ -235,8 +232,7 @@ var ArrowElite = (function (_super) {
 var ArrowMedic = (function (_super) {
     __extends(ArrowMedic, _super);
     function ArrowMedic() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     ArrowMedic.prototype.heal = function () { };
     return ArrowMedic;
@@ -270,8 +266,7 @@ var MimicGuard = (function () {
 var MimicLeader = (function (_super) {
     __extends(MimicLeader, _super);
     function MimicLeader() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     MimicLeader.prototype.lead = function () { };
     return MimicLeader;
@@ -279,8 +274,7 @@ var MimicLeader = (function (_super) {
 var MimicFollower = (function (_super) {
     __extends(MimicFollower, _super);
     function MimicFollower() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     MimicFollower.prototype.follow = function () { };
     return MimicFollower;

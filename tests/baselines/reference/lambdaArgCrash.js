@@ -56,8 +56,7 @@ var Event = (function () {
 var ItemSetEvent = (function (_super) {
     __extends(ItemSetEvent, _super);
     function ItemSetEvent() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     ItemSetEvent.prototype.add = function (listener) {
         _super.prototype.add.call(this, listener);

@@ -27,16 +27,14 @@ var Animal = (function () {
 var Cat = (function (_super) {
     __extends(Cat, _super);
     function Cat() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Cat;
 }(Animal));
 var Dog = (function (_super) {
     __extends(Dog, _super);
     function Dog() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Dog;
 }(Animal));

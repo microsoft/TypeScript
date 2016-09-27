@@ -92,8 +92,7 @@ var WrongTypeAccessor = (function () {
 var WrongTypeAccessorImpl = (function (_super) {
     __extends(WrongTypeAccessorImpl, _super);
     function WrongTypeAccessorImpl() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Object.defineProperty(WrongTypeAccessorImpl.prototype, "num", {
         get: function () { return "nope, wrong"; },

@@ -24,24 +24,21 @@ var __extends = (this && this.__extends) || function (d, b) {
 var C1 = (function (_super) {
     __extends(C1, _super);
     function C1() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return C1;
 }(M.I1));
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return C2;
 }(M.I2));
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return D;
 }(Mod.Nested.I));

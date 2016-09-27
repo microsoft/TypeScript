@@ -23,8 +23,7 @@ var a = (function () {
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     b.x = function () {
         return new b().x;

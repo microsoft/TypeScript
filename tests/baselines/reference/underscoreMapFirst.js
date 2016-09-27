@@ -57,8 +57,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var MyView = (function (_super) {
     __extends(MyView, _super);
     function MyView() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     MyView.prototype.getDataSeries = function () {
         var data = this.model.get("data");

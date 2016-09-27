@@ -36,8 +36,7 @@ var Model = (function () {
 var MyView = (function (_super) {
     __extends(MyView, _super);
     function MyView() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return MyView;
 }(View));

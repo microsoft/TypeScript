@@ -300,8 +300,7 @@ function f6() {
         var B = (function (_super) {
             __extends(B, _super);
             function B() {
-                var _this = _super.apply(this, arguments) || this;
-                return _this;
+                return _super.apply(this, arguments) || this;
             }
             return B;
         }(A));
@@ -309,8 +308,7 @@ function f6() {
             var C = (function (_super) {
                 __extends(C, _super);
                 function C() {
-                    var _this = _super.apply(this, arguments) || this;
-                    return _this;
+                    return _super.apply(this, arguments) || this;
                 }
                 return C;
             }(B));

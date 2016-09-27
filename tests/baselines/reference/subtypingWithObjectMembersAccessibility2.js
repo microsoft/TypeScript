@@ -76,8 +76,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
@@ -91,8 +90,7 @@ var ExplicitPublic;
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return B;
     }(A));
@@ -104,8 +102,7 @@ var ExplicitPublic;
     var B2 = (function (_super) {
         __extends(B2, _super);
         function B2() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return B2;
     }(A2));
@@ -117,8 +114,7 @@ var ExplicitPublic;
     var B3 = (function (_super) {
         __extends(B3, _super);
         function B3() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return B3;
     }(A3));
@@ -133,8 +129,7 @@ var ImplicitPublic;
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return B;
     }(A));
@@ -146,8 +141,7 @@ var ImplicitPublic;
     var B2 = (function (_super) {
         __extends(B2, _super);
         function B2() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return B2;
     }(A2));
@@ -159,8 +153,7 @@ var ImplicitPublic;
     var B3 = (function (_super) {
         __extends(B3, _super);
         function B3() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return B3;
     }(A3));

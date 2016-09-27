@@ -116,24 +116,21 @@ var SomeBase = (function () {
 var SomeDerived1 = (function (_super) {
     __extends(SomeDerived1, _super);
     function SomeDerived1() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return SomeDerived1;
 }(SomeBase));
 var SomeDerived2 = (function (_super) {
     __extends(SomeDerived2, _super);
     function SomeDerived2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return SomeDerived2;
 }(SomeBase));
 var SomeDerived3 = (function (_super) {
     __extends(SomeDerived3, _super);
     function SomeDerived3() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return SomeDerived3;
 }(SomeBase));

@@ -16,8 +16,7 @@ var x = new foo(); // can be used as a constructor function
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return C;
 }(foo)); // error, cannot extend it though

@@ -53,8 +53,7 @@ var Foo = (function () {
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Bar.prototype.classBarMethod = function () {
         return this;

@@ -43,8 +43,7 @@ var Backbone = require("./aliasUsageInOrExpression_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return VisualizationModel;
 }(Backbone.Model));

@@ -31,8 +31,7 @@ define(["require", "exports"], function (require, exports) {
     var Test1 = (function (_super) {
         __extends(Test1, _super);
         function Test1() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return Test1;
     }(C1));

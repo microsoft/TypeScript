@@ -120,8 +120,7 @@ var Base = (function () {
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Derived1.prototype.method1 = function () {
         var b;
@@ -140,8 +139,7 @@ var Derived1 = (function (_super) {
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Derived2.prototype.method2 = function () {
         var b;
@@ -160,8 +158,7 @@ var Derived2 = (function (_super) {
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Derived3.prototype.method3 = function () {
         var b;
@@ -180,8 +177,7 @@ var Derived3 = (function (_super) {
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Derived4.prototype.method4 = function () {
         var b;

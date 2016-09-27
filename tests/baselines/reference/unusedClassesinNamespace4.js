@@ -36,8 +36,7 @@ var Validation;
     var c3 = (function (_super) {
         __extends(c3, _super);
         function c3() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return c3;
     }(c1));

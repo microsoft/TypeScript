@@ -51,24 +51,21 @@ var Symbol = (function () {
 var InferenceSymbol = (function (_super) {
     __extends(InferenceSymbol, _super);
     function InferenceSymbol() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return InferenceSymbol;
 }(Symbol));
 var ParameterSymbol = (function (_super) {
     __extends(ParameterSymbol, _super);
     function ParameterSymbol() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return ParameterSymbol;
 }(InferenceSymbol));
 var TypeSymbol = (function (_super) {
     __extends(TypeSymbol, _super);
     function TypeSymbol() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return TypeSymbol;
 }(InferenceSymbol));

@@ -57,8 +57,7 @@ var F = (function () {
 var SuperObjectTest = (function (_super) {
     __extends(SuperObjectTest, _super);
     function SuperObjectTest() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     SuperObjectTest.prototype.testing = function () {
         var test = {

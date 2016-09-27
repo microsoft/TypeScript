@@ -84,24 +84,21 @@ var m1;
     var m1_C1_private = (function (_super) {
         __extends(m1_C1_private, _super);
         function m1_C1_private() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return m1_C1_private;
     }(m1_c_public));
     var m1_C2_private = (function (_super) {
         __extends(m1_C2_private, _super);
         function m1_C2_private() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return m1_C2_private;
     }(m1_c_private));
     var m1_C3_public = (function (_super) {
         __extends(m1_C3_public, _super);
         function m1_C3_public() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return m1_C3_public;
     }(m1_c_public));
@@ -109,8 +106,7 @@ var m1;
     var m1_C4_public = (function (_super) {
         __extends(m1_C4_public, _super);
         function m1_C4_public() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return m1_C4_public;
     }(m1_c_private));
@@ -140,24 +136,21 @@ var m1;
     var m1_C9_private = (function (_super) {
         __extends(m1_C9_private, _super);
         function m1_C9_private() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return m1_C9_private;
     }(m1_c_public));
     var m1_C10_private = (function (_super) {
         __extends(m1_C10_private, _super);
         function m1_C10_private() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return m1_C10_private;
     }(m1_c_private));
     var m1_C11_public = (function (_super) {
         __extends(m1_C11_public, _super);
         function m1_C11_public() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return m1_C11_public;
     }(m1_c_public));
@@ -165,8 +158,7 @@ var m1;
     var m1_C12_public = (function (_super) {
         __extends(m1_C12_public, _super);
         function m1_C12_public() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return m1_C12_public;
     }(m1_c_private));
@@ -182,8 +174,7 @@ var glo_c_public = (function () {
 var glo_C3_public = (function (_super) {
     __extends(glo_C3_public, _super);
     function glo_C3_public() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return glo_C3_public;
 }(glo_c_public));
@@ -195,8 +186,7 @@ var glo_C7_public = (function () {
 var glo_C11_public = (function (_super) {
     __extends(glo_C11_public, _super);
     function glo_C11_public() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return glo_C11_public;
 }(glo_c_public));

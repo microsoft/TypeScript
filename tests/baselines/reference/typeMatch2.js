@@ -65,8 +65,7 @@ var Animal = (function () {
 var Giraffe = (function (_super) {
     __extends(Giraffe, _super);
     function Giraffe() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Giraffe;
 }(Animal));

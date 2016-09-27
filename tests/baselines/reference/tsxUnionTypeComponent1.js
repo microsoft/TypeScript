@@ -35,8 +35,7 @@ var React = require("react");
 var MyComponent = (function (_super) {
     __extends(MyComponent, _super);
     function MyComponent() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     MyComponent.prototype.render = function () {
         var AnyComponent = this.props.AnyComponent;
@@ -50,8 +49,7 @@ React.createElement(MyComponent, { AnyComponent: function () { return React.crea
 var MyButtonComponent = (function (_super) {
     __extends(MyButtonComponent, _super);
     function MyButtonComponent() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return MyButtonComponent;
 }(React.Component));

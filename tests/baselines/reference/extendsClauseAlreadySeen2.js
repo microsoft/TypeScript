@@ -20,8 +20,7 @@ var C = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     D.prototype.baz = function () { };
     return D;

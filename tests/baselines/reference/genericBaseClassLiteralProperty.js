@@ -26,8 +26,7 @@ var BaseClass = (function () {
 var SubClass = (function (_super) {
     __extends(SubClass, _super);
     function SubClass() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     SubClass.prototype.Error = function () {
         var x = this._getValue1();

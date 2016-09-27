@@ -52,8 +52,7 @@ var MsPortal;
                 var ViewModel = (function (_super) {
                     __extends(ViewModel, _super);
                     function ViewModel() {
-                        var _this = _super.apply(this, arguments) || this;
-                        return _this;
+                        return _super.apply(this, arguments) || this;
                     }
                     return ViewModel;
                 }(ItemValue));

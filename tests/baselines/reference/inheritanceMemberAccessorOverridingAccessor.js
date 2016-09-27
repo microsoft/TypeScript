@@ -40,8 +40,7 @@ var a = (function () {
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Object.defineProperty(b.prototype, "x", {
         get: function () {

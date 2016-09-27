@@ -18,8 +18,7 @@ var m;
     var child = (function (_super) {
         __extends(child, _super);
         function child() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return child;
     }(base));

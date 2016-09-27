@@ -19,8 +19,7 @@ var Alpha;
 var Beta = (function (_super) {
     __extends(Beta, _super);
     function Beta() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Beta;
 }(Alpha.x));

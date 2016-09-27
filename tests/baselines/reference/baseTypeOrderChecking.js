@@ -51,8 +51,7 @@ var Class1 = (function () {
 var Class2 = (function (_super) {
     __extends(Class2, _super);
     function Class2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Class2;
 }(Class1));
@@ -64,8 +63,7 @@ var Class3 = (function () {
 var Class4 = (function (_super) {
     __extends(Class4, _super);
     function Class4() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Class4;
 }(Class3));

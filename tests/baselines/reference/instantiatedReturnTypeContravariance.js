@@ -47,8 +47,7 @@ var c = (function () {
 var d = (function (_super) {
     __extends(d, _super);
     function d() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     d.prototype.foo = function () {
         return null;

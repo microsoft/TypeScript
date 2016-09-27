@@ -32,8 +32,7 @@ var Bbb = (function () {
 var Aaa = (function (_super) {
     __extends(Aaa, _super);
     function Aaa() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Aaa;
 }(Bbb));

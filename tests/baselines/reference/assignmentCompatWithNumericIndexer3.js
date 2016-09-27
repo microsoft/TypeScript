@@ -59,8 +59,7 @@ b = a; // ok
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return B2;
 }(A));

@@ -63,8 +63,7 @@ var baz = (function () {
 var foo = (function (_super) {
     __extends(foo, _super);
     function foo() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     foo.prototype.bar = function () { return undefined; };
     ;

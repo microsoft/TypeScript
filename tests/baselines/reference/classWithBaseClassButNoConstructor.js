@@ -54,8 +54,7 @@ var Base = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return C;
 }(Base));
@@ -70,8 +69,7 @@ var Base2 = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return D;
 }(Base2));
@@ -82,8 +80,7 @@ var d2 = new D(1); // ok
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return D2;
 }(Base2));
@@ -93,8 +90,7 @@ var d4 = new D(1); // ok
 var D3 = (function (_super) {
     __extends(D3, _super);
     function D3() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return D3;
 }(Base2));

@@ -51,8 +51,7 @@ System.register(["tslib", "./a"], function (exports_1, context_1) {
             B = (function (_super) {
                 tslib_1.__extends(B, _super);
                 function B() {
-                    var _this = _super.apply(this, arguments) || this;
-                    return _this;
+                    return _super.apply(this, arguments) || this;
                 }
                 return B;
             }(a_1.A));

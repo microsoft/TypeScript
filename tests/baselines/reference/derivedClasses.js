@@ -39,8 +39,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var Red = (function (_super) {
     __extends(Red, _super);
     function Red() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Red.prototype.shade = function () {
         var _this = this;
@@ -59,8 +58,7 @@ var Color = (function () {
 var Blue = (function (_super) {
     __extends(Blue, _super);
     function Blue() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Blue.prototype.shade = function () {
         var _this = this;

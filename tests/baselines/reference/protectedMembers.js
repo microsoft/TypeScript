@@ -137,8 +137,7 @@ var C1 = (function () {
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     C2.prototype.f = function () {
         return _super.prototype.f.call(this) + this.x;
@@ -152,8 +151,7 @@ var C2 = (function (_super) {
 var C3 = (function (_super) {
     __extends(C3, _super);
     function C3() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     C3.prototype.f = function () {
         return _super.prototype.f.call(this);
@@ -189,16 +187,14 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     C.foo = function (a, b, c, d, e) {
         a.x = 1; // Error, access must be through C or type derived from C
@@ -212,8 +208,7 @@ var C = (function (_super) {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return D;
 }(C));
@@ -244,8 +239,7 @@ var A2 = (function () {
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return B2;
 }(A2));
@@ -258,8 +252,7 @@ var A3 = (function () {
 var B3 = (function (_super) {
     __extends(B3, _super);
     function B3() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return B3;
 }(A3));

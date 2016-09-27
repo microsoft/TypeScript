@@ -28,8 +28,7 @@ var BaseEvent = (function () {
 var MyEvent = (function (_super) {
     __extends(MyEvent, _super);
     function MyEvent() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return MyEvent;
 }(BaseEvent));
@@ -41,8 +40,7 @@ var BaseEventWrapper = (function () {
 var MyEventWrapper = (function (_super) {
     __extends(MyEventWrapper, _super);
     function MyEventWrapper() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return MyEventWrapper;
 }(BaseEventWrapper));

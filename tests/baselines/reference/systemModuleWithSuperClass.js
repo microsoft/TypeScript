@@ -49,8 +49,7 @@ System.register(["./foo"], function (exports_1, context_1) {
             Bar = (function (_super) {
                 __extends(Bar, _super);
                 function Bar() {
-                    var _this = _super.apply(this, arguments) || this;
-                    return _this;
+                    return _super.apply(this, arguments) || this;
                 }
                 return Bar;
             }(foo_1.Foo));

@@ -147,16 +147,14 @@ var C = (function () {
 var PA = (function (_super) {
     __extends(PA, _super);
     function PA() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return PA;
 }(A));
 var PB = (function (_super) {
     __extends(PB, _super);
     function PB() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return PB;
 }(B));

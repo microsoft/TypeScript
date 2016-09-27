@@ -128,8 +128,7 @@ var Test;
     var Directory = (function (_super) {
         __extends(Directory, _super);
         function Directory() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return Directory;
     }(FileSystemObject));

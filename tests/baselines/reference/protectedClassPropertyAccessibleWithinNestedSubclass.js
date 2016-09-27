@@ -52,8 +52,7 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     Object.defineProperty(C.prototype, "y", {
         get: function () { return this.x; },
@@ -94,8 +93,7 @@ var C = (function (_super) {
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return E;
 }(C));

@@ -81,16 +81,14 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return Derived2;
 }(Derived));
@@ -104,8 +102,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
@@ -117,8 +114,7 @@ var A2 = (function () {
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return B2;
 }(A2));
@@ -130,8 +126,7 @@ var A3 = (function () {
 var B3 = (function (_super) {
     __extends(B3, _super);
     function B3() {
-        var _this = _super.apply(this, arguments) || this;
-        return _this;
+        return _super.apply(this, arguments) || this;
     }
     return B3;
 }(A3));
@@ -145,8 +140,7 @@ var TwoLevels;
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return B;
     }(A));
@@ -158,8 +152,7 @@ var TwoLevels;
     var B2 = (function (_super) {
         __extends(B2, _super);
         function B2() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return B2;
     }(A2));
@@ -171,8 +164,7 @@ var TwoLevels;
     var B3 = (function (_super) {
         __extends(B3, _super);
         function B3() {
-            var _this = _super.apply(this, arguments) || this;
-            return _this;
+            return _super.apply(this, arguments) || this;
         }
         return B3;
     }(A3));

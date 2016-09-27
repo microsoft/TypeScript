@@ -35,8 +35,7 @@ var X;
             var W = (function (_super) {
                 __extends(W, _super);
                 function W() {
-                    var _this = _super.apply(this, arguments) || this;
-                    return _this;
+                    return _super.apply(this, arguments) || this;
                 }
                 return W;
             }(A.B.Base.W));
@@ -55,8 +54,7 @@ var X;
                 var W = (function (_super) {
                     __extends(W, _super);
                     function W() {
-                        var _this = _super.apply(this, arguments) || this;
-                        return _this;
+                        return _super.apply(this, arguments) || this;
                     }
                     return W;
                 }(X.Y.base.W));
