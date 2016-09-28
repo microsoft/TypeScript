@@ -15,8 +15,6 @@
 //// /*h1*/
 // @Filename: dir1/dir2/h2.ts
 //// /*h2*/
-// @Filename: dir1/dir2/.hidden.ts
-//// /*hidden*/
 // @Filename: dir1/dir2/dir3/i1.ts
 //// /*i1*/
 // @Filename: dir1/dir2/dir3/i2.ts
@@ -65,14 +63,12 @@ function workingDirCompletions() {
         goTo.marker(m);
         verify.completionListContains("h1.ts");
         verify.completionListContains("h2.ts");
-        verify.completionListContains(".hidden.ts");
         verify.completionListContains("dir3");
-        verify.not.completionListItemsCountIsGreaterThan(4);
+        verify.not.completionListItemsCountIsGreaterThan(3);
     }
 
     goTo.marker("1");
-    verify.completionListContains(".hidden.ts");
-    verify.not.completionListItemsCountIsGreaterThan(1);
+    verify.not.completionListItemsCountIsGreaterThan(0);
 
     goTo.marker("2");
     verify.not.completionListItemsCountIsGreaterThan(0);
