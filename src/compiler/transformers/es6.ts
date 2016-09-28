@@ -837,7 +837,6 @@ namespace ts {
             startLexicalEnvironment();
 
             let statementOffset = -1;
-            let superCaptureStatus = SuperCaptureResult.NoReplacement;
             if (hasSynthesizedSuper) {
                 // If a super call has already been synthesized,
                 // we're going to assume that we should just transform everything after that.
@@ -854,12 +853,9 @@ namespace ts {
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
                 Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
 
-                superCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, statementOffset);
             }
 
-            if (superCaptureStatus === SuperCaptureResult.NoReplacement) {
-                superCaptureStatus = addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
-            }
+            const superCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, hasSynthesizedSuper, statementOffset);
 
             // The last statement expression was replaced. Skip it.
             if (superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture || superCaptureStatus === SuperCaptureResult.ReplaceWithReturn) {
@@ -930,58 +926,39 @@ namespace ts {
         }
 
         /**
-         * Adds a synthesized call to `_super` if it is needed.
-         *
-         * @param statements The statements for the new constructor body.
-         * @param constructor The constructor for the class.
-         * @param extendsClauseElement The expression for the class `extends` clause.
-         * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
-         *                            synthesized `super` call.
-         */
-        function addDefaultSuperCallIfNeeded(statements: Statement[], constructor: ConstructorDeclaration, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
-            // If the TypeScript transformer needed to synthesize a constructor for property
-            // initializers, it would have also added a synthetic `...args` parameter and
-            // `super` call.
-            // If this is the case, or if the class has an `extends` clause but no
-            // constructor, we emit a synthesized call to `_super`.
-            if (constructor ? hasSynthesizedSuper : extendsClauseElement) {
-                const actualThis = createThis();
-                setNodeEmitFlags(actualThis, NodeEmitFlags.NoSubstitution);
-                const superCall = createFunctionApply(
-                    createIdentifier("_super"),
-                    actualThis,
-                    createIdentifier("arguments"),
-                );
-                const superReturnValueOrThis = createLogicalOr(superCall, actualThis);
-
-                if (!constructor) {
-                    // We must be here because the user didn't write a constructor
-                    // but we needed to call 'super()' anyway - but if that's the case,
-                    // we can just immediately return the result of a 'super()' call.
-                    statements.push(createReturn(superReturnValueOrThis));
-                    return SuperCaptureResult.ReplaceWithReturn;
-                }
-
-                // The constructor was generated for some reason.
-                // Create a captured '_this' variable.
-                captureThisForNode(statements, constructor, superReturnValueOrThis);
-                enableSubstitutionsForCapturedThis();
-                return SuperCaptureResult.ReplaceSuperCapture;
-            }
-
-            return SuperCaptureResult.NoReplacement;
-        }
-
-        /**
          * Declares a `_this` variable for derived classes and for when arrow functions capture `this`.
          *
          * @returns The new statement offset into the `statements` array.
          */
-        function declareOrCaptureOrReturnThisForConstructorIfNeeded(statements: Statement[], ctor: ConstructorDeclaration, hasExtendsClause: boolean, statementOffset: number) {
+        function declareOrCaptureOrReturnThisForConstructorIfNeeded(
+                    statements: Statement[],
+                    ctor: ConstructorDeclaration | undefined,
+                    hasExtendsClause: boolean,
+                    hasSynthesizedSuper: boolean,
+                    statementOffset: number) {
             // If this isn't a derived class, just capture 'this' for arrow functions if necessary.
             if (!hasExtendsClause) {
-                addCaptureThisForNodeIfNeeded(statements, ctor);
+                if (ctor) {
+                    addCaptureThisForNodeIfNeeded(statements, ctor);
+                }
                 return SuperCaptureResult.NoReplacement;
+            }
+
+            // We must be here because the user didn't write a constructor
+            // but we needed to call 'super(...args)' anyway as per 14.5.14 of the ES2016 spec.
+            // If that's the case we can just immediately return the result of a 'super()' call.
+            if (!ctor) {
+                statements.push(createReturn(createDefaultSuperCallOrThis()));
+                return SuperCaptureResult.ReplaceWithReturn;
+            }
+
+            // The constructor exists, but it and the 'super()' call it contains were generated
+            // for something like property initializers.
+            // Create a captured '_this' variable and assume it will subsequently be used.
+            if (hasSynthesizedSuper) {
+                captureThisForNode(statements, ctor, createDefaultSuperCallOrThis());
+                enableSubstitutionsForCapturedThis();
+                return SuperCaptureResult.ReplaceSuperCapture;
             }
 
             // Most of the time, a 'super' call will be the first real statement in a constructor body.
@@ -1032,6 +1009,17 @@ namespace ts {
             }
 
             return SuperCaptureResult.NoReplacement;
+        }
+
+        function createDefaultSuperCallOrThis() {
+            const actualThis = createThis();
+            setNodeEmitFlags(actualThis, NodeEmitFlags.NoSubstitution);
+            const superCall = createFunctionApply(
+                createIdentifier("_super"),
+                actualThis,
+                createIdentifier("arguments"),
+            );
+            return createLogicalOr(superCall, actualThis);
         }
 
         /**
