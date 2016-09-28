@@ -195,6 +195,7 @@ namespace ts.server {
         getFormattingEditsAfterKeystroke: (): any => throwLanguageServiceIsDisabledError(),
         getDocCommentTemplateAtPosition: (): any => throwLanguageServiceIsDisabledError(),
         isValidBraceCompletionAtPosition: (): any => throwLanguageServiceIsDisabledError(),
+        isValidSnippetInsertionAtPosition: (): any => throwLanguageServiceIsDisabledError(),
         getEmitOutput: (): any => throwLanguageServiceIsDisabledError(),
         getProgram: (): any => throwLanguageServiceIsDisabledError(),
         getNonBoundSourceFile: (): any => throwLanguageServiceIsDisabledError(),

@@ -132,6 +132,7 @@ namespace ts.server {
         export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
         export const BreakpointStatement = "breakpointStatement";
         export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export const SnippetInsertion = "snippetInsertion";
     }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
@@ -781,6 +782,12 @@ namespace ts.server {
             return project.getLanguageService(/*ensureSynchronized*/ false).isValidBraceCompletionAtPosition(file, position, args.openingBrace.charCodeAt(0));
         }
 
+        private isValidSnippetInsertion(args: protocol.FileLocationRequestArgs) {
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+            const position = this.getPosition(args, project.getScriptInfoForNormalizedPath(file));
+            return project.getLanguageService(/*ensureSynchronized*/ false).isValidSnippetInsertionAtPosition(file, position);
+        }
+
         private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
@@ -1396,6 +1403,9 @@ namespace ts.server {
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments));
+            },
+            [CommandNames.SnippetInsertion]: (request: protocol.FileLocationRequest) => {
+                return this.requiredResponse(this.isValidSnippetInsertion(request.arguments));
             },
             [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
                 return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));

@@ -245,6 +245,13 @@ namespace ts {
          */
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
 
+        /**
+         * Returns JSON-encoded boolean to indicate whether we should support snippet insertion
+         * at the current position.
+         * E.g. we don't want snippets inserted in the completion list for member completions
+         */
+        isValidSnippetInsertionAtPosition(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
     }
@@ -817,6 +824,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `isValidBraceCompletionAtPosition('${fileName}', ${position}, ${openingBrace})`,
                 () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace)
+            );
+        }
+
+        public isValidSnippetInsertionAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `isValidSnippetInsertionAtPosition('${fileName}', ${position})`,
+                () => this.languageService.isValidSnippetInsertionAtPosition(fileName, position)
             );
         }
 

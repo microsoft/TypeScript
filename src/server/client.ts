@@ -603,6 +603,10 @@ namespace ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
+        isValidSnippetInsertionAtPosition(fileName: string, position: number): boolean {
+            throw new Error("Not Implemented Yet.");
+        }
+
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             const args: protocol.FileLocationRequestArgs = {

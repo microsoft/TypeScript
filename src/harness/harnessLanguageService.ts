@@ -480,6 +480,9 @@ namespace Harness.LanguageService {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
+        isValidSnippetInsertionAtPosition(fileName: string, position: number): boolean {
+            return unwrapJSONCallResult(this.shim.isValidSnippetInsertionAtPosition(fileName, position));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }

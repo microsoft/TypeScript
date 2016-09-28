@@ -967,6 +967,13 @@ namespace FourSlash {
             }
         }
 
+        public verifySnippetInsertionAtPosition(expectedResult: boolean) {
+            const actual = this.languageService.isValidSnippetInsertionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            if (actual !== expectedResult) {
+                this.raiseError(`verifySnippetInsertionAtPosition failed - expected result to be ${actual}`);
+            }
+        }
+
         public verifyQuickInfoExists(negative: boolean) {
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (negative) {
@@ -2955,6 +2962,10 @@ namespace FourSlashInterface {
 
         public isValidBraceCompletionAtPosition(openingBrace: string) {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
+        }
+
+        public isValidSnippetInsertionAtPosition(expectedResult: boolean) {
+            this.state.verifySnippetInsertionAtPosition(expectedResult);
         }
     }
 

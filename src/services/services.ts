@@ -1274,6 +1274,8 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
+        isValidSnippetInsertionAtPosition(fileName: string, position: number): boolean;
+
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
         getProgram(): Program;
@@ -8635,6 +8637,11 @@ namespace ts {
             return true;
         }
 
+        function isValidSnippetInsertionAtPosition(fileName: string, position: number): boolean {
+            const completionInfo = getCompletionsAtPosition(fileName, position);
+            return completionInfo !== undefined && !completionInfo.isMemberCompletion;
+        }
+
         function getParametersForJsDocOwningNode(commentOwner: Node): ParameterDeclaration[] {
             if (isFunctionLike(commentOwner)) {
                 return commentOwner.parameters;
@@ -8974,6 +8981,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            isValidSnippetInsertionAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram

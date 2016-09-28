@@ -137,6 +137,7 @@ declare namespace FourSlashInterface {
         definitionLocationExists(): void;
         verifyDefinitionsName(name: string, containerName: string): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
+        isValidSnippetInsertionAtPosition(expectedResult: boolean): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
