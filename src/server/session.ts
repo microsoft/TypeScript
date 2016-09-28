@@ -728,9 +728,7 @@ namespace ts.server {
          */
         private openClientFile(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind) {
             const { configFileName, configFileErrors } = this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind);
-            if (configFileErrors) {
-                this.configFileDiagnosticEvent(fileName, configFileName, configFileErrors);
-            }
+            this.configFileDiagnosticEvent(fileName, configFileName, configFileErrors || []);
         }
 
         private getPosition(args: protocol.FileLocationRequestArgs, scriptInfo: ScriptInfo): number {
