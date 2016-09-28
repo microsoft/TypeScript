@@ -2536,7 +2536,7 @@ namespace ts {
 
     /* @internal */
     export interface SpreadElementType extends ResolvedType {
-        isDeclaredProperty: boolean | undefined;
+        isDeclaredProperty?: boolean;
     }
 
     /* @internal */
