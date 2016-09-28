@@ -2382,19 +2382,16 @@ namespace ts {
         Union                   = 1 << 19,  // Union (T | U)
         Intersection            = 1 << 20,  // Intersection (T & U)
         Anonymous               = 1 << 21,  // Anonymous
-        Instantiated            = 1 << 22,  // Instantiated anonymous type
         /* @internal */
-        ObjectLiteral           = 1 << 23,  // Originates in an object literal
+        ObjectLiteral           = 1 << 22,  // Originates in an object literal
         /* @internal */
-        FreshLiteral            = 1 << 24,  // Fresh literal type
+        FreshLiteral            = 1 << 23,  // Fresh literal type
         /* @internal */
-        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
-        ThisType                = 1 << 28,  // This type
-        ObjectLiteralPatternWithComputedProperties = 1 << 29,  // Object literal type implied by binding pattern has computed properties
+        ContainsAnyFunctionType = 1 << 26,  // Type is or contains object literal type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2463,7 +2460,9 @@ namespace ts {
     }
 
     // Object types (TypeFlags.ObjectType)
-    export interface ObjectType extends Type { }
+    export interface ObjectType extends Type {
+        inObjectLiteralPatternWithComputedProperties?: boolean;
+    }
 
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
@@ -2519,6 +2518,7 @@ namespace ts {
     /* @internal */
     // An instantiated anonymous type has a target and a mapper
     export interface AnonymousType extends ObjectType {
+        isInstantiated?: boolean;
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
     }
@@ -2558,6 +2558,8 @@ namespace ts {
         mapper?: TypeMapper;     // Instantiation mapper
         /* @internal */
         resolvedApparentType: Type;
+        /* @internal */
+        isThisType?: boolean;
     }
 
     export const enum SignatureKind {
