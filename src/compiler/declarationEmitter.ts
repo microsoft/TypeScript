@@ -1150,6 +1150,10 @@ namespace ts {
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
                         emitTypeOfVariableDeclarationFromTypeLiteral(node);
                     }
+                    else if (resolver.isLiteralConstDeclaration(node)) {
+                        write(" = ");
+                        resolver.writeLiteralConstValue(node, writer);
+                    }
                     else if (!hasModifier(node, ModifierFlags.Private)) {
                         writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
                     }

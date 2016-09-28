@@ -416,7 +416,7 @@ namespace ts {
         return node;
     }
 
-    export function createObjectLiteral(properties?: ObjectLiteralElement[], location?: TextRange, multiLine?: boolean) {
+    export function createObjectLiteral(properties?: ObjectLiteralElementLike[], location?: TextRange, multiLine?: boolean) {
         const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression, location);
         node.properties = createNodeArray(properties);
         if (multiLine) {
@@ -425,7 +425,7 @@ namespace ts {
         return node;
     }
 
-    export function updateObjectLiteral(node: ObjectLiteralExpression, properties: ObjectLiteralElement[]) {
+    export function updateObjectLiteral(node: ObjectLiteralExpression, properties: ObjectLiteralElementLike[]) {
         if (node.properties !== properties) {
             return updateNode(createObjectLiteral(properties, node, node.multiLine), node);
         }
@@ -2069,7 +2069,7 @@ namespace ts {
         }
     }
 
-    export function createExpressionForObjectLiteralElement(node: ObjectLiteralExpression, property: ObjectLiteralElement, receiver: Expression): Expression {
+    export function createExpressionForObjectLiteralElementLike(node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression {
         switch (property.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
@@ -2086,7 +2086,7 @@ namespace ts {
     function createExpressionForAccessorDeclaration(properties: NodeArray<Declaration>, property: AccessorDeclaration, receiver: Expression, multiLine: boolean) {
         const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
         if (property === firstAccessor) {
-            const properties: ObjectLiteralElement[] = [];
+            const properties: ObjectLiteralElementLike[] = [];
             if (getAccessor) {
                 const getterFunction = createFunctionExpression(
                     /*asteriskToken*/ undefined,

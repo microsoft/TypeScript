@@ -4140,7 +4140,7 @@ namespace ts {
             return undefined;
         }
 
-        function parseObjectLiteralElement(): ObjectLiteralElement {
+        function parseObjectLiteralElement(): ObjectLiteralElementLike {
             const fullStart = scanner.getStartPos();
             const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             if (dotDotDotToken) {
