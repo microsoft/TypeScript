@@ -2165,9 +2165,14 @@ namespace ts {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
-                    else if (!(flags & TypeFormatFlags.InTypeAlias) && type.flags & (TypeFlags.Anonymous | TypeFlags.UnionOrIntersection) && type.aliasSymbol &&
+                    else if (!(flags & TypeFormatFlags.InTypeAlias) && ((type.flags & TypeFlags.Anonymous && !(<AnonymousType>type).target) || type.flags & TypeFlags.UnionOrIntersection) && type.aliasSymbol &&
                         isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
-                        // Only write out inferred type with its corresponding type-alias if type-alias is visible
+                        // We emit inferred type as type-alias at the current localtion if all the following is true
+                        //      the input type is has alias symbol that is accessible
+                        //      the input type is a union, intersection or anonymous type that is fully instantiated (if not we want to keep dive into)
+                        //          e.g.: export type Bar<X, Y> = () => [X, Y];
+                        //                export type Foo<Y> = Bar<any, Y>;
+                        //                export const y = (x: Foo<string>) => 1  // we want to emit as ...x: () => [any, string])
                         const typeArguments = type.aliasTypeArguments;
                         writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
                     }
