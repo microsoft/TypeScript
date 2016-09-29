@@ -6,8 +6,6 @@ tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,5): error TS1
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,6): error TS7031: Binding element 'a1' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,23): error TS1182: A destructuring declaration must have an initializer.
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,24): error TS7031: Binding element 'b1' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,36): error TS7005: Variable 'c1' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(3,52): error TS7005: Variable 'd1' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(5,5): error TS1182: A destructuring declaration must have an initializer.
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(5,18): error TS1182: A destructuring declaration must have an initializer.
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(7,5): error TS1182: A destructuring declaration must have an initializer.
@@ -15,12 +13,10 @@ tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(7,13): error TS
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(7,25): error TS7008: Member 'b3' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(9,6): error TS7031: Binding element 'a4' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(9,26): error TS7031: Binding element 'b4' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(9,46): error TS7005: Variable 'c4' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(9,62): error TS7005: Variable 'd4' implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(11,6): error TS7031: Binding element 'a5' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts (20 errors) ====
+==== tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts (16 errors) ====
     var [a], {b}, c, d; // error
         ~~~
 !!! error TS1182: A destructuring declaration must have an initializer.
@@ -40,10 +36,6 @@ tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(11,6): error TS
 !!! error TS1182: A destructuring declaration must have an initializer.
                            ~~
 !!! error TS7031: Binding element 'b1' implicitly has an 'any' type.
-                                       ~~
-!!! error TS7005: Variable 'c1' implicitly has an 'any' type.
-                                                       ~~
-!!! error TS7005: Variable 'd1' implicitly has an 'any' type.
     
     var [a2]: [any], {b2}: { b2: any }, c2: any, d2: any;
         ~~~~
@@ -64,10 +56,6 @@ tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts(11,6): error TS
 !!! error TS7031: Binding element 'a4' implicitly has an 'any' type.
                              ~~
 !!! error TS7031: Binding element 'b4' implicitly has an 'any' type.
-                                                 ~~
-!!! error TS7005: Variable 'c4' implicitly has an 'any' type.
-                                                                 ~~
-!!! error TS7005: Variable 'd4' implicitly has an 'any' type.
     
     var [a5 = undefined] = []; // error
          ~~
