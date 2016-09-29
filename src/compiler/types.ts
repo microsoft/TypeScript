@@ -2462,7 +2462,6 @@ namespace ts {
 
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
-        isObjectLiteral?: boolean;
         inObjectLiteralPatternWithComputedProperties?: boolean;
     }
 

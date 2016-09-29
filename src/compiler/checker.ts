@@ -134,16 +134,16 @@ namespace ts {
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
 
-        const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined, undefined);
-        const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined, undefined);
+        const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = createMap<TypeReference>();
 
-        const anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined, undefined);
+        const anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
         // in getPropagatingFlagsOfTypes, and it is checked in inferFromTypes.
         anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
 
-        const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined, undefined);
+        const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
@@ -1618,12 +1618,9 @@ namespace ts {
             return <ResolvedType>type;
         }
 
-        function createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo, isObjectLiteral: boolean): ResolvedType {
-            const t = createObjectType(TypeFlags.Anonymous, symbol);
-            if (isObjectLiteral) {
-                t.isObjectLiteral = true;
-            }
-            return setObjectTypeMembers(t, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+        function createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): ResolvedType {
+            return setObjectTypeMembers(createObjectType(TypeFlags.Anonymous, symbol),
+                members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
         function forEachSymbolTableInScope<T>(enclosingDeclaration: Node, callback: (symbolTable: SymbolTable) => T): T {
@@ -3176,7 +3173,7 @@ namespace ts {
                 symbol.bindingElement = e;
                 members[symbol.name] = symbol;
             });
-            const result = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined, undefined);
+            const result = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
             if (includePatternInType) {
                 result.pattern = pattern;
             }
@@ -6477,7 +6474,7 @@ namespace ts {
 
                 if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
-                if (source.flags & TypeFlags.ObjectType && (source as ObjectType).isObjectLiteral && source.flags & TypeFlags.FreshLiteral) {
+                if (source.flags & TypeFlags.ObjectLiteral && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
@@ -6846,7 +6843,7 @@ namespace ts {
                 }
                 let result = Ternary.True;
                 const properties = getPropertiesOfObjectType(target);
-                const requireOptionalProperties = relation === subtypeRelation && !(source.flags & TypeFlags.ObjectType && (source as ObjectType).isObjectLiteral);
+                const requireOptionalProperties = relation === subtypeRelation && !(source.flags & TypeFlags.ObjectLiteral);
                 for (const targetProp of properties) {
                     const sourceProp = getPropertyOfType(source, targetProp.name);
 
@@ -7485,7 +7482,7 @@ namespace ts {
          * Leave signatures alone since they are not subject to the check.
          */
         function getRegularTypeOfObjectLiteral(type: Type): Type {
-            if (!(type.flags & TypeFlags.ObjectType && (type as ObjectType).isObjectLiteral && type.flags & TypeFlags.FreshLiteral)) {
+            if (!(type.flags & TypeFlags.ObjectLiteral && type.flags & TypeFlags.FreshLiteral)) {
                 return type;
             }
             const regularType = (<FreshObjectLiteralType>type).regularType;
@@ -7500,8 +7497,7 @@ namespace ts {
                 resolved.callSignatures,
                 resolved.constructSignatures,
                 resolved.stringIndexInfo,
-                resolved.numberIndexInfo,
-                resolved.isObjectLiteral);
+                resolved.numberIndexInfo);
             regularNew.flags = resolved.flags & ~TypeFlags.FreshLiteral;
             (<FreshObjectLiteralType>type).regularType = regularNew;
             return regularNew;
@@ -7516,8 +7512,7 @@ namespace ts {
             const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
             return createAnonymousType(type.symbol, members, emptyArray, emptyArray,
                 stringIndexInfo && createIndexInfo(getWidenedType(stringIndexInfo.type), stringIndexInfo.isReadonly),
-                numberIndexInfo && createIndexInfo(getWidenedType(numberIndexInfo.type), numberIndexInfo.isReadonly),
-                (type as ObjectType).isObjectLiteral);
+                numberIndexInfo && createIndexInfo(getWidenedType(numberIndexInfo.type), numberIndexInfo.isReadonly));
         }
 
         function getWidenedConstituentType(type: Type): Type {
@@ -7529,8 +7524,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Nullable) {
                     return anyType;
                 }
-                // if (type.flags & TypeFlags.ObjectLiteral) {
-                if (type.flags & TypeFlags.ObjectType && (type as ObjectType).isObjectLiteral) {
+                if (type.flags & TypeFlags.ObjectLiteral) {
                     return getWidenedTypeOfObjectLiteral(type);
                 }
                 if (type.flags & TypeFlags.Union) {
@@ -7570,7 +7564,7 @@ namespace ts {
                     }
                 }
             }
-            if (type.flags & TypeFlags.ObjectType && (type as ObjectType).isObjectLiteral) {
+            if (type.flags & TypeFlags.ObjectLiteral) {
                 for (const p of getPropertiesOfObjectType(type)) {
                     const t = getTypeOfSymbol(p);
                     if (t.flags & TypeFlags.ContainsWideningType) {
@@ -10379,7 +10373,7 @@ namespace ts {
 
             const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.String) : undefined;
             const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.Number) : undefined;
-            const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo, /*isObjectLiteral*/ true);
+            const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
             if (patternWithComputedProperties) {
@@ -12492,7 +12486,7 @@ namespace ts {
         function getInferredClassType(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
             if (!links.inferredClassType) {
-                links.inferredClassType = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined, /*isObjectLiteral*/ undefined);
+                links.inferredClassType = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
             }
             return links.inferredClassType;
         }
