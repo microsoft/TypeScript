@@ -69,5 +69,6 @@ function testBlock(offset: number, fileName: string, dir: string) {
     }
 
     goTo.marker("" + (offset + 3));
-    verify.not.completionListItemsCountIsGreaterThan(0);
+        verify.completionListContains(fileName);
+    verify.not.completionListItemsCountIsGreaterThan(1);
 }

@@ -17,7 +17,7 @@ for(let m of ["0", "2", "3"]) {
     goTo.marker(m);
     verify.completionListContains("f.ts");
     verify.completionListContains(".hidden.ts");
-    verify.not.completionListItemsCountIsGreaterThan(3);
+    verify.not.completionListItemsCountIsGreaterThan(2);
 }
 
 goTo.marker("1");

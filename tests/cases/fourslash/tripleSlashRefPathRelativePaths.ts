@@ -19,9 +19,10 @@
 //// /// <reference path=".//*1*/
 
 //// /// <reference path="./*2*/
+
 //// /// <reference path="../*3*/
 
-//// /// <reference path="..//4*/
+//// /// <reference path="..//*4*/
 //// /// <reference path="..\/*5*/
 
 //// /// <reference path="../..//*6*/
@@ -46,10 +47,12 @@ function workingDirCompletions() {
         verify.not.completionListItemsCountIsGreaterThan(2);
     }
 
-    for(let m of ["2", "3"]) {
-        goTo.marker(m);
-        verify.not.completionListItemsCountIsGreaterThan(0);
-    }
+    goTo.marker("2");
+    verify.completionListContains("h.ts");
+    verify.not.completionListItemsCountIsGreaterThan(1);
+
+    goTo.marker("3");
+    verify.not.completionListItemsCountIsGreaterThan(0);
 }
 
 function parentDirCompletions() {
@@ -69,7 +72,8 @@ function parentDirCompletions() {
 
 function childDirCompletions() {
     goTo.marker("7");
-    verify.not.completionListItemsCountIsGreaterThan(0);
+    verify.completionListContains("d3");
+    verify.not.completionListItemsCountIsGreaterThan(1);
 
     for (let m of ["8", "9"]) {
         goTo.marker(m);
