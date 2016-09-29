@@ -512,7 +512,7 @@ _.compact([0, 1, false, 2, '', 3]);
 >_.compact : <T>(list: T[]) => T[]
 >_ : Underscore.Static
 >compact : <T>(list: T[]) => T[]
->[0, 1, false, 2, '', 3] : (false | "" | 0 | 1 | 2 | 3)[]
+>[0, 1, false, 2, '', 3] : (false | 1 | 2 | 3 | 0 | "")[]
 >0 : 0
 >1 : 1
 >false : false

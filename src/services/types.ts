@@ -240,6 +240,12 @@ namespace ts {
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 
+        /**
+         * @internal
+         * @deprecated Use ts.createSourceFile instead.
+         */
+        getSourceFile(fileName: string): SourceFile;
+
         dispose(): void;
     }
 

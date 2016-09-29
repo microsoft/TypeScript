@@ -163,12 +163,12 @@ namespace ts {
         let currentText: string;
         let currentParent: Node;
         let currentNode: Node;
+        let enclosingVariableStatement: VariableStatement;
         let enclosingBlockScopeContainer: Node;
         let enclosingBlockScopeContainerParent: Node;
-        let containingNonArrowFunction: FunctionLikeDeclaration | ClassElement;
-
-        /** Tracks the container that determines whether `super.x` is a static. */
-        let superScopeContainer: FunctionLikeDeclaration | ClassElement;
+        let enclosingFunction: FunctionLikeDeclaration;
+        let enclosingNonArrowFunction: FunctionLikeDeclaration;
+        let enclosingNonAsyncFunctionBody: FunctionLikeDeclaration | ClassElement;
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -181,11 +181,6 @@ namespace ts {
          * be reset.
          */
         let enabledSubstitutions: ES6SubstitutionFlags;
-
-        /**
-         * This is used to determine whether we need to emit `_this` instead of `this`.
-         */
-        let useCapturedThis: boolean;
 
         return transformSourceFile;
 
@@ -206,13 +201,14 @@ namespace ts {
         }
 
         function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
-            const savedContainingNonArrowFunction = containingNonArrowFunction;
-            const savedSuperScopeContainer = superScopeContainer;
-            const savedCurrentParent = currentParent;
-            const savedCurrentNode = currentNode;
+            const savedEnclosingFunction = enclosingFunction;
+            const savedEnclosingNonArrowFunction = enclosingNonArrowFunction;
+            const savedEnclosingNonAsyncFunctionBody = enclosingNonAsyncFunctionBody;
             const savedEnclosingBlockScopeContainer = enclosingBlockScopeContainer;
             const savedEnclosingBlockScopeContainerParent = enclosingBlockScopeContainerParent;
-
+            const savedEnclosingVariableStatement = enclosingVariableStatement;
+            const savedCurrentParent = currentParent;
+            const savedCurrentNode = currentNode;
             const savedConvertedLoopState = convertedLoopState;
             if (nodeStartsNewLexicalEnvironment(node)) {
                 // don't treat content of nodes that start new lexical environment as part of converted loop copy
@@ -223,12 +219,14 @@ namespace ts {
             const visited = f(node);
 
             convertedLoopState = savedConvertedLoopState;
-            containingNonArrowFunction = savedContainingNonArrowFunction;
-            superScopeContainer = savedSuperScopeContainer;
-            currentParent = savedCurrentParent;
-            currentNode = savedCurrentNode;
+            enclosingFunction = savedEnclosingFunction;
+            enclosingNonArrowFunction = savedEnclosingNonArrowFunction;
+            enclosingNonAsyncFunctionBody = savedEnclosingNonAsyncFunctionBody;
             enclosingBlockScopeContainer = savedEnclosingBlockScopeContainer;
             enclosingBlockScopeContainerParent = savedEnclosingBlockScopeContainerParent;
+            enclosingVariableStatement = savedEnclosingVariableStatement;
+            currentParent = savedCurrentParent;
+            currentNode = savedCurrentNode;
             return visited;
         }
 
@@ -251,22 +249,13 @@ namespace ts {
         }
 
         function visitorForConvertedLoopWorker(node: Node): VisitResult<Node> {
-            const savedUseCapturedThis = useCapturedThis;
-
-            if (nodeStartsNewLexicalEnvironment(node)) {
-                useCapturedThis = false;
-            }
-
             let result: VisitResult<Node>;
-
             if (shouldCheckNode(node)) {
                 result = visitJavaScript(node);
             }
             else {
                 result = visitNodesInConvertedLoop(node);
             }
-
-            useCapturedThis = savedUseCapturedThis;
             return result;
         }
 
@@ -320,7 +309,7 @@ namespace ts {
                     return visitFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.VariableDeclaration:
-                    return visitVariableDeclaration(<VariableDeclaration>node, /*offset*/ undefined);
+                    return visitVariableDeclaration(<VariableDeclaration>node);
 
                 case SyntaxKind.Identifier:
                     return visitIdentifier(<Identifier>node);
@@ -409,30 +398,44 @@ namespace ts {
         }
 
         function onBeforeVisitNode(node: Node) {
-            const currentGrandparent = currentParent;
-            currentParent = currentNode;
-            currentNode = node;
-
-            if (currentParent) {
-                if (isBlockScope(currentParent, currentGrandparent)) {
-                    enclosingBlockScopeContainer = currentParent;
-                    enclosingBlockScopeContainerParent = currentGrandparent;
+            if (currentNode) {
+                if (isBlockScope(currentNode, currentParent)) {
+                    enclosingBlockScopeContainer = currentNode;
+                    enclosingBlockScopeContainerParent = currentParent;
                 }
 
-                switch (currentParent.kind) {
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionDeclaration:
-                        containingNonArrowFunction = <FunctionLikeDeclaration>currentParent;
-                        if (!(containingNonArrowFunction.emitFlags & NodeEmitFlags.AsyncFunctionBody)) {
-                            superScopeContainer = containingNonArrowFunction;
+                if (isFunctionLike(currentNode)) {
+                    enclosingFunction = currentNode;
+                    if (currentNode.kind !== SyntaxKind.ArrowFunction) {
+                        enclosingNonArrowFunction = currentNode;
+                        if (!(currentNode.emitFlags & NodeEmitFlags.AsyncFunctionBody)) {
+                            enclosingNonAsyncFunctionBody = currentNode;
                         }
+                    }
+                }
+
+                // keep track of the enclosing variable statement when in the context of
+                // variable statements, variable declarations, binding elements, and binding
+                // patterns.
+                switch (currentNode.kind) {
+                    case SyntaxKind.VariableStatement:
+                        enclosingVariableStatement = <VariableStatement>currentNode;
                         break;
+
+                    case SyntaxKind.VariableDeclarationList:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                        break;
+
+                    default:
+                        enclosingVariableStatement = undefined;
                 }
             }
+
+            currentParent = currentNode;
+            currentNode = node;
         }
 
         function visitSwitchStatement(node: SwitchStatement): SwitchStatement {
@@ -468,9 +471,8 @@ namespace ts {
 
         function visitThisKeyword(node: Node): Node {
             Debug.assert(convertedLoopState !== undefined);
-
-            if (useCapturedThis) {
-                // if useCapturedThis is true then 'this' keyword is contained inside an arrow function.
+            if (enclosingFunction && enclosingFunction.kind === SyntaxKind.ArrowFunction) {
+                // if the enclosing function is an ArrowFunction is then we use the captured 'this' keyword.
                 convertedLoopState.containsLexicalThis = true;
                 return node;
             }
@@ -1259,7 +1261,7 @@ namespace ts {
             setNodeEmitFlags(propertyName, NodeEmitFlags.NoComments | NodeEmitFlags.NoLeadingSourceMap);
             setSourceMapRange(propertyName, firstAccessor.name);
 
-            const properties: ObjectLiteralElement[] = [];
+            const properties: ObjectLiteralElementLike[] = [];
             if (getAccessor) {
                 const getterFunction = transformFunctionLikeToExpression(getAccessor, /*location*/ undefined, /*name*/ undefined);
                 setSourceMapRange(getterFunction, getSourceMapRange(getAccessor));
@@ -1306,12 +1308,7 @@ namespace ts {
                 enableSubstitutionsForCapturedThis();
             }
 
-            const savedUseCapturedThis = useCapturedThis;
-            useCapturedThis = true;
-
             const func = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
-
-            useCapturedThis = savedUseCapturedThis;
             setNodeEmitFlags(func, NodeEmitFlags.CapturesThis);
             return func;
         }
@@ -1334,7 +1331,7 @@ namespace ts {
             return setOriginalNode(
                 createFunctionDeclaration(
                     /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
+                    node.modifiers,
                     node.asteriskToken,
                     node.name,
                     /*typeParameters*/ undefined,
@@ -1354,9 +1351,9 @@ namespace ts {
          * @param name The name of the new FunctionExpression.
          */
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange, name: Identifier): FunctionExpression {
-            const savedContainingNonArrowFunction = containingNonArrowFunction;
+            const savedContainingNonArrowFunction = enclosingNonArrowFunction;
             if (node.kind !== SyntaxKind.ArrowFunction) {
-                containingNonArrowFunction = node;
+                enclosingNonArrowFunction = node;
             }
 
             const expression = setOriginalNode(
@@ -1372,7 +1369,7 @@ namespace ts {
                 /*original*/ node
             );
 
-            containingNonArrowFunction = savedContainingNonArrowFunction;
+            enclosingNonArrowFunction = savedContainingNonArrowFunction;
             return expression;
         }
 
@@ -1663,13 +1660,13 @@ namespace ts {
          *
          * @param node A VariableDeclaration node.
          */
-        function visitVariableDeclarationInLetDeclarationList(node: VariableDeclaration, offset: number) {
+        function visitVariableDeclarationInLetDeclarationList(node: VariableDeclaration) {
             // For binding pattern names that lack initializers there is no point to emit
             // explicit initializer since downlevel codegen for destructuring will fail
             // in the absence of initializer so all binding elements will say uninitialized
             const name = node.name;
             if (isBindingPattern(name)) {
-                return visitVariableDeclaration(node, offset);
+                return visitVariableDeclaration(node);
             }
 
             if (!node.initializer && shouldEmitExplicitInitializerForLetDeclaration(node)) {
@@ -1686,10 +1683,13 @@ namespace ts {
          *
          * @param node A VariableDeclaration node.
          */
-        function visitVariableDeclaration(node: VariableDeclaration, offset: number): VisitResult<VariableDeclaration> {
+        function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern.
             if (isBindingPattern(node.name)) {
-                return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor);
+                const recordTempVariablesInLine = !enclosingVariableStatement
+                    || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
+                return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor,
+                    recordTempVariablesInLine ? undefined : hoistVariableDeclaration);
             }
 
             return visitEachChild(node, visitor, context);
@@ -1765,7 +1765,7 @@ namespace ts {
             // Note also that because an extra statement is needed to assign to the LHS,
             // for-of bodies are always emitted as blocks.
 
-            const expression = node.expression;
+            const expression = visitNode(node.expression, visitor, isExpression);
             const initializer = node.initializer;
             const statements: Statement[] = [];
 
@@ -1940,7 +1940,7 @@ namespace ts {
                 temp,
                 setNodeEmitFlags(
                     createObjectLiteral(
-                        visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                        visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
                         /*location*/ undefined,
                         node.multiLine
                     ),
@@ -2014,7 +2014,7 @@ namespace ts {
                 case SyntaxKind.ForOfStatement:
                     const initializer = (<ForStatement | ForInStatement | ForOfStatement>node).initializer;
                     if (initializer && initializer.kind === SyntaxKind.VariableDeclarationList) {
-                        loopInitializer = <VariableDeclarationList>(<ForStatement | ForInStatement | ForOfStatement>node).initializer;
+                        loopInitializer = <VariableDeclarationList>initializer;
                     }
                     break;
             }
@@ -2066,8 +2066,8 @@ namespace ts {
             }
 
             const isAsyncBlockContainingAwait =
-                containingNonArrowFunction
-                && (containingNonArrowFunction.emitFlags & NodeEmitFlags.AsyncFunctionBody) !== 0
+                enclosingNonArrowFunction
+                && (enclosingNonArrowFunction.emitFlags & NodeEmitFlags.AsyncFunctionBody) !== 0
                 && (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
 
             let loopBodyFlags: NodeEmitFlags = 0;
@@ -2474,7 +2474,7 @@ namespace ts {
          *
          * @param node A MethodDeclaration node.
          */
-        function visitMethodDeclaration(node: MethodDeclaration): ObjectLiteralElement {
+        function visitMethodDeclaration(node: MethodDeclaration): ObjectLiteralElementLike {
             // We should only get here for methods on an object literal with regular identifier names.
             // Methods on classes are handled in visitClassDeclaration/visitClassExpression.
             // Methods with computed property names are handled in visitObjectLiteralExpression.
@@ -2493,7 +2493,7 @@ namespace ts {
          *
          * @param node A ShorthandPropertyAssignment node.
          */
-        function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
+        function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
             return createPropertyAssignment(
                 node.name,
                 getSynthesizedClone(node.name),
@@ -2829,9 +2829,9 @@ namespace ts {
          * Visits the `super` keyword
          */
         function visitSuperKeyword(node: PrimaryExpression): LeftHandSideExpression {
-            return superScopeContainer
-                && isClassElement(superScopeContainer)
-                && !hasModifier(superScopeContainer, ModifierFlags.Static)
+            return enclosingNonAsyncFunctionBody
+                && isClassElement(enclosingNonAsyncFunctionBody)
+                && !hasModifier(enclosingNonAsyncFunctionBody, ModifierFlags.Static)
                 && currentParent.kind !== SyntaxKind.CallExpression
                     ? createPropertyAccess(createIdentifier("_super"), "prototype")
                     : createIdentifier("_super");
@@ -2856,17 +2856,16 @@ namespace ts {
          * @param node The node to be printed.
          */
         function onEmitNode(node: Node, emit: (node: Node) => void) {
-            const savedUseCapturedThis = useCapturedThis;
+            const savedEnclosingFunction = enclosingFunction;
 
             if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
-                // If we are tracking a captured `this`, push a bit that indicates whether the
-                // containing function is an arrow function.
-                useCapturedThis = (getNodeEmitFlags(node) & NodeEmitFlags.CapturesThis) !== 0;
+                // If we are tracking a captured `this`, keep track of the enclosing function.
+                enclosingFunction = node;
             }
 
             previousOnEmitNode(node, emit);
 
-            useCapturedThis = savedUseCapturedThis;
+            enclosingFunction = savedEnclosingFunction;
         }
 
         /**
@@ -2994,7 +2993,9 @@ namespace ts {
          * @param node The ThisKeyword node.
          */
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
-            if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && useCapturedThis) {
+            if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis
+                && enclosingFunction
+                && enclosingFunction.emitFlags & NodeEmitFlags.CapturesThis) {
                 return createIdentifier("_this", /*location*/ node);
             }
 

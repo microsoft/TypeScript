@@ -529,8 +529,8 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare const Number: NumberConstructor;
 
-interface TemplateStringsArray extends Array<string> {
-    readonly raw: string[];
+interface TemplateStringsArray extends ReadonlyArray<string> {
+    readonly raw: ReadonlyArray<string>
 }
 
 interface Math {
@@ -1022,7 +1022,12 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[]): T[];
+    concat(...items: T[][]): T[];
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: (T | T[])[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1071,6 +1076,12 @@ interface ReadonlyArray<T> {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
     map<U>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => U, thisArg?: any): U[];
+    /**
+     * Returns the elements of an array that meet the condition specified in a callback function.
+     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
+    filter<S extends T>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => value is S, thisArg?: any): S[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
@@ -1124,6 +1135,11 @@ interface Array<T> {
       * Removes the last element from an array and returns it.
       */
     pop(): T | undefined;
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: T[][]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
@@ -1271,13 +1287,44 @@ declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | P
 
 interface PromiseLike<T> {
     /**
-    * Attaches callbacks for the resolution and/or rejection of the Promise.
-    * @param onfulfilled The callback to execute when the Promise is resolved.
-    * @param onrejected The callback to execute when the Promise is rejected.
-    * @returns A Promise for the completion of which ever callback is executed.
-    */
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then(
+        onfulfilled?: ((value: T) => T | PromiseLike<T>) | undefined | null,
+        onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): PromiseLike<T>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(
+        onfulfilled: ((value: T) => T | PromiseLike<T>) | undefined | null,
+        onrejected: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<T | TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(
+        onfulfilled: (value: T) => TResult | PromiseLike<TResult>,
+        onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): PromiseLike<TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1, TResult2>(
+        onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>,
+        onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): PromiseLike<TResult1 | TResult2>;
 }
 
 interface ArrayLike<T> {
@@ -1537,7 +1584,7 @@ interface Int8Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -1545,7 +1592,7 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1810,7 +1857,7 @@ interface Uint8Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -1818,7 +1865,7 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2084,7 +2131,7 @@ interface Uint8ClampedArray {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2092,7 +2139,7 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2357,7 +2404,7 @@ interface Int16Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2365,7 +2412,7 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2631,7 +2678,7 @@ interface Uint16Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2639,7 +2686,7 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2904,7 +2951,7 @@ interface Int32Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2912,7 +2959,7 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3177,7 +3224,7 @@ interface Uint32Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3185,7 +3232,7 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3450,7 +3497,7 @@ interface Float32Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3458,7 +3505,7 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3724,7 +3771,7 @@ interface Float64Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3732,7 +3779,7 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3949,12 +3996,9 @@ declare module Intl {
         resolvedOptions(): ResolvedCollatorOptions;
     }
     var Collator: {
-        new (locales?: string[], options?: CollatorOptions): Collator;
-        new (locale?: string, options?: CollatorOptions): Collator;
-        (locales?: string[], options?: CollatorOptions): Collator;
-        (locale?: string, options?: CollatorOptions): Collator;
-        supportedLocalesOf(locales: string[], options?: CollatorOptions): string[];
-        supportedLocalesOf(locale: string, options?: CollatorOptions): string[];
+        new (locales?: string | string[], options?: CollatorOptions): Collator;
+        (locales?: string | string[], options?: CollatorOptions): Collator;
+        supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
     }
 
     interface NumberFormatOptions {
@@ -3989,12 +4033,9 @@ declare module Intl {
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
     var NumberFormat: {
-        new (locales?: string[], options?: NumberFormatOptions): NumberFormat;
-        new (locale?: string, options?: NumberFormatOptions): NumberFormat;
-        (locales?: string[], options?: NumberFormatOptions): NumberFormat;
-        (locale?: string, options?: NumberFormatOptions): NumberFormat;
-        supportedLocalesOf(locales: string[], options?: NumberFormatOptions): string[];
-        supportedLocalesOf(locale: string, options?: NumberFormatOptions): string[];
+        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
     }
 
     interface DateTimeFormatOptions {
@@ -4035,90 +4076,51 @@ declare module Intl {
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
     var DateTimeFormat: {
-        new (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        new (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
-        (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
-        supportedLocalesOf(locales: string[], options?: DateTimeFormatOptions): string[];
-        supportedLocalesOf(locale: string, options?: DateTimeFormatOptions): string[];
+        new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
     }
 }
 
 interface String {
     /**
-      * Determines whether two strings are equivalent in the current locale.
+      * Determines whether two strings are equivalent in the current or specified locale.
       * @param that String to compare to target string
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
       * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
       */
-    localeCompare(that: string, locales: string[], options?: Intl.CollatorOptions): number;
-
-    /**
-      * Determines whether two strings are equivalent in the current locale.
-      * @param that String to compare to target string
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
-      * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
-      */
-    localeCompare(that: string, locale: string, options?: Intl.CollatorOptions): number;
+    localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number;
 }
 
 interface Number {
     /**
       * Converts a number to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locales?: string[], options?: Intl.NumberFormatOptions): string;
-
-    /**
-      * Converts a number to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleString(locale?: string, options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Date {
     /**
       * Converts a date and time to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
     /**
       * Converts a date to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleDateString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleDateString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 
     /**
       * Converts a time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleTimeString(locale?: string[], options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a date and time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a date to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleDateString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleTimeString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 }
 
 /////////////////////////////
@@ -4248,6 +4250,7 @@ interface KeyAlgorithm {
 }
 
 interface KeyboardEventInit extends EventModifierInit {
+    code?: string;
     key?: string;
     location?: number;
     repeat?: boolean;
@@ -6410,7 +6413,7 @@ declare var DeviceRotationRate: {
     new(): DeviceRotationRate;
 }
 
-interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent {
+interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent, ParentNode {
     /**
       * Sets or gets the URL for the current document. 
       */
@@ -7473,7 +7476,7 @@ declare var Document: {
     new(): Document;
 }
 
-interface DocumentFragment extends Node, NodeSelector {
+interface DocumentFragment extends Node, NodeSelector, ParentNode {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -7542,7 +7545,7 @@ declare var EXT_texture_filter_anisotropic: {
     readonly TEXTURE_MAX_ANISOTROPY_EXT: number;
 }
 
-interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode {
+interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode, ParentNode {
     readonly classList: DOMTokenList;
     className: string;
     readonly clientHeight: number;
@@ -7797,6 +7800,16 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     getElementsByClassName(classNames: string): NodeListOf<Element>;
     matches(selector: string): boolean;
     closest(selector: string): Element | null;
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions): void;
+    scroll(options?: ScrollToOptions): void;
+    scroll(x: number, y: number): void;
+    scrollTo(options?: ScrollToOptions): void;
+    scrollTo(x: number, y: number): void;
+    scrollBy(options?: ScrollToOptions): void;
+    scrollBy(x: number, y: number): void;
+    insertAdjacentElement(position: string, insertedElement: Element): Element | null;
+    insertAdjacentHTML(where: string, html: string): void;
+    insertAdjacentText(where: string, text: string): void;
     addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -8568,7 +8581,7 @@ interface HTMLCanvasElement extends HTMLElement {
       * @param type The standard MIME type for the image format to return. If you do not specify this parameter, the default value is a PNG format image.
       */
     toDataURL(type?: string, ...args: any[]): string;
-    toBlob(callback: (result: Blob | null) => void, ... arguments: any[]): void;
+    toBlob(callback: (result: Blob | null) => void, type?: string, ...arguments: any[]): void;
 }
 
 declare var HTMLCanvasElement: {
@@ -8743,11 +8756,7 @@ interface HTMLElement extends Element {
     click(): void;
     dragDrop(): boolean;
     focus(): void;
-    insertAdjacentElement(position: string, insertedElement: Element): Element;
-    insertAdjacentHTML(where: string, html: string): void;
-    insertAdjacentText(where: string, text: string): void;
     msGetInputContext(): MSInputMethodContext;
-    scrollIntoView(top?: boolean): void;
     setActive(): void;
     addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -10012,6 +10021,7 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
       */
     type: string;
     import?: Document;
+    integrity: string;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10300,7 +10310,7 @@ interface HTMLMediaElement extends HTMLElement {
       */
     canPlayType(type: string): string;
     /**
-      * Fires immediately after the client loads the object.
+      * Resets the audio or video object and loads a new media resource.
       */
     load(): void;
     /**
@@ -10873,6 +10883,7 @@ interface HTMLScriptElement extends HTMLElement {
       * Sets or retrieves the MIME type for the associated scripting engine.
       */
     type: string;
+    integrity: string;
 }
 
 declare var HTMLScriptElement: {
@@ -11878,6 +11889,7 @@ interface KeyboardEvent extends UIEvent {
     readonly repeat: boolean;
     readonly shiftKey: boolean;
     readonly which: number;
+    readonly code: string;
     getModifierState(keyArg: string): boolean;
     initKeyboardEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, keyArg: string, locationArg: number, modifiersListArg: string, repeat: boolean, locale: string): void;
     readonly DOM_KEY_LOCATION_JOYSTICK: number;
@@ -13250,6 +13262,7 @@ interface PerformanceTiming {
     readonly responseStart: number;
     readonly unloadEventEnd: number;
     readonly unloadEventStart: number;
+    readonly secureConnectionStart: number;
     toJSON(): any;
 }
 
@@ -15527,8 +15540,8 @@ declare var StereoPannerNode: {
 interface Storage {
     readonly length: number;
     clear(): void;
-    getItem(key: string): string;
-    key(index: number): string;
+    getItem(key: string): string | null;
+    key(index: number): string | null;
     removeItem(key: string): void;
     setItem(key: string, data: string): void;
     [key: string]: any;
@@ -17069,7 +17082,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onunload: (this: this, ev: Event) => any;
     onvolumechange: (this: this, ev: Event) => any;
     onwaiting: (this: this, ev: Event) => any;
-    readonly opener: Window;
+    opener: any;
     orientation: string | number;
     readonly outerHeight: number;
     readonly outerWidth: number;
@@ -17124,6 +17137,9 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
+    scroll(options?: ScrollToOptions): void;
+    scrollTo(options?: ScrollToOptions): void;
+    scrollBy(options?: ScrollToOptions): void;
     addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -18151,6 +18167,20 @@ interface ProgressEventInit extends EventInit {
     total?: number;
 }
 
+interface ScrollOptions {
+    behavior?: ScrollBehavior;
+}
+
+interface ScrollToOptions extends ScrollOptions {
+    left?: number;
+    top?: number;
+}
+
+interface ScrollIntoViewOptions extends ScrollOptions {
+    block?: ScrollLogicalPosition;
+    inline?: ScrollLogicalPosition;
+}
+
 interface ClipboardEventInit extends EventInit {
     data?: string;
     dataType?: string;
@@ -18194,7 +18224,7 @@ interface EcdsaParams extends Algorithm {
 }
 
 interface EcKeyGenParams extends Algorithm {
-    typedCurve: string;
+    namedCurve: string;
 }
 
 interface EcKeyAlgorithm extends KeyAlgorithm {
@@ -18330,6 +18360,13 @@ interface JsonWebKey {
     k?: string;
 }
 
+interface ParentNode {
+    readonly children: HTMLCollection;
+    readonly firstElementChild: Element;
+    readonly lastElementChild: Element;
+    readonly childElementCount: number;
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
@@ -18400,7 +18437,7 @@ declare var location: Location;
 declare var locationbar: BarProp;
 declare var menubar: BarProp;
 declare var msCredentials: MSCredentials;
-declare var name: string;
+declare const name: never;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;
 declare var onabort: (this: Window, ev: UIEvent) => any;
@@ -18494,7 +18531,7 @@ declare var ontouchstart: (ev: TouchEvent) => any;
 declare var onunload: (this: Window, ev: Event) => any;
 declare var onvolumechange: (this: Window, ev: Event) => any;
 declare var onwaiting: (this: Window, ev: Event) => any;
-declare var opener: Window;
+declare var opener: any;
 declare var orientation: string | number;
 declare var outerHeight: number;
 declare var outerWidth: number;
@@ -18547,6 +18584,9 @@ declare function webkitCancelAnimationFrame(handle: number): void;
 declare function webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
+declare function scroll(options?: ScrollToOptions): void;
+declare function scrollTo(options?: ScrollToOptions): void;
+declare function scrollBy(options?: ScrollToOptions): void;
 declare function toString(): string;
 declare function addEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 declare function dispatchEvent(evt: Event): boolean;
@@ -18702,6 +18742,8 @@ type MSOutboundPayload = MSVideoSendPayload | MSAudioSendPayload;
 type RTCIceGatherCandidate = RTCIceCandidate | RTCIceCandidateComplete;
 type RTCTransport = RTCDtlsTransport | RTCSrtpSdesTransport;
 type payloadtype = number;
+type ScrollBehavior = "auto" | "instant" | "smooth";
+type ScrollLogicalPosition = "start" | "center" | "end" | "nearest";
 type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
 type MouseWheelEvent = WheelEvent;
