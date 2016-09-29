@@ -1,4 +1,4 @@
-tests/cases/compiler/withStatement.ts(3,1): error TS2410: Unsupported 'with' statement, all symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/withStatement.ts(3,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
 ==== tests/cases/compiler/withStatement.ts (1 errors) ====
@@ -6,7 +6,7 @@ tests/cases/compiler/withStatement.ts(3,1): error TS2410: Unsupported 'with' sta
     
     with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2410: Unsupported 'with' statement, all symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
         bing = true; // no error
         bang = true; // no error
         
