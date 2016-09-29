@@ -323,16 +323,24 @@ namespace ts.Completions {
         }
 
         /**
-         * Given a path ending at a directory, gets the completions for the path.
+         * Given a path ending at a directory, gets the completions for the path, and filters for those entries containing the basename.
          */
         function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
-            fragment = getDirectoryPath(fragment); // TODO: modify fragment so it respects our internal path representation?
-            if (!fragment) {
-                fragment = "./";
+            if(fragment === undefined) { fragment = "./"; } // TODO: (arozga) remove the second check along with adding --strictNullChecks
+            
+            fragment = normalizeSlashes(fragment);
+
+            const baseName = getBaseFileName(fragment); // TODO: brittle?
+
+            // Remove the basename from our directory path
+            // TODO: (arozga) when is that used for filtering options later?
+            fragment = getDirectoryPath(fragment);
+            
+            if (fragment === "") { 
+                fragment = '.' + directorySeparator; // TODO: (arozga) can we remove this?
             }
-            else {
-                fragment = ensureTrailingDirectorySeparator(fragment); // TODO: why is this necessary?
-            }
+
+            fragment = ensureTrailingDirectorySeparator(fragment); // TODO: why is this necessary?
 
             const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment));
             const baseDirectory = getDirectoryPath(absolutePath);
@@ -373,6 +381,8 @@ namespace ts.Completions {
                     }
                 }
             }
+
+            result = result.filter(entry => entry.name.indexOf(baseName) >= 0);
 
             return result;
         }
@@ -583,7 +593,7 @@ namespace ts.Completions {
                     // Wrap in try catch because getEffectiveTypeRoots touches the filesystem
                     typeRoots = getEffectiveTypeRoots(options, host);
                 }
-                catch (e) {}
+                catch (e) { }
 
                 if (typeRoots) {
                     for (const root of typeRoots) {
@@ -1700,7 +1710,7 @@ namespace ts.Completions {
         try {
             return directoryProbablyExists(path, host);
         }
-        catch (e) {}
+        catch (e) { }
         return undefined;
     }
 
@@ -1708,7 +1718,7 @@ namespace ts.Completions {
         try {
             return toApply && toApply.apply(host, args);
         }
-        catch (e) {}
+        catch (e) { }
         return undefined;
     }
 }
