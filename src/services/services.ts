@@ -1665,6 +1665,11 @@ namespace ts {
             return true;
         }
 
+        function isValidSnippetInsertionAtPosition(fileName: string, position: number): boolean {
+            const completionInfo = getCompletionsAtPosition(fileName, position);
+            return completionInfo !== undefined && !completionInfo.isMemberCompletion;
+        }
+
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             // Note: while getting todo comments seems like a syntactic operation, we actually
             // treat it as a semantic operation here.  This is because we expect our host to call
@@ -1855,6 +1860,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            isValidSnippetInsertionAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,
