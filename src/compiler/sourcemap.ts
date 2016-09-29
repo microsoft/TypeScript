@@ -348,7 +348,7 @@ namespace ts {
         }
 
         /**
-         * Emits a token of a node node with possible leading and trailing source maps.
+         * Emits a token of a node with possible leading and trailing source maps.
          *
          * @param node The node containing the token.
          * @param token The token to emit.

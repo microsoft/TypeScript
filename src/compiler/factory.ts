@@ -2798,17 +2798,20 @@ namespace ts {
         return tokenSourceMapRanges && tokenSourceMapRanges[token];
     }
 
-    export function getConstantValue(node: Node) {
+    /**
+     * Gets the constant value to emit for an expression.
+     */
+    export function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression) {
         const emitNode = node.emitNode;
-        if (emitNode && emitNode.flags & EmitFlags.ConstantValue) {
-            return emitNode.constantValue;
-        }
+        return emitNode && emitNode.constantValue;
     }
 
-    export function setConstantValue(node: Node, value: number) {
+    /**
+     * Sets the constant value to emit for an expression.
+     */
+    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: number) {
         const emitNode = getOrCreateEmitNode(node);
         emitNode.constantValue = value;
-        emitNode.flags |= EmitFlags.ConstantValue;
         return node;
     }
 

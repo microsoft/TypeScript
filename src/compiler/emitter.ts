@@ -413,7 +413,7 @@ const _super = (function (geti, seti) {
          *
          * NOTE: Do not call this method directly. It is part of the emit pipeline
          * and should only be called indirectly from pipelineEmitWithSourceMap or
-         * pipelineEmitInUnspecifiedContext (when pickign a more specific context).
+         * pipelineEmitInUnspecifiedContext (when picking a more specific context).
          */
         function pipelineEmitWithSubstitution(emitContext: EmitContext, node: Node) {
             emitNodeWithSubstitution(emitContext, node, pipelineEmitForContext);
@@ -1172,7 +1172,7 @@ const _super = (function (geti, seti) {
                 const text = getLiteralTextOfNode(<LiteralExpression>expression);
                 return text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
             }
-            else {
+            else if (isPropertyAccessExpression(expression) || isElementAccessExpression(expression)) {
                 // check if constant enum value is integer
                 const constantValue = getConstantValue(expression);
                 // isFinite handles cases when constantValue is undefined
