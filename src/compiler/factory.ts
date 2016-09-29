@@ -1618,17 +1618,23 @@ namespace ts {
         );
     }
 
-    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement) {
+    export function createJsxFactory(jsxFactory: string) {
+        // No explicit validation of this parameter is required. Users are
+        // assumed to have provided a correct string.
+        return createIdentifier(jsxFactory);
+    }
+
+    export function createReactCreateElement(reactNamespace: string, parentElement: JsxOpeningLikeElement) {
         // To ensure the emit resolver can properly resolve the namespace, we need to
         // treat this identifier as if it were a source tree node by clearing the `Synthesized`
         // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
-        react.parent = parent;
-        return react;
+        react.parent = parentElement;
+        return createPropertyAccess(react, "createElement");
     }
 
-    export function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
+    export function createJsxFactoryCall(jsxFactory: Identifier | PropertyAccessExpression, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
             argumentsList.push(props);
@@ -1651,10 +1657,7 @@ namespace ts {
         }
 
         return createCall(
-            createPropertyAccess(
-                createReactNamespace(reactNamespace, parentElement),
-                "createElement"
-            ),
+            jsxFactory,
             /*typeArguments*/ undefined,
             argumentsList,
             location

@@ -293,6 +293,10 @@ var x = 0;`, {
             options: { compilerOptions: { jsx: 1 }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'jsxFactory'", "x;", {
+            options: { compilerOptions: { jsxFactory: "React.createElement" }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'lib'", "x;", {
             options: { compilerOptions: { lib: ["es2015", "dom"] }, fileName: "input.js", reportDiagnostics: true }
         });

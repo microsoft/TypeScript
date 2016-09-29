@@ -1,0 +1,15 @@
+tests/cases/conformance/jsx/file.tsx(8,2): error TS2304: Cannot find name 'h'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    declare module JSX {
+    	interface IntrinsicElements {
+    		[s: string]: any;
+    	}
+    }
+    
+    // This should raise an error as 'h' is not declared.
+    <div />;
+     ~~~
+!!! error TS2304: Cannot find name 'h'.
+    

@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 0, 20))
+
+		[s: string]: any;
+>s : Symbol(s, Decl(file.tsx, 2, 3))
+	}
+}
+
+=== tests/cases/conformance/jsx/h.d.ts ===
+export var h;
+>h : Symbol(h, Decl(h.d.ts, 0, 10))
+
+=== tests/cases/conformance/jsx/react-consumer.tsx ===
+import {h} from "./h";
+>h : Symbol(h, Decl(react-consumer.tsx, 0, 8))
+
+// Should not elide h import
+<div />;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 0, 20))
+

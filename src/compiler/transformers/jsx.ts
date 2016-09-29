@@ -109,8 +109,12 @@ namespace ts {
                     || createAssignHelper(currentSourceFile.externalHelpersModuleName, segments);
             }
 
-            const element = createReactCreateElement(
-                compilerOptions.reactNamespace,
+            const jsxFactory = compilerOptions.jsxFactory
+                ? createJsxFactory(compilerOptions.jsxFactory)
+                : createReactCreateElement(compilerOptions.reactNamespace, node);
+
+            const element = createJsxFactoryCall(
+                jsxFactory,
                 tagName,
                 objectProperties,
                 filter(map(children, transformJsxChildToExpression), isDefined),
