@@ -9153,6 +9153,7 @@ namespace ts {
                 if (flowType === autoType) {
                     if (compilerOptions.noImplicitAny) {
                         error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_any_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol));
+                        error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(anyType));
                     }
                     return anyType;
                 }
