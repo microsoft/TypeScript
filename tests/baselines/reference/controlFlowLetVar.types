@@ -1,0 +1,296 @@
+=== tests/cases/compiler/controlFlowLetVar.ts ===
+
+declare let cond: boolean;
+>cond : boolean
+
+function f1() {
+>f1 : () => void
+
+    let x;
+>x : any
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : string | number | undefined
+>x : string | number | undefined
+}
+
+function f2() {
+>f2 : () => void
+
+    let x = undefined;
+>x : any
+>undefined : undefined
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : string | number | undefined
+>x : string | number | undefined
+}
+
+function f3() {
+>f3 : () => void
+
+    let x = null;
+>x : any
+>null : null
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : string | number | null
+>x : string | number | null
+}
+
+function f4() {
+>f4 : () => void
+
+    let x: any;
+>x : any
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : any
+>x : any
+}
+
+function f5() {
+>f5 : () => void
+
+    var x;
+>x : any
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : string | number | undefined
+>x : string | number | undefined
+}
+
+function f6() {
+>f6 : () => void
+
+    var x = undefined;
+>x : any
+>undefined : undefined
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : string | number | undefined
+>x : string | number | undefined
+}
+
+function f7() {
+>f7 : () => void
+
+    var x = null;
+>x : any
+>null : null
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : string | number | null
+>x : string | number | null
+}
+
+function f8() {
+>f8 : () => void
+
+    var x: any;
+>x : any
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : any
+>x : any
+}
+
+function f9() {
+>f9 : () => void
+
+    let x;
+>x : any
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : string | number | undefined
+>x : string | number | undefined
+
+    function f() {
+>f : () => void
+
+        const z = x;
+>z : any
+>x : any
+    }
+}
+
+function f10() {
+>f10 : () => void
+
+    let x;
+>x : any
+
+    if (cond) {
+>cond : boolean
+
+        x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+    }
+    if (cond) {
+>cond : boolean
+
+        x = "hello";
+>x = "hello" : "hello"
+>x : any
+>"hello" : "hello"
+    }
+    const y = x;
+>y : string | number | undefined
+>x : string | number | undefined
+
+    const f = () => {
+>f : () => void
+>() => {        const z = x;    } : () => void
+
+        const z = x;
+>z : any
+>x : any
+
+    };
+}

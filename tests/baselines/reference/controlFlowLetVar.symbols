@@ -1,0 +1,253 @@
+=== tests/cases/compiler/controlFlowLetVar.ts ===
+
+declare let cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowLetVar.ts, 1, 26))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 4, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 4, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 4, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 11, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 4, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(controlFlowLetVar.ts, 12, 1))
+
+    let x = undefined;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 15, 7))
+>undefined : Symbol(undefined)
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 15, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 15, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 22, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 15, 7))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(controlFlowLetVar.ts, 23, 1))
+
+    let x = null;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 26, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 26, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 26, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 33, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 26, 7))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(controlFlowLetVar.ts, 34, 1))
+
+    let x: any;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 37, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 37, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 37, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 44, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 37, 7))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(controlFlowLetVar.ts, 45, 1))
+
+    var x;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 48, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 48, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 48, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 55, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 48, 7))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(controlFlowLetVar.ts, 56, 1))
+
+    var x = undefined;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 59, 7))
+>undefined : Symbol(undefined)
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 59, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 59, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 66, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 59, 7))
+}
+
+function f7() {
+>f7 : Symbol(f7, Decl(controlFlowLetVar.ts, 67, 1))
+
+    var x = null;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 70, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 70, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 70, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 77, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 70, 7))
+}
+
+function f8() {
+>f8 : Symbol(f8, Decl(controlFlowLetVar.ts, 78, 1))
+
+    var x: any;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 81, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 81, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 81, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 88, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 81, 7))
+}
+
+function f9() {
+>f9 : Symbol(f9, Decl(controlFlowLetVar.ts, 89, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 92, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 92, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 92, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 99, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 92, 7))
+
+    function f() {
+>f : Symbol(f, Decl(controlFlowLetVar.ts, 99, 16))
+
+        const z = x;
+>z : Symbol(z, Decl(controlFlowLetVar.ts, 101, 13))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 92, 7))
+    }
+}
+
+function f10() {
+>f10 : Symbol(f10, Decl(controlFlowLetVar.ts, 103, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 106, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 106, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowLetVar.ts, 1, 11))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 106, 7))
+    }
+    const y = x;
+>y : Symbol(y, Decl(controlFlowLetVar.ts, 113, 9))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 106, 7))
+
+    const f = () => {
+>f : Symbol(f, Decl(controlFlowLetVar.ts, 114, 9))
+
+        const z = x;
+>z : Symbol(z, Decl(controlFlowLetVar.ts, 115, 13))
+>x : Symbol(x, Decl(controlFlowLetVar.ts, 106, 7))
+
+    };
+}
