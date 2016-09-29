@@ -16,11 +16,13 @@ declare module "gulp-typescript" {
         noImplicitThis?: boolean;
         stripInternal?: boolean;
         types?: string[];
+        sourceMap?: boolean;
     }
     interface CompileStream extends NodeJS.ReadWriteStream { } // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
 }
 import * as insert from "gulp-insert";
 import * as sourcemaps from "gulp-sourcemaps";
+import uglify = require("gulp-uglify");
 import Q = require("q");
 declare global {
     // `del` further depends on `Promise` (and is also not included), so we just, patch the global scope's Promise to Q's (which we already include in our deps because gulp depends on it)
@@ -254,6 +256,8 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     }
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
+        // copy.preserveConstEnums = false;
+        // copy.sourceMap = false;
         copy.newLine = "lf";
     }
     else {
@@ -492,8 +496,35 @@ gulp.task("clean", "Cleans the compiler output, declare files, and tests", [], (
 gulp.task("useDebugMode", false, [], (done) => { useDebugMode = true; done(); });
 gulp.task("dontUseDebugMode", false, [], (done) => { useDebugMode = false; done(); });
 
+
+const minifiedServicesFile = path.join(builtLocalDirectory, "typescriptServices.min.js");
+const minifiedNodePackageFile = path.join(builtLocalDirectory, "typescript.min.js");
+gulp.task("minify", false, [servicesFile], () => {
+    const minifiedFile = gulp.src(servicesFile)
+        .pipe(newer(minifiedServicesFile))
+        .pipe(uglify());
+    return merge2([
+        minifiedFile
+            .pipe(insert.transform((content, file) => (file.path = minifiedServicesFile, content))),
+        minifiedFile
+            .pipe(clone())
+            .pipe(insert.transform((content, file) => (file.path = minifiedNodePackageFile, content))),
+    ]).pipe(gulp.dest(builtLocalDirectory));
+});
+
 gulp.task("VerifyLKG", false, [], () => {
-    const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
+    const expectedFiles = [
+        builtLocalCompiler,
+        servicesFile,
+        serverFile,
+        nodePackageFile,
+        nodeDefinitionsFile,
+        standaloneDefinitionsFile,
+        tsserverLibraryFile,
+        tsserverLibraryDefinitionFile,
+        minifiedServicesFile,
+        minifiedNodePackageFile
+    ].concat(libraryTargets);
     const missingFiles = expectedFiles.filter(function(f) {
         return !fs.existsSync(f);
     });
@@ -507,8 +538,9 @@ gulp.task("VerifyLKG", false, [], () => {
 
 gulp.task("LKGInternal", false, ["lib", "local"]);
 
+
 gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
-    return runSequence("LKGInternal", "VerifyLKG");
+    return runSequence("LKGInternal", "minify", "VerifyLKG");
 });
 
 

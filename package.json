@@ -40,6 +40,7 @@
         "@types/gulp-newer": "latest",
         "@types/gulp-sourcemaps": "latest",
         "@types/gulp-typescript": "latest",
+        "@types/gulp-uglify": "0.0.29",
         "@types/merge2": "latest",
         "@types/minimatch": "latest",
         "@types/minimist": "latest",
@@ -61,6 +62,7 @@
         "gulp-newer": "latest",
         "gulp-sourcemaps": "latest",
         "gulp-typescript": "latest",
+        "gulp-uglify": "^2.0.0",
         "into-stream": "latest",
         "istanbul": "latest",
         "jake": "latest",
@@ -77,7 +79,8 @@
         "ts-node": "latest",
         "tsd": "latest",
         "tslint": "next",
-        "typescript": "next"
+        "typescript": "next",
+        "uglify-js": "^2.7.3"
     },
     "scripts": {
         "pretest": "jake tests",
