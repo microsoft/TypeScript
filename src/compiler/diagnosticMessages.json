@@ -2857,6 +2857,10 @@
         "category": "Message",
         "code": 6139
     },
+    "Auto discovery for typings is enabled in project '{0}'. Running extra resolution pass for module '{1}' using cache location '{2}'.": {
+        "category": "Error",
+        "code": 6140
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
