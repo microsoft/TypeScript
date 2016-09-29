@@ -507,7 +507,7 @@ namespace ts {
             }
 
             function getDeclarations(name: string) {
-                return result[name] || (result[name] = []);
+                return _getOrUpdate(result, name, () => []);
             }
 
             function getDeclarationName(declaration: Declaration) {
@@ -923,7 +923,7 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
-            localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
+            localizedDiagnosticMessages = createMapFromMapLike<string>(host.getLocalizedDiagnosticMessages());
         }
 
         function log(message: string) {
@@ -1839,7 +1839,7 @@ namespace ts {
         function walk(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    nameTable[(<Identifier>node).text] = nameTable[(<Identifier>node).text] === undefined ? node.pos : -1;
+                    _s(nameTable, (<Identifier>node).text, _g(nameTable, (<Identifier>node).text) === undefined ? node.pos : -1);
                     break;
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -1852,7 +1852,7 @@ namespace ts {
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
 
-                        nameTable[(<LiteralExpression>node).text] = nameTable[(<LiteralExpression>node).text] === undefined ? node.pos : -1;
+                        _s(nameTable, (<LiteralExpression>node).text, _g(nameTable, (<LiteralExpression>node).text) === undefined ? node.pos : -1);
                     }
                     break;
                 default:

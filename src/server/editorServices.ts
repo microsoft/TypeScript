@@ -18,7 +18,7 @@ namespace ts.server {
     const lineCollectionCapacity = 4;
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
-        const hasOwnProperty = Object.prototype.hasOwnProperty;
+        const hasOwnProperty = Object.prototype.hasOwnProperty; //no no no, use hasProperty
         Object.keys(formatOptions).forEach((key) => {
             const codeKey = key.charAt(0).toUpperCase() + key.substring(1);
             if (hasOwnProperty.call(formatCodeOptions, codeKey)) {
@@ -136,9 +136,9 @@ namespace ts.server {
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = newResolutions[name];
+                let resolution = _g(newResolutions, name);
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile[name];
+                    const existingResolution = currentResolutionsInFile && _g(currentResolutionsInFile, name);
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
@@ -146,7 +146,7 @@ namespace ts.server {
                     else {
                         resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost);
                         resolution.lastCheckTime = Date.now();
-                        newResolutions[name] = resolution;
+                        _s(newResolutions, name, resolution);
                     }
                 }
 
@@ -469,7 +469,7 @@ namespace ts.server {
                 return undefined;
             }
 
-            return this.filenameToSourceFile[info.fileName];
+            return _g(this.filenameToSourceFile, info.fileName);
         }
 
         getSourceFileFromName(filename: string, requireOpen?: boolean) {
@@ -511,7 +511,7 @@ namespace ts.server {
             const sourceFiles = this.program.getSourceFiles();
             for (let i = 0, len = sourceFiles.length; i < len; i++) {
                 const normFilename = ts.normalizePath(sourceFiles[i].fileName);
-                this.filenameToSourceFile[normFilename] = sourceFiles[i];
+                _s(this.filenameToSourceFile, normFilename, sourceFiles[i]);
             }
         }
 
@@ -566,7 +566,7 @@ namespace ts.server {
             }
 
             let strBuilder = "";
-            ts.forEachProperty(this.filenameToSourceFile,
+            ts._eachValue(this.filenameToSourceFile,
                 sourceFile => { strBuilder += sourceFile.fileName + "\n"; });
             return strBuilder;
         }
@@ -642,7 +642,7 @@ namespace ts.server {
 
         getFormatCodeOptions(file?: string) {
             if (file) {
-                const info = this.filenameToScriptInfo[file];
+                const info = _g(this.filenameToScriptInfo, file);
                 if (info) {
                     return info.formatCodeOptions;
                 }
@@ -651,7 +651,7 @@ namespace ts.server {
         }
 
         watchedFileChanged(fileName: string) {
-            const info = this.filenameToScriptInfo[fileName];
+            const info = _g(this.filenameToScriptInfo, fileName);
             if (!info) {
                 this.psLogger.info("Error: got watch notification for unknown file: " + fileName);
             }
@@ -685,13 +685,13 @@ namespace ts.server {
         }
 
         startTimerForDetectingProjectFileListChanges(project: Project) {
-            if (this.timerForDetectingProjectFileListChanges[project.projectFilename]) {
-                this.host.clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
+            if (_g(this.timerForDetectingProjectFileListChanges, project.projectFilename)) {
+                this.host.clearTimeout(_g(this.timerForDetectingProjectFileListChanges, project.projectFilename));
             }
-            this.timerForDetectingProjectFileListChanges[project.projectFilename] = this.host.setTimeout(
+            _s(this.timerForDetectingProjectFileListChanges, project.projectFilename, this.host.setTimeout(
                 () => this.handleProjectFileListChanges(project),
                 250
-            );
+            ));
         }
 
         handleProjectFileListChanges(project: Project) {
@@ -774,7 +774,7 @@ namespace ts.server {
 
         setHostConfiguration(args: ts.server.protocol.ConfigureRequestArguments) {
             if (args.file) {
-                const info = this.filenameToScriptInfo[args.file];
+                const info = _g(this.filenameToScriptInfo, args.file);
                 if (info) {
                     info.setFormatOptions(args.formatOptions);
                     this.log("Host configuration update for file " + args.file, "Info");
@@ -803,14 +803,14 @@ namespace ts.server {
             let currentPath = ts.getDirectoryPath(root.fileName);
             let parentPath = ts.getDirectoryPath(currentPath);
             while (currentPath != parentPath) {
-                if (!project.projectService.directoryWatchersForTsconfig[currentPath]) {
+                if (!_g(project.projectService.directoryWatchersForTsconfig, currentPath)) {
                     this.log("Add watcher for: " + currentPath);
-                    project.projectService.directoryWatchersForTsconfig[currentPath] =
-                        this.host.watchDirectory(currentPath, fileName => this.directoryWatchedForTsconfigChanged(fileName));
-                    project.projectService.directoryWatchersRefCount[currentPath] = 1;
+                    _s(project.projectService.directoryWatchersForTsconfig, currentPath,
+                        this.host.watchDirectory(currentPath, fileName => this.directoryWatchedForTsconfigChanged(fileName)));
+                    _s(project.projectService.directoryWatchersRefCount, currentPath, 1);
                 }
                 else {
-                    project.projectService.directoryWatchersRefCount[currentPath] += 1;
+                    _mod(project.projectService.directoryWatchersRefCount, currentPath, refCount => refCount + 1);
                 }
                 project.directoriesWatchedForTsconfig.push(currentPath);
                 currentPath = parentPath;
@@ -831,7 +831,7 @@ namespace ts.server {
             }
 
             if (!info.isOpen) {
-                this.filenameToScriptInfo[info.fileName] = undefined;
+                _s(this.filenameToScriptInfo, info.fileName, undefined);
                 const referencingProjects = this.findReferencingProjects(info);
                 if (info.defaultProject) {
                     info.defaultProject.removeRoot(info);
@@ -871,18 +871,18 @@ namespace ts.server {
             if (project.isConfiguredProject()) {
                 project.projectFileWatcher.close();
                 project.directoryWatcher.close();
-                forEachProperty(project.directoriesWatchedForWildcards, watcher => { watcher.close(); });
+                _eachValue(project.directoriesWatchedForWildcards, watcher => { watcher.close(); });
                 delete project.directoriesWatchedForWildcards;
                 unorderedRemoveItem(this.configuredProjects, project);
             }
             else {
                 for (const directory of project.directoriesWatchedForTsconfig) {
                     // if the ref count for this directory watcher drops to 0, it's time to close it
-                    project.projectService.directoryWatchersRefCount[directory]--;
-                    if (!project.projectService.directoryWatchersRefCount[directory]) {
+                    _mod(project.projectService.directoryWatchersRefCount, directory, refCount => refCount - 1);
+                    if (!_g(project.projectService.directoryWatchersRefCount, directory)) {
                         this.log("Close directory watcher for: " + directory);
-                        project.projectService.directoryWatchersForTsconfig[directory].close();
-                        delete project.projectService.directoryWatchersForTsconfig[directory];
+                        _g(project.projectService.directoryWatchersForTsconfig, directory).close();
+                        _delete(project.projectService.directoryWatchersForTsconfig, directory);
                     }
                 }
                 unorderedRemoveItem(this.inferredProjects, project);
@@ -1138,7 +1138,7 @@ namespace ts.server {
 
         getScriptInfo(filename: string) {
             filename = ts.normalizePath(filename);
-            return this.filenameToScriptInfo[filename];
+            return _g(this.filenameToScriptInfo, filename);
         }
 
         /**
@@ -1147,7 +1147,7 @@ namespace ts.server {
          */
         openFile(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
             fileName = ts.normalizePath(fileName);
-            let info = this.filenameToScriptInfo[fileName];
+            let info = _g(this.filenameToScriptInfo, fileName);
             if (!info) {
                 let content: string;
                 if (this.host.fileExists(fileName)) {
@@ -1162,7 +1162,7 @@ namespace ts.server {
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
                     info.scriptKind = scriptKind;
                     info.setFormatOptions(this.getFormatCodeOptions());
-                    this.filenameToScriptInfo[fileName] = info;
+                    _s(this.filenameToScriptInfo, fileName, info);
                     if (!info.isOpen) {
                         info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
                     }
@@ -1261,7 +1261,7 @@ namespace ts.server {
          * @param filename is absolute pathname
          */
         closeClientFile(filename: string) {
-            const info = this.filenameToScriptInfo[filename];
+            const info = _g(this.filenameToScriptInfo, filename);
             if (info) {
                 this.closeOpenFile(info);
                 info.isOpen = false;
@@ -1270,14 +1270,14 @@ namespace ts.server {
         }
 
         getProjectForFile(filename: string) {
-            const scriptInfo = this.filenameToScriptInfo[filename];
+            const scriptInfo = _g(this.filenameToScriptInfo, filename);
             if (scriptInfo) {
                 return scriptInfo.defaultProject;
             }
         }
 
         printProjectsForFile(filename: string) {
-            const scriptInfo = this.filenameToScriptInfo[filename];
+            const scriptInfo = _g(this.filenameToScriptInfo, filename);
             if (scriptInfo) {
                 this.psLogger.startGroup();
                 this.psLogger.info("Projects for " + filename);
@@ -1431,19 +1431,33 @@ namespace ts.server {
                 /*recursive*/ true
             );
 
-            project.directoriesWatchedForWildcards = reduceProperties(createMap(projectOptions.wildcardDirectories), (watchers, flag, directory) => {
+            /*project.directoriesWatchedForWildcards = reduceProperties(createMap(projectOptions.wildcardDirectories), (watchers, flag, directory) => {
                 if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                     this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);
-                    watchers[directory] = this.host.watchDirectory(
+                    _s(watchers, directory, this.host.watchDirectory(
                         directory,
                         path => this.directoryWatchedForSourceFilesChanged(project, path),
                         recursive
-                    );
+                    ));
                 }
 
                 return watchers;
-            }, <Map<FileWatcher>>{});
+            }, <Map<FileWatcher>>{});*/
+
+            project.directoriesWatchedForWildcards = createMap<FileWatcher>();
+            //neater
+            _each(createMapFromMapLike(projectOptions.wildcardDirectories), (directory, flag) => {
+                if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
+                    const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                    this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);
+                    _s(project.directoriesWatchedForWildcards, directory, this.host.watchDirectory(
+                        directory,
+                        path => this.directoryWatchedForSourceFilesChanged(project, path),
+                        recursive
+                    ));
+                }
+            });
 
             return { project: project, errors };
         }

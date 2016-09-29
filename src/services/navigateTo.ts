@@ -9,13 +9,13 @@ namespace ts.NavigateTo {
         // This means "compare in a case insensitive manner."
         const baseSensitivity: Intl.CollatorOptions = { sensitivity: "base" };
 
-        // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
-        forEach(sourceFiles, sourceFile => {
+        //Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
+        /*forEach(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
 
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            for (const name in nameToDeclarations) {
-                const declarations = nameToDeclarations[name];
+            for (const name in nameToDeclarations) { //todo: actual map loop
+                const declarations = _g(nameToDeclarations, name);
                 if (declarations) {
                     // First do a quick check to see if the name of the declaration matches the
                     // last portion of the (possibly) dotted name they're searching for.
@@ -31,7 +31,7 @@ namespace ts.NavigateTo {
                         if (patternMatcher.patternContainsDots) {
                             const containers = getContainers(declaration);
                             if (!containers) {
-                                return undefined;
+                                return undefined; //goto next source file
                             }
 
                             matches = patternMatcher.getMatches(containers, name);
@@ -47,7 +47,41 @@ namespace ts.NavigateTo {
                     }
                 }
             }
-        });
+        });*/
+
+        for (const sourceFile of sourceFiles) {
+            cancellationToken.throwIfCancellationRequested();
+
+            const nameToDeclarations = sourceFile.getNamedDeclarations();
+            _eachAndBreakIfReturningTrue(nameToDeclarations, (name, declarations) => {
+                if (!declarations) { return; }
+                // First do a quick check to see if the name of the declaration matches the
+                // last portion of the (possibly) dotted name they're searching for.
+                let matches = patternMatcher.getMatchesForLastSegmentOfPattern(name);
+                if (!matches) { return; }
+
+                for (const declaration of declarations) {
+                    // It was a match!  If the pattern has dots in it, then also see if the
+                    // declaration container matches as well.
+                    if (patternMatcher.patternContainsDots) {
+                        const containers = getContainers(declaration);
+                        if (!containers) {
+                            return true; //This means: break out of the declarations loop and go to the next source file
+                        }
+
+                        matches = patternMatcher.getMatches(containers, name);
+
+                        if (!matches) {
+                            continue;
+                        }
+                    }
+
+                    const fileName = sourceFile.fileName;
+                    const matchKind = bestMatchKind(matches);
+                    rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });
+                }
+            });
+        }
 
         // Remove imports when the imported declaration is already in the list and has the same name.
         rawItems = filter(rawItems, item => {

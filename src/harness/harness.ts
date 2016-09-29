@@ -925,7 +925,7 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap=  ts.createMap<ts.SourceFile>({
+        const libFileNameSourceFileMap=  ts.createMapFromMapLike<ts.SourceFile>({
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         });
 
@@ -934,10 +934,10 @@ namespace Harness {
                 return undefined;
             }
 
-            if (!libFileNameSourceFileMap[fileName]) {
-                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
+            if (!ts._g(libFileNameSourceFileMap, fileName)) {
+                ts._s(libFileNameSourceFileMap, fileName, createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
             }
-            return libFileNameSourceFileMap[fileName];
+            return ts._g(libFileNameSourceFileMap, fileName);
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
@@ -1085,10 +1085,10 @@ namespace Harness {
                 optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
-                    optionsIndex[option.name.toLowerCase()] = option;
+                    ts._s(optionsIndex, option.name.toLowerCase(), option);
                 }
             }
-            return optionsIndex[name.toLowerCase()];
+            return ts._g(optionsIndex, name.toLowerCase());
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1442,7 +1442,7 @@ namespace Harness {
             const fullResults = ts.createMap<TypeWriterResult[]>();
 
             for (const sourceFile of allFiles) {
-                fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                ts._s(fullResults, sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
             }
 
             // Produce baselines.  The first gives the types for all expressions.
@@ -1495,7 +1495,7 @@ namespace Harness {
 
                 allFiles.forEach(file => {
                     const codeLines = file.content.split("\n");
-                    typeWriterResults[file.unitName].forEach(result => {
+                    ts._g(typeWriterResults, file.unitName).forEach(result => {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
                         }

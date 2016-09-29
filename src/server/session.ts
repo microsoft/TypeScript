@@ -1100,7 +1100,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers = createMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
+        private handlers = createMapFromMapLike<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.Exit]: () => {
                 this.exit();
                 return { responseRequired: false };
@@ -1244,14 +1244,14 @@ namespace ts.server {
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
-            if (command in this.handlers) {
+            if (_has(this.handlers, command)) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
-            this.handlers[command] = handler;
+            _s(this.handlers, command, handler);
         }
 
         public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
-            const handler = this.handlers[request.command];
+            const handler = _g(this.handlers, request.command);
             if (handler) {
                 return handler(request);
             }

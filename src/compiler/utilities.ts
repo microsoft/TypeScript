@@ -103,11 +103,11 @@ namespace ts {
     }
 
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
-        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules[moduleNameText]);
+        return !!(sourceFile && sourceFile.resolvedModules && _g(sourceFile.resolvedModules, moduleNameText));
     }
 
     export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule {
-        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+        return hasResolvedModule(sourceFile, moduleNameText) ? _g(sourceFile.resolvedModules, moduleNameText) : undefined;
     }
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void {
@@ -115,7 +115,7 @@ namespace ts {
             sourceFile.resolvedModules = createMap<ResolvedModule>();
         }
 
-        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
+        _s(sourceFile.resolvedModules, moduleNameText, resolvedModule);
     }
 
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
@@ -123,7 +123,7 @@ namespace ts {
             sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective>();
         }
 
-        sourceFile.resolvedTypeReferenceDirectiveNames[typeReferenceDirectiveName] = resolvedTypeReferenceDirective;
+        _s(sourceFile.resolvedTypeReferenceDirectiveNames, typeReferenceDirectiveName, resolvedTypeReferenceDirective);
     }
 
     /* @internal */
@@ -143,7 +143,7 @@ namespace ts {
         }
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
-            const oldResolution = oldResolutions && oldResolutions[names[i]];
+            const oldResolution = oldResolutions && _g(oldResolutions, names[i]);
             const changed =
                 oldResolution
                     ? !newResolution || !comparer(oldResolution, newResolution)
@@ -2237,11 +2237,11 @@ namespace ts {
         }
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
-            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
+            if (!_has(fileDiagnostics, newFile.fileName)) {
                 return;
             }
 
-            for (const diagnostic of fileDiagnostics[newFile.fileName]) {
+            for (const diagnostic of _g(fileDiagnostics, newFile.fileName)) {
                 diagnostic.file = newFile;
             }
         }
@@ -2249,10 +2249,10 @@ namespace ts {
         function add(diagnostic: Diagnostic): void {
             let diagnostics: Diagnostic[];
             if (diagnostic.file) {
-                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                diagnostics = _g(fileDiagnostics, diagnostic.file.fileName);
                 if (!diagnostics) {
                     diagnostics = [];
-                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                    _s(fileDiagnostics, diagnostic.file.fileName, diagnostics);
                 }
             }
             else {
@@ -2272,7 +2272,7 @@ namespace ts {
         function getDiagnostics(fileName?: string): Diagnostic[] {
             sortAndDeduplicate();
             if (fileName) {
-                return fileDiagnostics[fileName] || [];
+                return _g(fileDiagnostics, fileName) || [];
             }
 
             const allDiagnostics: Diagnostic[] = [];
@@ -2282,9 +2282,8 @@ namespace ts {
 
             forEach(nonFileDiagnostics, pushDiagnostic);
 
-            for (const key in fileDiagnostics) {
-                forEach(fileDiagnostics[key], pushDiagnostic);
-            }
+            _eachValue(fileDiagnostics, diagnostics =>
+                forEach(diagnostics, pushDiagnostic));
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
@@ -2297,9 +2296,7 @@ namespace ts {
             diagnosticsModified = false;
             nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
-            for (const key in fileDiagnostics) {
-                fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
-            }
+            _mapValuesMutate(fileDiagnostics, sortAndDeduplicateDiagnostics);
         }
     }
 
@@ -2309,7 +2306,7 @@ namespace ts {
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap = createMap({
+    const escapedCharsMap = createMapFromMapLike({
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -2336,7 +2333,7 @@ namespace ts {
         return s;
 
         function getReplacement(c: string) {
-            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+            return _g(escapedCharsMap, c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
     }
 
@@ -3371,13 +3368,13 @@ namespace ts {
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;
         if (syntaxKindEnum) {
-            if (syntaxKindCache[kind]) {
-                return syntaxKindCache[kind];
+            if (_hasWakka(syntaxKindCache, kind)) {
+                return _getWakka(syntaxKindCache, kind);
             }
 
             for (const name in syntaxKindEnum) {
                 if (syntaxKindEnum[name] === kind) {
-                    return syntaxKindCache[kind] = kind.toString() + " (" + name + ")";
+                    return _setWakka(syntaxKindCache, kind, kind.toString() + " (" + name + ")");
                 }
             }
         }
@@ -3555,7 +3552,7 @@ namespace ts {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
                             const name = (specifier.propertyName || specifier.name).text;
-                            (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
+                            multiMapAdd(exportSpecifiers, name, specifier);
                         }
                     }
                     break;

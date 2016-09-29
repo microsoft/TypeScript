@@ -217,7 +217,7 @@ namespace ts {
         Endfinally = 7,
     }
 
-    const instructionNames = createMap<string>({
+    const instructionNames = createMapFromMapLike<string>({
         [Instruction.Return]: "return",
         [Instruction.Break]: "break",
         [Instruction.Yield]: "yield",
@@ -243,7 +243,7 @@ namespace ts {
         context.onSubstituteNode = onSubstituteNode;
 
         let currentSourceFile: SourceFile;
-        let renamedCatchVariables: Map<boolean>;
+        let renamedCatchVariables: Set;
         let renamedCatchVariableDeclarations: Map<Identifier>;
 
         let inGeneratorFunctionBody: boolean;
@@ -1903,12 +1903,12 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier) {
-            if (renamedCatchVariables && hasProperty(renamedCatchVariables, node.text)) {
+            if (renamedCatchVariables && _setHas(renamedCatchVariables, node.text)) {
                 const original = getOriginalNode(node);
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
                     if (declaration) {
-                        const name = getProperty(renamedCatchVariableDeclarations, String(getOriginalNodeId(declaration)));
+                        const name = _g(renamedCatchVariableDeclarations, String(getOriginalNodeId(declaration)));
                         if (name) {
                             const clone = getMutableClone(name);
                             setSourceMapRange(clone, node);
@@ -2073,13 +2073,13 @@ namespace ts {
             const name = declareLocal(text);
 
             if (!renamedCatchVariables) {
-                renamedCatchVariables = createMap<boolean>();
+                renamedCatchVariables = createSet();
                 renamedCatchVariableDeclarations = createMap<Identifier>();
                 context.enableSubstitution(SyntaxKind.Identifier);
             }
 
-            renamedCatchVariables[text] = true;
-            renamedCatchVariableDeclarations[getOriginalNodeId(variable)] = name;
+            _add(renamedCatchVariables, text);
+            _setWakka(renamedCatchVariableDeclarations, getOriginalNodeId(variable), name);
 
             const exception = <ExceptionBlock>peekBlock();
             Debug.assert(exception.state < ExceptionBlockState.Catch);
@@ -2383,7 +2383,7 @@ namespace ts {
          */
         function createInstruction(instruction: Instruction): NumericLiteral {
             const literal = createLiteral(instruction);
-            literal.trailingComment = instructionNames[instruction];
+            literal.trailingComment = _getWakka(instructionNames, instruction);
             return literal;
         }
 

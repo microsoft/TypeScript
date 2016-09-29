@@ -10,7 +10,7 @@
 
 /* @internal */
 namespace ts {
-    const moduleTransformerMap = createMap<Transformer>({
+    const moduleTransformerMap = createMapFromMapLike<Transformer>({
         [ModuleKind.ES6]: transformES6Module,
         [ModuleKind.System]: transformSystemModule,
         [ModuleKind.AMD]: transformModule,
@@ -170,7 +170,7 @@ namespace ts {
         const transformers: Transformer[] = [];
 
         transformers.push(transformTypeScript);
-        transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
+        transformers.push(_getWakka(moduleTransformerMap, moduleKind) || _getWakka(moduleTransformerMap, ModuleKind.None));
 
         if (jsx === JsxEmit.React) {
             transformers.push(transformJsx);
@@ -431,7 +431,7 @@ namespace ts {
             let range: TextRange;
             let current = node;
             while (current) {
-                range = current.id ? tokenSourceMapRanges[current.id + "-" + token] : undefined;
+                range = current.id ? _g(tokenSourceMapRanges, current.id + "-" + token) : undefined;
                 if (range !== undefined) {
                     break;
                 }
@@ -458,7 +458,7 @@ namespace ts {
             lastTokenSourceMapRangeNode = node;
             lastTokenSourceMapRangeToken = token;
             lastTokenSourceMapRange = range;
-            tokenSourceMapRanges[getNodeId(node) + "-" + token] = range;
+            _s(tokenSourceMapRanges, getNodeId(node) + "-" + token, range);
             return node;
         }
 

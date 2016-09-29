@@ -4,7 +4,7 @@
 /*@internal*/
 namespace ts {
     export function transformModule(context: TransformationContext) {
-        const transformModuleDelegates = createMap<(node: SourceFile) => SourceFile>({
+        const transformModuleDelegates = createMapFromMapLike<(node: SourceFile) => SourceFile>({
             [ModuleKind.None]: transformCommonJSModule,
             [ModuleKind.CommonJS]: transformCommonJSModule,
             [ModuleKind.AMD]: transformAMDModule,
@@ -61,7 +61,7 @@ namespace ts {
                 ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
 
                 // Perform the transformation.
-                const transformModule = transformModuleDelegates[moduleKind] || transformModuleDelegates[ModuleKind.None];
+                const transformModule = _getWakka(transformModuleDelegates, moduleKind) || _getWakka(transformModuleDelegates, ModuleKind.None);
                 const updated = transformModule(node);
                 aggregateTransformFlags(updated);
 
@@ -523,7 +523,7 @@ namespace ts {
             const original = getOriginalNode(currentSourceFile);
             Debug.assert(original.kind === SyntaxKind.SourceFile);
 
-            if (!original.symbol.exports["___esModule"]) {
+            if (!_g(original.symbol.exports, "___esModule")) {
                 if (languageVersion === ScriptTarget.ES3) {
                     statements.push(
                         createStatement(
@@ -578,8 +578,8 @@ namespace ts {
         }
 
         function addExportMemberAssignments(statements: Statement[], name: Identifier): void {
-            if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
-                for (const specifier of exportSpecifiers[name.text]) {
+            if (!exportEquals && exportSpecifiers && _has(exportSpecifiers, name.text)) {
+                for (const specifier of _g(exportSpecifiers, name.text)) {
                     statements.push(
                         startOnNewLine(
                             createStatement(
@@ -666,12 +666,12 @@ namespace ts {
                 }
             }
             else {
-                if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
+                if (!exportEquals && exportSpecifiers && _has(exportSpecifiers, name.text)) {
                     const sourceFileId = getOriginalNodeId(currentSourceFile);
-                    if (!bindingNameExportSpecifiersForFileMap[sourceFileId]) {
-                        bindingNameExportSpecifiersForFileMap[sourceFileId] = createMap<ExportSpecifier[]>();
+                    if (!_getWakka(bindingNameExportSpecifiersForFileMap, sourceFileId)) {
+                        _setWakka(bindingNameExportSpecifiersForFileMap, sourceFileId, createMap<ExportSpecifier[]>());
                     }
-                    bindingNameExportSpecifiersForFileMap[sourceFileId][name.text] = exportSpecifiers[name.text];
+                    _s(_getWakka(bindingNameExportSpecifiersForFileMap, sourceFileId), name.text, _g(exportSpecifiers, name.text));
                     addExportMemberAssignments(resultStatements, name);
                 }
             }
@@ -823,7 +823,7 @@ namespace ts {
 
         function onEmitNode(node: Node, emit: (node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
-                bindingNameExportSpecifiersMap = bindingNameExportSpecifiersForFileMap[getOriginalNodeId(node)];
+                bindingNameExportSpecifiersMap = _getWakka(bindingNameExportSpecifiersForFileMap, getOriginalNodeId(node));
                 previousOnEmitNode(node, emit);
                 bindingNameExportSpecifiersMap = undefined;
             }
@@ -889,10 +889,10 @@ namespace ts {
             const left = node.left;
             // If the left-hand-side of the binaryExpression is an identifier and its is export through export Specifier
             if (isIdentifier(left) && isAssignmentOperator(node.operatorToken.kind)) {
-                if (bindingNameExportSpecifiersMap && hasProperty(bindingNameExportSpecifiersMap, left.text)) {
+                if (bindingNameExportSpecifiersMap && _has(bindingNameExportSpecifiersMap, left.text)) {
                     setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
                     let nestedExportAssignment: BinaryExpression;
-                    for (const specifier of bindingNameExportSpecifiersMap[left.text]) {
+                    for (const specifier of _g(bindingNameExportSpecifiersMap, left.text)) {
                         nestedExportAssignment = nestedExportAssignment ?
                             createExportAssignment(specifier.name, nestedExportAssignment) :
                             createExportAssignment(specifier.name, node);
@@ -909,7 +909,7 @@ namespace ts {
             const operator = node.operator;
             const operand = node.operand;
             if (isIdentifier(operand) && bindingNameExportSpecifiersForFileMap) {
-                if (bindingNameExportSpecifiersMap && hasProperty(bindingNameExportSpecifiersMap, operand.text)) {
+                if (bindingNameExportSpecifiersMap && _has(bindingNameExportSpecifiersMap, operand.text)) {
                     setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
                     let transformedUnaryExpression: BinaryExpression;
                     if (node.kind === SyntaxKind.PostfixUnaryExpression) {
@@ -923,7 +923,7 @@ namespace ts {
                         setNodeEmitFlags(transformedUnaryExpression, NodeEmitFlags.NoSubstitution);
                     }
                     let nestedExportAssignment: BinaryExpression;
-                    for (const specifier of bindingNameExportSpecifiersMap[operand.text]) {
+                    for (const specifier of _g(bindingNameExportSpecifiersMap, operand.text)) {
                         nestedExportAssignment = nestedExportAssignment ?
                             createExportAssignment(specifier.name, nestedExportAssignment) :
                             createExportAssignment(specifier.name, transformedUnaryExpression || node);

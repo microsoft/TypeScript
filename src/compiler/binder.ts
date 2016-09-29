@@ -126,7 +126,7 @@ namespace ts {
 
         let symbolCount = 0;
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
-        let classifiableNames: Map<string>;
+        let classifiableNames: Set;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -140,7 +140,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
-            classifiableNames = createMap<string>();
+            classifiableNames = createSet();
             symbolCount = 0;
             skipTransformFlagAggregation = isDeclarationFile(file);
 
@@ -332,17 +332,17 @@ namespace ts {
                 // Otherwise, we'll be merging into a compatible existing symbol (for example when
                 // you have multiple 'vars' with the same name in the same container).  In this case
                 // just add this node into the declarations list of the symbol.
-                symbol = symbolTable[name] || (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                symbol = _getOrUpdate(symbolTable, name, name => createSymbol(SymbolFlags.None, name));
 
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames[name] = name;
+                    _add(classifiableNames, name);
                 }
 
                 if (symbol.flags & excludes) {
                     if (symbol.isReplaceableByMethod) {
                         // Javascript constructor-declared symbols can be discarded in favor of
                         // prototype symbols like methods.
-                        symbol = symbolTable[name] = createSymbol(SymbolFlags.None, name);
+                        symbol = _s(symbolTable, name, createSymbol(SymbolFlags.None, name));
                     }
                     else {
                         if (node.name) {
@@ -1444,7 +1444,7 @@ namespace ts {
             const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
             typeLiteralSymbol.members = createMap<Symbol>();
-            typeLiteralSymbol.members[symbol.name] = symbol;
+            _s(typeLiteralSymbol.members, symbol.name, symbol);
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
@@ -1475,9 +1475,9 @@ namespace ts {
                         ? ElementKind.Property
                         : ElementKind.Accessor;
 
-                    const existingKind = seen[identifier.text];
+                    const existingKind = _g(seen, identifier.text);
                     if (!existingKind) {
-                        seen[identifier.text] = currentKind;
+                        _s(seen, identifier.text, currentKind);
                         continue;
                     }
 
@@ -2049,7 +2049,7 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = leftSideOfAssignment;
 
-            const funcSymbol = container.locals[constructorFunction.text];
+            const funcSymbol = _g(container.locals, constructorFunction.text);
             if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
                 return;
             }
@@ -2089,7 +2089,7 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
-                    classifiableNames[node.name.text] = node.name.text;
+                    _add(classifiableNames, node.name.text);
                 }
             }
 
@@ -2105,14 +2105,15 @@ namespace ts {
             // module might have an exported variable called 'prototype'.  We can't allow that as
             // that would clash with the built-in 'prototype' for the class.
             const prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
-            if (symbol.exports[prototypeSymbol.name]) {
+            const symbolExport = _g(symbol.exports, prototypeSymbol.name);
+            if (symbolExport) {
                 if (node.name) {
                     node.name.parent = node;
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
+                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0],
                     Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
             }
-            symbol.exports[prototypeSymbol.name] = prototypeSymbol;
+            _s(symbol.exports, prototypeSymbol.name, prototypeSymbol);
             prototypeSymbol.parent = symbol;
         }
 

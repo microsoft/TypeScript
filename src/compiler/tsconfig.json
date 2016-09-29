@@ -12,6 +12,7 @@
     },
     "files": [
         "core.ts",
+        "dataStructures.ts",
         "performance.ts",
         "sys.ts",
         "types.ts",
