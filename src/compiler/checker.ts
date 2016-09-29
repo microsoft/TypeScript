@@ -3051,6 +3051,11 @@ namespace ts {
             return undefined;
         }
 
+        function isAutoVariableInitializer(initializer: Expression) {
+            let expr = initializer && skipParentheses(initializer);
+            return !expr || expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>expr) === undefinedSymbol;
+        }
+
         function addOptionality(type: Type, optional: boolean): Type {
             return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
         }
@@ -3090,9 +3095,10 @@ namespace ts {
             }
 
             // Use control flow type inference for non-ambient, non-exported var or let variables with no initializer
+            // or a 'null' or 'undefined' initializer.
             if (declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedNodeFlags(declaration) & NodeFlags.Const) && !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) &&
-                !declaration.initializer && !isInAmbientContext(declaration)) {
+                !isInAmbientContext(declaration) && isAutoVariableInitializer(declaration.initializer)) {
                 return autoType;
             }
 
@@ -8965,7 +8971,7 @@ namespace ts {
                 if (isRightSideOfQualifiedNameOrPropertyAccess(location)) {
                     location = location.parent;
                 }
-                if (isExpression(location) && !isAssignmentTarget(location)) {
+                if (isPartOfExpression(location) && !isAssignmentTarget(location)) {
                     const type = checkExpression(<Expression>location);
                     if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
                         return type;
@@ -9146,7 +9152,7 @@ namespace ts {
             if (type === autoType) {
                 if (flowType === autoType) {
                     if (compilerOptions.noImplicitAny) {
-                        error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_any_and_is_referenced_in_a_nested_function, symbolToString(symbol));
+                        error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_any_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol));
                     }
                     return anyType;
                 }
