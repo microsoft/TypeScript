@@ -3052,7 +3052,7 @@ namespace ts {
         }
 
         function isAutoVariableInitializer(initializer: Expression) {
-            let expr = initializer && skipParentheses(initializer);
+            const expr = initializer && skipParentheses(initializer);
             return !expr || expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>expr) === undefinedSymbol;
         }
 
