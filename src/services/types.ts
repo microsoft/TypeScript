@@ -472,6 +472,7 @@ namespace ts {
     }
 
     export interface CompletionInfo {
+        // TODO: (arozga) What does this do?
         isMemberCompletion: boolean;
 
         /**
