@@ -2201,7 +2201,6 @@ namespace ts {
                 }
             }
 
-            debugger;
             let loopBody = visitNode(node.statement, visitor, isStatement);
 
             const currentState = convertedLoopState;
