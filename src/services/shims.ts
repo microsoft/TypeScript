@@ -16,7 +16,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-let debugObjectHost = new Function("return this")();
+let debugObjectHost = (function (this: any) { return this; })();
 
 // We need to use 'null' to interface with the managed side.
 /* tslint:disable:no-null-keyword */
@@ -67,6 +67,7 @@ namespace ts {
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
 
+        getTypeRootsVersion?(): number;
         readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
         readFile(path: string, encoding?: string): string;
         fileExists(path: string): boolean;
@@ -362,6 +363,13 @@ namespace ts {
             }
 
             return this.shimHost.getProjectVersion();
+        }
+
+        public getTypeRootsVersion(): number {
+            if (!this.shimHost.getTypeRootsVersion) {
+                return 0;
+            }
+            return this.shimHost.getTypeRootsVersion();
         }
 
         public useCaseSensitiveFileNames(): boolean {
