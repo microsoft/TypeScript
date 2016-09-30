@@ -9,6 +9,10 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             return visitEachChild(node, visitor, context);
         }
 
