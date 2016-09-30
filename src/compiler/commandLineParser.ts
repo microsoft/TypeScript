@@ -72,7 +72,7 @@ namespace ts {
         {
             name: "jsxFactory",
             type: "string",
-            description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_eg_React_createElement_or_h,
+            description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h,
         },
         {
             name: "reactNamespace",

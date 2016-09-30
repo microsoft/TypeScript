@@ -2361,6 +2361,10 @@
         "category": "Error",
         "code": 5066
     },
+    "Option '{0}' can only be used when '{1}' is '{2}'.": {
+        "category": "Error",
+        "code": 5067
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2852,6 +2856,10 @@
     "Import emit helpers from 'tslib'.": {
         "category": "Message",
         "code": 6139
+    },
+    "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
+        "category": "Message",
+        "code": 6140
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
