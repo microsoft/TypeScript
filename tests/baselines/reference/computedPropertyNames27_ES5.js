@@ -19,8 +19,8 @@ var Base = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
-    C.prototype[(_super.call(this), "prop")] = function () { };
+    C.prototype[(_this = _super.call(this) || this, "prop")] = function () { };
     return C;
 }(Base));

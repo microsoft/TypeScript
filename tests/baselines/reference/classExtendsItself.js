@@ -14,21 +14,21 @@ var __extends = (this && this.__extends) || function (d, b) {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C;
 }(C)); // error
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return D;
 }(D)); // error
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return E;
 }(E)); // error

@@ -51,7 +51,7 @@ var EndGate;
         var NumberTween = (function (_super) {
             __extends(NumberTween, _super);
             function NumberTween(from) {
-                _super.call(this, from);
+                return _super.call(this, from) || this;
             }
             return NumberTween;
         }(Tweening.Tween));

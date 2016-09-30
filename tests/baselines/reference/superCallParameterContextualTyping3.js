@@ -47,20 +47,22 @@ var CBase = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
+        var _this = 
         // Should be okay.
         // 'p' should have type 'string'.
         _super.call(this, {
             method: function (p) {
                 p.length;
             }
-        });
+        }) || this;
         // Should be okay.
         // 'p' should have type 'string'.
-        _super.prototype.foo.call(this, {
+        _super.prototype.foo.call(_this, {
             method: function (p) {
                 p.length;
             }
         });
+        return _this;
     }
     return C;
 }(CBase));
