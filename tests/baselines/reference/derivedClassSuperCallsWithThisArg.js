@@ -42,32 +42,34 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.call(this, this); // ok
+        return _super.call(this, _this) || this;
     }
     return Derived;
 }(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2(a) {
-        _super.call(this, this); // error
-        this.a = a;
+        var _this = _super.call(this, _this) || this;
+        _this.a = a;
+        return _this;
     }
     return Derived2;
 }(Base));
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3(a) {
-        var _this = this;
-        _super.call(this, function () { return _this; }); // error
-        this.a = a;
+        var _this = _super.call(this, function () { return _this; }) || this;
+        _this.a = a;
+        return _this;
     }
     return Derived3;
 }(Base));
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4(a) {
-        _super.call(this, function () { return this; }); // ok
-        this.a = a;
+        var _this = _super.call(this, function () { return this; }) || this;
+        _this.a = a;
+        return _this;
     }
     return Derived4;
 }(Base));

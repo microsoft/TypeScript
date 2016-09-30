@@ -231,9 +231,6 @@ namespace ts {
             endLexicalEnvironment,
             hoistFunctionDeclaration,
             hoistVariableDeclaration,
-            setSourceMapRange,
-            setCommentRange,
-            setNodeEmitFlags
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -294,6 +291,10 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             if (node.transformFlags & TransformFlags.ContainsGenerator) {
                 currentSourceFile = node;
                 node = visitEachChild(node, visitor, context);
@@ -444,7 +445,7 @@ namespace ts {
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): Statement {
             // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionDeclaration(
                         /*decorators*/ undefined,
@@ -492,7 +493,7 @@ namespace ts {
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
             // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionExpression(
                         /*asteriskToken*/ undefined,
@@ -573,10 +574,10 @@ namespace ts {
             operationLocations = undefined;
             state = createTempVariable(/*recordTempVariable*/ undefined);
 
-            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
-
             // Build the generator
             startLexicalEnvironment();
+
+            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
             transformAndEmitStatements(body.statements, statementOffset);
 
@@ -615,6 +616,11 @@ namespace ts {
                 return undefined;
             }
             else {
+                // Do not hoist custom prologues.
+                if (getEmitFlags(node) & EmitFlags.CustomPrologue) {
+                    return node;
+                }
+
                 for (const variable of node.declarationList.declarations) {
                     hoistVariableDeclaration(<Identifier>variable.name);
                 }
@@ -1020,7 +1026,7 @@ namespace ts {
             const temp = declareLocal();
             emitAssignment(temp,
                 createObjectLiteral(
-                    visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                    visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
                     /*location*/ undefined,
                     multiLine
                 )
@@ -1030,13 +1036,13 @@ namespace ts {
             expressions.push(multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
             return inlineExpressions(expressions);
 
-            function reduceProperty(expressions: Expression[], property: ObjectLiteralElement) {
+            function reduceProperty(expressions: Expression[], property: ObjectLiteralElementLike) {
                 if (containsYield(property) && expressions.length > 0) {
                     emitStatement(createStatement(inlineExpressions(expressions)));
                     expressions = [];
                 }
 
-                const expression = createExpressionForObjectLiteralElement(node, property, temp);
+                const expression = createExpressionForObjectLiteralElementLike(node, property, temp);
                 const visited = visitNode(expression, visitor, isExpression);
                 if (visited) {
                     if (multiLine) {
@@ -1882,9 +1888,9 @@ namespace ts {
             return -1;
         }
 
-        function onSubstituteNode(node: Node, isExpression: boolean): Node {
-            node = previousOnSubstituteNode(node, isExpression);
-            if (isExpression) {
+        function onSubstituteNode(emitContext: EmitContext, node: Node): Node {
+            node = previousOnSubstituteNode(emitContext, node);
+            if (emitContext === EmitContext.Expression) {
                 return substituteExpression(<Expression>node);
             }
             return node;
@@ -2580,7 +2586,7 @@ namespace ts {
                 /*typeArguments*/ undefined,
                 [
                     createThis(),
-                    setNodeEmitFlags(
+                    setEmitFlags(
                         createFunctionExpression(
                             /*asteriskToken*/ undefined,
                             /*name*/ undefined,
@@ -2593,7 +2599,7 @@ namespace ts {
                                 /*multiLine*/ buildResult.length > 0
                             )
                         ),
-                        NodeEmitFlags.ReuseTempVariableScope
+                        EmitFlags.ReuseTempVariableScope
                     )
                 ]
             );

@@ -1692,23 +1692,16 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                    function Mode() {
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 1 >Emitted(87, 21) Source(91, 2) + SourceIndex(0)
 ---
->>>                        _super.apply(this, arguments);
-1->^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->export class Mode extends 
-2 >                        AbstractMode
-1->Emitted(88, 25) Source(91, 28) + SourceIndex(0)
-2 >Emitted(88, 55) Source(91, 40) + SourceIndex(0)
----
+>>>                        return _super.apply(this, arguments) || this;
 >>>                    }
-1 >^^^^^^^^^^^^^^^^^^^^
+1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
 3 >                     ^^^^^^^^^^^^^->
-1 > {
+1->export class Mode extends AbstractMode {
   >
   >		// scenario 2
   >		public getInitialState(): IState {
@@ -1718,7 +1711,7 @@ sourceFile:recursiveClassReferenceTest.ts
   >
   >	
 2 >                    }
-1 >Emitted(89, 21) Source(99, 2) + SourceIndex(0)
+1->Emitted(89, 21) Source(99, 2) + SourceIndex(0)
 2 >Emitted(89, 22) Source(99, 3) + SourceIndex(0)
 ---
 >>>                    // scenario 2

@@ -819,6 +819,10 @@
         "category": "Error",
         "code": 1253
     },
+    "A 'const' initializer in an ambient context must be a string or numeric literal.": {
+        "category": "Error",
+        "code": 1254
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -1275,7 +1279,7 @@
         "category": "Error",
         "code": 2409
     },
-    "All symbols within a 'with' block will be resolved to 'any'.": {
+    "The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.": {
         "category": "Error",
         "code": 2410
     },
@@ -2857,9 +2861,13 @@
         "category": "Message",
         "code": 6139
     },
+    "Auto discovery for typings is enabled in project '{0}'. Running extra resolution pass for module '{1}' using cache location '{2}'.": {
+        "category": "Error",
+        "code": 6140
+    },
     "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
         "category": "Message",
-        "code": 6140
+        "code": 6141
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

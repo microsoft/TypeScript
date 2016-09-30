@@ -1335,7 +1335,7 @@ namespace ts {
         return ensureScriptKind(fileName, scriptKind);
     }
 
-    export function parseAndReEmitConfigJSONFile(content: string) {
+    export function sanitizeConfigFile(configFileName: string, content: string) {
         const options: TranspileOptions = {
             fileName: "config.js",
             compilerOptions: {
@@ -1349,10 +1349,13 @@ namespace ts {
         // also, the emitted result will have "(" in the beginning and ");" in the end. We need to strip these
         // as well
         const trimmedOutput = outputText.trim();
-        const configJsonObject = JSON.parse(trimmedOutput.substring(1, trimmedOutput.length - 2));
         for (const diagnostic of diagnostics) {
             diagnostic.start = diagnostic.start - 1;
         }
-        return { configJsonObject, diagnostics };
+        const {config, error} = parseConfigFileTextToJson(configFileName, trimmedOutput.substring(1, trimmedOutput.length - 2), /*stripComments*/ false);
+        return {
+            configJsonObject: config || {},
+            diagnostics: error ? concatenate(diagnostics, [error]) : diagnostics
+        };
     }
 }

@@ -76,7 +76,7 @@ namespace ts {
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
         const clone = <T>createNode(node.kind, /*location*/ undefined, node.flags);
-        clone.original = node;
+        setOriginalNode(clone, node);
 
         for (const key in node) {
             if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
@@ -416,7 +416,7 @@ namespace ts {
         return node;
     }
 
-    export function createObjectLiteral(properties?: ObjectLiteralElement[], location?: TextRange, multiLine?: boolean) {
+    export function createObjectLiteral(properties?: ObjectLiteralElementLike[], location?: TextRange, multiLine?: boolean) {
         const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression, location);
         node.properties = createNodeArray(properties);
         if (multiLine) {
@@ -425,7 +425,7 @@ namespace ts {
         return node;
     }
 
-    export function updateObjectLiteral(node: ObjectLiteralExpression, properties: ObjectLiteralElement[]) {
+    export function updateObjectLiteral(node: ObjectLiteralExpression, properties: ObjectLiteralElementLike[]) {
         if (node.properties !== properties) {
             return updateNode(createObjectLiteral(properties, node, node.multiLine), node);
         }
@@ -435,7 +435,7 @@ namespace ts {
     export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange, flags?: NodeFlags) {
         const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location, flags);
         node.expression = parenthesizeForAccess(expression);
-        node.emitFlags = NodeEmitFlags.NoIndentation;
+        (node.emitNode || (node.emitNode = {})).flags |= EmitFlags.NoIndentation;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         return node;
     }
@@ -444,7 +444,7 @@ namespace ts {
         if (node.expression !== expression || node.name !== name) {
             const propertyAccess = createPropertyAccess(expression, name, /*location*/ node, node.flags);
             // Because we are updating existed propertyAccess we want to inherit its emitFlags instead of using default from createPropertyAccess
-            propertyAccess.emitFlags = node.emitFlags;
+            (propertyAccess.emitNode || (propertyAccess.emitNode = {})).flags = getEmitFlags(node);
             return updateNode(propertyAccess, node);
         }
         return node;
@@ -1551,7 +1551,7 @@ namespace ts {
         }
         else {
             const expression = isIdentifier(memberName) ? createPropertyAccess(target, memberName, location) : createElementAccess(target, memberName, location);
-            expression.emitFlags |= NodeEmitFlags.NoNestedSourceMaps;
+            (expression.emitNode || (expression.emitNode = {})).flags |= EmitFlags.NoNestedSourceMaps;
             return expression;
         }
     }
@@ -1747,7 +1747,7 @@ namespace ts {
         );
 
         // Mark this node as originally an async function
-        generatorFunc.emitFlags |= NodeEmitFlags.AsyncFunctionBody;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody;
 
         return createCall(
             createHelperName(externalHelpersModuleName, "__awaiter"),
@@ -2072,7 +2072,7 @@ namespace ts {
         }
     }
 
-    export function createExpressionForObjectLiteralElement(node: ObjectLiteralExpression, property: ObjectLiteralElement, receiver: Expression): Expression {
+    export function createExpressionForObjectLiteralElementLike(node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression {
         switch (property.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
@@ -2089,7 +2089,7 @@ namespace ts {
     function createExpressionForAccessorDeclaration(properties: NodeArray<Declaration>, property: AccessorDeclaration, receiver: Expression, multiLine: boolean) {
         const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
         if (property === firstAccessor) {
-            const properties: ObjectLiteralElement[] = [];
+            const properties: ObjectLiteralElementLike[] = [];
             if (getAccessor) {
                 const getterFunction = createFunctionExpression(
                     /*asteriskToken*/ undefined,
@@ -2225,7 +2225,7 @@ namespace ts {
                     target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
                     foundUseStrict = true;
                 }
-                if (statement.emitFlags & NodeEmitFlags.CustomPrologue) {
+                if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
                     target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
                 }
                 else {
@@ -2646,11 +2646,175 @@ namespace ts {
     export function setOriginalNode<T extends Node>(node: T, original: Node): T {
         node.original = original;
         if (original) {
-            const { emitFlags, commentRange, sourceMapRange } = original;
-            if (emitFlags) node.emitFlags = emitFlags;
-            if (commentRange) node.commentRange = commentRange;
-            if (sourceMapRange) node.sourceMapRange = sourceMapRange;
+            const emitNode = original.emitNode;
+            if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
         }
+        return node;
+    }
+
+    function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode) {
+        const { flags, commentRange, sourceMapRange, tokenSourceMapRanges } = sourceEmitNode;
+        if (!destEmitNode && (flags || commentRange || sourceMapRange || tokenSourceMapRanges)) destEmitNode = {};
+        if (flags) destEmitNode.flags = flags;
+        if (commentRange) destEmitNode.commentRange = commentRange;
+        if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
+        if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges);
+        return destEmitNode;
+    }
+
+    function mergeTokenSourceMapRanges(sourceRanges: Map<TextRange>, destRanges: Map<TextRange>) {
+        if (!destRanges) destRanges = createMap<TextRange>();
+        copyProperties(sourceRanges, destRanges);
+        return destRanges;
+    }
+
+    /**
+     * Clears any EmitNode entries from parse-tree nodes.
+     * @param sourceFile A source file.
+     */
+    export function disposeEmitNodes(sourceFile: SourceFile) {
+        // During transformation we may need to annotate a parse tree node with transient
+        // transformation properties. As parse tree nodes live longer than transformation
+        // nodes, we need to make sure we reclaim any memory allocated for custom ranges
+        // from these nodes to ensure we do not hold onto entire subtrees just for position
+        // information. We also need to reset these nodes to a pre-transformation state
+        // for incremental parsing scenarios so that we do not impact later emit.
+        sourceFile = getSourceFileOfNode(getParseTreeNode(sourceFile));
+        const emitNode = sourceFile && sourceFile.emitNode;
+        const annotatedNodes = emitNode && emitNode.annotatedNodes;
+        if (annotatedNodes) {
+            for (const node of annotatedNodes) {
+                node.emitNode = undefined;
+            }
+        }
+    }
+
+    /**
+     * Associates a node with the current transformation, initializing
+     * various transient transformation properties.
+     *
+     * @param node The node.
+     */
+    function getOrCreateEmitNode(node: Node) {
+        if (!node.emitNode) {
+            if (isParseTreeNode(node)) {
+                // To avoid holding onto transformation artifacts, we keep track of any
+                // parse tree node we are annotating. This allows us to clean them up after
+                // all transformations have completed.
+                if (node.kind === SyntaxKind.SourceFile) {
+                    return node.emitNode = { annotatedNodes: [node] };
+                }
+
+                const sourceFile = getSourceFileOfNode(node);
+                getOrCreateEmitNode(sourceFile).annotatedNodes.push(node);
+            }
+
+            node.emitNode = {};
+        }
+
+        return node.emitNode;
+    }
+
+    /**
+     * Gets flags that control emit behavior of a node.
+     *
+     * @param node The node.
+     */
+    export function getEmitFlags(node: Node) {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.flags;
+    }
+
+    /**
+     * Sets flags that control emit behavior of a node.
+     *
+     * @param node The node.
+     * @param emitFlags The NodeEmitFlags for the node.
+     */
+    export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
+        getOrCreateEmitNode(node).flags = emitFlags;
+        return node;
+    }
+
+    /**
+     * Sets a custom text range to use when emitting source maps.
+     *
+     * @param node The node.
+     * @param range The text range.
+     */
+    export function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
+        getOrCreateEmitNode(node).sourceMapRange = range;
+        return node;
+    }
+
+    /**
+     * Sets the TextRange to use for source maps for a token of a node.
+     *
+     * @param node The node.
+     * @param token The token.
+     * @param range The text range.
+     */
+    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
+        const emitNode = getOrCreateEmitNode(node);
+        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<TextRange>());
+        tokenSourceMapRanges[token] = range;
+        return node;
+    }
+
+    /**
+     * Sets a custom text range to use when emitting comments.
+     */
+    export function setCommentRange<T extends Node>(node: T, range: TextRange) {
+        getOrCreateEmitNode(node).commentRange = range;
+        return node;
+    }
+
+    /**
+     * Gets a custom text range to use when emitting comments.
+     *
+     * @param node The node.
+     */
+    export function getCommentRange(node: Node) {
+        const emitNode = node.emitNode;
+        return (emitNode && emitNode.commentRange) || node;
+    }
+
+    /**
+     * Gets a custom text range to use when emitting source maps.
+     *
+     * @param node The node.
+     */
+    export function getSourceMapRange(node: Node) {
+        const emitNode = node.emitNode;
+        return (emitNode && emitNode.sourceMapRange) || node;
+    }
+
+    /**
+     * Gets the TextRange to use for source maps for a token of a node.
+     *
+     * @param node The node.
+     * @param token The token.
+     */
+    export function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
+        const emitNode = node.emitNode;
+        const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
+        return tokenSourceMapRanges && tokenSourceMapRanges[token];
+    }
+
+    /**
+     * Gets the constant value to emit for an expression.
+     */
+    export function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression) {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.constantValue;
+    }
+
+    /**
+     * Sets the constant value to emit for an expression.
+     */
+    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: number) {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.constantValue = value;
         return node;
     }
 
@@ -2695,7 +2859,7 @@ namespace ts {
         return undefined;
     }
 
-   /**
+    /**
      * Get the name of a target module from an import/export declaration as should be written in the emitted output.
      * The emitted output name can be different from the input if:
      *  1. The module has a /// <amd-module name="<new name>" />

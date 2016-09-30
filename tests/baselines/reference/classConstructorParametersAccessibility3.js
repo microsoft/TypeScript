@@ -28,9 +28,10 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(p) {
-        _super.call(this, p);
-        this.p = p;
-        this.p; // OK
+        var _this = _super.call(this, p) || this;
+        _this.p = p;
+        _this.p; // OK
+        return _this;
     }
     return Derived;
 }(Base));

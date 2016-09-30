@@ -59,8 +59,9 @@ var TypeScript;
     var PullTypeSymbol = (function (_super) {
         __extends(PullTypeSymbol, _super);
         function PullTypeSymbol() {
-            _super.apply(this, arguments);
-            this._elementType = null;
+            var _this = _super.apply(this, arguments) || this;
+            _this._elementType = null;
+            return _this;
         }
         PullTypeSymbol.prototype.toString = function (scopeSymbol, useConstraintInName) {
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();

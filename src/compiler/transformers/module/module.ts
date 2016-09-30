@@ -15,9 +15,6 @@ namespace ts {
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
-            setNodeEmitFlags,
-            getNodeEmitFlags,
-            setSourceMapRange,
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -54,6 +51,10 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
                 currentSourceFile = node;
 
@@ -92,7 +93,7 @@ namespace ts {
 
             const updated = updateSourceFile(node, statements);
             if (hasExportStarsToExportValues) {
-                setNodeEmitFlags(updated, NodeEmitFlags.EmitExportStar | getNodeEmitFlags(node));
+                setEmitFlags(updated, EmitFlags.EmitExportStar | getEmitFlags(node));
             }
 
             return updated;
@@ -116,7 +117,7 @@ namespace ts {
          */
         function transformUMDModule(node: SourceFile) {
             const define = createIdentifier("define");
-            setNodeEmitFlags(define, NodeEmitFlags.UMDDefine);
+            setEmitFlags(define, EmitFlags.UMDDefine);
             return transformAsynchronousModule(node, define, /*moduleName*/ undefined, /*includeNonAmdDependencies*/ false);
         }
 
@@ -220,7 +221,7 @@ namespace ts {
             if (hasExportStarsToExportValues) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
-                setNodeEmitFlags(body, NodeEmitFlags.EmitExportStar);
+                setEmitFlags(body, EmitFlags.EmitExportStar);
             }
 
             return body;
@@ -234,7 +235,7 @@ namespace ts {
                         /*location*/ exportEquals
                     );
 
-                    setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoComments);
+                    setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
                     statements.push(statement);
                 }
                 else {
@@ -249,7 +250,7 @@ namespace ts {
                         /*location*/ exportEquals
                     );
 
-                    setNodeEmitFlags(statement, NodeEmitFlags.NoComments);
+                    setEmitFlags(statement, EmitFlags.NoComments);
                     statements.push(statement);
                 }
             }
@@ -388,7 +389,7 @@ namespace ts {
 
             // Set emitFlags on the name of the importEqualsDeclaration
             // This is so the printer will not substitute the identifier
-            setNodeEmitFlags(node.name, NodeEmitFlags.NoSubstitution);
+            setEmitFlags(node.name, EmitFlags.NoSubstitution);
             const statements: Statement[] = [];
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
@@ -598,7 +599,7 @@ namespace ts {
             }
             else {
                 statements.push(
-                    createExportStatement(node.name, setNodeEmitFlags(getSynthesizedClone(node.name), NodeEmitFlags.LocalName), /*location*/ node)
+                    createExportStatement(node.name, setEmitFlags(getSynthesizedClone(node.name), EmitFlags.LocalName), /*location*/ node)
                 );
             }
         }
@@ -813,7 +814,7 @@ namespace ts {
                 )],
                     /*location*/ node
             );
-            setNodeEmitFlags(transformedStatement, NodeEmitFlags.NoComments);
+            setEmitFlags(transformedStatement, EmitFlags.NoComments);
             statements.push(transformedStatement);
         }
 
@@ -821,14 +822,14 @@ namespace ts {
             return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
         }
 
-        function onEmitNode(node: Node, emit: (node: Node) => void): void {
+        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
                 bindingNameExportSpecifiersMap = bindingNameExportSpecifiersForFileMap[getOriginalNodeId(node)];
-                previousOnEmitNode(node, emit);
+                previousOnEmitNode(emitContext, node, emitCallback);
                 bindingNameExportSpecifiersMap = undefined;
             }
             else {
-                previousOnEmitNode(node, emit);
+                previousOnEmitNode(emitContext, node, emitCallback);
             }
         }
 
@@ -839,9 +840,9 @@ namespace ts {
          * @param isExpression A value indicating whether the node is to be used in an expression
          *                     position.
          */
-        function onSubstituteNode(node: Node, isExpression: boolean) {
-            node = previousOnSubstituteNode(node, isExpression);
-            if (isExpression) {
+        function onSubstituteNode(emitContext: EmitContext, node: Node) {
+            node = previousOnSubstituteNode(emitContext, node);
+            if (emitContext === EmitContext.Expression) {
                 return substituteExpression(<Expression>node);
             }
             else if (isShorthandPropertyAssignment(node)) {
@@ -850,7 +851,7 @@ namespace ts {
             return node;
         }
 
-        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
+        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
             const name = node.name;
             const exportedOrImportedName = substituteExpressionIdentifier(name);
             if (exportedOrImportedName !== name) {
@@ -890,7 +891,7 @@ namespace ts {
             // If the left-hand-side of the binaryExpression is an identifier and its is export through export Specifier
             if (isIdentifier(left) && isAssignmentOperator(node.operatorToken.kind)) {
                 if (bindingNameExportSpecifiersMap && hasProperty(bindingNameExportSpecifiersMap, left.text)) {
-                    setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
+                    setEmitFlags(node, EmitFlags.NoSubstitution);
                     let nestedExportAssignment: BinaryExpression;
                     for (const specifier of bindingNameExportSpecifiersMap[left.text]) {
                         nestedExportAssignment = nestedExportAssignment ?
@@ -910,7 +911,7 @@ namespace ts {
             const operand = node.operand;
             if (isIdentifier(operand) && bindingNameExportSpecifiersForFileMap) {
                 if (bindingNameExportSpecifiersMap && hasProperty(bindingNameExportSpecifiersMap, operand.text)) {
-                    setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
+                    setEmitFlags(node, EmitFlags.NoSubstitution);
                     let transformedUnaryExpression: BinaryExpression;
                     if (node.kind === SyntaxKind.PostfixUnaryExpression) {
                         transformedUnaryExpression = createBinary(
@@ -920,7 +921,7 @@ namespace ts {
                             /*location*/ node
                         );
                         // We have to set no substitution flag here to prevent visit the binary expression and substitute it again as we will preform all necessary substitution in here
-                        setNodeEmitFlags(transformedUnaryExpression, NodeEmitFlags.NoSubstitution);
+                        setEmitFlags(transformedUnaryExpression, EmitFlags.NoSubstitution);
                     }
                     let nestedExportAssignment: BinaryExpression;
                     for (const specifier of bindingNameExportSpecifiersMap[operand.text]) {
@@ -935,9 +936,9 @@ namespace ts {
         }
 
         function trySubstituteExportedName(node: Identifier) {
-            const emitFlags = getNodeEmitFlags(node);
-            if ((emitFlags & NodeEmitFlags.LocalName) === 0) {
-                const container = resolver.getReferencedExportContainer(node, (emitFlags & NodeEmitFlags.ExportName) !== 0);
+            const emitFlags = getEmitFlags(node);
+            if ((emitFlags & EmitFlags.LocalName) === 0) {
+                const container = resolver.getReferencedExportContainer(node, (emitFlags & EmitFlags.ExportName) !== 0);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
                         return createPropertyAccess(
@@ -953,7 +954,7 @@ namespace ts {
         }
 
         function trySubstituteImportedName(node: Identifier): Expression {
-            if ((getNodeEmitFlags(node) & NodeEmitFlags.LocalName) === 0) {
+            if ((getEmitFlags(node) & EmitFlags.LocalName) === 0) {
                 const declaration = resolver.getReferencedImportDeclaration(node);
                 if (declaration) {
                     if (isImportClause(declaration)) {
@@ -1077,7 +1078,7 @@ namespace ts {
                 if (includeNonAmdDependencies && importAliasName) {
                     // Set emitFlags on the name of the classDeclaration
                     // This is so that when printer will not substitute the identifier
-                    setNodeEmitFlags(importAliasName, NodeEmitFlags.NoSubstitution);
+                    setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
                     aliasedModuleNames.push(externalModuleName);
                     importAliasNames.push(createParameter(importAliasName));
                 }
