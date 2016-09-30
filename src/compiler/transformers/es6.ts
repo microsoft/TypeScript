@@ -139,6 +139,30 @@ namespace ts {
         loopOutParameters?: LoopOutParameter[];
     }
 
+    const enum SuperCaptureResult {
+        /**
+         * A capture may have been added for calls to 'super', but
+         * the caller should emit subsequent statements normally.
+         */
+        NoReplacement,
+        /**
+         * A call to 'super()' got replaced with a capturing statement like:
+         *
+         *  var _this = _super.call(...) || this;
+         *
+         * Callers should skip the current statement.
+         */
+        ReplaceSuperCapture,
+        /**
+         * A call to 'super()' got replaced with a capturing statement like:
+         *
+         *  return _super.call(...) || this;
+         *
+         * Callers should skip the current statement and avoid any returns of '_this'.
+         */
+        ReplaceWithReturn,
+    }
+
     export function transformES6(context: TransformationContext) {
         const {
             startLexicalEnvironment,
@@ -197,7 +221,7 @@ namespace ts {
                 : visitorWorker(node);
         }
 
-        function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
+        function saveStateAndInvoke<T extends Node, U>(node: T, f: (node: T) => U): U {
             const savedEnclosingFunction = enclosingFunction;
             const savedEnclosingNonArrowFunction = enclosingNonArrowFunction;
             const savedEnclosingNonAsyncFunctionBody = enclosingNonAsyncFunctionBody;
@@ -756,7 +780,8 @@ namespace ts {
         function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
             const constructor = getFirstConstructorWithBody(node);
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
-            statements.push(
+
+            const constructorFunction =
                 createFunctionDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
@@ -767,8 +792,12 @@ namespace ts {
                     /*type*/ undefined,
                     transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper),
                     /*location*/ constructor || node
-                )
-            );
+                );
+
+            if (extendsClauseElement) {
+                setEmitFlags(constructorFunction, EmitFlags.CapturesThis);
+            }
+            statements.push(constructorFunction);
         }
 
         /**
@@ -800,20 +829,51 @@ namespace ts {
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function transformConstructorBody(constructor: ConstructorDeclaration, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
+        function transformConstructorBody(constructor: ConstructorDeclaration | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            if (constructor) {
-                addCaptureThisForNodeIfNeeded(statements, constructor);
-                addDefaultValueAssignmentsIfNeeded(statements, constructor);
-                addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+
+            let statementOffset = -1;
+            if (hasSynthesizedSuper) {
+                // If a super call has already been synthesized,
+                // we're going to assume that we should just transform everything after that.
+                // The assumption is that no prior step in the pipeline has added any prologue directives.
+                statementOffset = 1;
+            }
+            else if (constructor) {
+                // Otherwise, try to emit all potential prologue directives first.
+                statementOffset = addPrologueDirectives(statements, constructor.body.statements, /*ensureUseStrict*/ false, visitor);
             }
 
-            addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
+            if (constructor) {
+                addDefaultValueAssignmentsIfNeeded(statements, constructor);
+                addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+                Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
+
+            }
+
+            const superCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, hasSynthesizedSuper, statementOffset);
+
+            // The last statement expression was replaced. Skip it.
+            if (superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture || superCaptureStatus === SuperCaptureResult.ReplaceWithReturn) {
+                statementOffset++;
+            }
 
             if (constructor) {
-                const body = saveStateAndInvoke(constructor, hasSynthesizedSuper ? transformConstructorBodyWithSynthesizedSuper : transformConstructorBodyWithoutSynthesizedSuper);
+                const body = saveStateAndInvoke(constructor, constructor => visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
                 addRange(statements, body);
+            }
+
+            // Return `_this` unless we're sure enough that it would be pointless to add a return statement.
+            // If there's a constructor that we can tell returns in enough places, then we *do not* want to add a return.
+            if (extendsClauseElement
+                && superCaptureStatus !== SuperCaptureResult.ReplaceWithReturn
+                && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
+                statements.push(
+                    createReturn(
+                        createIdentifier("_this")
+                    )
+                );
             }
 
             addRange(statements, endLexicalEnvironment());
@@ -833,41 +893,130 @@ namespace ts {
             return block;
         }
 
-        function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
-            return visitNodes(node.body.statements, visitor, isStatement, 1);
-        }
+        /**
+         * We want to try to avoid emitting a return statement in certain cases if a user already returned something.
+         * It would generate obviously dead code, so we'll try to make things a little bit prettier
+         * by doing a minimal check on whether some common patterns always explicitly return.
+         */
+        function isSufficientlyCoveredByReturnStatements(statement: Statement): boolean {
+            // A return statement is considered covered.
+            if (statement.kind === SyntaxKind.ReturnStatement) {
+                return true;
+            }
+            // An if-statement with two covered branches is covered.
+            else if (statement.kind === SyntaxKind.IfStatement) {
+                const ifStatement = statement as IfStatement;
+                if (ifStatement.elseStatement) {
+                    return isSufficientlyCoveredByReturnStatements(ifStatement.thenStatement) &&
+                        isSufficientlyCoveredByReturnStatements(ifStatement.elseStatement);
+                }
+            }
+            // A block is covered if it has a last statement which is covered.
+            else if (statement.kind === SyntaxKind.Block) {
+                const lastStatement = lastOrUndefined((statement as Block).statements);
+                if (lastStatement && isSufficientlyCoveredByReturnStatements(lastStatement)) {
+                    return true;
+                }
+            }
 
-        function transformConstructorBodyWithoutSynthesizedSuper(node: ConstructorDeclaration) {
-            return visitNodes(node.body.statements, visitor, isStatement, 0);
+            return false;
         }
 
         /**
-         * Adds a synthesized call to `_super` if it is needed.
+         * Declares a `_this` variable for derived classes and for when arrow functions capture `this`.
          *
-         * @param statements The statements for the new constructor body.
-         * @param constructor The constructor for the class.
-         * @param extendsClauseElement The expression for the class `extends` clause.
-         * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
-         *                            synthesized `super` call.
+         * @returns The new statement offset into the `statements` array.
          */
-        function addDefaultSuperCallIfNeeded(statements: Statement[], constructor: ConstructorDeclaration, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
-            // If the TypeScript transformer needed to synthesize a constructor for property
-            // initializers, it would have also added a synthetic `...args` parameter and
-            // `super` call.
-            // If this is the case, or if the class has an `extends` clause but no
-            // constructor, we emit a synthesized call to `_super`.
-            if (constructor ? hasSynthesizedSuper : extendsClauseElement) {
-                statements.push(
-                    createStatement(
-                        createFunctionApply(
-                            createIdentifier("_super"),
-                            createThis(),
-                            createIdentifier("arguments")
-                        ),
-                        /*location*/ extendsClauseElement
-                    )
-                );
+        function declareOrCaptureOrReturnThisForConstructorIfNeeded(
+                    statements: Statement[],
+                    ctor: ConstructorDeclaration | undefined,
+                    hasExtendsClause: boolean,
+                    hasSynthesizedSuper: boolean,
+                    statementOffset: number) {
+            // If this isn't a derived class, just capture 'this' for arrow functions if necessary.
+            if (!hasExtendsClause) {
+                if (ctor) {
+                    addCaptureThisForNodeIfNeeded(statements, ctor);
+                }
+                return SuperCaptureResult.NoReplacement;
             }
+
+            // We must be here because the user didn't write a constructor
+            // but we needed to call 'super(...args)' anyway as per 14.5.14 of the ES2016 spec.
+            // If that's the case we can just immediately return the result of a 'super()' call.
+            if (!ctor) {
+                statements.push(createReturn(createDefaultSuperCallOrThis()));
+                return SuperCaptureResult.ReplaceWithReturn;
+            }
+
+            // The constructor exists, but it and the 'super()' call it contains were generated
+            // for something like property initializers.
+            // Create a captured '_this' variable and assume it will subsequently be used.
+            if (hasSynthesizedSuper) {
+                captureThisForNode(statements, ctor, createDefaultSuperCallOrThis());
+                enableSubstitutionsForCapturedThis();
+                return SuperCaptureResult.ReplaceSuperCapture;
+            }
+
+            // Most of the time, a 'super' call will be the first real statement in a constructor body.
+            // In these cases, we'd like to transform these into a *single* statement instead of a declaration
+            // followed by an assignment statement for '_this'. For instance, if we emitted without an initializer,
+            // we'd get:
+            //
+            //      var _this;
+            //      _this = _super.call(...) || this;
+            //
+            // instead of
+            //
+            //      var _this = _super.call(...) || this;
+            //
+            // Additionally, if the 'super()' call is the last statement, we should just avoid capturing
+            // entirely and immediately return the result like so:
+            //
+            //      return _super.call(...) || this;
+            //
+            let firstStatement: Statement;
+            let superCallExpression: Expression;
+
+            const ctorStatements = ctor.body.statements;
+            if (statementOffset < ctorStatements.length) {
+                firstStatement = ctorStatements[statementOffset];
+
+                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
+                    const superCall = (firstStatement as ExpressionStatement).expression as CallExpression;
+                    superCallExpression = setOriginalNode(
+                        saveStateAndInvoke(superCall, visitImmediateSuperCallInBody),
+                        superCall
+                    );
+                }
+            }
+
+            // Return the result if we have an immediate super() call on the last statement.
+            if (superCallExpression && statementOffset === ctorStatements.length - 1) {
+                statements.push(createReturn(superCallExpression));
+                return SuperCaptureResult.ReplaceWithReturn;
+            }
+
+            // Perform the capture.
+            captureThisForNode(statements, ctor, superCallExpression, firstStatement);
+
+            // If we're actually replacing the original statement, we need to signal this to the caller.
+            if (superCallExpression) {
+                return SuperCaptureResult.ReplaceSuperCapture;
+            }
+
+            return SuperCaptureResult.NoReplacement;
+        }
+
+        function createDefaultSuperCallOrThis() {
+            const actualThis = createThis();
+            setEmitFlags(actualThis, EmitFlags.NoSubstitution);
+            const superCall = createFunctionApply(
+                createIdentifier("_super"),
+                actualThis,
+                createIdentifier("arguments"),
+            );
+            return createLogicalOr(superCall, actualThis);
         }
 
         /**
@@ -1121,22 +1270,27 @@ namespace ts {
          */
         function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): void {
             if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
-                enableSubstitutionsForCapturedThis();
-                const captureThisStatement = createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            "_this",
-                            /*type*/ undefined,
-                            createThis()
-                        )
-                    ])
-                );
-
-                setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
-                setSourceMapRange(captureThisStatement, node);
-                statements.push(captureThisStatement);
+                captureThisForNode(statements, node, createThis());
             }
+        }
+
+        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, originalStatement?: Statement): void {
+            enableSubstitutionsForCapturedThis();
+            const captureThisStatement = createVariableStatement(
+                /*modifiers*/ undefined,
+                createVariableDeclarationList([
+                    createVariableDeclaration(
+                        "_this",
+                        /*type*/ undefined,
+                        initializer
+                    )
+                ]),
+                originalStatement
+            );
+
+            setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
+            setSourceMapRange(captureThisStatement, node);
+            statements.push(captureThisStatement);
         }
 
         /**
@@ -2523,11 +2677,23 @@ namespace ts {
          *
          * @param node a CallExpression.
          */
-        function visitCallExpression(node: CallExpression): LeftHandSideExpression {
+        function visitCallExpression(node: CallExpression) {
+            return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
+        }
+
+        function visitImmediateSuperCallInBody(node: CallExpression) {
+            return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ false);
+        }
+
+        function visitCallExpressionWithPotentialCapturedThisAssignment(node: CallExpression, assignToCapturedThis: boolean): CallExpression | BinaryExpression {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
 
             const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                setEmitFlags(thisArg, EmitFlags.NoSubstitution);
+            }
+            let resultingCall: CallExpression | BinaryExpression;
             if (node.transformFlags & TransformFlags.ContainsSpreadElementExpression) {
                 // [source]
                 //      f(...a, b)
@@ -2543,7 +2709,7 @@ namespace ts {
                 //      _super.m.apply(this, a.concat([b]))
                 //      _super.prototype.m.apply(this, a.concat([b]))
 
-                return createFunctionApply(
+                resultingCall = createFunctionApply(
                     visitNode(target, visitor, isExpression),
                     visitNode(thisArg, visitor, isExpression),
                     transformAndSpreadElements(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
@@ -2560,13 +2726,27 @@ namespace ts {
                 //      _super.m.call(this, a)
                 //      _super.prototype.m.call(this, a)
 
-                return createFunctionCall(
+                resultingCall = createFunctionCall(
                     visitNode(target, visitor, isExpression),
                     visitNode(thisArg, visitor, isExpression),
                     visitNodes(node.arguments, visitor, isExpression),
                     /*location*/ node
                 );
             }
+
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                const actualThis = createThis();
+                setEmitFlags(actualThis, EmitFlags.NoSubstitution);
+                const initializer =
+                    createLogicalOr(
+                        resultingCall,
+                        actualThis
+                    );
+                return assignToCapturedThis
+                    ? createAssignment(createIdentifier("_this"), initializer)
+                    : initializer;
+            }
+            return resultingCall;
         }
 
         /**

@@ -42,7 +42,7 @@ var React = require("react");
 var Button = (function (_super) {
     __extends(Button, _super);
     function Button() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     Button.prototype.render = function () {
         return <button>Some button</button>;
@@ -63,7 +63,7 @@ var button_1 = require("./button");
 var App = (function (_super) {
     __extends(App, _super);
     function App() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     App.prototype.render = function () {
         return <button_1.Button />;

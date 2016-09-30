@@ -49,14 +49,14 @@ var Foo;
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        _super.call(this);
+        return _super.call(this) || this;
     }
     return Bar;
 }(Foo.Object));
 var Baz = (function (_super) {
     __extends(Baz, _super);
     function Baz() {
-        _super.call(this);
+        return _super.call(this) || this;
     }
     return Baz;
 }(Object));

@@ -24,7 +24,7 @@ var Base = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.call(this, this);
+        return _super.call(this, this) || this;
     }
     return D;
 }(Base));

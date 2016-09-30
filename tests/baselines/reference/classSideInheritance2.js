@@ -29,7 +29,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var SubText = (function (_super) {
     __extends(SubText, _super);
     function SubText(text, span) {
-        _super.call(this);
+        return _super.call(this) || this;
     }
     return SubText;
 }(TextBase));

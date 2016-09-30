@@ -31,7 +31,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     Derived.prototype.foo = function () { return 2; };
     return Derived;

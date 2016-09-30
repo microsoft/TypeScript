@@ -31,7 +31,7 @@ function maker(value) {
     var Bar = (function (_super) {
         __extends(Bar, _super);
         function Bar() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return Bar;
     }(Foo));
