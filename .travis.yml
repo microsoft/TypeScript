@@ -9,19 +9,10 @@ sudo: false
 env:
   - workerCount=3
 
-matrix:
-  fast_finish: true
-
 branches:
   only:
   - master
   - release-2.0
-
-install:
-  - npm uninstall typescript
-  - npm uninstall tslint
-  - npm install
-  - npm update
 
 git:
   depth: 1
