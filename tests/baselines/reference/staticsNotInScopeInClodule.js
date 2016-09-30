@@ -14,7 +14,6 @@ var Clod = (function () {
     return Clod;
 }());
 Clod.x = 10;
-var Clod;
 (function (Clod) {
     var p = x; // x isn't in scope here
 })(Clod || (Clod = {}));

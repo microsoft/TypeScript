@@ -51,6 +51,7 @@ namespace ts {
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
+        let currentScopeFirstDeclarationsOfName: Map<Node>;
         let currentSourceFileExternalHelpersModuleName: Identifier;
 
         /**
@@ -100,6 +101,7 @@ namespace ts {
         function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             // Save state
             const savedCurrentScope = currentScope;
+            const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
 
             // Handle state changes before visiting a node.
             onBeforeVisitNode(node);
@@ -107,8 +109,11 @@ namespace ts {
             const visited = f(node);
 
             // Restore state
-            currentScope = savedCurrentScope;
+            if (currentScope !== savedCurrentScope) {
+                currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;
+            }
 
+            currentScope = savedCurrentScope;
             return visited;
         }
 
@@ -414,6 +419,16 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.Block:
                     currentScope = <SourceFile | CaseBlock | ModuleBlock | Block>node;
+                    currentScopeFirstDeclarationsOfName = undefined;
+                    break;
+
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                    if (hasModifier(node, ModifierFlags.Ambient)) {
+                        break;
+                    }
+
+                    recordEmittedDeclarationInScope(node);
                     break;
             }
         }
@@ -2502,9 +2517,11 @@ namespace ts {
         }
 
         function shouldEmitVarForEnumDeclaration(node: EnumDeclaration | ModuleDeclaration) {
-            return !hasModifier(node, ModifierFlags.Export)
-                || (isES6ExportedDeclaration(node) && isFirstDeclarationOfKind(node, node.kind));
+            return isFirstEmittedDeclarationInScope(node)
+                && (!hasModifier(node, ModifierFlags.Export)
+                    || isES6ExportedDeclaration(node));
         }
+
 
         /*
          * Adds a trailing VariableStatement for an enum or module declaration.
@@ -2543,6 +2560,7 @@ namespace ts {
             // If needed, we should emit a variable declaration for the enum. If we emit
             // a leading variable declaration, we should not emit leading comments for the
             // enum body.
+            recordEmittedDeclarationInScope(node);
             if (shouldEmitVarForEnumDeclaration(node)) {
                 addVarForEnumOrModuleDeclaration(statements, node);
 
@@ -2679,20 +2697,48 @@ namespace ts {
             return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
         }
 
-        function isModuleMergedWithES6Class(node: ModuleDeclaration) {
-            return languageVersion === ScriptTarget.ES6
-                && isMergedWithClass(node);
-        }
-
         function isES6ExportedDeclaration(node: Node) {
             return isExternalModuleExport(node)
                 && moduleKind === ModuleKind.ES6;
         }
 
+        /**
+         * Records that a declaration was emitted in the current scope, if it was the first
+         * declaration for the provided symbol.
+         *
+         * NOTE: if there is ever a transformation above this one, we may not be able to rely
+         *       on symbol names.
+         */
+        function recordEmittedDeclarationInScope(node: Node) {
+            const name = node.symbol && node.symbol.name;
+            if (name) {
+                if (!currentScopeFirstDeclarationsOfName) {
+                    currentScopeFirstDeclarationsOfName = createMap<Node>();
+                }
+
+                if (!(name in currentScopeFirstDeclarationsOfName)) {
+                    currentScopeFirstDeclarationsOfName[name] = node;
+                }
+            }
+        }
+
+        /**
+         * Determines whether a declaration is the first declaration with the same name emitted
+         * in the current scope.
+         */
+        function isFirstEmittedDeclarationInScope(node: Node) {
+            if (currentScopeFirstDeclarationsOfName) {
+                const name = node.symbol && node.symbol.name;
+                if (name) {
+                    return currentScopeFirstDeclarationsOfName[name] === node;
+                }
+            }
+
+            return false;
+        }
+
         function shouldEmitVarForModuleDeclaration(node: ModuleDeclaration) {
-            return !isModuleMergedWithES6Class(node)
-                && (!isES6ExportedDeclaration(node)
-                    || isFirstDeclarationOfKind(node, node.kind));
+            return isFirstEmittedDeclarationInScope(node);
         }
 
         /**
@@ -2768,6 +2814,7 @@ namespace ts {
             // If needed, we should emit a variable declaration for the module. If we emit
             // a leading variable declaration, we should not emit leading comments for the
             // module body.
+            recordEmittedDeclarationInScope(node);
             if (shouldEmitVarForModuleDeclaration(node)) {
                 addVarForEnumOrModuleDeclaration(statements, node);
                 // We should still emit the comments if we are emitting a system module.
@@ -2837,8 +2884,10 @@ namespace ts {
         function transformModuleBody(node: ModuleDeclaration, namespaceLocalName: Identifier): Block {
             const savedCurrentNamespaceContainerName = currentNamespaceContainerName;
             const savedCurrentNamespace = currentNamespace;
+            const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
             currentNamespaceContainerName = namespaceLocalName;
             currentNamespace = node;
+            currentScopeFirstDeclarationsOfName = undefined;
 
             const statements: Statement[] = [];
             startLexicalEnvironment();
@@ -2865,10 +2914,12 @@ namespace ts {
                 const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
                 statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
-            addRange(statements, endLexicalEnvironment());
 
+            addRange(statements, endLexicalEnvironment());
             currentNamespaceContainerName = savedCurrentNamespaceContainerName;
             currentNamespace = savedCurrentNamespace;
+            currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;
+
             const block = createBlock(
                 createNodeArray(
                     statements,
