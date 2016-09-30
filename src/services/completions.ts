@@ -330,17 +330,16 @@ namespace ts.Completions {
 
             fragment = normalizeSlashes(fragment);
 
-            const baseName = getBaseFileName(fragment); // TODO: brittle?
+            const baseName = getBaseFileName(fragment);
 
             // Remove the basename from our directory path
-            // TODO: (arozga) when is that used for filtering options later?
             fragment = getDirectoryPath(fragment);
 
             if (fragment === "") {
-                fragment = "." + directorySeparator; // TODO: (arozga) can we remove this?
+                fragment = "." + directorySeparator;
             }
 
-            fragment = ensureTrailingDirectorySeparator(fragment); // TODO: why is this necessary?
+            fragment = ensureTrailingDirectorySeparator(fragment);
 
             const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment));
             const baseDirectory = getDirectoryPath(absolutePath);
