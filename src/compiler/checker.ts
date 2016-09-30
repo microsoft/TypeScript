@@ -11079,17 +11079,22 @@ namespace ts {
         }
 
         /**
-         * Given React element instance type and the class type, resolve the Jsx type
-         * Pass elemType to handle individual type in the union typed element type.
-         */
-        function getResolvedJsxType(node: JsxOpeningLikeElement, elemType?: Type, elemClassType?: Type): Type {
+         * Resolve attributes type of the given node. The function is intended to initally be called from getJsxElementAttributesType which already handle JSX-intrinsic-element.
+         * @param node a non-instrinsic JSXOPeningLikeElement
+         * @param elemType an instance type of the given node
+         * @param elemClassType a JSX-ElementClass type. This is a result of looking up ElementClass interface in the JSX global (imported from react.d.ts)
+         * @return attributes'type if able to resolve the type of node
+         *         anyType if there is no type ElementAttributesProperty or there is an error
+         *         emptyObjectType if there is no "prop" in the element instance type
+         **/
+        function resolveJsxElementAttributesType(node: JsxOpeningLikeElement, elemType?: Type, elemClassType?: Type): Type {
             if (!elemType) {
                 elemType = checkExpression(node.tagName);
             }
             if (elemType.flags & TypeFlags.Union) {
                 const types = (<UnionOrIntersectionType>elemType).types;
                 return getUnionType(types.map(type => {
-                    return getResolvedJsxType(node, type, elemClassType);
+                    return resolveJsxElementAttributesType(node, type, elemClassType);
                 }), /*subtypeReduction*/ true);
             }
 
@@ -11199,30 +11204,31 @@ namespace ts {
         }
 
         /**
-         * Given an opening/self-closing element, get the 'element attributes type', i.e. the type that tells
-         * us which attributes are valid on a given element.
+         * Get the attributes type which is the type that indicate which attributes are valid on the given JSXOpeningLikeElement.
+         * @param node a JSXOpeningLikeElement node
+         * @return an attributes type of the given node
          */
         function getJsxElementAttributesType(node: JsxOpeningLikeElement): Type {
             const links = getNodeLinks(node);
-            if (!links.resolvedJsxType) {
+            if (!links.resolvedJsxElementAttributesType) {
                 if (isJsxIntrinsicIdentifier(node.tagName)) {
                     const symbol = getIntrinsicTagSymbol(node);
                     if (links.jsxFlags & JsxFlags.IntrinsicNamedElement) {
-                        return links.resolvedJsxType = getTypeOfSymbol(symbol);
+                        return links.resolvedJsxElementAttributesType = getTypeOfSymbol(symbol);
                     }
                     else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
-                        return links.resolvedJsxType = getIndexInfoOfSymbol(symbol, IndexKind.String).type;
+                        return links.resolvedJsxElementAttributesType = getIndexInfoOfSymbol(symbol, IndexKind.String).type;
                     }
                     else {
-                        return links.resolvedJsxType = unknownType;
+                        return links.resolvedJsxElementAttributesType = unknownType;
                     }
                 }
                 else {
                     const elemClassType = getJsxGlobalElementClassType();
-                    return links.resolvedJsxType = getResolvedJsxType(node, undefined, elemClassType);
+                    return links.resolvedJsxElementAttributesType = resolveJsxElementAttributesType(node, undefined, elemClassType);
                 }
             }
-            return links.resolvedJsxType;
+            return links.resolvedJsxElementAttributesType;
         }
 
         /**
