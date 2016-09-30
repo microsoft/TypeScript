@@ -33,7 +33,6 @@ var D = (function (_super) {
     }
     return D;
 }(C));
-var D;
 (function (D) {
     D.y = D.bar; // error
 })(D || (D = {}));

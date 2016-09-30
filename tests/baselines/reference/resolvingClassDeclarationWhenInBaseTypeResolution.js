@@ -2302,7 +2302,6 @@ var quasiater;
     }());
     quasiater.bobrinskoi = bobrinskoi;
 })(quasiater || (quasiater = {}));
-var ruatanica;
 (function (ruatanica) {
     var americanus = (function (_super) {
         __extends(americanus, _super);
@@ -3225,7 +3224,6 @@ var panglima;
     }(argurus.dauricus));
     panglima.abidi = abidi;
 })(panglima || (panglima = {}));
-var quasiater;
 (function (quasiater) {
     var carolinensis = (function () {
         function carolinensis() {
@@ -3459,7 +3457,6 @@ var daubentonii;
     }());
     daubentonii.nesiotes = nesiotes;
 })(daubentonii || (daubentonii = {}));
-var nigra;
 (function (nigra) {
     var thalia = (function () {
         function thalia() {
@@ -3533,7 +3530,6 @@ var sagitta;
     }(minutus.portoricensis));
     sagitta.walkeri = walkeri;
 })(sagitta || (sagitta = {}));
-var minutus;
 (function (minutus) {
     var inez = (function (_super) {
         __extends(inez, _super);
@@ -3550,7 +3546,6 @@ var minutus;
     }(samarensis.pelurus));
     minutus.inez = inez;
 })(minutus || (minutus = {}));
-var macrorhinos;
 (function (macrorhinos) {
     var konganensis = (function (_super) {
         __extends(konganensis, _super);
@@ -3626,7 +3621,6 @@ var panamensis;
     }(ruatanica.hector));
     panamensis.linulus = linulus;
 })(panamensis || (panamensis = {}));
-var nigra;
 (function (nigra) {
     var gracilis = (function () {
         function gracilis() {
@@ -3960,7 +3954,6 @@ var samarensis;
     }());
     samarensis.cahirinus = cahirinus;
 })(samarensis || (samarensis = {}));
-var sagitta;
 (function (sagitta) {
     var leptoceros = (function (_super) {
         __extends(leptoceros, _super);
@@ -4001,7 +3994,6 @@ var sagitta;
     }(caurinus.johorensis));
     sagitta.leptoceros = leptoceros;
 })(sagitta || (sagitta = {}));
-var daubentonii;
 (function (daubentonii) {
     var nigricans = (function (_super) {
         __extends(nigricans, _super);
@@ -4027,7 +4019,6 @@ var dammermani;
     }());
     dammermani.siberu = siberu;
 })(dammermani || (dammermani = {}));
-var argurus;
 (function (argurus) {
     var pygmaea = (function (_super) {
         __extends(pygmaea, _super);
@@ -4109,7 +4100,6 @@ var chrysaeolus;
     }(caurinus.psilurus));
     chrysaeolus.sarasinorum = sarasinorum;
 })(chrysaeolus || (chrysaeolus = {}));
-var argurus;
 (function (argurus) {
     var wetmorei = (function () {
         function wetmorei() {
@@ -4160,7 +4150,6 @@ var argurus;
     }());
     argurus.wetmorei = wetmorei;
 })(argurus || (argurus = {}));
-var argurus;
 (function (argurus) {
     var oreas = (function (_super) {
         __extends(oreas, _super);
@@ -4219,7 +4208,6 @@ var argurus;
     }(lavali.wilsoni));
     argurus.oreas = oreas;
 })(argurus || (argurus = {}));
-var daubentonii;
 (function (daubentonii) {
     var arboreus = (function () {
         function arboreus() {
@@ -4410,7 +4398,6 @@ var provocax;
     }(lavali.wilsoni));
     provocax.melanoleuca = melanoleuca;
 })(provocax || (provocax = {}));
-var sagitta;
 (function (sagitta) {
     var sicarius = (function () {
         function sicarius() {
@@ -4431,7 +4418,6 @@ var sagitta;
     }());
     sagitta.sicarius = sicarius;
 })(sagitta || (sagitta = {}));
-var howi;
 (function (howi) {
     var marcanoi = (function (_super) {
         __extends(marcanoi, _super);
@@ -4526,7 +4512,6 @@ var howi;
     }(Lanthanum.megalonyx));
     howi.marcanoi = marcanoi;
 })(howi || (howi = {}));
-var argurus;
 (function (argurus) {
     var gilbertii = (function () {
         function gilbertii() {
@@ -4616,7 +4601,6 @@ var petrophilus;
     }());
     petrophilus.minutilla = minutilla;
 })(petrophilus || (petrophilus = {}));
-var lutreolus;
 (function (lutreolus) {
     var punicus = (function () {
         function punicus() {
@@ -4703,7 +4687,6 @@ var lutreolus;
     }());
     lutreolus.punicus = punicus;
 })(lutreolus || (lutreolus = {}));
-var macrorhinos;
 (function (macrorhinos) {
     var daphaenodon = (function () {
         function daphaenodon() {
@@ -4748,7 +4731,6 @@ var macrorhinos;
     }());
     macrorhinos.daphaenodon = daphaenodon;
 })(macrorhinos || (macrorhinos = {}));
-var sagitta;
 (function (sagitta) {
     var cinereus = (function () {
         function cinereus() {
@@ -4829,7 +4811,6 @@ var sagitta;
     }());
     sagitta.cinereus = cinereus;
 })(sagitta || (sagitta = {}));
-var nigra;
 (function (nigra) {
     var caucasica = (function () {
         function caucasica() {
@@ -5070,7 +5051,6 @@ var imperfecta;
     }(dogramacii.robustulus));
     imperfecta.ciliolabrum = ciliolabrum;
 })(imperfecta || (imperfecta = {}));
-var quasiater;
 (function (quasiater) {
     var wattsi = (function () {
         function wattsi() {
@@ -5103,7 +5083,6 @@ var quasiater;
     }());
     quasiater.wattsi = wattsi;
 })(quasiater || (quasiater = {}));
-var petrophilus;
 (function (petrophilus) {
     var sodyi = (function (_super) {
         __extends(sodyi, _super);
@@ -5168,7 +5147,6 @@ var petrophilus;
     }(quasiater.bobrinskoi));
     petrophilus.sodyi = sodyi;
 })(petrophilus || (petrophilus = {}));
-var caurinus;
 (function (caurinus) {
     var megaphyllus = (function (_super) {
         __extends(megaphyllus, _super);
@@ -5227,7 +5205,6 @@ var caurinus;
     }(imperfecta.lasiurus));
     caurinus.megaphyllus = megaphyllus;
 })(caurinus || (caurinus = {}));
-var minutus;
 (function (minutus) {
     var portoricensis = (function () {
         function portoricensis() {
@@ -5254,7 +5231,6 @@ var minutus;
     }());
     minutus.portoricensis = portoricensis;
 })(minutus || (minutus = {}));
-var lutreolus;
 (function (lutreolus) {
     var foina = (function () {
         function foina() {
@@ -5341,7 +5317,6 @@ var lutreolus;
     }());
     lutreolus.foina = foina;
 })(lutreolus || (lutreolus = {}));
-var lutreolus;
 (function (lutreolus) {
     var cor = (function (_super) {
         __extends(cor, _super);
@@ -5412,7 +5387,6 @@ var lutreolus;
     }(panglima.fundatus));
     lutreolus.cor = cor;
 })(lutreolus || (lutreolus = {}));
-var howi;
 (function (howi) {
     var coludo = (function () {
         function coludo() {
@@ -5433,7 +5407,6 @@ var howi;
     }());
     howi.coludo = coludo;
 })(howi || (howi = {}));
-var argurus;
 (function (argurus) {
     var germaini = (function (_super) {
         __extends(germaini, _super);
@@ -5456,7 +5429,6 @@ var argurus;
     }(gabriellae.amicus));
     argurus.germaini = germaini;
 })(argurus || (argurus = {}));
-var sagitta;
 (function (sagitta) {
     var stolzmanni = (function () {
         function stolzmanni() {
@@ -5531,7 +5503,6 @@ var sagitta;
     }());
     sagitta.stolzmanni = stolzmanni;
 })(sagitta || (sagitta = {}));
-var dammermani;
 (function (dammermani) {
     var melanops = (function (_super) {
         __extends(melanops, _super);
@@ -5620,7 +5591,6 @@ var dammermani;
     }(minutus.inez));
     dammermani.melanops = melanops;
 })(dammermani || (dammermani = {}));
-var argurus;
 (function (argurus) {
     var peninsulae = (function (_super) {
         __extends(peninsulae, _super);
@@ -5679,7 +5649,6 @@ var argurus;
     }(patas.uralensis));
     argurus.peninsulae = peninsulae;
 })(argurus || (argurus = {}));
-var argurus;
 (function (argurus) {
     var netscheri = (function () {
         function netscheri() {
@@ -5766,7 +5735,6 @@ var argurus;
     }());
     argurus.netscheri = netscheri;
 })(argurus || (argurus = {}));
-var ruatanica;
 (function (ruatanica) {
     var Praseodymium = (function (_super) {
         __extends(Praseodymium, _super);
@@ -5855,7 +5823,6 @@ var ruatanica;
     }(ruatanica.hector));
     ruatanica.Praseodymium = Praseodymium;
 })(ruatanica || (ruatanica = {}));
-var caurinus;
 (function (caurinus) {
     var johorensis = (function (_super) {
         __extends(johorensis, _super);
@@ -5872,7 +5839,6 @@ var caurinus;
     }(lutreolus.punicus));
     caurinus.johorensis = johorensis;
 })(caurinus || (caurinus = {}));
-var argurus;
 (function (argurus) {
     var luctuosa = (function () {
         function luctuosa() {
@@ -5887,7 +5853,6 @@ var argurus;
     }());
     argurus.luctuosa = luctuosa;
 })(argurus || (argurus = {}));
-var panamensis;
 (function (panamensis) {
     var setulosus = (function () {
         function setulosus() {
@@ -5944,7 +5909,6 @@ var panamensis;
     }());
     panamensis.setulosus = setulosus;
 })(panamensis || (panamensis = {}));
-var petrophilus;
 (function (petrophilus) {
     var rosalia = (function () {
         function rosalia() {
@@ -5983,7 +5947,6 @@ var petrophilus;
     }());
     petrophilus.rosalia = rosalia;
 })(petrophilus || (petrophilus = {}));
-var caurinus;
 (function (caurinus) {
     var psilurus = (function (_super) {
         __extends(psilurus, _super);

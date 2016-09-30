@@ -47,7 +47,6 @@ var TypeScript;
     }());
     TypeScript.MemberName = MemberName;
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     var PullSymbol = (function () {
         function PullSymbol() {

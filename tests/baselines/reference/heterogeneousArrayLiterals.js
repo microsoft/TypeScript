@@ -174,7 +174,6 @@ var Derived2 = (function (_super) {
 var base;
 var derived;
 var derived2;
-var Derived;
 (function (Derived) {
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
     var i = [{ foo: base, basear: derived }, { foo: derived }]; // {foo: Derived}[]

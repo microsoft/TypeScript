@@ -67,7 +67,6 @@ var templa;
     })(dom = templa.dom || (templa.dom = {}));
 })(templa || (templa = {}));
 // Module
-var templa;
 (function (templa) {
     var dom;
     (function (dom) {

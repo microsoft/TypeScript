@@ -43,7 +43,6 @@ var M;
     }(B));
     M.C = C;
 })(M || (M = {}));
-var M;
 (function (M) {
     var C2 = (function (_super) {
         __extends(C2, _super);

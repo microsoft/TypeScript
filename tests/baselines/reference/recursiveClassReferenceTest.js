@@ -132,7 +132,6 @@ var Sample;
         })(Thing = Actions.Thing || (Actions.Thing = {}));
     })(Actions = Sample.Actions || (Sample.Actions = {}));
 })(Sample || (Sample = {}));
-var Sample;
 (function (Sample) {
     var Thing;
     (function (Thing) {
@@ -165,7 +164,6 @@ var AbstractMode = (function () {
     AbstractMode.prototype.getInitialState = function () { return null; };
     return AbstractMode;
 }());
-var Sample;
 (function (Sample) {
     var Thing;
     (function (Thing) {

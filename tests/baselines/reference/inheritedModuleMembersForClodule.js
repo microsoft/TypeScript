@@ -42,7 +42,6 @@ var D = (function (_super) {
     }
     return D;
 }(C));
-var D;
 (function (D) {
     function foo() {
         return 0;
