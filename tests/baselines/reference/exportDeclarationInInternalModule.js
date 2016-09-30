@@ -36,7 +36,6 @@ var Aaa = (function (_super) {
     }
     return Aaa;
 }(Bbb));
-var Aaa;
 (function (Aaa) {
     var SomeType = (function () {
         function SomeType() {
@@ -45,7 +44,6 @@ var Aaa;
     }());
     Aaa.SomeType = SomeType;
 })(Aaa || (Aaa = {}));
-var Bbb;
 (function (Bbb) {
     var SomeType = (function () {
         function SomeType() {

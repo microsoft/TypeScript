@@ -684,7 +684,6 @@ exports.glo_im2_public = glo_M3_private;
 //    module "abc3" {
 //    }
 //}
-var m2;
 (function (m2) {
     //import m3 = require("use_glo_M1_public");
     var m4;

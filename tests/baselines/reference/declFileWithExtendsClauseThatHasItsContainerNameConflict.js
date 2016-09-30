@@ -36,7 +36,6 @@ var A;
         B.EventManager = EventManager;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-var A;
 (function (A) {
     var B;
     (function (B) {

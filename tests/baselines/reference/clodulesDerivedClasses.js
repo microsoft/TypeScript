@@ -33,7 +33,6 @@ var Shape = (function () {
     }
     return Shape;
 }());
-var Shape;
 (function (Shape) {
     var Utils;
     (function (Utils) {
@@ -48,7 +47,6 @@ var Path = (function (_super) {
     }
     return Path;
 }(Shape));
-var Path;
 (function (Path) {
     var Utils;
     (function (Utils) {

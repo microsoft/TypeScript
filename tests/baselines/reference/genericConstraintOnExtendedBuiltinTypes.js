@@ -45,7 +45,6 @@ var EndGate;
         Tweening.Tween = Tween;
     })(Tweening = EndGate.Tweening || (EndGate.Tweening = {}));
 })(EndGate || (EndGate = {}));
-var EndGate;
 (function (EndGate) {
     var Tweening;
     (function (Tweening) {

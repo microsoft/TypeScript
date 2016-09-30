@@ -20,7 +20,6 @@ var b = point.equals(p1, p2);
 function point(x, y) {
     return { x: x, y: y };
 }
-var point;
 (function (point) {
     point.origin = point(0, 0);
     function equals(p1, p2) {

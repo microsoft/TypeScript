@@ -215,7 +215,13 @@ namespace ts.server {
         }
 
         getScriptInfos() {
-            return map(this.program.getSourceFiles(), sourceFile => this.getScriptInfoLSHost(sourceFile.path));
+            return map(this.program.getSourceFiles(), sourceFile => {
+                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
+                if (!scriptInfo) {
+                    Debug.assert(false, `scriptInfo for a file '${sourceFile.fileName}' is missing.`);
+                }
+                return scriptInfo;
+            });
         }
 
         getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles: boolean) {

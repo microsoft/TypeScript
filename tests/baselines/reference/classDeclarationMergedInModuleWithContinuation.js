@@ -25,12 +25,10 @@ var M;
         return N;
     }());
     M.N = N;
-    var N;
     (function (N) {
         N.v = 0;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
-var M;
 (function (M) {
     var O = (function (_super) {
         __extends(O, _super);
