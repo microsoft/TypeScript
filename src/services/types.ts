@@ -239,6 +239,8 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
+        isValidSnippetInsertionAtPosition(fileName: string, position: number): boolean;
+
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
         getProgram(): Program;
