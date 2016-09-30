@@ -1,6 +1,5 @@
-/// <reference path="types.ts"/>
+﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
-
 
 /* @internal */
 namespace ts {
@@ -47,6 +46,7 @@ namespace ts {
             contains,
             remove,
             forEachValue: forEachValueInMap,
+            getKeys,
             clear,
         };
 
@@ -54,6 +54,14 @@ namespace ts {
             for (const key in files) {
                 f(<Path>key, files[key]);
             }
+        }
+
+        function getKeys() {
+            const keys: Path[] = [];
+            for (const key in files) {
+                keys.push(<Path>key);
+            }
+            return keys;
         }
 
         // path should already be well-formed so it does not need to be normalized
@@ -397,6 +405,7 @@ namespace ts {
         return [...array1, ...array2];
     }
 
+    // TODO: fixme (N^2) - add optional comparer so collection can be sorted before deduplication.
     export function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[] {
         let result: T[];
         if (array) {
@@ -496,18 +505,25 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch(array: number[], value: number): number {
+    export function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number): number {
+        if (!array || array.length === 0) {
+            return -1;
+        }
+
         let low = 0;
         let high = array.length - 1;
+        comparer = comparer !== undefined
+            ? comparer
+            : (v1, v2) => (v1 < v2 ? -1 : (v1 > v2 ? 1 : 0));
 
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
             const midValue = array[middle];
 
-            if (midValue === value) {
+            if (comparer(midValue, value) === 0) {
                 return middle;
             }
-            else if (midValue > value) {
+            else if (comparer(midValue, value) > 0) {
                 high = middle - 1;
             }
             else {
@@ -1162,8 +1178,47 @@ namespace ts {
         return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
     }
 
+    export function isExternalModuleNameRelative(moduleName: string): boolean {
+        // TypeScript 1.0 spec (April 2014): 11.2.1
+        // An external module name is "relative" if the first term is "." or "..".
+        return /^\.\.?($|[\\/])/.test(moduleName);
+    }
+
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
+        return compilerOptions.target || ScriptTarget.ES3;
+    }
+
+    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
+        return typeof compilerOptions.module === "number" ?
+            compilerOptions.module :
+            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
+    }
+
+    /* @internal */
+    export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
+        let seenAsterisk = false;
+        for (let i = 0; i < str.length; i++) {
+            if (str.charCodeAt(i) === CharacterCodes.asterisk) {
+                if (!seenAsterisk) {
+                    seenAsterisk = true;
+                }
+                else {
+                    // have already seen asterisk
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     export function isRootedDiskPath(path: string) {
         return getRootLength(path) !== 0;
+    }
+
+    export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
+        return !isRootedDiskPath(absoluteOrRelativePath)
+            ? absoluteOrRelativePath
+            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
     }
 
     function normalizedPathComponents(path: string, rootLength: number) {
@@ -1657,6 +1712,14 @@ namespace ts {
         return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
     }
 
+    export function hasJavaScriptFileExtension(fileName: string) {
+        return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function hasTypeScriptFileExtension(fileName: string) {
+        return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
         if (!fileName) { return false; }
 
@@ -1889,5 +1952,83 @@ namespace ts {
         return useCaseSensitiveFileNames
             ? ((fileName) => fileName)
             : ((fileName) => fileName.toLowerCase());
+    }
+
+    /**
+     * patternStrings contains both pattern strings (containing "*") and regular strings.
+     * Return an exact match if possible, or a pattern match, or undefined.
+     * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
+     */
+    /* @internal */
+    export function matchPatternOrExact(patternStrings: string[], candidate: string): string | Pattern | undefined {
+        const patterns: Pattern[] = [];
+        for (const patternString of patternStrings) {
+            const pattern = tryParsePattern(patternString);
+            if (pattern) {
+                patterns.push(pattern);
+            }
+            else if (patternString === candidate) {
+                // pattern was matched as is - no need to search further
+                return patternString;
+            }
+        }
+
+        return findBestPatternMatch(patterns, _ => _, candidate);
+    }
+
+    /* @internal */
+    export function patternText({prefix, suffix}: Pattern): string {
+        return `${prefix}*${suffix}`;
+    }
+
+    /**
+     * Given that candidate matches pattern, returns the text matching the '*'.
+     * E.g.: matchedText(tryParsePattern("foo*baz"), "foobarbaz") === "bar"
+     */
+    /* @internal */
+    export function matchedText(pattern: Pattern, candidate: string): string {
+        Debug.assert(isPatternMatch(pattern, candidate));
+        return candidate.substr(pattern.prefix.length, candidate.length - pattern.suffix.length);
+    }
+
+    /** Return the object corresponding to the best pattern to match `candidate`. */
+    /* @internal */
+    export function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined {
+        let matchedValue: T | undefined = undefined;
+        // use length of prefix as betterness criteria
+        let longestMatchPrefixLength = -1;
+
+        for (const v of values) {
+            const pattern = getPattern(v);
+            if (isPatternMatch(pattern, candidate) && pattern.prefix.length > longestMatchPrefixLength) {
+                longestMatchPrefixLength = pattern.prefix.length;
+                matchedValue = v;
+            }
+        }
+
+        return matchedValue;
+    }
+
+    function isPatternMatch({prefix, suffix}: Pattern, candidate: string) {
+        return candidate.length >= prefix.length + suffix.length &&
+            startsWith(candidate, prefix) &&
+            endsWith(candidate, suffix);
+    }
+
+    /* @internal */
+    export function tryParsePattern(pattern: string): Pattern | undefined {
+        // This should be verified outside of here and a proper error thrown.
+        Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
+        const indexOfStar = pattern.indexOf("*");
+        return indexOfStar === -1 ? undefined : {
+            prefix: pattern.substr(0, indexOfStar),
+            suffix: pattern.substr(indexOfStar + 1)
+        };
+    }
+
+    export function positionIsSynthesized(pos: number): boolean {
+        // This is a fast way of testing the following conditions:
+        //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
+        return !(pos >= 0);
     }
 }

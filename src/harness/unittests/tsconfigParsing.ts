@@ -191,7 +191,7 @@ namespace ts {
                 }
                 "files": ["file1.ts"]
             }`;
-            const { configJsonObject, diagnostics } = parseAndReEmitConfigJSONFile(content);
+            const { configJsonObject, diagnostics } = sanitizeConfigFile("config.json", content);
             const expectedResult = {
                 compilerOptions: {
                     allowJs: true,

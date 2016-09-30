@@ -13,8 +13,11 @@ namespace ts {
         _i        = 0x10000000,  // Use/preference flag for '_i'
     }
 
+    const id = (s: SourceFile) => s;
+    const nullTransformers: Transformer[] = [ctx => id];
+
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
         const delimiters = createDelimiterMap();
         const brackets = createBracketsMap();
 
@@ -192,7 +195,7 @@ const _super = (function (geti, seti) {
         const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         const newLine = host.getNewLine();
-        const transformers = getTransformers(compilerOptions);
+        const transformers: Transformer[] = emitOnlyDtsFiles ? nullTransformers : getTransformers(compilerOptions);
         const writer = createTextWriter(newLine);
         const {
             write,
@@ -242,7 +245,7 @@ const _super = (function (geti, seti) {
 
         // Emit each output file
         performance.mark("beforePrint");
-        forEachTransformedEmitFile(host, transformed, emitFile);
+        forEachTransformedEmitFile(host, transformed, emitFile, emitOnlyDtsFiles);
         performance.measure("printTime", "beforePrint");
 
         // Clean up emit nodes on parse tree
@@ -260,18 +263,22 @@ const _super = (function (geti, seti) {
         function emitFile(jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
             // Make sure not to write js file and source map file if any of them cannot be written
             if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
-                printFile(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
+                if (!emitOnlyDtsFiles) {
+                    printFile(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
+                }
             }
             else {
                 emitSkipped = true;
             }
 
             if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, getOriginalSourceFiles(sourceFiles), isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
+                emitSkipped = writeDeclarationFile(declarationFilePath, getOriginalSourceFiles(sourceFiles), isBundledEmit, host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
             }
 
             if (!emitSkipped && emittedFilesList) {
-                emittedFilesList.push(jsFilePath);
+                if (!emitOnlyDtsFiles) {
+                    emittedFilesList.push(jsFilePath);
+                }
                 if (sourceMapFilePath) {
                     emittedFilesList.push(sourceMapFilePath);
                 }

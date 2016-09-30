@@ -418,9 +418,35 @@ gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
     ]).pipe(gulp.dest(builtLocalDirectory));
 });
 
+// cancellationToken.js
+const cancellationTokenJs = path.join(builtLocalDirectory, "cancellationToken.js");
+gulp.task(cancellationTokenJs, false, [servicesFile], () => {
+    const cancellationTokenProject = tsc.createProject("src/server/cancellationToken/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+    return cancellationTokenProject.src()
+        .pipe(newer(cancellationTokenJs))
+        .pipe(sourcemaps.init())
+        .pipe(tsc(cancellationTokenProject))
+        .pipe(prependCopyright())
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(builtLocalDirectory));
+});
+
+// typingsInstallerFile.js
+const typingsInstallerJs = path.join(builtLocalDirectory, "typingsInstaller.js");
+gulp.task(typingsInstallerJs, false, [servicesFile], () => {
+    const cancellationTokenProject = tsc.createProject("src/server/typingsInstaller/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+    return cancellationTokenProject.src()
+        .pipe(newer(typingsInstallerJs))
+        .pipe(sourcemaps.init())
+        .pipe(tsc(cancellationTokenProject))
+        .pipe(prependCopyright())
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(builtLocalDirectory));
+});
+
 const serverFile = path.join(builtLocalDirectory, "tsserver.js");
 
-gulp.task(serverFile, false, [servicesFile], () => {
+gulp.task(serverFile, false, [servicesFile, typingsInstallerJs, cancellationTokenJs], () => {
     const serverProject = tsc.createProject("src/server/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
     return serverProject.src()
         .pipe(newer(serverFile))
@@ -453,7 +479,6 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
 gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile]);
 gulp.task("tsc", "Builds only the compiler", [builtLocalCompiler]);
-
 
 // Generate Markdown spec
 const word2mdJs = path.join(scriptsDirectory, "word2md.js");
@@ -493,7 +518,7 @@ gulp.task("useDebugMode", false, [], (done) => { useDebugMode = true; done(); })
 gulp.task("dontUseDebugMode", false, [], (done) => { useDebugMode = false; done(); });
 
 gulp.task("VerifyLKG", false, [], () => {
-    const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
+    const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, typingsInstallerJs, cancellationTokenJs].concat(libraryTargets);
     const missingFiles = expectedFiles.filter(function(f) {
         return !fs.existsSync(f);
     });
