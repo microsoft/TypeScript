@@ -13,13 +13,8 @@
 //// /// <reference path=".//*2*/
 //// /// <reference path=".\/*3*/
 
-for(let m of ["0", "2", "3"]) {
+for(let m of ["0", "1", "2", "3"]) {
     goTo.marker(m);
     verify.completionListContains("f.ts");
-    verify.completionListContains(".hidden.ts");
-    verify.not.completionListItemsCountIsGreaterThan(2);
+    verify.not.completionListItemsCountIsGreaterThan(1);
 }
-
-goTo.marker("1");
-verify.completionListContains(".hidden.ts");
-verify.not.completionListItemsCountIsGreaterThan(1);
