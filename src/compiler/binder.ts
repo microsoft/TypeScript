@@ -358,16 +358,13 @@ namespace ts {
                             }
                             else {
                                 // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
-                                for (const declaration of symbol.declarations) {
-                                    // Error on multiple export default in the following case:
-                                    // 1. multiple export default of class declaration or function declaration by checking NodeFlags.Default
-                                    // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
-                                    if ((declaration.flags & NodeFlags.Default) ||
-                                        (declaration.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
+                                // Error on multiple export default in the following case:
+                                // 1. multiple export default of class declaration or function declaration by checking NodeFlags.Default
+                                // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
+                                if (symbol.declarations && symbol.declarations.length &&
+                                    (isDefaultExport || (node.kind === SyntaxKind.ExportAssignment &&  !(<ExportAssignment>node).isExportEquals))) {
                                         message = Diagnostics.A_module_cannot_have_multiple_default_exports;
-                                        break;
-                                    }
-                                }
+                                 }
                             }
                         }
 
