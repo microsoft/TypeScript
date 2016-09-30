@@ -1689,7 +1689,7 @@ namespace ts {
                             assignment = flattenVariableDestructuringToExpression(context, decl, hoistVariableDeclaration, /*nameSubstitution*/ undefined, visitor);
                         }
                         else {
-                            assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, decl.initializer);
+                            assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
                         }
                         (assignments || (assignments = [])).push(assignment);
                     }
@@ -2201,6 +2201,7 @@ namespace ts {
                 }
             }
 
+            debugger;
             let loopBody = visitNode(node.statement, visitor, isStatement);
 
             const currentState = convertedLoopState;
