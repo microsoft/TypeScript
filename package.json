@@ -60,7 +60,7 @@
         "gulp-insert": "latest",
         "gulp-newer": "latest",
         "gulp-sourcemaps": "latest",
-        "gulp-typescript": "latest",
+        "gulp-typescript": "2.14.1",
         "into-stream": "latest",
         "istanbul": "latest",
         "jake": "latest",
