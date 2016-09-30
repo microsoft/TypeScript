@@ -35,11 +35,11 @@ var d2: D2;
 >D2 : D2
 
 d.x = '';
->d.x = '' : string
+>d.x = '' : ""
 >d.x : string
 >d : D
 >x : string
->'' : string
+>'' : ""
 
 b = d;
 >b = d : D
@@ -47,9 +47,9 @@ b = d;
 >d : D
 
 b.x = 1; // assigned number to string
->b.x = 1 : number
+>b.x = 1 : 1
 >b.x : Object
 >b : B
 >x : Object
->1 : number
+>1 : 1
 

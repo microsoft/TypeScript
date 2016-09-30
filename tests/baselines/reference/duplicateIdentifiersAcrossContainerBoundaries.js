@@ -73,8 +73,8 @@ var M;
         function f() {
         }
         return f;
-    }());
-    M.f = f; // error
+    }()); // error
+    M.f = f;
 })(M || (M = {}));
 var M;
 (function (M) {
@@ -86,8 +86,8 @@ var M;
         function g() {
         }
         return g;
-    }());
-    M.g = g; // no error
+    }()); // no error
+    M.g = g;
 })(M || (M = {}));
 var M;
 (function (M) {

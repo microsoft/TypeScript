@@ -164,13 +164,14 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C;
 }(A));
 function hasANonBooleanReturnStatement(x) {
     return '';
 }
+function hasTypeGuardTypeInsideTypeGuardType(x) { }
 is;
 A;
 {
@@ -231,6 +232,7 @@ function b2(a, A) {
     if (a === void 0) { a = is; }
 }
 ;
+function b3() { }
 is;
 A;
 {

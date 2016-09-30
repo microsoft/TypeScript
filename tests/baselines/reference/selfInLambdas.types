@@ -28,7 +28,7 @@ var o = {
 
     counter: 0,
 >counter : number
->0 : number
+>0 : 0
 
     start: function() {
 >start : () => void
@@ -67,7 +67,7 @@ class X {
 
 	private value = "value";
 >value : string
->"value" : string
+>"value" : "value"
 
 	public foo() {
 >foo : () => void

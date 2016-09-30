@@ -123,7 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
-        protected fileNameToScript = ts.createMap<ScriptInfo>();
+        protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
                     protected settings = ts.getDefaultCompilerOptions()) {
@@ -135,22 +135,24 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            ts.forEachProperty(this.fileNameToScript, (scriptInfo) => {
+            for (const virtualEntry of this.virtualFileSystem.getAllFileEntries()){
+                const scriptInfo = virtualEntry.content;
                 if (scriptInfo.isRootFile) {
                     // only include root files here
                     // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
                     fileNames.push(scriptInfo.fileName);
                 }
-            });
+            }
             return fileNames;
         }
 
         public getScriptInfo(fileName: string): ScriptInfo {
-            return this.fileNameToScript[fileName];
+            const fileEntry = this.virtualFileSystem.traversePath(fileName);
+            return fileEntry && fileEntry.isFile() ? (<Utils.VirtualFile>fileEntry).content : undefined;
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
-            this.fileNameToScript[fileName] = new ScriptInfo(fileName, content, isRootFile);
+            this.virtualFileSystem.addFile(fileName, new ScriptInfo(fileName, content, isRootFile));
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
@@ -171,7 +173,7 @@ namespace Harness.LanguageService {
           * @param col 0 based index
           */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
-            const script: ScriptInfo = this.fileNameToScript[fileName];
+            const script: ScriptInfo = this.getScriptInfo(fileName);
             assert.isOk(script);
 
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
@@ -182,8 +184,14 @@ namespace Harness.LanguageService {
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
-        getDirectories(path: string): string[] { return []; }
-        getCurrentDirectory(): string { return ""; }
+        getDirectories(path: string): string[] {
+            const dir = this.virtualFileSystem.traversePath(path);
+            if (dir && dir.isDirectory()) {
+                return ts.map((<Utils.VirtualDirectory>dir).getDirectories(), (d) => ts.combinePaths(path, d.name));
+            }
+            return [];
+        }
+        getCurrentDirectory(): string { return virtualFileSystemRoot; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
@@ -195,6 +203,25 @@ namespace Harness.LanguageService {
             const script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
         }
+
+        fileExists(fileName: string): boolean {
+            const script = this.getScriptSnapshot(fileName);
+            return script !== undefined;
+        }
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+            return ts.matchFiles(path, extensions, exclude, include,
+            /*useCaseSensitiveFileNames*/false,
+            this.getCurrentDirectory(),
+            (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
+        }
+        readFile(path: string, encoding?: string): string {
+            const snapshot = this.getScriptSnapshot(path);
+            return snapshot.getText(0, snapshot.getLength());
+        }
+        getTypeRootsVersion() {
+            return 0;
+        }
+
 
         log(s: string): void { }
         trace(s: string): void { }
@@ -384,6 +411,9 @@ namespace Harness.LanguageService {
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): ts.CompletionEntryDetails {
             return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName));
         }
+        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): ts.Symbol {
+            throw new Error("getCompletionEntrySymbol not implemented across the shim layer.");
+        }
         getQuickInfoAtPosition(fileName: string, position: number): ts.QuickInfo {
             return unwrapJSONCallResult(this.shim.getQuickInfoAtPosition(fileName, position));
         }
@@ -407,6 +437,9 @@ namespace Harness.LanguageService {
         }
         getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getTypeDefinitionAtPosition(fileName, position));
+        }
+        getImplementationAtPosition(fileName: string, position: number): ts.ImplementationLocation[] {
+            return unwrapJSONCallResult(this.shim.getImplementationAtPosition(fileName, position));
         }
         getReferencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getReferencesAtPosition(fileName, position));
@@ -460,6 +493,9 @@ namespace Harness.LanguageService {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
         getNonBoundSourceFile(fileName: string): ts.SourceFile {
+            throw new Error("SourceFile can not be marshaled across the shim layer.");
+        }
+        getSourceFile(fileName: string): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
         dispose(): void { this.shim.dispose({}); }
@@ -572,7 +608,6 @@ namespace Harness.LanguageService {
             this.writeMessage(message);
         }
 
-
         readFile(fileName: string): string {
             if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
                 fileName = Harness.Compiler.defaultLibFileName;
@@ -617,6 +652,10 @@ namespace Harness.LanguageService {
             return [];
         }
 
+        getEnvironmentVariable(name: string): string {
+            return ts.sys.getEnvironmentVariable(name);
+        }
+
         readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]): string[] {
             throw new Error("Not implemented Yet.");
         }
@@ -644,7 +683,11 @@ namespace Harness.LanguageService {
             return true;
         }
 
-        isVerbose() {
+        getLogFileName(): string {
+            return undefined;
+        }
+
+        hasLevel() {
             return false;
         }
 
@@ -666,6 +709,14 @@ namespace Harness.LanguageService {
         clearTimeout(timeoutId: any): void {
             clearTimeout(timeoutId);
         }
+
+        setImmediate(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            return setImmediate(callback, args);
+        }
+
+        clearImmediate(timeoutId: any): void {
+            clearImmediate(timeoutId);
+        }
     }
 
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
@@ -680,8 +731,12 @@ namespace Harness.LanguageService {
             // host to answer server queries about files on disk
             const serverHost = new SessionServerHost(clientHost);
             const server = new ts.server.Session(serverHost,
-                Buffer ? Buffer.byteLength : (string: string, encoding?: string) => string.length,
-                process.hrtime, serverHost);
+                { isCancellationRequested: () => false },
+                /*useOneInferredProject*/ false,
+                /*typingsInstaller*/ undefined,
+                Utils.byteLength,
+                process.hrtime, serverHost,
+                /*canUseEvents*/ true);
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);

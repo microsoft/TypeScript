@@ -6,6 +6,11 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
+    interface Statistic {
+        name: string;
+        value: string;
+    }
+
     const defaultFormatDiagnosticsHost: FormatDiagnosticsHost = {
         getCurrentDirectory: () => sys.getCurrentDirectory(),
         getNewLine: () => sys.newLine,
@@ -228,18 +233,6 @@ namespace ts {
         }
 
         return s;
-    }
-
-    function reportStatisticalValue(name: string, value: string) {
-        sys.write(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
-    }
-
-    function reportCountStatistic(name: string, count: number) {
-        reportStatisticalValue(name, "" + count);
-    }
-
-    function reportTimeStatistic(name: string, time: number) {
-        reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
     function isJSONSupported() {
@@ -489,10 +482,7 @@ namespace ts {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             if (removed) {
-                const index = rootFileNames.indexOf(sourceFile.fileName);
-                if (index >= 0) {
-                    rootFileNames.splice(index, 1);
-                }
+                unorderedRemoveItem(rootFileNames, sourceFile.fileName);
             }
             startTimerForRecompilation();
         }
@@ -550,7 +540,11 @@ namespace ts {
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
         const hasDiagnostics = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
-        if (hasDiagnostics) performance.enable();
+        let statistics: Statistic[];
+        if (hasDiagnostics) {
+            performance.enable();
+            statistics = [];
+        }
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -594,6 +588,7 @@ namespace ts {
                 reportTimeStatistic("Emit time", emitTime);
             }
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            reportStatistics();
 
             performance.disable();
         }
@@ -635,6 +630,36 @@ namespace ts {
             }
             return ExitStatus.Success;
         }
+
+        function reportStatistics() {
+            let nameSize = 0;
+            let valueSize = 0;
+            for (const { name, value } of statistics) {
+                if (name.length > nameSize) {
+                    nameSize = name.length;
+                }
+
+                if (value.length > valueSize) {
+                    valueSize = value.length;
+                }
+            }
+
+            for (const { name, value } of statistics) {
+                sys.write(padRight(name + ":", nameSize + 2) + padLeft(value.toString(), valueSize) + sys.newLine);
+            }
+        }
+
+        function reportStatisticalValue(name: string, value: string) {
+            statistics.push({ name, value });
+        }
+
+        function reportCountStatistic(name: string, count: number) {
+            reportStatisticalValue(name, "" + count);
+        }
+
+        function reportTimeStatistic(name: string, time: number) {
+            reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
+        }
     }
 
     function printVersion() {
@@ -642,7 +667,7 @@ namespace ts {
     }
 
     function printHelp() {
-        let output = "";
+        const output: string[] = [];
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
         const syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length;
@@ -653,17 +678,17 @@ namespace ts {
         let syntax = makePadding(marginLength - syntaxLength);
         syntax += "tsc [" + getDiagnosticText(Diagnostics.options) + "] [" + getDiagnosticText(Diagnostics.file) + " ...]";
 
-        output += getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax);
-        output += sys.newLine + sys.newLine;
+        output.push(getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax));
+        output.push(sys.newLine + sys.newLine);
 
         // Build up the list of examples.
         const padding = makePadding(marginLength);
-        output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
-        output += padding + "tsc --outFile file.js file.ts" + sys.newLine;
-        output += padding + "tsc @args.txt" + sys.newLine;
-        output += sys.newLine;
+        output.push(getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine);
+        output.push(padding + "tsc --outFile file.js file.ts" + sys.newLine);
+        output.push(padding + "tsc @args.txt" + sys.newLine);
+        output.push(sys.newLine);
 
-        output += getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine;
+        output.push(getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine);
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         const optsList = filter(optionDeclarations.slice(), v => !v.experimental);
@@ -730,18 +755,20 @@ namespace ts {
             const usage = usageColumn[i];
             const description = descriptionColumn[i];
             const kindsList = optionsDescriptionMap[description];
-            output += usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine;
+            output.push(usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine);
 
             if (kindsList) {
-                output += makePadding(marginLength + 4);
+                output.push(makePadding(marginLength + 4));
                 for (const kind of kindsList) {
-                    output += kind + " ";
+                    output.push(kind + " ");
                 }
-                output += sys.newLine;
+                output.push(sys.newLine);
             }
         }
 
-        sys.write(output);
+        for (const line of output) {
+            sys.write(line);
+        }
         return;
 
         function getParamType(option: CommandLineOption) {
@@ -763,68 +790,16 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
         }
         else {
-            const compilerOptions = extend(options, defaultInitCompilerOptions);
-            const configurations: any = {
-                compilerOptions: serializeCompilerOptions(compilerOptions)
-            };
-
-            if (fileNames && fileNames.length) {
-                // only set the files property if we have at least one file
-                configurations.files = fileNames;
-            }
-            else {
-                configurations.exclude = ["node_modules"];
-                if (compilerOptions.outDir) {
-                    configurations.exclude.push(compilerOptions.outDir);
-                }
-            }
-
-            sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
+            sys.writeFile(file, JSON.stringify(generateTSConfig(options, fileNames), undefined, 4));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
         }
 
         return;
-
-        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
-            const result = createMap<string | number | boolean>();
-            const optionsNameMap = getOptionNameMap().optionNameMap;
-
-            for (const name in options) {
-                if (hasProperty(options, name)) {
-                    // tsconfig only options cannot be specified via command line,
-                    // so we can assume that only types that can appear here string | number | boolean
-                    const value = <string | number | boolean>options[name];
-                    switch (name) {
-                        case "init":
-                        case "watch":
-                        case "version":
-                        case "help":
-                        case "project":
-                            break;
-                        default:
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
-                            if (optionDefinition) {
-                                if (typeof optionDefinition.type === "string") {
-                                    // string, number or boolean
-                                    result[name] = value;
-                                }
-                                else {
-                                    // Enum
-                                    const typeMap = <Map<number>>optionDefinition.type;
-                                    for (const key in typeMap) {
-                                        if (typeMap[key] === value) {
-                                            result[name] = key;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
-            return result;
-        }
     }
+}
+
+if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+    ts.sys.tryEnableSourceMapsForHost();
 }
 
 ts.executeCommandLine(ts.sys.args);

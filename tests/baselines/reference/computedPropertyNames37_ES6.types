@@ -17,12 +17,12 @@ class C {
 
     // Computed properties
     get ["get1"]() { return new Foo }
->"get1" : string
+>"get1" : "get1"
 >new Foo : Foo
 >Foo : typeof Foo
 
     set ["set1"](p: Foo2) { }
->"set1" : string
+>"set1" : "set1"
 >p : Foo2
 >Foo2 : Foo2
 }

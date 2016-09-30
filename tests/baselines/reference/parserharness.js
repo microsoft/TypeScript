@@ -2371,18 +2371,19 @@ var Harness;
                 errorHandlerStack[errorHandlerStack.length - 1](e);
             }
         };
-        // The current stack of Runnable objects
-        Runnable.currentStack = [];
-        Runnable.errorHandlerStack = [];
         return Runnable;
     }());
+    // The current stack of Runnable objects
+    Runnable.currentStack = [];
+    Runnable.errorHandlerStack = [];
     Harness.Runnable = Runnable;
     var TestCase = (function (_super) {
         __extends(TestCase, _super);
         function TestCase(description, block) {
-            _super.call(this, description, block);
-            this.description = description;
-            this.block = block;
+            var _this = _super.call(this, description, block) || this;
+            _this.description = description;
+            _this.block = block;
+            return _this;
         }
         TestCase.prototype.addChild = function (child) {
             throw new Error("Testcases may not be nested inside other testcases");
@@ -2414,9 +2415,10 @@ var Harness;
     var Scenario = (function (_super) {
         __extends(Scenario, _super);
         function Scenario(description, block) {
-            _super.call(this, description, block);
-            this.description = description;
-            this.block = block;
+            var _this = _super.call(this, description, block) || this;
+            _this.description = description;
+            _this.block = block;
+            return _this;
         }
         /** Run the block, and if the block doesn't raise an error, run the children. */
         Scenario.prototype.run = function (done) {
@@ -2469,7 +2471,7 @@ var Harness;
     var Run = (function (_super) {
         __extends(Run, _super);
         function Run() {
-            _super.call(this, 'Test Run', null);
+            return _super.call(this, 'Test Run', null) || this;
         }
         Run.prototype.run = function () {
             emitLog('start');

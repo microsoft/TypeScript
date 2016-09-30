@@ -16,54 +16,54 @@ export default class C {}
 
 
 //// [file1.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function default_1() { }
     exports_1("default", default_1);
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
         }
-    }
+    };
 });
 //// [file2.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function foo() { }
     exports_1("default", foo);
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
         }
-    }
+    };
 });
 //// [file3.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var default_1;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             default_1 = (function () {
-                function default_1() {
+                function class_1() {
                 }
-                return default_1;
+                return class_1;
             }());
             exports_1("default", default_1);
         }
-    }
+    };
 });
 //// [file4.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var C;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             C = (function () {
                 function C() {
                 }
@@ -71,5 +71,5 @@ System.register([], function(exports_1, context_1) {
             }());
             exports_1("default", C);
         }
-    }
+    };
 });

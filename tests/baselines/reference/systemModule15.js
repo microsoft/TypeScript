@@ -34,63 +34,65 @@ export default value;
 export var value2 = "v";
 
 //// [file3.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var value;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             exports_1("value", value = "youpi");
-            exports_1("default",value);
+            exports_1("default", value);
         }
-    }
+    };
 });
 //// [file4.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var value2;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             exports_1("value2", value2 = "v");
         }
-    }
+    };
 });
 //// [file2.js]
-System.register(["./file3"], function(exports_1, context_1) {
+System.register(["./file3"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var moduleCStar, file3_1, file3_2;
     return {
-        setters:[
+        setters: [
             function (moduleCStar_1) {
                 moduleCStar = moduleCStar_1;
                 file3_1 = moduleCStar_1;
                 file3_2 = moduleCStar_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             exports_1("moduleCStar", moduleCStar);
             exports_1("moduleC", file3_1["default"]);
             exports_1("value", file3_2.value);
         }
-    }
+    };
 });
 //// [file1.js]
-System.register(["./file2"], function(exports_1, context_1) {
+System.register(["./file2"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var moduleB;
     return {
-        setters:[
+        setters: [
             function (moduleB_1) {
                 moduleB = moduleB_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             use(moduleB.value);
             use(moduleB.moduleC);
             use(moduleB.moduleCStar);
         }
-    }
+    };
 });

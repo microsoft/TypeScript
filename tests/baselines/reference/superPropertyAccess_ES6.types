@@ -5,11 +5,11 @@ class MyBase {
 
   getValue(): number { return 1; }
 >getValue : () => number
->1 : number
+>1 : 1
 
   get value(): number { return 1; }
 >value : number
->1 : number
+>1 : 1
 }
 
 class MyDerived extends MyBase {
@@ -84,6 +84,6 @@ class B extends A {
 >property : string
 >value + " addition" : string
 >value : string
->" addition" : string
+>" addition" : " addition"
     }
 }

@@ -227,7 +227,7 @@ var c2 = (function () {
 var c3 = (function (_super) {
     __extends(c3, _super);
     function c3() {
-        _super.call(this, 10);
+        return _super.call(this, 10) || this;
     }
     /** c3 f1*/
     c3.prototype.f1 = function () {
@@ -258,7 +258,7 @@ c2_i = c3_i;
 var c4 = (function (_super) {
     __extends(c4, _super);
     function c4() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return c4;
 }(c2));

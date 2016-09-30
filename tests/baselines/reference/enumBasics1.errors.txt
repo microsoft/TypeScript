@@ -1,4 +1,4 @@
-tests/cases/compiler/enumBasics1.ts(26,5): error TS2339: Property 'A' does not exist on type 'E'.
+tests/cases/compiler/enumBasics1.ts(26,5): error TS2339: Property 'A' does not exist on type 'E.A'.
 tests/cases/compiler/enumBasics1.ts(35,2): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
 
 
@@ -30,7 +30,7 @@ tests/cases/compiler/enumBasics1.ts(35,2): error TS2432: In an enum with multipl
     */
     E.A.A; // should error
         ~
-!!! error TS2339: Property 'A' does not exist on type 'E'.
+!!! error TS2339: Property 'A' does not exist on type 'E.A'.
     
     
     enum E2 {

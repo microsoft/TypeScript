@@ -130,53 +130,59 @@ sourceFile:sourceMapValidationDestructuringVariableStatementDefaultValues.ts
 ---
 >>>var _a = robotA.name, nameA = _a === void 0 ? "<NoName>" : _a;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^
-3 >                    ^^
-4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                             ^
-6 >                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^
+4 >                    ^^
+5 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                             ^
+7 >                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >var { 
-2 >name: nameA = "<NoName>"
-3 >                    
-4 >                      name: nameA = "<NoName>"
-5 >                                                              } = robotA;
+2 >
+3 >    name: nameA = "<NoName>"
+4 >                    
+5 >                      name: nameA = "<NoName>"
+6 >                                                              } = robotA;
 1->Emitted(4, 1) Source(11, 7) + SourceIndex(0)
-2 >Emitted(4, 21) Source(11, 31) + SourceIndex(0)
-3 >Emitted(4, 23) Source(11, 7) + SourceIndex(0)
-4 >Emitted(4, 62) Source(11, 31) + SourceIndex(0)
-5 >Emitted(4, 63) Source(11, 43) + SourceIndex(0)
+2 >Emitted(4, 5) Source(11, 7) + SourceIndex(0)
+3 >Emitted(4, 21) Source(11, 31) + SourceIndex(0)
+4 >Emitted(4, 23) Source(11, 7) + SourceIndex(0)
+5 >Emitted(4, 62) Source(11, 31) + SourceIndex(0)
+6 >Emitted(4, 63) Source(11, 43) + SourceIndex(0)
 ---
 >>>var _b = robotB.name, nameB = _b === void 0 ? "<NoName>" : _b, _c = robotB.skill, skillB = _c === void 0 ? "<skillUnspecified>" : _c;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^
-3 >                    ^^
-4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                             ^^
-6 >                                                               ^^^^^^^^^^^^^^^^^
-7 >                                                                                ^^
-8 >                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                                                                    ^
-10>                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^
+4 >                    ^^
+5 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                             ^^
+7 >                                                               ^^^^^^^^^^^^^^^^^
+8 >                                                                                ^^
+9 >                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                                                                    ^
+11>                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >var { 
-2 >name: nameB = "<NoName>"
-3 >                    
-4 >                      name: nameB = "<NoName>"
-5 >                                                             , 
-6 >                                                               skill: skillB = "<skillUnspecified>"
-7 >                                                                                
-8 >                                                                                  skill: skillB = "<skillUnspecified>"
-9 >                                                                                                                                     } = robotB;
+2 >
+3 >    name: nameB = "<NoName>"
+4 >                    
+5 >                      name: nameB = "<NoName>"
+6 >                                                             , 
+7 >                                                               skill: skillB = "<skillUnspecified>"
+8 >                                                                                
+9 >                                                                                  skill: skillB = "<skillUnspecified>"
+10>                                                                                                                                     } = robotB;
 1->Emitted(5, 1) Source(12, 7) + SourceIndex(0)
-2 >Emitted(5, 21) Source(12, 31) + SourceIndex(0)
-3 >Emitted(5, 23) Source(12, 7) + SourceIndex(0)
-4 >Emitted(5, 62) Source(12, 31) + SourceIndex(0)
-5 >Emitted(5, 64) Source(12, 33) + SourceIndex(0)
-6 >Emitted(5, 81) Source(12, 69) + SourceIndex(0)
-7 >Emitted(5, 83) Source(12, 33) + SourceIndex(0)
-8 >Emitted(5, 133) Source(12, 69) + SourceIndex(0)
-9 >Emitted(5, 134) Source(12, 81) + SourceIndex(0)
+2 >Emitted(5, 5) Source(12, 7) + SourceIndex(0)
+3 >Emitted(5, 21) Source(12, 31) + SourceIndex(0)
+4 >Emitted(5, 23) Source(12, 7) + SourceIndex(0)
+5 >Emitted(5, 62) Source(12, 31) + SourceIndex(0)
+6 >Emitted(5, 64) Source(12, 33) + SourceIndex(0)
+7 >Emitted(5, 81) Source(12, 69) + SourceIndex(0)
+8 >Emitted(5, 83) Source(12, 33) + SourceIndex(0)
+9 >Emitted(5, 133) Source(12, 69) + SourceIndex(0)
+10>Emitted(5, 134) Source(12, 81) + SourceIndex(0)
 ---
 >>>var _d = { name: "Edger", skill: "cutting edges" }, _e = _d.name, nameC = _e === void 0 ? "<NoName>" : _e, _f = _d.skill, skillC = _f === void 0 ? "<skillUnspecified>" : _f;
 1->
@@ -192,9 +198,9 @@ sourceFile:sourceMapValidationDestructuringVariableStatementDefaultValues.ts
 11>                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 12>                                                                                                                                                                            ^
 1->
-  >
+  >var 
 2 >
-3 >    var { name: nameC = "<NoName>", skill: skillC = "<skillUnspecified>" } = { name: "Edger", skill: "cutting edges" }
+3 >    { name: nameC = "<NoName>", skill: skillC = "<skillUnspecified>" } = { name: "Edger", skill: "cutting edges" }
 4 >                                                  
 5 >                                                    name: nameC = "<NoName>"
 6 >                                                                
@@ -204,8 +210,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementDefaultValues.ts
 10>                                                                                                                        
 11>                                                                                                                          skill: skillC = "<skillUnspecified>"
 12>                                                                                                                                                                             } = { name: "Edger", skill: "cutting edges" };
-1->Emitted(6, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(6, 5) Source(13, 1) + SourceIndex(0)
+1->Emitted(6, 1) Source(13, 5) + SourceIndex(0)
+2 >Emitted(6, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(6, 51) Source(13, 115) + SourceIndex(0)
 4 >Emitted(6, 53) Source(13, 7) + SourceIndex(0)
 5 >Emitted(6, 65) Source(13, 31) + SourceIndex(0)

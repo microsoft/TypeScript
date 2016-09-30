@@ -28,9 +28,9 @@ toString();
 var i = 1;
 var test1 = i.toString();
 var test2 = 2., toString = ();
-var test3 = 3 .toString();
-var test4 = 3 .toString();
-var test5 = 3 .toString();
+var test3 = 3..toString();
+var test4 = 3..toString();
+var test5 = 3..toString();
 var test6 = 3.['toString']();
 var test7 = 3
     .toString();

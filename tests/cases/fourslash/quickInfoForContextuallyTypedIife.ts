@@ -8,31 +8,19 @@
 ////    return q; })({ q: 13, qq: 12 }, 1, { p: 14 });
 ////((a/*9*/, b/*10*/, c/*11*/) => [a/*12*/,b/*13*/,c/*14*/])("foo", 101, false);
 
-goTo.marker('1');
-verify.quickInfoIs("var q: number");
-goTo.marker('2');
-verify.quickInfoIs("var qq: number");
-goTo.marker('3');
-verify.quickInfoIs("(parameter) x: number");
-goTo.marker('4');
-verify.quickInfoIs("var p: number");
-goTo.marker('5');
-verify.quickInfoIs("var q: number");
-goTo.marker('6');
-verify.quickInfoIs("var qq: number");
-goTo.marker('7');
-verify.quickInfoIs("var p: number");
-goTo.marker('8');
-verify.quickInfoIs("(parameter) x: number");
-goTo.marker('9');
-verify.quickInfoIs("(parameter) a: string");
-goTo.marker('10');
-verify.quickInfoIs("(parameter) b: number");
-goTo.marker('11');
-verify.quickInfoIs("(parameter) c: boolean");
-goTo.marker('12');
-verify.quickInfoIs("(parameter) a: string");
-goTo.marker('13');
-verify.quickInfoIs("(parameter) b: number");
-goTo.marker('14');
-verify.quickInfoIs("(parameter) c: boolean");
+verify.quickInfos({
+    1: "var q: number",
+    2: "var qq: number",
+    3: "(parameter) x: number",
+    4: "var p: number",
+    5: "var q: number",
+    6: "var qq: number",
+    7: "var p: number",
+    8: "(parameter) x: number",
+    9: "(parameter) a: string",
+    10: "(parameter) b: number",
+    11: "(parameter) c: boolean",
+    12: "(parameter) a: string",
+    13: "(parameter) b: number",
+    14: "(parameter) c: boolean"
+});

@@ -5,14 +5,14 @@
 >function() {    "use strict";    for (let i = 0; i < 4; i++) {        (() => [i] = [i + 1])();    }} : () => void
 
     "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
     for (let i = 0; i < 4; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < 4 : boolean
 >i : number
->4 : number
+>4 : 4
 >i++ : number
 >i : number
 
@@ -26,7 +26,7 @@
 >[i + 1] : [number]
 >i + 1 : number
 >i : number
->1 : number
+>1 : 1
     }
 })();
 
@@ -36,14 +36,14 @@
 >function() {    "use strict";    for (let i = 0; i < 4; i++) {        (() => ({a:i} = {a:i + 1}))();    }} : () => void
 
     "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
     for (let i = 0; i < 4; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < 4 : boolean
 >i : number
->4 : number
+>4 : 4
 >i++ : number
 >i : number
 
@@ -60,6 +60,6 @@
 >a : number
 >i + 1 : number
 >i : number
->1 : number
+>1 : 1
     }
 })();

@@ -18,9 +18,9 @@ var x = { p1: 10, p2: 20 };
 >x : { p1: number; p2: number; }
 >{ p1: 10, p2: 20 } : { p1: number; p2: number; }
 >p1 : number
->10 : number
+>10 : 10
 >p2 : number
->20 : number
+>20 : 20
 
 var y: number | I2 = x;
 >y : number | I2

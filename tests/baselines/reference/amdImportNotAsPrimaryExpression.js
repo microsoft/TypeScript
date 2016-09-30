@@ -38,10 +38,10 @@ define(["require", "exports"], function (require, exports) {
         function C1() {
             this.m1 = 42;
         }
-        C1.s1 = true;
         return C1;
     }());
     exports.C1 = C1;
+    C1.s1 = true;
     (function (E1) {
         E1[E1["A"] = 0] = "A";
         E1[E1["B"] = 1] = "B";

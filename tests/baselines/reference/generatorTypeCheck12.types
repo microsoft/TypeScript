@@ -4,5 +4,5 @@ function* g(): IterableIterator<number> {
 >IterableIterator : IterableIterator<T>
 
     return "";
->"" : string
+>"" : ""
 }

@@ -18,7 +18,7 @@ function f(x: number, y: number, z: number) {
 f(1, 2, 3);
 >f(1, 2, 3) : any[]
 >f : (x: number, y: number, z: number) => any[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 

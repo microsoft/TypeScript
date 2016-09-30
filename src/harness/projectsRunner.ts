@@ -222,6 +222,7 @@ class ProjectRunner extends RunnerBase {
                     useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
                     fileExists,
                     readDirectory,
+                    readFile
                 };
                 const configParseResult = ts.parseJsonConfigFileContent(configObject, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
@@ -290,6 +291,10 @@ class ProjectRunner extends RunnerBase {
 
             function fileExists(fileName: string): boolean {
                 return Harness.IO.fileExists(getFileNameInTheProjectTest(fileName));
+            }
+
+            function readFile(fileName: string): string {
+                return Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
             }
 
             function getSourceFileText(fileName: string): string {
@@ -459,7 +464,7 @@ class ProjectRunner extends RunnerBase {
                     });
 
                     it("Resolution information of (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
-                        Harness.Baseline.runBaseline("Resolution information of (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".json", () => {
+                        Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".json", () => {
                             return JSON.stringify(getCompilerResolutionInfo(), undefined, "    ");
                         });
                     });
@@ -467,12 +472,11 @@ class ProjectRunner extends RunnerBase {
 
                     it("Errors for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (compilerResult.errors.length) {
-                            Harness.Baseline.runBaseline("Errors for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".errors.txt", () => {
+                            Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".errors.txt", () => {
                                 return getErrorsBaseline(compilerResult);
                             });
                         }
                     });
-
 
                     it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
@@ -481,7 +485,7 @@ class ProjectRunner extends RunnerBase {
                                 // There may be multiple files with different baselines. Run all and report at the end, else
                                 // it stops copying the remaining emitted files from 'local/projectOutput' to 'local/project'.
                                 try {
-                                    Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
+                                    Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
                                         try {
                                             return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
                                         }
@@ -500,23 +504,21 @@ class ProjectRunner extends RunnerBase {
                         }
                     });
 
-
-                    it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
-                        if (compilerResult.sourceMapData) {
-                            Harness.Baseline.runBaseline("SourceMapRecord for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
-                                return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
-                                    ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
-                            });
-                        }
-                    });
+                    // it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
+                    //     if (compilerResult.sourceMapData) {
+                    //         Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
+                    //             return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
+                    //                 ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
+                    //         });
+                    //     }
+                    // });
 
                     // Verify that all the generated .d.ts files compile
-
                     it("Errors in generated Dts files for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (!compilerResult.errors.length && testCase.declaration) {
                             const dTsCompileResult = compileCompileDTsFiles(compilerResult);
                             if (dTsCompileResult && dTsCompileResult.errors.length) {
-                                Harness.Baseline.runBaseline("Errors in generated Dts files for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".dts.errors.txt", () => {
+                                Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".dts.errors.txt", () => {
                                     return getErrorsBaseline(dTsCompileResult);
                                 });
                             }

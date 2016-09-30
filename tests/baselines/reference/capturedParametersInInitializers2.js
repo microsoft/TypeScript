@@ -7,14 +7,16 @@ function foo2(y = class {[x] = x}, x = 1) {
 
 //// [capturedParametersInInitializers2.js]
 function foo(y, x) {
-    if (y === void 0) { y = (function () {
-        function class_1() {
-        }
-        class_1.c = x;
-        return class_1;
-    }()); }
+    if (y === void 0) { y = (_a = (function () {
+            function class_1() {
+            }
+            return class_1;
+        }()),
+        _a.c = x,
+        _a); }
     if (x === void 0) { x = 1; }
     y.c;
+    var _a;
 }
 function foo2(y, x) {
     if (y === void 0) { y = (function () {

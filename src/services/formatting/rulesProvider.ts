@@ -4,7 +4,7 @@
 namespace ts.formatting {
     export class RulesProvider {
         private globalRules: Rules;
-        private options: ts.FormatCodeOptions;
+        private options: ts.FormatCodeSettings;
         private activeRules: Rule[];
         private rulesMap: RulesMap;
 
@@ -24,7 +24,7 @@ namespace ts.formatting {
             return this.rulesMap;
         }
 
-        public ensureUpToDate(options: ts.FormatCodeOptions) {
+        public ensureUpToDate(options: ts.FormatCodeSettings) {
             if (!this.options || !ts.compareDataObjects(this.options, options)) {
                 const activeRules = this.createActiveRules(options);
                 const rulesMap = RulesMap.create(activeRules);
@@ -35,31 +35,31 @@ namespace ts.formatting {
             }
         }
 
-        private createActiveRules(options: ts.FormatCodeOptions): Rule[] {
+        private createActiveRules(options: ts.FormatCodeSettings): Rule[] {
             let rules = this.globalRules.HighPriorityCommonRules.slice(0);
 
-            if (options.InsertSpaceAfterCommaDelimiter) {
+            if (options.insertSpaceAfterCommaDelimiter) {
                 rules.push(this.globalRules.SpaceAfterComma);
             }
             else {
                 rules.push(this.globalRules.NoSpaceAfterComma);
             }
 
-            if (options.InsertSpaceAfterFunctionKeywordForAnonymousFunctions) {
+            if (options.insertSpaceAfterFunctionKeywordForAnonymousFunctions) {
                 rules.push(this.globalRules.SpaceAfterAnonymousFunctionKeyword);
             }
             else {
                 rules.push(this.globalRules.NoSpaceAfterAnonymousFunctionKeyword);
             }
 
-            if (options.InsertSpaceAfterKeywordsInControlFlowStatements) {
+            if (options.insertSpaceAfterKeywordsInControlFlowStatements) {
                 rules.push(this.globalRules.SpaceAfterKeywordInControl);
             }
             else {
                 rules.push(this.globalRules.NoSpaceAfterKeywordInControl);
             }
 
-            if (options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis) {
+            if (options.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis) {
                 rules.push(this.globalRules.SpaceAfterOpenParen);
                 rules.push(this.globalRules.SpaceBeforeCloseParen);
                 rules.push(this.globalRules.NoSpaceBetweenParens);
@@ -70,7 +70,7 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceBetweenParens);
             }
 
-            if (options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets) {
+            if (options.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets) {
                 rules.push(this.globalRules.SpaceAfterOpenBracket);
                 rules.push(this.globalRules.SpaceBeforeCloseBracket);
                 rules.push(this.globalRules.NoSpaceBetweenBrackets);
@@ -81,7 +81,20 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceBetweenBrackets);
             }
 
-            if (options.InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces) {
+            // The default value of InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces is true
+            // so if the option is undefined, we should treat it as true as well
+            if (options.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces !== false) {
+                rules.push(this.globalRules.SpaceAfterOpenBrace);
+                rules.push(this.globalRules.SpaceBeforeCloseBrace);
+                rules.push(this.globalRules.NoSpaceBetweenEmptyBraceBrackets);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceAfterOpenBrace);
+                rules.push(this.globalRules.NoSpaceBeforeCloseBrace);
+                rules.push(this.globalRules.NoSpaceBetweenEmptyBraceBrackets);
+            }
+
+            if (options.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces) {
                 rules.push(this.globalRules.SpaceAfterTemplateHeadAndMiddle);
                 rules.push(this.globalRules.SpaceBeforeTemplateMiddleAndTail);
             }
@@ -90,7 +103,7 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceBeforeTemplateMiddleAndTail);
             }
 
-            if (options.InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces) {
+            if (options.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces) {
                 rules.push(this.globalRules.SpaceAfterOpenBraceInJsxExpression);
                 rules.push(this.globalRules.SpaceBeforeCloseBraceInJsxExpression);
             }
@@ -99,14 +112,14 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceBeforeCloseBraceInJsxExpression);
             }
 
-            if (options.InsertSpaceAfterSemicolonInForStatements) {
+            if (options.insertSpaceAfterSemicolonInForStatements) {
                 rules.push(this.globalRules.SpaceAfterSemicolonInFor);
             }
             else {
                 rules.push(this.globalRules.NoSpaceAfterSemicolonInFor);
             }
 
-            if (options.InsertSpaceBeforeAndAfterBinaryOperators) {
+            if (options.insertSpaceBeforeAndAfterBinaryOperators) {
                 rules.push(this.globalRules.SpaceBeforeBinaryOperator);
                 rules.push(this.globalRules.SpaceAfterBinaryOperator);
             }
@@ -115,13 +128,20 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceAfterBinaryOperator);
             }
 
-            if (options.PlaceOpenBraceOnNewLineForControlBlocks) {
+            if (options.placeOpenBraceOnNewLineForControlBlocks) {
                 rules.push(this.globalRules.NewLineBeforeOpenBraceInControl);
             }
 
-            if (options.PlaceOpenBraceOnNewLineForFunctions) {
+            if (options.placeOpenBraceOnNewLineForFunctions) {
                 rules.push(this.globalRules.NewLineBeforeOpenBraceInFunction);
                 rules.push(this.globalRules.NewLineBeforeOpenBraceInTypeScriptDeclWithBlock);
+            }
+
+            if (options.insertSpaceAfterTypeAssertion) {
+                rules.push(this.globalRules.SpaceAfterTypeAssertion);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceAfterTypeAssertion);
             }
 
             rules = rules.concat(this.globalRules.LowPriorityCommonRules);

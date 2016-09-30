@@ -11,5 +11,4 @@ goTo.marker('1');
 verify.completionListContains('I');
 verify.not.completionListContains('foo');
 
-goTo.marker('2');
-verify.quickInfoIs('var r: number');
+verify.quickInfoAt("2", "var r: number");

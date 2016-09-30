@@ -10,8 +10,7 @@
 /////*1*/val;
 
 // Do resolve without typeCheck
-goTo.marker('1');
-verify.quickInfoIs("var val: c1");
+verify.quickInfoAt("1", "var val: c1");
 
 // TypeCheck
 verify.numberOfErrorsInCurrentFile(1);

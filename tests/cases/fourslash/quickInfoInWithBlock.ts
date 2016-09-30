@@ -5,12 +5,8 @@
 ////    var /*2*/b = /*3*/f;
 ////}
 
-
-goTo.marker('1');
-verify.quickInfoIs("any");
-
-goTo.marker('2');
-verify.quickInfoIs("any");
-
-goTo.marker('3');
-verify.quickInfoIs("any");
+verify.quickInfos({
+    1: "any",
+    2: "any",
+    3: "any"
+});

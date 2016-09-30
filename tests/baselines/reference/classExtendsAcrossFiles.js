@@ -26,7 +26,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var a_1 = require('./a');
+var a_1 = require("./a");
 exports.b = {
     f: function () {
         var A = (function () {
@@ -37,7 +37,7 @@ exports.b = {
         var B = (function (_super) {
             __extends(B, _super);
             function B() {
-                _super.apply(this, arguments);
+                return _super.apply(this, arguments) || this;
             }
             return B;
         }(A));
@@ -51,7 +51,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var b_1 = require('./b');
+var b_1 = require("./b");
 exports.a = {
     f: function () {
         var A = (function () {
@@ -62,7 +62,7 @@ exports.a = {
         var B = (function (_super) {
             __extends(B, _super);
             function B() {
-                _super.apply(this, arguments);
+                return _super.apply(this, arguments) || this;
             }
             return B;
         }(A));

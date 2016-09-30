@@ -93,6 +93,68 @@ async function I() {
     }
 }
 
+// addresses github issue #4903:
+
+const p00 = p.catch();
+const p01 = p.catch(undefined);
+const p07 = p.catch(null);
+const p02 = p.catch(() => 1);
+const p03 = p.catch(() => {});
+const p04 = p.catch(() => {throw 1});
+const p05 = p.catch(() => Promise.reject(1));
+const p06 = p.catch(() => Promise.resolve(1));
+
+const p10 = p.then();
+
+const p20 = p.then(undefined);
+const p21 = p.then(() => 1);
+const p22 = p.then(() => {});
+const p23 = p.then(() => {throw 1});
+const p24 = p.then(() => Promise.resolve(1));
+const p25 = p.then(() => Promise.reject(1));
+
+const p30 = p.then(undefined, undefined);
+const p31 = p.then(undefined, () => 1);
+const p32 = p.then(undefined, () => {});
+const p33 = p.then(undefined, () => {throw 1});
+const p34 = p.then(undefined, () => Promise.resolve(1));
+const p35 = p.then(undefined, () => Promise.reject(1));
+
+const p40 = p.then(() => "1", undefined);
+const p41 = p.then(() => "1", () => 1);
+const p42 = p.then(() => "1", () => {});
+const p43 = p.then(() => "1", () => {throw 1});
+const p44 = p.then(() => "1", () => Promise.resolve(1));
+const p45 = p.then(() => "1", () => Promise.reject(1));
+
+const p50 = p.then(() => {}, undefined);
+const p51 = p.then(() => {}, () => 1);
+const p52 = p.then(() => {}, () => {});
+const p53 = p.then(() => {}, () => {throw 1});
+const p54 = p.then(() => {}, () => Promise.resolve(1));
+const p55 = p.then(() => {}, () => Promise.reject(1));
+
+const p60 = p.then(() => {throw 1}, undefined);
+const p61 = p.then(() => {throw 1}, () => 1);
+const p62 = p.then(() => {throw 1}, () => {});
+const p63 = p.then(() => {throw 1}, () => {throw 1});
+const p64 = p.then(() => {throw 1}, () => Promise.resolve(1));
+const p65 = p.then(() => {throw 1}, () => Promise.reject(1));
+
+const p70 = p.then(() => Promise.resolve("1"), undefined);
+const p71 = p.then(() => Promise.resolve("1"), () => 1);
+const p72 = p.then(() => Promise.resolve("1"), () => {});
+const p73 = p.then(() => Promise.resolve("1"), () => {throw 1});
+const p74 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
+const p75 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
+
+const p80 = p.then(() => Promise.reject(1), undefined);
+const p81 = p.then(() => Promise.reject(1), () => 1);
+const p82 = p.then(() => Promise.reject(1), () => {});
+const p83 = p.then(() => Promise.reject(1), () => {throw 1});
+const p84 = p.then(() => Promise.reject(1), () => Promise.resolve(1));
+const p85 = p.then(() => Promise.reject(1), () => Promise.reject(1));
+
 //// [promiseType.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -200,3 +262,55 @@ function I() {
         }
     });
 }
+// addresses github issue #4903:
+const p00 = p.catch();
+const p01 = p.catch(undefined);
+const p07 = p.catch(null);
+const p02 = p.catch(() => 1);
+const p03 = p.catch(() => { });
+const p04 = p.catch(() => { throw 1; });
+const p05 = p.catch(() => Promise.reject(1));
+const p06 = p.catch(() => Promise.resolve(1));
+const p10 = p.then();
+const p20 = p.then(undefined);
+const p21 = p.then(() => 1);
+const p22 = p.then(() => { });
+const p23 = p.then(() => { throw 1; });
+const p24 = p.then(() => Promise.resolve(1));
+const p25 = p.then(() => Promise.reject(1));
+const p30 = p.then(undefined, undefined);
+const p31 = p.then(undefined, () => 1);
+const p32 = p.then(undefined, () => { });
+const p33 = p.then(undefined, () => { throw 1; });
+const p34 = p.then(undefined, () => Promise.resolve(1));
+const p35 = p.then(undefined, () => Promise.reject(1));
+const p40 = p.then(() => "1", undefined);
+const p41 = p.then(() => "1", () => 1);
+const p42 = p.then(() => "1", () => { });
+const p43 = p.then(() => "1", () => { throw 1; });
+const p44 = p.then(() => "1", () => Promise.resolve(1));
+const p45 = p.then(() => "1", () => Promise.reject(1));
+const p50 = p.then(() => { }, undefined);
+const p51 = p.then(() => { }, () => 1);
+const p52 = p.then(() => { }, () => { });
+const p53 = p.then(() => { }, () => { throw 1; });
+const p54 = p.then(() => { }, () => Promise.resolve(1));
+const p55 = p.then(() => { }, () => Promise.reject(1));
+const p60 = p.then(() => { throw 1; }, undefined);
+const p61 = p.then(() => { throw 1; }, () => 1);
+const p62 = p.then(() => { throw 1; }, () => { });
+const p63 = p.then(() => { throw 1; }, () => { throw 1; });
+const p64 = p.then(() => { throw 1; }, () => Promise.resolve(1));
+const p65 = p.then(() => { throw 1; }, () => Promise.reject(1));
+const p70 = p.then(() => Promise.resolve("1"), undefined);
+const p71 = p.then(() => Promise.resolve("1"), () => 1);
+const p72 = p.then(() => Promise.resolve("1"), () => { });
+const p73 = p.then(() => Promise.resolve("1"), () => { throw 1; });
+const p74 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
+const p75 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
+const p80 = p.then(() => Promise.reject(1), undefined);
+const p81 = p.then(() => Promise.reject(1), () => 1);
+const p82 = p.then(() => Promise.reject(1), () => { });
+const p83 = p.then(() => Promise.reject(1), () => { throw 1; });
+const p84 = p.then(() => Promise.reject(1), () => Promise.resolve(1));
+const p85 = p.then(() => Promise.reject(1), () => Promise.reject(1));

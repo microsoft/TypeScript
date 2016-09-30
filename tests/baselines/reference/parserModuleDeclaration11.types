@@ -14,7 +14,7 @@ string.foo("abc");
 >string.foo : (s: string) => any
 >string : typeof string
 >foo : (s: string) => any
->"abc" : string
+>"abc" : "abc"
 
 var x: string.X;
 >x : string.X

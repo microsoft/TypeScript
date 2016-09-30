@@ -7,8 +7,7 @@
 ////}
 /////*2*/e.a;
 
-goTo.marker('1');
-verify.quickInfoIs("const enum e");
+verify.quickInfoAt("1", "const enum e");
 
 goTo.marker('2');
 verify.completionListContains("e", "const enum e");

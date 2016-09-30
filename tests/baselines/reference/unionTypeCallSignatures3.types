@@ -44,5 +44,5 @@ var fUnion: typeof f1 | typeof f2 | typeof f3 | typeof f4 | typeof f5 | typeof f
 fUnion(""); // All constituents can be called by passing a single string.
 >fUnion("") : void
 >fUnion : ((s: string) => void) | ((s?: string) => void) | ((...s: string[]) => void) | ((s: string, s2?: string) => void) | ((s?: string, n?: number) => void) | ((s?: string, ...n: number[]) => void) | ((s: string, ...sRest: string[]) => void)
->"" : string
+>"" : ""
 
