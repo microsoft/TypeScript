@@ -438,7 +438,7 @@ namespace ts.server {
                 }));
             }
             else {
-                return implementations
+                return implementations;
             }
         }
 
