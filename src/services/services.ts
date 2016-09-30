@@ -947,7 +947,7 @@ namespace ts {
 
         let lastTypesRootVersion = 0;
 
-        const useCaseSensitivefileNames = false;
+        const useCaseSensitivefileNames = host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames();
         const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
         const currentDirectory = host.getCurrentDirectory();
