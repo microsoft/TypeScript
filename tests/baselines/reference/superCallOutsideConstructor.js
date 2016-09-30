@@ -37,14 +37,15 @@ var C = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.call(this);
-        this.x = _super.call(this);
+        var _this = _super.call(this) || this;
+        _this.x = _this = _super.call(this) || this;
         var y = function () {
-            _super.call(this);
+            _this = _super.call(this) || this;
         };
         var y2 = function () {
-            _super.call(this);
+            _this = _super.call(this) || this;
         };
+        return _this;
     }
     return D;
 }(C));

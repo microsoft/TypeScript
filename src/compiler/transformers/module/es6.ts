@@ -12,6 +12,10 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
                 currentSourceFile = node;
                 return visitEachChild(node, visitor, context);
