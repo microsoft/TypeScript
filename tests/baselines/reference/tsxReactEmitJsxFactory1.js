@@ -5,10 +5,10 @@ declare module JSX {
 	}
 }
 
-// This should raise an error as 'h' is not declared.
+// This should issue an error as 'h' is not declared.
 <div />;
 
 
 //// [file.js]
-// This should raise an error as 'h' is not declared.
+// This should issue an error as 'h' is not declared.
 h("div", null);

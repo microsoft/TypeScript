@@ -294,7 +294,7 @@ var x = 0;`, {
         });
 
         transpilesCorrectly("Supports setting 'jsxFactory'", "x;", {
-            options: { compilerOptions: { jsxFactory: "React.createElement" }, fileName: "input.js", reportDiagnostics: true }
+            options: { compilerOptions: { jsxFactory: "React.createElement", jsx: JsxEmit.React }, fileName: "input.js", reportDiagnostics: true }
         });
 
         transpilesCorrectly("Supports setting 'lib'", "x;", {

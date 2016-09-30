@@ -8,7 +8,7 @@ tests/cases/conformance/jsx/file.tsx(8,2): error TS2304: Cannot find name 'h'.
     	}
     }
     
-    // This should raise an error as 'h' is not declared.
+    // This should issue an error as 'h' is not declared.
     <div />;
      ~~~
 !!! error TS2304: Cannot find name 'h'.

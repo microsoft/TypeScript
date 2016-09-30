@@ -1,0 +1,7 @@
+error TS5067: Option 'jsxFactory' can only be used when 'jsx' is 'react'.
+
+
+!!! error TS5067: Option 'jsxFactory' can only be used when 'jsx' is 'react'.
+==== tests/cases/conformance/jsx/file.tsx (0 errors) ====
+    // An error should be issued when 'jsxFactory' is used when 'jsx' is not 'react'.
+    

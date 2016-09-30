@@ -10719,7 +10719,8 @@ namespace ts {
             let jsxFactoryNamespace = "React";
             if (compilerOptions.jsxFactory) {
                 jsxFactoryNamespace = compilerOptions.jsxFactory.split(".")[0];
-            } else if (compilerOptions.reactNamespace) {
+            }
+            else if (compilerOptions.reactNamespace) {
                 jsxFactoryNamespace = compilerOptions.reactNamespace;
             }
             const jsxFactorySym = resolveName(node.tagName, jsxFactoryNamespace, SymbolFlags.Value, jsxFactoryRefErr, jsxFactoryNamespace);

@@ -1624,7 +1624,7 @@ namespace ts {
         return createIdentifier(jsxFactory);
     }
 
-    export function createReactCreateElement(reactNamespace: string, parentElement: JsxOpeningLikeElement) {
+    export function createReactCreateElement(reactNamespace: string | undefined, parentElement: JsxOpeningLikeElement) {
         // To ensure the emit resolver can properly resolve the namespace, we need to
         // treat this identifier as if it were a source tree node by clearing the `Synthesized`
         // flag and setting a parent node.
