@@ -28,7 +28,6 @@ var M;
         return C;
     }());
     M.C = C;
-    var C;
     (function (C) {
         var X = (function () {
             function X() {

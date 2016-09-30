@@ -826,9 +826,10 @@ var TypeScript;
     var NumberLiteralToken = (function (_super) {
         __extends(NumberLiteralToken, _super);
         function NumberLiteralToken(value, hasEmptyFraction) {
-            _super.call(this, TokenID.NumberLiteral);
-            this.value = value;
-            this.hasEmptyFraction = hasEmptyFraction;
+            var _this = _super.call(this, TokenID.NumberLiteral) || this;
+            _this.value = value;
+            _this.hasEmptyFraction = hasEmptyFraction;
+            return _this;
         }
         NumberLiteralToken.prototype.getText = function () {
             return this.hasEmptyFraction ? this.value.toString() + ".0" : this.value.toString();
@@ -842,8 +843,9 @@ var TypeScript;
     var StringLiteralToken = (function (_super) {
         __extends(StringLiteralToken, _super);
         function StringLiteralToken(value) {
-            _super.call(this, TokenID.StringLiteral);
-            this.value = value;
+            var _this = _super.call(this, TokenID.StringLiteral) || this;
+            _this.value = value;
+            return _this;
         }
         StringLiteralToken.prototype.getText = function () {
             return this.value;
@@ -857,9 +859,10 @@ var TypeScript;
     var IdentifierToken = (function (_super) {
         __extends(IdentifierToken, _super);
         function IdentifierToken(value, hasEscapeSequence) {
-            _super.call(this, TokenID.Identifier);
-            this.value = value;
-            this.hasEscapeSequence = hasEscapeSequence;
+            var _this = _super.call(this, TokenID.Identifier) || this;
+            _this.value = value;
+            _this.hasEscapeSequence = hasEscapeSequence;
+            return _this;
         }
         IdentifierToken.prototype.getText = function () {
             return this.value;
@@ -873,8 +876,9 @@ var TypeScript;
     var WhitespaceToken = (function (_super) {
         __extends(WhitespaceToken, _super);
         function WhitespaceToken(tokenId, value) {
-            _super.call(this, tokenId);
-            this.value = value;
+            var _this = _super.call(this, tokenId) || this;
+            _this.value = value;
+            return _this;
         }
         WhitespaceToken.prototype.getText = function () {
             return this.value;
@@ -888,12 +892,13 @@ var TypeScript;
     var CommentToken = (function (_super) {
         __extends(CommentToken, _super);
         function CommentToken(tokenID, value, isBlock, startPos, line, endsLine) {
-            _super.call(this, tokenID);
-            this.value = value;
-            this.isBlock = isBlock;
-            this.startPos = startPos;
-            this.line = line;
-            this.endsLine = endsLine;
+            var _this = _super.call(this, tokenID) || this;
+            _this.value = value;
+            _this.isBlock = isBlock;
+            _this.startPos = startPos;
+            _this.line = line;
+            _this.endsLine = endsLine;
+            return _this;
         }
         CommentToken.prototype.getText = function () {
             return this.value;
@@ -907,8 +912,9 @@ var TypeScript;
     var RegularExpressionLiteralToken = (function (_super) {
         __extends(RegularExpressionLiteralToken, _super);
         function RegularExpressionLiteralToken(regex) {
-            _super.call(this, TokenID.RegularExpressionLiteral);
-            this.regex = regex;
+            var _this = _super.call(this, TokenID.RegularExpressionLiteral) || this;
+            _this.regex = regex;
+            return _this;
         }
         RegularExpressionLiteralToken.prototype.getText = function () {
             return this.regex.toString();

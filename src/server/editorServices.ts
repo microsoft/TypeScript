@@ -1001,8 +1001,13 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            return this.filenameToScriptInfo.get(normalizedPathToPath(fileName, this.host.getCurrentDirectory(), this.toCanonicalFileName));
+            return this.getScriptInfoForPath(normalizedPathToPath(fileName, this.host.getCurrentDirectory(), this.toCanonicalFileName));
         }
+
+        getScriptInfoForPath(fileName: Path) {
+            return this.filenameToScriptInfo.get(fileName);
+        }
+
 
         setHostConfiguration(args: protocol.ConfigureRequestArguments) {
             if (args.file) {

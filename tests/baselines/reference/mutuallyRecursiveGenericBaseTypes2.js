@@ -25,7 +25,7 @@ var foo = (function () {
 var foo2 = (function (_super) {
     __extends(foo2, _super);
     function foo2() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return foo2;
 }(foo));

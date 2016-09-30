@@ -65,7 +65,6 @@ var F;
         return Helper;
     }());
 })(F || (F = {}));
-var F;
 (function (F) {
     // Should not be an error
     var Helper = (function () {
@@ -82,7 +81,6 @@ var Foo;
         return Helper;
     }());
 })(Foo || (Foo = {}));
-var Foo;
 (function (Foo) {
     // Should not be an error
     var Helper = (function () {
@@ -101,7 +99,6 @@ var Gar;
             return Helper;
         }());
     })(Foo || (Foo = {}));
-    var Foo;
     (function (Foo) {
         // Should not be an error
         var Helper = (function () {

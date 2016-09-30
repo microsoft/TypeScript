@@ -96,7 +96,6 @@ var X;
         return 42;
     }
     X.Y = Y;
-    var Y;
     (function (Y) {
         var Point = (function () {
             function Point(x, y) {
@@ -124,7 +123,6 @@ var K;
         return L;
     }());
     K.L = L;
-    var L;
     (function (L) {
         L.y = 12;
     })(L = K.L || (K.L = {}));

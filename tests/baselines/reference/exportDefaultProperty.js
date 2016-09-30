@@ -51,7 +51,6 @@ var A;
         return B;
     }());
     A.B = B;
-    var B;
     (function (B) {
         B.b = 0;
     })(B = A.B || (A.B = {}));
