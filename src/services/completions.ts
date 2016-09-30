@@ -326,8 +326,8 @@ namespace ts.Completions {
          * Given a path ending at a directory, gets the completions for the path, and filters for those entries containing the basename.
          */
         function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
-            if(fragment === undefined) { fragment = "./"; } // TODO: (arozga) remove the second check along with adding --strictNullChecks
-            
+            if (fragment === undefined) { fragment = "./"; } // TODO: (arozga) remove the second check along with adding --strictNullChecks
+
             fragment = normalizeSlashes(fragment);
 
             const baseName = getBaseFileName(fragment); // TODO: brittle?
@@ -335,9 +335,9 @@ namespace ts.Completions {
             // Remove the basename from our directory path
             // TODO: (arozga) when is that used for filtering options later?
             fragment = getDirectoryPath(fragment);
-            
-            if (fragment === "") { 
-                fragment = '.' + directorySeparator; // TODO: (arozga) can we remove this?
+
+            if (fragment === "") {
+                fragment = "." + directorySeparator; // TODO: (arozga) can we remove this?
             }
 
             fragment = ensureTrailingDirectorySeparator(fragment); // TODO: why is this necessary?
@@ -577,7 +577,11 @@ namespace ts.Completions {
                 };
             }
 
-            return undefined;
+            return {
+                isMemberCompletion: false,
+                isNewIdentifierLocation: false,
+                entries: []
+            };
         }
 
         function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, span: TextSpan, result: CompletionEntry[] = []): CompletionEntry[] {
