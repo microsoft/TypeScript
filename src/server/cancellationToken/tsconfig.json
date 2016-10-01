@@ -5,7 +5,6 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "pretty": true,
-        "outDir": "../../../built/local",
         "module": "commonjs",
         "sourceMap": true,
         "stripInternal": true,
