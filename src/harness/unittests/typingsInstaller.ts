@@ -11,11 +11,12 @@ namespace ts.projectSystem {
     }
 
     class Installer extends TestTypingsInstaller {
-        constructor(host: server.ServerHost, p?: InstallerParams) {
+        constructor(host: server.ServerHost, p?: InstallerParams, log?: TI.Log) {
             super(
                 (p && p.globalTypingsCacheLocation) || "/a/data",
                 (p && p.throttleLimit) || 5,
-                host);
+                host,
+                log);
         }
 
         installAll(expectedView: typeof TI.NpmViewRequest[], expectedInstall: typeof TI.NpmInstallRequest[]) {
@@ -718,6 +719,62 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+        });
+    });
+
+    describe("Validate package name:", () => {
+        it ("name cannot be too long", () => {
+            let packageName = "a";
+            for (let i = 0; i < 8; i++) {
+                packageName += packageName;
+            }
+            assert.equal(TI.validatePackageName(packageName), TI.PackageNameValidationResult.NameTooLong);
+        });
+        it ("name cannot start with dot", () => {
+            assert.equal(TI.validatePackageName(".foo"), TI.PackageNameValidationResult.NameStartsWithDot);
+        });
+        it ("name cannot start with underscore", () => {
+            assert.equal(TI.validatePackageName("_foo"), TI.PackageNameValidationResult.NameStartsWithUnderscore);
+        });
+        it ("scoped packages not supported", () => {
+            assert.equal(TI.validatePackageName("@scope/bar"), TI.PackageNameValidationResult.ScopedPackagesNotSupported);
+        });
+        it ("non URI safe characters are not supported", () => {
+            assert.equal(TI.validatePackageName("  scope  "), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(TI.validatePackageName("; say ‘Hello from TypeScript!’ #"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(TI.validatePackageName("a/b/c"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
+        });
+    });
+
+    describe("Invalid package names", () => {
+        it ("should not be installed", () => {
+            const f1 = {
+                path: "/a/b/app.js",
+                content: "let x = 1"
+            };
+            const packageJson = {
+                path: "/a/b/package.json",
+                content: JSON.stringify({
+                    "dependencies": {
+                        "; say ‘Hello from TypeScript!’ #": "0.0.x"
+                    }
+                })
+            };
+            const messages: string[] = [];
+            const host = createServerHost([f1, packageJson]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: "/tmp" }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
+                }
+                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    assert(false, "runCommand should not be invoked");
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(f1.path);
+
+            installer.checkPendingCommands([]);
+            assert.isTrue(messages.indexOf("Package name '; say ‘Hello from TypeScript!’ #' contains non URI safe characters") > 0, "should find package with invalid name");
         });
     });
 }
