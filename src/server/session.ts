@@ -93,6 +93,7 @@ namespace ts.server {
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
         export const Implementation = "implementation";
+        export const ImplementationFull = "implementation-full";
         export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
         export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
         export const NavBar = "navbar";
@@ -421,7 +422,7 @@ namespace ts.server {
             });
         }
 
-        private getImplementation(args: protocol.FileLocationRequestArgs): protocol.FileSpan[] {
+        private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | ImplementationLocation[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
@@ -429,11 +430,16 @@ namespace ts.server {
             if (!implementations) {
                 return [];
             }
-            return implementations.map(impl => ({
-                file: impl.fileName,
-                start: scriptInfo.positionToLineOffset(impl.textSpan.start),
-                end: scriptInfo.positionToLineOffset(ts.textSpanEnd(impl.textSpan))
-            }));
+            if (simplifiedResult) {
+                return implementations.map(impl => ({
+                    file: impl.fileName,
+                    start: scriptInfo.positionToLineOffset(impl.textSpan.start),
+                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(impl.textSpan))
+                }));
+            }
+            else {
+                return implementations;
+            }
         }
 
         private getOccurrences(args: protocol.FileLocationRequestArgs): protocol.OccurrencesResponseItem[] {
@@ -1329,7 +1335,10 @@ namespace ts.server {
                 return this.requiredResponse(this.getTypeDefinition(request.arguments));
             },
             [CommandNames.Implementation]: (request: protocol.Request) => {
-                return this.requiredResponse(this.getImplementation(request.arguments));
+                return this.requiredResponse(this.getImplementation(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.ImplementationFull]: (request: protocol.Request) => {
+                return this.requiredResponse(this.getImplementation(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.References]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ true));
