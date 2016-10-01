@@ -23,6 +23,43 @@ namespace ts.server.typingsInstaller {
         return result.resolvedModule && result.resolvedModule.resolvedFileName;
     }
 
+    export enum PackageNameValidationResult {
+        Ok,
+        ScopedPackagesNotSupported,
+        NameTooLong,
+        NameStartsWithDot,
+        NameStartsWithUnderscore,
+        NameContainsNonURISafeCharacters
+    }
+
+
+    export const MaxPackageNameLength = 214;
+    /**
+     * Validates package name using rules defined at https://docs.npmjs.com/files/package.json 
+     */
+    export function validatePackageName(packageName: string): PackageNameValidationResult {
+        Debug.assert(!!packageName, "Package name is not specified");
+        if (packageName.length > MaxPackageNameLength) {
+            return PackageNameValidationResult.NameTooLong;
+        }
+        if (packageName.charCodeAt(0) === CharacterCodes.dot) {
+            return PackageNameValidationResult.NameStartsWithDot;
+        }
+        if (packageName.charCodeAt(0) === CharacterCodes._) {
+            return PackageNameValidationResult.NameStartsWithUnderscore;
+        }
+        // check if name is scope package like: starts with @ and has one '/' in the middle
+        // scoped packages are not currently supported
+        // TODO: when support will be added we'll need to split and check both scope and package name
+        if (/^@[^/]+\/[^/]+$/.test(packageName)) {
+            return PackageNameValidationResult.ScopedPackagesNotSupported;
+        }
+        if (encodeURIComponent(packageName) !== packageName) {
+            return PackageNameValidationResult.NameContainsNonURISafeCharacters;
+        }
+        return PackageNameValidationResult.Ok;
+    }
+
     export const NpmViewRequest: "npm view" = "npm view";
     export const NpmInstallRequest: "npm install" = "npm install";
 
@@ -185,14 +222,54 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet[cacheLocation] = true;
         }
 
+        private filterTypings(typingsToInstall: string[]) {
+            if (typingsToInstall.length === 0) {
+                return typingsToInstall;
+            }
+            const result: string[] = [];
+            for (const typing of typingsToInstall) {
+                if (this.missingTypingsSet[typing]) {
+                    continue;
+                }
+                const validationResult = validatePackageName(typing);
+                if (validationResult === PackageNameValidationResult.Ok) {
+                    result.push(typing);
+                }
+                else {
+                    // add typing name to missing set so we won't process it again
+                    this.missingTypingsSet[typing] = true;
+                    if (this.log.isEnabled()) {
+                        switch (validationResult) {
+                            case PackageNameValidationResult.NameTooLong:
+                                this.log.writeLine(`Package name '${typing}' should be less than ${MaxPackageNameLength} characters`);
+                                break;
+                            case PackageNameValidationResult.NameStartsWithDot:
+                                this.log.writeLine(`Package name '${typing}' cannot start with '.'`);
+                                break;
+                            case PackageNameValidationResult.NameStartsWithUnderscore:
+                                this.log.writeLine(`Package name '${typing}' cannot start with '_'`);
+                                break;
+                            case PackageNameValidationResult.ScopedPackagesNotSupported:
+                                this.log.writeLine(`Package '${typing}' is scoped and currently is not supported`);
+                                break;
+                            case PackageNameValidationResult.NameContainsNonURISafeCharacters:
+                                this.log.writeLine(`Package name '${typing}' contains non URI safe characters`);
+                                break;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
         private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[]) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
             }
-            typingsToInstall = filter(typingsToInstall, x => !this.missingTypingsSet[x]);
+            typingsToInstall = this.filterTypings(typingsToInstall);
             if (typingsToInstall.length === 0) {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`All typings are known to be missing - no need to go any further`);
+                    this.log.writeLine(`All typings are known to be missing or invalid - no need to go any further`);
                 }
                 return;
             }
