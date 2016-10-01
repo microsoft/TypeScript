@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/transformNestedGeneratorsWithTry.ts] ////
 
 //// [main.ts]
+// https://github.com/Microsoft/TypeScript/issues/11177
 import * as Bluebird from 'bluebird';
 async function a(): Bluebird<void> {
   try {
@@ -58,6 +59,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+// https://github.com/Microsoft/TypeScript/issues/11177
 var Bluebird = require("bluebird");
 function a() {
     return __awaiter(this, void 0, Bluebird, function () {
