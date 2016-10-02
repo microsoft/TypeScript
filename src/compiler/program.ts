@@ -1533,12 +1533,19 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
             }
 
-            if (options.jsxFactory && options.jsx !== JsxEmit.React) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_1_is_2, "jsxFactory", "jsx", "react"));
-            }
+            if (options.jsxFactory) {
+                if (options.jsx !== JsxEmit.React) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_1_is_2, "jsxFactory", "jsx", "react"));
+                }
 
-            if (options.jsxFactory && options.reactNamespace) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "jsxFactory", "reactNamespace"));
+                if (options.reactNamespace) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "jsxFactory", "reactNamespace"));
+                }
+
+                const { diagnostics } = parseIsolatedEntityName(options.jsxFactory);
+                if (diagnostics.length > 0) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_0_1_is_not_a_valid_identifier_Slashqualified_name, "jsxFactory", options.jsxFactory));
+                }
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files

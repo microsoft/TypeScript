@@ -2369,6 +2369,10 @@
         "category": "Error",
         "code": 5067
     },
+    "Invalid value for '{0}'. '{1}' is not a valid identifier/qualified-name.": {
+        "category": "Error",
+        "code": 5068
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001

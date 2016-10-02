@@ -10800,7 +10800,12 @@ namespace ts {
             const jsxFactoryRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
             let jsxFactoryNamespace = "React";
             if (compilerOptions.jsxFactory) {
-                jsxFactoryNamespace = compilerOptions.jsxFactory.split(".")[0];
+                let { entityName } = parseIsolatedEntityName(compilerOptions.jsxFactory);
+                while (entityName.kind === SyntaxKind.QualifiedName) {
+                    entityName = (<QualifiedName>entityName).left;
+                }
+                Debug.assertNode(entityName, node => node.kind === SyntaxKind.Identifier);
+                jsxFactoryNamespace = (<Identifier>entityName).text;
             }
             else if (compilerOptions.reactNamespace) {
                 jsxFactoryNamespace = compilerOptions.reactNamespace;
