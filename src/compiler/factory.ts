@@ -1618,10 +1618,25 @@ namespace ts {
         );
     }
 
+    export function createEntityName(entityName: string) {
+        const { entityName: node } = parseIsolatedEntityName(entityName);
+
+        // Parsing occurred in an isolated context, so nodes need to be synthesized
+        // and positions erased for correct positioning in emit.
+        const synthesize = (node: Node) => {
+            node.pos = -1;
+            node.end = -1;
+            node.flags |= NodeFlags.Synthesized;
+            forEachChild(node, synthesize);
+        };
+        synthesize(node);
+
+        return node;
+    }
+
     export function createJsxFactory(jsxFactory: string) {
-        // No explicit validation of this parameter is required. Users are
-        // assumed to have provided a correct string.
-        return createIdentifier(jsxFactory);
+        const entityName = createEntityName(jsxFactory);
+        return createExpressionFromEntityName(entityName);
     }
 
     export function createReactCreateElement(reactNamespace: string | undefined, parentElement: JsxOpeningLikeElement) {
@@ -1634,7 +1649,7 @@ namespace ts {
         return createPropertyAccess(react, "createElement");
     }
 
-    export function createJsxFactoryCall(jsxFactory: Identifier | PropertyAccessExpression, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
+    export function createJsxFactoryCall(jsxFactory: Expression, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
             argumentsList.push(props);
