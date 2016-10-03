@@ -38,20 +38,17 @@ var goodObj = {
 }; // Ok, because toString is a subtype of Object's toString
 var errFun = {}; // Error for no call signature
 function foo() { }
-var foo;
 (function (foo) {
     foo.boom = 0;
 })(foo || (foo = {}));
 var goodFundule = foo; // ok
 function bar() { }
-var bar;
 (function (bar) {
     function apply(thisArg, argArray) { }
     bar.apply = apply;
 })(bar || (bar = {}));
 var goodFundule2 = bar; // ok
 function bad() { }
-var bad;
 (function (bad) {
     bad.apply = 0;
 })(bad || (bad = {}));

@@ -677,6 +677,34 @@ namespace ts {
         displayParts(): SymbolDisplayPart[];
     }
 
+    /* @internal */
+    export function toEditorSettings(options: FormatCodeOptions | FormatCodeSettings): FormatCodeSettings;
+    export function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
+    export function toEditorSettings(optionsAsMap: MapLike<any>): MapLike<any> {
+        let allPropertiesAreCamelCased = true;
+        for (const key in optionsAsMap) {
+            if (hasProperty(optionsAsMap, key) && !isCamelCase(key)) {
+                allPropertiesAreCamelCased = false;
+                break;
+            }
+        }
+        if (allPropertiesAreCamelCased) {
+            return optionsAsMap;
+        }
+        const settings: MapLike<any> = {};
+        for (const key in optionsAsMap) {
+            if (hasProperty(optionsAsMap, key)) {
+                const newKey = isCamelCase(key) ? key : key.charAt(0).toLowerCase() + key.substr(1);
+                settings[newKey] = optionsAsMap[key];
+            }
+        }
+        return settings;
+    }
+
+    function isCamelCase(s: string) {
+        return !s.length || s.charAt(0) === s.charAt(0).toLowerCase();
+    }
+
     export function displayPartsToString(displayParts: SymbolDisplayPart[]) {
         if (displayParts) {
             return map(displayParts, displayPart => displayPart.text).join("");
@@ -917,7 +945,9 @@ namespace ts {
         let program: Program;
         let lastProjectVersion: string;
 
-        const useCaseSensitivefileNames = false;
+        let lastTypesRootVersion = 0;
+
+        const useCaseSensitivefileNames = host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames();
         const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
         const currentDirectory = host.getCurrentDirectory();
@@ -942,7 +972,7 @@ namespace ts {
             return sourceFile;
         }
 
-        function getRuleProvider(options: FormatCodeOptions) {
+        function getRuleProvider(options: FormatCodeSettings) {
             // Ensure rules are initialized and up to date wrt to formatting options
             if (!ruleProvider) {
                 ruleProvider = new formatting.RulesProvider();
@@ -963,6 +993,13 @@ namespace ts {
 
                     lastProjectVersion = hostProjectVersion;
                 }
+            }
+
+            const typeRootsVersion = host.getTypeRootsVersion ? host.getTypeRootsVersion() : 0;
+            if (lastTypesRootVersion !== typeRootsVersion) {
+                log("TypeRoots version has changed; provide new program");
+                program = undefined;
+                lastTypesRootVersion = typeRootsVersion;
             }
 
             // Get a fresh cache of the host information
@@ -1355,14 +1392,14 @@ namespace ts {
         }
 
         /// NavigateTo
-        function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): NavigateToItem[] {
+        function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[] {
             synchronizeHostData();
 
             const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
-            return ts.NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount);
+            return ts.NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
         }
 
-        function getEmitOutput(fileName: string): EmitOutput {
+        function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
@@ -1376,7 +1413,7 @@ namespace ts {
                 });
             }
 
-            const emitOutput = program.emit(sourceFile, writeFile, cancellationToken);
+            const emitOutput = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles);
 
             return {
                 outputFiles,
@@ -1552,40 +1589,44 @@ namespace ts {
             }
         }
 
-        function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
+        function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions | EditorSettings) {
             let start = timestamp();
+            const settings = toEditorSettings(editorOptions);
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getIndentationAtPosition: getCurrentSourceFile: " + (timestamp() - start));
 
             start = timestamp();
 
-            const result = formatting.SmartIndenter.getIndentation(position, sourceFile, editorOptions);
+            const result = formatting.SmartIndenter.getIndentation(position, sourceFile, settings);
             log("getIndentationAtPosition: computeIndentation  : " + (timestamp() - start));
 
             return result;
         }
 
-        function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
+        function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
+            const settings = toEditorSettings(options);
+            return formatting.formatSelection(start, end, sourceFile, getRuleProvider(settings), settings);
         }
 
-        function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
+        function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return formatting.formatDocument(sourceFile, getRuleProvider(options), options);
+            const settings = toEditorSettings(options);
+            return formatting.formatDocument(sourceFile, getRuleProvider(settings), settings);
         }
 
-        function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
+        function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const settings = toEditorSettings(options);
 
             if (key === "}") {
-                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
+                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
             }
             else if (key === ";") {
-                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(options), options);
+                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
             }
             else if (key === "\n") {
-                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(options), options);
+                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
             }
 
             return [];

@@ -22,8 +22,9 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
-        this.bing = function () { return Base.foo; }; // error
+        var _this = _super.apply(this, arguments) || this;
+        _this.bing = function () { return Base.foo; }; // error
+        return _this;
     }
     return Derived;
 }(Base));

@@ -592,19 +592,40 @@ namespace ts {
             };
         }
 
+        function recursiveCreateDirectory(directoryPath: string, sys: System) {
+            const basePath = getDirectoryPath(directoryPath);
+            const shouldCreateParent = directoryPath !== basePath && !sys.directoryExists(basePath);
+            if (shouldCreateParent) {
+                recursiveCreateDirectory(basePath, sys);
+            }
+            if (shouldCreateParent || !sys.directoryExists(directoryPath)) {
+                sys.createDirectory(directoryPath);
+            }
+        }
+
+        let sys: System;
         if (typeof ChakraHost !== "undefined") {
-            return getChakraSystem();
+            sys = getChakraSystem();
         }
         else if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
-            return getWScriptSystem();
+            sys = getWScriptSystem();
         }
         else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like
             // process.browser check excludes webpack and browserify
-            return getNodeSystem();
+            sys = getNodeSystem();
         }
-        else {
-            return undefined; // Unsupported host
+        if (sys) {
+            // patch writefile to create folder before writing the file
+            const originalWriteFile = sys.writeFile;
+            sys.writeFile = function(path, data, writeBom) {
+                const directoryPath = getDirectoryPath(normalizeSlashes(path));
+                if (directoryPath && !sys.directoryExists(directoryPath)) {
+                    recursiveCreateDirectory(directoryPath, sys);
+                }
+                originalWriteFile.call(sys, path, data, writeBom);
+            };
         }
+        return sys;
     })();
 }

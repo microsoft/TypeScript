@@ -31,7 +31,6 @@ var Point = (function () {
     return Point;
 }());
 Point.Origin = { x: 0, y: 0 };
-var Point;
 (function (Point) {
     Point.Origin = ""; //expected duplicate identifier error
 })(Point || (Point = {}));
@@ -46,7 +45,6 @@ var A;
     }());
     Point.Origin = { x: 0, y: 0 };
     A.Point = Point;
-    var Point;
     (function (Point) {
         Point.Origin = ""; //expected duplicate identifier error
     })(Point = A.Point || (A.Point = {}));

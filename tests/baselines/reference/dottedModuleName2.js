@@ -60,7 +60,6 @@ var AA;
 })(AA || (AA = {}));
 var tmpOK = AA.B.x;
 var tmpError = A.B.x;
-var A;
 (function (A) {
     var B;
     (function (B) {

@@ -34,7 +34,6 @@ debugger;
 if ()
     ;
 [1, 2];
-var ;
 (function () {
 })( || ( = {}));
 void {};

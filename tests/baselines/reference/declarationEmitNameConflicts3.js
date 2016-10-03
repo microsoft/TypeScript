@@ -50,7 +50,6 @@ var M;
         E.f = f;
     })(E = M.E || (M.E = {}));
 })(M || (M = {}));
-var M;
 (function (M) {
     var P;
     (function (P) {
@@ -64,7 +63,7 @@ var M;
         var E = (function (_super) {
             __extends(E, _super);
             function E() {
-                _super.apply(this, arguments);
+                return _super.apply(this, arguments) || this;
             }
             return E;
         }(C));
