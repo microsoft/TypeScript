@@ -7,12 +7,13 @@ interface B1 { b: number };
 >B1 : B1
 >b : number
 
-function override<U>(initial: U, override: U): U {
->override : <U>(initial: U, override: U) => U
+function override<U>(initial: U, override: U): { ...U, ...U } {
+>override : <U>(initial: U, override: U) => { ...U; ...U }
 >U : U
 >initial : U
 >U : U
 >override : U
+>U : U
 >U : U
 >U : U
 
@@ -72,10 +73,10 @@ let b1: B1 = { b: 101 };
 >101 : 101
 
 a1 = override(a1, { a: false });
->a1 = override(a1, { a: false }) : A1
+>a1 = override(a1, { a: false }) : { ...A1; ...A1 }
 >a1 : A1
->override(a1, { a: false }) : A1
->override : <U>(initial: U, override: U) => U
+>override(a1, { a: false }) : { ...A1; ...A1 }
+>override : <U>(initial: U, override: U) => { ...U; ...U }
 >a1 : A1
 >{ a: false } : { a: false; }
 >a : boolean

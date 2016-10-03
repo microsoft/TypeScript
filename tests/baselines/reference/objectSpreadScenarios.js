@@ -1,7 +1,7 @@
 //// [objectSpreadScenarios.ts]
 interface A1 { a: boolean }
 interface B1 { b: number };
-function override<U>(initial: U, override: U): U {
+function override<U>(initial: U, override: U): { ...U, ...U } {
     return { ...initial, ...override };
 }
 function update<U>(this: { u: U }, override: U): void {

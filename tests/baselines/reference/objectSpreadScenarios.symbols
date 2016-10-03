@@ -7,12 +7,13 @@ interface B1 { b: number };
 >B1 : Symbol(B1, Decl(objectSpreadScenarios.ts, 0, 27))
 >b : Symbol(B1.b, Decl(objectSpreadScenarios.ts, 1, 14))
 
-function override<U>(initial: U, override: U): U {
+function override<U>(initial: U, override: U): { ...U, ...U } {
 >override : Symbol(override, Decl(objectSpreadScenarios.ts, 1, 27))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 2, 18))
 >initial : Symbol(initial, Decl(objectSpreadScenarios.ts, 2, 21))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 2, 18))
 >override : Symbol(override, Decl(objectSpreadScenarios.ts, 2, 32))
+>U : Symbol(U, Decl(objectSpreadScenarios.ts, 2, 18))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 2, 18))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 2, 18))
 
