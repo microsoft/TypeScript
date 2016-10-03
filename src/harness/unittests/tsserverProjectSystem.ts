@@ -51,8 +51,8 @@ namespace ts.projectSystem {
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
-        constructor(readonly globalTypingsCacheLocation: string, throttleLimit: number, readonly installTypingHost: server.ServerHost) {
-            super(globalTypingsCacheLocation, "npm", safeList.path, throttleLimit);
+        constructor(readonly globalTypingsCacheLocation: string, throttleLimit: number, readonly installTypingHost: server.ServerHost, log?: TI.Log) {
+            super(globalTypingsCacheLocation, "npm", safeList.path, throttleLimit, log);
             this.init();
         }
 

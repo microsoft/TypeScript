@@ -17,7 +17,6 @@ declare module "gulp-typescript" {
         stripInternal?: boolean;
         types?: string[];
     }
-    interface CompileStream extends NodeJS.ReadWriteStream { } // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
 }
 import * as insert from "gulp-insert";
 import * as sourcemaps from "gulp-sourcemaps";
@@ -169,7 +168,7 @@ for (const i in libraryTargets) {
     gulp.task(target, false, [], function() {
         return gulp.src(sources)
             .pipe(newer(target))
-            .pipe(concat(target, { newLine: "" }))
+            .pipe(concat(target, { newLine: "\n\n" }))
             .pipe(gulp.dest("."));
     });
 }
@@ -380,10 +379,10 @@ gulp.task(builtLocalCompiler, false, [servicesFile], () => {
     return localCompilerProject.src()
         .pipe(newer(builtLocalCompiler))
         .pipe(sourcemaps.init())
-        .pipe(tsc(localCompilerProject))
+        .pipe(localCompilerProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest(builtLocalDirectory));
+        .pipe(gulp.dest("."));
 });
 
 gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
@@ -391,7 +390,7 @@ gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
     const {js, dts} = servicesProject.src()
         .pipe(newer(servicesFile))
         .pipe(sourcemaps.init())
-        .pipe(tsc(servicesProject));
+        .pipe(servicesProject());
     const completedJs = js.pipe(prependCopyright())
         .pipe(sourcemaps.write("."));
     const completedDts = dts.pipe(prependCopyright(/*outputCopyright*/true))
@@ -409,13 +408,13 @@ gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
                 file.path = nodeDefinitionsFile;
                 return content + "\r\nexport = ts;";
             }))
-            .pipe(gulp.dest(builtLocalDirectory)),
+            .pipe(gulp.dest(".")),
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {
                 file.path = nodeStandaloneDefinitionsFile;
                 return content.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
             }))
-    ]).pipe(gulp.dest(builtLocalDirectory));
+    ]).pipe(gulp.dest("."));
 });
 
 // cancellationToken.js
@@ -425,7 +424,7 @@ gulp.task(cancellationTokenJs, false, [servicesFile], () => {
     return cancellationTokenProject.src()
         .pipe(newer(cancellationTokenJs))
         .pipe(sourcemaps.init())
-        .pipe(tsc(cancellationTokenProject))
+        .pipe(cancellationTokenProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(builtLocalDirectory));
@@ -438,10 +437,10 @@ gulp.task(typingsInstallerJs, false, [servicesFile], () => {
     return cancellationTokenProject.src()
         .pipe(newer(typingsInstallerJs))
         .pipe(sourcemaps.init())
-        .pipe(tsc(cancellationTokenProject))
+        .pipe(cancellationTokenProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest(builtLocalDirectory));
+        .pipe(gulp.dest("."));
 });
 
 const serverFile = path.join(builtLocalDirectory, "tsserver.js");
@@ -451,10 +450,10 @@ gulp.task(serverFile, false, [servicesFile, typingsInstallerJs, cancellationToke
     return serverProject.src()
         .pipe(newer(serverFile))
         .pipe(sourcemaps.init())
-        .pipe(tsc(serverProject))
+        .pipe(serverProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest(builtLocalDirectory));
+        .pipe(gulp.dest("."));
 });
 
 const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
@@ -465,14 +464,14 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
     const {js, dts}: { js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream } = serverLibraryProject.src()
         .pipe(sourcemaps.init())
         .pipe(newer(tsserverLibraryFile))
-        .pipe(tsc(serverLibraryProject));
+        .pipe(serverLibraryProject());
 
     return merge2([
         js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."))
-            .pipe(gulp.dest(builtLocalDirectory)),
+            .pipe(gulp.dest(".")),
         dts.pipe(prependCopyright())
-            .pipe(gulp.dest(builtLocalDirectory))
+            .pipe(gulp.dest("."))
     ]);
 });
 
@@ -544,9 +543,9 @@ gulp.task(run, false, [servicesFile], () => {
     return testProject.src()
         .pipe(newer(run))
         .pipe(sourcemaps.init())
-        .pipe(tsc(testProject))
+        .pipe(testProject())
         .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
-        .pipe(gulp.dest(builtLocalDirectory));
+        .pipe(gulp.dest("."));
 });
 
 const internalTests = "internal/";
@@ -730,7 +729,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
     return testProject.src()
         .pipe(newer("built/local/bundle.js"))
         .pipe(sourcemaps.init())
-        .pipe(tsc(testProject))
+        .pipe(testProject)
         .pipe(through2.obj((file, enc, next) => {
             const originalMap = file.sourceMap;
             const prebundledContent = file.contents.toString();

@@ -5,7 +5,7 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "pretty": true,
-        "out": "../../built/local/typingsInstaller.js",
+        "outFile": "../../../built/local/typingsInstaller.js",
         "sourceMap": true,
         "stripInternal": true,
         "types": [

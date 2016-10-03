@@ -964,7 +964,11 @@ namespace ts {
                 currentFlow = preTryFlow;
                 bind(node.finallyBlock);
             }
-            currentFlow = finishFlowLabel(postFinallyLabel);
+            // if try statement has finally block and flow after finally block is unreachable - keep it
+            // otherwise use whatever flow was accumulated at postFinallyLabel
+            if (!node.finallyBlock || !(currentFlow.flags & FlowFlags.Unreachable)) {
+                currentFlow = finishFlowLabel(postFinallyLabel);
+            }
         }
 
         function bindSwitchStatement(node: SwitchStatement): void {
