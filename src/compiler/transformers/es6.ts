@@ -2308,8 +2308,7 @@ namespace ts {
                         extraVariableDeclarations = [];
                     }
                     // hoist collected variable declarations
-                    for (const name in currentState.hoistedLocalVariables) {
-                        const identifier = currentState.hoistedLocalVariables[name];
+                    for (const identifier of currentState.hoistedLocalVariables) {
                         extraVariableDeclarations.push(createVariableDeclaration(identifier));
                     }
                 }
