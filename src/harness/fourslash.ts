@@ -754,6 +754,16 @@ namespace FourSlash {
             }
         }
 
+        public verifyCompletionListIsGlobal(expected: boolean) {
+            const completions = this.getCompletionListAtCaret();
+            if (!completions && expected !== undefined) {
+                this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions}`);
+            }
+            else if (completions && completions.isGlobalCompletion !== expected) {
+                this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions.isGlobalCompletion}`);
+            }
+        }
+
         public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
             const completions = this.getCompletionListAtCaret();
             if (completions) {
@@ -3044,6 +3054,10 @@ namespace FourSlashInterface {
 
         public completionListIsEmpty() {
             this.state.verifyCompletionListIsEmpty(this.negative);
+        }
+
+        public completionListIsGlobal(expected: boolean) {
+            this.state.verifyCompletionListIsGlobal(expected);
         }
 
         public completionListAllowsNewIdentifier() {
