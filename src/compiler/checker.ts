@@ -3179,7 +3179,7 @@ namespace ts {
                 result.pattern = pattern;
             }
             if (hasComputedProperties) {
-                result.isObjectLiteralPatternWithComputedProperties = hasComputedProperties;
+                result.isObjectLiteralPatternWithComputedProperties = true;
             }
             return result;
         }
@@ -10378,7 +10378,7 @@ namespace ts {
             const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
             if (patternWithComputedProperties) {
-                result.isObjectLiteralPatternWithComputedProperties = patternWithComputedProperties;
+                result.isObjectLiteralPatternWithComputedProperties = true;
             }
             if (inDestructuringPattern) {
                 result.pattern = node;
