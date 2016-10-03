@@ -7,7 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var ClassC = (function (_super) {
     __extends(ClassC, _super);
     function ClassC() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return ClassC;
 }(test.ClassA));

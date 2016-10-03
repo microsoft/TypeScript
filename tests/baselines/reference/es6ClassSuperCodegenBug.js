@@ -28,12 +28,14 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
+        var _this;
         if (true) {
-            _super.call(this, 'a1', 'b1');
+            _this = _super.call(this, 'a1', 'b1') || this;
         }
         else {
-            _super.call(this, 'a2', 'b2');
+            _this = _super.call(this, 'a2', 'b2') || this;
         }
+        return _this;
     }
     return B;
 }(A));

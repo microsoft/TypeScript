@@ -139,18 +139,35 @@ namespace ts {
         loopOutParameters?: LoopOutParameter[];
     }
 
+    const enum SuperCaptureResult {
+        /**
+         * A capture may have been added for calls to 'super', but
+         * the caller should emit subsequent statements normally.
+         */
+        NoReplacement,
+        /**
+         * A call to 'super()' got replaced with a capturing statement like:
+         *
+         *  var _this = _super.call(...) || this;
+         *
+         * Callers should skip the current statement.
+         */
+        ReplaceSuperCapture,
+        /**
+         * A call to 'super()' got replaced with a capturing statement like:
+         *
+         *  return _super.call(...) || this;
+         *
+         * Callers should skip the current statement and avoid any returns of '_this'.
+         */
+        ReplaceWithReturn,
+    }
+
     export function transformES6(context: TransformationContext) {
         const {
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
-            getNodeEmitFlags,
-            setNodeEmitFlags,
-            getCommentRange,
-            setCommentRange,
-            getSourceMapRange,
-            setSourceMapRange,
-            setTokenSourceMapRange,
         } = context;
 
         const resolver = context.getEmitResolver();
@@ -185,6 +202,10 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             currentSourceFile = node;
             currentText = node.text;
             return visitNode(node, visitor, isSourceFile);
@@ -200,7 +221,7 @@ namespace ts {
                 : visitorWorker(node);
         }
 
-        function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
+        function saveStateAndInvoke<T extends Node, U>(node: T, f: (node: T) => U): U {
             const savedEnclosingFunction = enclosingFunction;
             const savedEnclosingNonArrowFunction = enclosingNonArrowFunction;
             const savedEnclosingNonAsyncFunctionBody = enclosingNonAsyncFunctionBody;
@@ -408,7 +429,7 @@ namespace ts {
                     enclosingFunction = currentNode;
                     if (currentNode.kind !== SyntaxKind.ArrowFunction) {
                         enclosingNonArrowFunction = currentNode;
-                        if (!(currentNode.emitFlags & NodeEmitFlags.AsyncFunctionBody)) {
+                        if (!(getEmitFlags(currentNode) & EmitFlags.AsyncFunctionBody)) {
                             enclosingNonAsyncFunctionBody = currentNode;
                         }
                     }
@@ -671,19 +692,19 @@ namespace ts {
             // To preserve the behavior of the old emitter, we explicitly indent
             // the body of the function here if it was requested in an earlier
             // transformation.
-            if (getNodeEmitFlags(node) & NodeEmitFlags.Indented) {
-                setNodeEmitFlags(classFunction, NodeEmitFlags.Indented);
+            if (getEmitFlags(node) & EmitFlags.Indented) {
+                setEmitFlags(classFunction, EmitFlags.Indented);
             }
 
             // "inner" and "outer" below are added purely to preserve source map locations from
             // the old emitter
             const inner = createPartiallyEmittedExpression(classFunction);
             inner.end = node.end;
-            setNodeEmitFlags(inner, NodeEmitFlags.NoComments);
+            setEmitFlags(inner, EmitFlags.NoComments);
 
             const outer = createPartiallyEmittedExpression(inner);
             outer.end = skipTrivia(currentText, node.pos);
-            setNodeEmitFlags(outer, NodeEmitFlags.NoComments);
+            setEmitFlags(outer, EmitFlags.NoComments);
 
             return createParen(
                 createCall(
@@ -717,17 +738,17 @@ namespace ts {
             // emit with the original emitter.
             const outer = createPartiallyEmittedExpression(localName);
             outer.end = closingBraceLocation.end;
-            setNodeEmitFlags(outer, NodeEmitFlags.NoComments);
+            setEmitFlags(outer, EmitFlags.NoComments);
 
             const statement = createReturn(outer);
             statement.pos = closingBraceLocation.pos;
-            setNodeEmitFlags(statement, NodeEmitFlags.NoComments | NodeEmitFlags.NoTokenSourceMaps);
+            setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
             statements.push(statement);
 
             addRange(statements, endLexicalEnvironment());
 
             const block = createBlock(createNodeArray(statements, /*location*/ node.members), /*location*/ undefined, /*multiLine*/ true);
-            setNodeEmitFlags(block, NodeEmitFlags.NoComments);
+            setEmitFlags(block, EmitFlags.NoComments);
             return block;
         }
 
@@ -759,7 +780,8 @@ namespace ts {
         function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
             const constructor = getFirstConstructorWithBody(node);
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
-            statements.push(
+
+            const constructorFunction =
                 createFunctionDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
@@ -770,8 +792,12 @@ namespace ts {
                     /*type*/ undefined,
                     transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper),
                     /*location*/ constructor || node
-                )
-            );
+                );
+
+            if (extendsClauseElement) {
+                setEmitFlags(constructorFunction, EmitFlags.CapturesThis);
+            }
+            statements.push(constructorFunction);
         }
 
         /**
@@ -803,20 +829,51 @@ namespace ts {
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function transformConstructorBody(constructor: ConstructorDeclaration, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
+        function transformConstructorBody(constructor: ConstructorDeclaration | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            if (constructor) {
-                addCaptureThisForNodeIfNeeded(statements, constructor);
-                addDefaultValueAssignmentsIfNeeded(statements, constructor);
-                addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+
+            let statementOffset = -1;
+            if (hasSynthesizedSuper) {
+                // If a super call has already been synthesized,
+                // we're going to assume that we should just transform everything after that.
+                // The assumption is that no prior step in the pipeline has added any prologue directives.
+                statementOffset = 1;
+            }
+            else if (constructor) {
+                // Otherwise, try to emit all potential prologue directives first.
+                statementOffset = addPrologueDirectives(statements, constructor.body.statements, /*ensureUseStrict*/ false, visitor);
             }
 
-            addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
+            if (constructor) {
+                addDefaultValueAssignmentsIfNeeded(statements, constructor);
+                addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+                Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
+
+            }
+
+            const superCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, hasSynthesizedSuper, statementOffset);
+
+            // The last statement expression was replaced. Skip it.
+            if (superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture || superCaptureStatus === SuperCaptureResult.ReplaceWithReturn) {
+                statementOffset++;
+            }
 
             if (constructor) {
-                const body = saveStateAndInvoke(constructor, hasSynthesizedSuper ? transformConstructorBodyWithSynthesizedSuper : transformConstructorBodyWithoutSynthesizedSuper);
+                const body = saveStateAndInvoke(constructor, constructor => visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
                 addRange(statements, body);
+            }
+
+            // Return `_this` unless we're sure enough that it would be pointless to add a return statement.
+            // If there's a constructor that we can tell returns in enough places, then we *do not* want to add a return.
+            if (extendsClauseElement
+                && superCaptureStatus !== SuperCaptureResult.ReplaceWithReturn
+                && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
+                statements.push(
+                    createReturn(
+                        createIdentifier("_this")
+                    )
+                );
             }
 
             addRange(statements, endLexicalEnvironment());
@@ -830,47 +887,136 @@ namespace ts {
             );
 
             if (!constructor) {
-                setNodeEmitFlags(block, NodeEmitFlags.NoComments);
+                setEmitFlags(block, EmitFlags.NoComments);
             }
 
             return block;
         }
 
-        function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
-            return visitNodes(node.body.statements, visitor, isStatement, 1);
-        }
+        /**
+         * We want to try to avoid emitting a return statement in certain cases if a user already returned something.
+         * It would generate obviously dead code, so we'll try to make things a little bit prettier
+         * by doing a minimal check on whether some common patterns always explicitly return.
+         */
+        function isSufficientlyCoveredByReturnStatements(statement: Statement): boolean {
+            // A return statement is considered covered.
+            if (statement.kind === SyntaxKind.ReturnStatement) {
+                return true;
+            }
+            // An if-statement with two covered branches is covered.
+            else if (statement.kind === SyntaxKind.IfStatement) {
+                const ifStatement = statement as IfStatement;
+                if (ifStatement.elseStatement) {
+                    return isSufficientlyCoveredByReturnStatements(ifStatement.thenStatement) &&
+                        isSufficientlyCoveredByReturnStatements(ifStatement.elseStatement);
+                }
+            }
+            // A block is covered if it has a last statement which is covered.
+            else if (statement.kind === SyntaxKind.Block) {
+                const lastStatement = lastOrUndefined((statement as Block).statements);
+                if (lastStatement && isSufficientlyCoveredByReturnStatements(lastStatement)) {
+                    return true;
+                }
+            }
 
-        function transformConstructorBodyWithoutSynthesizedSuper(node: ConstructorDeclaration) {
-            return visitNodes(node.body.statements, visitor, isStatement, 0);
+            return false;
         }
 
         /**
-         * Adds a synthesized call to `_super` if it is needed.
+         * Declares a `_this` variable for derived classes and for when arrow functions capture `this`.
          *
-         * @param statements The statements for the new constructor body.
-         * @param constructor The constructor for the class.
-         * @param extendsClauseElement The expression for the class `extends` clause.
-         * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
-         *                            synthesized `super` call.
+         * @returns The new statement offset into the `statements` array.
          */
-        function addDefaultSuperCallIfNeeded(statements: Statement[], constructor: ConstructorDeclaration, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
-            // If the TypeScript transformer needed to synthesize a constructor for property
-            // initializers, it would have also added a synthetic `...args` parameter and
-            // `super` call.
-            // If this is the case, or if the class has an `extends` clause but no
-            // constructor, we emit a synthesized call to `_super`.
-            if (constructor ? hasSynthesizedSuper : extendsClauseElement) {
-                statements.push(
-                    createStatement(
-                        createFunctionApply(
-                            createIdentifier("_super"),
-                            createThis(),
-                            createIdentifier("arguments")
-                        ),
-                        /*location*/ extendsClauseElement
-                    )
-                );
+        function declareOrCaptureOrReturnThisForConstructorIfNeeded(
+                    statements: Statement[],
+                    ctor: ConstructorDeclaration | undefined,
+                    hasExtendsClause: boolean,
+                    hasSynthesizedSuper: boolean,
+                    statementOffset: number) {
+            // If this isn't a derived class, just capture 'this' for arrow functions if necessary.
+            if (!hasExtendsClause) {
+                if (ctor) {
+                    addCaptureThisForNodeIfNeeded(statements, ctor);
+                }
+                return SuperCaptureResult.NoReplacement;
             }
+
+            // We must be here because the user didn't write a constructor
+            // but we needed to call 'super(...args)' anyway as per 14.5.14 of the ES2016 spec.
+            // If that's the case we can just immediately return the result of a 'super()' call.
+            if (!ctor) {
+                statements.push(createReturn(createDefaultSuperCallOrThis()));
+                return SuperCaptureResult.ReplaceWithReturn;
+            }
+
+            // The constructor exists, but it and the 'super()' call it contains were generated
+            // for something like property initializers.
+            // Create a captured '_this' variable and assume it will subsequently be used.
+            if (hasSynthesizedSuper) {
+                captureThisForNode(statements, ctor, createDefaultSuperCallOrThis());
+                enableSubstitutionsForCapturedThis();
+                return SuperCaptureResult.ReplaceSuperCapture;
+            }
+
+            // Most of the time, a 'super' call will be the first real statement in a constructor body.
+            // In these cases, we'd like to transform these into a *single* statement instead of a declaration
+            // followed by an assignment statement for '_this'. For instance, if we emitted without an initializer,
+            // we'd get:
+            //
+            //      var _this;
+            //      _this = _super.call(...) || this;
+            //
+            // instead of
+            //
+            //      var _this = _super.call(...) || this;
+            //
+            // Additionally, if the 'super()' call is the last statement, we should just avoid capturing
+            // entirely and immediately return the result like so:
+            //
+            //      return _super.call(...) || this;
+            //
+            let firstStatement: Statement;
+            let superCallExpression: Expression;
+
+            const ctorStatements = ctor.body.statements;
+            if (statementOffset < ctorStatements.length) {
+                firstStatement = ctorStatements[statementOffset];
+
+                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
+                    const superCall = (firstStatement as ExpressionStatement).expression as CallExpression;
+                    superCallExpression = setOriginalNode(
+                        saveStateAndInvoke(superCall, visitImmediateSuperCallInBody),
+                        superCall
+                    );
+                }
+            }
+
+            // Return the result if we have an immediate super() call on the last statement.
+            if (superCallExpression && statementOffset === ctorStatements.length - 1) {
+                statements.push(createReturn(superCallExpression));
+                return SuperCaptureResult.ReplaceWithReturn;
+            }
+
+            // Perform the capture.
+            captureThisForNode(statements, ctor, superCallExpression, firstStatement);
+
+            // If we're actually replacing the original statement, we need to signal this to the caller.
+            if (superCallExpression) {
+                return SuperCaptureResult.ReplaceSuperCapture;
+            }
+
+            return SuperCaptureResult.NoReplacement;
+        }
+
+        function createDefaultSuperCallOrThis() {
+            const actualThis = createThis();
+            setEmitFlags(actualThis, EmitFlags.NoSubstitution);
+            const superCall = createFunctionApply(
+                createIdentifier("_super"),
+                actualThis,
+                createIdentifier("arguments"),
+            );
+            return createLogicalOr(superCall, actualThis);
         }
 
         /**
@@ -967,27 +1113,27 @@ namespace ts {
             // of an initializer, we must emit that expression to preserve side effects.
             if (name.elements.length > 0) {
                 statements.push(
-                    setNodeEmitFlags(
+                    setEmitFlags(
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList(
                                 flattenParameterDestructuring(context, parameter, temp, visitor)
                             )
                         ),
-                        NodeEmitFlags.CustomPrologue
+                        EmitFlags.CustomPrologue
                     )
                 );
             }
             else if (initializer) {
                 statements.push(
-                    setNodeEmitFlags(
+                    setEmitFlags(
                         createStatement(
                             createAssignment(
                                 temp,
                                 visitNode(initializer, visitor, isExpression)
                             )
                         ),
-                        NodeEmitFlags.CustomPrologue
+                        EmitFlags.CustomPrologue
                     )
                 );
             }
@@ -1008,23 +1154,23 @@ namespace ts {
                     getSynthesizedClone(name),
                     createVoidZero()
                 ),
-                setNodeEmitFlags(
+                setEmitFlags(
                     createBlock([
                         createStatement(
                             createAssignment(
-                                setNodeEmitFlags(getMutableClone(name), NodeEmitFlags.NoSourceMap),
-                                setNodeEmitFlags(initializer, NodeEmitFlags.NoSourceMap | getNodeEmitFlags(initializer)),
+                                setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
+                                setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer)),
                                 /*location*/ parameter
                             )
                         )
                     ], /*location*/ parameter),
-                    NodeEmitFlags.SingleLine | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.NoTokenSourceMaps
+                    EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps
                 ),
                 /*elseStatement*/ undefined,
                 /*location*/ parameter
             );
             statement.startsOnNewLine = true;
-            setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.CustomPrologue);
+            setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue);
             statements.push(statement);
         }
 
@@ -1057,7 +1203,7 @@ namespace ts {
 
             // `declarationName` is the name of the local declaration for the parameter.
             const declarationName = getMutableClone(<Identifier>parameter.name);
-            setNodeEmitFlags(declarationName, NodeEmitFlags.NoSourceMap);
+            setEmitFlags(declarationName, EmitFlags.NoSourceMap);
 
             // `expressionName` is the name of the parameter used in expressions.
             const expressionName = getSynthesizedClone(<Identifier>parameter.name);
@@ -1066,7 +1212,7 @@ namespace ts {
 
             // var param = [];
             statements.push(
-                setNodeEmitFlags(
+                setEmitFlags(
                     createVariableStatement(
                         /*modifiers*/ undefined,
                         createVariableDeclarationList([
@@ -1078,7 +1224,7 @@ namespace ts {
                         ]),
                         /*location*/ parameter
                     ),
-                    NodeEmitFlags.CustomPrologue
+                    EmitFlags.CustomPrologue
                 )
             );
 
@@ -1111,7 +1257,7 @@ namespace ts {
                 ])
             );
 
-            setNodeEmitFlags(forStatement, NodeEmitFlags.CustomPrologue);
+            setEmitFlags(forStatement, EmitFlags.CustomPrologue);
             startOnNewLine(forStatement);
             statements.push(forStatement);
         }
@@ -1124,22 +1270,27 @@ namespace ts {
          */
         function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): void {
             if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
-                enableSubstitutionsForCapturedThis();
-                const captureThisStatement = createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            "_this",
-                            /*type*/ undefined,
-                            createThis()
-                        )
-                    ])
-                );
-
-                setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments | NodeEmitFlags.CustomPrologue);
-                setSourceMapRange(captureThisStatement, node);
-                statements.push(captureThisStatement);
+                captureThisForNode(statements, node, createThis());
             }
+        }
+
+        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, originalStatement?: Statement): void {
+            enableSubstitutionsForCapturedThis();
+            const captureThisStatement = createVariableStatement(
+                /*modifiers*/ undefined,
+                createVariableDeclarationList([
+                    createVariableDeclaration(
+                        "_this",
+                        /*type*/ undefined,
+                        initializer
+                    )
+                ]),
+                originalStatement
+            );
+
+            setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
+            setSourceMapRange(captureThisStatement, node);
+            statements.push(captureThisStatement);
         }
 
         /**
@@ -1200,7 +1351,7 @@ namespace ts {
             const sourceMapRange = getSourceMapRange(member);
 
             const func = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined);
-            setNodeEmitFlags(func, NodeEmitFlags.NoComments);
+            setEmitFlags(func, EmitFlags.NoComments);
             setSourceMapRange(func, sourceMapRange);
 
             const statement = createStatement(
@@ -1221,7 +1372,7 @@ namespace ts {
             // The location for the statement is used to emit comments only.
             // No source map should be emitted for this statement to align with the
             // old emitter.
-            setNodeEmitFlags(statement, NodeEmitFlags.NoSourceMap);
+            setEmitFlags(statement, EmitFlags.NoSourceMap);
             return statement;
         }
 
@@ -1240,7 +1391,7 @@ namespace ts {
             // The location for the statement is used to emit source maps only.
             // No comments should be emitted for this statement to align with the
             // old emitter.
-            setNodeEmitFlags(statement, NodeEmitFlags.NoComments);
+            setEmitFlags(statement, EmitFlags.NoComments);
             return statement;
         }
 
@@ -1254,11 +1405,11 @@ namespace ts {
             // To align with source maps in the old emitter, the receiver and property name
             // arguments are both mapped contiguously to the accessor name.
             const target = getMutableClone(receiver);
-            setNodeEmitFlags(target, NodeEmitFlags.NoComments | NodeEmitFlags.NoTrailingSourceMap);
+            setEmitFlags(target, EmitFlags.NoComments | EmitFlags.NoTrailingSourceMap);
             setSourceMapRange(target, firstAccessor.name);
 
             const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName));
-            setNodeEmitFlags(propertyName, NodeEmitFlags.NoComments | NodeEmitFlags.NoLeadingSourceMap);
+            setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoLeadingSourceMap);
             setSourceMapRange(propertyName, firstAccessor.name);
 
             const properties: ObjectLiteralElementLike[] = [];
@@ -1309,7 +1460,7 @@ namespace ts {
             }
 
             const func = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
-            setNodeEmitFlags(func, NodeEmitFlags.CapturesThis);
+            setEmitFlags(func, EmitFlags.CapturesThis);
             return func;
         }
 
@@ -1434,7 +1585,7 @@ namespace ts {
 
                 const expression = visitNode(body, visitor, isExpression);
                 const returnStatement = createReturn(expression, /*location*/ body);
-                setNodeEmitFlags(returnStatement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.NoTrailingComments);
+                setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);
                 statements.push(returnStatement);
 
                 // To align with the source map emit for the old emitter, we set a custom
@@ -1452,7 +1603,7 @@ namespace ts {
 
             const block = createBlock(createNodeArray(statements, statementsLocation), node.body, multiLine);
             if (!multiLine && singleLine) {
-                setNodeEmitFlags(block, NodeEmitFlags.SingleLine);
+                setEmitFlags(block, EmitFlags.SingleLine);
             }
 
             if (closeBraceLocation) {
@@ -1538,7 +1689,7 @@ namespace ts {
                             assignment = flattenVariableDestructuringToExpression(context, decl, hoistVariableDeclaration, /*nameSubstitution*/ undefined, visitor);
                         }
                         else {
-                            assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, decl.initializer);
+                            assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
                         }
                         (assignments || (assignments = [])).push(assignment);
                     }
@@ -1875,7 +2026,7 @@ namespace ts {
             }
 
             // The old emitter does not emit source maps for the expression
-            setNodeEmitFlags(expression, NodeEmitFlags.NoSourceMap | getNodeEmitFlags(expression));
+            setEmitFlags(expression, EmitFlags.NoSourceMap | getEmitFlags(expression));
 
             // The old emitter does not emit source maps for the block.
             // We add the location to preserve comments.
@@ -1884,7 +2035,7 @@ namespace ts {
                 /*location*/ bodyLocation
             );
 
-            setNodeEmitFlags(body, NodeEmitFlags.NoSourceMap | NodeEmitFlags.NoTokenSourceMaps);
+            setEmitFlags(body, EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps);
 
             const forStatement = createFor(
                 createVariableDeclarationList([
@@ -1902,7 +2053,7 @@ namespace ts {
             );
 
             // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
-            setNodeEmitFlags(forStatement, NodeEmitFlags.NoTokenTrailingSourceMaps);
+            setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
             return forStatement;
         }
 
@@ -1938,13 +2089,13 @@ namespace ts {
             const expressions: Expression[] = [];
             const assignment = createAssignment(
                 temp,
-                setNodeEmitFlags(
+                setEmitFlags(
                     createObjectLiteral(
                         visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
                         /*location*/ undefined,
                         node.multiLine
                     ),
-                    NodeEmitFlags.Indented
+                    EmitFlags.Indented
                 )
             );
             if (node.multiLine) {
@@ -2067,16 +2218,16 @@ namespace ts {
 
             const isAsyncBlockContainingAwait =
                 enclosingNonArrowFunction
-                && (enclosingNonArrowFunction.emitFlags & NodeEmitFlags.AsyncFunctionBody) !== 0
+                && (getEmitFlags(enclosingNonArrowFunction) & EmitFlags.AsyncFunctionBody) !== 0
                 && (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
 
-            let loopBodyFlags: NodeEmitFlags = 0;
+            let loopBodyFlags: EmitFlags = 0;
             if (currentState.containsLexicalThis) {
-                loopBodyFlags |= NodeEmitFlags.CapturesThis;
+                loopBodyFlags |= EmitFlags.CapturesThis;
             }
 
             if (isAsyncBlockContainingAwait) {
-                loopBodyFlags |= NodeEmitFlags.AsyncFunctionBody;
+                loopBodyFlags |= EmitFlags.AsyncFunctionBody;
             }
 
             const convertedLoopVariable =
@@ -2087,7 +2238,7 @@ namespace ts {
                             createVariableDeclaration(
                                 functionName,
                                 /*type*/ undefined,
-                                setNodeEmitFlags(
+                                setEmitFlags(
                                     createFunctionExpression(
                                         isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
                                         /*name*/ undefined,
@@ -2480,7 +2631,7 @@ namespace ts {
             // Methods with computed property names are handled in visitObjectLiteralExpression.
             Debug.assert(!isComputedPropertyName(node.name));
             const functionExpression = transformFunctionLikeToExpression(node, /*location*/ moveRangePos(node, -1), /*name*/ undefined);
-            setNodeEmitFlags(functionExpression, NodeEmitFlags.NoLeadingComments | getNodeEmitFlags(functionExpression));
+            setEmitFlags(functionExpression, EmitFlags.NoLeadingComments | getEmitFlags(functionExpression));
             return createPropertyAssignment(
                 node.name,
                 functionExpression,
@@ -2526,11 +2677,23 @@ namespace ts {
          *
          * @param node a CallExpression.
          */
-        function visitCallExpression(node: CallExpression): LeftHandSideExpression {
+        function visitCallExpression(node: CallExpression) {
+            return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
+        }
+
+        function visitImmediateSuperCallInBody(node: CallExpression) {
+            return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ false);
+        }
+
+        function visitCallExpressionWithPotentialCapturedThisAssignment(node: CallExpression, assignToCapturedThis: boolean): CallExpression | BinaryExpression {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
 
             const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                setEmitFlags(thisArg, EmitFlags.NoSubstitution);
+            }
+            let resultingCall: CallExpression | BinaryExpression;
             if (node.transformFlags & TransformFlags.ContainsSpreadExpression) {
                 // [source]
                 //      f(...a, b)
@@ -2546,7 +2709,7 @@ namespace ts {
                 //      _super.m.apply(this, a.concat([b]))
                 //      _super.prototype.m.apply(this, a.concat([b]))
 
-                return createFunctionApply(
+                resultingCall = createFunctionApply(
                     visitNode(target, visitor, isExpression),
                     visitNode(thisArg, visitor, isExpression),
                     transformAndSpreadElements(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
@@ -2563,13 +2726,27 @@ namespace ts {
                 //      _super.m.call(this, a)
                 //      _super.prototype.m.call(this, a)
 
-                return createFunctionCall(
+                resultingCall = createFunctionCall(
                     visitNode(target, visitor, isExpression),
                     visitNode(thisArg, visitor, isExpression),
                     visitNodes(node.arguments, visitor, isExpression),
                     /*location*/ node
                 );
             }
+
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                const actualThis = createThis();
+                setEmitFlags(actualThis, EmitFlags.NoSubstitution);
+                const initializer =
+                    createLogicalOr(
+                        resultingCall,
+                        actualThis
+                    );
+                return assignToCapturedThis
+                    ? createAssignment(createIdentifier("_this"), initializer)
+                    : initializer;
+            }
+            return resultingCall;
         }
 
         /**
@@ -2855,7 +3032,7 @@ namespace ts {
          *
          * @param node The node to be printed.
          */
-        function onEmitNode(node: Node, emit: (node: Node) => void) {
+        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
             const savedEnclosingFunction = enclosingFunction;
 
             if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
@@ -2863,7 +3040,7 @@ namespace ts {
                 enclosingFunction = node;
             }
 
-            previousOnEmitNode(node, emit);
+            previousOnEmitNode(emitContext, node, emitCallback);
 
             enclosingFunction = savedEnclosingFunction;
         }
@@ -2904,10 +3081,10 @@ namespace ts {
          * @param isExpression A value indicating whether the node is to be used in an expression
          *                     position.
          */
-        function onSubstituteNode(node: Node, isExpression: boolean) {
-            node = previousOnSubstituteNode(node, isExpression);
+        function onSubstituteNode(emitContext: EmitContext, node: Node) {
+            node = previousOnSubstituteNode(emitContext, node);
 
-            if (isExpression) {
+            if (emitContext === EmitContext.Expression) {
                 return substituteExpression(node);
             }
 
@@ -2995,7 +3172,7 @@ namespace ts {
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
             if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis
                 && enclosingFunction
-                && enclosingFunction.emitFlags & NodeEmitFlags.CapturesThis) {
+                && getEmitFlags(enclosingFunction) & EmitFlags.CapturesThis) {
                 return createIdentifier("_this", /*location*/ node);
             }
 
@@ -3013,7 +3190,7 @@ namespace ts {
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
         function getLocalName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean) {
-            return getDeclarationName(node, allowComments, allowSourceMaps, NodeEmitFlags.LocalName);
+            return getDeclarationName(node, allowComments, allowSourceMaps, EmitFlags.LocalName);
         }
 
         /**
@@ -3022,18 +3199,18 @@ namespace ts {
          * @param node The declaration.
          * @param allowComments Allow comments for the name.
          */
-        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
+        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
             if (node.name && !isGeneratedIdentifier(node.name)) {
                 const name = getMutableClone(node.name);
-                emitFlags |= getNodeEmitFlags(node.name);
+                emitFlags |= getEmitFlags(node.name);
                 if (!allowSourceMaps) {
-                    emitFlags |= NodeEmitFlags.NoSourceMap;
+                    emitFlags |= EmitFlags.NoSourceMap;
                 }
                 if (!allowComments) {
-                    emitFlags |= NodeEmitFlags.NoComments;
+                    emitFlags |= EmitFlags.NoComments;
                 }
                 if (emitFlags) {
-                    setNodeEmitFlags(name, emitFlags);
+                    setEmitFlags(name, emitFlags);
                 }
                 return name;
             }

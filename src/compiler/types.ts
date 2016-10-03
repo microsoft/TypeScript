@@ -19,6 +19,7 @@ namespace ts {
         remove(fileName: Path): void;
 
         forEachValue(f: (key: Path, v: T) => void): void;
+        getKeys(): Path[];
         clear(): void;
     }
 
@@ -495,10 +496,7 @@ namespace ts {
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
         /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
-        /* @internal */ transformId?: number;           // Associates transient transformation properties with a specific transformation (initialized by transformation).
-        /* @internal */ emitFlags?: NodeEmitFlags;      // Transient emit flags for a synthesized node (initialized by transformation).
-        /* @internal */ sourceMapRange?: TextRange;     // Transient custom sourcemap range for a synthesized node (initialized by transformation).
-        /* @internal */ commentRange?: TextRange;       // Transient custom comment range for a synthesized node (initialized by transformation).
+        /* @internal */ emitNode?: EmitNode;            // Associated EmitNode (initialized by transforms)
     }
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
@@ -1874,7 +1872,7 @@ namespace ts {
          * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the JavaScript and declaration files.
          */
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult;
 
         getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
@@ -1892,6 +1890,7 @@ namespace ts {
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
+        /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
         /* @internal */ getClassifiableNames(): Map<string>;
 
@@ -2063,6 +2062,7 @@ namespace ts {
         UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 0x00000200,  // Writing type in type alias declaration
+        UseTypeAliasValue               = 0x00000400,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
     }
 
     export const enum SymbolFormatFlags {
@@ -2874,6 +2874,7 @@ namespace ts {
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
+        compileOnSave?: boolean;
     }
 
     export const enum WatchDirectoryFlags {
@@ -3197,7 +3198,17 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum NodeEmitFlags {
+    export interface EmitNode {
+        flags?: EmitFlags;
+        commentRange?: TextRange;
+        sourceMapRange?: TextRange;
+        tokenSourceMapRanges?: Map<TextRange>;
+        annotatedNodes?: Node[];                // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
+        constantValue?: number;
+    }
+
+    /* @internal */
+    export const enum EmitFlags {
         EmitEmitHelpers = 1 << 0,                // Any emit helpers should be written to this node.
         EmitExportStar = 1 << 1,                 // The export * helper should be written to this node.
         EmitSuperHelper = 1 << 2,                // Emit the basic _super helper for async methods.
@@ -3225,6 +3236,14 @@ namespace ts {
         AsyncFunctionBody = 1 << 21,
         ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
         CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+    }
+
+    /* @internal */
+    export const enum EmitContext {
+        SourceFile,         // Emitting a SourceFile
+        Expression,         // Emitting an Expression
+        IdentifierName,     // Emitting an IdentifierName
+        Unspecified,        // Emitting an otherwise unspecified node
     }
 
     /** Additional context provided to `visitEachChild` */

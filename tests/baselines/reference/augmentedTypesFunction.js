@@ -63,19 +63,16 @@ var y3a = (function () {
 }()); // error
 // function then enum
 function y4() { } // error
-var y4;
 (function (y4) {
     y4[y4["One"] = 0] = "One";
 })(y4 || (y4 = {})); // error
 // function then internal module
 function y5() { }
 function y5a() { }
-var y5a;
 (function (y5a) {
     var y = 2;
 })(y5a || (y5a = {})); // should be an error
 function y5b() { }
-var y5b;
 (function (y5b) {
     y5b.y = 3;
 })(y5b || (y5b = {})); // should be an error

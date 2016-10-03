@@ -162,7 +162,7 @@ var C2 = (function (_super) {
     __extends(C2, _super);
     function C2(v2) {
         if (v2 === void 0) { v2 = 6; }
-        _super.call(this, v2);
+        return _super.call(this, v2) || this;
     }
     return C2;
 }(C1));

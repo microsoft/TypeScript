@@ -16,6 +16,10 @@ namespace ts {
          * @param node A SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             currentSourceFile = node;
             node = visitEachChild(node, visitor, context);
             currentSourceFile = undefined;

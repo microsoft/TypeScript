@@ -36,23 +36,25 @@ var Base = (function () {
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo() {
-        _super.call(this, this); // error: "super" has to be called before "this" accessing
+        return _super.call(this, _this) || this;
     }
     return Foo;
 }(Base));
 var Foo2 = (function (_super) {
     __extends(Foo2, _super);
     function Foo2() {
-        _super.call(this, this); // error
-        this.p = 0;
+        var _this = _super.call(this, _this) || this;
+        _this.p = 0;
+        return _this;
     }
     return Foo2;
 }(Base));
 var Foo3 = (function (_super) {
     __extends(Foo3, _super);
     function Foo3(p) {
-        _super.call(this, this); // error
-        this.p = p;
+        var _this = _super.call(this, _this) || this;
+        _this.p = p;
+        return _this;
     }
     return Foo3;
 }(Base));
