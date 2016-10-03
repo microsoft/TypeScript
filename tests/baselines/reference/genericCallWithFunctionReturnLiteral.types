@@ -1,0 +1,14 @@
+=== tests/cases/compiler/genericCallWithFunctionReturnLiteral.ts ===
+function foo<T>(t: T) { return t; }
+>foo : <T>(t: T) => T
+>T : T
+>t : T
+>T : T
+>t : T
+
+foo(() => 123)
+>foo(() => 123) : () => number
+>foo : <T>(t: T) => T
+>() => 123 : () => number
+>123 : 123
+

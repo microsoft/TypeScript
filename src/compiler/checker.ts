@@ -4870,7 +4870,8 @@ namespace ts {
                 else {
                     type = getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration);
                 }
-                if (!popTypeResolution()) {
+                // skip warning if type can be inferred, e.g. literal type in contextual typing position
+                if (!popTypeResolution() && !(type.flags & TypeFlags.Primitive)) {
                     type = anyType;
                     if (compilerOptions.noImplicitAny) {
                         const declaration = <Declaration>signature.declaration;
