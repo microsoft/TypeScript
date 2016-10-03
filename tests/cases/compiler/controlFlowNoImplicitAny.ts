@@ -12,7 +12,7 @@ function f1() {
     if (cond) {
         x = "hello";
     }
-    const y = x;  // string | number
+    const y = x;  // string | number | undefined
 }
 
 // CFA for 'let' with no type annotation and 'undefined' initializer
@@ -24,7 +24,7 @@ function f2() {
     if (cond) {
         x = "hello";
     }
-    const y = x;  // string | number
+    const y = x;  // string | number | undefined
 }
 
 // CFA for 'let' with no type annotation and 'null' initializer
@@ -36,7 +36,7 @@ function f3() {
     if (cond) {
         x = "hello";
     }
-    const y = x;  // string | number
+    const y = x;  // string | number | null
 }
 
 // No CFA for 'let' with with type annotation
@@ -60,7 +60,7 @@ function f5() {
     if (cond) {
         x = "hello";
     }
-    const y = x;  // string | number
+    const y = x;  // string | number | undefined
 }
 
 // CFA for 'var' with no type annotation and 'undefined' initializer
@@ -72,7 +72,7 @@ function f6() {
     if (cond) {
         x = "hello";
     }
-    const y = x;  // string | number
+    const y = x;  // string | number | undefined
 }
 
 // CFA for 'var' with no type annotation and 'null' initializer
@@ -84,7 +84,7 @@ function f7() {
     if (cond) {
         x = "hello";
     }
-    const y = x;  // string | number
+    const y = x;  // string | number | null
 }
 
 // No CFA for 'var' with with type annotation
@@ -108,7 +108,7 @@ function f9() {
     if (cond) {
         x = "hello";
     }
-    const y = x;  // string | number
+    const y = x;  // string | number | undefined
     function f() {
         const z = x;  // any
     }
@@ -123,7 +123,7 @@ function f10() {
     if (cond) {
         x = "hello";
     }
-    const y = x;  // string | number
+    const y = x;  // string | number | undefined
     const f = () => {
         const z = x;  // any
     };
