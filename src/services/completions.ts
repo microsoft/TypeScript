@@ -326,7 +326,7 @@ namespace ts.Completions {
          * Given a path ending at a directory, gets the completions for the path, and filters for those entries containing the basename.
          */
         function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
-            if (fragment === undefined) { fragment = "./"; } // TODO: (arozga) remove the second check along with adding --strictNullChecks
+            if (fragment === undefined) { fragment = "./"; }
 
             fragment = normalizeSlashes(fragment);
 
@@ -556,7 +556,7 @@ namespace ts.Completions {
                 const kind = match[2];
                 const toComplete = match[3];
 
-                const scriptPath = getDirectoryPath(sourceFile.path); // TODO: normalize for win10?
+                const scriptPath = getDirectoryPath(sourceFile.path);
                 let entries: CompletionEntry[];
                 if (kind === "path") {
                     // Give completions for a relative path
@@ -596,7 +596,7 @@ namespace ts.Completions {
                     // Wrap in try catch because getEffectiveTypeRoots touches the filesystem
                     typeRoots = getEffectiveTypeRoots(options, host);
                 }
-                catch (e) { }
+                catch (e) {}
 
                 if (typeRoots) {
                     for (const root of typeRoots) {
@@ -1713,7 +1713,7 @@ namespace ts.Completions {
         try {
             return directoryProbablyExists(path, host);
         }
-        catch (e) { }
+        catch (e) {}
         return undefined;
     }
 
@@ -1721,7 +1721,7 @@ namespace ts.Completions {
         try {
             return toApply && toApply.apply(host, args);
         }
-        catch (e) { }
+        catch (e) {}
         return undefined;
     }
 }
