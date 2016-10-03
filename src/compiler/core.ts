@@ -1158,7 +1158,7 @@ namespace ts {
 
     export function normalizePath(path: string): string {
         path = normalizeSlashes(path);
-        const rootLength = getRootLength(path); // TODO: (arozga) this expects un-slash-normalized strings. eg: 'x:\\...'
+        const rootLength = getRootLength(path);
         const root = path.substr(0, rootLength);
         const normalized = getNormalizedParts(path, rootLength);
         if (normalized.length) {
