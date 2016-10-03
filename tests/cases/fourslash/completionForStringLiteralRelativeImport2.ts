@@ -16,20 +16,20 @@
 
 // @Filename: f1.ts
 //// /f1*/
-// @Filename: f1.js
-//// /*f1j*/
-// @Filename: f1.d.ts
-//// /*f1d*/
-// @Filename: f2.tsx
+// @Filename: f2.js
 //// /*f2*/
-// @Filename: f3.js
+// @Filename: f3.d.ts
 //// /*f3*/
-// @Filename: f4.jsx
+// @Filename: f4.tsx
 //// /*f4*/
-// @Filename: e1.ts
-//// /*e1*/
-// @Filename: e2.js
-//// /*e2*/
+// @Filename: f5.js
+//// /*f5*/
+// @Filename: f6.jsx
+//// /*f6*/
+// @Filename: g1.ts
+//// /*g1*/
+// @Filename: g2.js
+//// /*g2*/
 const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
@@ -38,16 +38,18 @@ for (const kind of kinds) {
     verify.completionListContains("f2");
     verify.completionListContains("f3");
     verify.completionListContains("f4");
-    verify.completionListContains("e1");
-    verify.completionListContains("e2");
-    verify.not.completionListItemsCountIsGreaterThan(6);
+    verify.completionListContains("f5");
+    verify.completionListContains("f6");
+    verify.completionListContains("g1");
+    verify.completionListContains("g2");
+    verify.not.completionListItemsCountIsGreaterThan(8);
 
     goTo.marker(kind + "1");
     verify.completionListContains("f1");
     verify.completionListContains("f2");
     verify.completionListContains("f3");
     verify.completionListContains("f4");
-    verify.completionListContains("e1");
-    verify.completionListContains("e2");
+    verify.completionListContains("f5");
+    verify.completionListContains("f6");
     verify.not.completionListItemsCountIsGreaterThan(6);
 }

@@ -5,44 +5,45 @@
 // @Filename: test0.ts
 //// import * as foo1 from "./*import_as0*/
 //// import * as foo2 from ".//*import_as1*/
-//// import * as foo4 from "./folder//*import_as2*/
+//// import * as foo4 from "./d1//*import_as2*/
 
 //// import foo6 = require("./*import_equals0*/
 //// import foo7 = require(".//*import_equals1*/
-//// import foo9 = require("./folder//*import_equals2*/
+//// import foo9 = require("./d1//*import_equals2*/
 
 //// var foo11 = require("./*require0*/
 //// var foo12 = require(".//*require1*/
-//// var foo14 = require("./folder//*require2*/
+//// var foo14 = require("./d1//*require2*/
 
-// @Filename: parentTest/sub/test5.ts
-//// import * as foo16 from "../g/*import_as3*/
-//// import foo17 = require("../g/*import_equals3*/
-//// var foo18 = require("../g/*require3*/
+// @Filename: d2/d3/test1.ts
+//// import * as foo16 from "..//*import_as3*/
+//// import foo17 = require("..//*import_equals3*/
+//// var foo18 = require("..//*require3*/
 
 
 // @Filename: f1.ts
 //// /*f1*/
-// @Filename: f1.js
-//// /*f1j*/
-// @Filename: f1.d.ts
-//// /*f1d*/
-// @Filename: f2.tsx
-//// /f2*/
-// @Filename: f3.js
+// @Filename: f2.js
+//// /*f2*/
+// @Filename: f3.d.ts
 //// /*f3*/
-// @Filename: f4.jsx
-//// /*f4*/
-// @Filename: e1.ts
-//// /*e1*/
-// @Filename: folder/f3.ts
-//// /*subf1*/
-// @Filename: folder/h1.ts
-//// /*subh1*/
-// @Filename: parentTest/f4.ts
-//// /*parentf1*/
-// @Filename: parentTest/g1.ts
-//// /*parentg1*/
+// @Filename: f4.tsx
+//// /f4*/
+// @Filename: f5.js
+//// /*f5*/
+// @Filename: f6.jsx
+//// /*f6*/
+// @Filename: f7.ts
+//// /*f7*/
+// @Filename: d1/f8.ts
+//// /*d1f1*/
+// @Filename: d1/f9.ts
+//// /*d1f9*/
+// @Filename: d2/f10.ts
+//// /*d2f1*/
+// @Filename: d2/f11.ts
+//// /*d2f11*/
+
 const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
@@ -51,20 +52,21 @@ for (const kind of kinds) {
 
     goTo.marker(kind + "1");
     verify.completionListContains("f1");
-    verify.completionListContains("f2");
-    verify.completionListContains("e1");
-    verify.completionListContains("folder");
-    verify.completionListContains("parentTest");
-    verify.not.completionListItemsCountIsGreaterThan(5);
+    verify.completionListContains("f3");
+    verify.completionListContains("f4");
+    verify.completionListContains("f7");
+    verify.completionListContains("d1");
+    verify.completionListContains("d2");
+    verify.not.completionListItemsCountIsGreaterThan(6);
 
     goTo.marker(kind + "2");
-    verify.completionListContains("f3");
-    verify.completionListContains("h1");
+    verify.completionListContains("f8");
+    verify.completionListContains("f9");
     verify.not.completionListItemsCountIsGreaterThan(2);
 
     goTo.marker(kind + "3");
-    verify.completionListContains("f4");
-    verify.completionListContains("g1");
-    verify.completionListContains("sub");
+    verify.completionListContains("f10");
+    verify.completionListContains("f11");
+    verify.completionListContains("d3");
     verify.not.completionListItemsCountIsGreaterThan(3);
 }
