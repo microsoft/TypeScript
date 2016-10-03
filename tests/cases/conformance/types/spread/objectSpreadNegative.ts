@@ -47,3 +47,8 @@ callableConstructableSpread(12); // error, no call signature
 new callableConstructableSpread(12); // error, no construct signature
 
 let callableSpread = { ...publicx, ...(n => n + 1) }; // error, can't spread functions
+
+// { ...U } is not assignable to U
+function override<U>(initial: U, override: U): U {
+    return { ...initial, ...override };
+}
