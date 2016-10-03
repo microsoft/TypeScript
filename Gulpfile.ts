@@ -168,7 +168,7 @@ for (const i in libraryTargets) {
     gulp.task(target, false, [], function() {
         return gulp.src(sources)
             .pipe(newer(target))
-            .pipe(concat(target, { newLine: "" }))
+            .pipe(concat(target, { newLine: "\n\n" }))
             .pipe(gulp.dest("."));
     });
 }
