@@ -316,10 +316,9 @@ namespace ts {
                 if (platform === "win32" || platform === "win64") {
                     return false;
                 }
-
-                const upperCaseFilename = _path.basename(__filename).toUpperCase();
-
-                return !fileExists(_path.join(_path.dirname(__filename), upperCaseFilename));
+                // convert current file name to upper case / lower case and check if file exists
+                // (guards against cases when name is already all uppercase or lowercase)
+                return !fileExists(__filename.toUpperCase()) || !fileExists(__filename.toLowerCase());
             }
 
             const platform: string = _os.platform();
