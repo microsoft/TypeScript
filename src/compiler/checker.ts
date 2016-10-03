@@ -3156,7 +3156,7 @@ namespace ts {
         }
 
         // Return the type implied by an object binding pattern
-        function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): ResolvedType {
+        function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const members = createMap<Symbol>();
             let hasComputedProperties = false;
             forEach(pattern.elements, e => {
