@@ -11081,33 +11081,34 @@ namespace ts {
 
         /**
          * Resolve attributes type of the given node. The function is intended to initally be called from getJsxElementAttributesType which already handle JSX-intrinsic-element.
-         * @param node a non-instrinsic JSXOPeningLikeElement
-         * @param elemType an instance type of the given node
-         * @param elemClassType a JSX-ElementClass type. This is a result of looking up ElementClass interface in the JSX global (imported from react.d.ts)
+         * @param openingLikeElement a non-instrinsic JSXOPeningLikeElement
+         * @param elementType an instance type of the given node
+         * @param elementClassType a JSX-ElementClass type. This is a result of looking up ElementClass interface in the JSX global (imported from react.d.ts)
          * @return attributes'type if able to resolve the type of node
          *         anyType if there is no type ElementAttributesProperty or there is an error
          *         emptyObjectType if there is no "prop" in the element instance type
          **/
-        function resolveJsxElementAttributesType(node: JsxOpeningLikeElement, elemType?: Type, elemClassType?: Type): Type {
-            if (!elemType) {
-                elemType = checkExpression(node.tagName);
+        function resolveJsxElementAttributesType(openingLikeElement: JsxOpeningLikeElement, elementType?: Type, elementClassType?: Type): Type {
+            if (!elementType) {
+                elementType = checkExpression(openingLikeElement.tagName);
             }
-            if (elemType.flags & TypeFlags.Union) {
-                const types = (<UnionOrIntersectionType>elemType).types;
+
+            if (elementType.flags & TypeFlags.Union) {
+                const types = (<TypeOperatorType>elementType).types;
                 return getUnionType(types.map(type => {
-                    return resolveJsxElementAttributesType(node, type, elemClassType);
+                    return resolveJsxElementAttributesType(openingLikeElement, type, elementClassType);
                 }), /*subtypeReduction*/ true);
             }
 
             // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
-            if (elemType.flags & TypeFlags.String) {
+            if (elementType.flags & TypeFlags.String) {
                 return anyType;
             }
-            else if (elemType.flags & TypeFlags.StringLiteral) {
+            else if (elementType.flags & TypeFlags.StringLiteral) {
                 // If the elemType is a stringLiteral type, we can then provide a check to make sure that the string literal type is one of the Jsx intrinsic element type
                 const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
                 if (intrinsicElementsType !== unknownType) {
-                    const stringLiteralTypeName = (<LiteralType>elemType).text;
+                    const stringLiteralTypeName = (<LiteralType>elementType).text;
                     const intrinsicProp = getPropertyOfType(intrinsicElementsType, stringLiteralTypeName);
                     if (intrinsicProp) {
                         return getTypeOfSymbol(intrinsicProp);
@@ -11116,20 +11117,20 @@ namespace ts {
                     if (indexSignatureType) {
                         return indexSignatureType;
                     }
-                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, stringLiteralTypeName, "JSX." + JsxNames.IntrinsicElements);
+                    error(openingLikeElement, Diagnostics.Property_0_does_not_exist_on_type_1, stringLiteralTypeName, "JSX." + JsxNames.IntrinsicElements);
                 }
                 // If we need to report an error, we already done so here. So just return any to prevent any more error downstream
                 return anyType;
             }
 
             // Get the element instance type (the result of newing or invoking this tag)
-            const elemInstanceType = getJsxElementInstanceType(node, elemType);
+            const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType);
 
-            if (!elemClassType || !isTypeAssignableTo(elemInstanceType, elemClassType)) {
+            if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
                 // Is this is a stateless function component? See if its single signature's return type is
                 // assignable to the JSX Element Type
                 if (jsxElementType) {
-                    const callSignatures = elemType && getSignaturesOfType(elemType, SignatureKind.Call);
+                    const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
                     const callSignature = callSignatures && callSignatures.length > 0 && callSignatures[0];
                     const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                     let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
@@ -11145,8 +11146,8 @@ namespace ts {
             }
 
             // Issue an error if this return type isn't assignable to JSX.ElementClass
-            if (elemClassType) {
-                checkTypeRelatedTo(elemInstanceType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
+            if (elementClassType) {
+                checkTypeRelatedTo(elemInstanceType, elementClassType, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
             if (isTypeAny(elemInstanceType)) {
@@ -11175,7 +11176,7 @@ namespace ts {
                 }
                 else if (attributesType.flags & TypeFlags.Union) {
                     // Props cannot be a union type
-                    error(node.tagName, Diagnostics.JSX_element_attributes_type_0_may_not_be_a_union_type, typeToString(attributesType));
+                    error(openingLikeElement.tagName, Diagnostics.JSX_element_attributes_type_0_may_not_be_a_union_type, typeToString(attributesType));
                     return anyType;
                 }
                 else {
