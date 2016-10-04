@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// Should give completions for ts files when allowJs is false
+// Should give completions for ts files only when allowJs is false.
 
 // @Filename: test0.ts
 //// import * as foo1 from "./*import_as0*/
