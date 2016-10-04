@@ -204,6 +204,53 @@ declare namespace ts.server.protocol {
     }
 
     /**
+      * Request for the available codefixed at a specific position.
+      */
+    export interface CodeFixRequest extends Request {
+        arguments: CodeFixRequestArgs;
+    }
+
+    /**
+      * Instances of this interface specify errorcodes on a specific location in a sourcefile.
+      */
+    export interface CodeFixRequestArgs extends FileRequestArgs {
+        /**
+          * The line number for the request (1-based).
+          */
+        startLine?: number;
+
+        /**
+          * The character offset (on the line) for the request (1-based).
+          */
+        startOffset?: number;
+
+        /**
+         * Position (can be specified instead of line/offset pair) 
+         */
+        startPosition?: number;
+
+        /**
+          * The line number for the request (1-based).
+          */
+        endLine?: number;
+
+        /**
+          * The character offset (on the line) for the request (1-based).
+          */
+        endOffset?: number;
+
+        /**
+         * Position (can be specified instead of line/offset pair) 
+         */
+        endPosition?: number;
+
+        /**
+          * Errorcodes we want to get the fixes for.
+          */
+        errorCodes?: string[]
+    }
+
+    /**
       * A request whose arguments specify a file location (file, line, col).
       */
     export interface FileLocationRequest extends FileRequest {
@@ -427,7 +474,6 @@ declare namespace ts.server.protocol {
         findInComments?: boolean;
         findInStrings?: boolean;
     }
-
 
     /**
       * Rename request; value of command field is "rename". Return
@@ -871,6 +917,18 @@ declare namespace ts.server.protocol {
           * the empty string).
           */
         newText: string;
+    }
+
+    export interface FileCodeEdits {
+        fileName: string;
+        textChanges: CodeEdit[];
+    }
+
+    export interface CodeActionResponse extends Response {
+        /** Description of the code action to display in the UI of the editor */
+        description: string;
+        /** Text changes to apply to each file as part of the code action */
+        changes: FileCodeEdits[];
     }
 
     /**
@@ -1517,5 +1575,41 @@ declare namespace ts.server.protocol {
 
     export interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
+    }
+
+    export interface CodeAction {
+        /**
+          * Description of the code action to display in the UI of the editor.
+          */
+        description: string;
+
+        /**
+          * Changes to apply to each file as part of the code action.
+          */
+        changes: FileTextChanges[]
+    }
+
+    export interface FileTextChanges {
+        /**
+          * File to apply the change to.
+          */
+        fileName: string;
+
+        /**
+          * Changes to apply to the file.
+          */
+        textChanges: TextChange[];
+    }
+
+    export class TextChange {
+        /**
+          * The span for the text change.
+          */
+        span: TextSpan;
+
+        /**
+          * New text for the span, can be an empty string if we want to delete text.
+          */
+        newText: string;
     }
 }

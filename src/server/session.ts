@@ -134,6 +134,8 @@ namespace ts.server {
         export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
         export const BreakpointStatement = "breakpointStatement";
         export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export const GetCodeFixes = "getCodeFixes";
+        export const GetCodeFixesFull = "getCodeFixes-full";
     }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
@@ -751,7 +753,7 @@ namespace ts.server {
             return this.getFileAndProjectWorker(args.file, args.projectFileName, /*refreshInferredProjects*/ false, errorOnMissingProject);
         }
 
-        private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string, refreshInferredProjects: boolean,  errorOnMissingProject: boolean) {
+        private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string, refreshInferredProjects: boolean, errorOnMissingProject: boolean) {
             const file = toNormalizedPath(uncheckedFileName);
             const project: Project = this.getProject(projectFileName) || this.projectService.getDefaultProjectForFile(file, refreshInferredProjects);
             if (!project && errorOnMissingProject) {
@@ -1199,6 +1201,48 @@ namespace ts.server {
             }
         }
 
+        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const startPosition = getStartPosition();
+            const endPosition = getEndPosition();
+
+            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes);
+            if (!codeActions) {
+                return undefined;
+            }
+            if (simplifiedResult) {
+                return codeActions.map(mapCodeAction);
+            } else {
+                return codeActions;
+            }
+
+            function mapCodeAction(source: CodeAction): protocol.CodeAction {
+                return {
+                    description: source.description,
+                    changes: source.changes.map(change => ({
+                        fileName: change.fileName,
+                        textChanges: change.textChanges.map(textChange => ({
+                            span: {
+                                start: scriptInfo.positionToLineOffset(textChange.span.start),
+                                end: scriptInfo.positionToLineOffset(textChange.span.start + textChange.span.length)
+                            },
+                            newText: textChange.newText
+                        }))
+                    }))
+                };
+            }
+
+            function getStartPosition() {
+                return args.startPosition !== undefined ? args.startPosition : scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
+            }
+
+            function getEndPosition() {
+                return args.endPosition !== undefined ? args.endPosition : scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
+            }
+        }
+
         private getBraceMatching(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.TextSpan[] | TextSpan[] {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
 
@@ -1521,6 +1565,12 @@ namespace ts.server {
             [CommandNames.ReloadProjects]: (request: protocol.ReloadProjectsRequest) => {
                 this.projectService.reloadProjects();
                 return this.notRequired();
+            },
+            [CommandNames.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
+                return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
+                return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
             }
         });
 
