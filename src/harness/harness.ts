@@ -933,10 +933,9 @@ namespace Harness {
                 return undefined;
             }
 
-            if (!libFileNameSourceFileMap.get(fileName)) {
-                libFileNameSourceFileMap.set(fileName, createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
-            }
-            return libFileNameSourceFileMap.get(fileName);
+            const sourceFile = libFileNameSourceFileMap.get(fileName);
+            return sourceFile || ts.setAndReturn(libFileNameSourceFileMap, fileName,
+                createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {

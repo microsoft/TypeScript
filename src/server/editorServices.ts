@@ -1238,40 +1238,43 @@ namespace ts.server {
                 // close existing project and later we'll open a set of configured projects for these files
                 this.closeExternalProject(proj.projectFileName, /*suppressRefresh*/ true);
             }
-            else if (this.externalProjectToConfiguredProjectMap.get(proj.projectFileName)) {
-                // this project used to include config files
-                if (!tsConfigFiles) {
-                    // config files were removed from the project - close existing external project which in turn will close configured projects
-                    this.closeExternalProject(proj.projectFileName, /*suppressRefresh*/ true);
-                }
-                else {
-                    // project previously had some config files - compare them with new set of files and close all configured projects that correspond to unused files
-                    const oldConfigFiles = this.externalProjectToConfiguredProjectMap.get(proj.projectFileName);
-                    let iNew = 0;
-                    let iOld = 0;
-                    while (iNew < tsConfigFiles.length && iOld < oldConfigFiles.length) {
-                        const newConfig = tsConfigFiles[iNew];
-                        const oldConfig = oldConfigFiles[iOld];
-                        if (oldConfig < newConfig) {
-                            this.closeConfiguredProject(oldConfig);
-                            iOld++;
-                        }
-                        else if (oldConfig > newConfig) {
-                            iNew++;
-                        }
-                        else {
-                            // record existing config files so avoid extra add-refs
-                            (exisingConfigFiles || (exisingConfigFiles = [])).push(oldConfig);
-                            iOld++;
-                            iNew++;
-                        }
+            else  {
+                const oldConfigFiles = this.externalProjectToConfiguredProjectMap.get(proj.projectFileName);
+                if (oldConfigFiles) {
+                    // this project used to include config files
+                    if (!tsConfigFiles) {
+                        // config files were removed from the project - close existing external project which in turn will close configured projects
+                        this.closeExternalProject(proj.projectFileName, /*suppressRefresh*/ true);
                     }
-                    for (let i = iOld; i < oldConfigFiles.length; i++) {
-                        // projects for all remaining old config files should be closed
-                        this.closeConfiguredProject(oldConfigFiles[i]);
+                    else {
+                        // project previously had some config files - compare them with new set of files and close all configured projects that correspond to unused files
+                        let iNew = 0;
+                        let iOld = 0;
+                        while (iNew < tsConfigFiles.length && iOld < oldConfigFiles.length) {
+                            const newConfig = tsConfigFiles[iNew];
+                            const oldConfig = oldConfigFiles[iOld];
+                            if (oldConfig < newConfig) {
+                                this.closeConfiguredProject(oldConfig);
+                                iOld++;
+                            }
+                            else if (oldConfig > newConfig) {
+                                iNew++;
+                            }
+                            else {
+                                // record existing config files so avoid extra add-refs
+                                (exisingConfigFiles || (exisingConfigFiles = [])).push(oldConfig);
+                                iOld++;
+                                iNew++;
+                            }
+                        }
+                        for (let i = iOld; i < oldConfigFiles.length; i++) {
+                            // projects for all remaining old config files should be closed
+                            this.closeConfiguredProject(oldConfigFiles[i]);
+                        }
                     }
                 }
             }
+
             if (tsConfigFiles) {
                 // store the list of tsconfig files that belong to the external project
                 this.externalProjectToConfiguredProjectMap.set(proj.projectFileName, tsConfigFiles);

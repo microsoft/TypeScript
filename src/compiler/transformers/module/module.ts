@@ -581,7 +581,7 @@ namespace ts {
         function addExportMemberAssignments(statements: Statement[], name: Identifier): void {
             const specifiers = !exportEquals && exportSpecifiers && exportSpecifiers.get(name.text);
             if (specifiers) {
-                for (const specifier of exportSpecifiers.get(name.text)) {
+                for (const specifier of specifiers) {
                     statements.push(
                         startOnNewLine(
                             createStatement(
@@ -672,7 +672,7 @@ namespace ts {
                 if (specifiers) {
                     const sourceFileId = getOriginalNodeId(currentSourceFile);
                     const bindingNameExportSpecifiers = getOrUpdate(bindingNameExportSpecifiersForFileMap, sourceFileId, () => new StringMap());
-                    bindingNameExportSpecifiers.set(name.text, exportSpecifiers.get(name.text));
+                    bindingNameExportSpecifiers.set(name.text, specifiers);
                     addExportMemberAssignments(resultStatements, name);
                 }
             }
@@ -926,7 +926,7 @@ namespace ts {
                         setEmitFlags(transformedUnaryExpression, EmitFlags.NoSubstitution);
                     }
                     let nestedExportAssignment: BinaryExpression;
-                    for (const specifier of bindingNameExportSpecifiersMap.get(operand.text)) {
+                    for (const specifier of bindingNameExportSpecifiers) {
                         nestedExportAssignment = nestedExportAssignment ?
                             createExportAssignment(specifier.name, nestedExportAssignment) :
                             createExportAssignment(specifier.name, transformedUnaryExpression || node);

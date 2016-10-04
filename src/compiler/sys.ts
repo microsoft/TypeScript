@@ -301,7 +301,7 @@ namespace ts {
                     if ((eventName === "change" || eventName === "rename")) {
                         const callbacks = fileWatcherCallbacks.get(fileName);
                         if (callbacks) {
-                            for (const fileCallback of fileWatcherCallbacks.get(fileName)) {
+                            for (const fileCallback of callbacks) {
                                 fileCallback(fileName);
                            }
                         }
