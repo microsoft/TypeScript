@@ -4,10 +4,10 @@ const enum numbers {
 >numbers : numbers
 
     zero,
->zero : numbers
+>zero : numbers.zero
 
     one
->one : numbers
+>one : numbers.one
 }
 
 interface indexAccess {
@@ -25,69 +25,69 @@ let s = test[0];
 >s : string
 >test[0] : string
 >test : indexAccess
->0 : number
+>0 : 0
 
 let n = test[1];
 >n : number
 >test[1] : number
 >test : indexAccess
->1 : number
+>1 : 1
 
 let s1 = test[numbers.zero];
 >s1 : string
 >test[numbers.zero] : string
 >test : indexAccess
->numbers.zero : numbers
+>numbers.zero : numbers.zero
 >numbers : typeof numbers
->zero : numbers
+>zero : numbers.zero
 
 let n1 = test[numbers.one];
 >n1 : number
 >test[numbers.one] : number
 >test : indexAccess
->numbers.one : numbers
+>numbers.one : numbers.one
 >numbers : typeof numbers
->one : numbers
+>one : numbers.one
 
 let s2 = test[numbers["zero"]];
 >s2 : string
 >test[numbers["zero"]] : string
 >test : indexAccess
->numbers["zero"] : numbers
+>numbers["zero"] : numbers.zero
 >numbers : typeof numbers
->"zero" : string
+>"zero" : "zero"
 
 let n2 = test[numbers["one"]];
 >n2 : number
 >test[numbers["one"]] : number
 >test : indexAccess
->numbers["one"] : numbers
+>numbers["one"] : numbers.one
 >numbers : typeof numbers
->"one" : string
+>"one" : "one"
 
 enum numbersNotConst {
 >numbersNotConst : numbersNotConst
 
     zero,
->zero : numbersNotConst
+>zero : numbersNotConst.zero
 
     one
->one : numbersNotConst
+>one : numbersNotConst.one
 }
 
 let s3 = test[numbersNotConst.zero];
 >s3 : any
 >test[numbersNotConst.zero] : any
 >test : indexAccess
->numbersNotConst.zero : numbersNotConst
+>numbersNotConst.zero : numbersNotConst.zero
 >numbersNotConst : typeof numbersNotConst
->zero : numbersNotConst
+>zero : numbersNotConst.zero
 
 let n3 = test[numbersNotConst.one];
 >n3 : any
 >test[numbersNotConst.one] : any
 >test : indexAccess
->numbersNotConst.one : numbersNotConst
+>numbersNotConst.one : numbersNotConst.one
 >numbersNotConst : typeof numbersNotConst
->one : numbersNotConst
+>one : numbersNotConst.one
 

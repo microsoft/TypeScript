@@ -224,7 +224,7 @@ module Errors {
 >(x: number) => [''] : (x: number) => string[]
 >x : number
 >[''] : string[]
->'' : string
+>'' : ""
 ><T, U>(x: T) => <U[]>null : <T, U>(x: T) => U[]
 >T : T
 >U : U
@@ -248,7 +248,7 @@ module Errors {
 >(x: number) => [''] : (x: number) => string[]
 >x : number
 >[''] : string[]
->'' : string
+>'' : ""
 
     var r2arg = <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => <V>null;
 >r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
@@ -508,7 +508,7 @@ module Errors {
 >x : { a: string; b: number; }
 >a : string
 >b : number
->1 : number
+>1 : 1
 
     var r7 = foo15(r7arg); // any
 >r7 : any
@@ -538,7 +538,7 @@ module Errors {
 >T : T
 >b : T
 >T : T
->1 : number
+>1 : 1
 
     var r7c = foo15(r7arg3); // (x: { a: string; b: number }) => number): number;
 >r7c : (x: { a: string; b: number; }) => number
@@ -617,7 +617,7 @@ module WithGenericSignaturesInBaseType {
 >x : T
 >T : T
 >[''] : string[]
->'' : string
+>'' : ""
 
     var r2 = foo2(r2arg2); // <T>(x:T) => T[] since we can infer from generic signatures now
 >r2 : <T>(x: T) => T[]

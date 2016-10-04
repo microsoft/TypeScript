@@ -146,7 +146,7 @@ true || false ? exprIsObject1 : exprIsObject2;
 >true || false ? exprIsObject1 : exprIsObject2 : Object
 >true || false : boolean
 >true : boolean
->false : boolean
+>false : false
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
@@ -291,7 +291,7 @@ var resultIsObject3 = true || false ? exprIsObject1 : exprIsObject2;
 >true || false ? exprIsObject1 : exprIsObject2 : Object
 >true || false : boolean
 >true : boolean
->false : boolean
+>false : false
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 

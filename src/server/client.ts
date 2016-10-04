@@ -216,7 +216,18 @@ namespace ts.server {
             return {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body
+                entries: response.body.map(entry => {
+
+                    if (entry.replacementSpan !== undefined) {
+                        const { name, kind, kindModifiers, sortText, replacementSpan} = entry;
+
+                        const convertedSpan = createTextSpanFromBounds(this.lineOffsetToPosition(fileName, replacementSpan.start),
+                            this.lineOffsetToPosition(fileName, replacementSpan.end));
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                    }
+
+                    return entry as { name: string, kind: string, kindModifiers: string, sortText: string };
+                })
             };
         }
 
@@ -233,6 +244,10 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
             return response.body[0];
+        }
+
+        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
+            throw new Error("Not Implemented Yet.");
         }
 
         getNavigateToItems(searchValue: string): NavigateToItem[] {

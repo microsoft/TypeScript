@@ -12,5 +12,5 @@ Foo(() =>
 
     // do something
     127);
->127 : number
+>127 : 127
 

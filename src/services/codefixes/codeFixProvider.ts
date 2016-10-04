@@ -9,7 +9,7 @@ namespace ts {
         errorCode: string;
         sourceFile: SourceFile;
         span: TextSpan;
-        checker: TypeChecker;
+        program: Program;
         newLineCharacter: string;
     }
 
@@ -27,24 +27,22 @@ namespace ts {
             });
         }
 
-        export class CodeFixProvider {
-            public static getSupportedErrorCodes() {
-                return Object.keys(codeFixes);
-            }
+        export function getSupportedErrorCodes() {
+            return Object.keys(codeFixes);
+        }
 
-            public getFixes(context: CodeFixContext): CodeAction[] {
-                const fixes = codeFixes[context.errorCode];
-                let allActions: CodeAction[] = [];
+        export function getFixes(context: CodeFixContext): CodeAction[] {
+            const fixes = codeFixes[context.errorCode];
+            let allActions: CodeAction[] = [];
 
-                forEach(fixes, f => {
-                    const actions = f.getCodeActions(context);
-                    if (actions && actions.length > 0) {
-                        allActions = allActions.concat(actions);
-                    }
-                });
+            forEach(fixes, f => {
+                const actions = f.getCodeActions(context);
+                if (actions && actions.length > 0) {
+                    allActions = allActions.concat(actions);
+                }
+            });
 
-                return allActions;
-            }
+            return allActions;
         }
     }
 }

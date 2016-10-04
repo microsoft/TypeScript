@@ -275,7 +275,7 @@ namespace ts.server {
         removeRoot(info: ScriptInfo) {
             if (this.filenameToScript.contains(info.path)) {
                 this.filenameToScript.remove(info.path);
-                this.roots = copyListRemovingItem(info, this.roots);
+                unorderedRemoveItem(this.roots, info);
                 this.resolvedModuleNames.remove(info.path);
                 this.resolvedTypeReferenceDirectives.remove(info.path);
             }
@@ -306,11 +306,6 @@ namespace ts.server {
             throw new Error("No script with name '" + filename + "'");
         }
 
-        resolvePath(path: string): string {
-            const result = this.host.resolvePath(path);
-            return result;
-        }
-
         fileExists(path: string): boolean {
             const result = this.host.fileExists(path);
             return result;
@@ -322,6 +317,14 @@ namespace ts.server {
 
         getDirectories(path: string): string[] {
             return this.host.getDirectories(path);
+        }
+
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+            return this.host.readDirectory(path, extensions, exclude, include);
+        }
+
+        readFile(path: string, encoding?: string): string {
+            return this.host.readFile(path, encoding);
         }
 
         /**
@@ -583,16 +586,6 @@ namespace ts.server {
         success?: boolean;
         errorMsg?: string;
         project?: Project;
-    }
-
-    function copyListRemovingItem<T>(item: T, list: T[]) {
-        const copiedList: T[] = [];
-        for (let i = 0, len = list.length; i < len; i++) {
-            if (list[i] != item) {
-                copiedList.push(list[i]);
-            }
-        }
-        return copiedList;
     }
 
     /**
@@ -880,7 +873,7 @@ namespace ts.server {
                 project.directoryWatcher.close();
                 forEachProperty(project.directoriesWatchedForWildcards, watcher => { watcher.close(); });
                 delete project.directoriesWatchedForWildcards;
-                this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
+                unorderedRemoveItem(this.configuredProjects, project);
             }
             else {
                 for (const directory of project.directoriesWatchedForTsconfig) {
@@ -892,7 +885,7 @@ namespace ts.server {
                         delete project.projectService.directoryWatchersForTsconfig[directory];
                     }
                 }
-                this.inferredProjects = copyListRemovingItem(project, this.inferredProjects);
+                unorderedRemoveItem(this.inferredProjects, project);
             }
 
             const fileNames = project.getFileNames();
@@ -1017,7 +1010,7 @@ namespace ts.server {
                 }
             }
             else {
-                this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                unorderedRemoveItem(this.openFilesReferenced, info);
             }
             info.close();
         }
@@ -1524,13 +1517,13 @@ namespace ts.server {
                             // openFileRoots or openFileReferenced.
                             if (info.isOpen) {
                                 if (this.openFileRoots.indexOf(info) >= 0) {
-                                    this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                                    unorderedRemoveItem(this.openFileRoots, info);
                                     if (info.defaultProject && !info.defaultProject.isConfiguredProject()) {
                                         this.removeProject(info.defaultProject);
                                     }
                                 }
                                 if (this.openFilesReferenced.indexOf(info) >= 0) {
-                                    this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                                    unorderedRemoveItem(this.openFilesReferenced, info);
                                 }
                                 this.openFileRootsConfigured.push(info);
                                 info.defaultProject = project;
@@ -1601,8 +1594,10 @@ namespace ts.server {
                 InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
                 InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
                 InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+                InsertSpaceAfterTypeAssertion: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             });

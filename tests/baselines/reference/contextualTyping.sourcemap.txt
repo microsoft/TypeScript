@@ -160,19 +160,13 @@ sourceFile:contextualTyping.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^^
-4 >               ^^
-5 >                 ^
-6 >                  ^^^^^^^^^^^^->
+4 >               ^^^^^^^^^^^^^^^->
 1->
 2 >module 
 3 >           C2T5
-4 >                
-5 >                 {
 1->Emitted(12, 1) Source(21, 1) + SourceIndex(0)
 2 >Emitted(12, 12) Source(21, 8) + SourceIndex(0)
 3 >Emitted(12, 16) Source(21, 12) + SourceIndex(0)
-4 >Emitted(12, 18) Source(21, 13) + SourceIndex(0)
-5 >Emitted(12, 19) Source(21, 14) + SourceIndex(0)
 ---
 >>>    C2T5.foo = function (i) {
 1->^^^^
@@ -180,7 +174,7 @@ sourceFile:contextualTyping.ts
 3 >            ^^^
 4 >               ^^^^^^^^^^
 5 >                         ^
-1->
+1-> {
   >    export var 
 2 >    foo
 3 >            : (i: number, s: string) => number = 
@@ -1100,44 +1094,41 @@ sourceFile:contextualTyping.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^^
-4 >               ^^
-5 >                 ^
-6 >                  ^^^^^^^^^^^^^^^->
+4 >               ^^^^^^^^^^^^^^^^^^->
 1->
 2 >module 
 3 >           C5T5
-4 >                
-5 >                 {
 1->Emitted(51, 1) Source(66, 1) + SourceIndex(0)
 2 >Emitted(51, 12) Source(66, 8) + SourceIndex(0)
 3 >Emitted(51, 16) Source(66, 12) + SourceIndex(0)
-4 >Emitted(51, 18) Source(66, 13) + SourceIndex(0)
-5 >Emitted(51, 19) Source(66, 14) + SourceIndex(0)
 ---
 >>>    C5T5.foo = function (i, s) {
 1->^^^^
-2 >    ^^^^^^^^
-3 >            ^^^
-4 >               ^^^^^^^^^^
-5 >                         ^
-6 >                          ^^
-7 >                            ^
-1->
+2 >    ^^^^^
+3 >         ^^^
+4 >            ^^^
+5 >               ^^^^^^^^^^
+6 >                         ^
+7 >                          ^^
+8 >                            ^
+1-> {
   >    export var foo: (i: number, s: string) => string;
   >    
-2 >    foo
-3 >             = 
-4 >               function(
-5 >                         i
-6 >                          , 
-7 >                            s
+2 >    
+3 >         foo
+4 >             = 
+5 >               function(
+6 >                         i
+7 >                          , 
+8 >                            s
 1->Emitted(52, 5) Source(68, 5) + SourceIndex(0)
-2 >Emitted(52, 13) Source(68, 8) + SourceIndex(0)
-3 >Emitted(52, 16) Source(68, 11) + SourceIndex(0)
-4 >Emitted(52, 26) Source(68, 20) + SourceIndex(0)
-5 >Emitted(52, 27) Source(68, 21) + SourceIndex(0)
-6 >Emitted(52, 29) Source(68, 23) + SourceIndex(0)
-7 >Emitted(52, 30) Source(68, 24) + SourceIndex(0)
+2 >Emitted(52, 10) Source(68, 5) + SourceIndex(0)
+3 >Emitted(52, 13) Source(68, 8) + SourceIndex(0)
+4 >Emitted(52, 16) Source(68, 11) + SourceIndex(0)
+5 >Emitted(52, 26) Source(68, 20) + SourceIndex(0)
+6 >Emitted(52, 27) Source(68, 21) + SourceIndex(0)
+7 >Emitted(52, 29) Source(68, 23) + SourceIndex(0)
+8 >Emitted(52, 30) Source(68, 24) + SourceIndex(0)
 ---
 >>>        return s;
 1 >^^^^^^^^

@@ -7,6 +7,6 @@ declare module M {
 
         e = 3
 >e : E
->3 : number
+>3 : 3
     }
 }

@@ -98,17 +98,10 @@ sourceFile:computedPropertyNamesSourceMap1_ES6.ts
 2 >Emitted(7, 6) Source(7, 3) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(8, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(8, 2) Source(8, 2) + SourceIndex(0)
+  >}
+1 >Emitted(8, 2) Source(8, 2) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=computedPropertyNamesSourceMap1_ES6.js.map1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
-1->Emitted(9, 1) Source(8, 2) + SourceIndex(0)
----
+>>>//# sourceMappingURL=computedPropertyNamesSourceMap1_ES6.js.map

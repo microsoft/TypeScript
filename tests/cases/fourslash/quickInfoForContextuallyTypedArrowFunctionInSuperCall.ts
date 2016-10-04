@@ -10,11 +10,11 @@
 ////    constructor() { super(va/*1*/lue => String(va/*2*/lue.toExpone/*3*/ntial())); }
 ////}
 
-goTo.marker('1');
-verify.quickInfoIs('(parameter) value: number');
-
-goTo.marker('2');
-verify.quickInfoIs('(parameter) value: number');
-
-goTo.marker('3');
-verify.quickInfoIs('(method) Number.toExponential(fractionDigits?: number): string');
+verify.quickInfos({
+    1: "(parameter) value: number",
+    2: "(parameter) value: number",
+    3: [
+        "(method) Number.toExponential(fractionDigits?: number): string",
+        "Returns a string containing a number represented in exponential notation."
+    ]
+});

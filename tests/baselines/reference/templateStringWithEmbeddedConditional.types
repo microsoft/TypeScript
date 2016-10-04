@@ -2,8 +2,8 @@
 var x = `abc${ true ? false : " " }def`;
 >x : string
 >`abc${ true ? false : " " }def` : string
->true ? false : " " : string | boolean
->true : boolean
->false : boolean
->" " : string
+>true ? false : " " : false | " "
+>true : true
+>false : false
+>" " : " "
 

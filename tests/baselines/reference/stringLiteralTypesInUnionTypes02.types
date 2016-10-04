@@ -18,7 +18,7 @@ if (x === "foo") {
 >"foo" : "foo"
 
     let a = x;
->a : string | "foo"
+>a : string
 >x : string | "foo"
 }
 else if (x !== "bar") {
@@ -34,11 +34,11 @@ else if (x !== "bar") {
 }
 else {
     let c = x;
->c : string | "bar"
+>c : string
 >x : string | "bar"
 
     let d = y;
->d : string | "foo" | "bar" | "baz"
+>d : string
 >y : string | "foo" | "bar" | "baz"
 
     let e: (typeof x) | (typeof y) = c || d;
@@ -46,8 +46,8 @@ else {
 >x : string | "bar"
 >y : string | "foo" | "bar" | "baz"
 >c || d : string
->c : string | "bar"
->d : string | "foo" | "bar" | "baz"
+>c : string
+>d : string
 }
 
 x = y;

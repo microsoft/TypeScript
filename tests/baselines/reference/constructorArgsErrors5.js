@@ -7,7 +7,7 @@ class foo {
 
 //// [constructorArgsErrors5.js]
 var foo = (function () {
-    function foo(a) {
+    function foo(export a) {
     }
     return foo;
 }());

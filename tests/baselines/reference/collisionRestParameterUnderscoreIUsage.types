@@ -6,7 +6,7 @@ declare var console: { log(msg?: string): void; };
 
 var _i = "This is what I'd expect to see";
 >_i : string
->"This is what I'd expect to see" : string
+>"This is what I'd expect to see" : "This is what I'd expect to see"
 
 class Foo {
 >Foo : Foo

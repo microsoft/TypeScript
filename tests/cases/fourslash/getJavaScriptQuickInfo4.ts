@@ -5,5 +5,4 @@
 /////** @param {[number,string]} [a] */
 ////function /**/f(a) { }
 
-goTo.marker();
-verify.quickInfoIs('function f(a?: [number, string]): void');
+verify.quickInfoAt("", "function f(a?: [number, string]): void");

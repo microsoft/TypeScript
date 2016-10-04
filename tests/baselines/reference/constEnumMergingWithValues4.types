@@ -13,7 +13,7 @@ module foo {
 
     var x = 1;
 >x : number
->1 : number
+>1 : 1
 }
 
 

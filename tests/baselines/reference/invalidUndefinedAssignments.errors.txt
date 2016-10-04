@@ -1,7 +1,7 @@
 tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(4,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(5,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
 tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(9,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(14,1): error TS2304: Cannot find name 'I'.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(14,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
 tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(21,1): error TS2364: Invalid left-hand side of assignment expression.
 
@@ -28,7 +28,7 @@ tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.t
     g = x;
     I = x;
     ~
-!!! error TS2304: Cannot find name 'I'.
+!!! error TS2693: 'I' only refers to a type, but is being used as a value here.
     
     module M { export var x = 1; }
     M = x;

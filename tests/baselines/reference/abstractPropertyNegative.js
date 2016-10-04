@@ -52,18 +52,6 @@ var __extends = (this && this.__extends) || function (d, b) {
 var B = (function () {
     function B() {
     }
-    Object.defineProperty(B.prototype, "readonlyProp", {
-        get: function () { },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(B.prototype, "mismatch", {
-        get: function () { },
-        set: function (val) { } // error, not same type
-        ,
-        enumerable: true,
-        configurable: true
-    });
     return B;
 }());
 var C = (function (_super) {
@@ -97,11 +85,6 @@ var WrongTypePropertyImpl = (function (_super) {
 var WrongTypeAccessor = (function () {
     function WrongTypeAccessor() {
     }
-    Object.defineProperty(WrongTypeAccessor.prototype, "num", {
-        get: function () { },
-        enumerable: true,
-        configurable: true
-    });
     return WrongTypeAccessor;
 }());
 var WrongTypeAccessorImpl = (function (_super) {
@@ -128,7 +111,6 @@ var AbstractAccessorMismatch = (function () {
     function AbstractAccessorMismatch() {
     }
     Object.defineProperty(AbstractAccessorMismatch.prototype, "p1", {
-        get: function () { },
         set: function (val) { },
         enumerable: true,
         configurable: true
@@ -136,7 +118,6 @@ var AbstractAccessorMismatch = (function () {
     ;
     Object.defineProperty(AbstractAccessorMismatch.prototype, "p2", {
         get: function () { return "should work"; },
-        set: function (val) { },
         enumerable: true,
         configurable: true
     });
