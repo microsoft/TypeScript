@@ -12771,7 +12771,10 @@ namespace ts {
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
-            if (isUnitType(type) && !(contextualSignature && isLiteralContextualType(getReturnTypeOfSignature(contextualSignature)))) {
+            if (isUnitType(type) &&
+                !(contextualSignature &&
+                    isLiteralContextualType(
+                        contextualSignature === getSignatureFromDeclaration(func) ? type : getReturnTypeOfSignature(contextualSignature)))) {
                 type = getWidenedLiteralType(type);
             }
 
