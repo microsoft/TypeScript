@@ -5446,24 +5446,25 @@ namespace ts {
             return false;
         }
 
-        function removeSubtypes(types: TypeSet) {
-            if (types.length === 0) {
-                return types;
-            }
+        function isSetOfLiteralsFromSameEnum(types: TypeSet): boolean {
             const first = types[0];
             if (first.flags & TypeFlags.EnumLiteral) {
                 const firstEnum = getParentOfSymbol(first.symbol);
-                let sameEnumMembers = true;
                 for (let i = 1; i < types.length; i++) {
                     const other = types[i];
                     if (!(other.flags & TypeFlags.EnumLiteral) || (firstEnum !== getParentOfSymbol(other.symbol))) {
-                        sameEnumMembers = false;
-                        break;
+                        return false;
                     }
                 }
-                if (sameEnumMembers) {
-                    return;
-                }
+                return true;
+            }
+
+            return false;
+        }
+
+        function removeSubtypes(types: TypeSet) {
+            if (types.length === 0 || isSetOfLiteralsFromSameEnum(types)) {
+                return;
             }
             let i = types.length;
             while (i > 0) {
