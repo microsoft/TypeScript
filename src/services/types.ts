@@ -503,6 +503,7 @@ namespace ts {
     }
 
     export interface CompletionInfo {
+        isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
 
         /**

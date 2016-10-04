@@ -14,11 +14,11 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName } = completionData;
 
         if (isJsDocTagName) {
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
-            return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getAllJsDocCompletionEntries() };
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getAllJsDocCompletionEntries() };
         }
 
         const entries: CompletionEntry[] = [];
@@ -56,7 +56,7 @@ namespace ts.Completions {
             addRange(entries, keywordCompletions);
         }
 
-        return { isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation, entries };
+        return { isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation, entries };
 
         function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>): CompletionEntry[] {
             const entries: CompletionEntry[] = [];
@@ -190,7 +190,7 @@ namespace ts.Completions {
             if (type) {
                 getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, element, /*performCharacterChecks*/false);
                 if (entries.length) {
-                    return { isMemberCompletion: true, isNewIdentifierLocation: true, entries };
+                    return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
                 }
             }
         }
@@ -209,7 +209,7 @@ namespace ts.Completions {
             }
 
             if (entries.length) {
-                return { isMemberCompletion: false, isNewIdentifierLocation: true, entries };
+                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: true, entries };
             }
 
             return undefined;
@@ -221,7 +221,7 @@ namespace ts.Completions {
             if (type) {
                 getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, node, /*performCharacterChecks*/false);
                 if (entries.length) {
-                    return { isMemberCompletion: true, isNewIdentifierLocation: true, entries };
+                    return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
                 }
             }
             return undefined;
@@ -233,7 +233,7 @@ namespace ts.Completions {
                 const entries: CompletionEntry[] = [];
                 addStringLiteralCompletionsFromType(type, entries);
                 if (entries.length) {
-                    return { isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+                    return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
                 }
             }
             return undefined;
@@ -281,6 +281,7 @@ namespace ts.Completions {
                 entries = getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, span);
             }
             return {
+                isGlobalCompletion: false,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: true,
                 entries
@@ -549,13 +550,18 @@ namespace ts.Completions {
             }
 
             const completionInfo: CompletionInfo = {
-                    isMemberCompletion: false,
-                    /**
-                     * The user may type in a path that doesn't yet exist, creating a "new identifier"
-                     * with respect to the collection of identifiers the server is aware of.
-                     */
-                    isNewIdentifierLocation: true,
-                    entries: []
+                /**
+                 * We don't want the editor to offer any other completions, such as snippets, inside a comment.
+                 */
+                isGlobalCompletion: false,
+                isMemberCompletion: false,
+                /**
+                 * The user may type in a path that doesn't yet exist, creating a "new identifier"
+                 * with respect to the collection of identifiers the server is aware of.
+                 */
+                isNewIdentifierLocation: true,
+
+                entries: []
             };
 
             const text = sourceFile.text.substr(range.pos, position - range.pos);
@@ -828,7 +834,7 @@ namespace ts.Completions {
             }
 
             if (isJsDocTagName) {
-                return { symbols: undefined, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName };
+                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName };
             }
 
             if (!insideJsDocTagExpression) {
@@ -900,6 +906,7 @@ namespace ts.Completions {
         }
 
         const semanticStart = timestamp();
+        let isGlobalCompletion = false;
         let isMemberCompletion: boolean;
         let isNewIdentifierLocation: boolean;
         let symbols: Symbol[] = [];
@@ -935,14 +942,16 @@ namespace ts.Completions {
             if (!tryGetGlobalSymbols()) {
                 return undefined;
             }
+            isGlobalCompletion = true;
         }
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
+        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
 
         function getTypeScriptMemberSymbols(): void {
             // Right of dot member completion list
+            isGlobalCompletion = false;
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
 
