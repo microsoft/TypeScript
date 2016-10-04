@@ -20,10 +20,11 @@
         "semicolon": true,
         "whitespace": [true,
             "check-branch",
+            "check-decl",
             "check-operator",
+            "check-module",
             "check-separator",
-            "check-type",
-            "check-module"
+            "check-type"
         ],
         "typedef-whitespace": [true, {
             "call-signature": "nospace",
