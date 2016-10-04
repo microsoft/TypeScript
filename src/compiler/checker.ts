@@ -5447,6 +5447,23 @@ namespace ts {
         }
 
         function removeSubtypes(types: TypeSet) {
+            if (types.length === 0) {
+                return types;
+            }
+            const first = types[0];
+            if (first.flags & TypeFlags.EnumLiteral) {
+                let sameEnumMembers = true;
+                for (let i = 1; i < types.length; i++) {
+                    const other = types[i];
+                    if (!(other.flags & TypeFlags.EnumLiteral) || (getParentOfSymbol(first.symbol) !== getParentOfSymbol(other.symbol))) {
+                        sameEnumMembers = false;
+                        break;
+                    }
+                }
+                if (sameEnumMembers) {
+                    return;
+                }
+            }
             let i = types.length;
             while (i > 0) {
                 i--;
