@@ -311,9 +311,18 @@ namespace ts {
                 return parseInt(process.version.charAt(1)) >= 4;
             }
 
+            function isFileSystemCaseSensitive(): boolean {
+                // win32\win64 are case insensitive platforms
+                if (platform === "win32" || platform === "win64") {
+                    return false;
+                }
+                // convert current file name to upper case / lower case and check if file exists
+                // (guards against cases when name is already all uppercase or lowercase)
+                return !fileExists(__filename.toUpperCase()) || !fileExists(__filename.toLowerCase());
+            }
+
             const platform: string = _os.platform();
-            // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
-            const useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+            const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
             function readFile(fileName: string, encoding?: string): string {
                 if (!fileExists(fileName)) {
