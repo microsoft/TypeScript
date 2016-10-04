@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// Should give completions for relative references to ts files when allowJs is false
+// Should give completions for relative references to ts files when allowJs is true.
 
 // @allowJs: true
 
