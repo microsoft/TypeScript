@@ -49,6 +49,7 @@
         "documentRegistry.ts",
         "findAllReferences.ts",
         "goToDefinition.ts",
+        "goToImplementation.ts",
         "jsDoc.ts",
         "jsTyping.ts",
         "navigateTo.ts",

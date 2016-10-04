@@ -66,7 +66,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(expression);
             expressions.push(expression);
@@ -102,7 +102,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(declaration);
             declarations.push(declaration);
@@ -126,28 +126,47 @@ namespace ts {
         context: TransformationContext,
         node: VariableDeclaration,
         value?: Expression,
-        visitor?: (node: Node) => VisitResult<Node>) {
+        visitor?: (node: Node) => VisitResult<Node>,
+        recordTempVariable?: (node: Identifier) => void) {
         const declarations: VariableDeclaration[] = [];
 
+        let pendingAssignments: Expression[];
         flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
+            if (pendingAssignments) {
+                pendingAssignments.push(value);
+                value = inlineExpressions(pendingAssignments);
+                pendingAssignments = undefined;
+            }
+
             const declaration = createVariableDeclaration(name, /*type*/ undefined, value, location);
             declaration.original = original;
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
 
             declarations.push(declaration);
             aggregateTransformFlags(declaration);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(/*recordTempVariable*/ undefined);
-            emitAssignment(name, value, location, /*original*/ undefined);
+            const name = createTempVariable(recordTempVariable);
+            if (recordTempVariable) {
+                const assignment = createAssignment(name, value, location);
+                if (pendingAssignments) {
+                    pendingAssignments.push(assignment);
+                }
+                else {
+                    pendingAssignments = [assignment];
+                }
+            }
+            else {
+                emitAssignment(name, value, location, /*original*/ undefined);
+            }
             return name;
         }
     }
@@ -192,7 +211,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             pendingAssignments.push(expression);
             return expression;
@@ -252,8 +271,8 @@ namespace ts {
             }
             else {
                 const name = getMutableClone(<Identifier>target);
-                context.setSourceMapRange(name, target);
-                context.setCommentRange(name, target);
+                setSourceMapRange(name, target);
+                setCommentRange(name, target);
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
         }

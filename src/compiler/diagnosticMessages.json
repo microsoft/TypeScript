@@ -819,6 +819,10 @@
         "category": "Error",
         "code": 1253
     },
+    "A 'const' initializer in an ambient context must be a string or numeric literal.": {
+        "category": "Error",
+        "code": 1254
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -1275,7 +1279,7 @@
         "category": "Error",
         "code": 2409
     },
-    "All symbols within a 'with' block will be resolved to 'any'.": {
+    "The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.": {
         "category": "Error",
         "code": 2410
     },
@@ -1958,6 +1962,10 @@
     "Left side of comma operator is unused and has no side effects.": {
         "category": "Error",
         "code": 2695
+    },
+    "The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?": {
+        "category": "Error",
+        "code": 2696
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2848,6 +2856,10 @@
     "Import emit helpers from 'tslib'.": {
         "category": "Message",
         "code": 6139
+    },
+    "Auto discovery for typings is enabled in project '{0}'. Running extra resolution pass for module '{1}' using cache location '{2}'.": {
+        "category": "Error",
+        "code": 6140
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

@@ -17,4 +17,4 @@
 //// x - /**/a1()
 
 verify.quickInfoAt("", "function a1(p: any): number",
-                   "This is a very cool function that is very nice.\n@returns something");
+                   "This is a very cool function that is very nice.");

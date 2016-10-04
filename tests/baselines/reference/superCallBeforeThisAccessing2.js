@@ -24,8 +24,7 @@ var Base = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = this;
-        _super.call(this, function () { _this._t; }); // no error. only check when this is directly accessing in constructor
+        return _super.call(this, function () { _this._t; }) || this;
     }
     return D;
 }(Base));

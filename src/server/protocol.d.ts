@@ -91,6 +91,27 @@ declare namespace ts.server.protocol {
           * The file for the request (absolute pathname required).
           */
         file: string;
+
+        /*
+         * Optional name of project that contains file
+         */
+        projectFileName?: string;
+    }
+
+    export interface TodoCommentRequest extends FileRequest {
+        arguments: TodoCommentRequestArgs;
+    }
+
+    export interface TodoCommentRequestArgs extends FileRequestArgs {
+        descriptors: TodoCommentDescriptor[];
+    }
+
+    export interface IndentationRequest extends FileLocationRequest {
+        arguments: IndentationRequestArgs;
+    }
+
+    export interface IndentationRequestArgs extends FileLocationRequestArgs {
+        options?: EditorSettings;
     }
 
     /**
@@ -110,6 +131,14 @@ declare namespace ts.server.protocol {
         arguments: ProjectInfoRequestArgs;
     }
 
+    export interface ProjectRequest extends Request {
+        arguments: ProjectRequestArgs;
+    }
+
+    export interface ProjectRequestArgs {
+        projectFileName: string;
+    }
+
     /**
       * Response message body for "projectInfo" request
       */
@@ -127,6 +156,16 @@ declare namespace ts.server.protocol {
           * Indicates if the project has a active language service instance
           */
         languageServiceDisabled?: boolean;
+    }
+
+    export interface DiagnosticWithLinePosition {
+        message: string;
+        start: number;
+        length: number;
+        startLocation: Location;
+        endLocation: Location;
+        category: string;
+        code: number;
     }
 
     /**
@@ -151,12 +190,17 @@ declare namespace ts.server.protocol {
         /**
           * The line number for the request (1-based).
           */
-        line: number;
+        line?: number;
 
         /**
           * The character offset (on the line) for the request (1-based).
           */
-        offset: number;
+        offset?: number;
+
+        /**
+         * Position (can be specified instead of line/offset pair) 
+         */
+        position?: number;
     }
 
     /**
@@ -164,6 +208,15 @@ declare namespace ts.server.protocol {
       */
     export interface FileLocationRequest extends FileRequest {
         arguments: FileLocationRequestArgs;
+    }
+
+    export interface FileSpanRequestArgs extends FileRequestArgs {
+        start: number;
+        length: number;
+    }
+
+    export interface FileSpanRequest extends FileRequest {
+        arguments: FileSpanRequestArgs;
     }
 
     /**
@@ -191,6 +244,14 @@ declare namespace ts.server.protocol {
       * define the type for the symbol found in file at location line, col.
       */
     export interface TypeDefinitionRequest extends FileLocationRequest {
+    }
+
+    /**
+      * Go to implementation request; value of command field is
+      * "implementation". Return response giving the file locations that
+      * implement the symbol found in file at location line, col.
+      */
+    export interface ImplementationRequest extends FileLocationRequest {
     }
 
     /**
@@ -238,6 +299,21 @@ declare namespace ts.server.protocol {
       */
     export interface TypeDefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+
+    /**
+      * Implementation response message.  Gives text range for implementations.
+      */
+    export interface ImplementationResponse extends Response {
+        body?: FileSpan[];
+    }
+
+    export interface BraceCompletionRequest extends FileLocationRequest {
+        arguments: BraceCompletionRequestArgs;
+    }
+
+    export interface BraceCompletionRequestArgs extends FileLocationRequestArgs {
+        openingBrace: string;
     }
 
     /**
@@ -427,6 +503,62 @@ declare namespace ts.server.protocol {
         body?: RenameResponseBody;
     }
 
+    export interface ExternalFile {
+        fileName: string;
+        scriptKind?: ScriptKind;
+        hasMixedContent?: boolean;
+        content?: string;
+    }
+
+    export interface ExternalProject {
+        projectFileName: string;
+        rootFiles: ExternalFile[];
+        options: ExternalProjectCompilerOptions;
+        typingOptions?: TypingOptions;
+    }
+
+    /**
+     * For external projects, some of the project settings are sent together with
+     * compiler settings.
+     */
+    export interface ExternalProjectCompilerOptions extends CompilerOptions {
+        compileOnSave?: boolean;
+    }
+
+    export interface ProjectVersionInfo {
+        projectName: string;
+        isInferred: boolean;
+        version: number;
+        options: CompilerOptions;
+    }
+
+    export interface ProjectChanges {
+        added: string[];
+        removed: string[];
+    }
+
+    /**
+     * Describes set of files in the project.
+     * info might be omitted in case of inferred projects
+     * if files is set - then this is the entire set of files in the project
+     * if changes is set - then this is the set of changes that should be applied to existing project
+     * otherwise - assume that nothing is changed
+     */
+    export interface ProjectFiles {
+        info?: ProjectVersionInfo;
+        files?: string[];
+        changes?: ProjectChanges;
+    }
+
+    export interface ProjectFilesWithDiagnostics extends ProjectFiles {
+        projectErrors: DiagnosticWithLinePosition[];
+    }
+
+    export interface ChangedOpenFile {
+        fileName: string;
+        changes: ts.TextChange[];
+    }
+
     /**
      * Editor options
      */
@@ -479,9 +611,6 @@ declare namespace ts.server.protocol {
 
         /** Defines whether an open brace is put onto a new line for control blocks or not. Default value is false. */
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
-
-        /** Index operator */
-        [key: string]: string | number | boolean | undefined;
     }
 
     /**
@@ -504,6 +633,11 @@ declare namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatOptions;
+
+        /**
+         * If set to true - then all loose files will land into one inferred project
+         */
+        useOneInferredProject?: boolean;
     }
 
     /**
@@ -549,6 +683,54 @@ declare namespace ts.server.protocol {
         arguments: OpenRequestArgs;
     }
 
+    type OpenExternalProjectArgs = ExternalProject;
+
+    export interface OpenExternalProjectRequest extends Request {
+        arguments: OpenExternalProjectArgs;
+    }
+
+    export interface CloseExternalProjectRequestArgs {
+        projectFileName: string;
+    }
+
+    export interface OpenExternalProjectsRequest extends Request {
+        arguments: OpenExternalProjectsArgs;
+    }
+
+    export interface OpenExternalProjectsArgs {
+        projects: ExternalProject[];
+    }
+
+    export interface CloseExternalProjectRequest extends Request {
+        arguments: CloseExternalProjectRequestArgs;
+    }
+
+    export interface SynchronizeProjectListRequest extends Request {
+        arguments: SynchronizeProjectListRequestArgs;
+    }
+
+    export interface SynchronizeProjectListRequestArgs {
+        knownProjects: protocol.ProjectVersionInfo[];
+    }
+
+    export interface ApplyChangedToOpenFilesRequest extends Request {
+        arguments: ApplyChangedToOpenFilesRequestArgs;
+    }
+
+    export interface ApplyChangedToOpenFilesRequestArgs {
+        openFiles?: ExternalFile[];
+        changedFiles?: ChangedOpenFile[];
+        closedFiles?: string[];
+    }
+
+    export interface SetCompilerOptionsForInferredProjectsArgs {
+        options: ExternalProjectCompilerOptions;
+    }
+
+    export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
+        arguments: SetCompilerOptionsForInferredProjectsArgs;
+    }
+
     /**
       *  Exit request; value of command field is "exit".  Ask the server process
       *  to exit.
@@ -564,6 +746,26 @@ declare namespace ts.server.protocol {
       * currently send a response to a close request.
       */
     export interface CloseRequest extends FileRequest {
+    }
+
+    export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
+    }
+
+    export interface CompileOnSaveAffectedFileListSingleProject {
+        projectFileName: string;
+        fileNames: string[];
+    }
+
+    export interface CompileOnSaveAffectedFileListResponse extends Response {
+        body: CompileOnSaveAffectedFileListSingleProject[];
+    }
+
+    export interface CompileOnSaveEmitFileRequest extends FileRequest {
+        args: CompileOnSaveEmitFileRequestArgs;
+    }
+
+    export interface CompileOnSaveEmitFileRequestArgs extends FileRequestArgs {
+        forced?: boolean;
     }
 
     /**
@@ -630,6 +832,9 @@ declare namespace ts.server.protocol {
           * Character offset on last line of range for which to format text in file.
           */
         endOffset: number;
+
+        endPosition?: number;
+        options?: ts.FormatCodeOptions;
     }
 
     /**
@@ -683,6 +888,8 @@ declare namespace ts.server.protocol {
           * Key pressed (';', '\n', or '}').
           */
         key: string;
+
+        options?: ts.FormatCodeOptions;
     }
 
     /**
@@ -934,26 +1141,36 @@ declare namespace ts.server.protocol {
       * Synchronous request for semantic diagnostics of one file.
       */
     export interface SemanticDiagnosticsSyncRequest extends FileRequest {
+        arguments: SemanticDiagnosticsSyncRequestArgs;
+    }
+
+    export interface SemanticDiagnosticsSyncRequestArgs extends FileRequestArgs {
+        includeLinePosition?: boolean;
     }
 
     /**
       * Response object for synchronous sematic diagnostics request.
       */
     export interface SemanticDiagnosticsSyncResponse extends Response {
-        body?: Diagnostic[];
+        body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
       * Synchronous request for syntactic diagnostics of one file.
       */
     export interface SyntacticDiagnosticsSyncRequest extends FileRequest {
+        arguments: SyntacticDiagnosticsSyncRequestArgs;
+    }
+
+    export interface SyntacticDiagnosticsSyncRequestArgs extends FileRequestArgs {
+        includeLinePosition?: boolean;
     }
 
     /**
       * Response object for synchronous syntactic diagnostics request.
       */
     export interface SyntacticDiagnosticsSyncResponse extends Response {
-        body?: Diagnostic[];
+        body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
@@ -1141,6 +1358,13 @@ declare namespace ts.server.protocol {
           *  Optional limit on the number of items to return.
           */
         maxResultCount?: number;
+        /**
+          * Optional flag to indicate we want results for just the current file
+          * or the entire project.
+          */
+        currentFileOnly?: boolean;
+
+        projectFileName?: string;
     }
 
     /**

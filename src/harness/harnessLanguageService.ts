@@ -218,6 +218,9 @@ namespace Harness.LanguageService {
             const snapshot = this.getScriptSnapshot(path);
             return snapshot.getText(0, snapshot.getLength());
         }
+        getTypeRootsVersion() {
+            return 0;
+        }
 
 
         log(s: string): void { }
@@ -435,6 +438,9 @@ namespace Harness.LanguageService {
         getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getTypeDefinitionAtPosition(fileName, position));
         }
+        getImplementationAtPosition(fileName: string, position: number): ts.ImplementationLocation[] {
+            return unwrapJSONCallResult(this.shim.getImplementationAtPosition(fileName, position));
+        }
         getReferencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getReferencesAtPosition(fileName, position));
         }
@@ -487,6 +493,9 @@ namespace Harness.LanguageService {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
         getNonBoundSourceFile(fileName: string): ts.SourceFile {
+            throw new Error("SourceFile can not be marshaled across the shim layer.");
+        }
+        getSourceFile(fileName: string): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
         dispose(): void { this.shim.dispose({}); }
@@ -599,7 +608,6 @@ namespace Harness.LanguageService {
             this.writeMessage(message);
         }
 
-
         readFile(fileName: string): string {
             if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
                 fileName = Harness.Compiler.defaultLibFileName;
@@ -675,7 +683,11 @@ namespace Harness.LanguageService {
             return true;
         }
 
-        isVerbose() {
+        getLogFileName(): string {
+            return undefined;
+        }
+
+        hasLevel() {
             return false;
         }
 
@@ -697,6 +709,14 @@ namespace Harness.LanguageService {
         clearTimeout(timeoutId: any): void {
             clearTimeout(timeoutId);
         }
+
+        setImmediate(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            return setImmediate(callback, args);
+        }
+
+        clearImmediate(timeoutId: any): void {
+            clearImmediate(timeoutId);
+        }
     }
 
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
@@ -711,8 +731,12 @@ namespace Harness.LanguageService {
             // host to answer server queries about files on disk
             const serverHost = new SessionServerHost(clientHost);
             const server = new ts.server.Session(serverHost,
-                Buffer ? Buffer.byteLength : (string: string, encoding?: string) => string.length,
-                process.hrtime, serverHost);
+                { isCancellationRequested: () => false },
+                /*useOneInferredProject*/ false,
+                /*typingsInstaller*/ undefined,
+                Utils.byteLength,
+                process.hrtime, serverHost,
+                /*canUseEvents*/ true);
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);

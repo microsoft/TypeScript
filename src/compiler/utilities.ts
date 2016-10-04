@@ -1,4 +1,4 @@
-/// <reference path="sys.ts" />
+﻿/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -83,7 +83,7 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean {
+    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equaler?: (a: T, b: T) => boolean): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
         }
@@ -982,11 +982,11 @@ namespace ts {
     }
 
     /**
-      * Given an super call\property node returns a closest node where either
-      * - super call\property is legal in the node and not legal in the parent node the node.
+      * Given an super call/property node, returns the closest node where
+      * - a super call/property access is legal in the node and not legal in the parent node the node.
       *   i.e. super call is legal in constructor but not legal in the class body.
-      * - node is arrow function (so caller might need to call getSuperContainer in case it needs to climb higher)
-      * - super call\property is definitely illegal in the node (but might be legal in some subnode)
+      * - the container is an arrow function (so caller might need to call getSuperContainer again in case it needs to climb higher)
+      * - a super call/property is definitely illegal in the container (but might be legal in some subnode)
       *   i.e. super property access is illegal in function declaration but can be legal in the statement list
       */
     export function getSuperContainer(node: Node, stopOnFunctions: boolean): Node {
@@ -1253,12 +1253,6 @@ namespace ts {
         return false;
     }
 
-    export function isExternalModuleNameRelative(moduleName: string): boolean {
-        // TypeScript 1.0 spec (April 2014): 11.2.1
-        // An external module name is "relative" if the first term is "." or "..".
-        return /^\.\.?($|[\\/])/.test(moduleName);
-    }
-
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         const moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
@@ -1426,39 +1420,75 @@ namespace ts {
             return undefined;
         }
 
-        const jsDocComments = getJSDocComments(node, checkParentVariableStatement);
-        if (!jsDocComments) {
+        const jsDocTags = getJSDocTags(node, checkParentVariableStatement);
+        if (!jsDocTags) {
             return undefined;
         }
 
-        for (const jsDocComment of jsDocComments) {
-            for (const tag of jsDocComment.tags) {
-                if (tag.kind === kind) {
-                    return tag;
-                }
+        for (const tag of jsDocTags) {
+            if (tag.kind === kind) {
+                return tag;
             }
         }
     }
 
-    function getJSDocComments(node: Node, checkParentVariableStatement: boolean): JSDocComment[] {
-        if (node.jsDocComments) {
-            return node.jsDocComments;
+    function append<T>(previous: T[] | undefined, additional: T[] | undefined): T[] | undefined {
+        if (additional) {
+            if (!previous) {
+                previous = [];
+            }
+            for (const x of additional) {
+                previous.push(x);
+            }
         }
-        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
-        // /**
-        //   * @param {number} name
-        //   * @returns {number}
-        //   */
-        // var x = function(name) { return name.length; }
-        if (checkParentVariableStatement) {
-            const isInitializerOfVariableDeclarationInStatement =
-                node.parent.kind === SyntaxKind.VariableDeclaration &&
-                (<VariableDeclaration>node.parent).initializer === node &&
-                node.parent.parent.parent.kind === SyntaxKind.VariableStatement;
+        return previous;
+    }
 
-            const variableStatementNode = isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent : undefined;
+    export function getJSDocComments(node: Node, checkParentVariableStatement: boolean): string[] {
+        return getJSDocs(node, checkParentVariableStatement, docs => map(docs, doc => doc.comment), tags => map(tags, tag => tag.comment));
+    }
+
+    function getJSDocTags(node: Node, checkParentVariableStatement: boolean): JSDocTag[] {
+        return getJSDocs(node, checkParentVariableStatement, docs => {
+            const result: JSDocTag[] = [];
+            for (const doc of docs) {
+                if (doc.tags) {
+                    result.push(...doc.tags);
+                }
+            }
+            return result;
+        }, tags => tags);
+    }
+
+   function getJSDocs<T>(node: Node, checkParentVariableStatement: boolean, getDocs: (docs: JSDoc[]) => T[], getTags: (tags: JSDocTag[]) => T[]): T[] {
+        // TODO: Get rid of getJsDocComments and friends (note the lowercase 's' in Js)
+        // TODO: A lot of this work should be cached, maybe. I guess it's only used in services right now...
+        let result: T[] = undefined;
+        // prepend documentation from parent sources
+        if (checkParentVariableStatement) {
+            // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
+            // /**
+            //   * @param {number} name
+            //   * @returns {number}
+            //   */
+            // var x = function(name) { return name.length; }
+            const isInitializerOfVariableDeclarationInStatement =
+                isVariableLike(node.parent) &&
+                (node.parent).initializer === node &&
+                node.parent.parent.parent.kind === SyntaxKind.VariableStatement;
+            const isVariableOfVariableDeclarationStatement = isVariableLike(node) &&
+                node.parent.parent.kind === SyntaxKind.VariableStatement;
+
+            const variableStatementNode =
+                isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent :
+                isVariableOfVariableDeclarationStatement ? node.parent.parent :
+                undefined;
             if (variableStatementNode) {
-                return variableStatementNode.jsDocComments;
+                result = append(result, getJSDocs(variableStatementNode, checkParentVariableStatement, getDocs, getTags));
+            }
+            if (node.kind === SyntaxKind.ModuleDeclaration &&
+                node.parent && node.parent.kind === SyntaxKind.ModuleDeclaration) {
+                result = append(result, getJSDocs(node.parent, checkParentVariableStatement, getDocs, getTags));
             }
 
             // Also recognize when the node is the RHS of an assignment expression
@@ -1469,16 +1499,62 @@ namespace ts {
                 (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
                 parent.parent.kind === SyntaxKind.ExpressionStatement;
             if (isSourceOfAssignmentExpressionStatement) {
-                return parent.parent.jsDocComments;
+                result = append(result, getJSDocs(parent.parent, checkParentVariableStatement, getDocs, getTags));
             }
 
             const isPropertyAssignmentExpression = parent && parent.kind === SyntaxKind.PropertyAssignment;
             if (isPropertyAssignmentExpression) {
-                return parent.jsDocComments;
+                result = append(result, getJSDocs(parent, checkParentVariableStatement, getDocs, getTags));
+            }
+
+            // Pull parameter comments from declaring function as well
+            if (node.kind === SyntaxKind.Parameter) {
+                const paramTags = getJSDocParameterTag(node as ParameterDeclaration, checkParentVariableStatement);
+                if (paramTags) {
+                    result = append(result, getTags(paramTags));
+                }
             }
         }
 
-        return undefined;
+        if (isVariableLike(node) && node.initializer) {
+            result = append(result, getJSDocs(node.initializer, /*checkParentVariableStatement*/ false, getDocs, getTags));
+        }
+
+        if (node.jsDocComments) {
+            if (result) {
+                result = append(result, getDocs(node.jsDocComments));
+            }
+            else {
+                return getDocs(node.jsDocComments);
+            }
+        }
+
+        return result;
+    }
+
+    function getJSDocParameterTag(param: ParameterDeclaration, checkParentVariableStatement: boolean): JSDocTag[] {
+        const func = param.parent as FunctionLikeDeclaration;
+        const tags = getJSDocTags(func, checkParentVariableStatement);
+        if (!param.name) {
+            // this is an anonymous jsdoc param from a `function(type1, type2): type3` specification
+            const i = func.parameters.indexOf(param);
+            const paramTags = filter(tags, tag => tag.kind === SyntaxKind.JSDocParameterTag);
+            if (paramTags && 0 <= i && i < paramTags.length) {
+                return [paramTags[i]];
+            }
+        }
+        else if (param.name.kind === SyntaxKind.Identifier) {
+            const name = (param.name as Identifier).text;
+            const paramTags = filter(tags, tag => tag.kind === SyntaxKind.JSDocParameterTag && (tag as JSDocParameterTag).parameterName.text === name);
+            if (paramTags) {
+                return paramTags;
+            }
+        }
+        else {
+            // TODO: it's a destructured parameter, so it should look up an "object type" series of multiple lines
+            // But multi-line object types aren't supported yet either
+            return undefined;
+        }
     }
 
     export function getJSDocTypeTag(node: Node): JSDocTypeTag {
@@ -1499,17 +1575,15 @@ namespace ts {
             // annotation.
             const parameterName = (<Identifier>parameter.name).text;
 
-            const jsDocComments = getJSDocComments(parameter.parent, /*checkParentVariableStatement*/ true);
-            if (jsDocComments) {
-                for (const jsDocComment of jsDocComments) {
-                    for (const tag of jsDocComment.tags) {
-                        if (tag.kind === SyntaxKind.JSDocParameterTag) {
-                            const parameterTag = <JSDocParameterTag>tag;
-                            const name = parameterTag.preParameterName || parameterTag.postParameterName;
-                            if (name.text === parameterName) {
-                                return parameterTag;
-                            }
-                        }
+            const jsDocTags = getJSDocTags(parameter.parent, /*checkParentVariableStatement*/ true);
+            if (!jsDocTags) {
+                return undefined;
+            }
+            for (const tag of jsDocTags) {
+                if (tag.kind === SyntaxKind.JSDocParameterTag) {
+                    const parameterTag = <JSDocParameterTag>tag;
+                    if (parameterTag.parameterName.text === parameterName) {
+                        return parameterTag;
                     }
                 }
             }
@@ -1867,12 +1941,6 @@ namespace ts {
     export function nodeIsSynthesized(node: TextRange): boolean {
         return positionIsSynthesized(node.pos)
             || positionIsSynthesized(node.end);
-    }
-
-    export function positionIsSynthesized(pos: number): boolean {
-        // This is a fast way of testing the following conditions:
-        //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
-        return !(pos >= 0);
     }
 
     export function getOriginalNode(node: Node): Node {
@@ -2427,22 +2495,10 @@ namespace ts {
         const options = host.getCompilerOptions();
         const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
-        if (options.declaration) {
-            const path = outputDir
-                ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
-                : sourceFile.fileName;
-            return removeFileExtension(path) + ".d.ts";
-        }
-    }
-
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
-        return compilerOptions.target || ScriptTarget.ES3;
-    }
-
-    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
-        return typeof compilerOptions.module === "number" ?
-            compilerOptions.module :
-            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
+        const path = outputDir
+            ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
+            : sourceFile.fileName;
+        return removeFileExtension(path) + ".d.ts";
     }
 
     export interface EmitFileNames {
@@ -2495,7 +2551,8 @@ namespace ts {
      * @param action The action to execute.
      */
     export function forEachTransformedEmitFile(host: EmitHost, sourceFiles: SourceFile[],
-        action: (jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) => void) {
+        action: (jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
+        emitOnlyDtsFiles?: boolean) {
         const options = host.getCompilerOptions();
         // Emit on each source file
         if (options.outFile || options.out) {
@@ -2528,7 +2585,7 @@ namespace ts {
             }
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, extension);
             const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-            const declarationFilePath = !isSourceFileJavaScript(sourceFile) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
+            const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (options.declaration || emitOnlyDtsFiles) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
             action(jsFilePath, sourceMapFilePath, declarationFilePath, [sourceFile], /*isBundledEmit*/ false);
         }
 
@@ -2556,8 +2613,9 @@ namespace ts {
      * @param targetSourceFile An optional target source file to emit.
      */
     export function forEachExpectedEmitFile(host: EmitHost,
-        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
-        targetSourceFile?: SourceFile) {
+        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) => void,
+        targetSourceFile?: SourceFile,
+        emitOnlyDtsFiles?: boolean) {
         const options = host.getCompilerOptions();
         // Emit on each source file
         if (options.outFile || options.out) {
@@ -2590,12 +2648,13 @@ namespace ts {
                 }
             }
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, extension);
+            const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
             const emitFileNames: EmitFileNames = {
                 jsFilePath,
                 sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
-                declarationFilePath: !isSourceFileJavaScript(sourceFile) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined
+                declarationFilePath
             };
-            action(emitFileNames, [sourceFile], /*isBundledEmit*/false);
+            action(emitFileNames, [sourceFile], /*isBundledEmit*/false, emitOnlyDtsFiles);
         }
 
         function onBundledEmit(host: EmitHost) {
@@ -2613,7 +2672,7 @@ namespace ts {
                     sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
                     declarationFilePath: options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined
                 };
-                action(emitFileNames, bundledSources, /*isBundledEmit*/true);
+                action(emitFileNames, bundledSources, /*isBundledEmit*/true, emitOnlyDtsFiles);
             }
         }
     }
@@ -3052,19 +3111,10 @@ namespace ts {
         return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function hasJavaScriptFileExtension(fileName: string) {
-        return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
-    }
-
-    export function hasTypeScriptFileExtension(fileName: string) {
-        return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
-    }
-
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
     export function tryExtractTypeScriptExtension(fileName: string): string | undefined {
         return find(supportedTypescriptExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
     }
-
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
      * representing the UTF-8 encoding of the character, and return the expanded char code list.
@@ -3188,12 +3238,6 @@ namespace ts {
         }
 
         return result;
-    }
-
-    export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
-        return !isRootedDiskPath(absoluteOrRelativePath)
-            ? absoluteOrRelativePath
-            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /* isAbsolutePathAnUrl */ false);
     }
 
     const carriageReturnLineFeed = "\r\n";
@@ -3656,7 +3700,7 @@ namespace ts {
             || kind === SyntaxKind.SemicolonClassElement;
     }
 
-    export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
+    export function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAssignment
             || kind === SyntaxKind.ShorthandPropertyAssignment

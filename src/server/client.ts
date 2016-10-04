@@ -214,6 +214,7 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionsResponse>(request);
 
             return {
+                isGlobalCompletion: false,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
                 entries: response.body.map(entry => {
@@ -364,6 +365,28 @@ namespace ts.server {
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     kind: "",
                     name: ""
+                };
+            });
+        }
+
+        getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
+            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            const args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            const request = this.processRequest<protocol.ImplementationRequest>(CommandNames.Implementation, args);
+            const response = this.processResponse<protocol.ImplementationResponse>(request);
+
+            return response.body.map(entry => {
+                const fileName = entry.file;
+                const start = this.lineOffsetToPosition(fileName, entry.start);
+                const end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    fileName,
+                    textSpan: ts.createTextSpanFromBounds(start, end)
                 };
             });
         }
@@ -653,6 +676,10 @@ namespace ts.server {
         }
 
         getNonBoundSourceFile(fileName: string): SourceFile {
+            throw new Error("SourceFile objects are not serializable through the server protocol.");
+        }
+
+        getSourceFile(fileName: string): SourceFile {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 

@@ -28,7 +28,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     B.prototype.f = function (_a) {
         var _b = _a === void 0 ? {} : _a, x = _b.x, y = _b.y;

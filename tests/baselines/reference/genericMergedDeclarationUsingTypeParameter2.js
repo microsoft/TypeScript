@@ -12,7 +12,6 @@ var foo = (function () {
     }
     return foo;
 }());
-var foo;
 (function (foo) {
     var y = 1;
 })(foo || (foo = {}));

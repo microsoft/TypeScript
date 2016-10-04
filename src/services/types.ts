@@ -149,6 +149,11 @@ namespace ts {
         fileExists?(path: string): boolean;
 
         /*
+         * LS host can optionally implement these methods to support automatic updating when new type libraries are installed
+         */
+        getTypeRootsVersion?(): number;
+
+        /*
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
@@ -209,6 +214,7 @@ namespace ts {
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[];
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         findReferences(fileName: string, position: number): ReferencedSymbol[];
@@ -217,27 +223,33 @@ namespace ts {
         /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
 
-        getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
-        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
+        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions | EditorSettings): number;
 
-        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
+        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
-        getEmitOutput(fileName: string): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
         getProgram(): Program;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
+
+        /**
+         * @internal
+         * @deprecated Use ts.createSourceFile instead.
+         */
+        getSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
     }
@@ -297,6 +309,11 @@ namespace ts {
         isDefinition: boolean;
     }
 
+    export interface ImplementationLocation {
+        textSpan: TextSpan;
+        fileName: string;
+    }
+
     export interface DocumentHighlights {
         fileName: string;
         highlightSpans: HighlightSpan[];
@@ -327,6 +344,13 @@ namespace ts {
         containerKind: string;
     }
 
+    export enum IndentStyle {
+        None = 0,
+        Block = 1,
+        Smart = 2,
+    }
+
+    /* @deprecated - consider using EditorSettings instead */
     export interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
@@ -336,12 +360,16 @@ namespace ts {
         IndentStyle: IndentStyle;
     }
 
-    export enum IndentStyle {
-        None = 0,
-        Block = 1,
-        Smart = 2,
+    export interface EditorSettings {
+        baseIndentSize?: number;
+        indentSize: number;
+        tabSize: number;
+        newLineCharacter: string;
+        convertTabsToSpaces: boolean;
+        indentStyle: IndentStyle;
     }
 
+    /* @deprecated - consider using FormatCodeSettings instead */
     export interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -356,7 +384,22 @@ namespace ts {
         InsertSpaceAfterTypeAssertion?: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string | undefined;
+    }
+
+    export interface FormatCodeSettings extends EditorSettings {
+        insertSpaceAfterCommaDelimiter: boolean;
+        insertSpaceAfterSemicolonInForStatements: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: boolean;
+        insertSpaceAfterTypeAssertion?: boolean;
+        placeOpenBraceOnNewLineForFunctions: boolean;
+        placeOpenBraceOnNewLineForControlBlocks: boolean;
     }
 
     export interface DefinitionInfo {
@@ -460,6 +503,7 @@ namespace ts {
     }
 
     export interface CompletionInfo {
+        isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         isNewIdentifierLocation: boolean;  // true when the current location also allows for a new identifier
         entries: CompletionEntry[];

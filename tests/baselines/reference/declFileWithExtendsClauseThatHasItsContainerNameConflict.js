@@ -36,7 +36,6 @@ var A;
         B.EventManager = EventManager;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-var A;
 (function (A) {
     var B;
     (function (B) {
@@ -45,7 +44,7 @@ var A;
             var ContextMenu = (function (_super) {
                 __extends(ContextMenu, _super);
                 function ContextMenu() {
-                    _super.apply(this, arguments);
+                    return _super.apply(this, arguments) || this;
                 }
                 return ContextMenu;
             }(B.EventManager));

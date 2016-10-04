@@ -6,7 +6,7 @@
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
-            "end": 19,
+            "end": 20,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -22,7 +22,7 @@
                 "0": {
                     "kind": "TypeParameter",
                     "pos": 18,
-                    "end": 19,
+                    "end": 20,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
@@ -31,12 +31,13 @@
                     }
                 },
                 "length": 1,
-                "pos": 17,
-                "end": 19
-            }
+                "pos": 18,
+                "end": 20
+            },
+            "comment": ""
         },
         "length": 1,
         "pos": 8,
-        "end": 19
+        "end": 20
     }
 }
