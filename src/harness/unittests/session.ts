@@ -22,17 +22,21 @@ namespace ts.server {
         readDirectory(): string[] { return []; },
         exit(): void { },
         setTimeout(callback, ms, ...args) { return 0; },
-        clearTimeout(timeoutId) { }
+        clearTimeout(timeoutId) { },
+        setImmediate: () => 0,
+        clearImmediate() {}
     };
+    const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
     const mockLogger: Logger = {
         close(): void {},
-        isVerbose(): boolean { return false; },
+        hasLevel(): boolean { return false; },
         loggingEnabled(): boolean { return false; },
         perftrc(s: string): void {},
         info(s: string): void {},
         startGroup(): void {},
         endGroup(): void {},
         msg(s: string, type?: string): void {},
+        getLogFileName: (): string => undefined
     };
 
     describe("the Session class", () => {
@@ -40,7 +44,7 @@ namespace ts.server {
         let lastSent: protocol.Message;
 
         beforeEach(() => {
-            session = new Session(mockHost, Utils.byteLength, process.hrtime, mockLogger);
+            session = new Session(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
             session.send = (msg: protocol.Message) => {
                 lastSent = msg;
             };
@@ -265,7 +269,7 @@ namespace ts.server {
             lastSent: protocol.Message;
             customHandler = "testhandler";
             constructor() {
-                super(mockHost, Utils.byteLength, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
                 this.addProtocolHandler(this.customHandler, () => {
                     return { response: undefined, responseRequired: true };
                 });
@@ -323,7 +327,7 @@ namespace ts.server {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
             constructor(private client: InProcClient) {
-                super(mockHost, Utils.byteLength, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
                     response: req.arguments,
                     responseRequired: true

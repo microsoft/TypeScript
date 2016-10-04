@@ -7,6 +7,7 @@ tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(7,5): error TS2322: Type
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(8,5): error TS2322: Type 'U' is not assignable to type 'V'.
   Type 'Date' is not assignable to type 'V'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type 'Object' is not assignable to type 'T'.
+  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 
 
 ==== tests/cases/compiler/typeParametersShouldNotBeEqual2.ts (6 errors) ====
@@ -34,6 +35,7 @@ tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type
         x = zz;  // Error
         ~
 !!! error TS2322: Type 'Object' is not assignable to type 'T'.
+!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
         zz = x;  // Ok
     }
     

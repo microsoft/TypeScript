@@ -56,7 +56,6 @@ var clodule1 = (function () {
     }
     return clodule1;
 }());
-var clodule1;
 (function (clodule1) {
     function f(x) { }
 })(clodule1 || (clodule1 = {}));
@@ -65,7 +64,6 @@ var clodule2 = (function () {
     }
     return clodule2;
 }());
-var clodule2;
 (function (clodule2) {
     var x;
     var D = (function () {
@@ -79,7 +77,6 @@ var clodule3 = (function () {
     }
     return clodule3;
 }());
-var clodule3;
 (function (clodule3) {
     clodule3.y = { id: T };
 })(clodule3 || (clodule3 = {}));
@@ -88,7 +85,6 @@ var clodule4 = (function () {
     }
     return clodule4;
 }());
-var clodule4;
 (function (clodule4) {
     var D = (function () {
         function D() {

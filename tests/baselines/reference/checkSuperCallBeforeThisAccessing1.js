@@ -24,10 +24,11 @@ var Based = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.call(this);
-        this;
-        this.x = 10;
-        var that = this;
+        var _this = _super.call(this) || this;
+        _this;
+        _this.x = 10;
+        var that = _this;
+        return _this;
     }
     return Derived;
 }(Based));

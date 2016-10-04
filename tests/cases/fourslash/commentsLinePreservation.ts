@@ -111,19 +111,19 @@ verify.quickInfos({
     b: ["var b: string", "This is firstLine\nThis is second Line\n\nThis is fourth Line"],
     c: ["var c: string", "This is firstLine\nThis is second Line\n\nThis is fourth Line"],
  
-    d: ["function d(param: string): void", "This is firstLine\nThis is second Line\n@random tag This should be third line"],
+    d: ["function d(param: string): void", "This is firstLine\nThis is second Line"],
     1: "(parameter) param: string",
 
     e: ["function e(param: string): void", "This is firstLine\nThis is second Line"],
     2: "(parameter) param: string",
 
-    f: ["function f(param1: string): void", "This is firstLine\nThis is second Line\n@random tag This should be third line"],
+    f: ["function f(param1: string): void", "This is firstLine\nThis is second Line"],
     3: ["(parameter) param1: string", "first line of param\n\nparam information third line"],
 
-    g: ["function g(param1: string): void", "This is firstLine\nThis is second Line\n@random tag This should be third line"],
+    g: ["function g(param1: string): void", "This is firstLine\nThis is second Line"],
     4: ["(parameter) param1: string", "param information first line"],
 
-    h: ["function h(param1: string): void", "This is firstLine\nThis is second Line\n@random tag This should be third line"],
+    h: ["function h(param1: string): void", "This is firstLine\nThis is second Line"],
     5: ["(parameter) param1: string", "param information first line\n\nparam information third line"],
 
     i: ["function i(param1: string): void", "This is firstLine\nThis is second Line"],
@@ -132,7 +132,7 @@ verify.quickInfos({
     j: ["function j(param1: string): void", "This is firstLine\nThis is second Line"],
     7: ["(parameter) param1: string", "param information first line\n\nparam information third line"],
 
-    k: ["function k(param1: string): void", "This is firstLine\nThis is second Line\n@randomtag \n\n random information first line\n\n random information third line"],
+    k: ["function k(param1: string): void", "This is firstLine\nThis is second Line"],
     8: ["(parameter) param1: string", "hello   "],
 
     l: ["function l(param1: string): void", "This is firstLine\nThis is second Line"],

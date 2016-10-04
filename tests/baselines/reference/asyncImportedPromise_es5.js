@@ -19,7 +19,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var Task = (function (_super) {
     __extends(Task, _super);
     function Task() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Task;
 }(Promise));

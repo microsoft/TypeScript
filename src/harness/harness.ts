@@ -374,7 +374,7 @@ namespace Utils {
         // call this on both nodes to ensure all propagated flags have been set (and thus can be
         // compared).
         assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
-        assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
+        assert.equal(node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, "node1.flags !== node2.flags");
 
         ts.forEachChild(node1,
             child1 => {
@@ -925,7 +925,7 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap=  ts.createMap<ts.SourceFile>({
+        const libFileNameSourceFileMap = ts.createMap<ts.SourceFile>({
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         });
 
@@ -1407,7 +1407,7 @@ namespace Harness {
 
         export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[]) {
             Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string => {
-                if (errors.length === 0) {
+                if (!errors || (errors.length === 0)) {
                     /* tslint:disable:no-null-keyword */
                     return null;
                     /* tslint:enable:no-null-keyword */

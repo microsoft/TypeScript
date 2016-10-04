@@ -229,16 +229,16 @@ declare namespace n1 {
     let e: string;
 }
 declare namespace n2 {
-    let a: string;
+    let a: "Hello";
     let b: any;
-    let c: string;
+    let c: "Hello";
     let d: any;
     let e: any;
 }
 declare namespace n3 {
-    let a: string;
+    let a: "Hello" | "World";
     let b: any;
     let c: any;
     let d: any;
-    let e: string;
+    let e: "Hello" | "World";
 }

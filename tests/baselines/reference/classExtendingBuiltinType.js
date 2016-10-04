@@ -20,70 +20,70 @@ var __extends = (this && this.__extends) || function (d, b) {
 var C1 = (function (_super) {
     __extends(C1, _super);
     function C1() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C1;
 }(Object));
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C2;
 }(Function));
 var C3 = (function (_super) {
     __extends(C3, _super);
     function C3() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C3;
 }(String));
 var C4 = (function (_super) {
     __extends(C4, _super);
     function C4() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C4;
 }(Boolean));
 var C5 = (function (_super) {
     __extends(C5, _super);
     function C5() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C5;
 }(Number));
 var C6 = (function (_super) {
     __extends(C6, _super);
     function C6() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C6;
 }(Date));
 var C7 = (function (_super) {
     __extends(C7, _super);
     function C7() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C7;
 }(RegExp));
 var C8 = (function (_super) {
     __extends(C8, _super);
     function C8() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C8;
 }(Error));
 var C9 = (function (_super) {
     __extends(C9, _super);
     function C9() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C9;
 }(Array));
 var C10 = (function (_super) {
     __extends(C10, _super);
     function C10() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C10;
 }(Array));

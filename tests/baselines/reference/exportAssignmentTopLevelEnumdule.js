@@ -26,7 +26,6 @@ define(["require", "exports"], function (require, exports) {
         foo[foo["green"] = 1] = "green";
         foo[foo["blue"] = 2] = "blue";
     })(foo || (foo = {}));
-    var foo;
     (function (foo) {
         foo.answer = 42;
     })(foo || (foo = {}));

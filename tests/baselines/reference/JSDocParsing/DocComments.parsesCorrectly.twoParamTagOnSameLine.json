@@ -33,10 +33,56 @@
                 "pos": 24,
                 "end": 29,
                 "text": "name1"
-            }
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
+            },
+            "comment": ""
         },
-        "length": 1,
+        "1": {
+            "kind": "JSDocParameterTag",
+            "pos": 30,
+            "end": 51,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 30,
+                "end": 31
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 31,
+                "end": 36,
+                "text": "param"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 37,
+                "end": 45,
+                "type": {
+                    "kind": "NumberKeyword",
+                    "pos": 38,
+                    "end": 44
+                }
+            },
+            "postParameterName": {
+                "kind": "Identifier",
+                "pos": 46,
+                "end": 51,
+                "text": "name2"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 46,
+                "end": 51,
+                "text": "name2"
+            },
+            "comment": ""
+        },
+        "length": 2,
         "pos": 8,
-        "end": 29
+        "end": 51
     }
 }

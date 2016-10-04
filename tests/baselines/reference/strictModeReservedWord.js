@@ -48,7 +48,7 @@ function foo() {
     var myClass = (function (_super) {
         __extends(package, _super);
         function package() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return package;
     }(public));

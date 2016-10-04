@@ -111,6 +111,7 @@ declare namespace FourSlashInterface {
         bof(): void;
         eof(): void;
         type(definitionIndex?: number): void;
+        implementation(): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
         file(index: number, content?: string, scriptKindName?: string): any;
@@ -133,6 +134,7 @@ declare namespace FourSlashInterface {
         errorExistsBeforeMarker(markerName?: string): void;
         quickInfoExists(): void;
         typeDefinitionCountIs(expectedCount: number): void;
+        implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
     }
     class verify extends verifyNegatable {
@@ -209,7 +211,7 @@ declare namespace FourSlashInterface {
         codeFixAtPosition(expectedText: string, errorCode?: number): void;
 
         navigationBar(json: any): void;
-        navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;
+        navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
@@ -251,6 +253,7 @@ declare namespace FourSlashInterface {
         getSyntacticDiagnostics(expected: string): void;
         getSemanticDiagnostics(expected: string): void;
         ProjectInfo(expected: string[]): void;
+        allRangesAppearInImplementationList(markerName: string): void;
     }
     class edit {
         backspace(count?: number): void;

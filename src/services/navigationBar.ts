@@ -218,15 +218,13 @@ namespace ts.NavigationBar {
                 break;
 
             default:
-                if (node.jsDocComments) {
-                    for (const jsDocComment of node.jsDocComments) {
-                        for (const tag of jsDocComment.tags) {
-                            if (tag.kind === SyntaxKind.JSDocTypedefTag) {
-                                addLeafNode(tag);
-                            }
+                forEach(node.jsDocComments, jsDocComment => {
+                    forEach(jsDocComment.tags, tag => {
+                        if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                            addLeafNode(tag);
                         }
-                    }
-                }
+                    });
+                });
 
                 forEachChild(node, addChildrenRecursively);
         }

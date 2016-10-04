@@ -11,6 +11,8 @@ var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 var compilerDirectory = "src/compiler/";
 var servicesDirectory = "src/services/";
 var serverDirectory = "src/server/";
+var typingsInstallerDirectory = "src/server/typingsInstaller";
+var cancellationTokenDirectory = "src/server/cancellationToken";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
@@ -129,6 +131,7 @@ var servicesSources = [
     "documentRegistry.ts",
     "findAllReferences.ts",
     "goToDefinition.ts",
+    "goToImplementation.ts",
     "jsDoc.ts",
     "jsTyping.ts",
     "navigateTo.ts",
@@ -163,6 +166,13 @@ var servicesSources = [
 }));
 
 var serverCoreSources = [
+    "types.d.ts",
+    "utilities.ts",
+    "scriptVersionCache.ts",
+    "typingsCache.ts",
+    "scriptInfo.ts",
+    "lsHost.ts",
+    "project.ts",
     "editorServices.ts",
     "protocol.d.ts",
     "session.ts",
@@ -171,12 +181,33 @@ var serverCoreSources = [
     return path.join(serverDirectory, f);
 });
 
+var cancellationTokenSources = [
+    "cancellationToken.ts"
+].map(function (f) {
+    return path.join(cancellationTokenDirectory, f);
+});
+
+var typingsInstallerSources = [
+    "../types.d.ts",
+    "typingsInstaller.ts",
+    "nodeTypingsInstaller.ts"
+].map(function (f) {
+    return path.join(typingsInstallerDirectory, f);
+});
+
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
+    "protocol.d.ts",
+    "utilities.ts",
+    "scriptVersionCache.ts",
+    "scriptInfo.ts",
+    "lsHost.ts",
+    "project.ts",
     "editorServices.ts",
     "protocol.d.ts",
-    "session.ts"
+    "session.ts",
+
 ].map(function (f) {
     return path.join(serverDirectory, f);
 }).concat(servicesSources);
@@ -220,15 +251,24 @@ var harnessSources = harnessCoreSources.concat([
     "convertCompilerOptionsFromJson.ts",
     "convertTypingOptionsFromJson.ts",
     "tsserverProjectSystem.ts",
+    "compileOnSave.ts",
+    "typingsInstaller.ts",
+    "projectErrors.ts",
     "matchFiles.ts",
     "initializeTSConfig.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
     "protocol.d.ts",
+    "utilities.ts",
+    "scriptVersionCache.ts",
+    "scriptInfo.ts",
+    "lsHost.ts",
+    "project.ts",
+    "typingsCache.ts",
+    "editorServices.ts",
+    "protocol.d.ts",
     "session.ts",
-    "client.ts",
-    "editorServices.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
 }));
@@ -615,8 +655,14 @@ compileFile(
         inlineSourceMap: true
     });
 
+var cancellationTokenFile = path.join(builtLocalDirectory, "cancellationToken.js");
+compileFile(cancellationTokenFile, cancellationTokenSources, [builtLocalDirectory].concat(cancellationTokenSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: true });
+
+var typingsInstallerFile = path.join(builtLocalDirectory, "typingsInstaller.js");
+compileFile(typingsInstallerFile, typingsInstallerSources, [builtLocalDirectory].concat(typingsInstallerSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: false });
+
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
-compileFile(serverFile, serverSources, [builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/[copyright], /*useBuiltCompiler*/ true, { types: ["node"] });
+compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"] });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 compileFile(
@@ -699,7 +745,7 @@ task("generate-spec", [specMd]);
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
-    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -789,7 +835,7 @@ function cleanTestDirs() {
 
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit) {
-    var testConfigContents = JSON.stringify({ 
+    var testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         light: light,
         workerCount: workerCount,
@@ -947,7 +993,7 @@ desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is
 task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function () {
     cleanTestDirs();
     host = "node";
-    browser = process.env.browser || process.env.b || "IE";
+    browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
@@ -1129,6 +1175,8 @@ var lintTargets = compilerSources
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
     .concat(servicesSources)
+    .concat(typingsInstallerSources)
+    .concat(cancellationTokenSources)
     .concat(["Gulpfile.ts"])
     .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath]);
 

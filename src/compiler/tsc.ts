@@ -667,7 +667,7 @@ namespace ts {
     }
 
     function printHelp() {
-        let output = "";
+        const output: string[] = [];
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
         const syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length;
@@ -678,17 +678,17 @@ namespace ts {
         let syntax = makePadding(marginLength - syntaxLength);
         syntax += "tsc [" + getDiagnosticText(Diagnostics.options) + "] [" + getDiagnosticText(Diagnostics.file) + " ...]";
 
-        output += getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax);
-        output += sys.newLine + sys.newLine;
+        output.push(getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax));
+        output.push(sys.newLine + sys.newLine);
 
         // Build up the list of examples.
         const padding = makePadding(marginLength);
-        output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
-        output += padding + "tsc --outFile file.js file.ts" + sys.newLine;
-        output += padding + "tsc @args.txt" + sys.newLine;
-        output += sys.newLine;
+        output.push(getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine);
+        output.push(padding + "tsc --outFile file.js file.ts" + sys.newLine);
+        output.push(padding + "tsc @args.txt" + sys.newLine);
+        output.push(sys.newLine);
 
-        output += getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine;
+        output.push(getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine);
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         const optsList = filter(optionDeclarations.slice(), v => !v.experimental);
@@ -755,18 +755,20 @@ namespace ts {
             const usage = usageColumn[i];
             const description = descriptionColumn[i];
             const kindsList = optionsDescriptionMap[description];
-            output += usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine;
+            output.push(usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine);
 
             if (kindsList) {
-                output += makePadding(marginLength + 4);
+                output.push(makePadding(marginLength + 4));
                 for (const kind of kindsList) {
-                    output += kind + " ";
+                    output.push(kind + " ");
                 }
-                output += sys.newLine;
+                output.push(sys.newLine);
             }
         }
 
-        sys.write(output);
+        for (const line of output) {
+            sys.write(line);
+        }
         return;
 
         function getParamType(option: CommandLineOption) {
