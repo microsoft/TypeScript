@@ -548,39 +548,39 @@ namespace ts.Completions {
                 return undefined;
             }
 
+            const completionInfo: CompletionInfo = {
+                    isMemberCompletion: false,
+                    /**
+                     * The user may type in a path that doesn't yet exist, creating a "new identifier"
+                     * with respect to the collection of identifiers the server is aware of.
+                     */
+                    isNewIdentifierLocation: true,
+                    entries: []
+            };
+
             const text = sourceFile.text.substr(range.pos, position - range.pos);
 
             const match = tripleSlashDirectiveFragmentRegex.exec(text);
+
             if (match) {
                 const prefix = match[1];
                 const kind = match[2];
                 const toComplete = match[3];
 
                 const scriptPath = getDirectoryPath(sourceFile.path);
-                let entries: CompletionEntry[];
                 if (kind === "path") {
                     // Give completions for a relative path
                     const span: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
-                    entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/true, span, sourceFile.path);
+                    completionInfo.entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/true, span, sourceFile.path);
                 }
                 else {
                     // Give completions based on the typings available
                     const span: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
-                    entries = getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, span);
+                    completionInfo.entries = getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, span);
                 }
-
-                return {
-                    isMemberCompletion: false,
-                    isNewIdentifierLocation: true,
-                    entries
-                };
             }
 
-            return {
-                isMemberCompletion: false,
-                isNewIdentifierLocation: false,
-                entries: []
-            };
+            return completionInfo;
         }
 
         function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, span: TextSpan, result: CompletionEntry[] = []): CompletionEntry[] {

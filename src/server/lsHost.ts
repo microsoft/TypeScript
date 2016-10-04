@@ -180,7 +180,7 @@ namespace ts.server {
         }
 
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
-            return this.host.readDirectory(path, exclude, exclude, include);
+            return this.host.readDirectory(path, extensions, exclude, include);
         }
 
         getDirectories(path: string): string[] {
