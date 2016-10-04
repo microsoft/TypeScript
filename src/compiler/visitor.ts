@@ -862,7 +862,7 @@ namespace ts {
 
             case SyntaxKind.TemplateExpression:
                 return updateTemplateExpression(<TemplateExpression>node,
-                    visitNode((<TemplateExpression>node).head, visitor, isTemplateLiteralFragment),
+                    visitNode((<TemplateExpression>node).head, visitor, isTemplateHead),
                     visitNodes((<TemplateExpression>node).templateSpans, visitor, isTemplateSpan));
 
             case SyntaxKind.YieldExpression:
@@ -890,7 +890,7 @@ namespace ts {
             case SyntaxKind.TemplateSpan:
                 return updateTemplateSpan(<TemplateSpan>node,
                     visitNode((<TemplateSpan>node).expression, visitor, isExpression),
-                    visitNode((<TemplateSpan>node).literal, visitor, isTemplateLiteralFragment));
+                    visitNode((<TemplateSpan>node).literal, visitor, isTemplateMiddleOrTemplateTail));
 
             // Element
             case SyntaxKind.Block:

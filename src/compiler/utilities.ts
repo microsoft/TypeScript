@@ -1375,7 +1375,7 @@ namespace ts {
         }
     }
 
-    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport {
         if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
             return <ImportEqualsDeclaration>node;
         }
@@ -2459,7 +2459,7 @@ namespace ts {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): string {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || isDeclarationFile(file)) {
             return undefined;
@@ -3611,8 +3611,14 @@ namespace ts {
             || kind === SyntaxKind.TemplateTail;
     }
 
-    export function isTemplateLiteralFragment(node: Node): node is TemplateLiteralFragment {
-        return isTemplateLiteralFragmentKind(node.kind);
+    export function isTemplateHead(node: Node): node is TemplateHead {
+        return node.kind === SyntaxKind.TemplateHead;
+    }
+
+    export function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail {
+        const kind = node.kind;
+        return kind === SyntaxKind.TemplateMiddle
+            || kind === SyntaxKind.TemplateTail;
     }
 
     // Identifiers

@@ -1111,7 +1111,7 @@ namespace ts {
             }
             else {
                 forEachChild(node, bind);
-                if (node.operator === SyntaxKind.PlusEqualsToken || node.operator === SyntaxKind.MinusMinusToken) {
+                if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
                     bindAssignmentTargetFlow(node.operand);
                 }
             }
@@ -1360,7 +1360,7 @@ namespace ts {
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
             const body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
             if (body && (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock)) {
-                for (const stat of (<Block>body).statements) {
+                for (const stat of (<BlockLike>body).statements) {
                     if (stat.kind === SyntaxKind.ExportDeclaration || stat.kind === SyntaxKind.ExportAssignment) {
                         return true;
                     }

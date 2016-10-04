@@ -3886,7 +3886,7 @@ namespace ts {
             if (!links.declaredType) {
                 const enumType = <EnumType>getDeclaredTypeOfEnum(getParentOfSymbol(symbol));
                 links.declaredType = enumType.flags & TypeFlags.Union ?
-                    enumType.memberTypes[getEnumMemberValue(<EnumDeclaration>symbol.valueDeclaration)] :
+                    enumType.memberTypes[getEnumMemberValue(<EnumMember>symbol.valueDeclaration)] :
                     enumType;
             }
             return links.declaredType;
@@ -6049,7 +6049,7 @@ namespace ts {
             return !node.typeParameters && areAllParametersUntyped && !isNullaryArrow;
         }
 
-        function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | MethodDeclaration {
+        function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
             return (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) && isContextSensitiveFunctionLikeDeclaration(func);
         }
 
@@ -10022,7 +10022,7 @@ namespace ts {
             }
         }
 
-        function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression {
+        function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
             return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
         }
 
@@ -10033,7 +10033,7 @@ namespace ts {
                 : undefined;
         }
 
-        function getContextualTypeForFunctionLikeDeclaration(node: FunctionExpression | MethodDeclaration) {
+        function getContextualTypeForFunctionLikeDeclaration(node: FunctionExpression | ArrowFunction | MethodDeclaration) {
             return isObjectLiteralMethod(node) ?
                 getContextualTypeForObjectLiteralMethod(node) :
                 getApparentTypeOfContextualType(node);
@@ -10044,7 +10044,7 @@ namespace ts {
         // If the contextual type is a union type, get the signature from each type possible and if they are
         // all identical ignoring their return type, the result is same signature but with return type as
         // union type of return types from these signatures
-        function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
+        function getContextualSignature(node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             const type = getContextualTypeForFunctionLikeDeclaration(node);
             if (!type) {
@@ -11392,7 +11392,7 @@ namespace ts {
                 argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
             }
             else {
-                const callExpression = <CallExpression>node;
+                const callExpression = <CallExpression | NewExpression>node;
                 if (!callExpression.arguments) {
                     // This only happens when we have something of the form: 'new C'
                     Debug.assert(callExpression.kind === SyntaxKind.NewExpression);
@@ -11403,7 +11403,7 @@ namespace ts {
                 argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
 
                 // If we are missing the close paren, the call is incomplete.
-                callIsIncomplete = (<CallExpression>callExpression).arguments.end === callExpression.end;
+                callIsIncomplete = callExpression.arguments.end === callExpression.end;
 
                 typeArguments = callExpression.typeArguments;
                 spreadArgIndex = getSpreadArgumentIndex(args);
@@ -12490,7 +12490,7 @@ namespace ts {
          * @param node The call/new expression to be checked.
          * @returns On success, the expression's signature's return type. On failure, anyType.
          */
-        function checkCallExpression(node: CallExpression): Type {
+        function checkCallExpression(node: CallExpression | NewExpression): Type {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
 
@@ -12945,7 +12945,7 @@ namespace ts {
                 }
             }
 
-            if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
+            if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration) {
                 checkCollisionWithCapturedSuperVariable(node, (<FunctionExpression>node).name);
                 checkCollisionWithCapturedThisVariable(node, (<FunctionExpression>node).name);
             }
@@ -17419,9 +17419,12 @@ namespace ts {
                     }
                 }
 
-                checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
+                if (isIdentifier(node.name)) {
+                    checkCollisionWithCapturedThisVariable(node, node.name);
+                    checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                    checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
+                }
+
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
 
@@ -19040,7 +19043,7 @@ namespace ts {
             return undefined;
         }
 
-        function isLiteralConstDeclaration(node: VariableDeclaration): boolean {
+        function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
             if (isConst(node)) {
                 const type = getTypeOfSymbol(getSymbolOfNode(node));
                 return !!(type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral);
@@ -19048,7 +19051,7 @@ namespace ts {
             return false;
         }
 
-        function writeLiteralConstValue(node: VariableDeclaration, writer: SymbolWriter) {
+        function writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: SymbolWriter) {
             const type = getTypeOfSymbol(getSymbolOfNode(node));
             writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
         }
@@ -19785,7 +19788,7 @@ namespace ts {
                 checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
         }
 
-        function checkGrammarForOmittedArgument(node: CallExpression, args: NodeArray<Expression>): boolean {
+        function checkGrammarForOmittedArgument(node: CallExpression | NewExpression, args: NodeArray<Expression>): boolean {
             if (args) {
                 const sourceFile = getSourceFileOfNode(node);
                 for (const arg of args) {
@@ -19796,7 +19799,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarArguments(node: CallExpression, args: NodeArray<Expression>): boolean {
+        function checkGrammarArguments(node: CallExpression | NewExpression, args: NodeArray<Expression>): boolean {
             return checkGrammarForOmittedArgument(node, args);
         }
 
@@ -19918,8 +19921,7 @@ namespace ts {
 
             for (const prop of node.properties) {
                 const name = prop.name;
-                if (prop.kind === SyntaxKind.OmittedExpression ||
-                    name.kind === SyntaxKind.ComputedPropertyName) {
+                if (name.kind === SyntaxKind.ComputedPropertyName) {
                     // If the name is not a ComputedPropertyName, the grammar checking will skip it
                     checkGrammarComputedPropertyName(<ComputedPropertyName>name);
                 }
@@ -19966,7 +19968,7 @@ namespace ts {
                     currentKind = SetAccessor;
                 }
                 else {
-                    Debug.fail("Unexpected syntax kind:" + prop.kind);
+                    Debug.fail("Unexpected syntax kind:" + (<Node>prop).kind);
                 }
 
                 const effectiveName = getPropertyNameForPropertyNameNode(name);

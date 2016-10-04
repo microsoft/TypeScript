@@ -29,9 +29,9 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.5";
 
-    function createNode(kind: SyntaxKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject | IdentifierObject {
+    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) :
-            kind === SyntaxKind.Identifier ? new IdentifierObject(kind, pos, end) :
+            kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
                 new TokenObject(kind, pos, end);
         node.parent = parent;
         return node;
@@ -210,14 +210,13 @@ namespace ts {
         }
     }
 
-    class TokenOrIdentifierObject implements Token {
+    class TokenOrIdentifierObject implements Node {
         public kind: SyntaxKind;
         public pos: number;
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
         public jsDocComments: JSDoc[];
-        public __tokenTag: any;
 
         constructor(pos: number, end: number) {
             // Set properties in same order as NodeObject
@@ -319,16 +318,25 @@ namespace ts {
         }
     }
 
-    class TokenObject extends TokenOrIdentifierObject {
-        public kind: SyntaxKind;
-        constructor(kind: SyntaxKind, pos: number, end: number) {
+    class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
+        public kind: TKind;
+
+        constructor(kind: TKind, pos: number, end: number) {
             super(pos, end);
             this.kind = kind;
         }
     }
 
-    class IdentifierObject extends TokenOrIdentifierObject {
-        constructor(kind: SyntaxKind, pos: number, end: number) {
+    class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
+        public kind: SyntaxKind.Identifier;
+        public text: string;
+        _primaryExpressionBrand: any;
+        _memberExpressionBrand: any;
+        _leftHandSideExpressionBrand: any;
+        _incrementExpressionBrand: any;
+        _unaryExpressionBrand: any;
+        _expressionBrand: any;
+        constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
         }
     }
@@ -424,6 +432,7 @@ namespace ts {
     }
 
     class SourceFileObject extends NodeObject implements SourceFile {
+        public kind: SyntaxKind.SourceFile;
         public _declarationBrand: any;
         public fileName: string;
         public path: Path;
@@ -432,7 +441,7 @@ namespace ts {
         public lineMap: number[];
 
         public statements: NodeArray<Statement>;
-        public endOfFileToken: Node;
+        public endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
 
         public amdDependencies: { name: string; path: string }[];
         public moduleName: string;

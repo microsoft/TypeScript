@@ -528,7 +528,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitAccessorDeclaration(node: GetAccessorDeclaration) {
+        function visitAccessorDeclaration(node: AccessorDeclaration) {
             const savedInGeneratorFunctionBody = inGeneratorFunctionBody;
             const savedInStatementContainingYield = inStatementContainingYield;
             inGeneratorFunctionBody = false;
