@@ -206,7 +206,7 @@ namespace ts {
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
-            getEnvironmentVariable: name => getEnvironmentVariable(name, /*host*/ undefined),
+            getEnvironmentVariable: name => sys.getEnvironmentVariable ? sys.getEnvironmentVariable(name) : "",
             getDirectories: (path: string) => sys.getDirectories(path),
             realpath
         };
