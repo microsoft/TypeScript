@@ -2000,7 +2000,9 @@ namespace ts {
         function setCommonJsModuleIndicator(node: Node) {
             if (!file.commonJsModuleIndicator) {
                 file.commonJsModuleIndicator = node;
-                bindSourceFileAsExternalModule();
+                if (!file.externalModuleIndicator) {
+                    bindSourceFileAsExternalModule();
+                }
             }
         }
 
