@@ -756,10 +756,7 @@ namespace FourSlash {
 
         public verifyCompletionListIsGlobal(expected: boolean) {
             const completions = this.getCompletionListAtCaret();
-            if (!completions && expected !== undefined) {
-                this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions}`);
-            }
-            else if (completions && completions.isGlobalCompletion !== expected) {
+            if (completions && completions.isGlobalCompletion !== expected) {
                 this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions.isGlobalCompletion}`);
             }
         }

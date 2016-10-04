@@ -886,7 +886,7 @@ namespace ts.Completions {
         }
 
         const semanticStart = timestamp();
-        let isGlobalCompletion: boolean;
+        let isGlobalCompletion = false;
         let isMemberCompletion: boolean;
         let isNewIdentifierLocation: boolean;
         let symbols: Symbol[] = [];
@@ -902,7 +902,6 @@ namespace ts.Completions {
             else {
                 symbols = tagSymbols;
             }
-            isGlobalCompletion = false;
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
         }
@@ -913,7 +912,6 @@ namespace ts.Completions {
             if (!typeChecker.isUnknownSymbol(tagSymbol)) {
                 symbols = [tagSymbol];
             }
-            isGlobalCompletion = false;
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
         }
