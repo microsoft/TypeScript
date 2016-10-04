@@ -1033,7 +1033,7 @@ namespace ts.Completions {
                     isGlobalCompletion = false;
 
                     if (attrsType) {
-                        symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);
+                        symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes.properties);
                         isMemberCompletion = true;
                         isNewIdentifierLocation = false;
                         return true;
@@ -1369,13 +1369,18 @@ namespace ts.Completions {
                     case SyntaxKind.LessThanSlashToken:
                     case SyntaxKind.SlashToken:
                     case SyntaxKind.Identifier:
+                    case SyntaxKind.JsxAttributes:
                     case SyntaxKind.JsxAttribute:
                     case SyntaxKind.JsxSpreadAttribute:
                         if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                             return <JsxOpeningLikeElement>parent;
                         }
                         else if (parent.kind === SyntaxKind.JsxAttribute) {
-                            return <JsxOpeningLikeElement>parent.parent;
+                            // Currently we parse JsxOpeninLikeElement as:
+                            //      JsxOpeninLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            return /*properties list*/parent./*attributes*/parent.parent as JsxOpeningLikeElement;
                         }
                         break;
 
@@ -1384,7 +1389,11 @@ namespace ts.Completions {
                     // whose parent is a JsxOpeningLikeElement
                     case SyntaxKind.StringLiteral:
                         if (parent && ((parent.kind === SyntaxKind.JsxAttribute) || (parent.kind === SyntaxKind.JsxSpreadAttribute))) {
-                            return <JsxOpeningLikeElement>parent.parent;
+                            // Currently we parse JsxOpeninLikeElement as:
+                            //      JsxOpeninLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            return /*properties list*/parent./*attributes*/parent.parent as JsxOpeningLikeElement;
                         }
 
                         break;
@@ -1392,13 +1401,21 @@ namespace ts.Completions {
                     case SyntaxKind.CloseBraceToken:
                         if (parent &&
                             parent.kind === SyntaxKind.JsxExpression &&
-                            parent.parent &&
-                            (parent.parent.kind === SyntaxKind.JsxAttribute)) {
-                            return <JsxOpeningLikeElement>parent.parent.parent;
+                            parent.parent && parent.parent.kind === SyntaxKind.JsxAttribute) {
+                            // Currently we parse JsxOpeninLikeElement as:
+                            //      JsxOpeninLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            //                  each JsxAttribute can have initializer as JsxExpression
+                            return /*JsxExpression*/parent./*JsxAttribute*/parent./*JsxAttributes*/parent.parent as JsxOpeningLikeElement;
                         }
 
                         if (parent && parent.kind === SyntaxKind.JsxSpreadAttribute) {
-                            return <JsxOpeningLikeElement>parent.parent;
+                            // Currently we parse JsxOpeninLikeElement as:
+                            //      JsxOpeninLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            return /*properties list*/parent./*attributes*/parent.parent as JsxOpeningLikeElement;
                         }
 
                         break;

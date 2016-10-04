@@ -10360,7 +10360,7 @@ namespace ts {
 
         function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
             const kind = attribute.kind;
-            const jsxElement = attribute.parent as JsxOpeningLikeElement;
+            const jsxElement = attribute.parent.parent as JsxOpeningLikeElement;
             const attrsType = getJsxElementAttributesType(jsxElement);
 
             if (attribute.kind === SyntaxKind.JsxAttribute) {
@@ -10912,7 +10912,8 @@ namespace ts {
             // Look up the corresponding property for this attribute
             if (elementAttributesType === emptyObjectType && isUnhyphenatedJsxName(node.name.text)) {
                 // If there is no 'props' property, you may not have non-"data-" attributes
-                error(node.parent, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
+                // We do node.parent.parent to report an error at JsxOpeningLikeElement
+                error(node.parent.parent, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
             else if (elementAttributesType && !isTypeAny(elementAttributesType)) {
                 const correspondingPropSymbol = getPropertyOfType(elementAttributesType, node.name.text);
@@ -11237,7 +11238,7 @@ namespace ts {
          * that have no matching element attributes type property.
          */
         function getJsxAttributePropertySymbol(attrib: JsxAttribute): Symbol {
-            const attributesType = getJsxElementAttributesType(<JsxOpeningElement>attrib.parent);
+            const attributesType = getJsxElementAttributesType(attrib.parent.parent as JsxOpeningElement);
             const prop = getPropertyOfType(attributesType, attrib.name.text);
             return prop || unknownSymbol;
         }
@@ -11288,13 +11289,14 @@ namespace ts {
             // attributes (mostly from spreads) are being overwritten and
             // thus should have their types ignored
             let sawSpreadedAny = false;
-            for (let i = node.attributes.length - 1; i >= 0; i--) {
-                if (node.attributes[i].kind === SyntaxKind.JsxAttribute) {
-                    checkJsxAttribute(<JsxAttribute>(node.attributes[i]), targetAttributesType, nameTable);
+            const attributes = node.attributes.properties;
+            for (let i = attributes.length - 1; i >= 0; i--) {
+                if (attributes[i].kind === SyntaxKind.JsxAttribute) {
+                    checkJsxAttribute(<JsxAttribute>(attributes[i]), targetAttributesType, nameTable);
                 }
                 else {
-                    Debug.assert(node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute);
-                    const spreadType = checkJsxSpreadAttribute(<JsxSpreadAttribute>(node.attributes[i]), targetAttributesType, nameTable);
+                    Debug.assert(attributes[i].kind === SyntaxKind.JsxSpreadAttribute);
+                    const spreadType = checkJsxSpreadAttribute(<JsxSpreadAttribute>(attributes[i]), targetAttributesType, nameTable);
                     if (isTypeAny(spreadType)) {
                         sawSpreadedAny = true;
                     }
@@ -20503,7 +20505,7 @@ namespace ts {
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
             const seen = createMap<boolean>();
-            for (const attr of node.attributes) {
+            for (const attr of node.attributes.properties) {
                 if (attr.kind === SyntaxKind.JsxSpreadAttribute) {
                     continue;
                 }

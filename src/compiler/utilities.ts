@@ -4102,6 +4102,11 @@ namespace ts {
             || kind === SyntaxKind.JsxText;
     }
 
+    export function isJsxAttributes(node: Node): node is JsxAttributes {
+        const kind = node.kind;
+        return kind === SyntaxKind.JsxAttributes;
+    }
+
     export function isJsxAttributeLike(node: Node): node is JsxAttributeLike {
         const kind = node.kind;
         return kind === SyntaxKind.JsxAttribute
