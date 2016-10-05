@@ -3930,7 +3930,7 @@ namespace ts {
                     const tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
                     tagExpression.tag = expression;
                     tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
-                        ? parseLiteralNode()
+                        ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
                         : parseTemplateExpression();
                     expression = finishNode(tagExpression);
                     continue;

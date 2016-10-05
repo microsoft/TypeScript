@@ -989,7 +989,7 @@ namespace ts {
                 }
 
                 const statement = statements[index];
-                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
+                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
                     result.push(visitNode(statement, visitor, isStatement));
                     return index + 1;
                 }

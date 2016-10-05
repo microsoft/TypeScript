@@ -799,7 +799,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
                 return updateTaggedTemplate(<TaggedTemplateExpression>node,
                     visitNode((<TaggedTemplateExpression>node).tag, visitor, isExpression),
-                    visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplate));
+                    visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
 
             case SyntaxKind.ParenthesizedExpression:
                 return updateParen(<ParenthesizedExpression>node,

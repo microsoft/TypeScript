@@ -105,6 +105,7 @@ namespace ts {
     export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
     export function createLiteral(value: string, location?: TextRange): StringLiteral;
     export function createLiteral(value: number, location?: TextRange): NumericLiteral;
+    export function createLiteral(value: boolean, location?: TextRange): BooleanLiteral;
     export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
     export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
@@ -120,7 +121,7 @@ namespace ts {
             node.text = value;
             return node;
         }
-        else {
+        else if (value) {
             const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location, /*flags*/ undefined);
             node.textSourceNode = value;
             node.text = value.text;
@@ -497,14 +498,14 @@ namespace ts {
         return node;
     }
 
-    export function createTaggedTemplate(tag: Expression, template: Template, location?: TextRange) {
+    export function createTaggedTemplate(tag: Expression, template: TemplateLiteral, location?: TextRange) {
         const node = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, location);
         node.tag = parenthesizeForAccess(tag);
         node.template = template;
         return node;
     }
 
-    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: Template) {
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral) {
         if (node.tag !== tag || node.template !== template) {
             return updateNode(createTaggedTemplate(tag, template, node), node);
         }

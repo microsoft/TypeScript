@@ -523,7 +523,8 @@ namespace ts {
         | Token<SyntaxKind.PrivateKeyword>
         | Token<SyntaxKind.ProtectedKeyword>
         | Token<SyntaxKind.ReadonlyKeyword>
-        | Token<SyntaxKind.StaticKeyword>;
+        | Token<SyntaxKind.StaticKeyword>
+        ;
 
     export type ModifiersArray = NodeArray<Modifier>;
 
@@ -909,13 +910,16 @@ namespace ts {
         _incrementExpressionBrand: any;
     }
 
+    // see: https://tc39.github.io/ecma262/#prod-UpdateExpression
+    // see: https://tc39.github.io/ecma262/#prod-UnaryExpression
     export type PrefixUnaryOperator
         = SyntaxKind.PlusPlusToken
         | SyntaxKind.MinusMinusToken
         | SyntaxKind.PlusToken
         | SyntaxKind.MinusToken
         | SyntaxKind.TildeToken
-        | SyntaxKind.ExclamationToken;
+        | SyntaxKind.ExclamationToken
+        ;
 
     export interface PrefixUnaryExpression extends IncrementExpression {
         kind: SyntaxKind.PrefixUnaryExpression;
@@ -923,9 +927,11 @@ namespace ts {
         operand: UnaryExpression;
     }
 
+    // see: https://tc39.github.io/ecma262/#prod-UpdateExpression
     export type PostfixUnaryOperator
         = SyntaxKind.PlusPlusToken
-        | SyntaxKind.MinusMinusToken;
+        | SyntaxKind.MinusMinusToken
+        ;
 
     export interface PostfixUnaryExpression extends IncrementExpression {
         kind: SyntaxKind.PostfixUnaryExpression;
@@ -949,12 +955,20 @@ namespace ts {
         _primaryExpressionBrand: any;
     }
 
-    export interface KeywordExpression extends PrimaryExpression {
-        kind: SyntaxKind.TrueKeyword
-            | SyntaxKind.FalseKeyword
-            | SyntaxKind.NullKeyword
-            | SyntaxKind.ThisKeyword
-            | SyntaxKind.SuperKeyword;
+    export interface NullLiteral extends PrimaryExpression {
+        kind: SyntaxKind.NullKeyword;
+    }
+
+    export interface BooleanLiteral extends PrimaryExpression {
+        kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword;
+    }
+
+    export interface ThisExpression extends PrimaryExpression {
+        kind: SyntaxKind.ThisKeyword;
+    }
+
+    export interface SuperExpression extends PrimaryExpression {
+        kind: SyntaxKind.SuperKeyword;
     }
 
     export interface DeleteExpression extends UnaryExpression {
@@ -983,45 +997,142 @@ namespace ts {
         expression?: Expression;
     }
 
-    export type BinaryOperator
-        = SyntaxKind.PlusToken
-        | SyntaxKind.PlusEqualsToken
-        | SyntaxKind.MinusToken
-        | SyntaxKind.MinusEqualsToken
-        | SyntaxKind.AsteriskToken
-        | SyntaxKind.AsteriskAsteriskToken
-        | SyntaxKind.AsteriskAsteriskEqualsToken
-        | SyntaxKind.AsteriskEqualsToken
+    // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
+    export type ExponentiationOperator
+        = SyntaxKind.AsteriskAsteriskToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-MultiplicativeOperator
+    export type MultiplicativeOperator
+        = SyntaxKind.AsteriskToken
         | SyntaxKind.SlashToken
-        | SyntaxKind.SlashEqualsToken
         | SyntaxKind.PercentToken
-        | SyntaxKind.PercentEqualsToken
-        | SyntaxKind.AmpersandToken
-        | SyntaxKind.AmpersandAmpersandToken
-        | SyntaxKind.AmpersandEqualsToken
-        | SyntaxKind.BarToken
-        | SyntaxKind.BarBarToken
-        | SyntaxKind.BarEqualsToken
-        | SyntaxKind.CaretToken
-        | SyntaxKind.CaretEqualsToken
-        | SyntaxKind.LessThanToken
-        | SyntaxKind.LessThanLessThanToken
-        | SyntaxKind.LessThanLessThanEqualsToken
-        | SyntaxKind.LessThanEqualsToken
-        | SyntaxKind.GreaterThanToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-MultiplicativeExpression
+    export type MultiplicativeOperatorOrHigher
+        = ExponentiationOperator
+        | MultiplicativeOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AdditiveExpression
+    export type AdditiveOperator
+        = SyntaxKind.PlusToken
+        | SyntaxKind.MinusToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AdditiveExpression
+    export type AdditiveOperatorOrHigher
+        = MultiplicativeOperatorOrHigher
+        | AdditiveOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-ShiftExpression
+    export type ShiftOperator
+        = SyntaxKind.LessThanLessThanToken
         | SyntaxKind.GreaterThanGreaterThanToken
         | SyntaxKind.GreaterThanGreaterThanGreaterThanToken
-        | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
-        | SyntaxKind.GreaterThanGreaterThanEqualsToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-ShiftExpression
+    export type ShiftOperatorOrHigher
+        = AdditiveOperatorOrHigher
+        | ShiftOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-RelationalExpression
+    export type RelationalOperator
+        = SyntaxKind.LessThanToken
+        | SyntaxKind.LessThanEqualsToken
+        | SyntaxKind.GreaterThanToken
         | SyntaxKind.GreaterThanEqualsToken
-        | SyntaxKind.EqualsToken
-        | SyntaxKind.EqualsEqualsToken
+        | SyntaxKind.InstanceOfKeyword
+        | SyntaxKind.InKeyword
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-RelationalExpression
+    export type RelationalOperatorOrHigher
+        = ShiftOperatorOrHigher
+        | RelationalOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-EqualityExpression
+    export type EqualityOperator
+        = SyntaxKind.EqualsEqualsToken
         | SyntaxKind.EqualsEqualsEqualsToken
         | SyntaxKind.ExclamationEqualsEqualsToken
         | SyntaxKind.ExclamationEqualsToken
-        | SyntaxKind.InstanceOfKeyword
-        | SyntaxKind.InKeyword
-        | SyntaxKind.CommaToken;
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-EqualityExpression
+    export type EqualityOperatorOrHigher
+        = RelationalOperatorOrHigher
+        | EqualityOperator;
+
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseANDExpression
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseXORExpression
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseORExpression
+    export type BitwiseOperator
+        = SyntaxKind.AmpersandToken
+        | SyntaxKind.BarToken
+        | SyntaxKind.CaretToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseANDExpression
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseXORExpression
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseORExpression
+    export type BitwiseOperatorOrHigher
+        = EqualityOperatorOrHigher
+        | BitwiseOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-LogicalANDExpression
+    // see: https://tc39.github.io/ecma262/#prod-LogicalORExpression
+    export type LogicalOperator
+        = SyntaxKind.AmpersandAmpersandToken
+        | SyntaxKind.BarBarToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-LogicalANDExpression
+    // see: https://tc39.github.io/ecma262/#prod-LogicalORExpression
+    export type LogicalOperatorOrHigher
+        = BitwiseOperatorOrHigher
+        | LogicalOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AssignmentOperator
+    export type CompoundAssignmentOperator
+        = SyntaxKind.PlusEqualsToken
+        | SyntaxKind.MinusEqualsToken
+        | SyntaxKind.AsteriskAsteriskEqualsToken
+        | SyntaxKind.AsteriskEqualsToken
+        | SyntaxKind.SlashEqualsToken
+        | SyntaxKind.PercentEqualsToken
+        | SyntaxKind.AmpersandEqualsToken
+        | SyntaxKind.BarEqualsToken
+        | SyntaxKind.CaretEqualsToken
+        | SyntaxKind.LessThanLessThanEqualsToken
+        | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
+        | SyntaxKind.GreaterThanGreaterThanEqualsToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AssignmentExpression
+    export type AssignmentOperator
+        = SyntaxKind.EqualsToken
+        | CompoundAssignmentOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AssignmentExpression
+    export type AssignmentOperatorOrHigher
+        = LogicalOperatorOrHigher
+        | AssignmentOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-Expression
+    export type BinaryOperator
+        = AssignmentOperatorOrHigher
+        | SyntaxKind.CommaToken
+        ;
 
     export type BinaryOperatorToken = Token<BinaryOperator>;
 
@@ -1057,6 +1168,9 @@ namespace ts {
         body: ConciseBody;
     }
 
+    // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
+    // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
+    // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
     export interface LiteralLikeNode extends Node {
         text: string;
         isUnterminated?: boolean;
@@ -1097,7 +1211,7 @@ namespace ts {
         kind: SyntaxKind.TemplateTail;
     }
 
-    export type Template = TemplateExpression | LiteralExpression;
+    export type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;
 
     export interface TemplateExpression extends PrimaryExpression {
         kind: SyntaxKind.TemplateExpression;
@@ -1156,6 +1270,10 @@ namespace ts {
         name: Identifier;
     }
 
+    export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
+        expression: SuperExpression;
+    }
+
     /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
     export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
         _propertyAccessExpressionLikeQualifiedNameBrand?: any;
@@ -1168,11 +1286,26 @@ namespace ts {
         argumentExpression?: Expression;
     }
 
+    export interface SuperElementAccessExpression extends ElementAccessExpression {
+        expression: SuperExpression;
+    }
+
+    // see: https://tc39.github.io/ecma262/#prod-SuperProperty
+    export type SuperProperty
+        = SuperPropertyAccessExpression
+        | SuperElementAccessExpression
+        ;
+
     export interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
+    }
+
+    // see: https://tc39.github.io/ecma262/#prod-SuperCall
+    export interface SuperCall extends CallExpression {
+        expression: SuperExpression;
     }
 
     export interface ExpressionWithTypeArguments extends TypeNode {
@@ -1191,7 +1324,7 @@ namespace ts {
     export interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
-        template: Template;
+        template: TemplateLiteral;
     }
 
     export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
