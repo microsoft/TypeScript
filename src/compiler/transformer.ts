@@ -115,7 +115,9 @@ namespace ts {
             transformers.push(transformJsx);
         }
 
-        transformers.push(transformES7);
+        if (languageVersion < ScriptTarget.ES8) {
+            transformers.push(transformES7);
+        }
 
         if (languageVersion < ScriptTarget.ES6) {
             transformers.push(transformES6);

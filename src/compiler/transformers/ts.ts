@@ -240,11 +240,14 @@ namespace ts {
                     // ES6 export and default modifiers are elided when inside a namespace.
                     return currentNamespace ? undefined : node;
 
+                case SyntaxKind.AsyncKeyword:
+                    // Async keyword is not elided for target ES8
+                    return languageVersion < ScriptTarget.ES8 ? undefined : node;
+
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.AbstractKeyword:
-                case SyntaxKind.AsyncKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.ReadonlyKeyword:
@@ -2223,6 +2226,14 @@ namespace ts {
                 /*location*/ node
             );
 
+            // Add ES8 async function expression modifier
+            // Not sure this is the right place? Might be better to move this
+            // into createFunctionExpression itself.
+            if ((languageVersion >= ScriptTarget.ES8) && isAsyncFunctionLike(node)) {
+                const funcModifiers = visitNodes(node.modifiers, visitor, isModifier);
+                func.modifiers = createNodeArray(funcModifiers);
+            }
+
             setOriginalNode(func, node);
 
             return func;
@@ -2235,7 +2246,7 @@ namespace ts {
          */
         function visitArrowFunction(node: ArrowFunction) {
             const func = createArrowFunction(
-                /*modifiers*/ undefined,
+                visitNodes(node.modifiers, visitor, isModifier),
                 /*typeParameters*/ undefined,
                 visitNodes(node.parameters, visitor, isParameter),
                 /*type*/ undefined,
@@ -2250,7 +2261,7 @@ namespace ts {
         }
 
         function transformFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
-            if (isAsyncFunctionLike(node)) {
+            if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES8) {
                 return <FunctionBody>transformAsyncFunctionBody(node);
             }
 
@@ -2270,7 +2281,7 @@ namespace ts {
         }
 
         function transformConciseBody(node: ArrowFunction): ConciseBody {
-            if (isAsyncFunctionLike(node)) {
+            if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES8) {
                 return transformAsyncFunctionBody(node);
             }
 
@@ -2453,14 +2464,28 @@ namespace ts {
          * @param node The await expression node.
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
+            const targetAtLeastES8 = languageVersion >= ScriptTarget.ES8;
             return setOriginalNode(
-                createYield(
+                targetAtLeastES8 ? createAwaitExpression() : createYieldExpression(),
+                node
+            );
+
+            function createAwaitExpression() {
+                const awaitExpression = createAwait(
+                    visitNode(node.expression, visitor, isExpression),
+                    /*location*/ node
+                );
+                return awaitExpression;
+            }
+
+            function createYieldExpression() {
+                const yieldExpression = createYield(
                     /*asteriskToken*/ undefined,
                     visitNode(node.expression, visitor, isExpression),
                     /*location*/ node
-                ),
-                node
-            );
+                );
+                return yieldExpression;
+            }
         }
 
         /**

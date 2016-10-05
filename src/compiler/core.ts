@@ -1191,7 +1191,7 @@ namespace ts {
     export function getEmitModuleKind(compilerOptions: CompilerOptions) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
-            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
+            getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
     }
 
     /* @internal */
