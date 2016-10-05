@@ -12,19 +12,12 @@
 export { }
 
 === tests/cases/compiler/1.ts ===
-let v = "str" || true;
->v : Data
->"str" || true : Data
->"str" : string
->true : boolean
+var x = "hi" || 5;
+>x : string | number
+>"hi" || 5 : string | number
+>"hi" : string
+>5 : number
 
-function bar () {
->bar : () => Data
-
-    return v;
->v : Data
-}
-export { v, bar }
->v : Data
->bar : () => Data
+export default x;
+>x : string | number
 

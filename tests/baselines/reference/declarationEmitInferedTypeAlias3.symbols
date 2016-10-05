@@ -11,16 +11,9 @@
 export { }
 
 === tests/cases/compiler/1.ts ===
-let v = "str" || true;
->v : Symbol(v, Decl(1.ts, 0, 3))
+var x = "hi" || 5;
+>x : Symbol(x, Decl(1.ts, 0, 3))
 
-function bar () {
->bar : Symbol(bar, Decl(1.ts, 0, 22))
-
-    return v;
->v : Symbol(v, Decl(1.ts, 0, 3))
-}
-export { v, bar }
->v : Symbol(v, Decl(1.ts, 4, 8))
->bar : Symbol(bar, Decl(1.ts, 4, 11))
+export default x;
+>x : Symbol(x, Decl(1.ts, 0, 3))
 
