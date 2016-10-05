@@ -1,0 +1,33 @@
+=== tests/cases/compiler/metadataOfUnion.ts ===
+function PropDeco(target: Object, propKey: string | symbol) { }
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnion.ts, 0, 0))
+>target : Symbol(target, Decl(metadataOfUnion.ts, 0, 18))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>propKey : Symbol(propKey, Decl(metadataOfUnion.ts, 0, 33))
+
+class A {
+>A : Symbol(A, Decl(metadataOfUnion.ts, 0, 63))
+}
+
+class B {
+>B : Symbol(B, Decl(metadataOfUnion.ts, 3, 1))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnion.ts, 0, 0))
+
+    x: "foo" | A;
+>x : Symbol(B.x, Decl(metadataOfUnion.ts, 5, 9))
+>A : Symbol(A, Decl(metadataOfUnion.ts, 0, 63))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnion.ts, 0, 0))
+
+    y: true | boolean;
+>y : Symbol(B.y, Decl(metadataOfUnion.ts, 7, 17))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnion.ts, 0, 0))
+
+    z: "foo" | boolean;
+>z : Symbol(B.z, Decl(metadataOfUnion.ts, 10, 22))
+}

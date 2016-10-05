@@ -1,0 +1,34 @@
+=== tests/cases/compiler/metadataOfUnion.ts ===
+function PropDeco(target: Object, propKey: string | symbol) { }
+>PropDeco : (target: Object, propKey: string | symbol) => void
+>target : Object
+>Object : Object
+>propKey : string | symbol
+
+class A {
+>A : A
+}
+
+class B {
+>B : B
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    x: "foo" | A;
+>x : A | "foo"
+>A : A
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    y: true | boolean;
+>y : boolean
+>true : true
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    z: "foo" | boolean;
+>z : boolean | "foo"
+}
