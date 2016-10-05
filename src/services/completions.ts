@@ -1698,9 +1698,15 @@ namespace ts.Completions {
      * Matches a triple slash reference directive with an incomplete string literal for its path. Used
      * to determine if the caret is currently within the string literal and capture the literal fragment
      * for completions.
-     * For example, this matches /// <reference path="fragment
+     * For example, this matches
+     * 
+     * /// <reference path="fragment
+     * 
+     * but not
+     *  
+     * /// <reference path="fragment"
      */
-    const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3]*)$/;
+    const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
     interface VisibleModuleInfo {
         moduleName: string;
