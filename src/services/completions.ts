@@ -904,7 +904,6 @@ namespace ts.Completions {
             }
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
-            isGlobalCompletion = false;
         }
         else if (isStartingCloseTag) {
             const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
@@ -915,7 +914,6 @@ namespace ts.Completions {
             }
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
-            isGlobalCompletion = false;
         }
         else {
             // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
