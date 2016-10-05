@@ -119,3 +119,35 @@ function f5() {
 >length : number
     }
 }
+
+declare function getReadonlyFieldStringOrNumber(): { readonly a: string | number };
+>getReadonlyFieldStringOrNumber : () => { readonly a: string | number; }
+>a : string | number
+
+function f6() {
+>f6 : () => void
+
+    const x = getReadonlyFieldStringOrNumber();
+>x : { readonly a: string | number; }
+>getReadonlyFieldStringOrNumber() : { readonly a: string | number; }
+>getReadonlyFieldStringOrNumber : () => { readonly a: string | number; }
+
+    if (typeof x.a === 'string') {
+>typeof x.a === 'string' : boolean
+>typeof x.a : string
+>x.a : string | number
+>x : { readonly a: string | number; }
+>a : string | number
+>'string' : "string"
+
+        const f: () => number = () => x.a.length;
+>f : () => number
+>() => x.a.length : () => number
+>x.a.length : number
+>x.a : string
+>x : { readonly a: string | number; }
+>a : string
+>length : number
+    }
+}
+

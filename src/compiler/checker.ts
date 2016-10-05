@@ -8450,7 +8450,7 @@ namespace ts {
             return incomplete ? { flags: 0, type } : type;
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, flowContainer: Node) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, isReadonlyProperty: boolean, flowContainer: Node) {
             let key: string;
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
@@ -8502,7 +8502,7 @@ namespace ts {
                     else if (flow.flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
                         const container = (<FlowStart>flow).container;
-                        if (container && container !== flowContainer && reference.kind !== SyntaxKind.PropertyAccessExpression) {
+                        if (container && container !== flowContainer && (reference.kind !== SyntaxKind.PropertyAccessExpression || isReadonlyProperty)) {
                             flow = container.flowNode;
                             continue;
                         }
@@ -9009,6 +9009,24 @@ namespace ts {
             }
         }
 
+        /**
+         * When the control flow originates in a function expression or arrow function and we are referencing
+         * a const variable or parameter from an outer function, we extend the origin of the control flow
+         * analysis to include the immediately enclosing function.
+         */
+        function getOuterControlFlowContainer(node: Node, symbol: Symbol, isParameter: boolean, declarationContainer?: Node | undefined): Node {
+            if (!declarationContainer) {
+                return undefined;
+            }
+            let flowContainer = getControlFlowContainer(node);
+            while (flowContainer !== declarationContainer &&
+                   (flowContainer.kind === SyntaxKind.FunctionExpression || flowContainer.kind === SyntaxKind.ArrowFunction) &&
+                   (isReadonlySymbol(symbol) || isParameter && !isParameterAssigned(symbol))) {
+                flowContainer = getControlFlowContainer(flowContainer);
+            }
+            return flowContainer;
+        }
+
         // Check if a parameter is assigned anywhere within its declaring function.
         function isParameterAssigned(symbol: Symbol) {
             const func = <FunctionLikeDeclaration>getRootDeclaration(symbol.valueDeclaration).parent;
@@ -9133,22 +9151,14 @@ namespace ts {
             // flow graph to determine the control flow based type.
             const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
             const declarationContainer = getControlFlowContainer(declaration);
-            let flowContainer = getControlFlowContainer(node);
-            const isOuterVariable = flowContainer !== declarationContainer;
-            // When the control flow originates in a function expression or arrow function and we are referencing
-            // a const variable or parameter from an outer function, we extend the origin of the control flow
-            // analysis to include the immediately enclosing function.
-            while (flowContainer !== declarationContainer &&
-                (flowContainer.kind === SyntaxKind.FunctionExpression || flowContainer.kind === SyntaxKind.ArrowFunction) &&
-                (isReadonlySymbol(localOrExportSymbol) || isParameter && !isParameterAssigned(localOrExportSymbol))) {
-                flowContainer = getControlFlowContainer(flowContainer);
-            }
+            const flowContainer = getOuterControlFlowContainer(node, localOrExportSymbol, isParameter, declarationContainer);
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
-            const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isParameter ||
+            const isOuterVariable = flowContainer !== declarationContainer;
+            const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isParameter || isReadonlySymbol(localOrExportSymbol) ||
                 isOuterVariable || isInAmbientContext(declaration);
-            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
+            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, isReadonlySymbol(localOrExportSymbol), flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
@@ -9401,7 +9411,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*isReadonlyProperty*/ false, /*flowContainer*/ undefined);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -11051,7 +11061,9 @@ namespace ts {
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
-            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+            const declarationContainer = prop.valueDeclaration && getControlFlowContainer(prop.valueDeclaration);
+            const flowContainer = getOuterControlFlowContainer(node, prop, /*isParameter*/ false, declarationContainer);
+            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*isReadonlyProperty*/ isReadonlySymbol(prop), flowContainer);
 
             function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
                 let errorInfo: DiagnosticMessageChain;

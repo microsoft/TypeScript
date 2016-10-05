@@ -257,7 +257,7 @@ const v5 = v && v;
 >v5 : void
 >v && v : void
 >v : void
->v : never
+>v : void
 
 const v6 = v && u;
 >v6 : void
@@ -311,7 +311,7 @@ const u6 = u && u;
 >u6 : undefined
 >u && u : undefined
 >u : undefined
->u : never
+>u : undefined
 
 const u7 = u && n;
 >u7 : undefined
@@ -365,7 +365,7 @@ const n7 = n && n;
 >n7 : null
 >n && n : null
 >n : null
->n : never
+>n : null
 
 const n8 = n && z;
 >n8 : null
@@ -419,5 +419,5 @@ const z8 = z && z;
 >z8 : undefined
 >z && z : undefined
 >z : undefined
->z : never
+>z : undefined
 

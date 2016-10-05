@@ -93,3 +93,30 @@ function f5() {
 >length : Symbol(String.length, Decl(lib.d.ts, --, --))
     }
 }
+
+declare function getReadonlyFieldStringOrNumber(): { readonly a: string | number };
+>getReadonlyFieldStringOrNumber : Symbol(getReadonlyFieldStringOrNumber, Decl(constLocalsInFunctionExpressions.ts, 37, 1))
+>a : Symbol(a, Decl(constLocalsInFunctionExpressions.ts, 39, 52))
+
+function f6() {
+>f6 : Symbol(f6, Decl(constLocalsInFunctionExpressions.ts, 39, 83))
+
+    const x = getReadonlyFieldStringOrNumber();
+>x : Symbol(x, Decl(constLocalsInFunctionExpressions.ts, 41, 9))
+>getReadonlyFieldStringOrNumber : Symbol(getReadonlyFieldStringOrNumber, Decl(constLocalsInFunctionExpressions.ts, 37, 1))
+
+    if (typeof x.a === 'string') {
+>x.a : Symbol(a, Decl(constLocalsInFunctionExpressions.ts, 39, 52))
+>x : Symbol(x, Decl(constLocalsInFunctionExpressions.ts, 41, 9))
+>a : Symbol(a, Decl(constLocalsInFunctionExpressions.ts, 39, 52))
+
+        const f: () => number = () => x.a.length;
+>f : Symbol(f, Decl(constLocalsInFunctionExpressions.ts, 43, 13))
+>x.a.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.a : Symbol(a, Decl(constLocalsInFunctionExpressions.ts, 39, 52))
+>x : Symbol(x, Decl(constLocalsInFunctionExpressions.ts, 41, 9))
+>a : Symbol(a, Decl(constLocalsInFunctionExpressions.ts, 39, 52))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+    }
+}
+

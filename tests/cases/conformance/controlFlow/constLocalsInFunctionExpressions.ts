@@ -36,3 +36,11 @@ function f5() {
         const f = () => () => x.length;
     }
 }
+
+declare function getReadonlyFieldStringOrNumber(): { readonly a: string | number };
+function f6() {
+    const x = getReadonlyFieldStringOrNumber();
+    if (typeof x.a === 'string') {
+        const f: () => number = () => x.a.length;
+    }
+}
