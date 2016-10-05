@@ -29,7 +29,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var ShortDetails = (function (_super) {
     __extends(ShortDetails, _super);
     function ShortDetails() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     ShortDetails.prototype.render = function () {
         if (this.props.id < 1) {
