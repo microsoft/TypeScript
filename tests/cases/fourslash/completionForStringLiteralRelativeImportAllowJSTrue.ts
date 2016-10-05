@@ -33,7 +33,8 @@
 const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
-    goTo.marker(kind + "0");
+    for(let i = 0; i < 2; ++i) {
+    goTo.marker(kind + i);
     verify.completionListContains("f1");
     verify.completionListContains("f2");
     verify.completionListContains("f3");
@@ -43,13 +44,5 @@ for (const kind of kinds) {
     verify.completionListContains("g1");
     verify.completionListContains("g2");
     verify.not.completionListItemsCountIsGreaterThan(8);
-
-    goTo.marker(kind + "1");
-    verify.completionListContains("f1");
-    verify.completionListContains("f2");
-    verify.completionListContains("f3");
-    verify.completionListContains("f4");
-    verify.completionListContains("f5");
-    verify.completionListContains("f6");
-    verify.not.completionListItemsCountIsGreaterThan(6);
+    }
 }

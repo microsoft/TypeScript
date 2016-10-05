@@ -61,14 +61,10 @@ verify.completionListContains("d2");
 verify.not.completionListItemsCountIsGreaterThan(2);
 
 function testBlock(offset: number, fileName: string, dir: string) {
-    for (let m = offset; m < offset + 3; ++m) {
+    for (let m = offset; m < offset + 4; ++m) {
         goTo.marker("" + m);
         verify.completionListContains(fileName);
         verify.completionListContains(dir);
         verify.not.completionListItemsCountIsGreaterThan(2);
     }
-
-    goTo.marker("" + (offset + 3));
-        verify.completionListContains(fileName);
-    verify.not.completionListItemsCountIsGreaterThan(1);
 }

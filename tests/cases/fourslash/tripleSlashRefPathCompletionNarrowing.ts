@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-// Exercises relative path completions going up and down 2 directories
-// and the use of forward- and back-slashes and combinations thereof.
+// Exercises how changes in the basename change the completions offered.
+// They should have no effect, as filtering completions is the responsibility of the editor.
 
 // @Filename: f1.ts
 //// /*f1*/
@@ -25,21 +25,10 @@
 //// /// <reference path="./f1.t/*9*/
 //// /// <reference path="./f1.ts/*10*/
 
-for (let m of ["0", "1"]) {
-    goTo.marker(m);
-    verify.completionListContains("f1.ts");
-    verify.completionListContains("f2.ts");
-    verify.not.completionListItemsCountIsGreaterThan(2);
-}
-
-goTo.marker("2");
-verify.completionListContains("d");
-verify.not.completionListItemsCountIsGreaterThan(1);
-
-
-
-for (let m = 3; m < 11; ++m) {
+for (let m = 0; m < 11; ++m) {
     goTo.marker("" + m);
     verify.completionListContains("f1.ts");
-    verify.not.completionListItemsCountIsGreaterThan(1);
+    verify.completionListContains("f2.ts");
+    verify.completionListContains("d");
+    verify.not.completionListItemsCountIsGreaterThan(3);
 }

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// Offers completions for absolute paths.
+// Exercises completions for absolute paths.
 
 // @Filename: tests/test0.ts
 //// /// <reference path="/tests/cases/f/*0*/

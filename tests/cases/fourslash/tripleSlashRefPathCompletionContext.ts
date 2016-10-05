@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// Exercises for whether completions are performed depending on where the caret is positioned in the ref comment.
+// Exercises whether completions are supplied, conditional on the caret position in the ref comment.
 
 // @Filename: f.ts
 //// /*f*/

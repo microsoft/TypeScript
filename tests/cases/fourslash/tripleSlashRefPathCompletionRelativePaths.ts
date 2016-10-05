@@ -17,17 +17,14 @@
 // @Filename: d1/d2/test.ts
 //// /// <reference path="/*0*/
 //// /// <reference path=".//*1*/
-
 //// /// <reference path="./*2*/
-
 //// /// <reference path="../*3*/
+//// /// <reference path="d3/*4*/
 
-//// /// <reference path="..//*4*/
-//// /// <reference path="..\/*5*/
+//// /// <reference path="..//*5*/
+//// /// <reference path="..\/*6*/
 
-//// /// <reference path="../..//*6*/
-
-//// /// <reference path="d3/*7*/
+//// /// <reference path="../..//*7*/
 
 //// /// <reference path="d3//*8*/
 //// /// <reference path="./d3//*9*/
@@ -40,40 +37,30 @@ parentDirCompletions();
 childDirCompletions();
 
 function workingDirCompletions() {
-    for (let m of ["0", "1",]) {
-        goTo.marker(m);
+    for (let m = 0; m < 5; ++m) {
+        goTo.marker("" + m);
         verify.completionListContains("h.ts");
         verify.completionListContains("d3");
         verify.not.completionListItemsCountIsGreaterThan(2);
     }
-
-    goTo.marker("2");
-    verify.completionListContains("h.ts");
-    verify.not.completionListItemsCountIsGreaterThan(1);
-
-    goTo.marker("3");
-    verify.not.completionListItemsCountIsGreaterThan(0);
 }
 
 function parentDirCompletions() {
 
-    for (let m of ["4", "5"]) {
+    for (let m of ["5", "6"]) {
         goTo.marker(m);
         verify.completionListContains("g.ts");
         verify.completionListContains("d2");
         verify.not.completionListItemsCountIsGreaterThan(2);
     }
 
-    goTo.marker("6");
+    goTo.marker("7");
     verify.completionListContains("f.ts");
     verify.completionListContains("d1");
     verify.not.completionListItemsCountIsGreaterThan(2);
 }
 
 function childDirCompletions() {
-    goTo.marker("7");
-    verify.completionListContains("d3");
-    verify.not.completionListItemsCountIsGreaterThan(1);
 
     for (let m of ["8", "9"]) {
         goTo.marker(m);
