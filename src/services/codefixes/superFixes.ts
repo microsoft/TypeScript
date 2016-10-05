@@ -29,7 +29,7 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
 
             const token = getTokenAtPosition(sourceFile, context.span.start);
-            if (token.kind !== SyntaxKind.ConstructorKeyword) {
+            if (token.kind !== SyntaxKind.ThisKeyword) {
                 return undefined;
             }
 
