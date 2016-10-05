@@ -2183,9 +2183,14 @@ namespace ts {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
-                    else if (!(flags & TypeFormatFlags.InTypeAlias) && type.flags & (TypeFlags.Anonymous | TypeFlags.UnionOrIntersection) && type.aliasSymbol &&
+                    else if (!(flags & TypeFormatFlags.InTypeAlias) && ((type.flags & TypeFlags.Anonymous && !(<AnonymousType>type).target) || type.flags & TypeFlags.UnionOrIntersection) && type.aliasSymbol &&
                         isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
-                        // Only write out inferred type with its corresponding type-alias if type-alias is visible
+                        // We emit inferred type as type-alias at the current localtion if all the following is true
+                        //      the input type is has alias symbol that is accessible
+                        //      the input type is a union, intersection or anonymous type that is fully instantiated (if not we want to keep dive into)
+                        //          e.g.: export type Bar<X, Y> = () => [X, Y];
+                        //                export type Foo<Y> = Bar<any, Y>;
+                        //                export const y = (x: Foo<string>) => 1  // we want to emit as ...x: () => [any, string])
                         const typeArguments = type.aliasTypeArguments;
                         writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
                     }
@@ -5446,7 +5451,26 @@ namespace ts {
             return false;
         }
 
+        function isSetOfLiteralsFromSameEnum(types: TypeSet): boolean {
+            const first = types[0];
+            if (first.flags & TypeFlags.EnumLiteral) {
+                const firstEnum = getParentOfSymbol(first.symbol);
+                for (let i = 1; i < types.length; i++) {
+                    const other = types[i];
+                    if (!(other.flags & TypeFlags.EnumLiteral) || (firstEnum !== getParentOfSymbol(other.symbol))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            return false;
+        }
+
         function removeSubtypes(types: TypeSet) {
+            if (types.length === 0 || isSetOfLiteralsFromSameEnum(types)) {
+                return;
+            }
             let i = types.length;
             while (i > 0) {
                 i--;
@@ -9354,7 +9378,7 @@ namespace ts {
                 captureLexicalThis(node, container);
             }
             if (isFunctionLike(container) &&
-                (!isInParameterInitializerBeforeContainingFunction(node) || getFunctionLikeThisParameter(container))) {
+                (!isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container))) {
                 // Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
 
                 // If this is a function in a JS file, it might be a class method. Check if it's the RHS
@@ -15538,10 +15562,6 @@ namespace ts {
             }
         }
 
-        function parameterIsThisKeyword(parameter: ParameterDeclaration) {
-            return parameter.name && (<Identifier>parameter.name).originalKeywordKind === SyntaxKind.ThisKeyword;
-        }
-
         function parameterNameStartsWithUnderscore(parameter: ParameterDeclaration) {
             return parameter.name && parameter.name.kind === SyntaxKind.Identifier && (<Identifier>parameter.name).text.charCodeAt(0) === CharacterCodes._;
         }
@@ -20122,18 +20142,8 @@ namespace ts {
         }
 
         function getAccessorThisParameter(accessor: AccessorDeclaration): ParameterDeclaration {
-            if (accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 1 : 2) &&
-                accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
-                (<Identifier>accessor.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) {
-                return accessor.parameters[0];
-            }
-        }
-
-        function getFunctionLikeThisParameter(func: FunctionLikeDeclaration) {
-            if (func.parameters.length &&
-                func.parameters[0].name.kind === SyntaxKind.Identifier &&
-                (<Identifier>func.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) {
-                return func.parameters[0];
+            if (accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 1 : 2)) {
+                return getThisParameter(accessor);
             }
         }
 

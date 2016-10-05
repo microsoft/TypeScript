@@ -83,7 +83,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
-    export var sys: System = (function() {
+    export let sys: System = (function() {
 
         function getWScriptSystem(): System {
 
@@ -637,4 +637,10 @@ namespace ts {
         }
         return sys;
     })();
+
+    if (sys && sys.getEnvironmentVariable) {
+        Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
+            ? AssertionLevel.Normal
+            : AssertionLevel.None;
+    }
 }

@@ -523,6 +523,8 @@ namespace ts.server {
     process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");
     });
+    // See https://github.com/Microsoft/TypeScript/issues/11348
+    (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
 }
