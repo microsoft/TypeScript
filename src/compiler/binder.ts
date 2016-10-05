@@ -2432,8 +2432,7 @@ namespace ts {
         }
 
         // If the parameter's name is 'this', then it is TypeScript syntax.
-        if (subtreeFlags & TransformFlags.ContainsDecorators
-            || (name && isIdentifier(name) && name.originalKeywordKind === SyntaxKind.ThisKeyword)) {
+        if (subtreeFlags & TransformFlags.ContainsDecorators || isThisIdentifier(name)) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
