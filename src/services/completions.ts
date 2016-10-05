@@ -333,9 +333,10 @@ namespace ts.Completions {
 
             fragment = normalizeSlashes(fragment);
 
-            const baseName = getBaseFileName(fragment);
-
-            // Remove the basename from our directory path
+            /**
+             * Remove the basename from the path. Note that we don't use the basename to filter completions;
+             * the client is responsible for refining completions.
+             */
             fragment = getDirectoryPath(fragment);
 
             if (fragment === "") {
@@ -368,11 +369,6 @@ namespace ts.Completions {
 
                         const foundFileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
 
-                        // Only add entries that contain the basename as a substring.
-                        if (foundFileName.indexOf(baseName) === -1) {
-                            continue;
-                        }
-
                         if (!foundFiles[foundFileName]) {
                             foundFiles[foundFileName] = true;
                         }
@@ -389,11 +385,6 @@ namespace ts.Completions {
                 if (directories) {
                     for (const directory of directories) {
                         const directoryName = getBaseFileName(normalizePath(directory));
-
-                        // Only add entries that contain the basename as a substring.
-                        if (directoryName.indexOf(baseName) === -1) {
-                            continue;
-                        }
 
                         result.push(createCompletionEntryForModule(directoryName, ScriptElementKind.directory, span));
                     }
