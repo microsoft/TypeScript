@@ -2483,7 +2483,7 @@ namespace ts {
 
     // Enum types (TypeFlags.Enum)
     export interface EnumType extends Type {
-        memberTypes: Map<number, EnumLiteralType>;
+        memberTypes: { [enumMemberValue: number]: EnumLiteralType };
     }
 
     // Enum types (TypeFlags.EnumLiteral)

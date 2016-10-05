@@ -3868,15 +3868,15 @@ namespace ts {
                 enumType.symbol = symbol;
                 if (enumHasLiteralMembers(symbol)) {
                     const memberTypeList: Type[] = [];
-                    const memberTypes = new NumberMap<number, EnumLiteralType>();
+                    const memberTypes: { [enumMemberValue: number]: EnumLiteralType } = [];
                     for (const declaration of enumType.symbol.declarations) {
                         if (declaration.kind === SyntaxKind.EnumDeclaration) {
                             computeEnumMemberValues(<EnumDeclaration>declaration);
                             for (const member of (<EnumDeclaration>declaration).members) {
                                 const memberSymbol = getSymbolOfNode(member);
                                 const value = getEnumMemberValue(member);
-                                if (!memberTypes.get(value)) {
-                                    memberTypeList.push(setAndReturn(memberTypes, value, createEnumLiteralType(memberSymbol, enumType, "" + value)));
+                                if (!memberTypes[value]) {
+                                    memberTypeList.push(memberTypes[value] = createEnumLiteralType(memberSymbol, enumType, "" + value));
                                 }
                             }
                         }
@@ -3897,7 +3897,7 @@ namespace ts {
             if (!links.declaredType) {
                 const enumType = <EnumType>getDeclaredTypeOfEnum(getParentOfSymbol(symbol));
                 links.declaredType = enumType.flags & TypeFlags.Union ?
-                    enumType.memberTypes.get(getEnumMemberValue(<EnumDeclaration>symbol.valueDeclaration)) :
+                    enumType.memberTypes[getEnumMemberValue(<EnumDeclaration>symbol.valueDeclaration)] :
                     enumType;
             }
             return links.declaredType;
