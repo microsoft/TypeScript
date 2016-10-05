@@ -4497,7 +4497,9 @@ namespace ts {
                     return undefined;
                 }
 
-                if (node.parent.kind === SyntaxKind.PropertyAssignment && node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                if (node.parent.kind === SyntaxKind.PropertyAssignment &&
+                    node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression &&
+                    (<PropertyAssignment>node.parent).name === node) {
                     // Get quoted name of properties of the object literal expression
                     // i.e. interface ConfigFiles {
                     //          'jspm:dev': string
