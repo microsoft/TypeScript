@@ -24,5 +24,5 @@ var Foo = (function () {
 }());
 __decorate([
     PropDeco,
-    __metadata("design:type", Object)
+    __metadata("design:type", String)
 ], Foo.prototype, "foo");
