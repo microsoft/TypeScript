@@ -2063,4 +2063,88 @@ namespace ts.projectSystem {
             projectService.inferredProjects[0].getLanguageService().getProgram();
         });
     });
+
+    describe("skipLibCheck", () => {
+        it("should be turned on for js-only inferred projects", () => {
+            const file1 = {
+                path: "/a/b/file1.js",
+                content: `
+                /// <reference path="file2.d.ts" />
+                var x = 1;`
+            };
+            const file2 = {
+                path: "/a/b/file2.d.ts",
+                content: `
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };`
+            };
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file2.path);
+            checkNumberOfInferredProjects(projectService, 1);
+            let inferredProject = projectService.inferredProjects[0];
+            assert.isNotTrue(inferredProject.getCompilerOptions().skipLibCheck);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfInferredProjects(projectService, 1);
+            inferredProject = projectService.inferredProjects[0];
+            assert.isTrue(inferredProject.getCompilerOptions().skipLibCheck);
+
+            projectService.closeClientFile(file1.path);
+            checkNumberOfInferredProjects(projectService, 1);
+            inferredProject = projectService.inferredProjects[0];
+            assert.isNotTrue(inferredProject.getCompilerOptions().skipLibCheck);
+        });
+
+        it("should be turned on for js-only external projects", () => {
+            const file1 = {
+                path: "/a/b/f1.js",
+                content: "let x =1;"
+            };
+            const file2 = {
+                path: "/a/b/f2.d.ts",
+                content: "interface T {};"
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([file1.path, file2.path]),
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfExternalProjects(projectService, 1);
+            const externalProject = projectService.externalProjects[0];
+            assert.isTrue(externalProject.getCompilerOptions().skipLibCheck);
+        });
+
+        it("should not be turned on for ts external projects", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+            const file2 = {
+                path: "/a/b/f2.d.ts",
+                content: "interface T {};"
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([file1.path, file2.path]),
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfExternalProjects(projectService, 1);
+            const externalProject = projectService.externalProjects[0];
+            assert.isNotTrue(externalProject.getCompilerOptions().skipLibCheck);
+        });
+    });
 }

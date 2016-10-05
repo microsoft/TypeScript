@@ -1127,7 +1127,7 @@ namespace ts.server {
                 return combineProjectOutput(
                     projects,
                     project => {
-                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isJsOnlyProject());
+                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isNonTsProject());
                         if (!navItems) {
                             return [];
                         }
@@ -1165,7 +1165,7 @@ namespace ts.server {
             else {
                 return combineProjectOutput(
                     projects,
-                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isJsOnlyProject()),
+                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isNonTsProject()),
                     /*comparer*/ undefined,
                     navigateToItemIsEqualTo);
             }

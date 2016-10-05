@@ -20,16 +20,45 @@ namespace ts.server {
         }
     }
 
-    function isJsOrDtsFile(info: ScriptInfo) {
-        return info.scriptKind === ScriptKind.JS || info.scriptKind == ScriptKind.JSX || fileExtensionIs(info.fileName, ".d.ts");
+    function countEachFileTypes(infos: ScriptInfo[]): { js: number, jsx: number, ts: number, tsx: number, dts: number } {
+        const result = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
+        for (const info of infos) {
+            switch (info.scriptKind) {
+                case ScriptKind.JS:
+                    result.js += 1;
+                    break;
+                case ScriptKind.JSX:
+                    result.jsx += 1;
+                    break;
+                case ScriptKind.TS:
+                    if (fileExtensionIs(info.fileName, ".d.ts")) {
+                        result.dts += 1;
+                    }
+                    else {
+                        result.ts += 1;
+                    }
+                    break;
+                case ScriptKind.TSX:
+                    result.tsx += 1;
+                    break;
+            }
+        }
+        return result;
+    }
+
+    function hasOneOrMoreJsAndNoTsFiles(project: Project) {
+        const counts = countEachFileTypes(project.getScriptInfos());
+        return counts.js > 0 && counts.ts === 0 && counts.tsx === 0;
     }
 
     export function allRootFilesAreJsOrDts(project: Project): boolean {
-        return project.getRootScriptInfos().every(isJsOrDtsFile);
+        const counts = countEachFileTypes(project.getRootScriptInfos());
+        return counts.ts === 0 && counts.tsx === 0;
     }
 
     export function allFilesAreJsOrDts(project: Project): boolean {
-        return project.getScriptInfos().every(isJsOrDtsFile);
+        const counts = countEachFileTypes(project.getScriptInfos());
+        return counts.ts === 0 && counts.tsx === 0;
     }
 
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
@@ -71,9 +100,14 @@ namespace ts.server {
 
         public typesVersion = 0;
 
-        public isJsOnlyProject() {
+        public isNonTsProject() {
             this.updateGraph();
             return allFilesAreJsOrDts(this);
+        }
+
+        public isJsOnlyProject() {
+            this.updateGraph();
+            return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
         constructor(
@@ -322,6 +356,7 @@ namespace ts.server {
             }
             if (hasChanges) {
                 this.projectStructureVersion++;
+                this.updateCompilerOptions();
             }
             return !hasChanges;
         }
@@ -380,6 +415,17 @@ namespace ts.server {
 
         getScriptInfo(uncheckedFileName: string) {
             return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
+        }
+
+        updateCompilerOptions() {
+            if (this.projectKind === ProjectKind.External || this.projectKind === ProjectKind.Inferred) {
+                if (this.isJsOnlyProject()) {
+                    this.compilerOptions.skipLibCheck = true;
+                }
+                else {
+                    this.compilerOptions.skipLibCheck = false;
+                }
+            }
         }
 
         filesToString() {
