@@ -2707,13 +2707,33 @@ namespace ts {
         });
     }
 
-    export function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
+    /** Get the type annotaion for the value parameter. */
+    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration): TypeNode {
         if (accessor && accessor.parameters.length > 0) {
-            const hasThis = accessor.parameters.length === 2 &&
-                accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
-                (accessor.parameters[0].name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword;
+            const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
             return accessor.parameters[hasThis ? 1 : 0].type;
         }
+    }
+
+    export function getThisParameter(signature: SignatureDeclaration): ParameterDeclaration | undefined {
+        if (signature.parameters.length) {
+            const thisParameter = signature.parameters[0];
+            if (parameterIsThisKeyword(thisParameter)) {
+                return thisParameter;
+            }
+        }
+    }
+
+    export function parameterIsThisKeyword(parameter: ParameterDeclaration): boolean {
+        return isThisIdentifier(parameter.name);
+    }
+
+    export function isThisIdentifier(node: Node | undefined): boolean {
+        return node && node.kind === SyntaxKind.Identifier && identifierIsThisKeyword(node as Identifier);
+    }
+
+    export function identifierIsThisKeyword(id: Identifier): boolean {
+        return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
 
     export interface AllAccessorDeclarations {
