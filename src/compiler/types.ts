@@ -1020,6 +1020,7 @@ namespace ts {
         | SyntaxKind.ExclamationEqualsEqualsToken
         | SyntaxKind.ExclamationEqualsToken
         | SyntaxKind.InstanceOfKeyword
+        | SyntaxKind.InKeyword
         | SyntaxKind.CommaToken;
 
     export type BinaryOperatorToken = Token<BinaryOperator>;
