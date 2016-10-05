@@ -2,29 +2,29 @@
 
 {
     type Data = string | boolean;
->Data : Data
+>Data : string | boolean
 
     let obj: Data = true;
->obj : Data
->Data : Data
+>obj : string | boolean
+>Data : string | boolean
 >true : true
 }
 export { }
 
 === tests/cases/compiler/1.ts ===
 let v = "str" || true;
->v : Data
->"str" || true : Data
+>v : string | boolean
+>"str" || true : string | boolean
 >"str" : string
 >true : boolean
 
 function bar () {
->bar : () => Data
+>bar : () => string | boolean
 
     return v;
->v : Data
+>v : string | boolean
 }
 export { v, bar }
->v : Data
->bar : () => Data
+>v : string | boolean
+>bar : () => string | boolean
 

@@ -1744,7 +1744,15 @@ namespace ts {
             return false;
         }
 
-        function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult {
+        /**
+         * Check if the given symbol in given enclosing declaration is accessible and mark all associated alias to be visible if requested
+         *
+         * @param symbol a Symbol to check if accessible
+         * @param enclosingDeclaration a Node containing the symbol
+         * @param meaning a SymbolFlags to check if such meaning of the symbol is accessible
+         * @param shouldComputeAliasToMarkVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
+         */
+        function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult {
             if (symbol && enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter)) {
                 const initialSymbol = symbol;
                 let meaningToLook = meaning;
@@ -1752,7 +1760,7 @@ namespace ts {
                     // Symbol is accessible if it by itself is accessible
                     const accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaningToLook, /*useOnlyExternalAliasing*/ false);
                     if (accessibleSymbolChain) {
-                        const hasAccessibleDeclarations = hasVisibleDeclarations(accessibleSymbolChain[0]);
+                        const hasAccessibleDeclarations = hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible);
                         if (!hasAccessibleDeclarations) {
                             return <SymbolAccessibilityResult>{
                                 accessibility: SymbolAccessibility.NotAccessible,
@@ -1816,7 +1824,7 @@ namespace ts {
             return isAmbientModule(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>declaration));
         }
 
-        function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
+        function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMarkVisible: boolean): SymbolVisibilityResult {
             let aliasesToMakeVisible: AnyImportSyntax[];
             if (forEach(symbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
                 return undefined;
@@ -1832,14 +1840,16 @@ namespace ts {
                     if (anyImportSyntax &&
                         !(anyImportSyntax.flags & NodeFlags.Export) && // import clause without export
                         isDeclarationVisible(<Declaration>anyImportSyntax.parent)) {
-                        getNodeLinks(declaration).isVisible = true;
-                        if (aliasesToMakeVisible) {
-                            if (!contains(aliasesToMakeVisible, anyImportSyntax)) {
-                                aliasesToMakeVisible.push(anyImportSyntax);
+                        if (shouldComputeAliasToMarkVisible) {
+                            getNodeLinks(declaration).isVisible = true;
+                            if (aliasesToMakeVisible) {
+                                if (!contains(aliasesToMakeVisible, anyImportSyntax)) {
+                                    aliasesToMakeVisible.push(anyImportSyntax);
+                                }
                             }
-                        }
-                        else {
-                            aliasesToMakeVisible = [anyImportSyntax];
+                            else {
+                                aliasesToMakeVisible = [anyImportSyntax];
+                            }
                         }
                         return true;
                     }
@@ -1874,7 +1884,7 @@ namespace ts {
             const symbol = resolveName(enclosingDeclaration, (<Identifier>firstIdentifier).text, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
 
             // Verify if the symbol is accessible
-            return (symbol && hasVisibleDeclarations(symbol)) || <SymbolVisibilityResult>{
+            return (symbol && hasVisibleDeclarations(symbol, /*shouldComputeAliasToMarkVisible*/ true)) || <SymbolVisibilityResult>{
                 accessibility: SymbolAccessibility.NotAccessible,
                 errorSymbolName: getTextOfNode(firstIdentifier),
                 errorNode: firstIdentifier
@@ -2152,14 +2162,11 @@ namespace ts {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
-                    else if (!(flags & TypeFormatFlags.InTypeAlias) && type.flags & (TypeFlags.Anonymous | TypeFlags.UnionOrIntersection) && type.aliasSymbol) {
-                        if (type.flags & TypeFlags.Anonymous || !(flags & TypeFormatFlags.UseTypeAliasValue)) {
-                            const typeArguments = type.aliasTypeArguments;
-                            writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
-                        }
-                        else {
-                            writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
-                        }
+                    else if (!(flags & TypeFormatFlags.InTypeAlias) && type.flags & (TypeFlags.Anonymous | TypeFlags.UnionOrIntersection) && type.aliasSymbol &&
+                        isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
+                        // Only write out inferred type with its corresponding type-alias if type-alias is visible
+                        const typeArguments = type.aliasTypeArguments;
+                        writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
                     }
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
