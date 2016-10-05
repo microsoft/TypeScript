@@ -904,6 +904,7 @@ namespace ts.Completions {
             }
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
+            isGlobalCompletion = false;
         }
         else if (isStartingCloseTag) {
             const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
@@ -914,6 +915,7 @@ namespace ts.Completions {
             }
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
+            isGlobalCompletion = false;
         }
         else {
             // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
@@ -1001,6 +1003,7 @@ namespace ts.Completions {
                 if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                     // Cursor is inside a JSX self-closing element or opening element
                     attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
+                    isGlobalCompletion = false;
 
                     if (attrsType) {
                         symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);
