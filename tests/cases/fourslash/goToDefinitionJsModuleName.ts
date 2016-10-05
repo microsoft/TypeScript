@@ -7,5 +7,4 @@
 // @Filename: bar.js
 ////var x = require(/*1*/"./foo");
 
-debugger;
 verify.goToDefinition("1", "2");
