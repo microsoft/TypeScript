@@ -327,7 +327,9 @@ namespace ts.Completions {
          * Given a path ending at a directory, gets the completions for the path, and filters for those entries containing the basename.
          */
         function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
-            if (fragment === undefined) { fragment = "./"; }
+            if (fragment === undefined) {
+                fragment = "";
+            }
 
             fragment = normalizeSlashes(fragment);
 
