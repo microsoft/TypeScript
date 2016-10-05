@@ -5386,7 +5386,26 @@ namespace ts {
             return false;
         }
 
-        function removeSubtypes(types: Type[]) {
+        function isSetOfLiteralsFromSameEnum(types: TypeSet): boolean {
+            const first = types[0];
+            if (first.flags & TypeFlags.EnumLiteral) {
+                const firstEnum = getParentOfSymbol(first.symbol);
+                for (let i = 1; i < types.length; i++) {
+                    const other = types[i];
+                    if (!(other.flags & TypeFlags.EnumLiteral) || (firstEnum !== getParentOfSymbol(other.symbol))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        function removeSubtypes(types: TypeSet) {
+            if (types.length === 0 || isSetOfLiteralsFromSameEnum(types)) {
+                return;
+            }
             let i = types.length;
             while (i > 0) {
                 i--;
