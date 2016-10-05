@@ -168,9 +168,7 @@ namespace ts.server {
             eventHandler?: ProjectServiceEventHandler) {
 
             this.eventHander = canUseEvents
-                ? eventHandler
-                    ? eventHandler
-                    : event => this.defaultEventHandler(event)
+                ? eventHandler || (event => this.defaultEventHandler(event))
                 : undefined;
 
             this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander);
