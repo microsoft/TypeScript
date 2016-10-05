@@ -351,6 +351,12 @@ namespace ts.Completions {
                 const files = tryReadDirectory(host, baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
 
                 if (files) {
+                    /**
+                     * Multiple file entries might map to the same truncated name once we remove extensions
+                     * (happens iff includeExtensions === false)so we use a set-like data structure. Eg:
+                     * 
+                     * both foo.ts and foo.tsx become foo
+                     */
                     const foundFiles = createMap<boolean>();
                     for (let filePath of files) {
                         filePath = normalizePath(filePath);
@@ -359,6 +365,11 @@ namespace ts.Completions {
                         }
 
                         const foundFileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
+
+                        // Only add entries that contain the basename as a substring.
+                        if (foundFileName.indexOf(baseName) === -1) {
+                            continue;
+                        }
 
                         if (!foundFiles[foundFileName]) {
                             foundFiles[foundFileName] = true;
@@ -377,12 +388,15 @@ namespace ts.Completions {
                     for (const directory of directories) {
                         const directoryName = getBaseFileName(normalizePath(directory));
 
+                        // Only add entries that contain the basename as a substring.
+                        if (directoryName.indexOf(baseName) === -1) {
+                            continue;
+                        }
+
                         result.push(createCompletionEntryForModule(directoryName, ScriptElementKind.directory, span));
                     }
                 }
             }
-
-            result = result.filter(entry => entry.name.indexOf(baseName) >= 0);
 
             return result;
         }
