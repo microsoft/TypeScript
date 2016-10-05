@@ -2084,6 +2084,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1, file2]);
             const projectService = createProjectService(host);
+            const session = createSession()
 
             projectService.openClientFile(file2.path);
             checkNumberOfInferredProjects(projectService, 1);

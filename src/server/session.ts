@@ -14,6 +14,17 @@ namespace ts.server {
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
     }
 
+    function shouldSkipSematicCheck(project: Project) {
+        if (project.getCompilerOptions().skipLibCheck !== undefined) {
+            return false;
+        }
+
+        if ((project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) && project.isJsOnlyProject()) {
+            return true;
+        }
+        return false;
+    }
+
     interface FileStart {
         file: string;
         start: ILineInfo;
@@ -252,12 +263,13 @@ namespace ts.server {
 
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
-                const diags = project.getLanguageService().getSemanticDiagnostics(file);
-
-                if (diags) {
-                    const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                    this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                let diags: Diagnostic[] = [];
+                if (!shouldSkipSematicCheck(project)) {
+                    diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }
+
+                const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
+                this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
             }
             catch (err) {
                 this.logError(err, "semantic check");
@@ -370,6 +382,9 @@ namespace ts.server {
 
         private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
             const { project, file } = this.getFileAndProject(args);
+            if (shouldSkipSematicCheck(project)) {
+                return [];
+            }
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const diagnostics = selector(project, file);
             return includeLinePosition

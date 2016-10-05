@@ -356,7 +356,6 @@ namespace ts.server {
             }
             if (hasChanges) {
                 this.projectStructureVersion++;
-                this.updateCompilerOptions();
             }
             return !hasChanges;
         }
@@ -415,17 +414,6 @@ namespace ts.server {
 
         getScriptInfo(uncheckedFileName: string) {
             return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
-        }
-
-        updateCompilerOptions() {
-            if (this.projectKind === ProjectKind.External || this.projectKind === ProjectKind.Inferred) {
-                if (this.isJsOnlyProject()) {
-                    this.compilerOptions.skipLibCheck = true;
-                }
-                else {
-                    this.compilerOptions.skipLibCheck = false;
-                }
-            }
         }
 
         filesToString() {
