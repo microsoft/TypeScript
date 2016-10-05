@@ -1512,12 +1512,25 @@ namespace ts {
             return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
+        function isTsOrTsxFile(fileName: string): boolean {
+            const kind = getScriptKind(fileName, host);
+            return kind === ScriptKind.TS || kind === ScriptKind.TSX;
+        }
+
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+            if (!isTsOrTsxFile(fileName)) {
+                // do not run semantic classification on non-ts-or-tsx files
+                return [];
+            }
             synchronizeHostData();
             return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
 
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+            if (!isTsOrTsxFile(fileName)) {
+                // do not run semantic classification on non-ts-or-tsx files
+                return { spans: [], endOfLineState: EndOfLineState.None };
+            }
             synchronizeHostData();
             return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
