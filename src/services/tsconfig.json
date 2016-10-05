@@ -80,7 +80,6 @@
         "formatting/smartIndenter.ts",
         "formatting/tokenRange.ts",
         "codeFixes/codeFixProvider.ts",
-        "codeFixes/references.ts",
-        "codeFixes/superFixes.ts"
+        "codeFixes/fixes.ts"
     ]
 }

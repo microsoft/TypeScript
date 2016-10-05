@@ -24,7 +24,8 @@
 /// <reference path='transpile.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='codefixes\references.ts' />
+/// <reference path='codefixes\codeFixProvider.ts' />
+/// <reference path='codefixes\fixes.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1641,15 +1642,18 @@ namespace ts {
         function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
+            const span = { start, length: end - start };
+            const newLineChar = getNewLineOrDefaultFromHost(host);
+
             let allFixes: CodeAction[] = [];
 
             forEach(errorCodes, error => {
                 const context = {
                     errorCode: error,
                     sourceFile: sourceFile,
-                    span: { start, length: end - start },
+                    span: span,
                     program: program,
-                    newLineCharacter: getNewLineOrDefaultFromHost(host)
+                    newLineCharacter: newLineChar
                 };
 
                 const fixes = codefix.getFixes(context);
