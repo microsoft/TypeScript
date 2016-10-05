@@ -1,0 +1,22 @@
+=== tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters1.ts ===
+
+export type Bar<X, Y> = () => [X, Y];
+>Bar : Bar<X, Y>
+>X : X
+>Y : Y
+>X : X
+>Y : Y
+
+export type Foo<Y> = Bar<any, Y>;
+>Foo : () => [any, Y]
+>Y : Y
+>Bar : Bar<X, Y>
+>Y : Y
+
+export const y = (x: Foo<string>) => 1
+>y : (x: () => [any, string]) => number
+>(x: Foo<string>) => 1 : (x: () => [any, string]) => number
+>x : () => [any, string]
+>Foo : () => [any, Y]
+>1 : 1
+
