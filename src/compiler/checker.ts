@@ -5787,6 +5787,90 @@ namespace ts {
             }
         }
 
+        function getStaticTypeFromTypeNode(node: TypeNode) {
+            switch (node.kind) {
+                case SyntaxKind.AnyKeyword:
+                case SyntaxKind.JSDocAllType:
+                case SyntaxKind.JSDocUnknownType:
+                    return anyType;
+                case SyntaxKind.StringKeyword:
+                    return stringType;
+                case SyntaxKind.NumberKeyword:
+                    return numberType;
+                case SyntaxKind.BooleanKeyword:
+                    return booleanType;
+                case SyntaxKind.SymbolKeyword:
+                    return esSymbolType;
+                case SyntaxKind.VoidKeyword:
+                    return voidType;
+                case SyntaxKind.UndefinedKeyword:
+                    return undefinedType;
+                case SyntaxKind.NullKeyword:
+                    return nullType;
+                case SyntaxKind.NeverKeyword:
+                    return neverType;
+                case SyntaxKind.JSDocNullKeyword:
+                    return nullType;
+                case SyntaxKind.JSDocUndefinedKeyword:
+                    return undefinedType;
+                case SyntaxKind.JSDocNeverKeyword:
+                    return neverType;
+                case SyntaxKind.ThisType:
+                case SyntaxKind.ThisKeyword:
+                    return getTypeFromThisTypeNode(node);
+                case SyntaxKind.LiteralType:
+                    return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
+                case SyntaxKind.JSDocLiteralType:
+                    return getTypeFromLiteralTypeNode((<JSDocLiteralType>node).literal);
+                case SyntaxKind.TypeReference:
+                case SyntaxKind.JSDocTypeReference:
+                    return getTypeFromTypeReference(<TypeReferenceNode>node);
+                case SyntaxKind.TypePredicate:
+                    return booleanType;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
+                case SyntaxKind.TypeQuery:
+                    return getTypeFromTypeQueryNode(<TypeQueryNode>node);
+                case SyntaxKind.ArrayType:
+                case SyntaxKind.JSDocArrayType:
+                    return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
+                case SyntaxKind.TupleType:
+                    return getTypeFromTupleTypeNode(<TupleTypeNode>node);
+                case SyntaxKind.UnionType:
+                case SyntaxKind.JSDocUnionType:
+                    return getTypeFromUnionTypeNode(<UnionTypeNode>node, aliasSymbol, aliasTypeArguments);
+                case SyntaxKind.IntersectionType:
+                    return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node, aliasSymbol, aliasTypeArguments);
+                case SyntaxKind.ParenthesizedType:
+                case SyntaxKind.JSDocNullableType:
+                case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.JSDocConstructorType:
+                case SyntaxKind.JSDocThisType:
+                case SyntaxKind.JSDocOptionalType:
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode>node).type);
+                case SyntaxKind.JSDocRecordType:
+                    return getTypeFromTypeNode((node as JSDocRecordType).literal);
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
+                case SyntaxKind.JSDocFunctionType:
+                    return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node, aliasSymbol, aliasTypeArguments);
+                // This function assumes that an identifier or qualified name is a type expression
+                // Callers should first ensure this by calling isTypeNode
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    const symbol = getSymbolAtLocation(node);
+                    return symbol && getDeclaredTypeOfSymbol(symbol);
+                case SyntaxKind.JSDocTupleType:
+                    return getTypeFromJSDocTupleType(<JSDocTupleType>node);
+                case SyntaxKind.JSDocVariadicType:
+                    return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
+                default:
+                    return unknownType;
+            }
+        }
+
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
             if (items && items.length) {
                 const result: T[] = [];
@@ -15181,29 +15265,22 @@ namespace ts {
         }
 
         /**
-          * Checks the return type of an async function to ensure it is a compatible
-          * Promise implementation.
-          * @param node The signature to check
-          * @param returnType The return type for the function
-          * @remarks
-          * This checks that an async function has a valid Promise-compatible return type,
-          * and returns the *awaited type* of the promise. An async function has a valid
-          * Promise-compatible return type if the resolved value of the return type has a
-          * construct signature that takes in an `initializer` function that in turn supplies
-          * a `resolve` function as one of its arguments and results in an object with a
-          * callable `then` signature.
-          */
+         * Checks the return type of an async function to ensure it is a compatible
+         * Promise implementation.
+         *
+         * This checks that an async function has a valid Promise-compatible return type,
+         * and returns the *awaited type* of the promise. An async function has a valid
+         * Promise-compatible return type if the resolved value of the return type has a
+         * construct signature that takes in an `initializer` function that in turn supplies
+         * a `resolve` function as one of its arguments and results in an object with a
+         * callable `then` signature.
+         *
+         * @param node The signature to check
+         */
         function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration): Type {
             if (languageVersion >= ScriptTarget.ES6) {
                 const returnType = getTypeFromTypeNode(node.type);
                 return checkCorrectPromiseType(returnType, node.type, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
-            }
-
-            const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
-            if (globalPromiseConstructorLikeType === emptyObjectType) {
-                // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
-                // compatibility with __awaiter.
-                return unknownType;
             }
 
             // As part of our emit for an async function, we will need to emit the entity name of
@@ -15230,18 +15307,35 @@ namespace ts {
             //      then<U>(...): Promise<U>;
             //  }
             //
-            // When we get the type of the `Promise` symbol here, we get the type of the static
-            // side of the `Promise` class, which would be `{ new <T>(...): Promise<T> }`.
+
+            const promiseName = getEntityNameFromTypeNode(node.type);
+            const rootName = getFirstIdentifier(promiseName);
+
+            // Mark the root symbol as referenced.
+            getSymbolLinks(rootName.symbol).referenced = true;
 
             const promiseType = getTypeFromTypeNode(node.type);
             if (promiseType === unknownType && compilerOptions.isolatedModules) {
                 // If we are compiling with isolatedModules, we may not be able to resolve the
-                // type as a value. As such, we will just return unknownType;
+                // type as a value. As such, we will just return unknownType.
                 return unknownType;
             }
 
+            const promiseConstructorType = getStaticTypeFromTypeNode(node.type);
+
+            const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
+            if (globalPromiseConstructorLikeType === emptyObjectType) {
+                // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
+                // compatibility with __awaiter.
+                error(node.type || node.name || node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+                return unknownType;
+            }
+
+            // When we get the type of the `Promise` symbol here, we get the type of the static
+            // side of the `Promise` class, which would be `{ new <T>(...): Promise<T> }`.
+
             const promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
-            if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
+            if (!promiseConstructor) {
                 // try to fall back to global promise type.
                 const typeName = promiseConstructor
                     ? symbolToString(promiseConstructor)
@@ -15259,12 +15353,10 @@ namespace ts {
             }
 
             // Verify there is no local declaration that could collide with the promise constructor.
-            const promiseName = getEntityNameFromTypeNode(node.type);
-            const promiseNameOrNamespaceRoot = getFirstIdentifier(promiseName);
-            const rootSymbol = getSymbol(node.locals, promiseNameOrNamespaceRoot.text, SymbolFlags.Value);
+            const rootSymbol = getSymbol(node.locals, rootName.text, SymbolFlags.Value);
             if (rootSymbol) {
                 error(rootSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
-                    promiseNameOrNamespaceRoot.text,
+                    rootName.text,
                     getFullyQualifiedName(promiseConstructor));
                 return unknownType;
             }
@@ -18086,9 +18178,33 @@ namespace ts {
         function getDiagnosticsWorker(sourceFile: SourceFile): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
+                // Some global diagnostics are deferred until they are needed and
+                // may not be reported in the firt call to getGlobalDiagnostics.
+                // We should catch these changes and report them.
+                const previousGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
+                const previousGlobalDiagnosticsSize = previousGlobalDiagnostics.length;
+
                 checkSourceFile(sourceFile);
-                return diagnostics.getDiagnostics(sourceFile.fileName);
+
+                const semanticDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
+                const currentGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
+                if (currentGlobalDiagnostics !== previousGlobalDiagnostics) {
+                    // If the arrays are not the same reference, new diagnostics were added.
+                    const deferredGlobalDiagnostics = relativeComplement(previousGlobalDiagnostics, currentGlobalDiagnostics, compareDiagnostics);
+                    return concatenate(deferredGlobalDiagnostics, semanticDiagnostics);
+                }
+                else if (previousGlobalDiagnosticsSize === 0 && currentGlobalDiagnostics.length > 0) {
+                    // If the arrays are the same reference, but the length has changed, a single
+                    // new diagnostic was added as DiagnosticCollection attempts to reuse the
+                    // same array.
+                    return concatenate(currentGlobalDiagnostics, semanticDiagnostics);
+                }
+
+                return semanticDiagnostics;
             }
+
+            // Global diagnostics are always added when a file is not provided to
+            // getDiagnostics
             forEach(host.getSourceFiles(), checkSourceFile);
             return diagnostics.getDiagnostics();
         }
