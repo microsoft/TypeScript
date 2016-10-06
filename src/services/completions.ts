@@ -14,17 +14,17 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName } = completionData;
 
         if (isJsDocTagName) {
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
-            return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getAllJsDocCompletionEntries() };
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getAllJsDocCompletionEntries() };
         }
 
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ false);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true);
             addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames));
         }
         else {
@@ -56,7 +56,7 @@ namespace ts.Completions {
             addRange(entries, keywordCompletions);
         }
 
-        return { isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation || isSourceFileJavaScript(sourceFile), entries };
+        return { isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation, entries };
 
         function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>): CompletionEntry[] {
             const entries: CompletionEntry[] = [];
@@ -138,7 +138,9 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            if (node.parent.kind === SyntaxKind.PropertyAssignment && node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+            if (node.parent.kind === SyntaxKind.PropertyAssignment &&
+                node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression &&
+                (<PropertyAssignment>node.parent).name === node) {
                 // Get quoted name of properties of the object literal expression
                 // i.e. interface ConfigFiles {
                 //          'jspm:dev': string
@@ -190,7 +192,7 @@ namespace ts.Completions {
             if (type) {
                 getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, element, /*performCharacterChecks*/false);
                 if (entries.length) {
-                    return { isMemberCompletion: true, isNewIdentifierLocation: true, entries };
+                    return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
                 }
             }
         }
@@ -209,7 +211,7 @@ namespace ts.Completions {
             }
 
             if (entries.length) {
-                return { isMemberCompletion: false, isNewIdentifierLocation: true, entries };
+                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: true, entries };
             }
 
             return undefined;
@@ -221,7 +223,7 @@ namespace ts.Completions {
             if (type) {
                 getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, node, /*performCharacterChecks*/false);
                 if (entries.length) {
-                    return { isMemberCompletion: true, isNewIdentifierLocation: true, entries };
+                    return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
                 }
             }
             return undefined;
@@ -233,7 +235,7 @@ namespace ts.Completions {
                 const entries: CompletionEntry[] = [];
                 addStringLiteralCompletionsFromType(type, entries);
                 if (entries.length) {
-                    return { isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+                    return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
                 }
             }
             return undefined;
@@ -281,6 +283,7 @@ namespace ts.Completions {
                 entries = getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, span);
             }
             return {
+                isGlobalCompletion: false,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: true,
                 entries
@@ -558,6 +561,7 @@ namespace ts.Completions {
                 }
 
                 return {
+                    isGlobalCompletion: false,
                     isMemberCompletion: false,
                     isNewIdentifierLocation: true,
                     entries
@@ -812,7 +816,7 @@ namespace ts.Completions {
             }
 
             if (isJsDocTagName) {
-                return { symbols: undefined, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName };
+                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName };
             }
 
             if (!insideJsDocTagExpression) {
@@ -884,6 +888,7 @@ namespace ts.Completions {
         }
 
         const semanticStart = timestamp();
+        let isGlobalCompletion = false;
         let isMemberCompletion: boolean;
         let isNewIdentifierLocation: boolean;
         let symbols: Symbol[] = [];
@@ -919,14 +924,16 @@ namespace ts.Completions {
             if (!tryGetGlobalSymbols()) {
                 return undefined;
             }
+            isGlobalCompletion = true;
         }
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
+        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
 
         function getTypeScriptMemberSymbols(): void {
             // Right of dot member completion list
+            isGlobalCompletion = false;
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
 
@@ -996,6 +1003,7 @@ namespace ts.Completions {
                 if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                     // Cursor is inside a JSX self-closing element or opening element
                     attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
+                    isGlobalCompletion = false;
 
                     if (attrsType) {
                         symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);

@@ -114,12 +114,12 @@ namespace ts.SymbolDisplay {
                 }
 
                 // try get the call/construct signature from the type if it matches
-                let callExpression: CallExpression;
+                let callExpression: CallExpression | NewExpression;
                 if (location.kind === SyntaxKind.CallExpression || location.kind === SyntaxKind.NewExpression) {
-                    callExpression = <CallExpression>location;
+                    callExpression = <CallExpression | NewExpression>location;
                 }
                 else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
-                    callExpression = <CallExpression>location.parent;
+                    callExpression = <CallExpression | NewExpression>location.parent;
                 }
 
                 if (callExpression) {

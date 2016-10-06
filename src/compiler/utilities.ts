@@ -1,4 +1,4 @@
-/// <reference path="sys.ts" />
+﻿/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -83,7 +83,7 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean {
+    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equaler?: (a: T, b: T) => boolean): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
         }
@@ -609,7 +609,7 @@ namespace ts {
         return !!(getCombinedNodeFlags(node) & NodeFlags.Let);
     }
 
-    export function isSuperCallExpression(n: Node): boolean {
+    export function isSuperCall(n: Node): n is SuperCall {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
     }
 
@@ -982,11 +982,11 @@ namespace ts {
     }
 
     /**
-      * Given an super call\property node returns a closest node where either
-      * - super call\property is legal in the node and not legal in the parent node the node.
+      * Given an super call/property node, returns the closest node where
+      * - a super call/property access is legal in the node and not legal in the parent node the node.
       *   i.e. super call is legal in constructor but not legal in the class body.
-      * - node is arrow function (so caller might need to call getSuperContainer in case it needs to climb higher)
-      * - super call\property is definitely illegal in the node (but might be legal in some subnode)
+      * - the container is an arrow function (so caller might need to call getSuperContainer again in case it needs to climb higher)
+      * - a super call/property is definitely illegal in the container (but might be legal in some subnode)
       *   i.e. super property access is illegal in function declaration but can be legal in the statement list
       */
     export function getSuperContainer(node: Node, stopOnFunctions: boolean): Node {
@@ -1047,7 +1047,7 @@ namespace ts {
     /**
      * Determines whether a node is a property or element access expression for super.
      */
-    export function isSuperProperty(node: Node): node is (PropertyAccessExpression | ElementAccessExpression) {
+    export function isSuperProperty(node: Node): node is SuperProperty {
         const kind = node.kind;
         return (kind === SyntaxKind.PropertyAccessExpression || kind === SyntaxKind.ElementAccessExpression)
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
@@ -1253,12 +1253,6 @@ namespace ts {
         return false;
     }
 
-    export function isExternalModuleNameRelative(moduleName: string): boolean {
-        // TypeScript 1.0 spec (April 2014): 11.2.1
-        // An external module name is "relative" if the first term is "." or "..".
-        return /^\.\.?($|[\\/])/.test(moduleName);
-    }
-
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         const moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
@@ -1381,7 +1375,7 @@ namespace ts {
         }
     }
 
-    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport {
         if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
             return <ImportEqualsDeclaration>node;
         }
@@ -1949,12 +1943,6 @@ namespace ts {
             || positionIsSynthesized(node.end);
     }
 
-    export function positionIsSynthesized(pos: number): boolean {
-        // This is a fast way of testing the following conditions:
-        //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
-        return !(pos >= 0);
-    }
-
     export function getOriginalNode(node: Node): Node {
         if (node) {
             while (node.original !== undefined) {
@@ -2471,7 +2459,7 @@ namespace ts {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): string {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || isDeclarationFile(file)) {
             return undefined;
@@ -2507,22 +2495,10 @@ namespace ts {
         const options = host.getCompilerOptions();
         const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
-        if (options.declaration) {
-            const path = outputDir
-                ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
-                : sourceFile.fileName;
-            return removeFileExtension(path) + ".d.ts";
-        }
-    }
-
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
-        return compilerOptions.target || ScriptTarget.ES3;
-    }
-
-    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
-        return typeof compilerOptions.module === "number" ?
-            compilerOptions.module :
-            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
+        const path = outputDir
+            ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
+            : sourceFile.fileName;
+        return removeFileExtension(path) + ".d.ts";
     }
 
     export interface EmitFileNames {
@@ -2575,7 +2551,8 @@ namespace ts {
      * @param action The action to execute.
      */
     export function forEachTransformedEmitFile(host: EmitHost, sourceFiles: SourceFile[],
-        action: (jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) => void) {
+        action: (jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
+        emitOnlyDtsFiles?: boolean) {
         const options = host.getCompilerOptions();
         // Emit on each source file
         if (options.outFile || options.out) {
@@ -2608,7 +2585,7 @@ namespace ts {
             }
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, extension);
             const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-            const declarationFilePath = !isSourceFileJavaScript(sourceFile) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
+            const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (options.declaration || emitOnlyDtsFiles) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
             action(jsFilePath, sourceMapFilePath, declarationFilePath, [sourceFile], /*isBundledEmit*/ false);
         }
 
@@ -2636,8 +2613,9 @@ namespace ts {
      * @param targetSourceFile An optional target source file to emit.
      */
     export function forEachExpectedEmitFile(host: EmitHost,
-        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
-        targetSourceFile?: SourceFile) {
+        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) => void,
+        targetSourceFile?: SourceFile,
+        emitOnlyDtsFiles?: boolean) {
         const options = host.getCompilerOptions();
         // Emit on each source file
         if (options.outFile || options.out) {
@@ -2670,12 +2648,13 @@ namespace ts {
                 }
             }
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, extension);
+            const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
             const emitFileNames: EmitFileNames = {
                 jsFilePath,
                 sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
-                declarationFilePath: !isSourceFileJavaScript(sourceFile) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined
+                declarationFilePath
             };
-            action(emitFileNames, [sourceFile], /*isBundledEmit*/false);
+            action(emitFileNames, [sourceFile], /*isBundledEmit*/false, emitOnlyDtsFiles);
         }
 
         function onBundledEmit(host: EmitHost) {
@@ -2693,7 +2672,7 @@ namespace ts {
                     sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
                     declarationFilePath: options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined
                 };
-                action(emitFileNames, bundledSources, /*isBundledEmit*/true);
+                action(emitFileNames, bundledSources, /*isBundledEmit*/true, emitOnlyDtsFiles);
             }
         }
     }
@@ -2728,13 +2707,33 @@ namespace ts {
         });
     }
 
-    export function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
+    /** Get the type annotaion for the value parameter. */
+    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration): TypeNode {
         if (accessor && accessor.parameters.length > 0) {
-            const hasThis = accessor.parameters.length === 2 &&
-                accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
-                (accessor.parameters[0].name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword;
+            const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
             return accessor.parameters[hasThis ? 1 : 0].type;
         }
+    }
+
+    export function getThisParameter(signature: SignatureDeclaration): ParameterDeclaration | undefined {
+        if (signature.parameters.length) {
+            const thisParameter = signature.parameters[0];
+            if (parameterIsThisKeyword(thisParameter)) {
+                return thisParameter;
+            }
+        }
+    }
+
+    export function parameterIsThisKeyword(parameter: ParameterDeclaration): boolean {
+        return isThisIdentifier(parameter.name);
+    }
+
+    export function isThisIdentifier(node: Node | undefined): boolean {
+        return node && node.kind === SyntaxKind.Identifier && identifierIsThisKeyword(node as Identifier);
+    }
+
+    export function identifierIsThisKeyword(id: Identifier): boolean {
+        return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
 
     export interface AllAccessorDeclarations {
@@ -3132,19 +3131,10 @@ namespace ts {
         return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function hasJavaScriptFileExtension(fileName: string) {
-        return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
-    }
-
-    export function hasTypeScriptFileExtension(fileName: string) {
-        return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
-    }
-
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
     export function tryExtractTypeScriptExtension(fileName: string): string | undefined {
         return find(supportedTypescriptExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
     }
-
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
      * representing the UTF-8 encoding of the character, and return the expanded char code list.
@@ -3268,12 +3258,6 @@ namespace ts {
         }
 
         return result;
-    }
-
-    export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
-        return !isRootedDiskPath(absoluteOrRelativePath)
-            ? absoluteOrRelativePath
-            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /* isAbsolutePathAnUrl */ false);
     }
 
     const carriageReturnLineFeed = "\r\n";
@@ -3641,14 +3625,14 @@ namespace ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
-    function isTemplateLiteralFragmentKind(kind: SyntaxKind) {
-        return kind === SyntaxKind.TemplateHead
-            || kind === SyntaxKind.TemplateMiddle
-            || kind === SyntaxKind.TemplateTail;
+    export function isTemplateHead(node: Node): node is TemplateHead {
+        return node.kind === SyntaxKind.TemplateHead;
     }
 
-    export function isTemplateLiteralFragment(node: Node): node is TemplateLiteralFragment {
-        return isTemplateLiteralFragmentKind(node.kind);
+    export function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail {
+        const kind = node.kind;
+        return kind === SyntaxKind.TemplateMiddle
+            || kind === SyntaxKind.TemplateTail;
     }
 
     // Identifiers
@@ -3813,7 +3797,7 @@ namespace ts {
         return node.kind === SyntaxKind.CallExpression;
     }
 
-    export function isTemplate(node: Node): node is Template {
+    export function isTemplateLiteral(node: Node): node is TemplateLiteral {
         const kind = node.kind;
         return kind === SyntaxKind.TemplateExpression
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;

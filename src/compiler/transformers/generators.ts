@@ -231,9 +231,6 @@ namespace ts {
             endLexicalEnvironment,
             hoistFunctionDeclaration,
             hoistVariableDeclaration,
-            setSourceMapRange,
-            setCommentRange,
-            setNodeEmitFlags
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -294,6 +291,10 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             if (node.transformFlags & TransformFlags.ContainsGenerator) {
                 currentSourceFile = node;
                 node = visitEachChild(node, visitor, context);
@@ -444,7 +445,7 @@ namespace ts {
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): Statement {
             // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionDeclaration(
                         /*decorators*/ undefined,
@@ -492,7 +493,7 @@ namespace ts {
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
             // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionExpression(
                         /*asteriskToken*/ undefined,
@@ -527,7 +528,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitAccessorDeclaration(node: GetAccessorDeclaration) {
+        function visitAccessorDeclaration(node: AccessorDeclaration) {
             const savedInGeneratorFunctionBody = inGeneratorFunctionBody;
             const savedInStatementContainingYield = inStatementContainingYield;
             inGeneratorFunctionBody = false;
@@ -551,6 +552,7 @@ namespace ts {
             const savedBlocks = blocks;
             const savedBlockOffsets = blockOffsets;
             const savedBlockActions = blockActions;
+            const savedBlockStack = blockStack;
             const savedLabelOffsets = labelOffsets;
             const savedLabelExpressions = labelExpressions;
             const savedNextLabelId = nextLabelId;
@@ -565,6 +567,7 @@ namespace ts {
             blocks = undefined;
             blockOffsets = undefined;
             blockActions = undefined;
+            blockStack = undefined;
             labelOffsets = undefined;
             labelExpressions = undefined;
             nextLabelId = 1;
@@ -590,6 +593,7 @@ namespace ts {
             blocks = savedBlocks;
             blockOffsets = savedBlockOffsets;
             blockActions = savedBlockActions;
+            blockStack = savedBlockStack;
             labelOffsets = savedLabelOffsets;
             labelExpressions = savedLabelExpressions;
             nextLabelId = savedNextLabelId;
@@ -616,7 +620,7 @@ namespace ts {
             }
             else {
                 // Do not hoist custom prologues.
-                if (node.emitFlags & NodeEmitFlags.CustomPrologue) {
+                if (getEmitFlags(node) & EmitFlags.CustomPrologue) {
                     return node;
                 }
 
@@ -656,12 +660,12 @@ namespace ts {
             }
         }
 
-        function isCompoundAssignment(kind: SyntaxKind) {
+        function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
             return kind >= SyntaxKind.FirstCompoundAssignment
                 && kind <= SyntaxKind.LastCompoundAssignment;
         }
 
-        function getOperatorForCompoundAssignment(kind: SyntaxKind) {
+        function getOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
             switch (kind) {
                 case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
                 case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
@@ -1887,9 +1891,9 @@ namespace ts {
             return -1;
         }
 
-        function onSubstituteNode(node: Node, isExpression: boolean): Node {
-            node = previousOnSubstituteNode(node, isExpression);
-            if (isExpression) {
+        function onSubstituteNode(emitContext: EmitContext, node: Node): Node {
+            node = previousOnSubstituteNode(emitContext, node);
+            if (emitContext === EmitContext.Expression) {
                 return substituteExpression(<Expression>node);
             }
             return node;
@@ -2585,7 +2589,7 @@ namespace ts {
                 /*typeArguments*/ undefined,
                 [
                     createThis(),
-                    setNodeEmitFlags(
+                    setEmitFlags(
                         createFunctionExpression(
                             /*asteriskToken*/ undefined,
                             /*name*/ undefined,
@@ -2598,7 +2602,7 @@ namespace ts {
                                 /*multiLine*/ buildResult.length > 0
                             )
                         ),
-                        NodeEmitFlags.ReuseTempVariableScope
+                        EmitFlags.ReuseTempVariableScope
                     )
                 ]
             );

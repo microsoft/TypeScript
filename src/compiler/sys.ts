@@ -83,7 +83,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
-    export var sys: System = (function() {
+    export let sys: System = (function() {
 
         function getWScriptSystem(): System {
 
@@ -311,9 +311,18 @@ namespace ts {
                 return parseInt(process.version.charAt(1)) >= 4;
             }
 
+            function isFileSystemCaseSensitive(): boolean {
+                // win32\win64 are case insensitive platforms
+                if (platform === "win32" || platform === "win64") {
+                    return false;
+                }
+                // convert current file name to upper case / lower case and check if file exists
+                // (guards against cases when name is already all uppercase or lowercase)
+                return !fileExists(__filename.toUpperCase()) || !fileExists(__filename.toLowerCase());
+            }
+
             const platform: string = _os.platform();
-            // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
-            const useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+            const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
             function readFile(fileName: string, encoding?: string): string {
                 if (!fileExists(fileName)) {
@@ -592,19 +601,46 @@ namespace ts {
             };
         }
 
+        function recursiveCreateDirectory(directoryPath: string, sys: System) {
+            const basePath = getDirectoryPath(directoryPath);
+            const shouldCreateParent = directoryPath !== basePath && !sys.directoryExists(basePath);
+            if (shouldCreateParent) {
+                recursiveCreateDirectory(basePath, sys);
+            }
+            if (shouldCreateParent || !sys.directoryExists(directoryPath)) {
+                sys.createDirectory(directoryPath);
+            }
+        }
+
+        let sys: System;
         if (typeof ChakraHost !== "undefined") {
-            return getChakraSystem();
+            sys = getChakraSystem();
         }
         else if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
-            return getWScriptSystem();
+            sys = getWScriptSystem();
         }
         else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like
             // process.browser check excludes webpack and browserify
-            return getNodeSystem();
+            sys = getNodeSystem();
         }
-        else {
-            return undefined; // Unsupported host
+        if (sys) {
+            // patch writefile to create folder before writing the file
+            const originalWriteFile = sys.writeFile;
+            sys.writeFile = function(path, data, writeBom) {
+                const directoryPath = getDirectoryPath(normalizeSlashes(path));
+                if (directoryPath && !sys.directoryExists(directoryPath)) {
+                    recursiveCreateDirectory(directoryPath, sys);
+                }
+                originalWriteFile.call(sys, path, data, writeBom);
+            };
         }
+        return sys;
     })();
+
+    if (sys && sys.getEnvironmentVariable) {
+        Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
+            ? AssertionLevel.Normal
+            : AssertionLevel.None;
+    }
 }

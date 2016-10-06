@@ -77,7 +77,6 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 function foo() { }
-var foo;
 (function (foo) {
     foo.y = 1;
     var C = (function () {

@@ -21,7 +21,7 @@ var Type = (function () {
 var Any = (function (_super) {
     __extends(Any, _super);
     function Any() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Any;
 }(Type));

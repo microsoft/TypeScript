@@ -206,7 +206,7 @@ namespace FourSlash {
         // Whether or not we should format on keystrokes
         public enableFormatting = true;
 
-        public formatCodeOptions: ts.FormatCodeOptions;
+        public formatCodeSettings: ts.FormatCodeSettings;
 
         private inputFiles = ts.createMap<string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
 
@@ -350,26 +350,26 @@ namespace FourSlash {
                     Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
             }
 
-            this.formatCodeOptions = {
-                BaseIndentSize: 0,
-                IndentSize: 4,
-                TabSize: 4,
-                NewLineCharacter: Harness.IO.newLine(),
-                ConvertTabsToSpaces: true,
-                IndentStyle: ts.IndentStyle.Smart,
-                InsertSpaceAfterCommaDelimiter: true,
-                InsertSpaceAfterSemicolonInForStatements: true,
-                InsertSpaceBeforeAndAfterBinaryOperators: true,
-                InsertSpaceAfterKeywordsInControlFlowStatements: true,
-                InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-                InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-                InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-                InsertSpaceAfterTypeAssertion: false,
-                PlaceOpenBraceOnNewLineForFunctions: false,
-                PlaceOpenBraceOnNewLineForControlBlocks: false,
+            this.formatCodeSettings = {
+                baseIndentSize: 0,
+                indentSize: 4,
+                tabSize: 4,
+                newLineCharacter: Harness.IO.newLine(),
+                convertTabsToSpaces: true,
+                indentStyle: ts.IndentStyle.Smart,
+                insertSpaceAfterCommaDelimiter: true,
+                insertSpaceAfterSemicolonInForStatements: true,
+                insertSpaceBeforeAndAfterBinaryOperators: true,
+                insertSpaceAfterKeywordsInControlFlowStatements: true,
+                insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
+                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+                insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+                insertSpaceAfterTypeAssertion: false,
+                placeOpenBraceOnNewLineForFunctions: false,
+                placeOpenBraceOnNewLineForControlBlocks: false,
             };
 
             // Open the first file by default
@@ -751,6 +751,13 @@ namespace FourSlash {
             }
             else if ((completions && completions.isNewIdentifierLocation) && negative) {
                 this.raiseError("Un-expected builder completion entry");
+            }
+        }
+
+        public verifyCompletionListIsGlobal(expected: boolean) {
+            const completions = this.getCompletionListAtCaret();
+            if (completions && completions.isGlobalCompletion !== expected) {
+                this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions.isGlobalCompletion}`);
             }
         }
 
@@ -1428,7 +1435,7 @@ namespace FourSlash {
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
-                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
+                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                         // this.checkPostEditInvariants();
@@ -1466,7 +1473,7 @@ namespace FourSlash {
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
-                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
+                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                     }
@@ -1514,7 +1521,7 @@ namespace FourSlash {
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
-                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
+                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                     }
@@ -1538,7 +1545,7 @@ namespace FourSlash {
 
             // Handle formatting
             if (this.enableFormatting) {
-                const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeOptions);
+                const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeSettings);
                 if (edits.length) {
                     offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                 }
@@ -1611,30 +1618,30 @@ namespace FourSlash {
             return runningOffset;
         }
 
-        public copyFormatOptions(): ts.FormatCodeOptions {
-            return ts.clone(this.formatCodeOptions);
+        public copyFormatOptions(): ts.FormatCodeSettings {
+            return ts.clone(this.formatCodeSettings);
         }
 
-        public setFormatOptions(formatCodeOptions: ts.FormatCodeOptions): ts.FormatCodeOptions {
-            const oldFormatCodeOptions = this.formatCodeOptions;
-            this.formatCodeOptions = formatCodeOptions;
+        public setFormatOptions(formatCodeOptions: ts.FormatCodeOptions | ts.FormatCodeSettings): ts.FormatCodeSettings {
+            const oldFormatCodeOptions = this.formatCodeSettings;
+            this.formatCodeSettings = ts.toEditorSettings(formatCodeOptions);
             return oldFormatCodeOptions;
         }
 
         public formatDocument() {
-            const edits = this.languageService.getFormattingEditsForDocument(this.activeFile.fileName, this.formatCodeOptions);
+            const edits = this.languageService.getFormattingEditsForDocument(this.activeFile.fileName, this.formatCodeSettings);
             this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
 
         public formatSelection(start: number, end: number) {
-            const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeOptions);
+            const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeSettings);
             this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
 
         public formatOnType(pos: number, key: string) {
-            const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeOptions);
+            const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeSettings);
             this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
@@ -1835,11 +1842,9 @@ namespace FourSlash {
         }
 
         private getIndentation(fileName: string, position: number, indentStyle: ts.IndentStyle, baseIndentSize: number): number {
-
-            const formatOptions = ts.clone(this.formatCodeOptions);
-            formatOptions.IndentStyle = indentStyle;
-            formatOptions.BaseIndentSize = baseIndentSize;
-
+            const formatOptions = ts.clone(this.formatCodeSettings);
+            formatOptions.indentStyle = indentStyle;
+            formatOptions.baseIndentSize = baseIndentSize;
             return this.languageService.getIndentationAtPosition(fileName, position, formatOptions);
         }
 
@@ -3048,6 +3053,10 @@ namespace FourSlashInterface {
             this.state.verifyCompletionListIsEmpty(this.negative);
         }
 
+        public completionListIsGlobal(expected: boolean) {
+            this.state.verifyCompletionListIsGlobal(expected);
+        }
+
         public completionListAllowsNewIdentifier() {
             this.state.verifyCompletionListAllowsNewIdentifier(this.negative);
         }
@@ -3485,7 +3494,7 @@ namespace FourSlashInterface {
             this.state.formatDocument();
         }
 
-        public copyFormatOptions(): ts.FormatCodeOptions {
+        public copyFormatOptions(): ts.FormatCodeSettings {
             return this.state.copyFormatOptions();
         }
 
@@ -3505,7 +3514,7 @@ namespace FourSlashInterface {
         public setOption(name: string, value: string): void;
         public setOption(name: string, value: boolean): void;
         public setOption(name: string, value: any): void {
-            this.state.formatCodeOptions[name] = value;
+            (<any>this.state.formatCodeSettings)[name] = value;
         }
     }
 

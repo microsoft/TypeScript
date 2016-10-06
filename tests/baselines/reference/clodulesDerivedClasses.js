@@ -33,7 +33,6 @@ var Shape = (function () {
     }
     return Shape;
 }());
-var Shape;
 (function (Shape) {
     var Utils;
     (function (Utils) {
@@ -44,11 +43,10 @@ var Shape;
 var Path = (function (_super) {
     __extends(Path, _super);
     function Path() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Path;
 }(Shape));
-var Path;
 (function (Path) {
     var Utils;
     (function (Utils) {

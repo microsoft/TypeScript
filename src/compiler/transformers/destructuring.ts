@@ -66,7 +66,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(expression);
             expressions.push(expression);
@@ -102,7 +102,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(declaration);
             declarations.push(declaration);
@@ -147,7 +147,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
 
             declarations.push(declaration);
             aggregateTransformFlags(declaration);
@@ -211,7 +211,7 @@ namespace ts {
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
+            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             pendingAssignments.push(expression);
             return expression;
@@ -220,7 +220,7 @@ namespace ts {
 
     function flattenDestructuring(
         context: TransformationContext,
-        root: BindingElement | BinaryExpression,
+        root: VariableDeclaration | ParameterDeclaration | BindingElement | BinaryExpression,
         value: Expression,
         location: TextRange,
         emitAssignment: (name: Identifier, value: Expression, location: TextRange, original: Node) => void,
@@ -271,8 +271,8 @@ namespace ts {
             }
             else {
                 const name = getMutableClone(<Identifier>target);
-                context.setSourceMapRange(name, target);
-                context.setCommentRange(name, target);
+                setSourceMapRange(name, target);
+                setCommentRange(name, target);
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
         }
@@ -320,7 +320,7 @@ namespace ts {
             }
         }
 
-        function emitBindingElement(target: BindingElement, value: Expression) {
+        function emitBindingElement(target: VariableDeclaration | ParameterDeclaration | BindingElement, value: Expression) {
             // Any temporary assignments needed to emit target = value should point to target
             const initializer = visitor ? visitNode(target.initializer, visitor, isExpression) : target.initializer;
             if (initializer) {

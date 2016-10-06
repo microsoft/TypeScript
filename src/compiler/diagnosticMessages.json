@@ -1279,7 +1279,7 @@
         "category": "Error",
         "code": 2409
     },
-    "All symbols within a 'with' block will be resolved to 'any'.": {
+    "The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.": {
         "category": "Error",
         "code": 2410
     },
@@ -2856,6 +2856,10 @@
     "Import emit helpers from 'tslib'.": {
         "category": "Message",
         "code": 6139
+    },
+    "Auto discovery for typings is enabled in project '{0}'. Running extra resolution pass for module '{1}' using cache location '{2}'.": {
+        "category": "Error",
+        "code": 6140
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
