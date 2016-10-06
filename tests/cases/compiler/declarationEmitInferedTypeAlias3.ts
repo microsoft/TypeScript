@@ -1,4 +1,4 @@
-// @declaration: true
+﻿// @declaration: true
 // @skipDefaultLibCheck: true
 
 // @Filename: 0.ts
@@ -9,8 +9,5 @@
 export { }
 
 // @Filename: 1.ts
-let v = "str" || true;
-function bar () {
-    return v;
-}
-export { v, bar }
+var x = "hi" || 5;
+export default x;

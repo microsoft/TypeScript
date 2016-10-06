@@ -9,8 +9,11 @@
 export { }
 
 //// [1.ts]
-var x = "hi" || 5;
-export default x;
+let v = "str" || true;
+function bar () {
+    return v;
+}
+export { v, bar }
 
 //// [0.js]
 "use strict";
@@ -19,13 +22,17 @@ export default x;
 }
 //// [1.js]
 "use strict";
-var x = "hi" || 5;
-exports.__esModule = true;
-exports["default"] = x;
+var v = "str" || true;
+exports.v = v;
+function bar() {
+    return v;
+}
+exports.bar = bar;
 
 
 //// [0.d.ts]
 export {  };
 //// [1.d.ts]
-declare var x: string | number;
-export default x;
+declare let v: string | boolean;
+declare function bar(): string | boolean;
+export { v, bar };
