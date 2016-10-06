@@ -1,5 +1,6 @@
 /// <reference path="../../src/server/types.d.ts" />
 /// <reference path="../../src/server/protocol.d.ts" />
+/// <reference types="node" />
 declare namespace ts {
     interface MapLike<T> {
         [index: string]: T;
