@@ -1,0 +1,21 @@
+=== tests/cases/compiler/declFileTypeAliasWithGeneric.ts ===
+export type Bar<X, Y> = () => [X, Y];
+>Bar : Bar<X, Y>
+>X : X
+>Y : Y
+>X : X
+>Y : Y
+
+export type Foo<Y> = Bar<any, Y>;
+>Foo : Bar<any, Y>
+>Y : Y
+>Bar : Bar<X, Y>
+>Y : Y
+
+export const y = (x: Foo<string>) => 1
+>y : (x: Bar<string>) => number
+>(x: Foo<string>) => 1 : (x: Bar<string>) => number
+>x : Bar<string>
+>Foo : Bar<any, Y>
+>1 : number
+

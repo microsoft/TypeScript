@@ -2121,12 +2121,16 @@ namespace ts {
             }
 
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                const globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
+                let globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
+                if (globalFlags & TypeFormatFlags.UseTypeAliasValue) {
+                    globalFlagsToPass |= TypeFormatFlags.UseTypeAliasValue;
+                }
                 let inObjectTypeLiteral = false;
                 return writeType(type, globalFlags);
 
                 function writeType(type: Type, flags: TypeFormatFlags) {
                     const nextFlags = flags & ~TypeFormatFlags.InTypeAlias;
+
                     // Write undefined/null type as any
                     if (type.flags & TypeFlags.Intrinsic) {
                         // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
@@ -2152,14 +2156,9 @@ namespace ts {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
-                    else if (!(flags & TypeFormatFlags.InTypeAlias) && type.flags & (TypeFlags.Anonymous | TypeFlags.UnionOrIntersection) && type.aliasSymbol) {
-                        if (type.flags & TypeFlags.Anonymous || !(flags & TypeFormatFlags.UseTypeAliasValue)) {
-                            const typeArguments = type.aliasTypeArguments;
-                            writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
-                        }
-                        else {
-                            writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
-                        }
+                    else if (!(flags & TypeFormatFlags.InTypeAlias) && type.flags & (TypeFlags.Anonymous | TypeFlags.UnionOrIntersection) && type.aliasSymbol && !(flags & TypeFormatFlags.UseTypeAliasValue)) {
+                        const typeArguments = type.aliasTypeArguments;
+                        writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
                     }
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
