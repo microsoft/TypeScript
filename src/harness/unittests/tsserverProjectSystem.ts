@@ -1898,6 +1898,64 @@ namespace ts.projectSystem {
             projectService.closeExternalProject(projectName);
             projectService.checkNumberOfProjects({});
         });
+
+        it("correctly handles changes in lib section of config file", () => {
+            const libES5 = {
+                path: "/compiler/lib.es5.d.ts",
+                content: "declare const eval: any"
+            };
+            const libES2015Promise = {
+                path: "/compiler/lib.es2015.promise.d.ts",
+                content: "declare class Promise<T> {}"
+            };
+            const app = {
+                path: "/src/app.ts",
+                content: "var x: Promise<string>;"
+            };
+            const config1 = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify(
+                    {
+                        "compilerOptions": {
+                            "module": "commonjs",
+                            "target": "es5",
+                            "noImplicitAny": true,
+                            "sourceMap": false,
+                            "lib": [
+                                "es5"
+                            ]
+                        }
+                    })
+            };
+            const config2 = {
+                path: config1.path,
+                content: JSON.stringify(
+                    {
+                        "compilerOptions": {
+                            "module": "commonjs",
+                            "target": "es5",
+                            "noImplicitAny": true,
+                            "sourceMap": false,
+                            "lib": [
+                                "es5",
+                                "es2015.promise"
+                            ]
+                        }
+                    })
+            };
+            const host = createServerHost([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
+            const projectService = createProjectService(host);
+            projectService.openClientFile(app.path);
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, app.path]);
+
+            host.reloadFS([libES5, libES2015Promise, app, config2]);
+            host.triggerFileWatcherCallback(config1.path);
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, libES2015Promise.path, app.path]);
+        });
     });
 
     describe("prefer typings to js", () => {
