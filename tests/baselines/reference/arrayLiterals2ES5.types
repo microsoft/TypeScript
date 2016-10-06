@@ -193,10 +193,10 @@ var d5 = [...temp3];
 >temp3 : any[]
 
 var d6 = [...temp4];
->d6 : any[]
->[...temp4] : any[]
->...temp4 : any
->temp4 : any[]
+>d6 : never[]
+>[...temp4] : never[]
+>...temp4 : never
+>temp4 : never[]
 
 var d7 = [...[...temp1]];
 >d7 : number[]

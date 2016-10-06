@@ -105,7 +105,7 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
     } );
 
     return ret;
->ret : any[]
+>ret : never[]
 }
 
 // length :: [a] -> Num
