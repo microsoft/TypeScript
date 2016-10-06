@@ -2620,8 +2620,6 @@ namespace ts {
         ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
         /* @internal */
         ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
-        ThisType                = 1 << 28,  // This type
-        ObjectLiteralPatternWithComputedProperties = 1 << 29,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2690,7 +2688,9 @@ namespace ts {
     }
 
     // Object types (TypeFlags.ObjectType)
-    export interface ObjectType extends Type { }
+    export interface ObjectType extends Type {
+        isObjectLiteralPatternWithComputedProperties?: boolean;
+    }
 
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
@@ -2785,6 +2785,8 @@ namespace ts {
         mapper?: TypeMapper;     // Instantiation mapper
         /* @internal */
         resolvedApparentType: Type;
+        /* @internal */
+        isThisType?: boolean;
     }
 
     export const enum SignatureKind {

@@ -1801,10 +1801,41 @@ namespace ts {
                 case SyntaxKind.TypeReference:
                     return serializeTypeReferenceNode(<TypeReferenceNode>node);
 
+                case SyntaxKind.IntersectionType:
+                case SyntaxKind.UnionType:
+                    {
+                        const unionOrIntersection = <UnionOrIntersectionTypeNode>node;
+                        let serializedUnion: Identifier;
+                        for (const typeNode of unionOrIntersection.types) {
+                            const serializedIndividual = serializeTypeNode(typeNode) as Identifier;
+                            // Non identifier
+                            if (serializedIndividual.kind !== SyntaxKind.Identifier) {
+                                serializedUnion = undefined;
+                                break;
+                            }
+
+                            // One of the individual is global object, return immediately
+                            if (serializedIndividual.text === "Object") {
+                                return serializedIndividual;
+                            }
+
+                            // Different types
+                            if (serializedUnion && serializedUnion.text !== serializedIndividual.text) {
+                                serializedUnion = undefined;
+                                break;
+                            }
+
+                            serializedUnion = serializedIndividual;
+                        }
+
+                        // If we were able to find common type
+                        if (serializedUnion) {
+                            return serializedUnion;
+                        }
+                    }
+                    // Fallthrough
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeLiteral:
-                case SyntaxKind.UnionType:
-                case SyntaxKind.IntersectionType:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ThisType:
                     break;
@@ -2374,7 +2405,7 @@ namespace ts {
          * @param node The parameter declaration node.
          */
         function visitParameter(node: ParameterDeclaration) {
-            if (node.name && isIdentifier(node.name) && node.name.originalKeywordKind === SyntaxKind.ThisKeyword) {
+            if (parameterIsThisKeyword(node)) {
                 return undefined;
             }
 

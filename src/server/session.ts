@@ -1109,7 +1109,7 @@ namespace ts.server {
 
         private getNavigationBarItems(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.NavigationBarItem[] | NavigationBarItem[] {
             const { file, project } = this.getFileAndProject(args);
-            const items = project.getLanguageService().getNavigationBarItems(file);
+            const items = project.getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(file);
             if (!items) {
                 return undefined;
             }

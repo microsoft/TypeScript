@@ -73,9 +73,9 @@
 >first : Symbol(first, Decl(contextuallyTypedIife.ts, 20, 2))
 >rest : Symbol(rest, Decl(contextuallyTypedIife.ts, 20, 8))
 >first : Symbol(first, Decl(contextuallyTypedIife.ts, 20, 2))
->rest.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>rest.map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >rest : Symbol(rest, Decl(contextuallyTypedIife.ts, 20, 8))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 20, 43))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 20, 43))
 

@@ -552,6 +552,7 @@ namespace ts {
             const savedBlocks = blocks;
             const savedBlockOffsets = blockOffsets;
             const savedBlockActions = blockActions;
+            const savedBlockStack = blockStack;
             const savedLabelOffsets = labelOffsets;
             const savedLabelExpressions = labelExpressions;
             const savedNextLabelId = nextLabelId;
@@ -566,6 +567,7 @@ namespace ts {
             blocks = undefined;
             blockOffsets = undefined;
             blockActions = undefined;
+            blockStack = undefined;
             labelOffsets = undefined;
             labelExpressions = undefined;
             nextLabelId = 1;
@@ -591,6 +593,7 @@ namespace ts {
             blocks = savedBlocks;
             blockOffsets = savedBlockOffsets;
             blockActions = savedBlockActions;
+            blockStack = savedBlockStack;
             labelOffsets = savedLabelOffsets;
             labelExpressions = savedLabelExpressions;
             nextLabelId = savedNextLabelId;

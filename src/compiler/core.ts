@@ -212,7 +212,7 @@ namespace ts {
      * true for all elements, otherwise returns a new array instance containing the filtered subset.
      */
     export function filter<T, U extends T>(array: T[], f: (x: T) => x is U): U[];
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[]
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[];
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         if (array) {
             const len = array.length;
@@ -1867,10 +1867,10 @@ namespace ts {
         declare var process: any;
         declare var require: any;
 
-        let currentAssertionLevel: AssertionLevel;
+        export let currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
-            return getCurrentAssertionLevel() >= level;
+            return currentAssertionLevel >= level;
         }
 
         export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
@@ -1887,35 +1887,6 @@ namespace ts {
         export function fail(message?: string): void {
             Debug.assert(/*expression*/ false, message);
         }
-
-        function getCurrentAssertionLevel() {
-            if (currentAssertionLevel !== undefined) {
-                return currentAssertionLevel;
-            }
-
-            if (sys === undefined) {
-                return AssertionLevel.None;
-            }
-
-            const developmentMode = /^development$/i.test(getEnvironmentVariable("NODE_ENV"));
-            currentAssertionLevel = developmentMode
-                ? AssertionLevel.Normal
-                : AssertionLevel.None;
-
-            return currentAssertionLevel;
-        }
-    }
-
-    export function getEnvironmentVariable(name: string, host?: CompilerHost) {
-        if (host && host.getEnvironmentVariable) {
-            return host.getEnvironmentVariable(name);
-        }
-
-        if (sys && sys.getEnvironmentVariable) {
-            return sys.getEnvironmentVariable(name);
-        }
-
-        return "";
     }
 
     /** Remove an item from an array, moving everything to its right one space left. */
