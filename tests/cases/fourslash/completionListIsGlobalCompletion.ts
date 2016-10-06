@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+//@Filename: file.tsx
 /////// <reference path="/*1*/..\services\services.ts" /> // no globals in reference paths
 ////import { /*2*/ } from "./file.ts";  // no globals in imports
 ////var test = "/*3*/"; // no globals in strings
@@ -20,6 +21,7 @@
 ////   /*9*/ // insert globals
 ////}
 /////*10*/ // insert globals
+////const y = <div /*11*/ />;
 goTo.marker("1");
 verify.completionListIsGlobal(false);
 goTo.marker("2");
@@ -40,3 +42,5 @@ goTo.marker("9");
 verify.completionListIsGlobal(true);
 goTo.marker("10");
 verify.completionListIsGlobal(true);
+goTo.marker("11");
+verify.completionListIsGlobal(false);

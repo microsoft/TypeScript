@@ -24,7 +24,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ false);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true);
             addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames));
         }
         else {
@@ -138,7 +138,9 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            if (node.parent.kind === SyntaxKind.PropertyAssignment && node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+            if (node.parent.kind === SyntaxKind.PropertyAssignment &&
+                node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression &&
+                (<PropertyAssignment>node.parent).name === node) {
                 // Get quoted name of properties of the object literal expression
                 // i.e. interface ConfigFiles {
                 //          'jspm:dev': string
@@ -1001,6 +1003,7 @@ namespace ts.Completions {
                 if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                     // Cursor is inside a JSX self-closing element or opening element
                     attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
+                    isGlobalCompletion = false;
 
                     if (attrsType) {
                         symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);
