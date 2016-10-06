@@ -630,7 +630,7 @@ namespace ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.CodeAction[] {
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): ts.CodeAction[] {
             throw new Error("Not Implemented Yet.");
         }
 

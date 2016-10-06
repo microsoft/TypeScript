@@ -247,7 +247,7 @@ declare namespace ts.server.protocol {
         /**
           * Errorcodes we want to get the fixes for.
           */
-        errorCodes?: string[]
+        errorCodes?: number[]
     }
 
     /**

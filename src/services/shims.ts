@@ -961,7 +961,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getCodeFixesAtPosition( '${fileName}', ${start}, ${end}, ${errorCodes}')`,
                 () => {
-                    const localErrors: string[] = JSON.parse(errorCodes);
+                    const localErrors: number[] = JSON.parse(errorCodes);
                     return this.languageService.getCodeFixesAtPosition(fileName, start, end, localErrors);
                 }
             );

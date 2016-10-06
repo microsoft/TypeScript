@@ -1,12 +1,12 @@
-﻿/* @internal */
+/* @internal */
 namespace ts {
     export interface CodeFix {
-        errorCodes: string[];
+        errorCodes: number[];
         getCodeActions(context: CodeFixContext): CodeAction[];
     }
 
     export interface CodeFixContext {
-        errorCode: string;
+        errorCode: number;
         sourceFile: SourceFile;
         span: TextSpan;
         program: Program;
