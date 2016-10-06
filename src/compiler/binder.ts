@@ -760,6 +760,15 @@ namespace ts {
             };
         }
 
+        function createFlowArrayMutation(antecedent: FlowNode, node: Expression): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return <FlowArrayMutation>{
+                flags: FlowFlags.ArrayMutation,
+                antecedent,
+                node
+            };
+        }
+
         function finishFlowLabel(flow: FlowLabel): FlowNode {
             const antecedents = flow.antecedents;
             if (!antecedents) {
@@ -1136,6 +1145,12 @@ namespace ts {
                 forEachChild(node, bind);
                 if (operator === SyntaxKind.EqualsToken && !isAssignmentTarget(node)) {
                     bindAssignmentTargetFlow(node.left);
+                    if (node.left.kind === SyntaxKind.ElementAccessExpression) {
+                        const elementAccess = <ElementAccessExpression>node.left;
+                        if (isNarrowableReference(elementAccess.expression)) {
+                            currentFlow = createFlowArrayMutation(currentFlow, elementAccess.expression);
+                        }
+                    }
                 }
             }
         }
@@ -1195,6 +1210,12 @@ namespace ts {
             }
             else {
                 forEachChild(node, bind);
+            }
+            if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
+                const propertyAccess = <PropertyAccessExpression>node.expression;
+                if (isNarrowableReference(propertyAccess.expression) && propertyAccess.name.text === "push") {
+                    currentFlow = createFlowArrayMutation(currentFlow, propertyAccess.expression);
+                }
             }
         }
 

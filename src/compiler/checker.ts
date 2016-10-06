@@ -114,6 +114,7 @@ namespace ts {
         const intersectionTypes = createMap<IntersectionType>();
         const stringLiteralTypes = createMap<LiteralType>();
         const numericLiteralTypes = createMap<LiteralType>();
+        const evolvingArrayTypes: AnonymousType[] = [];
 
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
@@ -175,6 +176,7 @@ namespace ts {
         let globalBooleanType: ObjectType;
         let globalRegExpType: ObjectType;
         let anyArrayType: Type;
+        let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
 
         // The library files are only loaded when the feature is used.
@@ -3051,9 +3053,14 @@ namespace ts {
             return undefined;
         }
 
-        function isAutoVariableInitializer(initializer: Expression) {
-            const expr = initializer && skipParentheses(initializer);
-            return !expr || expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>expr) === undefinedSymbol;
+        function isNullOrUndefined(node: Expression) {
+            const expr = skipParentheses(node);
+            return expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>expr) === undefinedSymbol;
+        }
+
+        function isEmptyArrayLiteral(node: Expression) {
+            const expr = skipParentheses(node);
+            return expr.kind === SyntaxKind.ArrayLiteralExpression && (<ArrayLiteralExpression>expr).elements.length === 0;
         }
 
         function addOptionality(type: Type, optional: boolean): Type {
@@ -3094,12 +3101,18 @@ namespace ts {
                 return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
             }
 
-            // Use control flow type inference for non-ambient, non-exported var or let variables with no initializer
-            // or a 'null' or 'undefined' initializer.
             if (declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
-                !(getCombinedNodeFlags(declaration) & NodeFlags.Const) && !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) &&
-                !isInAmbientContext(declaration) && isAutoVariableInitializer(declaration.initializer)) {
-                return autoType;
+                !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !isInAmbientContext(declaration)) {
+                // Use control flow tracked 'any' type for non-ambient, non-exported var or let variables with no
+                // initializer or a 'null' or 'undefined' initializer.
+                if (!(getCombinedNodeFlags(declaration) & NodeFlags.Const) && (!declaration.initializer || isNullOrUndefined(declaration.initializer))) {
+                    return autoType;
+                }
+                // Use control flow tracked 'any[]' type for non-ambient, non-exported variables with an empty array
+                // literal initializer.
+                if (declaration.initializer && isEmptyArrayLiteral(declaration.initializer)) {
+                    return autoArrayType;
+                }
             }
 
             if (declaration.kind === SyntaxKind.Parameter) {
@@ -8363,6 +8376,11 @@ namespace ts {
                 getAssignedType(<Expression>node);
         }
 
+        function isEmptyArrayAssignment(node: VariableDeclaration | BindingElement | Expression) {
+            return node.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>node).initializer && isEmptyArrayLiteral((<VariableDeclaration>node).initializer) ||
+                node.kind !== SyntaxKind.BindingElement && node.parent.kind === SyntaxKind.BinaryExpression && isEmptyArrayLiteral((<BinaryExpression>node.parent).right);
+        }
+
         function getReferenceCandidate(node: Expression): Expression {
             switch (node.kind) {
                 case SyntaxKind.ParenthesizedExpression:
@@ -8441,21 +8459,94 @@ namespace ts {
             return incomplete ? { flags: 0, type } : type;
         }
 
+        // An evolving array type tracks the element types that have so far been seen in an
+        // 'x.push(value)' or 'x[n] = value' operation along the control flow graph. Evolving
+        // array types are ultimately converted into manifest array types (using getFinalArrayType)
+        // and never escape the getFlowTypeOfReference function. 
+        function createEvolvingArrayType(elementType: Type): AnonymousType {
+            const result = <AnonymousType>createObjectType(TypeFlags.Anonymous);
+            result.elementType = elementType;
+            return result;
+        }
+
+        function getEvolvingArrayType(elementType: Type): AnonymousType {
+            return evolvingArrayTypes[elementType.id] || (evolvingArrayTypes[elementType.id] = createEvolvingArrayType(elementType));
+        }
+
+        // When adding evolving array element types we do not perform subtype reduction. Instead,
+        // we defer subtype reduction until the evolving array type is finalized into a manifest
+        // array type.
+        function addEvolvingArrayElementType(evolvingArrayType: AnonymousType, node: Expression): AnonymousType {
+            const elementType = getBaseTypeOfLiteralType(checkExpression(node));
+            return isTypeSubsetOf(elementType, evolvingArrayType.elementType) ? evolvingArrayType : getEvolvingArrayType(getUnionType([evolvingArrayType.elementType, elementType]));
+        }
+
+        function isEvolvingArrayType(type: Type) {
+            return type.flags & TypeFlags.Anonymous && !!(<AnonymousType>type).elementType;
+        }
+
+        // We perform subtype reduction upon obtaining the final array type from an evolving array type.
+        function getFinalArrayType(evolvingArrayType: AnonymousType): Type {
+            return evolvingArrayType.finalArrayType || (evolvingArrayType.finalArrayType = createArrayType(getUnionType([evolvingArrayType.elementType], /*subtypeReduction*/ true)));
+        }
+
+        function finalizeEvolvingArrayType(type: Type): Type {
+            return isEvolvingArrayType(type) ? getFinalArrayType(<AnonymousType>type) : type;
+        }
+
+        function getElementTypeOfEvolvingArrayType(evolvingArrayType: AnonymousType) {
+            return evolvingArrayType.elementType;
+        }
+
+        // At flow control branch or loop junctions, if the type along every antecedent code path
+        // is an evolving array type, we construct a combined evolving array type. Otherwise we
+        // finalize all evolving array types.
+        function getUnionOrEvolvingArrayType(types: Type[], subtypeReduction: boolean) {
+            return types.length && every(types, isEvolvingArrayType) ?
+                getEvolvingArrayType(getUnionType(map(<AnonymousType[]>types, getElementTypeOfEvolvingArrayType))) :
+                getUnionType(map(types, finalizeEvolvingArrayType), subtypeReduction);
+        }
+
+        // Return true if the given node is 'x' in an 'x.push(value)' operation.
+        function isPushCallTarget(node: Node) {
+            return node.parent.kind === SyntaxKind.PropertyAccessExpression &&
+                (<PropertyAccessExpression>node.parent).name.text === "push" &&
+                node.parent.parent.kind === SyntaxKind.CallExpression;
+        }
+
+        // Return true if the given node is 'x' in an 'x[n] = value' operation, where 'n' is an
+        // expression of type any, undefined, or a number-like type.
+        function isElementAssignmentTarget(node: Node) {
+            const parent = node.parent;
+            return parent.kind === SyntaxKind.ElementAccessExpression &&
+                (<ElementAccessExpression>parent).expression === node &&
+                parent.parent.kind === SyntaxKind.BinaryExpression &&
+                (<BinaryExpression>parent.parent).operatorToken.kind === SyntaxKind.EqualsToken &&
+                (<BinaryExpression>parent.parent).left === parent &&
+                !isAssignmentTarget(parent.parent) &&
+                isTypeAnyOrAllConstituentTypesHaveKind(checkExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike | TypeFlags.Undefined);
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, flowContainer: Node) {
             let key: string;
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
             const initialType = assumeInitialized ? declaredType :
-                declaredType === autoType ? undefinedType :
+                declaredType === autoType || declaredType === autoArrayType ? undefinedType :
                 includeFalsyTypes(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
-            const result = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
+            const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
-            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            // When the reference is 'x' in an 'x.push(value)' or 'x[n] = value' operation, we give type
+            // 'any[]' to 'x' instead of using the type determed by control flow analysis such that new
+            // element types are not considered errors.
+            const isEvolvingArrayInferenceTarget = isEvolvingArrayType(evolvedType) && (isPushCallTarget(reference) || isElementAssignmentTarget(reference));
+            const resultType = isEvolvingArrayInferenceTarget ? anyArrayType : finalizeEvolvingArrayType(evolvedType);
+            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
-            return result;
+            return resultType;
 
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
                 while (true) {
@@ -8492,6 +8583,13 @@ namespace ts {
                             getTypeAtFlowBranchLabel(<FlowLabel>flow) :
                             getTypeAtFlowLoopLabel(<FlowLabel>flow);
                     }
+                    else if (flow.flags & FlowFlags.ArrayMutation) {
+                        type = getTypeAtFlowArrayMutation(<FlowArrayMutation>flow);
+                        if (!type) {
+                            flow = (<FlowArrayMutation>flow).antecedent;
+                            continue;
+                        }
+                    }
                     else if (flow.flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
                         const container = (<FlowStart>flow).container;
@@ -8504,8 +8602,8 @@ namespace ts {
                     }
                     else {
                         // Unreachable code errors are reported in the binding phase. Here we
-                        // simply return the declared type to reduce follow-on errors.
-                        type = declaredType;
+                        // simply return the non-auto declared type to reduce follow-on errors.
+                        type = convertAutoToAny(declaredType);
                     }
                     if (flow.flags & FlowFlags.Shared) {
                         // Record visited node and the associated type in the cache.
@@ -8526,9 +8624,17 @@ namespace ts {
                         const flowType = getTypeAtFlowNode(flow.antecedent);
                         return createFlowType(getBaseTypeOfLiteralType(getTypeFromFlowType(flowType)), isIncomplete(flowType));
                     }
-                    return declaredType === autoType ? getBaseTypeOfLiteralType(getInitialOrAssignedType(node)) :
-                        declaredType.flags & TypeFlags.Union ? getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(node)) :
-                        declaredType;
+                    if (declaredType === autoType || declaredType === autoArrayType) {
+                        if (isEmptyArrayAssignment(node)) {
+                            return getEvolvingArrayType(neverType);
+                        }
+                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(node));
+                        return isTypeAssignableTo(assignedType, declaredType) ? assignedType : anyArrayType;
+                    }
+                    if (declaredType.flags & TypeFlags.Union) {
+                        return getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(node));
+                    }
+                    return declaredType;
                 }
                 // We didn't have a direct match. However, if the reference is a dotted name, this
                 // may be an assignment to a left hand part of the reference. For example, for a
@@ -8541,24 +8647,51 @@ namespace ts {
                 return undefined;
             }
 
+            function getTypeAtFlowArrayMutation(flow: FlowArrayMutation): FlowType {
+                const node = flow.node;
+                if (isMatchingReference(reference, node)) {
+                    const flowType = getTypeAtFlowNode(flow.antecedent);
+                    const type = getTypeFromFlowType(flowType);
+                    if (isEvolvingArrayType(type)) {
+                        const parent = node.parent;
+                        let evolvedType = <AnonymousType>type;
+                        if (parent.kind === SyntaxKind.PropertyAccessExpression) {
+                            for (const arg of (<CallExpression>parent.parent).arguments) {
+                                evolvedType = addEvolvingArrayElementType(evolvedType, arg);
+                            }
+                        }
+                        else if (isTypeAnyOrAllConstituentTypesHaveKind(checkExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike)) {
+                            evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>parent.parent).right);
+                        }
+                        return evolvedType === type ? flowType : createFlowType(evolvedType, isIncomplete(flowType));
+                    }
+                    return flowType;
+                }
+                return undefined;
+            }
+
             function getTypeAtFlowCondition(flow: FlowCondition): FlowType {
                 const flowType = getTypeAtFlowNode(flow.antecedent);
-                let type = getTypeFromFlowType(flowType);
-                if (!(type.flags & TypeFlags.Never)) {
-                    // If we have an antecedent type (meaning we're reachable in some way), we first
-                    // attempt to narrow the antecedent type. If that produces the never type, and if
-                    // the antecedent type is incomplete (i.e. a transient type in a loop), then we
-                    // take the type guard as an indication that control *could* reach here once we
-                    // have the complete type. We proceed by switching to the silent never type which
-                    // doesn't report errors when operators are applied to it. Note that this is the
-                    // *only* place a silent never type is ever generated.
-                    const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
-                    type = narrowType(type, flow.expression, assumeTrue);
-                    if (type.flags & TypeFlags.Never && isIncomplete(flowType)) {
-                        type = silentNeverType;
-                    }
+                const type = getTypeFromFlowType(flowType);
+                if (type.flags & TypeFlags.Never) {
+                    return flowType;
                 }
-                return createFlowType(type, isIncomplete(flowType));
+                // If we have an antecedent type (meaning we're reachable in some way), we first
+                // attempt to narrow the antecedent type. If that produces the never type, and if
+                // the antecedent type is incomplete (i.e. a transient type in a loop), then we
+                // take the type guard as an indication that control *could* reach here once we
+                // have the complete type. We proceed by switching to the silent never type which
+                // doesn't report errors when operators are applied to it. Note that this is the
+                // *only* place a silent never type is ever generated.
+                const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
+                const nonEvolvingType = finalizeEvolvingArrayType(type);
+                const narrowedType = narrowType(nonEvolvingType, flow.expression, assumeTrue);
+                if (narrowedType === nonEvolvingType) {
+                    return flowType;
+                }
+                const incomplete = isIncomplete(flowType);
+                const resultType = incomplete && narrowedType.flags & TypeFlags.Never ? silentNeverType : narrowedType;
+                return createFlowType(resultType, incomplete);
             }
 
             function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
@@ -8601,7 +8734,7 @@ namespace ts {
                         seenIncomplete = true;
                     }
                 }
-                return createFlowType(getUnionType(antecedentTypes, subtypeReduction), seenIncomplete);
+                return createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction), seenIncomplete);
             }
 
             function getTypeAtFlowLoopLabel(flow: FlowLabel): FlowType {
@@ -8621,7 +8754,7 @@ namespace ts {
                 // junction is always the non-looping control flow path that leads to the top.
                 for (let i = flowLoopStart; i < flowLoopCount; i++) {
                     if (flowLoopNodes[i] === flow && flowLoopKeys[i] === key) {
-                        return createFlowType(getUnionType(flowLoopTypes[i]), /*incomplete*/ true);
+                        return createFlowType(getUnionOrEvolvingArrayType(flowLoopTypes[i], false), /*incomplete*/ true);
                     }
                 }
                 // Add the flow loop junction and reference to the in-process stack and analyze
@@ -8664,7 +8797,7 @@ namespace ts {
                 }
                 // The result is incomplete if the first antecedent (the non-looping control flow path)
                 // is incomplete.
-                const result = getUnionType(antecedentTypes, subtypeReduction);
+                const result = getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction);
                 if (isIncomplete(firstAntecedentType)) {
                     return createFlowType(result, /*incomplete*/ true);
                 }
@@ -9143,19 +9276,19 @@ namespace ts {
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
             const assumeInitialized = isParameter || isOuterVariable ||
-                type !== autoType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0) ||
+                type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0) ||
                 isInAmbientContext(declaration);
             const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
-            if (type === autoType) {
-                if (flowType === autoType) {
+            if (type === autoType || type === autoArrayType) {
+                if (flowType === type) {
                     if (compilerOptions.noImplicitAny) {
-                        error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_any_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol));
-                        error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(anyType));
+                        error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(type));
+                        error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(type));
                     }
-                    return anyType;
+                    return convertAutoToAny(type);
                 }
             }
             else if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
@@ -15904,7 +16037,7 @@ namespace ts {
         }
 
         function convertAutoToAny(type: Type) {
-            return type === autoType ? anyType : type;
+            return type === autoType ? anyType : type === autoArrayType ? anyArrayType : type;
         }
 
         // Check variable, parameter, or property declaration
@@ -19307,6 +19440,7 @@ namespace ts {
             }
 
             anyArrayType = createArrayType(anyType);
+            autoArrayType = createArrayType(autoType);
 
             const symbol = getGlobalSymbol("ReadonlyArray", SymbolFlags.Type, /*diagnostic*/ undefined);
             globalReadonlyArrayType = symbol && <GenericType>getTypeOfGlobalSymbol(symbol, /*arity*/ 1);

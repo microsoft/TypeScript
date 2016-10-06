@@ -1681,8 +1681,9 @@ namespace ts {
         TrueCondition  = 1 << 5,  // Condition known to be true
         FalseCondition = 1 << 6,  // Condition known to be false
         SwitchClause   = 1 << 7,  // Switch statement clause
-        Referenced     = 1 << 8,  // Referenced as antecedent once
-        Shared         = 1 << 9,  // Referenced as antecedent more than once
+        ArrayMutation  = 1 << 8,  // Potential array mutation
+        Referenced     = 1 << 9,  // Referenced as antecedent once
+        Shared         = 1 << 10, // Referenced as antecedent more than once
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -1722,6 +1723,13 @@ namespace ts {
         switchStatement: SwitchStatement;
         clauseStart: number;   // Start index of case/default clause range
         clauseEnd: number;     // End index of case/default clause range
+        antecedent: FlowNode;
+    }
+
+    // FlowArrayMutation represents a node potentially mutates an array, i.e. an
+    // operation of the form 'x.push(value)' or 'x[n] = value'.
+    export interface FlowArrayMutation extends FlowNode {
+        node: Expression;
         antecedent: FlowNode;
     }
 
@@ -2521,6 +2529,8 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+        elementType?: Type;      // Element expressions of evolving array type
+        finalArrayType?: Type;   // Final array type of evolving array type
     }
 
     /* @internal */
