@@ -3287,6 +3287,11 @@ namespace ts {
          * - don't use tripleslash references
          */
         isExternalLibraryImport?: boolean;
+        /**
+         * If true, the module came from a package.json, with no associated SourceFile.
+         * This does *not* include packages included by `--allowJs`.
+         */
+        isUntyped?: boolean;
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {

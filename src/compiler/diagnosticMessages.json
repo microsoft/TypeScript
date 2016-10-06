@@ -2861,6 +2861,10 @@
         "category": "Error",
         "code": 6140
     },
+    "Resolving real path for '{0}', result is untyped package '{1}'": {
+        "category": "Message",
+        "code": 6141
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

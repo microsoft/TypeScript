@@ -1,0 +1,9 @@
+=== /c.ts ===
+import foo, { bar } from "foo";
+>foo : Symbol(foo, Decl(c.ts, 0, 6))
+>bar : Symbol(bar, Decl(c.ts, 0, 13))
+
+foo(bar());
+>foo : Symbol(foo, Decl(c.ts, 0, 6))
+>bar : Symbol(bar, Decl(c.ts, 0, 13))
+

@@ -1,0 +1,11 @@
+=== /foo/a.ts ===
+import { x } from "bar";
+>x : Symbol(x, Decl(a.ts, 0, 8))
+
+x;
+>x : Symbol(x, Decl(a.ts, 0, 8))
+
+=== /node_modules/@types/bar/index.d.ts ===
+export const x: number;
+>x : Symbol(x, Decl(index.d.ts, 0, 12))
+

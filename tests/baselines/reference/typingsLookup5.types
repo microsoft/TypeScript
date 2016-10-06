@@ -1,0 +1,11 @@
+=== /c.ts ===
+import foo, { bar } from "foo";
+>foo : any
+>bar : any
+
+foo(bar());
+>foo(bar()) : any
+>foo : any
+>bar() : any
+>bar : any
+
