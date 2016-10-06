@@ -163,7 +163,7 @@
         "category": "Error",
         "code": 1054
     },
-    "Type '{0}' is not a valid async function return type.": {
+    "Type '{0}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.": {
         "category": "Error",
         "code": 1055
     },

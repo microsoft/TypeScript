@@ -2329,15 +2329,16 @@ namespace ts {
         }
 
         function getPromiseConstructor(type: TypeNode) {
-            const typeName = getEntityNameFromTypeNode(type);
-            if (typeName && isEntityName(typeName)) {
-                const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
-                if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
-                    || serializationKind === TypeReferenceSerializationKind.Unknown) {
-                    return typeName;
+            if (type) {
+                const typeName = getEntityNameFromTypeNode(type);
+                if (typeName && isEntityName(typeName)) {
+                    const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
+                    if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
+                        || serializationKind === TypeReferenceSerializationKind.Unknown) {
+                        return typeName;
+                    }
                 }
             }
-
             return undefined;
         }
 

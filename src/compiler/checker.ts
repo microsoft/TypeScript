@@ -5787,90 +5787,6 @@ namespace ts {
             }
         }
 
-        function getStaticTypeFromTypeNode(node: TypeNode) {
-            switch (node.kind) {
-                case SyntaxKind.AnyKeyword:
-                case SyntaxKind.JSDocAllType:
-                case SyntaxKind.JSDocUnknownType:
-                    return anyType;
-                case SyntaxKind.StringKeyword:
-                    return stringType;
-                case SyntaxKind.NumberKeyword:
-                    return numberType;
-                case SyntaxKind.BooleanKeyword:
-                    return booleanType;
-                case SyntaxKind.SymbolKeyword:
-                    return esSymbolType;
-                case SyntaxKind.VoidKeyword:
-                    return voidType;
-                case SyntaxKind.UndefinedKeyword:
-                    return undefinedType;
-                case SyntaxKind.NullKeyword:
-                    return nullType;
-                case SyntaxKind.NeverKeyword:
-                    return neverType;
-                case SyntaxKind.JSDocNullKeyword:
-                    return nullType;
-                case SyntaxKind.JSDocUndefinedKeyword:
-                    return undefinedType;
-                case SyntaxKind.JSDocNeverKeyword:
-                    return neverType;
-                case SyntaxKind.ThisType:
-                case SyntaxKind.ThisKeyword:
-                    return getTypeFromThisTypeNode(node);
-                case SyntaxKind.LiteralType:
-                    return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
-                case SyntaxKind.JSDocLiteralType:
-                    return getTypeFromLiteralTypeNode((<JSDocLiteralType>node).literal);
-                case SyntaxKind.TypeReference:
-                case SyntaxKind.JSDocTypeReference:
-                    return getTypeFromTypeReference(<TypeReferenceNode>node);
-                case SyntaxKind.TypePredicate:
-                    return booleanType;
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
-                case SyntaxKind.TypeQuery:
-                    return getTypeFromTypeQueryNode(<TypeQueryNode>node);
-                case SyntaxKind.ArrayType:
-                case SyntaxKind.JSDocArrayType:
-                    return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
-                case SyntaxKind.TupleType:
-                    return getTypeFromTupleTypeNode(<TupleTypeNode>node);
-                case SyntaxKind.UnionType:
-                case SyntaxKind.JSDocUnionType:
-                    return getTypeFromUnionTypeNode(<UnionTypeNode>node, aliasSymbol, aliasTypeArguments);
-                case SyntaxKind.IntersectionType:
-                    return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node, aliasSymbol, aliasTypeArguments);
-                case SyntaxKind.ParenthesizedType:
-                case SyntaxKind.JSDocNullableType:
-                case SyntaxKind.JSDocNonNullableType:
-                case SyntaxKind.JSDocConstructorType:
-                case SyntaxKind.JSDocThisType:
-                case SyntaxKind.JSDocOptionalType:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode>node).type);
-                case SyntaxKind.JSDocRecordType:
-                    return getTypeFromTypeNode((node as JSDocRecordType).literal);
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                case SyntaxKind.TypeLiteral:
-                case SyntaxKind.JSDocTypeLiteral:
-                case SyntaxKind.JSDocFunctionType:
-                    return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node, aliasSymbol, aliasTypeArguments);
-                // This function assumes that an identifier or qualified name is a type expression
-                // Callers should first ensure this by calling isTypeNode
-                case SyntaxKind.Identifier:
-                case SyntaxKind.QualifiedName:
-                    const symbol = getSymbolAtLocation(node);
-                    return symbol && getDeclaredTypeOfSymbol(symbol);
-                case SyntaxKind.JSDocTupleType:
-                    return getTypeFromJSDocTupleType(<JSDocTupleType>node);
-                case SyntaxKind.JSDocVariadicType:
-                    return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
-                default:
-                    return unknownType;
-            }
-        }
-
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
             if (items && items.length) {
                 const result: T[] = [];
@@ -15308,56 +15224,55 @@ namespace ts {
             //  }
             //
 
-            const promiseName = getEntityNameFromTypeNode(node.type);
-            const rootName = getFirstIdentifier(promiseName);
+            // Always mark the type node as referenced if it points to a value
+            markTypeNodeAsReferenced(node.type);
 
-            // Mark the root symbol as referenced.
-            getSymbolLinks(rootName.symbol).referenced = true;
-
+            const promiseConstructorName = getEntityNameFromTypeNode(node.type);
             const promiseType = getTypeFromTypeNode(node.type);
-            if (promiseType === unknownType && compilerOptions.isolatedModules) {
-                // If we are compiling with isolatedModules, we may not be able to resolve the
-                // type as a value. As such, we will just return unknownType.
+            if (promiseType === unknownType) {
+                if (!compilerOptions.isolatedModules) {
+                    if (promiseConstructorName) {
+                        error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                    }
+                    else {
+                        error(node.type, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+                    }
+                }
                 return unknownType;
             }
 
-            const promiseConstructorType = getStaticTypeFromTypeNode(node.type);
+            if (promiseConstructorName === undefined) {
+                error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, typeToString(promiseType));
+                return unknownType;
+            }
+
+            const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
+            const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : unknownType;
+            if (promiseConstructorType === unknownType) {
+                error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                return unknownType;
+            }
 
             const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
             if (globalPromiseConstructorLikeType === emptyObjectType) {
                 // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
                 // compatibility with __awaiter.
-                error(node.type || node.name || node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+                error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
                 return unknownType;
             }
 
-            // When we get the type of the `Promise` symbol here, we get the type of the static
-            // side of the `Promise` class, which would be `{ new <T>(...): Promise<T> }`.
-
-            const promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
-            if (!promiseConstructor) {
-                // try to fall back to global promise type.
-                const typeName = promiseConstructor
-                    ? symbolToString(promiseConstructor)
-                    : typeToString(promiseType);
-                return checkCorrectPromiseType(promiseType, node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeName);
-            }
-
-            // If the Promise constructor, resolved locally, is an alias symbol we should mark it as referenced.
-            checkReturnTypeAnnotationAsExpression(node);
-
-            // Validate the promise constructor type.
-            const promiseConstructorType = getTypeOfSymbol(promiseConstructor);
-            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
+            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node.type,
+                Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value)) {
                 return unknownType;
             }
 
             // Verify there is no local declaration that could collide with the promise constructor.
-            const rootSymbol = getSymbol(node.locals, rootName.text, SymbolFlags.Value);
-            if (rootSymbol) {
-                error(rootSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
+            const rootName = promiseConstructorName && getFirstIdentifier(promiseConstructorName);
+            const collidingSymbol = getSymbol(node.locals, rootName.text, SymbolFlags.Value);
+            if (collidingSymbol) {
+                error(collidingSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
                     rootName.text,
-                    getFullyQualifiedName(promiseConstructor));
+                    entityNameToString(promiseConstructorName));
                 return unknownType;
             }
 
@@ -15415,44 +15330,19 @@ namespace ts {
                 errorInfo);
         }
 
-        /** Checks a type reference node as an expression. */
-        function checkTypeNodeAsExpression(node: TypeNode) {
-            // When we are emitting type metadata for decorators, we need to try to check the type
-            // as if it were an expression so that we can emit the type in a value position when we
-            // serialize the type metadata.
-            if (node && node.kind === SyntaxKind.TypeReference) {
-                const root = getFirstIdentifier((<TypeReferenceNode>node).typeName);
-                const meaning = root.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
-                // Resolve type so we know which symbol is referenced
-                const rootSymbol = resolveName(root, root.text, meaning | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                // Resolved symbol is alias
-                if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
-                    const aliasTarget = resolveAlias(rootSymbol);
-                    // If alias has value symbol - mark alias as referenced
-                    if (aliasTarget.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
-                        markAliasSymbolAsReferenced(rootSymbol);
-                    }
-                }
-            }
-        }
-
         /**
-          * Checks the type annotation of an accessor declaration or property declaration as
-          * an expression if it is a type reference to a type with a value declaration.
-          */
-        function checkTypeAnnotationAsExpression(node: VariableLikeDeclaration) {
-            checkTypeNodeAsExpression((<PropertyDeclaration>node).type);
-        }
-
-        function checkReturnTypeAnnotationAsExpression(node: FunctionLikeDeclaration) {
-            checkTypeNodeAsExpression(node.type);
-        }
-
-        /** Checks the type annotation of the parameters of a function/method or the constructor of a class as expressions */
-        function checkParameterTypeAnnotationsAsExpressions(node: FunctionLikeDeclaration) {
-            // ensure all type annotations with a value declaration are checked as an expression
-            for (const parameter of node.parameters) {
-                checkTypeAnnotationAsExpression(parameter);
+         * If a TypeNode can be resolved to a value symbol imported from an external module, it is
+         * marked as referenced to prevent import elision.
+         */
+        function markTypeNodeAsReferenced(node: TypeNode) {
+            const typeName = node && getEntityNameFromTypeNode(node);
+            const rootName = typeName && getFirstIdentifier(typeName);
+            const rootSymbol = rootName && resolveName(rootName, rootName.text, (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            if (rootSymbol
+                && rootSymbol.flags & SymbolFlags.Alias
+                && symbolIsValue(rootSymbol)
+                && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
+                markAliasSymbolAsReferenced(rootSymbol);
             }
         }
 
@@ -15478,20 +15368,25 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                         const constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
                         if (constructor) {
-                            checkParameterTypeAnnotationsAsExpressions(constructor);
+                            for (const parameter of constructor.parameters) {
+                                markTypeNodeAsReferenced(parameter.type);
+                            }
                         }
                         break;
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
-                        checkReturnTypeAnnotationAsExpression(<FunctionLikeDeclaration>node);
+                        for (const parameter of (<FunctionLikeDeclaration>node).parameters) {
+                            markTypeNodeAsReferenced(parameter.type);
+                        }
+
+                        markTypeNodeAsReferenced((<FunctionLikeDeclaration>node).type);
                         break;
 
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.Parameter:
-                        checkTypeAnnotationAsExpression(<PropertyDeclaration | ParameterDeclaration>node);
+                        markTypeNodeAsReferenced((<PropertyDeclaration | ParameterDeclaration>node).type);
                         break;
                 }
             }
