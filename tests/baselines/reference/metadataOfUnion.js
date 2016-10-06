@@ -15,6 +15,27 @@ class B {
     z: "foo" | boolean;
 }
 
+enum E {
+    A,
+    B,
+    C,
+    D
+}
+
+class D {
+    @PropDeco
+    a: E.A;
+
+    @PropDeco
+    b: E.B | E.C;
+
+    @PropDeco
+    c: E;
+
+    @PropDeco
+    d: E | number;
+}
+
 //// [metadataOfUnion.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -48,3 +69,31 @@ __decorate([
     PropDeco,
     __metadata("design:type", Object)
 ], B.prototype, "z");
+var E;
+(function (E) {
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
+    E[E["C"] = 2] = "C";
+    E[E["D"] = 3] = "D";
+})(E || (E = {}));
+var D = (function () {
+    function D() {
+    }
+    return D;
+}());
+__decorate([
+    PropDeco,
+    __metadata("design:type", Number)
+], D.prototype, "a");
+__decorate([
+    PropDeco,
+    __metadata("design:type", Number)
+], D.prototype, "b");
+__decorate([
+    PropDeco,
+    __metadata("design:type", Number)
+], D.prototype, "c");
+__decorate([
+    PropDeco,
+    __metadata("design:type", Number)
+], D.prototype, "d");

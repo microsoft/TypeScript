@@ -32,3 +32,55 @@ class B {
     z: "foo" | boolean;
 >z : boolean | "foo"
 }
+
+enum E {
+>E : E
+
+    A,
+>A : E.A
+
+    B,
+>B : E.B
+
+    C,
+>C : E.C
+
+    D
+>D : E.D
+}
+
+class D {
+>D : D
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    a: E.A;
+>a : E.A
+>E : any
+>A : E.A
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    b: E.B | E.C;
+>b : E.B | E.C
+>E : any
+>B : E.B
+>E : any
+>C : E.C
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    c: E;
+>c : E
+>E : E
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    d: E | number;
+>d : number | E
+>E : E
+}

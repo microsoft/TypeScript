@@ -15,3 +15,24 @@ class B {
     @PropDeco
     z: "foo" | boolean;
 }
+
+enum E {
+    A,
+    B,
+    C,
+    D
+}
+
+class D {
+    @PropDeco
+    a: E.A;
+
+    @PropDeco
+    b: E.B | E.C;
+
+    @PropDeco
+    c: E;
+
+    @PropDeco
+    d: E | number;
+}
