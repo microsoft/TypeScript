@@ -2353,7 +2353,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean, errorCode?:number ) {
+        public verifyCodeFixAvailable(negative: boolean, errorCode?: number) {
             const fixes = this.getCodeFixes(errorCode);
 
             if (negative && fixes && fixes.length > 0) {

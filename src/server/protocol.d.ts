@@ -247,7 +247,7 @@ declare namespace ts.server.protocol {
         /**
           * Errorcodes we want to get the fixes for.
           */
-        errorCodes?: number[]
+        errorCodes?: number[];
     }
 
     /**
@@ -1586,7 +1586,7 @@ declare namespace ts.server.protocol {
         /**
           * Changes to apply to each file as part of the code action.
           */
-        changes: FileTextChanges[]
+        changes: FileTextChanges[];
     }
 
     export interface FileTextChanges {

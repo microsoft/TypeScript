@@ -1214,7 +1214,8 @@ namespace ts.server {
             }
             if (simplifiedResult) {
                 return codeActions.map(mapCodeAction);
-            } else {
+            }
+            else {
                 return codeActions;
             }
 
