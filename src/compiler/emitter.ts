@@ -1968,17 +1968,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 emitObjectLiteralBody(node, firstComputedPropertyIndex);
 
                 for (let i = firstComputedPropertyIndex, n = properties.length; i < n; i++) {
-                    writeComma();
-
                     const property = properties[i];
 
-                    emitStart(property);
                     if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor) {
                         // TODO (drosen): Reconcile with 'emitMemberFunctions'.
                         const accessors = getAllAccessorDeclarations(node.properties, <AccessorDeclaration>property);
                         if (property !== accessors.firstAccessor) {
                             continue;
                         }
+                        writeComma();
+                        emitStart(property);
                         write("Object.defineProperty(");
                         emit(tempVar);
                         write(", ");
@@ -2019,6 +2018,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         emitEnd(property);
                     }
                     else {
+                        writeComma();
+                        emitStart(property);
                         emitLeadingComments(property);
                         emitStart(property.name);
                         emit(tempVar);
@@ -2039,9 +2040,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         else {
                             Debug.fail("ObjectLiteralElement type not accounted for: " + property.kind);
                         }
+                        emitEnd(property);
                     }
 
-                    emitEnd(property);
                 }
 
                 writeComma();
