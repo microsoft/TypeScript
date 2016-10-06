@@ -8510,12 +8510,12 @@ namespace ts {
         }
 
         function isEvolvingArrayType(type: Type) {
-            return type.flags & TypeFlags.Anonymous && !!(<AnonymousType>type).elementType;
+            return !!(type.flags & TypeFlags.Anonymous && (<AnonymousType>type).elementType);
         }
 
         function createFinalArrayType(elementType: Type) {
             return createArrayType(elementType !== neverType ?
-                getUnionType([elementType], /*subtypeReduction*/ true) :
+                elementType.flags & TypeFlags.Union ? getUnionType((<UnionType>elementType).types, /*subtypeReduction*/ true) : elementType :
                 strictNullChecks ? neverType : undefinedWideningType);
         }
 
@@ -8528,16 +8528,29 @@ namespace ts {
             return isEvolvingArrayType(type) ? getFinalArrayType(<AnonymousType>type) : type;
         }
 
-        function getElementTypeOfEvolvingArrayType(evolvingArrayType: AnonymousType) {
-            return evolvingArrayType.elementType;
+        function getElementTypeOfEvolvingArrayType(type: Type) {
+            return isEvolvingArrayType(type) ? (<AnonymousType>type).elementType : neverType;
+        }
+
+        function isEvolvingArrayTypeList(types: Type[]) {
+            let hasEvolvingArrayType = false;
+            for (const t of types) {
+                if (!(t.flags & TypeFlags.Never)) {
+                    if (!isEvolvingArrayType(t)) {
+                        return false;
+                    }
+                    hasEvolvingArrayType = true;
+                }
+            }
+            return hasEvolvingArrayType;
         }
 
         // At flow control branch or loop junctions, if the type along every antecedent code path
         // is an evolving array type, we construct a combined evolving array type. Otherwise we
         // finalize all evolving array types.
         function getUnionOrEvolvingArrayType(types: Type[], subtypeReduction: boolean) {
-            return types.length && every(types, isEvolvingArrayType) ?
-                getEvolvingArrayType(getUnionType(map(<AnonymousType[]>types, getElementTypeOfEvolvingArrayType))) :
+            return isEvolvingArrayTypeList(types) ?
+                getEvolvingArrayType(getUnionType(map(types, getElementTypeOfEvolvingArrayType))) :
                 getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction);
         }
 
@@ -9211,6 +9224,10 @@ namespace ts {
             }
         }
 
+        function isConstVariable(symbol: Symbol) {
+            return symbol.flags & SymbolFlags.Variable && (getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 && getTypeOfSymbol(symbol) !== autoArrayType;
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
 
@@ -9303,7 +9320,7 @@ namespace ts {
             // analysis to include the immediately enclosing function.
             while (flowContainer !== declarationContainer &&
                 (flowContainer.kind === SyntaxKind.FunctionExpression || flowContainer.kind === SyntaxKind.ArrowFunction) &&
-                (isReadonlySymbol(localOrExportSymbol) || isParameter && !isParameterAssigned(localOrExportSymbol))) {
+                (isConstVariable(localOrExportSymbol) || isParameter && !isParameterAssigned(localOrExportSymbol))) {
                 flowContainer = getControlFlowContainer(flowContainer);
             }
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
