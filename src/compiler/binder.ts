@@ -355,11 +355,24 @@ namespace ts {
                             ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                             : Diagnostics.Duplicate_identifier_0;
 
-                        forEach(symbol.declarations, declaration => {
-                            if (hasModifier(declaration, ModifierFlags.Default)) {
+                        if (symbol.declarations && symbol.declarations.length) {
+                            // If the current node is a default export of some sort, then check if
+                            // there are any other default exports that we need to error on.
+                            // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
+                            if (isDefaultExport) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                             }
-                        });
+                            else {
+                                // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
+                                // Error on multiple export default in the following case:
+                                // 1. multiple export default of class declaration or function declaration by checking NodeFlags.Default
+                                // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
+                                if (symbol.declarations && symbol.declarations.length &&
+                                    (isDefaultExport || (node.kind === SyntaxKind.ExportAssignment &&  !(<ExportAssignment>node).isExportEquals))) {
+                                        message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                 }
+                            }
+                        }
 
                         forEach(symbol.declarations, declaration => {
                             file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
@@ -1944,12 +1957,15 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
             else {
+                // An export default clause with an expression exports a value
+                // We want to exclude both class and function here,  this is necessary to issue an error when there are both
+                // default export-assignment and default export function and class declaration.
                 const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node)
                     // An export default clause with an EntityNameExpression exports all meanings of that identifier
                     ? SymbolFlags.Alias
                     // An export default clause with any other expression exports a value
                     : SymbolFlags.Property;
-                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
+                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.Property | SymbolFlags.AliasExcludes | SymbolFlags.Class | SymbolFlags.Function);
             }
         }
 
