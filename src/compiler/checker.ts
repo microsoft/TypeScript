@@ -18167,6 +18167,9 @@ namespace ts {
                             (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
+                    if (isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) {
+                        return resolveExternalModuleName(node, <LiteralExpression>node);
+                    }
                 // Fall through
 
                 case SyntaxKind.NumericLiteral:
