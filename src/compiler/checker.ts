@@ -2167,7 +2167,7 @@ namespace ts {
                     }
                     else if (!(flags & TypeFormatFlags.InTypeAlias) && ((type.flags & TypeFlags.Anonymous && !(<AnonymousType>type).target) || type.flags & TypeFlags.UnionOrIntersection) && type.aliasSymbol &&
                         isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
-                        // We emit inferred type as type-alias at the current localtion if all the following is true
+                        // We emit inferred type as type-alias at the current location if all the following is true
                         //      the input type is has alias symbol that is accessible
                         //      the input type is a union, intersection or anonymous type that is fully instantiated (if not we want to keep dive into)
                         //          e.g.: export type Bar<X, Y> = () => [X, Y];
