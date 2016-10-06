@@ -136,6 +136,7 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
+        codeFixAvailable(): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;

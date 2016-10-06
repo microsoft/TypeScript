@@ -2041,13 +2041,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
-
-            const ranges = this.getRanges();
-            if (ranges.length == 0) {
-                this.raiseError("At least one range should be specified in the testfile.");
-            }
-
+        private getCodeFixes(errorCode?: number) {
             const fileName = this.activeFile.fileName;
             const diagnostics = this.getDiagnostics(fileName);
 
@@ -2061,7 +2055,16 @@ namespace FourSlash {
 
             const diagnostic = !errorCode ? diagnostics[0] : ts.find(diagnostics, d => d.code == errorCode);
 
-            const actual = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [`TS${diagnostic.code}`]);
+            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [`TS${diagnostic.code}`]);
+        }
+
+        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.");
+            }
+
+            const actual = this.getCodeFixes(errorCode);
 
             if (!actual || actual.length == 0) {
                 this.raiseError("No codefixes returned.");
@@ -2347,6 +2350,18 @@ namespace FourSlash {
 
             if (expectedCount !== actualCount) {
                 this.raiseError("verifyDocumentHighlightsAtPositionListCount failed - actual: " + actualCount + ", expected:" + expectedCount);
+            }
+        }
+
+        public verifyCodeFixAvailable(negative: boolean, errorCode?:number ) {
+            const fixes = this.getCodeFixes(errorCode);
+
+            if (negative && fixes && fixes.length > 0) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected no fixes, actual: ${fixes.length}`);
+            }
+
+            if (!negative && (fixes === undefined || fixes.length === 0)) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected code fixes, actual: 0`);
             }
         }
 
@@ -3136,6 +3151,10 @@ namespace FourSlashInterface {
 
         public isValidBraceCompletionAtPosition(openingBrace: string) {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
+        }
+
+        public codeFixAvailable(errorCode?: number) {
+            this.state.verifyCodeFixAvailable(this.negative, errorCode);
         }
     }
 

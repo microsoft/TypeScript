@@ -34,9 +34,20 @@ namespace ts.codefix {
             }
 
             const constructor = getContainingFunction(token);
-            const superCall = findSuperCall((<ConstructorDeclaration>constructor).body);
+            const superCall = <ExpressionStatement>findSuperCall((<ConstructorDeclaration>constructor).body);
             if (!superCall) {
                 return undefined;
+            }
+
+            // figure out if the this access is actuall inside the supercall
+            // i.e. super(this.a), since in that case we won't suggest a fix
+            if (superCall.expression && superCall.expression.kind == SyntaxKind.CallExpression) {
+                const arguments = (<CallExpression>superCall.expression).arguments;
+                for (let i = 0; i < arguments.length; i++){
+                    if ((<PropertyAccessExpression>arguments[i]).expression === token) {
+                        return undefined;
+                    }
+                }
             }
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>constructor, sourceFile);
