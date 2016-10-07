@@ -667,7 +667,7 @@ namespace ts.server {
                 errorCodes: errorCodes,
             };
 
-            const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixesFull, args);
+            const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
