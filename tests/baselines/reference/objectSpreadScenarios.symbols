@@ -19,13 +19,13 @@ function override<U>(initial: U, override: U): { ...U, ...U } {
 
     return { ...initial, ...override };
 }
-function update<U>(this: { u: U }, override: U): void {
+function update<U>(this: { u: { ...U } }, override: U): void {
 >update : Symbol(update, Decl(objectSpreadScenarios.ts, 4, 1))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 5, 16))
 >this : Symbol(this, Decl(objectSpreadScenarios.ts, 5, 19))
 >u : Symbol(u, Decl(objectSpreadScenarios.ts, 5, 26))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 5, 16))
->override : Symbol(override, Decl(objectSpreadScenarios.ts, 5, 34))
+>override : Symbol(override, Decl(objectSpreadScenarios.ts, 5, 41))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 5, 16))
 
     this.u = { ...this.u, ...override };

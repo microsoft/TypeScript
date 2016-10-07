@@ -31,7 +31,7 @@ let addAfter: { a: number, b: string, c: boolean } =
 >c : boolean
 
     { ...o, c: false }
->{ ...o, c: false } : { ...{ a: number; b: string; }; c: false; }
+>{ ...o, c: false } : { c: false; a: number; b: string; }
 >o : any
 >c : boolean
 >false : false
@@ -43,7 +43,7 @@ let addBefore: { a: number, b: string, c: boolean } =
 >c : boolean
 
     { c: false, ...o }
->{ c: false, ...o } : { c: false; ...{ a: number; b: string; } }
+>{ c: false, ...o } : { a: number; b: string; c: false; }
 >c : boolean
 >false : false
 >o : any
@@ -55,7 +55,7 @@ let ignore: { a: number, b: string } =
 >b : string
 
     { b: 'ignored', ...o }
->{ b: 'ignored', ...o } : { b: string; ...{ a: number; b: string; } }
+>{ b: 'ignored', ...o } : { a: number; b: string; }
 >b : string
 >'ignored' : "ignored"
 >o : any
@@ -66,7 +66,7 @@ let override: { a: number, b: string } =
 >b : string
 
     { ...o, b: 'override' }
->{ ...o, b: 'override' } : { ...{ a: number; b: string; }; b: string; }
+>{ ...o, b: 'override' } : { b: string; a: number; }
 >o : any
 >b : string
 >'override' : "override"
@@ -78,8 +78,8 @@ let nested: { a: number, b: boolean, c: string } =
 >c : string
 
     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
->{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { ...{ a: number; ...{ b: boolean; c: string; } }; c: string; }
->{ a: 3, ...{ b: false, c: 'overriden' } } : { a: number; ...{ b: boolean; c: string; } }
+>{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: boolean; a: number; }
+>{ a: 3, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
 >a : number
 >3 : 3
 >{ b: false, c: 'overriden' } : { b: boolean; c: string; }
@@ -97,7 +97,7 @@ let combined: { a: number, b: string, c: boolean } =
 >c : boolean
 
     { ...o, ...o2 }
->{ ...o, ...o2 } : { ...{ a: number; b: string; }; ...{ b: string; c: boolean; } }
+>{ ...o, ...o2 } : { b: string; c: boolean; a: number; }
 >o : any
 >o2 : any
 
@@ -108,7 +108,7 @@ let combinedBefore: { a: number, b: string, c: boolean } =
 >c : boolean
 
     { b: 'ok', ...o, ...o2 }
->{ b: 'ok', ...o, ...o2 } : { b: string; ...{ a: number; b: string; }; ...{ b: string; c: boolean; } }
+>{ b: 'ok', ...o, ...o2 } : { b: string; c: boolean; a: number; }
 >b : string
 >'ok' : "ok"
 >o : any
@@ -121,7 +121,7 @@ let combinedMid: { a: number, b: string, c: boolean } =
 >c : boolean
 
     { ...o, b: 'ok', ...o2 }
->{ ...o, b: 'ok', ...o2 } : { ...{ a: number; b: string; }; b: string; ...{ b: string; c: boolean; } }
+>{ ...o, b: 'ok', ...o2 } : { b: string; c: boolean; a: number; }
 >o : any
 >b : string
 >'ok' : "ok"
@@ -134,7 +134,7 @@ let combinedAfter: { a: number, b: string, c: boolean } =
 >c : boolean
 
     { ...o, ...o2, b: 'ok' }
->{ ...o, ...o2, b: 'ok' } : { ...{ a: number; b: string; }; ...{ b: string; c: boolean; }; b: string; }
+>{ ...o, ...o2, b: 'ok' } : { b: string; c: boolean; a: number; }
 >o : any
 >o2 : any
 >b : string
@@ -148,8 +148,8 @@ let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >d : string
 
     { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
->{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { ...{ a: number; ...{ b: boolean; c: string; } }; d: string; ...{ a: number; d: string; } }
->{ a: 4, ...{ b: false, c: 'overriden' } } : { a: number; ...{ b: boolean; c: string; } }
+>{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: boolean; c: string; }
+>{ a: 4, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
 >a : number
 >4 : 4
 >{ b: false, c: 'overriden' } : { b: boolean; c: string; }
@@ -172,8 +172,8 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >c : number
 
     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
->{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { ...{ a: number; ...{ b: boolean; c: string; } }; c: number; }
->{ a: 1, ...{ b: false, c: 'overriden' } } : { a: number; ...{ b: boolean; c: string; } }
+>{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: boolean; a: number; }
+>{ a: 1, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
 >a : number
 >1 : 1
 >{ b: false, c: 'overriden' } : { b: boolean; c: string; }
@@ -192,9 +192,9 @@ let propertyNested: { a: { a: number, b: string } } =
 >b : string
 
     { a: { ... o } }
->{ a: { ... o } } : { a: { ...{ a: number; b: string; } }; }
->a : { ...{ a: number; b: string; } }
->{ ... o } : { ...{ a: number; b: string; } }
+>{ a: { ... o } } : { a: { a: number; b: string; }; }
+>a : { a: number; b: string; }
+>{ ... o } : { a: number; b: string; }
 >o : any
 
 // accessors don't copy the descriptor
@@ -211,7 +211,7 @@ let getter: { a: number, c: number } =
 >c : number
 
     { ...op, c: 7 }
->{ ...op, c: 7 } : { ...{ readonly a: number; }; c: number; }
+>{ ...op, c: 7 } : { c: number; readonly a: number; }
 >op : any
 >c : number
 >7 : 7
@@ -260,7 +260,7 @@ let c: C = new C()
 let spreadC: { p: number } = { ...c }
 >spreadC : { p: number; }
 >p : number
->{ ...c } : { ...C }
+>{ ...c } : { p: number; }
 >c : any
 
 // own methods are enumerable
@@ -268,7 +268,7 @@ let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } }
 >cplus : { p: number; plus(): void; }
 >p : number
 >plus : () => void
->{ ...c, plus() { return this.p + 1; } } : { ...C; plus(): any; }
+>{ ...c, plus() { return this.p + 1; } } : { plus(): any; p: number; }
 >c : any
 >plus : () => any
 >this.p + 1 : any
@@ -290,7 +290,7 @@ let changeTypeAfter: { a: string, b: string } =
 >b : string
 
     { ...o, a: 'wrong type?' }
->{ ...o, a: 'wrong type?' } : { ...{ a: number; b: string; }; a: string; }
+>{ ...o, a: 'wrong type?' } : { a: string; b: string; }
 >o : any
 >a : string
 >'wrong type?' : "wrong type?"
@@ -301,7 +301,7 @@ let changeTypeBefore: { a: number, b: string } =
 >b : string
 
     { a: 'wrong type?', ...o };
->{ a: 'wrong type?', ...o } : { a: string; ...{ a: number; b: string; } }
+>{ a: 'wrong type?', ...o } : { a: number; b: string; }
 >a : string
 >'wrong type?' : "wrong type?"
 >o : any
@@ -312,7 +312,7 @@ let changeTypeBoth: { a: string, b: number } =
 >b : number
 
     { ...o, ...swap };
->{ ...o, ...swap } : { ...{ a: number; b: string; }; ...{ a: string; b: number; } }
+>{ ...o, ...swap } : { a: string; b: number; }
 >o : any
 >swap : any
 
@@ -336,7 +336,7 @@ let optionalNumber: { sn?: number };
 let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
 >optionalUnionStops : { sn: string | number | boolean; }
 >sn : string | number | boolean
->{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { ...{ sn: boolean; }; ...{ sn: string; }; ...{ sn?: number; } }
+>{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
 >definiteBoolean : any
 >definiteString : any
 >optionalNumber : any
@@ -344,7 +344,7 @@ let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean
 let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 >optionalUnionDuplicates : { sn: string | number; }
 >sn : string | number
->{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { ...{ sn: boolean; }; ...{ sn: string; }; ...{ sn?: string; }; ...{ sn?: number; } }
+>{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
 >definiteBoolean : any
 >definiteString : any
 >optionalString : any
@@ -353,7 +353,7 @@ let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...
 let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
 >allOptional : { sn?: string | number; }
 >sn : string | number
->{ ...optionalString, ...optionalNumber } : { ...{ sn?: string; }; ...{ sn?: number; } }
+>{ ...optionalString, ...optionalNumber } : { sn?: string | number; }
 >optionalString : any
 >optionalNumber : any
 
@@ -364,7 +364,7 @@ let computedFirst: { a: number, b: string, "before everything": number } =
 >b : string
 
     { ['before everything']: 12, ...o, b: 'yes' }
->{ ['before everything']: 12, ...o, b: 'yes' } : { ['before everything']: number; ...{ a: number; b: string; }; b: string; }
+>{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; ['before everything']: number; }
 >'before everything' : "before everything"
 >12 : 12
 >o : any
@@ -378,7 +378,7 @@ let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number 
 >c : boolean
 
     { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
->{ ...o, ['in the middle']: 13, b: 'maybe?', ...o2 } : { ...{ a: number; b: string; }; ['in the middle']: number; b: string; ...{ b: string; c: boolean; } }
+>{ ...o, ['in the middle']: 13, b: 'maybe?', ...o2 } : { b: string; c: boolean; ['in the middle']: number; a: number; }
 >o : any
 >'in the middle' : "in the middle"
 >13 : 13
@@ -392,7 +392,7 @@ let computedAfter: { a: number, b: string, "at the end": number } =
 >b : string
 
     { ...o, b: 'yeah', ['at the end']: 14 }
->{ ...o, b: 'yeah', ['at the end']: 14 } : { ...{ a: number; b: string; }; b: string; ['at the end']: number; }
+>{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; ['at the end']: number; a: number; }
 >o : any
 >b : string
 >'yeah' : "yeah"
@@ -408,7 +408,7 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >shortCutted : { a: number; b: string; }
 >a : number
 >b : string
->{ ...o, a } : { ...{ a: number; b: string; }; a: number; }
+>{ ...o, a } : { a: number; b: string; }
 >o : any
 >a : number
 
@@ -441,7 +441,7 @@ let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
 >d : boolean
 
     f({ a: 1, b: 'yes' }, { c: 'no', d: false })
->f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { id: string; ...{ a: number; b: string; }; ...{ c: string; d: boolean; } }
+>f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { c: string; d: boolean; a: number; b: string; id: string; }
 >f : <T, U>(t: T, u: U) => { id: string; ...T; ...U }
 >{ a: 1, b: 'yes' } : { a: number; b: string; }
 >a : number
@@ -461,7 +461,7 @@ let overlap: { id: string, a: number, b: string } =
 >b : string
 
     f({ a: 1 }, { a: 2, b: 'extra' })
->f({ a: 1 }, { a: 2, b: 'extra' }) : { id: string; ...{ a: number; }; ...{ a: number; b: string; } }
+>f({ a: 1 }, { a: 2, b: 'extra' }) : { a: number; b: string; id: string; }
 >f : <T, U>(t: T, u: U) => { id: string; ...T; ...U }
 >{ a: 1 } : { a: number; }
 >a : number
@@ -478,7 +478,7 @@ let overlapConflict: { id:string, a: string } =
 >a : string
 
     f({ a: 1 }, { a: 'mismatch' })
->f({ a: 1 }, { a: 'mismatch' }) : { id: string; ...{ a: number; }; ...{ a: string; } }
+>f({ a: 1 }, { a: 'mismatch' }) : { a: string; id: string; }
 >f : <T, U>(t: T, u: U) => { id: string; ...T; ...U }
 >{ a: 1 } : { a: number; }
 >a : number
@@ -495,7 +495,7 @@ let overwriteId: { id: boolean, a: number, c: number, d: string } =
 >d : string
 
     f({ a: 1, id: true }, { c: 1, d: 'no' })
->f({ a: 1, id: true }, { c: 1, d: 'no' }) : { id: string; ...{ a: number; id: boolean; }; ...{ c: number; d: string; } }
+>f({ a: 1, id: true }, { c: 1, d: 'no' }) : { c: number; d: string; a: number; id: boolean; }
 >f : <T, U>(t: T, u: U) => { id: string; ...T; ...U }
 >{ a: 1, id: true } : { a: number; id: true; }
 >a : number
@@ -515,13 +515,13 @@ class D { m() { }; q = 2; }
 >2 : 2
 
 let classesAreWrong: { id: string, ...C, ...D } =
->classesAreWrong : { id: string; ...C; ...D }
+>classesAreWrong : { q: number; p: number; id: string; }
 >id : string
 >C : C
 >D : D
 
     f(new C(), new D())
->f(new C(), new D()) : { id: string; ...C; ...D }
+>f(new C(), new D()) : { q: number; p: number; id: string; }
 >f : <T, U>(t: T, u: U) => { id: string; ...T; ...U }
 >new C() : C
 >C : typeof C

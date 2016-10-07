@@ -1,22 +1,31 @@
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(4,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...V; ...U; ...T }'.
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(5,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...U; ...T; ...V }'.
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(6,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...U; ...V }'.
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(7,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...T; ...V }'.
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(8,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...T; ...U }'.
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(13,11): error TS2322: Type '{}' is not assignable to type '{ ...T; ...U }'.
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(26,11): error TS2322: Type '{ first: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; second: string; ...T; third: string; }'.
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(34,11): error TS2322: Type '{ firrrrrrst: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
-  Property 'first' is missing in type '{ firrrrrrst: string; ...T; second: string; ...U; third: string; }'.
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(36,11): error TS2322: Type '{ first: string; ...T; ssssssssecond: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
-  Property 'second' is missing in type '{ first: string; ...T; ssssssssecond: string; ...U; third: string; }'.
-tests/cases/conformance/types/spread/objectSpreadGeneric.ts(38,11): error TS2322: Type '{ first: string; ...T; second: string; ...U; thirrrrrrrd: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
-  Property 'third' is missing in type '{ first: string; ...T; second: string; ...U; thirrrrrrrd: string; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(9,5): error TS2322: Type '{ ...U }' is not assignable to type 'U'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(10,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...V; ...U; ...T }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(11,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...U; ...T; ...V }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(12,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...U; ...V }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(13,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...T; ...V }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(14,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...T; ...U }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(19,11): error TS2322: Type '{}' is not assignable to type '{ ...T; ...U }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(32,11): error TS2322: Type '{ first: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; second: string; ...T; third: string; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(40,11): error TS2322: Type '{ firrrrrrst: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+  Property 'first' is missing in type '{ third: string; second: string; firrrrrrst: string; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(42,11): error TS2322: Type '{ first: string; ...T; ssssssssecond: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+  Property 'second' is missing in type '{ third: string; ssssssssecond: string; first: string; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(44,11): error TS2322: Type '{ first: string; ...T; second: string; ...U; thirrrrrrrd: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+  Property 'third' is missing in type '{ thirrrrrrrd: string; second: string; first: string; }'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadGeneric.ts (10 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadGeneric.ts (11 errors) ====
     function f<T, U, V>(t: T, u: U, v: V): void {
         let o: { ...T, ...U, ...V };
+        let uus: { ...U, ...U};
+        let us: { ...U };
         const same: { ...T, ...U, ...V } = o; // ok
+        uus = us; // ok, multiple spreads are equivalent to a single one
+        us = uus; // ok, multiple spreads are equivalent to a single one
+        us = u;   // ok, type has at least all the properties of the spread
+        u = us;   // error, might be missing a ton of stuff
+        ~
+!!! error TS2322: Type '{ ...U }' is not assignable to type 'U'.
         const reversed: { ...V, ...U, ...T } = o; // error, reversed
               ~~~~~~~~
 !!! error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...V; ...U; ...T }'.
@@ -64,17 +73,17 @@ tests/cases/conformance/types/spread/objectSpreadGeneric.ts(38,11): error TS2322
         const mismatchFirst: { first: string, ...T, second: string, ...U, third: string } =
               ~~~~~~~~~~~~~
 !!! error TS2322: Type '{ firrrrrrst: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
-!!! error TS2322:   Property 'first' is missing in type '{ firrrrrrst: string; ...T; second: string; ...U; third: string; }'.
+!!! error TS2322:   Property 'first' is missing in type '{ third: string; second: string; firrrrrrst: string; }'.
             { firrrrrrst: '1', ...t, second: '2', ...u, third: '3' }; // error, 'first' not found
         const mismatchSecond: { first: string, ...T, second: string, ...U, third: string } =
               ~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ first: string; ...T; ssssssssecond: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
-!!! error TS2322:   Property 'second' is missing in type '{ first: string; ...T; ssssssssecond: string; ...U; third: string; }'.
+!!! error TS2322:   Property 'second' is missing in type '{ third: string; ssssssssecond: string; first: string; }'.
             { first: '1', ...t, ssssssssecond: '2', ...u, third: '3' }; // error, 'second' not found
         const mismatchLast: { first: string, ...T, second: string, ...U, third: string } =
               ~~~~~~~~~~~~
 !!! error TS2322: Type '{ first: string; ...T; second: string; ...U; thirrrrrrrd: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
-!!! error TS2322:   Property 'third' is missing in type '{ first: string; ...T; second: string; ...U; thirrrrrrrd: string; }'.
+!!! error TS2322:   Property 'third' is missing in type '{ thirrrrrrrd: string; second: string; first: string; }'.
             { first: '1', ...t, second: '2', ...u, thirrrrrrrd: '3' }; // error, 'third' not found
     }
     

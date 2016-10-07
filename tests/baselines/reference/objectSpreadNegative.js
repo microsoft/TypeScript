@@ -8,10 +8,8 @@ class PrivateOptionalX {
 class PublicX {
     public x: number;
 }
-let privateOptionalx: PrivateOptionalX;
-let publicx: PublicX;
-let o3 = { ...publicx, ...privateOptionalx };
-let sn: string | number = o3.x; // error, x is private
+let o3: { ...PublicX, ...PrivateOptionalX };
+let sn: number = o3.x; // error, x is private
 let optionalString: { sn?: string };
 let optionalNumber: { sn?: number };
 let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
@@ -46,7 +44,13 @@ let callableConstructableSpread: { ...PublicX, (n: number): number, new (p: numb
 callableConstructableSpread(12); // error, no call signature
 new callableConstructableSpread(12); // error, no construct signature
 
+let publicx: PublicX;
 let callableSpread = { ...publicx, ...(n => n + 1) }; // error, can't spread functions
+
+// { ...U } is not assignable to U
+function override<U>(initial: U, override: U): U {
+    return { ...initial, ...override };
+}
 
 
 //// [objectSpreadNegative.js]
@@ -70,9 +74,7 @@ var PublicX = (function () {
     }
     return PublicX;
 }());
-var privateOptionalx;
-var publicx;
-var o3 = __assign({}, publicx, privateOptionalx);
+var o3;
 var sn = o3.x; // error, x is private
 var optionalString;
 var optionalNumber;
@@ -105,4 +107,9 @@ spreadC.m(); // error 'm' is not in '{ ... c }'
 var callableConstructableSpread;
 callableConstructableSpread(12); // error, no call signature
 new callableConstructableSpread(12); // error, no construct signature
+var publicx;
 var callableSpread = __assign({}, publicx, (function (n) { return n + 1; })); // error, can't spread functions
+// { ...U } is not assignable to U
+function override(initial, override) {
+    return __assign({}, initial, override);
+}
