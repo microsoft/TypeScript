@@ -652,6 +652,12 @@ declare namespace ts.server.protocol {
         /** Defines space handling after opening and before closing non empty brackets. Default value is false. */
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
 
+        /** Defines space handling before and after template string braces. Default value is false. */
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+
+        /** Defines space handling before and after JSX expression braces. Default value is false. */
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+
         /** Defines whether an open brace is put onto a new line for functions or not. Default value is false. */
         placeOpenBraceOnNewLineForFunctions?: boolean;
 

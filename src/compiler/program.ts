@@ -358,7 +358,7 @@ namespace ts {
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
             const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, host);
 
-            if (typeReferences) {
+            if (typeReferences.length) {
                 // This containingFilename needs to match with the one used in managed-side
                 const containingFilename = combinePaths(host.getCurrentDirectory(), "__inferred type names__.ts");
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
@@ -473,6 +473,7 @@ namespace ts {
                 (oldOptions.configFilePath !== options.configFilePath) ||
                 (oldOptions.baseUrl !== options.baseUrl) ||
                 (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
+                !arrayIsEqualTo(oldOptions.lib, options.lib) ||
                 !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
                 !equalOwnProperties(oldOptions.paths, options.paths)) {
@@ -1310,7 +1311,6 @@ namespace ts {
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
-                    const resolvedPath = resolution ? toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName) : undefined;
 
                     // add file to program only if:
                     // - resolution was successful
@@ -1332,7 +1332,7 @@ namespace ts {
                     }
                     else if (shouldAddFile) {
                         findSourceFile(resolution.resolvedFileName,
-                                resolvedPath,
+                                toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName),
                                 /*isDefaultLib*/ false, /*isReference*/ false,
                                 file,
                                 skipTrivia(file.text, file.imports[i].pos),

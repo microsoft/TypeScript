@@ -78,7 +78,7 @@ tests/cases/compiler/expr.ts(242,7): error TS2363: The right-hand side of an ari
     }
     
     function f() {
-        var a;
+        var a: any;
         var n=3;
         var s="";
         var b=false;
