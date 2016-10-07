@@ -2651,7 +2651,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return false;
                 }
 
-                return !exportEquals && exportSpecifiers && (<Identifier>node).text in exportSpecifiers;
+                if (exportEquals || !exportSpecifiers || !((<Identifier>node).text in exportSpecifiers)) {
+                    return false;
+                }
+                // check that referenced declaration is declared on source file level
+                const declaration = resolver.getReferencedValueDeclaration(<Identifier>node);
+                return declaration && getEnclosingBlockScopeContainer(declaration).kind === SyntaxKind.SourceFile;
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {

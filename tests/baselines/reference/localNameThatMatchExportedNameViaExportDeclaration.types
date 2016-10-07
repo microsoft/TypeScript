@@ -1,0 +1,51 @@
+=== tests/cases/compiler/localNameThatMatchExportedNameViaExportDeclaration.ts ===
+
+export { my }
+>my : any
+
+var my: any;
+>my : any
+
+my += my;
+>my += my : any
+>my : any
+>my : any
+
+function doSome1(my: any) {
+>doSome1 : (my: any) => any
+>my : any
+
+    my = +my;
+>my = +my : number
+>my : any
+>+my : number
+>my : any
+
+    return my;
+>my : any
+}
+
+function doSome2() {
+>doSome2 : () => any
+
+    const internal = (my: any) => {
+>internal : (my: any) => any
+>(my: any) => {        my = +my;        return my;    } : (my: any) => any
+>my : any
+
+        my = +my;
+>my = +my : number
+>my : any
+>+my : number
+>my : any
+
+        return my;
+>my : any
+
+    };
+    return internal("1");
+>internal("1") : any
+>internal : (my: any) => any
+>"1" : string
+}
+
