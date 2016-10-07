@@ -505,7 +505,11 @@ namespace ts {
     export interface CompletionInfo {
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
-        isNewIdentifierLocation: boolean;  // true when the current location also allows for a new identifier
+
+        /**
+         * true when the current location also allows for a new identifier
+         */
+        isNewIdentifierLocation: boolean;
         entries: CompletionEntry[];
     }
 

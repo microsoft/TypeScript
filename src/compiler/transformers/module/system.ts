@@ -1201,7 +1201,7 @@ namespace ts {
          * @param node The declaration statement.
          */
         function getDeclarationName(node: DeclarationStatement) {
-            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
+            return node.name ? getSynthesizedClone(<Identifier>node.name) : getGeneratedNameForNode(node);
         }
 
         function addExportStarFunction(statements: Statement[], localNames: Identifier) {

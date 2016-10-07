@@ -68,7 +68,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
@@ -655,7 +655,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.ModuleDeclaration:
                     return emitModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.ModuleBlock:
-                    return emitModuleBlock(<Block>node);
+                    return emitModuleBlock(<ModuleBlock>node);
                 case SyntaxKind.CaseBlock:
                     return emitCaseBlock(<CaseBlock>node);
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -1394,7 +1394,7 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function emitBlockStatements(node: Block) {
+        function emitBlockStatements(node: BlockLike) {
             if (getEmitFlags(node) & EmitFlags.SingleLine) {
                 emitList(node, node.statements, ListFormat.SingleLineBlockStatements);
             }
@@ -1795,7 +1795,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitModuleBlock(node: ModuleBlock) {
-            if (isSingleLineEmptyBlock(node)) {
+            if (isEmptyBlock(node)) {
                 write("{ }");
             }
             else {
@@ -2615,7 +2615,11 @@ const _super = (function (geti, seti) {
 
         function isSingleLineEmptyBlock(block: Block) {
             return !block.multiLine
-                && block.statements.length === 0
+                && isEmptyBlock(block);
+        }
+
+        function isEmptyBlock(block: BlockLike) {
+            return block.statements.length === 0
                 && rangeEndIsOnSameLineAsRangeStart(block, block, currentSourceFile);
         }
 

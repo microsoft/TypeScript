@@ -41,7 +41,7 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7
 
 ==== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts (39 errors) ====
     // expected error for all the LHS of assignments
-    var value;
+    var value: any;
     
     // this
     class C {
