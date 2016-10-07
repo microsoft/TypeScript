@@ -34,7 +34,7 @@ namespace ts.codefix {
             }
 
             const constructor = getContainingFunction(token);
-            const superCall = <ExpressionStatement>findSuperCall((<ConstructorDeclaration>constructor).body);
+            const superCall = findSuperCall((<ConstructorDeclaration>constructor).body);
             if (!superCall) {
                 return undefined;
             }
@@ -67,9 +67,9 @@ namespace ts.codefix {
                 changes
             }];
 
-            function findSuperCall(n: Node): Node {
-                if (n.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>n).expression)) {
-                    return n;
+            function findSuperCall(n: Node): ExpressionStatement {
+                if (n.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>n).expression)) {
+                    return <ExpressionStatement>n;
                 }
                 if (isFunctionLike(n)) {
                     return undefined;
