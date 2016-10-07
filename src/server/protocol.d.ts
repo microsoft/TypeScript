@@ -1310,6 +1310,11 @@ declare namespace ts.server.protocol {
           * Text of diagnostic message.
           */
         text: string;
+
+        /**
+          * The error code of the diagnostic message.
+          */
+        code?: number;
     }
 
     export interface DiagnosticEventBody {

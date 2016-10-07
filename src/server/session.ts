@@ -1,4 +1,4 @@
-﻿/// <reference path="..\compiler\commandLineParser.ts" />
+/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
 /// <reference path="protocol.d.ts" />
 /// <reference path="editorServices.ts" />
@@ -44,7 +44,8 @@ namespace ts.server {
         return {
             start: scriptInfo.positionToLineOffset(diag.start),
             end: scriptInfo.positionToLineOffset(diag.start + diag.length),
-            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
+            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n"),
+            code: diag.code
         };
     }
 
@@ -1241,7 +1242,7 @@ namespace ts.server {
             return {
                 start: scriptInfo.positionToLineOffset(change.span.start),
                 end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),
-                newText: change.newText
+                newText: change.newText ? change.newText : ""
             };
         }
 
