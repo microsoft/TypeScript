@@ -13,7 +13,7 @@ namespace ts {
      * Map can only be instantiated using NumberMap and StringMap, which come with shims.
      *
      * Internet Explorer does not support iterator-returning methods, so those are not allowed here.
-     * But map-using functions in dataStructures.ts check for these features and use them where possible.
+     * But map-using functions in collections.ts check for these features and use them where possible.
      */
     export interface Map<K, V> {
         clear(): void;

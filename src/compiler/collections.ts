@@ -8,7 +8,7 @@ namespace ts {
     const fullyFeaturedMaps = usingNativeMaps && "keys" in Map.prototype && "values" in Map.prototype && "entries" in Map.prototype;
 
     /** Extra Map methods that may not be available, so we must provide fallbacks. */
-    interface FullyFeaturedMap<K, V> extends Map<K, V> {
+    interface ES6Map<K, V> extends Map<K, V> {
         keys(): Iterator<K>;
         values(): Iterator<V>;
         entries(): Iterator<[K, V]>;
@@ -122,7 +122,7 @@ namespace ts {
 
     /** Iterates over entries in the map, returning the first output of `getResult` that is not `undefined`. */
     export const findInMap: <K, V, U>(map: Map<K, V>, getResult: (value: V, key: K) => U | undefined) => U | undefined = fullyFeaturedMaps
-        ? <K, V, U>(map: FullyFeaturedMap<K, V>, f: (value: V, key: K) => U | undefined) => {
+        ? <K, V, U>(map: ES6Map<K, V>, f: (value: V, key: K) => U | undefined) => {
             const iter = map.entries();
             while (true) {
                 const { value: pair, done } = iter.next();
@@ -147,7 +147,7 @@ namespace ts {
 
     /** Whether `predicate` is true for at least one entry in the map. */
     export const someInMap: <K, V>(map: Map<K, V>, predicate: (value: V, key: K) => boolean) => boolean = fullyFeaturedMaps
-        ? <K, V>(map: FullyFeaturedMap<K, V>, predicate: (value: V, key: K) => boolean) =>
+        ? <K, V>(map: ES6Map<K, V>, predicate: (value: V, key: K) => boolean) =>
             someInIterator(map.entries(), ([key, value]) => predicate(value, key))
         : <K, V>(map: Map<K, V>, predicate: (value: V, key: K) => boolean) => {
             let found = false;
@@ -159,13 +159,13 @@ namespace ts {
 
     /** Whether `predicate` is true for at least one key in the map. */
     export const someKeyInMap: <K>(map: Map<K, any>, predicate: (key: K) => boolean) => boolean = fullyFeaturedMaps
-        ? <K>(map: FullyFeaturedMap<K, any>, predicate: (key: K) => boolean) => someInIterator(map.keys(), predicate)
+        ? <K>(map: ES6Map<K, any>, predicate: (key: K) => boolean) => someInIterator(map.keys(), predicate)
         : <K>(map: Map<K, any>, predicate: (key: K) => boolean) =>
             someInMap(map, (_value, key) => predicate(key));
 
     /** Whether `predicate` is true for at least one value in the map. */
     export const someValueInMap: <T>(map: Map<any, T>, predicate: (value: T) => boolean) => boolean = fullyFeaturedMaps
-        ? <T>(map: FullyFeaturedMap<any, T>, predicate: (value: T) => boolean) =>
+        ? <T>(map: ES6Map<any, T>, predicate: (value: T) => boolean) =>
             someInIterator(map.values(), predicate)
         : someInMap;
 
@@ -186,7 +186,7 @@ namespace ts {
      * `for (const key of map.keys()) action(key);`
      */
     export const forEachKeyInMap: <K>(map: Map<K, any>, action: (key: K) => void) => void = fullyFeaturedMaps
-        ? <K>(map: FullyFeaturedMap<K, any>, f: (key: K) => void) => {
+        ? <K>(map: ES6Map<K, any>, f: (key: K) => void) => {
             const iter: Iterator<K> = map.keys();
             while (true) {
                 const { value: key, done } = iter.next();

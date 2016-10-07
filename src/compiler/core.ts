@@ -1,4 +1,4 @@
-/// <reference path="dataStructures.ts" />
+/// <reference path="collections.ts" />
 /// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
@@ -916,7 +916,7 @@ namespace ts {
 
     /**
      * Returns the path except for its basename. Eg:
-     * 
+     *
      * /path/to/file.ext -> /path/to
      */
     export function getDirectoryPath(path: Path): Path;
