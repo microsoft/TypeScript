@@ -926,7 +926,7 @@ declare namespace ts.server.protocol {
 
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        codeActions: CodeAction[];
+        body?: CodeAction[];
     }
 
     export interface CodeAction {
