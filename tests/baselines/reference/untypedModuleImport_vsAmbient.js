@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/typings/typingsLookup8.ts] ////
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_vsAmbient.ts] ////
 
 //// [package.json]
 {}

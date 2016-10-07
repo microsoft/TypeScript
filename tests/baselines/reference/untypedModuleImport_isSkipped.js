@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/typings/typingsLookup6.ts] ////
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_isSkipped.ts] ////
 
 //// [package.json]
 {}

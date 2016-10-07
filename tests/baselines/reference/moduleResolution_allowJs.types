@@ -1,0 +1,23 @@
+=== /a.ts ===
+import foo from "foo";
+>foo : { bar(): number; }
+
+foo.bar();
+>foo.bar() : number
+>foo.bar : () => number
+>foo : { bar(): number; }
+>bar : () => number
+
+=== /node_modules/foo/index.js ===
+exports.default = {
+>exports.default = {    bar() { return 0; }} : { bar(): number; }
+>exports.default : any
+>exports : any
+>default : any
+>{    bar() { return 0; }} : { bar(): number; }
+
+    bar() { return 0; }
+>bar : () => number
+>0 : 0
+}
+
