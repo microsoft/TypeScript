@@ -528,7 +528,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitAccessorDeclaration(node: GetAccessorDeclaration) {
+        function visitAccessorDeclaration(node: AccessorDeclaration) {
             const savedInGeneratorFunctionBody = inGeneratorFunctionBody;
             const savedInStatementContainingYield = inStatementContainingYield;
             inGeneratorFunctionBody = false;
@@ -552,6 +552,7 @@ namespace ts {
             const savedBlocks = blocks;
             const savedBlockOffsets = blockOffsets;
             const savedBlockActions = blockActions;
+            const savedBlockStack = blockStack;
             const savedLabelOffsets = labelOffsets;
             const savedLabelExpressions = labelExpressions;
             const savedNextLabelId = nextLabelId;
@@ -566,6 +567,7 @@ namespace ts {
             blocks = undefined;
             blockOffsets = undefined;
             blockActions = undefined;
+            blockStack = undefined;
             labelOffsets = undefined;
             labelExpressions = undefined;
             nextLabelId = 1;
@@ -591,6 +593,7 @@ namespace ts {
             blocks = savedBlocks;
             blockOffsets = savedBlockOffsets;
             blockActions = savedBlockActions;
+            blockStack = savedBlockStack;
             labelOffsets = savedLabelOffsets;
             labelExpressions = savedLabelExpressions;
             nextLabelId = savedNextLabelId;
@@ -657,12 +660,12 @@ namespace ts {
             }
         }
 
-        function isCompoundAssignment(kind: SyntaxKind) {
+        function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
             return kind >= SyntaxKind.FirstCompoundAssignment
                 && kind <= SyntaxKind.LastCompoundAssignment;
         }
 
-        function getOperatorForCompoundAssignment(kind: SyntaxKind) {
+        function getOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
             switch (kind) {
                 case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
                 case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;

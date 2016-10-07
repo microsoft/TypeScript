@@ -982,7 +982,7 @@ namespace ts {
             if (statementOffset < ctorStatements.length) {
                 firstStatement = ctorStatements[statementOffset];
 
-                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
+                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCall((firstStatement as ExpressionStatement).expression)) {
                     const superCall = (firstStatement as ExpressionStatement).expression as CallExpression;
                     superCallExpression = setOriginalNode(
                         saveStateAndInvoke(superCall, visitImmediateSuperCallInBody),
@@ -2308,8 +2308,7 @@ namespace ts {
                         extraVariableDeclarations = [];
                     }
                     // hoist collected variable declarations
-                    for (const name in currentState.hoistedLocalVariables) {
-                        const identifier = currentState.hoistedLocalVariables[name];
+                    for (const identifier of currentState.hoistedLocalVariables) {
                         extraVariableDeclarations.push(createVariableDeclaration(identifier));
                     }
                 }
@@ -3199,7 +3198,7 @@ namespace ts {
          * @param node The declaration.
          * @param allowComments Allow comments for the name.
          */
-        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
+        function getDeclarationName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
             if (node.name && !isGeneratedIdentifier(node.name)) {
                 const name = getMutableClone(node.name);
                 emitFlags |= getEmitFlags(node.name);

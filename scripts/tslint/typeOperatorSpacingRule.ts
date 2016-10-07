@@ -18,8 +18,13 @@ class TypeOperatorSpacingWalker extends Lint.RuleWalker {
             for (let i = 1; i < types.length; i++) {
                 const currentType = types[i];
                 if (expectedStart !== currentType.pos || currentType.getLeadingTriviaWidth() !== 1) {
-                    const failure = this.createFailure(currentType.pos, currentType.getWidth(), Rule.FAILURE_STRING);
-                    this.addFailure(failure);
+                    const sourceFile = currentType.getSourceFile();
+                    const previousTypeEndPos = sourceFile.getLineAndCharacterOfPosition(types[i - 1].end);
+                    const currentTypeStartPos = sourceFile.getLineAndCharacterOfPosition(currentType.pos);
+                    if (previousTypeEndPos.line === currentTypeStartPos.line) {
+                        const failure = this.createFailure(currentType.pos, currentType.getWidth(), Rule.FAILURE_STRING);
+                        this.addFailure(failure);
+                    }
                 }
                 expectedStart = currentType.end + 2;
             }

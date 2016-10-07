@@ -214,6 +214,7 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionsResponse>(request);
 
             return {
+                isGlobalCompletion: false,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
                 entries: response.body.map(entry => {

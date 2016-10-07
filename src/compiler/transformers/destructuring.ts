@@ -220,7 +220,7 @@ namespace ts {
 
     function flattenDestructuring(
         context: TransformationContext,
-        root: BindingElement | BinaryExpression,
+        root: VariableDeclaration | ParameterDeclaration | BindingElement | BinaryExpression,
         value: Expression,
         location: TextRange,
         emitAssignment: (name: Identifier, value: Expression, location: TextRange, original: Node) => void,
@@ -320,7 +320,7 @@ namespace ts {
             }
         }
 
-        function emitBindingElement(target: BindingElement, value: Expression) {
+        function emitBindingElement(target: VariableDeclaration | ParameterDeclaration | BindingElement, value: Expression) {
             // Any temporary assignments needed to emit target = value should point to target
             const initializer = visitor ? visitNode(target.initializer, visitor, isExpression) : target.initializer;
             if (initializer) {

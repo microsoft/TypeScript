@@ -2969,6 +2969,10 @@
         "category": "Error",
         "code": 7033
     },
+    "Variable '{0}' implicitly has type 'any' in some locations where its type cannot be determined.": {
+        "category": "Error",
+        "code": 7034
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

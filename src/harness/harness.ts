@@ -509,7 +509,7 @@ namespace Harness {
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
     }
-    export var IO: IO;
+    export let IO: IO;
 
     // harness always uses one kind of new line
     const harnessNewLine = "\r\n";
@@ -925,7 +925,7 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap=  ts.createMap<ts.SourceFile>({
+        const libFileNameSourceFileMap = ts.createMap<ts.SourceFile>({
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         });
 

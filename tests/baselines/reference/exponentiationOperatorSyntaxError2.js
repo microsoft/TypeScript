@@ -1,7 +1,7 @@
 //// [exponentiationOperatorSyntaxError2.ts]
 
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
-var temp;
+var temp: any;
 
 delete --temp ** 3;
 delete ++temp ** 3;
