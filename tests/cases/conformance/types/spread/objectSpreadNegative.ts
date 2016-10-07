@@ -8,10 +8,8 @@ class PrivateOptionalX {
 class PublicX {
     public x: number;
 }
-let privateOptionalx: PrivateOptionalX;
-let publicx: PublicX;
-let o3 = { ...publicx, ...privateOptionalx };
-let sn: string | number = o3.x; // error, x is private
+let o3: { ...PublicX, ...PrivateOptionalX };
+let sn: number = o3.x; // error, x is private
 let optionalString: { sn?: string };
 let optionalNumber: { sn?: number };
 let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
@@ -46,6 +44,7 @@ let callableConstructableSpread: { ...PublicX, (n: number): number, new (p: numb
 callableConstructableSpread(12); // error, no call signature
 new callableConstructableSpread(12); // error, no construct signature
 
+let publicx: PublicX;
 let callableSpread = { ...publicx, ...(n => n + 1) }; // error, can't spread functions
 
 // { ...U } is not assignable to U

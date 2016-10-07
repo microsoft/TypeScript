@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////interface A1 { [|a|]: number };
+////interface A1 { [|a|]: string };
 ////interface A2 { [|a|]?: number };
 ////let a12: { ...A1, ...A2 };
 ////a12.[|a|];

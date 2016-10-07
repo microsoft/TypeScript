@@ -3,7 +3,7 @@ interface B1 { b: number };
 function override<U>(initial: U, override: U): { ...U, ...U } {
     return { ...initial, ...override };
 }
-function update<U>(this: { u: U }, override: U): void {
+function update<U>(this: { u: { ...U } }, override: U): void {
     this.u = { ...this.u, ...override };
 }
 function mixin<T, U>(one: T, two: U): { ...T, ...U } {

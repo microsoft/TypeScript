@@ -1,13 +1,12 @@
 function f<T, U, V>(t: T, u: U, v: V): void {
     let o: { ...T, ...U, ...V };
-    let uu: { ...U, ...U};
-    let u: { ...U };
-    let u0: U;
-    uu = u; // ok, multiple spreads are equivalent to a single one
-    u = uu; // ok, multiple spreads are equivalent to a single one
-    u0 = u; // error, might be missing a ton of stuff
-    u = u0; // ok, type has at least all the properties of the spread
+    let uus: { ...U, ...U};
+    let us: { ...U };
     const same: { ...T, ...U, ...V } = o; // ok
+    uus = us; // ok, multiple spreads are equivalent to a single one
+    us = uus; // ok, multiple spreads are equivalent to a single one
+    us = u;   // ok, type has at least all the properties of the spread
+    u = us;   // error, might be missing a ton of stuff
     const reversed: { ...V, ...U, ...T } = o; // error, reversed
     const reversed2: { ...U, ...T, ...V } = o; // error, U and T are still reversed
     const missingT: { ...U, ...V } = o; // error, missing T
