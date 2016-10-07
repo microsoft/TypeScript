@@ -1311,7 +1311,6 @@ namespace ts {
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
-                    const resolvedPath = resolution ? toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName) : undefined;
 
                     // add file to program only if:
                     // - resolution was successful
@@ -1333,7 +1332,7 @@ namespace ts {
                     }
                     else if (shouldAddFile) {
                         findSourceFile(resolution.resolvedFileName,
-                                resolvedPath,
+                                toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName),
                                 /*isDefaultLib*/ false, /*isReference*/ false,
                                 file,
                                 skipTrivia(file.text, file.imports[i].pos),
