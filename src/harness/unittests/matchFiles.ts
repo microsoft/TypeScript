@@ -88,6 +88,12 @@ namespace ts {
         "c:/dev/g.min.js/.g/g.ts"
     ]);
 
+    function assertParsed(actual: ts.ParsedCommandLine, expected: ts.ParsedCommandLine): void {
+        assert.deepEqual(actual.fileNames, expected.fileNames);
+        assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+        assert.deepEqual(actual.errors, expected.errors);
+    }
+
     describe("matchFiles", () => {
         describe("with literal file list", () => {
             it("without exclusions", () => {
@@ -107,9 +113,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("missing files are still present", () => {
                 const json = {
@@ -128,9 +132,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("are not removed due to excludes", () => {
                 const json = {
@@ -152,9 +154,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
         });
 
@@ -176,9 +176,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with non .ts file extensions are excluded", () => {
                 const json = {
@@ -194,9 +192,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with missing files are excluded", () => {
                 const json = {
@@ -212,9 +208,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with literal excludes", () => {
                 const json = {
@@ -235,9 +229,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with wildcard excludes", () => {
                 const json = {
@@ -265,9 +257,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with recursive excludes", () => {
                 const json = {
@@ -294,9 +284,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with case sensitive exclude", () => {
                 const json = {
@@ -316,9 +304,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseSensitiveHost, caseSensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with common package folders and no exclusions", () => {
                 const json = {
@@ -340,9 +326,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with common package folders and exclusions", () => {
                 const json = {
@@ -369,9 +353,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with common package folders and empty exclude", () => {
                 const json = {
@@ -397,9 +379,7 @@ namespace ts {
                     wildcardDirectories: {},
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
         });
 
@@ -423,9 +403,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("`*` matches only ts files", () => {
                 const json = {
@@ -446,9 +424,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("`?` matches only a single character", () => {
                 const json = {
@@ -468,9 +444,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with recursive directory", () => {
                 const json = {
@@ -492,9 +466,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with multiple recursive directories", () => {
                 const json = {
@@ -518,9 +490,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("case sensitive", () => {
                 const json = {
@@ -539,9 +509,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseSensitiveHost, caseSensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with missing files are excluded", () => {
                 const json = {
@@ -558,9 +526,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("always include literal files", () => {
                 const json = {
@@ -585,9 +551,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("exclude folders", () => {
                 const json = {
@@ -612,9 +576,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with common package folders and no exclusions", () => {
                 const json = {
@@ -633,9 +595,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with common package folders and exclusions", () => {
                 const json = {
@@ -659,9 +619,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with common package folders and empty exclude", () => {
                 const json = {
@@ -684,9 +642,7 @@ namespace ts {
                     },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("exclude .js files when allowJs=false", () => {
                 const json = {
@@ -708,9 +664,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("include .js files when allowJs=true", () => {
                 const json = {
@@ -735,9 +689,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("include explicitly listed .min.js files when allowJs=true", () => {
                 const json = {
@@ -762,9 +714,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("include paths outside of the project", () => {
                 const json = {
@@ -788,9 +738,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("include paths outside of the project using relative paths", () => {
                 const json = {
@@ -813,9 +761,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("exclude paths outside of the project using relative paths", () => {
                 const json = {
@@ -833,9 +779,7 @@ namespace ts {
                     wildcardDirectories: {}
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("include files with .. in their name", () => {
                 const json = {
@@ -855,9 +799,7 @@ namespace ts {
                     wildcardDirectories: {}
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("exclude files with .. in their name", () => {
                 const json = {
@@ -879,9 +821,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with jsx=none, allowJs=false", () => {
                 const json = {
@@ -904,9 +844,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with jsx=preserve, allowJs=false", () => {
                 const json = {
@@ -931,9 +869,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with jsx=none, allowJs=true", () => {
                 const json = {
@@ -958,9 +894,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("with jsx=preserve, allowJs=true", () => {
                 const json = {
@@ -987,9 +921,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             it("exclude .min.js files using wildcards", () => {
                 const json = {
@@ -1016,9 +948,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             describe("with trailing recursive directory", () => {
                 it("in includes", () => {
@@ -1036,9 +966,7 @@ namespace ts {
                         wildcardDirectories: {}
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
                 it("in excludes", () => {
                     const json = {
@@ -1056,9 +984,7 @@ namespace ts {
                         wildcardDirectories: {}
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
             });
             describe("with multiple recursive directory patterns", () => {
@@ -1077,9 +1003,7 @@ namespace ts {
                         wildcardDirectories: {}
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
                 it("in excludes", () => {
                     const json = {
@@ -1106,9 +1030,7 @@ namespace ts {
                         }
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
             });
 
@@ -1128,9 +1050,7 @@ namespace ts {
                         wildcardDirectories: {}
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
 
                 it("in includes after a subdirectory", () => {
@@ -1148,9 +1068,7 @@ namespace ts {
                         wildcardDirectories: {}
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
 
                 it("in excludes immediately after", () => {
@@ -1178,9 +1096,7 @@ namespace ts {
                         }
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
 
                 it("in excludes after a subdirectory", () => {
@@ -1208,9 +1124,25 @@ namespace ts {
                         }
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
+                });
+            });
+
+            describe("with implicit globbification", () => {
+                it("Expands 'z' to 'z/**/*'", () => {
+                    const json = {
+                        include: ["z"]
+                    };
+                    const expected: ts.ParsedCommandLine = {
+                        options: {},
+                        errors: [],
+                        fileNames: [ "a.ts", "aba.ts", "abz.ts", "b.ts", "bba.ts", "bbz.ts" ].map(x => `c:/dev/z/${x}`),
+                        wildcardDirectories: {
+                            "c:/dev/z": ts.WatchDirectoryFlags.Recursive
+                        }
+                    };
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    assertParsed(actual, expected);
                 });
             });
         });
@@ -1235,9 +1167,7 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                assert.deepEqual(actual.errors, expected.errors);
+                assertParsed(actual, expected);
             });
             describe("that are explicitly included", () => {
                 it("without wildcards", () => {
@@ -1257,9 +1187,7 @@ namespace ts {
                         wildcardDirectories: {}
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
                 it("with recursive wildcards that match directories", () => {
                     const json = {
@@ -1281,9 +1209,7 @@ namespace ts {
                         }
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
                 it("with recursive wildcards that match nothing", () => {
                     const json = {
@@ -1305,9 +1231,7 @@ namespace ts {
                         }
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
                 it("with wildcard excludes that implicitly exclude dotted files", () => {
                     const json = {
@@ -1325,9 +1249,7 @@ namespace ts {
                         wildcardDirectories: {}
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
-                    assert.deepEqual(actual.fileNames, expected.fileNames);
-                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
-                    assert.deepEqual(actual.errors, expected.errors);
+                    assertParsed(actual, expected);
                 });
             });
         });
