@@ -58,6 +58,14 @@ function f7() {
     y.push("hello");  // Error
 }
 
+function f8() {
+    const x = [];  // Implicit any[] error in some locations
+    x.push(5);
+    function g() {
+        x;  // Implicit any[] error
+    }
+}
+
 //// [controlFlowArrayErrors.js]
 function f1() {
     var x = [];
@@ -107,4 +115,11 @@ function f7() {
     var y = x; // y has non-evolving array value
     x.push("hello"); // Ok
     y.push("hello"); // Error
+}
+function f8() {
+    var x = []; // Implicit any[] error in some locations
+    x.push(5);
+    function g() {
+        x; // Implicit any[] error
+    }
 }

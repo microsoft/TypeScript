@@ -57,3 +57,11 @@ function f7() {
     x.push("hello");  // Ok
     y.push("hello");  // Error
 }
+
+function f8() {
+    const x = [];  // Implicit any[] error in some locations
+    x.push(5);
+    function g() {
+        x;  // Implicit any[] error
+    }
+}
