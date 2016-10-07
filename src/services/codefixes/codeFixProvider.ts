@@ -2,7 +2,7 @@
 namespace ts {
     export interface CodeFix {
         errorCodes: number[];
-        getCodeActions(context: CodeFixContext): CodeAction[];
+        getCodeActions(context: CodeFixContext): CodeAction[] | undefined;
     }
 
     export interface CodeFixContext {

@@ -136,6 +136,7 @@ namespace ts.server {
         export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
         export const GetCodeFixes = "getCodeFixes";
         export const GetCodeFixesFull = "getCodeFixes-full";
+        export const GetSupportedCodeFixes = "getSupportedCodeFixes";
     }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
@@ -844,13 +845,7 @@ namespace ts.server {
                 return undefined;
             }
 
-            return edits.map((edit) => {
-                return {
-                    start: scriptInfo.positionToLineOffset(edit.span.start),
-                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(edit.span)),
-                    newText: edit.newText ? edit.newText : ""
-                };
-            });
+            return edits.map(edit => this.convertTextChangeToCodeEdit(edit, scriptInfo));
         }
 
         private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
@@ -1201,6 +1196,10 @@ namespace ts.server {
             }
         }
 
+        private getSupportedCodeFixes(): string[] {
+            return ts.getSupportedCodeFixes();
+        }
+
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
 
@@ -1213,26 +1212,10 @@ namespace ts.server {
                 return undefined;
             }
             if (simplifiedResult) {
-                return codeActions.map(mapCodeAction);
+                return codeActions.map(codeAction => this.mapCodeAction(codeAction, scriptInfo));
             }
             else {
                 return codeActions;
-            }
-
-            function mapCodeAction(source: CodeAction): protocol.CodeAction {
-                return {
-                    description: source.description,
-                    changes: source.changes.map(change => ({
-                        fileName: change.fileName,
-                        textChanges: change.textChanges.map(textChange => ({
-                            span: {
-                                start: scriptInfo.positionToLineOffset(textChange.span.start),
-                                end: scriptInfo.positionToLineOffset(textChange.span.start + textChange.span.length)
-                            },
-                            newText: textChange.newText
-                        }))
-                    }))
-                };
             }
 
             function getStartPosition() {
@@ -1242,6 +1225,24 @@ namespace ts.server {
             function getEndPosition() {
                 return args.endPosition !== undefined ? args.endPosition : scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
             }
+        }
+
+        private mapCodeAction(codeAction: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
+            return {
+                description: codeAction.description,
+                changes: codeAction.changes.map(change => ({
+                    fileName: change.fileName,
+                    textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
+                }))
+            };
+        }
+
+        private convertTextChangeToCodeEdit(change: ts.TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
+            return {
+                start: scriptInfo.positionToLineOffset(change.span.start),
+                end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),
+                newText: change.newText
+            };
         }
 
         private getBraceMatching(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.TextSpan[] | TextSpan[] {
@@ -1572,6 +1573,9 @@ namespace ts.server {
             },
             [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.GetSupportedCodeFixes]: (request: protocol.Request) => {
+                return this.requiredResponse(this.getSupportedCodeFixes());
             }
         });
 

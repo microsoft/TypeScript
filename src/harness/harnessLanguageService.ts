@@ -487,7 +487,7 @@ namespace Harness.LanguageService {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): ts.CodeAction[] {
-            return unwrapJSONCallResult(this.shim.getCodeFixesAtPosition(fileName, start, end, JSON.stringify(errorCodes)));
+            throw new Error("Not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));

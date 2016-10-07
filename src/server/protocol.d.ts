@@ -204,7 +204,7 @@ declare namespace ts.server.protocol {
     }
 
     /**
-      * Request for the available codefixed at a specific position.
+      * Request for the available codefixes at a specific position.
       */
     export interface CodeFixRequest extends Request {
         arguments: CodeFixRequestArgs;
@@ -924,7 +924,12 @@ declare namespace ts.server.protocol {
         textChanges: CodeEdit[];
     }
 
-    export interface CodeActionResponse extends Response {
+    export interface CodeFixResponse extends Response {
+        /** The code actions that are available */
+        codeActions: CodeAction[];
+    }
+
+    export interface CodeAction {
         /** Description of the code action to display in the UI of the editor */
         description: string;
         /** Text changes to apply to each file as part of the code action */
@@ -1586,30 +1591,6 @@ declare namespace ts.server.protocol {
         /**
           * Changes to apply to each file as part of the code action.
           */
-        changes: FileTextChanges[];
-    }
-
-    export interface FileTextChanges {
-        /**
-          * File to apply the change to.
-          */
-        fileName: string;
-
-        /**
-          * Changes to apply to the file.
-          */
-        textChanges: TextChange[];
-    }
-
-    export class TextChange {
-        /**
-          * The span for the text change.
-          */
-        span: TextSpan;
-
-        /**
-          * New text for the span, can be an empty string if we want to delete text.
-          */
-        newText: string;
+        changes: FileCodeEdits[];
     }
 }

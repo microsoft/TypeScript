@@ -251,8 +251,6 @@ namespace ts {
          */
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string): string;
-
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
     }
@@ -268,7 +266,6 @@ namespace ts {
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
         discoverTypings(discoverTypingsJson: string): string;
-        getSupportedCodeFixes(): string;
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -957,16 +954,6 @@ namespace ts {
             );
         }
 
-        public getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string): string {
-            return this.forwardJSONCall(
-                `getCodeFixesAtPosition( '${fileName}', ${start}, ${end}, ${errorCodes}')`,
-                () => {
-                    const localErrors: number[] = JSON.parse(errorCodes);
-                    return this.languageService.getCodeFixesAtPosition(fileName, start, end, localErrors);
-                }
-            );
-        }
-
         /// NAVIGATE TO
 
         /** Return a list of symbols that are interesting to navigate to */
@@ -1174,12 +1161,6 @@ namespace ts {
                     info.typingOptions,
                     info.compilerOptions);
             });
-        }
-
-        public getSupportedCodeFixes(): string {
-            return this.forwardJSONCall("getSupportedCodeFixes()",
-                () => getSupportedCodeFixes()
-            );
         }
     }
 

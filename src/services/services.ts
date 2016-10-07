@@ -1648,6 +1648,8 @@ namespace ts {
             let allFixes: CodeAction[] = [];
 
             forEach(errorCodes, error => {
+                cancellationToken.throwIfCancellationRequested();
+
                 const context = {
                     errorCode: error,
                     sourceFile: sourceFile,
