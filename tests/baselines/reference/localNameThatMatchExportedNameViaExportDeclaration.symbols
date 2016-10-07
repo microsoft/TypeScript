@@ -1,0 +1,43 @@
+=== tests/cases/compiler/localNameThatMatchExportedNameViaExportDeclaration.ts ===
+
+export { my }
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 1, 8))
+
+var my: any;
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 3, 3))
+
+my += my;
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 3, 3))
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 3, 3))
+
+function doSome1(my: any) {
+>doSome1 : Symbol(doSome1, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 5, 9))
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 7, 17))
+
+    my = +my;
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 7, 17))
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 7, 17))
+
+    return my;
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 7, 17))
+}
+
+function doSome2() {
+>doSome2 : Symbol(doSome2, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 10, 1))
+
+    const internal = (my: any) => {
+>internal : Symbol(internal, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 13, 9))
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 13, 22))
+
+        my = +my;
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 13, 22))
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 13, 22))
+
+        return my;
+>my : Symbol(my, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 13, 22))
+
+    };
+    return internal("1");
+>internal : Symbol(internal, Decl(localNameThatMatchExportedNameViaExportDeclaration.ts, 13, 9))
+}
+
