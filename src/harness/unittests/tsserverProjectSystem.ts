@@ -2063,4 +2063,89 @@ namespace ts.projectSystem {
             projectService.inferredProjects[0].getLanguageService().getProgram();
         });
     });
+
+    describe("rename a module file and rename back", () => {
+        it("should restore the states for inferred projects", () => {
+            const moduleFile = {
+                path: "/a/b/moduleFile.ts",
+                content: "export function bar() { };"
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "import * as T from './moduleFile'; T.bar();"
+            };
+            const host = createServerHost([moduleFile, file1]);
+            const session = createSession(host);
+
+            openFilesForSession([file1], session);
+            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+                server.CommandNames.SemanticDiagnosticsSync,
+                { file: file1.path }
+            );
+            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+
+            const moduleFileOldPath = moduleFile.path; 
+            const moduleFileNewPath = "/a/b/moduleFile1.ts";
+            moduleFile.path = moduleFileNewPath;
+            host.reloadFS([moduleFile, file1]);
+            host.triggerFileWatcherCallback(moduleFileOldPath);
+            host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
+            host.runQueuedTimeoutCallbacks();
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 1);
+ 
+            moduleFile.path = moduleFileOldPath;
+            host.reloadFS([moduleFile, file1]);
+            host.triggerFileWatcherCallback(moduleFileNewPath);
+            host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
+            host.runQueuedTimeoutCallbacks();
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+        });
+
+        it("should restore the states for configured projects", () => {
+            const moduleFile = {
+                path: "/a/b/moduleFile.ts",
+                content: "export function bar() { };"
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "import * as T from './moduleFile'; T.bar();"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{}`
+            };
+            const host = createServerHost([moduleFile, file1, configFile]);
+            const session = createSession(host);
+
+            openFilesForSession([file1], session);
+            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+                server.CommandNames.SemanticDiagnosticsSync,
+                { file: file1.path }
+            );
+            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+
+            const moduleFileOldPath = moduleFile.path; 
+            const moduleFileNewPath = "/a/b/moduleFile1.ts";
+            moduleFile.path = moduleFileNewPath;
+            host.reloadFS([moduleFile, file1, configFile]);
+            host.triggerFileWatcherCallback(moduleFileOldPath);
+            host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
+            host.runQueuedTimeoutCallbacks();
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 1);
+ 
+            moduleFile.path = moduleFileOldPath;
+            host.reloadFS([moduleFile, file1, configFile]);
+            host.triggerFileWatcherCallback(moduleFileNewPath);
+            host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
+            host.runQueuedTimeoutCallbacks();
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+        });
+
+    });
 }
