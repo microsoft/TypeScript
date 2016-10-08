@@ -599,7 +599,7 @@ namespace ts {
             }
             else {
                 statements.push(
-                    createExportStatement(node.name, factory.setEmitFlags(factory.getSynthesizedClone(node.name), EmitFlags.LocalName), /*location*/ node)
+                    createExportStatement(<Identifier>node.name, factory.setEmitFlags(factory.getSynthesizedClone(node.name), EmitFlags.LocalName), /*location*/ node)
                 );
             }
         }
@@ -796,7 +796,7 @@ namespace ts {
                 addVarForExportedEnumOrNamespaceDeclaration(statements, original);
             }
 
-            addExportMemberAssignments(statements, original.name);
+            addExportMemberAssignments(statements, <Identifier>original.name);
 
             return statements;
         }
@@ -819,7 +819,7 @@ namespace ts {
         }
 
         function getDeclarationName(node: DeclarationStatement) {
-            return node.name ? factory.getSynthesizedClone(node.name) : factory.getGeneratedNameForNode(node);
+            return node.name ? factory.getSynthesizedClone(<Identifier>node.name) : factory.getGeneratedNameForNode(node);
         }
 
         function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
@@ -916,7 +916,7 @@ namespace ts {
                     if (node.kind === SyntaxKind.PostfixUnaryExpression) {
                         transformedUnaryExpression = factory.createBinary(
                             operand,
-                            createNode(operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
+                            factory.createToken(operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
                             factory.createLiteral(1),
                             /*location*/ node
                         );

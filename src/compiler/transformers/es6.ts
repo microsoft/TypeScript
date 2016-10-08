@@ -982,7 +982,7 @@ namespace ts {
             if (statementOffset < ctorStatements.length) {
                 firstStatement = ctorStatements[statementOffset];
 
-                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((firstStatement as ExpressionStatement).expression)) {
+                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCall((firstStatement as ExpressionStatement).expression)) {
                     const superCall = (firstStatement as ExpressionStatement).expression as CallExpression;
                     superCallExpression = factory.setOriginalNode(
                         saveStateAndInvoke(superCall, visitImmediateSuperCallInBody),
@@ -3198,7 +3198,7 @@ namespace ts {
          * @param node The declaration.
          * @param allowComments Allow comments for the name.
          */
-        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
+        function getDeclarationName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
             if (node.name && !isGeneratedIdentifier(node.name)) {
                 const name = factory.getMutableClone(node.name);
                 emitFlags |= factory.getEmitFlags(node.name);

@@ -989,7 +989,7 @@ namespace ts {
                 }
 
                 const statement = statements[index];
-                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
+                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
                     result.push(visitNode(statement, visitor, isStatement));
                     return index + 1;
                 }
@@ -3100,7 +3100,7 @@ namespace ts {
             return factory.createStatement(expression, /*location*/ undefined);
         }
 
-        function addExportMemberAssignment(statements: Statement[], node: DeclarationStatement) {
+        function addExportMemberAssignment(statements: Statement[], node: ClassDeclaration | FunctionDeclaration) {
             const expression = factory.createAssignment(
                 getExportName(node),
                 getLocalName(node, /*noSourceMaps*/ true)
@@ -3178,7 +3178,7 @@ namespace ts {
          * @param noSourceMaps A value indicating whether source maps may not be emitted for the name.
          * @param allowComments A value indicating whether comments may be emitted for the name.
          */
-        function getLocalName(node: DeclarationStatement | ClassExpression, noSourceMaps?: boolean, allowComments?: boolean) {
+        function getLocalName(node: FunctionDeclaration | ClassDeclaration | ClassExpression | ModuleDeclaration | EnumDeclaration, noSourceMaps?: boolean, allowComments?: boolean) {
             return getDeclarationName(node, allowComments, !noSourceMaps, EmitFlags.LocalName);
         }
 
@@ -3192,7 +3192,7 @@ namespace ts {
          * @param noSourceMaps A value indicating whether source maps may not be emitted for the name.
          * @param allowComments A value indicating whether comments may be emitted for the name.
          */
-        function getExportName(node: DeclarationStatement | ClassExpression, noSourceMaps?: boolean, allowComments?: boolean) {
+        function getExportName(node: FunctionDeclaration | ClassDeclaration | ClassExpression | ModuleDeclaration | EnumDeclaration, noSourceMaps?: boolean, allowComments?: boolean) {
             if (isNamespaceExport(node)) {
                 return getNamespaceMemberName(getDeclarationName(node), allowComments, !noSourceMaps);
             }
@@ -3208,9 +3208,9 @@ namespace ts {
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          * @param emitFlags Additional NodeEmitFlags to specify for the name.
          */
-        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
+        function getDeclarationName(node: FunctionDeclaration | ClassDeclaration | ClassExpression | ModuleDeclaration | EnumDeclaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
             if (node.name) {
-                const name = factory.getMutableClone(node.name);
+                const name = factory.getMutableClone(<Identifier>node.name);
                 emitFlags |= factory.getEmitFlags(node.name);
                 if (!allowSourceMaps) {
                     emitFlags |= EmitFlags.NoSourceMap;
