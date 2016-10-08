@@ -121,7 +121,8 @@ namespace ts {
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
-        // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
+        // not depending on if we see "use strict" in certain places or if we hit a class/namespace
+        // or if compiler options contain alwaysStrict.
         let inStrictMode: boolean;
 
         let symbolCount = 0;
@@ -139,7 +140,7 @@ namespace ts {
             file = f;
             options = opts;
             languageVersion = getEmitScriptTarget(options);
-            inStrictMode = !!file.externalModuleIndicator;
+            inStrictMode = bindInStrictMode(file, opts);
             classifiableNames = createMap<string>();
             symbolCount = 0;
             skipTransformFlagAggregation = isDeclarationFile(file);
@@ -173,6 +174,16 @@ namespace ts {
         }
 
         return bindSourceFile;
+
+        function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
+            if (opts.alwaysStrict && !isDeclarationFile(file)) {
+                // bind in strict mode source files with alwaysStrict option
+                return true;
+            }
+            else {
+                return !!file.externalModuleIndicator;
+            }
+        }
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;

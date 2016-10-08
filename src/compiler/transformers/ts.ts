@@ -436,6 +436,11 @@ namespace ts {
         function visitSourceFile(node: SourceFile) {
             currentSourceFile = node;
 
+            // ensure "use strict"" is emitted in all scenarios in alwaysStrict mode
+            if (compilerOptions.alwaysStrict) {
+                node = emitUseStrict(node);
+            }
+
             // If the source file requires any helpers and is an external module, and
             // the importHelpers compiler option is enabled, emit a synthesized import
             // statement for the helpers library.
@@ -470,6 +475,13 @@ namespace ts {
 
             setEmitFlags(node, EmitFlags.EmitEmitHelpers | getEmitFlags(node));
             return node;
+        }
+
+        function emitUseStrict(node: SourceFile): SourceFile {
+            const statements: Statement[] = [];
+            statements.push(startOnNewLine(createStatement(createLiteral("use strict"))));
+            // add "use strict" as the first statement
+            return updateSourceFileNode(node, statements.concat(node.statements));
         }
 
         /**
