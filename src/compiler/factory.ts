@@ -1466,6 +1466,7 @@ namespace ts.factory {
      *
      * @param original The original statement.
      */
+    /* @internal */
     export function createNotEmittedStatement(original: Node) {
         const node = <NotEmittedStatement>createNode(SyntaxKind.NotEmittedStatement, /*location*/ original);
         node.original = original;
@@ -1480,6 +1481,7 @@ namespace ts.factory {
      * @param original The original outer expression.
      * @param location The location for the expression. Defaults to the positions from "original" if provided.
      */
+    /* @internal */
     export function createPartiallyEmittedExpression(expression: Expression, original?: Node, location?: TextRange) {
         const node = <PartiallyEmittedExpression>createNode(SyntaxKind.PartiallyEmittedExpression, /*location*/ location || original);
         node.expression = expression;
@@ -1487,6 +1489,7 @@ namespace ts.factory {
         return node;
     }
 
+    /* @internal */
     export function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression) {
         if (node.expression !== expression) {
             return updateNode(createPartiallyEmittedExpression(expression, node.original, node), node);
@@ -2717,6 +2720,7 @@ namespace ts.factory {
      *
      * @param node The node.
      */
+    /* @internal */
     export function getEmitFlags(node: Node) {
         const emitNode = node.emitNode;
         return emitNode && emitNode.flags;
@@ -2728,6 +2732,7 @@ namespace ts.factory {
      * @param node The node.
      * @param emitFlags The NodeEmitFlags for the node.
      */
+    /* @internal */
     export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
         getOrCreateEmitNode(node).flags = emitFlags;
         return node;
@@ -2864,6 +2869,7 @@ namespace ts.factory {
      *  3- The containing SourceFile has an entry in renamedDependencies for the import as requested by some module loaders (e.g. System).
      * Otherwise, a new StringLiteral node representing the module name will be returned.
      */
+    /* @internal */
     export function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
         const moduleName = getExternalModuleName(importNode);
         if (moduleName.kind === SyntaxKind.StringLiteral) {
@@ -2893,6 +2899,7 @@ namespace ts.factory {
      *  2. --out or --outFile is used, making the name relative to the rootDir
      * Otherwise, a new StringLiteral node representing the module name will be returned.
      */
+    /* @internal */
     export function tryGetModuleNameFromFile(file: SourceFile, host: EmitHost, options: CompilerOptions): StringLiteral {
         if (!file) {
             return undefined;

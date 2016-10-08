@@ -2,7 +2,6 @@
 /// <reference path="factory.ts" />
 /// <reference path="utilities.ts" />
 
-/* @internal */
 namespace ts {
     export type VisitResult<T extends Node> = T | T[];
 
@@ -108,6 +107,7 @@ namespace ts {
      * @param f The callback function
      * @param initial The initial value to supply to the reduction.
      */
+    /* @internal */
     export function reduceEachChild<T>(node: Node, f: (memo: T, node: Node) => T, initial: T): T {
         if (node === undefined) {
             return initial;
@@ -591,8 +591,11 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
+    /* @internal */
     export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
+    /* @internal */
     export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start: number, count: number, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): NodeArray<T>;
+    /* @internal */
     export function visitNodes(nodes: NodeArray<Node>, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start?: number, count?: number, parenthesize?: (node: Node, parentNode: Node) => Node, parentNode?: Node): NodeArray<Node> {
         if (nodes === undefined) {
             return undefined;
@@ -660,6 +663,7 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
+    /* @internal */
     export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
     export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): Node {
         if (node === undefined) {
@@ -1172,6 +1176,7 @@ namespace ts {
      * @param node The ConciseBody of an arrow function.
      * @param declarations The lexical declarations to merge.
      */
+    /* @internal */
     export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]): FunctionBody;
 
     /**
@@ -1180,8 +1185,10 @@ namespace ts {
      * @param node The ConciseBody of an arrow function.
      * @param declarations The lexical declarations to merge.
      */
+    /* @internal */
     export function mergeFunctionBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody;
 
+    /* @internal */
     export function mergeFunctionBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody {
         if (body && declarations !== undefined && declarations.length > 0) {
             if (isBlock(body)) {
@@ -1202,6 +1209,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
+    /* @internal */
     export function liftToBlock(nodes: Node[]): Statement {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return <Statement>singleOrUndefined(nodes) || factory.createBlock(<NodeArray<Statement>>nodes);
@@ -1220,6 +1228,7 @@ namespace ts {
     /**
      * Aggregates the TransformFlags for a Node and its subtree.
      */
+    /* @internal */
     export function aggregateTransformFlags<T extends Node>(node: T): T {
         aggregateTransformFlagsForNode(node);
         return node;
@@ -1327,6 +1336,7 @@ namespace ts {
         }
     }
 
+    /* @internal */
     export namespace Debug {
         export const failNotOptional = shouldAssert(AssertionLevel.Normal)
             ? (message?: string) => assert(false, message || "Node not optional.")

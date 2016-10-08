@@ -50,7 +50,9 @@ namespace ts {
 
     export interface TransformationContext extends LexicalEnvironment {
         getCompilerOptions(): CompilerOptions;
+        /* @internal */
         getEmitResolver(): EmitResolver;
+        /* @internal */
         getEmitHost(): EmitHost;
 
         /**
