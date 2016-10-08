@@ -1,8 +1,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="utilities.ts"/>
 
-/* @internal */
-namespace ts {
+namespace ts.factory {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
@@ -2669,6 +2668,7 @@ namespace ts {
      * Clears any EmitNode entries from parse-tree nodes.
      * @param sourceFile A source file.
      */
+    /* @internal */
     export function disposeEmitNodes(sourceFile: SourceFile) {
         // During transformation we may need to annotate a parse tree node with transient
         // transformation properties. As parse tree nodes live longer than transformation

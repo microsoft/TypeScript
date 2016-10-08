@@ -201,7 +201,7 @@ namespace ts {
          */
         function isSubstitutionEnabled(node: Node) {
             return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.Substitution) !== 0
-                && (getEmitFlags(node) & EmitFlags.NoSubstitution) === 0;
+                && (factory.getEmitFlags(node) & EmitFlags.NoSubstitution) === 0;
         }
 
         /**
@@ -238,7 +238,7 @@ namespace ts {
          */
         function isEmitNotificationEnabled(node: Node) {
             return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.EmitNotifications) !== 0
-                || (getEmitFlags(node) & EmitFlags.AdviseOnEmitNode) !== 0;
+                || (factory.getEmitFlags(node) & EmitFlags.AdviseOnEmitNode) !== 0;
         }
 
         /**
@@ -264,7 +264,7 @@ namespace ts {
          */
         function hoistVariableDeclaration(name: Identifier): void {
             Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
-            const decl = createVariableDeclaration(name);
+            const decl = factory.createVariableDeclaration(name);
             if (!hoistedVariableDeclarations) {
                 hoistedVariableDeclarations = [decl];
             }
@@ -318,9 +318,9 @@ namespace ts {
                 }
 
                 if (hoistedVariableDeclarations) {
-                    const statement = createVariableStatement(
+                    const statement = factory.createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList(hoistedVariableDeclarations)
+                        factory.createVariableDeclarationList(hoistedVariableDeclarations)
                     );
 
                     if (!statements) {

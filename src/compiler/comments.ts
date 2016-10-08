@@ -41,8 +41,8 @@ namespace ts {
             }
 
             if (node) {
-                const { pos, end } = getCommentRange(node);
-                const emitFlags = getEmitFlags(node);
+                const { pos, end } = factory.getCommentRange(node);
+                const emitFlags = factory.getEmitFlags(node);
                 if ((pos < 0 && end < 0) || (pos === end)) {
                     // Both pos and end are synthesized, so just emit the node without comments.
                     if (emitFlags & EmitFlags.NoNestedComments) {
@@ -129,7 +129,7 @@ namespace ts {
             }
 
             const { pos, end } = detachedRange;
-            const emitFlags = getEmitFlags(node);
+            const emitFlags = factory.getEmitFlags(node);
             const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
             const skipTrailingComments = disabled || end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
 

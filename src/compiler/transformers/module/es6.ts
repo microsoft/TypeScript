@@ -69,7 +69,7 @@ namespace ts {
                 return node;
             }
             return newExportClause
-                ? createExportDeclaration(
+                ? factory.createExportDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     newExportClause,
@@ -82,7 +82,7 @@ namespace ts {
             if (node.elements === newExports) {
                 return node;
             }
-            return newExports.length ? createNamedExports(newExports) : undefined;
+            return newExports.length ? factory.createNamedExports(newExports) : undefined;
         }
 
         function visitExportSpecifier(node: ExportSpecifier): ExportSpecifier {
@@ -100,7 +100,7 @@ namespace ts {
                     return undefined;
                 }
                 else if (newImportClause !== node.importClause) {
-                    return createImportDeclaration(
+                    return factory.createImportDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         newImportClause,
@@ -117,7 +117,7 @@ namespace ts {
             }
             const newNamedBindings = visitNode(node.namedBindings, visitor, isNamedImportBindings, /*optional*/ true);
             return newDefaultImport !== node.name || newNamedBindings !== node.namedBindings
-                ? createImportClause(newDefaultImport, newNamedBindings)
+                ? factory.createImportClause(newDefaultImport, newNamedBindings)
                 : node;
         }
 
@@ -133,7 +133,7 @@ namespace ts {
                 if (newNamedImportElements === (<NamedImports>node).elements) {
                     return node;
                 }
-                return createNamedImports(newNamedImportElements);
+                return factory.createNamedImports(newNamedImportElements);
             }
         }
 

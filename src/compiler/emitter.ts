@@ -62,7 +62,7 @@ namespace ts {
         printFile("output.js", "", [file], false);
 
         // Clean up emit nodes on parse tree
-        disposeEmitNodes(file);
+        factory.disposeEmitNodes(file);
 
         return {
             result
@@ -95,7 +95,7 @@ namespace ts {
 
         // Clean up emit nodes on parse tree
         for (const sourceFile of sourceFiles) {
-            disposeEmitNodes(sourceFile);
+            factory.disposeEmitNodes(sourceFile);
         }
 
         return {
@@ -925,7 +925,7 @@ const _super = (function (geti, seti) {
         //
 
         function emitIdentifier(node: Identifier) {
-            if (getEmitFlags(node) & EmitFlags.UMDDefine) {
+            if (factory.getEmitFlags(node) & EmitFlags.UMDDefine) {
                 writeLines(umdHelper);
             }
             else {
@@ -1198,7 +1198,7 @@ const _super = (function (geti, seti) {
                 write("{}");
             }
             else {
-                const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
+                const indentedFlag = factory.getEmitFlags(node) & EmitFlags.Indented;
                 if (indentedFlag) {
                     increaseIndent();
                 }
@@ -1216,7 +1216,7 @@ const _super = (function (geti, seti) {
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             let indentBeforeDot = false;
             let indentAfterDot = false;
-            if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
+            if (!(factory.getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentText, node.expression.end) + 1;
                 const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
@@ -1245,7 +1245,7 @@ const _super = (function (geti, seti) {
             }
             else if (isPropertyAccessExpression(expression) || isElementAccessExpression(expression)) {
                 // check if constant enum value is integer
-                const constantValue = getConstantValue(expression);
+                const constantValue = factory.getConstantValue(expression);
                 // isFinite handles cases when constantValue is undefined
                 return isFinite(constantValue)
                     && Math.floor(constantValue) === constantValue
@@ -1459,7 +1459,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitBlockStatements(node: Block) {
-            if (getEmitFlags(node) & EmitFlags.SingleLine) {
+            if (factory.getEmitFlags(node) & EmitFlags.SingleLine) {
                 emitList(node, node.statements, ListFormat.SingleLineBlockStatements);
             }
             else {
@@ -1663,12 +1663,12 @@ const _super = (function (geti, seti) {
             const body = node.body;
             if (body) {
                 if (isBlock(body)) {
-                    const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
+                    const indentedFlag = factory.getEmitFlags(node) & EmitFlags.Indented;
                     if (indentedFlag) {
                         increaseIndent();
                     }
 
-                    if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
+                    if (factory.getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                         emitSignatureHead(node);
                         emitBlockFunctionBody(node, body);
                     }
@@ -1712,7 +1712,7 @@ const _super = (function (geti, seti) {
             // * A non-synthesized body's start and end position are on different lines.
             // * Any statement in the body starts on a new line.
 
-            if (getEmitFlags(body) & EmitFlags.SingleLine) {
+            if (factory.getEmitFlags(body) & EmitFlags.SingleLine) {
                 return true;
             }
 
@@ -1783,7 +1783,7 @@ const _super = (function (geti, seti) {
             write("class");
             emitNodeWithPrefix(" ", node.name, emitIdentifierName);
 
-            const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
+            const indentedFlag = factory.getEmitFlags(node) & EmitFlags.Indented;
             if (indentedFlag) {
                 increaseIndent();
             }
@@ -2116,8 +2116,8 @@ const _super = (function (geti, seti) {
             // "comment1" is not considered to be leading comment for node.initializer
             // but rather a trailing comment on the previous node.
             const initializer = node.initializer;
-            if ((getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
-                const commentRange = getCommentRange(initializer);
+            if ((factory.getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
+                const commentRange = factory.getCommentRange(initializer);
                 emitTrailingCommentsOfPosition(commentRange.pos);
             }
 
@@ -2189,7 +2189,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitHelpers(node: Node) {
-            const emitFlags = getEmitFlags(node);
+            const emitFlags = factory.getEmitFlags(node);
             let helpersEmitted = false;
             if (emitFlags & EmitFlags.EmitEmitHelpers) {
                 helpersEmitted = emitEmitHelpers(currentSourceFile);
@@ -2450,7 +2450,7 @@ const _super = (function (geti, seti) {
                     }
 
                     if (shouldEmitInterveningComments) {
-                        const commentRange = getCommentRange(child);
+                        const commentRange = factory.getCommentRange(child);
                         emitTrailingCommentsOfPosition(commentRange.pos);
                     }
                     else {

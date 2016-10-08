@@ -13438,7 +13438,7 @@ namespace ts {
          * its value is discarded (e.g. the left side of the comma operator).
          */
         function isSideEffectFree(node: Node): boolean {
-            node = skipParentheses(node);
+            node = factory.skipParentheses(node);
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.StringLiteral:

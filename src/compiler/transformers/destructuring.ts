@@ -57,23 +57,23 @@ namespace ts {
             expressions.push(value);
         }
 
-        const expression = inlineExpressions(expressions);
+        const expression = factory.inlineExpressions(expressions);
         aggregateTransformFlags(expression);
         return expression;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
-            const expression = createAssignment(name, value, location);
+            const expression = factory.createAssignment(name, value, location);
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
+            factory.setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(expression);
             expressions.push(expression);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(recordTempVariable);
+            const name = factory.createTempVariable(recordTempVariable);
             emitAssignment(name, value, location);
             return name;
         }
@@ -98,18 +98,18 @@ namespace ts {
         return declarations;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
-            const declaration = createVariableDeclaration(name, /*type*/ undefined, value, location);
+            const declaration = factory.createVariableDeclaration(name, /*type*/ undefined, value, location);
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
+            factory.setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(declaration);
             declarations.push(declaration);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(/*recordTempVariable*/ undefined);
+            const name = factory.createTempVariable(/*recordTempVariable*/ undefined);
             emitAssignment(name, value, location);
             return name;
         }
@@ -138,25 +138,25 @@ namespace ts {
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
             if (pendingAssignments) {
                 pendingAssignments.push(value);
-                value = inlineExpressions(pendingAssignments);
+                value = factory.inlineExpressions(pendingAssignments);
                 pendingAssignments = undefined;
             }
 
-            const declaration = createVariableDeclaration(name, /*type*/ undefined, value, location);
+            const declaration = factory.createVariableDeclaration(name, /*type*/ undefined, value, location);
             declaration.original = original;
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
+            factory.setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps);
 
             declarations.push(declaration);
             aggregateTransformFlags(declaration);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(recordTempVariable);
+            const name = factory.createTempVariable(recordTempVariable);
             if (recordTempVariable) {
-                const assignment = createAssignment(name, value, location);
+                const assignment = factory.createAssignment(name, value, location);
                 if (pendingAssignments) {
                     pendingAssignments.push(assignment);
                 }
@@ -190,7 +190,7 @@ namespace ts {
 
         flattenDestructuring(context, node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, visitor);
 
-        const expression = inlineExpressions(pendingAssignments);
+        const expression = factory.inlineExpressions(pendingAssignments);
         aggregateTransformFlags(expression);
         return expression;
 
@@ -200,18 +200,18 @@ namespace ts {
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(recordTempVariable);
+            const name = factory.createTempVariable(recordTempVariable);
             emitPendingAssignment(name, value, location, /*original*/ undefined);
             return name;
         }
 
         function emitPendingAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
-            const expression = createAssignment(name, value, location);
+            const expression = factory.createAssignment(name, value, location);
             expression.original = original;
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
-            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
+            factory.setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             pendingAssignments.push(expression);
             return expression;
@@ -270,9 +270,9 @@ namespace ts {
                 emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, location);
             }
             else {
-                const name = getMutableClone(<Identifier>target);
-                setSourceMapRange(name, target);
-                setCommentRange(name, target);
+                const name = factory.getMutableClone(<Identifier>target);
+                factory.setSourceMapRange(name, target);
+                factory.setCommentRange(name, target);
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
         }
@@ -311,10 +311,10 @@ namespace ts {
                 if (e.kind !== SyntaxKind.OmittedExpression) {
                     // Assignment for target = value.propName should highligh whole property, hence use e as source map node
                     if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                        emitDestructuringAssignment(e, createElementAccess(value, createLiteral(i)), e);
+                        emitDestructuringAssignment(e, factory.createElementAccess(value, factory.createLiteral(i)), e);
                     }
                     else if (i === numElements - 1) {
-                        emitDestructuringAssignment((<SpreadElementExpression>e).expression, createArraySlice(value, i), e);
+                        emitDestructuringAssignment((<SpreadElementExpression>e).expression, factory.createArraySlice(value, i), e);
                     }
                 }
             }
@@ -329,7 +329,7 @@ namespace ts {
             }
             else if (!value) {
                 // Use 'void 0' in absence of value and initializer
-                value = createVoidZero();
+                value = factory.createVoidZero();
             }
 
             const name = target.name;
@@ -356,10 +356,10 @@ namespace ts {
                     else {
                         if (!element.dotDotDotToken) {
                             // Rewrite element to a declaration that accesses array element at index i
-                            emitBindingElement(element, createElementAccess(value, i));
+                            emitBindingElement(element, factory.createElementAccess(value, i));
                         }
                         else if (i === numElements - 1) {
-                            emitBindingElement(element, createArraySlice(value, i));
+                            emitBindingElement(element, factory.createArraySlice(value, i));
                         }
                     }
                 }
@@ -371,11 +371,11 @@ namespace ts {
 
         function createDefaultValueCheck(value: Expression, defaultValue: Expression, location: TextRange): Expression {
             value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
-            return createConditional(
-                createStrictEquality(value, createVoidZero()),
-                createToken(SyntaxKind.QuestionToken),
+            return factory.createConditional(
+                factory.createStrictEquality(value, factory.createVoidZero()),
+                factory.createToken(SyntaxKind.QuestionToken),
                 defaultValue,
-                createToken(SyntaxKind.ColonToken),
+                factory.createToken(SyntaxKind.ColonToken),
                 value
             );
         }
@@ -389,24 +389,24 @@ namespace ts {
          */
         function createDestructuringPropertyAccess(expression: Expression, propertyName: PropertyName): LeftHandSideExpression {
             if (isComputedPropertyName(propertyName)) {
-                return createElementAccess(
+                return factory.createElementAccess(
                     expression,
                     ensureIdentifier(propertyName.expression, /*reuseIdentifierExpressions*/ false, /*location*/ propertyName, emitTempVariableAssignment)
                 );
             }
             else if (isLiteralExpression(propertyName)) {
-                const clone = getSynthesizedClone(propertyName);
+                const clone = factory.getSynthesizedClone(propertyName);
                 clone.text = unescapeIdentifier(clone.text);
-                return createElementAccess(expression, clone);
+                return factory.createElementAccess(expression, clone);
             }
             else {
                 if (isGeneratedIdentifier(propertyName)) {
-                    const clone = getSynthesizedClone(propertyName);
+                    const clone = factory.getSynthesizedClone(propertyName);
                     clone.text = unescapeIdentifier(clone.text);
-                    return createPropertyAccess(expression, clone);
+                    return factory.createPropertyAccess(expression, clone);
                 }
                 else {
-                    return createPropertyAccess(expression, createIdentifier(unescapeIdentifier(propertyName.text)));
+                    return factory.createPropertyAccess(expression, factory.createIdentifier(unescapeIdentifier(propertyName.text)));
                 }
             }
         }
