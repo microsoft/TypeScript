@@ -272,7 +272,7 @@ namespace ts.server {
                 else {
                     projectsToUpdate = [];
                     for (const f of this.changedFiles) {
-                         projectsToUpdate = projectsToUpdate.concat(f.containingProjects);
+                        projectsToUpdate = projectsToUpdate.concat(f.containingProjects);
                     }
                 }
                 this.updateProjectGraphs(projectsToUpdate);
@@ -341,15 +341,35 @@ namespace ts.server {
             // TODO: handle isOpen = true case
 
             if (!info.isOpen) {
-                this.filenameToScriptInfo.remove(info.path);
-
                 // capture list of projects since detachAllProjects will wipe out original list 
                 const containingProjects = info.containingProjects.slice();
 
+                const allFilesReferencingDeletedFile: [Project, ScriptInfo[]][] = [];
+                for (const project of containingProjects) {
+                    const referencingInfos = project.builder.getReferencingScriptInfos(info);
+                    allFilesReferencingDeletedFile.push([project, referencingInfos]);
+                }
+
+                this.filenameToScriptInfo.remove(info.path);
                 info.detachAllProjects();
 
                 // update projects to make sure that set of referenced files is correct
                 this.updateProjectGraphs(containingProjects);
+
+                for (const [project, referencingInfos] of allFilesReferencingDeletedFile) {
+                    for (const referencingInfo of referencingInfos) {
+                        const sourceFile = project.getSourceFile(referencingInfo.path);
+                        if (!sourceFile || !sourceFile.resolvedModules) {
+                            continue;
+                        }
+                        for (const moduleName in sourceFile.resolvedModules) {
+                            const resolvedModule = sourceFile.resolvedModules[moduleName];
+                            if (resolvedModule.resolvedFileName === info.fileName) {
+                                sourceFile.resolvedModules[moduleName] = undefined;
+                            }
+                        }
+                    }
+                }
 
                 if (!this.eventHandler) {
                     return;
