@@ -4,7 +4,6 @@
 /// <reference path="sourcemap.ts"/>
 /// <reference path="comments.ts" />
 
-/* @internal */
 namespace ts {
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
@@ -16,8 +15,131 @@ namespace ts {
     const id = (s: SourceFile) => s;
     const nullTransformers: Transformer[] = [ctx => id];
 
+    export function emit(file: SourceFile, transformers: Transformer[] = nullTransformers, newLine = "\n") {
+        let result: string;
+
+        const options: CompilerOptions = {};
+        const host: EmitHost = {
+            getCompilerOptions() {
+                return options;
+            },
+            getSourceFile(fileName: string) {
+                if (fileName === file.fileName) return file;
+            },
+            getSourceFileByPath(path: Path) {
+                if (path === file.fileName) return file;
+            },
+            getCurrentDirectory() {
+                return "";
+            },
+            getSourceFiles() {
+                return [file];
+            },
+            isSourceFileFromExternalLibrary() {
+                return false;
+            },
+            getCommonSourceDirectory() {
+                return "";
+            },
+            getCanonicalFileName(fileName: string) {
+                return fileName;
+            },
+            getNewLine() {
+                return newLine;
+            },
+            isEmitBlocked() {
+                return false;
+            },
+            writeFile(fileName: string, data: string) {
+                result = data;
+            }
+        };
+
+        const transform = transformFiles(undefined, host, [file], transformers);
+
+        const printFile = createPrinter(host, undefined, createDiagnosticCollection(), transform, () => false);
+
+        printFile("output.js", "", [file], false);
+
+        // Clean up emit nodes on parse tree
+        disposeEmitNodes(file);
+
+        return {
+            result
+        };
+    }
+
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
+    /* @internal */
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
+        const compilerOptions = host.getCompilerOptions();
+        const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
+        const emitterDiagnostics = createDiagnosticCollection();
+        const transformers: Transformer[] = emitOnlyDtsFiles ? nullTransformers : getTransformers(compilerOptions);
+        let emitSkipped = false;
+
+        const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
+
+        // Transform the source files
+        performance.mark("beforeTransform");
+        const transform = transformFiles(resolver, host, sourceFiles, transformers);
+        performance.measure("transformTime", "beforeTransform");
+
+        const printFile = createPrinter(host, emittedFilesList, emitterDiagnostics, transform, resolver.hasGlobalName);
+
+        // Emit each output file
+        performance.mark("beforePrint");
+        forEachTransformedEmitFile(host, transform.transformed, emitFile, emitOnlyDtsFiles);
+        performance.measure("printTime", "beforePrint");
+
+        // Clean up emit nodes on parse tree
+        for (const sourceFile of sourceFiles) {
+            disposeEmitNodes(sourceFile);
+        }
+
+        return {
+            emitSkipped,
+            diagnostics: emitterDiagnostics.getDiagnostics(),
+            emittedFiles: emittedFilesList,
+            sourceMaps: sourceMapDataList
+        };
+
+        function emitFile(jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+            // Make sure not to write js file and source map file if any of them cannot be written
+            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
+                if (!emitOnlyDtsFiles) {
+                    printFile(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
+                }
+            }
+            else {
+                emitSkipped = true;
+            }
+
+            if (declarationFilePath) {
+                emitSkipped = writeDeclarationFile(declarationFilePath, getOriginalSourceFiles(sourceFiles), isBundledEmit, host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
+            }
+
+            if (!emitSkipped && emittedFilesList) {
+                if (!emitOnlyDtsFiles) {
+                    emittedFilesList.push(jsFilePath);
+                }
+                if (sourceMapFilePath) {
+                    emittedFilesList.push(sourceMapFilePath);
+                }
+                if (declarationFilePath) {
+                    emittedFilesList.push(declarationFilePath);
+                }
+            }
+        }
+    }
+    function createPrinter(
+            host: EmitHost,
+            emittedFilesList: string[],
+            emitterDiagnostics: DiagnosticCollection,
+            { transformed, emitNodeWithSubstitution, emitNodeWithNotification }: TransformationResult,
+            hasGlobalName: (name: string) => boolean
+        ) {
         const delimiters = createDelimiterMap();
         const brackets = createBracketsMap();
 
@@ -187,15 +309,12 @@ const _super = (function (geti, seti) {
     const cache = Object.create(null);
     return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
 })(name => super[name], (name, value) => super[name] = value);`;
-
+        
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
-        const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
-        const emitterDiagnostics = createDiagnosticCollection();
         const newLine = host.getNewLine();
-        const transformers: Transformer[] = emitOnlyDtsFiles ? nullTransformers : getTransformers(compilerOptions);
         const writer = createTextWriter(newLine);
         const {
             write,
@@ -230,63 +349,8 @@ const _super = (function (geti, seti) {
         let paramEmitted: boolean;
         let awaiterEmitted: boolean;
         let isOwnFileEmit: boolean;
-        let emitSkipped = false;
 
-        const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
-
-        // Transform the source files
-        performance.mark("beforeTransform");
-        const {
-            transformed,
-            emitNodeWithSubstitution,
-            emitNodeWithNotification
-        } = transformFiles(resolver, host, sourceFiles, transformers);
-        performance.measure("transformTime", "beforeTransform");
-
-        // Emit each output file
-        performance.mark("beforePrint");
-        forEachTransformedEmitFile(host, transformed, emitFile, emitOnlyDtsFiles);
-        performance.measure("printTime", "beforePrint");
-
-        // Clean up emit nodes on parse tree
-        for (const sourceFile of sourceFiles) {
-            disposeEmitNodes(sourceFile);
-        }
-
-        return {
-            emitSkipped,
-            diagnostics: emitterDiagnostics.getDiagnostics(),
-            emittedFiles: emittedFilesList,
-            sourceMaps: sourceMapDataList
-        };
-
-        function emitFile(jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
-            // Make sure not to write js file and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
-                if (!emitOnlyDtsFiles) {
-                    printFile(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
-                }
-            }
-            else {
-                emitSkipped = true;
-            }
-
-            if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, getOriginalSourceFiles(sourceFiles), isBundledEmit, host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
-            }
-
-            if (!emitSkipped && emittedFilesList) {
-                if (!emitOnlyDtsFiles) {
-                    emittedFilesList.push(jsFilePath);
-                }
-                if (sourceMapFilePath) {
-                    emittedFilesList.push(sourceMapFilePath);
-                }
-                if (declarationFilePath) {
-                    emittedFilesList.push(declarationFilePath);
-                }
-            }
-        }
+        return printFile;
 
         function printFile(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
             sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
@@ -2620,7 +2684,7 @@ const _super = (function (geti, seti) {
         }
 
         function isUniqueName(name: string): boolean {
-            return !resolver.hasGlobalName(name) &&
+            return !hasGlobalName(name) &&
                 !hasProperty(currentFileIdentifiers, name) &&
                 !hasProperty(generatedNameSet, name);
         }

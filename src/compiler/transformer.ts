@@ -8,7 +8,6 @@
 /// <reference path="transformers/module/system.ts" />
 /// <reference path="transformers/module/es6.ts" />
 
-/* @internal */
 namespace ts {
     const moduleTransformerMap = createMap<Transformer>({
         [ModuleKind.ES6]: transformES6Module,
@@ -99,9 +98,9 @@ namespace ts {
         onEmitNode?: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
     }
 
-    /* @internal */
     export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
+    /* @internal */
     export function getTransformers(compilerOptions: CompilerOptions) {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -133,6 +132,7 @@ namespace ts {
      * @param sourceFiles An array of source files
      * @param transforms An array of Transformers.
      */
+    /* @internal */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult {
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
