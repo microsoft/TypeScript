@@ -657,6 +657,13 @@ namespace ts {
         return updated || nodes;
     }
 
+    const emptyLexicalEnvironment: LexicalEnvironment = {
+        startLexicalEnvironment() {},
+        endLexicalEnvironment() {
+            return [];
+        }
+    };
+
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -664,8 +671,8 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
-    export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): Node {
+    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context?: LexicalEnvironment): T;
+    export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment = emptyLexicalEnvironment): Node {
         if (node === undefined) {
             return undefined;
         }
