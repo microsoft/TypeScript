@@ -348,3 +348,24 @@ function f14() {
     return x;  // (string | number | boolean)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 133, 9))
 }
+
+function f15() {
+>f15 : Symbol(f15, Decl(controlFlowArrays.ts, 138, 1))
+
+    let x = [];
+>x : Symbol(x, Decl(controlFlowArrays.ts, 141, 7))
+
+    while (cond()) {
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        while (cond()) {}
+>cond : Symbol(cond, Decl(controlFlowArrays.ts, 0, 0))
+
+        x.push("hello");
+>x.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 141, 7))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+    }
+    return x;  // string[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 141, 7))
+}

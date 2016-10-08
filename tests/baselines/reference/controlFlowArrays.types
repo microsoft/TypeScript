@@ -445,3 +445,29 @@ function f14() {
     return x;  // (string | number | boolean)[]
 >x : (string | number | boolean)[]
 }
+
+function f15() {
+>f15 : () => string[]
+
+    let x = [];
+>x : any[]
+>[] : never[]
+
+    while (cond()) {
+>cond() : boolean
+>cond : () => boolean
+
+        while (cond()) {}
+>cond() : boolean
+>cond : () => boolean
+
+        x.push("hello");
+>x.push("hello") : number
+>x.push : (...items: any[]) => number
+>x : any[]
+>push : (...items: any[]) => number
+>"hello" : "hello"
+    }
+    return x;  // string[]
+>x : string[]
+}

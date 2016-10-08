@@ -139,6 +139,15 @@ function f14() {
     return x;  // (string | number | boolean)[]
 }
 
+function f15() {
+    let x = [];
+    while (cond()) {
+        while (cond()) {}
+        x.push("hello");
+    }
+    return x;  // string[]
+}
+
 //// [controlFlowArrays.js]
 function f1() {
     var x = [];
@@ -264,4 +273,12 @@ function f14() {
     x.push("hello");
     x.push(true);
     return x; // (string | number | boolean)[]
+}
+function f15() {
+    var x = [];
+    while (cond()) {
+        while (cond()) { }
+        x.push("hello");
+    }
+    return x; // string[]
 }
