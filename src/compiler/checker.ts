@@ -9163,7 +9163,9 @@ namespace ts {
             // a const variable or parameter from an outer function, we extend the origin of the control flow
             // analysis to include the immediately enclosing function.
             while (flowContainer !== declarationContainer &&
-                (flowContainer.kind === SyntaxKind.FunctionExpression || flowContainer.kind === SyntaxKind.ArrowFunction) &&
+                (flowContainer.kind === SyntaxKind.FunctionExpression ||
+                    flowContainer.kind === SyntaxKind.ArrowFunction ||
+                    isObjectLiteralOrClassExpressionMethod(flowContainer)) &&
                 (isReadonlySymbol(localOrExportSymbol) || isParameter && !isParameterAssigned(localOrExportSymbol))) {
                 flowContainer = getControlFlowContainer(flowContainer);
             }
