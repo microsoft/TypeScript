@@ -8797,10 +8797,14 @@ namespace ts {
                 }
                 // If this flow loop junction and reference are already being processed, return
                 // the union of the types computed for each branch so far, marked as incomplete.
-                // We should never see an empty array here because the first antecedent of a loop
-                // junction is always the non-looping control flow path that leads to the top.
+                // It is possible to see an empty array in cases where loops are nested and the
+                // back edge of the outer loop reaches an inner loop that is already being analyzed.
+                // In such cases we restart the analysis of the inner loop, which will then see
+                // a non-empty in-process array for the outer loop and eventually terminate because
+                // the first antecedent of a loop junction is always the non-looping control flow
+                // path that leads to the top.
                 for (let i = flowLoopStart; i < flowLoopCount; i++) {
-                    if (flowLoopNodes[i] === flow && flowLoopKeys[i] === key) {
+                    if (flowLoopNodes[i] === flow && flowLoopKeys[i] === key && flowLoopTypes[i].length) {
                         return createFlowType(getUnionOrEvolvingArrayType(flowLoopTypes[i], /*subtypeReduction*/ false), /*incomplete*/ true);
                     }
                 }
