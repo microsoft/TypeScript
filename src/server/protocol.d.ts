@@ -576,7 +576,13 @@ declare namespace ts.server.protocol {
     }
 
     /**
-     * Represents a file in external project
+     * Represents a file in external project.
+     * External project is project whose set of files, compilation options and open\close state 
+     * is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
+     * External project will exist even if all files in it are closed and should be closed explicity.
+     * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will 
+     * create configured project for every config file but will maintain a link that these projects were created
+     * as a result of opening external project so they should be removed once external project is closed. 
      */
     export interface ExternalFile {
         /**
@@ -931,7 +937,13 @@ declare namespace ts.server.protocol {
     }
 
     /**
-     * Request to set compiler options for inferred projects. 
+     * Request to set compiler options for inferred projects.
+     * External projects are opened / closed explicitly.
+     * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
+     * This configuration file will be used to obtain a list of files and configuration settings for the project.
+     * Inferred projects are created when user opens a loose file that is not the part of external project
+     * or configured project and will contain only open file and transitive closure of referenced files if 'useOneInferredProject' is false,
+     * or all open loose files and its transitive closure of referenced files if 'useOneInferredProject' is true.
      */
     export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
         arguments: SetCompilerOptionsForInferredProjectsArgs;
@@ -966,6 +978,7 @@ declare namespace ts.server.protocol {
 
     /**
      * Request to obtain the list of files that should be regenerated if target file is recompiled.
+     * NOTE: this us query only operation and does not generate any output on disk.
      */
     export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
     }
@@ -992,7 +1005,7 @@ declare namespace ts.server.protocol {
     }
 
     /**
-     * Request to recompile the file.
+     * Request to recompile the file. Result file is written on disk.
      */
     export interface CompileOnSaveEmitFileRequest extends FileRequest {
         args: CompileOnSaveEmitFileRequestArgs;
