@@ -84,8 +84,7 @@ namespace ts.server {
 
     export interface Builder {
         readonly project: Project;
-        getFilesAffectedByForEmitting(scriptInfo: ScriptInfo): string[];
-        getReferencingScriptInfos(scriptInfo: ScriptInfo): ScriptInfo[];
+        getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         onProjectUpdateGraph(): void;
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
     }
@@ -127,8 +126,7 @@ namespace ts.server {
             this.fileInfos.forEachValue((path: Path, value: T) => action(value));
         }
 
-        abstract getFilesAffectedByForEmitting(scriptInfo: ScriptInfo): string[];
-        abstract getReferencingScriptInfos(scriptInfo: ScriptInfo): ScriptInfo[];
+        abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         abstract onProjectUpdateGraph(): void;
 
         /**
@@ -166,7 +164,7 @@ namespace ts.server {
          * consumed by the API user, which will use it to interact with file systems. Path
          * should only be used internally, because the case sensitivity is not trustable.
          */
-        getFilesAffectedByForEmitting(scriptInfo: ScriptInfo): string[] {
+        getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
             const info = this.getOrCreateFileInfo(scriptInfo.path);
             const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
             if (info.updateShapeSignature()) {
@@ -179,10 +177,6 @@ namespace ts.server {
                 return this.project.getAllEmittableFiles();
             }
             return singleFileResult;
-        }
-
-        getReferencingScriptInfos(scriptInfo: ScriptInfo): ScriptInfo[] {
-            return [];
         }
     }
 
@@ -329,7 +323,7 @@ namespace ts.server {
             fileInfo.scriptVersionForReferences = fileInfo.scriptInfo.getLatestVersion();
         }
 
-        getFilesAffectedByForEmitting(scriptInfo: ScriptInfo): string[] {
+        getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
             this.ensureProjectDependencyGraphUpToDate();
 
             const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
@@ -373,17 +367,6 @@ namespace ts.server {
                 }
             }
             return result;
-        }
-
-        getReferencingScriptInfos(scriptInfo: ScriptInfo): ScriptInfo[] {
-            this.ensureProjectDependencyGraphUpToDate();
-
-            const fileInfo = this.getFileInfo(scriptInfo.path);
-            if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
-                return [];
-            }
-
-            return map(fileInfo.referencedBy, fInfo => fInfo.scriptInfo);
         }
     }
 

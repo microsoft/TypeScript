@@ -122,7 +122,7 @@ namespace ts.server {
                 return [];
             }
             this.updateGraph();
-            return this.builder.getFilesAffectedByForEmitting(scriptInfo);
+            return this.builder.getFilesAffectedBy(scriptInfo);
         }
 
         getProjectVersion() {
