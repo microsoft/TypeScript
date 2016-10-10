@@ -11206,11 +11206,10 @@ namespace ts {
         }
 
         /**
-         * Get the attributes type which is the type that indicate which attributes are valid on the given JSXOpeningLikeElement.
-         * @param node a JSXOpeningLikeElement node
-         * @return an attributes type of the given node
+         *
+         * @param node
          */
-        function getJsxElementAttributesType(node: JsxOpeningLikeElement): Type {
+        function getIntrinsicJsxElementAttributesType(node: JsxOpeningElement): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedJsxElementAttributesType) {
                 if (isJsxIntrinsicIdentifier(node.tagName)) {
@@ -11225,12 +11224,29 @@ namespace ts {
                         return links.resolvedJsxElementAttributesType = unknownType;
                     }
                 }
-                else {
+            }
+            return links.resolvedJsxElementAttributesType;
+        }
+
+        function getCustomJsxElementAttributesType(node: JsxOpeningElement): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedJsxElementAttributesType) {
+                if (!isJsxIntrinsicIdentifier(node.tagName)) {
                     const elemClassType = getJsxGlobalElementClassType();
                     return links.resolvedJsxElementAttributesType = resolveJsxElementAttributesType(node, undefined, elemClassType);
                 }
             }
             return links.resolvedJsxElementAttributesType;
+        }
+
+        /**
+         * Get the attributes type which is the type that indicate which attributes are valid on the given JSXOpeningLikeElement.
+         * @param node a JSXOpeningLikeElement node
+         * @return an attributes type of the given node
+         */
+        function getJsxElementAttributesType(node: JsxOpeningLikeElement): Type {
+            const intrinsicAttributesType = getIntrinsicJsxElementAttributesType(node);
+            return intrinsicAttributesType ? intrinsicAttributesType : getCustomJsxElementAttributesType(node);
         }
 
         /**
