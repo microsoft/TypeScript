@@ -223,26 +223,35 @@ getter.a = 12;
 >a : number
 >12 : 12
 
-// null and undefined are just skipped
-let spreadNull: { a: number } =
->spreadNull : { a: number; }
->a : number
-
-    { a: 7, ...null }
->{ a: 7, ...null } : { a: number; }
->a : number
->7 : 7
+// null, undefined, functions and primitives result in { }
+let spreadNull = { ...null };
+>spreadNull : {}
+>{ ...null } : {}
 >null : null
 
-let spreadUndefined: { a: number } =
->spreadUndefined : { a: number; }
->a : number
-
-    { a: 7, ...undefined }
->{ a: 7, ...undefined } : { a: number; }
->a : number
->7 : 7
+let spreadUndefind = { ...undefined };
+>spreadUndefind : {}
+>{ ...undefined } : {}
 >undefined : any
+
+let spreadNum = { ...12 };
+>spreadNum : {}
+>{ ...12 } : {}
+
+let spreadStr = { ...'foo' };
+>spreadStr : {}
+>{ ...'foo' } : {}
+
+let spreadBool = { ...false };
+>spreadBool : {}
+>{ ...false } : {}
+>false : false
+
+let spreadFunc = { ...(function () { }) };
+>spreadFunc : {}
+>{ ...(function () { }) } : {}
+>(function () { }) : () => void
+>function () { } : () => void
 
 // methods are not enumerable
 class C { p = 1; m() { } }

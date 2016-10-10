@@ -35,11 +35,13 @@ let getter: { a: number, c: number } =
     { ...op, c: 7 }
 getter.a = 12;
 
-// null and undefined are just skipped
-let spreadNull: { a: number } =
-    { a: 7, ...null }
-let spreadUndefined: { a: number } =
-    { a: 7, ...undefined }
+// null, undefined, functions and primitives result in { }
+let spreadNull = { ...null };
+let spreadUndefind = { ...undefined };
+let spreadNum = { ...12 };
+let spreadStr = { ...'foo' };
+let spreadBool = { ...false };
+let spreadFunc = { ...(function () { }) };
 
 // methods are not enumerable
 class C { p = 1; m() { } }
@@ -126,9 +128,13 @@ var propertyNested = __assign({ a: __assign({}, o) });
 var op = { get a() { return 6; } };
 var getter = __assign({}, op, { c: 7 });
 getter.a = 12;
-// null and undefined are just skipped
-var spreadNull = __assign({ a: 7 }, null);
-var spreadUndefined = __assign({ a: 7 }, undefined);
+// null, undefined, functions and primitives result in { }
+var spreadNull = __assign({}, null);
+var spreadUndefind = __assign({}, undefined);
+var spreadNum = __assign({}, 12);
+var spreadStr = __assign({}, 'foo');
+var spreadBool = __assign({}, false);
+var spreadFunc = __assign({}, (function () { }));
 // methods are not enumerable
 var C = (function () {
     function C() {

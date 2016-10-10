@@ -8,8 +8,8 @@ class PrivateOptionalX {
 class PublicX {
     public x: number;
 }
-let o3: { ...PublicX, ...PrivateOptionalX };
-let sn: number = o3.x; // error, x is private
+let o2: { ...PublicX, ...PrivateOptionalX };
+let sn: number = o2.x; // error, x is private
 let optionalString: { sn?: string };
 let optionalNumber: { sn?: number };
 let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
@@ -22,13 +22,28 @@ let spread: { ...Bool, ...Str } = { s: 'foo' }; // error, missing 'b'
 let b: Bool;
 spread = b; // error, missing 's'
 
-// expressions are not allowed
-let o1 = { ...1 + 1 };
-let o2 = { ...(1 + 1) };
-
 // literal repeats are not allowed, but spread repeats are fine
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
+
+// null and undefined are just skipped
+let spreadNull = { ...null }
+spreadNull.null;
+let spreadUndefined = { ...undefined }
+spreadUndefined.undefined;
+
+// primitives and functions are skipped
+let spreadNum = { ...12 };
+spreadNum.toFixed(); // error, no methods from number
+let spreadSum = { ...1 + 1 };
+spreadSum.toFixed(); // error, no methods from number
+let spreadStr = { ...'foo' };
+spreadStr.length; // error, no 'length'
+spreadStr.charAt(1); // error, no methods either
+let spreadBool = { ...true };
+spreadBool.valueOf(); // error, what were you thinking?
+let spreadFunc = { ...function () { } }
+spreadFunc(); // error, no call signature
 
 // write-only properties get skipped
 let setterOnly = { ...{ set b (bad: number) { } } };
@@ -43,9 +58,6 @@ spreadC.m(); // error 'm' is not in '{ ... c }'
 let callableConstructableSpread: { ...PublicX, (n: number): number, new (p: number) };
 callableConstructableSpread(12); // error, no call signature
 new callableConstructableSpread(12); // error, no construct signature
-
-let publicx: PublicX;
-let callableSpread = { ...publicx, ...(n => n + 1) }; // error, can't spread functions
 
 // { ...U } is not assignable to U
 function override<U>(initial: U, override: U): U {

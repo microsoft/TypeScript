@@ -5,19 +5,23 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(20,5): error TS2322
   Property 'b' is missing in type '{ s: string; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(22,1): error TS2322: Type 'Bool' is not assignable to type '{ s: string; b: boolean; }'.
   Property 's' is missing in type 'Bool'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,15): error TS2697: Spread properties must be identifiers, property accesses, or object literals.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(26,15): error TS2697: Spread properties must be identifiers, property accesses, or object literals.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(29,36): error TS2300: Duplicate identifier 'b'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(29,53): error TS2300: Duplicate identifier 'b'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(34,12): error TS2339: Property 'b' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(40,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ x: number; }' has no compatible call signatures.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(44,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(47,39): error TS2697: Spread properties must be identifiers, property accesses, or object literals.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(51,12): error TS2322: Type '{ ...U }' is not assignable to type 'U'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,36): error TS2300: Duplicate identifier 'b'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,53): error TS2300: Duplicate identifier 'b'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(30,12): error TS2339: Property 'null' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,17): error TS2339: Property 'undefined' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(36,11): error TS2339: Property 'toFixed' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(38,11): error TS2339: Property 'toFixed' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(40,11): error TS2339: Property 'length' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(41,11): error TS2339: Property 'charAt' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(45,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,12): error TS2339: Property 'b' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(55,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ x: number; }' has no compatible call signatures.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(63,12): error TS2322: Type '{ ...U }' is not assignable to type 'U'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (14 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (18 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -27,8 +31,8 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(51,12): error TS232
     class PublicX {
         public x: number;
     }
-    let o3: { ...PublicX, ...PrivateOptionalX };
-    let sn: number = o3.x; // error, x is private
+    let o2: { ...PublicX, ...PrivateOptionalX };
+    let sn: number = o2.x; // error, x is private
                         ~
 !!! error TS2339: Property 'x' does not exist on type '{}'.
     let optionalString: { sn?: string };
@@ -52,14 +56,6 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(51,12): error TS232
 !!! error TS2322: Type 'Bool' is not assignable to type '{ s: string; b: boolean; }'.
 !!! error TS2322:   Property 's' is missing in type 'Bool'.
     
-    // expressions are not allowed
-    let o1 = { ...1 + 1 };
-                  ~~~~~
-!!! error TS2697: Spread properties must be identifiers, property accesses, or object literals.
-    let o2 = { ...(1 + 1) };
-                  ~~~~~~~
-!!! error TS2697: Spread properties must be identifiers, property accesses, or object literals.
-    
     // literal repeats are not allowed, but spread repeats are fine
     let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
                                        ~
@@ -67,6 +63,39 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(51,12): error TS232
                                                         ~
 !!! error TS2300: Duplicate identifier 'b'.
     let duplicatedSpread = { ...o, ...o }
+    
+    // null and undefined are just skipped
+    let spreadNull = { ...null }
+    spreadNull.null;
+               ~~~~
+!!! error TS2339: Property 'null' does not exist on type '{}'.
+    let spreadUndefined = { ...undefined }
+    spreadUndefined.undefined;
+                    ~~~~~~~~~
+!!! error TS2339: Property 'undefined' does not exist on type '{}'.
+    
+    // primitives and functions are skipped
+    let spreadNum = { ...12 };
+    spreadNum.toFixed(); // error, no methods from number
+              ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type '{}'.
+    let spreadSum = { ...1 + 1 };
+    spreadSum.toFixed(); // error, no methods from number
+              ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type '{}'.
+    let spreadStr = { ...'foo' };
+    spreadStr.length; // error, no 'length'
+              ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type '{}'.
+    spreadStr.charAt(1); // error, no methods either
+              ~~~~~~
+!!! error TS2339: Property 'charAt' does not exist on type '{}'.
+    let spreadBool = { ...true };
+    spreadBool.valueOf(); // error, what were you thinking?
+    let spreadFunc = { ...function () { } }
+    spreadFunc(); // error, no call signature
+    ~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
     
     // write-only properties get skipped
     let setterOnly = { ...{ set b (bad: number) { } } };
@@ -89,11 +118,6 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(51,12): error TS232
     new callableConstructableSpread(12); // error, no construct signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-    
-    let publicx: PublicX;
-    let callableSpread = { ...publicx, ...(n => n + 1) }; // error, can't spread functions
-                                          ~~~~~~~~~~~~
-!!! error TS2697: Spread properties must be identifiers, property accesses, or object literals.
     
     // { ...U } is not assignable to U
     function override<U>(initial: U, override: U): U {

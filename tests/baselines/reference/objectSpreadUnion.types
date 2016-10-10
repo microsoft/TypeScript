@@ -1,0 +1,131 @@
+=== tests/cases/conformance/types/spread/objectSpreadUnion.ts ===
+// concrete types work
+interface A1 { a: number }
+>A1 : A1
+>a : number
+
+interface A2 { a: string }
+>A2 : A2
+>a : string
+
+let a12: A1 | A2;
+>a12 : A1 | A2
+>A1 : A1
+>A2 : A2
+
+let result = { ...a12 };
+>result : { a: number; } | { a: string; }
+>{ ...a12 } : { a: number; } | { a: string; }
+>a12 : any
+
+let sn: number | string = result.a;
+>sn : string | number
+>result.a : string | number
+>result : { a: number; } | { a: string; }
+>a : string | number
+
+let assignable: { ...(A1 | A2) } = result;
+>assignable : { a: number; } | { a: string; }
+>A1 : A1
+>A2 : A2
+>result : { a: number; } | { a: string; }
+
+function tripleUnion<T, U, V>(t: T, u: U, v: V): void {
+>tripleUnion : <T, U, V>(t: T, u: U, v: V) => void
+>T : T
+>U : U
+>V : V
+>t : T
+>T : T
+>u : U
+>U : U
+>v : V
+>V : V
+
+    let tuv: T | U | V;
+>tuv : T | U | V
+>T : T
+>U : U
+>V : V
+
+    let result = { id: 'foo', ...tuv };
+>result : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
+>{ id: 'foo', ...tuv } : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
+>id : string
+>'foo' : "foo"
+>tuv : any
+
+    let expected: { id: string, ...T } | { id: string, ...U } | { id: string, ...V } = result;
+>expected : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
+>id : string
+>T : T
+>id : string
+>U : U
+>id : string
+>V : V
+>result : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
+
+    let assignable: { id: string, ...(T | U | V) } = result;
+>assignable : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
+>id : string
+>T : T
+>U : U
+>V : V
+>result : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
+}
+function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
+>iteratedDoubleUnion : <T, U, V>(t: T, u: U, v: V) => void
+>T : T
+>U : U
+>V : V
+>t : T
+>T : T
+>u : U
+>U : U
+>v : V
+>V : V
+
+    let tu: T | U;
+>tu : T | U
+>T : T
+>U : U
+
+    let uv: U | V;
+>uv : U | V
+>U : U
+>V : V
+
+    let result = { id: 'bar', ...tu, ...uv };
+>result : { id: string; ...T; ...U } | { id: string; ...U } | { id: string; ...T; ...V } | { id: string; ...U; ...V }
+>{ id: 'bar', ...tu, ...uv } : { id: string; ...T; ...U } | { id: string; ...U } | { id: string; ...T; ...V } | { id: string; ...U; ...V }
+>id : string
+>'bar' : "bar"
+>tu : any
+>uv : any
+
+    let expected: { id: string, ...T, ...U } | { id: string, ...T, ...V } | { id: string, ...U } | { id: string, ...U, ...V };
+>expected : { id: string; ...T; ...U } | { id: string; ...T; ...V } | { id: string; ...U } | { id: string; ...U; ...V }
+>id : string
+>T : T
+>U : U
+>id : string
+>T : T
+>V : V
+>id : string
+>U : U
+>id : string
+>U : U
+>V : V
+
+    let assignable: { id: string, ...(T | U), ...(U | V) } = result;
+>assignable : { id: string; ...T; ...U } | { id: string; ...U } | { id: string; ...T; ...V } | { id: string; ...U; ...V }
+>id : string
+>T : T
+>U : U
+>U : U
+>V : V
+>result : { id: string; ...T; ...U } | { id: string; ...U } | { id: string; ...T; ...V } | { id: string; ...U; ...V }
+}
+
+
+

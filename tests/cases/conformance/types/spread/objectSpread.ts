@@ -35,11 +35,13 @@ let getter: { a: number, c: number } =
     { ...op, c: 7 }
 getter.a = 12;
 
-// null and undefined are just skipped
-let spreadNull: { a: number } =
-    { a: 7, ...null }
-let spreadUndefined: { a: number } =
-    { a: 7, ...undefined }
+// null, undefined, functions and primitives result in { }
+let spreadNull = { ...null };
+let spreadUndefind = { ...undefined };
+let spreadNum = { ...12 };
+let spreadStr = { ...'foo' };
+let spreadBool = { ...false };
+let spreadFunc = { ...(function () { }) };
 
 // methods are not enumerable
 class C { p = 1; m() { } }
