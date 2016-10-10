@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
@@ -136,6 +136,19 @@ namespace ts.projectSystem {
         return map(fileNames, toExternalFile);
     }
 
+    export class TestServerEventManager {
+        private events: server.ProjectServiceEvent[] = [];
+
+        handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
+            this.events.push(event);
+        }
+
+        checkEventCountOfType(eventType: "context" | "configFileDiag", expectedCount: number) {
+            const eventsOfType = filter(this.events, e => e.eventName === eventType);
+            assert.equal(eventsOfType.length, expectedCount, `The actual event counts of type ${eventType} is ${eventsOfType.length}, while expected ${expectedCount}`);
+        }
+    }
+
     export interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
@@ -159,11 +172,11 @@ namespace ts.projectSystem {
         return host;
     }
 
-    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller) {
+    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler) {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+        return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
     }
 
     export interface CreateProjectServiceParameters {
@@ -2119,6 +2132,50 @@ namespace ts.projectSystem {
             projectService.openClientFile(f.path);
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
             projectService.inferredProjects[0].getLanguageService().getProgram();
+        });
+    });
+
+    describe("Configure file diagnostics events", () => {
+
+        it("are generated when the config file has errors", () => {
+            const serverEventManager = new TestServerEventManager();
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    }
+                }`
+            };
+
+            const host = createServerHost([file, configFile]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            openFilesForSession([file], session);
+            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+        });
+
+        it("are generated when the config file doesn't have errors", () => {
+            const serverEventManager = new TestServerEventManager();
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {}
+                }`
+            };
+
+            const host = createServerHost([file, configFile]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            openFilesForSession([file], session);
+            serverEventManager.checkEventCountOfType("configFileDiag", 1);
         });
     });
 }

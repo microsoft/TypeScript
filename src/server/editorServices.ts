@@ -755,12 +755,14 @@ namespace ts.server {
         }
 
         private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile?: string) {
-            if (diagnostics && diagnostics.length > 0) {
-                this.eventHandler({
-                    eventName: "configFileDiag",
-                    data: { configFileName, diagnostics, triggerFile }
-                });
+            if (!this.eventHandler) {
+                return;
             }
+
+            this.eventHandler({
+                eventName: "configFileDiag",
+                data: { configFileName, diagnostics: diagnostics || [], triggerFile }
+            });
         }
 
         private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], clientFileName?: string) {
