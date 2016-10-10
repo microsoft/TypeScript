@@ -342,7 +342,7 @@ namespace ts.server {
             }
         }
 
-        private getEncodedSemanticClassifications(args: protocol.FileSpanRequestArgs) {
+        private getEncodedSemanticClassifications(args: protocol.SemanticDiagnosticsRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             return project.getLanguageService().getEncodedSemanticClassifications(file, args);
         }
@@ -351,7 +351,7 @@ namespace ts.server {
             return projectFileName && this.projectService.findProject(projectFileName);
         }
 
-        private getCompilerOptionsDiagnostics(args: protocol.ProjectRequestArgs) {
+        private getCompilerOptionsDiagnostics(args: protocol.CompilerOptionsDiagnosticsRequestArgs) {
             const project = this.getProject(args.projectFileName);
             return this.convertToDiagnosticsWithLinePosition(project.getLanguageService().getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
         }
@@ -1438,10 +1438,10 @@ namespace ts.server {
             [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.ProjectRequest) => {
+            [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
                 return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
             },
-            [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.FileSpanRequest) => {
+            [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.SemanticDiagnosticsRequest) => {
                 return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
             },
             [CommandNames.Cleanup]: (request: protocol.Request) => {
