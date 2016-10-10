@@ -1967,17 +1967,9 @@
         "category": "Error",
         "code": 2696
     },
-    "Spread properties must be identifiers, property accesses, or object literals.": {
-        "category": "Error",
-        "code": 2697
-    },
-    "Cannot change type of property '{0}' from '{1}' to '{2}'.": {
-        "category": "Error",
-        "code": 2698
-    },
     "Interface declaration cannot contain a spread property.": {
         "category": "Error",
-        "code": 2699
+        "code": 2697
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

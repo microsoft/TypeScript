@@ -1802,7 +1802,7 @@ namespace ts {
 
     export interface JSDocRecordType extends JSDocType {
         kind: SyntaxKind.JSDocRecordType;
-        literal: TypeLiteralNode;
+        literal: TypeLiteralNode;
     }
 
     export interface JSDocTypeReference extends JSDocType {
@@ -2536,7 +2536,7 @@ namespace ts {
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
-        containingType?: TypeOperatorType;  // Containing union or intersection type for synthetic property
+        containingType?: UnionOrIntersectionType;  // Containing union or intersection type for synthetic property
         leftSpread?: Symbol;                // Left source for synthetic spread property
         rightSpread?: Symbol;               // Right source for synthetic spread property
         hasNonUniformType?: boolean;        // True if constituents have non-uniform types
@@ -2755,7 +2755,7 @@ namespace ts {
         instantiations: Map<TypeReference>;   // Generic instantiation cache
     }
 
-    export interface TypeOperatorType extends Type {
+    export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
         /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
@@ -2763,9 +2763,9 @@ namespace ts {
         couldContainTypeParameters: boolean;
     }
 
-    export interface UnionType extends TypeOperatorType { }
+    export interface UnionType extends UnionOrIntersectionType { }
 
-    export interface IntersectionType extends TypeOperatorType { }
+    export interface IntersectionType extends UnionOrIntersectionType { }
 
     /* @internal */
     export interface SpreadType extends Type {
@@ -2782,7 +2782,7 @@ namespace ts {
 
     /* @internal */
     // Resolved object, spread, union, or intersection type
-    export interface ResolvedType extends ObjectType, TypeOperatorType {
+    export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
