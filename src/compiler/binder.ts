@@ -2223,9 +2223,9 @@ namespace ts {
             if (currentFlow) {
                 node.flowNode = currentFlow;
             }
-            checkStrictModeFunctionName(<FunctionExpression>node);
-            const bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
-            return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
+            checkStrictModeFunctionName(node);
+            const bindingName = node.name ? node.name.text : "__function";
+            return bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
