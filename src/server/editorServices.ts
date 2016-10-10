@@ -338,13 +338,13 @@ namespace ts.server {
         private handleDeletedFile(info: ScriptInfo) {
             this.logger.info(`${info.fileName} deleted`);
 
-            this.lastDeletedFile = info;
             info.stopWatcher();
 
             // TODO: handle isOpen = true case
 
             if (!info.isOpen) {
                 this.filenameToScriptInfo.remove(info.path);
+                this.lastDeletedFile = info;
 
                 // capture list of projects since detachAllProjects will wipe out original list 
                 const containingProjects = info.containingProjects.slice();
@@ -353,6 +353,7 @@ namespace ts.server {
 
                 // update projects to make sure that set of referenced files is correct
                 this.updateProjectGraphs(containingProjects);
+                this.lastDeletedFile = undefined;
 
                 if (!this.eventHandler) {
                     return;
