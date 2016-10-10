@@ -438,7 +438,7 @@ namespace ts {
 
             // ensure "use strict"" is emitted in all scenarios in alwaysStrict mode
             if (compilerOptions.alwaysStrict) {
-                node = emitUseStrict(node);
+                node = ensureUseStrict(node);
             }
 
             // If the source file requires any helpers and is an external module, and
@@ -475,13 +475,6 @@ namespace ts {
 
             setEmitFlags(node, EmitFlags.EmitEmitHelpers | getEmitFlags(node));
             return node;
-        }
-
-        function emitUseStrict(node: SourceFile): SourceFile {
-            const statements: Statement[] = [];
-            statements.push(startOnNewLine(createStatement(createLiteral("use strict"))));
-            // add "use strict" as the first statement
-            return updateSourceFileNode(node, statements.concat(node.statements));
         }
 
         /**
