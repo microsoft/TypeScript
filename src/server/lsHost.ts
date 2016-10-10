@@ -126,7 +126,24 @@ namespace ts.server {
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
-            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName, m => m.resolvedModule);
+            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName, m => {
+                if (!m.resolvedModule) {
+                    return undefined;
+                }
+
+                const lastDeletedFile = this.project.projectService.lastDeletedFile;
+                if (lastDeletedFile && m.resolvedModule.resolvedFileName === lastDeletedFile.fileName) {
+                    // Chances are the deleted file was added back.
+                    if (this.host.fileExists(lastDeletedFile.fileName)) {
+                        this.project.projectService.lastDeletedFile = undefined;
+                    }
+                    else {
+                        m.failedLookupLocations.push(m.resolvedModule.resolvedFileName);
+                        return undefined;
+                    }
+                }
+                return m.resolvedModule;
+            });
         }
 
         getDefaultLibFileName() {
