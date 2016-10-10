@@ -575,7 +575,7 @@ namespace ts {
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
 
-            initializeState(fileName, _sourceText, languageVersion, _syntaxCursor, scriptKind);
+            initializeState(_sourceText, languageVersion, _syntaxCursor, scriptKind);
 
             const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, scriptKind);
 
@@ -589,7 +589,7 @@ namespace ts {
             return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS ? LanguageVariant.JSX : LanguageVariant.Standard;
         }
 
-        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
+        function initializeState(_sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
             NodeConstructor = objectAllocator.getNodeConstructor();
             TokenConstructor = objectAllocator.getTokenConstructor();
             IdentifierConstructor = objectAllocator.getIdentifierConstructor();
@@ -5259,7 +5259,7 @@ namespace ts {
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = parseNameOfClassDeclarationOrExpression();
             node.typeParameters = parseTypeParameters();
-            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ true);
+            node.heritageClauses = parseHeritageClauses();
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 // ClassTail[Yield,Await] : (Modified) See 14.5
@@ -5289,7 +5289,7 @@ namespace ts {
             return token() === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword);
         }
 
-        function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
+        function parseHeritageClauses(): NodeArray<HeritageClause> {
             // ClassTail[Yield,Await] : (Modified) See 14.5
             //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
 
@@ -5337,7 +5337,7 @@ namespace ts {
             parseExpected(SyntaxKind.InterfaceKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
-            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ false);
+            node.heritageClauses = parseHeritageClauses();
             node.members = parseObjectTypeMembers();
             return addJSDocComment(finishNode(node));
         }
@@ -5817,7 +5817,7 @@ namespace ts {
             }
 
             export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {
-                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+                initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS);
                 scanner.setText(content, start, length);
                 currentToken = scanner.scan();
@@ -6134,7 +6134,7 @@ namespace ts {
             }
 
             export function parseIsolatedJSDocComment(content: string, start: number, length: number) {
-                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+                initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content };
                 const jsDoc = parseJSDocCommentWorker(start, length);
                 const diagnostics = parseDiagnostics;

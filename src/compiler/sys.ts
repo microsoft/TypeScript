@@ -46,13 +46,9 @@ namespace ts {
     }
 
     declare var require: any;
-    declare var module: any;
     declare var process: any;
     declare var global: any;
     declare var __filename: string;
-    declare var Buffer: {
-        new (str: string, encoding?: string): any;
-    };
 
     declare class Enumerator {
         public atEnd(): boolean;
@@ -324,7 +320,7 @@ namespace ts {
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
-            function readFile(fileName: string, encoding?: string): string {
+            function readFile(fileName: string, _encoding?: string): string {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
@@ -576,7 +572,7 @@ namespace ts {
                 args: ChakraHost.args,
                 useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
                 write: ChakraHost.echo,
-                readFile(path: string, encoding?: string) {
+                readFile(path: string, _encoding?: string) {
                     // encoding is automatically handled by the implementation in ChakraHost
                     return ChakraHost.readFile(path);
                 },
@@ -595,9 +591,9 @@ namespace ts {
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,
-                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || ((name: string) => ""),
+                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || ((_name: string) => ""),
                 readDirectory: (path: string, extensions?: string[], excludes?: string[], includes?: string[]) => {
-                    const pattern = getFileMatcherPatterns(path, extensions, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
+                    const pattern = getFileMatcherPatterns(path, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
                     return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
                 },
                 exit: ChakraHost.quit,

@@ -165,7 +165,7 @@ namespace ts {
             hoistFunctionDeclaration,
             startLexicalEnvironment,
             endLexicalEnvironment,
-            onSubstituteNode: (emitContext, node) => node,
+            onSubstituteNode: (_emitContext, node) => node,
             enableSubstitution,
             isSubstitutionEnabled,
             onEmitNode: (node, emitContext, emitCallback) => emitCallback(node, emitContext),

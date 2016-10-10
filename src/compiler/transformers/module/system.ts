@@ -646,7 +646,7 @@ namespace ts {
             }
             else {
                 // If the variable has a BindingPattern, flatten the variable into multiple assignment expressions.
-                return flattenVariableDestructuringToExpression(context, node, hoistVariableDeclaration);
+                return flattenVariableDestructuringToExpression(node, hoistVariableDeclaration);
             }
         }
 
@@ -795,7 +795,7 @@ namespace ts {
             const name = firstDeclaration.name;
             return isIdentifier(name)
                 ? name
-                : flattenVariableDestructuringToExpression(context, firstDeclaration, hoistVariableDeclaration);
+                : flattenVariableDestructuringToExpression(firstDeclaration, hoistVariableDeclaration);
         }
 
         /**

@@ -22,17 +22,13 @@ namespace ts {
         function visitor(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    // Elide `import=` as it is not legal with --module ES6
+                    return undefined;
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(<ExportAssignment>node);
             }
 
             return node;
-        }
-
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<ImportEqualsDeclaration> {
-            // Elide `import=` as it is not legal with --module ES6
-            return undefined;
         }
 
         function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment> {

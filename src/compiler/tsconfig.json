@@ -9,7 +9,9 @@
         "sourceMap": true,
         "declaration": true,
         "stripInternal": true,
-        "target": "es5"
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "files": [
         "core.ts",
