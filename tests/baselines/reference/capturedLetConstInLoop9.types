@@ -39,7 +39,7 @@ for (let x = 0; x < 1; ++x) {
     }
 
     switch (x) {
->x : any
+>x : undefined
 
         case 1:
 >1 : 1

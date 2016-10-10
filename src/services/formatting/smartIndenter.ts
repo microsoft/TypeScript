@@ -332,7 +332,7 @@ namespace ts.formatting {
                 (<CallExpression>node.parent).expression !== node) {
 
                 const fullCallOrNewExpression = (<CallExpression | NewExpression>node.parent).expression;
-                const startingExpression = getStartingExpression(<PropertyAccessExpression | CallExpression | ElementAccessExpression>fullCallOrNewExpression);
+                const startingExpression = getStartingExpression(fullCallOrNewExpression);
 
                 if (fullCallOrNewExpression === startingExpression) {
                     return Value.Unknown;
@@ -350,15 +350,14 @@ namespace ts.formatting {
 
             return Value.Unknown;
 
-            function getStartingExpression(node: PropertyAccessExpression | CallExpression | ElementAccessExpression) {
+            function getStartingExpression(node: Expression) {
                 while (true) {
                     switch (node.kind) {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                         case SyntaxKind.PropertyAccessExpression:
                         case SyntaxKind.ElementAccessExpression:
-
-                            node = <PropertyAccessExpression | CallExpression | ElementAccessExpression | PropertyAccessExpression>node.expression;
+                            node = (<PropertyAccessExpression | CallExpression | NewExpression | ElementAccessExpression | PropertyAccessExpression>node).expression;
                             break;
                         default:
                             return node;

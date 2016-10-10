@@ -1,0 +1,18 @@
+tests/cases/conformance/externalModules/multipleExportDefault2.ts(1,1): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/externalModules/multipleExportDefault2.ts(5,25): error TS2528: A module cannot have multiple default exports.
+
+
+==== tests/cases/conformance/externalModules/multipleExportDefault2.ts (2 errors) ====
+    export default {
+    ~~~~~~~~~~~~~~~~
+        uhoh: "another default",
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    };
+    ~~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    export default function Foo() { }
+                            ~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    

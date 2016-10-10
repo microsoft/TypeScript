@@ -1,5 +1,5 @@
 === tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsReference.ts ===
-var value;
+var value: any;
 >value : any
 
 // identifiers: variable and parameter

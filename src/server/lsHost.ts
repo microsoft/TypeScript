@@ -171,12 +171,16 @@ namespace ts.server {
             return this.host.fileExists(path);
         }
 
+        readFile(fileName: string): string {
+            return this.host.readFile(fileName);
+        }
+
         directoryExists(path: string): boolean {
             return this.host.directoryExists(path);
         }
 
-        readFile(fileName: string): string {
-            return this.host.readFile(fileName);
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+            return this.host.readDirectory(path, extensions, exclude, include);
         }
 
         getDirectories(path: string): string[] {
