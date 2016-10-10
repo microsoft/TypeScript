@@ -978,7 +978,7 @@ declare namespace ts.server.protocol {
 
     /**
      * Request to obtain the list of files that should be regenerated if target file is recompiled.
-     * NOTE: this us query only operation and does not generate any output on disk.
+     * NOTE: this us query-only operation and does not generate any output on disk.
      */
     export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
     }
@@ -1005,7 +1005,7 @@ declare namespace ts.server.protocol {
     }
 
     /**
-     * Request to recompile the file. Result file is written on disk.
+     * Request to recompile the file. All generated outputs (.js, .d.ts or .js.map files) is written on disk.
      */
     export interface CompileOnSaveEmitFileRequest extends FileRequest {
         args: CompileOnSaveEmitFileRequestArgs;
