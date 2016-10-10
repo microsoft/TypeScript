@@ -529,7 +529,7 @@ namespace ts {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
                 }
-                const result = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state, /*checkOneLevel*/ false, /*allowUntyped*/ !compilerOptions.noImplicitAny);
+                const result = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state, /*checkOneLevel*/ false);
                 isExternalLibraryImport = result !== undefined;
                 if (isExternalLibraryImport) {
                     resolvedFileName = result.path;
@@ -698,20 +698,20 @@ namespace ts {
     }
 
     function loadTypedModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, checkOneLevel: boolean): string | undefined {
-        return discardUntypedResults(loadModuleFromNodeModules(moduleName, directory, failedLookupLocations, state, checkOneLevel, /*allowUntyped*/ false));
+        return discardUntypedResults(loadModuleFromNodeModules(moduleName, directory, failedLookupLocations, state, checkOneLevel));
     }
 
     /* @internal */
-    export function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, checkOneLevel: boolean, allowUntyped: boolean): ResolutionResult {
-        return loadModuleFromNodeModulesWorker(moduleName, directory, failedLookupLocations, state, checkOneLevel, /*typesOnly*/ false, allowUntyped);
+    export function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, checkOneLevel: boolean): ResolutionResult {
+        return loadModuleFromNodeModulesWorker(moduleName, directory, failedLookupLocations, state, checkOneLevel, /*typesOnly*/ false);
     }
 
     function loadModuleFromNodeModulesAtTypes(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState): string | undefined {
-        return discardUntypedResults(loadModuleFromNodeModulesWorker(moduleName, directory, failedLookupLocations, state, /*checkOneLevel*/ false, /*typesOnly*/ true, /*allowUntyped*/ false));
+        return discardUntypedResults(loadModuleFromNodeModulesWorker(moduleName, directory, failedLookupLocations, state, /*checkOneLevel*/ false, /*typesOnly*/ true));
     }
 
     function loadModuleFromNodeModulesWorker(
-        moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, checkOneLevel: boolean, typesOnly: boolean, allowUntyped: boolean): ResolutionResult {
+        moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, checkOneLevel: boolean, typesOnly: boolean): ResolutionResult {
         directory = normalizeSlashes(directory);
         /**
          * Remembers the path to a package.json for the package.
@@ -740,9 +740,7 @@ namespace ts {
 
                 if (packageResult) {
                     if (packageResult.isUntyped) {
-                        if (allowUntyped) {
-                            packageJson = packageResult.path;
-                        }
+                        packageJson = packageResult.path;
                     }
                     else {
                         return packageResult;

@@ -40,7 +40,7 @@ namespace ts.server {
                         trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, this.project.getProjectName(), moduleName, globalCache);
                     }
                     const state: ModuleResolutionState = { compilerOptions, host, skipTsx: false, traceEnabled };
-                    const resolvedName = loadModuleFromNodeModules(moduleName, globalCache, secondaryLookupFailedLookupLocations, state, /*checkOneLevel*/ true, /*allowUntyped*/ !compilerOptions.noImplicitAny);
+                    const resolvedName = loadModuleFromNodeModules(moduleName, globalCache, secondaryLookupFailedLookupLocations, state, /*checkOneLevel*/ true);
                     if (resolvedName) {
                         return createResolvedModule(resolvedName.path, /*isExternalLibraryImport*/ true, resolvedName.isUntyped, primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations));
                     }

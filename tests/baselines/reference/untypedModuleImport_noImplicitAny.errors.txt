@@ -1,10 +1,10 @@
-/a.ts(1,22): error TS2307: Cannot find module 'foo'.
+/a.ts(1,22): error TS6142: A package for 'foo' was found at '/node_modules/foo/package.json', but is untyped. Since '--noImplicitAny' is enabled, this package must have a declaration.
 
 
 ==== /a.ts (1 errors) ====
     import * as foo from "foo";
                          ~~~~~
-!!! error TS2307: Cannot find module 'foo'.
+!!! error TS6142: A package for 'foo' was found at '/node_modules/foo/package.json', but is untyped. Since '--noImplicitAny' is enabled, this package must have a declaration.
     
 ==== /node_modules/foo/package.json (0 errors) ====
     {}

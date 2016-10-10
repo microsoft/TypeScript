@@ -17,5 +17,6 @@
     "File '/node_modules/@types/foo/index.ts' does not exist.",
     "File '/node_modules/@types/foo/index.tsx' does not exist.",
     "File '/node_modules/@types/foo/index.d.ts' does not exist.",
-    "======== Module name 'foo' was not resolved. ========"
+    "Resolving real path for '/node_modules/foo/package.json', result is untyped package '/node_modules/foo/package.json'",
+    "======== Module name 'foo' was successfully resolved to '/node_modules/foo/package.json'. ========"
 ]

@@ -1369,6 +1369,13 @@ namespace ts {
             if (resolvedModule && resolvedModule.isUntyped) {
                 Debug.assert(!isRelative); // Only global modules may be untyped
                 Debug.assert(quotedName !== undefined);
+                if (compilerOptions.noImplicitAny) {
+                    error(errorNode,
+                        Diagnostics.A_package_for_0_was_found_at_1_but_is_untyped_Since_noImplicitAny_is_enabled_this_package_must_have_a_declaration,
+                        moduleReference,
+                        resolvedModule.resolvedFileName);
+                }
+
                 const newSymbol = createSymbol(SymbolFlags.ValueModule, quotedName);
                 // Module symbols are expected to have 'exports', although since this is an untyped module it can be empty.
                 newSymbol.exports = createMap<Symbol>();
