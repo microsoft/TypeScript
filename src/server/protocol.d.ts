@@ -98,19 +98,38 @@ declare namespace ts.server.protocol {
         projectFileName?: string;
     }
 
+    /**
+     * A request to get TODO comments from the file
+     */
     export interface TodoCommentRequest extends FileRequest {
         arguments: TodoCommentRequestArgs;
     }
 
+    /**
+     * Arguments for TodoCommentRequest request.
+     */
     export interface TodoCommentRequestArgs extends FileRequestArgs {
+        /**
+         * Array of target TodoCommentDescriptors that describes TODO comments to be found 
+         */
         descriptors: TodoCommentDescriptor[];
     }
 
+    /**
+     * A request to get indentation for a location in file
+     */
     export interface IndentationRequest extends FileLocationRequest {
         arguments: IndentationRequestArgs;
     }
 
+    /**
+     * Arguments for IndentationRequest request.
+     */
     export interface IndentationRequestArgs extends FileLocationRequestArgs {
+        /**
+         * An optional set of settings to be used when computing indentation.
+         * If argument is omitted - then it will use settings for file that were previously set via 'configure' request or global settings.
+         */
         options?: EditorSettings;
     }
 
@@ -125,17 +144,26 @@ declare namespace ts.server.protocol {
     }
 
     /**
-      * A request to get the project information of the current file
+      * A request to get the project information of the current file.
       */
     export interface ProjectInfoRequest extends Request {
         arguments: ProjectInfoRequestArgs;
     }
 
-    export interface ProjectRequest extends Request {
-        arguments: ProjectRequestArgs;
+    /**
+     * A request to retrieve compiler options diagnostics for a project
+     */
+    export interface CompilerOptionsDiagnosticsRequest extends Request {
+        arguments: CompilerOptionsDiagnosticsRequestArgs;
     }
 
-    export interface ProjectRequestArgs {
+    /**
+     * Arguments for CompilerOptionsDiagnosticsRequest request.
+     */
+    export interface CompilerOptionsDiagnosticsRequestArgs {
+        /**
+         * Name of the project to retrieve compiler options diagnostics.
+         */
         projectFileName: string;
     }
 
@@ -158,6 +186,11 @@ declare namespace ts.server.protocol {
         languageServiceDisabled?: boolean;
     }
 
+    /**
+     * Represents diagnostic info that includes location of diagnostic in two forms
+     * - start position and length of the error span
+     * - startLocation and endLocation - a pair of Location objects that store start/end line and offset of the error span.
+     */
     export interface DiagnosticWithLinePosition {
         message: string;
         start: number;
@@ -210,13 +243,25 @@ declare namespace ts.server.protocol {
         arguments: FileLocationRequestArgs;
     }
 
-    export interface FileSpanRequestArgs extends FileRequestArgs {
-        start: number;
-        length: number;
+    /**
+     * A request to get semantic diagnostics for a span in the file
+     */
+    export interface SemanticDiagnosticsRequest extends FileRequest {
+        arguments: SemanticDiagnosticsRequestArgs;
     }
 
-    export interface FileSpanRequest extends FileRequest {
-        arguments: FileSpanRequestArgs;
+    /**
+     * Arguments for SemanticDiagnosticsRequest request.
+     */
+    export interface SemanticDiagnosticsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
     }
 
     /**
@@ -293,11 +338,27 @@ declare namespace ts.server.protocol {
         body?: FileSpan[];
     }
 
+    /**
+      * Implementation response message.  Gives text range for implementations.
+      */
+    export interface ImplementationResponse extends Response {
+        body?: FileSpan[];
+    }
+
+    /**
+     * Request to get brace completion for a location in the file.
+     */
     export interface BraceCompletionRequest extends FileLocationRequest {
         arguments: BraceCompletionRequestArgs;
     }
 
+    /**
+     * Argument for BraceCompletionRequest request.
+     */
     export interface BraceCompletionRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Kind of opening brace
+         */
         openingBrace: string;
     }
 
@@ -329,10 +390,17 @@ declare namespace ts.server.protocol {
         arguments: DocumentHighlightsRequestArgs;
     }
 
+    /**
+     * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
+     * Kind is taken from HighlightSpanKind type.
+     */
     export interface HighlightSpan extends TextSpan {
         kind: string;
     }
 
+    /**
+     * Represents a set of highligh spans for a give name
+     */
     export interface DocumentHighlightsItem {
         /**
           * File containing highlight spans.
@@ -345,6 +413,9 @@ declare namespace ts.server.protocol {
         highlightSpans: HighlightSpan[];
     }
 
+    /**
+     * Response for a DocumentHighlightsRequest request.
+     */
     export interface DocumentHighlightsResponse extends Response {
         body?: DocumentHighlightsItem[];
     }
@@ -408,11 +479,19 @@ declare namespace ts.server.protocol {
         body?: ReferencesResponseBody;
     }
 
+    /**
+     * Argument for RenameRequest request.
+     */
     export interface RenameRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Should text at specified location be found/changed in comments?
+         */
         findInComments?: boolean;
+        /**
+         * Should text at specified location be found/changed in strings?
+         */
         findInStrings?: boolean;
     }
-
 
     /**
       * Rename request; value of command field is "rename". Return
@@ -488,17 +567,53 @@ declare namespace ts.server.protocol {
         body?: RenameResponseBody;
     }
 
+    /**
+     * Represents a file in external project.
+     * External project is project whose set of files, compilation options and open\close state 
+     * is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
+     * External project will exist even if all files in it are closed and should be closed explicity.
+     * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will 
+     * create configured project for every config file but will maintain a link that these projects were created
+     * as a result of opening external project so they should be removed once external project is closed. 
+     */
     export interface ExternalFile {
+        /**
+         * Name of file file
+         */
         fileName: string;
+        /**
+         * Script kind of the file
+         */
         scriptKind?: ScriptKind;
+        /**
+         * Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
+         */
         hasMixedContent?: boolean;
+        /**
+         * Content of the file
+         */
         content?: string;
     }
 
+    /**
+     * Represent an external project
+     */
     export interface ExternalProject {
+        /**
+         * Project name
+         */
         projectFileName: string;
+        /**
+         * List of root files in project
+         */
         rootFiles: ExternalFile[];
+        /**
+         * Compiler options for the project
+         */
         options: ExternalProjectCompilerOptions;
+        /**
+         * Explicitly specified typing options for the project
+         */
         typingOptions?: TypingOptions;
     }
 
@@ -507,18 +622,45 @@ declare namespace ts.server.protocol {
      * compiler settings.
      */
     export interface ExternalProjectCompilerOptions extends CompilerOptions {
+        /**
+         * If compile on save is enabled for the project
+         */
         compileOnSave?: boolean;
     }
 
+    /**
+     * Contains information about current project version
+     */
     export interface ProjectVersionInfo {
+        /**
+         * Project name
+         */
         projectName: string;
+        /**
+         * true if project is inferred or false if project is external or configured
+         */
         isInferred: boolean;
+        /**
+         * Project version
+         */
         version: number;
+        /**
+         * Current set of compiler options for project
+         */
         options: CompilerOptions;
     }
 
+    /**
+     * Represents a set of changes that happen in project
+     */
     export interface ProjectChanges {
+        /**
+         * List of added files
+         */
         added: string[];
+        /**
+         * List of removed files
+         */
         removed: string[];
     }
 
@@ -530,17 +672,41 @@ declare namespace ts.server.protocol {
      * otherwise - assume that nothing is changed
      */
     export interface ProjectFiles {
+        /**
+         * Information abount project verison
+         */
         info?: ProjectVersionInfo;
+        /**
+         * List of files in project (might be omitted if current state of project can be computed using only information from 'changes')
+         */
         files?: string[];
+        /**
+         * Set of changes in project (omitted if the entire set of files in project should be replaced)
+         */
         changes?: ProjectChanges;
     }
 
+    /**
+     * Combines project information with project level errors.
+     */
     export interface ProjectFilesWithDiagnostics extends ProjectFiles {
+        /**
+         * List of errors in project
+         */
         projectErrors: DiagnosticWithLinePosition[];
     }
 
+    /**
+     * Represents set of changes in open file
+     */
     export interface ChangedOpenFile {
+        /**
+         * Name of file
+         */
         fileName: string;
+        /**
+         * List of changes that should be applied to known open file
+         */
         changes: ts.TextChange[];
     }
 
@@ -674,52 +840,115 @@ declare namespace ts.server.protocol {
         arguments: OpenRequestArgs;
     }
 
-    type OpenExternalProjectArgs = ExternalProject;
-
+    /**
+     * Request to open or update external project
+     */
     export interface OpenExternalProjectRequest extends Request {
         arguments: OpenExternalProjectArgs;
     }
 
-    export interface CloseExternalProjectRequestArgs {
-        projectFileName: string;
-    }
+    /**
+     * Arguments to OpenExternalProjectRequest request
+     */
+    type OpenExternalProjectArgs = ExternalProject;
 
+    /**
+     * Request to open multiple external projects
+     */
     export interface OpenExternalProjectsRequest extends Request {
         arguments: OpenExternalProjectsArgs;
     }
 
+    /**
+     * Arguments to OpenExternalProjectsRequest
+     */
     export interface OpenExternalProjectsArgs {
+        /**
+         * List of external projects to open or update
+         */
         projects: ExternalProject[];
     }
 
+    /**
+     * Request to close external project.
+     */
     export interface CloseExternalProjectRequest extends Request {
         arguments: CloseExternalProjectRequestArgs;
     }
 
+    /**
+     * Arguments to CloseExternalProjectRequest request
+     */
+    export interface CloseExternalProjectRequestArgs {
+        /**
+         * Name of the project to close
+         */
+        projectFileName: string;
+    }
+
+    /**
+     * Request to check if given list of projects is up-to-date and synchronize them if necessary
+     */
     export interface SynchronizeProjectListRequest extends Request {
         arguments: SynchronizeProjectListRequestArgs;
     }
 
+    /**
+     * Arguments to SynchronizeProjectListRequest
+     */
     export interface SynchronizeProjectListRequestArgs {
+        /**
+         * List of last known projects
+         */
         knownProjects: protocol.ProjectVersionInfo[];
     }
 
+    /**
+     * Request to synchronize list of open files with the client
+     */
     export interface ApplyChangedToOpenFilesRequest extends Request {
         arguments: ApplyChangedToOpenFilesRequestArgs;
     }
 
+    /**
+     * Arguments to ApplyChangedToOpenFilesRequest
+     */
     export interface ApplyChangedToOpenFilesRequestArgs {
+        /**
+         * List of newly open files
+         */
         openFiles?: ExternalFile[];
+        /**
+         * List of open files files that were changes
+         */
         changedFiles?: ChangedOpenFile[];
+        /**
+         * List of files that were closed
+         */
         closedFiles?: string[];
     }
 
-    export interface SetCompilerOptionsForInferredProjectsArgs {
-        options: ExternalProjectCompilerOptions;
-    }
-
+    /**
+     * Request to set compiler options for inferred projects.
+     * External projects are opened / closed explicitly.
+     * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
+     * This configuration file will be used to obtain a list of files and configuration settings for the project.
+     * Inferred projects are created when user opens a loose file that is not the part of external project
+     * or configured project and will contain only open file and transitive closure of referenced files if 'useOneInferredProject' is false,
+     * or all open loose files and its transitive closure of referenced files if 'useOneInferredProject' is true.
+     */
     export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
         arguments: SetCompilerOptionsForInferredProjectsArgs;
+    }
+
+    /**
+     * Argument for SetCompilerOptionsForInferredProjectsRequest request.
+     */
+    export interface SetCompilerOptionsForInferredProjectsArgs {
+        /**
+         * Compiler options to be used with inferred projects.
+         */
+        options: ExternalProjectCompilerOptions;
     }
 
     /**
@@ -739,23 +968,48 @@ declare namespace ts.server.protocol {
     export interface CloseRequest extends FileRequest {
     }
 
+    /**
+     * Request to obtain the list of files that should be regenerated if target file is recompiled.
+     * NOTE: this us query-only operation and does not generate any output on disk.
+     */
     export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
     }
 
+    /**
+     * Contains a list of files that should be regenerated in a project
+     */
     export interface CompileOnSaveAffectedFileListSingleProject {
+        /**
+         * Project name
+         */
         projectFileName: string;
+        /**
+         * List of files names that should be recompiled
+         */
         fileNames: string[];
     }
 
+    /**
+     * Response for CompileOnSaveAffectedFileListRequest request; 
+     */
     export interface CompileOnSaveAffectedFileListResponse extends Response {
         body: CompileOnSaveAffectedFileListSingleProject[];
     }
 
+    /**
+     * Request to recompile the file. All generated outputs (.js, .d.ts or .js.map files) is written on disk.
+     */
     export interface CompileOnSaveEmitFileRequest extends FileRequest {
         args: CompileOnSaveEmitFileRequestArgs;
     }
 
+    /**
+     * Arguments for CompileOnSaveEmitFileRequest
+     */
     export interface CompileOnSaveEmitFileRequestArgs extends FileRequestArgs {
+        /**
+         * if true - then file should be recompiled even if it does not have any changes.
+         */
         forced?: boolean;
     }
 
@@ -824,7 +1078,14 @@ declare namespace ts.server.protocol {
           */
         endOffset: number;
 
+        /**
+         * End position of the range for which to format text in file.
+         */
         endPosition?: number;
+
+        /**
+         * Format options to be used.
+         */
         options?: ts.FormatCodeOptions;
     }
 
