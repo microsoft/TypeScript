@@ -436,7 +436,7 @@ namespace ts {
         function visitSourceFile(node: SourceFile) {
             currentSourceFile = node;
 
-            // ensure "use strict"" is emitted in all scenarios in alwaysStrict mode
+            // ensure "use strict" is emitted in all scenarios in alwaysStrict mode
             if (compilerOptions.alwaysStrict) {
                 node = ensureUseStrict(node);
             }

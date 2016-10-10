@@ -2242,19 +2242,16 @@ namespace ts {
      */
     export function ensureUseStrict(node: SourceFile): SourceFile {
         let foundUseStrict = false;
-        let statementOffset = 0;
-        const numStatements = node.statements.length;
-        while (statementOffset < numStatements) {
-            const statement = node.statements[statementOffset];
+        for (const statement of node.statements) {
             if (isPrologueDirective(statement)) {
                 if (isUseStrictPrologue(statement as ExpressionStatement)) {
                     foundUseStrict = true;
+                    break;
                 }
             }
             else {
                 break;
             }
-            statementOffset++;
         }
         if (!foundUseStrict) {
             const statements: Statement[] = [];
