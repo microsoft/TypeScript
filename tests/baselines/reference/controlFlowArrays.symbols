@@ -369,3 +369,34 @@ function f15() {
     return x;  // string[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 141, 7))
 }
+
+function f16() {
+>f16 : Symbol(f16, Decl(controlFlowArrays.ts, 147, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowArrays.ts, 150, 7))
+
+    let y;
+>y : Symbol(y, Decl(controlFlowArrays.ts, 151, 7))
+
+    (x = [], x).push(5);
+>(x = [], x).push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 150, 7))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 150, 7))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+    (x.push("hello"), x).push(true);
+>(x.push("hello"), x).push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 150, 7))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowArrays.ts, 150, 7))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+    ((x))[3] = { a: 1 };
+>x : Symbol(x, Decl(controlFlowArrays.ts, 150, 7))
+>a : Symbol(a, Decl(controlFlowArrays.ts, 154, 16))
+
+    return x;  // (string | number | boolean | { a: number })[]
+>x : Symbol(x, Decl(controlFlowArrays.ts, 150, 7))
+}

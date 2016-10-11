@@ -471,3 +471,53 @@ function f15() {
     return x;  // string[]
 >x : string[]
 }
+
+function f16() {
+>f16 : () => (string | number | boolean | { a: number; })[]
+
+    let x;
+>x : any
+
+    let y;
+>y : any
+
+    (x = [], x).push(5);
+>(x = [], x).push(5) : number
+>(x = [], x).push : (...items: any[]) => number
+>(x = [], x) : any[]
+>x = [], x : any[]
+>x = [] : never[]
+>x : any
+>[] : never[]
+>x : any[]
+>push : (...items: any[]) => number
+>5 : 5
+
+    (x.push("hello"), x).push(true);
+>(x.push("hello"), x).push(true) : number
+>(x.push("hello"), x).push : (...items: any[]) => number
+>(x.push("hello"), x) : any[]
+>x.push("hello"), x : any[]
+>x.push("hello") : number
+>x.push : (...items: any[]) => number
+>x : any[]
+>push : (...items: any[]) => number
+>"hello" : "hello"
+>x : any[]
+>push : (...items: any[]) => number
+>true : true
+
+    ((x))[3] = { a: 1 };
+>((x))[3] = { a: 1 } : { a: number; }
+>((x))[3] : any
+>((x)) : any[]
+>(x) : any[]
+>x : any[]
+>3 : 3
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+    return x;  // (string | number | boolean | { a: number })[]
+>x : (string | number | boolean | { a: number; })[]
+}
