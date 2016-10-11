@@ -10,15 +10,15 @@ if (true) {
 >x0 : any
 
     var obj1 = { x0: x0 };
->obj1 : { x0: any; }
->{ x0: x0 } : { x0: any; }
->x0 : any
->x0 : any
+>obj1 : { x0: undefined; }
+>{ x0: x0 } : { x0: undefined; }
+>x0 : undefined
+>x0 : undefined
 
     var obj2 = { x0 };
->obj2 : { x0: any; }
->{ x0 } : { x0: any; }
->x0 : any
+>obj2 : { x0: undefined; }
+>{ x0 } : { x0: undefined; }
+>x0 : undefined
 }
 
 var x, y, z;

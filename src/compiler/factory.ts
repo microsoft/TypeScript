@@ -105,6 +105,7 @@ namespace ts {
     export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
     export function createLiteral(value: string, location?: TextRange): StringLiteral;
     export function createLiteral(value: number, location?: TextRange): NumericLiteral;
+    export function createLiteral(value: boolean, location?: TextRange): BooleanLiteral;
     export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
     export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
@@ -120,7 +121,7 @@ namespace ts {
             node.text = value;
             return node;
         }
-        else {
+        else if (value) {
             const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location, /*flags*/ undefined);
             node.textSourceNode = value;
             node.text = value.text;
@@ -187,8 +188,8 @@ namespace ts {
 
     // Punctuation
 
-    export function createToken(token: SyntaxKind) {
-        return createNode(token);
+    export function createToken<TKind extends SyntaxKind>(token: TKind) {
+        return <Token<TKind>>createNode(token);
     }
 
     // Reserved words
@@ -238,7 +239,7 @@ namespace ts {
         );
     }
 
-    export function createParameterDeclaration(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: Node, name: string | Identifier | BindingPattern, questionToken: Node, type: TypeNode, initializer: Expression, location?: TextRange, flags?: NodeFlags) {
+    export function createParameterDeclaration(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: string | Identifier | BindingPattern, questionToken: QuestionToken, type: TypeNode, initializer: Expression, location?: TextRange, flags?: NodeFlags) {
         const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter, location, flags);
         node.decorators = decorators ? createNodeArray(decorators) : undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
@@ -260,7 +261,7 @@ namespace ts {
 
     // Type members
 
-    export function createProperty(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, questionToken: Node, type: TypeNode, initializer: Expression, location?: TextRange) {
+    export function createProperty(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, questionToken: QuestionToken, type: TypeNode, initializer: Expression, location?: TextRange) {
         const node = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, location);
         node.decorators = decorators ? createNodeArray(decorators) : undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
@@ -278,7 +279,7 @@ namespace ts {
         return node;
     }
 
-    export function createMethod(decorators: Decorator[], modifiers: Modifier[], asteriskToken: Node, name: string | PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
+    export function createMethod(decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
         const node = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, location, flags);
         node.decorators = decorators ? createNodeArray(decorators) : undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
@@ -381,7 +382,7 @@ namespace ts {
         return node;
     }
 
-    export function createBindingElement(propertyName: string | PropertyName, dotDotDotToken: Node, name: string | BindingName, initializer?: Expression, location?: TextRange) {
+    export function createBindingElement(propertyName: string | PropertyName, dotDotDotToken: DotDotDotToken, name: string | BindingName, initializer?: Expression, location?: TextRange) {
         const node = <BindingElement>createNode(SyntaxKind.BindingElement, location);
         node.propertyName = typeof propertyName === "string" ? createIdentifier(propertyName) : propertyName;
         node.dotDotDotToken = dotDotDotToken;
@@ -497,14 +498,14 @@ namespace ts {
         return node;
     }
 
-    export function createTaggedTemplate(tag: Expression, template: Template, location?: TextRange) {
+    export function createTaggedTemplate(tag: Expression, template: TemplateLiteral, location?: TextRange) {
         const node = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, location);
         node.tag = parenthesizeForAccess(tag);
         node.template = template;
         return node;
     }
 
-    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: Template) {
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral) {
         if (node.tag !== tag || node.template !== template) {
             return updateNode(createTaggedTemplate(tag, template, node), node);
         }
@@ -524,7 +525,7 @@ namespace ts {
         return node;
     }
 
-    export function createFunctionExpression(asteriskToken: Node, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
+    export function createFunctionExpression(asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
         const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression, location, flags);
         node.modifiers = undefined;
         node.asteriskToken = asteriskToken;
@@ -543,13 +544,13 @@ namespace ts {
         return node;
     }
 
-    export function createArrowFunction(modifiers: Modifier[], typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, equalsGreaterThanToken: Node, body: ConciseBody, location?: TextRange, flags?: NodeFlags) {
+    export function createArrowFunction(modifiers: Modifier[], typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody, location?: TextRange, flags?: NodeFlags) {
         const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, location, flags);
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.typeParameters = typeParameters ? createNodeArray(typeParameters) : undefined;
         node.parameters = createNodeArray(parameters);
         node.type = type;
-        node.equalsGreaterThanToken = equalsGreaterThanToken || createNode(SyntaxKind.EqualsGreaterThanToken);
+        node.equalsGreaterThanToken = equalsGreaterThanToken || createToken(SyntaxKind.EqualsGreaterThanToken);
         node.body = parenthesizeConciseBody(body);
         return node;
     }
@@ -613,7 +614,7 @@ namespace ts {
         return node;
     }
 
-    export function createPrefix(operator: SyntaxKind, operand: Expression, location?: TextRange) {
+    export function createPrefix(operator: PrefixUnaryOperator, operand: Expression, location?: TextRange) {
         const node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression, location);
         node.operator = operator;
         node.operand = parenthesizePrefixOperand(operand);
@@ -627,7 +628,7 @@ namespace ts {
         return node;
     }
 
-    export function createPostfix(operand: Expression, operator: SyntaxKind, location?: TextRange) {
+    export function createPostfix(operand: Expression, operator: PostfixUnaryOperator, location?: TextRange) {
         const node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, location);
         node.operand = parenthesizePostfixOperand(operand);
         node.operator = operator;
@@ -641,8 +642,8 @@ namespace ts {
         return node;
     }
 
-    export function createBinary(left: Expression, operator: SyntaxKind | Node, right: Expression, location?: TextRange) {
-        const operatorToken = typeof operator === "number" ? createSynthesizedNode(operator) : operator;
+    export function createBinary(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression, location?: TextRange) {
+        const operatorToken = typeof operator === "number" ? createToken(operator) : operator;
         const operatorKind = operatorToken.kind;
         const node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, location);
         node.left = parenthesizeBinaryOperand(operatorKind, left, /*isLeftSideOfBinary*/ true, /*leftOperand*/ undefined);
@@ -658,7 +659,7 @@ namespace ts {
         return node;
     }
 
-    export function createConditional(condition: Expression, questionToken: Node, whenTrue: Expression, colonToken: Node, whenFalse: Expression, location?: TextRange) {
+    export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression, location?: TextRange) {
         const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, location);
         node.condition = condition;
         node.questionToken = questionToken;
@@ -675,21 +676,21 @@ namespace ts {
         return node;
     }
 
-    export function createTemplateExpression(head: TemplateLiteralFragment, templateSpans: TemplateSpan[], location?: TextRange) {
+    export function createTemplateExpression(head: TemplateHead, templateSpans: TemplateSpan[], location?: TextRange) {
         const node = <TemplateExpression>createNode(SyntaxKind.TemplateExpression, location);
         node.head = head;
         node.templateSpans = createNodeArray(templateSpans);
         return node;
     }
 
-    export function updateTemplateExpression(node: TemplateExpression, head: TemplateLiteralFragment, templateSpans: TemplateSpan[]) {
+    export function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: TemplateSpan[]) {
         if (node.head !== head || node.templateSpans !== templateSpans) {
             return updateNode(createTemplateExpression(head, templateSpans, node), node);
         }
         return node;
     }
 
-    export function createYield(asteriskToken: Node, expression: Expression, location?: TextRange) {
+    export function createYield(asteriskToken: AsteriskToken, expression: Expression, location?: TextRange) {
         const node = <YieldExpression>createNode(SyntaxKind.YieldExpression, location);
         node.asteriskToken = asteriskToken;
         node.expression = expression;
@@ -756,14 +757,14 @@ namespace ts {
 
     // Misc
 
-    export function createTemplateSpan(expression: Expression, literal: TemplateLiteralFragment, location?: TextRange) {
+    export function createTemplateSpan(expression: Expression, literal: TemplateMiddle | TemplateTail, location?: TextRange) {
         const node = <TemplateSpan>createNode(SyntaxKind.TemplateSpan, location);
         node.expression = expression;
         node.literal = literal;
         return node;
     }
 
-    export function updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateLiteralFragment) {
+    export function updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddle | TemplateTail) {
         if (node.expression !== expression || node.literal !== literal) {
             return updateNode(createTemplateSpan(expression, literal, node), node);
         }
@@ -932,14 +933,14 @@ namespace ts {
         return node;
     }
 
-    export function updateForOf(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement) {
+    export function updateForOf(node: ForOfStatement, initializer: ForInitializer, expression: Expression, statement: Statement) {
         if (node.initializer !== initializer || node.expression !== expression || node.statement !== statement) {
             return updateNode(createForOf(initializer, expression, statement, node), node);
         }
         return node;
     }
 
-    export function createContinue(label?: Identifier, location?: TextRange): BreakStatement {
+    export function createContinue(label?: Identifier, location?: TextRange): ContinueStatement {
         const node = <ContinueStatement>createNode(SyntaxKind.ContinueStatement, location);
         if (label) {
             node.label = label;
@@ -1065,7 +1066,7 @@ namespace ts {
         return node;
     }
 
-    export function createFunctionDeclaration(decorators: Decorator[], modifiers: Modifier[], asteriskToken: Node, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
+    export function createFunctionDeclaration(decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
         const node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, location, flags);
         node.decorators = decorators ? createNodeArray(decorators) : undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
@@ -1560,7 +1561,7 @@ namespace ts {
         return createParameterDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
-            createSynthesizedNode(SyntaxKind.DotDotDotToken),
+            createToken(SyntaxKind.DotDotDotToken),
             name,
             /*questionToken*/ undefined,
             /*type*/ undefined,
@@ -1735,7 +1736,7 @@ namespace ts {
 
     export function createAwaiterHelper(externalHelpersModuleName: Identifier | undefined, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
         const generatorFunc = createFunctionExpression(
-            createNode(SyntaxKind.AsteriskToken),
+            createToken(SyntaxKind.AsteriskToken),
             /*name*/ undefined,
             /*typeParameters*/ undefined,
             /*parameters*/ [],

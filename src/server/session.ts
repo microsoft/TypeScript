@@ -155,6 +155,8 @@ namespace ts.server {
         private immediateId: any;
         private changeSeq = 0;
 
+        private eventHander: ProjectServiceEventHandler;
+
         constructor(
             private host: ServerHost,
             cancellationToken: HostCancellationToken,
@@ -163,17 +165,18 @@ namespace ts.server {
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
             protected logger: Logger,
-            protected readonly canUseEvents: boolean) {
+            protected readonly canUseEvents: boolean,
+            eventHandler?: ProjectServiceEventHandler) {
 
-            const eventHandler: ProjectServiceEventHandler = canUseEvents
-                ? event => this.handleEvent(event)
+            this.eventHander = canUseEvents
+                ? eventHandler || (event => this.defaultEventHandler(event))
                 : undefined;
 
-            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler);
+            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander);
             this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);
         }
 
-        private handleEvent(event: ProjectServiceEvent) {
+        private defaultEventHandler(event: ProjectServiceEvent) {
             switch (event.eventName) {
                 case "context":
                     const { project, fileName } = event.data;
@@ -342,7 +345,7 @@ namespace ts.server {
             }
         }
 
-        private getEncodedSemanticClassifications(args: protocol.FileSpanRequestArgs) {
+        private getEncodedSemanticClassifications(args: protocol.SemanticDiagnosticsRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             return project.getLanguageService().getEncodedSemanticClassifications(file, args);
         }
@@ -351,7 +354,7 @@ namespace ts.server {
             return projectFileName && this.projectService.findProject(projectFileName);
         }
 
-        private getCompilerOptionsDiagnostics(args: protocol.ProjectRequestArgs) {
+        private getCompilerOptionsDiagnostics(args: protocol.CompilerOptionsDiagnosticsRequestArgs) {
             const project = this.getProject(args.projectFileName);
             return this.convertToDiagnosticsWithLinePosition(project.getLanguageService().getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
         }
@@ -734,8 +737,11 @@ namespace ts.server {
          */
         private openClientFile(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind) {
             const { configFileName, configFileErrors } = this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind);
-            if (configFileErrors) {
-                this.configFileDiagnosticEvent(fileName, configFileName, configFileErrors);
+            if (this.eventHander) {
+                this.eventHander({
+                    eventName: "configFileDiag",
+                    data: { fileName, configFileName, diagnostics: configFileErrors || [] }
+                });
             }
         }
 
@@ -1109,7 +1115,7 @@ namespace ts.server {
 
         private getNavigationBarItems(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.NavigationBarItem[] | NavigationBarItem[] {
             const { file, project } = this.getFileAndProject(args);
-            const items = project.getLanguageService().getNavigationBarItems(file);
+            const items = project.getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(file);
             if (!items) {
                 return undefined;
             }
@@ -1438,10 +1444,10 @@ namespace ts.server {
             [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.ProjectRequest) => {
+            [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
                 return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
             },
-            [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.FileSpanRequest) => {
+            [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.SemanticDiagnosticsRequest) => {
                 return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
             },
             [CommandNames.Cleanup]: (request: protocol.Request) => {

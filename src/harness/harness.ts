@@ -509,7 +509,7 @@ namespace Harness {
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
     }
-    export var IO: IO;
+    export let IO: IO;
 
     // harness always uses one kind of new line
     const harnessNewLine = "\r\n";

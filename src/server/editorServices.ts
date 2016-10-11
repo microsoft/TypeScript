@@ -12,7 +12,7 @@ namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
     export type ProjectServiceEvent =
-        { eventName: "context", data: { project: Project, fileName: NormalizedPath } } | { eventName: "configFileDiag", data: { triggerFile?: string, configFileName: string, diagnostics: Diagnostic[] } }
+        { eventName: "context", data: { project: Project, fileName: NormalizedPath } } | { eventName: "configFileDiag", data: { triggerFile?: string, configFileName: string, diagnostics: Diagnostic[] } };
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -759,12 +759,14 @@ namespace ts.server {
         }
 
         private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile?: string) {
-            if (diagnostics && diagnostics.length > 0) {
-                this.eventHandler({
-                    eventName: "configFileDiag",
-                    data: { configFileName, diagnostics, triggerFile }
-                });
+            if (!this.eventHandler) {
+                return;
             }
+
+            this.eventHandler({
+                eventName: "configFileDiag",
+                data: { configFileName, diagnostics: diagnostics || [], triggerFile }
+            });
         }
 
         private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], clientFileName?: string) {
