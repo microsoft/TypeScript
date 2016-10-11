@@ -18,3 +18,7 @@ interface Indexed2 {
 }
 let ii: { ...Indexed, ...Indexed2, b: boolean, d: number };
 let nb: number | boolean = ii[1001];
+
+function f<T>(t: T) {
+    let i: { ...T, [n: number]: string };
+}
