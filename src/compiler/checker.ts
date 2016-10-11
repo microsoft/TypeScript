@@ -6084,9 +6084,9 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
-            const areAllParametersUntyped = !forEach(node.parameters, p => p.type);
+            const hasUntypedParameterOrNoParameter = node.parameters.length === 0 || forEach(node.parameters, p => !p.type);
             const isNullaryArrow = node.kind === SyntaxKind.ArrowFunction && !node.parameters.length;
-            return !node.typeParameters && areAllParametersUntyped && !isNullaryArrow;
+            return !node.typeParameters && hasUntypedParameterOrNoParameter && !isNullaryArrow;
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
@@ -12637,17 +12637,32 @@ namespace ts {
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
+            const declaredParameterTypes = signature.declaration.parameters;
             if (context.thisParameter) {
                 if (!signature.thisParameter) {
                     signature.thisParameter = createTransientSymbol(context.thisParameter, undefined);
                 }
                 assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter), mapper);
             }
-            for (let i = 0; i < len; i++) {
-                const parameter = signature.parameters[i];
-                const contextualParameterType = getTypeAtPosition(context, i);
-                assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
+
+            // infer type parameter from annotated arguments
+            if (isInferentialContext(mapper)) {
+                for (let i = 0; i < len; i++) {
+                    if (declaredParameterTypes[i].type) {
+                        const type = getTypeFromTypeNode(declaredParameterTypes[i].type);
+                        inferTypes(mapper.context, type, getTypeAtPosition(context, i));
+                    }
+                }
             }
+
+            for (let i = 0; i < len; i++) {
+                if (!declaredParameterTypes[i].type) {
+                    const parameter = signature.parameters[i];
+                    const contextualParameterType = getTypeAtPosition(context, i);
+                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
+                }
+            }
+
             if (signature.hasRestParameter && isRestParameterIndex(context, signature.parameters.length - 1)) {
                 const parameter = lastOrUndefined(signature.parameters);
                 const contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
