@@ -180,6 +180,8 @@ namespace ts.server {
 
         private toCanonicalFileName: (f: string) => string;
 
+        public lastDeletedFile: ScriptInfo;
+
         constructor(public readonly host: ServerHost,
             public readonly logger: Logger,
             public readonly cancellationToken: HostCancellationToken,
@@ -272,7 +274,7 @@ namespace ts.server {
                 else {
                     projectsToUpdate = [];
                     for (const f of this.changedFiles) {
-                         projectsToUpdate = projectsToUpdate.concat(f.containingProjects);
+                        projectsToUpdate = projectsToUpdate.concat(f.containingProjects);
                     }
                 }
                 this.updateProjectGraphs(projectsToUpdate);
@@ -342,6 +344,7 @@ namespace ts.server {
 
             if (!info.isOpen) {
                 this.filenameToScriptInfo.remove(info.path);
+                this.lastDeletedFile = info;
 
                 // capture list of projects since detachAllProjects will wipe out original list 
                 const containingProjects = info.containingProjects.slice();
@@ -350,6 +353,7 @@ namespace ts.server {
 
                 // update projects to make sure that set of referenced files is correct
                 this.updateProjectGraphs(containingProjects);
+                this.lastDeletedFile = undefined;
 
                 if (!this.eventHandler) {
                     return;
