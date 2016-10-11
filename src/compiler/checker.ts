@@ -8424,12 +8424,12 @@ namespace ts {
             return node;
         }
 
-        function getReferenceParent(node: Node): Node {
+        function getReferenceRoot(node: Node): Node {
             const parent = node.parent;
             return parent.kind === SyntaxKind.ParenthesizedExpression ||
                 parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken && (<BinaryExpression>parent).left === node ||
                 parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.CommaToken && (<BinaryExpression>parent).right === node ?
-                getReferenceParent(parent) : parent;
+                getReferenceRoot(parent) : node;
         }
 
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
@@ -8564,7 +8564,7 @@ namespace ts {
 
         // Return true if the given node is 'x' in an 'x.push(value)' operation.
         function isPushCallTarget(node: Node) {
-            const parent = getReferenceParent(node);
+            const parent = getReferenceRoot(node).parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression &&
                 (<PropertyAccessExpression>parent).name.text === "push" &&
                 parent.parent.kind === SyntaxKind.CallExpression;
@@ -8573,9 +8573,10 @@ namespace ts {
         // Return true if the given node is 'x' in an 'x[n] = value' operation, where 'n' is an
         // expression of type any, undefined, or a number-like type.
         function isElementAssignmentTarget(node: Node) {
-            const parent = getReferenceParent(node);
+            const root = getReferenceRoot(node);
+            const parent = root.parent;
             return parent.kind === SyntaxKind.ElementAccessExpression &&
-                (<ElementAccessExpression>parent).expression === node &&
+                (<ElementAccessExpression>parent).expression === root &&
                 parent.parent.kind === SyntaxKind.BinaryExpression &&
                 (<BinaryExpression>parent.parent).operatorToken.kind === SyntaxKind.EqualsToken &&
                 (<BinaryExpression>parent.parent).left === parent &&
