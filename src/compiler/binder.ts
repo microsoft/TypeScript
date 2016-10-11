@@ -760,7 +760,7 @@ namespace ts {
             };
         }
 
-        function createFlowArrayMutation(antecedent: FlowNode, node: Expression): FlowNode {
+        function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
             return <FlowArrayMutation>{
                 flags: FlowFlags.ArrayMutation,
@@ -1151,8 +1151,8 @@ namespace ts {
                     bindAssignmentTargetFlow(node.left);
                     if (node.left.kind === SyntaxKind.ElementAccessExpression) {
                         const elementAccess = <ElementAccessExpression>node.left;
-                        if (isNarrowableReference(elementAccess.expression)) {
-                            currentFlow = createFlowArrayMutation(currentFlow, elementAccess.expression);
+                        if (isNarrowableOperand(elementAccess.expression)) {
+                            currentFlow = createFlowArrayMutation(currentFlow, node);
                         }
                     }
                 }
@@ -1217,8 +1217,8 @@ namespace ts {
             }
             if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
                 const propertyAccess = <PropertyAccessExpression>node.expression;
-                if (isNarrowableReference(propertyAccess.expression) && propertyAccess.name.text === "push") {
-                    currentFlow = createFlowArrayMutation(currentFlow, propertyAccess.expression);
+                if (isNarrowableOperand(propertyAccess.expression) && propertyAccess.name.text === "push") {
+                    currentFlow = createFlowArrayMutation(currentFlow, node);
                 }
             }
         }

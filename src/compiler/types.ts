@@ -1955,7 +1955,7 @@ namespace ts {
     // FlowArrayMutation represents a node potentially mutates an array, i.e. an
     // operation of the form 'x.push(value)' or 'x[n] = value'.
     export interface FlowArrayMutation extends FlowNode {
-        node: Expression;
+        node: CallExpression | BinaryExpression;
         antecedent: FlowNode;
     }
 

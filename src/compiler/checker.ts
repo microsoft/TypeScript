@@ -8424,6 +8424,14 @@ namespace ts {
             return node;
         }
 
+        function getReferenceParent(node: Node): Node {
+            const parent = node.parent;
+            return parent.kind === SyntaxKind.ParenthesizedExpression ||
+                parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken && (<BinaryExpression>parent).left === node ||
+                parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.CommaToken && (<BinaryExpression>parent).right === node ?
+                getReferenceParent(parent) : parent;
+        }
+
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
             if (clause.kind === SyntaxKind.CaseClause) {
                 const caseType = getRegularTypeOfLiteralType(checkExpression((<CaseClause>clause).expression));
@@ -8556,15 +8564,16 @@ namespace ts {
 
         // Return true if the given node is 'x' in an 'x.push(value)' operation.
         function isPushCallTarget(node: Node) {
-            return node.parent.kind === SyntaxKind.PropertyAccessExpression &&
-                (<PropertyAccessExpression>node.parent).name.text === "push" &&
-                node.parent.parent.kind === SyntaxKind.CallExpression;
+            const parent = getReferenceParent(node);
+            return parent.kind === SyntaxKind.PropertyAccessExpression &&
+                (<PropertyAccessExpression>parent).name.text === "push" &&
+                parent.parent.kind === SyntaxKind.CallExpression;
         }
 
         // Return true if the given node is 'x' in an 'x[n] = value' operation, where 'n' is an
         // expression of type any, undefined, or a number-like type.
         function isElementAssignmentTarget(node: Node) {
-            const parent = node.parent;
+            const parent = getReferenceParent(node);
             return parent.kind === SyntaxKind.ElementAccessExpression &&
                 (<ElementAccessExpression>parent).expression === node &&
                 parent.parent.kind === SyntaxKind.BinaryExpression &&
@@ -8696,19 +8705,24 @@ namespace ts {
 
             function getTypeAtFlowArrayMutation(flow: FlowArrayMutation): FlowType {
                 const node = flow.node;
-                if (isMatchingReference(reference, node)) {
+                const expr = node.kind === SyntaxKind.CallExpression ?
+                    (<PropertyAccessExpression>(<CallExpression>node).expression).expression :
+                    (<ElementAccessExpression>(<BinaryExpression>node).left).expression;
+                if (isMatchingReference(reference, getReferenceCandidate(expr))) {
                     const flowType = getTypeAtFlowNode(flow.antecedent);
                     const type = getTypeFromFlowType(flowType);
                     if (isEvolvingArrayType(type)) {
-                        const parent = node.parent;
                         let evolvedType = <AnonymousType>type;
-                        if (parent.kind === SyntaxKind.PropertyAccessExpression) {
-                            for (const arg of (<CallExpression>parent.parent).arguments) {
+                        if (node.kind === SyntaxKind.CallExpression) {
+                            for (const arg of (<CallExpression>node).arguments) {
                                 evolvedType = addEvolvingArrayElementType(evolvedType, arg);
                             }
                         }
-                        else if (isTypeAnyOrAllConstituentTypesHaveKind(checkExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike)) {
-                            evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>parent.parent).right);
+                        else {
+                            const indexType = checkExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
+                            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike | TypeFlags.Undefined)) {
+                                evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>node).right);
+                            }
                         }
                         return evolvedType === type ? flowType : createFlowType(evolvedType, isIncomplete(flowType));
                     }
