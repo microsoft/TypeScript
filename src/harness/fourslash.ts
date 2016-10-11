@@ -2049,7 +2049,7 @@ namespace FourSlash {
                 this.raiseError("Errors expected.");
             }
 
-            if (diagnostics.length > 1 && errorCode !== undefined) {
+            if (diagnostics.length > 1 && errorCode === undefined) {
                 this.raiseError("When there's more than one error, you must specify the errror to fix.");
             }
 
