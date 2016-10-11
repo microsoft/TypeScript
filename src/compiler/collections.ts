@@ -71,13 +71,19 @@ namespace ts {
     };
 
     export interface StringMapConstructor {
-        new<T>(): Map<string, T>;
+        new<T>(pairs?: [string, T][]): Map<string, T>;
     }
     /** In runtimes without Maps, this is implemented using an object. */
     export const StringMap: StringMapConstructor = usingNativeMaps ? Map : class ShimStringMap<T> implements Map<string, T> {
         private data = createDictionaryModeObject<T>();
 
-        constructor() {}
+        constructor(pairs?: [string, T][]) {
+            if (pairs) {
+                for (const [key, value] of pairs) {
+                    this.data[key] = value;
+                }
+            }
+        }
 
         clear() {
             this.data = createDictionaryModeObject<T>();
@@ -276,16 +282,8 @@ namespace ts {
     export const setIsEmpty: (set: Set<string>) => boolean = usingNativeSets
         ? set => (set as any).size === 0
         : (set: ShimStringSet) => set.isEmpty();
-}
 
-// Map utilities
-namespace ts {
-    /** Create a map containing a single entry key -> value. */
-    export function createMapWithEntry<T>(key: string, value: T): Map<string, T> {
-        const map = new StringMap<T>();
-        map.set(key, value);
-        return map;
-    }
+    // Map utilities
 
     /** Set a value in a map, then return that value. */
     export function setAndReturn<K, V>(map: Map<K, V>, key: K, value: V): V {
@@ -477,11 +475,9 @@ namespace ts {
         naturalNumberKeys.sort((a, b) => toInt(a) - toInt(b));
         return naturalNumberKeys.concat(allOtherKeys);
     }
-}
 
-// Set utilities
-/* @internal */
-namespace ts {
+    // Set utilities
+
     /** Union of the `getSet` of each element in the array. */
     export function setAggregate<T>(array: T[], getSet: (t: T) => Set<string>): Set<string> {
         const result = new StringSet();
@@ -506,11 +502,9 @@ namespace ts {
         });
         return result;
     }
-}
 
-// MapLike utilities
-/* @internal */
-namespace ts {
+    // MapLike utilities
+
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function clone<T>(object: T): T {

@@ -146,7 +146,7 @@ namespace ts {
                 const fingerprint = outputFingerprints.get(fileName);
 
                 // If output has not been changed, and the file has no external modification
-                if (fingerprint !== undefined && fingerprint.byteOrderMark === writeByteOrderMark &&
+                if (fingerprint && fingerprint.byteOrderMark === writeByteOrderMark &&
                     fingerprint.hash === hash &&
                     fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
                     return;

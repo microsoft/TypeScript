@@ -352,7 +352,7 @@ namespace ts {
             ResolvedReturnType
         }
 
-        const builtinGlobals = createMapWithEntry(undefinedSymbol.name, undefinedSymbol);
+        const builtinGlobals = new StringMap([[undefinedSymbol.name, undefinedSymbol]]);
 
         initializeTypeChecker();
 
@@ -3789,7 +3789,7 @@ namespace ts {
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
                     type.localTypeParameters = localTypeParameters;
-                    (<GenericType>type).instantiations = createMapWithEntry(getTypeListId(type.typeParameters), <GenericType>type);
+                    (<GenericType>type).instantiations = new StringMap([[getTypeListId(type.typeParameters), <GenericType>type]]);
                     (<GenericType>type).target = <GenericType>type;
                     (<GenericType>type).typeArguments = type.typeParameters;
                     type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter);
@@ -3831,7 +3831,7 @@ namespace ts {
                     if (typeParameters) {
                         // Initialize the instantiation cache for generic type aliases. The declared type corresponds to
                         // an instantiation of the type alias with the type parameters supplied as type arguments.
-                        links.instantiations = createMapWithEntry(getTypeListId(links.typeParameters), type);
+                        links.instantiations = new StringMap([[getTypeListId(links.typeParameters), type]]);
                     }
                 }
                 else {
@@ -5343,7 +5343,7 @@ namespace ts {
             type.typeParameters = typeParameters;
             type.outerTypeParameters = undefined;
             type.localTypeParameters = typeParameters;
-            type.instantiations = createMapWithEntry(getTypeListId(type.typeParameters), <GenericType>type);
+            type.instantiations = new StringMap([[getTypeListId(type.typeParameters), <GenericType>type]]);
             type.target = <GenericType>type;
             type.typeArguments = type.typeParameters;
             type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter);
@@ -6831,7 +6831,7 @@ namespace ts {
                 }
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
-                maybeStack[depth] = createMapWithEntry(id, RelationComparisonResult.Succeeded);
+                maybeStack[depth] = new StringMap([[id, RelationComparisonResult.Succeeded]]);
                 depth++;
                 const saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;

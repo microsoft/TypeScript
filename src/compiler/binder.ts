@@ -1460,7 +1460,7 @@ namespace ts {
 
             const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = createMapWithEntry(symbol.name, symbol);
+            typeLiteralSymbol.members = new StringMap([[symbol.name, symbol]]);
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {

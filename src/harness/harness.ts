@@ -925,8 +925,10 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap = ts.createMapWithEntry<ts.SourceFile>(defaultLibFileName,
-            createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest));
+        const libFileNameSourceFileMap = new ts.StringMap<ts.SourceFile>([[
+            defaultLibFileName,
+            createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
+        ]]);
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
