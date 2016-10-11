@@ -20,6 +20,24 @@ namespace ts {
 
     const createObject = Object.create;
 
+    // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
+    export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
+
+    /**
+     * Use this function instead of calling "String.prototype.localeCompre". This function will preform appropriate check to make sure that
+     *  "typeof Intl" is correct as there are reported issues #11110  nad #11339.
+     * @param a reference string to compare
+     * @param b string to compare against
+     * @param locales string of BCP 47 language tag or an array of string of BCP 47 language tag
+     * @param options an object of Intl.CollatorOptions to specify localeCompare properties
+     */
+    export function localeCompare(a: string, b: string, locales?: string | string[], options?: Intl.CollatorOptions): number | undefined {
+        if (collator && String.prototype.localeCompare) {
+            return a.localeCompare(b, locales, options);
+        }
+        return undefined;
+    }
+
     export function createMap<T>(template?: MapLike<T>): Map<T> {
         const map: Map<T> = createObject(null); // tslint:disable-line:no-null-keyword
 
@@ -1016,8 +1034,8 @@ namespace ts {
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
         if (ignoreCase) {
-            if (String.prototype.localeCompare) {
-                const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
+            const result = localeCompare(a, b, /*locales*/ undefined, /*options*/  { usage: "sort", sensitivity: "accent" });
+            if (result) {
                 return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
             }
 
