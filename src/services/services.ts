@@ -1516,9 +1516,11 @@ namespace ts {
         }
 
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName));
+        }
 
-            return NavigationBar.getNavigationBarItems(sourceFile);
+        function getNavigationTree(fileName: string): NavigationTree {
+            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName));
         }
 
         function isTsOrTsxFile(fileName: string): boolean {
@@ -1868,6 +1870,7 @@ namespace ts {
             getRenameInfo,
             findRenameLocations,
             getNavigationBarItems,
+            getNavigationTree,
             getOutliningSpans,
             getTodoComments,
             getBraceMatchingAtPosition,

@@ -459,6 +459,10 @@ namespace Harness.LanguageService {
         getNavigationBarItems(fileName: string): ts.NavigationBarItem[] {
             return unwrapJSONCallResult(this.shim.getNavigationBarItems(fileName));
         }
+        getNavigationTree(fileName: string): ts.NavigationTree {
+            return unwrapJSONCallResult(this.shim.getNavigationTree(fileName));
+        }
+
         getOutliningSpans(fileName: string): ts.OutliningSpan[] {
             return unwrapJSONCallResult(this.shim.getOutliningSpans(fileName));
         }

@@ -2211,6 +2211,18 @@ namespace FourSlash {
             }
         }
 
+        public verifyNavigationTree(json: any) {
+            const tree = this.languageService.getNavigationTree(this.activeFile.fileName);
+            if (JSON.stringify(tree, replacer) !== JSON.stringify(json)) {
+                this.raiseError(`verifyNavigationTree failed - expected: ${stringify(json)}, got: ${stringify(tree, replacer)}`);
+            }
+
+            function replacer(key: string, value: any) {
+                // Don't check "spans", and omit falsy values.
+                return key === "spans" ? undefined : (value || undefined);
+            }
+        }
+
         public printNavigationItems(searchValue: string) {
             const items = this.languageService.getNavigateToItems(searchValue);
             const length = items && items.length;
@@ -3277,6 +3289,10 @@ namespace FourSlashInterface {
 
         public navigationBar(json: any) {
             this.state.verifyNavigationBar(json);
+        }
+
+        public navigationTree(json: any) {
+            this.state.verifyNavigationTree(json);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string) {
