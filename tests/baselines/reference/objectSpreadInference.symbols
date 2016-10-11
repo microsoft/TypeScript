@@ -1,0 +1,241 @@
+=== tests/cases/conformance/types/spread/objectSpreadInference.ts ===
+interface Result<T,U,V> {
+>Result : Symbol(Result, Decl(objectSpreadInference.ts, 0, 0))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 0, 17))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 0, 19))
+>V : Symbol(V, Decl(objectSpreadInference.ts, 0, 21))
+
+    t: T;
+>t : Symbol(Result.t, Decl(objectSpreadInference.ts, 0, 25))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 0, 17))
+
+    u: U;
+>u : Symbol(Result.u, Decl(objectSpreadInference.ts, 1, 9))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 0, 19))
+
+    v: V;
+>v : Symbol(Result.v, Decl(objectSpreadInference.ts, 2, 9))
+>V : Symbol(V, Decl(objectSpreadInference.ts, 0, 21))
+}
+declare function infer<T,U,V>(tuv: { ...T, ...U, a: V }): { t: T, u: U, v: V };
+>infer : Symbol(infer, Decl(objectSpreadInference.ts, 4, 1))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 5, 23))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 5, 25))
+>V : Symbol(V, Decl(objectSpreadInference.ts, 5, 27))
+>tuv : Symbol(tuv, Decl(objectSpreadInference.ts, 5, 30))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 5, 23))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 5, 25))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 5, 48))
+>V : Symbol(V, Decl(objectSpreadInference.ts, 5, 27))
+>t : Symbol(t, Decl(objectSpreadInference.ts, 5, 59))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 5, 23))
+>u : Symbol(u, Decl(objectSpreadInference.ts, 5, 65))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 5, 25))
+>v : Symbol(v, Decl(objectSpreadInference.ts, 5, 71))
+>V : Symbol(V, Decl(objectSpreadInference.ts, 5, 27))
+
+declare function infer2<T,U,V>(utv: { ...U, a: V, ...T }): { t: T, u: U, v: V };
+>infer2 : Symbol(infer2, Decl(objectSpreadInference.ts, 5, 79))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 6, 24))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 6, 26))
+>V : Symbol(V, Decl(objectSpreadInference.ts, 6, 28))
+>utv : Symbol(utv, Decl(objectSpreadInference.ts, 6, 31))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 6, 26))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 6, 43))
+>V : Symbol(V, Decl(objectSpreadInference.ts, 6, 28))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 6, 24))
+>t : Symbol(t, Decl(objectSpreadInference.ts, 6, 60))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 6, 24))
+>u : Symbol(u, Decl(objectSpreadInference.ts, 6, 66))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 6, 26))
+>v : Symbol(v, Decl(objectSpreadInference.ts, 6, 72))
+>V : Symbol(V, Decl(objectSpreadInference.ts, 6, 28))
+
+function generic<W, X, Y>(w: W, x: X, y: Y) {
+>generic : Symbol(generic, Decl(objectSpreadInference.ts, 6, 80))
+>W : Symbol(W, Decl(objectSpreadInference.ts, 7, 17))
+>X : Symbol(X, Decl(objectSpreadInference.ts, 7, 19))
+>Y : Symbol(Y, Decl(objectSpreadInference.ts, 7, 22))
+>w : Symbol(w, Decl(objectSpreadInference.ts, 7, 26))
+>W : Symbol(W, Decl(objectSpreadInference.ts, 7, 17))
+>x : Symbol(x, Decl(objectSpreadInference.ts, 7, 31))
+>X : Symbol(X, Decl(objectSpreadInference.ts, 7, 19))
+>y : Symbol(y, Decl(objectSpreadInference.ts, 7, 37))
+>Y : Symbol(Y, Decl(objectSpreadInference.ts, 7, 22))
+
+    // should infer { t: {}, u: {}, v: {} } because there is no trailing type parameter
+    return infer({ ...w, ...x, a: y, b: "different type" });
+>infer : Symbol(infer, Decl(objectSpreadInference.ts, 4, 1))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 9, 30))
+>y : Symbol(y, Decl(objectSpreadInference.ts, 7, 37))
+>b : Symbol(b, Decl(objectSpreadInference.ts, 9, 36))
+}
+let b: { b: number };
+>b : Symbol(b, Decl(objectSpreadInference.ts, 11, 3))
+>b : Symbol(b, Decl(objectSpreadInference.ts, 11, 8))
+
+let c: { c: number };
+>c : Symbol(c, Decl(objectSpreadInference.ts, 12, 3))
+>c : Symbol(c, Decl(objectSpreadInference.ts, 12, 8))
+
+// should infer { t: {}, u: { b: number, c: number }, v: number }
+let i1 = infer({ ...b, ...c, a: 12 });
+>i1 : Symbol(i1, Decl(objectSpreadInference.ts, 14, 3))
+>infer : Symbol(infer, Decl(objectSpreadInference.ts, 4, 1))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 14, 28))
+
+// should infer { t: { a: number, b: number, c: number }, u: {}, v: {} }
+let i2 = infer2({ ...b, ...c, a: 12 });
+>i2 : Symbol(i2, Decl(objectSpreadInference.ts, 16, 3))
+>infer2 : Symbol(infer2, Decl(objectSpreadInference.ts, 5, 79))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 16, 29))
+
+// should infer { t: {}, u: {}, v: {} }
+let i3 = generic(b, c, { a: 12 });
+>i3 : Symbol(i3, Decl(objectSpreadInference.ts, 18, 3))
+>generic : Symbol(generic, Decl(objectSpreadInference.ts, 6, 80))
+>b : Symbol(b, Decl(objectSpreadInference.ts, 11, 3))
+>c : Symbol(c, Decl(objectSpreadInference.ts, 12, 3))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 18, 24))
+
+interface Preserved {
+>Preserved : Symbol(Preserved, Decl(objectSpreadInference.ts, 18, 34))
+
+    kind: 0 | 1 | 2 | 3;
+>kind : Symbol(Preserved.kind, Decl(objectSpreadInference.ts, 20, 21))
+}
+class C implements Preserved {
+>C : Symbol(C, Decl(objectSpreadInference.ts, 22, 1))
+>Preserved : Symbol(Preserved, Decl(objectSpreadInference.ts, 18, 34))
+
+    kind: 0 = 0;
+>kind : Symbol(C.kind, Decl(objectSpreadInference.ts, 23, 30))
+
+    a = 1;
+>a : Symbol(C.a, Decl(objectSpreadInference.ts, 24, 16))
+
+    method() { return "C"; }
+>method : Symbol(C.method, Decl(objectSpreadInference.ts, 25, 10))
+}
+declare function revive<T extends Preserved>(t: { ...T }): T;
+>revive : Symbol(revive, Decl(objectSpreadInference.ts, 27, 1))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 28, 24))
+>Preserved : Symbol(Preserved, Decl(objectSpreadInference.ts, 18, 34))
+>t : Symbol(t, Decl(objectSpreadInference.ts, 28, 45))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 28, 24))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 28, 24))
+
+function genericRevive<U extends Preserved>(u: U) {
+>genericRevive : Symbol(genericRevive, Decl(objectSpreadInference.ts, 28, 61))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 29, 23))
+>Preserved : Symbol(Preserved, Decl(objectSpreadInference.ts, 18, 34))
+>u : Symbol(u, Decl(objectSpreadInference.ts, 29, 44))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 29, 23))
+
+    let us: { ...U };
+>us : Symbol(us, Decl(objectSpreadInference.ts, 30, 7))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 29, 23))
+
+    return revive(us);
+>revive : Symbol(revive, Decl(objectSpreadInference.ts, 27, 1))
+>us : Symbol(us, Decl(objectSpreadInference.ts, 30, 7))
+}
+// result should not have `method`
+let result = revive({ a: 12, kind: 0 });
+>result : Symbol(result, Decl(objectSpreadInference.ts, 34, 3))
+>revive : Symbol(revive, Decl(objectSpreadInference.ts, 27, 1))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 34, 21))
+>kind : Symbol(kind, Decl(objectSpreadInference.ts, 34, 28))
+
+// result2 should be of type C and have `method`
+let result2 = revive<C>({ a: 12, kind: 0 });
+>result2 : Symbol(result2, Decl(objectSpreadInference.ts, 36, 3))
+>revive : Symbol(revive, Decl(objectSpreadInference.ts, 27, 1))
+>C : Symbol(C, Decl(objectSpreadInference.ts, 22, 1))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 36, 25))
+>kind : Symbol(kind, Decl(objectSpreadInference.ts, 36, 32))
+
+declare function destructureRevive<T extends Preserved>(t: { ...T, a: number }): T;
+>destructureRevive : Symbol(destructureRevive, Decl(objectSpreadInference.ts, 36, 44))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 38, 35))
+>Preserved : Symbol(Preserved, Decl(objectSpreadInference.ts, 18, 34))
+>t : Symbol(t, Decl(objectSpreadInference.ts, 38, 56))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 38, 35))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 38, 66))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 38, 35))
+
+function genericDestructureRevive<U extends Preserved & { a: number }>(u: U) {
+>genericDestructureRevive : Symbol(genericDestructureRevive, Decl(objectSpreadInference.ts, 38, 83))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 39, 34))
+>Preserved : Symbol(Preserved, Decl(objectSpreadInference.ts, 18, 34))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 39, 57))
+>u : Symbol(u, Decl(objectSpreadInference.ts, 39, 71))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 39, 34))
+
+    let us: { ...U };
+>us : Symbol(us, Decl(objectSpreadInference.ts, 40, 7))
+>U : Symbol(U, Decl(objectSpreadInference.ts, 39, 34))
+
+    return destructureRevive(us);
+>destructureRevive : Symbol(destructureRevive, Decl(objectSpreadInference.ts, 36, 44))
+>us : Symbol(us, Decl(objectSpreadInference.ts, 40, 7))
+}
+// result3 is just `Preserved` because `a` and `method` both get removed
+let result3 = destructureRevive({ a: 12, kind: 0 });
+>result3 : Symbol(result3, Decl(objectSpreadInference.ts, 44, 3))
+>destructureRevive : Symbol(destructureRevive, Decl(objectSpreadInference.ts, 36, 44))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 44, 33))
+>kind : Symbol(kind, Decl(objectSpreadInference.ts, 44, 40))
+
+// result4 is still C -- a is not removed -- because we specified the argument explicitly
+let result4 = destructureRevive<C>({ a: 12, kind: 0 });
+>result4 : Symbol(result4, Decl(objectSpreadInference.ts, 46, 3))
+>destructureRevive : Symbol(destructureRevive, Decl(objectSpreadInference.ts, 36, 44))
+>C : Symbol(C, Decl(objectSpreadInference.ts, 22, 1))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 46, 36))
+>kind : Symbol(kind, Decl(objectSpreadInference.ts, 46, 43))
+
+result4.method();
+>result4.method : Symbol(C.method, Decl(objectSpreadInference.ts, 25, 10))
+>result4 : Symbol(result4, Decl(objectSpreadInference.ts, 46, 3))
+>method : Symbol(C.method, Decl(objectSpreadInference.ts, 25, 10))
+
+result4.a;
+>result4.a : Symbol(C.a, Decl(objectSpreadInference.ts, 24, 16))
+>result4 : Symbol(result4, Decl(objectSpreadInference.ts, 46, 3))
+>a : Symbol(C.a, Decl(objectSpreadInference.ts, 24, 16))
+
+declare function removeIndexSignature<T>(t: { ...T, a: number, [s: string]: number, [n: number]: number }): T;
+>removeIndexSignature : Symbol(removeIndexSignature, Decl(objectSpreadInference.ts, 48, 10))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 50, 38))
+>t : Symbol(t, Decl(objectSpreadInference.ts, 50, 41))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 50, 38))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 50, 51))
+>s : Symbol(s, Decl(objectSpreadInference.ts, 50, 64))
+>n : Symbol(n, Decl(objectSpreadInference.ts, 50, 85))
+>T : Symbol(T, Decl(objectSpreadInference.ts, 50, 38))
+
+interface I {
+>I : Symbol(I, Decl(objectSpreadInference.ts, 50, 110))
+
+    a: number;
+>a : Symbol(I.a, Decl(objectSpreadInference.ts, 51, 13))
+
+    b: number;
+>b : Symbol(I.b, Decl(objectSpreadInference.ts, 52, 14))
+
+    [s: string]: number;
+>s : Symbol(s, Decl(objectSpreadInference.ts, 54, 5))
+
+    [n: number]: number;
+>n : Symbol(n, Decl(objectSpreadInference.ts, 55, 5))
+}
+let i: I;
+>i : Symbol(i, Decl(objectSpreadInference.ts, 57, 3))
+>I : Symbol(I, Decl(objectSpreadInference.ts, 50, 110))
+
+let result5 = removeIndexSignature(i);
+>result5 : Symbol(result5, Decl(objectSpreadInference.ts, 58, 3))
+>removeIndexSignature : Symbol(removeIndexSignature, Decl(objectSpreadInference.ts, 48, 10))
+>i : Symbol(i, Decl(objectSpreadInference.ts, 57, 3))
+

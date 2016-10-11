@@ -69,3 +69,15 @@ let nb: number | boolean = ii[1001];
 >nb : Symbol(nb, Decl(objectSpreadIndexSignature.ts, 19, 3))
 >ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 18, 3))
 
+function f<T>(t: T) {
+>f : Symbol(f, Decl(objectSpreadIndexSignature.ts, 19, 36))
+>T : Symbol(T, Decl(objectSpreadIndexSignature.ts, 21, 11))
+>t : Symbol(t, Decl(objectSpreadIndexSignature.ts, 21, 14))
+>T : Symbol(T, Decl(objectSpreadIndexSignature.ts, 21, 11))
+
+    let i: { ...T, [n: number]: string };
+>i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 22, 7))
+>T : Symbol(T, Decl(objectSpreadIndexSignature.ts, 21, 11))
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 22, 20))
+}
+

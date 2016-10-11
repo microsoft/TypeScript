@@ -9,7 +9,7 @@ class C {
 >c : boolean
 }
 let c: { ...C, b: string, c?: string, [n: number]: string };
->c : { [n: number]: string; b: string; c: string | boolean; a: number; }
+>c : { [x: number]: string; b: string; c: string | boolean; a: number; }
 >C : C
 >b : string
 >c : string
@@ -18,13 +18,13 @@ let c: { ...C, b: string, c?: string, [n: number]: string };
 let n: number = c.a;
 >n : number
 >c.a : number
->c : { [n: number]: string; b: string; c: string | boolean; a: number; }
+>c : { [x: number]: string; b: string; c: string | boolean; a: number; }
 >a : number
 
 let s: string = c[12];
 >s : string
 >c[12] : string
->c : { [n: number]: string; b: string; c: string | boolean; a: number; }
+>c : { [x: number]: string; b: string; c: string | boolean; a: number; }
 >12 : 12
 
 interface Indexed {
@@ -76,4 +76,16 @@ let nb: number | boolean = ii[1001];
 >ii[1001] : number | boolean
 >ii : { [x: string]: number | boolean; b: boolean; d: number; c: boolean; a: number; }
 >1001 : 1001
+
+function f<T>(t: T) {
+>f : <T>(t: T) => void
+>T : T
+>t : T
+>T : T
+
+    let i: { ...T, [n: number]: string };
+>i : { ...T; [n: number]: string; }
+>T : T
+>n : number
+}
 

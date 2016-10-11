@@ -20,6 +20,10 @@ interface Indexed2 {
 let ii: { ...Indexed, ...Indexed2, b: boolean, d: number };
 let nb: number | boolean = ii[1001];
 
+function f<T>(t: T) {
+    let i: { ...T, [n: number]: string };
+}
+
 
 //// [objectSpreadIndexSignature.js]
 var C = (function () {
@@ -35,3 +39,6 @@ n = i[101];
 n = i.b;
 var ii;
 var nb = ii[1001];
+function f(t) {
+    var i;
+}
