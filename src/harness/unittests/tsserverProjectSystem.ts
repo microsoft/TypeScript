@@ -3,6 +3,8 @@
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
+    import protocol = server.protocol;
+    import CommandNames = server.CommandNames;
 
     const safeList = {
         path: <Path>"/safeList.json",
@@ -128,7 +130,7 @@ namespace ts.projectSystem {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
-    export function toExternalFile(fileName: string): server.protocol.ExternalFile {
+    export function toExternalFile(fileName: string): protocol.ExternalFile {
         return { fileName };
     }
 
@@ -527,7 +529,7 @@ namespace ts.projectSystem {
     }
 
     export function makeSessionRequest<T>(command: string, args: T) {
-        const newRequest: server.protocol.Request = {
+        const newRequest: protocol.Request = {
             seq: 0,
             type: "request",
             command,
@@ -538,7 +540,7 @@ namespace ts.projectSystem {
 
     export function openFilesForSession(files: FileOrFolder[], session: server.Session) {
         for (const file of files) {
-            const request = makeSessionRequest<server.protocol.OpenRequestArgs>(server.CommandNames.Open, { file: file.path });
+            const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
             session.executeCommand(request);
         }
     }
@@ -1751,7 +1753,7 @@ namespace ts.projectSystem {
     });
 
     describe("navigate-to for javascript project", () => {
-        function containsNavToItem(items: server.protocol.NavtoItem[], itemName: string, itemKind: string) {
+        function containsNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
             return find(items, item => item.name === itemName && item.kind === itemKind) !== undefined;
         }
 
@@ -1769,12 +1771,12 @@ namespace ts.projectSystem {
             openFilesForSession([file1], session);
 
             // Try to find some interface type defined in lib.d.ts
-            const libTypeNavToRequest = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
-            const items: server.protocol.NavtoItem[] = session.executeCommand(libTypeNavToRequest).response;
+            const libTypeNavToRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
+            const items: protocol.NavtoItem[] = session.executeCommand(libTypeNavToRequest).response;
             assert.isFalse(containsNavToItem(items, "Document", "interface"), `Found lib.d.ts symbol in JavaScript project nav to request result.`);
 
-            const localFunctionNavToRequst = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
-            const items2: server.protocol.NavtoItem[] = session.executeCommand(localFunctionNavToRequst).response;
+            const localFunctionNavToRequst = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
+            const items2: protocol.NavtoItem[] = session.executeCommand(localFunctionNavToRequst).response;
             assert.isTrue(containsNavToItem(items2, "foo", "function"), `Cannot find function symbol "foo".`);
         });
     });
@@ -2097,7 +2099,7 @@ namespace ts.projectSystem {
             const projectFileName = "externalProject";
             const host = createServerHost([f]);
             const projectService = createProjectService(host);
-            // create a project 
+            // create a project
             projectService.openExternalProject({ projectFileName, rootFiles: [toExternalFile(f.path)], options: {} });
             projectService.checkNumberOfProjects({ externalProjects: 1 });
 
@@ -2198,69 +2200,60 @@ namespace ts.projectSystem {
                 };`
             };
             const host = createServerHost([file1, file2]);
-            const projectService = createProjectService(host);
-            const session = createSession()
+            const session = createSession(host);
+            openFilesForSession([file1, file2], session);
 
-            projectService.openClientFile(file2.path);
-            checkNumberOfInferredProjects(projectService, 1);
-            let inferredProject = projectService.inferredProjects[0];
-            assert.isNotTrue(inferredProject.getCompilerOptions().skipLibCheck);
+            const file2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: file2.path }
+            );
+            let errorResult = <protocol.Diagnostic[]>session.executeCommand(file2GetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
 
-            projectService.openClientFile(file1.path);
-            checkNumberOfInferredProjects(projectService, 1);
-            inferredProject = projectService.inferredProjects[0];
-            assert.isTrue(inferredProject.getCompilerOptions().skipLibCheck);
+            const closeFileRequest = makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file1.path });
+            session.executeCommand(closeFileRequest);
+            errorResult = <protocol.Diagnostic[]>session.executeCommand(file2GetErrRequest).response;
+            assert.isTrue(errorResult.length !== 0);
 
-            projectService.closeClientFile(file1.path);
-            checkNumberOfInferredProjects(projectService, 1);
-            inferredProject = projectService.inferredProjects[0];
-            assert.isNotTrue(inferredProject.getCompilerOptions().skipLibCheck);
+            openFilesForSession([file1], session);
+            errorResult = <protocol.Diagnostic[]>session.executeCommand(file2GetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
         });
 
         it("should be turned on for js-only external projects", () => {
-            const file1 = {
-                path: "/a/b/f1.js",
+            const jsFile = {
+                path: "/a/b/file1.js",
                 content: "let x =1;"
             };
-            const file2 = {
-                path: "/a/b/f2.d.ts",
-                content: "interface T {};"
+            const dTsFile = {
+                path: "/a/b/file2.d.ts",
+                content: `
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };`
             };
-            const externalProjectName = "externalproject";
-            const host = createServerHost([file1, file2]);
-            const projectService = createProjectService(host);
-            projectService.openExternalProject({
-                rootFiles: toExternalFiles([file1.path, file2.path]),
-                options: {},
-                projectFileName: externalProjectName
-            });
+            const host = createServerHost([jsFile, dTsFile]);
+            const session = createSession(host);
 
-            checkNumberOfExternalProjects(projectService, 1);
-            const externalProject = projectService.externalProjects[0];
-            assert.isTrue(externalProject.getCompilerOptions().skipLibCheck);
-        });
+            const openExternalProjectRequest = makeSessionRequest<protocol.OpenExternalProjectArgs>(
+                CommandNames.OpenExternalProject,
+                {
+                    projectFileName: "project1",
+                    rootFiles: toExternalFiles([jsFile.path, dTsFile.path]),
+                    options: {}
+                }
+            );
+            session.executeCommand(openExternalProjectRequest);
 
-        it("should not be turned on for ts external projects", () => {
-            const file1 = {
-                path: "/a/b/f1.ts",
-                content: "let x =1;"
-            };
-            const file2 = {
-                path: "/a/b/f2.d.ts",
-                content: "interface T {};"
-            };
-            const externalProjectName = "externalproject";
-            const host = createServerHost([file1, file2]);
-            const projectService = createProjectService(host);
-            projectService.openExternalProject({
-                rootFiles: toExternalFiles([file1.path, file2.path]),
-                options: {},
-                projectFileName: externalProjectName
-            });
-
-            checkNumberOfExternalProjects(projectService, 1);
-            const externalProject = projectService.externalProjects[0];
-            assert.isNotTrue(externalProject.getCompilerOptions().skipLibCheck);
+            const dTsFileGetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
         });
     });
 }
