@@ -157,48 +157,49 @@ namespace ts.server {
             }
         };
     }
-    function throwLanguageServiceIsDisabledError() {
+    function throwLanguageServiceIsDisabledError(): never {
         throw new Error("LanguageService is disabled");
     }
 
     export const nullLanguageService: LanguageService = {
-        cleanupSemanticCache: (): any => throwLanguageServiceIsDisabledError(),
-        getSyntacticDiagnostics: (): any => throwLanguageServiceIsDisabledError(),
-        getSemanticDiagnostics: (): any => throwLanguageServiceIsDisabledError(),
-        getCompilerOptionsDiagnostics: (): any => throwLanguageServiceIsDisabledError(),
-        getSyntacticClassifications: (): any => throwLanguageServiceIsDisabledError(),
-        getEncodedSyntacticClassifications: (): any => throwLanguageServiceIsDisabledError(),
-        getSemanticClassifications: (): any => throwLanguageServiceIsDisabledError(),
-        getEncodedSemanticClassifications: (): any => throwLanguageServiceIsDisabledError(),
-        getCompletionsAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        findReferences: (): any => throwLanguageServiceIsDisabledError(),
-        getCompletionEntryDetails: (): any => throwLanguageServiceIsDisabledError(),
-        getQuickInfoAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        findRenameLocations: (): any => throwLanguageServiceIsDisabledError(),
-        getNameOrDottedNameSpan: (): any => throwLanguageServiceIsDisabledError(),
-        getBreakpointStatementAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getBraceMatchingAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getSignatureHelpItems: (): any => throwLanguageServiceIsDisabledError(),
-        getDefinitionAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getRenameInfo: (): any => throwLanguageServiceIsDisabledError(),
-        getTypeDefinitionAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getReferencesAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getDocumentHighlights: (): any => throwLanguageServiceIsDisabledError(),
-        getOccurrencesAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getNavigateToItems: (): any => throwLanguageServiceIsDisabledError(),
-        getNavigationBarItems: (): any => throwLanguageServiceIsDisabledError(),
-        getOutliningSpans: (): any => throwLanguageServiceIsDisabledError(),
-        getTodoComments: (): any => throwLanguageServiceIsDisabledError(),
-        getIndentationAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getFormattingEditsForRange: (): any => throwLanguageServiceIsDisabledError(),
-        getFormattingEditsForDocument: (): any => throwLanguageServiceIsDisabledError(),
-        getFormattingEditsAfterKeystroke: (): any => throwLanguageServiceIsDisabledError(),
-        getDocCommentTemplateAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        isValidBraceCompletionAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getEmitOutput: (): any => throwLanguageServiceIsDisabledError(),
-        getProgram: (): any => throwLanguageServiceIsDisabledError(),
-        getNonBoundSourceFile: (): any => throwLanguageServiceIsDisabledError(),
-        dispose: (): any => throwLanguageServiceIsDisabledError(),
+        cleanupSemanticCache: throwLanguageServiceIsDisabledError,
+        getSyntacticDiagnostics: throwLanguageServiceIsDisabledError,
+        getSemanticDiagnostics: throwLanguageServiceIsDisabledError,
+        getCompilerOptionsDiagnostics: throwLanguageServiceIsDisabledError,
+        getSyntacticClassifications: throwLanguageServiceIsDisabledError,
+        getEncodedSyntacticClassifications: throwLanguageServiceIsDisabledError,
+        getSemanticClassifications: throwLanguageServiceIsDisabledError,
+        getEncodedSemanticClassifications: throwLanguageServiceIsDisabledError,
+        getCompletionsAtPosition: throwLanguageServiceIsDisabledError,
+        findReferences: throwLanguageServiceIsDisabledError,
+        getCompletionEntryDetails: throwLanguageServiceIsDisabledError,
+        getQuickInfoAtPosition: throwLanguageServiceIsDisabledError,
+        findRenameLocations: throwLanguageServiceIsDisabledError,
+        getNameOrDottedNameSpan: throwLanguageServiceIsDisabledError,
+        getBreakpointStatementAtPosition: throwLanguageServiceIsDisabledError,
+        getBraceMatchingAtPosition: throwLanguageServiceIsDisabledError,
+        getSignatureHelpItems: throwLanguageServiceIsDisabledError,
+        getDefinitionAtPosition: throwLanguageServiceIsDisabledError,
+        getRenameInfo: throwLanguageServiceIsDisabledError,
+        getTypeDefinitionAtPosition: throwLanguageServiceIsDisabledError,
+        getReferencesAtPosition: throwLanguageServiceIsDisabledError,
+        getDocumentHighlights: throwLanguageServiceIsDisabledError,
+        getOccurrencesAtPosition: throwLanguageServiceIsDisabledError,
+        getNavigateToItems: throwLanguageServiceIsDisabledError,
+        getNavigationBarItems: throwLanguageServiceIsDisabledError,
+        getNavigationTree: throwLanguageServiceIsDisabledError,
+        getOutliningSpans: throwLanguageServiceIsDisabledError,
+        getTodoComments: throwLanguageServiceIsDisabledError,
+        getIndentationAtPosition: throwLanguageServiceIsDisabledError,
+        getFormattingEditsForRange: throwLanguageServiceIsDisabledError,
+        getFormattingEditsForDocument: throwLanguageServiceIsDisabledError,
+        getFormattingEditsAfterKeystroke: throwLanguageServiceIsDisabledError,
+        getDocCommentTemplateAtPosition: throwLanguageServiceIsDisabledError,
+        isValidBraceCompletionAtPosition: throwLanguageServiceIsDisabledError,
+        getEmitOutput: throwLanguageServiceIsDisabledError,
+        getProgram: throwLanguageServiceIsDisabledError,
+        getNonBoundSourceFile: throwLanguageServiceIsDisabledError,
+        dispose: throwLanguageServiceIsDisabledError,
     };
 
     export interface ServerLanguageServiceHost {
@@ -245,7 +246,7 @@ namespace ts.server {
                 // another operation was already scheduled for this id - cancel it
                 this.host.clearTimeout(this.pendingTimeouts[operationId]);
             }
-            // schedule new operation, pass arguments  
+            // schedule new operation, pass arguments
             this.pendingTimeouts[operationId] = this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb);
         }
 

@@ -4,7 +4,7 @@ namespace ts.server {
 
     export class ScriptInfo {
         /**
-         * All projects that include this file 
+         * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
         private formatCodeSettings: ts.FormatCodeSettings;
