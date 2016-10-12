@@ -22,7 +22,7 @@
         "typingsCache.ts",
         "project.ts",
         "editorServices.ts",
-        "protocol.d.ts",
+        "protocol.ts",
         "session.ts",
         "server.ts"
     ]

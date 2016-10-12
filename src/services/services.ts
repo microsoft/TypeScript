@@ -1407,11 +1407,11 @@ namespace ts {
 
     export interface EditorSettings {
         baseIndentSize?: number;
-        indentSize: number;
-        tabSize: number;
-        newLineCharacter: string;
-        convertTabsToSpaces: boolean;
-        indentStyle: IndentStyle;
+        indentSize?: number;
+        tabSize?: number;
+        newLineCharacter?: string;
+        convertTabsToSpaces?: boolean;
+        indentStyle?: IndentStyle;
     }
 
     export enum IndentStyle {
@@ -1436,17 +1436,17 @@ namespace ts {
     }
 
     export interface FormatCodeSettings extends EditorSettings {
-        insertSpaceAfterCommaDelimiter: boolean;
-        insertSpaceAfterSemicolonInForStatements: boolean;
-        insertSpaceBeforeAndAfterBinaryOperators: boolean;
-        insertSpaceAfterKeywordsInControlFlowStatements: boolean;
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: boolean;
-        placeOpenBraceOnNewLineForFunctions: boolean;
-        placeOpenBraceOnNewLineForControlBlocks: boolean;
+        insertSpaceAfterCommaDelimiter?: boolean;
+        insertSpaceAfterSemicolonInForStatements?: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        placeOpenBraceOnNewLineForFunctions?: boolean;
+        placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
 
     /* @internal */
