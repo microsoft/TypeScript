@@ -5,7 +5,7 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "pretty": true,
-        "out": "../../built/local/tsserver.js",
+        "outFile": "../../built/local/tsserver.js",
         "sourceMap": true,
         "stripInternal": true,
         "types": [
