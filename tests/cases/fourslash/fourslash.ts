@@ -136,6 +136,7 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
+        codeFixAvailable(): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -208,6 +209,7 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
+        codeFixAtPosition(expectedText: string, errorCode?: number): void;
 
         navigationBar(json: any): void;
         navigationTree(json: any): void;

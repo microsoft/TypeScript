@@ -52,7 +52,7 @@ namespace ts.server {
             };
         }
 
-        private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
+        private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R extends { resolvedFileName?: string }>(
             names: string[],
             containingFile: string,
             cache: ts.FileMap<Map<T>>,
@@ -65,6 +65,7 @@ namespace ts.server {
             const newResolutions: Map<T> = createMap<T>();
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
+            const lastDeletedFileName = this.project.projectService.lastDeletedFile && this.project.projectService.lastDeletedFile.fileName;
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
@@ -94,8 +95,11 @@ namespace ts.server {
                     return false;
                 }
 
-                if (getResult(resolution)) {
-                    // TODO: consider checking failedLookupLocations
+                const result = getResult(resolution);
+                if (result) {
+                    if (result.resolvedFileName && result.resolvedFileName === lastDeletedFileName) {
+                        return false;
+                    }
                     return true;
                 }
 

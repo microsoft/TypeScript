@@ -1,4 +1,4 @@
-﻿/// <reference path="..\compiler\commandLineParser.ts" />
+/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
 /// <reference path="protocol.d.ts" />
 /// <reference path="editorServices.ts" />
@@ -12,6 +12,17 @@ namespace ts.server {
         const seconds = time[0];
         const nanoseconds = time[1];
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
+    }
+
+    function shouldSkipSematicCheck(project: Project) {
+        if (project.getCompilerOptions().skipLibCheck !== undefined) {
+            return false;
+        }
+
+        if ((project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) && project.isJsOnlyProject()) {
+            return true;
+        }
+        return false;
     }
 
     interface FileStart {
@@ -44,7 +55,8 @@ namespace ts.server {
         return {
             start: scriptInfo.positionToLineOffset(diag.start),
             end: scriptInfo.positionToLineOffset(diag.start + diag.length),
-            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
+            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n"),
+            code: diag.code
         };
     }
 
@@ -136,6 +148,9 @@ namespace ts.server {
         export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
         export const BreakpointStatement = "breakpointStatement";
         export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export const GetCodeFixes = "getCodeFixes";
+        export const GetCodeFixesFull = "getCodeFixes-full";
+        export const GetSupportedCodeFixes = "getSupportedCodeFixes";
     }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
@@ -257,12 +272,13 @@ namespace ts.server {
 
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
-                const diags = project.getLanguageService().getSemanticDiagnostics(file);
-
-                if (diags) {
-                    const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                    this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                let diags: Diagnostic[] = [];
+                if (!shouldSkipSematicCheck(project)) {
+                    diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }
+
+                const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
+                this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
             }
             catch (err) {
                 this.logError(err, "semantic check");
@@ -375,6 +391,9 @@ namespace ts.server {
 
         private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
             const { project, file } = this.getFileAndProject(args);
+            if (shouldSkipSematicCheck(project)) {
+                return [];
+            }
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const diagnostics = selector(project, file);
             return includeLinePosition
@@ -759,7 +778,7 @@ namespace ts.server {
             return this.getFileAndProjectWorker(args.file, args.projectFileName, /*refreshInferredProjects*/ false, errorOnMissingProject);
         }
 
-        private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string, refreshInferredProjects: boolean,  errorOnMissingProject: boolean) {
+        private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string, refreshInferredProjects: boolean, errorOnMissingProject: boolean) {
             const file = toNormalizedPath(uncheckedFileName);
             const project: Project = this.getProject(projectFileName) || this.projectService.getDefaultProjectForFile(file, refreshInferredProjects);
             if (!project && errorOnMissingProject) {
@@ -850,13 +869,7 @@ namespace ts.server {
                 return undefined;
             }
 
-            return edits.map((edit) => {
-                return {
-                    start: scriptInfo.positionToLineOffset(edit.span.start),
-                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(edit.span)),
-                    newText: edit.newText ? edit.newText : ""
-                };
-            });
+            return edits.map(edit => this.convertTextChangeToCodeEdit(edit, scriptInfo));
         }
 
         private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
@@ -1144,7 +1157,7 @@ namespace ts.server {
                 return combineProjectOutput(
                     projects,
                     project => {
-                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isJsOnlyProject());
+                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isNonTsProject());
                         if (!navItems) {
                             return [];
                         }
@@ -1182,7 +1195,7 @@ namespace ts.server {
             else {
                 return combineProjectOutput(
                     projects,
-                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isJsOnlyProject()),
+                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isNonTsProject()),
                     /*comparer*/ undefined,
                     navigateToItemIsEqualTo);
             }
@@ -1214,6 +1227,55 @@ namespace ts.server {
                 }
                 return false;
             }
+        }
+
+        private getSupportedCodeFixes(): string[] {
+            return ts.getSupportedCodeFixes();
+        }
+
+        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const startPosition = getStartPosition();
+            const endPosition = getEndPosition();
+
+            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes);
+            if (!codeActions) {
+                return undefined;
+            }
+            if (simplifiedResult) {
+                return codeActions.map(codeAction => this.mapCodeAction(codeAction, scriptInfo));
+            }
+            else {
+                return codeActions;
+            }
+
+            function getStartPosition() {
+                return args.startPosition !== undefined ? args.startPosition : scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
+            }
+
+            function getEndPosition() {
+                return args.endPosition !== undefined ? args.endPosition : scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
+            }
+        }
+
+        private mapCodeAction(codeAction: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
+            return {
+                description: codeAction.description,
+                changes: codeAction.changes.map(change => ({
+                    fileName: change.fileName,
+                    textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
+                }))
+            };
+        }
+
+        private convertTextChangeToCodeEdit(change: ts.TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
+            return {
+                start: scriptInfo.positionToLineOffset(change.span.start),
+                end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),
+                newText: change.newText ? change.newText : ""
+            };
         }
 
         private getBraceMatching(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.TextSpan[] | TextSpan[] {
@@ -1536,6 +1598,15 @@ namespace ts.server {
             [CommandNames.ReloadProjects]: (request: protocol.ReloadProjectsRequest) => {
                 this.projectService.reloadProjects();
                 return this.notRequired();
+            },
+            [CommandNames.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
+                return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
+                return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.GetSupportedCodeFixes]: (request: protocol.Request) => {
+                return this.requiredResponse(this.getSupportedCodeFixes());
             }
         });
 
