@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
@@ -136,6 +136,19 @@ namespace ts.projectSystem {
         return map(fileNames, toExternalFile);
     }
 
+    export class TestServerEventManager {
+        private events: server.ProjectServiceEvent[] = [];
+
+        handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
+            this.events.push(event);
+        }
+
+        checkEventCountOfType(eventType: "context" | "configFileDiag", expectedCount: number) {
+            const eventsOfType = filter(this.events, e => e.eventName === eventType);
+            assert.equal(eventsOfType.length, expectedCount, `The actual event counts of type ${eventType} is ${eventsOfType.length}, while expected ${expectedCount}`);
+        }
+    }
+
     export interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
@@ -159,11 +172,11 @@ namespace ts.projectSystem {
         return host;
     }
 
-    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller) {
+    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler) {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+        return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
     }
 
     export interface CreateProjectServiceParameters {
@@ -2084,7 +2097,7 @@ namespace ts.projectSystem {
             const projectFileName = "externalProject";
             const host = createServerHost([f]);
             const projectService = createProjectService(host);
-            // create a project 
+            // create a project
             projectService.openExternalProject({ projectFileName, rootFiles: [toExternalFile(f.path)], options: {} });
             projectService.checkNumberOfProjects({ externalProjects: 1 });
 
@@ -2119,6 +2132,181 @@ namespace ts.projectSystem {
             projectService.openClientFile(f.path);
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
             projectService.inferredProjects[0].getLanguageService().getProgram();
+        });
+    });
+
+    describe("rename a module file and rename back", () => {
+        it("should restore the states for inferred projects", () => {
+            const moduleFile = {
+                path: "/a/b/moduleFile.ts",
+                content: "export function bar() { };"
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "import * as T from './moduleFile'; T.bar();"
+            };
+            const host = createServerHost([moduleFile, file1]);
+            const session = createSession(host);
+
+            openFilesForSession([file1], session);
+            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+                server.CommandNames.SemanticDiagnosticsSync,
+                { file: file1.path }
+            );
+            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+
+            const moduleFileOldPath = moduleFile.path;
+            const moduleFileNewPath = "/a/b/moduleFile1.ts";
+            moduleFile.path = moduleFileNewPath;
+            host.reloadFS([moduleFile, file1]);
+            host.triggerFileWatcherCallback(moduleFileOldPath);
+            host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
+            host.runQueuedTimeoutCallbacks();
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 1);
+
+            moduleFile.path = moduleFileOldPath;
+            host.reloadFS([moduleFile, file1]);
+            host.triggerFileWatcherCallback(moduleFileNewPath);
+            host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
+            host.runQueuedTimeoutCallbacks();
+
+            // Make a change to trigger the program rebuild
+            const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
+                server.CommandNames.Change,
+                { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
+            );
+            session.executeCommand(changeRequest);
+            host.runQueuedTimeoutCallbacks();
+
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+        });
+
+        it("should restore the states for configured projects", () => {
+            const moduleFile = {
+                path: "/a/b/moduleFile.ts",
+                content: "export function bar() { };"
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "import * as T from './moduleFile'; T.bar();"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{}`
+            };
+            const host = createServerHost([moduleFile, file1, configFile]);
+            const session = createSession(host);
+
+            openFilesForSession([file1], session);
+            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+                server.CommandNames.SemanticDiagnosticsSync,
+                { file: file1.path }
+            );
+            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+
+            const moduleFileOldPath = moduleFile.path;
+            const moduleFileNewPath = "/a/b/moduleFile1.ts";
+            moduleFile.path = moduleFileNewPath;
+            host.reloadFS([moduleFile, file1, configFile]);
+            host.triggerFileWatcherCallback(moduleFileOldPath);
+            host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
+            host.runQueuedTimeoutCallbacks();
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 1);
+
+            moduleFile.path = moduleFileOldPath;
+            host.reloadFS([moduleFile, file1, configFile]);
+            host.triggerFileWatcherCallback(moduleFileNewPath);
+            host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
+            host.runQueuedTimeoutCallbacks();
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+        });
+
+    });
+
+    describe("add the missing module file for inferred project", () => {
+        it("should remove the `module not found` error", () => {
+            const moduleFile = {
+                path: "/a/b/moduleFile.ts",
+                content: "export function bar() { };"
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "import * as T from './moduleFile'; T.bar();"
+            };
+            const host = createServerHost([file1]);
+            const session = createSession(host);
+            openFilesForSession([file1], session);
+            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+                server.CommandNames.SemanticDiagnosticsSync,
+                { file: file1.path }
+            );
+            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 1);
+
+            host.reloadFS([file1, moduleFile]);
+            host.triggerDirectoryWatcherCallback(getDirectoryPath(file1.path), moduleFile.path);
+            host.runQueuedTimeoutCallbacks();
+
+            // Make a change to trigger the program rebuild
+            const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
+                server.CommandNames.Change,
+                { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
+            );
+            session.executeCommand(changeRequest);
+
+            // Recheck
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+        });
+    });
+
+    describe("Configure file diagnostics events", () => {
+
+        it("are generated when the config file has errors", () => {
+            const serverEventManager = new TestServerEventManager();
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    }
+                }`
+            };
+
+            const host = createServerHost([file, configFile]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            openFilesForSession([file], session);
+            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+        });
+
+        it("are generated when the config file doesn't have errors", () => {
+            const serverEventManager = new TestServerEventManager();
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {}
+                }`
+            };
+
+            const host = createServerHost([file, configFile]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            openFilesForSession([file], session);
+            serverEventManager.checkEventCountOfType("configFileDiag", 1);
         });
     });
 }
