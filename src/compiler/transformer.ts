@@ -1,7 +1,7 @@
 /// <reference path="visitor.ts" />
 /// <reference path="transformers/ts.ts" />
 /// <reference path="transformers/jsx.ts" />
-/// <reference path="transformers/es7.ts" />
+/// <reference path="transformers/es2016.ts" />
 /// <reference path="transformers/es6.ts" />
 /// <reference path="transformers/generators.ts" />
 /// <reference path="transformers/module/module.ts" />
@@ -115,8 +115,9 @@ namespace ts {
             transformers.push(transformJsx);
         }
 
-        if (languageVersion < ScriptTarget.ES8) {
-            transformers.push(transformES7);
+
+        if (languageVersion < ScriptTarget.ES2016) {
+            transformers.push(transformES2016);
         }
 
         if (languageVersion < ScriptTarget.ES6) {

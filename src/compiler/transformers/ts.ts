@@ -241,8 +241,7 @@ namespace ts {
                     return currentNamespace ? undefined : node;
 
                 case SyntaxKind.AsyncKeyword:
-                    // Async keyword is not elided for target ES8
-                    return languageVersion < ScriptTarget.ES8 ? undefined : node;
+                    return node;
 
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:

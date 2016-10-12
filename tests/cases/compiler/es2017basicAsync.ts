@@ -1,4 +1,4 @@
-// @target: es8
+// @target: es2017
 // @lib: es2017
 // @noEmitHelpers: true
 

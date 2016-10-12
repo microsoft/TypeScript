@@ -2411,8 +2411,8 @@ namespace ts {
         }
         else if (operatorTokenKind === SyntaxKind.AsteriskAsteriskToken
             || operatorTokenKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
-            // Exponentiation is ES7 syntax.
-            transformFlags |= TransformFlags.AssertES7;
+            // Exponentiation is ES2016 syntax.
+            transformFlags |= TransformFlags.AssertES2016;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;

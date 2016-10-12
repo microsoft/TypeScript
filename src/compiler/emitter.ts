@@ -2194,8 +2194,8 @@ const _super = (function (geti, seti) {
 
             // Only emit __awaiter function when target ES5/ES6.
             // Only emit __generator function when target ES5.
-            // For target ES8 and above, we can emit async/await as is.
-            if ((languageVersion < ScriptTarget.ES8) && (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions)) {
+            // For target ES2017 and above, we can emit async/await as is.
+            if ((languageVersion < ScriptTarget.ES2017) && (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions)) {
                 writeLines(awaiterHelper);
                 if (languageVersion < ScriptTarget.ES6) {
                     writeLines(generatorHelper);
