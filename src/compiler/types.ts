@@ -18,7 +18,11 @@ namespace ts {
     export interface Map<K, V> {
         clear(): void;
         delete(key: K): void;
-        forEach(action: (value: V, key: K) => void): void;
+        /**
+         * Call `action` for each entry in the map.
+         * Since we use a `for-in` loop for our shims, `key` may be a string.
+         */
+        forEach(action: (value: V, key: K | string) => void): void;
         get(key: K): V;
         /**
          * Whether the key is in the map.

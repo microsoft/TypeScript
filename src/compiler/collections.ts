@@ -2,7 +2,7 @@
 /* @internal */
 namespace ts {
     // The global Map object. This may not be available, so we must test for it.
-    declare const Map: NumberMapConstructor & StringMapConstructor | undefined;
+    declare const Map: { new<K, V>(pairs?: [K, V][]): Map<K, V> } | undefined;
     const usingNativeMaps = typeof Map !== "undefined";
     // tslint:disable-next-line:no-in-operator
     const fullyFeaturedMaps = usingNativeMaps && "keys" in Map.prototype && "values" in Map.prototype && "entries" in Map.prototype;
@@ -19,99 +19,63 @@ namespace ts {
         next(): { value: T, done: false } | { value: never, done: true };
     }
 
-    export interface NumberMapConstructor {
-        /**
-         * Creates a new Map with number keys.
-         * If `pairs` is provided, each [key, value] pair will be added to the map.
-         */
-        new<K extends number, V>(pairs?: [K, V][]): Map<K, V>;
-    }
-
     /**
-     * In runtimes without Maps, this is implemented using a sparse array.
-     * This is generic over the key type because it is usually an enum.
+     * Provides Map-like functionality for ES5 runtimes.
+     * This is intentionally *not* a full Map shim, and doesn't provide iterators (which aren't available for IE Maps anyway).
+     * We can only efficiently support strings and number keys, and iteration will always yield stringified keys.
      */
-    export const NumberMap: NumberMapConstructor = usingNativeMaps ? Map : class ShimNumberMap<K extends number, V> implements Map<K, V> {
-        private data: { [key: number]: V } = [];
+    class ShimMap<K extends string | number, V> implements Map<K, V> {
+        private data = createDictionaryModeObject<V>();
+
+        /*
+        So long as `K extends string | number`, we can cast `key as string` and insert it into the map.
+        However, `forEach` will iterate over strings because values are stringified before being put in the map.
+        */
 
         constructor(pairs?: [K, V][]) {
             if (pairs) {
                 for (const [key, value] of pairs) {
-                    this.data[key as number] = value;
+                    this.data[key as string] = value;
                 }
             }
         }
 
-        clear() {
-            this.data = [];
+        clear(): void {
+            this.data = createDictionaryModeObject<V>();
         }
 
-        delete(key: K) {
-            delete this.data[key as number];
+        delete(key: K): void {
+            delete this.data[key as string];
         }
 
-        get(key: K) {
-            return this.data[key as number];
+        get(key: K): V {
+            return this.data[key as string];
         }
 
-        has(key: K) {
+        has(key: K): boolean {
             // tslint:disable-next-line:no-in-operator
-            return (key as number) in this.data;
+            return (key as string) in this.data;
         }
 
-        set(key: K, value: V) {
-            this.data[key as number] = value;
+        set(key: K, value: V): void {
+            this.data[key as string] = value;
         }
 
-        forEach(action: (value: V, key: K) => void) {
+        forEach(action: (value: V, key: string) => void): void {
             for (const key in this.data) {
-                action(this.data[key], key as any as K);
+                action(this.data[key], key);
             }
         }
-    };
-
-    export interface StringMapConstructor {
-        new<T>(pairs?: [string, T][]): Map<string, T>;
     }
-    /** In runtimes without Maps, this is implemented using an object. */
-    export const StringMap: StringMapConstructor = usingNativeMaps ? Map : class ShimStringMap<T> implements Map<string, T> {
-        private data = createDictionaryModeObject<T>();
 
-        constructor(pairs?: [string, T][]) {
-            if (pairs) {
-                for (const [key, value] of pairs) {
-                    this.data[key] = value;
-                }
-            }
-        }
+    /**
+     * In runtimes without Maps, this is implemented using an object.
+     * `pairs` is an optional list of entries to add to the new map.
+     */
+    export const StringMap: { new<T>(pairs?: [string, T][]): Map<string, T>; } = usingNativeMaps ? Map : ShimMap;
 
-        clear() {
-            this.data = createDictionaryModeObject<T>();
-        }
-
-        delete(key: string) {
-            delete this.data[key];
-        }
-
-        get(key: string) {
-            return this.data[key];
-        }
-
-        has(key: string) {
-            // tslint:disable-next-line:no-in-operator
-            return key in this.data;
-        }
-
-        set(key: string, value: T) {
-            this.data[key] = value;
-        }
-
-        forEach(f: (value: T, key: string) => void) {
-            for (const key in this.data) {
-                f(this.data[key], key);
-            }
-        }
-    };
+    /** This is generic over the key type because it is usually an enum. */
+    export const NumberMap: { new<K extends number, V>(pairs?: [K, V][]): Map<K, V> } = usingNativeMaps ? Map : ShimMap;
 
     const createObject = Object.create;
     function createDictionaryModeObject<T>(): MapLike<T> {
@@ -126,9 +90,12 @@ namespace ts {
         return map;
     }
 
-    /** Iterates over entries in the map, returning the first output of `getResult` that is not `undefined`. */
-    export const findInMap: <K, V, U>(map: Map<K, V>, getResult: (value: V, key: K) => U | undefined) => U | undefined = fullyFeaturedMaps
-        ? <K, V, U>(map: ES6Map<K, V>, f: (value: V, key: K) => U | undefined) => {
+    /**
+     * Iterates over entries in the map, returning the first output of `getResult` that is not `undefined`.
+     * Only works for strings because shims iterate with `for-in`.
+     */
+    export const findInMap: <V, U>(map: Map<string, V>, getResult: (value: V, key: string) => U | undefined) => U | undefined = fullyFeaturedMaps
+        ? <V, U>(map: ES6Map<string, V>, f: (value: V, key: string) => U | undefined) => {
             const iter = map.entries();
             while (true) {
                 const { value: pair, done } = iter.next();
@@ -142,7 +109,7 @@ namespace ts {
                 }
             }
         }
-        : <K, V, U>(map: Map<K, V>, f: (value: V, key: K) => U | undefined) => {
+        : <V, U>(map: Map<string, V>, f: (value: V, key: string) => U | undefined) => {
             let result: U | undefined;
             map.forEach((value, key) => {
                 if (result === undefined)
@@ -151,11 +118,14 @@ namespace ts {
             return result;
         };
 
-    /** Whether `predicate` is true for at least one entry in the map. */
-    export const someInMap: <K, V>(map: Map<K, V>, predicate: (value: V, key: K) => boolean) => boolean = fullyFeaturedMaps
-        ? <K, V>(map: ES6Map<K, V>, predicate: (value: V, key: K) => boolean) =>
+    /**
+     * Whether `predicate` is true for at least one entry in the map.
+     * Only works for strings because shims iterate with `for-in`.
+     */
+    export const someInMap: <V>(map: Map<string, V>, predicate: (value: V, key: string) => boolean) => boolean = fullyFeaturedMaps
+        ? <V>(map: ES6Map<string, V>, predicate: (value: V, key: string) => boolean) =>
             someInIterator(map.entries(), ([key, value]) => predicate(value, key))
-        : <K, V>(map: Map<K, V>, predicate: (value: V, key: K) => boolean) => {
+        : <V>(map: Map<string, V>, predicate: (value: V, key: string) => boolean) => {
             let found = false;
             map.forEach((value, key) => {
                 found = found || predicate(value, key);
@@ -163,10 +133,13 @@ namespace ts {
             return found;
         };
 
-    /** Whether `predicate` is true for at least one key in the map. */
-    export const someKeyInMap: <K>(map: Map<K, any>, predicate: (key: K) => boolean) => boolean = fullyFeaturedMaps
-        ? <K>(map: ES6Map<K, any>, predicate: (key: K) => boolean) => someInIterator(map.keys(), predicate)
-        : <K>(map: Map<K, any>, predicate: (key: K) => boolean) =>
+    /**
+     * Whether `predicate` is true for at least one key in the map.
+     * Only works for strings because shims iterate with `for-in`.
+     */
+    export const someKeyInMap: (map: Map<string, any>, predicate: (key: string) => boolean) => boolean = fullyFeaturedMaps
+        ? (map: ES6Map<string, any>, predicate: (key: string) => boolean) => someInIterator(map.keys(), predicate)
+        : (map: Map<string, any>, predicate: (key: string) => boolean) =>
             someInMap(map, (_value, key) => predicate(key));
 
     /** Whether `predicate` is true for at least one value in the map. */
@@ -190,19 +163,20 @@ namespace ts {
     /**
      * Equivalent to the ES6 code:
      * `for (const key of map.keys()) action(key);`
+     * Only works for strings because shims iterate with `for-in`.
      */
-    export const forEachKeyInMap: <K>(map: Map<K, any>, action: (key: K) => void) => void = fullyFeaturedMaps
-        ? <K>(map: ES6Map<K, any>, f: (key: K) => void) => {
-            const iter: Iterator<K> = map.keys();
+    export const forEachKeyInMap: (map: Map<string, any>, action: (key: string) => void) => void = fullyFeaturedMaps
+        ? (map: ES6Map<string, any>, action: (key: string) => void) => {
+            const iter: Iterator<string> = map.keys();
             while (true) {
                 const { value: key, done } = iter.next();
                 if (done) {
                     return;
                 }
-                f(key);
+                action(key);
             }
         }
-        : <K>(map: Map<K, any>, action: (key: K) => void) => {
+        : (map: Map<string, any>, action: (key: string) => void) => {
             map.forEach((_value, key) => action(key));
         };
 
@@ -310,14 +284,17 @@ namespace ts {
      * @param target A map to which properties should be copied.
      */
     export function copyMapEntriesFromTo<K, V>(source: Map<K, V>, target: Map<K, V>): void {
-        source.forEach((value, key) => {
+        source.forEach((value: V, key: K) => {
             target.set(key, value);
         });
     }
 
-    /** Equivalent to `Array.from(map.keys())`. */
-    export function keysOfMap<K>(map: Map<K, any>): K[] {
-        const keys: K[] = [];
+    /**
+     * Equivalent to `Array.from(map.keys())`.
+     * Only works for strings because shims iterate with `for-in`.
+     */
+    export function keysOfMap(map: Map<string, any>): string[] {
+        const keys: string[] = [];
         forEachKeyInMap(map, key => { keys.push(key); });
         return keys;
     }
@@ -442,7 +419,7 @@ namespace ts {
     }
 
     /** True if the maps have the same keys and values. */
-    export function mapsAreEqual<K, V>(left: Map<K, V>, right: Map<K, V>, valuesAreEqual?: (left: V, right: V) => boolean): boolean {
+    export function mapsAreEqual<V>(left: Map<string, V>, right: Map<string, V>, valuesAreEqual?: (left: V, right: V) => boolean): boolean {
         if (left === right) return true;
         if (!left || !right) return false;
         const someInLeftHasNoMatch = someInMap(left, (leftValue, leftKey) => {
