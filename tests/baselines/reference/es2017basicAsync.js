@@ -1,4 +1,4 @@
-//// [es2017-async.ts]
+//// [es2017basicAsync.ts]
 
 async (): Promise<void> => {
     await 0;
@@ -47,7 +47,7 @@ class AsyncClass {
 }
 
 
-//// [es2017-async.js]
+//// [es2017basicAsync.js]
 async () => {
     await 0;
 };

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/es2017-async.ts ===
+=== tests/cases/compiler/es2017basicAsync.ts ===
 
 async (): Promise<void> => {
 >async (): Promise<void> => {    await 0;} : () => Promise<void>
