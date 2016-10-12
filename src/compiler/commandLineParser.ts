@@ -1289,14 +1289,18 @@ namespace ts {
 
     function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: string, flags: WatchDirectoryFlags } | undefined {
         const match = wildcardDirectoryPattern.exec(spec);
-        return match
-            ? {
+        if (match) {
+            return {
                 key: useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase(),
                 flags: watchRecursivePattern.test(spec) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
-            }
-            : isImplicitGlob(spec)
-            ? { key: spec, flags: WatchDirectoryFlags.Recursive }
-            : undefined;
+            };
+        }
+        else if (isImplicitGlob(spec)) {
+            return { key: spec, flags: WatchDirectoryFlags.Recursive };
+        }
+        else {
+            return undefined;
+        }
     }
 
     /**

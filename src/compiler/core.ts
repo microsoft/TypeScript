@@ -1182,13 +1182,13 @@ namespace ts {
      */
     export function getDirectoryPath(path: Path): Path;
     export function getDirectoryPath(path: string): string;
-    export function getDirectoryPath(path: string): any {
+    export function getDirectoryPath(path: string): string {
         return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
     }
 
     function getBasename(path: Path): Path;
     function getBasename(path: string): string;
-    function getBasename(path: string): any {
+    function getBasename(path: string): string {
         return path.substr(Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
     }
 
@@ -1519,7 +1519,7 @@ namespace ts {
     }
 
     /**
-     * An "includes" path "foo" is implicitly a glob "foo\**\*" (replace \ with /) if its last component has no extension,
+     * An "includes" path "foo" is implicitly a glob "foo/** /*" (without the space) if its last component has no extension,
      * and does not contain any glob characters itself.
      */
     export function isImplicitGlob(lastPathComponent: string): boolean {
