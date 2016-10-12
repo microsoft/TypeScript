@@ -1,4 +1,4 @@
-/**
+﻿/**
   * Declaration module describing the TypeScript Server protocol
   */
 declare namespace ts.server.protocol {
@@ -1591,17 +1591,5 @@ declare namespace ts.server.protocol {
 
     export interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
-    }
-
-    export interface CodeAction {
-        /**
-          * Description of the code action to display in the UI of the editor.
-          */
-        description: string;
-
-        /**
-          * Changes to apply to each file as part of the code action.
-          */
-        changes: FileCodeEdits[];
     }
 }
