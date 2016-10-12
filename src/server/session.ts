@@ -959,7 +959,7 @@ namespace ts.server {
                         result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
                     }
                     return result;
-                }, []).sort((a, b) => localeCompare(a.name, b.name));
+                }, []).sort((a, b) => ts.compareStrings(a.name, b.name));
             }
             else {
                 return completions;

@@ -188,8 +188,8 @@ namespace ts.NavigateTo {
             // We first sort case insensitively.  So "Aaa" will come before "bar".
             // Then we sort case sensitively, so "aaa" will come before "Aaa".
             return i1.matchKind - i2.matchKind ||
-                ts.localeCompare(i1.name, i2.name, /*locales*/ undefined, /*options*/ baseSensitivity) ||
-                ts.localeCompare(i1.name, i2.name);
+                ts.compareStrings(i1.name, i2.name, /*locales*/ undefined, /*options*/ baseSensitivity) ||
+                ts.compareStrings(i1.name, i2.name);
         }
 
         function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {

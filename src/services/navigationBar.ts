@@ -335,7 +335,7 @@ namespace ts.NavigationBar {
             if (chA === "'" && chB === "\"") {
                 return -1;
             }
-            const cmp = ts.localeCompare(chA.toLocaleLowerCase(), chB.toLocaleLowerCase());
+            const cmp = ts.compareStrings(chA.toLocaleLowerCase(), chB.toLocaleLowerCase());
             if (cmp !== 0) {
                 return cmp;
             }

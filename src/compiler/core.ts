@@ -23,6 +23,10 @@ namespace ts {
     // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
     export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
 
+    // This means "compare in a case insensitive manner but consider accentsor other diacritic marks"
+    // (e.g. a ≠ b, a ≠ á, a = A)
+    const accentSensitivity: Intl.CollatorOptions = { usage: "sort", sensitivity: "accent" };
+
     /**
      * Use this function instead of calling "String.prototype.localeCompre". This function will preform appropriate check to make sure that
      *  "typeof Intl" is correct as there are reported issues #11110  nad #11339.
@@ -1029,13 +1033,13 @@ namespace ts {
         return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
-    export function compareStrings(a: string, b: string, ignoreCase?: boolean): Comparison {
+    export function compareStrings(a: string, b: string, locales?: string | string[], options?: Intl.CollatorOptions): Comparison {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
-        if (ignoreCase) {
-            const result = localeCompare(a, b, /*locales*/ undefined, /*options*/  { usage: "sort", sensitivity: "accent" });
-            if (result) {
+        if (options) {
+            if (collator && String.prototype.localeCompare) {
+                const result =  a.localeCompare(b, locales, options);
                 return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
             }
 
@@ -1048,7 +1052,7 @@ namespace ts {
     }
 
     export function compareStringsCaseInsensitive(a: string, b: string) {
-        return compareStrings(a, b, /*ignoreCase*/ true);
+        return compareStrings(a, b, /*locales*/ undefined, accentSensitivity);
     }
 
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
@@ -1418,7 +1422,8 @@ namespace ts {
         const bComponents = getNormalizedPathComponents(b, currentDirectory);
         const sharedLength = Math.min(aComponents.length, bComponents.length);
         for (let i = 0; i < sharedLength; i++) {
-            const result = compareStrings(aComponents[i], bComponents[i], ignoreCase);
+            const result = compareStrings(aComponents[i], bComponents[i],
+                /*locales*/ undefined, /*options*/ ignoreCase ? accentSensitivity : undefined);
             if (result !== Comparison.EqualTo) {
                 return result;
             }
@@ -1440,7 +1445,8 @@ namespace ts {
         }
 
         for (let i = 0; i < parentComponents.length; i++) {
-            const result = compareStrings(parentComponents[i], childComponents[i], ignoreCase);
+            const result = compareStrings(parentComponents[i], childComponents[i],
+                /*locales*/ undefined, /*options*/ ignoreCase ? accentSensitivity : undefined);
             if (result !== Comparison.EqualTo) {
                 return false;
             }
