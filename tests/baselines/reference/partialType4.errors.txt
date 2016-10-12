@@ -1,0 +1,29 @@
+tests/cases/compiler/partialType4.ts(13,1): error TS2322: Type 'false' is not assignable to type 'string | undefined'.
+tests/cases/compiler/partialType4.ts(15,1): error TS2322: Type 'false' is not assignable to type 'string | number | undefined'.
+tests/cases/compiler/partialType4.ts(16,1): error TS2322: Type 'false' is not assignable to type 'string | number | undefined'.
+
+
+==== tests/cases/compiler/partialType4.ts (3 errors) ====
+    
+    interface State1 {
+        name: string;
+        length: number;
+        [key: string]: string | number;
+    }
+    
+    const subs: partial State1 = {};
+    subs['foo'] = 32;
+    subs['bar'] = 'ok';
+    subs['ok'] = undefined;
+    subs.name = undefined; // ok
+    subs.name = false; // not ok
+    ~~~~~~~~~
+!!! error TS2322: Type 'false' is not assignable to type 'string | undefined'.
+    // Errors
+    subs['err'] = false;
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'false' is not assignable to type 'string | number | undefined'.
+    subs[12] = false;
+    ~~~~~~~~
+!!! error TS2322: Type 'false' is not assignable to type 'string | number | undefined'.
+    

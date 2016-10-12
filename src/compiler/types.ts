@@ -182,7 +182,8 @@ namespace ts {
         UndefinedKeyword,
         FromKeyword,
         GlobalKeyword,
-        OfKeyword, // LastKeyword and LastToken
+        OfKeyword,
+        PartialKeyword,
 
         // Parse tree nodes
 
@@ -215,6 +216,7 @@ namespace ts {
         TupleType,
         UnionType,
         IntersectionType,
+        PartialType,
         ParenthesizedType,
         ThisType,
         TypeOperator,
@@ -902,6 +904,7 @@ namespace ts {
         literal: Expression;
     }
 
+    // @kind(SyntaxKind.StringLiteralType)
     export interface StringLiteral extends LiteralExpression {
         kind: SyntaxKind.StringLiteral;
         /* @internal */ textSourceNode?: Identifier | StringLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
@@ -2576,6 +2579,7 @@ namespace ts {
         /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
+        /* @internal */ partialSource?: Symbol;  // True if the symbol is a synthetic partial property
     }
 
     /* @internal */
@@ -2589,6 +2593,7 @@ namespace ts {
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
+        originalType?: Type;                // Originating type for a partial type synthetic property
         hasNonUniformType?: boolean;        // True if constituents have non-uniform types
         isPartial?: boolean;                // True if syntheric property of union type occurs in some but not all constituents
         isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
@@ -2688,6 +2693,7 @@ namespace ts {
         ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
         ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
+        Partial                 = 1 << 24,  // Partial type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2728,6 +2734,7 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: Type[];     // Alias type arguments (if any)
+        resolvedPartialType?: Type;      // If we create a partial type for this, it's cached here
     }
 
     /* @internal */
@@ -2770,6 +2777,11 @@ namespace ts {
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
+    }
+
+    // Partial types
+    export interface PartialType extends Type {
+        type: Type;
     }
 
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)

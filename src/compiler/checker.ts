@@ -1575,6 +1575,10 @@ namespace ts {
         }
 
         function symbolIsValue(symbol: Symbol): boolean {
+            if (symbol.partialSource) {
+                return symbolIsValue(symbol.partialSource);
+            }
+
             // If it is an instantiated symbol, then it is a value if the symbol it is an
             // instantiation of is a value.
             if (symbol.flags & SymbolFlags.Instantiated) {
@@ -1627,6 +1631,12 @@ namespace ts {
             const type = <ObjectType>createType(TypeFlags.Object);
             type.objectFlags = objectFlags;
             type.symbol = symbol;
+            return type;
+        }
+
+        function createPartialTypeFromObjectType(target: Type): Type {
+            const type = <PartialType>createType(TypeFlags.Partial | TypeFlags.ObjectType);
+            type.type = target;
             return type;
         }
 
@@ -2217,6 +2227,10 @@ namespace ts {
                         }
                         writer.writeKeyword("this");
                     }
+                    else if (type.flags & TypeFlags.Partial) {
+                        writer.writeKeyword("partial ");
+                        writeType((type as PartialType).type, flags);
+                    }
                     else if (getObjectFlags(type) & ObjectFlags.Reference) {
                         writeTypeReference(<TypeReference>type, nextFlags);
                     }
@@ -2799,6 +2813,7 @@ namespace ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.ParenthesizedType:
+                    case SyntaxKind.PartialType:
                         return isDeclarationVisible(<Declaration>node.parent);
 
                     // Default binding, import specifier and namespace import is visible
@@ -3542,7 +3557,24 @@ namespace ts {
             return links.type;
         }
 
+        function getTypeOfPartialPropertySymbol(symbol: Symbol): Type {
+            const links = getSymbolLinks(symbol);
+            if (!links.type) {
+                const type = getTypeOfSymbol(symbol.partialSource);
+                if (strictNullChecks) {
+                    links.type = getUnionType([type, undefinedType]);
+                }
+                else {
+                    links.type = type;
+                }
+            }
+            return links.type;
+        }
+
         function getTypeOfSymbol(symbol: Symbol): Type {
+            if (symbol.partialSource) {
+                return getTypeOfPartialPropertySymbol(symbol);
+            }
             if (symbol.flags & SymbolFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
@@ -4199,6 +4231,29 @@ namespace ts {
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
+        function resolvePartialTypeMembers(type: PartialType) {
+            const source = getPropertiesOfType(type.type);
+            const members = createMap<Symbol>();
+            for (const member of source) {
+                if (member.flags & SymbolFlags.Optional) {
+                    members[member.name] = member;
+                }
+                else {
+                    const synthetic = createSymbol(member.flags | SymbolFlags.SyntheticProperty | SymbolFlags.Optional, member.name);
+                    getSymbolLinks(synthetic).originalType = type.type;
+                    synthetic.partialSource = member;
+                    members[member.name] = synthetic;
+                }
+            }
+            const stringIndex = getIndexInfoOfType(type.type, IndexKind.String);
+            const numberIndex = getIndexInfoOfType(type.type, IndexKind.Number);
+            const stringIndexType = stringIndex && (strictNullChecks ? getUnionType([stringIndex.type, undefinedType]) : stringIndex.type);
+            const numberIndexType = numberIndex && (strictNullChecks ? getUnionType([numberIndex.type, undefinedType]) : numberIndex.type);
+            setObjectTypeMembers(type, members, emptyArray, emptyArray,
+                stringIndex && createIndexInfo(stringIndexType, stringIndex.isReadonly, stringIndex.declaration),
+                numberIndex && createIndexInfo(numberIndexType, numberIndex.isReadonly, numberIndex.declaration));
+        }
+
         function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
             resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature {
             const sig = new Signature(checker);
@@ -4420,6 +4475,8 @@ namespace ts {
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
                         resolveAnonymousTypeMembers(<AnonymousType>type);
                     }
+                    else if ((<ObjectType>type).flags & TypeFlags.Partial) {
+                    resolvePartialTypeMembers(<PartialType>type);
                 }
                 else if (type.flags & TypeFlags.Union) {
                     resolveUnionTypeMembers(<UnionType>type);
@@ -5695,6 +5752,7 @@ namespace ts {
             return links.resolvedType;
         }
 
+<<<<<<< 7b34b612beda66b0812462a3feeabc63852cd842
         function getIndexTypeForTypeParameter(type: TypeParameter) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
@@ -5721,7 +5779,17 @@ namespace ts {
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getIndexType(getTypeFromTypeNodeNoAlias(node.type));
+                switch (node.operator) {
+                    case SyntaxKind.KeyOfKeyword:
+                        links.resolvedType = getIndexType(getTypeFromTypeNodeNoAlias(node.type));
+                        break;
+                    case SyntaxKind.PartialKeyword:
+                        links.resolvedType = getPartialType(getTypeOfNode(node.type));
+                        break;
+                    default:
+                        Debug.fail('Unknown operator of type operator type')
+                        break;
+                }
             }
             return links.resolvedType;
         }
@@ -5832,6 +5900,32 @@ namespace ts {
                 links.resolvedType = getIndexedAccessType(getTypeFromTypeNodeNoAlias(node.objectType), getTypeFromTypeNodeNoAlias(node.indexType), node);
             }
             return links.resolvedType;
+        }
+
+        function getPartialType(type: Type): Type {
+            if (type.resolvedPartialType) {
+                return type.resolvedPartialType;
+            }
+
+            if (type.flags & TypeFlags.Partial) {
+                // partial partial T === partial T
+                return type;
+            }
+            if (type.flags & TypeFlags.Union) {
+                return type.resolvedPartialType = getUnionType((type as UnionType).types.map(getPartialType));
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                return type.resolvedPartialType = getIntersectionType((type as IntersectionType).types.map(getPartialType));
+            }
+            if (type.flags & TypeFlags.ObjectType) {
+                return type.resolvedPartialType = createPartialTypeFromObjectType(type);
+            }
+
+            // Type parameter
+            Debug.assert(!!(type.flags & TypeFlags.TypeParameter));
+            const result = <PartialType>createType(TypeFlags.Partial);
+            result.type = type;
+            return type.resolvedPartialType = result;
         }
 
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: Node, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
@@ -5983,6 +6077,8 @@ namespace ts {
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node, aliasSymbol, aliasTypeArguments);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node, aliasSymbol, aliasTypeArguments);
+                case SyntaxKind.PartialType:
+                    return getTypeFromPartialTypeNode(<PartialTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocNonNullableType:
@@ -6271,6 +6367,9 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
+                }
+                if (type.flags & TypeFlags.Partial) {
+                    return getPartialType(instantiateType((<PartialType>type).type, mapper));
                 }
             }
             return type;
@@ -6754,6 +6853,17 @@ namespace ts {
                 }
 
                 if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
+
+                // If the target is a 'partial T', the only allowed source is T, partial T, or {}
+                if ((target.flags & (TypeFlags.Partial | TypeFlags.ObjectType)) === TypeFlags.Partial) {
+                    if ((source === emptyObjectType) || ((<PartialType>target).type === source)) {
+                        return Ternary.True;
+                    }
+                    if (reportErrors) {
+                        reportRelationError(headMessage, source, target);
+                    }
+                    return Ternary.False;
+                }
 
                 if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
@@ -15072,6 +15182,10 @@ namespace ts {
             getTypeFromIndexedAccessTypeNode(node);
         }
 
+        function checkPartialType(node: PartialTypeNode) {
+            checkSourceElement(node.type);
+        }
+
         function isPrivateWithinAmbient(node: Node): boolean {
             return (getModifierFlags(node) & ModifierFlags.Private) && isInAmbientContext(node);
         }
@@ -18307,6 +18421,8 @@ namespace ts {
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
+                case SyntaxKind.PartialType:
+                    return checkPartialType(<PartialTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TypeOperator:
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
@@ -18662,7 +18778,7 @@ namespace ts {
                 node = node.parent;
             }
 
-            return node.parent && (node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.JSDocTypeReference) ;
+            return node.parent && (node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.JSDocTypeReference);
         }
 
         function isHeritageClauseElementIdentifier(entityName: Node): boolean {
@@ -19054,15 +19170,23 @@ namespace ts {
 
         function getRootSymbols(symbol: Symbol): Symbol[] {
             if (symbol.flags & SymbolFlags.SyntheticProperty) {
-                const symbols: Symbol[] = [];
-                const name = symbol.name;
-                forEach(getSymbolLinks(symbol).containingType.types, t => {
-                    const symbol = getPropertyOfType(t, name);
-                    if (symbol) {
-                        symbols.push(symbol);
-                    }
-                });
-                return symbols;
+                const links = getSymbolLinks(symbol);
+                if (links.containingType) {
+                    const symbols: Symbol[] = [];
+                    const name = symbol.name;
+
+                    forEach(links.containingType.types, t => {
+                        const symbol = getPropertyOfType(t, name);
+                        if (symbol) {
+                            symbols.push(symbol);
+                        }
+                    });
+                    return symbols;
+                }
+                else if (links.originalType) {
+                    return [links.originalType.symbol];
+                }
+                return emptyArray;
             }
             else if (symbol.flags & SymbolFlags.Transient) {
                 let target: Symbol;

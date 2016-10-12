@@ -1,0 +1,25 @@
+tests/cases/compiler/subsetType3.ts(11,1): error TS2322: Type 'false' is not assignable to type 'string | number'.
+tests/cases/compiler/subsetType3.ts(12,1): error TS2322: Type 'false' is not assignable to type 'string | number'.
+
+
+==== tests/cases/compiler/subsetType3.ts (2 errors) ====
+    interface State {
+        name: string;
+        length: number;
+        [key: string]: string | number;
+    }
+    
+    const subs: partial State = {};
+    subs['foo'] = 32;
+    subs['bar'] = 'ok';
+    // Errors
+    subs['err'] = false;
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'false' is not assignable to type 'string | number'.
+    subs[12] = false;
+    ~~~~~~~~
+!!! error TS2322: Type 'false' is not assignable to type 'string | number'.
+    
+    
+    
+    
