@@ -17893,7 +17893,8 @@ namespace ts {
             }
 
             function isNotOverload(declaration: Declaration): boolean {
-                return declaration.kind !== SyntaxKind.FunctionDeclaration || !!(declaration as FunctionDeclaration).body;
+                return (declaration.kind !== SyntaxKind.FunctionDeclaration && declaration.kind !== SyntaxKind.MethodDeclaration) || 
+                        !!(declaration as FunctionDeclaration).body;
             }
         }
 
