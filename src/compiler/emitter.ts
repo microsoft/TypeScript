@@ -86,7 +86,7 @@ namespace ts {
         const transform = transformFiles(resolver, host, sourceFiles, transformers);
         performance.measure("transformTime", "beforeTransform");
 
-        const printFile = createPrinter(host, emittedFilesList, emitterDiagnostics, transform, resolver.hasGlobalName);
+        const printFile = createPrinter(host, emittedFilesList, emitterDiagnostics, transform, resolver.hasGlobalName, sourceMapDataList);
 
         // Emit each output file
         performance.mark("beforePrint");
@@ -138,7 +138,8 @@ namespace ts {
             emittedFilesList: string[],
             emitterDiagnostics: DiagnosticCollection,
             { transformed, emitNodeWithSubstitution, emitNodeWithNotification }: TransformationResult,
-            hasGlobalName: (name: string) => boolean
+            hasGlobalName: (name: string) => boolean,
+            sourceMapDataList?: SourceMapData[]
         ) {
         const delimiters = createDelimiterMap();
         const brackets = createBracketsMap();
@@ -313,7 +314,6 @@ const _super = (function (geti, seti) {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         const newLine = host.getNewLine();
         const writer = createTextWriter(newLine);
         const {
