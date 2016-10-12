@@ -9,4 +9,4 @@ tests/cases/compiler/variableDeclarationInStrictMode1.ts(2,5): error TS2300: Dup
         ~~~~
 !!! error TS1100: Invalid use of 'eval' in strict mode.
         ~~~~
-!!! error TS2300: Duplicate identifier 'eval'. 
+!!! error TS2300: Duplicate identifier 'eval'.
