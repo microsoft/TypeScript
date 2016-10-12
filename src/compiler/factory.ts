@@ -2206,7 +2206,7 @@ namespace ts {
      * @param visitor: Optional callback used to visit any custom prologue directives.
      */
     export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
-        Debug.assert(target.length === 0, "PrologueDirectives should be at the first statement in the target statements array");
+        Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         let statementOffset = 0;
         const numStatements = source.length;
@@ -2219,16 +2219,20 @@ namespace ts {
                 target.push(statement);
             }
             else {
-                if (ensureUseStrict && !foundUseStrict) {
-                    target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
-                    foundUseStrict = true;
-                }
-                if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
-                    target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
-                }
-                else {
-                    break;
-                }
+                break;
+            }
+            statementOffset++;
+        }
+        if (ensureUseStrict && !foundUseStrict) {
+            target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
+        }
+        while (statementOffset < numStatements) {
+            const statement = source[statementOffset];
+            if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
+                target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
+            }
+            else {
+                break;
             }
             statementOffset++;
         }

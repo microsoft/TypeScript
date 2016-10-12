@@ -18,7 +18,7 @@ var a = (function () {
 exports.a = a;
 //// [client.js]
 "use strict";
-var server_1 = require("./server"), nameSpaceBinding = server_1;
+var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.a();
 
 

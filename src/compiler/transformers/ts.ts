@@ -148,6 +148,35 @@ namespace ts {
         }
 
         /**
+         * Specialized visitor that visits the immediate children of a SourceFile.
+         *
+         * @param node The node to visit.
+         */
+        function sourceElementVisitor(node: Node): VisitResult<Node> {
+            return saveStateAndInvoke(node, sourceElementVisitorWorker);
+        }
+
+        /**
+         * Specialized visitor that visits the immediate children of a SourceFile.
+         *
+         * @param node The node to visit.
+         */
+        function sourceElementVisitorWorker(node: Node): VisitResult<Node> {
+            switch (node.kind) {
+                case SyntaxKind.ImportDeclaration:
+                    return visitImportDeclaration(<ImportDeclaration>node);
+                case SyntaxKind.ImportEqualsDeclaration:
+                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                case SyntaxKind.ExportAssignment:
+                    return visitExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.ExportDeclaration:
+                    return visitExportDeclaration(<ExportDeclaration>node);
+                default:
+                    return visitorWorker(node);
+            }
+        }
+
+        /**
          * Specialized visitor that visits the immediate children of a namespace.
          *
          * @param node The node to visit.
@@ -457,7 +486,7 @@ namespace ts {
                 statements.push(externalHelpersModuleImport);
 
                 currentSourceFileExternalHelpersModuleName = externalHelpersModuleName;
-                addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+                addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
                 addRange(statements, endLexicalEnvironment());
                 currentSourceFileExternalHelpersModuleName = undefined;
 
@@ -465,7 +494,7 @@ namespace ts {
                 node.externalHelpersModuleName = externalHelpersModuleName;
             }
             else {
-                node = visitEachChild(node, visitor, context);
+                node = visitEachChild(node, sourceElementVisitor, context);
             }
 
             setEmitFlags(node, EmitFlags.EmitEmitHelpers | getEmitFlags(node));
@@ -2994,6 +3023,133 @@ namespace ts {
         }
 
         /**
+         * Visits an import declaration, eliding it if it is not referenced.
+         *
+         * @param node The import declaration node.
+         */
+        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
+            if (!node.importClause) {
+                // Do not elide a side-effect only import declaration.
+                //  import "foo";
+                return node;
+            }
+
+            // Elide the declaration if the import clause was elided.
+            const importClause = visitNode(node.importClause, visitImportClause, isImportClause, /*optional*/ true);
+            return importClause
+                ? updateImportDeclaration(
+                    node,
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    importClause,
+                    node.moduleSpecifier)
+                : undefined;
+        }
+
+        /**
+         * Visits an import clause, eliding it if it is not referenced.
+         *
+         * @param node The import clause node.
+         */
+        function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
+            // Elide the import clause if we elide both its name and its named bindings.
+            const name = resolver.isReferencedAliasDeclaration(node) ? node.name : undefined;
+            const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings, /*optional*/ true);
+            return (name || namedBindings) ? updateImportClause(node, name, namedBindings) : undefined;
+        }
+
+        /**
+         * Visits named import bindings, eliding it if it is not referenced.
+         *
+         * @param node The named import bindings node.
+         */
+        function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> {
+            if (node.kind === SyntaxKind.NamespaceImport) {
+                // Elide a namespace import if it is not referenced.
+                return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
+            }
+            else {
+                // Elide named imports if all of its import specifiers are elided.
+                const elements = visitNodes(node.elements, visitImportSpecifier, isImportSpecifier);
+                return some(elements) ? updateNamedImports(node, elements) : undefined;
+            }
+        }
+
+        /**
+         * Visits an import specifier, eliding it if it is not referenced.
+         *
+         * @param node The import specifier node.
+         */
+        function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> {
+            // Elide an import specifier if it is not referenced.
+            return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
+        }
+
+        /**
+         * Visits an export assignment, eliding it if it does not contain a clause that resolves
+         * to a value.
+         *
+         * @param node The export assignment node.
+         */
+        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
+            // Elide the export assignment if it does not reference a value.
+            return resolver.isValueAliasDeclaration(node)
+                ? visitEachChild(node, visitor, context)
+                : undefined;
+        }
+
+        /**
+         * Visits an export declaration, eliding it if it does not contain a clause that resolves
+         * to a value.
+         *
+         * @param node The export declaration node.
+         */
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+            if (!node.exportClause) {
+                // Elide a star export if the module it references does not export a value.
+                return resolver.moduleExportsSomeValue(node.moduleSpecifier) ? node : undefined;
+            }
+
+            if (!resolver.isValueAliasDeclaration(node)) {
+                // Elide the export declaration if it does not export a value.
+                return undefined;
+            }
+
+            // Elide the export declaration if all of its named exports are elided.
+            const exportClause = visitNode(node.exportClause, visitNamedExports, isNamedExports, /*optional*/ true);
+            return exportClause
+                ? updateExportDeclaration(
+                    node,
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    exportClause,
+                    node.moduleSpecifier)
+                : undefined;
+        }
+
+        /**
+         * Visits named exports, eliding it if it does not contain an export specifier that
+         * resolves to a value.
+         *
+         * @param node The named exports node.
+         */
+        function visitNamedExports(node: NamedExports): VisitResult<NamedExports> {
+            // Elide the named exports if all of its export specifiers were elided.
+            const elements = visitNodes(node.elements, visitExportSpecifier, isExportSpecifier);
+            return some(elements) ? updateNamedExports(node, elements) : undefined;
+        }
+
+        /**
+         * Visits an export specifier, eliding it if it does not resolve to a value.
+         *
+         * @param node The export specifier node.
+         */
+        function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> {
+            // Elide an export specifier if it does not reference a value.
+            return resolver.isValueAliasDeclaration(node) ? node : undefined;
+        }
+
+        /**
          * Determines whether to emit an import equals declaration.
          *
          * @param node The import equals declaration node.
@@ -3014,7 +3170,10 @@ namespace ts {
          */
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             if (isExternalModuleImportEqualsDeclaration(node)) {
-                return visitEachChild(node, visitor, context);
+                // Elide external module `import=` if it is not referenced.
+                return resolver.isReferencedAliasDeclaration(node)
+                    ? visitEachChild(node, visitor, context)
+                    : undefined;
             }
 
             if (!shouldEmitImportEqualsDeclaration(node)) {
