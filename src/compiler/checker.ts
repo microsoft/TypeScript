@@ -922,7 +922,7 @@ namespace ts {
                 if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
                     const decls = result.declarations;
                     if (decls && decls.length === 1 && decls[0].kind === SyntaxKind.NamespaceExportDeclaration) {
-                        error(errorLocation, Diagnostics.Identifier_0_must_be_imported_from_a_module, name);
+                        error(errorLocation, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, name);
                     }
                 }
             }
