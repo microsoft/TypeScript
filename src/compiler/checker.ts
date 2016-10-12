@@ -2228,7 +2228,8 @@ namespace ts {
                         writer.writeKeyword("this");
                     }
                     else if (type.flags & TypeFlags.Partial) {
-                        writer.writeKeyword("partial ");
+                        writer.writeKeyword("partial");
+                        writeSpace(writer);
                         writeType((type as PartialType).type, flags);
                     }
                     else if (getObjectFlags(type) & ObjectFlags.Reference) {
