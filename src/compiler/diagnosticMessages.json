@@ -3073,7 +3073,6 @@
         "category": "Error",
         "code": 17010
     },
-
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
@@ -3081,5 +3080,33 @@
     "The path in an 'extends' options must be relative or rooted.": {
         "category": "Error",
         "code": 18001
+    },
+    "Add missing 'super()' call.": {
+        "category": "Message",
+        "code": 90001
+    },
+    "Make 'super()' call the first statement in the constructor.": {
+        "category": "Message",
+        "code": 90002
+    },
+    "Change 'extends' to 'implements'": {
+        "category": "Message",
+        "code": 90003
+    },
+    "Remove unused identifiers": {
+        "category": "Message",
+        "code": 90004
+    },
+    "Implement interface on reference": {
+        "category": "Message",
+        "code": 90005
+    },
+    "Implement interface on class": {
+        "category": "Message",
+        "code": 90006
+    },
+    "Implement inherited abstract class": {
+        "category": "Message",
+        "code": 90007
     }
 }
