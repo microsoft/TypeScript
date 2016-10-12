@@ -3,6 +3,8 @@
 const expect: typeof _chai.expect = _chai.expect;
 
 namespace ts.server {
+    import CommandNames = protocol.CommandNames;
+
     let lastWrittenToHost: string;
     const mockHost: ServerHost = {
         args: [],

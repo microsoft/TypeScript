@@ -3,6 +3,7 @@
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
+    import CommandNames = server.protocol.CommandNames;
 
     const safeList = {
         path: <Path>"/safeList.json",
@@ -544,7 +545,7 @@ namespace ts.projectSystem {
 
     export function openFilesForSession(files: FileOrFolder[], session: server.Session) {
         for (const file of files) {
-            const request = makeSessionRequest<server.protocol.OpenRequestArgs>(server.CommandNames.Open, { file: file.path });
+            const request = makeSessionRequest<server.protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
             session.executeCommand(request);
         }
     }
@@ -1775,11 +1776,11 @@ namespace ts.projectSystem {
             openFilesForSession([file1], session);
 
             // Try to find some interface type defined in lib.d.ts
-            const libTypeNavToRequest = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
+            const libTypeNavToRequest = makeSessionRequest<server.protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
             const items: server.protocol.NavtoItem[] = session.executeCommand(libTypeNavToRequest).response;
             assert.isFalse(containsNavToItem(items, "Document", "interface"), `Found lib.d.ts symbol in JavaScript project nav to request result.`);
 
-            const localFunctionNavToRequst = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
+            const localFunctionNavToRequst = makeSessionRequest<server.protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
             const items2: server.protocol.NavtoItem[] = session.executeCommand(localFunctionNavToRequst).response;
             assert.isTrue(containsNavToItem(items2, "foo", "function"), `Cannot find function symbol "foo".`);
         });

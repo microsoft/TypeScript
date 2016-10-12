@@ -1,7 +1,8 @@
 /// <reference path="session.ts" />
 
 namespace ts.server {
-
+    import CommandNames = protocol.CommandNames;
+    
     export interface SessionClientHost extends LanguageServiceHost {
         writeMessage(message: string): void;
     }
