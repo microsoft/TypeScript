@@ -887,6 +887,7 @@ namespace ts {
         type: TypeNode;
     }
 
+<<<<<<< d147616ccc57b7c9f6418074c8edffd3ee258961
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
         operator: SyntaxKind.KeyOfKeyword;
@@ -899,6 +900,14 @@ namespace ts {
         indexType: TypeNode;
     }
 
+=======
+    // @kind(SyntaxKind.PartialType)
+    export interface PartialTypeNode extends TypeNode {
+        type: TypeNode;
+    }
+
+    // @kind(SyntaxKind.StringLiteralType)
+>>>>>>> Partial Types (#11233)
     export interface LiteralTypeNode extends TypeNode {
         kind: SyntaxKind.LiteralType;
         literal: Expression;
@@ -2692,8 +2701,8 @@ namespace ts {
         /* @internal */
         ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
-        Partial                 = 1 << 24,  // Partial type
+        ContainsAnyFunctionType = 1 << 21,  // Type is or contains object literal type
+        Partial                 = 1 << 22,  // Partial type
 
         /* @internal */
         Nullable = Undefined | Null,

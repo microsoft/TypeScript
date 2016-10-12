@@ -27,6 +27,7 @@ subs.name = false; // not ok
 // Errors
 subs['err'] = false;
 subs[12] = false;
+<<<<<<< d147616ccc57b7c9f6418074c8edffd3ee258961
 
 
 //// [partialType4.d.ts]
@@ -36,3 +37,5 @@ interface State1 {
     [key: string]: string | number;
 }
 declare const subs: partial State1;
+=======
+>>>>>>> Partial Types (#11233)

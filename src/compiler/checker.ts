@@ -4475,6 +4475,8 @@ namespace ts {
                     }
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
                         resolveAnonymousTypeMembers(<AnonymousType>type);
+                    } else if ((<ObjectType>type).objectFlags & ObjectFlags.Partial) {
+                        resolvePartialTypeMembers(<PartialType>type);
                     }
                     else if ((<ObjectType>type).flags & TypeFlags.Partial) {
                     resolvePartialTypeMembers(<PartialType>type);
@@ -5753,6 +5755,7 @@ namespace ts {
             return links.resolvedType;
         }
 
+<<<<<<< d147616ccc57b7c9f6418074c8edffd3ee258961
 <<<<<<< 7b34b612beda66b0812462a3feeabc63852cd842
         function getIndexTypeForTypeParameter(type: TypeParameter) {
             if (!type.resolvedIndexType) {
@@ -5899,6 +5902,14 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getIndexedAccessType(getTypeFromTypeNodeNoAlias(node.objectType), getTypeFromTypeNodeNoAlias(node.indexType), node);
+            }
+            return links.resolvedType;
+        }
+
+        function getTypeFromPartialTypeNode(node: PartialTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getPartialType(getTypeOfNode(node.type));
             }
             return links.resolvedType;
         }

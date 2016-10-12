@@ -1,5 +1,8 @@
 // @strictNullChecks: true
+<<<<<<< d147616ccc57b7c9f6418074c8edffd3ee258961
 // @declaration: true
+=======
+>>>>>>> Partial Types (#11233)
 
 interface State1 {
     name: string;
