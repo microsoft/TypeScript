@@ -5716,7 +5716,7 @@ namespace ts {
                     return getTypeFromSpreadTypeLiteral(node, aliasSymbol, aliasTypeArguments);
                 }
 
-                let type = createObjectType(TypeFlags.Anonymous, node.symbol);
+                const type = createObjectType(TypeFlags.Anonymous, node.symbol);
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
                 links.resolvedType = type;
