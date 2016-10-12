@@ -2247,10 +2247,6 @@ namespace ts {
         }
 
         function transformFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
-            // if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES2017) {
-            //     return <FunctionBody>transformAsyncFunctionBody(node);
-            // }
-
             return transformFunctionBodyWorker(node.body);
         }
 
@@ -2267,10 +2263,6 @@ namespace ts {
         }
 
         function transformConciseBody(node: ArrowFunction): ConciseBody {
-            // if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES2017) {
-            //     return transformAsyncFunctionBody(node);
-            // }
-
             return transformConciseBodyWorker(node.body, /*forceBlockFunctionBody*/ false);
         }
 

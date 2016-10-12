@@ -71,8 +71,6 @@ namespace ts {
                 return visitEachChild(node, visitor, context);
             }
 
-            // node = visitEachChild(node, visitor, context);
-            // return visitEachChild(node, visitor, context);
             return node;
         }
 
