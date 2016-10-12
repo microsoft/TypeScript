@@ -3,7 +3,7 @@
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
-    import CommandNames = server.protocol.CommandNames;
+    import CommandNames = server.CommandNames;
 
     function createTestTypingsInstaller(host: server.ServerHost) {
         return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);

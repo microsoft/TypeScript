@@ -3,7 +3,7 @@
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
-    import CommandNames = server.protocol.CommandNames;
+    import CommandNames = server.CommandNames;
 
     const safeList = {
         path: <Path>"/safeList.json",

@@ -2,87 +2,89 @@
   * Declaration module describing the TypeScript Server protocol
   */
 namespace ts.server.protocol {
-    export namespace CommandNames {
-        export const Brace = "brace";
+    export namespace CommandTypes {
+        export type Brace = "brace";
         /* @internal */
-        export const BraceFull = "brace-full";
-        export const BraceCompletion = "braceCompletion";
-        export const Change = "change";
-        export const Close = "close";
-        export const Completions = "completions";
+        export type BraceFull = "brace-full";
+        export type BraceCompletion = "braceCompletion";
+        export type Change = "change";
+        export type Close = "close";
+        export type Completions = "completions";
         /* @internal */
-        export const CompletionsFull = "completions-full";
-        export const CompletionDetails = "completionEntryDetails";
-        export const CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
-        export const CompileOnSaveEmitFile = "compileOnSaveEmitFile";
-        export const Configure = "configure";
-        export const Definition = "definition";
+        export type CompletionsFull = "completions-full";
+        export type CompletionDetails = "completionEntryDetails";
+        export type CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
+        export type CompileOnSaveEmitFile = "compileOnSaveEmitFile";
+        export type Configure = "configure";
+        export type Definition = "definition";
         /* @internal */
-        export const DefinitionFull = "definition-full";
-        export const Exit = "exit";
-        export const Format = "format";
-        export const Formatonkey = "formatonkey";
+        export type DefinitionFull = "definition-full";
+        export type Exit = "exit";
+        export type Format = "format";
+        export type Formatonkey = "formatonkey";
         /* @internal */
-        export const FormatFull = "format-full";
+        export type FormatFull = "format-full";
         /* @internal */
-        export const FormatonkeyFull = "formatonkey-full";
+        export type FormatonkeyFull = "formatonkey-full";
         /* @internal */
-        export const FormatRangeFull = "formatRange-full";
-        export const Geterr = "geterr";
-        export const GeterrForProject = "geterrForProject";
-        export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
-        export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
-        export const NavBar = "navbar";
+        export type FormatRangeFull = "formatRange-full";
+        export type Geterr = "geterr";
+        export type GeterrForProject = "geterrForProject";
+        export type SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export type SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
+        export type NavBar = "navbar";
         /* @internal */
-        export const NavBarFull = "navbar-full";
-        export const Navto = "navto";
+        export type NavBarFull = "navbar-full";
+        export type Navto = "navto";
         /* @internal */
-        export const NavtoFull = "navto-full";
-        export const Occurrences = "occurrences";
-        export const DocumentHighlights = "documentHighlights";
+        export type NavtoFull = "navto-full";
+        export type Occurrences = "occurrences";
+        export type DocumentHighlights = "documentHighlights";
         /* @internal */
-        export const DocumentHighlightsFull = "documentHighlights-full";
-        export const Open = "open";
-        export const Quickinfo = "quickinfo";
+        export type DocumentHighlightsFull = "documentHighlights-full";
+        export type Open = "open";
+        export type Quickinfo = "quickinfo";
         /* @internal */
-        export const QuickinfoFull = "quickinfo-full";
-        export const References = "references";
+        export type QuickinfoFull = "quickinfo-full";
+        export type References = "references";
         /* @internal */
-        export const ReferencesFull = "references-full";
-        export const Reload = "reload";
-        export const Rename = "rename";
+        export type ReferencesFull = "references-full";
+        export type Reload = "reload";
+        export type Rename = "rename";
         /* @internal */
-        export const RenameInfoFull = "rename-full";
+        export type RenameInfoFull = "rename-full";
         /* @internal */
-        export const RenameLocationsFull = "renameLocations-full";
-        export const Saveto = "saveto";
-        export const SignatureHelp = "signatureHelp";
+        export type RenameLocationsFull = "renameLocations-full";
+        export type Saveto = "saveto";
+        export type SignatureHelp = "signatureHelp";
         /* @internal */
-        export const SignatureHelpFull = "signatureHelp-full";
-        export const TypeDefinition = "typeDefinition";
-        export const ProjectInfo = "projectInfo";
-        export const ReloadProjects = "reloadProjects";
-        export const Unknown = "unknown";
-        export const OpenExternalProject = "openExternalProject";
-        export const OpenExternalProjects = "openExternalProjects";
-        export const CloseExternalProject = "closeExternalProject";
-        export const SynchronizeProjectList = "synchronizeProjectList";
+        export type SignatureHelpFull = "signatureHelp-full";
+        export type TypeDefinition = "typeDefinition";
+        export type ProjectInfo = "projectInfo";
+        export type ReloadProjects = "reloadProjects";
+        export type Unknown = "unknown";
+        export type OpenExternalProject = "openExternalProject";
+        export type OpenExternalProjects = "openExternalProjects";
+        export type CloseExternalProject = "closeExternalProject";
         /* @internal */
-        export const ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        export type SynchronizeProjectList = "synchronizeProjectList";
         /* @internal */
-        export const EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
-        export const Cleanup = "cleanup";
-        export const OutliningSpans = "outliningSpans";
-        export const TodoComments = "todoComments";
-        export const Indentation = "indentation";
-        export const DocCommentTemplate = "docCommentTemplate";
+        export type ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
         /* @internal */
-        export const CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        export type EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
         /* @internal */
-        export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        export type Cleanup = "cleanup";
+        export type OutliningSpans = "outliningSpans";
+        export type TodoComments = "todoComments";
+        export type Indentation = "indentation";
+        export type DocCommentTemplate = "docCommentTemplate";
         /* @internal */
-        export const BreakpointStatement = "breakpointStatement";
-        export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export type CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        /* @internal */
+        export type NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        /* @internal */
+        export type BreakpointStatement = "breakpointStatement";
+        export type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
     }
 
     /**
@@ -119,6 +121,7 @@ namespace ts.server.protocol {
       * Request to reload the project structure for all the opened files
       */
     export interface ReloadProjectsRequest extends Message {
+        command: CommandTypes.ReloadProjects;
     }
 
     /**
@@ -182,9 +185,24 @@ namespace ts.server.protocol {
     }
 
     /**
+     * Requests a JS Doc comment template for a given position
+     */
+    export interface DocCommentTemplateRequest extends FileLocationRequest {
+        command: CommandTypes.DocCommentTemplate;
+    }
+
+    /**
+     * Response to DocCommentTemplateRequest
+     */
+    export interface DocCommandTemplateResponse extends Response {
+        body?: TextInsertion;
+    }
+
+    /**
      * A request to get TODO comments from the file
      */
     export interface TodoCommentRequest extends FileRequest {
+        command: CommandTypes.TodoComments;
         arguments: TodoCommentRequestArgs;
     }
 
@@ -199,10 +217,53 @@ namespace ts.server.protocol {
     }
 
     /**
+     * Response for TodoCommentRequest request.
+     */
+    export interface TodoCommentsResponse extends Response {
+        body?: TodoComment[];
+    }
+
+    /**
+     * Request to obtain outlining spans in file.
+     */
+    export interface OutliningSpansRequest extends FileRequest {
+        command: CommandTypes.OutliningSpans;
+    }
+
+    /**
+     * Response to OutliningSpansRequest request.
+     */
+    export interface OutliningSpansResponse extends Response {
+        body?: OutliningSpan[];
+    }
+
+    /**
      * A request to get indentation for a location in file
      */
     export interface IndentationRequest extends FileLocationRequest {
+        command: CommandTypes.Indentation;
         arguments: IndentationRequestArgs;
+    }
+
+    /**
+     * Response for IndentationRequest request.
+     */
+    export interface IndentationResponse extends Response {
+        body?: IndentationResult;
+    }
+
+    /**
+     * Indentation result representing where indentation should be placed
+     */
+    export interface IndentationResult {
+        /**
+         * The base position in the document that the indent should be relative to
+         */
+        position: number;
+        /**
+         * The number of columns the indent should be at relative to the position's column.
+         */
+        indentation: number;
     }
 
     /**
@@ -230,6 +291,7 @@ namespace ts.server.protocol {
       * A request to get the project information of the current file.
       */
     export interface ProjectInfoRequest extends Request {
+        command: CommandTypes.ProjectInfo;
         arguments: ProjectInfoRequestArgs;
     }
 
@@ -328,16 +390,17 @@ namespace ts.server.protocol {
     }
 
     /**
-     * A request to get semantic diagnostics for a span in the file
+     * A request to get encoded semantic classifications for a span in the file
      */
-    export interface SemanticDiagnosticsRequest extends FileRequest {
-        arguments: SemanticDiagnosticsRequestArgs;
+    /** @internal */
+    export interface EncodedSemanticClassificationsRequest extends FileRequest {
+        arguments: EncodedSemanticClassificationsRequestArgs;
     }
 
     /**
-     * Arguments for SemanticDiagnosticsRequest request.
+     * Arguments for EncodedSemanticClassificationsRequest request.
      */
-    export interface SemanticDiagnosticsRequestArgs extends FileRequestArgs {
+    export interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
          */
@@ -365,6 +428,7 @@ namespace ts.server.protocol {
       * define the symbol found in file at location line, col.
       */
     export interface DefinitionRequest extends FileLocationRequest {
+        command: CommandTypes.Definition;
     }
 
     /**
@@ -373,6 +437,7 @@ namespace ts.server.protocol {
       * define the type for the symbol found in file at location line, col.
       */
     export interface TypeDefinitionRequest extends FileLocationRequest {
+        command: CommandTypes.TypeDefinition;
     }
 
     /**
@@ -433,6 +498,7 @@ namespace ts.server.protocol {
      * Request to get brace completion for a location in the file.
      */
     export interface BraceCompletionRequest extends FileLocationRequest {
+        command: CommandTypes.BraceCompletion;
         arguments: BraceCompletionRequestArgs;
     }
 
@@ -452,6 +518,7 @@ namespace ts.server.protocol {
       * in the file at a given line and column.
       */
     export interface OccurrencesRequest extends FileLocationRequest {
+        command: CommandTypes.Occurrences;
     }
 
     export interface OccurrencesResponseItem extends FileSpan {
@@ -471,6 +538,7 @@ namespace ts.server.protocol {
       * in the file at a given line and column.
       */
     export interface DocumentHighlightsRequest extends FileLocationRequest {
+        command: CommandTypes.DocumentHighlights;
         arguments: DocumentHighlightsRequestArgs;
     }
 
@@ -510,6 +578,7 @@ namespace ts.server.protocol {
       * reference the symbol found in file at location line, col.
       */
     export interface ReferencesRequest extends FileLocationRequest {
+        command: CommandTypes.References;
     }
 
     export interface ReferencesResponseItem extends FileSpan {
@@ -584,6 +653,7 @@ namespace ts.server.protocol {
       * name of the symbol so that client can print it unambiguously.
       */
     export interface RenameRequest extends FileLocationRequest {
+        command: CommandTypes.Rename;
         arguments: RenameRequestArgs;
     }
 
@@ -823,6 +893,7 @@ namespace ts.server.protocol {
       *  host information, such as host type, tab size, and indent size.
       */
     export interface ConfigureRequest extends Request {
+        command: CommandTypes.Configure;
         arguments: ConfigureRequestArguments;
     }
 
@@ -858,6 +929,7 @@ namespace ts.server.protocol {
       * send a response to an open request.
       */
     export interface OpenRequest extends Request {
+        command: CommandTypes.Open;
         arguments: OpenRequestArgs;
     }
 
@@ -865,6 +937,7 @@ namespace ts.server.protocol {
      * Request to open or update external project
      */
     export interface OpenExternalProjectRequest extends Request {
+        command: CommandTypes.OpenExternalProject;
         arguments: OpenExternalProjectArgs;
     }
 
@@ -877,6 +950,7 @@ namespace ts.server.protocol {
      * Request to open multiple external projects
      */
     export interface OpenExternalProjectsRequest extends Request {
+        command: CommandTypes.OpenExternalProjects;
         arguments: OpenExternalProjectsArgs;
     }
 
@@ -891,9 +965,24 @@ namespace ts.server.protocol {
     }
 
     /**
+     * Response to OpenExternalProjectRequest request. This is just an acknowledgement, so
+     * no body field is required.
+     */
+    export interface OpenExternalProjectResponse extends Response {
+    }
+
+    /**
+     * Response to OpenExternalProjectsRequest request. This is just an acknowledgement, so
+     * no body field is required.
+     */
+    export interface OpenExternalProjectsResponse extends Response {
+    }
+
+    /**
      * Request to close external project.
      */
     export interface CloseExternalProjectRequest extends Request {
+        command: CommandTypes.CloseExternalProject;
         arguments: CloseExternalProjectRequestArgs;
     }
 
@@ -908,8 +997,16 @@ namespace ts.server.protocol {
     }
 
     /**
+     * Response to CloseExternalProjectRequest request. This is just an acknowledgement, so
+     * no body field is required.
+     */
+    export interface CloseExternalProjectResponse extends Response {
+    }
+
+    /**
      * Request to check if given list of projects is up-to-date and synchronize them if necessary
      */
+    /* @internal */
     export interface SynchronizeProjectListRequest extends Request {
         arguments: SynchronizeProjectListRequestArgs;
     }
@@ -961,6 +1058,7 @@ namespace ts.server.protocol {
      * or all open loose files and its transitive closure of referenced files if 'useOneInferredProject' is true.
      */
     export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
+        command: CommandTypes.CompilerOptionsForInferredProjects;
         arguments: SetCompilerOptionsForInferredProjectsArgs;
     }
 
@@ -975,10 +1073,18 @@ namespace ts.server.protocol {
     }
 
     /**
+      * Response to SetCompilerOptionsForInferredProjectsResponse request. This is just an acknowledgement, so
+      * no body field is required.
+      */
+    export interface SetCompilerOptionsForInferredProjectsResponse extends Response {
+    }
+
+    /**
       *  Exit request; value of command field is "exit".  Ask the server process
       *  to exit.
       */
     export interface ExitRequest extends Request {
+        command: CommandTypes.Exit;
     }
 
     /**
@@ -989,6 +1095,7 @@ namespace ts.server.protocol {
       * currently send a response to a close request.
       */
     export interface CloseRequest extends FileRequest {
+        command: CommandTypes.Close;
     }
 
     /**
@@ -996,6 +1103,7 @@ namespace ts.server.protocol {
      * NOTE: this us query-only operation and does not generate any output on disk.
      */
     export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
+        command: CommandTypes.CompileOnSaveAffectedFileList;
     }
 
     /**
@@ -1023,7 +1131,8 @@ namespace ts.server.protocol {
      * Request to recompile the file. All generated outputs (.js, .d.ts or .js.map files) is written on disk.
      */
     export interface CompileOnSaveEmitFileRequest extends FileRequest {
-        args: CompileOnSaveEmitFileRequestArgs;
+        command: CommandTypes.CompileOnSaveEmitFile;
+        arguments: CompileOnSaveEmitFileRequestArgs;
     }
 
     /**
@@ -1043,6 +1152,7 @@ namespace ts.server.protocol {
       * line, col.
       */
     export interface QuickInfoRequest extends FileLocationRequest {
+        command: CommandTypes.Quickinfo;
     }
 
     /**
@@ -1119,6 +1229,7 @@ namespace ts.server.protocol {
       * reformatted text.
       */
     export interface FormatRequest extends FileLocationRequest {
+        command: CommandTypes.Format;
         arguments: FormatRequestArgs;
     }
 
@@ -1175,6 +1286,7 @@ namespace ts.server.protocol {
       * reformatted text.
       */
     export interface FormatOnKeyRequest extends FileLocationRequest {
+        command: CommandTypes.Formatonkey;
         arguments: FormatOnKeyRequestArgs;
     }
 
@@ -1195,6 +1307,7 @@ namespace ts.server.protocol {
       * begin with prefix.
       */
     export interface CompletionsRequest extends FileLocationRequest {
+        command: CommandTypes.Completions;
         arguments: CompletionsRequestArgs;
     }
 
@@ -1215,6 +1328,7 @@ namespace ts.server.protocol {
       * detailed information for each completion entry.
       */
     export interface CompletionDetailsRequest extends FileLocationRequest {
+        command: CommandTypes.CompletionDetails;
         arguments: CompletionDetailsRequestArgs;
     }
 
@@ -1401,6 +1515,7 @@ namespace ts.server.protocol {
       * help.
       */
     export interface SignatureHelpRequest extends FileLocationRequest {
+        command: CommandTypes.SignatureHelp;
         arguments: SignatureHelpRequestArgs;
     }
 
@@ -1415,6 +1530,7 @@ namespace ts.server.protocol {
       * Synchronous request for semantic diagnostics of one file.
       */
     export interface SemanticDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SemanticDiagnosticsSync;
         arguments: SemanticDiagnosticsSyncRequestArgs;
     }
 
@@ -1433,6 +1549,7 @@ namespace ts.server.protocol {
       * Synchronous request for syntactic diagnostics of one file.
       */
     export interface SyntacticDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SyntacticDiagnosticsSync;
         arguments: SyntacticDiagnosticsSyncRequestArgs;
     }
 
@@ -1469,6 +1586,7 @@ namespace ts.server.protocol {
       * it request for every file in this project.
       */
     export interface GeterrForProjectRequest extends Request {
+        command: CommandTypes.GeterrForProject;
         arguments: GeterrForProjectRequestArgs;
     }
 
@@ -1500,6 +1618,7 @@ namespace ts.server.protocol {
       * file that is currently visible, in most-recently-used order.
       */
     export interface GeterrRequest extends Request {
+        command: CommandTypes.Geterr;
         arguments: GeterrRequestArgs;
     }
 
@@ -1587,11 +1706,12 @@ namespace ts.server.protocol {
       * The two names can be identical.
       */
     export interface ReloadRequest extends FileRequest {
+        command: CommandTypes.Reload;
         arguments: ReloadRequestArgs;
     }
 
     /**
-      * Response to "reload" request.  This is just an acknowledgement, so
+      * Response to "reload" request. This is just an acknowledgement, so
       * no body field is required.
       */
     export interface ReloadResponse extends Response {
@@ -1616,6 +1736,7 @@ namespace ts.server.protocol {
       * "saveto" request.
       */
     export interface SavetoRequest extends FileRequest {
+        command: CommandTypes.Saveto;
         arguments: SavetoRequestArgs;
     }
 
@@ -1643,6 +1764,7 @@ namespace ts.server.protocol {
       * context for the search is given by the named file.
       */
     export interface NavtoRequest extends FileRequest {
+        command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }
 
@@ -1726,6 +1848,7 @@ namespace ts.server.protocol {
       * Server does not currently send a response to a change request.
       */
     export interface ChangeRequest extends FileLocationRequest {
+        command: CommandTypes.Change;
         arguments: ChangeRequestArgs;
     }
 
@@ -1742,6 +1865,7 @@ namespace ts.server.protocol {
       * found in file at location line, offset.
       */
     export interface BraceRequest extends FileLocationRequest {
+        command: CommandTypes.Brace;
     }
 
     /**
@@ -1750,6 +1874,7 @@ namespace ts.server.protocol {
       * extracted from the requested file.
       */
     export interface NavBarRequest extends FileRequest {
+        command: CommandTypes.NavBar;
     }
 
     export interface NavigationBarItem {

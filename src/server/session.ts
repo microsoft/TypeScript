@@ -70,7 +70,69 @@ namespace ts.server {
         return true;
     }
 
-    import CommandNames = protocol.CommandNames;
+    export namespace CommandNames {
+        export const Brace: protocol.CommandTypes.Brace = "brace";
+        export const BraceFull: protocol.CommandTypes.BraceFull = "brace-full";
+        export const BraceCompletion: protocol.CommandTypes.BraceCompletion = "braceCompletion";
+        export const Change: protocol.CommandTypes.Change = "change";
+        export const Close: protocol.CommandTypes.Close = "close";
+        export const Completions: protocol.CommandTypes.Completions = "completions";
+        export const CompletionsFull: protocol.CommandTypes.CompletionsFull = "completions-full";
+        export const CompletionDetails: protocol.CommandTypes.CompletionDetails = "completionEntryDetails";
+        export const CompileOnSaveAffectedFileList: protocol.CommandTypes.CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
+        export const CompileOnSaveEmitFile: protocol.CommandTypes.CompileOnSaveEmitFile = "compileOnSaveEmitFile";
+        export const Configure: protocol.CommandTypes.Configure = "configure";
+        export const Definition: protocol.CommandTypes.Definition = "definition";
+        export const DefinitionFull: protocol.CommandTypes.DefinitionFull = "definition-full";
+        export const Exit: protocol.CommandTypes.Exit = "exit";
+        export const Format: protocol.CommandTypes.Format = "format";
+        export const Formatonkey: protocol.CommandTypes.Formatonkey = "formatonkey";
+        export const FormatFull: protocol.CommandTypes.FormatFull = "format-full";
+        export const FormatonkeyFull: protocol.CommandTypes.FormatonkeyFull = "formatonkey-full";
+        export const FormatRangeFull: protocol.CommandTypes.FormatRangeFull = "formatRange-full";
+        export const Geterr: protocol.CommandTypes.Geterr = "geterr";
+        export const GeterrForProject: protocol.CommandTypes.GeterrForProject = "geterrForProject";
+        export const SemanticDiagnosticsSync: protocol.CommandTypes.SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export const SyntacticDiagnosticsSync: protocol.CommandTypes.SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
+        export const NavBar: protocol.CommandTypes.NavBar = "navbar";
+        export const NavBarFull: protocol.CommandTypes.NavBarFull = "navbar-full";
+        export const Navto: protocol.CommandTypes.Navto = "navto";
+        export const NavtoFull: protocol.CommandTypes.NavtoFull = "navto-full";
+        export const Occurrences: protocol.CommandTypes.Occurrences = "occurrences";
+        export const DocumentHighlights: protocol.CommandTypes.DocumentHighlights = "documentHighlights";
+        export const DocumentHighlightsFull: protocol.CommandTypes.DocumentHighlightsFull = "documentHighlights-full";
+        export const Open: protocol.CommandTypes.Open = "open";
+        export const Quickinfo: protocol.CommandTypes.Quickinfo = "quickinfo";
+        export const QuickinfoFull: protocol.CommandTypes.QuickinfoFull = "quickinfo-full";
+        export const References: protocol.CommandTypes.References = "references";
+        export const ReferencesFull: protocol.CommandTypes.ReferencesFull = "references-full";
+        export const Reload: protocol.CommandTypes.Reload = "reload";
+        export const Rename: protocol.CommandTypes.Rename = "rename";
+        export const RenameInfoFull: protocol.CommandTypes.RenameInfoFull = "rename-full";
+        export const RenameLocationsFull: protocol.CommandTypes.RenameLocationsFull = "renameLocations-full";
+        export const Saveto: protocol.CommandTypes.Saveto = "saveto";
+        export const SignatureHelp: protocol.CommandTypes.SignatureHelp = "signatureHelp";
+        export const SignatureHelpFull: protocol.CommandTypes.SignatureHelpFull = "signatureHelp-full";
+        export const TypeDefinition: protocol.CommandTypes.TypeDefinition = "typeDefinition";
+        export const ProjectInfo: protocol.CommandTypes.ProjectInfo = "projectInfo";
+        export const ReloadProjects: protocol.CommandTypes.ReloadProjects = "reloadProjects";
+        export const Unknown: protocol.CommandTypes.Unknown = "unknown";
+        export const OpenExternalProject: protocol.CommandTypes.OpenExternalProject = "openExternalProject";
+        export const OpenExternalProjects: protocol.CommandTypes.OpenExternalProjects = "openExternalProjects";
+        export const CloseExternalProject: protocol.CommandTypes.CloseExternalProject = "closeExternalProject";
+        export const SynchronizeProjectList: protocol.CommandTypes.SynchronizeProjectList = "synchronizeProjectList";
+        export const ApplyChangedToOpenFiles: protocol.CommandTypes.ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        export const EncodedSemanticClassificationsFull: protocol.CommandTypes.EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
+        export const Cleanup: protocol.CommandTypes.Cleanup = "cleanup";
+        export const OutliningSpans: protocol.CommandTypes.OutliningSpans = "outliningSpans";
+        export const TodoComments: protocol.CommandTypes.TodoComments = "todoComments";
+        export const Indentation: protocol.CommandTypes.Indentation = "indentation";
+        export const DocCommentTemplate: protocol.CommandTypes.DocCommentTemplate = "docCommentTemplate";
+        export const CompilerOptionsDiagnosticsFull: protocol.CommandTypes.CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        export const NameOrDottedNameSpan: protocol.CommandTypes.NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        export const BreakpointStatement: protocol.CommandTypes.BreakpointStatement = "breakpointStatement";
+        export const CompilerOptionsForInferredProjects: protocol.CommandTypes.CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+    }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);
@@ -278,7 +340,7 @@ namespace ts.server {
             }
         }
 
-        private getEncodedSemanticClassifications(args: protocol.SemanticDiagnosticsRequestArgs) {
+        private getEncodedSemanticClassifications(args: protocol.EncodedSemanticClassificationsRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             return project.getLanguageService().getEncodedSemanticClassifications(file, args);
         }
@@ -1308,7 +1370,7 @@ namespace ts.server {
             [CommandNames.BraceCompletion]: (request: protocol.BraceCompletionRequest) => {
                 return this.requiredResponse(this.isValidBraceCompletion(request.arguments));
             },
-            [CommandNames.DocCommentTemplate]: (request: protocol.FileLocationRequest) => {
+            [CommandNames.DocCommentTemplate]: (request: protocol.DocCommentTemplateRequest) => {
                 return this.requiredResponse(this.getDocCommentTemplate(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.FormatRequest) => {
@@ -1350,7 +1412,7 @@ namespace ts.server {
             [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
                 return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
             },
-            [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.SemanticDiagnosticsRequest) => {
+            [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.EncodedSemanticClassificationsRequest) => {
                 return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
             },
             [CommandNames.Cleanup]: (request: protocol.Request) => {
