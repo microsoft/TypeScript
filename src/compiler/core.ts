@@ -271,7 +271,7 @@ namespace ts {
         return result;
     }
 
-    // Maps from T to T and avoids allocation of all elements map to themselves
+    // Maps from T to T and avoids allocation if all elements map to themselves
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[] {
         let result: T[];
         if (array) {
