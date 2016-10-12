@@ -1923,7 +1923,7 @@
         "category": "Error",
         "code": 2685
     },
-    "Identifier '{0}' must be imported from a module": {
+    "'{0}' refers to a UMD global, but the current file is a module. Consider adding an import instead.": {
         "category": "Error",
         "code": 2686
     },
