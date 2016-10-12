@@ -59,7 +59,7 @@ namespace ts {
 
         const printFile = createPrinter(host, undefined, createDiagnosticCollection(), transform, () => false);
 
-        printFile("output.js", "", [file], false);
+        printFile("output.js", "", [file], /*isBundledEmit*/ false);
 
         // Clean up emit nodes on parse tree
         factory.disposeEmitNodes(file);
@@ -137,7 +137,7 @@ namespace ts {
             host: EmitHost,
             emittedFilesList: string[],
             emitterDiagnostics: DiagnosticCollection,
-            { transformed, emitNodeWithSubstitution, emitNodeWithNotification }: TransformationResult,
+            { emitNodeWithSubstitution, emitNodeWithNotification }: TransformationResult,
             hasGlobalName: (name: string) => boolean,
             sourceMapDataList?: SourceMapData[]
         ) {
@@ -310,7 +310,7 @@ const _super = (function (geti, seti) {
     const cache = Object.create(null);
     return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
 })(name => super[name], (name, value) => super[name] = value);`;
-        
+
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
