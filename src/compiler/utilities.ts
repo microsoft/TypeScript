@@ -4142,6 +4142,8 @@ namespace ts {
 namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         switch (options.target) {
+            case ScriptTarget.ES2017:
+                return "lib.es2017.d.ts";
             case ScriptTarget.ES2016:
                 return "lib.es2016.d.ts";
             case ScriptTarget.ES6:

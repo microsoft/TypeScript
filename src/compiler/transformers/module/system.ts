@@ -662,9 +662,11 @@ namespace ts {
             if (hasModifier(node, ModifierFlags.Export)) {
                 // If the function is exported, ensure it has a name and rewrite the function without any export flags.
                 const name = node.name || getGeneratedNameForNode(node);
+                // Keep async modifier for ES2017 transformer
+                const isAsync = hasModifier(node, ModifierFlags.Async);
                 const newNode = createFunctionDeclaration(
                     /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
+                    isAsync ? [<Modifier>createNode(SyntaxKind.AsyncKeyword)] : undefined,
                     node.asteriskToken,
                     name,
                     /*typeParameters*/ undefined,

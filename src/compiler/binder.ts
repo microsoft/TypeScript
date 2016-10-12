@@ -2555,6 +2555,11 @@ namespace ts {
         // extends clause of a class.
         let transformFlags = subtreeFlags | TransformFlags.AssertES6;
 
+        // propagate ES2017
+        if (node.expression.transformFlags & TransformFlags.ContainsES2017) {
+            transformFlags |= TransformFlags.ContainsES2017;
+        }
+
         // If an ExpressionWithTypeArguments contains type arguments, then it
         // is TypeScript syntax.
         if (node.typeArguments) {
@@ -2593,6 +2598,11 @@ namespace ts {
             || (modifierFlags & (ModifierFlags.Async | ModifierFlags.Abstract))
             || (subtreeFlags & TransformFlags.ContainsDecorators)) {
             transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // Async MethodDeclaration is ES2017
+        if (modifierFlags & ModifierFlags.Async) {
+            transformFlags |= TransformFlags.AssertES2017;
         }
 
         // Currently, we only support generators that were originally async function bodies.
@@ -2656,7 +2666,7 @@ namespace ts {
 
             // If a FunctionDeclaration is async, then it is TypeScript syntax.
             if (modifierFlags & ModifierFlags.Async) {
-                transformFlags |= TransformFlags.AssertTypeScript;
+                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2017;
             }
 
             // If a FunctionDeclaration's subtree has marked the container as needing to capture the
@@ -2687,7 +2697,7 @@ namespace ts {
 
         // An async function expression is TypeScript syntax.
         if (modifierFlags & ModifierFlags.Async) {
-            transformFlags |= TransformFlags.AssertTypeScript;
+            transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2017;
         }
 
         // If a FunctionExpression's subtree has marked the container as needing to capture the
@@ -2717,7 +2727,7 @@ namespace ts {
 
         // An async arrow function is TypeScript syntax.
         if (modifierFlags & ModifierFlags.Async) {
-            transformFlags |= TransformFlags.AssertTypeScript;
+            transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2017;
         }
 
         // If an ArrowFunction contains a lexical this, its container must capture the lexical this.
@@ -2856,14 +2866,18 @@ namespace ts {
         let excludeFlags = TransformFlags.NodeExcludes;
 
         switch (kind) {
+            case SyntaxKind.AsyncKeyword:
+            case SyntaxKind.AwaitExpression:
+                // Typescript async/await are ES2017 features
+                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2017;
+                break;
+
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.DeclareKeyword:
-            case SyntaxKind.AsyncKeyword:
             case SyntaxKind.ConstKeyword:
-            case SyntaxKind.AwaitExpression:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
             case SyntaxKind.TypeAssertionExpression:

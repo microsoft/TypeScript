@@ -4,8 +4,6 @@
 
 /*@internal*/
 namespace ts {
-    type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
-
     /**
      * Indicates whether to emit type metadata in the new format.
      */
@@ -16,8 +14,6 @@ namespace ts {
         ClassAliases = 1 << 0,
         /** Enables substitutions for namespace exports. */
         NamespaceExports = 1 << 1,
-        /** Enables substitutions for async methods with `super` calls. */
-        AsyncMethodsWithSuper = 1 << 2,
         /* Enables substitutions for unqualified enum members */
         NonQualifiedEnumMembers = 1 << 3
     }
@@ -71,12 +67,6 @@ namespace ts {
          * just-in-time substitution while printing an expression identifier.
          */
         let applicableSubstitutions: TypeScriptSubstitutionFlags;
-
-        /**
-         * This keeps track of containers where `super` is valid, for use with
-         * just-in-time substitution for `super` expressions inside of async methods.
-         */
-        let currentSuperContainer: SuperContainer;
 
         return transformSourceFile;
 
@@ -240,6 +230,7 @@ namespace ts {
                     // ES6 export and default modifiers are elided when inside a namespace.
                     return currentNamespace ? undefined : node;
 
+                // Typescript ES2017 async/await are handled by ES2017 transformer
                 case SyntaxKind.AsyncKeyword:
                     return node;
 
@@ -388,7 +379,7 @@ namespace ts {
                     return visitEnumDeclaration(<EnumDeclaration>node);
 
                 case SyntaxKind.AwaitExpression:
-                    // TypeScript 'await' expressions must be transformed.
+                    // Typescript ES2017 async/await are handled by ES2017 transformer
                     return visitAwaitExpression(<AwaitExpression>node);
 
                 case SyntaxKind.VariableStatement:
@@ -2225,13 +2216,9 @@ namespace ts {
                 /*location*/ node
             );
 
-            // Add ES8 async function expression modifier
-            // Not sure this is the right place? Might be better to move this
-            // into createFunctionExpression itself.
-            if ((languageVersion >= ScriptTarget.ES8) && isAsyncFunctionLike(node)) {
-                const funcModifiers = visitNodes(node.modifiers, visitor, isModifier);
-                func.modifiers = createNodeArray(funcModifiers);
-            }
+            // Keep modifiers in case of async functions
+            const funcModifiers = visitNodes(node.modifiers, visitor, isModifier);
+            func.modifiers = createNodeArray(funcModifiers);
 
             setOriginalNode(func, node);
 
@@ -2260,9 +2247,9 @@ namespace ts {
         }
 
         function transformFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
-            if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES8) {
-                return <FunctionBody>transformAsyncFunctionBody(node);
-            }
+            // if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES2017) {
+            //     return <FunctionBody>transformAsyncFunctionBody(node);
+            // }
 
             return transformFunctionBodyWorker(node.body);
         }
@@ -2280,9 +2267,9 @@ namespace ts {
         }
 
         function transformConciseBody(node: ArrowFunction): ConciseBody {
-            if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES8) {
-                return transformAsyncFunctionBody(node);
-            }
+            // if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES2017) {
+            //     return transformAsyncFunctionBody(node);
+            // }
 
             return transformConciseBodyWorker(node.body, /*forceBlockFunctionBody*/ false);
         }
@@ -2304,72 +2291,6 @@ namespace ts {
                 else {
                     return merged;
                 }
-            }
-        }
-
-        function getPromiseConstructor(type: TypeNode) {
-            const typeName = getEntityNameFromTypeNode(type);
-            if (typeName && isEntityName(typeName)) {
-                const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
-                if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
-                    || serializationKind === TypeReferenceSerializationKind.Unknown) {
-                    return typeName;
-                }
-            }
-
-            return undefined;
-        }
-
-        function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody | FunctionBody {
-            const promiseConstructor = languageVersion < ScriptTarget.ES6 ? getPromiseConstructor(node.type) : undefined;
-            const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
-            const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
-
-            // An async function is emit as an outer function that calls an inner
-            // generator function. To preserve lexical bindings, we pass the current
-            // `this` and `arguments` objects to `__awaiter`. The generator function
-            // passed to `__awaiter` is executed inside of the callback to the
-            // promise constructor.
-
-
-            if (!isArrowFunction) {
-                const statements: Statement[] = [];
-                const statementOffset = addPrologueDirectives(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, visitor);
-                statements.push(
-                    createReturn(
-                        createAwaiterHelper(
-                            currentSourceFileExternalHelpersModuleName,
-                            hasLexicalArguments,
-                            promiseConstructor,
-                            transformFunctionBodyWorker(<Block>node.body, statementOffset)
-                        )
-                    )
-                );
-
-                const block = createBlock(statements, /*location*/ node.body, /*multiLine*/ true);
-
-                // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
-                // This step isn't needed if we eventually transform this to ES5.
-                if (languageVersion >= ScriptTarget.ES6) {
-                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
-                        enableSubstitutionForAsyncMethodsWithSuper();
-                        setEmitFlags(block, EmitFlags.EmitAdvancedSuperHelper);
-                    }
-                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
-                        enableSubstitutionForAsyncMethodsWithSuper();
-                        setEmitFlags(block, EmitFlags.EmitSuperHelper);
-                    }
-                }
-
-                return block;
-            }
-            else {
-                return createAwaiterHelper(
-                    currentSourceFileExternalHelpersModuleName,
-                    hasLexicalArguments,
-                    promiseConstructor,
-                    <Block>transformConciseBodyWorker(node.body, /*forceBlockFunctionBody*/ true)
-                );
             }
         }
 
@@ -2458,33 +2379,18 @@ namespace ts {
         /**
          * Visits an await expression.
          *
-         * This function will be called any time a TypeScript await expression is encountered.
+         * This function will be called any time a ES2017 await expression is encountered.
          *
          * @param node The await expression node.
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
-            const targetAtLeastES8 = languageVersion >= ScriptTarget.ES8;
-            return setOriginalNode(
-                targetAtLeastES8 ? createAwaitExpression() : createYieldExpression(),
+            return updateNode(
+                createAwait(
+                    visitNode(node.expression, visitor, isExpression),
+                    /*location*/ node
+                ),
                 node
             );
-
-            function createAwaitExpression() {
-                const awaitExpression = createAwait(
-                    visitNode(node.expression, visitor, isExpression),
-                    /*location*/ node
-                );
-                return awaitExpression;
-            }
-
-            function createYieldExpression() {
-                const yieldExpression = createYield(
-                    /*asteriskToken*/ undefined,
-                    visitNode(node.expression, visitor, isExpression),
-                    /*location*/ node
-                );
-                return yieldExpression;
-            }
         }
 
         /**
@@ -3241,25 +3147,6 @@ namespace ts {
             }
         }
 
-        function enableSubstitutionForAsyncMethodsWithSuper() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.AsyncMethodsWithSuper;
-
-                // We need to enable substitutions for call, property access, and element access
-                // if we need to rewrite super calls.
-                context.enableSubstitution(SyntaxKind.CallExpression);
-                context.enableSubstitution(SyntaxKind.PropertyAccessExpression);
-                context.enableSubstitution(SyntaxKind.ElementAccessExpression);
-
-                // We need to be notified when entering and exiting declarations that bind super.
-                context.enableEmitNotification(SyntaxKind.ClassDeclaration);
-                context.enableEmitNotification(SyntaxKind.MethodDeclaration);
-                context.enableEmitNotification(SyntaxKind.GetAccessor);
-                context.enableEmitNotification(SyntaxKind.SetAccessor);
-                context.enableEmitNotification(SyntaxKind.Constructor);
-            }
-        }
-
         function enableSubstitutionForClassAliases() {
             if ((enabledSubstitutions & TypeScriptSubstitutionFlags.ClassAliases) === 0) {
                 enabledSubstitutions |= TypeScriptSubstitutionFlags.ClassAliases;
@@ -3287,15 +3174,6 @@ namespace ts {
             }
         }
 
-        function isSuperContainer(node: Node): node is SuperContainer {
-            const kind = node.kind;
-            return kind === SyntaxKind.ClassDeclaration
-                || kind === SyntaxKind.Constructor
-                || kind === SyntaxKind.MethodDeclaration
-                || kind === SyntaxKind.GetAccessor
-                || kind === SyntaxKind.SetAccessor;
-        }
-
         function isTransformedModuleDeclaration(node: Node): boolean {
             return getOriginalNode(node).kind === SyntaxKind.ModuleDeclaration;
         }
@@ -3312,12 +3190,6 @@ namespace ts {
          */
         function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
             const savedApplicableSubstitutions = applicableSubstitutions;
-            const savedCurrentSuperContainer = currentSuperContainer;
-            // If we need to support substitutions for `super` in an async method,
-            // we should track it here.
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
-                currentSuperContainer = node;
-            }
 
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)) {
                 applicableSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
@@ -3330,7 +3202,6 @@ namespace ts {
             previousOnEmitNode(emitContext, node, emitCallback);
 
             applicableSubstitutions = savedApplicableSubstitutions;
-            currentSuperContainer = savedCurrentSuperContainer;
         }
 
         /**
@@ -3377,11 +3248,6 @@ namespace ts {
                     return substitutePropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return substituteElementAccessExpression(<ElementAccessExpression>node);
-                case SyntaxKind.CallExpression:
-                    if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) {
-                        return substituteCallExpression(<CallExpression>node);
-                    }
-                    break;
             }
 
             return node;
@@ -3436,54 +3302,11 @@ namespace ts {
             return undefined;
         }
 
-        function substituteCallExpression(node: CallExpression): Expression {
-            const expression = node.expression;
-            if (isSuperProperty(expression)) {
-                const flags = getSuperContainerAsyncMethodFlags();
-                if (flags) {
-                    const argumentExpression = isPropertyAccessExpression(expression)
-                        ? substitutePropertyAccessExpression(expression)
-                        : substituteElementAccessExpression(expression);
-                    return createCall(
-                        createPropertyAccess(argumentExpression, "call"),
-                        /*typeArguments*/ undefined,
-                        [
-                            createThis(),
-                            ...node.arguments
-                        ]
-                    );
-                }
-            }
-            return node;
-        }
-
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper && node.expression.kind === SyntaxKind.SuperKeyword) {
-                const flags = getSuperContainerAsyncMethodFlags();
-                if (flags) {
-                    return createSuperAccessInAsyncMethod(
-                        createLiteral(node.name.text),
-                        flags,
-                        node
-                    );
-                }
-            }
-
             return substituteConstantValue(node);
         }
 
         function substituteElementAccessExpression(node: ElementAccessExpression) {
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper && node.expression.kind === SyntaxKind.SuperKeyword) {
-                const flags = getSuperContainerAsyncMethodFlags();
-                if (flags) {
-                    return createSuperAccessInAsyncMethod(
-                        node.argumentExpression,
-                        flags,
-                        node
-                    );
-                }
-            }
-
             return substituteConstantValue(node);
         }
 
@@ -3515,33 +3338,6 @@ namespace ts {
             return isPropertyAccessExpression(node) || isElementAccessExpression(node)
                 ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
                 : undefined;
-        }
-
-        function createSuperAccessInAsyncMethod(argumentExpression: Expression, flags: NodeCheckFlags, location: TextRange): LeftHandSideExpression {
-            if (flags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
-                return createPropertyAccess(
-                    createCall(
-                        createIdentifier("_super"),
-                        /*typeArguments*/ undefined,
-                        [argumentExpression]
-                    ),
-                    "value",
-                    location
-                );
-            }
-            else {
-                return createCall(
-                    createIdentifier("_super"),
-                    /*typeArguments*/ undefined,
-                    [argumentExpression],
-                    location
-                );
-            }
-        }
-
-        function getSuperContainerAsyncMethodFlags() {
-            return currentSuperContainer !== undefined
-                && resolver.getNodeCheckFlags(currentSuperContainer) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
         }
     }
 }

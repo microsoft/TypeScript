@@ -24,6 +24,7 @@
         "visitor.ts",
         "transformers/ts.ts",
         "transformers/jsx.ts",
+        "transformers/es2017.ts",
         "transformers/es2016.ts",
         "transformers/es6.ts",
         "transformers/generators.ts",
