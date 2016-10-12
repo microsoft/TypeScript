@@ -5781,7 +5781,10 @@ namespace ts {
             if (id in spreadTypes) {
                 return spreadTypes[id];
             }
-            const right = types.pop();
+            let right = types.pop();
+            if (right.flags & TypeFlags.StringLike) {
+                right = createAnonymousType(symbol, emptySymbols, emptyArray, emptyArray, undefined, createIndexInfo(stringType, /*isReadonly*/ false));
+            }
             if (right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -5801,16 +5804,13 @@ namespace ts {
                 return getIntersectionType(spreads, aliasSymbol, aliasTypeArguments);
             }
             if (right.flags & TypeFlags.Union) {
-                // TODO: types is mutable, so this block has to happen before the call to `const left = getSpreadType(...)`
-                // because that call consumes the array. It might be worthwhile to use a simple linked list here instead.
-                // It would avoid the slice+concat call that is needed here for multiple calls to getSpreadType.
                 const spreads = map((right as UnionType).types,
                                     t => getSpreadType(types.slice().concat([t]), symbol, aliasSymbol, aliasTypeArguments));
                 return getUnionType(spreads, /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
             const atBeginning = types.length === 0;
             const left = getSpreadType(types, symbol, aliasSymbol, aliasTypeArguments);
-            if (right.flags & TypeFlags.Primitive || left.flags & TypeFlags.Any) {
+            if (right.flags & (TypeFlags.Primitive & ~TypeFlags.StringLike) || left.flags & TypeFlags.Any) {
                 return left;
             }
             if (right.flags & TypeFlags.TypeParameter &&
@@ -5837,7 +5837,7 @@ namespace ts {
             if (left.flags & TypeFlags.Union) {
                 const spreads = map((left as UnionType).types,
                                   t => getSpreadType(types.slice().concat([t, right]), symbol, aliasSymbol, aliasTypeArguments));
-                return getUnionType(spreads, /*subTypeReduction*/ false, aliasSymbol, aliasTypeArguments);
+                return getUnionType(spreads, /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
             if (right.flags & TypeFlags.ObjectType && left.flags & TypeFlags.ObjectType) {
                 const members = createMap<Symbol>();
@@ -8100,7 +8100,7 @@ namespace ts {
                 if (source.flags & TypeFlags.Spread && target.flags & TypeFlags.Spread) {
                     // only the last type parameter is a valid inference site,
                     // and only if not followed by object literal properties.
-                    if((source as SpreadType).right.flags & TypeFlags.TypeParameter &&
+                    if ((source as SpreadType).right.flags & TypeFlags.TypeParameter &&
                        (target as SpreadType).right.flags & TypeFlags.TypeParameter) {
                         inferFromTypes((source as SpreadType).right, (target as SpreadType).right);
                     }
@@ -19053,7 +19053,6 @@ namespace ts {
         function getRootSymbols(symbol: Symbol): Symbol[] {
             if (symbol.flags & SymbolFlags.SyntheticProperty) {
                 if (symbol.syntheticKind === SyntheticSymbolKind.Spread) {
-                    const name = symbol.name;
                     const links = getSymbolLinks(symbol);
                     return [links.leftSpread, links.rightSpread];
                 }
