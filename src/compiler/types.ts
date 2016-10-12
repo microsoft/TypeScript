@@ -2917,11 +2917,7 @@ namespace ts {
         NodeJs   = 2
     }
 
-    export type RootPaths = string[];
-    export type PathSubstitutions = MapLike<string[]>;
-    export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
-
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
 
     export interface CompilerOptions {
         allowJs?: boolean;
@@ -2973,14 +2969,14 @@ namespace ts {
         out?: string;
         outDir?: string;
         outFile?: string;
-        paths?: PathSubstitutions;
+        paths?: MapLike<string[]>;
         preserveConstEnums?: boolean;
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
         removeComments?: boolean;
         rootDir?: string;
-        rootDirs?: RootPaths;
+        rootDirs?: string[];
         skipLibCheck?: boolean;
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
