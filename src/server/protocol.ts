@@ -1219,6 +1219,7 @@ namespace ts.server.protocol {
         /**
          * End position of the range for which to format text in file.
          */
+        /* @internal */
         endPosition?: number;
         /**
          * Format options to be used.
