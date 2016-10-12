@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @declaration: true
 
 interface State1 {
     name: string;
