@@ -8791,6 +8791,10 @@ namespace ts {
                             assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
                     return getTypeWithFacts(type, facts);
                 }
+                if (type.flags & TypeFlags.String && isTypeOfKind(valueType, TypeFlags.StringLiteral) ||
+                    type.flags & TypeFlags.Number && isTypeOfKind(valueType, TypeFlags.NumberLiteral)) {
+                    return assumeTrue? valueType : type;
+                }
                 if (type.flags & TypeFlags.NotUnionOrUnit) {
                     return type;
                 }
@@ -8843,7 +8847,11 @@ namespace ts {
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
                 const discriminantType = getUnionType(clauseTypes);
-                const caseType = discriminantType.flags & TypeFlags.Never ? neverType : filterType(type, t => isTypeComparableTo(discriminantType, t));
+                const caseType =
+                    discriminantType.flags & TypeFlags.Never ? neverType :
+                    type.flags & TypeFlags.String && isTypeOfKind(discriminantType, TypeFlags.StringLiteral) ? discriminantType :
+                    type.flags & TypeFlags.Number && isTypeOfKind(discriminantType, TypeFlags.NumberLiteral) ? discriminantType :
+                    filterType(type, t => isTypeComparableTo(discriminantType, t));
                 if (!hasDefaultClause) {
                     return caseType;
                 }
