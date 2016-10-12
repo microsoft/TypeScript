@@ -223,7 +223,7 @@ getter.a = 12;
 >a : number
 >12 : 12
 
-// null, undefined, functions and primitives result in { }
+// null, undefined, functions and primitives besides string result in { }
 let spreadNull = { ...null };
 >spreadNull : {}
 >{ ...null } : {}
@@ -238,10 +238,6 @@ let spreadNum = { ...12 };
 >spreadNum : {}
 >{ ...12 } : {}
 
-let spreadStr = { ...'foo' };
->spreadStr : {}
->{ ...'foo' } : {}
-
 let spreadBool = { ...false };
 >spreadBool : {}
 >{ ...false } : {}
@@ -252,6 +248,11 @@ let spreadFunc = { ...(function () { }) };
 >{ ...(function () { }) } : {}
 >(function () { }) : () => void
 >function () { } : () => void
+
+// strings get a numeric indexer: [n: number]: string
+let spreadStr = { ...'foo' };
+>spreadStr : { [x: number]: string; }
+>{ ...'foo' } : { [x: number]: string; }
 
 // methods are not enumerable
 class C { p = 1; m() { } }
