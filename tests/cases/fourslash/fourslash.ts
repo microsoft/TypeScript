@@ -212,6 +212,7 @@ declare namespace FourSlashInterface {
         codeFixAtPosition(expectedText: string, errorCode?: number): void;
 
         navigationBar(json: any): void;
+        navigationTree(json: any): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
