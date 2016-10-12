@@ -91,7 +91,7 @@ namespace ts.server {
             return this.containingProjects[0];
         }
 
-        setFormatOptions(formatSettings: protocol.FormatOptions): void {
+        setFormatOptions(formatSettings: FormatCodeSettings): void {
             if (formatSettings) {
                 if (!this.formatCodeSettings) {
                     this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);

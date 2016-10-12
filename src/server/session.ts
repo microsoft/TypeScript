@@ -1,6 +1,6 @@
 ﻿/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
-/// <reference path="protocol.d.ts" />
+/// <reference path="protocol.ts" />
 /// <reference path="editorServices.ts" />
 
 namespace ts.server {
@@ -70,69 +70,7 @@ namespace ts.server {
         return true;
     }
 
-    export namespace CommandNames {
-        export const Brace = "brace";
-        export const BraceFull = "brace-full";
-        export const BraceCompletion = "braceCompletion";
-        export const Change = "change";
-        export const Close = "close";
-        export const Completions = "completions";
-        export const CompletionsFull = "completions-full";
-        export const CompletionDetails = "completionEntryDetails";
-        export const CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
-        export const CompileOnSaveEmitFile = "compileOnSaveEmitFile";
-        export const Configure = "configure";
-        export const Definition = "definition";
-        export const DefinitionFull = "definition-full";
-        export const Exit = "exit";
-        export const Format = "format";
-        export const Formatonkey = "formatonkey";
-        export const FormatFull = "format-full";
-        export const FormatonkeyFull = "formatonkey-full";
-        export const FormatRangeFull = "formatRange-full";
-        export const Geterr = "geterr";
-        export const GeterrForProject = "geterrForProject";
-        export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
-        export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
-        export const NavBar = "navbar";
-        export const NavBarFull = "navbar-full";
-        export const Navto = "navto";
-        export const NavtoFull = "navto-full";
-        export const Occurrences = "occurrences";
-        export const DocumentHighlights = "documentHighlights";
-        export const DocumentHighlightsFull = "documentHighlights-full";
-        export const Open = "open";
-        export const Quickinfo = "quickinfo";
-        export const QuickinfoFull = "quickinfo-full";
-        export const References = "references";
-        export const ReferencesFull = "references-full";
-        export const Reload = "reload";
-        export const Rename = "rename";
-        export const RenameInfoFull = "rename-full";
-        export const RenameLocationsFull = "renameLocations-full";
-        export const Saveto = "saveto";
-        export const SignatureHelp = "signatureHelp";
-        export const SignatureHelpFull = "signatureHelp-full";
-        export const TypeDefinition = "typeDefinition";
-        export const ProjectInfo = "projectInfo";
-        export const ReloadProjects = "reloadProjects";
-        export const Unknown = "unknown";
-        export const OpenExternalProject = "openExternalProject";
-        export const OpenExternalProjects = "openExternalProjects";
-        export const CloseExternalProject = "closeExternalProject";
-        export const SynchronizeProjectList = "synchronizeProjectList";
-        export const ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
-        export const EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
-        export const Cleanup = "cleanup";
-        export const OutliningSpans = "outliningSpans";
-        export const TodoComments = "todoComments";
-        export const Indentation = "indentation";
-        export const DocCommentTemplate = "docCommentTemplate";
-        export const CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
-        export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
-        export const BreakpointStatement = "breakpointStatement";
-        export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
-    }
+    import CommandNames = protocol.CommandNames;
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);

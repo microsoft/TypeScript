@@ -1,7 +1,90 @@
 /**
   * Declaration module describing the TypeScript Server protocol
   */
-declare namespace ts.server.protocol {
+namespace ts.server.protocol {
+    export namespace CommandNames {
+        export const Brace = "brace";
+        /* @internal */
+        export const BraceFull = "brace-full";
+        export const BraceCompletion = "braceCompletion";
+        export const Change = "change";
+        export const Close = "close";
+        export const Completions = "completions";
+        /* @internal */
+        export const CompletionsFull = "completions-full";
+        export const CompletionDetails = "completionEntryDetails";
+        export const CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
+        export const CompileOnSaveEmitFile = "compileOnSaveEmitFile";
+        export const Configure = "configure";
+        export const Definition = "definition";
+        /* @internal */
+        export const DefinitionFull = "definition-full";
+        export const Exit = "exit";
+        export const Format = "format";
+        export const Formatonkey = "formatonkey";
+        /* @internal */
+        export const FormatFull = "format-full";
+        /* @internal */
+        export const FormatonkeyFull = "formatonkey-full";
+        /* @internal */
+        export const FormatRangeFull = "formatRange-full";
+        export const Geterr = "geterr";
+        export const GeterrForProject = "geterrForProject";
+        export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
+        export const NavBar = "navbar";
+        /* @internal */
+        export const NavBarFull = "navbar-full";
+        export const Navto = "navto";
+        /* @internal */
+        export const NavtoFull = "navto-full";
+        export const Occurrences = "occurrences";
+        export const DocumentHighlights = "documentHighlights";
+        /* @internal */
+        export const DocumentHighlightsFull = "documentHighlights-full";
+        export const Open = "open";
+        export const Quickinfo = "quickinfo";
+        /* @internal */
+        export const QuickinfoFull = "quickinfo-full";
+        export const References = "references";
+        /* @internal */
+        export const ReferencesFull = "references-full";
+        export const Reload = "reload";
+        export const Rename = "rename";
+        /* @internal */
+        export const RenameInfoFull = "rename-full";
+        /* @internal */
+        export const RenameLocationsFull = "renameLocations-full";
+        export const Saveto = "saveto";
+        export const SignatureHelp = "signatureHelp";
+        /* @internal */
+        export const SignatureHelpFull = "signatureHelp-full";
+        export const TypeDefinition = "typeDefinition";
+        export const ProjectInfo = "projectInfo";
+        export const ReloadProjects = "reloadProjects";
+        export const Unknown = "unknown";
+        export const OpenExternalProject = "openExternalProject";
+        export const OpenExternalProjects = "openExternalProjects";
+        export const CloseExternalProject = "closeExternalProject";
+        export const SynchronizeProjectList = "synchronizeProjectList";
+        /* @internal */
+        export const ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        /* @internal */
+        export const EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
+        export const Cleanup = "cleanup";
+        export const OutliningSpans = "outliningSpans";
+        export const TodoComments = "todoComments";
+        export const Indentation = "indentation";
+        export const DocCommentTemplate = "docCommentTemplate";
+        /* @internal */
+        export const CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        /* @internal */
+        export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        /* @internal */
+        export const BreakpointStatement = "breakpointStatement";
+        export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+    }
+
     /**
       * A TypeScript Server message
       */
@@ -190,16 +273,17 @@ declare namespace ts.server.protocol {
         /**
           * The line number for the request (1-based).
           */
-        line?: number;
+        line: number;
 
         /**
           * The character offset (on the line) for the request (1-based).
           */
-        offset?: number;
+        offset: number;
 
         /**
          * Position (can be specified instead of line/offset pair) 
          */
+        /* @internal */
         position?: number;
     }
 
@@ -539,70 +623,12 @@ declare namespace ts.server.protocol {
         projectErrors: DiagnosticWithLinePosition[];
     }
 
+    /* @internal */
     export interface ChangedOpenFile {
         fileName: string;
         changes: ts.TextChange[];
     }
 
-    /**
-     * Editor options
-     */
-    export interface EditorOptions {
-
-        /** Number of spaces for each tab. Default value is 4. */
-        tabSize?: number;
-
-        /** Number of spaces to indent during formatting. Default value is 4. */
-        indentSize?: number;
-
-        /** Number of additional spaces to indent during formatting to preserve base indentation (ex. script block indentation). Default value is 0. */
-        baseIndentSize?: number;
-
-        /** The new line character to be used. Default value is the OS line delimiter. */
-        newLineCharacter?: string;
-
-        /** Whether tabs should be converted to spaces. Default value is true. */
-        convertTabsToSpaces?: boolean;
-    }
-
-    /**
-     * Format options
-     */
-    export interface FormatOptions extends EditorOptions {
-
-        /** Defines space handling after a comma delimiter. Default value is true. */
-        insertSpaceAfterCommaDelimiter?: boolean;
-
-        /** Defines space handling after a semicolon in a for statement. Default value is true */
-        insertSpaceAfterSemicolonInForStatements?: boolean;
-
-        /** Defines space handling after a binary operator. Default value is true. */
-        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
-
-        /** Defines space handling after keywords in control flow statement. Default value is true. */
-        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
-
-        /** Defines space handling after function keyword for anonymous functions. Default value is false. */
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
-
-        /** Defines space handling after opening and before closing non empty parenthesis. Default value is false. */
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
-
-        /** Defines space handling after opening and before closing non empty brackets. Default value is false. */
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
-
-        /** Defines space handling before and after template string braces. Default value is false. */
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
-
-        /** Defines space handling before and after JSX expression braces. Default value is false. */
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
-
-        /** Defines whether an open brace is put onto a new line for functions or not. Default value is false. */
-        placeOpenBraceOnNewLineForFunctions?: boolean;
-
-        /** Defines whether an open brace is put onto a new line for control blocks or not. Default value is false. */
-        placeOpenBraceOnNewLineForControlBlocks?: boolean;
-    }
 
     /**
       * Information found in a configure request.
@@ -623,7 +649,7 @@ declare namespace ts.server.protocol {
         /**
          * The format options to use during formatting and other code editing features.
          */
-        formatOptions?: FormatOptions;
+        formatOptions?: FormatCodeSettings;
     }
 
     /**
@@ -669,7 +695,7 @@ declare namespace ts.server.protocol {
         arguments: OpenRequestArgs;
     }
 
-    type OpenExternalProjectArgs = ExternalProject;
+    export type OpenExternalProjectArgs = ExternalProject;
 
     export interface OpenExternalProjectRequest extends Request {
         arguments: OpenExternalProjectArgs;
@@ -699,10 +725,12 @@ declare namespace ts.server.protocol {
         knownProjects: protocol.ProjectVersionInfo[];
     }
 
+    /* @internal */
     export interface ApplyChangedToOpenFilesRequest extends Request {
         arguments: ApplyChangedToOpenFilesRequestArgs;
     }
 
+    /* @internal */
     export interface ApplyChangedToOpenFilesRequestArgs {
         openFiles?: ExternalFile[];
         changedFiles?: ChangedOpenFile[];
@@ -820,7 +848,7 @@ declare namespace ts.server.protocol {
         endOffset: number;
 
         endPosition?: number;
-        options?: ts.FormatCodeOptions;
+        options?: FormatCodeSettings;
     }
 
     /**
@@ -875,7 +903,7 @@ declare namespace ts.server.protocol {
           */
         key: string;
 
-        options?: ts.FormatCodeOptions;
+        options?: FormatCodeSettings;
     }
 
     /**
