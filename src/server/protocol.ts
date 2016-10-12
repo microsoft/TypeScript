@@ -38,6 +38,8 @@ namespace ts.server.protocol {
         export type Navto = "navto";
         /* @internal */
         export type NavtoFull = "navto-full";
+        export type NavTree = "navtree";
+        export type NavTreeFull = "navtree-full";
         export type Occurrences = "occurrences";
         export type DocumentHighlights = "documentHighlights";
         /* @internal */
@@ -74,6 +76,7 @@ namespace ts.server.protocol {
         export type EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
         /* @internal */
         export type Cleanup = "cleanup";
+        /* @internal */
         export type OutliningSpans = "outliningSpans";
         export type TodoComments = "todoComments";
         export type Indentation = "indentation";
@@ -211,7 +214,7 @@ namespace ts.server.protocol {
      */
     export interface TodoCommentRequestArgs extends FileRequestArgs {
         /**
-         * Array of target TodoCommentDescriptors that describes TODO comments to be found 
+         * Array of target TodoCommentDescriptors that describes TODO comments to be found
          */
         descriptors: TodoCommentDescriptor[];
     }
@@ -226,6 +229,7 @@ namespace ts.server.protocol {
     /**
      * Request to obtain outlining spans in file.
      */
+    /* @internal */
     export interface OutliningSpansRequest extends FileRequest {
         command: CommandTypes.OutliningSpans;
     }
@@ -233,6 +237,7 @@ namespace ts.server.protocol {
     /**
      * Response to OutliningSpansRequest request.
      */
+    /* @internal */
     export interface OutliningSpansResponse extends Response {
         body?: OutliningSpan[];
     }
@@ -376,7 +381,7 @@ namespace ts.server.protocol {
         offset: number;
 
         /**
-         * Position (can be specified instead of line/offset pair) 
+         * Position (can be specified instead of line/offset pair)
          */
         /* @internal */
         position?: number;
@@ -723,12 +728,12 @@ namespace ts.server.protocol {
 
     /**
      * Represents a file in external project.
-     * External project is project whose set of files, compilation options and open\close state 
+     * External project is project whose set of files, compilation options and open\close state
      * is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
      * External project will exist even if all files in it are closed and should be closed explicity.
-     * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will 
+     * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will
      * create configured project for every config file but will maintain a link that these projects were created
-     * as a result of opening external project so they should be removed once external project is closed. 
+     * as a result of opening external project so they should be removed once external project is closed.
      */
     export interface ExternalFile {
         /**
@@ -1121,7 +1126,7 @@ namespace ts.server.protocol {
     }
 
     /**
-     * Response for CompileOnSaveAffectedFileListRequest request; 
+     * Response for CompileOnSaveAffectedFileListRequest request;
      */
     export interface CompileOnSaveAffectedFileListResponse extends Response {
         body: CompileOnSaveAffectedFileListSingleProject[];
@@ -1877,6 +1882,14 @@ namespace ts.server.protocol {
         command: CommandTypes.NavBar;
     }
 
+    /**
+     * NavTree request; value of command field is "navtree".
+     * Return response giving the navigation tree of the requested file.
+     */
+    export interface NavTreeRequest extends FileRequest {
+        command: CommandTypes.NavTree;
+    }
+
     export interface NavigationBarItem {
         /**
           * The item's display text.
@@ -1909,7 +1922,20 @@ namespace ts.server.protocol {
         indent: number;
     }
 
+    /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
+    export interface NavigationTree {
+        text: string;
+        kind: string;
+        kindModifiers: string;
+        spans: TextSpan[];
+        childItems?: NavigationTree[];
+    }
+
     export interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
+    }
+
+    export interface NavTreeResponse extends Response {
+        body?: NavigationTree;
     }
 }

@@ -96,6 +96,8 @@ namespace ts.server {
         export const SyntacticDiagnosticsSync: protocol.CommandTypes.SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
         export const NavBar: protocol.CommandTypes.NavBar = "navbar";
         export const NavBarFull: protocol.CommandTypes.NavBarFull = "navbar-full";
+        export const NavTree: protocol.CommandTypes.NavTree = "navtree";
+        export const NavTreeFull: protocol.CommandTypes.NavTreeFull = "navtree-full";
         export const Navto: protocol.CommandTypes.Navto = "navto";
         export const NavtoFull: protocol.CommandTypes.NavtoFull = "navto-full";
         export const Occurrences: protocol.CommandTypes.Occurrences = "occurrences";
@@ -525,7 +527,7 @@ namespace ts.server {
                 const scriptInfo = this.projectService.getScriptInfo(args.file);
                 projects = scriptInfo.containingProjects;
             }
-            // ts.filter handles case when 'projects' is undefined 
+            // ts.filter handles case when 'projects' is undefined
             projects = filter(projects, p => p.languageServiceEnabled);
             if (!projects || !projects.length) {
                 return Errors.ThrowNoProject();
@@ -919,15 +921,8 @@ namespace ts.server {
                 return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
                         const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
-
-                        let convertedSpan: protocol.TextSpan = undefined;
-                        if (replacementSpan) {
-                            convertedSpan = {
-                                start: scriptInfo.positionToLineOffset(replacementSpan.start),
-                                end: scriptInfo.positionToLineOffset(replacementSpan.start + replacementSpan.length)
-                            };
-                        }
-
+                        const convertedSpan: protocol.TextSpan =
+                            replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
                         result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
                     }
                     return result;
@@ -1065,36 +1060,52 @@ namespace ts.server {
             this.projectService.closeClientFile(file);
         }
 
-        private decorateNavigationBarItem(project: Project, fileName: NormalizedPath, items: ts.NavigationBarItem[]): protocol.NavigationBarItem[] {
-            if (!items) {
-                return undefined;
-            }
-
-            const scriptInfo = project.getScriptInfoForNormalizedPath(fileName);
-
-            return items.map(item => ({
+        private decorateNavigationBarItems(items: ts.NavigationBarItem[], scriptInfo: ScriptInfo): protocol.NavigationBarItem[] {
+            return map(items, item => ({
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
-                spans: item.spans.map(span => ({
-                    start: scriptInfo.positionToLineOffset(span.start),
-                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(span))
-                })),
-                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems),
+                spans: item.spans.map(span => this.decorateSpan(span, scriptInfo)),
+                childItems: this.decorateNavigationBarItems(item.childItems, scriptInfo),
                 indent: item.indent
             }));
         }
 
         private getNavigationBarItems(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.NavigationBarItem[] | NavigationBarItem[] {
             const { file, project } = this.getFileAndProject(args);
-            const items = project.getLanguageService().getNavigationBarItems(file);
-            if (!items) {
-                return undefined;
-            }
-
-            return simplifiedResult
-                ? this.decorateNavigationBarItem(project, file, items)
+            const items = project.getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(file);
+            return !items
+                ? undefined
+                : simplifiedResult
+                ? this.decorateNavigationBarItems(items, project.getScriptInfoForNormalizedPath(file))
                 : items;
+        }
+
+        private decorateNavigationTree(tree: ts.NavigationTree, scriptInfo: ScriptInfo): protocol.NavigationTree {
+            return {
+                text: tree.text,
+                kind: tree.kind,
+                kindModifiers: tree.kindModifiers,
+                spans: tree.spans.map(span => this.decorateSpan(span, scriptInfo)),
+                childItems: map(tree.childItems, item => this.decorateNavigationTree(item, scriptInfo))
+            };
+        }
+
+        private decorateSpan(span: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
+            return {
+                start: scriptInfo.positionToLineOffset(span.start),
+                end: scriptInfo.positionToLineOffset(ts.textSpanEnd(span))
+            };
+        }
+
+        private getNavigationTree(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.NavigationTree | NavigationTree {
+            const { file, project } = this.getFileAndProject(args);
+            const tree = project.getLanguageService(/*ensureSynchronized*/ false).getNavigationTree(file);
+            return !tree
+                ? undefined
+                : simplifiedResult
+                ? this.decorateNavigationTree(tree, project.getScriptInfoForNormalizedPath(file))
+                : tree;
         }
 
         private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): protocol.NavtoItem[] | NavigateToItem[] {
@@ -1183,19 +1194,11 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
 
             const spans = project.getLanguageService(/*ensureSynchronized*/ false).getBraceMatchingAtPosition(file, position);
-            if (!spans) {
-                return undefined;
-            }
-            if (simplifiedResult) {
-
-                return spans.map(span => ({
-                    start: scriptInfo.positionToLineOffset(span.start),
-                    end: scriptInfo.positionToLineOffset(span.start + span.length)
-                }));
-            }
-            else {
-                return spans;
-            }
+            return !spans
+                ? undefined
+                : simplifiedResult
+                ? spans.map(span => this.decorateSpan(span, scriptInfo))
+                : spans;
         }
 
         getDiagnosticsForProject(delay: number, fileName: string) {
@@ -1473,6 +1476,12 @@ namespace ts.server {
             },
             [CommandNames.NavBarFull]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.NavTree]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.NavTreeFull]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.Occurrences]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getOccurrences(request.arguments));

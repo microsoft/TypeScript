@@ -21,6 +21,13 @@ namespace ts.NavigationBar {
         return result;
     }
 
+    export function getNavigationTree(sourceFile: SourceFile): NavigationTree {
+        curSourceFile = sourceFile;
+        const result = convertToTree(rootNavigationBarNode(sourceFile));
+        curSourceFile = undefined;
+        return result;
+    }
+
     // Keep sourceFile handy so we don't have to search for it every time we need to call `getText`.
     let curSourceFile: SourceFile;
     function nodeText(node: Node): string {
@@ -503,6 +510,16 @@ namespace ts.NavigationBar {
     // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
     const emptyChildItemArray: NavigationBarItem[] = [];
 
+    function convertToTree(n: NavigationBarNode): NavigationTree {
+        return {
+            text: getItemName(n.node),
+            kind: getNodeKind(n.node),
+            kindModifiers: getNodeModifiers(n.node),
+            spans: getSpans(n),
+            childItems: map(n.children, convertToTree)
+        };
+    }
+
     function convertToTopLevelItem(n: NavigationBarNode): NavigationBarItem {
         return {
             text: getItemName(n.node),
@@ -527,16 +544,16 @@ namespace ts.NavigationBar {
                 grayed: false
             };
         }
+    }
 
-        function getSpans(n: NavigationBarNode): TextSpan[] {
-            const spans = [getNodeSpan(n.node)];
-            if (n.additionalNodes) {
-                for (const node of n.additionalNodes) {
-                    spans.push(getNodeSpan(node));
-                }
+    function getSpans(n: NavigationBarNode): TextSpan[] {
+        const spans = [getNodeSpan(n.node)];
+        if (n.additionalNodes) {
+            for (const node of n.additionalNodes) {
+                spans.push(getNodeSpan(node));
             }
-            return spans;
         }
+        return spans;
     }
 
     function getModuleName(moduleDeclaration: ModuleDeclaration): string {

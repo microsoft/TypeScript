@@ -218,6 +218,9 @@ namespace ts {
          */
         getNavigationBarItems(fileName: string): string;
 
+        /** Returns a JSON-encoded value of the type ts.NavigationTree. */
+        getNavigationTree(fileName: string): string;
+
         /**
          * Returns a JSON-encoded value of the type:
          * { textSpan: { start: number, length: number }; hintSpan: { start: number, length: number }; bannerText: string; autoCollapse: boolean } [] = [];
@@ -934,6 +937,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `getNavigationBarItems('${fileName}')`,
                 () => this.languageService.getNavigationBarItems(fileName)
+            );
+        }
+
+        public getNavigationTree(fileName: string): string {
+            return this.forwardJSONCall(
+                `getNavigationTree('${fileName}')`,
+                () => this.languageService.getNavigationTree(fileName)
             );
         }
 
