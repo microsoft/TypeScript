@@ -5710,67 +5710,69 @@ namespace ts {
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: Node, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                const isSpread = (node.kind === SyntaxKind.TypeLiteral &&
-                                  find((node as TypeLiteralNode).members, elt => elt.kind === SyntaxKind.SpreadTypeElement));
-                let type: ObjectType;
-                if (isSpread) {
-                    let members: Map<Symbol>;
-                    let stringIndexInfo: IndexInfo;
-                    let numberIndexInfo: IndexInfo;
-                    const spreads: Type[] = [];
-                    for (const member of (node as TypeLiteralNode).members) {
-                        if (member.kind === SyntaxKind.SpreadTypeElement) {
-                            if (members) {
-                                spreads.push(createAnonymousType(node.symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo));
-                                members = undefined;
-                                stringIndexInfo = undefined;
-                                numberIndexInfo = undefined;
-                            }
-                            spreads.push(getTypeFromTypeNode((member as SpreadTypeElement).type));
-                        }
-                        else if (member.kind === SyntaxKind.IndexSignature) {
-                            const index = member as IndexSignatureDeclaration;
-                            if (index.parameters.length === 1) {
-                                const parameter = index.parameters[0];
-                                if (parameter && parameter.type) {
-                                    const indexInfo = createIndexInfo(index.type ? getTypeFromTypeNode(index.type) : anyType,
-                                                                      (getModifierFlags(index) & ModifierFlags.Readonly) !== 0, index);
-                                    if (parameter.type.kind === SyntaxKind.StringKeyword) {
-                                        stringIndexInfo = indexInfo;
-                                    }
-                                    else {
-                                        numberIndexInfo = indexInfo;
-                                    }
-                                }
-                            }
-                        }
-                        else if (member.kind !== SyntaxKind.CallSignature && member.kind !== SyntaxKind.ConstructSignature) {
-                            // note that spread types don't include call and construct signatures
-                            const flags = SymbolFlags.Property | SymbolFlags.Transient | (member.questionToken ? SymbolFlags.Optional : 0);
-                            const text = getTextOfPropertyName(member.name);
-                            const symbol = <TransientSymbol>createSymbol(flags, text);
-                            symbol.declarations = [member];
-                            symbol.valueDeclaration = member;
-                            symbol.type = getTypeFromTypeNodeNoAlias((member as IndexSignatureDeclaration | PropertySignature | MethodSignature).type);
-                            if (!members) {
-                                members = createMap<Symbol>();
-                            }
-                            members[symbol.name] = symbol;
-                        }
-                    }
-                    if (members || stringIndexInfo || numberIndexInfo) {
-                        spreads.push(createAnonymousType(node.symbol, members || emptySymbols, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo));
-                    }
-                    return getSpreadType(spreads, node.symbol, aliasSymbol, aliasTypeArguments);
+                const hasSpread = (node.kind === SyntaxKind.TypeLiteral &&
+                                   find((node as TypeLiteralNode).members, elt => elt.kind === SyntaxKind.SpreadTypeElement));
+                if (hasSpread) {
+                    return getTypeFromSpreadTypeLiteral(node, aliasSymbol, aliasTypeArguments);
                 }
-                else {
-                    type = createObjectType(TypeFlags.Anonymous, node.symbol);
-                }
+
+                let type = createObjectType(TypeFlags.Anonymous, node.symbol);
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
                 links.resolvedType = type;
             }
             return links.resolvedType;
+        }
+
+        function getTypeFromSpreadTypeLiteral(node: Node, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            let members: Map<Symbol>;
+            let stringIndexInfo: IndexInfo;
+            let numberIndexInfo: IndexInfo;
+            const spreads: Type[] = [];
+            for (const member of (node as TypeLiteralNode).members) {
+                if (member.kind === SyntaxKind.SpreadTypeElement) {
+                    if (members) {
+                        spreads.push(createAnonymousType(node.symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo));
+                        members = undefined;
+                        stringIndexInfo = undefined;
+                        numberIndexInfo = undefined;
+                    }
+                    spreads.push(getTypeFromTypeNode((member as SpreadTypeElement).type));
+                }
+                else if (member.kind === SyntaxKind.IndexSignature) {
+                    const index = member as IndexSignatureDeclaration;
+                    if (index.parameters.length === 1) {
+                        const parameter = index.parameters[0];
+                        if (parameter && parameter.type) {
+                            const indexInfo = createIndexInfo(index.type ? getTypeFromTypeNode(index.type) : anyType,
+                                                              (getModifierFlags(index) & ModifierFlags.Readonly) !== 0, index);
+                            if (parameter.type.kind === SyntaxKind.StringKeyword) {
+                                stringIndexInfo = indexInfo;
+                            }
+                            else {
+                                numberIndexInfo = indexInfo;
+                            }
+                        }
+                    }
+                }
+                else if (member.kind !== SyntaxKind.CallSignature && member.kind !== SyntaxKind.ConstructSignature) {
+                    // note that spread types don't include call and construct signatures
+                    const flags = SymbolFlags.Property | SymbolFlags.Transient | (member.questionToken ? SymbolFlags.Optional : 0);
+                    const text = getTextOfPropertyName(member.name);
+                    const symbol = <TransientSymbol>createSymbol(flags, text);
+                    symbol.declarations = [member];
+                    symbol.valueDeclaration = member;
+                    symbol.type = getTypeFromTypeNodeNoAlias((member as IndexSignatureDeclaration | PropertySignature | MethodSignature).type);
+                    if (!members) {
+                        members = createMap<Symbol>();
+                    }
+                    members[symbol.name] = symbol;
+                }
+            }
+            if (members || stringIndexInfo || numberIndexInfo) {
+                spreads.push(createAnonymousType(node.symbol, members || emptySymbols, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo));
+            }
+            return getSpreadType(spreads, node.symbol, aliasSymbol, aliasTypeArguments);
         }
 
         function getSpreadType(types: Type[], symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
