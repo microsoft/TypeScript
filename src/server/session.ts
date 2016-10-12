@@ -155,6 +155,8 @@ namespace ts.server {
         private immediateId: any;
         private changeSeq = 0;
 
+        private eventHander: ProjectServiceEventHandler;
+
         constructor(
             private host: ServerHost,
             cancellationToken: HostCancellationToken,
@@ -163,17 +165,18 @@ namespace ts.server {
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
             protected logger: Logger,
-            protected readonly canUseEvents: boolean) {
+            protected readonly canUseEvents: boolean,
+            eventHandler?: ProjectServiceEventHandler) {
 
-            const eventHandler: ProjectServiceEventHandler = canUseEvents
-                ? event => this.handleEvent(event)
+            this.eventHander = canUseEvents
+                ? eventHandler || (event => this.defaultEventHandler(event))
                 : undefined;
 
-            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler);
+            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander);
             this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);
         }
 
-        private handleEvent(event: ProjectServiceEvent) {
+        private defaultEventHandler(event: ProjectServiceEvent) {
             switch (event.eventName) {
                 case "context":
                     const { project, fileName } = event.data;
@@ -714,8 +717,11 @@ namespace ts.server {
          */
         private openClientFile(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind) {
             const { configFileName, configFileErrors } = this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind);
-            if (configFileErrors) {
-                this.configFileDiagnosticEvent(fileName, configFileName, configFileErrors);
+            if (this.eventHander) {
+                this.eventHander({
+                    eventName: "configFileDiag",
+                    data: { fileName, configFileName, diagnostics: configFileErrors || [] }
+                });
             }
         }
 
