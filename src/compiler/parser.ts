@@ -5352,7 +5352,7 @@ namespace ts {
             parseExpected(SyntaxKind.EqualsToken);
             node.type = parseType();
             parseSemicolon();
-            return finishNode(node);
+            return addJSDocComment(finishNode(node));
         }
 
         // In an ambient declaration, the grammar only allows integer literals as initializers.

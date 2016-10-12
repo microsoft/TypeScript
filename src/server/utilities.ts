@@ -175,7 +175,8 @@ namespace ts.server {
         dispose: (): any => throwLanguageServiceIsDisabledError(),
         getCompletionEntrySymbol: (): any => throwLanguageServiceIsDisabledError(),
         getImplementationAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getSourceFile: (): any => throwLanguageServiceIsDisabledError()
+        getSourceFile: (): any => throwLanguageServiceIsDisabledError(),
+        getCodeFixesAtPosition: (): any => throwLanguageServiceIsDisabledError()
     };
 
     export interface ServerLanguageServiceHost {
