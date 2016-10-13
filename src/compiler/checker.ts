@@ -16584,7 +16584,7 @@ namespace ts {
             let firstDefaultClause: CaseOrDefaultClause;
             let hasDuplicateDefaultClause = false;
 
-            const expressionType = checkExpression(node.expression);
+            let expressionType = checkExpression(node.expression);
             forEach(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
@@ -16605,7 +16605,13 @@ namespace ts {
                     // TypeScript 1.0 spec (April 2014): 5.9
                     // In a 'switch' statement, each 'case' expression must be of a type that is comparable
                     // to or from the type of the 'switch' expression.
-                    const caseType = checkExpression(caseClause.expression);
+                    let caseType = checkExpression(caseClause.expression);
+                    const expressionIsLiteral = isLiteralType(expressionType);
+                    const caseIsLiteral = isLiteralType(caseType);
+                    if (!expressionIsLiteral || !caseIsLiteral) {
+                        expressionType = expressionIsLiteral ? getBaseTypeOfLiteralType(expressionType) : expressionType;
+                        caseType = caseIsLiteral ? getBaseTypeOfLiteralType(caseType) : caseType;
+                    }
                     if (!isTypeEqualityComparableTo(expressionType, caseType)) {
                         // expressionType is not comparable to caseType, try the reversed check and report errors if it fails
                         checkTypeComparableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
