@@ -738,7 +738,11 @@ namespace Harness.LanguageService {
             // host to answer server queries about files on disk
             const serverHost = new SessionServerHost(clientHost);
             const server = new ts.server.Session(serverHost,
-                { isCancellationRequested: () => false },
+                {
+                    isCancellationRequested: () => false,
+                    attachToRequest: (): void => void 0,
+                    detachFromRequest: (): void => void 0
+                },
                 /*useOneInferredProject*/ false,
                 /*typingsInstaller*/ undefined,
                 Utils.byteLength,

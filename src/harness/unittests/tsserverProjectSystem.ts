@@ -34,8 +34,10 @@ namespace ts.projectSystem {
         getLogFileName: (): string => undefined
     };
 
-    export const nullCancellationToken: HostCancellationToken = {
-        isCancellationRequested: () => false
+    export const nullCancellationToken: server.ServerCancellationToken = {
+        isCancellationRequested: () => false,
+        attachToRequest: (): void => void 0,
+        detachFromRequest: (): void => void 0
     };
 
     export const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);

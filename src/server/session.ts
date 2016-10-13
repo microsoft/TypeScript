@@ -8,6 +8,11 @@ namespace ts.server {
         stack?: string;
     }
 
+    export interface ServerCancellationToken extends HostCancellationToken {
+        attachToRequest(requestId: number): void;
+        detachFromRequest(requestId: number): void;
+    }
+
     function hrTimeToMilliseconds(time: number[]): number {
         const seconds = time[0];
         const nanoseconds = time[1];
@@ -180,7 +185,7 @@ namespace ts.server {
 
         constructor(
             private host: ServerHost,
-            cancellationToken: HostCancellationToken,
+            private readonly cancellationToken: ServerCancellationToken,
             useSingleInferredProject: boolean,
             protected readonly typingsInstaller: ITypingsInstaller,
             private byteLength: (buf: string, encoding?: string) => number,
@@ -1618,7 +1623,13 @@ namespace ts.server {
         public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
             const handler = this.handlers[request.command];
             if (handler) {
-                return handler(request);
+                try {
+                    this.cancellationToken.attachToRequest(request.seq);
+                    return handler(request);
+                }
+                finally {
+                    this.cancellationToken.detachFromRequest(request.seq);
+                }
             }
             else {
                 this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);

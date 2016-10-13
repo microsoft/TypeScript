@@ -319,7 +319,7 @@ namespace ts.server {
     class IOSession extends Session {
         constructor(
             host: ServerHost,
-            cancellationToken: HostCancellationToken,
+            cancellationToken: ServerCancellationToken,
             installerEventPort: number,
             canUseEvents: boolean,
             useSingleInferredProject: boolean,
@@ -557,14 +557,16 @@ namespace ts.server {
         sys.gc = () => global.gc();
     }
 
-    let cancellationToken: HostCancellationToken;
+    let cancellationToken: ServerCancellationToken;
     try {
         const factory = require("./cancellationToken");
         cancellationToken = factory(sys.args);
     }
     catch (e) {
         cancellationToken = {
-            isCancellationRequested: () => false
+            isCancellationRequested: () => false,
+            attachToRequest: () => void 0,
+            detachFromRequest: () => void 0
         };
     };
 
