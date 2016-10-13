@@ -521,3 +521,67 @@ function f16() {
     return x;  // (string | number | boolean | { a: number })[]
 >x : (string | number | boolean | { a: number; })[]
 }
+
+function f17() {
+>f17 : () => (string | number | boolean)[]
+
+    let x = [];
+>x : any[]
+>[] : never[]
+
+    x.unshift(5);
+>x.unshift(5) : number
+>x.unshift : (...items: any[]) => number
+>x : any[]
+>unshift : (...items: any[]) => number
+>5 : 5
+
+    x.unshift("hello");
+>x.unshift("hello") : number
+>x.unshift : (...items: any[]) => number
+>x : any[]
+>unshift : (...items: any[]) => number
+>"hello" : "hello"
+
+    x.unshift(true);
+>x.unshift(true) : number
+>x.unshift : (...items: any[]) => number
+>x : any[]
+>unshift : (...items: any[]) => number
+>true : true
+
+    return x;  // (string | number | boolean)[]
+>x : (string | number | boolean)[]
+}
+
+function f18() {
+>f18 : () => (string | number | boolean)[]
+
+    let x = [];
+>x : any[]
+>[] : never[]
+
+    x.push(5);
+>x.push(5) : number
+>x.push : (...items: any[]) => number
+>x : any[]
+>push : (...items: any[]) => number
+>5 : 5
+
+    x.unshift("hello");
+>x.unshift("hello") : number
+>x.unshift : (...items: any[]) => number
+>x : any[]
+>unshift : (...items: any[]) => number
+>"hello" : "hello"
+
+    x[2] = true;
+>x[2] = true : true
+>x[2] : any
+>x : any[]
+>2 : 2
+>true : true
+
+    return x;  // (string | number | boolean)[]
+>x : (string | number | boolean)[]
+}

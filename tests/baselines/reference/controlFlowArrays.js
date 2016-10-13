@@ -157,6 +157,22 @@ function f16() {
     return x;  // (string | number | boolean | { a: number })[]
 }
 
+function f17() {
+    let x = [];
+    x.unshift(5);
+    x.unshift("hello");
+    x.unshift(true);
+    return x;  // (string | number | boolean)[]
+}
+
+function f18() {
+    let x = [];
+    x.push(5);
+    x.unshift("hello");
+    x[2] = true;
+    return x;  // (string | number | boolean)[]
+}
+
 //// [controlFlowArrays.js]
 function f1() {
     var x = [];
@@ -298,4 +314,18 @@ function f16() {
     (x.push("hello"), x).push(true);
     ((x))[3] = { a: 1 };
     return x; // (string | number | boolean | { a: number })[]
+}
+function f17() {
+    var x = [];
+    x.unshift(5);
+    x.unshift("hello");
+    x.unshift(true);
+    return x; // (string | number | boolean)[]
+}
+function f18() {
+    var x = [];
+    x.push(5);
+    x.unshift("hello");
+    x[2] = true;
+    return x; // (string | number | boolean)[]
 }

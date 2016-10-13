@@ -157,3 +157,19 @@ function f16() {
     ((x))[3] = { a: 1 };
     return x;  // (string | number | boolean | { a: number })[]
 }
+
+function f17() {
+    let x = [];
+    x.unshift(5);
+    x.unshift("hello");
+    x.unshift(true);
+    return x;  // (string | number | boolean)[]
+}
+
+function f18() {
+    let x = [];
+    x.push(5);
+    x.unshift("hello");
+    x[2] = true;
+    return x;  // (string | number | boolean)[]
+}
