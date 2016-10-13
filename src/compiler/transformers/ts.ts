@@ -1777,7 +1777,7 @@ namespace ts {
                     return createIdentifier("Number");
 
                 case SyntaxKind.SymbolKeyword:
-                    return languageVersion < ScriptTarget.ES6
+                    return languageVersion < ScriptTarget.ES2015
                         ? getGlobalSymbolNameWithFallback()
                         : createIdentifier("Symbol");
 
@@ -1843,7 +1843,7 @@ namespace ts {
                     return createIdentifier("Array");
 
                 case TypeReferenceSerializationKind.ESSymbolType:
-                    return languageVersion < ScriptTarget.ES6
+                    return languageVersion < ScriptTarget.ES2015
                         ? getGlobalSymbolNameWithFallback()
                         : createIdentifier("Symbol");
 
@@ -2592,7 +2592,7 @@ namespace ts {
 
         function isES6ExportedDeclaration(node: Node) {
             return isExternalModuleExport(node)
-                && moduleKind === ModuleKind.ES6;
+                && moduleKind === ModuleKind.ES2015;
         }
 
         /**

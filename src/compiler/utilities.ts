@@ -337,7 +337,7 @@ namespace ts {
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, languageVersion: ScriptTarget) {
         // Any template literal or string literal with an extended escape
         // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
-        if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
+        if (languageVersion < ScriptTarget.ES2015 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
             return getQuotedEscapedLiteralText('"', node.text, '"');
         }
 
@@ -345,7 +345,7 @@ namespace ts {
         // the node's parent reference, then simply get the text as it was originally written.
         if (!nodeIsSynthesized(node) && node.parent) {
             const text = getSourceTextOfNodeFromSourceFile(sourceFile, node);
-            if (languageVersion < ScriptTarget.ES6 && isBinaryOrOctalIntegerLiteral(node, text)) {
+            if (languageVersion < ScriptTarget.ES2015 && isBinaryOrOctalIntegerLiteral(node, text)) {
                 return node.text;
             }
             return text;
@@ -4146,7 +4146,7 @@ namespace ts {
                 return "lib.es2017.d.ts";
             case ScriptTarget.ES2016:
                 return "lib.es2016.d.ts";
-            case ScriptTarget.ES6:
+            case ScriptTarget.ES2015:
                 return "lib.es2015.d.ts";
 
             default:

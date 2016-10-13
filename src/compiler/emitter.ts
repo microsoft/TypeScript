@@ -2165,7 +2165,7 @@ const _super = (function (geti, seti) {
 
             // Only Emit __extends function when target ES5.
             // For target ES6 and above, we can emit classDeclaration as is.
-            if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
+            if ((languageVersion < ScriptTarget.ES2015) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
                 writeLines(extendsHelper);
                 extendsEmitted = true;
                 helpersEmitted = true;
@@ -2197,7 +2197,7 @@ const _super = (function (geti, seti) {
             // For target ES2017 and above, we can emit async/await as is.
             if ((languageVersion < ScriptTarget.ES2017) && (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions)) {
                 writeLines(awaiterHelper);
-                if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES2015) {
                     writeLines(generatorHelper);
                 }
 

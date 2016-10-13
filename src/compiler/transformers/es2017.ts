@@ -263,7 +263,7 @@ namespace ts {
 
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody | FunctionBody {
             const nodeType = node.original ? (<FunctionLikeDeclaration>node.original).type : node.type;
-            const promiseConstructor = languageVersion < ScriptTarget.ES6 ? getPromiseConstructor(nodeType) : undefined;
+            const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
             const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
             const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
 
@@ -292,7 +292,7 @@ namespace ts {
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
-                if (languageVersion >= ScriptTarget.ES6) {
+                if (languageVersion >= ScriptTarget.ES2015) {
                     if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
                         enableSubstitutionForAsyncMethodsWithSuper();
                         setEmitFlags(block, EmitFlags.EmitAdvancedSuperHelper);

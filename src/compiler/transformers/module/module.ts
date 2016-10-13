@@ -416,7 +416,7 @@ namespace ts {
                                 )
                             ],
                             /*location*/ undefined,
-                            /*flags*/ languageVersion >= ScriptTarget.ES6 ? NodeFlags.Const : NodeFlags.None),
+                            /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None),
                             /*location*/ node
                         )
                     );

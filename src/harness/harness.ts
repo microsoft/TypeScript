@@ -946,7 +946,7 @@ namespace Harness {
                     return "lib.es2017.d.ts";
                 case ts.ScriptTarget.ES2016:
                     return "lib.es2016.d.ts";
-                case ts.ScriptTarget.ES6:
+                case ts.ScriptTarget.ES2015:
                     return es2015DefaultLibFileName;
 
                 default:

@@ -3123,8 +3123,8 @@ namespace ts {
         ContainsES2017 = 1 << 5,
         ES2016 = 1 << 6,
         ContainsES2016 = 1 << 7,
-        ES6 = 1 << 8,
-        ContainsES6 = 1 << 9,
+        ES2015 = 1 << 8,
+        ContainsES2015 = 1 << 9,
         DestructuringAssignment = 1 << 10,
         Generator = 1 << 11,
         ContainsGenerator = 1 << 12,
@@ -3153,13 +3153,13 @@ namespace ts {
         AssertJsx = Jsx | ContainsJsx,
         AssertES2017 = ES2017 | ContainsES2017,
         AssertES2016 = ES2016 | ContainsES2016,
-        AssertES6 = ES6 | ContainsES6,
+        AssertES2015 = ES2015 | ContainsES2015,
         AssertGenerator = Generator | ContainsGenerator,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        NodeExcludes = TypeScript | Jsx | ES2017 | ES2016 | ES6 | DestructuringAssignment | Generator | HasComputedFlags,
+        NodeExcludes = TypeScript | Jsx | ES2017 | ES2016 | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
         ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
         FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
         ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
@@ -3175,7 +3175,7 @@ namespace ts {
         // Masks
         // - Additional bitmasks
         TypeScriptClassSyntaxMask = ContainsParameterPropertyAssignments | ContainsPropertyInitializer | ContainsDecorators,
-        ES6FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
+        ES2015FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
     }
 
     /* @internal */
