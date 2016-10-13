@@ -33,23 +33,38 @@ namespace ts.server.typingsInstaller {
         }
     }
 
-    export class NodeTypingsInstaller extends TypingsInstaller {
-        private readonly exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
+    type HttpGet = {
+        (url: string, callback: (response: HttpResponse) => void): NodeJS.EventEmitter;
+    }
 
+    interface HttpResponse extends NodeJS.ReadableStream {
+        statusCode: number;
+        statusMessage: string;
+        destroy(): void;
+    }
+
+    type Exec = {
+        (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any
+    }
+
+    export class NodeTypingsInstaller extends TypingsInstaller {
+        private readonly exec: Exec;
+        private readonly httpGet: HttpGet;
+        private readonly npmPath: string;
         readonly installTypingHost: InstallTypingHost = sys;
 
         constructor(globalTypingsCacheLocation: string, throttleLimit: number, log: Log) {
             super(
                 globalTypingsCacheLocation,
-                /*npmPath*/ getNPMLocation(process.argv[0]),
                 toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
                 log);
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
             }
-            const { exec } = require("child_process");
-            this.exec = exec;
+            this.npmPath = getNPMLocation(process.argv[0]);
+            this.exec = require("child_process").exec;
+            this.httpGet = require("http").get;
         }
 
         init() {
@@ -75,17 +90,54 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected runCommand(requestKind: RequestKind, requestId: number, command: string, cwd: string, onRequestCompleted: RequestCompletedAction): void {
+        protected executeRequest(requestKind: RequestKind, requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
             if (this.log.isEnabled()) {
-                this.log.writeLine(`#${requestId} running command '${command}'.`);
+                this.log.writeLine(`#${requestId} executing ${requestKind}, arguments'${JSON.stringify(args)}'.`);
             }
-            this.exec(command, { cwd }, (err, stdout, stderr) => {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`${requestKind} #${requestId} stdout: ${stdout}`);
-                    this.log.writeLine(`${requestKind} #${requestId} stderr: ${stderr}`);
-                }
-                onRequestCompleted(err, stdout, stderr);
-            });
+            switch (requestKind) {
+                case NpmViewRequest: {
+                        // const command = `${self.npmPath} view @types/${typing} --silent name`;
+                        // use http request to global npm registry instead of running npm view
+                        Debug.assert(args.length === 1);
+                        const url = `http://registry.npmjs.org/@types%2f${args[0]}`;
+                        const start = Date.now();
+                        this.httpGet(url, response => {
+                            let ok = false;
+                            if (this.log.isEnabled()) {
+                                this.log.writeLine(`${requestKind} #${requestId} request to ${url}:: status code ${response.statusCode}, status message '${response.statusMessage}', took ${Date.now() - start} ms`);
+                            }
+                            switch (response.statusCode) {
+                                case 200: // OK
+                                case 301: // redirect - Moved - treat package as present
+                                case 302: // redirect - Found - treat package as present
+                                    ok = true;
+                                    break;
+                            }
+                            response.destroy();
+                            onRequestCompleted(ok);
+                        }).on("error", (err: Error) => {
+                            if (this.log.isEnabled()) {
+                                this.log.writeLine(`${requestKind} #${requestId} query to npm registry failed with error ${err.message}, stack ${err.stack}`);
+                            }
+                            onRequestCompleted(/*success*/ false);
+                        });
+                    }
+                    break;
+                case NpmInstallRequest: {
+                        const command = `${this.npmPath} install ${args.join(" ")} --save-dev`;
+                        const start = Date.now();
+                        this.exec(command, { cwd }, (err, stdout, stderr) => {
+                            if (this.log.isEnabled()) {
+                                this.log.writeLine(`${requestKind} #${requestId} took: ${Date.now() - start} ms${sys.newLine}stdout: ${stdout}${sys.newLine}stderr: ${stderr}`);
+                            }
+                            // treat any output on stdout as success
+                            onRequestCompleted(!!stdout);
+                        });
+                    }
+                    break;
+                default:
+                    Debug.assert(false, `Unknown request kind ${requestKind}`);
+            }
         }
     }
 
