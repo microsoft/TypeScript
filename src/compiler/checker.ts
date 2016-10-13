@@ -4776,9 +4776,6 @@ namespace ts {
                 if (isJSConstructSignature) {
                     minArgumentCount--;
                 }
-                if (!thisParameter && isObjectLiteralMethod(declaration)) {
-                    thisParameter = getContextualThisParameter(declaration);
-                }
 
                 const classType = declaration.kind === SyntaxKind.Constructor ?
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
@@ -9429,8 +9426,13 @@ namespace ts {
                         return getInferredClassType(classSymbol);
                     }
                 }
+                let thisType = getThisTypeOfDeclaration(container);
+                if (thisType) {
+                    return thisType;
+                }
 
-                const thisType = getThisTypeOfDeclaration(container);
+                const thisParameter = getContextualThisParameter(container);
+                thisType = thisParameter && getTypeOfSymbol(thisParameter);
                 if (thisType) {
                     return thisType;
                 }
