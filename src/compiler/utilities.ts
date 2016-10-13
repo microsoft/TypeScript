@@ -1895,6 +1895,10 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
     }
 
+    export function isPushOrUnshiftIdentifier(node: Identifier) {
+        return node.text === "push" || node.text === "unshift";
+    }
+
     export function isModifierKind(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.AbstractKeyword:

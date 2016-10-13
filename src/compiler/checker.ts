@@ -8405,8 +8405,10 @@ namespace ts {
         }
 
         function isEmptyArrayAssignment(node: VariableDeclaration | BindingElement | Expression) {
-            return node.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>node).initializer && isEmptyArrayLiteral((<VariableDeclaration>node).initializer) ||
-                node.kind !== SyntaxKind.BindingElement && node.parent.kind === SyntaxKind.BinaryExpression && isEmptyArrayLiteral((<BinaryExpression>node.parent).right);
+            return node.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>node).initializer &&
+                isEmptyArrayLiteral((<VariableDeclaration>node).initializer) ||
+                node.kind !== SyntaxKind.BindingElement && node.parent.kind === SyntaxKind.BinaryExpression &&
+                isEmptyArrayLiteral((<BinaryExpression>node.parent).right);
         }
 
         function getReferenceCandidate(node: Expression): Expression {
@@ -8562,12 +8564,12 @@ namespace ts {
                 getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction);
         }
 
-        // Return true if the given node is 'x' in an 'x.push(value)' operation.
-        function isPushCallTarget(node: Node) {
+        // Return true if the given node is 'x' in an 'x.push(value)' or 'x.unshift(value)' operation.
+        function isPushOrUnshiftCallTarget(node: Node) {
             const parent = getReferenceRoot(node).parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression &&
-                (<PropertyAccessExpression>parent).name.text === "push" &&
-                parent.parent.kind === SyntaxKind.CallExpression;
+                parent.parent.kind === SyntaxKind.CallExpression &&
+                isPushOrUnshiftIdentifier((<PropertyAccessExpression>parent).name);
         }
 
         // Return true if the given node is 'x' in an 'x[n] = value' operation, where 'n' is an
@@ -8596,9 +8598,9 @@ namespace ts {
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
             // When the reference is 'x' in an 'x.push(value)' or 'x[n] = value' operation, we give type
-            // 'any[]' to 'x' instead of using the type determed by control flow analysis such that new
+            // 'any[]' to 'x' instead of using the type determined by control flow analysis such that new
             // element types are not considered errors.
-            const isEvolvingArrayInferenceTarget = isEvolvingArrayType(evolvedType) && (isPushCallTarget(reference) || isElementAssignmentTarget(reference));
+            const isEvolvingArrayInferenceTarget = isEvolvingArrayType(evolvedType) && (isPushOrUnshiftCallTarget(reference) || isElementAssignmentTarget(reference));
             const resultType = isEvolvingArrayInferenceTarget ? anyArrayType : finalizeEvolvingArrayType(evolvedType);
             if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
