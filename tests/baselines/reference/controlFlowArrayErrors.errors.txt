@@ -1,5 +1,7 @@
-tests/cases/compiler/controlFlowArrayErrors.ts(6,9): error TS7005: Variable 'y' implicitly has an 'any[]' type.
-tests/cases/compiler/controlFlowArrayErrors.ts(14,9): error TS7005: Variable 'y' implicitly has an 'any[]' type.
+tests/cases/compiler/controlFlowArrayErrors.ts(5,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+tests/cases/compiler/controlFlowArrayErrors.ts(6,13): error TS7005: Variable 'x' implicitly has an 'any[]' type.
+tests/cases/compiler/controlFlowArrayErrors.ts(12,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+tests/cases/compiler/controlFlowArrayErrors.ts(14,13): error TS7005: Variable 'x' implicitly has an 'any[]' type.
 tests/cases/compiler/controlFlowArrayErrors.ts(20,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
 tests/cases/compiler/controlFlowArrayErrors.ts(23,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
 tests/cases/compiler/controlFlowArrayErrors.ts(30,12): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string | number'.
@@ -10,25 +12,29 @@ tests/cases/compiler/controlFlowArrayErrors.ts(61,11): error TS7034: Variable 'x
 tests/cases/compiler/controlFlowArrayErrors.ts(64,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
 
 
-==== tests/cases/compiler/controlFlowArrayErrors.ts (10 errors) ====
+==== tests/cases/compiler/controlFlowArrayErrors.ts (12 errors) ====
     
     declare function cond(): boolean;
     
     function f1() {
-        let x = [];
-        let y = x;  // Implicit any[] error
+        let x = [];  // Implicit any[] error in some locations
             ~
-!!! error TS7005: Variable 'y' implicitly has an 'any[]' type.
+!!! error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+        let y = x;   // Implicit any[] error
+                ~
+!!! error TS7005: Variable 'x' implicitly has an 'any[]' type.
         x.push(5);
         let z = x;
     }
     
     function f2() {
-        let x;
-        x = [];
-        let y = x;  // Implicit any[] error
+        let x;       // Implicit any[] error in some locations
             ~
-!!! error TS7005: Variable 'y' implicitly has an 'any[]' type.
+!!! error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+        x = [];
+        let y = x;   // Implicit any[] error
+                ~
+!!! error TS7005: Variable 'x' implicitly has an 'any[]' type.
         x.push(5);
         let z = x;
     }
@@ -39,7 +45,7 @@ tests/cases/compiler/controlFlowArrayErrors.ts(64,9): error TS7005: Variable 'x'
 !!! error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
         x.push(5);
         function g() {
-            x;  // Implicit any[] error
+            x;       // Implicit any[] error
             ~
 !!! error TS7005: Variable 'x' implicitly has an 'any[]' type.
         }

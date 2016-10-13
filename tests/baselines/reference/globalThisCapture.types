@@ -13,7 +13,7 @@ var parts = [];
 
 // Ensure that the generated code is correct
 parts[0];
->parts[0] : undefined
->parts : undefined[]
+>parts[0] : any
+>parts : any[]
 >0 : 0
 

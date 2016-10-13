@@ -194,9 +194,9 @@ var d5 = [...temp3];
 
 var d6 = [...temp4];
 >d6 : any[]
->[...temp4] : undefined[]
->...temp4 : undefined
->temp4 : undefined[]
+>[...temp4] : any[]
+>...temp4 : any
+>temp4 : any[]
 
 var d7 = [...[...temp1]];
 >d7 : number[]

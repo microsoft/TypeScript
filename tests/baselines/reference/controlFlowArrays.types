@@ -357,18 +357,32 @@ function f10() {
 }
 
 function f11() {
->f11 : () => never[]
+>f11 : () => string[]
 
     let x = [];
 >x : any[]
 >[] : never[]
 
-    return x;  // never[]
->x : never[]
+    if (x.length === 0) {  // x.length ok on implicit any[]
+>x.length === 0 : boolean
+>x.length : number
+>x : any[]
+>length : number
+>0 : 0
+
+        x.push("hello");
+>x.push("hello") : number
+>x.push : (...items: any[]) => number
+>x : any[]
+>push : (...items: any[]) => number
+>"hello" : "hello"
+    }
+    return x;
+>x : string[]
 }
 
 function f12() {
->f12 : () => never[]
+>f12 : () => string[]
 
     let x;
 >x : any
@@ -378,8 +392,22 @@ function f12() {
 >x : any
 >[] : never[]
 
-    return x;  // never[]
->x : never[]
+    if (x.length === 0) {  // x.length ok on implicit any[]
+>x.length === 0 : boolean
+>x.length : number
+>x : any[]
+>length : number
+>0 : 0
+
+        x.push("hello");
+>x.push("hello") : number
+>x.push : (...items: any[]) => number
+>x : any[]
+>push : (...items: any[]) => number
+>"hello" : "hello"
+    }
+    return x;
+>x : string[]
 }
 
 function f13() {
