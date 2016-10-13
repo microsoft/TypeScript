@@ -2644,7 +2644,7 @@ namespace ts {
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | BooleanLike | ESSymbol,
-        NotUnionOrUnit = Any | String | Number | ESSymbol | ObjectType,
+        NotUnionOrUnit = Any | ESSymbol | ObjectType,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
