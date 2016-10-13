@@ -22,6 +22,12 @@ function TodoList({ todos }: TodoListProps) {
         {...<Todo key={todos[0].id} todo={todos[0].todo} />}
     </div>;
 }
+function TodoListNoError({ todos }: TodoListProps) {
+    // any is not checked
+    return <div>
+        {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
+    </div>;
+}
 let x: TodoListProps;
     <TodoList {...x}/>
 
@@ -40,6 +46,11 @@ function Todo(prop) {
 }
 function TodoList(_a) {
     var todos = _a.todos;
+    return React.createElement("div", null, React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
+}
+function TodoListNoError(_a) {
+    var todos = _a.todos;
+    // any is not checked
     return React.createElement("div", null, React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
 }
 var x;

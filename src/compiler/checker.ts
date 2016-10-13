@@ -10905,7 +10905,7 @@ namespace ts {
         function checkJsxExpression(node: JsxExpression) {
             if (node.expression) {
                 const type = checkExpression(node.expression);
-                if (node.dotDotDotToken && !isArrayType(type)) {
+                if (node.dotDotDotToken && type !== anyType && !isArrayType(type)) {
                     error(node, Diagnostics.JSX_spread_child_must_be_an_array_type, node.toString(), typeToString(type));
                 }
                 return type;

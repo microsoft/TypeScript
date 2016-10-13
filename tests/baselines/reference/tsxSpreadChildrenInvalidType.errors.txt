@@ -27,6 +27,12 @@ tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609
 !!! error TS2609: JSX spread child must be an array type.
         </div>;
     }
+    function TodoListNoError({ todos }: TodoListProps) {
+        // any is not checked
+        return <div>
+            {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
+        </div>;
+    }
     let x: TodoListProps;
         <TodoList {...x}/>
     

@@ -22,5 +22,11 @@ function TodoList({ todos }: TodoListProps) {
         {...<Todo key={todos[0].id} todo={todos[0].todo} />}
     </div>;
 }
+function TodoListNoError({ todos }: TodoListProps) {
+    // any is not checked
+    return <div>
+        {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
+    </div>;
+}
 let x: TodoListProps;
     <TodoList {...x}/>
