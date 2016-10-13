@@ -77,26 +77,27 @@ namespace ts {
         function visitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.AsyncKeyword:
+                    // ES2017 async modifier should be elided for targets < ES2017
                     return undefined;
 
                 case SyntaxKind.AwaitExpression:
-                    // Typescript 'await' expressions must be transformed for targets < ES2017.
+                    // ES2017 'await' expressions must be transformed for targets < ES2017.
                     return visitAwaitExpression(<AwaitExpression>node);
 
                 case SyntaxKind.MethodDeclaration:
-                    // TypeScript method declarations may be 'async'
+                    // ES2017 method declarations may be 'async'
                     return visitMethodDeclaration(<MethodDeclaration>node);
 
                 case SyntaxKind.FunctionDeclaration:
-                    // TypeScript function declarations may be 'async'
+                    // ES2017 function declarations may be 'async'
                     return visitFunctionDeclaration(<FunctionDeclaration>node);
 
                 case SyntaxKind.FunctionExpression:
-                    // TypeScript function expressions may be 'async'
+                    // ES2017 function expressions may be 'async'
                     return visitFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.ArrowFunction:
-                    // TypeScript arrow functions may be 'async'
+                    // ES2017 arrow functions may be 'async'
                     return visitArrowFunction(<ArrowFunction>node);
 
                 default:
@@ -160,9 +161,7 @@ namespace ts {
          * Visits a function declaration.
          *
          * This function will be called when one of the following conditions are met:
-         * - The node is an overload
          * - The node is marked async
-         * - The node is exported from a TypeScript namespace
          *
          * @param node The function node.
          */

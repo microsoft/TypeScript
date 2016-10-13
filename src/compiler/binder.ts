@@ -2555,11 +2555,6 @@ namespace ts {
         // extends clause of a class.
         let transformFlags = subtreeFlags | TransformFlags.AssertES6;
 
-        // propagate ES2017
-        if (node.expression.transformFlags & TransformFlags.ContainsES2017) {
-            transformFlags |= TransformFlags.ContainsES2017;
-        }
-
         // If an ExpressionWithTypeArguments contains type arguments, then it
         // is TypeScript syntax.
         if (node.typeArguments) {
@@ -2591,16 +2586,16 @@ namespace ts {
         const typeParameters = node.typeParameters;
         const asteriskToken = node.asteriskToken;
 
-        // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
+        // A MethodDeclaration is TypeScript syntax if it is either abstract, overloaded,
         // generic, or has a decorator.
         if (!body
             || typeParameters
-            || (modifierFlags & (ModifierFlags.Async | ModifierFlags.Abstract))
+            || (modifierFlags & ModifierFlags.Abstract)
             || (subtreeFlags & TransformFlags.ContainsDecorators)) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // Async MethodDeclaration is ES2017
+        // An async method declaration is ES2017 syntax.
         if (modifierFlags & ModifierFlags.Async) {
             transformFlags |= TransformFlags.AssertES2017;
         }
@@ -2619,10 +2614,10 @@ namespace ts {
         const modifierFlags = getModifierFlags(node);
         const body = node.body;
 
-        // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
+        // An accessor is TypeScript syntax if it is either abstract, overloaded,
         // generic, or has a decorator.
         if (!body
-            || (modifierFlags & (ModifierFlags.Async | ModifierFlags.Abstract))
+            || (modifierFlags & ModifierFlags.Abstract)
             || (subtreeFlags & TransformFlags.ContainsDecorators)) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -2664,9 +2659,9 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES6;
             }
 
-            // If a FunctionDeclaration is async, then it is TypeScript syntax.
+            // An async function declaration is ES2017 syntax.
             if (modifierFlags & ModifierFlags.Async) {
-                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2017;
+                transformFlags |= TransformFlags.AssertES2017;
             }
 
             // If a FunctionDeclaration's subtree has marked the container as needing to capture the
@@ -2695,9 +2690,9 @@ namespace ts {
         const modifierFlags = getModifierFlags(node);
         const asteriskToken = node.asteriskToken;
 
-        // An async function expression is TypeScript syntax.
+        // An async function expression is ES2017 syntax.
         if (modifierFlags & ModifierFlags.Async) {
-            transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2017;
+            transformFlags |= TransformFlags.AssertES2017;
         }
 
         // If a FunctionExpression's subtree has marked the container as needing to capture the
@@ -2725,9 +2720,9 @@ namespace ts {
         let transformFlags = subtreeFlags | TransformFlags.AssertES6;
         const modifierFlags = getModifierFlags(node);
 
-        // An async arrow function is TypeScript syntax.
+        // An async arrow function is ES2017 syntax.
         if (modifierFlags & ModifierFlags.Async) {
-            transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2017;
+            transformFlags |= TransformFlags.AssertES2017;
         }
 
         // If an ArrowFunction contains a lexical this, its container must capture the lexical this.
@@ -2868,8 +2863,8 @@ namespace ts {
         switch (kind) {
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.AwaitExpression:
-                // Typescript async/await are ES2017 features
-                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2017;
+                // async/await is ES2017 syntax
+                transformFlags |= TransformFlags.AssertES2017;
                 break;
 
             case SyntaxKind.PublicKeyword:

@@ -230,10 +230,6 @@ namespace ts {
                     // ES6 export and default modifiers are elided when inside a namespace.
                     return currentNamespace ? undefined : node;
 
-                // Typescript ES2017 async/await are handled by ES2017 transformer
-                case SyntaxKind.AsyncKeyword:
-                    return node;
-
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
@@ -297,7 +293,6 @@ namespace ts {
                     // - property declarations
                     // - index signatures
                     // - method overload signatures
-                    // - async methods
                     return visitClassDeclaration(<ClassDeclaration>node);
 
                 case SyntaxKind.ClassExpression:
@@ -310,7 +305,6 @@ namespace ts {
                     // - property declarations
                     // - index signatures
                     // - method overload signatures
-                    // - async methods
                     return visitClassExpression(<ClassExpression>node);
 
                 case SyntaxKind.HeritageClause:
@@ -325,7 +319,7 @@ namespace ts {
                     return visitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
 
                 case SyntaxKind.MethodDeclaration:
-                    // TypeScript method declarations may be 'async', and may have decorators, modifiers
+                    // TypeScript method declarations may have decorators, modifiers
                     // or type annotations.
                     return visitMethodDeclaration(<MethodDeclaration>node);
 
@@ -334,19 +328,19 @@ namespace ts {
                     return visitGetAccessor(<GetAccessorDeclaration>node);
 
                 case SyntaxKind.SetAccessor:
-                    // Set Accessors can have TypeScript modifiers, decorators, and type annotations.
+                    // Set Accessors can have TypeScript modifiers and type annotations.
                     return visitSetAccessor(<SetAccessorDeclaration>node);
 
                 case SyntaxKind.FunctionDeclaration:
-                    // TypeScript function declarations may be 'async'
+                    // Typescript function declarations can have modifiers, decorators, and type annotations.
                     return visitFunctionDeclaration(<FunctionDeclaration>node);
 
                 case SyntaxKind.FunctionExpression:
-                    // TypeScript function expressions may be 'async'
+                    // TypeScript function expressions can have modifiers and type annotations.
                     return visitFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.ArrowFunction:
-                    // TypeScript arrow functions may be 'async'
+                    // TypeScript arrow functions can have modifiers and type annotations.
                     return visitArrowFunction(<ArrowFunction>node);
 
                 case SyntaxKind.Parameter:
@@ -377,10 +371,6 @@ namespace ts {
                 case SyntaxKind.EnumDeclaration:
                     // TypeScript enum declarations do not exist in ES6 and must be rewritten.
                     return visitEnumDeclaration(<EnumDeclaration>node);
-
-                case SyntaxKind.AwaitExpression:
-                    // Typescript ES2017 async/await are handled by ES2017 transformer
-                    return visitAwaitExpression(<AwaitExpression>node);
 
                 case SyntaxKind.VariableStatement:
                     // TypeScript namespace exports for variable statements must be transformed.
@@ -2050,7 +2040,7 @@ namespace ts {
          *
          * This function will be called when one of the following conditions are met:
          * - The node is an overload
-         * - The node is marked as abstract, async, public, private, protected, or readonly
+         * - The node is marked as abstract, public, private, protected, or readonly
          * - The node has both a decorator and a computed property name
          *
          * @param node The method node.
@@ -2161,8 +2151,8 @@ namespace ts {
          *
          * This function will be called when one of the following conditions are met:
          * - The node is an overload
-         * - The node is marked async
          * - The node is exported from a TypeScript namespace
+         * - The node has decorators
          *
          * @param node The function node.
          */
@@ -2197,7 +2187,7 @@ namespace ts {
          * Visits a function expression node.
          *
          * This function will be called when one of the following conditions are met:
-         * - The node is marked async
+         * - The node has type annotations
          *
          * @param node The function expression node.
          */
@@ -2216,10 +2206,6 @@ namespace ts {
                 /*location*/ node
             );
 
-            // Keep modifiers in case of async functions
-            const funcModifiers = visitNodes(node.modifiers, visitor, isModifier);
-            func.modifiers = createNodeArray(funcModifiers);
-
             setOriginalNode(func, node);
 
             return func;
@@ -2228,7 +2214,7 @@ namespace ts {
         /**
          * @remarks
          * This function will be called when one of the following conditions are met:
-         * - The node is marked async
+         * - The node has type annotations
          */
         function visitArrowFunction(node: ArrowFunction) {
             const func = createArrowFunction(
@@ -2366,23 +2352,6 @@ namespace ts {
                     /*location*/ node
                 );
             }
-        }
-
-        /**
-         * Visits an await expression.
-         *
-         * This function will be called any time a ES2017 await expression is encountered.
-         *
-         * @param node The await expression node.
-         */
-        function visitAwaitExpression(node: AwaitExpression): Expression {
-            return updateNode(
-                createAwait(
-                    visitNode(node.expression, visitor, isExpression),
-                    /*location*/ node
-                ),
-                node
-            );
         }
 
         /**
