@@ -2197,6 +2197,7 @@ namespace ts {
             }
 
             const func = createFunctionExpression(
+                visitNodes(node.modifiers, visitor, isModifier),
                 node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
@@ -2477,6 +2478,7 @@ namespace ts {
             const enumStatement = createStatement(
                 createCall(
                     createFunctionExpression(
+                        /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
@@ -2748,6 +2750,7 @@ namespace ts {
             const moduleStatement = createStatement(
                 createCall(
                     createFunctionExpression(
+                        /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,

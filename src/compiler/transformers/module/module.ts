@@ -179,6 +179,7 @@ namespace ts {
                             //
                             //     function (require, exports, module1, module2) ...
                             createFunctionExpression(
+                                /*modifiers*/ undefined,
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,

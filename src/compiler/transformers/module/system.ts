@@ -110,6 +110,7 @@ namespace ts {
             const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             const dependencies = createArrayLiteral(map(dependencyGroups, getNameOfDependencyGroup));
             const body = createFunctionExpression(
+                /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -244,6 +245,7 @@ namespace ts {
                             ),
                             createPropertyAssignment("execute",
                                 createFunctionExpression(
+                                    /*modifiers*/ undefined,
                                     /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
                                     /*typeParameters*/ undefined,
@@ -430,6 +432,7 @@ namespace ts {
 
                 setters.push(
                     createFunctionExpression(
+                        /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,

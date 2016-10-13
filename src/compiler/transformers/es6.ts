@@ -681,6 +681,7 @@ namespace ts {
 
             const extendsClauseElement = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
+                /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -1509,6 +1510,7 @@ namespace ts {
 
             const expression = setOriginalNode(
                 createFunctionExpression(
+                    /*modifiers*/ undefined,
                     node.asteriskToken,
                     name,
                     /*typeParameters*/ undefined,
@@ -2240,6 +2242,7 @@ namespace ts {
                                 /*type*/ undefined,
                                 setEmitFlags(
                                     createFunctionExpression(
+                                        /*modifiers*/ undefined,
                                         isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
                                         /*name*/ undefined,
                                         /*typeParameters*/ undefined,

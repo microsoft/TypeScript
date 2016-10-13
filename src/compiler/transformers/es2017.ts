@@ -202,6 +202,7 @@ namespace ts {
             }
 
             const func = createFunctionExpression(
+                /*modifiers*/ undefined,
                 node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
@@ -210,8 +211,6 @@ namespace ts {
                 transformFunctionBody(node),
                 /*location*/ node
             );
-
-            node.modifiers = visitNodes(node.modifiers, visitor, isModifier);
 
             setOriginalNode(func, node);
 
