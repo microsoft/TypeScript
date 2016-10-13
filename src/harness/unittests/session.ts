@@ -25,7 +25,13 @@ namespace ts.server {
         setImmediate: () => 0,
         clearImmediate() {}
     };
-    const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
+
+    const nullCancellationToken: ServerCancellationToken = {
+        isCancellationRequested: () => false,
+        attachToRequest: (): void => void 0,
+        detachFromRequest: (): void => void 0
+    };
+
     const mockLogger: Logger = {
         close(): void {},
         hasLevel(): boolean { return false; },
