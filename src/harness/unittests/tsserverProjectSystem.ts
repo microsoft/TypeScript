@@ -2387,4 +2387,33 @@ namespace ts.projectSystem {
             assert.isTrue(errorResult.length === 0);
         });
     });
+
+    describe("non-existing directories listed in config file input array", () => {
+        it("should be tolerated without crashing the server", () => {
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {},
+                    "include": ["app/*", "test/**/*", "something"]
+                }`
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "let t = 10;"
+            };
+
+            const host = createServerHost([file1, configFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 1);
+
+            const configuredProject = projectService.configuredProjects[0];
+            assert.isTrue(configuredProject.getFileNames().length == 0);
+
+            const inferredProject = projectService.inferredProjects[0];
+            assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
+        });
+    });
 }
