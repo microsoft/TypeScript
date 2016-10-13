@@ -39,6 +39,7 @@ tests/cases/**/*.js.map
 scripts/debug.bat
 scripts/run.bat
 scripts/word2md.js
+scripts/buildProtocol.js
 scripts/ior.js
 scripts/*.js.map
 scripts/typings/
