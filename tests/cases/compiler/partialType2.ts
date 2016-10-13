@@ -5,11 +5,15 @@ interface State {
 }
 
 function doSomething1<T>(x: T) {
+<<<<<<< 57a95d24ca1cca41e009f5eb0285db73cd3b2bff
 <<<<<<< d147616ccc57b7c9f6418074c8edffd3ee258961
     let y: partial T = <any>null;
 =======
     let y: subset T = <any>null;
 >>>>>>> Partial Types (#11233)
+=======
+    let y: partial T = <any>null;
+>>>>>>> Update test
     y = x; // Should be OK
     x = y; // Error
 }
