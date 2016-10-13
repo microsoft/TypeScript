@@ -1,0 +1,7 @@
+error TS5068: Invalid value for 'jsxFactory'. '0' is not a valid identifier/qualified-name.
+
+
+!!! error TS5068: Invalid value for 'jsxFactory'. '0' is not a valid identifier/qualified-name.
+==== tests/cases/conformance/jsx/file.tsx (0 errors) ====
+    // An error should be issued when 'jsxFactory' is an invalid identifier.
+    

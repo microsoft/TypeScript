@@ -1,0 +1,25 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		[s: string]: any;
+>s : string
+	}
+}
+
+=== tests/cases/conformance/jsx/h.d.ts ===
+export var h;
+>h : any
+
+=== tests/cases/conformance/jsx/react-consumer.tsx ===
+import {h} from "./h";
+>h : any
+
+// Should not elide h import
+<div />;
+><div /> : any
+>div : any
+

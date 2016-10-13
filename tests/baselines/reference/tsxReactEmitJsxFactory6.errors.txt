@@ -1,0 +1,7 @@
+error TS5053: Option 'jsxFactory' cannot be specified with option 'reactNamespace'.
+
+
+!!! error TS5053: Option 'jsxFactory' cannot be specified with option 'reactNamespace'.
+==== tests/cases/conformance/jsx/file.tsx (0 errors) ====
+    // An error should be issued when jsxFactory and reactNamespace are both specified.
+    

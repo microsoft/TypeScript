@@ -1619,17 +1619,38 @@ namespace ts {
         );
     }
 
-    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement) {
+    export function createEntityName(entityName: string) {
+        const { entityName: node } = parseIsolatedEntityName(entityName);
+
+        // Parsing occurred in an isolated context, so nodes need to be synthesized
+        // and positions erased for correct positioning in emit.
+        const synthesize = (node: Node) => {
+            node.pos = -1;
+            node.end = -1;
+            node.flags |= NodeFlags.Synthesized;
+            forEachChild(node, synthesize);
+        };
+        synthesize(node);
+
+        return node;
+    }
+
+    export function createJsxFactory(jsxFactory: string) {
+        const entityName = createEntityName(jsxFactory);
+        return createExpressionFromEntityName(entityName);
+    }
+
+    export function createReactCreateElement(reactNamespace: string | undefined, parentElement: JsxOpeningLikeElement) {
         // To ensure the emit resolver can properly resolve the namespace, we need to
         // treat this identifier as if it were a source tree node by clearing the `Synthesized`
         // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
-        react.parent = parent;
-        return react;
+        react.parent = parentElement;
+        return createPropertyAccess(react, "createElement");
     }
 
-    export function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
+    export function createJsxFactoryCall(jsxFactory: Expression, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
             argumentsList.push(props);
@@ -1652,10 +1673,7 @@ namespace ts {
         }
 
         return createCall(
-            createPropertyAccess(
-                createReactNamespace(reactNamespace, parentElement),
-                "createElement"
-            ),
+            jsxFactory,
             /*typeArguments*/ undefined,
             argumentsList,
             location

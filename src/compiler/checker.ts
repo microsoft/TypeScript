@@ -10885,13 +10885,24 @@ namespace ts {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
 
-            // The reactNamespace symbol should be marked as 'used' so we don't incorrectly elide its import. And if there
-            // is no reactNamespace symbol in scope when targeting React emit, we should issue an error.
-            const reactRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const reactNamespace = compilerOptions.reactNamespace ? compilerOptions.reactNamespace : "React";
-            const reactSym = resolveName(node.tagName, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace);
-            if (reactSym) {
-                getSymbolLinks(reactSym).referenced = true;
+            // The JSX factory namespace symbol should be marked as 'used' so we don't incorrectly elide its import. And if
+            // it isn't in scope when targeting React emit, we should issue an error.
+            const jsxFactoryRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            let jsxFactoryNamespace = "React";
+            if (compilerOptions.jsxFactory) {
+                let { entityName } = parseIsolatedEntityName(compilerOptions.jsxFactory);
+                while (entityName.kind === SyntaxKind.QualifiedName) {
+                    entityName = (<QualifiedName>entityName).left;
+                }
+                Debug.assertNode(entityName, node => node.kind === SyntaxKind.Identifier);
+                jsxFactoryNamespace = (<Identifier>entityName).text;
+            }
+            else if (compilerOptions.reactNamespace) {
+                jsxFactoryNamespace = compilerOptions.reactNamespace;
+            }
+            const jsxFactorySym = resolveName(node.tagName, jsxFactoryNamespace, SymbolFlags.Value, jsxFactoryRefErr, jsxFactoryNamespace);
+            if (jsxFactorySym) {
+                getSymbolLinks(jsxFactorySym).referenced = true;
             }
 
             const targetAttributesType = getJsxElementAttributesType(node);

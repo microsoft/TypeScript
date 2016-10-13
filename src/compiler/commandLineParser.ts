@@ -73,6 +73,11 @@ namespace ts {
             description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
         },
         {
+            name: "jsxFactory",
+            type: "string",
+            description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h,
+        },
+        {
             name: "reactNamespace",
             type: "string",
             description: Diagnostics.Specify_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit

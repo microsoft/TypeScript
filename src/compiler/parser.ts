@@ -463,6 +463,13 @@ namespace ts {
     }
 
     /* @internal */
+    export function parseIsolatedEntityName(content: string) {
+        const result = Parser.parseIsolatedEntityName(content);
+        Parser.fixupParentReferences(result.entityName);
+        return result;
+    }
+
+    /* @internal */
     // Exposed only for testing.
     export function parseJSDocTypeExpressionForTests(content: string, start?: number, length?: number) {
         return Parser.JSDocParser.parseJSDocTypeExpressionForTests(content, start, length);
@@ -582,6 +589,20 @@ namespace ts {
             clearState();
 
             return result;
+        }
+
+        export function parseIsolatedEntityName(content: string, allowReservedWords = false) {
+            initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+            sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content };
+
+            nextToken();
+            const entityName = parseEntityName(allowReservedWords);
+            parseExpected(SyntaxKind.EndOfFileToken);
+
+            const diagnostics = parseDiagnostics;
+            clearState();
+
+            return { entityName, diagnostics };
         }
 
         function getLanguageVariant(scriptKind: ScriptKind) {
