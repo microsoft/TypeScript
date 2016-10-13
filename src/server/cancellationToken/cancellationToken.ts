@@ -5,8 +5,8 @@ import fs = require("fs");
 // TODO: remove after extrating services types into separate .d.ts file
 interface ServerCancellationToken {
     isCancellationRequested(): boolean;
-    attachToRequest(requestId: number): void;
-    detachFromRequest(requestId: number): void;
+    setRequest(requestId: number): void;
+    resetRequest(requestId: number): void;
 }
 
 function isPipeExist(name: string): boolean {
@@ -30,8 +30,8 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
     if (!cancellationPipeName) {
         return {
             isCancellationRequested: () => false,
-            attachToRequest: (requestId: number): void => void 0,
-            detachFromRequest: (requestId: number): void => void 0
+            setRequest: (_requestId: number): void => void 0,
+            resetRequest: (_requestId: number): void => void 0
         };
     }
     if (cancellationPipeName.charAt(cancellationPipeName.length - 1) === "*") {
@@ -40,12 +40,17 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
             throw new Error("Invalid name for template cancellation pipe: it should have length greater than 2 characters and contain only one '*'.");
         }
         let perRequestPipeName: string;
+        let currentRequestId: number;
         return {
             isCancellationRequested: () =>  perRequestPipeName !== undefined && isPipeExist(perRequestPipeName),
-            attachToRequest(requestId: number) {
+            setRequest(requestId: number) {
+                currentRequestId = currentRequestId;
                 perRequestPipeName = namePrefix + requestId;
             },
-            detachFromRequest(requestId: number) {
+            resetRequest(requestId: number) {
+                if (currentRequestId !== requestId) {
+                    throw new Error(`Mismatched request id, expected ${currentRequestId}, actual ${requestId}`);
+                }
                 perRequestPipeName = undefined;
             }
         };
@@ -53,8 +58,8 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
     else {
         return {
             isCancellationRequested: () => isPipeExist(cancellationPipeName),
-            attachToRequest: (requestId: number): void => void 0,
-            detachFromRequest: (requestId: number): void => void 0
+            setRequest: (_requestId: number): void => void 0,
+            resetRequest: (_requestId: number): void => void 0
         };
     }
 }

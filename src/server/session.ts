@@ -9,9 +9,15 @@ namespace ts.server {
     }
 
     export interface ServerCancellationToken extends HostCancellationToken {
-        attachToRequest(requestId: number): void;
-        detachFromRequest(requestId: number): void;
+        setRequest(requestId: number): void;
+        resetRequest(requestId: number): void;
     }
+
+    export const nullCancellationToken: ServerCancellationToken = {
+        isCancellationRequested: () => false,
+        setRequest: () => void 0,
+        resetRequest: () => void 0
+    };
 
     function hrTimeToMilliseconds(time: number[]): number {
         const seconds = time[0];
@@ -180,6 +186,7 @@ namespace ts.server {
         private errorTimer: any; /*NodeJS.Timer | number*/
         private immediateId: any;
         private changeSeq = 0;
+        private currentRequestId: number;
 
         private eventHander: ProjectServiceEventHandler;
 
@@ -194,12 +201,38 @@ namespace ts.server {
             protected readonly canUseEvents: boolean,
             eventHandler?: ProjectServiceEventHandler) {
 
+            if (cancellationToken !== nullCancellationToken) {
+                host.setImmediate = this.wrapDeferredCall(this.host, this.host.setImmediate);
+                host.setTimeout = this.wrapDeferredCall(this.host, this.host.setTimeout);
+            }
+
             this.eventHander = canUseEvents
                 ? eventHandler || (event => this.defaultEventHandler(event))
                 : undefined;
 
             this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander);
             this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);
+        }
+
+        private wrapDeferredCall<T extends (cb: (...args: any[]) => void, ...rest: any[]) => any>(thisArg: any, originalCall: T): T {
+            return <T>((cb, rest) => {
+                Debug.assert(this.currentRequestId !== undefined, "No in-flight request");
+                const capturedRequestId = this.currentRequestId;
+                const wrapped: typeof cb = a => {
+                    Debug.assert(this.currentRequestId === undefined, `Request ${this.currentRequestId} is in-flight`);
+                    // restore captured request id
+                    try {
+                        this.setCurrentRequest(capturedRequestId);
+                        cb(a);
+                    }
+                    finally {
+                        this.resetCurrentRequest(capturedRequestId);
+                    }
+                };
+                // substiture callback with wrapper function that will restore the request id
+                // before invoking the original callback
+                return originalCall.call(thisArg, wrapped, ...rest);
+            });
         }
 
         private defaultEventHandler(event: ProjectServiceEvent) {
@@ -1620,15 +1653,27 @@ namespace ts.server {
             this.handlers[command] = handler;
         }
 
+        private setCurrentRequest(requestId: number): void {
+            Debug.assert(this.currentRequestId === undefined);
+            this.currentRequestId = requestId;
+            this.cancellationToken.setRequest(requestId);
+        }
+
+        private resetCurrentRequest(requestId: number): void {
+            Debug.assert(this.currentRequestId === requestId);
+            this.currentRequestId = undefined;
+            this.cancellationToken.resetRequest(requestId);
+        }
+
         public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
             const handler = this.handlers[request.command];
             if (handler) {
                 try {
-                    this.cancellationToken.attachToRequest(request.seq);
+                    this.setCurrentRequest(request.seq);
                     return handler(request);
                 }
                 finally {
-                    this.cancellationToken.detachFromRequest(request.seq);
+                    this.resetCurrentRequest(request.seq);
                 }
             }
             else {

@@ -563,11 +563,7 @@ namespace ts.server {
         cancellationToken = factory(sys.args);
     }
     catch (e) {
-        cancellationToken = {
-            isCancellationRequested: () => false,
-            attachToRequest: () => void 0,
-            detachFromRequest: () => void 0
-        };
+        cancellationToken = nullCancellationToken;
     };
 
     let eventPort: number;

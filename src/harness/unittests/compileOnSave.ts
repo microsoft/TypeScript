@@ -4,6 +4,7 @@
 
 namespace ts.projectSystem {
     import CommandNames = server.CommandNames;
+    const nullCancellationToken = server.nullCancellationToken;
 
     function createTestTypingsInstaller(host: server.ServerHost) {
         return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
