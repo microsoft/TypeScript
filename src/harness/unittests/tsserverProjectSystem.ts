@@ -19,10 +19,8 @@ namespace ts.projectSystem {
 
     export interface PostExecAction {
         readonly requestKind: TI.RequestKind;
-        readonly error: Error;
-        readonly stdout: string;
-        readonly stderr: string;
-        readonly callback: (err: Error, stdout: string, stderr: string) => void;
+        readonly success: boolean;
+        readonly callback: TI.RequestCompletedAction;
     }
 
     export function notImplemented(): any {
@@ -54,7 +52,7 @@ namespace ts.projectSystem {
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
         constructor(readonly globalTypingsCacheLocation: string, throttleLimit: number, readonly installTypingHost: server.ServerHost, log?: TI.Log) {
-            super(globalTypingsCacheLocation, "npm", safeList.path, throttleLimit, log);
+            super(globalTypingsCacheLocation, safeList.path, throttleLimit, log);
             this.init();
         }
 
@@ -65,7 +63,7 @@ namespace ts.projectSystem {
             const actionsToRun = this.postExecActions;
             this.postExecActions = [];
             for (const action of actionsToRun) {
-                action.callback(action.error, action.stdout, action.stderr);
+                action.callback(action.success);
             }
         }
 
@@ -85,7 +83,7 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: (err: Error, stdout: string, stderr: string) => void): void {
+        executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
             switch (requestKind) {
                 case TI.NpmViewRequest:
                 case TI.NpmInstallRequest:
@@ -108,9 +106,7 @@ namespace ts.projectSystem {
         addPostExecAction(requestKind: TI.RequestKind, stdout: string | string[], cb: TI.RequestCompletedAction) {
             const out = typeof stdout === "string" ? stdout : createNpmPackageJsonString(stdout);
             const action: PostExecAction = {
-                error: undefined,
-                stdout: out,
-                stderr: "",
+                success: !!out,
                 callback: cb,
                 requestKind
             };
