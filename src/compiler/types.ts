@@ -1922,7 +1922,7 @@ namespace ts {
     // function, the container property references the function (which in turn has a flowNode
     // property for the containing control flow).
     export interface FlowStart extends FlowNode {
-        container?: FunctionExpression | ArrowFunction;
+        container?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.

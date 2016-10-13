@@ -84,6 +84,7 @@ namespace ts {
         IsFunctionExpression = 1 << 4,
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
+        IsObjectLiteralOrClassExpressionMethod = 1 << 7,
     }
 
     const binder = createBinder();
@@ -486,8 +487,8 @@ namespace ts {
                 }
                 else {
                     currentFlow = { flags: FlowFlags.Start };
-                    if (containerFlags & ContainerFlags.IsFunctionExpression) {
-                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction>node;
+                    if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
+                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
                     currentReturnTarget = undefined;
                 }
@@ -1237,9 +1238,12 @@ namespace ts {
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
+                case SyntaxKind.MethodDeclaration:
+                    if (isObjectLiteralOrClassExpressionMethod(node)) {
+                        return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethod;
+                    }
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -2236,6 +2240,10 @@ namespace ts {
                 if (nodeIsDecorated(node)) {
                     emitFlags |= NodeFlags.HasDecorators;
                 }
+            }
+
+            if (currentFlow && isObjectLiteralOrClassExpressionMethod(node)) {
+                node.flowNode = currentFlow;
             }
 
             return hasDynamicName(node)
