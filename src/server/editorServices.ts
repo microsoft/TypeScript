@@ -122,6 +122,11 @@ namespace ts.server {
             let currentPath = getDirectoryPath(fileName);
             let parentPath = getDirectoryPath(currentPath);
             while (currentPath != parentPath) {
+                if (!this.projectService.host.directoryExists(currentPath)) {
+                    this.projectService.logger.msg(`Cannot add watcher for ${currentPath}: the path doesn't exist.`, Msg.Err);
+                    break;
+                }
+
                 if (!this.directoryWatchersForTsconfig[currentPath]) {
                     this.projectService.logger.info(`Add watcher for: ${currentPath}`);
                     this.directoryWatchersForTsconfig[currentPath] = this.projectService.host.watchDirectory(currentPath, callback);
@@ -711,7 +716,7 @@ namespace ts.server {
             Debug.assert(!!parsedCommandLine.fileNames);
 
             if (parsedCommandLine.fileNames.length === 0) {
-                errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
+                (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
                 return { success: false, configFileErrors: errors };
             }
 

@@ -670,6 +670,10 @@ namespace ts.server {
             }
 
             const directoryToWatch = getDirectoryPath(this.configFileName);
+            if (!this.projectService.host.directoryExists(directoryToWatch)) {
+                this.projectService.logger.msg(`Cannot add watcher for ${directoryToWatch}: the path does not exist.`, Msg.Err);
+                return;
+            }
             this.projectService.logger.info(`Add recursive watcher for: ${directoryToWatch}`);
             this.directoryWatcher = this.projectService.host.watchDirectory(directoryToWatch, path => callback(this, path), /*recursive*/ true);
         }
