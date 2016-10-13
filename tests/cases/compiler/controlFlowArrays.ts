@@ -115,13 +115,19 @@ function f10() {
 
 function f11() {
     let x = [];
-    return x;  // never[]
+    if (x.length === 0) {  // x.length ok on implicit any[]
+        x.push("hello");
+    }
+    return x;
 }
 
 function f12() {
     let x;
     x = [];
-    return x;  // never[]
+    if (x.length === 0) {  // x.length ok on implicit any[]
+        x.push("hello");
+    }
+    return x;
 }
 
 function f13() {

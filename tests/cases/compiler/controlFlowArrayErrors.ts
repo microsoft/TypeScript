@@ -3,16 +3,16 @@
 declare function cond(): boolean;
 
 function f1() {
-    let x = [];
-    let y = x;  // Implicit any[] error
+    let x = [];  // Implicit any[] error in some locations
+    let y = x;   // Implicit any[] error
     x.push(5);
     let z = x;
 }
 
 function f2() {
-    let x;
+    let x;       // Implicit any[] error in some locations
     x = [];
-    let y = x;  // Implicit any[] error
+    let y = x;   // Implicit any[] error
     x.push(5);
     let z = x;
 }
@@ -21,7 +21,7 @@ function f3() {
     let x = [];  // Implicit any[] error in some locations
     x.push(5);
     function g() {
-        x;  // Implicit any[] error
+        x;       // Implicit any[] error
     }
 }
 
