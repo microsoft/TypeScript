@@ -8524,9 +8524,11 @@ namespace ts {
         }
 
         function createFinalArrayType(elementType: Type) {
-            return createArrayType(elementType !== neverType ?
-                elementType.flags & TypeFlags.Union ? getUnionType((<UnionType>elementType).types, /*subtypeReduction*/ true) : elementType :
-                strictNullChecks ? neverType : undefinedWideningType);
+            return elementType.flags & TypeFlags.Never ?
+                autoArrayType :
+                createArrayType(elementType.flags & TypeFlags.Union ?
+                    getUnionType((<UnionType>elementType).types, /*subtypeReduction*/ true) :
+                    elementType);
         }
 
         // We perform subtype reduction upon obtaining the final array type from an evolving array type.
@@ -8564,26 +8566,22 @@ namespace ts {
                 getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction);
         }
 
-        // Return true if the given node is 'x' in an 'x.push(value)' or 'x.unshift(value)' operation.
-        function isPushOrUnshiftCallTarget(node: Node) {
-            const parent = getReferenceRoot(node).parent;
-            return parent.kind === SyntaxKind.PropertyAccessExpression &&
-                parent.parent.kind === SyntaxKind.CallExpression &&
-                isPushOrUnshiftIdentifier((<PropertyAccessExpression>parent).name);
-        }
-
-        // Return true if the given node is 'x' in an 'x[n] = value' operation, where 'n' is an
-        // expression of type any, undefined, or a number-like type.
-        function isElementAssignmentTarget(node: Node) {
+        // Return true if the given node is 'x' in an 'x.length', x.push(value)', 'x.unshift(value)' or
+        // 'x[n] = value' operation, where 'n' is an expression of type any, undefined, or a number-like type.
+        function isEvolvingArrayOperationTarget(node: Node) {
             const root = getReferenceRoot(node);
             const parent = root.parent;
-            return parent.kind === SyntaxKind.ElementAccessExpression &&
+            const isLengthPushOrUnshift = parent.kind === SyntaxKind.PropertyAccessExpression && (
+                (<PropertyAccessExpression>parent).name.text === "length" ||
+                parent.parent.kind === SyntaxKind.CallExpression && isPushOrUnshiftIdentifier((<PropertyAccessExpression>parent).name));
+            const isElementAssignment = parent.kind === SyntaxKind.ElementAccessExpression &&
                 (<ElementAccessExpression>parent).expression === root &&
                 parent.parent.kind === SyntaxKind.BinaryExpression &&
                 (<BinaryExpression>parent.parent).operatorToken.kind === SyntaxKind.EqualsToken &&
                 (<BinaryExpression>parent.parent).left === parent &&
                 !isAssignmentTarget(parent.parent) &&
                 isTypeAnyOrAllConstituentTypesHaveKind(checkExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike | TypeFlags.Undefined);
+            return isLengthPushOrUnshift || isElementAssignment;
         }
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, flowContainer: Node) {
@@ -8597,11 +8595,11 @@ namespace ts {
             const visitedFlowStart = visitedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
-            // When the reference is 'x' in an 'x.push(value)' or 'x[n] = value' operation, we give type
-            // 'any[]' to 'x' instead of using the type determined by control flow analysis such that new
-            // element types are not considered errors.
-            const isEvolvingArrayInferenceTarget = isEvolvingArrayType(evolvedType) && (isPushOrUnshiftCallTarget(reference) || isElementAssignmentTarget(reference));
-            const resultType = isEvolvingArrayInferenceTarget ? anyArrayType : finalizeEvolvingArrayType(evolvedType);
+            // When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
+            // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
+            // on empty arrays are possible without implicit any errors and new element types can be inferred without
+            // type mismatch errors.
+            const resultType = isEvolvingArrayType(evolvedType) && isEvolvingArrayOperationTarget(reference) ? anyArrayType : finalizeEvolvingArrayType(evolvedType);
             if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
@@ -9355,12 +9353,12 @@ namespace ts {
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
             if (type === autoType || type === autoArrayType) {
-                if (flowType === type) {
+                if (flowType === autoType || flowType === autoArrayType) {
                     if (compilerOptions.noImplicitAny) {
-                        error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(type));
-                        error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(type));
+                        error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
+                        error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
                     }
-                    return convertAutoToAny(type);
+                    return convertAutoToAny(flowType);
                 }
             }
             else if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
