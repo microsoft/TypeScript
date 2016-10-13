@@ -2387,4 +2387,26 @@ namespace ts.projectSystem {
             assert.isTrue(errorResult.length === 0);
         });
     });
+
+    describe("maxNodeModuleJsDepth for inferred projects", () => {
+        it("should be set by default", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.js",
+                content: `var t = require("test"); t.`
+            };
+            const moduleFile: FileOrFolder = {
+                path: "/a/b/node_modules/test/index.js",
+                content: `var v = 10; module.exports = v;`
+            };
+
+            const host = createServerHost([file1, moduleFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+
+            const project = projectService.inferredProjects[0];
+            const sourceFile = project.getSourceFile(<Path>file1.path);
+            assert.isTrue("test" in sourceFile.resolvedModules);
+            assert.equal((<ResolvedModule>sourceFile.resolvedModules["test"]).resolvedFileName, moduleFile.path);
+        });
+    });
 }

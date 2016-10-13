@@ -126,6 +126,13 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
+            if (this.projectKind === ProjectKind.Inferred) {
+                // Add default compiler options for inferred projects here
+                if (this.compilerOptions.maxNodeModuleJsDepth === undefined) {
+                    this.compilerOptions.maxNodeModuleJsDepth = 2;
+                }
+            }
+
             if (languageServiceEnabled) {
                 this.enableLanguageService();
             }
