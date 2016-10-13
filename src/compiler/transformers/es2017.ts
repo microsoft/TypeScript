@@ -395,7 +395,7 @@ namespace ts {
                 }
             }
 
-            return substituteConstantValue(node);
+            return node;
         }
 
         function substituteElementAccessExpression(node: ElementAccessExpression) {
@@ -410,37 +410,7 @@ namespace ts {
                 }
             }
 
-            return substituteConstantValue(node);
-        }
-
-        function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression): LeftHandSideExpression {
-            const constantValue = tryGetConstEnumValue(node);
-            if (constantValue !== undefined) {
-                const substitute = createLiteral(constantValue);
-                setSourceMapRange(substitute, node);
-                setCommentRange(substitute, node);
-                if (!compilerOptions.removeComments) {
-                    const propertyName = isPropertyAccessExpression(node)
-                        ? declarationNameToString(node.name)
-                        : getTextOfNode(node.argumentExpression);
-                    substitute.trailingComment = ` ${propertyName} `;
-                }
-
-                setConstantValue(node, constantValue);
-                return substitute;
-            }
-
             return node;
-        }
-
-        function tryGetConstEnumValue(node: Node): number {
-            if (compilerOptions.isolatedModules) {
-                return undefined;
-            }
-
-            return isPropertyAccessExpression(node) || isElementAccessExpression(node)
-                ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
-                : undefined;
         }
 
         function substituteCallExpression(node: CallExpression): Expression {
