@@ -2236,6 +2236,33 @@ namespace ts {
     }
 
     /**
+     * Ensures "use strict" directive is added
+     * 
+     * @param node source file
+     */
+    export function ensureUseStrict(node: SourceFile): SourceFile {
+        let foundUseStrict = false;
+        for (const statement of node.statements) {
+            if (isPrologueDirective(statement)) {
+                if (isUseStrictPrologue(statement as ExpressionStatement)) {
+                    foundUseStrict = true;
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+        }
+        if (!foundUseStrict) {
+            const statements: Statement[] = [];
+            statements.push(startOnNewLine(createStatement(createLiteral("use strict"))));
+            // add "use strict" as the first statement
+            return updateSourceFileNode(node, statements.concat(node.statements));
+        }
+        return node;
+    }
+
+    /**
      * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
      * order of operations.
      *

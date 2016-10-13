@@ -2925,6 +2925,7 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
+        alwaysStrict?: boolean;
         baseUrl?: string;
         charset?: string;
         /* @internal */ configFilePath?: string;
