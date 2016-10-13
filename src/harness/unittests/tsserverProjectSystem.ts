@@ -3,6 +3,8 @@
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
+    import protocol = server.protocol;
+    import CommandNames = server.CommandNames;
 
     const safeList = {
         path: <Path>"/safeList.json",
@@ -128,7 +130,7 @@ namespace ts.projectSystem {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
-    export function toExternalFile(fileName: string): server.protocol.ExternalFile {
+    export function toExternalFile(fileName: string): protocol.ExternalFile {
         return { fileName };
     }
 
@@ -527,7 +529,7 @@ namespace ts.projectSystem {
     }
 
     export function makeSessionRequest<T>(command: string, args: T) {
-        const newRequest: server.protocol.Request = {
+        const newRequest: protocol.Request = {
             seq: 0,
             type: "request",
             command,
@@ -538,7 +540,7 @@ namespace ts.projectSystem {
 
     export function openFilesForSession(files: FileOrFolder[], session: server.Session) {
         for (const file of files) {
-            const request = makeSessionRequest<server.protocol.OpenRequestArgs>(server.CommandNames.Open, { file: file.path });
+            const request = makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, { file: file.path });
             session.executeCommand(request);
         }
     }
@@ -1751,7 +1753,7 @@ namespace ts.projectSystem {
     });
 
     describe("navigate-to for javascript project", () => {
-        function containsNavToItem(items: server.protocol.NavtoItem[], itemName: string, itemKind: string) {
+        function containsNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
             return find(items, item => item.name === itemName && item.kind === itemKind) !== undefined;
         }
 
@@ -1769,12 +1771,12 @@ namespace ts.projectSystem {
             openFilesForSession([file1], session);
 
             // Try to find some interface type defined in lib.d.ts
-            const libTypeNavToRequest = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
-            const items: server.protocol.NavtoItem[] = session.executeCommand(libTypeNavToRequest).response;
+            const libTypeNavToRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
+            const items: protocol.NavtoItem[] = session.executeCommand(libTypeNavToRequest).response;
             assert.isFalse(containsNavToItem(items, "Document", "interface"), `Found lib.d.ts symbol in JavaScript project nav to request result.`);
 
-            const localFunctionNavToRequst = makeSessionRequest<server.protocol.NavtoRequestArgs>(server.CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
-            const items2: server.protocol.NavtoItem[] = session.executeCommand(localFunctionNavToRequst).response;
+            const localFunctionNavToRequst = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
+            const items2: protocol.NavtoItem[] = session.executeCommand(localFunctionNavToRequst).response;
             assert.isTrue(containsNavToItem(items2, "foo", "function"), `Cannot find function symbol "foo".`);
         });
     });
@@ -2307,6 +2309,111 @@ namespace ts.projectSystem {
             const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
+        });
+    });
+
+    describe("skipLibCheck", () => {
+        it("should be turned on for js-only inferred projects", () => {
+            const file1 = {
+                path: "/a/b/file1.js",
+                content: `
+                /// <reference path="file2.d.ts" />
+                var x = 1;`
+            };
+            const file2 = {
+                path: "/a/b/file2.d.ts",
+                content: `
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };`
+            };
+            const host = createServerHost([file1, file2]);
+            const session = createSession(host);
+            openFilesForSession([file1, file2], session);
+
+            const file2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: file2.path }
+            );
+            let errorResult = <protocol.Diagnostic[]>session.executeCommand(file2GetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
+
+            const closeFileRequest = makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file1.path });
+            session.executeCommand(closeFileRequest);
+            errorResult = <protocol.Diagnostic[]>session.executeCommand(file2GetErrRequest).response;
+            assert.isTrue(errorResult.length !== 0);
+
+            openFilesForSession([file1], session);
+            errorResult = <protocol.Diagnostic[]>session.executeCommand(file2GetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
+        });
+
+        it("should be turned on for js-only external projects", () => {
+            const jsFile = {
+                path: "/a/b/file1.js",
+                content: "let x =1;"
+            };
+            const dTsFile = {
+                path: "/a/b/file2.d.ts",
+                content: `
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };`
+            };
+            const host = createServerHost([jsFile, dTsFile]);
+            const session = createSession(host);
+
+            const openExternalProjectRequest = makeSessionRequest<protocol.OpenExternalProjectArgs>(
+                CommandNames.OpenExternalProject,
+                {
+                    projectFileName: "project1",
+                    rootFiles: toExternalFiles([jsFile.path, dTsFile.path]),
+                    options: {}
+                }
+            );
+            session.executeCommand(openExternalProjectRequest);
+
+            const dTsFileGetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
+        });
+    });
+
+    describe("non-existing directories listed in config file input array", () => {
+        it("should be tolerated without crashing the server", () => {
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {},
+                    "include": ["app/*", "test/**/*", "something"]
+                }`
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "let t = 10;"
+            };
+
+            const host = createServerHost([file1, configFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 1);
+
+            const configuredProject = projectService.configuredProjects[0];
+            assert.isTrue(configuredProject.getFileNames().length == 0);
+
+            const inferredProject = projectService.inferredProjects[0];
+            assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
         });
     });
 }
