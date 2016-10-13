@@ -5,7 +5,7 @@ interface State {
 }
 
 function doSomething1<T>(x: T) {
-    let y: subset T = <any>null;
+    let y: partial T = <any>null;
     y = x; // Should be OK
     x = y; // Error
 }

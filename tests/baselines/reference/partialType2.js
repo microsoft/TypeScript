@@ -6,7 +6,7 @@ interface State {
 }
 
 function doSomething1<T>(x: T) {
-    let y: subset T = <any>null;
+    let y: partial T = <any>null;
     y = x; // Should be OK
     x = y; // Error
 }
@@ -28,7 +28,7 @@ function doSomething2<T extends State>(x: T) {
 
 //// [partialType2.js]
 function doSomething1(x) {
-    var y = T = null;
+    var y = null;
     y = x; // Should be OK
     x = y; // Error
 }

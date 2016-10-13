@@ -1,11 +1,9 @@
-tests/cases/compiler/partialType2.ts(8,12): error TS2304: Cannot find name 'subset'.
-tests/cases/compiler/partialType2.ts(8,19): error TS1005: '=' expected.
-tests/cases/compiler/partialType2.ts(8,19): error TS2693: 'T' only refers to a type, but is being used as a value here.
+tests/cases/compiler/partialType2.ts(10,5): error TS2322: Type 'partial T' is not assignable to type 'T'.
 tests/cases/compiler/partialType2.ts(16,5): error TS2322: Type '{ name: string; length: number; foo: number; }' is not assignable to type 'partial T'.
 tests/cases/compiler/partialType2.ts(18,11): error TS2339: Property 'name' does not exist on type 'partial T'.
 
 
-==== tests/cases/compiler/partialType2.ts (5 errors) ====
+==== tests/cases/compiler/partialType2.ts (3 errors) ====
     interface State {
         name: string;
         length: number;
@@ -13,15 +11,11 @@ tests/cases/compiler/partialType2.ts(18,11): error TS2339: Property 'name' does 
     }
     
     function doSomething1<T>(x: T) {
-        let y: subset T = <any>null;
-               ~~~~~~
-!!! error TS2304: Cannot find name 'subset'.
-                      ~
-!!! error TS1005: '=' expected.
-                      ~
-!!! error TS2693: 'T' only refers to a type, but is being used as a value here.
+        let y: partial T = <any>null;
         y = x; // Should be OK
         x = y; // Error
+        ~
+!!! error TS2322: Type 'partial T' is not assignable to type 'T'.
     }
     
     function doSomething2<T extends State>(x: T) {
