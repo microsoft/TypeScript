@@ -35,7 +35,7 @@ namespace ts.server.typingsInstaller {
 
     type HttpGet = {
         (url: string, callback: (response: HttpResponse) => void): NodeJS.EventEmitter;
-    }
+    };
 
     interface HttpResponse extends NodeJS.ReadableStream {
         statusCode: number;
@@ -45,7 +45,7 @@ namespace ts.server.typingsInstaller {
 
     type Exec = {
         (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any
-    }
+    };
 
     export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly exec: Exec;
