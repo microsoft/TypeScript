@@ -24,7 +24,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ false);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true);
             addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames));
         }
         else {
@@ -138,7 +138,9 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            if (node.parent.kind === SyntaxKind.PropertyAssignment && node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+            if (node.parent.kind === SyntaxKind.PropertyAssignment &&
+                node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression &&
+                (<PropertyAssignment>node.parent).name === node) {
                 // Get quoted name of properties of the object literal expression
                 // i.e. interface ConfigFiles {
                 //          'jspm:dev': string
@@ -323,14 +325,27 @@ namespace ts.Completions {
             return result;
         }
 
+        /**
+         * Given a path ending at a directory, gets the completions for the path, and filters for those entries containing the basename.
+         */
         function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
+            if (fragment === undefined) {
+                fragment = "";
+            }
+
+            fragment = normalizeSlashes(fragment);
+
+            /**
+             * Remove the basename from the path. Note that we don't use the basename to filter completions;
+             * the client is responsible for refining completions.
+             */
             fragment = getDirectoryPath(fragment);
-            if (!fragment) {
-                fragment = "./";
+
+            if (fragment === "") {
+                fragment = "." + directorySeparator;
             }
-            else {
-                fragment = ensureTrailingDirectorySeparator(fragment);
-            }
+
+            fragment = ensureTrailingDirectorySeparator(fragment);
 
             const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment));
             const baseDirectory = getDirectoryPath(absolutePath);
@@ -341,6 +356,12 @@ namespace ts.Completions {
                 const files = tryReadDirectory(host, baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
 
                 if (files) {
+                    /**
+                     * Multiple file entries might map to the same truncated name once we remove extensions
+                     * (happens iff includeExtensions === false)so we use a set-like data structure. Eg:
+                     * 
+                     * both foo.ts and foo.tsx become foo
+                     */
                     const foundFiles = createMap<boolean>();
                     for (let filePath of files) {
                         filePath = normalizePath(filePath);
@@ -537,36 +558,44 @@ namespace ts.Completions {
                 return undefined;
             }
 
+            const completionInfo: CompletionInfo = {
+                /**
+                 * We don't want the editor to offer any other completions, such as snippets, inside a comment.
+                 */
+                isGlobalCompletion: false,
+                isMemberCompletion: false,
+                /**
+                 * The user may type in a path that doesn't yet exist, creating a "new identifier"
+                 * with respect to the collection of identifiers the server is aware of.
+                 */
+                isNewIdentifierLocation: true,
+
+                entries: []
+            };
+
             const text = sourceFile.text.substr(range.pos, position - range.pos);
 
             const match = tripleSlashDirectiveFragmentRegex.exec(text);
+
             if (match) {
                 const prefix = match[1];
                 const kind = match[2];
                 const toComplete = match[3];
 
                 const scriptPath = getDirectoryPath(sourceFile.path);
-                let entries: CompletionEntry[];
                 if (kind === "path") {
                     // Give completions for a relative path
                     const span: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
-                    entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/true, span, sourceFile.path);
+                    completionInfo.entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/true, span, sourceFile.path);
                 }
                 else {
                     // Give completions based on the typings available
                     const span: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
-                    entries = getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, span);
+                    completionInfo.entries = getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, span);
                 }
-
-                return {
-                    isGlobalCompletion: false,
-                    isMemberCompletion: false,
-                    isNewIdentifierLocation: true,
-                    entries
-                };
             }
 
-            return undefined;
+            return completionInfo;
         }
 
         function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, span: TextSpan, result: CompletionEntry[] = []): CompletionEntry[] {
@@ -1001,6 +1030,7 @@ namespace ts.Completions {
                 if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                     // Cursor is inside a JSX self-closing element or opening element
                     attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
+                    isGlobalCompletion = false;
 
                     if (attrsType) {
                         symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);
@@ -1671,9 +1701,15 @@ namespace ts.Completions {
      * Matches a triple slash reference directive with an incomplete string literal for its path. Used
      * to determine if the caret is currently within the string literal and capture the literal fragment
      * for completions.
-     * For example, this matches /// <reference path="fragment
+     * For example, this matches
+     * 
+     * /// <reference path="fragment
+     * 
+     * but not
+     *  
+     * /// <reference path="fragment"
      */
-    const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3]*)$/;
+    const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
     interface VisibleModuleInfo {
         moduleName: string;

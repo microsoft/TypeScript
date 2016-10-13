@@ -2,7 +2,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of3.ts(2,6): error TS2487: Inva
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of3.ts (1 errors) ====
-    var v;
+    var v: any;
     for (v++ of []) { }
          ~~~
 !!! error TS2487: Invalid left-hand side in 'for...of' statement.

@@ -1,7 +1,102 @@
-/**
+﻿/**
   * Declaration module describing the TypeScript Server protocol
   */
-declare namespace ts.server.protocol {
+namespace ts.server.protocol {
+    export namespace CommandTypes {
+        export type Brace = "brace";
+        /* @internal */
+        export type BraceFull = "brace-full";
+        export type BraceCompletion = "braceCompletion";
+        export type Change = "change";
+        export type Close = "close";
+        export type Completions = "completions";
+        /* @internal */
+        export type CompletionsFull = "completions-full";
+        export type CompletionDetails = "completionEntryDetails";
+        export type CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
+        export type CompileOnSaveEmitFile = "compileOnSaveEmitFile";
+        export type Configure = "configure";
+        export type Definition = "definition";
+        /* @internal */
+        export type DefinitionFull = "definition-full";
+        export type Implementation = "implementation";
+        /* @internal */
+        export type ImplementationFull = "implementation-full";
+        export type Exit = "exit";
+        export type Format = "format";
+        export type Formatonkey = "formatonkey";
+        /* @internal */
+        export type FormatFull = "format-full";
+        /* @internal */
+        export type FormatonkeyFull = "formatonkey-full";
+        /* @internal */
+        export type FormatRangeFull = "formatRange-full";
+        export type Geterr = "geterr";
+        export type GeterrForProject = "geterrForProject";
+        export type SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export type SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
+        export type NavBar = "navbar";
+        /* @internal */
+        export type NavBarFull = "navbar-full";
+        export type Navto = "navto";
+        /* @internal */
+        export type NavtoFull = "navto-full";
+        export type NavTree = "navtree";
+        export type NavTreeFull = "navtree-full";
+        export type Occurrences = "occurrences";
+        export type DocumentHighlights = "documentHighlights";
+        /* @internal */
+        export type DocumentHighlightsFull = "documentHighlights-full";
+        export type Open = "open";
+        export type Quickinfo = "quickinfo";
+        /* @internal */
+        export type QuickinfoFull = "quickinfo-full";
+        export type References = "references";
+        /* @internal */
+        export type ReferencesFull = "references-full";
+        export type Reload = "reload";
+        export type Rename = "rename";
+        /* @internal */
+        export type RenameInfoFull = "rename-full";
+        /* @internal */
+        export type RenameLocationsFull = "renameLocations-full";
+        export type Saveto = "saveto";
+        export type SignatureHelp = "signatureHelp";
+        /* @internal */
+        export type SignatureHelpFull = "signatureHelp-full";
+        export type TypeDefinition = "typeDefinition";
+        export type ProjectInfo = "projectInfo";
+        export type ReloadProjects = "reloadProjects";
+        export type Unknown = "unknown";
+        export type OpenExternalProject = "openExternalProject";
+        export type OpenExternalProjects = "openExternalProjects";
+        export type CloseExternalProject = "closeExternalProject";
+        /* @internal */
+        export type SynchronizeProjectList = "synchronizeProjectList";
+        /* @internal */
+        export type ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        /* @internal */
+        export type EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
+        /* @internal */
+        export type Cleanup = "cleanup";
+        /* @internal */
+        export type OutliningSpans = "outliningSpans";
+        export type TodoComments = "todoComments";
+        export type Indentation = "indentation";
+        export type DocCommentTemplate = "docCommentTemplate";
+        /* @internal */
+        export type CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        /* @internal */
+        export type NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        /* @internal */
+        export type BreakpointStatement = "breakpointStatement";
+        export type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export type GetCodeFixes = "getCodeFixes";
+        /* @internal */
+        export type GetCodeFixesFull = "getCodeFixes-full";
+        export type GetSupportedCodeFixes = "getSupportedCodeFixes";
+    }
+
     /**
       * A TypeScript Server message
       */
@@ -36,6 +131,7 @@ declare namespace ts.server.protocol {
       * Request to reload the project structure for all the opened files
       */
     export interface ReloadProjectsRequest extends Message {
+        command: CommandTypes.ReloadProjects;
     }
 
     /**
@@ -98,19 +194,98 @@ declare namespace ts.server.protocol {
         projectFileName?: string;
     }
 
+    /**
+     * Requests a JS Doc comment template for a given position
+     */
+    export interface DocCommentTemplateRequest extends FileLocationRequest {
+        command: CommandTypes.DocCommentTemplate;
+    }
+
+    /**
+     * Response to DocCommentTemplateRequest
+     */
+    export interface DocCommandTemplateResponse extends Response {
+        body?: TextInsertion;
+    }
+
+    /**
+     * A request to get TODO comments from the file
+     */
     export interface TodoCommentRequest extends FileRequest {
+        command: CommandTypes.TodoComments;
         arguments: TodoCommentRequestArgs;
     }
 
+    /**
+     * Arguments for TodoCommentRequest request.
+     */
     export interface TodoCommentRequestArgs extends FileRequestArgs {
+        /**
+         * Array of target TodoCommentDescriptors that describes TODO comments to be found
+         */
         descriptors: TodoCommentDescriptor[];
     }
 
+    /**
+     * Response for TodoCommentRequest request.
+     */
+    export interface TodoCommentsResponse extends Response {
+        body?: TodoComment[];
+    }
+
+    /**
+     * Request to obtain outlining spans in file.
+     */
+    /* @internal */
+    export interface OutliningSpansRequest extends FileRequest {
+        command: CommandTypes.OutliningSpans;
+    }
+
+    /**
+     * Response to OutliningSpansRequest request.
+     */
+    /* @internal */
+    export interface OutliningSpansResponse extends Response {
+        body?: OutliningSpan[];
+    }
+
+    /**
+     * A request to get indentation for a location in file
+     */
     export interface IndentationRequest extends FileLocationRequest {
+        command: CommandTypes.Indentation;
         arguments: IndentationRequestArgs;
     }
 
+    /**
+     * Response for IndentationRequest request.
+     */
+    export interface IndentationResponse extends Response {
+        body?: IndentationResult;
+    }
+
+    /**
+     * Indentation result representing where indentation should be placed
+     */
+    export interface IndentationResult {
+        /**
+         * The base position in the document that the indent should be relative to
+         */
+        position: number;
+        /**
+         * The number of columns the indent should be at relative to the position's column.
+         */
+        indentation: number;
+    }
+
+    /**
+     * Arguments for IndentationRequest request.
+     */
     export interface IndentationRequestArgs extends FileLocationRequestArgs {
+        /**
+         * An optional set of settings to be used when computing indentation.
+         * If argument is omitted - then it will use settings for file that were previously set via 'configure' request or global settings.
+         */
         options?: EditorSettings;
     }
 
@@ -125,17 +300,27 @@ declare namespace ts.server.protocol {
     }
 
     /**
-      * A request to get the project information of the current file
+      * A request to get the project information of the current file.
       */
     export interface ProjectInfoRequest extends Request {
+        command: CommandTypes.ProjectInfo;
         arguments: ProjectInfoRequestArgs;
     }
 
-    export interface ProjectRequest extends Request {
-        arguments: ProjectRequestArgs;
+    /**
+     * A request to retrieve compiler options diagnostics for a project
+     */
+    export interface CompilerOptionsDiagnosticsRequest extends Request {
+        arguments: CompilerOptionsDiagnosticsRequestArgs;
     }
 
-    export interface ProjectRequestArgs {
+    /**
+     * Arguments for CompilerOptionsDiagnosticsRequest request.
+     */
+    export interface CompilerOptionsDiagnosticsRequestArgs {
+        /**
+         * Name of the project to retrieve compiler options diagnostics.
+         */
         projectFileName: string;
     }
 
@@ -158,6 +343,11 @@ declare namespace ts.server.protocol {
         languageServiceDisabled?: boolean;
     }
 
+    /**
+     * Represents diagnostic info that includes location of diagnostic in two forms
+     * - start position and length of the error span
+     * - startLocation and endLocation - a pair of Location objects that store start/end line and offset of the error span.
+     */
     export interface DiagnosticWithLinePosition {
         message: string;
         start: number;
@@ -190,17 +380,75 @@ declare namespace ts.server.protocol {
         /**
           * The line number for the request (1-based).
           */
-        line?: number;
+        line: number;
 
         /**
           * The character offset (on the line) for the request (1-based).
           */
-        offset?: number;
+        offset: number;
+
+        /**
+         * Position (can be specified instead of line/offset pair)
+         */
+        /* @internal */
+        position?: number;
+    }
+
+    /**
+      * Request for the available codefixes at a specific position.
+      */
+    export interface CodeFixRequest extends Request {
+        command: CommandTypes.GetCodeFixes;
+        arguments: CodeFixRequestArgs;
+    }
+
+    /**
+      * Instances of this interface specify errorcodes on a specific location in a sourcefile.
+      */
+    export interface CodeFixRequestArgs extends FileRequestArgs {
+        /**
+          * The line number for the request (1-based).
+          */
+        startLine: number;
+
+        /**
+          * The character offset (on the line) for the request (1-based).
+          */
+        startOffset: number;
 
         /**
          * Position (can be specified instead of line/offset pair) 
          */
-        position?: number;
+        /* @internal */
+        startPosition?: number;
+
+        /**
+          * The line number for the request (1-based).
+          */
+        endLine: number;
+
+        /**
+          * The character offset (on the line) for the request (1-based).
+          */
+        endOffset: number;
+
+        /**
+         * Position (can be specified instead of line/offset pair) 
+         */
+        /* @internal */
+        endPosition?: number;
+
+        /**
+          * Errorcodes we want to get the fixes for.
+          */
+        errorCodes?: number[];
+    }
+
+    /**
+     * Response for GetCodeFixes request. 
+     */
+    export interface GetCodeFixesResponse extends Response {
+        body?: CodeAction[];
     }
 
     /**
@@ -210,13 +458,43 @@ declare namespace ts.server.protocol {
         arguments: FileLocationRequestArgs;
     }
 
-    export interface FileSpanRequestArgs extends FileRequestArgs {
-        start: number;
-        length: number;
+    /**
+     * A request to get codes of supported code fixes.
+     */
+    export interface GetSupportedCodeFixesRequest extends Request {
+        command: CommandTypes.GetSupportedCodeFixes;
     }
 
-    export interface FileSpanRequest extends FileRequest {
-        arguments: FileSpanRequestArgs;
+    /**
+     * A response for GetSupportedCodeFixesRequest request.
+     */
+    export interface GetSupportedCodeFixesResponse extends Response {
+        /**
+         * List of error codes supported by the server.
+         */
+        body?: string[];
+    }
+
+    /**
+     * A request to get encoded semantic classifications for a span in the file
+     */
+    /** @internal */
+    export interface EncodedSemanticClassificationsRequest extends FileRequest {
+        arguments: EncodedSemanticClassificationsRequestArgs;
+    }
+
+    /**
+     * Arguments for EncodedSemanticClassificationsRequest request.
+     */
+    export interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
     }
 
     /**
@@ -236,6 +514,7 @@ declare namespace ts.server.protocol {
       * define the symbol found in file at location line, col.
       */
     export interface DefinitionRequest extends FileLocationRequest {
+        command: CommandTypes.Definition;
     }
 
     /**
@@ -244,6 +523,7 @@ declare namespace ts.server.protocol {
       * define the type for the symbol found in file at location line, col.
       */
     export interface TypeDefinitionRequest extends FileLocationRequest {
+        command: CommandTypes.TypeDefinition;
     }
 
     /**
@@ -252,6 +532,7 @@ declare namespace ts.server.protocol {
       * implement the symbol found in file at location line, col.
       */
     export interface ImplementationRequest extends FileLocationRequest {
+        command: CommandTypes.Implementation;
     }
 
     /**
@@ -308,11 +589,21 @@ declare namespace ts.server.protocol {
         body?: FileSpan[];
     }
 
+    /**
+     * Request to get brace completion for a location in the file.
+     */
     export interface BraceCompletionRequest extends FileLocationRequest {
+        command: CommandTypes.BraceCompletion;
         arguments: BraceCompletionRequestArgs;
     }
 
+    /**
+     * Argument for BraceCompletionRequest request.
+     */
     export interface BraceCompletionRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Kind of opening brace
+         */
         openingBrace: string;
     }
 
@@ -322,6 +613,7 @@ declare namespace ts.server.protocol {
       * in the file at a given line and column.
       */
     export interface OccurrencesRequest extends FileLocationRequest {
+        command: CommandTypes.Occurrences;
     }
 
     export interface OccurrencesResponseItem extends FileSpan {
@@ -341,13 +633,21 @@ declare namespace ts.server.protocol {
       * in the file at a given line and column.
       */
     export interface DocumentHighlightsRequest extends FileLocationRequest {
+        command: CommandTypes.DocumentHighlights;
         arguments: DocumentHighlightsRequestArgs;
     }
 
+    /**
+     * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
+     * Kind is taken from HighlightSpanKind type.
+     */
     export interface HighlightSpan extends TextSpan {
         kind: string;
     }
 
+    /**
+     * Represents a set of highligh spans for a give name
+     */
     export interface DocumentHighlightsItem {
         /**
           * File containing highlight spans.
@@ -360,6 +660,9 @@ declare namespace ts.server.protocol {
         highlightSpans: HighlightSpan[];
     }
 
+    /**
+     * Response for a DocumentHighlightsRequest request.
+     */
     export interface DocumentHighlightsResponse extends Response {
         body?: DocumentHighlightsItem[];
     }
@@ -370,6 +673,7 @@ declare namespace ts.server.protocol {
       * reference the symbol found in file at location line, col.
       */
     export interface ReferencesRequest extends FileLocationRequest {
+        command: CommandTypes.References;
     }
 
     export interface ReferencesResponseItem extends FileSpan {
@@ -423,11 +727,19 @@ declare namespace ts.server.protocol {
         body?: ReferencesResponseBody;
     }
 
+    /**
+     * Argument for RenameRequest request.
+     */
     export interface RenameRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Should text at specified location be found/changed in comments?
+         */
         findInComments?: boolean;
+        /**
+         * Should text at specified location be found/changed in strings?
+         */
         findInStrings?: boolean;
     }
-
 
     /**
       * Rename request; value of command field is "rename". Return
@@ -436,6 +748,7 @@ declare namespace ts.server.protocol {
       * name of the symbol so that client can print it unambiguously.
       */
     export interface RenameRequest extends FileLocationRequest {
+        command: CommandTypes.Rename;
         arguments: RenameRequestArgs;
     }
 
@@ -503,17 +816,53 @@ declare namespace ts.server.protocol {
         body?: RenameResponseBody;
     }
 
+    /**
+     * Represents a file in external project.
+     * External project is project whose set of files, compilation options and open\close state
+     * is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
+     * External project will exist even if all files in it are closed and should be closed explicity.
+     * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will
+     * create configured project for every config file but will maintain a link that these projects were created
+     * as a result of opening external project so they should be removed once external project is closed.
+     */
     export interface ExternalFile {
+        /**
+         * Name of file file
+         */
         fileName: string;
+        /**
+         * Script kind of the file
+         */
         scriptKind?: ScriptKind;
+        /**
+         * Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
+         */
         hasMixedContent?: boolean;
+        /**
+         * Content of the file
+         */
         content?: string;
     }
 
+    /**
+     * Represent an external project
+     */
     export interface ExternalProject {
+        /**
+         * Project name
+         */
         projectFileName: string;
+        /**
+         * List of root files in project
+         */
         rootFiles: ExternalFile[];
+        /**
+         * Compiler options for the project
+         */
         options: ExternalProjectCompilerOptions;
+        /**
+         * Explicitly specified typing options for the project
+         */
         typingOptions?: TypingOptions;
     }
 
@@ -522,18 +871,45 @@ declare namespace ts.server.protocol {
      * compiler settings.
      */
     export interface ExternalProjectCompilerOptions extends CompilerOptions {
+        /**
+         * If compile on save is enabled for the project
+         */
         compileOnSave?: boolean;
     }
 
+    /**
+     * Contains information about current project version
+     */
     export interface ProjectVersionInfo {
+        /**
+         * Project name
+         */
         projectName: string;
+        /**
+         * true if project is inferred or false if project is external or configured
+         */
         isInferred: boolean;
+        /**
+         * Project version
+         */
         version: number;
+        /**
+         * Current set of compiler options for project
+         */
         options: CompilerOptions;
     }
 
+    /**
+     * Represents a set of changes that happen in project
+     */
     export interface ProjectChanges {
+        /**
+         * List of added files
+         */
         added: string[];
+        /**
+         * List of removed files
+         */
         removed: string[];
     }
 
@@ -545,73 +921,45 @@ declare namespace ts.server.protocol {
      * otherwise - assume that nothing is changed
      */
     export interface ProjectFiles {
+        /**
+         * Information abount project verison
+         */
         info?: ProjectVersionInfo;
+        /**
+         * List of files in project (might be omitted if current state of project can be computed using only information from 'changes')
+         */
         files?: string[];
+        /**
+         * Set of changes in project (omitted if the entire set of files in project should be replaced)
+         */
         changes?: ProjectChanges;
     }
 
+    /**
+     * Combines project information with project level errors.
+     */
     export interface ProjectFilesWithDiagnostics extends ProjectFiles {
+        /**
+         * List of errors in project
+         */
         projectErrors: DiagnosticWithLinePosition[];
     }
 
+    /**
+     * Represents set of changes in open file
+     */
+    /* @internal */
     export interface ChangedOpenFile {
+        /**
+         * Name of file
+         */
         fileName: string;
+        /**
+         * List of changes that should be applied to known open file
+         */
         changes: ts.TextChange[];
     }
 
-    /**
-     * Editor options
-     */
-    export interface EditorOptions {
-
-        /** Number of spaces for each tab. Default value is 4. */
-        tabSize?: number;
-
-        /** Number of spaces to indent during formatting. Default value is 4. */
-        indentSize?: number;
-
-        /** Number of additional spaces to indent during formatting to preserve base indentation (ex. script block indentation). Default value is 0. */
-        baseIndentSize?: number;
-
-        /** The new line character to be used. Default value is the OS line delimiter. */
-        newLineCharacter?: string;
-
-        /** Whether tabs should be converted to spaces. Default value is true. */
-        convertTabsToSpaces?: boolean;
-    }
-
-    /**
-     * Format options
-     */
-    export interface FormatOptions extends EditorOptions {
-
-        /** Defines space handling after a comma delimiter. Default value is true. */
-        insertSpaceAfterCommaDelimiter?: boolean;
-
-        /** Defines space handling after a semicolon in a for statement. Default value is true */
-        insertSpaceAfterSemicolonInForStatements?: boolean;
-
-        /** Defines space handling after a binary operator. Default value is true. */
-        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
-
-        /** Defines space handling after keywords in control flow statement. Default value is true. */
-        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
-
-        /** Defines space handling after function keyword for anonymous functions. Default value is false. */
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
-
-        /** Defines space handling after opening and before closing non empty parenthesis. Default value is false. */
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
-
-        /** Defines space handling after opening and before closing non empty brackets. Default value is false. */
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
-
-        /** Defines whether an open brace is put onto a new line for functions or not. Default value is false. */
-        placeOpenBraceOnNewLineForFunctions?: boolean;
-
-        /** Defines whether an open brace is put onto a new line for control blocks or not. Default value is false. */
-        placeOpenBraceOnNewLineForControlBlocks?: boolean;
-    }
 
     /**
       * Information found in a configure request.
@@ -632,12 +980,7 @@ declare namespace ts.server.protocol {
         /**
          * The format options to use during formatting and other code editing features.
          */
-        formatOptions?: FormatOptions;
-
-        /**
-         * If set to true - then all loose files will land into one inferred project
-         */
-        useOneInferredProject?: boolean;
+        formatOptions?: FormatCodeSettings;
     }
 
     /**
@@ -645,6 +988,7 @@ declare namespace ts.server.protocol {
       *  host information, such as host type, tab size, and indent size.
       */
     export interface ConfigureRequest extends Request {
+        command: CommandTypes.Configure;
         arguments: ConfigureRequestArguments;
     }
 
@@ -680,55 +1024,154 @@ declare namespace ts.server.protocol {
       * send a response to an open request.
       */
     export interface OpenRequest extends Request {
+        command: CommandTypes.Open;
         arguments: OpenRequestArgs;
     }
 
-    type OpenExternalProjectArgs = ExternalProject;
-
+    /**
+     * Request to open or update external project
+     */
     export interface OpenExternalProjectRequest extends Request {
+        command: CommandTypes.OpenExternalProject;
         arguments: OpenExternalProjectArgs;
     }
 
-    export interface CloseExternalProjectRequestArgs {
-        projectFileName: string;
-    }
+    /**
+     * Arguments to OpenExternalProjectRequest request
+     */
+    export type OpenExternalProjectArgs = ExternalProject;
 
+    /**
+     * Request to open multiple external projects
+     */
     export interface OpenExternalProjectsRequest extends Request {
+        command: CommandTypes.OpenExternalProjects;
         arguments: OpenExternalProjectsArgs;
     }
 
+    /**
+     * Arguments to OpenExternalProjectsRequest
+     */
     export interface OpenExternalProjectsArgs {
+        /**
+         * List of external projects to open or update
+         */
         projects: ExternalProject[];
     }
 
+    /**
+     * Response to OpenExternalProjectRequest request. This is just an acknowledgement, so
+     * no body field is required.
+     */
+    export interface OpenExternalProjectResponse extends Response {
+    }
+
+    /**
+     * Response to OpenExternalProjectsRequest request. This is just an acknowledgement, so
+     * no body field is required.
+     */
+    export interface OpenExternalProjectsResponse extends Response {
+    }
+
+    /**
+     * Request to close external project.
+     */
     export interface CloseExternalProjectRequest extends Request {
+        command: CommandTypes.CloseExternalProject;
         arguments: CloseExternalProjectRequestArgs;
     }
 
+    /**
+     * Arguments to CloseExternalProjectRequest request
+     */
+    export interface CloseExternalProjectRequestArgs {
+        /**
+         * Name of the project to close
+         */
+        projectFileName: string;
+    }
+
+    /**
+     * Response to CloseExternalProjectRequest request. This is just an acknowledgement, so
+     * no body field is required.
+     */
+    export interface CloseExternalProjectResponse extends Response {
+    }
+
+    /**
+     * Request to check if given list of projects is up-to-date and synchronize them if necessary
+     */
+    /* @internal */
     export interface SynchronizeProjectListRequest extends Request {
         arguments: SynchronizeProjectListRequestArgs;
     }
 
+    /**
+     * Arguments to SynchronizeProjectListRequest
+     */
     export interface SynchronizeProjectListRequestArgs {
+        /**
+         * List of last known projects
+         */
         knownProjects: protocol.ProjectVersionInfo[];
     }
 
+    /**
+     * Request to synchronize list of open files with the client
+     */
+    /* @internal */
     export interface ApplyChangedToOpenFilesRequest extends Request {
         arguments: ApplyChangedToOpenFilesRequestArgs;
     }
 
+    /**
+     * Arguments to ApplyChangedToOpenFilesRequest
+     */
+    /* @internal */
     export interface ApplyChangedToOpenFilesRequestArgs {
+        /**
+         * List of newly open files
+         */
         openFiles?: ExternalFile[];
+        /**
+         * List of open files files that were changes
+         */
         changedFiles?: ChangedOpenFile[];
+        /**
+         * List of files that were closed
+         */
         closedFiles?: string[];
     }
 
+    /**
+     * Request to set compiler options for inferred projects.
+     * External projects are opened / closed explicitly.
+     * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
+     * This configuration file will be used to obtain a list of files and configuration settings for the project.
+     * Inferred projects are created when user opens a loose file that is not the part of external project
+     * or configured project and will contain only open file and transitive closure of referenced files if 'useOneInferredProject' is false,
+     * or all open loose files and its transitive closure of referenced files if 'useOneInferredProject' is true.
+     */
+    export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
+        command: CommandTypes.CompilerOptionsForInferredProjects;
+        arguments: SetCompilerOptionsForInferredProjectsArgs;
+    }
+
+    /**
+     * Argument for SetCompilerOptionsForInferredProjectsRequest request.
+     */
     export interface SetCompilerOptionsForInferredProjectsArgs {
+        /**
+         * Compiler options to be used with inferred projects.
+         */
         options: ExternalProjectCompilerOptions;
     }
 
-    export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
-        arguments: SetCompilerOptionsForInferredProjectsArgs;
+    /**
+      * Response to SetCompilerOptionsForInferredProjectsResponse request. This is just an acknowledgement, so
+      * no body field is required.
+      */
+    export interface SetCompilerOptionsForInferredProjectsResponse extends Response {
     }
 
     /**
@@ -736,6 +1179,7 @@ declare namespace ts.server.protocol {
       *  to exit.
       */
     export interface ExitRequest extends Request {
+        command: CommandTypes.Exit;
     }
 
     /**
@@ -746,25 +1190,53 @@ declare namespace ts.server.protocol {
       * currently send a response to a close request.
       */
     export interface CloseRequest extends FileRequest {
+        command: CommandTypes.Close;
     }
 
+    /**
+     * Request to obtain the list of files that should be regenerated if target file is recompiled.
+     * NOTE: this us query-only operation and does not generate any output on disk.
+     */
     export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
+        command: CommandTypes.CompileOnSaveAffectedFileList;
     }
 
+    /**
+     * Contains a list of files that should be regenerated in a project
+     */
     export interface CompileOnSaveAffectedFileListSingleProject {
+        /**
+         * Project name
+         */
         projectFileName: string;
+        /**
+         * List of files names that should be recompiled
+         */
         fileNames: string[];
     }
 
+    /**
+     * Response for CompileOnSaveAffectedFileListRequest request;
+     */
     export interface CompileOnSaveAffectedFileListResponse extends Response {
         body: CompileOnSaveAffectedFileListSingleProject[];
     }
 
+    /**
+     * Request to recompile the file. All generated outputs (.js, .d.ts or .js.map files) is written on disk.
+     */
     export interface CompileOnSaveEmitFileRequest extends FileRequest {
-        args: CompileOnSaveEmitFileRequestArgs;
+        command: CommandTypes.CompileOnSaveEmitFile;
+        arguments: CompileOnSaveEmitFileRequestArgs;
     }
 
+    /**
+     * Arguments for CompileOnSaveEmitFileRequest
+     */
     export interface CompileOnSaveEmitFileRequestArgs extends FileRequestArgs {
+        /**
+         * if true - then file should be recompiled even if it does not have any changes.
+         */
         forced?: boolean;
     }
 
@@ -775,6 +1247,7 @@ declare namespace ts.server.protocol {
       * line, col.
       */
     export interface QuickInfoRequest extends FileLocationRequest {
+        command: CommandTypes.Quickinfo;
     }
 
     /**
@@ -833,8 +1306,15 @@ declare namespace ts.server.protocol {
           */
         endOffset: number;
 
+        /**
+         * End position of the range for which to format text in file.
+         */
+        /* @internal */
         endPosition?: number;
-        options?: ts.FormatCodeOptions;
+        /**
+         * Format options to be used.
+         */
+        options?: FormatCodeSettings;
     }
 
     /**
@@ -845,6 +1325,7 @@ declare namespace ts.server.protocol {
       * reformatted text.
       */
     export interface FormatRequest extends FileLocationRequest {
+        command: CommandTypes.Format;
         arguments: FormatRequestArgs;
     }
 
@@ -873,6 +1354,23 @@ declare namespace ts.server.protocol {
         newText: string;
     }
 
+    export interface FileCodeEdits {
+        fileName: string;
+        textChanges: CodeEdit[];
+    }
+
+    export interface CodeFixResponse extends Response {
+        /** The code actions that are available */
+        body?: CodeAction[];
+    }
+
+    export interface CodeAction {
+        /** Description of the code action to display in the UI of the editor */
+        description: string;
+        /** Text changes to apply to each file as part of the code action */
+        changes: FileCodeEdits[];
+    }
+
     /**
       * Format and format on key response message.
       */
@@ -889,7 +1387,7 @@ declare namespace ts.server.protocol {
           */
         key: string;
 
-        options?: ts.FormatCodeOptions;
+        options?: FormatCodeSettings;
     }
 
     /**
@@ -901,6 +1399,7 @@ declare namespace ts.server.protocol {
       * reformatted text.
       */
     export interface FormatOnKeyRequest extends FileLocationRequest {
+        command: CommandTypes.Formatonkey;
         arguments: FormatOnKeyRequestArgs;
     }
 
@@ -921,6 +1420,7 @@ declare namespace ts.server.protocol {
       * begin with prefix.
       */
     export interface CompletionsRequest extends FileLocationRequest {
+        command: CommandTypes.Completions;
         arguments: CompletionsRequestArgs;
     }
 
@@ -941,6 +1441,7 @@ declare namespace ts.server.protocol {
       * detailed information for each completion entry.
       */
     export interface CompletionDetailsRequest extends FileLocationRequest {
+        command: CommandTypes.CompletionDetails;
         arguments: CompletionDetailsRequestArgs;
     }
 
@@ -1127,6 +1628,7 @@ declare namespace ts.server.protocol {
       * help.
       */
     export interface SignatureHelpRequest extends FileLocationRequest {
+        command: CommandTypes.SignatureHelp;
         arguments: SignatureHelpRequestArgs;
     }
 
@@ -1141,6 +1643,7 @@ declare namespace ts.server.protocol {
       * Synchronous request for semantic diagnostics of one file.
       */
     export interface SemanticDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SemanticDiagnosticsSync;
         arguments: SemanticDiagnosticsSyncRequestArgs;
     }
 
@@ -1159,6 +1662,7 @@ declare namespace ts.server.protocol {
       * Synchronous request for syntactic diagnostics of one file.
       */
     export interface SyntacticDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SyntacticDiagnosticsSync;
         arguments: SyntacticDiagnosticsSyncRequestArgs;
     }
 
@@ -1195,6 +1699,7 @@ declare namespace ts.server.protocol {
       * it request for every file in this project.
       */
     export interface GeterrForProjectRequest extends Request {
+        command: CommandTypes.GeterrForProject;
         arguments: GeterrForProjectRequestArgs;
     }
 
@@ -1226,6 +1731,7 @@ declare namespace ts.server.protocol {
       * file that is currently visible, in most-recently-used order.
       */
     export interface GeterrRequest extends Request {
+        command: CommandTypes.Geterr;
         arguments: GeterrRequestArgs;
     }
 
@@ -1247,6 +1753,11 @@ declare namespace ts.server.protocol {
           * Text of diagnostic message.
           */
         text: string;
+
+        /**
+          * The error code of the diagnostic message.
+          */
+        code?: number;
     }
 
     export interface DiagnosticEventBody {
@@ -1313,11 +1824,12 @@ declare namespace ts.server.protocol {
       * The two names can be identical.
       */
     export interface ReloadRequest extends FileRequest {
+        command: CommandTypes.Reload;
         arguments: ReloadRequestArgs;
     }
 
     /**
-      * Response to "reload" request.  This is just an acknowledgement, so
+      * Response to "reload" request. This is just an acknowledgement, so
       * no body field is required.
       */
     export interface ReloadResponse extends Response {
@@ -1342,6 +1854,7 @@ declare namespace ts.server.protocol {
       * "saveto" request.
       */
     export interface SavetoRequest extends FileRequest {
+        command: CommandTypes.Saveto;
         arguments: SavetoRequestArgs;
     }
 
@@ -1374,6 +1887,7 @@ declare namespace ts.server.protocol {
       * context for the search is given by the named file.
       */
     export interface NavtoRequest extends FileRequest {
+        command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }
 
@@ -1457,6 +1971,7 @@ declare namespace ts.server.protocol {
       * Server does not currently send a response to a change request.
       */
     export interface ChangeRequest extends FileLocationRequest {
+        command: CommandTypes.Change;
         arguments: ChangeRequestArgs;
     }
 
@@ -1473,6 +1988,7 @@ declare namespace ts.server.protocol {
       * found in file at location line, offset.
       */
     export interface BraceRequest extends FileLocationRequest {
+        command: CommandTypes.Brace;
     }
 
     /**
@@ -1481,6 +1997,15 @@ declare namespace ts.server.protocol {
       * extracted from the requested file.
       */
     export interface NavBarRequest extends FileRequest {
+        command: CommandTypes.NavBar;
+    }
+
+    /**
+     * NavTree request; value of command field is "navtree".
+     * Return response giving the navigation tree of the requested file.
+     */
+    export interface NavTreeRequest extends FileRequest {
+        command: CommandTypes.NavTree;
     }
 
     export interface NavigationBarItem {
@@ -1515,7 +2040,20 @@ declare namespace ts.server.protocol {
         indent: number;
     }
 
+    /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
+    export interface NavigationTree {
+        text: string;
+        kind: string;
+        kindModifiers: string;
+        spans: TextSpan[];
+        childItems?: NavigationTree[];
+    }
+
     export interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
+    }
+
+    export interface NavTreeResponse extends Response {
+        body?: NavigationTree;
     }
 }

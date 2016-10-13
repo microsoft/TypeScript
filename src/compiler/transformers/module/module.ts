@@ -600,7 +600,7 @@ namespace ts {
             }
             else {
                 statements.push(
-                    createExportStatement(node.name, setEmitFlags(getSynthesizedClone(node.name), EmitFlags.LocalName), /*location*/ node)
+                    createExportStatement(<Identifier>node.name, setEmitFlags(getSynthesizedClone(node.name), EmitFlags.LocalName), /*location*/ node)
                 );
             }
         }
@@ -799,7 +799,7 @@ namespace ts {
                 addVarForExportedEnumOrNamespaceDeclaration(statements, original);
             }
 
-            addExportMemberAssignments(statements, original.name);
+            addExportMemberAssignments(statements, <Identifier>original.name);
 
             return statements;
         }
@@ -822,7 +822,7 @@ namespace ts {
         }
 
         function getDeclarationName(node: DeclarationStatement) {
-            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
+            return node.name ? getSynthesizedClone(<Identifier>node.name) : getGeneratedNameForNode(node);
         }
 
         function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
@@ -919,7 +919,7 @@ namespace ts {
                     if (node.kind === SyntaxKind.PostfixUnaryExpression) {
                         transformedUnaryExpression = createBinary(
                             operand,
-                            createNode(operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
+                            createToken(operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
                             createLiteral(1),
                             /*location*/ node
                         );

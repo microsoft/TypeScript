@@ -1,6 +1,6 @@
 //// [assignmentLHSIsValue.ts]
 // expected error for all the LHS of assignments
-var value;
+var value: any;
 
 // this
 class C {

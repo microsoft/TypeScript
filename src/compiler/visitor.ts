@@ -799,7 +799,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
                 return updateTaggedTemplate(<TaggedTemplateExpression>node,
                     visitNode((<TaggedTemplateExpression>node).tag, visitor, isExpression),
-                    visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplate));
+                    visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
 
             case SyntaxKind.ParenthesizedExpression:
                 return updateParen(<ParenthesizedExpression>node,
@@ -863,7 +863,7 @@ namespace ts {
 
             case SyntaxKind.TemplateExpression:
                 return updateTemplateExpression(<TemplateExpression>node,
-                    visitNode((<TemplateExpression>node).head, visitor, isTemplateLiteralFragment),
+                    visitNode((<TemplateExpression>node).head, visitor, isTemplateHead),
                     visitNodes((<TemplateExpression>node).templateSpans, visitor, isTemplateSpan));
 
             case SyntaxKind.YieldExpression:
@@ -891,7 +891,7 @@ namespace ts {
             case SyntaxKind.TemplateSpan:
                 return updateTemplateSpan(<TemplateSpan>node,
                     visitNode((<TemplateSpan>node).expression, visitor, isExpression),
-                    visitNode((<TemplateSpan>node).literal, visitor, isTemplateLiteralFragment));
+                    visitNode((<TemplateSpan>node).literal, visitor, isTemplateMiddleOrTemplateTail));
 
             // Element
             case SyntaxKind.Block:

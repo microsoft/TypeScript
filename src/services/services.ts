@@ -24,14 +24,16 @@
 /// <reference path='transpile.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='codefixes\codeFixProvider.ts' />
+/// <reference path='codefixes\fixes.ts' />
 
 namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.5";
 
-    function createNode(kind: SyntaxKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject | IdentifierObject {
+    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) :
-            kind === SyntaxKind.Identifier ? new IdentifierObject(kind, pos, end) :
+            kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
                 new TokenObject(kind, pos, end);
         node.parent = parent;
         return node;
@@ -210,14 +212,13 @@ namespace ts {
         }
     }
 
-    class TokenOrIdentifierObject implements Token {
+    class TokenOrIdentifierObject implements Node {
         public kind: SyntaxKind;
         public pos: number;
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
         public jsDocComments: JSDoc[];
-        public __tokenTag: any;
 
         constructor(pos: number, end: number) {
             // Set properties in same order as NodeObject
@@ -319,16 +320,25 @@ namespace ts {
         }
     }
 
-    class TokenObject extends TokenOrIdentifierObject {
-        public kind: SyntaxKind;
-        constructor(kind: SyntaxKind, pos: number, end: number) {
+    class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
+        public kind: TKind;
+
+        constructor(kind: TKind, pos: number, end: number) {
             super(pos, end);
             this.kind = kind;
         }
     }
 
-    class IdentifierObject extends TokenOrIdentifierObject {
-        constructor(kind: SyntaxKind, pos: number, end: number) {
+    class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
+        public kind: SyntaxKind.Identifier;
+        public text: string;
+        _primaryExpressionBrand: any;
+        _memberExpressionBrand: any;
+        _leftHandSideExpressionBrand: any;
+        _incrementExpressionBrand: any;
+        _unaryExpressionBrand: any;
+        _expressionBrand: any;
+        constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
         }
     }
@@ -424,6 +434,7 @@ namespace ts {
     }
 
     class SourceFileObject extends NodeObject implements SourceFile {
+        public kind: SyntaxKind.SourceFile;
         public _declarationBrand: any;
         public fileName: string;
         public path: Path;
@@ -432,7 +443,7 @@ namespace ts {
         public lineMap: number[];
 
         public statements: NodeArray<Statement>;
-        public endOfFileToken: Node;
+        public endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
 
         public amdDependencies: { name: string; path: string }[];
         public moduleName: string;
@@ -655,6 +666,7 @@ namespace ts {
         return {
             getNodeConstructor: () => NodeObject,
             getTokenConstructor: () => TokenObject,
+
             getIdentifierConstructor: () => IdentifierObject,
             getSourceFileConstructor: () => SourceFileObject,
             getSymbolConstructor: () => SymbolObject,
@@ -721,9 +733,13 @@ namespace ts {
         };
     }
 
-    // Cache host information about script should be refreshed
+    export function getSupportedCodeFixes() {
+        return codefix.getSupportedErrorCodes();
+    }
+
+    // Cache host information about script Should be refreshed
     // at each language service public entry point, since we don't know when
-    // set of scripts handled by the host changes.
+    // the set of scripts handled by the host changes.
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
@@ -1507,17 +1523,32 @@ namespace ts {
         }
 
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName));
+        }
 
-            return NavigationBar.getNavigationBarItems(sourceFile);
+        function getNavigationTree(fileName: string): NavigationTree {
+            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName));
+        }
+
+        function isTsOrTsxFile(fileName: string): boolean {
+            const kind = getScriptKind(fileName, host);
+            return kind === ScriptKind.TS || kind === ScriptKind.TSX;
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+            if (!isTsOrTsxFile(fileName)) {
+                // do not run semantic classification on non-ts-or-tsx files
+                return [];
+            }
             synchronizeHostData();
             return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
 
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+            if (!isTsOrTsxFile(fileName)) {
+                // do not run semantic classification on non-ts-or-tsx files
+                return { spans: [], endOfLineState: EndOfLineState.None };
+            }
             synchronizeHostData();
             return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
@@ -1630,6 +1661,34 @@ namespace ts {
             }
 
             return [];
+        }
+
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const span = { start, length: end - start };
+            const newLineChar = getNewLineOrDefaultFromHost(host);
+
+            let allFixes: CodeAction[] = [];
+
+            forEach(errorCodes, error => {
+                cancellationToken.throwIfCancellationRequested();
+
+                const context = {
+                    errorCode: error,
+                    sourceFile: sourceFile,
+                    span: span,
+                    program: program,
+                    newLineCharacter: newLineChar
+                };
+
+                const fixes = codefix.getFixes(context);
+                if (fixes) {
+                    allFixes = allFixes.concat(fixes);
+                }
+            });
+
+            return allFixes;
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
@@ -1846,6 +1905,7 @@ namespace ts {
             getRenameInfo,
             findRenameLocations,
             getNavigationBarItems,
+            getNavigationTree,
             getOutliningSpans,
             getTodoComments,
             getBraceMatchingAtPosition,
@@ -1855,6 +1915,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

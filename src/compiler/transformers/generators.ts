@@ -529,7 +529,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitAccessorDeclaration(node: GetAccessorDeclaration) {
+        function visitAccessorDeclaration(node: AccessorDeclaration) {
             const savedInGeneratorFunctionBody = inGeneratorFunctionBody;
             const savedInStatementContainingYield = inStatementContainingYield;
             inGeneratorFunctionBody = false;
@@ -661,12 +661,12 @@ namespace ts {
             }
         }
 
-        function isCompoundAssignment(kind: SyntaxKind) {
+        function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
             return kind >= SyntaxKind.FirstCompoundAssignment
                 && kind <= SyntaxKind.LastCompoundAssignment;
         }
 
-        function getOperatorForCompoundAssignment(kind: SyntaxKind) {
+        function getOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
             switch (kind) {
                 case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
                 case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;

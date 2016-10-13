@@ -376,7 +376,7 @@ namespace ts {
                 return true;
             case SyntaxKind.Identifier:
                 // 'this' as a parameter
-                return (node as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword && node.parent.kind === SyntaxKind.Parameter;
+                return identifierIsThisKeyword(node as Identifier) && node.parent.kind === SyntaxKind.Parameter;
             default:
                 return false;
         }
