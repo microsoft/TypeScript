@@ -1499,7 +1499,8 @@ namespace ts.server {
                 return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
-                return this.requiredResponse(this.setCompilerOptionsForInferredProjects(request.arguments));
+                this.setCompilerOptionsForInferredProjects(request.arguments);
+                return this.requiredResponse(true);
             },
             [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));
