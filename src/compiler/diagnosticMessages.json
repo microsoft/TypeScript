@@ -2861,6 +2861,14 @@
         "category": "Error",
         "code": 6140
     },
+    "Resolving real path for '{0}', result is untyped package '{1}'": {
+        "category": "Message",
+        "code": 6141
+    },
+    "A package for '{0}' was found at '{1}', but is untyped. Since '--noImplicitAny' is enabled, this package must have a declaration.": {
+        "category": "Error",
+        "code": 6142
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

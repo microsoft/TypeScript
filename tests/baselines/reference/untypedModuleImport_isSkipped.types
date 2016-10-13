@@ -1,0 +1,11 @@
+=== /foo/a.ts ===
+import { x } from "bar";
+>x : number
+
+x;
+>x : number
+
+=== /node_modules/@types/bar/index.d.ts ===
+export const x: number;
+>x : number
+

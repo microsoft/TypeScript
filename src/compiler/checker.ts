@@ -1059,7 +1059,7 @@ namespace ts {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
 
             if (moduleSymbol) {
-                const exportDefaultSymbol = isShorthandAmbientModuleSymbol(moduleSymbol) ?
+                const exportDefaultSymbol = isUntypedModuleSymbol(moduleSymbol) ?
                     moduleSymbol :
                     moduleSymbol.exports["export="] ?
                         getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
@@ -1135,7 +1135,7 @@ namespace ts {
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
-                    if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
+                    if (isUntypedModuleSymbol(moduleSymbol)) {
                         return moduleSymbol;
                     }
 
@@ -1355,8 +1355,10 @@ namespace ts {
             }
 
             const isRelative = isExternalModuleNameRelative(moduleName);
+            let quotedName: string | undefined;
             if (!isRelative) {
-                const symbol = getSymbol(globals, '"' + moduleName + '"', SymbolFlags.ValueModule);
+                quotedName = '"' + moduleName + '"';
+                const symbol = getSymbol(globals, quotedName, SymbolFlags.ValueModule);
                 if (symbol) {
                     // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(symbol);
@@ -1364,6 +1366,23 @@ namespace ts {
             }
 
             const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
+            if (resolvedModule && resolvedModule.isUntyped) {
+                Debug.assert(!isRelative); // Only global modules may be untyped
+                Debug.assert(quotedName !== undefined);
+                if (compilerOptions.noImplicitAny) {
+                    error(errorNode,
+                        Diagnostics.A_package_for_0_was_found_at_1_but_is_untyped_Since_noImplicitAny_is_enabled_this_package_must_have_a_declaration,
+                        moduleReference,
+                        resolvedModule.resolvedFileName);
+                }
+
+                const newSymbol = createSymbol(SymbolFlags.ValueModule, quotedName);
+                // Module symbols are expected to have 'exports', although since this is an untyped module it can be empty.
+                newSymbol.exports = createMap<Symbol>();
+                globals[quotedName] = newSymbol;
+                return newSymbol;
+            }
+
             const sourceFile = resolvedModule && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
@@ -3436,7 +3455,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (symbol.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && isShorthandAmbientModuleSymbol(symbol)) {
+                if (symbol.flags & SymbolFlags.Module && isUntypedModuleSymbol(symbol)) {
                     links.type = anyType;
                 }
                 else {
@@ -18736,8 +18755,8 @@ namespace ts {
 
         function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
             let moduleSymbol = resolveExternalModuleName(moduleReferenceExpression.parent, moduleReferenceExpression);
-            if (!moduleSymbol || isShorthandAmbientModuleSymbol(moduleSymbol)) {
-                // If the module is not found or is shorthand, assume that it may export a value.
+            if (!moduleSymbol || isUntypedModuleSymbol(moduleSymbol)) {
+                // If the module is not found or is untyped, assume that it may export a value.
                 return true;
             }
 

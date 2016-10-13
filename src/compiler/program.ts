@@ -1325,7 +1325,7 @@ namespace ts {
                     }
 
                     const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModulesJsDepth;
-                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
+                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport && !resolution.isUntyped;
 
                     if (elideImport) {
                         modulesWithElidedImports[file.path] = true;

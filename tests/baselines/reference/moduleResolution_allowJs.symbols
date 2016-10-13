@@ -1,0 +1,18 @@
+=== /a.ts ===
+import foo from "foo";
+>foo : Symbol(foo, Decl(a.ts, 0, 6))
+
+foo.bar();
+>foo.bar : Symbol(bar, Decl(index.js, 0, 19))
+>foo : Symbol(foo, Decl(a.ts, 0, 6))
+>bar : Symbol(bar, Decl(index.js, 0, 19))
+
+=== /node_modules/foo/index.js ===
+exports.default = {
+>exports : Symbol(default, Decl(index.js, 0, 0))
+>default : Symbol(default, Decl(index.js, 0, 0))
+
+    bar() { return 0; }
+>bar : Symbol(bar, Decl(index.js, 0, 19))
+}
+

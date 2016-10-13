@@ -31,7 +31,7 @@ namespace ts.server {
                     }
                 }
                 // create different collection of failed lookup locations for second pass
-                // if it will fail and we've already found something during the first pass - we don't want to pollute its results 
+                // if it will fail and we've already found something during the first pass - we don't want to pollute its results
                 const secondaryLookupFailedLookupLocations: string[] = [];
                 const globalCache = this.project.projectService.typingsInstaller.globalTypingsCacheLocation;
                 if (this.project.getTypingOptions().enableAutoDiscovery && globalCache) {
@@ -42,7 +42,7 @@ namespace ts.server {
                     const state: ModuleResolutionState = { compilerOptions, host, skipTsx: false, traceEnabled };
                     const resolvedName = loadModuleFromNodeModules(moduleName, globalCache, secondaryLookupFailedLookupLocations, state, /*checkOneLevel*/ true);
                     if (resolvedName) {
-                        return createResolvedModule(resolvedName, /*isExternalLibraryImport*/ true, primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations));
+                        return createResolvedModule(resolvedName.path, /*isExternalLibraryImport*/ true, resolvedName.isUntyped, primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations));
                     }
                 }
                 if (!primaryResult.resolvedModule && secondaryLookupFailedLookupLocations.length) {

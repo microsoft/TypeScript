@@ -1,0 +1,25 @@
+=== /c.ts ===
+import foo, { bar } from "foo";
+>foo : Symbol(foo, Decl(c.ts, 0, 6))
+>bar : Symbol(bar, Decl(c.ts, 0, 13))
+
+import "./a";
+import "./b";
+foo(bar());
+>foo : Symbol(foo, Decl(c.ts, 0, 6))
+>bar : Symbol(bar, Decl(c.ts, 0, 13))
+
+=== /a.ts ===
+import * as foo from "foo";
+>foo : Symbol(foo, Decl(a.ts, 0, 6))
+
+foo.bar();
+>foo : Symbol(foo, Decl(a.ts, 0, 6))
+
+=== /b.ts ===
+import foo = require("foo");
+>foo : Symbol(foo, Decl(b.ts, 0, 0))
+
+foo();
+>foo : Symbol(foo, Decl(b.ts, 0, 0))
+
