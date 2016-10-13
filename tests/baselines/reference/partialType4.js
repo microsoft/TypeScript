@@ -27,3 +27,12 @@ subs.name = false; // not ok
 // Errors
 subs['err'] = false;
 subs[12] = false;
+
+
+//// [partialType4.d.ts]
+interface State1 {
+    name: string;
+    length: number;
+    [key: string]: string | number;
+}
+declare const subs: partial State1;
