@@ -1753,7 +1753,7 @@ namespace ts {
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
-    const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
+    export const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
     export function getSupportedExtensions(options?: CompilerOptions): string[] {
         return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
@@ -1848,10 +1848,6 @@ namespace ts {
 
     export function removeExtension(path: string, extension: string): string {
         return path.substring(0, path.length - extension.length);
-    }
-
-    export function isJsxOrTsxExtension(ext: string): boolean {
-        return ext === ".jsx" || ext === ".tsx";
     }
 
     export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {

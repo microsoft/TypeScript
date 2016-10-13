@@ -118,6 +118,29 @@ namespace ts {
         sourceFile.resolvedModules[moduleNameText] = resolvedModule;
     }
 
+    /** Host may have omitted resolvedTsFileName and resolvedJsFileName, in which case we should infer them from the file extension of resolvedFileName. */
+    export function convertResolvedModuleFromHost(resolved: ResolvedModuleFromHost | undefined): ResolvedModule | undefined {
+        if (resolved === undefined) {
+            return undefined;
+        }
+        // `resolvedTsFileName` and `resolvedJsFileName` should be present as properties even if undefined.
+        else if ("resolvedTsFileName" in resolved) {
+            const { resolvedFileName, resolvedTsFileName, resolvedJsFileName } = resolved as ResolvedModule;
+            Debug.assert(resolvedFileName === (resolvedTsFileName || resolvedJsFileName));
+            return resolved as ResolvedModule;
+        }
+        else {
+            const { resolvedFileName, isExternalLibraryImport } = resolved;
+            if (fileExtensionIsAny(resolvedFileName, supportedTypeScriptExtensions)) {
+                return { resolvedFileName, resolvedTsFileName: resolvedFileName, resolvedJsFileName: undefined, isExternalLibraryImport };
+            }
+            else {
+                Debug.assert(fileExtensionIsAny(resolvedFileName, supportedJavascriptExtensions));
+                return { resolvedFileName, resolvedTsFileName: undefined, resolvedJsFileName: resolvedFileName, isExternalLibraryImport };
+            }
+        }
+    }
+
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
             sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective>();
@@ -127,8 +150,13 @@ namespace ts {
     }
 
     /* @internal */
+    /**
+     * Considers two ResolvedModules equal if they have the same `resolvedFileName`.
+     * Thus `{ ts: foo, js: bar }` is equal to `{ ts: foo, js: baz }` because `ts` is preferred.
+     */
     export function moduleResolutionIsEqualTo(oldResolution: ResolvedModule, newResolution: ResolvedModule): boolean {
-        return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport;
+        return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
+            oldResolution.resolvedFileName === newResolution.resolvedFileName;
     }
 
     /* @internal */

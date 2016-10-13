@@ -5,8 +5,8 @@
 namespace ts.server {
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost, ServerLanguageServiceHost {
         private compilationSettings: ts.CompilerOptions;
-        private readonly resolvedModuleNames: ts.FileMap<Map<ResolvedModuleWithFailedLookupLocations>>;
-        private readonly resolvedTypeReferenceDirectives: ts.FileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
+        private readonly resolvedModuleNames= createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        private readonly resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         private readonly getCanonicalFileName: (fileName: string) => string;
 
         private readonly resolveModuleName: typeof resolveModuleName;
@@ -14,50 +14,26 @@ namespace ts.server {
 
         constructor(private readonly host: ServerHost, private readonly project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
-            this.resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
-            this.resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
 
             if (host.trace) {
                 this.trace = s => host.trace(s);
             }
 
             this.resolveModuleName = (moduleName, containingFile, compilerOptions, host) => {
-                const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
-                if (primaryResult.resolvedModule) {
-                    // return result immediately only if it is .ts, .tsx or .d.ts
-                    // otherwise try to load typings from @types
-                    if (fileExtensionIsAny(primaryResult.resolvedModule.resolvedFileName, supportedTypeScriptExtensions)) {
-                        return primaryResult;
-                    }
-                }
-                // create different collection of failed lookup locations for second pass
-                // if it will fail and we've already found something during the first pass - we don't want to pollute its results 
-                const secondaryLookupFailedLookupLocations: string[] = [];
-                const globalCache = this.project.projectService.typingsInstaller.globalTypingsCacheLocation;
-                if (this.project.getTypingOptions().enableAutoDiscovery && globalCache) {
-                    const traceEnabled = isTraceEnabled(compilerOptions, host);
-                    if (traceEnabled) {
-                        trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, this.project.getProjectName(), moduleName, globalCache);
-                    }
-                    const state: ModuleResolutionState = { compilerOptions, host, skipTsx: false, traceEnabled };
-                    const resolvedName = loadModuleFromNodeModules(moduleName, globalCache, secondaryLookupFailedLookupLocations, state, /*checkOneLevel*/ true);
-                    if (resolvedName) {
-                        return createResolvedModule(resolvedName, /*isExternalLibraryImport*/ true, primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations));
-                    }
-                }
-                if (!primaryResult.resolvedModule && secondaryLookupFailedLookupLocations.length) {
-                    primaryResult.failedLookupLocations = primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations);
-                }
-                return primaryResult;
+                const globalCache = this.project.getTypingOptions().enableAutoDiscovery
+                    ? this.project.projectService.typingsInstaller.globalTypingsCacheLocation
+                    : undefined;
+                return resolveModuleNameForLsHost(moduleName, containingFile, compilerOptions, host, globalCache, this.project.getProjectName());
             };
         }
 
-        private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R extends { resolvedFileName?: string }>(
+        private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
             cache: ts.FileMap<Map<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
-            getResult: (s: T) => R): R[] {
+            getResult: (s: T) => R,
+            getResultFileName: (result: R) => string): R[] {
 
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
@@ -97,10 +73,7 @@ namespace ts.server {
 
                 const result = getResult(resolution);
                 if (result) {
-                    if (result.resolvedFileName && result.resolvedFileName === lastDeletedFileName) {
-                        return false;
-                    }
-                    return true;
+                    return getResultFileName(result) !== lastDeletedFileName;
                 }
 
                 // consider situation if we have no candidate locations as valid resolution.
@@ -126,11 +99,11 @@ namespace ts.server {
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective, m => m.resolvedTypeReferenceDirective);
+            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective, m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName);
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
-            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName, m => m.resolvedModule);
+            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName, m => m.resolvedModule, r => r.resolvedFileName);
         }
 
         getDefaultLibFileName() {

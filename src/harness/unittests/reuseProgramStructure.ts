@@ -152,17 +152,6 @@ namespace ts {
         return program;
     }
 
-    function checkResolvedModule(expected: ResolvedModule, actual: ResolvedModule): boolean {
-        if (!expected === !actual) {
-            if (expected) {
-                assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'isExternalLibraryImport': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
-            }
-            return true;
-        }
-        return false;
-    }
-
     function checkResolvedTypeDirective(expected: ResolvedTypeReferenceDirective, actual: ResolvedTypeReferenceDirective): boolean {
         if (!expected === !actual) {
             if (expected) {
@@ -306,7 +295,7 @@ namespace ts {
             const options: CompilerOptions = { target };
 
             const program_1 = newProgram(files, ["a.ts"], options);
-            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": { resolvedFileName: "b.ts" } }));
+            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": createTsResolvedModule("b.ts") }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
@@ -315,7 +304,7 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": { resolvedFileName: "b.ts" } }));
+            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": createTsResolvedModule("b.ts") }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             // imports has changed - program is not reused
@@ -332,7 +321,7 @@ namespace ts {
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedModulesCache(program_4, "a.ts", createMap({ "b": { resolvedFileName: "b.ts" }, "c": undefined }));
+            checkResolvedModulesCache(program_4, "a.ts", createMap({ "b": createTsResolvedModule("b.ts"), "c": undefined }));
         });
 
         it("resolved type directives cache follows type directives", () => {

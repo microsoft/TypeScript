@@ -3287,19 +3287,42 @@ namespace ts {
         getDirectories?(path: string): string[];
     }
 
+    /**
+     * Represents the result of module resolution.
+     * Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
+     * The Program will then filter results based on these flags.
+     *
+     * At least one of `resolvedTsFileName` or `resolvedJsFileName` must be defined,
+     * else resolution should just return `undefined` instead of a ResolvedModule.
+     */
     export interface ResolvedModule {
+        /**
+         * This should always be set to `resolvedTsFileName || resolvedJsFileName`.
+         * Present for backwards compatibility.
+         */
         resolvedFileName: string;
-        /*
-         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
+        /** TypeScript (.d.ts, .ts, .tsx) file that the module was resolved to. This will be preferred over a JS file. */
+        resolvedTsFileName: string | undefined;
+        /** JavaScript (or .jsx) file that the module was resolved to. This should be returned even if '--allowJs' (or '--jsx') is disabled. */
+        resolvedJsFileName: string | undefined;
+        /**
+         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
          * - be a .d.ts file
          * - use top level imports\exports
          * - don't use tripleslash references
          */
-        isExternalLibraryImport?: boolean;
+        isExternalLibraryImport: boolean;
     }
 
+    /**
+     * For backwards compatibility, a host may choose not to return `resolvedTsFileName` and `resolvedJsFileName` from a result ResolvedModule,
+     * in which case they will be inferred from the file extension.
+     * Prefer to return a full ResolvedModule.
+     */
+    export type ResolvedModuleFromHost = { resolvedFileName: string; isExternalLibraryImport: boolean } | ResolvedModule;
+
     export interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModule;
+        resolvedModule: ResolvedModule | undefined;
         failedLookupLocations: string[];
     }
 
@@ -3335,7 +3358,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModuleFromHost[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
