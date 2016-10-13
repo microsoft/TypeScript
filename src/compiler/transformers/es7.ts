@@ -48,17 +48,17 @@ namespace ts {
                 let value: Expression;
                 if (isElementAccessExpression(left)) {
                     // Transforms `a[x] **= b` into `(_a = a)[_x = x] = Math.pow(_a[_x], b)`
-                    const expressionTemp = createTempVariable(hoistVariableDeclaration);
+                    const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
 
-                    const argumentExpressionTemp = createTempVariable(hoistVariableDeclaration);
+                    const argumentExpressionTemp = factory.createTempVariable(hoistVariableDeclaration);
 
-                    target = createElementAccess(
-                        createAssignment(expressionTemp, left.expression, /*location*/ left.expression),
-                        createAssignment(argumentExpressionTemp, left.argumentExpression, /*location*/ left.argumentExpression),
+                    target = factory.createElementAccess(
+                        factory.createAssignment(expressionTemp, left.expression, /*location*/ left.expression),
+                        factory.createAssignment(argumentExpressionTemp, left.argumentExpression, /*location*/ left.argumentExpression),
                         /*location*/ left
                     );
 
-                    value = createElementAccess(
+                    value = factory.createElementAccess(
                         expressionTemp,
                         argumentExpressionTemp,
                         /*location*/ left
@@ -66,15 +66,15 @@ namespace ts {
                 }
                 else if (isPropertyAccessExpression(left)) {
                     // Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
-                    const expressionTemp = createTempVariable(hoistVariableDeclaration);
+                    const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
 
-                    target = createPropertyAccess(
-                        createAssignment(expressionTemp, left.expression, /*location*/ left.expression),
+                    target = factory.createPropertyAccess(
+                        factory.createAssignment(expressionTemp, left.expression, /*location*/ left.expression),
                         left.name,
                         /*location*/ left
                     );
 
-                    value = createPropertyAccess(
+                    value = factory.createPropertyAccess(
                         expressionTemp,
                         left.name,
                         /*location*/ left
@@ -86,11 +86,11 @@ namespace ts {
                     value = left;
                 }
 
-                return createAssignment(target, createMathPow(value, right, /*location*/ node), /*location*/ node);
+                return factory.createAssignment(target, factory.createMathPow(value, right, /*location*/ node), /*location*/ node);
             }
             else if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken) {
                 // Transforms `a ** b` into `Math.pow(a, b)`
-                return createMathPow(left, right, /*location*/ node);
+                return factory.createMathPow(left, right, /*location*/ node);
             }
             else {
                 Debug.failBadSyntaxKind(node);

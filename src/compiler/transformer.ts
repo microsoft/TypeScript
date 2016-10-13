@@ -8,7 +8,6 @@
 /// <reference path="transformers/module/system.ts" />
 /// <reference path="transformers/module/es6.ts" />
 
-/* @internal */
 namespace ts {
     const moduleTransformerMap = createMap<Transformer>({
         [ModuleKind.ES6]: transformES6Module,
@@ -51,7 +50,9 @@ namespace ts {
 
     export interface TransformationContext extends LexicalEnvironment {
         getCompilerOptions(): CompilerOptions;
+        /* @internal */
         getEmitResolver(): EmitResolver;
+        /* @internal */
         getEmitHost(): EmitHost;
 
         /**
@@ -99,9 +100,9 @@ namespace ts {
         onEmitNode?: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
     }
 
-    /* @internal */
     export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
+    /* @internal */
     export function getTransformers(compilerOptions: CompilerOptions) {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -133,6 +134,7 @@ namespace ts {
      * @param sourceFiles An array of source files
      * @param transforms An array of Transformers.
      */
+    /* @internal */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult {
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
@@ -201,7 +203,7 @@ namespace ts {
          */
         function isSubstitutionEnabled(node: Node) {
             return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.Substitution) !== 0
-                && (getEmitFlags(node) & EmitFlags.NoSubstitution) === 0;
+                && (factory.getEmitFlags(node) & EmitFlags.NoSubstitution) === 0;
         }
 
         /**
@@ -238,7 +240,7 @@ namespace ts {
          */
         function isEmitNotificationEnabled(node: Node) {
             return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.EmitNotifications) !== 0
-                || (getEmitFlags(node) & EmitFlags.AdviseOnEmitNode) !== 0;
+                || (factory.getEmitFlags(node) & EmitFlags.AdviseOnEmitNode) !== 0;
         }
 
         /**
@@ -264,7 +266,7 @@ namespace ts {
          */
         function hoistVariableDeclaration(name: Identifier): void {
             Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
-            const decl = createVariableDeclaration(name);
+            const decl = factory.createVariableDeclaration(name);
             if (!hoistedVariableDeclarations) {
                 hoistedVariableDeclarations = [decl];
             }
@@ -318,9 +320,9 @@ namespace ts {
                 }
 
                 if (hoistedVariableDeclarations) {
-                    const statement = createVariableStatement(
+                    const statement = factory.createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList(hoistedVariableDeclarations)
+                        factory.createVariableDeclarationList(hoistedVariableDeclarations)
                     );
 
                     if (!statements) {

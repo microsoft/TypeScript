@@ -4,7 +4,6 @@
 /// <reference path="sourcemap.ts"/>
 /// <reference path="comments.ts" />
 
-/* @internal */
 namespace ts {
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
@@ -16,8 +15,132 @@ namespace ts {
     const id = (s: SourceFile) => s;
     const nullTransformers: Transformer[] = [ctx => id];
 
+    export function emit(file: SourceFile, transformers: Transformer[] = nullTransformers, newLine = "\n") {
+        let result: string;
+
+        const options: CompilerOptions = {};
+        const host: EmitHost = {
+            getCompilerOptions() {
+                return options;
+            },
+            getSourceFile(fileName: string) {
+                if (fileName === file.fileName) return file;
+            },
+            getSourceFileByPath(path: Path) {
+                if (path === file.fileName) return file;
+            },
+            getCurrentDirectory() {
+                return "";
+            },
+            getSourceFiles() {
+                return [file];
+            },
+            isSourceFileFromExternalLibrary() {
+                return false;
+            },
+            getCommonSourceDirectory() {
+                return "";
+            },
+            getCanonicalFileName(fileName: string) {
+                return fileName;
+            },
+            getNewLine() {
+                return newLine;
+            },
+            isEmitBlocked() {
+                return false;
+            },
+            writeFile(fileName: string, data: string) {
+                result = data;
+            }
+        };
+
+        const transform = transformFiles(undefined, host, [file], transformers);
+
+        const printFile = createPrinter(host, undefined, createDiagnosticCollection(), transform, () => false);
+
+        printFile("output.js", "", [file], /*isBundledEmit*/ false);
+
+        // Clean up emit nodes on parse tree
+        factory.disposeEmitNodes(file);
+
+        return {
+            result
+        };
+    }
+
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
+    /* @internal */
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
+        const compilerOptions = host.getCompilerOptions();
+        const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
+        const emitterDiagnostics = createDiagnosticCollection();
+        const transformers: Transformer[] = emitOnlyDtsFiles ? nullTransformers : getTransformers(compilerOptions);
+        let emitSkipped = false;
+
+        const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
+
+        // Transform the source files
+        performance.mark("beforeTransform");
+        const transform = transformFiles(resolver, host, sourceFiles, transformers);
+        performance.measure("transformTime", "beforeTransform");
+
+        const printFile = createPrinter(host, emittedFilesList, emitterDiagnostics, transform, resolver.hasGlobalName, sourceMapDataList);
+
+        // Emit each output file
+        performance.mark("beforePrint");
+        forEachTransformedEmitFile(host, transform.transformed, emitFile, emitOnlyDtsFiles);
+        performance.measure("printTime", "beforePrint");
+
+        // Clean up emit nodes on parse tree
+        for (const sourceFile of sourceFiles) {
+            factory.disposeEmitNodes(sourceFile);
+        }
+
+        return {
+            emitSkipped,
+            diagnostics: emitterDiagnostics.getDiagnostics(),
+            emittedFiles: emittedFilesList,
+            sourceMaps: sourceMapDataList
+        };
+
+        function emitFile(jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+            // Make sure not to write js file and source map file if any of them cannot be written
+            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
+                if (!emitOnlyDtsFiles) {
+                    printFile(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
+                }
+            }
+            else {
+                emitSkipped = true;
+            }
+
+            if (declarationFilePath) {
+                emitSkipped = writeDeclarationFile(declarationFilePath, getOriginalSourceFiles(sourceFiles), isBundledEmit, host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
+            }
+
+            if (!emitSkipped && emittedFilesList) {
+                if (!emitOnlyDtsFiles) {
+                    emittedFilesList.push(jsFilePath);
+                }
+                if (sourceMapFilePath) {
+                    emittedFilesList.push(sourceMapFilePath);
+                }
+                if (declarationFilePath) {
+                    emittedFilesList.push(declarationFilePath);
+                }
+            }
+        }
+    }
+    function createPrinter(
+            host: EmitHost,
+            emittedFilesList: string[],
+            emitterDiagnostics: DiagnosticCollection,
+            { emitNodeWithSubstitution, emitNodeWithNotification }: TransformationResult,
+            hasGlobalName: (name: string) => boolean,
+            sourceMapDataList?: SourceMapData[]
+        ) {
         const delimiters = createDelimiterMap();
         const brackets = createBracketsMap();
 
@@ -191,11 +314,7 @@ const _super = (function (geti, seti) {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
-        const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
-        const emitterDiagnostics = createDiagnosticCollection();
         const newLine = host.getNewLine();
-        const transformers: Transformer[] = emitOnlyDtsFiles ? nullTransformers : getTransformers(compilerOptions);
         const writer = createTextWriter(newLine);
         const {
             write,
@@ -230,63 +349,8 @@ const _super = (function (geti, seti) {
         let paramEmitted: boolean;
         let awaiterEmitted: boolean;
         let isOwnFileEmit: boolean;
-        let emitSkipped = false;
 
-        const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
-
-        // Transform the source files
-        performance.mark("beforeTransform");
-        const {
-            transformed,
-            emitNodeWithSubstitution,
-            emitNodeWithNotification
-        } = transformFiles(resolver, host, sourceFiles, transformers);
-        performance.measure("transformTime", "beforeTransform");
-
-        // Emit each output file
-        performance.mark("beforePrint");
-        forEachTransformedEmitFile(host, transformed, emitFile, emitOnlyDtsFiles);
-        performance.measure("printTime", "beforePrint");
-
-        // Clean up emit nodes on parse tree
-        for (const sourceFile of sourceFiles) {
-            disposeEmitNodes(sourceFile);
-        }
-
-        return {
-            emitSkipped,
-            diagnostics: emitterDiagnostics.getDiagnostics(),
-            emittedFiles: emittedFilesList,
-            sourceMaps: sourceMapDataList
-        };
-
-        function emitFile(jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
-            // Make sure not to write js file and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
-                if (!emitOnlyDtsFiles) {
-                    printFile(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
-                }
-            }
-            else {
-                emitSkipped = true;
-            }
-
-            if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, getOriginalSourceFiles(sourceFiles), isBundledEmit, host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
-            }
-
-            if (!emitSkipped && emittedFilesList) {
-                if (!emitOnlyDtsFiles) {
-                    emittedFilesList.push(jsFilePath);
-                }
-                if (sourceMapFilePath) {
-                    emittedFilesList.push(sourceMapFilePath);
-                }
-                if (declarationFilePath) {
-                    emittedFilesList.push(declarationFilePath);
-                }
-            }
-        }
+        return printFile;
 
         function printFile(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
             sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
@@ -861,7 +925,7 @@ const _super = (function (geti, seti) {
         //
 
         function emitIdentifier(node: Identifier) {
-            if (getEmitFlags(node) & EmitFlags.UMDDefine) {
+            if (factory.getEmitFlags(node) & EmitFlags.UMDDefine) {
                 writeLines(umdHelper);
             }
             else {
@@ -1134,7 +1198,7 @@ const _super = (function (geti, seti) {
                 write("{}");
             }
             else {
-                const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
+                const indentedFlag = factory.getEmitFlags(node) & EmitFlags.Indented;
                 if (indentedFlag) {
                     increaseIndent();
                 }
@@ -1152,7 +1216,7 @@ const _super = (function (geti, seti) {
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             let indentBeforeDot = false;
             let indentAfterDot = false;
-            if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
+            if (!(factory.getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentText, node.expression.end) + 1;
                 const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
@@ -1181,7 +1245,7 @@ const _super = (function (geti, seti) {
             }
             else if (isPropertyAccessExpression(expression) || isElementAccessExpression(expression)) {
                 // check if constant enum value is integer
-                const constantValue = getConstantValue(expression);
+                const constantValue = factory.getConstantValue(expression);
                 // isFinite handles cases when constantValue is undefined
                 return isFinite(constantValue)
                     && Math.floor(constantValue) === constantValue
@@ -1395,7 +1459,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitBlockStatements(node: BlockLike) {
-            if (getEmitFlags(node) & EmitFlags.SingleLine) {
+            if (factory.getEmitFlags(node) & EmitFlags.SingleLine) {
                 emitList(node, node.statements, ListFormat.SingleLineBlockStatements);
             }
             else {
@@ -1599,12 +1663,12 @@ const _super = (function (geti, seti) {
             const body = node.body;
             if (body) {
                 if (isBlock(body)) {
-                    const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
+                    const indentedFlag = factory.getEmitFlags(node) & EmitFlags.Indented;
                     if (indentedFlag) {
                         increaseIndent();
                     }
 
-                    if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
+                    if (factory.getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                         emitSignatureHead(node);
                         emitBlockFunctionBody(node, body);
                     }
@@ -1648,7 +1712,7 @@ const _super = (function (geti, seti) {
             // * A non-synthesized body's start and end position are on different lines.
             // * Any statement in the body starts on a new line.
 
-            if (getEmitFlags(body) & EmitFlags.SingleLine) {
+            if (factory.getEmitFlags(body) & EmitFlags.SingleLine) {
                 return true;
             }
 
@@ -1719,7 +1783,7 @@ const _super = (function (geti, seti) {
             write("class");
             emitNodeWithPrefix(" ", node.name, emitIdentifierName);
 
-            const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
+            const indentedFlag = factory.getEmitFlags(node) & EmitFlags.Indented;
             if (indentedFlag) {
                 increaseIndent();
             }
@@ -2052,8 +2116,8 @@ const _super = (function (geti, seti) {
             // "comment1" is not considered to be leading comment for node.initializer
             // but rather a trailing comment on the previous node.
             const initializer = node.initializer;
-            if ((getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
-                const commentRange = getCommentRange(initializer);
+            if ((factory.getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
+                const commentRange = factory.getCommentRange(initializer);
                 emitTrailingCommentsOfPosition(commentRange.pos);
             }
 
@@ -2125,7 +2189,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitHelpers(node: Node) {
-            const emitFlags = getEmitFlags(node);
+            const emitFlags = factory.getEmitFlags(node);
             let helpersEmitted = false;
             if (emitFlags & EmitFlags.EmitEmitHelpers) {
                 helpersEmitted = emitEmitHelpers(currentSourceFile);
@@ -2386,7 +2450,7 @@ const _super = (function (geti, seti) {
                     }
 
                     if (shouldEmitInterveningComments) {
-                        const commentRange = getCommentRange(child);
+                        const commentRange = factory.getCommentRange(child);
                         emitTrailingCommentsOfPosition(commentRange.pos);
                     }
                     else {
@@ -2624,7 +2688,7 @@ const _super = (function (geti, seti) {
         }
 
         function isUniqueName(name: string): boolean {
-            return !resolver.hasGlobalName(name) &&
+            return !hasGlobalName(name) &&
                 !hasProperty(currentFileIdentifiers, name) &&
                 !hasProperty(generatedNameSet, name);
         }

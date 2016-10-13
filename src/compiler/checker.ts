@@ -3062,7 +3062,7 @@ namespace ts {
         }
 
         function isAutoVariableInitializer(initializer: Expression) {
-            const expr = initializer && skipParentheses(initializer);
+            const expr = initializer && factory.skipParentheses(initializer);
             return !expr || expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>expr) === undefinedSymbol;
         }
 
@@ -13498,7 +13498,7 @@ namespace ts {
          * its value is discarded (e.g. the left side of the comma operator).
          */
         function isSideEffectFree(node: Node): boolean {
-            node = skipParentheses(node);
+            node = factory.skipParentheses(node);
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.StringLiteral:

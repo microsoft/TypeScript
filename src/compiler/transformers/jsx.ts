@@ -89,7 +89,7 @@ namespace ts {
             const attrs = node.attributes;
             if (attrs.length === 0) {
                 // When there are no attributes, React wants "null"
-                objectProperties = createNull();
+                objectProperties = factory.createNull();
             }
             else {
                 // Map spans of JsxAttribute nodes into object literals and spans
@@ -97,23 +97,23 @@ namespace ts {
                 const segments = flatten(
                     spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                         ? map(attrs, transformJsxSpreadAttributeToExpression)
-                        : createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                        : factory.createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
                     )
                 );
 
                 if (isJsxSpreadAttribute(attrs[0])) {
                     // We must always emit at least one object literal before a spread
                     // argument.
-                    segments.unshift(createObjectLiteral());
+                    segments.unshift(factory.createObjectLiteral());
                 }
 
                 // Either emit one big object literal (no spread attribs), or
                 // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments)
-                    || createAssignHelper(currentSourceFile.externalHelpersModuleName, segments);
+                    || factory.createAssignHelper(currentSourceFile.externalHelpersModuleName, segments);
             }
 
-            const element = createReactCreateElement(
+            const element = factory.createReactCreateElement(
                 compilerOptions.reactNamespace,
                 tagName,
                 objectProperties,
@@ -123,7 +123,7 @@ namespace ts {
             );
 
             if (isChild) {
-                startOnNewLine(element);
+                factory.startOnNewLine(element);
             }
 
             return element;
@@ -136,16 +136,16 @@ namespace ts {
         function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {
             const name = getAttributeName(node);
             const expression = transformJsxAttributeInitializer(node.initializer);
-            return createPropertyAssignment(name, expression);
+            return factory.createPropertyAssignment(name, expression);
         }
 
         function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression) {
             if (node === undefined) {
-                return createLiteral(true);
+                return factory.createLiteral(true);
             }
             else if (node.kind === SyntaxKind.StringLiteral) {
                 const decoded = tryDecodeEntities((<StringLiteral>node).text);
-                return decoded ? createLiteral(decoded, /*location*/ node) : node;
+                return decoded ? factory.createLiteral(decoded, /*location*/ node) : node;
             }
             else if (node.kind === SyntaxKind.JsxExpression) {
                 return visitJsxExpression(<JsxExpression>node);
@@ -176,7 +176,7 @@ namespace ts {
 
                         // We do not escape the string here as that is handled by the printer
                         // when it emits the literal. We do, however, need to decode JSX entities.
-                        parts.push(createLiteral(decodeEntities(part)));
+                        parts.push(factory.createLiteral(decodeEntities(part)));
                     }
 
                     firstNonWhitespace = -1;
@@ -197,7 +197,7 @@ namespace ts {
 
                 // We do not escape the string here as that is handled by the printer
                 // when it emits the literal. We do, however, need to decode JSX entities.
-                parts.push(createLiteral(decodeEntities(part)));
+                parts.push(factory.createLiteral(decodeEntities(part)));
             }
 
             if (parts) {
@@ -211,7 +211,7 @@ namespace ts {
          * Aggregates two expressions by interpolating them with a whitespace literal.
          */
         function aggregateJsxTextParts(left: Expression, right: Expression) {
-            return createAdd(createAdd(left, createLiteral(" ")), right);
+            return factory.createAdd(factory.createAdd(left, factory.createLiteral(" ")), right);
         }
 
         /**
@@ -247,10 +247,10 @@ namespace ts {
             else {
                 const name = (<JsxOpeningLikeElement>node).tagName;
                 if (isIdentifier(name) && isIntrinsicJsxName(name.text)) {
-                    return createLiteral(name.text);
+                    return factory.createLiteral(name.text);
                 }
                 else {
-                    return createExpressionFromEntityName(name);
+                    return factory.createExpressionFromEntityName(name);
                 }
             }
         }
@@ -266,7 +266,7 @@ namespace ts {
                 return name;
             }
             else {
-                return createLiteral(name.text);
+                return factory.createLiteral(name.text);
             }
         }
 

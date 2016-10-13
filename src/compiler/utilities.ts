@@ -3839,7 +3839,7 @@ namespace ts {
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
-        return isLeftHandSideExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+        return isLeftHandSideExpressionKind(factory.skipPartiallyEmittedExpressions(node).kind);
     }
 
     function isUnaryExpressionKind(kind: SyntaxKind): boolean {
@@ -3854,7 +3854,7 @@ namespace ts {
     }
 
     export function isUnaryExpression(node: Node): node is UnaryExpression {
-        return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+        return isUnaryExpressionKind(factory.skipPartiallyEmittedExpressions(node).kind);
     }
 
     function isExpressionKind(kind: SyntaxKind) {
@@ -3869,7 +3869,7 @@ namespace ts {
     }
 
     export function isExpression(node: Node): node is Expression {
-        return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+        return isExpressionKind(factory.skipPartiallyEmittedExpressions(node).kind);
     }
 
     export function isAssertionExpression(node: Node): node is AssertionExpression {
