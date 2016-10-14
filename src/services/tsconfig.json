@@ -27,6 +27,7 @@
         "../compiler/transformers/jsx.ts",
         "../compiler/transformers/es7.ts",
         "../compiler/transformers/es6.ts",
+        "../compiler/transformers/es5.ts",
         "../compiler/transformers/generators.ts",
         "../compiler/transformers/destructuring.ts",
         "../compiler/transformers/module/module.ts",
