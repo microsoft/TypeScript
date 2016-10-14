@@ -38,12 +38,18 @@ namespace ts.server {
         getLogFileName: (): string => undefined
     };
 
+    class TestSession extends Session {
+        getProjectService() {
+            return this.projectService;
+        }
+    }
+
     describe("the Session class", () => {
-        let session: Session;
+        let session: TestSession;
         let lastSent: protocol.Message;
 
         beforeEach(() => {
-            session = new Session(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
+            session = new TestSession(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
             session.send = (msg: protocol.Message) => {
                 lastSent = msg;
             };
@@ -54,7 +60,7 @@ namespace ts.server {
                 const req: protocol.FileRequest = {
                     command: CommandNames.Open,
                     seq: 0,
-                    type: "command",
+                    type: "request",
                     arguments: {
                         file: undefined
                     }
@@ -66,7 +72,7 @@ namespace ts.server {
                 const req: protocol.Request = {
                     command: "foobar",
                     seq: 0,
-                    type: "command"
+                    type: "request"
                 };
 
                 session.executeCommand(req);
@@ -84,7 +90,7 @@ namespace ts.server {
                 const req: protocol.ConfigureRequest = {
                     command: CommandNames.Configure,
                     seq: 0,
-                    type: "command",
+                    type: "request",
                     arguments: {
                         hostInfo: "unit test",
                         formatOptions: {
@@ -105,6 +111,47 @@ namespace ts.server {
                     body: undefined
                 });
             });
+            it ("should handle literal types in request", () => {
+                const configureRequest: protocol.ConfigureRequest = {
+                    command: CommandNames.Configure,
+                    seq: 0,
+                    type: "request",
+                    arguments: {
+                        formatOptions: {
+                            indentStyle: "Block"
+                        }
+                    }
+                };
+
+                session.onMessage(JSON.stringify(configureRequest));
+
+                assert.equal(session.getProjectService().getFormatCodeOptions().indentStyle, IndentStyle.Block);
+
+                const setOptionsRequest: protocol.SetCompilerOptionsForInferredProjectsRequest = {
+                    command: CommandNames.CompilerOptionsForInferredProjects,
+                    seq: 1,
+                    type: "request",
+                    arguments: {
+                        options: {
+                            module: "System",
+                            target: "ES5",
+                            jsx: "React",
+                            newLine: "Lf",
+                            moduleResolution: "Node"
+                        }
+                    }
+                };
+                session.onMessage(JSON.stringify(setOptionsRequest));
+                assert.deepEqual(
+                    session.getProjectService().getCompilerOptionsForInferredProjects(),
+                    <CompilerOptions>{
+                        module: ModuleKind.System,
+                        target: ScriptTarget.ES5,
+                        jsx: JsxEmit.React,
+                        newLine: NewLineKind.LineFeed,
+                        moduleResolution: ModuleResolutionKind.NodeJs
+                    });
+            });
         });
 
         describe("onMessage", () => {
@@ -117,7 +164,7 @@ namespace ts.server {
                     const req: protocol.Request = {
                         command: name,
                         seq: i,
-                        type: "command"
+                        type: "request"
                     };
                     i++;
                     session.onMessage(JSON.stringify(req));
@@ -150,7 +197,7 @@ namespace ts.server {
                 const req: protocol.ConfigureRequest = {
                     command: CommandNames.Configure,
                     seq: 0,
-                    type: "command",
+                    type: "request",
                     arguments: {
                         hostInfo: "unit test",
                         formatOptions: {
@@ -174,7 +221,7 @@ namespace ts.server {
 
         describe("send", () => {
             it("is an overrideable handle which sends protocol messages over the wire", () => {
-                const msg = { seq: 0, type: "none" };
+                const msg: server.protocol.Request = { seq: 0, type: "request", command: "" };
                 const strmsg = JSON.stringify(msg);
                 const len = 1 + Utils.byteLength(strmsg, "utf8");
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
@@ -202,7 +249,7 @@ namespace ts.server {
                 expect(session.executeCommand({
                     command,
                     seq: 0,
-                    type: "command"
+                    type: "request"
                 })).to.deep.equal(result);
             });
             it("throws when a duplicate handler is passed", () => {
@@ -303,7 +350,7 @@ namespace ts.server {
 
             expect(session.executeCommand({
                 seq: 0,
-                type: "command",
+                type: "request",
                 command: session.customHandler
             })).to.deep.equal({
                 response: undefined,
@@ -404,7 +451,7 @@ namespace ts.server {
                 this.seq++;
                 this.server.enqueue({
                     seq: this.seq,
-                    type: "command",
+                    type: "request",
                     command,
                     arguments: args
                 });

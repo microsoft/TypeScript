@@ -766,7 +766,7 @@ namespace ts.server {
         private getIndentation(args: protocol.IndentationRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const position = this.getPosition(args, project.getScriptInfoForNormalizedPath(file));
-            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
             const indentation = project.getLanguageService(/*ensureSynchronized*/ false).getIndentationAtPosition(file, position, options);
             return { position, indentation };
         }
@@ -839,19 +839,19 @@ namespace ts.server {
 
         private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
-            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
             return project.getLanguageService(/*ensureSynchronized*/ false).getFormattingEditsForRange(file, args.position, args.endPosition, options);
         }
 
         private getFormattingEditsForDocumentFull(args: protocol.FormatRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
-            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
             return project.getLanguageService(/*ensureSynchronized*/ false).getFormattingEditsForDocument(file, options);
         }
 
         private getFormattingEditsAfterKeystrokeFull(args: protocol.FormatOnKeyRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
-            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
             return project.getLanguageService(/*ensureSynchronized*/ false).getFormattingEditsAfterKeystroke(file, args.position, args.key, options);
         }
 
@@ -1335,24 +1335,8 @@ namespace ts.server {
             [CommandNames.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getRenameInfo(request.arguments));
             },
-            [CommandNames.Open]: (request: protocol.Request) => {
-                const openArgs = <protocol.OpenRequestArgs>request.arguments;
-                let scriptKind: ScriptKind;
-                switch (openArgs.scriptKindName) {
-                    case "TS":
-                        scriptKind = ScriptKind.TS;
-                        break;
-                    case "JS":
-                        scriptKind = ScriptKind.JS;
-                        break;
-                    case "TSX":
-                        scriptKind = ScriptKind.TSX;
-                        break;
-                    case "JSX":
-                        scriptKind = ScriptKind.JSX;
-                        break;
-                }
-                this.openClientFile(toNormalizedPath(openArgs.file), openArgs.fileContent, scriptKind);
+            [CommandNames.Open]: (request: protocol.OpenRequest) => {
+                this.openClientFile(toNormalizedPath(request.arguments.file), request.arguments.fileContent, convertScriptKindName(request.arguments.scriptKindName));
                 return this.notRequired();
             },
             [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {

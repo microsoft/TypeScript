@@ -8,6 +8,69 @@ namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
     /* @internal */
+    export const jsxCompilerOption: CommandLineOptionOfCustomType = {
+        name: "jsx",
+        type: createMap({
+            "preserve": JsxEmit.Preserve,
+            "react": JsxEmit.React
+        }),
+        paramType: Diagnostics.KIND,
+        description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
+    };
+
+    /* @internal */
+    export const moduleCommandLineOption: CommandLineOptionOfCustomType = {
+        name: "module",
+        shortName: "m",
+        type: createMap({
+            "none": ModuleKind.None,
+            "commonjs": ModuleKind.CommonJS,
+            "amd": ModuleKind.AMD,
+            "system": ModuleKind.System,
+            "umd": ModuleKind.UMD,
+            "es6": ModuleKind.ES6,
+            "es2015": ModuleKind.ES2015,
+        }),
+        description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
+        paramType: Diagnostics.KIND,
+    };
+
+    /* @internal */
+    export const newLineCommandLineOption: CommandLineOptionOfCustomType = {
+        name: "newLine",
+        type: createMap({
+            "crlf": NewLineKind.CarriageReturnLineFeed,
+            "lf": NewLineKind.LineFeed
+        }),
+        description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
+        paramType: Diagnostics.NEWLINE,
+    };
+
+    /* @internal */
+    export const moduleResolutionCommandLineOption: CommandLineOptionOfCustomType = {
+        name: "moduleResolution",
+        type: createMap({
+            "node": ModuleResolutionKind.NodeJs,
+            "classic": ModuleResolutionKind.Classic,
+        }),
+        description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
+    };
+
+    /* @internal */
+    export const targetCommandLineOption: CommandLineOptionOfCustomType = {
+        name: "target",
+        shortName: "t",
+        type: createMap({
+            "es3": ScriptTarget.ES3,
+            "es5": ScriptTarget.ES5,
+            "es6": ScriptTarget.ES6,
+            "es2015": ScriptTarget.ES2015,
+        }),
+        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
+        paramType: Diagnostics.VERSION,
+    };
+
+    /* @internal */
     export const optionDeclarations: CommandLineOption[] = [
         {
             name: "charset",
@@ -62,15 +125,7 @@ namespace ts {
             name: "inlineSources",
             type: "boolean",
         },
-        {
-            name: "jsx",
-            type: createMap({
-                "preserve": JsxEmit.Preserve,
-                "react": JsxEmit.React
-            }),
-            paramType: Diagnostics.KIND,
-            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
-        },
+        jsxCompilerOption,
         {
             name: "reactNamespace",
             type: "string",
@@ -91,30 +146,8 @@ namespace ts {
             description: Diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
             paramType: Diagnostics.LOCATION,
         },
-        {
-            name: "module",
-            shortName: "m",
-            type: createMap({
-                "none": ModuleKind.None,
-                "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD,
-                "system": ModuleKind.System,
-                "umd": ModuleKind.UMD,
-                "es6": ModuleKind.ES6,
-                "es2015": ModuleKind.ES2015,
-            }),
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
-            paramType: Diagnostics.KIND,
-        },
-        {
-            name: "newLine",
-            type: createMap({
-                "crlf": NewLineKind.CarriageReturnLineFeed,
-                "lf": NewLineKind.LineFeed
-            }),
-            description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
-            paramType: Diagnostics.NEWLINE,
-        },
+        moduleCommandLineOption,
+        newLineCommandLineOption,
         {
             name: "noEmit",
             type: "boolean",
@@ -254,18 +287,7 @@ namespace ts {
             description: Diagnostics.Do_not_emit_declarations_for_code_that_has_an_internal_annotation,
             experimental: true
         },
-        {
-            name: "target",
-            shortName: "t",
-            type: createMap({
-                "es3": ScriptTarget.ES3,
-                "es5": ScriptTarget.ES5,
-                "es6": ScriptTarget.ES6,
-                "es2015": ScriptTarget.ES2015,
-            }),
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
-            paramType: Diagnostics.VERSION,
-        },
+        targetCommandLineOption,
         {
             name: "version",
             shortName: "v",
@@ -289,14 +311,7 @@ namespace ts {
             experimental: true,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
-        {
-            name: "moduleResolution",
-            type: createMap({
-                "node": ModuleResolutionKind.NodeJs,
-                "classic": ModuleResolutionKind.Classic,
-            }),
-            description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
-        },
+        moduleResolutionCommandLineOption,
         {
             name: "allowUnusedLabels",
             type: "boolean",
