@@ -2995,6 +2995,22 @@ namespace ts {
             return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind);
         }
 
+        function getDifferenceType(left: Type, right: Type, symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            Debug.assert(!!(left.flags & TypeFlags.ObjectType && right.flags & TypeFlags.ObjectType));
+            if (left.flags & TypeFlags.ObjectType && right.flags & TypeFlags.ObjectType) {
+                const members = createMap<Symbol>();
+                for (const prop of getPropertiesOfType(left)) {
+                    if (!getPropertyOfObjectType(right, prop.name)) {
+                        members[prop.name] = prop;
+                    }
+                }
+                // TODO: Include call and construct signatures and indexers
+                // but that's not applicable to the tests I currently have
+                return createAnonymousType(symbol, members, emptyArray, emptyArray, getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.Number));
+            }
+            // TODO: createDifferenceType
+        }
+
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type {
             const pattern = <BindingPattern>declaration.parent;
@@ -3016,29 +3032,15 @@ namespace ts {
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    const newMembers = createMap<Symbol>();
-                    const seenMembers = createMap<BindingElement>();
+                    const literalMembers = createMap<Symbol>();
                     for (const element of pattern.elements) {
-                        if (element.kind === SyntaxKind.OmittedExpression) {
+                        if (element.kind === SyntaxKind.OmittedExpression || (element as BindingElement).dotDotDotToken) {
                             continue;
                         }
-                        const binding = element as BindingElement;
-                        if (!binding.dotDotDotToken) {
-                            const name = binding.propertyName || binding.name as Identifier;
-                            seenMembers[getTextOfPropertyName(name)] = binding;
-                        }
+                        const name = element.propertyName || element.name as Identifier;
+                        literalMembers[getTextOfPropertyName(name)] = getSymbolOfNode(element);
                     }
-                    for (const prop of getPropertiesOfType(parentType)) {
-                        if (!hasProperty(seenMembers, prop.name)) {
-                            newMembers[prop.name] = prop;
-                        }
-                    }
-                    type = createAnonymousType(getSymbolOfNode(declaration),
-                                               newMembers,
-                                               emptyArray,
-                                               emptyArray,
-                                               getIndexInfoOfType(parentType, IndexKind.String),
-                                               getIndexInfoOfType(parentType, IndexKind.Number));
+                    type = getDifferenceType(parentType, createAnonymousType(declaration.symbol, literalMembers, emptyArray, emptyArray, undefined, undefined), declaration.symbol);
                 }
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
