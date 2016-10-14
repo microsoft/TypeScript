@@ -436,6 +436,11 @@ namespace ts {
         function visitSourceFile(node: SourceFile) {
             currentSourceFile = node;
 
+            // ensure "use strict" is emitted in all scenarios in alwaysStrict mode
+            if (compilerOptions.alwaysStrict) {
+                node = ensureUseStrict(node);
+            }
+
             // If the source file requires any helpers and is an external module, and
             // the importHelpers compiler option is enabled, emit a synthesized import
             // statement for the helpers library.

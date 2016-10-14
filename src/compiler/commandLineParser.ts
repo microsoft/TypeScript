@@ -444,6 +444,11 @@ namespace ts {
             name: "importHelpers",
             type: "boolean",
             description: Diagnostics.Import_emit_helpers_from_tslib
+        },
+        {
+            name: "alwaysStrict",
+            type: "boolean",
+            description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
         }
     ];
 
@@ -975,7 +980,7 @@ namespace ts {
         basePath: string, errors: Diagnostic[], configFileName?: string): CompilerOptions {
 
         const options: CompilerOptions = getBaseFileName(configFileName) === "jsconfig.json"
-            ? { allowJs: true, maxNodeModuleJsDepth: 2, allowSyntheticDefaultImports: true }
+            ? { allowJs: true, maxNodeModuleJsDepth: 2, allowSyntheticDefaultImports: true, skipLibCheck: true }
             : {};
         convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
         return options;
