@@ -1,0 +1,46 @@
+=== tests/cases/conformance/es6/destructuring/objectRest.ts ===
+let o = { a: 1, b: 'no' }
+>o : { a: number; b: string; }
+>{ a: 1, b: 'no' } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>'no' : "no"
+
+var { ...clone } = o;
+>clone : { a: number; b: string; }
+>o : { a: number; b: string; }
+
+var { a, ...justB } = o;
+>a : number
+>justB : { b: string; }
+>o : { a: number; b: string; }
+
+var { a, b: renamed, ...empty } = o;
+>a : number
+>b : any
+>renamed : string
+>empty : {}
+>o : { a: number; b: string; }
+
+let o2 = { c: 'terrible idea?', d: 'yes' };
+>o2 : { c: string; d: string; }
+>{ c: 'terrible idea?', d: 'yes' } : { c: string; d: string; }
+>c : string
+>'terrible idea?' : "terrible idea?"
+>d : string
+>'yes' : "yes"
+
+var { d: renamed, ...d } = o2;
+>d : any
+>renamed : string
+>d : { c: string; }
+>o2 : { c: string; d: string; }
+
+function cloneAgain({ ...clone }: { a: number, b: string }): void {
+>cloneAgain : ({...clone}: { a: number; b: string; }) => void
+>clone : { a: number; b: string; }
+>a : number
+>b : string
+}
+

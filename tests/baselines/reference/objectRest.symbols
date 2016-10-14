@@ -1,0 +1,40 @@
+=== tests/cases/conformance/es6/destructuring/objectRest.ts ===
+let o = { a: 1, b: 'no' }
+>o : Symbol(o, Decl(objectRest.ts, 0, 3))
+>a : Symbol(a, Decl(objectRest.ts, 0, 9))
+>b : Symbol(b, Decl(objectRest.ts, 0, 15))
+
+var { ...clone } = o;
+>clone : Symbol(clone, Decl(objectRest.ts, 1, 5))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3))
+
+var { a, ...justB } = o;
+>a : Symbol(a, Decl(objectRest.ts, 2, 5), Decl(objectRest.ts, 3, 5))
+>justB : Symbol(justB, Decl(objectRest.ts, 2, 8))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3))
+
+var { a, b: renamed, ...empty } = o;
+>a : Symbol(a, Decl(objectRest.ts, 2, 5), Decl(objectRest.ts, 3, 5))
+>b : Symbol(b, Decl(objectRest.ts, 0, 15))
+>renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 6, 5))
+>empty : Symbol(empty, Decl(objectRest.ts, 3, 20))
+>o : Symbol(o, Decl(objectRest.ts, 0, 3))
+
+let o2 = { c: 'terrible idea?', d: 'yes' };
+>o2 : Symbol(o2, Decl(objectRest.ts, 5, 3))
+>c : Symbol(c, Decl(objectRest.ts, 5, 10))
+>d : Symbol(d, Decl(objectRest.ts, 5, 31))
+
+var { d: renamed, ...d } = o2;
+>d : Symbol(d, Decl(objectRest.ts, 5, 31))
+>renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 6, 5))
+>d : Symbol(d, Decl(objectRest.ts, 6, 17))
+>o2 : Symbol(o2, Decl(objectRest.ts, 5, 3))
+
+function cloneAgain({ ...clone }: { a: number, b: string }): void {
+>cloneAgain : Symbol(cloneAgain, Decl(objectRest.ts, 6, 30))
+>clone : Symbol(clone, Decl(objectRest.ts, 8, 21))
+>a : Symbol(a, Decl(objectRest.ts, 8, 35))
+>b : Symbol(b, Decl(objectRest.ts, 8, 46))
+}
+
