@@ -392,12 +392,12 @@ namespace ts.server {
             this.throttledOperations.schedule(
                 project.configFileName,
                 /*delay*/250,
-                () => this.handleChangeInSourceFileForConfiguredProject(project));
+                () => this.handleChangeInSourceFileForConfiguredProject(project, fileName));
         }
 
-        private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject) {
+        private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject, triggerFile: string) {
             const { projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.configFileName);
-            this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors);
+            this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors, triggerFile);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
@@ -434,7 +434,7 @@ namespace ts.server {
             }
 
             const { configFileErrors } = this.convertConfigFileContentToProjectOptions(fileName);
-            this.reportConfigFileDiagnostics(fileName, configFileErrors);
+            this.reportConfigFileDiagnostics(fileName, configFileErrors, fileName);
 
             this.logger.info(`Detected newly added tsconfig file: ${fileName}`);
             this.reloadProjects();
@@ -757,7 +757,7 @@ namespace ts.server {
             return project;
         }
 
-        private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile?: string) {
+        private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile: string) {
             if (!this.eventHandler) {
                 return;
             }
