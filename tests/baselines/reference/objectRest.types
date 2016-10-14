@@ -29,6 +29,11 @@ var { ['b']: renamed, ...justA } = o;
 >justA : { a: number; }
 >o : { a: number; b: string; }
 
+var { 'b': renamed, ...justA } = o;
+>renamed : string
+>justA : { a: number; }
+>o : { a: number; b: string; }
+
 let o2 = { c: 'terrible idea?', d: 'yes' };
 >o2 : { c: string; d: string; }
 >{ c: 'terrible idea?', d: 'yes' } : { c: string; d: string; }

@@ -4,6 +4,7 @@ var { ...clone } = o;
 var { a, ...justB } = o;
 var { a, b: renamed, ...empty } = o;
 var { ['b']: renamed, ...justA } = o;
+var { 'b': renamed, ...justA } = o;
 
 let o2 = { c: 'terrible idea?', d: 'yes' };
 var { d: renamed, ...d } = o2;
@@ -24,6 +25,7 @@ var clone = __rest(o, []);
 var a = o.a, justB = __rest(o, ["a"]);
 var a = o.a, renamed = o.b, empty = __rest(o, ["a", "b"]);
 var _a = 'b', renamed = o[_a], justA = __rest(o, ["b"]);
+var renamed = o["b"], justA = __rest(o, ["b"]);
 var o2 = { c: 'terrible idea?', d: 'yes' };
 var renamed = o2.d, d = __rest(o2, ["d"]);
 function cloneAgain(_a) {
