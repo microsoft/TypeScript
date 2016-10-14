@@ -4,6 +4,7 @@
 /// <reference path="transformers/es2017.ts" />
 /// <reference path="transformers/es2016.ts" />
 /// <reference path="transformers/es2015.ts" />
+/// <reference path="transformers/es5.ts" />
 /// <reference path="transformers/generators.ts" />
 /// <reference path="transformers/module/module.ts" />
 /// <reference path="transformers/module/system.ts" />
@@ -127,6 +128,10 @@ namespace ts {
         if (languageVersion < ScriptTarget.ES2015) {
             transformers.push(transformES2015);
             transformers.push(transformGenerators);
+        }
+
+        if (languageVersion < ScriptTarget.ES5) {
+            transformers.push(transformES5);
         }
 
         return transformers;
