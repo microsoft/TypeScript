@@ -3021,8 +3021,8 @@ namespace ts {
                         if (element.kind === SyntaxKind.OmittedExpression || (element as BindingElement).dotDotDotToken) {
                             continue;
                         }
-                        const name = element.propertyName || element.name as Identifier;
-                        literalMembers[getTextOfPropertyName(name)] = getSymbolOfNode(element);
+                        const name = getTextOfPropertyName(element.propertyName || element.name as Identifier);
+                        literalMembers[name] = getPropertyOfObjectType(parentType, name);
                     }
                     type = getDifferenceType(parentType, createAnonymousType(declaration.symbol, literalMembers, emptyArray, emptyArray, undefined, undefined), declaration.symbol);
                 }
