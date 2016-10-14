@@ -13532,6 +13532,12 @@ namespace ts {
         }
 
         function isTypeEqualityComparableTo(source: Type, target: Type) {
+            const sourceIsLiteral = isLiteralType(source);
+            const targetIsLiteral = isLiteralType(target);
+            if (!sourceIsLiteral || !targetIsLiteral) {
+                source = sourceIsLiteral ? getBaseTypeOfLiteralType(source) : source;
+                target = targetIsLiteral ? getBaseTypeOfLiteralType(target) : target;
+            }
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
@@ -13672,12 +13678,6 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    const leftIsLiteral = isLiteralType(leftType);
-                    const rightIsLiteral = isLiteralType(rightType);
-                    if (!leftIsLiteral || !rightIsLiteral) {
-                        leftType = leftIsLiteral ? getBaseTypeOfLiteralType(leftType) : leftType;
-                        rightType = rightIsLiteral ? getBaseTypeOfLiteralType(rightType) : rightType;
-                    }
                     if (!isTypeEqualityComparableTo(leftType, rightType) && !isTypeEqualityComparableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
@@ -16584,7 +16584,7 @@ namespace ts {
             let firstDefaultClause: CaseOrDefaultClause;
             let hasDuplicateDefaultClause = false;
 
-            let expressionType = checkExpression(node.expression);
+            const expressionType = checkExpression(node.expression);
             forEach(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
@@ -16605,13 +16605,7 @@ namespace ts {
                     // TypeScript 1.0 spec (April 2014): 5.9
                     // In a 'switch' statement, each 'case' expression must be of a type that is comparable
                     // to or from the type of the 'switch' expression.
-                    let caseType = checkExpression(caseClause.expression);
-                    const expressionIsLiteral = isLiteralType(expressionType);
-                    const caseIsLiteral = isLiteralType(caseType);
-                    if (!expressionIsLiteral || !caseIsLiteral) {
-                        expressionType = expressionIsLiteral ? getBaseTypeOfLiteralType(expressionType) : expressionType;
-                        caseType = caseIsLiteral ? getBaseTypeOfLiteralType(caseType) : caseType;
-                    }
+                    const caseType = checkExpression(caseClause.expression);
                     if (!isTypeEqualityComparableTo(expressionType, caseType)) {
                         // expressionType is not comparable to caseType, try the reversed check and report errors if it fails
                         checkTypeComparableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
