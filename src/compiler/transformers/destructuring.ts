@@ -320,6 +320,35 @@ namespace ts {
             }
         }
 
+        /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
+         * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`*/
+        function createRestCall(value: Expression, propName: Identifier, pattern: BindingPattern): Expression {
+            const call = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
+            const restIdentifier = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+            restIdentifier.text = "__rest";
+            call.expression = restIdentifier;
+            call.arguments = <NodeArray<LiteralExpression>>createSynthesizedNodeArray();
+            call.arguments.push(value);
+            const array = <ArrayLiteralExpression>createSynthesizedNode(SyntaxKind.ArrayLiteralExpression);
+            array.pos = pattern.pos;
+            array.end = pattern.end;
+            array.elements = <NodeArray<LiteralExpression>>createSynthesizedNodeArray();
+            for (const element of pattern.elements) {
+                if (isOmittedExpression(element)) {
+                    continue;
+                }
+                if (!element.dotDotDotToken) {
+                    const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+                    str.pos = pattern.pos;
+                    str.end = pattern.end;
+                    str.text = getTextOfNode(element.propertyName || <Identifier>element.name);
+                    array.elements.push(str);
+                }
+            }
+            call.arguments.push(array);
+            return call;
+        }
+
         function emitBindingElement(target: VariableDeclaration | ParameterDeclaration | BindingElement, value: Expression) {
             // Any temporary assignments needed to emit target = value should point to target
             const initializer = visitor ? visitNode(target.initializer, visitor, isExpression) : target.initializer;
@@ -351,7 +380,10 @@ namespace ts {
                     else if (name.kind === SyntaxKind.ObjectBindingPattern) {
                         // Rewrite element to a declaration with an initializer that fetches property
                         const propName = element.propertyName || <Identifier>element.name;
-                        emitBindingElement(element, createDestructuringPropertyAccess(value, propName));
+                        const destructuredValue = element.dotDotDotToken ?
+                            createRestCall(value, propName as Identifier, name) :
+                            createDestructuringPropertyAccess(value, propName);
+                        emitBindingElement(element, destructuredValue);
                     }
                     else {
                         if (!element.dotDotDotToken) {
