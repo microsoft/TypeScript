@@ -3019,8 +3019,7 @@ namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
-        ES6 = 5,
-        ES2015 = ES6,
+        ES2015 = 5,
     }
 
     export const enum JsxEmit {
@@ -3053,8 +3052,7 @@ namespace ts {
     export const enum ScriptTarget {
         ES3 = 0,
         ES5 = 1,
-        ES6 = 2,
-        ES2015 = ES6,
+        ES2015 = 2,
         ES2016 = 3,
         ES2017 = 4,
         Latest = ES2017,
