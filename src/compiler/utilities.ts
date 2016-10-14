@@ -503,6 +503,22 @@ namespace ts {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
+    export function getTextOfPropertyName(name: PropertyName): string {
+        switch (name.kind) {
+        case SyntaxKind.Identifier:
+            return (<Identifier>name).text;
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NumericLiteral:
+            return (<LiteralExpression>name).text;
+        case SyntaxKind.ComputedPropertyName:
+            if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
+                return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
+            }
+        }
+
+        return undefined;
+    }
+
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);

@@ -341,7 +341,7 @@ namespace ts {
                     const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
                     str.pos = pattern.pos;
                     str.end = pattern.end;
-                    str.text = getTextOfNode(element.propertyName || <Identifier>element.name);
+                    str.text = getTextOfPropertyName(element.propertyName || <Identifier>element.name);
                     array.elements.push(str);
                 }
             }
