@@ -34,6 +34,13 @@ var { 'b': renamed, ...justA } = o;
 >justA : { a: number; }
 >o : { a: number; b: string; }
 
+var { b: { '0': n, '1': oooo }, ...justA } = o;
+>b : any
+>n : string
+>oooo : string
+>justA : { a: number; }
+>o : { a: number; b: string; }
+
 let o2 = { c: 'terrible idea?', d: 'yes' };
 >o2 : { c: string; d: string; }
 >{ c: 'terrible idea?', d: 'yes' } : { c: string; d: string; }
