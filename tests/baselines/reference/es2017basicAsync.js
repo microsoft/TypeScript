@@ -8,7 +8,7 @@ async function asyncFunc() {
     await 0;
 }
 
-const asycnArrowFunc = async (): Promise<void> => {
+const asyncArrowFunc = async (): Promise<void> => {
     await 0;
 }
 
@@ -54,7 +54,7 @@ async () => {
 async function asyncFunc() {
     await 0;
 }
-const asycnArrowFunc = async () => {
+const asyncArrowFunc = async () => {
     await 0;
 };
 async function asyncIIFE() {

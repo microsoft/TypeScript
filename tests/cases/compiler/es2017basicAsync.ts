@@ -10,7 +10,7 @@ async function asyncFunc() {
     await 0;
 }
 
-const asycnArrowFunc = async (): Promise<void> => {
+const asyncArrowFunc = async (): Promise<void> => {
     await 0;
 }
 

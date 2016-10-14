@@ -12,8 +12,8 @@ async function asyncFunc() {
     await 0;
 }
 
-const asycnArrowFunc = async (): Promise<void> => {
->asycnArrowFunc : Symbol(asycnArrowFunc, Decl(es2017basicAsync.ts, 9, 5))
+const asyncArrowFunc = async (): Promise<void> => {
+>asyncArrowFunc : Symbol(asyncArrowFunc, Decl(es2017basicAsync.ts, 9, 5))
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 
     await 0;

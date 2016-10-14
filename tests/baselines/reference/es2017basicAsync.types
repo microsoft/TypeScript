@@ -17,8 +17,8 @@ async function asyncFunc() {
 >0 : 0
 }
 
-const asycnArrowFunc = async (): Promise<void> => {
->asycnArrowFunc : () => Promise<void>
+const asyncArrowFunc = async (): Promise<void> => {
+>asyncArrowFunc : () => Promise<void>
 >async (): Promise<void> => {    await 0;} : () => Promise<void>
 >Promise : Promise<T>
 
