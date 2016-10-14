@@ -42,7 +42,14 @@ class DeclarationsWalker {
                     return;
                 }
                 // splice declaration in final d.ts file
-                const text = decl.getFullText();
+                let text = decl.getFullText();
+                if (decl.kind === ts.SyntaxKind.EnumDeclaration && !(decl.flags & ts.NodeFlags.Const)) {
+                    // patch enum declaration to make them constan
+                    const declStart = decl.getStart() - decl.getFullStart();
+                    const prefix = text.substring(0, declStart);
+                    const suffix = text.substring(declStart + "enum".length, decl.getEnd() - decl.getFullStart());
+                    text = prefix + "const enum" + suffix;
+                }
                 this.text += `${text}\n`;
 
                 // recursively pull all dependencies into result dts file
