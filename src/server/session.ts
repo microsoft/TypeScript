@@ -761,7 +761,7 @@ namespace ts.server {
             if (this.eventHander) {
                 this.eventHander({
                     eventName: "configFileDiag",
-                    data: { fileName, configFileName, diagnostics: configFileErrors || [] }
+                    data: { triggerFile: fileName, configFileName, diagnostics: configFileErrors || [] }
                 });
             }
         }
