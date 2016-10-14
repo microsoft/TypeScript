@@ -4,6 +4,23 @@
 ////    function;
 ////}
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "f",
+            "kind": "function",
+            "childItems": [
+                {
+                    "text": "<function>",
+                    "kind": "function"
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",

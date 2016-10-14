@@ -1936,7 +1936,7 @@ namespace ts {
     // function, the container property references the function (which in turn has a flowNode
     // property for the containing control flow).
     export interface FlowStart extends FlowNode {
-        container?: FunctionExpression | ArrowFunction;
+        container?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
@@ -2668,7 +2668,7 @@ namespace ts {
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | BooleanLike | ESSymbol | Spread,
-        NotUnionOrUnit = Any | String | Number | ESSymbol | ObjectType,
+        NotUnionOrUnit = Any | ESSymbol | ObjectType,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
@@ -2947,11 +2947,7 @@ namespace ts {
         NodeJs   = 2
     }
 
-    export type RootPaths = string[];
-    export type PathSubstitutions = MapLike<string[]>;
-    export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
-
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
 
     export interface CompilerOptions {
         allowJs?: boolean;
@@ -2959,6 +2955,7 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
+        alwaysStrict?: boolean;
         baseUrl?: string;
         charset?: string;
         /* @internal */ configFilePath?: string;
@@ -3003,14 +3000,14 @@ namespace ts {
         out?: string;
         outDir?: string;
         outFile?: string;
-        paths?: PathSubstitutions;
+        paths?: MapLike<string[]>;
         preserveConstEnums?: boolean;
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
         removeComments?: boolean;
         rootDir?: string;
-        rootDirs?: RootPaths;
+        rootDirs?: string[];
         skipLibCheck?: boolean;
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;

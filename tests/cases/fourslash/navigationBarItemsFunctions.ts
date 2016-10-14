@@ -14,6 +14,53 @@
 ////    var v = 10;
 ////}
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "baz",
+            "kind": "function",
+            "childItems": [
+                {
+                    "text": "v",
+                    "kind": "var"
+                }
+            ]
+        },
+        {
+            "text": "foo",
+            "kind": "function",
+            "childItems": [
+                {
+                    "text": "bar",
+                    "kind": "function",
+                    "childItems": [
+                        {
+                            "text": "biz",
+                            "kind": "function",
+                            "childItems": [
+                                {
+                                    "text": "z",
+                                    "kind": "var"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "y",
+                            "kind": "var"
+                        }
+                    ]
+                },
+                {
+                    "text": "x",
+                    "kind": "var"
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",
