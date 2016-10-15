@@ -84,6 +84,7 @@ namespace ts {
         IsFunctionExpression = 1 << 4,
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
+        IsObjectLiteralOrClassExpressionMethod = 1 << 7,
     }
 
     const binder = createBinder();
@@ -121,7 +122,8 @@ namespace ts {
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
-        // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
+        // not depending on if we see "use strict" in certain places or if we hit a class/namespace
+        // or if compiler options contain alwaysStrict.
         let inStrictMode: boolean;
 
         let symbolCount = 0;
@@ -139,7 +141,7 @@ namespace ts {
             file = f;
             options = opts;
             languageVersion = getEmitScriptTarget(options);
-            inStrictMode = !!file.externalModuleIndicator;
+            inStrictMode = bindInStrictMode(file, opts);
             classifiableNames = createMap<string>();
             symbolCount = 0;
             skipTransformFlagAggregation = isDeclarationFile(file);
@@ -173,6 +175,16 @@ namespace ts {
         }
 
         return bindSourceFile;
+
+        function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
+            if (opts.alwaysStrict && !isDeclarationFile(file)) {
+                // bind in strict mode source files with alwaysStrict option
+                return true;
+            }
+            else {
+                return !!file.externalModuleIndicator;
+            }
+        }
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;
@@ -486,8 +498,8 @@ namespace ts {
                 }
                 else {
                     currentFlow = { flags: FlowFlags.Start };
-                    if (containerFlags & ContainerFlags.IsFunctionExpression) {
-                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction>node;
+                    if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
+                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
                     currentReturnTarget = undefined;
                 }
@@ -768,6 +780,15 @@ namespace ts {
             setFlowNodeReferenced(antecedent);
             return <FlowAssignment>{
                 flags: FlowFlags.Assignment,
+                antecedent,
+                node
+            };
+        }
+
+        function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return <FlowArrayMutation>{
+                flags: FlowFlags.ArrayMutation,
                 antecedent,
                 node
             };
@@ -1153,6 +1174,12 @@ namespace ts {
                 forEachChild(node, bind);
                 if (operator === SyntaxKind.EqualsToken && !isAssignmentTarget(node)) {
                     bindAssignmentTargetFlow(node.left);
+                    if (node.left.kind === SyntaxKind.ElementAccessExpression) {
+                        const elementAccess = <ElementAccessExpression>node.left;
+                        if (isNarrowableOperand(elementAccess.expression)) {
+                            currentFlow = createFlowArrayMutation(currentFlow, node);
+                        }
+                    }
                 }
             }
         }
@@ -1213,6 +1240,12 @@ namespace ts {
             else {
                 forEachChild(node, bind);
             }
+            if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
+                const propertyAccess = <PropertyAccessExpression>node.expression;
+                if (isNarrowableOperand(propertyAccess.expression) && isPushOrUnshiftIdentifier(propertyAccess.name)) {
+                    currentFlow = createFlowArrayMutation(currentFlow, node);
+                }
+            }
         }
 
         function getContainerFlags(node: Node): ContainerFlags {
@@ -1237,9 +1270,12 @@ namespace ts {
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
+                case SyntaxKind.MethodDeclaration:
+                    if (isObjectLiteralOrClassExpressionMethod(node)) {
+                        return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethod;
+                    }
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -2236,6 +2272,10 @@ namespace ts {
                 if (nodeIsDecorated(node)) {
                     emitFlags |= NodeFlags.HasDecorators;
                 }
+            }
+
+            if (currentFlow && isObjectLiteralOrClassExpressionMethod(node)) {
+                node.flowNode = currentFlow;
             }
 
             return hasDynamicName(node)

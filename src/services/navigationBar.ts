@@ -330,10 +330,8 @@ namespace ts.NavigationBar {
         }
     }
 
-    // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
-    const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
     // Intl is missing in Safari, and node 0.10 treats "a" as greater than "B".
-    const localeCompareIsCorrect = collator && collator.compare("a", "B") < 0;
+    const localeCompareIsCorrect = ts.collator && ts.collator.compare("a", "B") < 0;
     const localeCompareFix: (a: string, b: string) => number = localeCompareIsCorrect ? collator.compare : function(a, b) {
         // This isn't perfect, but it passes all of our tests.
         for (let i = 0; i < Math.min(a.length, b.length); i++) {
@@ -344,7 +342,7 @@ namespace ts.NavigationBar {
             if (chA === "'" && chB === "\"") {
                 return -1;
             }
-            const cmp = chA.toLocaleLowerCase().localeCompare(chB.toLocaleLowerCase());
+            const cmp = ts.compareStrings(chA.toLocaleLowerCase(), chB.toLocaleLowerCase());
             if (cmp !== 0) {
                 return cmp;
             }

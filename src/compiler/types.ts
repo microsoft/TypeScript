@@ -1907,8 +1907,9 @@ namespace ts {
         TrueCondition  = 1 << 5,  // Condition known to be true
         FalseCondition = 1 << 6,  // Condition known to be false
         SwitchClause   = 1 << 7,  // Switch statement clause
-        Referenced     = 1 << 8,  // Referenced as antecedent once
-        Shared         = 1 << 9,  // Referenced as antecedent more than once
+        ArrayMutation  = 1 << 8,  // Potential array mutation
+        Referenced     = 1 << 9,  // Referenced as antecedent once
+        Shared         = 1 << 10, // Referenced as antecedent more than once
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -1922,7 +1923,7 @@ namespace ts {
     // function, the container property references the function (which in turn has a flowNode
     // property for the containing control flow).
     export interface FlowStart extends FlowNode {
-        container?: FunctionExpression | ArrowFunction;
+        container?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
@@ -1948,6 +1949,13 @@ namespace ts {
         switchStatement: SwitchStatement;
         clauseStart: number;   // Start index of case/default clause range
         clauseEnd: number;     // End index of case/default clause range
+        antecedent: FlowNode;
+    }
+
+    // FlowArrayMutation represents a node potentially mutates an array, i.e. an
+    // operation of the form 'x.push(value)', 'x.unshift(value)' or 'x[n] = value'.
+    export interface FlowArrayMutation extends FlowNode {
+        node: CallExpression | BinaryExpression;
         antecedent: FlowNode;
     }
 
@@ -2644,7 +2652,7 @@ namespace ts {
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | BooleanLike | ESSymbol,
-        NotUnionOrUnit = Any | String | Number | ESSymbol | ObjectType,
+        NotUnionOrUnit = Any | ESSymbol | ObjectType,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
@@ -2748,6 +2756,8 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+        elementType?: Type;      // Element expressions of evolving array type
+        finalArrayType?: Type;   // Final array type of evolving array type
     }
 
     /* @internal */
@@ -2925,6 +2935,7 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
+        alwaysStrict?: boolean;
         baseUrl?: string;
         charset?: string;
         /* @internal */ configFilePath?: string;

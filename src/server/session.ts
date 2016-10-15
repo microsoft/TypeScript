@@ -761,7 +761,7 @@ namespace ts.server {
             if (this.eventHander) {
                 this.eventHander({
                     eventName: "configFileDiag",
-                    data: { fileName, configFileName, diagnostics: configFileErrors || [] }
+                    data: { triggerFile: fileName, configFileName, diagnostics: configFileErrors || [] }
                 });
             }
         }
@@ -967,7 +967,7 @@ namespace ts.server {
                         result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
                     }
                     return result;
-                }, []).sort((a, b) => a.name.localeCompare(b.name));
+                }, []).sort((a, b) => ts.compareStrings(a.name, b.name));
             }
             else {
                 return completions;
@@ -1590,7 +1590,8 @@ namespace ts.server {
                 return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
-                return this.requiredResponse(this.setCompilerOptionsForInferredProjects(request.arguments));
+                this.setCompilerOptionsForInferredProjects(request.arguments);
+                return this.requiredResponse(true);
             },
             [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));

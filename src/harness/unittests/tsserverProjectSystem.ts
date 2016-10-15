@@ -19,10 +19,8 @@ namespace ts.projectSystem {
 
     export interface PostExecAction {
         readonly requestKind: TI.RequestKind;
-        readonly error: Error;
-        readonly stdout: string;
-        readonly stderr: string;
-        readonly callback: (err: Error, stdout: string, stderr: string) => void;
+        readonly success: boolean;
+        readonly callback: TI.RequestCompletedAction;
     }
 
     export function notImplemented(): any {
@@ -54,7 +52,7 @@ namespace ts.projectSystem {
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
         constructor(readonly globalTypingsCacheLocation: string, throttleLimit: number, readonly installTypingHost: server.ServerHost, log?: TI.Log) {
-            super(globalTypingsCacheLocation, "npm", safeList.path, throttleLimit, log);
+            super(globalTypingsCacheLocation, safeList.path, throttleLimit, log);
             this.init();
         }
 
@@ -65,7 +63,7 @@ namespace ts.projectSystem {
             const actionsToRun = this.postExecActions;
             this.postExecActions = [];
             for (const action of actionsToRun) {
-                action.callback(action.error, action.stdout, action.stderr);
+                action.callback(action.success);
             }
         }
 
@@ -85,7 +83,7 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: (err: Error, stdout: string, stderr: string) => void): void {
+        executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
             switch (requestKind) {
                 case TI.NpmViewRequest:
                 case TI.NpmInstallRequest:
@@ -108,9 +106,7 @@ namespace ts.projectSystem {
         addPostExecAction(requestKind: TI.RequestKind, stdout: string | string[], cb: TI.RequestCompletedAction) {
             const out = typeof stdout === "string" ? stdout : createNpmPackageJsonString(stdout);
             const action: PostExecAction = {
-                error: undefined,
-                stdout: out,
-                stderr: "",
+                success: !!out,
                 callback: cb,
                 requestKind
             };
@@ -139,7 +135,7 @@ namespace ts.projectSystem {
     }
 
     export class TestServerEventManager {
-        private events: server.ProjectServiceEvent[] = [];
+        public events: server.ProjectServiceEvent[] = [];
 
         handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
             this.events.push(event);
@@ -2290,6 +2286,14 @@ namespace ts.projectSystem {
             const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
+
+            for (const event of serverEventManager.events) {
+                if (event.eventName === "configFileDiag") {
+                    assert.equal(event.data.configFileName, configFile.path);
+                    assert.equal(event.data.triggerFile, file.path);
+                    return;
+                }
+            }
         });
 
         it("are generated when the config file doesn't have errors", () => {
@@ -2385,6 +2389,35 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
             assert.isTrue(errorResult.length === 0);
+        });
+    });
+
+    describe("non-existing directories listed in config file input array", () => {
+        it("should be tolerated without crashing the server", () => {
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {},
+                    "include": ["app/*", "test/**/*", "something"]
+                }`
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "let t = 10;"
+            };
+
+            const host = createServerHost([file1, configFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 1);
+
+            const configuredProject = projectService.configuredProjects[0];
+            assert.isTrue(configuredProject.getFileNames().length == 0);
+
+            const inferredProject = projectService.inferredProjects[0];
+            assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
         });
     });
 }

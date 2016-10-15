@@ -42,6 +42,7 @@ scripts/debug.bat
 scripts/run.bat
 scripts/word2md.js
 scripts/ior.js
+scripts/buildProtocol.js
 scripts/*.js.map
 scripts/typings/
 coverage/

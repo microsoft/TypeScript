@@ -91,7 +91,7 @@ namespace ts {
             Debug.assert(!exportFunctionForFile);
 
             // Collect information about the external module and dependency groups.
-            ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
+            ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node));
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
@@ -576,28 +576,23 @@ namespace ts {
         }
 
         function visitExportSpecifier(specifier: ExportSpecifier): Statement {
-            if (resolver.getReferencedValueDeclaration(specifier.propertyName || specifier.name)
-                || resolver.isValueAliasDeclaration(specifier)) {
-                recordExportName(specifier.name);
-                return createExportStatement(
-                    specifier.name,
-                    specifier.propertyName || specifier.name
-                );
-            }
-            return undefined;
+            recordExportName(specifier.name);
+            return createExportStatement(
+                specifier.name,
+                specifier.propertyName || specifier.name
+            );
         }
 
         function visitExportAssignment(node: ExportAssignment): Statement {
-            if (!node.isExportEquals) {
-                if (nodeIsSynthesized(node) || resolver.isValueAliasDeclaration(node)) {
-                    return createExportStatement(
-                        createLiteral("default"),
-                        node.expression
-                    );
-                }
+            if (node.isExportEquals) {
+                // Elide `export=` as it is illegal in a SystemJS module.
+                return undefined;
             }
 
-            return undefined;
+            return createExportStatement(
+                createLiteral("default"),
+                node.expression
+            );
         }
 
         /**

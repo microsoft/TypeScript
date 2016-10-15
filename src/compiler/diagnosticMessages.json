@@ -2861,6 +2861,10 @@
         "category": "Error",
         "code": 6140
     },
+    "Parse in strict mode and emit \"use strict\" for each source file": {
+        "category": "Message",
+        "code": 6141
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2957,7 +2961,7 @@
         "category": "Error",
         "code": 7033
     },
-    "Variable '{0}' implicitly has type 'any' in some locations where its type cannot be determined.": {
+    "Variable '{0}' implicitly has type '{1}' in some locations where its type cannot be determined.": {
         "category": "Error",
         "code": 7034
     },

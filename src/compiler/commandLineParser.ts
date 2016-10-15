@@ -446,6 +446,11 @@ namespace ts {
             name: "importHelpers",
             type: "boolean",
             description: Diagnostics.Import_emit_helpers_from_tslib
+        },
+        {
+            name: "alwaysStrict",
+            type: "boolean",
+            description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
         }
     ];
 
