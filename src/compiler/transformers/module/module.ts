@@ -59,7 +59,7 @@ namespace ts {
                 currentSourceFile = node;
 
                 // Collect information about the external module.
-                ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
+                ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node));
 
                 // Perform the transformation.
                 const transformModule = transformModuleDelegates[moduleKind] || transformModuleDelegates[ModuleKind.None];
@@ -228,7 +228,7 @@ namespace ts {
         }
 
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
-            if (exportEquals && resolver.isValueAliasDeclaration(exportEquals)) {
+            if (exportEquals) {
                 if (emitAsReturn) {
                     const statement = createReturn(
                         exportEquals.expression,
@@ -461,23 +461,21 @@ namespace ts {
                     );
                 }
                 for (const specifier of node.exportClause.elements) {
-                    if (resolver.isValueAliasDeclaration(specifier)) {
-                        const exportedValue = createPropertyAccess(
-                            generatedName,
-                            specifier.propertyName || specifier.name
-                        );
-                        statements.push(
-                            createStatement(
-                                createExportAssignment(specifier.name, exportedValue),
-                                /*location*/ specifier
-                            )
-                        );
-                    }
+                    const exportedValue = createPropertyAccess(
+                        generatedName,
+                        specifier.propertyName || specifier.name
+                    );
+                    statements.push(
+                        createStatement(
+                            createExportAssignment(specifier.name, exportedValue),
+                            /*location*/ specifier
+                        )
+                    );
                 }
 
                 return singleOrMany(statements);
             }
-            else if (resolver.moduleExportsSomeValue(node.moduleSpecifier)) {
+            else {
                 // export * from "mod";
                 return createStatement(
                     createCall(
@@ -495,15 +493,14 @@ namespace ts {
         }
 
         function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
-            if (!node.isExportEquals) {
-                if (nodeIsSynthesized(node) || resolver.isValueAliasDeclaration(node)) {
-                    const statements: Statement[] = [];
-                    addExportDefault(statements, node.expression, /*location*/ node);
-                    return statements;
-                }
+            if (node.isExportEquals) {
+                // Elide as `export=` is handled in addExportEqualsIfNeeded
+                return undefined;
             }
 
-            return undefined;
+            const statements: Statement[] = [];
+            addExportDefault(statements, node.expression, /*location*/ node);
+            return statements;
         }
 
         function addExportDefault(statements: Statement[], expression: Expression, location: TextRange): void {
@@ -568,7 +565,7 @@ namespace ts {
         }
 
         function collectExportMembers(names: Identifier[], node: Node): Identifier[] {
-            if (isAliasSymbolDeclaration(node) && resolver.isValueAliasDeclaration(node) && isDeclaration(node)) {
+            if (isAliasSymbolDeclaration(node) && isDeclaration(node)) {
                 const name = node.name;
                 if (isIdentifier(name)) {
                     names.push(name);

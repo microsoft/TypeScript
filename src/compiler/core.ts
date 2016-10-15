@@ -422,6 +422,17 @@ namespace ts {
         return result;
     }
 
+    export function some<T>(array: T[], predicate?: (value: T) => boolean): boolean {
+        if (array) {
+            for (const v of array) {
+                if (!predicate || predicate(v)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
@@ -1201,7 +1212,7 @@ namespace ts {
 
     /**
      * Returns the path except for its basename. Eg:
-     * 
+     *
      * /path/to/file.ext -> /path/to
      */
     export function getDirectoryPath(path: Path): Path;

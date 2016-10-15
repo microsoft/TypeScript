@@ -3506,7 +3506,7 @@ namespace ts {
         return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
     }
 
-    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver) {
+    export function collectExternalModuleInfo(sourceFile: SourceFile) {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMap<ExportSpecifier[]>();
         let exportEquals: ExportAssignment = undefined;
@@ -3514,19 +3514,16 @@ namespace ts {
         for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
-                    if (!(<ImportDeclaration>node).importClause ||
-                        resolver.isReferencedAliasDeclaration((<ImportDeclaration>node).importClause, /*checkChildren*/ true)) {
-                        // import "mod"
-                        // import x from "mod" where x is referenced
-                        // import * as x from "mod" where x is referenced
-                        // import { x, y } from "mod" where at least one import is referenced
-                        externalImports.push(<ImportDeclaration>node);
-                    }
+                    // import "mod"
+                    // import x from "mod"
+                    // import * as x from "mod"
+                    // import { x, y } from "mod"
+                    externalImports.push(<ImportDeclaration>node);
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(node)) {
-                        // import x = require("mod") where x is referenced
+                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                        // import x = require("mod")
                         externalImports.push(<ImportEqualsDeclaration>node);
                     }
                     break;
@@ -3535,13 +3532,11 @@ namespace ts {
                     if ((<ExportDeclaration>node).moduleSpecifier) {
                         if (!(<ExportDeclaration>node).exportClause) {
                             // export * from "mod"
-                            if (resolver.moduleExportsSomeValue((<ExportDeclaration>node).moduleSpecifier)) {
-                                externalImports.push(<ExportDeclaration>node);
-                                hasExportStarsToExportValues = true;
-                            }
+                            externalImports.push(<ExportDeclaration>node);
+                            hasExportStarsToExportValues = true;
                         }
-                        else if (resolver.isValueAliasDeclaration(node)) {
-                            // export { x, y } from "mod" where at least one export is a value symbol
+                        else {
+                            // export { x, y } from "mod"
                             externalImports.push(<ExportDeclaration>node);
                         }
                     }
