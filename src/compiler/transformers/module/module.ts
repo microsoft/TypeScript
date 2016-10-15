@@ -179,6 +179,7 @@ namespace ts {
                             //
                             //     function (require, exports, module1, module2) ...
                             createFunctionExpression(
+                                /*modifiers*/ undefined,
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,
@@ -415,7 +416,7 @@ namespace ts {
                                 )
                             ],
                             /*location*/ undefined,
-                            /*flags*/ languageVersion >= ScriptTarget.ES6 ? NodeFlags.Const : NodeFlags.None),
+                            /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None),
                             /*location*/ node
                         )
                     );
@@ -698,11 +699,13 @@ namespace ts {
             const statements: Statement[] = [];
             const name = node.name || getGeneratedNameForNode(node);
             if (hasModifier(node, ModifierFlags.Export)) {
+                // Keep async modifier for ES2017 transformer
+                const isAsync = hasModifier(node, ModifierFlags.Async);
                 statements.push(
                     setOriginalNode(
                         createFunctionDeclaration(
                             /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
+                            isAsync ? [<Modifier>createNode(SyntaxKind.AsyncKeyword)] : undefined,
                             node.asteriskToken,
                             name,
                             /*typeParameters*/ undefined,
