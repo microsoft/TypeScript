@@ -2469,7 +2469,7 @@ namespace ts {
         if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression) {
             // If the this node contains a SpreadElementExpression then it is an ES6
             // node.
-            transformFlags |= TransformFlags.AssertES6;
+            transformFlags |= TransformFlags.AssertES2015;
         }
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
@@ -2671,7 +2671,7 @@ namespace ts {
         }
 
         // An async method declaration is ES2017 syntax.
-        if (modifierFlags & ModifierFlags.Async) {
+        if (hasModifier(node, ModifierFlags.Async)) {
             transformFlags |= TransformFlags.AssertES2017;
         }
 
@@ -2778,7 +2778,7 @@ namespace ts {
         }
 
         // An async function expression is ES2017 syntax.
-        if (modifierFlags & ModifierFlags.Async) {
+        if (hasModifier(node, ModifierFlags.Async)) {
             transformFlags |= TransformFlags.AssertES2017;
         }
 
@@ -2815,7 +2815,7 @@ namespace ts {
         }
 
         // An async arrow function is ES2017 syntax.
-        if (modifierFlags & ModifierFlags.Async) {
+        if (hasModifier(node, ModifierFlags.Async)) {
             transformFlags |= TransformFlags.AssertES2017;
         }
 
