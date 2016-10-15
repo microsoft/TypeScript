@@ -4,7 +4,7 @@
 /*@internal*/
 namespace ts {
 
-    const enum ES6SubstitutionFlags {
+    const enum ES2015SubstitutionFlags {
         /** Enables substitutions for captured `this` */
         CapturedThis = 1 << 0,
         /** Enables substitutions for block-scoped bindings. */
@@ -163,7 +163,7 @@ namespace ts {
         ReplaceWithReturn,
     }
 
-    export function transformES6(context: TransformationContext) {
+    export function transformES2015(context: TransformationContext) {
         const {
             startLexicalEnvironment,
             endLexicalEnvironment,
@@ -197,7 +197,7 @@ namespace ts {
          * They are persisted between each SourceFile transformation and should not
          * be reset.
          */
-        let enabledSubstitutions: ES6SubstitutionFlags;
+        let enabledSubstitutions: ES2015SubstitutionFlags;
 
         return transformSourceFile;
 
@@ -252,7 +252,7 @@ namespace ts {
         }
 
         function shouldCheckNode(node: Node): boolean {
-            return (node.transformFlags & TransformFlags.ES6) !== 0 ||
+            return (node.transformFlags & TransformFlags.ES2015) !== 0 ||
                 node.kind === SyntaxKind.LabeledStatement ||
                 (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node));
         }
@@ -261,7 +261,7 @@ namespace ts {
             if (shouldCheckNode(node)) {
                 return visitJavaScript(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsES6) {
+            else if (node.transformFlags & TransformFlags.ContainsES2015) {
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -681,6 +681,7 @@ namespace ts {
 
             const extendsClauseElement = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
+                /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -1511,6 +1512,7 @@ namespace ts {
 
             const expression = setOriginalNode(
                 createFunctionExpression(
+                    /*modifiers*/ undefined,
                     node.asteriskToken,
                     name,
                     /*typeParameters*/ undefined,
@@ -2242,6 +2244,7 @@ namespace ts {
                                 /*type*/ undefined,
                                 setEmitFlags(
                                     createFunctionExpression(
+                                        /*modifiers*/ undefined,
                                         isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
                                         /*name*/ undefined,
                                         /*typeParameters*/ undefined,
@@ -3036,7 +3039,7 @@ namespace ts {
         function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
             const savedEnclosingFunction = enclosingFunction;
 
-            if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, keep track of the enclosing function.
                 enclosingFunction = node;
             }
@@ -3051,8 +3054,8 @@ namespace ts {
          * contains block-scoped bindings (e.g. `let` or `const`).
          */
         function enableSubstitutionsForBlockScopedBindings() {
-            if ((enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) === 0) {
-                enabledSubstitutions |= ES6SubstitutionFlags.BlockScopedBindings;
+            if ((enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) === 0) {
+                enabledSubstitutions |= ES2015SubstitutionFlags.BlockScopedBindings;
                 context.enableSubstitution(SyntaxKind.Identifier);
             }
         }
@@ -3062,8 +3065,8 @@ namespace ts {
          * contains a captured `this`.
          */
         function enableSubstitutionsForCapturedThis() {
-            if ((enabledSubstitutions & ES6SubstitutionFlags.CapturedThis) === 0) {
-                enabledSubstitutions |= ES6SubstitutionFlags.CapturedThis;
+            if ((enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis) === 0) {
+                enabledSubstitutions |= ES2015SubstitutionFlags.CapturedThis;
                 context.enableSubstitution(SyntaxKind.ThisKeyword);
                 context.enableEmitNotification(SyntaxKind.Constructor);
                 context.enableEmitNotification(SyntaxKind.MethodDeclaration);
@@ -3102,7 +3105,7 @@ namespace ts {
         function substituteIdentifier(node: Identifier) {
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
-            if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
                 const original = getParseTreeNode(node, isIdentifier);
                 if (original && isNameOfDeclarationWithCollidingName(original)) {
                     return getGeneratedNameForNode(original);
@@ -3155,7 +3158,7 @@ namespace ts {
          * @param node An Identifier node.
          */
         function substituteExpressionIdentifier(node: Identifier): Identifier {
-            if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
                 const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
                 if (declaration) {
                     return getGeneratedNameForNode(declaration.name);
@@ -3171,7 +3174,7 @@ namespace ts {
          * @param node The ThisKeyword node.
          */
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
-            if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis
+            if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
                 && enclosingFunction
                 && getEmitFlags(enclosingFunction) & EmitFlags.CapturesThis) {
                 return createIdentifier("_this", /*location*/ node);

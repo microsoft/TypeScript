@@ -135,7 +135,7 @@ namespace ts.projectSystem {
     }
 
     export class TestServerEventManager {
-        private events: server.ProjectServiceEvent[] = [];
+        public events: server.ProjectServiceEvent[] = [];
 
         handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
             this.events.push(event);
@@ -2286,6 +2286,14 @@ namespace ts.projectSystem {
             const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
+
+            for (const event of serverEventManager.events) {
+                if (event.eventName === "configFileDiag") {
+                    assert.equal(event.data.configFileName, configFile.path);
+                    assert.equal(event.data.triggerFile, file.path);
+                    return;
+                }
+            }
         });
 
         it("are generated when the config file doesn't have errors", () => {

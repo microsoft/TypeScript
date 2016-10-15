@@ -268,11 +268,31 @@ namespace ts {
         if (array) {
             result = [];
             for (let i = 0; i < array.length; i++) {
-                const v = array[i];
-                result.push(f(v, i));
+                result.push(f(array[i], i));
             }
         }
         return result;
+    }
+
+    // Maps from T to T and avoids allocation if all elements map to themselves
+    export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                if (result) {
+                    result.push(f(array[i], i));
+                }
+                else {
+                    const item = array[i];
+                    const mapped = f(item, i);
+                    if (item !== mapped) {
+                        result = array.slice(0, i);
+                        result.push(mapped);
+                    }
+                }
+            }
+        }
+        return result || array;
     }
 
     /**
@@ -400,6 +420,17 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    export function some<T>(array: T[], predicate?: (value: T) => boolean): boolean {
+        if (array) {
+            for (const v of array) {
+                if (!predicate || predicate(v)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
@@ -1181,7 +1212,7 @@ namespace ts {
 
     /**
      * Returns the path except for its basename. Eg:
-     * 
+     *
      * /path/to/file.ext -> /path/to
      */
     export function getDirectoryPath(path: Path): Path;
@@ -1207,7 +1238,7 @@ namespace ts {
     export function getEmitModuleKind(compilerOptions: CompilerOptions) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
-            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
+            getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
     }
 
     /* @internal */
