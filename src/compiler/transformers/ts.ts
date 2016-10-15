@@ -286,7 +286,6 @@ namespace ts {
                     // TypeScript property declarations are elided.
 
                 case SyntaxKind.Constructor:
-                    // TypeScript constructors are transformed in `visitClassDeclaration`.
                     return visitConstructor(<ConstructorDeclaration>node);
 
                 case SyntaxKind.InterfaceDeclaration:
