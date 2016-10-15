@@ -1,0 +1,94 @@
+=== tests/cases/compiler/transformsElideNullUndefinedType.ts ===
+
+var v0: null;
+>v0 : null
+>null : null
+
+var v1: undefined;
+>v1 : undefined
+
+function f0(): null { return null; }
+>f0 : () => null
+>null : null
+>null : null
+
+function f1(): undefined { return undefined; }
+>f1 : () => undefined
+>undefined : undefined
+
+var f2 = function (): null { return null; }
+>f2 : () => null
+>function (): null { return null; } : () => null
+>null : null
+>null : null
+
+var f3 = function (): undefined { return undefined; }
+>f3 : () => undefined
+>function (): undefined { return undefined; } : () => undefined
+>undefined : undefined
+
+var f4 = (): null => null;
+>f4 : () => null
+>(): null => null : () => null
+>null : null
+>null : null
+
+var f5 = (): undefined => undefined;
+>f5 : () => undefined
+>(): undefined => undefined : () => undefined
+>undefined : undefined
+
+function f6(p0: null) { }
+>f6 : (p0: null) => void
+>p0 : null
+>null : null
+
+function f7(p1: undefined) { }
+>f7 : (p1: undefined) => void
+>p1 : undefined
+
+class C<T> {
+>C : C<T>
+>T : T
+
+    m0(): null { return null; }
+>m0 : () => null
+>null : null
+>null : null
+
+    m1(): undefined { return undefined; }
+>m1 : () => undefined
+>undefined : undefined
+
+    get a0(): null { return null; }
+>a0 : null
+>null : null
+>null : null
+
+    get a1(): undefined { return undefined; }
+>a1 : undefined
+>undefined : undefined
+}
+
+declare function fn<T>();
+>fn : <T>() => any
+>T : T
+
+fn<null>();
+>fn<null>() : any
+>fn : <T>() => any
+>null : null
+
+fn<undefined>();
+>fn<undefined>() : any
+>fn : <T>() => any
+
+new C<null>();
+>new C<null>() : C<null>
+>C : typeof C
+>null : null
+
+new C<undefined>();
+>new C<undefined>() : C<undefined>
+>C : typeof C
+

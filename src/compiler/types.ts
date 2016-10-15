@@ -456,6 +456,8 @@ namespace ts {
         // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
         ParameterPropertyModifier = AccessibilityModifier | Readonly,
         NonPublicAccessibilityModifier = Private | Protected,
+
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Async | Const
     }
 
     export const enum JsxFlags {

@@ -1,0 +1,72 @@
+=== tests/cases/compiler/transformsElideNullUndefinedType.ts ===
+
+var v0: null;
+>v0 : Symbol(v0, Decl(transformsElideNullUndefinedType.ts, 1, 3))
+
+var v1: undefined;
+>v1 : Symbol(v1, Decl(transformsElideNullUndefinedType.ts, 2, 3))
+
+function f0(): null { return null; }
+>f0 : Symbol(f0, Decl(transformsElideNullUndefinedType.ts, 2, 18))
+
+function f1(): undefined { return undefined; }
+>f1 : Symbol(f1, Decl(transformsElideNullUndefinedType.ts, 4, 36))
+>undefined : Symbol(undefined)
+
+var f2 = function (): null { return null; }
+>f2 : Symbol(f2, Decl(transformsElideNullUndefinedType.ts, 7, 3))
+
+var f3 = function (): undefined { return undefined; }
+>f3 : Symbol(f3, Decl(transformsElideNullUndefinedType.ts, 8, 3))
+>undefined : Symbol(undefined)
+
+var f4 = (): null => null;
+>f4 : Symbol(f4, Decl(transformsElideNullUndefinedType.ts, 10, 3))
+
+var f5 = (): undefined => undefined;
+>f5 : Symbol(f5, Decl(transformsElideNullUndefinedType.ts, 11, 3))
+>undefined : Symbol(undefined)
+
+function f6(p0: null) { }
+>f6 : Symbol(f6, Decl(transformsElideNullUndefinedType.ts, 11, 36))
+>p0 : Symbol(p0, Decl(transformsElideNullUndefinedType.ts, 13, 12))
+
+function f7(p1: undefined) { }
+>f7 : Symbol(f7, Decl(transformsElideNullUndefinedType.ts, 13, 25))
+>p1 : Symbol(p1, Decl(transformsElideNullUndefinedType.ts, 14, 12))
+
+class C<T> {
+>C : Symbol(C, Decl(transformsElideNullUndefinedType.ts, 14, 30))
+>T : Symbol(T, Decl(transformsElideNullUndefinedType.ts, 16, 8))
+
+    m0(): null { return null; }
+>m0 : Symbol(C.m0, Decl(transformsElideNullUndefinedType.ts, 16, 12))
+
+    m1(): undefined { return undefined; }
+>m1 : Symbol(C.m1, Decl(transformsElideNullUndefinedType.ts, 17, 31))
+>undefined : Symbol(undefined)
+
+    get a0(): null { return null; }
+>a0 : Symbol(C.a0, Decl(transformsElideNullUndefinedType.ts, 18, 41))
+
+    get a1(): undefined { return undefined; }
+>a1 : Symbol(C.a1, Decl(transformsElideNullUndefinedType.ts, 20, 35))
+>undefined : Symbol(undefined)
+}
+
+declare function fn<T>();
+>fn : Symbol(fn, Decl(transformsElideNullUndefinedType.ts, 22, 1))
+>T : Symbol(T, Decl(transformsElideNullUndefinedType.ts, 24, 20))
+
+fn<null>();
+>fn : Symbol(fn, Decl(transformsElideNullUndefinedType.ts, 22, 1))
+
+fn<undefined>();
+>fn : Symbol(fn, Decl(transformsElideNullUndefinedType.ts, 22, 1))
+
+new C<null>();
+>C : Symbol(C, Decl(transformsElideNullUndefinedType.ts, 14, 30))
+
+new C<undefined>();
+>C : Symbol(C, Decl(transformsElideNullUndefinedType.ts, 14, 30))
+

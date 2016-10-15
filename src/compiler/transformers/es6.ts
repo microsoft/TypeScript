@@ -1416,6 +1416,7 @@ namespace ts {
             if (getAccessor) {
                 const getterFunction = transformFunctionLikeToExpression(getAccessor, /*location*/ undefined, /*name*/ undefined);
                 setSourceMapRange(getterFunction, getSourceMapRange(getAccessor));
+                setEmitFlags(getterFunction, EmitFlags.NoLeadingComments);
                 const getter = createPropertyAssignment("get", getterFunction);
                 setCommentRange(getter, getCommentRange(getAccessor));
                 properties.push(getter);
@@ -1424,6 +1425,7 @@ namespace ts {
             if (setAccessor) {
                 const setterFunction = transformFunctionLikeToExpression(setAccessor, /*location*/ undefined, /*name*/ undefined);
                 setSourceMapRange(setterFunction, getSourceMapRange(setAccessor));
+                setEmitFlags(setterFunction, EmitFlags.NoLeadingComments);
                 const setter = createPropertyAssignment("set", setterFunction);
                 setCommentRange(setter, getCommentRange(setAccessor));
                 properties.push(setter);
