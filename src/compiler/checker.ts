@@ -13922,6 +13922,50 @@ namespace ts {
             }
         }
 
+        // Static members may conflict with non-configurable non-writable built-in Function.prototype properties 
+        // see https://github.com/microsoft/typescript/issues/442.
+        function checkClassForStaticPropertyNameConflicts(node: ClassLikeDeclaration) { 
+            const es5_descriptors: PropertyDescriptorMap = {
+                // see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.3
+                // see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.5
+                "name":      {configurable: false, writable: false},
+                "length":    {configurable: false, writable: false},
+                "prototype": {configurable: false, writable: false},
+
+                // see https://github.com/microsoft/typescript/issues/442
+                "caller":    {configurable: false, writable: false},
+                "arguments": {configurable: false, writable: false}
+            }; 
+            const post_es5_descriptors: PropertyDescriptorMap = {
+                // see http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-the-function-constructor
+                // see http://www.ecma-international.org/ecma-262/6.0/#sec-function-instances
+                "name":      {configurable: true,  writable: false},
+                "length":    {configurable: true,  writable: false},
+                "prototype": {configurable: false, writable: false},
+                "caller":    {configurable: false, writable: false},
+                "arguments": {configurable: false, writable: false}
+            };
+            const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
+            const className = getSymbolOfNode(node).name;
+            
+            for (let member of node.members) {
+                let isStatic = forEach(member.modifiers, (m:Modifier) => m.kind === SyntaxKind.StaticKeyword);
+                if (isStatic) {
+                    let memberNameNode = member.name;
+                    let memberName = getPropertyNameForPropertyNameNode(memberNameNode);
+                    let descriptor: PropertyDescriptor = null;
+                    if (languageVersion <= ScriptTarget.ES5) {
+                        descriptor = es5_descriptors.hasOwnProperty(memberName) ? es5_descriptors[memberName] : null;
+                    } else if (languageVersion > ScriptTarget.ES5) {
+                        descriptor = post_es5_descriptors.hasOwnProperty(memberName) ? post_es5_descriptors[memberName] : null;                           
+                    }
+                    if (descriptor && descriptor.configurable === false && descriptor.writable === false) { 
+                        error(memberNameNode, message, memberName, className);
+                    }
+                }
+            }
+        }
+
         function checkObjectTypeForDuplicateDeclarations(node: TypeLiteralNode | InterfaceDeclaration) {
             const names = createMap<boolean>();
             for (const member of node.members) {
@@ -16423,6 +16467,7 @@ namespace ts {
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
             checkTypeParameterListsIdentical(node, symbol);
             checkClassForDuplicateDeclarations(node);
+            checkClassForStaticPropertyNameConflicts(node);
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {

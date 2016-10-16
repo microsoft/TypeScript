@@ -1,4 +1,4 @@
-// @target: es6
+//// [staticPropertyNameConflictsEs6.ts]
 
 
 class StaticName {
@@ -53,4 +53,37 @@ class StaticArguments {
 class StaticArgumentsFn {
     static arguments() {} // // error
     arguments() {} // ok
+}
+
+
+//// [staticPropertyNameConflictsEs6.js]
+class StaticName {
+}
+class StaticNameFn {
+    static name() { } // ok
+    name() { } // ok
+}
+class StaticLength {
+}
+class StaticLengthFn {
+    static length() { } // ok
+    length() { } // ok
+}
+class StaticPrototype {
+}
+class StaticPrototypeFn {
+    static prototype() { } // error
+    prototype() { } // ok
+}
+class StaticCaller {
+}
+class StaticCallerFn {
+    static caller() { } // // error
+    caller() { } // ok
+}
+class StaticArguments {
+}
+class StaticArgumentsFn {
+    static arguments() { } // // error
+    arguments() { } // ok
 }
