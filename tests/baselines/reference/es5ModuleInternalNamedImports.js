@@ -29,7 +29,11 @@ export module M {
     export {M_F as f};
     export {M_E as e};
     export {M_A as a};
+    import * as M2 from "M2";
+    import M4 from "M4";
+    export import M5 = require("M5");
 }
+import M3 from "M3";
 
 
 //// [es5ModuleInternalNamedImports.js]
@@ -60,6 +64,5 @@ define(["require", "exports"], function (require, exports) {
         var M_E = M.M_E;
         // alias
         M.M_A = M_M;
-        // Reexports
     })(M = exports.M || (exports.M = {}));
 });

@@ -79,6 +79,26 @@ interface ArrayConstructor {
     from<T>(iterable: Iterable<T>): Array<T>;
 }
 
+interface ReadonlyArray<T> {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<T>;
+
+    /** 
+      * Returns an array of key, value pairs for every entry in the array
+      */
+    entries(): IterableIterator<[number, T]>;
+
+    /** 
+      * Returns an list of keys in the array
+      */
+    keys(): IterableIterator<number>;
+
+    /** 
+      * Returns an list of values in the array
+      */
+    values(): IterableIterator<T>;
+}
+
 interface IArguments {
     /** Iterator */
     [Symbol.iterator](): IterableIterator<any>;

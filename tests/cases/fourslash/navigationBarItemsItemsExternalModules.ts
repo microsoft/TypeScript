@@ -4,6 +4,25 @@
 ////    public s: string;
 ////}
 
+verify.navigationTree({
+    "text": "\"navigationBarItemsItemsExternalModules\"",
+    "kind": "module",
+    "childItems": [
+        {
+            "text": "Bar",
+            "kind": "class",
+            "kindModifiers": "export",
+            "childItems": [
+                {
+                    "text": "s",
+                    "kind": "property",
+                    "kindModifiers": "public"
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "\"navigationBarItemsItemsExternalModules\"",

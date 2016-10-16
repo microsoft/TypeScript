@@ -29,8 +29,9 @@ var Super = (function () {
 var Sub = (function (_super) {
     __extends(Sub, _super);
     function Sub(options) {
-        _super.call(this, options.value);
-        this.options = options;
+        var _this = _super.call(this, options.value) || this;
+        _this.options = options;
+        return _this;
     }
     return Sub;
 }(Super));

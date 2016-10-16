@@ -1,0 +1,7 @@
+=== tests/cases/conformance/async/es2017/asyncArrowFunction/arrowFunctionWithParameterNameAsync_es2017.ts ===
+
+const x = async => async;
+>x : Symbol(x, Decl(arrowFunctionWithParameterNameAsync_es2017.ts, 1, 5))
+>async : Symbol(async, Decl(arrowFunctionWithParameterNameAsync_es2017.ts, 1, 9))
+>async : Symbol(async, Decl(arrowFunctionWithParameterNameAsync_es2017.ts, 1, 9))
+

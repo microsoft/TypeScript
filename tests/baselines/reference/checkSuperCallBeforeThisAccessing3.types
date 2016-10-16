@@ -18,11 +18,11 @@ class Derived extends Based {
 
             constructor() {
                 this.y = true;
->this.y = true : boolean
+>this.y = true : true
 >this.y : boolean
 >this : this
 >y : boolean
->true : boolean
+>true : true
             }
         }
         super();
@@ -30,11 +30,11 @@ class Derived extends Based {
 >super : typeof Based
 
         this.x = 10;
->this.x = 10 : number
+>this.x = 10 : 10
 >this.x : number
 >this : this
 >x : number
->10 : number
+>10 : 10
 
         var that = this;
 >that : this

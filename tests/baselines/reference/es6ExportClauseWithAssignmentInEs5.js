@@ -25,7 +25,7 @@ exports.foo = foo = 3;
 var baz = 3;
 exports.baz = baz;
 exports.quux = baz;
-exports.baz = exports.quux = baz = 4;
+exports.quux = exports.baz = baz = 4;
 var buzz = 10;
 exports.buzz = buzz;
 exports.buzz = buzz += 3;

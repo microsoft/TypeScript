@@ -7,13 +7,13 @@ function a(x: string | number | boolean) {
 >x : string | number | boolean
 
     x = true;
->x = true : boolean
+>x = true : true
 >x : string | number | boolean
->true : boolean
+>true : true
 
     do {
         x; // boolean | string
->x : string | boolean
+>x : string | true
 
         x = undefined;
 >x = undefined : undefined
@@ -34,13 +34,13 @@ function b(x: string | number | boolean) {
 >x : string | number | boolean
 
     x = true;
->x = true : boolean
+>x = true : true
 >x : string | number | boolean
->true : boolean
+>true : true
 
     do {
         x; // boolean | string
->x : string | boolean
+>x : string | true
 
         if (cond) continue;
 >cond : boolean
@@ -64,9 +64,9 @@ function c(x: string | number) {
 >x : string | number
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
 
     do {
         x; // string

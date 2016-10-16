@@ -9,44 +9,12 @@ export class Rule extends Lint.Rules.AbstractRule {
     }
 }
 
-function isBindingPattern(node: ts.Node): node is ts.BindingPattern {
-    return !!node && (node.kind === ts.SyntaxKind.ArrayBindingPattern || node.kind === ts.SyntaxKind.ObjectBindingPattern);
-}
-
-function walkUpBindingElementsAndPatterns(node: ts.Node): ts.Node {
-    while (node && (node.kind === ts.SyntaxKind.BindingElement || isBindingPattern(node))) {
-        node = node.parent;
-    }
-
-    return node;
-}
-
-function getCombinedNodeFlags(node: ts.Node): ts.NodeFlags {
-    node = walkUpBindingElementsAndPatterns(node);
-
-    let flags = node.flags;
-    if (node.kind === ts.SyntaxKind.VariableDeclaration) {
-        node = node.parent;
-    }
-
-    if (node && node.kind === ts.SyntaxKind.VariableDeclarationList) {
-        flags |= node.flags;
-        node = node.parent;
-    }
-
-    if (node && node.kind === ts.SyntaxKind.VariableStatement) {
-        flags |= node.flags;
-    }
-
-    return flags;
-}
-
 function isLet(node: ts.Node) {
-    return !!(getCombinedNodeFlags(node) & ts.NodeFlags.Let);
+    return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Let);
 }
 
 function isExported(node: ts.Node) {
-    return !!(getCombinedNodeFlags(node) & ts.NodeFlags.Export);
+    return !!(ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export);
 }
 
 function isAssignmentOperator(token: ts.SyntaxKind): boolean {
@@ -125,11 +93,16 @@ class PreferConstWalker extends Lint.RuleWalker {
 
     private visitBindingPatternIdentifiers(pattern: ts.BindingPattern) {
         for (const element of pattern.elements) {
-            if (element.name.kind === ts.SyntaxKind.Identifier) {
-                this.markAssignment(element.name as ts.Identifier);
+            if (element.kind !== ts.SyntaxKind.BindingElement) {
+                continue;
+            }
+
+            const name = (<ts.BindingElement>element).name;
+            if (name.kind === ts.SyntaxKind.Identifier) {
+                this.markAssignment(name as ts.Identifier);
             }
             else {
-                this.visitBindingPatternIdentifiers(element.name as ts.BindingPattern);
+                this.visitBindingPatternIdentifiers(name as ts.BindingPattern);
             }
         }
     }
@@ -153,7 +126,7 @@ class PreferConstWalker extends Lint.RuleWalker {
     visitModuleDeclaration(node: ts.ModuleDeclaration) {
         if (node.body.kind === ts.SyntaxKind.ModuleBlock) {
             // For some reason module blocks are left out of the visit block traversal
-            this.visitBlock(node.body as ts.ModuleBlock);
+            this.visitBlock(node.body as any as ts.Block);
         }
         super.visitModuleDeclaration(node);
     }
@@ -223,7 +196,9 @@ class PreferConstWalker extends Lint.RuleWalker {
 
     private collectBindingPatternIdentifiers(value: ts.VariableDeclaration, pattern: ts.BindingPattern, table: ts.MapLike<DeclarationUsages>) {
         for (const element of pattern.elements) {
-            this.collectNameIdentifiers(value, element.name, table);
+            if (element.kind === ts.SyntaxKind.BindingElement) {
+                this.collectNameIdentifiers(value, (<ts.BindingElement>element).name, table);
+            }
         }
     }
 }

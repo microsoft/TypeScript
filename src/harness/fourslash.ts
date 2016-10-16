@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,6 +86,10 @@ namespace FourSlash {
 
     interface RangeLocationInformation extends LocationInformation {
         marker?: Marker;
+    }
+
+    interface ImplementationLocationInformation extends ts.ImplementationLocation {
+        matched?: boolean;
     }
 
     export interface TextSpan {
@@ -202,9 +206,27 @@ namespace FourSlash {
         // Whether or not we should format on keystrokes
         public enableFormatting = true;
 
-        public formatCodeOptions: ts.FormatCodeOptions;
+        public formatCodeSettings: ts.FormatCodeSettings;
 
         private inputFiles = ts.createMap<string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
+
+        private static getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[]) {
+            let result = "";
+            ts.forEach(displayParts, part => {
+                if (result) {
+                    result += ",\n    ";
+                }
+                else {
+                    result = "[\n    ";
+                }
+                result += JSON.stringify(part);
+            });
+            if (result) {
+                result += "\n]";
+            }
+
+            return result;
+        }
 
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
@@ -245,15 +267,8 @@ namespace FourSlash {
         constructor(private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
-            const compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
-            if (compilationOptions.typeRoots) {
-                compilationOptions.typeRoots = compilationOptions.typeRoots.map(p => ts.getNormalizedAbsolutePath(p, this.basePath));
-            }
+            let compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
             compilationOptions.skipDefaultLibCheck = true;
-
-            const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
-            this.languageServiceAdapterHost = languageServiceAdapter.getHost();
-            this.languageService = languageServiceAdapter.getLanguageService();
 
             // Initialize the language service with all the scripts
             let startResolveFileRef: FourSlashFile;
@@ -261,6 +276,22 @@ namespace FourSlash {
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles[file.fileName] = file.content;
+
+                if (ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json") {
+                    const configJson = ts.parseConfigFileTextToJson(file.fileName, file.content);
+                    assert.isTrue(configJson.config !== undefined);
+
+                    // Extend our existing compiler options so that we can also support tsconfig only options
+                    if (configJson.config.compilerOptions) {
+                        const baseDirectory = ts.normalizePath(ts.getDirectoryPath(file.fileName));
+                        const tsConfig = ts.convertCompilerOptionsFromJson(configJson.config.compilerOptions, baseDirectory, file.fileName);
+
+                        if (!tsConfig.errors || !tsConfig.errors.length) {
+                            compilationOptions = ts.extend(compilationOptions, tsConfig.options);
+                        }
+                    }
+                }
+
                 if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
                     startResolveFileRef = file;
                 }
@@ -269,6 +300,15 @@ namespace FourSlash {
                     throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
                 }
             });
+
+
+            if (compilationOptions.typeRoots) {
+                compilationOptions.typeRoots = compilationOptions.typeRoots.map(p => ts.getNormalizedAbsolutePath(p, this.basePath));
+            }
+
+            const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
+            this.languageServiceAdapterHost = languageServiceAdapter.getHost();
+            this.languageService = languageServiceAdapter.getLanguageService();
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost
@@ -310,24 +350,26 @@ namespace FourSlash {
                     Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
             }
 
-            this.formatCodeOptions = {
-                BaseIndentSize: 0,
-                IndentSize: 4,
-                TabSize: 4,
-                NewLineCharacter: Harness.IO.newLine(),
-                ConvertTabsToSpaces: true,
-                IndentStyle: ts.IndentStyle.Smart,
-                InsertSpaceAfterCommaDelimiter: true,
-                InsertSpaceAfterSemicolonInForStatements: true,
-                InsertSpaceBeforeAndAfterBinaryOperators: true,
-                InsertSpaceAfterKeywordsInControlFlowStatements: true,
-                InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-                InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-                InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-                PlaceOpenBraceOnNewLineForFunctions: false,
-                PlaceOpenBraceOnNewLineForControlBlocks: false,
+            this.formatCodeSettings = {
+                baseIndentSize: 0,
+                indentSize: 4,
+                tabSize: 4,
+                newLineCharacter: Harness.IO.newLine(),
+                convertTabsToSpaces: true,
+                indentStyle: ts.IndentStyle.Smart,
+                insertSpaceAfterCommaDelimiter: true,
+                insertSpaceAfterSemicolonInForStatements: true,
+                insertSpaceBeforeAndAfterBinaryOperators: true,
+                insertSpaceAfterKeywordsInControlFlowStatements: true,
+                insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
+                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+                insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+                insertSpaceAfterTypeAssertion: false,
+                placeOpenBraceOnNewLineForFunctions: false,
+                placeOpenBraceOnNewLineForControlBlocks: false,
             };
 
             // Open the first file by default
@@ -385,7 +427,7 @@ namespace FourSlash {
 
             if (exists !== negative) {
                 this.printErrorLog(negative, this.getAllDiagnostics());
-                throw new Error("Failure between markers: " + startMarkerName + ", " + endMarkerName);
+                throw new Error(`Failure between markers: '${startMarkerName}', '${endMarkerName}'`);
             }
         }
 
@@ -504,6 +546,67 @@ namespace FourSlash {
             const evaluation = new Function(`${emit.outputFiles[0].text};\r\nreturn (${expr});`)();
             if (evaluation !== value) {
                 this.raiseError(`Expected evaluation of expression "${expr}" to equal "${value}", but got "${evaluation}"`);
+            }
+        }
+
+        public verifyGoToDefinitionIs(endMarker: string | string[]) {
+            this.verifyGoToDefinitionWorker(endMarker instanceof Array ? endMarker : [endMarker]);
+        }
+
+        public verifyGoToDefinition(arg0: any, endMarkerNames?: string | string[]) {
+            if (endMarkerNames) {
+                this.verifyGoToDefinitionPlain(arg0, endMarkerNames);
+            }
+            else if (arg0 instanceof Array) {
+                const pairs: [string | string[], string | string[]][] = arg0;
+                for (const [start, end] of pairs) {
+                    this.verifyGoToDefinitionPlain(start, end);
+                }
+            }
+            else {
+                const obj: { [startMarkerName: string]: string | string[] } = arg0;
+                for (const startMarkerName in obj) {
+                    if (ts.hasProperty(obj, startMarkerName)) {
+                        this.verifyGoToDefinitionPlain(startMarkerName, obj[startMarkerName]);
+                    }
+                }
+            }
+        }
+
+        private verifyGoToDefinitionPlain(startMarkerNames: string | string[], endMarkerNames: string | string[]) {
+            if (startMarkerNames instanceof Array) {
+                for (const start of startMarkerNames) {
+                    this.verifyGoToDefinitionSingle(start, endMarkerNames);
+                }
+            }
+            else {
+                this.verifyGoToDefinitionSingle(startMarkerNames, endMarkerNames);
+            }
+        }
+
+        public verifyGoToDefinitionForMarkers(markerNames: string[]) {
+            for (const markerName of markerNames) {
+                this.verifyGoToDefinitionSingle(`${markerName}Reference`, `${markerName}Definition`);
+            }
+        }
+
+        private verifyGoToDefinitionSingle(startMarkerName: string, endMarkerNames: string | string[]) {
+            this.goToMarker(startMarkerName);
+            this.verifyGoToDefinitionWorker(endMarkerNames instanceof Array ? endMarkerNames : [endMarkerNames]);
+        }
+
+        private verifyGoToDefinitionWorker(endMarkers: string[]) {
+            const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition) || [];
+
+            if (endMarkers.length !== definitions.length) {
+                this.raiseError(`goToDefinitions failed - expected to find ${endMarkers.length} definitions but got ${definitions.length}`);
+            }
+
+            for (let i = 0; i < endMarkers.length; i++) {
+                const marker = this.getMarkerByName(endMarkers[i]), definition = definitions[i];
+                if (marker.fileName !== definition.fileName || marker.position !== definition.textSpan.start) {
+                    this.raiseError(`goToDefinition failed for definition ${i}: expected ${marker.fileName} at ${marker.position}, got ${definition.fileName} at ${definition.textSpan.start}`);
+                }
             }
         }
 
@@ -639,7 +742,6 @@ namespace FourSlash {
             }
         }
 
-
         public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
             const completions = this.getCompletionListAtCaret();
 
@@ -651,10 +753,17 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
+        public verifyCompletionListIsGlobal(expected: boolean) {
+            const completions = this.getCompletionListAtCaret();
+            if (completions && completions.isGlobalCompletion !== expected) {
+                this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions.isGlobalCompletion}`);
+            }
+        }
+
+        public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
             const completions = this.getCompletionListAtCaret();
             if (completions) {
-                this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind);
+                this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind, spanIndex);
             }
             else {
                 this.raiseError(`No completions at position '${this.currentCaretPosition}' when looking for '${symbol}'.`);
@@ -670,25 +779,32 @@ namespace FourSlash {
          * @param expectedText the text associated with the symbol
          * @param expectedDocumentation the documentation text associated with the symbol
          * @param expectedKind the kind of symbol (see ScriptElementKind)
+         * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
-        public verifyCompletionListDoesNotContain(symbol: string, expectedText?: string, expectedDocumentation?: string, expectedKind?: string) {
+        public verifyCompletionListDoesNotContain(symbol: string, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number) {
             const that = this;
+            let replacementSpan: ts.TextSpan;
+            if (spanIndex !== undefined) {
+                replacementSpan = this.getTextSpanForRangeAtIndex(spanIndex);
+            }
+
             function filterByTextOrDocumentation(entry: ts.CompletionEntry) {
                 const details = that.getCompletionEntryDetails(entry.name);
                 const documentation = ts.displayPartsToString(details.documentation);
                 const text = ts.displayPartsToString(details.displayParts);
-                if (expectedText && expectedDocumentation) {
-                    return (documentation === expectedDocumentation && text === expectedText) ? true : false;
+
+                // If any of the expected values are undefined, assume that users don't
+                // care about them.
+                if (replacementSpan && !TestState.textSpansEqual(replacementSpan, entry.replacementSpan)) {
+                    return false;
                 }
-                else if (expectedText && !expectedDocumentation) {
-                    return text === expectedText ? true : false;
+                else if (expectedText && text !== expectedText) {
+                    return false;
                 }
-                else if (expectedDocumentation && !expectedText) {
-                    return documentation === expectedDocumentation ? true : false;
+                else if (expectedDocumentation && documentation !== expectedDocumentation) {
+                    return false;
                 }
-                // Because expectedText and expectedDocumentation are undefined, we assume that
-                // users don"t care to compare them so we will treat that entry as if the entry has matching text and documentation
-                // and keep it in the list of filtered entry.
+
                 return true;
             }
 
@@ -711,6 +827,10 @@ namespace FourSlash {
                     }
                     if (expectedKind) {
                         error += "Expected kind: " + expectedKind + " to equal: " + filterCompletions[0].kind + ".";
+                    }
+                    if (replacementSpan) {
+                        const spanText = filterCompletions[0].replacementSpan ? stringify(filterCompletions[0].replacementSpan) : undefined;
+                        error += "Expected replacement span: " + stringify(replacementSpan) + " to equal: " + spanText + ".";
                     }
                     this.raiseError(error);
                 }
@@ -777,6 +897,20 @@ namespace FourSlash {
             ts.forEachProperty(this.rangesByText(), ranges => this.verifyRangesReferenceEachOther(ranges));
         }
 
+        public verifyDisplayPartsOfReferencedSymbol(expected: ts.SymbolDisplayPart[]) {
+            const referencedSymbols = this.findReferencesAtCaret();
+
+            if (referencedSymbols.length === 0) {
+                this.raiseError("No referenced symbols found at current caret position");
+            }
+            else if (referencedSymbols.length > 1) {
+                this.raiseError("More than one referenced symbol found");
+            }
+
+            assert.equal(TestState.getDisplayPartsJson(referencedSymbols[0].definition.displayParts),
+                TestState.getDisplayPartsJson(expected), this.messageAtLastKnownMarker("referenced symbol definition display parts"));
+        }
+
         private verifyReferencesWorker(references: ts.ReferenceEntry[], fileName: string, start: number, end: number, isWriteAccess?: boolean, isDefinition?: boolean) {
             for (let i = 0; i < references.length; i++) {
                 const reference = references[i];
@@ -811,6 +945,10 @@ namespace FourSlash {
             return this.languageService.getReferencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
+        private findReferencesAtCaret() {
+            return this.languageService.findReferences(this.activeFile.fileName, this.currentCaretPosition);
+        }
+
         public getSyntacticDiagnostics(expected: string) {
             const diagnostics = this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
             this.testDiagnostics(expected, diagnostics);
@@ -827,59 +965,47 @@ namespace FourSlash {
             assert.equal(actual, expected);
         }
 
-        public verifyQuickInfoString(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
+        public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
+            this.goToMarker(markerName);
+            this.verifyQuickInfoString(expectedText, expectedDocumentation);
+        }
+
+        public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
+            ts.forEachProperty(ts.createMap(namesAndTexts), (text, name) => {
+                if (text instanceof Array) {
+                    assert(text.length === 2);
+                    const [expectedText, expectedDocumentation] = text;
+                    this.verifyQuickInfoAt(name, expectedText, expectedDocumentation);
+                }
+                else {
+                    this.verifyQuickInfoAt(name, text);
+                }
+            });
+        }
+
+        public verifyQuickInfoString(expectedText: string, expectedDocumentation?: string) {
+            if (expectedDocumentation === "") {
+                throw new Error("Use 'undefined' instead");
+            }
+
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             const actualQuickInfoText = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.displayParts) : "";
             const actualQuickInfoDocumentation = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.documentation) : "";
 
-            if (negative) {
-                if (expectedText !== undefined) {
-                    assert.notEqual(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
-                }
-                // TODO: should be '==='?
-                if (expectedDocumentation != undefined) {
-                    assert.notEqual(actualQuickInfoDocumentation, expectedDocumentation, this.messageAtLastKnownMarker("quick info doc comment"));
-                }
-            }
-            else {
-                if (expectedText !== undefined) {
-                    assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
-                }
-                // TODO: should be '==='?
-                if (expectedDocumentation != undefined) {
-                    assert.equal(actualQuickInfoDocumentation, expectedDocumentation, this.assertionMessageAtLastKnownMarker("quick info doc"));
-                }
-            }
+            assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
+            assert.equal(actualQuickInfoDocumentation, expectedDocumentation || "", this.assertionMessageAtLastKnownMarker("quick info doc"));
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
             displayParts: ts.SymbolDisplayPart[],
             documentation: ts.SymbolDisplayPart[]) {
 
-            function getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[]) {
-                let result = "";
-                ts.forEach(displayParts, part => {
-                    if (result) {
-                        result += ",\n    ";
-                    }
-                    else {
-                        result = "[\n    ";
-                    }
-                    result += JSON.stringify(part);
-                });
-                if (result) {
-                    result += "\n]";
-                }
-
-                return result;
-            }
-
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
             assert.equal(actualQuickInfo.kindModifiers, kindModifiers, this.messageAtLastKnownMarker("QuickInfo kindModifiers"));
             assert.equal(JSON.stringify(actualQuickInfo.textSpan), JSON.stringify(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
-            assert.equal(getDisplayPartsJson(actualQuickInfo.displayParts), getDisplayPartsJson(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
-            assert.equal(getDisplayPartsJson(actualQuickInfo.documentation), getDisplayPartsJson(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
+            assert.equal(TestState.getDisplayPartsJson(actualQuickInfo.displayParts), TestState.getDisplayPartsJson(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
+            assert.equal(TestState.getDisplayPartsJson(actualQuickInfo.documentation), TestState.getDisplayPartsJson(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
         }
 
         public verifyRenameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]) {
@@ -1185,6 +1311,22 @@ namespace FourSlash {
                 });
         }
 
+        public baselineQuickInfo() {
+            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            if (!baselineFile) {
+                baselineFile = ts.getBaseFileName(this.activeFile.fileName).replace(".ts", ".baseline");
+            }
+
+            Harness.Baseline.runBaseline(
+                baselineFile,
+                () => stringify(
+                    this.testData.markers.map(marker => ({
+                        marker,
+                        quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
+                    }))
+                ));
+        }
+
         public printBreakpointLocation(pos: number) {
             Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(pos, this.getBreakpointStatementLocation(pos), "  "));
         }
@@ -1292,7 +1434,7 @@ namespace FourSlash {
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
-                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
+                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                         // this.checkPostEditInvariants();
@@ -1330,7 +1472,7 @@ namespace FourSlash {
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
-                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
+                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                     }
@@ -1378,7 +1520,7 @@ namespace FourSlash {
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
-                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
+                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                     }
@@ -1402,7 +1544,7 @@ namespace FourSlash {
 
             // Handle formatting
             if (this.enableFormatting) {
-                const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeOptions);
+                const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeSettings);
                 if (edits.length) {
                     offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                 }
@@ -1468,37 +1610,37 @@ namespace FourSlash {
             if (isFormattingEdit) {
                 const newContent = this.getFileContent(fileName);
 
-                if (newContent.replace(/\s/g, "") !== oldContent.replace(/\s/g, "")) {
+                if (this.removeWhitespace(newContent) !== this.removeWhitespace(oldContent)) {
                     this.raiseError("Formatting operation destroyed non-whitespace content");
                 }
             }
             return runningOffset;
         }
 
-        public copyFormatOptions(): ts.FormatCodeOptions {
-            return ts.clone(this.formatCodeOptions);
+        public copyFormatOptions(): ts.FormatCodeSettings {
+            return ts.clone(this.formatCodeSettings);
         }
 
-        public setFormatOptions(formatCodeOptions: ts.FormatCodeOptions): ts.FormatCodeOptions {
-            const oldFormatCodeOptions = this.formatCodeOptions;
-            this.formatCodeOptions = formatCodeOptions;
+        public setFormatOptions(formatCodeOptions: ts.FormatCodeOptions | ts.FormatCodeSettings): ts.FormatCodeSettings {
+            const oldFormatCodeOptions = this.formatCodeSettings;
+            this.formatCodeSettings = ts.toEditorSettings(formatCodeOptions);
             return oldFormatCodeOptions;
         }
 
         public formatDocument() {
-            const edits = this.languageService.getFormattingEditsForDocument(this.activeFile.fileName, this.formatCodeOptions);
+            const edits = this.languageService.getFormattingEditsForDocument(this.activeFile.fileName, this.formatCodeSettings);
             this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
 
         public formatSelection(start: number, end: number) {
-            const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeOptions);
+            const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeSettings);
             this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
 
         public formatOnType(pos: number, key: string) {
-            const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeOptions);
+            const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeSettings);
             this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
@@ -1534,6 +1676,10 @@ namespace FourSlash {
             }
         }
 
+        private removeWhitespace(text: string): string {
+            return text.replace(/\s/g, "");
+        }
+
         public goToBOF() {
             this.goToPosition(0);
         }
@@ -1543,25 +1689,10 @@ namespace FourSlash {
             this.goToPosition(len);
         }
 
-        public goToDefinition(definitionIndex: number) {
-            const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-            if (!definitions || !definitions.length) {
-                this.raiseError("goToDefinition failed - expected to at least one definition location but got 0");
-            }
-
-            if (definitionIndex >= definitions.length) {
-                this.raiseError(`goToDefinition failed - definitionIndex value (${definitionIndex}) exceeds definition list size (${definitions.length})`);
-            }
-
-            const definition = definitions[definitionIndex];
-            this.openFile(definition.fileName);
-            this.currentCaretPosition = definition.textSpan.start;
-        }
-
         public goToTypeDefinition(definitionIndex: number) {
             const definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!definitions || !definitions.length) {
-                this.raiseError("goToTypeDefinition failed - expected to at least one definition location but got 0");
+                this.raiseError("goToTypeDefinition failed - expected to find at least one definition location but got 0");
             }
 
             if (definitionIndex >= definitions.length) {
@@ -1573,28 +1704,6 @@ namespace FourSlash {
             this.currentCaretPosition = definition.textSpan.start;
         }
 
-        public verifyDefinitionLocationExists(negative: boolean) {
-            const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-
-            const foundDefinitions = definitions && definitions.length;
-
-            if (foundDefinitions && negative) {
-                this.raiseError(`goToDefinition - expected to 0 definition locations but got ${definitions.length}`);
-            }
-            else if (!foundDefinitions && !negative) {
-                this.raiseError("goToDefinition - expected to at least one definition location but got 0");
-            }
-        }
-
-        public verifyDefinitionsCount(negative: boolean, expectedCount: number) {
-            const assertFn = negative ? assert.notEqual : assert.equal;
-
-            const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-            const actualCount = definitions && definitions.length || 0;
-
-            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
-        }
-
         public verifyTypeDefinitionsCount(negative: boolean, expectedCount: number) {
             const assertFn = negative ? assert.notEqual : assert.equal;
 
@@ -1604,23 +1713,108 @@ namespace FourSlash {
             assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Type definitions Count"));
         }
 
-        public verifyDefinitionsName(negative: boolean, expectedName: string, expectedContainerName: string) {
+        public verifyImplementationListIsEmpty(negative: boolean) {
+            const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+
+            if (negative) {
+                assert.isTrue(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
+            }
+            else {
+                assert.isUndefined(implementations, "Expected implementation list to be empty but implementations returned");
+            }
+        }
+
+        public verifyGoToDefinitionName(expectedName: string, expectedContainerName: string) {
             const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             const actualDefinitionName = definitions && definitions.length ? definitions[0].name : "";
             const actualDefinitionContainerName = definitions && definitions.length ? definitions[0].containerName : "";
-            if (negative) {
-                assert.notEqual(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
-                assert.notEqual(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
+            assert.equal(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
+            assert.equal(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
+        }
+
+        public goToImplementation() {
+            const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            if (!implementations || !implementations.length) {
+                this.raiseError("goToImplementation failed - expected to find at least one implementation location but got 0");
             }
-            else {
-                assert.equal(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
-                assert.equal(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
+            if (implementations.length > 1) {
+                this.raiseError(`goToImplementation failed - more than 1 implementation returned (${implementations.length})`);
+            }
+
+            const implementation = implementations[0];
+            this.openFile(implementation.fileName);
+            this.currentCaretPosition = implementation.textSpan.start;
+        }
+
+        public verifyRangesInImplementationList(markerName: string) {
+            this.goToMarker(markerName);
+            const implementations: ImplementationLocationInformation[] = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            if (!implementations || !implementations.length) {
+                this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
+            }
+
+            for (let i = 0; i < implementations.length; i++) {
+                for (let j = 0; j < implementations.length; j++) {
+                    if (i !== j && implementationsAreEqual(implementations[i], implementations[j])) {
+                        const { textSpan, fileName } = implementations[i];
+                        const end = textSpan.start + textSpan.length;
+                        this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${end}) in ${fileName}`);
+                    }
+                }
+            }
+
+            const ranges = this.getRanges();
+
+            if (!ranges || !ranges.length) {
+                this.raiseError("verifyRangesInImplementationList failed - expected to find at least one range in test source");
+            }
+
+            const unsatisfiedRanges: Range[] = [];
+
+            for (const range of ranges) {
+                const length = range.end - range.start;
+                const matchingImpl = ts.find(implementations, impl =>
+                    range.fileName === impl.fileName && range.start === impl.textSpan.start && length === impl.textSpan.length);
+                if (matchingImpl) {
+                    matchingImpl.matched = true;
+                }
+                else {
+                    unsatisfiedRanges.push(range);
+                }
+            }
+
+            const unmatchedImplementations = implementations.filter(impl => !impl.matched);
+            if (unmatchedImplementations.length || unsatisfiedRanges.length) {
+                let error = "Not all ranges or implementations are satisfied";
+                if (unsatisfiedRanges.length) {
+                    error += "\nUnsatisfied ranges:";
+                    for (const range of unsatisfiedRanges) {
+                        error += `\n    (${range.start}, ${range.end}) in ${range.fileName}: ${this.rangeText(range)}`;
+                    }
+                }
+
+                if (unmatchedImplementations.length) {
+                    error += "\nUnmatched implementations:";
+                    for (const impl of unmatchedImplementations) {
+                        const end = impl.textSpan.start + impl.textSpan.length;
+                        error += `\n    (${impl.textSpan.start}, ${end}) in ${impl.fileName}: ${this.getFileContent(impl.fileName).slice(impl.textSpan.start, end)}`;
+                    }
+                }
+                this.raiseError(error);
+            }
+
+            function implementationsAreEqual(a: ImplementationLocationInformation, b: ImplementationLocationInformation) {
+                return a.fileName === b.fileName && TestState.textSpansEqual(a.textSpan, b.textSpan);
             }
         }
 
         public getMarkers(): Marker[] {
             //  Return a copy of the list
             return this.testData.markers.slice(0);
+        }
+
+        public getMarkerNames(): string[] {
+            return Object.keys(this.testData.markerPositions);
         }
 
         public getRanges(): Range[] {
@@ -1631,8 +1825,7 @@ namespace FourSlash {
             const result = ts.createMap<Range[]>();
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
-                const ranges = result[text] || (result[text] = []);
-                ranges.push(range);
+                ts.multiMapAdd(result, text, range);
             }
             return result;
         }
@@ -1652,11 +1845,9 @@ namespace FourSlash {
         }
 
         private getIndentation(fileName: string, position: number, indentStyle: ts.IndentStyle, baseIndentSize: number): number {
-
-            const formatOptions = ts.clone(this.formatCodeOptions);
-            formatOptions.IndentStyle = indentStyle;
-            formatOptions.BaseIndentSize = baseIndentSize;
-
+            const formatOptions = ts.clone(this.formatCodeSettings);
+            formatOptions.indentStyle = indentStyle;
+            formatOptions.baseIndentSize = baseIndentSize;
             return this.languageService.getIndentationAtPosition(fileName, position, formatOptions);
         }
 
@@ -1850,6 +2041,47 @@ namespace FourSlash {
             }
         }
 
+        private getCodeFixes(errorCode?: number) {
+            const fileName = this.activeFile.fileName;
+            const diagnostics = this.getDiagnostics(fileName);
+
+            if (diagnostics.length === 0) {
+                this.raiseError("Errors expected.");
+            }
+
+            if (diagnostics.length > 1 && errorCode !== undefined) {
+                this.raiseError("When there's more than one error, you must specify the errror to fix.");
+            }
+
+            const diagnostic = !errorCode ? diagnostics[0] : ts.find(diagnostics, d => d.code == errorCode);
+
+            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
+        }
+
+        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.");
+            }
+
+            const actual = this.getCodeFixes(errorCode);
+
+            if (!actual || actual.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            if (actual.length > 1) {
+                this.raiseError("More than 1 codefix returned.");
+            }
+
+            this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
+            const actualText = this.rangeText(ranges[0]);
+
+            if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
+                this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
+            }
+        }
+
         public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
             const name = "verifyDocCommentTemplate";
             const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -1946,11 +2178,12 @@ namespace FourSlash {
         }
 
         /*
-            Check number of navigationItems which match both searchValue and matchKind.
+            Check number of navigationItems which match both searchValue and matchKind,
+            if a filename is passed in, limit the results to that file.
             Report an error if expected value and actual value do not match.
         */
-        public verifyNavigationItemsCount(expected: number, searchValue: string, matchKind?: string) {
-            const items = this.languageService.getNavigateToItems(searchValue);
+        public verifyNavigationItemsCount(expected: number, searchValue: string, matchKind?: string, fileName?: string) {
+            const items = this.languageService.getNavigateToItems(searchValue, /*maxResultCount*/ undefined, fileName);
             let actual = 0;
             let item: ts.NavigateToItem;
 
@@ -2019,6 +2252,18 @@ namespace FourSlash {
                         // Omit falsy values, those are presumed to be the default.
                         return value || undefined;
                 }
+            }
+        }
+
+        public verifyNavigationTree(json: any) {
+            const tree = this.languageService.getNavigationTree(this.activeFile.fileName);
+            if (JSON.stringify(tree, replacer) !== JSON.stringify(json)) {
+                this.raiseError(`verifyNavigationTree failed - expected: ${stringify(json)}, got: ${stringify(tree, replacer)}`);
+            }
+
+            function replacer(key: string, value: any) {
+                // Don't check "spans", and omit falsy values.
+                return key === "spans" ? undefined : (value || undefined);
             }
         }
 
@@ -2120,6 +2365,18 @@ namespace FourSlash {
             }
         }
 
+        public verifyCodeFixAvailable(negative: boolean, errorCode?: number) {
+            const fixes = this.getCodeFixes(errorCode);
+
+            if (negative && fixes && fixes.length > 0) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected no fixes, actual: ${fixes.length}`);
+            }
+
+            if (!negative && (fixes === undefined || fixes.length === 0)) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected code fixes, actual: 0`);
+            }
+        }
+
         // Get the text of the entire line the caret is currently at
         private getCurrentLineContent() {
             const text = this.getFileContent(this.activeFile.fileName);
@@ -2149,7 +2406,7 @@ namespace FourSlash {
             return text.substring(startPos, endPos);
         }
 
-        private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, text?: string, documentation?: string, kind?: string) {
+        private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
                 if (item.name === name) {
@@ -2166,6 +2423,11 @@ namespace FourSlash {
 
                     if (kind !== undefined) {
                         assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + name));
+                    }
+
+                    if (spanIndex !== undefined) {
+                        const span = this.getTextSpanForRangeAtIndex(spanIndex);
+                        assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + name));
                     }
 
                     return;
@@ -2224,6 +2486,17 @@ namespace FourSlash {
             return `line ${(pos.line + 1)}, col ${pos.character}`;
         }
 
+        private getTextSpanForRangeAtIndex(index: number): ts.TextSpan {
+            const ranges = this.getRanges();
+            if (ranges && ranges.length > index) {
+                const range = ranges[index];
+                return { start: range.start, length: range.end - range.start };
+            }
+            else {
+                this.raiseError("Supplied span index: " + index + " does not exist in range list of size: " + (ranges ? 0 : ranges.length));
+            }
+        }
+
         public getMarkerByName(markerName: string) {
             const markerPos = this.testData.markerPositions[markerName];
             if (markerPos === undefined) {
@@ -2247,6 +2520,10 @@ namespace FourSlash {
         public resetCancelled(): void {
             this.cancellationToken.resetCancelled();
         }
+
+        private static textSpansEqual(a: ts.TextSpan, b: ts.TextSpan) {
+            return a && b && a.start === b.start && a.length === b.length;
+        }
     }
 
     export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string) {
@@ -2255,12 +2532,16 @@ namespace FourSlash {
     }
 
     export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string): void {
+        // Give file paths an absolute path for the virtual file system
+        const absoluteBasePath = ts.combinePaths(Harness.virtualFileSystemRoot, basePath);
+        const absoluteFileName = ts.combinePaths(Harness.virtualFileSystemRoot, fileName);
+
         // Parse out the files and their metadata
-        const testData = parseTestData(basePath, content, fileName);
-        const state = new TestState(basePath, testType, testData);
+        const testData = parseTestData(absoluteBasePath, content, absoluteFileName);
+        const state = new TestState(absoluteBasePath, testType, testData);
         const output = ts.transpileModule(content, { reportDiagnostics: true });
         if (output.diagnostics.length > 0) {
-            throw new Error(`Syntax error in ${basePath}: ${output.diagnostics[0].messageText}`);
+            throw new Error(`Syntax error in ${absoluteBasePath}: ${output.diagnostics[0].messageText}`);
         }
         runCode(output.outputText, state);
     }
@@ -2725,6 +3006,10 @@ namespace FourSlashInterface {
             return this.state.getMarkers();
         }
 
+        public markerNames(): string[] {
+            return this.state.getMarkerNames();
+        }
+
         public marker(name?: string): FourSlash.Marker {
             return this.state.getMarkerByName(name);
         }
@@ -2760,12 +3045,12 @@ namespace FourSlashInterface {
             this.state.goToEOF();
         }
 
-        public definition(definitionIndex = 0) {
-            this.state.goToDefinition(definitionIndex);
-        }
-
         public type(definitionIndex = 0) {
             this.state.goToTypeDefinition(definitionIndex);
+        }
+
+        public implementation() {
+            this.state.goToImplementation();
         }
 
         public position(position: number, fileIndex?: number): void;
@@ -2813,12 +3098,12 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
+        public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
             if (this.negative) {
-                this.state.verifyCompletionListDoesNotContain(symbol, text, documentation, kind);
+                this.state.verifyCompletionListDoesNotContain(symbol, text, documentation, kind, spanIndex);
             }
             else {
-                this.state.verifyCompletionListContains(symbol, text, documentation, kind);
+                this.state.verifyCompletionListContains(symbol, text, documentation, kind, spanIndex);
             }
         }
 
@@ -2834,6 +3119,10 @@ namespace FourSlashInterface {
 
         public completionListIsEmpty() {
             this.state.verifyCompletionListIsEmpty(this.negative);
+        }
+
+        public completionListIsGlobal(expected: boolean) {
+            this.state.verifyCompletionListIsGlobal(expected);
         }
 
         public completionListAllowsNewIdentifier() {
@@ -2860,38 +3149,42 @@ namespace FourSlashInterface {
             this.state.verifyErrorExistsAfterMarker(markerName, !this.negative, /*after*/ false);
         }
 
-        public quickInfoIs(expectedText?: string, expectedDocumentation?: string) {
-            this.state.verifyQuickInfoString(this.negative, expectedText, expectedDocumentation);
-        }
-
         public quickInfoExists() {
             this.state.verifyQuickInfoExists(this.negative);
-        }
-
-        public definitionCountIs(expectedCount: number) {
-            this.state.verifyDefinitionsCount(this.negative, expectedCount);
         }
 
         public typeDefinitionCountIs(expectedCount: number) {
             this.state.verifyTypeDefinitionsCount(this.negative, expectedCount);
         }
 
-        public definitionLocationExists() {
-            this.state.verifyDefinitionLocationExists(this.negative);
-        }
-
-        public verifyDefinitionsName(name: string, containerName: string) {
-            this.state.verifyDefinitionsName(this.negative, name, containerName);
+        public implementationListIsEmpty() {
+            this.state.verifyImplementationListIsEmpty(this.negative);
         }
 
         public isValidBraceCompletionAtPosition(openingBrace: string) {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
+        }
+
+        public codeFixAvailable(errorCode?: number) {
+            this.state.verifyCodeFixAvailable(this.negative, errorCode);
         }
     }
 
     export class Verify extends VerifyNegatable {
         constructor(state: FourSlash.TestState) {
             super(state);
+        }
+
+        public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
+            this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
+        }
+
+        public quickInfoAt(markerName: string, expectedText?: string, expectedDocumentation?: string) {
+            this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation);
+        }
+
+        public quickInfos(namesAndTexts: { [name: string]: string }) {
+            this.state.verifyQuickInfos(namesAndTexts);
         }
 
         public caretAtMarker(markerName?: string) {
@@ -2927,6 +3220,25 @@ namespace FourSlashInterface {
             this.state.verifyCurrentFileContent(text);
         }
 
+        public goToDefinitionIs(endMarkers: string | string[]) {
+            this.state.verifyGoToDefinitionIs(endMarkers);
+        }
+
+        public goToDefinition(startMarkerName: string | string[], endMarkerName: string | string[]): void;
+        public goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
+        public goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
+        public goToDefinition(arg0: any, endMarkerName?: string | string[]) {
+            this.state.verifyGoToDefinition(arg0, endMarkerName);
+        }
+
+        public goToDefinitionForMarkers(...markerNames: string[]) {
+            this.state.verifyGoToDefinitionForMarkers(markerNames);
+        }
+
+        public goToDefinitionName(name: string, containerName: string) {
+            this.state.verifyGoToDefinitionName(name, containerName);
+        }
+
         public verifyGetEmitOutputForCurrentFile(expected: string): void {
             this.state.verifyGetEmitOutputForCurrentFile(expected);
         }
@@ -2945,6 +3257,10 @@ namespace FourSlashInterface {
 
         public rangesReferenceEachOther(ranges?: FourSlash.Range[]) {
             this.state.verifyRangesReferenceEachOther(ranges);
+        }
+
+        public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {
+            this.state.verifyDisplayPartsOfReferencedSymbol(expected);
         }
 
         public rangesWithSameTextReferenceEachOther() {
@@ -2999,6 +3315,10 @@ namespace FourSlashInterface {
             this.state.baselineGetEmitOutput();
         }
 
+        public baselineQuickInfo() {
+            this.state.baselineQuickInfo();
+        }
+
         public nameOrDottedNameSpanTextIs(text: string) {
             this.state.verifyCurrentNameOrDottedNameSpanText(text);
         }
@@ -3027,12 +3347,20 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
+        public codeFixAtPosition(expectedText: string, errorCode?: number): void {
+            this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        }
+
         public navigationBar(json: any) {
             this.state.verifyNavigationBar(json);
         }
 
-        public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
-            this.state.verifyNavigationItemsCount(count, searchValue, matchKind);
+        public navigationTree(json: any) {
+            this.state.verifyNavigationTree(json);
+        }
+
+        public navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string) {
+            this.state.verifyNavigationItemsCount(count, searchValue, matchKind, fileName);
         }
 
         public navigationItemsListContains(
@@ -3112,6 +3440,10 @@ namespace FourSlashInterface {
 
         public ProjectInfo(expected: string[]) {
             this.state.verifyProjectInfo(expected);
+        }
+
+        public allRangesAppearInImplementationList(markerName: string) {
+            this.state.verifyRangesInImplementationList(markerName);
         }
     }
 
@@ -3242,7 +3574,7 @@ namespace FourSlashInterface {
             this.state.formatDocument();
         }
 
-        public copyFormatOptions(): ts.FormatCodeOptions {
+        public copyFormatOptions(): ts.FormatCodeSettings {
             return this.state.copyFormatOptions();
         }
 
@@ -3262,7 +3594,7 @@ namespace FourSlashInterface {
         public setOption(name: string, value: string): void;
         public setOption(name: string, value: boolean): void;
         public setOption(name: string, value: any): void {
-            this.state.formatCodeOptions[name] = value;
+            (<any>this.state.formatCodeSettings)[name] = value;
         }
     }
 

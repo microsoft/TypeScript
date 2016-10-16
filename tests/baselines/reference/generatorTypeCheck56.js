@@ -13,6 +13,5 @@ function* g() {
         *[yield 0]() {
             yield 0;
         }
-    }
-    ;
+    };
 }

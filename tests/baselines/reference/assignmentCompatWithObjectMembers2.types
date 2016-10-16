@@ -50,13 +50,13 @@ var a2 = { foo: '' };
 >a2 : { foo: string; }
 >{ foo: '' } : { foo: string; }
 >foo : string
->'' : string
+>'' : ""
 
 var b2 = { foo: '' };
 >b2 : { foo: string; }
 >{ foo: '' } : { foo: string; }
 >foo : string
->'' : string
+>'' : ""
 
 s = t;
 >s = t : T

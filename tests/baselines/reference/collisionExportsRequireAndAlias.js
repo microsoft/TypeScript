@@ -32,7 +32,7 @@ define(["require", "exports"], function (require, exports) {
     exports.bar2 = bar2;
 });
 //// [collisionExportsRequireAndAlias_file2.js]
-define(["require", "exports", 'collisionExportsRequireAndAlias_file1', 'collisionExportsRequireAndAlias_file3333'], function (require, exports, require, exports) {
+define(["require", "exports", "collisionExportsRequireAndAlias_file1", "collisionExportsRequireAndAlias_file3333"], function (require, exports, require, exports) {
     "use strict";
     function foo() {
         require.bar();

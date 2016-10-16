@@ -21,10 +21,10 @@ var D = (function () {
         this.p = 1;
     }
     D.prototype.method = function () { };
-    D.s = 0;
-    D = __decorate([
-        foo
-    ], D);
     return D;
 }());
+D.s = 0;
+D = __decorate([
+    foo
+], D);
 export default D;

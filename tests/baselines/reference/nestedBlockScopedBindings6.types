@@ -5,24 +5,24 @@ function a0() {
     for (let x of [1]) {
 >x : number
 >[1] : number[]
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : number
 >x : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
     }
     for (let x;;) {
 >x : any
 
         x = x + 2;
->x = x + 2 : any
+>x = x + 2 : number
 >x : any
->x + 2 : any
->x : any
->2 : number
+>x + 2 : number
+>x : number
+>2 : 2
     }
 }
 
@@ -32,14 +32,14 @@ function a1() {
     for (let x of [1]) {
 >x : number
 >[1] : number[]
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : number
 >x : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => number
@@ -49,11 +49,11 @@ function a1() {
 >x : any
 
         x = x + 2;
->x = x + 2 : any
+>x = x + 2 : number
 >x : any
->x + 2 : any
->x : any
->2 : number
+>x + 2 : number
+>x : number
+>2 : 2
     }
 }
 
@@ -63,24 +63,24 @@ function a2() {
     for (let x of [1]) {
 >x : number
 >[1] : number[]
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : number
 >x : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
     }
     for (let x;;) {
 >x : any
 
         x = x + 2;
->x = x + 2 : any
+>x = x + 2 : number
 >x : any
->x + 2 : any
->x : any
->2 : number
+>x + 2 : number
+>x : number
+>2 : 2
 
         () => x;
 >() => x : () => any
@@ -94,14 +94,14 @@ function a3() {
     for (let x of [1]) {
 >x : number
 >[1] : number[]
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : number
 >x : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => number
@@ -111,11 +111,11 @@ function a3() {
 >x : any
 
         x = x + 2;
->x = x + 2 : any
+>x = x + 2 : number
 >x : any
->x + 2 : any
->x : any
->2 : number
+>x + 2 : number
+>x : number
+>2 : 2
 
         () => x;
 >() => x : () => any
@@ -129,21 +129,21 @@ function a4() {
     for (let x of [1]) {
 >x : number
 >[1] : number[]
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : number
 >x : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => number
 >x : number
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
 >1 : 1
@@ -162,17 +162,17 @@ function a5() {
     for (let x of [1]) {
 >x : number
 >[1] : number[]
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : number
 >x : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
 >1 : 1
@@ -194,17 +194,17 @@ function a6() {
     for (let x of [1]) {
 >x : number
 >[1] : number[]
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : number
 >x : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
 >1 : 1
@@ -222,21 +222,21 @@ function a7() {
     for (let x of [1]) {
 >x : number
 >[1] : number[]
->1 : number
+>1 : 1
 
         x = x + 1;
 >x = x + 1 : number
 >x : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => number
 >x : number
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
 >1 : 1

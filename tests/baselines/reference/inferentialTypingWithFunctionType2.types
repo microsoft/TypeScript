@@ -13,12 +13,12 @@ var x = [1, 2, 3].map(identity)[0];
 >x : number
 >[1, 2, 3].map(identity)[0] : number
 >[1, 2, 3].map(identity) : number[]
->[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>[1, 2, 3].map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
->map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>1 : 1
+>2 : 2
+>3 : 3
+>map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
 >identity : <A>(a: A) => A
->0 : number
+>0 : 0
 

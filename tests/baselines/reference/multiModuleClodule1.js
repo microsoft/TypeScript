@@ -27,12 +27,10 @@ var C = (function () {
     C.boo = function () { };
     return C;
 }());
-var C;
 (function (C) {
     C.x = 1;
     var y = 2;
 })(C || (C = {}));
-var C;
 (function (C) {
     function foo() { }
     C.foo = foo;

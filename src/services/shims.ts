@@ -16,7 +16,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-let debugObjectHost = new Function("return this")();
+let debugObjectHost = (function (this: any) { return this; })();
 
 // We need to use 'null' to interface with the managed side.
 /* tslint:disable:no-null-keyword */
@@ -66,6 +66,11 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
+
+        getTypeRootsVersion?(): number;
+        readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
+        readFile(path: string, encoding?: string): string;
+        fileExists(path: string): boolean;
 
         getModuleResolutionsForFile?(fileName: string): string;
         getTypeReferenceDirectiveResolutionsForFile?(fileName: string): string;
@@ -175,6 +180,12 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; }[]
+         */
+        getImplementationAtPosition(fileName: string, position: number): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
@@ -205,13 +216,16 @@ namespace ts {
          * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
-        getNavigateToItems(searchValue: string, maxResultCount?: number): string;
+        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): string;
 
         /**
          * Returns a JSON-encoded value of the type:
          * { text: string; kind: string; kindModifiers: string; bolded: boolean; grayed: boolean; indent: number; spans: { start: number; length: number; }[]; childItems: <recursive use of this type>[] } [] = [];
          */
         getNavigationBarItems(fileName: string): string;
+
+        /** Returns a JSON-encoded value of the type ts.NavigationTree. */
+        getNavigationTree(fileName: string): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -354,6 +368,13 @@ namespace ts {
             return this.shimHost.getProjectVersion();
         }
 
+        public getTypeRootsVersion(): number {
+            if (!this.shimHost.getTypeRootsVersion) {
+                return 0;
+            }
+            return this.shimHost.getTypeRootsVersion();
+        }
+
         public useCaseSensitiveFileNames(): boolean {
             return this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
         }
@@ -420,6 +441,28 @@ namespace ts {
 
         public getDefaultLibFileName(options: CompilerOptions): string {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+        }
+
+        public readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+            const pattern = getFileMatcherPatterns(path, extensions, exclude, include,
+                this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
+            return JSON.parse(this.shimHost.readDirectory(
+                path,
+                JSON.stringify(extensions),
+                JSON.stringify(pattern.basePaths),
+                pattern.excludePattern,
+                pattern.includeFilePattern,
+                pattern.includeDirectoryPattern,
+                depth
+            ));
+        }
+
+        public readFile(path: string, encoding?: string): string {
+            return this.shimHost.readFile(path, encoding);
+        }
+
+        public fileExists(path: string): boolean {
+            return this.shimHost.fileExists(path);
         }
     }
 
@@ -772,6 +815,19 @@ namespace ts {
             );
         }
 
+        /// GOTO Implementation
+
+        /**
+         * Computes the implementation location of the symbol
+         * at the requested position.
+         */
+        public getImplementationAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getImplementationAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getImplementationAtPosition(fileName, position)
+            );
+        }
+
         public getRenameInfo(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getRenameInfo('${fileName}', ${position})`,
@@ -904,10 +960,10 @@ namespace ts {
         /// NAVIGATE TO
 
         /** Return a list of symbols that are interesting to navigate to */
-        public getNavigateToItems(searchValue: string, maxResultCount?: number): string {
+        public getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): string {
             return this.forwardJSONCall(
-                `getNavigateToItems('${searchValue}', ${maxResultCount})`,
-                () => this.languageService.getNavigateToItems(searchValue, maxResultCount)
+                `getNavigateToItems('${searchValue}', ${maxResultCount}, ${fileName})`,
+                () => this.languageService.getNavigateToItems(searchValue, maxResultCount, fileName)
             );
         }
 
@@ -915,6 +971,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `getNavigationBarItems('${fileName}')`,
                 () => this.languageService.getNavigationBarItems(fileName)
+            );
+        }
+
+        public getNavigationTree(fileName: string): string {
+            return this.forwardJSONCall(
+                `getNavigationTree('${fileName}')`,
+                () => this.languageService.getNavigationTree(fileName)
             );
         }
 

@@ -109,9 +109,9 @@ module Editor {
 >next : List<T>
 
             for (i = 0; !(entry.isHead); i++) {
->i = 0 : number
+>i = 0 : 0
 >i : number
->0 : number
+>0 : 0
 >!(entry.isHead) : boolean
 >(entry.isHead) : boolean
 >entry.isHead : boolean
@@ -175,11 +175,11 @@ module Editor {
 >T : T
 
             entry.isHead = false;
->entry.isHead = false : boolean
+>entry.isHead = false : false
 >entry.isHead : boolean
 >entry : List<T>
 >isHead : boolean
->false : boolean
+>false : false
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
@@ -237,11 +237,11 @@ module Editor {
 >data : T
 
             entry.isHead = false;
->entry.isHead = false : boolean
+>entry.isHead = false : false
 >entry.isHead : boolean
 >entry : List<T>
 >isHead : boolean
->false : boolean
+>false : false
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
@@ -317,11 +317,11 @@ module Editor {
 >T : T
 
             entry.isHead = false;
->entry.isHead = false : boolean
+>entry.isHead = false : false
 >entry.isHead : boolean
 >entry : List<T>
 >isHead : boolean
->false : boolean
+>false : false
 
             this.prev.next = entry;
 >this.prev.next = entry : List<T>
@@ -501,7 +501,7 @@ module Editor {
 >new List<T>(true, null) : List<T>
 >List : typeof List
 >T : T
->true : boolean
+>true : true
 >null : null
 
             entry.prev = entry;
@@ -537,7 +537,7 @@ module Editor {
 >new List<T>(false, data) : List<T>
 >List : typeof List
 >T : T
->false : boolean
+>false : false
 >data : T
 
             entry.prev = entry;

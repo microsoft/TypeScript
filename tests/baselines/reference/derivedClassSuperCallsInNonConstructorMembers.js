@@ -46,37 +46,38 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
-        this.a = _super.call(this);
+        var _this = _super.apply(this, arguments) || this;
+        _this.a = _this = _super.call(this) || this;
+        return _this;
     }
     Derived.prototype.b = function () {
-        _super.call(this);
+        _this = _super.call(this) || this;
     };
     Object.defineProperty(Derived.prototype, "C", {
         get: function () {
-            _super.call(this);
+            _this = _super.call(this) || this;
             return 1;
         },
         set: function (v) {
-            _super.call(this);
+            _this = _super.call(this) || this;
         },
         enumerable: true,
         configurable: true
     });
     Derived.b = function () {
-        _super.call(this);
+        _this = _super.call(this) || this;
     };
     Object.defineProperty(Derived, "C", {
         get: function () {
-            _super.call(this);
+            _this = _super.call(this) || this;
             return 1;
         },
         set: function (v) {
-            _super.call(this);
+            _this = _super.call(this) || this;
         },
         enumerable: true,
         configurable: true
     });
-    Derived.a = _super.call(this);
     return Derived;
 }(Base));
+Derived.a = _this = _super.call(this) || this;

@@ -145,7 +145,6 @@ var E2;
 })(E2 || (E2 = {}));
 var r4 = foo13(E.A);
 function f() { }
-var f;
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
@@ -155,7 +154,6 @@ var CC = (function () {
     }
     return CC;
 }());
-var CC;
 (function (CC) {
     CC.bar = 1;
 })(CC || (CC = {}));

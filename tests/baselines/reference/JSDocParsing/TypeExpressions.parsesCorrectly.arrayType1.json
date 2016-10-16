@@ -1,0 +1,16 @@
+{
+    "kind": "JSDocArrayType",
+    "pos": 1,
+    "end": 4,
+    "elementType": {
+        "kind": "JSDocTypeReference",
+        "pos": 1,
+        "end": 2,
+        "name": {
+            "kind": "Identifier",
+            "pos": 1,
+            "end": 2,
+            "text": "a"
+        }
+    }
+}

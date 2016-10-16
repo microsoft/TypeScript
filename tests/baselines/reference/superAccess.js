@@ -24,13 +24,13 @@ var MyBase = (function () {
         this.S2 = "test";
         this.f = function () { return 5; };
     }
-    MyBase.S1 = 5;
     return MyBase;
 }());
+MyBase.S1 = 5;
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     MyDerived.prototype.foo = function () {
         var l3 = _super.prototype.S1; // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword

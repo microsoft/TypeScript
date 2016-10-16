@@ -101,7 +101,6 @@ namespace ts {
                     });
                 });
 
-
                 if (canUseOldTranspile) {
                     it("Correct output (old transpile) for " + justName, () => {
                         Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), () => {
@@ -252,6 +251,10 @@ var x = 0;`, {
 
         transpilesCorrectly("Supports setting 'allowUnusedLabels'", "x;", {
             options: { compilerOptions: { allowUnusedLabels: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
+        transpilesCorrectly("Supports setting 'alwaysStrict'", "x;", {
+            options: { compilerOptions: { alwaysStrict: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
         transpilesCorrectly("Supports setting 'baseUrl'", "x;", {

@@ -40,7 +40,7 @@ tests/cases/compiler/strictModeReservedWord.ts(22,22): error TS1212: Identifier 
 tests/cases/compiler/strictModeReservedWord.ts(22,30): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode
 tests/cases/compiler/strictModeReservedWord.ts(23,5): error TS2304: Cannot find name 'ublic'.
 tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS1212: Identifier expected. 'static' is a reserved word in strict mode
-tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
 
 
 ==== tests/cases/compiler/strictModeReservedWord.ts (43 errors) ====
@@ -153,7 +153,7 @@ tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invok
         ~~~~~~
 !!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode
         ~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
     }
     
     

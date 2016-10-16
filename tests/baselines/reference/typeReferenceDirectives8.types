@@ -22,5 +22,5 @@ export function foo(): Lib { return {x: 1} }
 >Lib : Lib
 >{x: 1} : { x: number; }
 >x : number
->1 : number
+>1 : 1
 

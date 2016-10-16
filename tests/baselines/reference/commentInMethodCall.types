@@ -5,9 +5,9 @@ var s: string[];
 
 s.map(// do something
 >s.map(// do something    function () { }) : void[]
->s.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>s.map : { <U>(this: [string, string, string, string, string], callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [string, string, string, string], callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [string, string, string], callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): [U, U, U]; <U>(this: [string, string], callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): U[]; }
 >s : string[]
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>map : { <U>(this: [string, string, string, string, string], callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [string, string, string, string], callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [string, string, string], callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): [U, U, U]; <U>(this: [string, string], callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any): U[]; }
 
     function () { });
 >function () { } : () => void

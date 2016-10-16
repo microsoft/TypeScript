@@ -2,5 +2,5 @@
 for (var v of [true]) { }
 >v : boolean
 >[true] : boolean[]
->true : boolean
+>true : true
 

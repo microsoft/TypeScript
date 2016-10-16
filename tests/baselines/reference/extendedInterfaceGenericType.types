@@ -37,5 +37,5 @@ betaOfNumber.takesArgOfT(5);
 >betaOfNumber.takesArgOfT : (arg: number) => Alpha<number>
 >betaOfNumber : Beta<number>
 >takesArgOfT : (arg: number) => Alpha<number>
->5 : number
+>5 : 5
 

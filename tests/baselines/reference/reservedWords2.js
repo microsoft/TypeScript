@@ -23,6 +23,7 @@ while (from)
 var ;
 typeof ;
 10;
+function () { }
 throw function () { };
 module;
 void {};
@@ -33,7 +34,6 @@ debugger;
 if ()
     ;
 [1, 2];
-var ;
 (function () {
 })( || ( = {}));
 void {};

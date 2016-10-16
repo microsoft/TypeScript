@@ -10,12 +10,12 @@ function f1() {
     if (a < b || b > (c + 1)) { }
 >a < b || b > (c + 1) : boolean
 >a < b : boolean
->a : any
->b : any
+>a : undefined
+>b : undefined
 >b > (c + 1) : boolean
->b : any
->(c + 1) : any
->c + 1 : any
->c : any
->1 : number
+>b : undefined
+>(c + 1) : number
+>c + 1 : number
+>c : undefined
+>1 : 1
 }

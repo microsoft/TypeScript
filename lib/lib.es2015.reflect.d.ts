@@ -22,8 +22,7 @@ declare namespace Reflect {
     function get(target: any, propertyKey: PropertyKey, receiver?: any): any;
     function getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
     function getPrototypeOf(target: any): any;
-    function has(target: any, propertyKey: string): boolean;
-    function has(target: any, propertyKey: symbol): boolean;
+    function has(target: any, propertyKey: PropertyKey): boolean;
     function isExtensible(target: any): boolean;
     function ownKeys(target: any): Array<PropertyKey>;
     function preventExtensions(target: any): boolean;

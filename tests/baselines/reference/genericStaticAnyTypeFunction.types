@@ -16,7 +16,7 @@ class A {
     }
     static goo() { return 0; }
 >goo : () => number
->0 : number
+>0 : 0
 
     static two<T>(source: T): T {
 >two : <T>(source: T) => T
@@ -32,7 +32,7 @@ class A {
 >one : <T>(source: T, value: number) => T
 >T : T
 >source : T
->42 : number
+>42 : 42
 
     }
 

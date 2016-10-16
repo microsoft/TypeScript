@@ -4,10 +4,10 @@ function a0() {
     {
         for (let x = 0; x < 1; ) {
 >x : number
->0 : number
+>0 : 0
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
             () => x;
 >() => x : () => number
@@ -31,8 +31,8 @@ function a1() {
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
->x : any
->1 : number
+>x : undefined
+>1 : 1
 
         () => x;
 >() => x : () => any
@@ -53,25 +53,25 @@ function a2() {
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
->x : any
->1 : number
+>x : number
+>1 : 1
 
         x = x + 1;
->x = x + 1 : any
+>x = x + 1 : number
 >x : any
->x + 1 : any
->x : any
->1 : number
+>x + 1 : number
+>x : number
+>1 : 1
     }
     for (let x;;) {
 >x : any
 
         x = x + 2;
->x = x + 2 : any
+>x = x + 2 : number
 >x : any
->x + 2 : any
->x : any
->2 : number
+>x + 2 : number
+>x : number
+>2 : 2
     }
 }
 
@@ -82,18 +82,18 @@ function a3() {
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
->x : any
->1 : number
+>x : number
+>1 : 1
 
         x = x + 1;
->x = x + 1 : any
+>x = x + 1 : number
 >x : any
->x + 1 : any
->x : any
->1 : number
+>x + 1 : number
+>x : number
+>1 : 1
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
 >1 : 1
@@ -111,22 +111,22 @@ function a4() {
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
->x : any
->1 : number
+>x : number
+>1 : 1
 
         x = x + 1;
->x = x + 1 : any
+>x = x + 1 : number
 >x : any
->x + 1 : any
->x : any
->1 : number
+>x + 1 : number
+>x : number
+>1 : 1
 
         () => x;
 >() => x : () => any
 >x : any
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
 >1 : 1
@@ -145,22 +145,22 @@ function a5() {
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
->x : any
->1 : number
+>x : number
+>1 : 1
 
         x = x + 1;
->x = x + 1 : any
+>x = x + 1 : number
 >x : any
->x + 1 : any
->x : any
->1 : number
+>x + 1 : number
+>x : number
+>1 : 1
 
         () => x;
 >() => x : () => any
 >x : any
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
 >1 : 1

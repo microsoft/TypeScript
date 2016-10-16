@@ -2,16 +2,17 @@
 namespace ts.NavigateTo {
     type RawNavigateToItem = { name: string; fileName: string; matchKind: PatternMatchKind; isCaseSensitive: boolean; declaration: Declaration };
 
-    export function getNavigateToItems(program: Program, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[] {
+    export function getNavigateToItems(sourceFiles: SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number, excludeDtsFiles: boolean): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
         let rawItems: RawNavigateToItem[] = [];
 
-        // This means "compare in a case insensitive manner."
-        const baseSensitivity: Intl.CollatorOptions = { sensitivity: "base" };
-
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
-        forEach(program.getSourceFiles(), sourceFile => {
+        forEach(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
+
+            if (excludeDtsFiles && fileExtensionIs(sourceFile.fileName, ".d.ts")) {
+                return;
+            }
 
             const nameToDeclarations = sourceFile.getNamedDeclarations();
             for (const name in nameToDeclarations) {
@@ -184,8 +185,8 @@ namespace ts.NavigateTo {
             // We first sort case insensitively.  So "Aaa" will come before "bar".
             // Then we sort case sensitively, so "aaa" will come before "Aaa".
             return i1.matchKind - i2.matchKind ||
-                i1.name.localeCompare(i2.name, undefined, baseSensitivity) ||
-                i1.name.localeCompare(i2.name);
+                ts.compareStringsCaseInsensitive(i1.name, i2.name) ||
+                ts.compareStrings(i1.name, i2.name);
         }
 
         function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {

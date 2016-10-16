@@ -6,9 +6,9 @@ let obj: any;
 >obj : any
 
 x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
+>"" : ""
 
 x = x.length;
 >x = x.length : number
@@ -21,18 +21,18 @@ x; // number
 >x : number
 
 x = true;
->x = true : boolean
+>x = true : true
 >x : string | number | boolean
->true : boolean
+>true : true
 
 (x = "", obj).foo = (x = x.length);
 >(x = "", obj).foo = (x = x.length) : number
 >(x = "", obj).foo : any
 >(x = "", obj) : any
 >x = "", obj : any
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
+>"" : ""
 >obj : any
 >foo : any
 >(x = x.length) : number

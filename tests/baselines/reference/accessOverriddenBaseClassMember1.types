@@ -13,11 +13,11 @@ class Point {
 >"x=" + this.x + " y=" + this.y : string
 >"x=" + this.x + " y=" : string
 >"x=" + this.x : string
->"x=" : string
+>"x=" : "x="
 >this.x : number
 >this : this
 >x : number
->" y=" : string
+>" y=" : " y="
 >this.y : number
 >this : this
 >y : number
@@ -48,7 +48,7 @@ class ColoredPoint extends Point {
 >super.toString : () => string
 >super : Point
 >toString : () => string
->" color=" : string
+>" color=" : " color="
 >this.color : string
 >this : this
 >color : string

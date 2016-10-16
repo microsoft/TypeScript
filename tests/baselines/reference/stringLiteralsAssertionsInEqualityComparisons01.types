@@ -4,7 +4,7 @@ var a = "foo" === "bar" as string;
 >"foo" === "bar" as string : boolean
 >"foo" : "foo"
 >"bar" as string : string
->"bar" : string
+>"bar" : "bar"
 
 var b = "foo" !== ("bar" as string);
 >b : boolean
@@ -12,7 +12,7 @@ var b = "foo" !== ("bar" as string);
 >"foo" : "foo"
 >("bar" as string) : string
 >"bar" as string : string
->"bar" : string
+>"bar" : "bar"
 
 var c = "foo" == (<any>"bar");
 >c : boolean
@@ -20,5 +20,5 @@ var c = "foo" == (<any>"bar");
 >"foo" : "foo"
 >(<any>"bar") : any
 ><any>"bar" : any
->"bar" : string
+>"bar" : "bar"
 

@@ -13,6 +13,17 @@
 ////export default function Func { }
 
 goTo.file("a.ts");
+verify.navigationTree({
+    "text": "\"a\"",
+    "kind": "module",
+    "childItems": [
+        {
+            "text": "default",
+            "kind": "class",
+            "kindModifiers": "export"
+        }
+    ]
+});
 verify.navigationBar([
     {
         "text": "\"a\"",
@@ -34,6 +45,17 @@ verify.navigationBar([
 ]);
 
 goTo.file("b.ts");
+verify.navigationTree({
+    "text": "\"b\"",
+    "kind": "module",
+    "childItems": [
+        {
+            "text": "C",
+            "kind": "class",
+            "kindModifiers": "export"
+        }
+    ]
+});
 verify.navigationBar([
     {
         "text": "\"b\"",
@@ -55,6 +77,17 @@ verify.navigationBar([
 ]);
 
 goTo.file("c.ts");
+verify.navigationTree({
+    "text": "\"c\"",
+    "kind": "module",
+    "childItems": [
+        {
+            "text": "default",
+            "kind": "function",
+            "kindModifiers": "export"
+        }
+    ]
+});
 verify.navigationBar([
     {
         "text": "\"c\"",
@@ -76,6 +109,17 @@ verify.navigationBar([
 ]);
 
 goTo.file("d.ts");
+verify.navigationTree({
+    "text": "\"d\"",
+    "kind": "module",
+    "childItems": [
+        {
+            "text": "Func",
+            "kind": "function",
+            "kindModifiers": "export"
+        }
+    ]
+});
 verify.navigationBar([
     {
         "text": "\"d\"",

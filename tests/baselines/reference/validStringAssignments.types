@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/primitives/string/validStringAssignments.ts ===
 var x = '';
 >x : string
->'' : string
+>'' : ""
 
 var a: any = x;
 >a : any

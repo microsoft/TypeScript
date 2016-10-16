@@ -1,7 +1,6 @@
 /// <reference path="session.ts" />
 
 namespace ts.server {
-
     export interface SessionClientHost extends LanguageServiceHost {
         writeMessage(message: string): void;
     }
@@ -214,9 +213,21 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionsResponse>(request);
 
             return {
+                isGlobalCompletion: false,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body
+                entries: response.body.map(entry => {
+
+                    if (entry.replacementSpan !== undefined) {
+                        const { name, kind, kindModifiers, sortText, replacementSpan} = entry;
+
+                        const convertedSpan = createTextSpanFromBounds(this.lineOffsetToPosition(fileName, replacementSpan.start),
+                            this.lineOffsetToPosition(fileName, replacementSpan.end));
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                    }
+
+                    return entry as { name: string, kind: string, kindModifiers: string, sortText: string };
+                })
             };
         }
 
@@ -233,6 +244,10 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
             return response.body[0];
+        }
+
+        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
+            throw new Error("Not Implemented Yet.");
         }
 
         getNavigateToItems(searchValue: string): NavigateToItem[] {
@@ -353,6 +368,28 @@ namespace ts.server {
             });
         }
 
+        getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
+            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            const args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            const request = this.processRequest<protocol.ImplementationRequest>(CommandNames.Implementation, args);
+            const response = this.processResponse<protocol.ImplementationResponse>(request);
+
+            return response.body.map(entry => {
+                const fileName = entry.file;
+                const start = this.lineOffsetToPosition(fileName, entry.start);
+                const end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    fileName,
+                    textSpan: ts.createTextSpanFromBounds(start, end)
+                };
+            });
+        }
+
         findReferences(fileName: string, position: number): ReferencedSymbol[] {
             // Not yet implemented.
             return [];
@@ -387,11 +424,35 @@ namespace ts.server {
         }
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[] {
-            throw new Error("Not Implemented Yet.");
+            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file: fileName };
+
+            const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest>(CommandNames.SyntacticDiagnosticsSync, args);
+            const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse>(request);
+
+            return (<protocol.Diagnostic[]>response.body).map(entry => this.convertDiagnostic(entry, fileName));
         }
 
         getSemanticDiagnostics(fileName: string): Diagnostic[] {
-            throw new Error("Not Implemented Yet.");
+            const args: protocol.SemanticDiagnosticsSyncRequestArgs = { file: fileName };
+
+            const request = this.processRequest<protocol.SemanticDiagnosticsSyncRequest>(CommandNames.SemanticDiagnosticsSync, args);
+            const response = this.processResponse<protocol.SemanticDiagnosticsSyncResponse>(request);
+
+            return (<protocol.Diagnostic[]>response.body).map(entry => this.convertDiagnostic(entry, fileName));
+        }
+
+        convertDiagnostic(entry: protocol.Diagnostic, fileName: string): Diagnostic {
+            const start = this.lineOffsetToPosition(fileName, entry.start);
+            const end = this.lineOffsetToPosition(fileName, entry.end);
+
+            return {
+                file: undefined,
+                start: start,
+                length: end - start,
+                messageText: entry.text,
+                category: undefined,
+                code: entry.code
+            };
         }
 
         getCompilerOptionsDiagnostics(): Diagnostic[] {
@@ -450,7 +511,7 @@ namespace ts.server {
             return this.lastRenameEntry.locations;
         }
 
-        decodeNavigationBarItems(items: protocol.NavigationBarItem[], fileName: string, lineMap: number[]): NavigationBarItem[] {
+        private decodeNavigationBarItems(items: protocol.NavigationBarItem[], fileName: string, lineMap: number[]): NavigationBarItem[] {
             if (!items) {
                 return [];
             }
@@ -459,10 +520,7 @@ namespace ts.server {
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers || "",
-                spans: item.spans.map(span =>
-                    createTextSpanFromBounds(
-                        this.lineOffsetToPosition(fileName, span.start, lineMap),
-                        this.lineOffsetToPosition(fileName, span.end, lineMap))),
+                spans: item.spans.map(span => this.decodeSpan(span, fileName, lineMap)),
                 childItems: this.decodeNavigationBarItems(item.childItems, fileName, lineMap),
                 indent: item.indent,
                 bolded: false,
@@ -471,15 +529,35 @@ namespace ts.server {
         }
 
         getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            const args: protocol.FileRequestArgs = {
-                file: fileName
-            };
-
-            const request = this.processRequest<protocol.NavBarRequest>(CommandNames.NavBar, args);
+            const request = this.processRequest<protocol.NavBarRequest>(CommandNames.NavBar, { file: fileName });
             const response = this.processResponse<protocol.NavBarResponse>(request);
 
             const lineMap = this.getLineMap(fileName);
             return this.decodeNavigationBarItems(response.body, fileName, lineMap);
+        }
+
+        private decodeNavigationTree(tree: protocol.NavigationTree, fileName: string, lineMap: number[]): NavigationTree {
+            return {
+                text: tree.text,
+                kind: tree.kind,
+                kindModifiers: tree.kindModifiers,
+                spans: tree.spans.map(span => this.decodeSpan(span, fileName, lineMap)),
+                childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap))
+            };
+        }
+
+        getNavigationTree(fileName: string): NavigationTree {
+            const request = this.processRequest<protocol.NavTreeRequest>(CommandNames.NavTree, { file: fileName });
+            const response = this.processResponse<protocol.NavTreeResponse>(request);
+
+            const lineMap = this.getLineMap(fileName);
+            return this.decodeNavigationTree(response.body, fileName, lineMap);
+        }
+
+        private decodeSpan(span: protocol.TextSpan, fileName: string, lineMap: number[]) {
+            return createTextSpanFromBounds(
+                this.lineOffsetToPosition(fileName, span.start, lineMap),
+                this.lineOffsetToPosition(fileName, span.end, lineMap));
         }
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
@@ -592,6 +670,48 @@ namespace ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
+            const startLineOffset = this.positionToOneBasedLineOffset(fileName, start);
+            const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
+
+            const args: protocol.CodeFixRequestArgs = {
+                file: fileName,
+                startLine: startLineOffset.line,
+                startOffset: startLineOffset.offset,
+                endLine: endLineOffset.line,
+                endOffset: endLineOffset.offset,
+                errorCodes: errorCodes,
+            };
+
+            const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
+            const response = this.processResponse<protocol.CodeFixResponse>(request);
+
+            return response.body.map(entry => this.convertCodeActions(entry, fileName));
+        }
+
+        convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {
+            return {
+                description: entry.description,
+                changes: entry.changes.map(change => ({
+                    fileName: change.fileName,
+                    textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
+                }))
+            };
+        }
+
+        convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): ts.TextChange {
+            const start = this.lineOffsetToPosition(fileName, change.start);
+            const end = this.lineOffsetToPosition(fileName, change.end);
+
+            return {
+                span: {
+                    start: start,
+                    length: end - start
+                },
+                newText: change.newText ? change.newText : ""
+            };
+        }
+
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             const args: protocol.FileLocationRequestArgs = {
@@ -638,6 +758,10 @@ namespace ts.server {
         }
 
         getNonBoundSourceFile(fileName: string): SourceFile {
+            throw new Error("SourceFile objects are not serializable through the server protocol.");
+        }
+
+        getSourceFile(fileName: string): SourceFile {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 
