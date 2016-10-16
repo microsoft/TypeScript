@@ -47,9 +47,30 @@ function f7(p1: undefined) { }
 >f7 : (p1: undefined) => void
 >p1 : undefined
 
-class C<T> {
->C : C<T>
->T : T
+var f8 = function (p2: null) { }
+>f8 : (p2: null) => void
+>function (p2: null) { } : (p2: null) => void
+>p2 : null
+>null : null
+
+var f9 = function (p3: undefined) { }
+>f9 : (p3: undefined) => void
+>function (p3: undefined) { } : (p3: undefined) => void
+>p3 : undefined
+
+var f10 = (p4: null) => { }
+>f10 : (p4: null) => void
+>(p4: null) => { } : (p4: null) => void
+>p4 : null
+>null : null
+
+var f11 = (p5: undefined) => { }
+>f11 : (p5: undefined) => void
+>(p5: undefined) => { } : (p5: undefined) => void
+>p5 : undefined
+
+class C1 {
+>C1 : C1
 
     m0(): null { return null; }
 >m0 : () => null
@@ -60,6 +81,15 @@ class C<T> {
 >m1 : () => undefined
 >undefined : undefined
 
+    m3(p6: null) { }
+>m3 : (p6: null) => void
+>p6 : null
+>null : null
+
+    m4(p7: undefined) { }
+>m4 : (p7: undefined) => void
+>p7 : undefined
+
     get a0(): null { return null; }
 >a0 : null
 >null : null
@@ -68,7 +98,57 @@ class C<T> {
     get a1(): undefined { return undefined; }
 >a1 : undefined
 >undefined : undefined
+
+    set a2(p8: null) { }
+>a2 : null
+>p8 : null
+>null : null
+
+    set a3(p9: undefined) { }
+>a3 : undefined
+>p9 : undefined
 }
+
+class C2 { constructor(p10: null) { } }
+>C2 : C2
+>p10 : null
+>null : null
+
+class C3 { constructor(p11: undefined) { } }
+>C3 : C3
+>p11 : undefined
+
+class C4 {
+>C4 : C4
+
+    f1;
+>f1 : any
+
+    constructor(p12: null) { }
+>p12 : null
+>null : null
+}
+
+class C5 {
+>C5 : C5
+
+    f2;
+>f2 : any
+
+    constructor(p13: undefined) { }
+>p13 : undefined
+}
+
+var C6 = class { constructor(p12: null) { } }
+>C6 : typeof (Anonymous class)
+>class { constructor(p12: null) { } } : typeof (Anonymous class)
+>p12 : null
+>null : null
+
+var C7 = class { constructor(p13: undefined) { } }
+>C7 : typeof (Anonymous class)
+>class { constructor(p13: undefined) { } } : typeof (Anonymous class)
+>p13 : undefined
 
 declare function fn<T>();
 >fn : <T>() => any
@@ -83,12 +163,16 @@ fn<undefined>();
 >fn<undefined>() : any
 >fn : <T>() => any
 
-new C<null>();
->new C<null>() : C<null>
->C : typeof C
+declare class D<T> {}
+>D : D<T>
+>T : T
+
+new D<null>();
+>new D<null>() : D<null>
+>D : typeof D
 >null : null
 
-new C<undefined>();
->new C<undefined>() : C<undefined>
->C : typeof C
+new D<undefined>();
+>new D<undefined>() : D<undefined>
+>D : typeof D
 
