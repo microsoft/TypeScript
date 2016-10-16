@@ -48,7 +48,7 @@ namespace ts {
         let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
         let currentScopeFirstDeclarationsOfName: Map<Node>;
-        let currentSourceFileExternalHelpersModuleName: Identifier;
+        let currentExternalHelpersModuleName: Identifier;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -475,16 +475,16 @@ namespace ts {
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-                    createLiteral(externalHelpersModuleNameText)
-                );
+                    createLiteral(externalHelpersModuleNameText));
+
                 externalHelpersModuleImport.parent = node;
                 externalHelpersModuleImport.flags &= ~NodeFlags.Synthesized;
                 statements.push(externalHelpersModuleImport);
 
-                currentSourceFileExternalHelpersModuleName = externalHelpersModuleName;
+                currentExternalHelpersModuleName = externalHelpersModuleName;
                 addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
                 addRange(statements, endLexicalEnvironment());
-                currentSourceFileExternalHelpersModuleName = undefined;
+                currentExternalHelpersModuleName = undefined;
 
                 node = updateSourceFileNode(node, createNodeArray(statements, node.statements));
                 node.externalHelpersModuleName = externalHelpersModuleName;
@@ -614,9 +614,10 @@ namespace ts {
          * Transforms a decorated class declaration and appends the resulting statements. If
          * the class requires an alias to avoid issues with double-binding, the alias is returned.
          *
+         * @param statements A statement list to which to add the declaration.
          * @param node A ClassDeclaration node.
          * @param name The name of the class.
-         * @param hasExtendsClause A value indicating whether
+         * @param hasExtendsClause A value indicating whether the class has an extends clause.
          */
         function addClassDeclarationHeadWithDecorators(statements: Statement[], node: ClassDeclaration, name: Identifier, hasExtendsClause: boolean) {
             // When we emit an ES6 class that has a class decorator, we must tailor the
@@ -1454,7 +1455,7 @@ namespace ts {
                 : undefined;
 
             const helper = createDecorateHelper(
-                currentSourceFileExternalHelpersModuleName,
+                currentExternalHelpersModuleName,
                 decoratorExpressions,
                 prefix,
                 memberName,
@@ -1504,7 +1505,7 @@ namespace ts {
                 const expression = createAssignment(
                     decoratedClassAlias,
                     createDecorateHelper(
-                        currentSourceFileExternalHelpersModuleName,
+                        currentExternalHelpersModuleName,
                         decoratorExpressions,
                         getDeclarationName(node)
                     )
@@ -1528,7 +1529,7 @@ namespace ts {
                 const result = createAssignment(
                     getDeclarationName(node),
                     createDecorateHelper(
-                        currentSourceFileExternalHelpersModuleName,
+                        currentExternalHelpersModuleName,
                         decoratorExpressions,
                         getDeclarationName(node)
                     ),
@@ -1561,7 +1562,7 @@ namespace ts {
                 expressions = [];
                 for (const decorator of decorators) {
                     const helper = createParamHelper(
-                        currentSourceFileExternalHelpersModuleName,
+                        currentExternalHelpersModuleName,
                         transformDecorator(decorator),
                         parameterOffset,
                         /*location*/ decorator.expression);
@@ -1591,13 +1592,13 @@ namespace ts {
         function addOldTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 if (shouldAddTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileExternalHelpersModuleName, "design:type", serializeTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentExternalHelpersModuleName, "design:type", serializeTypeOfNode(node)));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileExternalHelpersModuleName, "design:paramtypes", serializeParameterTypesOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentExternalHelpersModuleName, "design:paramtypes", serializeParameterTypesOfNode(node)));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileExternalHelpersModuleName, "design:returntype", serializeReturnTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentExternalHelpersModuleName, "design:returntype", serializeReturnTypeOfNode(node)));
                 }
             }
         }
@@ -1606,16 +1607,16 @@ namespace ts {
             if (compilerOptions.emitDecoratorMetadata) {
                 let properties: ObjectLiteralElementLike[];
                 if (shouldAddTypeMetadata(node)) {
-                    (properties || (properties = [])).push(createPropertyAssignment("type", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, serializeTypeOfNode(node))));
+                    (properties || (properties = [])).push(createPropertyAssignment("type", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), serializeTypeOfNode(node))));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    (properties || (properties = [])).push(createPropertyAssignment("paramTypes", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, serializeParameterTypesOfNode(node))));
+                    (properties || (properties = [])).push(createPropertyAssignment("paramTypes", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), serializeParameterTypesOfNode(node))));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, serializeReturnTypeOfNode(node))));
+                    (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), serializeReturnTypeOfNode(node))));
                 }
                 if (properties) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileExternalHelpersModuleName, "design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
+                    decoratorExpressions.push(createMetadataHelper(currentExternalHelpersModuleName, "design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
                 }
             }
         }
@@ -2188,9 +2189,9 @@ namespace ts {
 
             // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
+            setOriginalNode(accessor, node);
             setCommentRange(accessor, node);
             setSourceMapRange(accessor, moveRangePastDecorators(node));
-            setOriginalNode(accessor, node);
 
             return accessor;
         }
@@ -2220,9 +2221,9 @@ namespace ts {
 
             // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
+            setOriginalNode(accessor, node);
             setCommentRange(accessor, node);
             setSourceMapRange(accessor, moveRangePastDecorators(node));
-            setOriginalNode(accessor, node);
 
             return accessor;
         }
@@ -2372,7 +2373,7 @@ namespace ts {
                 return undefined;
             }
 
-            const parameter = createParameterDeclaration(
+            const parameter = createParameter(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 node.dotDotDotToken,
@@ -2590,7 +2591,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [createParameter(parameterName)],
+                        [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
                         transformEnumBody(node, containerName)
                     ),
@@ -2758,7 +2759,7 @@ namespace ts {
                 ]
             );
 
-            setOriginalNode(statement, /*original*/ node);
+            setOriginalNode(statement, node);
 
             // Adjust the source map emit to match the old emitter.
             if (node.kind === SyntaxKind.EnumDeclaration) {
@@ -2862,7 +2863,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [createParameter(parameterName)],
+                        [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
                         transformModuleBody(node, containerName)
                     ),
@@ -3387,6 +3388,7 @@ namespace ts {
         /**
          * Hook for node emit.
          *
+         * @param emitContext A context hint for the emitter.
          * @param node The node to emit.
          * @param emit A callback used to emit the node in the printer.
          */
@@ -3409,9 +3411,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
+         * @param emitContext A context hint for the emitter.
          * @param node The node to substitute.
-         * @param isExpression A value indicating whether the node is to be used in an expression
-         *                     position.
          */
         function onSubstituteNode(emitContext: EmitContext, node: Node) {
             node = previousOnSubstituteNode(emitContext, node);

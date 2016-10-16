@@ -114,8 +114,8 @@ namespace ts {
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
                 [
-                    createParameter(exportFunctionForFile),
-                    createParameter(contextObjectForFile)
+                    createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, exportFunctionForFile),
+                    createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, contextObjectForFile)
                 ],
                 /*type*/ undefined,
                 setEmitFlags(
@@ -435,7 +435,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [createParameter(parameterName)],
+                        [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
                         createBlock(statements, /*location*/ undefined, /*multiLine*/ true)
                     )
@@ -771,7 +771,7 @@ namespace ts {
                 return createFor(
                     expressions.length
                         ? inlineExpressions(expressions)
-                        : <OmittedExpression>createSynthesizedNode(SyntaxKind.OmittedExpression),
+                        : createOmittedExpression(),
                     node.condition,
                     node.incrementor,
                     visitNode(node.statement, visitNestedNode, isStatement),
@@ -806,10 +806,12 @@ namespace ts {
         function visitForInStatement(node: ForInStatement): ForInStatement {
             const initializer = node.initializer;
             if (shouldHoistLoopInitializer(initializer)) {
-                const updated = getMutableClone(node);
-                updated.initializer = transformForBinding(<VariableDeclarationList>initializer);
-                updated.statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
-                return updated;
+                return updateForIn(
+                    node,
+                    transformForBinding(<VariableDeclarationList>initializer),
+                    node.expression,
+                    visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock)
+                );
             }
             else {
                 return visitEachChild(node, visitNestedNode, context);
@@ -824,10 +826,12 @@ namespace ts {
         function visitForOfStatement(node: ForOfStatement): ForOfStatement {
             const initializer = node.initializer;
             if (shouldHoistLoopInitializer(initializer)) {
-                const updated = getMutableClone(node);
-                updated.initializer = transformForBinding(<VariableDeclarationList>initializer);
-                updated.statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
-                return updated;
+                return updateForOf(
+                    node,
+                    transformForBinding(<VariableDeclarationList>initializer),
+                    node.expression,
+                    visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock)
+                );
             }
             else {
                 return visitEachChild(node, visitNestedNode, context);
@@ -840,14 +844,12 @@ namespace ts {
          * @param node The statement to visit.
          */
         function visitDoStatement(node: DoStatement) {
-            const statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
-            if (statement !== node.statement) {
-                const updated = getMutableClone(node);
-                updated.statement = statement;
-                return updated;
+            return updateDo(
+                node,
+                visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock),
+                node.expression
+            );
             }
-            return node;
-        }
 
         /**
          * Visits the body of a WhileStatement to hoist declarations.
@@ -855,14 +857,12 @@ namespace ts {
          * @param node The statement to visit.
          */
         function visitWhileStatement(node: WhileStatement) {
-            const statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
-            if (statement !== node.statement) {
-                const updated = getMutableClone(node);
-                updated.statement = statement;
-                return updated;
+            return updateWhile(
+                node,
+                node.expression,
+                visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock)
+            );
             }
-            return node;
-        }
 
         /**
          * Visits the body of a LabeledStatement to hoist declarations.
@@ -870,13 +870,11 @@ namespace ts {
          * @param node The statement to visit.
          */
         function visitLabeledStatement(node: LabeledStatement) {
-            const statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
-            if (statement !== node.statement) {
-                const updated = getMutableClone(node);
-                updated.statement = statement;
-                return updated;
-            }
-            return node;
+            return updateLabel(
+                node,
+                node.label,
+                visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock)
+            );
         }
 
         /**
@@ -885,13 +883,11 @@ namespace ts {
          * @param node The statement to visit.
          */
         function visitWithStatement(node: WithStatement) {
-            const statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
-            if (statement !== node.statement) {
-                const updated = getMutableClone(node);
-                updated.statement = statement;
-                return updated;
-            }
-            return node;
+            return updateWith(
+                node,
+                node.expression,
+                visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock)
+            );
         }
 
         /**
@@ -900,13 +896,11 @@ namespace ts {
          * @param node The statement to visit.
          */
         function visitSwitchStatement(node: SwitchStatement) {
-            const caseBlock = visitNode(node.caseBlock, visitNestedNode, isCaseBlock);
-            if (caseBlock !== node.caseBlock) {
-                const updated = getMutableClone(node);
-                updated.caseBlock = caseBlock;
-                return updated;
-            }
-            return node;
+            return updateSwitch(
+                node,
+                node.expression,
+                visitNode(node.caseBlock, visitNestedNode, isCaseBlock)
+            );
         }
 
         /**
@@ -915,13 +909,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitCaseBlock(node: CaseBlock) {
-            const clauses = visitNodes(node.clauses, visitNestedNode, isCaseOrDefaultClause);
-            if (clauses !== node.clauses) {
-                const updated = getMutableClone(node);
-                updated.clauses = clauses;
-                return updated;
-            }
-            return node;
+            return updateCaseBlock(
+                node,
+                visitNodes(node.clauses, visitNestedNode, isCaseOrDefaultClause)
+            );
         }
 
         /**
@@ -930,13 +921,11 @@ namespace ts {
          * @param node The clause to visit.
          */
         function visitCaseClause(node: CaseClause) {
-            const statements = visitNodes(node.statements, visitNestedNode, isStatement);
-            if (statements !== node.statements) {
-                const updated = getMutableClone(node);
-                updated.statements = statements;
-                return updated;
-            }
-            return node;
+            return updateCaseClause(
+                node,
+                node.expression,
+                visitNodes(node.statements, visitNestedNode, isStatement)
+            );
         }
 
         /**
@@ -963,13 +952,11 @@ namespace ts {
          * @param node The clause to visit.
          */
         function visitCatchClause(node: CatchClause) {
-            const block = visitNode(node.block, visitNestedNode, isBlock);
-            if (block !== node.block) {
-                const updated = getMutableClone(node);
-                updated.block = block;
-                return updated;
-            }
-            return node;
+            return updateCatchClause(
+                node,
+                node.variableDeclaration,
+                visitNode(node.block, visitNestedNode, isBlock)
+            );
         }
 
         /**
@@ -1223,7 +1210,7 @@ namespace ts {
                     /*asteriskToken*/ undefined,
                     exportStarFunction,
                     /*typeParameters*/ undefined,
-                    [createParameter(m)],
+                    [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, m)],
                     /*type*/ undefined,
                     createBlock([
                         createVariableStatement(

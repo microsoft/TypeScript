@@ -552,6 +552,14 @@ namespace ts {
         resolvedSymbol: Symbol;
     }
 
+    /*@internal*/
+    export interface GeneratedIdentifier extends Identifier {
+        autoGenerateKind: GeneratedIdentifierKind.Auto
+                        | GeneratedIdentifierKind.Loop
+                        | GeneratedIdentifierKind.Unique
+                        | GeneratedIdentifierKind.Node;
+    }
+
     export interface QualifiedName extends Node {
         kind: SyntaxKind.QualifiedName;
         left: EntityName;

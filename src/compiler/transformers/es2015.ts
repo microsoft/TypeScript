@@ -685,7 +685,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                extendsClauseElement ? [createParameter("_super")] : [],
+                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "_super")] : [],
                 /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
@@ -1035,7 +1035,12 @@ namespace ts {
                 // evaluated inside the function body.
                 return setOriginalNode(
                     createParameter(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
                         getGeneratedNameForNode(node),
+                        /*questionToken*/ undefined,
+                        /*type*/ undefined,
                         /*initializer*/ undefined,
                         /*location*/ node
                     ),
@@ -1046,7 +1051,12 @@ namespace ts {
                 // Initializers are elided
                 return setOriginalNode(
                     createParameter(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
                         node.name,
+                        /*questionToken*/ undefined,
+                        /*type*/ undefined,
                         /*initializer*/ undefined,
                         /*location*/ node
                     ),
@@ -2506,7 +2516,7 @@ namespace ts {
                 }
             }
             else {
-                loopParameters.push(createParameter(name));
+                loopParameters.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
                     const outParamName = createUniqueName("out_" + name.text);
                     loopOutParameters.push({ originalName: name, outParamName });
@@ -3081,9 +3091,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
+         * @param emitContext The context for the emitter.
          * @param node The node to substitute.
-         * @param isExpression A value indicating whether the node is to be used in an expression
-         *                     position.
          */
         function onSubstituteNode(emitContext: EmitContext, node: Node) {
             node = previousOnSubstituteNode(emitContext, node);

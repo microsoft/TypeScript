@@ -91,7 +91,7 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
-            const updated = updateSourceFile(node, statements);
+            const updated = updateSourceFileNode(node, createNodeArray(statements, node.statements));
             if (hasExportStarsToExportValues) {
                 setEmitFlags(updated, EmitFlags.EmitExportStar | getEmitFlags(node));
             }
@@ -156,7 +156,8 @@ namespace ts {
             // Create an updated SourceFile:
             //
             //     define(moduleName?, ["module1", "module2"], function ...
-            return updateSourceFile(node, [
+            return updateSourceFileNode(node, createNodeArray(
+                [
                 createStatement(
                     createCall(
                         define,
@@ -184,8 +185,8 @@ namespace ts {
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,
                                 [
-                                    createParameter("require"),
-                                    createParameter("exports"),
+                                        createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                        createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
                                     ...importAliasNames
                                 ],
                                 /*type*/ undefined,
@@ -194,7 +195,9 @@ namespace ts {
                         ]
                     )
                 )
-            ]);
+                ],
+                /*location*/ node.statements)
+            );
         }
 
         /**
@@ -988,7 +991,7 @@ namespace ts {
         function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
             const moduleName = getExternalModuleNameLiteral(importNode, currentSourceFile, host, resolver, compilerOptions);
             const args: Expression[] = [];
-            if (isDefined(moduleName)) {
+            if (moduleName) {
                 args.push(moduleName);
             }
 
@@ -1037,7 +1040,7 @@ namespace ts {
             for (const amdDependency of node.amdDependencies) {
                 if (amdDependency.name) {
                     aliasedModuleNames.push(createLiteral(amdDependency.path));
-                    importAliasNames.push(createParameter(amdDependency.name));
+                    importAliasNames.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name));
                 }
                 else {
                     unaliasedModuleNames.push(createLiteral(amdDependency.path));
@@ -1055,7 +1058,7 @@ namespace ts {
                     // This is so that when printer will not substitute the identifier
                     setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
                     aliasedModuleNames.push(externalModuleName);
-                    importAliasNames.push(createParameter(importAliasName));
+                    importAliasNames.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
                 }
                 else {
                     unaliasedModuleNames.push(externalModuleName);
@@ -1063,12 +1066,6 @@ namespace ts {
             }
 
             return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
-        }
-
-        function updateSourceFile(node: SourceFile, statements: Statement[]) {
-            const updated = getMutableClone(node);
-            updated.statements = createNodeArray(statements, node.statements);
-            return updated;
         }
     }
 }
