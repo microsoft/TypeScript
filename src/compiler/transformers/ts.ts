@@ -304,8 +304,7 @@ namespace ts {
                     // TypeScript property declarations are elided.
 
                 case SyntaxKind.Constructor:
-                    // TypeScript constructors are transformed in `visitClassDeclaration`.
-                    return undefined;
+                    return visitConstructor(<ConstructorDeclaration>node);
 
                 case SyntaxKind.InterfaceDeclaration:
                     // TypeScript interfaces are elided, but some comments may be preserved.
@@ -393,6 +392,12 @@ namespace ts {
                     // TypeScript type assertions are removed, but their subtrees are preserved.
                     return visitAssertionExpression(<AssertionExpression>node);
 
+                case SyntaxKind.CallExpression:
+                    return visitCallExpression(<CallExpression>node);
+
+                case SyntaxKind.NewExpression:
+                    return visitNewExpression(<NewExpression>node);
+
                 case SyntaxKind.NonNullExpression:
                     // TypeScript non-null expressions are removed, but their subtrees are preserved.
                     return visitNonNullExpression(<NonNullExpression>node);
@@ -404,6 +409,9 @@ namespace ts {
                 case SyntaxKind.VariableStatement:
                     // TypeScript namespace exports for variable statements must be transformed.
                     return visitVariableStatement(<VariableStatement>node);
+
+                case SyntaxKind.VariableDeclaration:
+                    return visitVariableDeclaration(<VariableDeclaration>node);
 
                 case SyntaxKind.ModuleDeclaration:
                     // TypeScript namespace declarations must be transformed.
@@ -2100,6 +2108,14 @@ namespace ts {
             return !nodeIsMissing(node.body);
         }
 
+        function visitConstructor(node: ConstructorDeclaration) {
+            if (!shouldEmitFunctionLikeDeclaration(node)) {
+                return undefined;
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
         /**
          * Visits a method declaration of a class.
          *
@@ -2304,13 +2320,16 @@ namespace ts {
 
         function transformFunctionBodyWorker(body: Block, start = 0) {
             const savedCurrentScope = currentScope;
+            const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
             currentScope = body;
+            currentScopeFirstDeclarationsOfName = createMap<Node>();
             startLexicalEnvironment();
 
             const statements = visitNodes(body.statements, visitor, isStatement, start);
             const visited = updateBlock(body, statements);
             const declarations = endLexicalEnvironment();
             currentScope = savedCurrentScope;
+            currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;
             return mergeFunctionBodyLexicalEnvironment(visited, declarations);
         }
 
@@ -2420,6 +2439,14 @@ namespace ts {
             }
         }
 
+        function visitVariableDeclaration(node: VariableDeclaration) {
+            return updateVariableDeclaration(
+                node,
+                visitNode(node.name, visitor, isBindingName),
+                /*type*/ undefined,
+                visitNode(node.initializer, visitor, isExpression));
+        }
+
         /**
          * Visits a parenthesized expression that contains either a type assertion or an `as`
          * expression.
@@ -2460,6 +2487,22 @@ namespace ts {
         function visitNonNullExpression(node: NonNullExpression): Expression {
             const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
             return createPartiallyEmittedExpression(expression, node);
+        }
+
+        function visitCallExpression(node: CallExpression) {
+            return updateCall(
+                node,
+                visitNode(node.expression, visitor, isExpression),
+                /*typeArguments*/ undefined,
+                visitNodes(node.arguments, visitor, isExpression));
+        }
+
+        function visitNewExpression(node: NewExpression) {
+            return updateNew(
+                node,
+                visitNode(node.expression, visitor, isExpression),
+                /*typeArguments*/ undefined,
+                visitNodes(node.arguments, visitor, isExpression));
         }
 
         /**
