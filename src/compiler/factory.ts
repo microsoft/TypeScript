@@ -1462,6 +1462,17 @@ namespace ts {
     }
 
     /**
+     * Creates a synthetic element to act as a placeholder for the end of an emitted declaration in
+     * order to properly emit exports.
+     */
+    export function createEndOfDeclarationMarker(original: Node) {
+        const node = <EndOfDeclarationMarker>createNode(SyntaxKind.EndOfDeclarationMarker);
+        node.emitNode = {};
+        node.original = original;
+        return node;
+    }
+
+    /**
      * Creates a synthetic expression to act as a placeholder for a not-emitted expression in
      * order to preserve comments or sourcemap positions.
      *
@@ -1635,6 +1646,18 @@ namespace ts {
             argumentsList,
             location
         );
+    }
+
+    export function createExportDefault(expression: Expression) {
+        return createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportEquals*/ false, expression);
+    }
+
+    export function createExternalModuleExport(exportName: Identifier) {
+        return createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([createExportSpecifier(exportName)]));
+    }
+
+    export function createLetStatement(name: Identifier, initializer: Expression, location?: TextRange) {
+        return createVariableStatement(/*modifiers*/ undefined, createLetDeclarationList([createVariableDeclaration(name, /*type*/ undefined, initializer)]), location);
     }
 
     export function createLetDeclarationList(declarations: VariableDeclaration[], location?: TextRange) {
@@ -2163,6 +2186,132 @@ namespace ts {
                 /*original*/ method
             )
         );
+    }
+
+    /**
+     * Gets the local name of a declaration. This is primarily used for declarations that can be
+     * referred to by name in the declaration's immediate scope (classes, enums, namespaces). A
+     * local name will *never* be prefixed with an module or namespace export modifier like
+     * "exports." when emitted as an expression.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName);
+    }
+
+    /**
+     * Gets whether an identifier should only be referred to by its local name.
+     */
+    export function isLocalName(node: Identifier) {
+        return (getEmitFlags(node) & EmitFlags.ExportBindingName) === EmitFlags.LocalName;
+    }
+
+    /**
+     * Gets the export name of a declaration. This is primarily used for declarations that can be
+     * referred to by name in the declaration's immediate scope (classes, enums, namespaces). An
+     * export name will *always* be prefixed with an module or namespace export modifier like
+     * `"exports."` when emitted as an expression if the name points to an exported symbol.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getExportName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.ExportName);
+    }
+
+    /**
+     * Gets whether an identifier should only be referred to by its export representation if the
+     * name points to an exported symbol.
+     */
+    export function isExportName(node: Identifier) {
+        return (getEmitFlags(node) & EmitFlags.ExportBindingName) === EmitFlags.ExportName;
+    }
+
+    /**
+     * Gets the export binding name of a declaration for use in the left-hand side of assignment
+     * expressions. This is primarily used for declarations that can be referred to by name in the
+     * declaration's immediate scope (classes, enums, namespaces). If the declaration is exported
+     * and the name is the target of an assignment expression, its export binding name should be
+     * substituted with an expression that assigns *both* the local *and* export names of the
+     * declaration. If an export binding name appears in any other position it should be treated
+     * as a local name.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getExportBindingName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.ExportBindingName);
+    }
+
+    /**
+     * Gets whether an identifier should be treated as both an export name and a local name when
+     * it is the target of an assignment expression.
+     */
+    export function isExportBindingName(node: Identifier) {
+        return (getEmitFlags(node) & EmitFlags.ExportBindingName) === EmitFlags.ExportBindingName;
+    }
+
+    /**
+     * Gets the name of a declaration for use in declarations.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getDeclarationName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+        return getName(node, allowComments, allowSourceMaps);
+    }
+
+    function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
+        if (node.name && isIdentifier(node.name) && !isGeneratedIdentifier(node.name)) {
+            const name = getMutableClone(node.name);
+            emitFlags |= getEmitFlags(node.name);
+            if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
+            if (!allowComments) emitFlags |= EmitFlags.NoComments;
+            if (emitFlags) setEmitFlags(name, emitFlags);
+            return name;
+        }
+        return getGeneratedNameForNode(node);
+    }
+
+    /**
+     * Gets the exported name of a declaration for use in expressions.
+     *
+     * An exported name will *always* be prefixed with an module or namespace export modifier like
+     * "exports." if the name points to an exported symbol.
+     *
+     * @param ns The namespace identifier.
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression {
+        if (ns && hasModifier(node, ModifierFlags.Export)) {
+            return getNamespaceMemberName(ns, getName(node), allowComments, allowSourceMaps);
+        }
+        return getExportName(node, allowComments, allowSourceMaps);
+    }
+
+    /**
+     * Gets a namespace-qualified name for use in expressions.
+     *
+     * @param ns The namespace identifier.
+     * @param name The name.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
+        const qualifiedName = createPropertyAccess(ns, nodeIsSynthesized(name) ? name : getSynthesizedClone(name), /*location*/ name);
+        let emitFlags: EmitFlags;
+        if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
+        if (!allowComments) emitFlags |= EmitFlags.NoComments;
+        if (emitFlags) setEmitFlags(qualifiedName, emitFlags);
+        return qualifiedName;
     }
 
     // Utilities

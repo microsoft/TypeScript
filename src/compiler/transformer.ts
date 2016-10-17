@@ -111,7 +111,10 @@ namespace ts {
         const transformers: Transformer[] = [];
 
         transformers.push(transformTypeScript);
-        transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
+
+        if (moduleKind === ModuleKind.System) {
+            transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
+        }
 
         if (jsx === JsxEmit.React) {
             transformers.push(transformJsx);
@@ -128,6 +131,10 @@ namespace ts {
         if (languageVersion < ScriptTarget.ES2015) {
             transformers.push(transformES2015);
             transformers.push(transformGenerators);
+        }
+
+        if (moduleKind !== ModuleKind.System) {
+            transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
         }
 
         if (languageVersion < ScriptTarget.ES5) {

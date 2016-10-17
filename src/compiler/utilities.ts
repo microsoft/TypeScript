@@ -1953,14 +1953,16 @@ namespace ts {
             || positionIsSynthesized(node.end);
     }
 
-    export function getOriginalNode(node: Node): Node {
+    export function getOriginalNode(node: Node): Node;
+    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
+    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
         if (node) {
             while (node.original !== undefined) {
                 node = node.original;
             }
         }
 
-        return node;
+        return !nodeTest || nodeTest(node) ? node : undefined;
     }
 
     /**
@@ -3506,9 +3508,20 @@ namespace ts {
         return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
     }
 
-    export function collectExternalModuleInfo(sourceFile: SourceFile) {
+    export interface ExternalModuleInfo {
+        externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
+        exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
+        exportedBindings: Map<Identifier[]>; // exported names of local declarations
+        exportedNames: Identifier[]; // all exported names local to module
+        exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
+        hasExportStarsToExportValues: boolean; // whether this module contains export*
+    }
+
+    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMap<ExportSpecifier[]>();
+        const exportedBindings = createMap<Identifier[]>();
+        const uniqueExports = createMap<Identifier>();
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
         for (const node of sourceFile.statements) {
@@ -3526,6 +3539,16 @@ namespace ts {
                         // import x = require("mod")
                         externalImports.push(<ImportEqualsDeclaration>node);
                     }
+
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        // export import x = ...
+                        const name = (<ImportEqualsDeclaration>node).name;
+                        if (!uniqueExports[name.text]) {
+                            multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
+                            uniqueExports[name.text] = name;
+                        }
+                    }
+
                     break;
 
                 case SyntaxKind.ExportDeclaration:
@@ -3543,8 +3566,19 @@ namespace ts {
                     else {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            const name = (specifier.propertyName || specifier.name).text;
-                            (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
+                            if (!uniqueExports[specifier.name.text]) {
+                                const name = specifier.propertyName || specifier.name;
+                                multiMapAdd(exportSpecifiers, name.text, specifier);
+
+                                const decl = resolver.getReferencedImportDeclaration(name)
+                                    || resolver.getReferencedValueDeclaration(name);
+
+                                if (decl) {
+                                    multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                                }
+
+                                uniqueExports[specifier.name.text] = specifier.name;
+                            }
                         }
                     }
                     break;
@@ -3555,10 +3589,95 @@ namespace ts {
                         exportEquals = <ExportAssignment>node;
                     }
                     break;
+
+                case SyntaxKind.VariableDeclaration:
+                    // export var x
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        for (const decl of (<VariableStatement>node).declarationList.declarations) {
+                            collectExportedVariableInfo(decl, exportedBindings, uniqueExports);
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.FunctionDeclaration:
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
+                            // export default function() { }
+                            if (!uniqueExports["default"]) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
+                                uniqueExports["default"] = createIdentifier("default");
+                            }
+                        }
+                        else {
+                            // export function x() { }
+                            const name = (<FunctionDeclaration>node).name;
+                            if (!uniqueExports[name.text]) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports[name.text] = name;
+                            }
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.ClassDeclaration:
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
+                            // export default class { }
+                            if (!uniqueExports["default"]) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
+                            }
+                        }
+                        else {
+                            // export class x { }
+                            const name = (<ClassDeclaration>node).name;
+                            if (!uniqueExports[name.text]) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports[name.text] = name;
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
-        return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues };
+        const exportedNames: Identifier[] = [];
+        for (const key in uniqueExports) {
+            exportedNames.push(uniqueExports[key]);
+        }
+
+        return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames };
+    }
+
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, exportedNames: Map<Identifier[]>, uniqueExports: Map<Identifier>) {
+        if (isBindingPattern(decl.name)) {
+            for (const element of decl.name.elements) {
+                if (!isOmittedExpression(element)) {
+                    collectExportedVariableInfo(element, exportedNames, uniqueExports);
+                }
+            }
+        }
+        else if (!isGeneratedIdentifier(decl.name)) {
+            if (!uniqueExports[decl.name.text]) {
+                multiMapAdd(exportedNames, getOriginalNodeId(decl), decl.name);
+                uniqueExports[decl.name.text] = decl.name;
+            }
+        }
+    }
+
+    /**
+     * Determines whether a name was originally the declaration name of an enum or namespace
+     * declaration.
+     */
+    export function isDeclarationNameOfEnumOrNamespace(node: Identifier) {
+        const parseNode = getParseTreeNode(node);
+        if (parseNode) {
+            switch (parseNode.parent.kind) {
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                    return parseNode === (<EnumDeclaration | ModuleDeclaration>parseNode.parent).name;
+            }
+        }
+        return false;
     }
 
     export function getInitializedVariables(node: VariableDeclarationList) {
@@ -4041,7 +4160,8 @@ namespace ts {
             || kind === SyntaxKind.VariableStatement
             || kind === SyntaxKind.WhileStatement
             || kind === SyntaxKind.WithStatement
-            || kind === SyntaxKind.NotEmittedStatement;
+            || kind === SyntaxKind.NotEmittedStatement
+            || kind === SyntaxKind.EndOfDeclarationMarker;
     }
 
     export function isDeclaration(node: Node): node is Declaration {

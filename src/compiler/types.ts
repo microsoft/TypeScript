@@ -362,6 +362,7 @@ namespace ts {
         // Transformation nodes
         NotEmittedStatement,
         PartiallyEmittedExpression,
+        EndOfDeclarationMarker,
 
         // Enum value count
         Count,
@@ -457,7 +458,8 @@ namespace ts {
         ParameterPropertyModifier = AccessibilityModifier | Readonly,
         NonPublicAccessibilityModifier = Private | Protected,
 
-        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const,
+        ExportDefault = Export | Default,
     }
 
     export const enum JsxFlags {
@@ -1424,6 +1426,14 @@ namespace ts {
     // @internal
     export interface NotEmittedStatement extends Statement {
         kind: SyntaxKind.NotEmittedStatement;
+    }
+
+    /**
+     * Marks the end of transformed declaration to properly emit exports.
+     */
+    /* @internal */
+    export interface EndOfDeclarationMarker extends Statement {
+        kind: SyntaxKind.EndOfDeclarationMarker;
     }
 
     export interface EmptyStatement extends Statement {
@@ -3367,9 +3377,9 @@ namespace ts {
         ContainsES2016 = 1 << 7,
         ES2015 = 1 << 8,
         ContainsES2015 = 1 << 9,
-        DestructuringAssignment = 1 << 10,
-        Generator = 1 << 11,
-        ContainsGenerator = 1 << 12,
+        Generator = 1 << 10,
+        ContainsGenerator = 1 << 11,
+        DestructuringAssignment = 1 << 12,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
@@ -3454,11 +3464,14 @@ namespace ts {
         NoNestedComments = 1 << 16,
         ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        ExportBindingName = LocalName | ExportName,
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
         NoIndentation = 1 << 20,                 // Do not indent the node.
         AsyncFunctionBody = 1 << 21,
         ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
         CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoHoisting = 1 << 24,                    // Do not hoist this declaration in --module system
+        HasEndOfDeclarationMarker = 1 << 25,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
     }
 
     /* @internal */

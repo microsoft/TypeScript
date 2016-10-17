@@ -485,6 +485,13 @@ namespace ts {
         return result;
     }
 
+    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+        if (value === undefined) return to;
+        if (to === undefined) to = [];
+        to.push(value);
+        return to;
+    }
+
     export function addRange<T>(to: T[], from: T[]): void {
         if (to && from) {
             for (const v of from) {
@@ -830,7 +837,7 @@ namespace ts {
      * Adds the value to an array of values associated with the key, and returns the array.
      * Creates the array if it does not already exist.
      */
-    export function multiMapAdd<V>(map: Map<V[]>, key: string, value: V): V[] {
+    export function multiMapAdd<V>(map: Map<V[]>, key: string | number, value: V): V[] {
         const values = map[key];
         if (values) {
             values.push(value);

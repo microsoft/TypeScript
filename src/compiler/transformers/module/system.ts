@@ -90,7 +90,7 @@ namespace ts {
             Debug.assert(!exportFunctionForFile);
 
             // Collect information about the external module and dependency groups.
-            ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node));
+            ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
