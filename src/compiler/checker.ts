@@ -3004,26 +3004,23 @@ namespace ts {
                         members[prop.name] = prop;
                     }
                 }
-                // TODO: Include call and construct signatures and indexers
-                // but that's not applicable to the tests I currently have
-                return createAnonymousType(symbol, members, emptyArray, emptyArray, getIndexInfoOfType(source, IndexKind.String), getIndexInfoOfType(minus, IndexKind.Number));
+                // TODO: Maybe we should require the call signatures to be exactly the same in order to subtract them
+                const callSignatures = getSignaturesOfType(minus, SignatureKind.Call) !== emptyArray ? emptyArray : getSignaturesOfType(source, SignatureKind.Call);
+                const constructSignatures = getSignaturesOfType(minus, SignatureKind.Construct) !== emptyArray ? emptyArray : getSignaturesOfType(source, SignatureKind.Construct);
+                // TODO: Include indexers
+                return createAnonymousType(symbol, members, callSignatures, constructSignatures, getIndexInfoOfType(source, IndexKind.String), getIndexInfoOfType(minus, IndexKind.Number));
             }
             const id = getTypeListId([source, minus]);
             if (id in differenceTypes) {
                 return differenceTypes[id];
             }
-            if (source.flags & TypeFlags.TypeParameter ||
-                source.flags & TypeFlags.Difference) {
-                const difference = differenceTypes[id] = createObjectType(TypeFlags.Difference, symbol) as DifferenceType;
-                difference.source = source;
-                difference.minus = minus;
-                difference.aliasSymbol = aliasSymbol;
-                difference.aliasTypeArguments = aliasTypeArguments;
-                return difference;
-            }
-            // TODO: Make sure to handle top-level unknownTypes without asserting
-            // and true for spread types as well.
-            Debug.fail("Unhandled case (could be a top-level unknownType)");
+
+            const difference = differenceTypes[id] = createObjectType(TypeFlags.Difference, symbol) as DifferenceType;
+            difference.source = source;
+            difference.minus = minus;
+            difference.aliasSymbol = aliasSymbol;
+            difference.aliasTypeArguments = aliasTypeArguments;
+            return difference;
         }
 
         /** Return the inferred type for a binding element */
