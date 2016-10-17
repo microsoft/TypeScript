@@ -5,17 +5,43 @@ interface Gen {
     x: any;
 >x : any
 }
-function cloneAgain<T extends Gen>(t: T): T {
->cloneAgain : <T extends Gen>(t: T) => T
+interface Gen2 {
+>Gen2 : Gen2
+
+    parent: Gen;
+>parent : Gen
+>Gen : Gen
+
+    millenial: any;
+>millenial : any
+}
+function cloneAgain<T extends Gen & Gen2>(t: T): T {
+>cloneAgain : <T extends Gen & Gen2>(t: T) => T
 >T : T
 >Gen : Gen
+>Gen2 : Gen2
 >t : T
 >T : T
 >T : T
 
-    let { x, ...rest } = t;
+    let y: Gen;
+>y : Gen
+>Gen : Gen
+
+    let rest: T - Gen;
+>rest : any
+>T : T
+>Gen : Gen
+
+    let rest1: T - Gen - Gen2;
+>rest1 : any
+>T : T
+>Gen : Gen
+>Gen2 : Gen2
+
+    var { x, ...rest2 } = t;
 >x : any
->rest : T - { x: any; }
+>rest2 : T - { x: any; }
 >t : T
 
     return t;

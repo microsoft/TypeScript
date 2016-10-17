@@ -5,20 +5,46 @@ interface Gen {
     x: any;
 >x : Symbol(Gen.x, Decl(differenceGeneric.ts, 0, 15))
 }
-function cloneAgain<T extends Gen>(t: T): T {
->cloneAgain : Symbol(cloneAgain, Decl(differenceGeneric.ts, 2, 1))
->T : Symbol(T, Decl(differenceGeneric.ts, 3, 20))
->Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
->t : Symbol(t, Decl(differenceGeneric.ts, 3, 35))
->T : Symbol(T, Decl(differenceGeneric.ts, 3, 20))
->T : Symbol(T, Decl(differenceGeneric.ts, 3, 20))
+interface Gen2 {
+>Gen2 : Symbol(Gen2, Decl(differenceGeneric.ts, 2, 1))
 
-    let { x, ...rest } = t;
->x : Symbol(x, Decl(differenceGeneric.ts, 4, 9))
->rest : Symbol(rest, Decl(differenceGeneric.ts, 4, 12))
->t : Symbol(t, Decl(differenceGeneric.ts, 3, 35))
+    parent: Gen;
+>parent : Symbol(Gen2.parent, Decl(differenceGeneric.ts, 3, 16))
+>Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
+
+    millenial: any;
+>millenial : Symbol(Gen2.millenial, Decl(differenceGeneric.ts, 4, 16))
+}
+function cloneAgain<T extends Gen & Gen2>(t: T): T {
+>cloneAgain : Symbol(cloneAgain, Decl(differenceGeneric.ts, 6, 1))
+>T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
+>Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
+>Gen2 : Symbol(Gen2, Decl(differenceGeneric.ts, 2, 1))
+>t : Symbol(t, Decl(differenceGeneric.ts, 7, 42))
+>T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
+>T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
+
+    let y: Gen;
+>y : Symbol(y, Decl(differenceGeneric.ts, 8, 7))
+>Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
+
+    let rest: T - Gen;
+>rest : Symbol(rest, Decl(differenceGeneric.ts, 9, 7))
+>T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
+>Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
+
+    let rest1: T - Gen - Gen2;
+>rest1 : Symbol(rest1, Decl(differenceGeneric.ts, 10, 7))
+>T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
+>Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
+>Gen2 : Symbol(Gen2, Decl(differenceGeneric.ts, 2, 1))
+
+    var { x, ...rest2 } = t;
+>x : Symbol(x, Decl(differenceGeneric.ts, 11, 9))
+>rest2 : Symbol(rest2, Decl(differenceGeneric.ts, 11, 12))
+>t : Symbol(t, Decl(differenceGeneric.ts, 7, 42))
 
     return t;
->t : Symbol(t, Decl(differenceGeneric.ts, 3, 35))
+>t : Symbol(t, Decl(differenceGeneric.ts, 7, 42))
 }
 

@@ -2,8 +2,15 @@
 interface Gen {
     x: any;
 }
-function cloneAgain<T extends Gen>(t: T): T {
-    let { x, ...rest } = t;
+interface Gen2 {
+    parent: Gen;
+    millenial: any;
+}
+function cloneAgain<T extends Gen & Gen2>(t: T): T {
+    let y: Gen;
+    let rest: T - Gen;
+    let rest1: T - Gen - Gen2;
+    var { x, ...rest2 } = t;
     return t;
 }
 
@@ -16,6 +23,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 function cloneAgain(t) {
-    var x = t.x, rest = __rest(t, ["x"]);
+    var y;
+    var rest;
+    var rest1;
+    var x = t.x, rest2 = __rest(t, ["x"]);
     return t;
 }
