@@ -984,24 +984,44 @@ namespace ts {
         }
 
         function bindTryStatement(node: TryStatement): void {
-            const postFinallyLabel = createBranchLabel();
+            const preFinallyLabel = createBranchLabel();
             const preTryFlow = currentFlow;
             // TODO: Every statement in try block is potentially an exit point!
             bind(node.tryBlock);
-            addAntecedent(postFinallyLabel, currentFlow);
+            addAntecedent(preFinallyLabel, currentFlow);
+
+            const flowAfterTry = currentFlow;
+            let flowAfterCatch = unreachableFlow;
+
             if (node.catchClause) {
                 currentFlow = preTryFlow;
                 bind(node.catchClause);
-                addAntecedent(postFinallyLabel, currentFlow);
+                addAntecedent(preFinallyLabel, currentFlow);
+
+                flowAfterCatch = currentFlow;
             }
             if (node.finallyBlock) {
-                currentFlow = preTryFlow;
+                // in finally flow is combined from pre-try/flow from try/flow from catch
+                // pre-flow is necessary to make sure that finally is reachable even if finaly flows in both try and finally blocks are unreachable
+                addAntecedent(preFinallyLabel, preTryFlow);
+                currentFlow = finishFlowLabel(preFinallyLabel);
                 bind(node.finallyBlock);
+                // if flow after finally is unreachable - keep it
+                // otherwise check if flows after try and after catch are unreachable 
+                // if yes - convert current flow to unreachable
+                // i.e.
+                // try { return "1" } finally { console.log(1); }
+                // console.log(2); // this line should be unreachable even if flow falls out of finally block
+                if (!(currentFlow.flags & FlowFlags.Unreachable)) {
+                    if ((flowAfterTry.flags & FlowFlags.Unreachable) && (flowAfterCatch.flags & FlowFlags.Unreachable)) {
+                        currentFlow = flowAfterTry == reportedUnreachableFlow || flowAfterCatch === reportedUnreachableFlow
+                            ? reportedUnreachableFlow
+                            : unreachableFlow;
+                    }
+                }
             }
-            // if try statement has finally block and flow after finally block is unreachable - keep it
-            // otherwise use whatever flow was accumulated at postFinallyLabel
-            if (!node.finallyBlock || !(currentFlow.flags & FlowFlags.Unreachable)) {
-                currentFlow = finishFlowLabel(postFinallyLabel);
+            else {
+                currentFlow = finishFlowLabel(preFinallyLabel);
             }
         }
 
