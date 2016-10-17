@@ -137,6 +137,9 @@ namespace ts {
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNodes, (<UnionOrIntersectionTypeNode>node).types);
+            case SyntaxKind.DifferenceType:
+                return visitNode(cbNode, (node as DifferenceTypeNode).source) ||
+                    visitNode(cbNode, (node as DifferenceTypeNode).minus);
             case SyntaxKind.ParenthesizedType:
                 return visitNode(cbNode, (<ParenthesizedTypeNode>node).type);
             case SyntaxKind.LiteralType:
@@ -2545,6 +2548,19 @@ namespace ts {
             return type;
         }
 
+        function parseDifferenceTypeOrHigher(): TypeNode {
+            let type = parseArrayTypeOrHigher();
+            if (parseOptional(SyntaxKind.MinusToken)) {
+                let minus = parseDifferenceTypeOrHigher();
+                const node = createNode(SyntaxKind.DifferenceType, type.pos) as DifferenceTypeNode;
+                node.source = type;
+                node.minus = minus;
+                type = finishNode(node);
+
+            }
+            return type;
+        }
+
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
             let type = parseConstituentType();
             if (token() === operator) {
@@ -2561,7 +2577,7 @@ namespace ts {
         }
 
         function parseIntersectionTypeOrHigher(): TypeNode {
-            return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseArrayTypeOrHigher, SyntaxKind.AmpersandToken);
+            return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseDifferenceTypeOrHigher, SyntaxKind.AmpersandToken);
         }
 
         function parseUnionTypeOrHigher(): TypeNode {

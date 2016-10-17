@@ -213,6 +213,7 @@ namespace ts {
         TupleType,
         UnionType,
         IntersectionType,
+        DifferenceType,
         ParenthesizedType,
         ThisType,
         LiteralType,
@@ -875,6 +876,12 @@ namespace ts {
 
     export interface IntersectionTypeNode extends UnionOrIntersectionTypeNode {
         kind: SyntaxKind.IntersectionType;
+    }
+
+    export interface DifferenceTypeNode extends TypeNode {
+        kind: SyntaxKind.DifferenceType;
+        source: TypeNode;
+        minus: TypeNode;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
