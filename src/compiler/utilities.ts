@@ -4121,6 +4121,10 @@ namespace ts {
         return node.kind === SyntaxKind.JsxAttribute;
     }
 
+    export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement {
+        return node.kind === SyntaxKind.JsxOpeningElement || node.kind === SyntaxKind.JsxSelfClosingElement;
+    }
+
     export function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression {
         const kind = node.kind;
         return kind === SyntaxKind.StringLiteral

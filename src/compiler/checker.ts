@@ -7014,6 +7014,8 @@ namespace ts {
                                 // reasoning about what went wrong.
                                 Debug.assert(!!errorNode);
                                 if (isJsxAttributes(errorNode)) {
+                                    // JsxAttributes has an object-literal flag and is underwent same type -nonassignablity check as normal object-literal.
+                                    // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
                                 }
                                 else {
@@ -10912,10 +10914,6 @@ namespace ts {
             }
         }
 
-        function isJsxAttribute(node: Node): node is JsxAttribute {
-            return node.kind === SyntaxKind.JsxAttribute;
-        }
-
         /**
          * Get attributes symbol of the given Jsx opening-like element. The result is from resolving "attributes" property of the opening-like element.
          * @param openingLikeElement a Jsx opening-like element
@@ -11291,7 +11289,7 @@ namespace ts {
                 if (jsxElementType) {
                     // Cached the result of trying to solve opening-like JSX element as a stateless function component (similar to how getResolvedSignature)
                     const links = getNodeLinks(openingLikeElement);
-                    const callSignature = resolveStateLessJsxOpeningLikeElement(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
+                    const callSignature = resolvedStateLessJsxOpeningLikeElement(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
                     links.resolvedSignature = callSignature;
                     const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                     let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
@@ -11393,7 +11391,7 @@ namespace ts {
          * The function is intended to be called from a function which has handle intrinsic Jsx element already.
          * @param node a custom Jsx opening-like element
          */
-        function getCustomJsxElementAttributesType(node: JsxOpeningElement): Type {
+        function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedJsxElementAttributesType) {
                 const elemClassType = getJsxGlobalElementClassType();
@@ -11992,9 +11990,18 @@ namespace ts {
             let isDecorator: boolean;
             let spreadArgIndex = -1;
 
-            /// TODO(Yuisu): comment
-            if (node.kind === SyntaxKind.JsxOpeningElement || node.kind === SyntaxKind.JsxSelfClosingElement) {
-                return true;
+
+            if (isJsxOpeningLikeElement(node)) {
+                argCount = args.length;
+                // If we are missing the close "/>", the call is incomplete.
+                callIsIncomplete = node.attributes.end === node.end;
+                typeArguments = undefined;
+                // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
+                // However "context" and "updater" are implicit and can't be specify by users.
+                // If there existed "attributes" property, it is still considered correct arity if the number argument is less than parameters
+                return callIsIncomplete ||
+                    argCount === signature.parameters.length ||
+                    (argCount > 0 && argCount <= signature.parameters.length);
             }
 
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
@@ -12038,7 +12045,7 @@ namespace ts {
 
                 argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
 
-                // If we are missing the close paren, the call is incomplete.
+                // If we are missing the close parenthesis, the call is incomplete.
                 callIsIncomplete = callExpression.arguments.end === callExpression.end;
 
                 typeArguments = callExpression.typeArguments;
@@ -12278,11 +12285,11 @@ namespace ts {
                 // `getEffectiveArgumentCount` and `getEffectiveArgumentType` below.
                 return undefined;
             }
-            else if (node.kind === SyntaxKind.JsxOpeningElement || node.kind === SyntaxKind.JsxSelfClosingElement) {
-                args = [(<JsxOpeningLikeElement>node).attributes];
+            else if (isJsxOpeningLikeElement(node)) {
+                args = node.attributes.properties.length > 0 ? [node.attributes] : [];
             }
             else {
-                args = (<CallExpression>node).arguments || emptyArray;
+                args = node.arguments || emptyArray;
             }
 
             return args;
@@ -12524,7 +12531,7 @@ namespace ts {
             else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
                 return getGlobalTemplateStringsArrayType();
             }
-            else if (node.kind === SyntaxKind.JsxOpeningElement || node.kind === SyntaxKind.JsxSelfClosingElement) {
+            else if (isJsxOpeningLikeElement(node)) {
                 const symbolTable = getAttributesSymbolTableOfJsxOpeningLikeElement(node as JsxOpeningLikeElement);
                 let argAttributesType = anyType as Type;
                 if (symbolTable) {
@@ -12571,11 +12578,11 @@ namespace ts {
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
-            const isJsxOpeningLikeElement = node.kind === SyntaxKind.JsxOpeningElement || node.kind === SyntaxKind.JsxSelfClosingElement;
+            const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
 
             let typeArguments: TypeNode[];
 
-            if (!isTaggedTemplate && !isDecorator && !isJsxOpeningLikeElement) {
+            if (!isTaggedTemplate && !isDecorator && !isJsxOpeningOrSelfClosingElement) {
                 typeArguments = (<CallExpression>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
@@ -12735,7 +12742,7 @@ namespace ts {
             return resolveErrorCall(node);
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
-                if (isJsxOpeningLikeElement) {
+                if (isJsxOpeningOrSelfClosingElement) {
                     return;
                 }
                 let errorInfo: DiagnosticMessageChain;
@@ -13093,16 +13100,18 @@ namespace ts {
          * Try treating a given opening-like element as stateless function component and try to resolve a signature.
          * @param openingLikeElement an JsxOpeningLikeElement we want to try resolve its state-less function if possible
          * @param elementType a type of the opening-like JSX element, a result of resolving tagName in opening-like element.
-         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;         *                           the function will fill it up with appropriate candidate signatures         * @return a resolved signature if we can find function matching function signature through resolve call or a first signature in the list of functions.
+         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
+         *                           the function will fill it up with appropriate candidate signatures
+         * @return a resolved signature if we can find function matching function signature through resolve call or a first signature in the list of functions.
          *         otherwise return undefined if tag-name of the opening-like element doesn't have call signatures
          */
-        function resolveStateLessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature | undefined {
+        function resolvedStateLessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature | undefined {
             if (elementType.flags & TypeFlags.Union) {
                 const types = (elementType as UnionType).types;
                 let result: Signature;
                 types.map(type => {
                     // This is mainly to fill in all the candidates if there is one.
-                    result = result || resolveStateLessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
+                    result = result || resolvedStateLessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
                 });
 
                 return result;
@@ -13112,7 +13121,7 @@ namespace ts {
 
             if (callSignatures && callSignatures.length > 0) {
                 let callSignature: Signature;
-                callSignature = resolveCall(node, callSignatures, candidatesOutArray) || callSignatures[0];
+                callSignature = resolveCall(openingLikeElement, callSignatures, candidatesOutArray) || callSignatures[0];
                 return callSignature
             }
 
@@ -13131,7 +13140,7 @@ namespace ts {
                     return resolveDecorator(<Decorator>node, candidatesOutArray);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
-                    return resolveStateLessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray);
+                    return resolvedStateLessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray);
             }
             Debug.fail("Branch in 'resolveSignature' should be unreachable.");
         }
