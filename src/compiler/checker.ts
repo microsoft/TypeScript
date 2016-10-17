@@ -6114,7 +6114,7 @@ namespace ts {
             // know that all parameters (including 'this') have type annotations and nothing is
             // subject to contextual typing.
             const parameter = firstOrUndefined(node.parameters);
-            return !(parameter && parameter.name.kind === SyntaxKind.Identifier && (<Identifier>parameter.name).text === "this");
+            return !(parameter && parameterIsThisKeyword(parameter));
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
