@@ -102,7 +102,7 @@ namespace ts.server.protocol {
         /**
           * One of "request", "response", or "event"
           */
-        type: string;
+        type: "request" | "response" | "event";
     }
 
     /**
@@ -743,7 +743,7 @@ namespace ts.server.protocol {
         /**
          * Script kind of the file
          */
-        scriptKind?: ScriptKind;
+        scriptKind?: ScriptKindName | ts.ScriptKind;
         /**
          * Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
          */
@@ -776,11 +776,7 @@ namespace ts.server.protocol {
         typingOptions?: TypingOptions;
     }
 
-    /**
-     * For external projects, some of the project settings are sent together with
-     * compiler settings.
-     */
-    export interface ExternalProjectCompilerOptions extends CompilerOptions {
+    export interface CompileOnSaveMixin {
         /**
          * If compile on save is enabled for the project
          */
@@ -788,8 +784,15 @@ namespace ts.server.protocol {
     }
 
     /**
+     * For external projects, some of the project settings are sent together with
+     * compiler settings.
+     */
+    export type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin;
+
+    /**
      * Contains information about current project version
      */
+    /* @internal */
     export interface ProjectVersionInfo {
         /**
          * Project name
@@ -806,7 +809,7 @@ namespace ts.server.protocol {
         /**
          * Current set of compiler options for project
          */
-        options: CompilerOptions;
+        options: ts.CompilerOptions;
     }
 
     /**
@@ -830,6 +833,7 @@ namespace ts.server.protocol {
      * if changes is set - then this is the set of changes that should be applied to existing project
      * otherwise - assume that nothing is changed
      */
+    /* @internal */
     export interface ProjectFiles {
         /**
          * Information abount project verison
@@ -848,6 +852,7 @@ namespace ts.server.protocol {
     /**
      * Combines project information with project level errors.
      */
+    /* @internal */
     export interface ProjectFilesWithDiagnostics extends ProjectFiles {
         /**
          * List of errors in project
@@ -922,8 +927,10 @@ namespace ts.server.protocol {
          * Used to specify the script kind of the file explicitly. It could be one of the following:
          *      "TS", "JS", "TSX", "JSX"
          */
-        scriptKindName?: "TS" | "JS" | "TSX" | "JSX";
+        scriptKindName?: ScriptKindName;
     }
+
+    export type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
 
     /**
       * Open request; value of command field is "open". Notify the
@@ -1019,6 +1026,7 @@ namespace ts.server.protocol {
     /**
      * Arguments to SynchronizeProjectListRequest
      */
+    /* @internal */
     export interface SynchronizeProjectListRequestArgs {
         /**
          * List of last known projects
@@ -1939,4 +1947,141 @@ namespace ts.server.protocol {
     export interface NavTreeResponse extends Response {
         body?: NavigationTree;
     }
+
+    export namespace IndentStyle {
+        export type None = "None";
+        export type Block = "Block";
+        export type Smart = "Smart";
+    }
+
+    export type IndentStyle = IndentStyle.None | IndentStyle.Block | IndentStyle.Smart;
+
+    export interface EditorSettings {
+        baseIndentSize?: number;
+        indentSize?: number;
+        tabSize?: number;
+        newLineCharacter?: string;
+        convertTabsToSpaces?: boolean;
+        indentStyle?: IndentStyle | ts.IndentStyle;
+    }
+
+    export interface FormatCodeSettings extends EditorSettings {
+        insertSpaceAfterCommaDelimiter?: boolean;
+        insertSpaceAfterSemicolonInForStatements?: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        placeOpenBraceOnNewLineForFunctions?: boolean;
+        placeOpenBraceOnNewLineForControlBlocks?: boolean;
+    }
+
+    export interface CompilerOptions {
+        allowJs?: boolean;
+        allowSyntheticDefaultImports?: boolean;
+        allowUnreachableCode?: boolean;
+        allowUnusedLabels?: boolean;
+        baseUrl?: string;
+        charset?: string;
+        declaration?: boolean;
+        declarationDir?: string;
+        disableSizeLimit?: boolean;
+        emitBOM?: boolean;
+        emitDecoratorMetadata?: boolean;
+        experimentalDecorators?: boolean;
+        forceConsistentCasingInFileNames?: boolean;
+        inlineSourceMap?: boolean;
+        inlineSources?: boolean;
+        isolatedModules?: boolean;
+        jsx?: JsxEmit | ts.JsxEmit;
+        lib?: string[];
+        locale?: string;
+        mapRoot?: string;
+        maxNodeModuleJsDepth?: number;
+        module?: ModuleKind | ts.ModuleKind;
+        moduleResolution?: ModuleResolutionKind | ts.ModuleResolutionKind;
+        newLine?: NewLineKind | ts.NewLineKind;
+        noEmit?: boolean;
+        noEmitHelpers?: boolean;
+        noEmitOnError?: boolean;
+        noErrorTruncation?: boolean;
+        noFallthroughCasesInSwitch?: boolean;
+        noImplicitAny?: boolean;
+        noImplicitReturns?: boolean;
+        noImplicitThis?: boolean;
+        noUnusedLocals?: boolean;
+        noUnusedParameters?: boolean;
+        noImplicitUseStrict?: boolean;
+        noLib?: boolean;
+        noResolve?: boolean;
+        out?: string;
+        outDir?: string;
+        outFile?: string;
+        paths?: MapLike<string[]>;
+        preserveConstEnums?: boolean;
+        project?: string;
+        reactNamespace?: string;
+        removeComments?: boolean;
+        rootDir?: string;
+        rootDirs?: string[];
+        skipLibCheck?: boolean;
+        skipDefaultLibCheck?: boolean;
+        sourceMap?: boolean;
+        sourceRoot?: string;
+        strictNullChecks?: boolean;
+        suppressExcessPropertyErrors?: boolean;
+        suppressImplicitAnyIndexErrors?: boolean;
+        target?: ScriptTarget | ts.ScriptTarget;
+        traceResolution?: boolean;
+        types?: string[];
+        /** Paths used to used to compute primary types search locations */
+        typeRoots?: string[];
+        [option: string]: CompilerOptionsValue | undefined;
+    }
+
+    export namespace JsxEmit {
+        export type None = "None";
+        export type Preserve = "Preserve";
+        export type React = "React";
+    }
+
+    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React;
+
+    export namespace ModuleKind {
+        export type None = "None";
+        export type CommonJS = "CommonJS";
+        export type AMD = "AMD";
+        export type UMD = "UMD";
+        export type System = "System";
+        export type ES6 = "ES6";
+        export type ES2015 = "ES2015";
+    }
+
+    export type ModuleKind = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.AMD | ModuleKind.UMD | ModuleKind.System | ModuleKind.ES6 | ModuleKind.ES2015;
+
+    export namespace ModuleResolutionKind {
+        export type Classic = "Classic";
+        export type Node = "Node";
+    }
+
+    export type ModuleResolutionKind = ModuleResolutionKind.Classic | ModuleResolutionKind.Node;
+
+    export namespace NewLineKind {
+        export type Crlf = "Crlf";
+        export type Lf = "Lf";
+    }
+
+    export type NewLineKind = NewLineKind.Crlf | NewLineKind.Lf;
+
+    export namespace ScriptTarget {
+        export type ES3 = "ES3";
+        export type ES5 = "ES5";
+        export type ES6 = "ES6";
+        export type ES2015 = "ES2015";
+    }
+
+    export type ScriptTarget = ScriptTarget.ES3 | ScriptTarget.ES5 | ScriptTarget.ES6 | ScriptTarget.ES2015;
 }
