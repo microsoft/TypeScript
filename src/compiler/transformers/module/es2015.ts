@@ -3,7 +3,7 @@
 
 /*@internal*/
 namespace ts {
-    export function transformES6Module(context: TransformationContext) {
+    export function transformES2015Module(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
         return transformSourceFile;
 

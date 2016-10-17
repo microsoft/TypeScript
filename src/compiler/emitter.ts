@@ -504,15 +504,29 @@ const _super = (function (geti, seti) {
 
                 // Contextual keywords
                 case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.AsKeyword:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.AsyncKeyword:
+                case SyntaxKind.AwaitKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.ConstructorKeyword:
                 case SyntaxKind.DeclareKeyword:
-                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.GetKeyword:
+                case SyntaxKind.IsKeyword:
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.NamespaceKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ReadonlyKeyword:
+                case SyntaxKind.RequireKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.SetKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.TypeKeyword:
+                case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.FromKeyword:
                 case SyntaxKind.GlobalKeyword:
+                case SyntaxKind.OfKeyword:
                     writeTokenText(kind);
                     return;
 
@@ -1198,12 +1212,14 @@ const _super = (function (geti, seti) {
 
         function emitCallExpression(node: CallExpression) {
             emitExpression(node.expression);
+            emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
         }
 
         function emitNewExpression(node: NewExpression) {
             write("new ");
             emitExpression(node.expression);
+            emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
         }
 
@@ -1575,6 +1591,7 @@ const _super = (function (geti, seti) {
 
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
+            emitWithPrefix(": ", node.type);
             emitExpressionWithPrefix(" = ", node.initializer);
         }
 
@@ -2165,7 +2182,7 @@ const _super = (function (geti, seti) {
 
             // Only Emit __extends function when target ES5.
             // For target ES6 and above, we can emit classDeclaration as is.
-            if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
+            if ((languageVersion < ScriptTarget.ES2015) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
                 writeLines(extendsHelper);
                 extendsEmitted = true;
                 helpersEmitted = true;
@@ -2192,9 +2209,12 @@ const _super = (function (geti, seti) {
                 helpersEmitted = true;
             }
 
-            if (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions) {
+            // Only emit __awaiter function when target ES5/ES6.
+            // Only emit __generator function when target ES5.
+            // For target ES2017 and above, we can emit async/await as is.
+            if ((languageVersion < ScriptTarget.ES2017) && (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions)) {
                 writeLines(awaiterHelper);
-                if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES2015) {
                     writeLines(generatorHelper);
                 }
 

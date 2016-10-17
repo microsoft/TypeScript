@@ -1,4 +1,4 @@
-tests/cases/conformance/externalModules/a.ts(7,14): error TS2686: Identifier 'Foo' must be imported from a module
+tests/cases/conformance/externalModules/a.ts(7,14): error TS2686: 'Foo' refers to a UMD global, but the current file is a module. Consider adding an import instead.
 
 
 ==== tests/cases/conformance/externalModules/a.ts (1 errors) ====
@@ -10,7 +10,7 @@ tests/cases/conformance/externalModules/a.ts(7,14): error TS2686: Identifier 'Fo
     let z: Foo.SubThing; // OK in ns position
     let x: any = Foo; // Not OK in value position
                  ~~~
-!!! error TS2686: Identifier 'Foo' must be imported from a module
+!!! error TS2686: 'Foo' refers to a UMD global, but the current file is a module. Consider adding an import instead.
     
 ==== tests/cases/conformance/externalModules/foo.d.ts (0 errors) ====
     

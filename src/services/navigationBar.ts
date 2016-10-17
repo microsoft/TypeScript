@@ -21,6 +21,13 @@ namespace ts.NavigationBar {
         return result;
     }
 
+    export function getNavigationTree(sourceFile: SourceFile): NavigationTree {
+        curSourceFile = sourceFile;
+        const result = convertToTree(rootNavigationBarNode(sourceFile));
+        curSourceFile = undefined;
+        return result;
+    }
+
     // Keep sourceFile handy so we don't have to search for it every time we need to call `getText`.
     let curSourceFile: SourceFile;
     function nodeText(node: Node): string {
@@ -323,10 +330,8 @@ namespace ts.NavigationBar {
         }
     }
 
-    // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
-    const collator: { compare(a: string, b: string): number } = typeof Intl === "undefined" ? undefined : new Intl.Collator();
     // Intl is missing in Safari, and node 0.10 treats "a" as greater than "B".
-    const localeCompareIsCorrect = collator && collator.compare("a", "B") < 0;
+    const localeCompareIsCorrect = ts.collator && ts.collator.compare("a", "B") < 0;
     const localeCompareFix: (a: string, b: string) => number = localeCompareIsCorrect ? collator.compare : function(a, b) {
         // This isn't perfect, but it passes all of our tests.
         for (let i = 0; i < Math.min(a.length, b.length); i++) {
@@ -337,7 +342,7 @@ namespace ts.NavigationBar {
             if (chA === "'" && chB === "\"") {
                 return -1;
             }
-            const cmp = chA.toLocaleLowerCase().localeCompare(chB.toLocaleLowerCase());
+            const cmp = ts.compareStrings(chA.toLocaleLowerCase(), chB.toLocaleLowerCase());
             if (cmp !== 0) {
                 return cmp;
             }
@@ -502,6 +507,16 @@ namespace ts.NavigationBar {
     // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
     const emptyChildItemArray: NavigationBarItem[] = [];
 
+    function convertToTree(n: NavigationBarNode): NavigationTree {
+        return {
+            text: getItemName(n.node),
+            kind: getNodeKind(n.node),
+            kindModifiers: getNodeModifiers(n.node),
+            spans: getSpans(n),
+            childItems: map(n.children, convertToTree)
+        };
+    }
+
     function convertToTopLevelItem(n: NavigationBarNode): NavigationBarItem {
         return {
             text: getItemName(n.node),
@@ -526,16 +541,16 @@ namespace ts.NavigationBar {
                 grayed: false
             };
         }
+    }
 
-        function getSpans(n: NavigationBarNode): TextSpan[] {
-            const spans = [getNodeSpan(n.node)];
-            if (n.additionalNodes) {
-                for (const node of n.additionalNodes) {
-                    spans.push(getNodeSpan(node));
-                }
+    function getSpans(n: NavigationBarNode): TextSpan[] {
+        const spans = [getNodeSpan(n.node)];
+        if (n.additionalNodes) {
+            for (const node of n.additionalNodes) {
+                spans.push(getNodeSpan(node));
             }
-            return spans;
         }
+        return spans;
     }
 
     function getModuleName(moduleDeclaration: ModuleDeclaration): string {

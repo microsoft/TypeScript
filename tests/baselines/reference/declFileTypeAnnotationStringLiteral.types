@@ -23,7 +23,7 @@ function foo(a: string): string | number {
 
         return a.length;
 >a.length : number
->a : string
+>a : "hello"
 >length : number
     }
 

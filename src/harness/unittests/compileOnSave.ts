@@ -3,6 +3,8 @@
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
+    import CommandNames = server.CommandNames;
+
     function createTestTypingsInstaller(host: server.ServerHost) {
         return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
     }
@@ -75,7 +77,7 @@ namespace ts.projectSystem {
                 };
 
                 // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1ShapeRequest1 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                changeModuleFile1ShapeRequest1 = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: moduleFile1.path,
                     line: 1,
                     offset: 1,
@@ -85,7 +87,7 @@ namespace ts.projectSystem {
                 });
 
                 // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1InternalRequest1 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                changeModuleFile1InternalRequest1 = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: moduleFile1.path,
                     line: 1,
                     offset: 1,
@@ -95,7 +97,7 @@ namespace ts.projectSystem {
                 });
 
                 // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: moduleFile1.path,
                     line: 1,
                     offset: 1,
@@ -104,7 +106,7 @@ namespace ts.projectSystem {
                     insertString: `export var T2: number;`
                 });
 
-                moduleFile1FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path, projectFileName: configFile.path });
+                moduleFile1FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path, projectFileName: configFile.path });
             });
 
             it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
@@ -120,7 +122,7 @@ namespace ts.projectSystem {
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
 
                 // Change the content of file1 to `export var T: number;export function Foo() { console.log('hi'); };`
-                const changeFile1InternalRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                const changeFile1InternalRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: moduleFile1.path,
                     line: 1,
                     offset: 46,
@@ -143,7 +145,7 @@ namespace ts.projectSystem {
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
 
                 // Change file2 content to `let y = Foo();`
-                const removeFile1Consumer1ImportRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                const removeFile1Consumer1ImportRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: file1Consumer1.path,
                     line: 1,
                     offset: 1,
@@ -156,7 +158,7 @@ namespace ts.projectSystem {
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
 
                 // Add the import statements back to file2
-                const addFile2ImportRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                const addFile2ImportRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: file1Consumer1.path,
                     line: 1,
                     offset: 1,
@@ -167,7 +169,7 @@ namespace ts.projectSystem {
                 session.executeCommand(addFile2ImportRequest);
 
                 // Change the content of file1 to `export var T2: string;export var T: number;export function Foo() { };`
-                const changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                const changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: moduleFile1.path,
                     line: 1,
                     offset: 1,
@@ -272,7 +274,7 @@ namespace ts.projectSystem {
                 const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
 
                 openFilesForSession([globalFile3], session);
-                const changeGlobalFile3ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                const changeGlobalFile3ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: globalFile3.path,
                     line: 1,
                     offset: 1,
@@ -283,7 +285,7 @@ namespace ts.projectSystem {
 
                 // check after file1 shape changes
                 session.executeCommand(changeGlobalFile3ShapeRequest);
-                const globalFile3FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: globalFile3.path });
+                const globalFile3FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: globalFile3.path });
                 sendAffectedFileRequestAndCheckResult(session, globalFile3FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2] }]);
             });
 
@@ -316,7 +318,7 @@ namespace ts.projectSystem {
                 const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
                 openFilesForSession([moduleFile1], session);
 
-                const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: moduleFile1.path,
                     line: 1,
                     offset: 27,
@@ -345,7 +347,7 @@ namespace ts.projectSystem {
                 const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
                 openFilesForSession([moduleFile1], session);
 
-                const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: moduleFile1.path,
                     line: 1,
                     offset: 27,
@@ -369,7 +371,7 @@ namespace ts.projectSystem {
                 openFilesForSession([moduleFile1, file1Consumer1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer1Consumer1] }]);
 
-                const changeFile1Consumer1ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                const changeFile1Consumer1ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
                     file: file1Consumer1.path,
                     line: 2,
                     offset: 1,
@@ -400,7 +402,7 @@ namespace ts.projectSystem {
                 const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
 
                 openFilesForSession([file1, file2], session);
-                const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
+                const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
                 sendAffectedFileRequestAndCheckResult(session, file1AffectedListRequest, [{ projectFileName: configFile.path, files: [file1, file2] }]);
             });
 
@@ -415,7 +417,7 @@ namespace ts.projectSystem {
                 const session = createSession(host);
 
                 openFilesForSession([file1, file2, file3], session);
-                const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
+                const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
 
                 sendAffectedFileRequestAndCheckResult(session, file1AffectedListRequest, [
                     { projectFileName: configFile1.path, files: [file1, file2] },
@@ -437,11 +439,11 @@ namespace ts.projectSystem {
                 host.reloadFS([referenceFile1, configFile]);
                 host.triggerFileWatcherCallback(moduleFile1.path, /*removed*/ true);
 
-                const request = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
+                const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, request, [
                     { projectFileName: configFile.path, files: [referenceFile1] }
                 ]);
-                const requestForMissingFile = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path });
+                const requestForMissingFile = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, requestForMissingFile, []);
             });
 
@@ -456,7 +458,7 @@ namespace ts.projectSystem {
                 const session = createSession(host);
 
                 openFilesForSession([referenceFile1], session);
-                const request = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
+                const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, request, [
                     { projectFileName: configFile.path, files: [referenceFile1] }
                 ]);
@@ -483,7 +485,7 @@ namespace ts.projectSystem {
             const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
 
             openFilesForSession([file1, file2], session);
-            const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(server.CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: configFile.path });
+            const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: configFile.path });
             session.executeCommand(compileFileRequest);
 
             const expectedEmittedFileName = "/a/b/f1.js";
