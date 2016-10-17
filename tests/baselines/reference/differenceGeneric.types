@@ -1,0 +1,24 @@
+=== tests/cases/conformance/es6/destructuring/differenceGeneric.ts ===
+interface Gen {
+>Gen : Gen
+
+    x: any;
+>x : any
+}
+function cloneAgain<T extends Gen>(t: T): T {
+>cloneAgain : <T extends Gen>(t: T) => T
+>T : T
+>Gen : Gen
+>t : T
+>T : T
+>T : T
+
+    let { x, ...rest } = t;
+>x : any
+>rest : T - { x: any; }
+>t : T
+
+    return t;
+>t : T
+}
+
