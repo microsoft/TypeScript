@@ -9640,7 +9640,7 @@ namespace ts {
                     }
                 }
 
-                let thisType = getThisTypeOfDeclaration(container) || getContextualThisParameterType(container);
+                const thisType = getThisTypeOfDeclaration(container) || getContextualThisParameterType(container);
                 if (thisType) {
                     return thisType;
                 }
