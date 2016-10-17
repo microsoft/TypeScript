@@ -11019,15 +11019,14 @@ namespace ts {
         }
 
         /**
-         *  Check the attributes of the given JsxOpeningLikeElement.
+         * Check the attributes of the given JsxOpeningLikeElement.
          *      Resolve the type of attributes of the openingLikeElement
          *      Compare if the given attributes assignable to attributes type resolved from the type of opening-element
-         * @param openingLikeElement 
+         * @param openingLikeElement an opening-like JSX element to check its JSXAttributes
          */
         function checkJsxAttributes(openingLikeElement: JsxOpeningLikeElement) {
             let targetAttributesType: Type;
-            // Get target attributes type from resolving opening-element
-            // Check if given attributes (openingLikeELement.attributes) are compatible with the given attributes
+            // targetAttributesType is a type of an attributes from resolving tagnmae of an opening-like JSX element.
             if (isJsxIntrinsicIdentifier(openingLikeElement.tagName)) {
                 targetAttributesType = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement);
             }
@@ -11038,6 +11037,9 @@ namespace ts {
             const symbolTable = getAttributesSymbolTableOfJsxOpeningLikeElement(openingLikeElement);
             // Filter out any hyphenated names as those are not play any role in type-checking unless there are corresponding properties in the target type
             let attributesTable: Map<Symbol>;
+            // sourceAttributesType is a type of an attributes properties.
+            // i.e <div attr1={10} attr2="string" />
+            //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes". They resolved to be sourceAttributesType.
             let sourceAttributesType = anyType as Type;
             let isSourceAttributesTypeEmpty = true;
             if (symbolTable) {
@@ -11050,7 +11052,9 @@ namespace ts {
                 }
                 sourceAttributesType = createJsxAttributesType(openingLikeElement.attributes, attributesTable);
             }
-            // TODO(yuisu): comment
+
+            // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
+            // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
             if (targetAttributesType === emptyObjectType && !isTypeAny(sourceAttributesType) && !isSourceAttributesTypeEmpty) {
                 error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
@@ -11283,14 +11287,12 @@ namespace ts {
             const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType);
 
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
-                // Is this is a stateless function component? See if its single signature's return type is
-                // assignable to the JSX Element Type
+                // Is this is a stateless function component? See if its single signature's return type is assignable to the JSX Element Type
                 if (jsxElementType) {
-                    // TODO (yuisu) : comment
+                    // Cached the result of trying to solve opening-like JSX element as a stateless function component (similar to how getResolvedSignature)
                     const links = getNodeLinks(openingLikeElement);
                     const callSignature = resolveStateLessJsxOpeningLikeElement(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
                     links.resolvedSignature = callSignature;
-                    //const callSignature = getResolvedSignature(openingLikeElement);
                     const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                     let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
                     if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
@@ -12671,8 +12673,9 @@ namespace ts {
                 resultOfFailedInference = undefined;
                 result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
             }
-            // TODO (yuisu): comment
-            if (result || isJsxOpeningLikeElement) {
+
+            // Do not report any error if we are doing so for stateless function component as such error will be error will be handle in "resolveCustomJsxElementAttributesType"
+            if (result || isJsxOpeningOrSelfClosingElement) {
                 return result;
             }
 
@@ -13087,17 +13090,19 @@ namespace ts {
         }
 
         /**
-         * 
-         * @param node
-         * @param candidatesOutArray
+         * Try treating a given opening-like element as stateless function component and try to resolve a signature.
+         * @param openingLikeElement an JsxOpeningLikeElement we want to try resolve its state-less function if possible
+         * @param elementType a type of the opening-like JSX element, a result of resolving tagName in opening-like element.
+         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;         *                           the function will fill it up with appropriate candidate signatures         * @return a resolved signature if we can find function matching function signature through resolve call or a first signature in the list of functions.
+         *         otherwise return undefined if tag-name of the opening-like element doesn't have call signatures
          */
-        function resolveStateLessJsxOpeningLikeElement(node: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature | undefined {
+        function resolveStateLessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature | undefined {
             if (elementType.flags & TypeFlags.Union) {
                 const types = (elementType as UnionType).types;
                 let result: Signature;
                 types.map(type => {
                     // This is mainly to fill in all the candidates if there is one.
-                    result = result || resolveStateLessJsxOpeningLikeElement(node, type, candidatesOutArray);
+                    result = result || resolveStateLessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
                 });
 
                 return result;
@@ -13131,8 +13136,13 @@ namespace ts {
             Debug.fail("Branch in 'resolveSignature' should be unreachable.");
         }
 
-        // candidatesOutArray is passed by signature help in the language service, and collectCandidates
-        // must fill it up with the appropriate candidate signatures
+        /**
+         * Resolve a signature of a given call-like expression.
+         * @param node a call-like expression to try resolve a signature for
+         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
+         *                           the function will fill it up with appropriate candidate signatures
+         * @return a signature of the call-like expression or undefined if one can't be found
+         */
         function getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
             const links = getNodeLinks(node);
             // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
