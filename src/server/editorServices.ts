@@ -17,6 +17,22 @@ namespace ts.server {
         (event: ProjectServiceEvent): void;
     }
 
+    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<Map<number>> {
+        const map: Map<Map<number>> = createMap<Map<number>>();
+        for (const option of commandLineOptions) {
+            if (typeof option.type === "object") {
+                const optionMap = <Map<number>>option.type;
+                // verify that map contains only numbers
+                for (const id in optionMap) {
+                    Debug.assert(typeof optionMap[id] === "number");
+                }
+                map[option.name] = optionMap;
+            }
+        }
+        return map;
+    }
+
+    const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
     const indentStyle = createMap({
         "none": IndentStyle.None,
         "block": IndentStyle.Block,
@@ -32,20 +48,14 @@ namespace ts.server {
     }
 
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin {
-        protocolOptions.target = convertCompilerOptionEnum(targetCommandLineOption, protocolOptions.target);
-        protocolOptions.module = convertCompilerOptionEnum(moduleCommandLineOption, protocolOptions.module);
-        protocolOptions.moduleResolution = convertCompilerOptionEnum(moduleResolutionCommandLineOption, protocolOptions.moduleResolution);
-        protocolOptions.jsx = convertCompilerOptionEnum(jsxCompilerOption, protocolOptions.jsx);
-        protocolOptions.newLine = convertCompilerOptionEnum(newLineCommandLineOption, protocolOptions.newLine);
-        return <any>protocolOptions;
-    }
-
-    function convertCompilerOptionEnum(option: CommandLineOptionOfCustomType, value: string | number): number {
-        if (typeof value === "string") {
-            value = <number>option.type[value.toLowerCase()];
-            Debug.assert(value !== undefined);
+        for (const id in compilerOptionConverters) {
+            const propertyValue = protocolOptions[id];
+            if (typeof propertyValue === "string") {
+                const mappedValues = compilerOptionConverters[id];
+                protocolOptions[id] = mappedValues[propertyValue.toLowerCase()];
+            }
         }
-        return value;
+        return <any>protocolOptions;
     }
 
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind {

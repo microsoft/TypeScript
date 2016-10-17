@@ -162,6 +162,7 @@ function generateProtocolFile(protocolTs: string, typeScriptServicesDts: string)
     }
     protocolDts += "\nimport protocol = ts.server.protocol;";
     protocolDts += "\nexport = protocol;";
+    protocolDts += "\nexport as namespace protocol;";
     // do sanity check and try to compile generated text as standalone program
     const sanityCheckProgram = getProgramWithProtocolText(protocolDts, /*includeTypeScriptServices*/ false);
     const diagnostics = [...sanityCheckProgram.getSyntacticDiagnostics(), ...sanityCheckProgram.getSemanticDiagnostics(), ...sanityCheckProgram.getGlobalDiagnostics()];
