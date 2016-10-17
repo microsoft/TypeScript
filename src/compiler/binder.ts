@@ -1002,7 +1002,7 @@ namespace ts {
             }
             if (node.finallyBlock) {
                 // in finally flow is combined from pre-try/flow from try/flow from catch
-                // pre-flow is necessary to make sure that finally is reachable even if finaly flows in both try and finally blocks are unreachable
+                // pre-flow is necessary to make sure that finally is reachable even if finally flows in both try and finally blocks are unreachable
                 addAntecedent(preFinallyLabel, preTryFlow);
                 currentFlow = finishFlowLabel(preFinallyLabel);
                 bind(node.finallyBlock);
@@ -1014,7 +1014,7 @@ namespace ts {
                 // console.log(2); // this line should be unreachable even if flow falls out of finally block
                 if (!(currentFlow.flags & FlowFlags.Unreachable)) {
                     if ((flowAfterTry.flags & FlowFlags.Unreachable) && (flowAfterCatch.flags & FlowFlags.Unreachable)) {
-                        currentFlow = flowAfterTry == reportedUnreachableFlow || flowAfterCatch === reportedUnreachableFlow
+                        currentFlow = flowAfterTry === reportedUnreachableFlow || flowAfterCatch === reportedUnreachableFlow
                             ? reportedUnreachableFlow
                             : unreachableFlow;
                     }
