@@ -70,13 +70,14 @@ var compilerSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es6.ts",
+    "transformers/module/es2015.ts",
     "transformers/module/system.ts",
     "transformers/module/module.ts",
     "transformers/jsx.ts",
-    "transformers/es7.ts",
+    "transformers/es2017.ts",
+    "transformers/es2016.ts",
+    "transformers/es2015.ts",
     "transformers/generators.ts",
-    "transformers/es6.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -104,13 +105,14 @@ var servicesSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es6.ts",
+    "transformers/module/es2015.ts",
     "transformers/module/system.ts",
     "transformers/module/module.ts",
     "transformers/jsx.ts",
-    "transformers/es7.ts",
+    "transformers/es2017.ts",
+    "transformers/es2016.ts",
+    "transformers/es2015.ts",
     "transformers/generators.ts",
-    "transformers/es6.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -174,7 +176,7 @@ var serverCoreSources = [
     "lsHost.ts",
     "project.ts",
     "editorServices.ts",
-    "protocol.d.ts",
+    "protocol.ts",
     "session.ts",
     "server.ts"
 ].map(function (f) {
@@ -198,14 +200,13 @@ var typingsInstallerSources = [
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
-    "protocol.d.ts",
+    "protocol.ts",
     "utilities.ts",
     "scriptVersionCache.ts",
     "scriptInfo.ts",
     "lsHost.ts",
     "project.ts",
     "editorServices.ts",
-    "protocol.d.ts",
     "session.ts",
 
 ].map(function (f) {
@@ -259,7 +260,7 @@ var harnessSources = harnessCoreSources.concat([
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
-    "protocol.d.ts",
+    "protocol.ts",
     "utilities.ts",
     "scriptVersionCache.ts",
     "scriptInfo.ts",
@@ -267,7 +268,6 @@ var harnessSources = harnessCoreSources.concat([
     "project.ts",
     "typingsCache.ts",
     "editorServices.ts",
-    "protocol.d.ts",
     "session.ts",
 ].map(function (f) {
     return path.join(serverDirectory, f);
@@ -355,6 +355,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
         if (!fs.existsSync(sourceFiles[i])) {
             fail(sourceFiles[i] + " does not exist!");
         }
+        fs.appendFileSync(temp, "\n\n");
         fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
     }
     // Move the file to the final destination
@@ -518,6 +519,40 @@ compileFile(processDiagnosticMessagesJs,
     [],
             /*useBuiltCompiler*/ false);
 
+var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
+var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
+var buildProtocolDts = path.join(builtLocalDirectory, "protocol.d.ts");
+var typescriptServicesDts = path.join(builtLocalDirectory, "typescriptServices.d.ts");
+
+file(buildProtocolTs);
+
+compileFile(buildProtocolJs,
+    [buildProtocolTs],
+    [buildProtocolTs],
+    [],
+    /*useBuiltCompiler*/ false,
+    {noOutFile: true});
+
+file(buildProtocolDts, [buildProtocolTs, buildProtocolJs, typescriptServicesDts], function() {
+
+    var protocolTs = path.join(serverDirectory, "protocol.ts");
+
+    var cmd = host + " " + buildProtocolJs + " "+ protocolTs + " " + typescriptServicesDts + " " + buildProtocolDts;
+    console.log(cmd);
+    var ex = jake.createExec([cmd]);
+    // Add listeners for output and error
+    ex.addListener("stdout", function (output) {
+        process.stdout.write(output);
+    });
+    ex.addListener("stderr", function (error) {
+        process.stderr.write(error);
+    });
+    ex.addListener("cmdEnd", function () {
+        complete();
+    });
+    ex.run();
+}, { async: true })
+
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
     var cmd = host + " " + processDiagnosticMessagesJs + " " + diagnosticMessagesJson;
@@ -655,6 +690,8 @@ compileFile(
         inlineSourceMap: true
     });
 
+file(typescriptServicesDts, [servicesFile]);
+
 var cancellationTokenFile = path.join(builtLocalDirectory, "cancellationToken.js");
 compileFile(cancellationTokenFile, cancellationTokenSources, [builtLocalDirectory].concat(cancellationTokenSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: true });
 
@@ -689,7 +726,7 @@ task("build-fold-end", [], function () {
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["build-fold-start", "generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, "lssl", "build-fold-end"]);
+task("local", ["build-fold-start", "generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, buildProtocolDts, builtGeneratedDiagnosticMessagesJSON, "lssl", "build-fold-end"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -745,7 +782,7 @@ task("generate-spec", [specMd]);
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
-    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });

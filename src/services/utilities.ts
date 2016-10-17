@@ -376,7 +376,7 @@ namespace ts {
                 return true;
             case SyntaxKind.Identifier:
                 // 'this' as a parameter
-                return (node as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword && node.parent.kind === SyntaxKind.Parameter;
+                return identifierIsThisKeyword(node as Identifier) && node.parent.kind === SyntaxKind.Parameter;
             default:
                 return false;
         }
@@ -750,7 +750,7 @@ namespace ts {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 
@@ -761,7 +761,7 @@ namespace ts {
         }
 
         function find(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 
@@ -1339,7 +1339,7 @@ namespace ts {
         const options: TranspileOptions = {
             fileName: "config.js",
             compilerOptions: {
-                target: ScriptTarget.ES6,
+                target: ScriptTarget.ES2015,
                 removeComments: true
             },
             reportDiagnostics: true

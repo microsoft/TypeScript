@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -427,7 +427,7 @@ namespace FourSlash {
 
             if (exists !== negative) {
                 this.printErrorLog(negative, this.getAllDiagnostics());
-                throw new Error("Failure between markers: " + startMarkerName + ", " + endMarkerName);
+                throw new Error(`Failure between markers: '${startMarkerName}', '${endMarkerName}'`);
             }
         }
 
@@ -741,7 +741,6 @@ namespace FourSlash {
                 this.raiseError("Completion list is not empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition + errorMsg);
             }
         }
-
 
         public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
             const completions = this.getCompletionListAtCaret();
@@ -1611,7 +1610,7 @@ namespace FourSlash {
             if (isFormattingEdit) {
                 const newContent = this.getFileContent(fileName);
 
-                if (newContent.replace(/\s/g, "") !== oldContent.replace(/\s/g, "")) {
+                if (this.removeWhitespace(newContent) !== this.removeWhitespace(oldContent)) {
                     this.raiseError("Formatting operation destroyed non-whitespace content");
                 }
             }
@@ -1675,6 +1674,10 @@ namespace FourSlash {
                     return position;
                 }
             }
+        }
+
+        private removeWhitespace(text: string): string {
+            return text.replace(/\s/g, "");
         }
 
         public goToBOF() {
@@ -2038,6 +2041,47 @@ namespace FourSlash {
             }
         }
 
+        private getCodeFixes(errorCode?: number) {
+            const fileName = this.activeFile.fileName;
+            const diagnostics = this.getDiagnostics(fileName);
+
+            if (diagnostics.length === 0) {
+                this.raiseError("Errors expected.");
+            }
+
+            if (diagnostics.length > 1 && errorCode !== undefined) {
+                this.raiseError("When there's more than one error, you must specify the errror to fix.");
+            }
+
+            const diagnostic = !errorCode ? diagnostics[0] : ts.find(diagnostics, d => d.code == errorCode);
+
+            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
+        }
+
+        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.");
+            }
+
+            const actual = this.getCodeFixes(errorCode);
+
+            if (!actual || actual.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            if (actual.length > 1) {
+                this.raiseError("More than 1 codefix returned.");
+            }
+
+            this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
+            const actualText = this.rangeText(ranges[0]);
+
+            if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
+                this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
+            }
+        }
+
         public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
             const name = "verifyDocCommentTemplate";
             const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -2211,6 +2255,18 @@ namespace FourSlash {
             }
         }
 
+        public verifyNavigationTree(json: any) {
+            const tree = this.languageService.getNavigationTree(this.activeFile.fileName);
+            if (JSON.stringify(tree, replacer) !== JSON.stringify(json)) {
+                this.raiseError(`verifyNavigationTree failed - expected: ${stringify(json)}, got: ${stringify(tree, replacer)}`);
+            }
+
+            function replacer(key: string, value: any) {
+                // Don't check "spans", and omit falsy values.
+                return key === "spans" ? undefined : (value || undefined);
+            }
+        }
+
         public printNavigationItems(searchValue: string) {
             const items = this.languageService.getNavigateToItems(searchValue);
             const length = items && items.length;
@@ -2306,6 +2362,18 @@ namespace FourSlash {
 
             if (expectedCount !== actualCount) {
                 this.raiseError("verifyDocumentHighlightsAtPositionListCount failed - actual: " + actualCount + ", expected:" + expectedCount);
+            }
+        }
+
+        public verifyCodeFixAvailable(negative: boolean, errorCode?: number) {
+            const fixes = this.getCodeFixes(errorCode);
+
+            if (negative && fixes && fixes.length > 0) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected no fixes, actual: ${fixes.length}`);
+            }
+
+            if (!negative && (fixes === undefined || fixes.length === 0)) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected code fixes, actual: 0`);
             }
         }
 
@@ -3096,6 +3164,10 @@ namespace FourSlashInterface {
         public isValidBraceCompletionAtPosition(openingBrace: string) {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
         }
+
+        public codeFixAvailable(errorCode?: number) {
+            this.state.verifyCodeFixAvailable(this.negative, errorCode);
+        }
     }
 
     export class Verify extends VerifyNegatable {
@@ -3275,8 +3347,16 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
+        public codeFixAtPosition(expectedText: string, errorCode?: number): void {
+            this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        }
+
         public navigationBar(json: any) {
             this.state.verifyNavigationBar(json);
+        }
+
+        public navigationTree(json: any) {
+            this.state.verifyNavigationTree(json);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string) {

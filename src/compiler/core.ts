@@ -20,6 +20,9 @@ namespace ts {
 
     const createObject = Object.create;
 
+    // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
+    export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
+
     export function createMap<T>(template?: MapLike<T>): Map<T> {
         const map: Map<T> = createObject(null); // tslint:disable-line:no-null-keyword
 
@@ -265,11 +268,31 @@ namespace ts {
         if (array) {
             result = [];
             for (let i = 0; i < array.length; i++) {
-                const v = array[i];
-                result.push(f(v, i));
+                result.push(f(array[i], i));
             }
         }
         return result;
+    }
+
+    // Maps from T to T and avoids allocation if all elements map to themselves
+    export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                if (result) {
+                    result.push(f(array[i], i));
+                }
+                else {
+                    const item = array[i];
+                    const mapped = f(item, i);
+                    if (item !== mapped) {
+                        result = array.slice(0, i);
+                        result.push(mapped);
+                    }
+                }
+            }
+        }
+        return result || array;
     }
 
     /**
@@ -397,6 +420,17 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    export function some<T>(array: T[], predicate?: (value: T) => boolean): boolean {
+        if (array) {
+            for (const v of array) {
+                if (!predicate || predicate(v)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
@@ -1016,7 +1050,8 @@ namespace ts {
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
         if (ignoreCase) {
-            if (String.prototype.localeCompare) {
+            if (collator && String.prototype.localeCompare) {
+                // accent means a ≠ b, a ≠ á, a = A
                 const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
                 return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
             }
@@ -1097,7 +1132,9 @@ namespace ts {
         return path.replace(/\\/g, "/");
     }
 
-    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
+    /**
+     * Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
+    */
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -1126,9 +1163,14 @@ namespace ts {
         return 0;
     }
 
+    /**
+     * Internally, we represent paths as strings with '/' as the directory separator.
+     * When we make system calls (eg: LanguageServiceHost.getDirectory()),
+     * we expect the host to correctly handle paths in our specified format.
+     */
     export const directorySeparator = "/";
     const directorySeparatorCharCode = CharacterCodes.slash;
-    function getNormalizedParts(normalizedSlashedPath: string, rootLength: number) {
+    function getNormalizedParts(normalizedSlashedPath: string, rootLength: number): string[] {
         const parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
         const normalized: string[] = [];
         for (const part of parts) {
@@ -1168,6 +1210,11 @@ namespace ts {
         return path.charCodeAt(path.length - 1) === directorySeparatorCharCode;
     }
 
+    /**
+     * Returns the path except for its basename. Eg:
+     *
+     * /path/to/file.ext -> /path/to
+     */
     export function getDirectoryPath(path: Path): Path;
     export function getDirectoryPath(path: string): string;
     export function getDirectoryPath(path: string): any {
@@ -1191,7 +1238,7 @@ namespace ts {
     export function getEmitModuleKind(compilerOptions: CompilerOptions) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
-            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
+            getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
     }
 
     /* @internal */
@@ -1813,9 +1860,9 @@ namespace ts {
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        getTokenConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
-        getIdentifierConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
-        getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
+        getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
+        getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
+        getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;

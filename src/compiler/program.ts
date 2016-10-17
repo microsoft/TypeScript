@@ -358,7 +358,7 @@ namespace ts {
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
             const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, host);
 
-            if (typeReferences) {
+            if (typeReferences.length) {
                 // This containingFilename needs to match with the one used in managed-side
                 const containingFilename = combinePaths(host.getCurrentDirectory(), "__inferred type names__.ts");
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
@@ -473,6 +473,7 @@ namespace ts {
                 (oldOptions.configFilePath !== options.configFilePath) ||
                 (oldOptions.baseUrl !== options.baseUrl) ||
                 (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
+                !arrayIsEqualTo(oldOptions.lib, options.lib) ||
                 !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
                 !equalOwnProperties(oldOptions.paths, options.paths)) {
@@ -1310,7 +1311,6 @@ namespace ts {
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
-                    const resolvedPath = resolution ? toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName) : undefined;
 
                     // add file to program only if:
                     // - resolution was successful
@@ -1332,7 +1332,7 @@ namespace ts {
                     }
                     else if (shouldAddFile) {
                         findSourceFile(resolution.resolvedFileName,
-                                resolvedPath,
+                                toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName),
                                 /*isDefaultLib*/ false, /*isReference*/ false,
                                 file,
                                 skipTrivia(file.text, file.imports[i].pos),
@@ -1473,12 +1473,16 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib"));
             }
 
+            if (options.noImplicitUseStrict && options.alwaysStrict) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict"));
+            }
+
             const languageVersion = options.target || ScriptTarget.ES3;
             const outFile = options.outFile || options.out;
 
             const firstNonAmbientExternalModuleSourceFile = forEach(files, f => isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
             if (options.isolatedModules) {
-                if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES6) {
+                if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher));
                 }
 
@@ -1488,7 +1492,7 @@ namespace ts {
                     programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided));
                 }
             }
-            else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && options.module === ModuleKind.None) {
+            else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, firstNonAmbientExternalModuleSourceFile.externalModuleIndicator);
                 programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));

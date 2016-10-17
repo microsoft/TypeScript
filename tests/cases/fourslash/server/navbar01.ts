@@ -38,6 +38,114 @@
 ////var p: IPoint = new Shapes.Point(3, 4);
 ////var dist = p.getDist();
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "dist",
+            "kind": "var"
+        },
+        {
+            "text": "IPoint",
+            "kind": "interface",
+            "childItems": [
+                {
+                    "text": "()",
+                    "kind": "call"
+                },
+                {
+                    "text": "new()",
+                    "kind": "construct"
+                },
+                {
+                    "text": "[]",
+                    "kind": "index"
+                },
+                {
+                    "text": "getDist",
+                    "kind": "method"
+                },
+                {
+                    "text": "prop",
+                    "kind": "property"
+                }
+            ]
+        },
+        {
+            "text": "p",
+            "kind": "var"
+        },
+        {
+            "text": "Shapes",
+            "kind": "module",
+            "childItems": [
+                {
+                    "text": "Point",
+                    "kind": "class",
+                    "kindModifiers": "export",
+                    "childItems": [
+                        {
+                            "text": "constructor",
+                            "kind": "constructor"
+                        },
+                        {
+                            "text": "getDist",
+                            "kind": "method"
+                        },
+                        {
+                            "text": "getOrigin",
+                            "kind": "method",
+                            "kindModifiers": "private,static"
+                        },
+                        {
+                            "text": "origin",
+                            "kind": "property",
+                            "kindModifiers": "static"
+                        },
+                        {
+                            "text": "value",
+                            "kind": "getter"
+                        },
+                        {
+                            "text": "value",
+                            "kind": "setter"
+                        },
+                        {
+                            "text": "x",
+                            "kind": "property",
+                            "kindModifiers": "public"
+                        },
+                        {
+                            "text": "y",
+                            "kind": "property",
+                            "kindModifiers": "public"
+                        }
+                    ]
+                },
+                {
+                    "text": "Values",
+                    "kind": "enum",
+                    "childItems": [
+                        {
+                            "text": "value1",
+                            "kind": "const"
+                        },
+                        {
+                            "text": "value2",
+                            "kind": "const"
+                        },
+                        {
+                            "text": "value3",
+                            "kind": "const"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",
