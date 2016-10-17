@@ -5,5 +5,5 @@ var f: {
 };
 
 //// [dontShowCompilerGeneratedMembers.js]
-var f = -;
+var f;
 ;
