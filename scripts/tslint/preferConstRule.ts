@@ -126,7 +126,7 @@ class PreferConstWalker extends Lint.RuleWalker {
     visitModuleDeclaration(node: ts.ModuleDeclaration) {
         if (node.body.kind === ts.SyntaxKind.ModuleBlock) {
             // For some reason module blocks are left out of the visit block traversal
-            this.visitBlock(node.body as ts.ModuleBlock);
+            this.visitBlock(node.body as any as ts.Block);
         }
         super.visitModuleDeclaration(node);
     }

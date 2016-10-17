@@ -11,6 +11,37 @@
 ////    function bar() {}
 ////}
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "a",
+            "kind": "module",
+            "childItems": [
+                {
+                    "text": "bar",
+                    "kind": "function"
+                },
+                {
+                    "text": "foo",
+                    "kind": "function"
+                }
+            ]
+        },
+        {
+            "text": "b",
+            "kind": "module",
+            "childItems": [
+                {
+                    "text": "foo",
+                    "kind": "function"
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",
@@ -60,6 +91,22 @@ verify.navigationBar([
 ////function a() {}
 
 goTo.file("file2.ts");
+
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "a",
+            "kind": "function"
+        },
+        {
+            "text": "a",
+            "kind": "module"
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",
@@ -101,6 +148,34 @@ verify.navigationBar([
 ////}
 
 goTo.file("file3.ts");
+
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "a",
+            "kind": "module",
+            "childItems": [
+                {
+                    "text": "A",
+                    "kind": "interface",
+                    "childItems": [
+                        {
+                            "text": "bar",
+                            "kind": "property"
+                        },
+                        {
+                            "text": "foo",
+                            "kind": "property"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",
@@ -147,6 +222,36 @@ verify.navigationBar([
 ////module A.B { export var y; }
 
 goTo.file("file4.ts");
+
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "A",
+            "kind": "module",
+            "childItems": [
+                {
+                    "text": "x",
+                    "kind": "var",
+                    "kindModifiers": "export"
+                }
+            ]
+        },
+        {
+            "text": "A.B",
+            "kind": "module",
+            "childItems": [
+                {
+                    "text": "y",
+                    "kind": "var",
+                    "kindModifiers": "export"
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",

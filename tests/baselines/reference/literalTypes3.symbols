@@ -1,0 +1,137 @@
+=== tests/cases/conformance/types/literal/literalTypes3.ts ===
+
+function f1(s: string) {
+>f1 : Symbol(f1, Decl(literalTypes3.ts, 0, 0))
+>s : Symbol(s, Decl(literalTypes3.ts, 1, 12))
+
+    if (s === "foo") {
+>s : Symbol(s, Decl(literalTypes3.ts, 1, 12))
+
+        s;  // "foo"
+>s : Symbol(s, Decl(literalTypes3.ts, 1, 12))
+    }
+    if (s === "foo" || s === "bar") {
+>s : Symbol(s, Decl(literalTypes3.ts, 1, 12))
+>s : Symbol(s, Decl(literalTypes3.ts, 1, 12))
+
+        s;  // "foo" | "bar"
+>s : Symbol(s, Decl(literalTypes3.ts, 1, 12))
+    }
+}
+
+function f2(s: string) {
+>f2 : Symbol(f2, Decl(literalTypes3.ts, 8, 1))
+>s : Symbol(s, Decl(literalTypes3.ts, 10, 12))
+
+    switch (s) {
+>s : Symbol(s, Decl(literalTypes3.ts, 10, 12))
+
+        case "foo":
+        case "bar":
+            s;  // "foo" | "bar"
+>s : Symbol(s, Decl(literalTypes3.ts, 10, 12))
+
+        case "baz":
+            s;  // "foo" | "bar" | "baz"
+>s : Symbol(s, Decl(literalTypes3.ts, 10, 12))
+
+            break;
+        default:
+            s;  // string
+>s : Symbol(s, Decl(literalTypes3.ts, 10, 12))
+    }
+}
+
+function f3(s: string) {
+>f3 : Symbol(f3, Decl(literalTypes3.ts, 21, 1))
+>s : Symbol(s, Decl(literalTypes3.ts, 23, 12))
+
+    return s === "foo" || s === "bar" ? s : undefined;  // "foo" | "bar" | undefined
+>s : Symbol(s, Decl(literalTypes3.ts, 23, 12))
+>s : Symbol(s, Decl(literalTypes3.ts, 23, 12))
+>s : Symbol(s, Decl(literalTypes3.ts, 23, 12))
+>undefined : Symbol(undefined)
+}
+
+function f4(x: number) {
+>f4 : Symbol(f4, Decl(literalTypes3.ts, 25, 1))
+>x : Symbol(x, Decl(literalTypes3.ts, 27, 12))
+
+    if (x === 1 || x === 2) {
+>x : Symbol(x, Decl(literalTypes3.ts, 27, 12))
+>x : Symbol(x, Decl(literalTypes3.ts, 27, 12))
+
+        return x;  // 1 | 2
+>x : Symbol(x, Decl(literalTypes3.ts, 27, 12))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+}
+
+function f5(x: number, y: 1 | 2) {
+>f5 : Symbol(f5, Decl(literalTypes3.ts, 32, 1))
+>x : Symbol(x, Decl(literalTypes3.ts, 34, 12))
+>y : Symbol(y, Decl(literalTypes3.ts, 34, 22))
+
+    if (x === 0 || x === y) {
+>x : Symbol(x, Decl(literalTypes3.ts, 34, 12))
+>x : Symbol(x, Decl(literalTypes3.ts, 34, 12))
+>y : Symbol(y, Decl(literalTypes3.ts, 34, 22))
+
+        x;  // 0 | 1 | 2
+>x : Symbol(x, Decl(literalTypes3.ts, 34, 12))
+    }
+}
+
+function f6(x: number, y: 1 | 2) {
+>f6 : Symbol(f6, Decl(literalTypes3.ts, 38, 1))
+>x : Symbol(x, Decl(literalTypes3.ts, 40, 12))
+>y : Symbol(y, Decl(literalTypes3.ts, 40, 22))
+
+    if (y === x || 0 === x) {
+>y : Symbol(y, Decl(literalTypes3.ts, 40, 22))
+>x : Symbol(x, Decl(literalTypes3.ts, 40, 12))
+>x : Symbol(x, Decl(literalTypes3.ts, 40, 12))
+
+        x;  // 0 | 1 | 2
+>x : Symbol(x, Decl(literalTypes3.ts, 40, 12))
+    }
+}
+
+function f7(x: number | "foo" | "bar", y: 1 | 2 | string) {
+>f7 : Symbol(f7, Decl(literalTypes3.ts, 44, 1))
+>x : Symbol(x, Decl(literalTypes3.ts, 46, 12))
+>y : Symbol(y, Decl(literalTypes3.ts, 46, 38))
+
+    if (x === y) {
+>x : Symbol(x, Decl(literalTypes3.ts, 46, 12))
+>y : Symbol(y, Decl(literalTypes3.ts, 46, 38))
+
+        x;  // "foo" | "bar" | 1 | 2
+>x : Symbol(x, Decl(literalTypes3.ts, 46, 12))
+    }
+}
+
+function f8(x: number | "foo" | "bar") {
+>f8 : Symbol(f8, Decl(literalTypes3.ts, 50, 1))
+>x : Symbol(x, Decl(literalTypes3.ts, 52, 12))
+
+    switch (x) {
+>x : Symbol(x, Decl(literalTypes3.ts, 52, 12))
+
+        case 1:
+        case 2:
+            x;  // 1 | 2
+>x : Symbol(x, Decl(literalTypes3.ts, 52, 12))
+
+            break;
+        case "foo":
+            x;  // "foo"
+>x : Symbol(x, Decl(literalTypes3.ts, 52, 12))
+
+            break;
+        default:
+            x;  // number | "bar"
+>x : Symbol(x, Decl(literalTypes3.ts, 52, 12))
+    }
+}

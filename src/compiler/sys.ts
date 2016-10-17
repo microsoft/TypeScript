@@ -83,7 +83,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
-    export var sys: System = (function() {
+    export let sys: System = (function() {
 
         function getWScriptSystem(): System {
 
@@ -476,6 +476,10 @@ namespace ts {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     let options: any;
+                    if (!directoryExists(directoryName)) {
+                        return;
+                    }
+
                     if (isNode4OrLater() && (process.platform === "win32" || process.platform === "darwin")) {
                         options = { persistent: true, recursive: !!recursive };
                     }
@@ -637,4 +641,10 @@ namespace ts {
         }
         return sys;
     })();
+
+    if (sys && sys.getEnvironmentVariable) {
+        Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
+            ? AssertionLevel.Normal
+            : AssertionLevel.None;
+    }
 }

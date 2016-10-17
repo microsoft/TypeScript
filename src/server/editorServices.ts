@@ -1,6 +1,5 @@
 /// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
-/// <reference path="protocol.d.ts" />
 /// <reference path="utilities.ts" />
 /// <reference path="session.ts" />
 /// <reference path="scriptVersionCache.ts"/>
@@ -12,7 +11,7 @@ namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
     export type ProjectServiceEvent =
-        { eventName: "context", data: { project: Project, fileName: NormalizedPath } } | { eventName: "configFileDiag", data: { triggerFile?: string, configFileName: string, diagnostics: Diagnostic[] } }
+        { eventName: "context", data: { project: Project, fileName: NormalizedPath } } | { eventName: "configFileDiag", data: { triggerFile: string, configFileName: string, diagnostics: Diagnostic[] } };
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -180,6 +179,8 @@ namespace ts.server {
 
         private toCanonicalFileName: (f: string) => string;
 
+        public lastDeletedFile: ScriptInfo;
+
         constructor(public readonly host: ServerHost,
             public readonly logger: Logger,
             public readonly cancellationToken: HostCancellationToken,
@@ -272,7 +273,7 @@ namespace ts.server {
                 else {
                     projectsToUpdate = [];
                     for (const f of this.changedFiles) {
-                         projectsToUpdate = projectsToUpdate.concat(f.containingProjects);
+                        projectsToUpdate = projectsToUpdate.concat(f.containingProjects);
                     }
                 }
                 this.updateProjectGraphs(projectsToUpdate);
@@ -342,6 +343,7 @@ namespace ts.server {
 
             if (!info.isOpen) {
                 this.filenameToScriptInfo.remove(info.path);
+                this.lastDeletedFile = info;
 
                 // capture list of projects since detachAllProjects will wipe out original list 
                 const containingProjects = info.containingProjects.slice();
@@ -350,6 +352,7 @@ namespace ts.server {
 
                 // update projects to make sure that set of referenced files is correct
                 this.updateProjectGraphs(containingProjects);
+                this.lastDeletedFile = undefined;
 
                 if (!this.eventHandler) {
                     return;
@@ -389,12 +392,12 @@ namespace ts.server {
             this.throttledOperations.schedule(
                 project.configFileName,
                 /*delay*/250,
-                () => this.handleChangeInSourceFileForConfiguredProject(project));
+                () => this.handleChangeInSourceFileForConfiguredProject(project, fileName));
         }
 
-        private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject) {
+        private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject, triggerFile: string) {
             const { projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.configFileName);
-            this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors);
+            this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors, triggerFile);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
@@ -431,7 +434,7 @@ namespace ts.server {
             }
 
             const { configFileErrors } = this.convertConfigFileContentToProjectOptions(fileName);
-            this.reportConfigFileDiagnostics(fileName, configFileErrors);
+            this.reportConfigFileDiagnostics(fileName, configFileErrors, fileName);
 
             this.logger.info(`Detected newly added tsconfig file: ${fileName}`);
             this.reloadProjects();
@@ -707,7 +710,7 @@ namespace ts.server {
             Debug.assert(!!parsedCommandLine.fileNames);
 
             if (parsedCommandLine.fileNames.length === 0) {
-                errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
+                (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
                 return { success: false, configFileErrors: errors };
             }
 
@@ -754,13 +757,15 @@ namespace ts.server {
             return project;
         }
 
-        private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile?: string) {
-            if (diagnostics && diagnostics.length > 0) {
-                this.eventHandler({
-                    eventName: "configFileDiag",
-                    data: { configFileName, diagnostics, triggerFile }
-                });
+        private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile: string) {
+            if (!this.eventHandler) {
+                return;
             }
+
+            this.eventHandler({
+                eventName: "configFileDiag",
+                data: { configFileName, diagnostics: diagnostics || [], triggerFile }
+            });
         }
 
         private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], clientFileName?: string) {

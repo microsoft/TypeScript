@@ -265,13 +265,16 @@ namespace ts.server {
             installerEventPort: number,
             canUseEvents: boolean,
             useSingleInferredProject: boolean,
+            disableAutomaticTypingAcquisition: boolean,
             globalTypingsCacheLocation: string,
             logger: server.Logger) {
             super(
                 host,
                 cancellationToken,
                 useSingleInferredProject,
-                new NodeTypingsInstaller(logger, installerEventPort, globalTypingsCacheLocation, host.newLine),
+                disableAutomaticTypingAcquisition
+                    ? nullTypingsInstaller
+                    : new NodeTypingsInstaller(logger, installerEventPort, globalTypingsCacheLocation, host.newLine),
                 Buffer.byteLength,
                 process.hrtime,
                 logger,
@@ -512,17 +515,21 @@ namespace ts.server {
     }
 
     const useSingleInferredProject = sys.args.indexOf("--useSingleInferredProject") >= 0;
+    const disableAutomaticTypingAcquisition = sys.args.indexOf("--disableAutomaticTypingAcquisition") >= 0;
     const ioSession = new IOSession(
         sys,
         cancellationToken,
         eventPort,
         /*canUseEvents*/ eventPort === undefined,
         useSingleInferredProject,
+        disableAutomaticTypingAcquisition,
         getGlobalTypingsCacheLocation(),
         logger);
     process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");
     });
+    // See https://github.com/Microsoft/TypeScript/issues/11348
+    (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
 }
