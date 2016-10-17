@@ -4172,7 +4172,7 @@ namespace ts {
             case ScriptTarget.ES2016:
                 return "lib.es2016.d.ts";
             case ScriptTarget.ES2015:
-                return "lib.es2015.d.ts";
+                return "lib.es6.d.ts";
 
             default:
                 return "lib.d.ts";
