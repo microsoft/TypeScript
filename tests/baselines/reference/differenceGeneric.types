@@ -29,12 +29,12 @@ function cloneAgain<T extends Gen & Gen2>(t: T): T {
 >Gen : Gen
 
     let rest: T - Gen;
->rest : any
+>rest : T - Gen
 >T : T
 >Gen : Gen
 
     let rest1: T - Gen - Gen2;
->rest1 : any
+>rest1 : T - Gen - Gen2
 >T : T
 >Gen : Gen
 >Gen2 : Gen2
