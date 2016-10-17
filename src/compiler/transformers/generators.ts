@@ -496,6 +496,7 @@ namespace ts {
             if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionExpression(
+                        /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
@@ -2591,6 +2592,7 @@ namespace ts {
                     createThis(),
                     setEmitFlags(
                         createFunctionExpression(
+                            /*modifiers*/ undefined,
                             /*asteriskToken*/ undefined,
                             /*name*/ undefined,
                             /*typeParameters*/ undefined,

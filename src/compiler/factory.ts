@@ -525,9 +525,9 @@ namespace ts {
         return node;
     }
 
-    export function createFunctionExpression(asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
+    export function createFunctionExpression(modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
         const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression, location, flags);
-        node.modifiers = undefined;
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.asteriskToken = asteriskToken;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = typeParameters ? createNodeArray(typeParameters) : undefined;
@@ -537,9 +537,9 @@ namespace ts {
         return node;
     }
 
-    export function updateFunctionExpression(node: FunctionExpression, name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
-        if (node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
-            return updateNode(createFunctionExpression(node.asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node, node.flags), node);
+    export function updateFunctionExpression(node: FunctionExpression, modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
+        if (node.name !== name || node.modifiers !== modifiers || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
+            return updateNode(createFunctionExpression(modifiers, node.asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node, node.flags), node);
         }
         return node;
     }
@@ -1736,6 +1736,7 @@ namespace ts {
 
     export function createAwaiterHelper(externalHelpersModuleName: Identifier | undefined, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
         const generatorFunc = createFunctionExpression(
+            /*modifiers*/ undefined,
             createToken(SyntaxKind.AsteriskToken),
             /*name*/ undefined,
             /*typeParameters*/ undefined,
@@ -1909,6 +1910,7 @@ namespace ts {
                     createCall(
                         createParen(
                             createFunctionExpression(
+                                /*modifiers*/ undefined,
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,
@@ -1984,7 +1986,7 @@ namespace ts {
         }
         else if (callee.kind === SyntaxKind.SuperKeyword) {
             thisArg = createThis();
-            target = languageVersion < ScriptTarget.ES6 ? createIdentifier("_super", /*location*/ callee) : <PrimaryExpression>callee;
+            target = languageVersion < ScriptTarget.ES2015 ? createIdentifier("_super", /*location*/ callee) : <PrimaryExpression>callee;
         }
         else {
             switch (callee.kind) {
@@ -2090,6 +2092,7 @@ namespace ts {
             const properties: ObjectLiteralElementLike[] = [];
             if (getAccessor) {
                 const getterFunction = createFunctionExpression(
+                    getAccessor.modifiers,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
@@ -2105,6 +2108,7 @@ namespace ts {
 
             if (setAccessor) {
                 const setterFunction = createFunctionExpression(
+                    setAccessor.modifiers,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
@@ -2171,6 +2175,7 @@ namespace ts {
                     createMemberAccessForPropertyName(receiver, method.name, /*location*/ method.name),
                     setOriginalNode(
                         createFunctionExpression(
+                            method.modifiers,
                             method.asteriskToken,
                             /*name*/ undefined,
                             /*typeParameters*/ undefined,
@@ -2206,7 +2211,7 @@ namespace ts {
      * @param visitor: Optional callback used to visit any custom prologue directives.
      */
     export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
-        Debug.assert(target.length === 0, "PrologueDirectives should be at the first statement in the target statements array");
+        Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         let statementOffset = 0;
         const numStatements = source.length;
@@ -2219,20 +2224,51 @@ namespace ts {
                 target.push(statement);
             }
             else {
-                if (ensureUseStrict && !foundUseStrict) {
-                    target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
-                    foundUseStrict = true;
-                }
-                if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
-                    target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
-                }
-                else {
-                    break;
-                }
+                break;
+            }
+            statementOffset++;
+        }
+        if (ensureUseStrict && !foundUseStrict) {
+            target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
+        }
+        while (statementOffset < numStatements) {
+            const statement = source[statementOffset];
+            if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
+                target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
+            }
+            else {
+                break;
             }
             statementOffset++;
         }
         return statementOffset;
+    }
+
+    /**
+     * Ensures "use strict" directive is added
+     * 
+     * @param node source file
+     */
+    export function ensureUseStrict(node: SourceFile): SourceFile {
+        let foundUseStrict = false;
+        for (const statement of node.statements) {
+            if (isPrologueDirective(statement)) {
+                if (isUseStrictPrologue(statement as ExpressionStatement)) {
+                    foundUseStrict = true;
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+        }
+        if (!foundUseStrict) {
+            const statements: Statement[] = [];
+            statements.push(startOnNewLine(createStatement(createLiteral("use strict"))));
+            // add "use strict" as the first statement
+            return updateSourceFileNode(node, statements.concat(node.statements));
+        }
+        return node;
     }
 
     /**

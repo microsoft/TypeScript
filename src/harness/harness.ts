@@ -941,7 +941,17 @@ namespace Harness {
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
-            return options.target === ts.ScriptTarget.ES6 ? es2015DefaultLibFileName : defaultLibFileName;
+            switch (options.target) {
+                case ts.ScriptTarget.ES2017:
+                    return "lib.es2017.d.ts";
+                case ts.ScriptTarget.ES2016:
+                    return "lib.es2016.d.ts";
+                case ts.ScriptTarget.ES2015:
+                    return es2015DefaultLibFileName;
+
+                default:
+                    return defaultLibFileName;
+            }
         }
 
         // Cache these between executions so we don't have to re-parse them for every test
@@ -1634,7 +1644,7 @@ namespace Harness {
 
         export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): string {
             // Collect, test, and sort the fileNames
-            outputFiles.sort((a, b) => cleanName(a.fileName).localeCompare(cleanName(b.fileName)));
+            outputFiles.sort((a, b) => ts.compareStrings(cleanName(a.fileName), cleanName(b.fileName)));
 
             // Emit them
             let result = "";

@@ -1191,7 +1191,7 @@ namespace ts {
         }
 
         function scanBinaryOrOctalDigits(base: number): number {
-            Debug.assert(base !== 2 || base !== 8, "Expected either base 2 or base 8");
+            Debug.assert(base === 2 || base === 8, "Expected either base 2 or base 8");
 
             let value = 0;
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.

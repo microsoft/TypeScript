@@ -337,7 +337,7 @@ namespace ts {
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, languageVersion: ScriptTarget) {
         // Any template literal or string literal with an extended escape
         // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
-        if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
+        if (languageVersion < ScriptTarget.ES2015 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
             return getQuotedEscapedLiteralText('"', node.text, '"');
         }
 
@@ -345,7 +345,7 @@ namespace ts {
         // the node's parent reference, then simply get the text as it was originally written.
         if (!nodeIsSynthesized(node) && node.parent) {
             const text = getSourceTextOfNodeFromSourceFile(sourceFile, node);
-            if (languageVersion < ScriptTarget.ES6 && isBinaryOrOctalIntegerLiteral(node, text)) {
+            if (languageVersion < ScriptTarget.ES2015 && isBinaryOrOctalIntegerLiteral(node, text)) {
                 return node.text;
             }
             return text;
@@ -893,6 +893,12 @@ namespace ts {
 
     export function isObjectLiteralMethod(node: Node): node is MethodDeclaration {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
+    }
+
+    export function isObjectLiteralOrClassExpressionMethod(node: Node): node is MethodDeclaration {
+        return node.kind === SyntaxKind.MethodDeclaration &&
+            (node.parent.kind === SyntaxKind.ObjectLiteralExpression ||
+            node.parent.kind === SyntaxKind.ClassExpression);
     }
 
     export function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate {
@@ -1893,6 +1899,10 @@ namespace ts {
      */
     export function isESSymbolIdentifier(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
+    }
+
+    export function isPushOrUnshiftIdentifier(node: Identifier) {
+        return node.text === "push" || node.text === "unshift";
     }
 
     export function isModifierKind(token: SyntaxKind): boolean {
@@ -3496,7 +3506,7 @@ namespace ts {
         return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
     }
 
-    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver) {
+    export function collectExternalModuleInfo(sourceFile: SourceFile) {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = new StringMap<ExportSpecifier[]>();
         let exportEquals: ExportAssignment = undefined;
@@ -3504,19 +3514,16 @@ namespace ts {
         for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
-                    if (!(<ImportDeclaration>node).importClause ||
-                        resolver.isReferencedAliasDeclaration((<ImportDeclaration>node).importClause, /*checkChildren*/ true)) {
-                        // import "mod"
-                        // import x from "mod" where x is referenced
-                        // import * as x from "mod" where x is referenced
-                        // import { x, y } from "mod" where at least one import is referenced
-                        externalImports.push(<ImportDeclaration>node);
-                    }
+                    // import "mod"
+                    // import x from "mod"
+                    // import * as x from "mod"
+                    // import { x, y } from "mod"
+                    externalImports.push(<ImportDeclaration>node);
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(node)) {
-                        // import x = require("mod") where x is referenced
+                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                        // import x = require("mod")
                         externalImports.push(<ImportEqualsDeclaration>node);
                     }
                     break;
@@ -3525,13 +3532,11 @@ namespace ts {
                     if ((<ExportDeclaration>node).moduleSpecifier) {
                         if (!(<ExportDeclaration>node).exportClause) {
                             // export * from "mod"
-                            if (resolver.moduleExportsSomeValue((<ExportDeclaration>node).moduleSpecifier)) {
-                                externalImports.push(<ExportDeclaration>node);
-                                hasExportStarsToExportValues = true;
-                            }
+                            externalImports.push(<ExportDeclaration>node);
+                            hasExportStarsToExportValues = true;
                         }
-                        else if (resolver.isValueAliasDeclaration(node)) {
-                            // export { x, y } from "mod" where at least one export is a value symbol
+                        else {
+                            // export { x, y } from "mod"
                             externalImports.push(<ExportDeclaration>node);
                         }
                     }
@@ -4161,7 +4166,17 @@ namespace ts {
 
 namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
-        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
+        switch (options.target) {
+            case ScriptTarget.ES2017:
+                return "lib.es2017.d.ts";
+            case ScriptTarget.ES2016:
+                return "lib.es2016.d.ts";
+            case ScriptTarget.ES2015:
+                return "lib.es2015.d.ts";
+
+            default:
+                return "lib.d.ts";
+        }
     }
 
     export function textSpanEnd(span: TextSpan) {

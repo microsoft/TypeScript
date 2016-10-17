@@ -101,7 +101,7 @@ namespace ts {
                 "amd": ModuleKind.AMD,
                 "system": ModuleKind.System,
                 "umd": ModuleKind.UMD,
-                "es6": ModuleKind.ES6,
+                "es6": ModuleKind.ES2015,
                 "es2015": ModuleKind.ES2015,
             }),
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
@@ -261,8 +261,10 @@ namespace ts {
             type: mapOfMapLike({
                 "es3": ScriptTarget.ES3,
                 "es5": ScriptTarget.ES5,
-                "es6": ScriptTarget.ES6,
+                "es6": ScriptTarget.ES2015,
                 "es2015": ScriptTarget.ES2015,
+                "es2016": ScriptTarget.ES2016,
+                "es2017": ScriptTarget.ES2017,
             }),
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
@@ -444,6 +446,11 @@ namespace ts {
             name: "importHelpers",
             type: "boolean",
             description: Diagnostics.Import_emit_helpers_from_tslib
+        },
+        {
+            name: "alwaysStrict",
+            type: "boolean",
+            description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
         }
     ];
 

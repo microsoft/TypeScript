@@ -1018,7 +1018,7 @@ import b = require("./moduleB");
             const files = [f1, f2, f3, f4];
 
             const names = map(files, f => f.name);
-            const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES6)), f => f.fileName);
+            const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES2015)), f => f.fileName);
             const compilerHost: CompilerHost = {
                 fileExists : fileName => sourceFiles.has(fileName),
                 getSourceFile: fileName => sourceFiles.get(fileName),

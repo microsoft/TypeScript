@@ -84,6 +84,7 @@ namespace ts {
         IsFunctionExpression = 1 << 4,
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
+        IsObjectLiteralOrClassExpressionMethod = 1 << 7,
     }
 
     const binder = createBinder();
@@ -121,7 +122,8 @@ namespace ts {
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
-        // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
+        // not depending on if we see "use strict" in certain places or if we hit a class/namespace
+        // or if compiler options contain alwaysStrict.
         let inStrictMode: boolean;
 
         let symbolCount = 0;
@@ -139,7 +141,7 @@ namespace ts {
             file = f;
             options = opts;
             languageVersion = getEmitScriptTarget(options);
-            inStrictMode = !!file.externalModuleIndicator;
+            inStrictMode = bindInStrictMode(file, opts);
             classifiableNames = new StringSet();
             symbolCount = 0;
             skipTransformFlagAggregation = isDeclarationFile(file);
@@ -173,6 +175,16 @@ namespace ts {
         }
 
         return bindSourceFile;
+
+        function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
+            if (opts.alwaysStrict && !isDeclarationFile(file)) {
+                // bind in strict mode source files with alwaysStrict option
+                return true;
+            }
+            else {
+                return !!file.externalModuleIndicator;
+            }
+        }
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;
@@ -486,8 +498,8 @@ namespace ts {
                 }
                 else {
                     currentFlow = { flags: FlowFlags.Start };
-                    if (containerFlags & ContainerFlags.IsFunctionExpression) {
-                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction>node;
+                    if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
+                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
                     currentReturnTarget = undefined;
                 }
@@ -768,6 +780,15 @@ namespace ts {
             setFlowNodeReferenced(antecedent);
             return <FlowAssignment>{
                 flags: FlowFlags.Assignment,
+                antecedent,
+                node
+            };
+        }
+
+        function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return <FlowArrayMutation>{
+                flags: FlowFlags.ArrayMutation,
                 antecedent,
                 node
             };
@@ -1153,6 +1174,12 @@ namespace ts {
                 forEachChild(node, bind);
                 if (operator === SyntaxKind.EqualsToken && !isAssignmentTarget(node)) {
                     bindAssignmentTargetFlow(node.left);
+                    if (node.left.kind === SyntaxKind.ElementAccessExpression) {
+                        const elementAccess = <ElementAccessExpression>node.left;
+                        if (isNarrowableOperand(elementAccess.expression)) {
+                            currentFlow = createFlowArrayMutation(currentFlow, node);
+                        }
+                    }
                 }
             }
         }
@@ -1213,6 +1240,12 @@ namespace ts {
             else {
                 forEachChild(node, bind);
             }
+            if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
+                const propertyAccess = <PropertyAccessExpression>node.expression;
+                if (isNarrowableOperand(propertyAccess.expression) && isPushOrUnshiftIdentifier(propertyAccess.name)) {
+                    currentFlow = createFlowArrayMutation(currentFlow, node);
+                }
+            }
         }
 
         function getContainerFlags(node: Node): ContainerFlags {
@@ -1237,9 +1270,12 @@ namespace ts {
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
+                case SyntaxKind.MethodDeclaration:
+                    if (isObjectLiteralOrClassExpressionMethod(node)) {
+                        return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethod;
+                    }
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -1648,7 +1684,7 @@ namespace ts {
         }
 
         function checkStrictModeFunctionDeclaration(node: FunctionDeclaration) {
-            if (languageVersion < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES2015) {
                 // Report error if function is not top level function declaration
                 if (blockScopeContainer.kind !== SyntaxKind.SourceFile &&
                     blockScopeContainer.kind !== SyntaxKind.ModuleDeclaration &&
@@ -2238,6 +2274,10 @@ namespace ts {
                 }
             }
 
+            if (currentFlow && isObjectLiteralOrClassExpressionMethod(node)) {
+                node.flowNode = currentFlow;
+            }
+
             return hasDynamicName(node)
                 ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
@@ -2310,6 +2350,9 @@ namespace ts {
         switch (kind) {
             case SyntaxKind.CallExpression:
                 return computeCallExpression(<CallExpression>node, subtreeFlags);
+
+            case SyntaxKind.NewExpression:
+                return computeNewExpression(<NewExpression>node, subtreeFlags);
 
             case SyntaxKind.ModuleDeclaration:
                 return computeModuleDeclaration(<ModuleDeclaration>node, subtreeFlags);
@@ -2388,11 +2431,15 @@ namespace ts {
         const expression = node.expression;
         const expressionKind = expression.kind;
 
+        if (node.typeArguments) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
         if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression
             || isSuperOrSuperProperty(expression, expressionKind)) {
             // If the this node contains a SpreadElementExpression, or is a super call, then it is an ES6
             // node.
-            transformFlags |= TransformFlags.AssertES6;
+            transformFlags |= TransformFlags.AssertES2015;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2414,6 +2461,21 @@ namespace ts {
         return false;
     }
 
+    function computeNewExpression(node: NewExpression, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        if (node.typeArguments) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+        if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression) {
+            // If the this node contains a SpreadElementExpression then it is an ES6
+            // node.
+            transformFlags |= TransformFlags.AssertES2015;
+        }
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
+    }
+
+
     function computeBinaryExpression(node: BinaryExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
         const operatorTokenKind = node.operatorToken.kind;
@@ -2423,12 +2485,12 @@ namespace ts {
             && (leftKind === SyntaxKind.ObjectLiteralExpression
                 || leftKind === SyntaxKind.ArrayLiteralExpression)) {
             // Destructuring assignments are ES6 syntax.
-            transformFlags |= TransformFlags.AssertES6 | TransformFlags.DestructuringAssignment;
+            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.DestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.AsteriskAsteriskToken
             || operatorTokenKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
-            // Exponentiation is ES7 syntax.
-            transformFlags |= TransformFlags.AssertES7;
+            // Exponentiation is ES2016 syntax.
+            transformFlags |= TransformFlags.AssertES2016;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2442,13 +2504,12 @@ namespace ts {
         const initializer = node.initializer;
         const dotDotDotToken = node.dotDotDotToken;
 
-        // If the parameter has a question token, then it is TypeScript syntax.
-        if (node.questionToken) {
-            transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        // If the parameter's name is 'this', then it is TypeScript syntax.
-        if (subtreeFlags & TransformFlags.ContainsDecorators || isThisIdentifier(name)) {
+        // The '?' token, type annotations, decorators, and 'this' parameters are TypeSCript
+        // syntax.
+        if (node.questionToken
+            || node.type
+            || subtreeFlags & TransformFlags.ContainsDecorators
+            || isThisIdentifier(name)) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -2460,7 +2521,7 @@ namespace ts {
         // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
         // it is ES6 syntax and its container must emit default value assignments or parameter destructuring downlevel.
         if (subtreeFlags & TransformFlags.ContainsBindingPattern || initializer || dotDotDotToken) {
-            transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsDefaultValueAssignments;
+            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsDefaultValueAssignments;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2501,13 +2562,14 @@ namespace ts {
         }
         else {
             // A ClassDeclaration is ES6 syntax.
-            transformFlags = subtreeFlags | TransformFlags.AssertES6;
+            transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
             // A class with a parameter property assignment, property initializer, or decorator is
             // TypeScript syntax.
             // An exported declaration may be TypeScript syntax.
             if ((subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask)
-                || (modifierFlags & ModifierFlags.Export)) {
+                || (modifierFlags & ModifierFlags.Export)
+                || node.typeParameters) {
                 transformFlags |= TransformFlags.AssertTypeScript;
             }
 
@@ -2524,11 +2586,12 @@ namespace ts {
 
     function computeClassExpression(node: ClassExpression, subtreeFlags: TransformFlags) {
         // A ClassExpression is ES6 syntax.
-        let transformFlags = subtreeFlags | TransformFlags.AssertES6;
+        let transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
         // A class with a parameter property assignment, property initializer, or decorator is
         // TypeScript syntax.
-        if (subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask) {
+        if (subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask
+            || node.typeParameters) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -2548,7 +2611,7 @@ namespace ts {
         switch (node.token) {
             case SyntaxKind.ExtendsKeyword:
                 // An `extends` HeritageClause is ES6 syntax.
-                transformFlags |= TransformFlags.AssertES6;
+                transformFlags |= TransformFlags.AssertES2015;
                 break;
 
             case SyntaxKind.ImplementsKeyword:
@@ -2568,7 +2631,7 @@ namespace ts {
     function computeExpressionWithTypeArguments(node: ExpressionWithTypeArguments, subtreeFlags: TransformFlags) {
         // An ExpressionWithTypeArguments is ES6 syntax, as it is used in the
         // extends clause of a class.
-        let transformFlags = subtreeFlags | TransformFlags.AssertES6;
+        let transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
         // If an ExpressionWithTypeArguments contains type arguments, then it
         // is TypeScript syntax.
@@ -2582,10 +2645,10 @@ namespace ts {
 
     function computeConstructor(node: ConstructorDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const body = node.body;
 
-        if (body === undefined) {
-            // An overload constructor is TypeScript syntax.
+        // TypeScript-specific modifiers and overloads are TypeScript syntax
+        if (hasModifier(node, ModifierFlags.TypeScriptModifier)
+            || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -2595,23 +2658,25 @@ namespace ts {
 
     function computeMethod(node: MethodDeclaration, subtreeFlags: TransformFlags) {
         // A MethodDeclaration is ES6 syntax.
-        let transformFlags = subtreeFlags | TransformFlags.AssertES6;
-        const modifierFlags = getModifierFlags(node);
-        const body = node.body;
-        const typeParameters = node.typeParameters;
-        const asteriskToken = node.asteriskToken;
+        let transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
-        // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
-        // generic, or has a decorator.
-        if (!body
-            || typeParameters
-            || (modifierFlags & (ModifierFlags.Async | ModifierFlags.Abstract))
-            || (subtreeFlags & TransformFlags.ContainsDecorators)) {
+        // Decorators, TypeScript-specific modifiers, type parameters, type annotations, and
+        // overloads are TypeScript syntax.
+        if (node.decorators
+            || hasModifier(node, ModifierFlags.TypeScriptModifier)
+            || node.typeParameters
+            || node.type
+            || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
+        // An async method declaration is ES2017 syntax.
+        if (hasModifier(node, ModifierFlags.Async)) {
+            transformFlags |= TransformFlags.AssertES2017;
+        }
+
         // Currently, we only support generators that were originally async function bodies.
-        if (asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
+        if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 
@@ -2621,14 +2686,13 @@ namespace ts {
 
     function computeAccessor(node: AccessorDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const modifierFlags = getModifierFlags(node);
-        const body = node.body;
 
-        // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
-        // generic, or has a decorator.
-        if (!body
-            || (modifierFlags & (ModifierFlags.Async | ModifierFlags.Abstract))
-            || (subtreeFlags & TransformFlags.ContainsDecorators)) {
+        // Decorators, TypeScript-specific modifiers, type annotations, and overloads are
+        // TypeScript syntax.
+        if (node.decorators
+            || hasModifier(node, ModifierFlags.TypeScriptModifier)
+            || node.type
+            || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -2654,7 +2718,6 @@ namespace ts {
         let transformFlags: TransformFlags;
         const modifierFlags = getModifierFlags(node);
         const body = node.body;
-        const asteriskToken = node.asteriskToken;
 
         if (!body || (modifierFlags & ModifierFlags.Ambient)) {
             // An ambient declaration is TypeScript syntax.
@@ -2666,19 +2729,27 @@ namespace ts {
 
             // If a FunctionDeclaration is exported, then it is either ES6 or TypeScript syntax.
             if (modifierFlags & ModifierFlags.Export) {
-                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES6;
+                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2015;
             }
 
-            // If a FunctionDeclaration is async, then it is TypeScript syntax.
-            if (modifierFlags & ModifierFlags.Async) {
+            // TypeScript-specific modifiers, type parameters, and type annotations are TypeScript
+            // syntax.
+            if (modifierFlags & ModifierFlags.TypeScriptModifier
+                || node.typeParameters
+                || node.type) {
                 transformFlags |= TransformFlags.AssertTypeScript;
+            }
+
+            // An async function declaration is ES2017 syntax.
+            if (modifierFlags & ModifierFlags.Async) {
+                transformFlags |= TransformFlags.AssertES2017;
             }
 
             // If a FunctionDeclaration's subtree has marked the container as needing to capture the
             // lexical this, or the function contains parameters with initializers, then this node is
             // ES6 syntax.
-            if (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask) {
-                transformFlags |= TransformFlags.AssertES6;
+            if (subtreeFlags & TransformFlags.ES2015FunctionSyntaxMask) {
+                transformFlags |= TransformFlags.AssertES2015;
             }
 
             // If a FunctionDeclaration is generator function and is the body of a
@@ -2686,7 +2757,7 @@ namespace ts {
             // down-level generator.
             // Currently we do not support transforming any other generator fucntions
             // down level.
-            if (asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 transformFlags |= TransformFlags.AssertGenerator;
             }
         }
@@ -2697,19 +2768,25 @@ namespace ts {
 
     function computeFunctionExpression(node: FunctionExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const modifierFlags = getModifierFlags(node);
-        const asteriskToken = node.asteriskToken;
 
-        // An async function expression is TypeScript syntax.
-        if (modifierFlags & ModifierFlags.Async) {
+        // TypeScript-specific modifiers, type parameters, and type annotations are TypeScript
+        // syntax.
+        if (hasModifier(node, ModifierFlags.TypeScriptModifier)
+            || node.typeParameters
+            || node.type) {
             transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // An async function expression is ES2017 syntax.
+        if (hasModifier(node, ModifierFlags.Async)) {
+            transformFlags |= TransformFlags.AssertES2017;
         }
 
         // If a FunctionExpression's subtree has marked the container as needing to capture the
         // lexical this, or the function contains parameters with initializers, then this node is
         // ES6 syntax.
-        if (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask) {
-            transformFlags |= TransformFlags.AssertES6;
+        if (subtreeFlags & TransformFlags.ES2015FunctionSyntaxMask) {
+            transformFlags |= TransformFlags.AssertES2015;
         }
 
         // If a FunctionExpression is generator function and is the body of a
@@ -2717,7 +2794,7 @@ namespace ts {
         // down-level generator.
         // Currently we do not support transforming any other generator fucntions
         // down level.
-        if (asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
+        if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 
@@ -2727,12 +2804,19 @@ namespace ts {
 
     function computeArrowFunction(node: ArrowFunction, subtreeFlags: TransformFlags) {
         // An ArrowFunction is ES6 syntax, and excludes markers that should not escape the scope of an ArrowFunction.
-        let transformFlags = subtreeFlags | TransformFlags.AssertES6;
-        const modifierFlags = getModifierFlags(node);
+        let transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
-        // An async arrow function is TypeScript syntax.
-        if (modifierFlags & ModifierFlags.Async) {
+        // TypeScript-specific modifiers, type parameters, and type annotations are TypeScript
+        // syntax.
+        if (hasModifier(node, ModifierFlags.TypeScriptModifier)
+            || node.typeParameters
+            || node.type) {
             transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // An async arrow function is ES2017 syntax.
+        if (hasModifier(node, ModifierFlags.Async)) {
+            transformFlags |= TransformFlags.AssertES2017;
         }
 
         // If an ArrowFunction contains a lexical this, its container must capture the lexical this.
@@ -2765,7 +2849,12 @@ namespace ts {
 
         // A VariableDeclaration with a binding pattern is ES6 syntax.
         if (nameKind === SyntaxKind.ObjectBindingPattern || nameKind === SyntaxKind.ArrayBindingPattern) {
-            transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsBindingPattern;
+            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
+        }
+
+        // Type annotations are TypeScript syntax.
+        if (node.type) {
+            transformFlags |= TransformFlags.AssertTypeScript;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2786,11 +2875,11 @@ namespace ts {
 
             // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
             if (modifierFlags & ModifierFlags.Export) {
-                transformFlags |= TransformFlags.AssertES6 | TransformFlags.AssertTypeScript;
+                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertTypeScript;
             }
 
             if (declarationListTransformFlags & TransformFlags.ContainsBindingPattern) {
-                transformFlags |= TransformFlags.AssertES6;
+                transformFlags |= TransformFlags.AssertES2015;
             }
         }
 
@@ -2804,7 +2893,7 @@ namespace ts {
         // A labeled statement containing a block scoped binding *may* need to be transformed from ES6.
         if (subtreeFlags & TransformFlags.ContainsBlockScopedBinding
             && isIterationStatement(node, /*lookInLabeledStatements*/ true)) {
-            transformFlags |= TransformFlags.AssertES6;
+            transformFlags |= TransformFlags.AssertES2015;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2830,7 +2919,7 @@ namespace ts {
         // then we treat the statement as ES6 so that we can indicate that we do not
         // need to hold on to the right-hand side.
         if (node.expression.transformFlags & TransformFlags.DestructuringAssignment) {
-            transformFlags |= TransformFlags.AssertES6;
+            transformFlags |= TransformFlags.AssertES2015;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2853,12 +2942,12 @@ namespace ts {
         let transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
         if (subtreeFlags & TransformFlags.ContainsBindingPattern) {
-            transformFlags |= TransformFlags.AssertES6;
+            transformFlags |= TransformFlags.AssertES2015;
         }
 
         // If a VariableDeclarationList is `let` or `const`, then it is ES6 syntax.
         if (node.flags & NodeFlags.BlockScoped) {
-            transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsBlockScopedBinding;
+            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBlockScopedBinding;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2871,14 +2960,18 @@ namespace ts {
         let excludeFlags = TransformFlags.NodeExcludes;
 
         switch (kind) {
+            case SyntaxKind.AsyncKeyword:
+            case SyntaxKind.AwaitExpression:
+                // async/await is ES2017 syntax
+                transformFlags |= TransformFlags.AssertES2017;
+                break;
+
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.DeclareKeyword:
-            case SyntaxKind.AsyncKeyword:
             case SyntaxKind.ConstKeyword:
-            case SyntaxKind.AwaitExpression:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
             case SyntaxKind.TypeAssertionExpression:
@@ -2903,7 +2996,7 @@ namespace ts {
 
             case SyntaxKind.ExportKeyword:
                 // This node is both ES6 and TypeScript syntax.
-                transformFlags |= TransformFlags.AssertES6 | TransformFlags.AssertTypeScript;
+                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertTypeScript;
                 break;
 
             case SyntaxKind.DefaultKeyword:
@@ -2916,12 +3009,12 @@ namespace ts {
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.ForOfStatement:
                 // These nodes are ES6 syntax.
-                transformFlags |= TransformFlags.AssertES6;
+                transformFlags |= TransformFlags.AssertES2015;
                 break;
 
             case SyntaxKind.YieldExpression:
                 // This node is ES6 syntax.
-                transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsYield;
+                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
                 break;
 
             case SyntaxKind.AnyKeyword:
@@ -2982,7 +3075,7 @@ namespace ts {
 
             case SyntaxKind.SuperKeyword:
                 // This node is ES6 syntax.
-                transformFlags |= TransformFlags.AssertES6;
+                transformFlags |= TransformFlags.AssertES2015;
                 break;
 
             case SyntaxKind.ThisKeyword:
@@ -2993,7 +3086,7 @@ namespace ts {
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 // These nodes are ES6 syntax.
-                transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsBindingPattern;
+                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
                 break;
 
             case SyntaxKind.Decorator:
@@ -3006,7 +3099,7 @@ namespace ts {
                 if (subtreeFlags & TransformFlags.ContainsComputedPropertyName) {
                     // If an ObjectLiteralExpression contains a ComputedPropertyName, then it
                     // is an ES6 node.
-                    transformFlags |= TransformFlags.AssertES6;
+                    transformFlags |= TransformFlags.AssertES2015;
                 }
 
                 if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
@@ -3023,7 +3116,7 @@ namespace ts {
                 if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression) {
                     // If the this node contains a SpreadElementExpression, then it is an ES6
                     // node.
-                    transformFlags |= TransformFlags.AssertES6;
+                    transformFlags |= TransformFlags.AssertES2015;
                 }
 
                 break;
@@ -3034,14 +3127,14 @@ namespace ts {
             case SyntaxKind.ForInStatement:
                 // A loop containing a block scoped binding *may* need to be transformed from ES6.
                 if (subtreeFlags & TransformFlags.ContainsBlockScopedBinding) {
-                    transformFlags |= TransformFlags.AssertES6;
+                    transformFlags |= TransformFlags.AssertES2015;
                 }
 
                 break;
 
             case SyntaxKind.SourceFile:
                 if (subtreeFlags & TransformFlags.ContainsCapturedLexicalThis) {
-                    transformFlags |= TransformFlags.AssertES6;
+                    transformFlags |= TransformFlags.AssertES2015;
                 }
 
                 break;

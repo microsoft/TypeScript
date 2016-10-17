@@ -403,11 +403,11 @@ namespace ts {
 
     export interface EditorSettings {
         baseIndentSize?: number;
-        indentSize: number;
-        tabSize: number;
-        newLineCharacter: string;
-        convertTabsToSpaces: boolean;
-        indentStyle: IndentStyle;
+        indentSize?: number;
+        tabSize?: number;
+        newLineCharacter?: string;
+        convertTabsToSpaces?: boolean;
+        indentStyle?: IndentStyle;
     }
 
     /* @deprecated - consider using FormatCodeSettings instead */
@@ -428,19 +428,19 @@ namespace ts {
     }
 
     export interface FormatCodeSettings extends EditorSettings {
-        insertSpaceAfterCommaDelimiter: boolean;
-        insertSpaceAfterSemicolonInForStatements: boolean;
-        insertSpaceBeforeAndAfterBinaryOperators: boolean;
-        insertSpaceAfterKeywordsInControlFlowStatements: boolean;
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        insertSpaceAfterCommaDelimiter?: boolean;
+        insertSpaceAfterSemicolonInForStatements?: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         insertSpaceAfterTypeAssertion?: boolean;
-        placeOpenBraceOnNewLineForFunctions: boolean;
-        placeOpenBraceOnNewLineForControlBlocks: boolean;
+        placeOpenBraceOnNewLineForFunctions?: boolean;
+        placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
 
     export interface DefinitionInfo {
