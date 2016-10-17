@@ -12538,7 +12538,7 @@ namespace ts {
             if (isInJavaScriptFile(node) &&
                 isRequireCall(node, /*checkArgumentIsStringLiteral*/true) &&
                 // Make sure require is not a local function
-                !resolveName(node.expression, (<Identifier>node.expression).text, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined)) {
+                !resolveName(node.expression, (<Identifier>node.expression).text, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined)) {
                 return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
             }
 
