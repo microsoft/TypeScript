@@ -792,12 +792,6 @@ namespace ts {
         function visitExpressionStatementForEnumOrNamespaceDeclaration(node: ExpressionStatement, original: EnumDeclaration | ModuleDeclaration): VisitResult<Statement> {
             const statements: Statement[] = [node];
 
-            // Preserve old behavior for enums in which a variable statement is emitted after the body itself.
-            if (hasModifier(original, ModifierFlags.Export) &&
-                original.kind === SyntaxKind.EnumDeclaration &&
-                isFirstDeclarationOfKind(original, SyntaxKind.EnumDeclaration)) {
-                addVarForExportedEnumOrNamespaceDeclaration(statements, original);
-            }
 
             addExportMemberAssignments(statements, <Identifier>original.name);
 

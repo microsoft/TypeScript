@@ -2517,29 +2517,6 @@ namespace ts {
                 || compilerOptions.isolatedModules;
         }
 
-        function shouldEmitVarForEnumDeclaration(node: EnumDeclaration | ModuleDeclaration) {
-            return isFirstEmittedDeclarationInScope(node)
-                && (!hasModifier(node, ModifierFlags.Export)
-                    || isES6ExportedDeclaration(node));
-        }
-
-
-        /*
-         * Adds a trailing VariableStatement for an enum or module declaration.
-         */
-        function addVarForEnumExportedFromNamespace(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
-            const statement = createVariableStatement(
-                /*modifiers*/ undefined,
-                [createVariableDeclaration(
-                    getDeclarationName(node),
-                    /*type*/ undefined,
-                    getExportName(node)
-                )]
-            );
-            setSourceMapRange(statement, node);
-            statements.push(statement);
-        }
-
         /**
          * Visits an enum declaration.
          *
@@ -2562,7 +2539,7 @@ namespace ts {
             // a leading variable declaration, we should not emit leading comments for the
             // enum body.
             recordEmittedDeclarationInScope(node);
-            if (shouldEmitVarForEnumDeclaration(node)) {
+            if (isFirstEmittedDeclarationInScope(node)) {
                 addVarForEnumOrModuleDeclaration(statements, node);
 
                 // We should still emit the comments if we are emitting a system module.
@@ -2580,6 +2557,25 @@ namespace ts {
             // `exportName` is the expression used within this node's container for any exported references.
             const exportName = getExportName(node);
 
+            //  x || (x = {})
+            //  exports.x || (exports.x = {})
+            let moduleArg =
+                createLogicalOr(
+                    exportName,
+                    createAssignment(
+                        exportName,
+                        createObjectLiteral()
+                    )
+                );
+
+            if (hasModifier(node, ModifierFlags.Export) && !isES6ExportedDeclaration(node)) {
+                // `localName` is the expression used within this node's containing scope for any local references.
+                const localName = getLocalName(node);
+
+                //  x = (exports.x || (exports.x = {}))
+                moduleArg = createAssignment(localName, moduleArg);
+            }
+
             //  (function (x) {
             //      x[x["y"] = 0] = "y";
             //      ...
@@ -2596,13 +2592,7 @@ namespace ts {
                         transformEnumBody(node, containerName)
                     ),
                     /*typeArguments*/ undefined,
-                    [createLogicalOr(
-                        exportName,
-                        createAssignment(
-                            exportName,
-                            createObjectLiteral()
-                        )
-                    )]
+                    [moduleArg]
                 ),
                 /*location*/ node
             );
@@ -2610,11 +2600,6 @@ namespace ts {
             setOriginalNode(enumStatement, node);
             setEmitFlags(enumStatement, emitFlags);
             statements.push(enumStatement);
-
-            if (isNamespaceExport(node)) {
-                addVarForEnumExportedFromNamespace(statements, node);
-            }
-
             return statements;
         }
 
@@ -2739,10 +2724,6 @@ namespace ts {
             return false;
         }
 
-        function shouldEmitVarForModuleDeclaration(node: ModuleDeclaration) {
-            return isFirstEmittedDeclarationInScope(node);
-        }
-
         /**
          * Adds a leading VariableStatement for a enum or module declaration.
          */
@@ -2817,7 +2798,7 @@ namespace ts {
             // a leading variable declaration, we should not emit leading comments for the
             // module body.
             recordEmittedDeclarationInScope(node);
-            if (shouldEmitVarForModuleDeclaration(node)) {
+            if (isFirstEmittedDeclarationInScope(node)) {
                 addVarForEnumOrModuleDeclaration(statements, node);
                 // We should still emit the comments if we are emitting a system module.
                 if (moduleKind !== ModuleKind.System || currentScope !== currentSourceFile) {
