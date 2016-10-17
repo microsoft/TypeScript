@@ -355,6 +355,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
         if (!fs.existsSync(sourceFiles[i])) {
             fail(sourceFiles[i] + " does not exist!");
         }
+        fs.appendFileSync(temp, "\n\n");
         fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
     }
     // Move the file to the final destination
