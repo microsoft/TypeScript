@@ -7,7 +7,6 @@
 namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
-
     /* @internal */
     export const optionDeclarations: CommandLineOption[] = [
         {
