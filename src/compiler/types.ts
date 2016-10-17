@@ -2644,7 +2644,8 @@ namespace ts {
         ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
         /* @internal */
         ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
-        Spread                = 1 << 28,    // Spread types
+        Spread                  = 1 << 28,  // Spread types
+        Difference              = 1 << 29,  // No way this will last
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2772,6 +2773,11 @@ namespace ts {
     export interface SpreadType extends Type {
         left: SpreadType | ResolvedType;
         right: TypeParameter | ResolvedType;
+    }
+
+    export interface DifferenceType extends Type {
+        source: Type; // might be able to refine these like the SpreadType
+        minus: Type;
     }
 
     /* @internal */

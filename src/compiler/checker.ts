@@ -114,6 +114,7 @@ namespace ts {
         const unionTypes = createMap<UnionType>();
         const intersectionTypes = createMap<IntersectionType>();
         const spreadTypes = createMap<SpreadType>();
+        const differenceTypes = createMap<DifferenceType>();
         const stringLiteralTypes = createMap<LiteralType>();
         const numericLiteralTypes = createMap<LiteralType>();
 
@@ -2204,7 +2205,10 @@ namespace ts {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
                     }
                     else if (type.flags & TypeFlags.Spread) {
-                        writeSpreadType(<SpreadType>type, nextFlags);
+                        writeSpreadType(type as SpreadType, nextFlags);
+                    }
+                    else if (type.flags & TypeFlags.Difference) {
+                        writeDifferenceType(type as DifferenceType, nextFlags);
                     }
                     else if (type.flags & TypeFlags.Anonymous) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
@@ -2350,6 +2354,19 @@ namespace ts {
                     }
                 }
 
+                function writeDifferenceType(type: DifferenceType, flags: TypeFormatFlags) {
+                    if (flags & TypeFormatFlags.InElementType) {
+                        writePunctuation(writer, SyntaxKind.OpenParenToken);
+                    }
+                    writeType(type.source, flags);
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.MinusToken);
+                    writeSpace(writer);
+                    writeType(type.minus, flags);
+                    if (flags & TypeFormatFlags.InElementType) {
+                        writePunctuation(writer, SyntaxKind.CloseParenToken);
+                    }
+                }
                 function writeAnonymousType(type: ObjectType, flags: TypeFormatFlags) {
                     const symbol = type.symbol;
                     if (symbol) {
@@ -2979,18 +2996,27 @@ namespace ts {
             return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind);
         }
 
-        function getDifferenceType(left: Type, right: Type, symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
-            Debug.assert(!!(left.flags & TypeFlags.ObjectType && right.flags & TypeFlags.ObjectType));
-            if (left.flags & TypeFlags.ObjectType && right.flags & TypeFlags.ObjectType) {
+        function getDifferenceType(source: Type, minus: Type, symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            if (source.flags & TypeFlags.ObjectType && minus.flags & TypeFlags.ObjectType) {
                 const members = createMap<Symbol>();
-                for (const prop of getPropertiesOfType(left)) {
-                    if (!getPropertyOfObjectType(right, prop.name)) {
+                for (const prop of getPropertiesOfType(source)) {
+                    if (!getPropertyOfObjectType(minus, prop.name)) {
                         members[prop.name] = prop;
                     }
                 }
                 // TODO: Include call and construct signatures and indexers
                 // but that's not applicable to the tests I currently have
-                return createAnonymousType(symbol, members, emptyArray, emptyArray, getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.Number));
+                return createAnonymousType(symbol, members, emptyArray, emptyArray, getIndexInfoOfType(source, IndexKind.String), getIndexInfoOfType(minus, IndexKind.Number));
+            }
+            if (source.flags & TypeFlags.TypeParameter) {
+                // don't touch the minus until later I guess?
+                var id = 0;
+                const difference = differenceTypes[id] = createObjectType(TypeFlags.Difference, symbol) as DifferenceType;
+                difference.source = source;
+                difference.minus = minus;
+                difference.aliasSymbol = aliasSymbol;
+                difference.aliasTypeArguments = aliasTypeArguments;
+                return difference;
             }
             // TODO: createDifferenceType
         }
@@ -3021,8 +3047,9 @@ namespace ts {
                         if (element.kind === SyntaxKind.OmittedExpression || (element as BindingElement).dotDotDotToken) {
                             continue;
                         }
-                        const name = getTextOfPropertyName(element.propertyName || element.name as Identifier);
-                        literalMembers[name] = getPropertyOfObjectType(parentType, name);
+                        const propertyName = element.propertyName || element.name as Identifier;
+                        const name = getTextOfPropertyName(propertyName);
+                        literalMembers[name] = getSymbolOfNode(element) || getPropertyOfObjectType(parentType, name);
                     }
                     type = getDifferenceType(parentType, createAnonymousType(declaration.symbol, literalMembers, emptyArray, emptyArray, undefined, undefined), declaration.symbol);
                 }
