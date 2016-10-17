@@ -38,10 +38,6 @@ namespace ts.projectSystem {
         getLogFileName: (): string => undefined
     };
 
-    export const nullCancellationToken: HostCancellationToken = {
-        isCancellationRequested: () => false
-    };
-
     export const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
@@ -173,7 +169,7 @@ namespace ts.projectSystem {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
+        return new server.Session(host, server.nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
     }
 
     export interface CreateProjectServiceParameters {
@@ -196,7 +192,7 @@ namespace ts.projectSystem {
         }
     }
     export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}) {
-        const cancellationToken = parameters.cancellationToken || nullCancellationToken;
+        const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
         const logger = parameters.logger || nullLogger;
         const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
         return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller, parameters.eventHandler);
