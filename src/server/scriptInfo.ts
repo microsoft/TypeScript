@@ -84,7 +84,10 @@ namespace ts.server {
         }
 
         getDefaultProject() {
-            return this.containingProjects.length === 0 ? Errors.ThrowNoProject() : this.containingProjects[0];
+            if (this.containingProjects.length === 0) {
+                return Errors.ThrowNoProject();
+            }
+            return this.containingProjects[0];
         }
 
         setFormatOptions(formatSettings: FormatCodeSettings): void {
