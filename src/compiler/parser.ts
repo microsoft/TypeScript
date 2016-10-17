@@ -2549,16 +2549,20 @@ namespace ts {
         }
 
         function parseDifferenceTypeOrHigher(): TypeNode {
-            let type = parseArrayTypeOrHigher();
-            if (parseOptional(SyntaxKind.MinusToken)) {
-                let minus = parseDifferenceTypeOrHigher();
-                const node = createNode(SyntaxKind.DifferenceType, type.pos) as DifferenceTypeNode;
-                node.source = type;
-                node.minus = minus;
-                type = finishNode(node);
-
+            let leftType = parseArrayTypeOrHigher();
+            // create left-associative difference types as long as the parser sees `-`
+            while (token() === SyntaxKind.MinusToken) {
+                parseTokenNode();
+                leftType = makeDifferenceType(leftType, parseArrayTypeOrHigher());
             }
-            return type;
+            return leftType;
+        }
+
+        function makeDifferenceType(source: TypeNode, minus: TypeNode) {
+            const node = createNode(SyntaxKind.DifferenceType, source.pos) as DifferenceTypeNode;
+            node.source = source;
+            node.minus = minus;
+            return finishNode(node);
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {

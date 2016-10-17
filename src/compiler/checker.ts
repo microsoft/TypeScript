@@ -3008,9 +3008,12 @@ namespace ts {
                 // but that's not applicable to the tests I currently have
                 return createAnonymousType(symbol, members, emptyArray, emptyArray, getIndexInfoOfType(source, IndexKind.String), getIndexInfoOfType(minus, IndexKind.Number));
             }
-            if (source.flags & TypeFlags.TypeParameter) {
-                // don't touch the minus until later I guess?
-                var id = 0;
+            const id = getTypeListId([source, minus]);
+            if (id in differenceTypes) {
+                return differenceTypes[id];
+            }
+            if (source.flags & TypeFlags.TypeParameter ||
+                source.flags & TypeFlags.Difference) {
                 const difference = differenceTypes[id] = createObjectType(TypeFlags.Difference, symbol) as DifferenceType;
                 difference.source = source;
                 difference.minus = minus;
@@ -3018,7 +3021,9 @@ namespace ts {
                 difference.aliasTypeArguments = aliasTypeArguments;
                 return difference;
             }
-            // TODO: createDifferenceType
+            // TODO: Make sure to handle top-level unknownTypes without asserting
+            // and true for spread types as well.
+            Debug.fail("Unhandled case (could be a top-level unknownType)");
         }
 
         /** Return the inferred type for a binding element */
@@ -5751,6 +5756,18 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromDifferenceTypeNode(node: DifferenceTypeNode, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getDifferenceType(getTypeFromTypeNodeNoAlias(node.source),
+                                                       getTypeFromTypeNodeNoAlias(node.minus),
+                                                       node.symbol,
+                                                       aliasSymbol,
+                                                       aliasTypeArguments);
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: Node, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -6076,6 +6093,8 @@ namespace ts {
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node, aliasSymbol, aliasTypeArguments);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node, aliasSymbol, aliasTypeArguments);
+                case SyntaxKind.DifferenceType:
+                    return getTypeFromDifferenceTypeNode(node as DifferenceTypeNode, aliasSymbol, aliasTypeArguments);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocNonNullableType:
