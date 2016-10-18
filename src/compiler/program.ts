@@ -766,7 +766,7 @@ namespace ts {
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
-                return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile);
+                return bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
             });
         }
 
