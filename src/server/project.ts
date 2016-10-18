@@ -400,11 +400,11 @@ namespace ts.server {
             }
         }
 
-        reloadScript(filename: NormalizedPath): boolean {
+        reloadScript(filename: NormalizedPath, tempFileName?: NormalizedPath): boolean {
             const script = this.projectService.getScriptInfoForNormalizedPath(filename);
             if (script) {
                 Debug.assert(script.isAttached(this));
-                script.reloadFromFile();
+                script.reloadFromFile(tempFileName);
                 return true;
             }
             return false;
