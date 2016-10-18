@@ -10933,7 +10933,7 @@ namespace ts {
                     }
                     else {
                         // <Elem attr /> is sugar for <Elem attr={true} />
-                        exprType = booleanType;
+                        exprType = trueType;
                     }
 
                     const attributeSymbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
