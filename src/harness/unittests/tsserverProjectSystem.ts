@@ -170,11 +170,18 @@ namespace ts.projectSystem {
         return host;
     }
 
+    class TestSession extends server.Session {
+        getProjectService() {
+            return this.projectService;
+        }
+    };
+
     export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler) {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
+
+        return new TestSession(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
     }
 
     export interface CreateProjectServiceParameters {
@@ -515,11 +522,13 @@ namespace ts.projectSystem {
             this.reloadFS(filesOrFolders);
         }
 
+        write(s: string) {
+        }
+
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly write = (s: string) => notImplemented();
         readonly exit = () => notImplemented();
         readonly getEnvironmentVariable = (v: string) => notImplemented();
     }
@@ -2418,6 +2427,55 @@ namespace ts.projectSystem {
 
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
+        });
+    });
+
+    describe("reload", () => {
+        it("should work with temp file", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const tmp = {
+                path: "/a/b/app.tmp",
+                content: "const y = 42"
+            };
+            const host = createServerHost([f1, tmp]);
+            const session = createSession(host);
+
+            // send open request
+            session.executeCommand(<server.protocol.OpenRequest>{
+                type: "request",
+                command: "open",
+                seq: 1,
+                arguments: { file: f1.path }
+            });
+
+            // reload from tmp file
+            session.executeCommand(<server.protocol.ReloadRequest>{
+                type: "request",
+                command: "reload",
+                seq: 2,
+                arguments: { file: f1.path, tmpfile: tmp.path }
+            });
+
+            // verify content
+            const projectServiice = session.getProjectService();
+            const snap1 = projectServiice.getScriptInfo(f1.path).snap();
+            assert.equal(snap1.getText(0, snap1.getLength()), tmp.content, "content should be equal to the content of temp file");
+
+            // reload from original file file
+            session.executeCommand(<server.protocol.ReloadRequest>{
+                type: "request",
+                command: "reload",
+                seq: 2,
+                arguments: { file: f1.path }
+            });
+
+            // verify content
+            const snap2 = projectServiice.getScriptInfo(f1.path).snap();
+            assert.equal(snap2.getText(0, snap2.getLength()), f1.content, "content should be equal to the content of original file");
+
         });
     });
 }
