@@ -1799,6 +1799,9 @@ namespace ts {
                 case CharacterCodes.comma:
                     pos++;
                     return token = SyntaxKind.CommaToken;
+                case CharacterCodes.dot:
+                    pos++;
+                    return token = SyntaxKind.DotToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
