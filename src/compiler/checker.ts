@@ -7014,7 +7014,7 @@ namespace ts {
                                 // reasoning about what went wrong.
                                 Debug.assert(!!errorNode);
                                 if (isJsxAttributes(errorNode)) {
-                                    // JsxAttributes has an object-literal flag and is underwent same type -nonassignablity check as normal object-literal.
+                                    // JsxAttributes has an object-literal flag and is underwent same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
                                 }
