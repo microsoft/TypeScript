@@ -1,0 +1,68 @@
+=== tests/cases/conformance/es6/destructuring/differenceIndexer.ts ===
+interface A { a: number }
+>A : Symbol(A, Decl(differenceIndexer.ts, 0, 0))
+>a : Symbol(A.a, Decl(differenceIndexer.ts, 0, 13))
+
+interface String1 { [s: string]: number }
+>String1 : Symbol(String1, Decl(differenceIndexer.ts, 0, 25))
+>s : Symbol(s, Decl(differenceIndexer.ts, 1, 21))
+
+interface String2 { [s: string]: string }
+>String2 : Symbol(String2, Decl(differenceIndexer.ts, 1, 41))
+>s : Symbol(s, Decl(differenceIndexer.ts, 2, 21))
+
+interface Number1 { [n: number]: number }
+>Number1 : Symbol(Number1, Decl(differenceIndexer.ts, 2, 41))
+>n : Symbol(n, Decl(differenceIndexer.ts, 3, 21))
+
+interface Number2 { [n: number]: number }
+>Number2 : Symbol(Number2, Decl(differenceIndexer.ts, 3, 41))
+>n : Symbol(n, Decl(differenceIndexer.ts, 4, 21))
+
+interface StringNumber { [s: string]: number; [n: number]: number }
+>StringNumber : Symbol(StringNumber, Decl(differenceIndexer.ts, 4, 41))
+>s : Symbol(s, Decl(differenceIndexer.ts, 5, 26))
+>n : Symbol(n, Decl(differenceIndexer.ts, 5, 47))
+
+// these should all be empty
+let diffString: String1 - String2;
+>diffString : Symbol(diffString, Decl(differenceIndexer.ts, 7, 3))
+>String1 : Symbol(String1, Decl(differenceIndexer.ts, 0, 25))
+>String2 : Symbol(String2, Decl(differenceIndexer.ts, 1, 41))
+
+let diffNumber: Number1 - Number2;
+>diffNumber : Symbol(diffNumber, Decl(differenceIndexer.ts, 8, 3))
+>Number1 : Symbol(Number1, Decl(differenceIndexer.ts, 2, 41))
+>Number2 : Symbol(Number2, Decl(differenceIndexer.ts, 3, 41))
+
+let diffStringNumber: Number1 - String1;
+>diffStringNumber : Symbol(diffStringNumber, Decl(differenceIndexer.ts, 9, 3))
+>Number1 : Symbol(Number1, Decl(differenceIndexer.ts, 2, 41))
+>String1 : Symbol(String1, Decl(differenceIndexer.ts, 0, 25))
+
+let diffStringA: A - String1;
+>diffStringA : Symbol(diffStringA, Decl(differenceIndexer.ts, 10, 3))
+>A : Symbol(A, Decl(differenceIndexer.ts, 0, 0))
+>String1 : Symbol(String1, Decl(differenceIndexer.ts, 0, 25))
+
+let diffStringStringNumber: StringNumber - String1;
+>diffStringStringNumber : Symbol(diffStringStringNumber, Decl(differenceIndexer.ts, 11, 3))
+>StringNumber : Symbol(StringNumber, Decl(differenceIndexer.ts, 4, 41))
+>String1 : Symbol(String1, Decl(differenceIndexer.ts, 0, 25))
+
+let diffStringNumberString: String1 - StringNumber;
+>diffStringNumberString : Symbol(diffStringNumberString, Decl(differenceIndexer.ts, 12, 3))
+>String1 : Symbol(String1, Decl(differenceIndexer.ts, 0, 25))
+>StringNumber : Symbol(StringNumber, Decl(differenceIndexer.ts, 4, 41))
+
+// these should still have their indexer
+let diffAString: String1 - A;
+>diffAString : Symbol(diffAString, Decl(differenceIndexer.ts, 14, 3))
+>String1 : Symbol(String1, Decl(differenceIndexer.ts, 0, 25))
+>A : Symbol(A, Decl(differenceIndexer.ts, 0, 0))
+
+let diffANumber: Number1 - A;
+>diffANumber : Symbol(diffANumber, Decl(differenceIndexer.ts, 15, 3))
+>Number1 : Symbol(Number1, Decl(differenceIndexer.ts, 2, 41))
+>A : Symbol(A, Decl(differenceIndexer.ts, 0, 0))
+
