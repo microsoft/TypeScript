@@ -1,9 +1,10 @@
 //@noUnusedLocals:true
 //@module: commonjs
-//@jsx: react
+//@reactNamespace: Element
+//@jsx: preserve
 
 // @filename: foo.tsx
-import React = require("react");
+import Element = require("react");
 
 export const FooComponent = <div></div>
 

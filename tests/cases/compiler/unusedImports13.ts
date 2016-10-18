@@ -1,5 +1,4 @@
 //@noUnusedLocals:true
-//@noUnusedParameters:true
 //@module: commonjs
 //@jsx: preserve
 
