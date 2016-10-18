@@ -1041,11 +1041,12 @@ namespace ts.server {
 
         private reload(args: protocol.ReloadRequestArgs, reqSeq: number) {
             const file = toNormalizedPath(args.file);
+            const tempFileName = args.tmpfile && toNormalizedPath(args.tmpfile);
             const project = this.projectService.getDefaultProjectForFile(file, /*refreshInferredProjects*/ true);
             if (project) {
                 this.changeSeq++;
                 // make sure no changes happen before this one is finished
-                if (project.reloadScript(file)) {
+                if (project.reloadScript(file, tempFileName)) {
                     this.output(undefined, CommandNames.Reload, reqSeq);
                 }
             }
