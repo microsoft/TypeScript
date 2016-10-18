@@ -19,7 +19,6 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
         const host = context.getEmitHost();
-        const languageVersion = getEmitScriptTarget(compilerOptions);
         const previousOnSubstituteNode = context.onSubstituteNode;
         const previousOnEmitNode = context.onEmitNode;
         context.onSubstituteNode = onSubstituteNode;
@@ -1317,12 +1316,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (name.originalKeywordKind && languageVersion === ScriptTarget.ES3) {
-                return createElementAccess(importAlias, createLiteral(name.text));
-            }
-            else {
-                return createPropertyAccess(importAlias, getSynthesizedClone(name));
-            }
+            return createPropertyAccess(importAlias, getSynthesizedClone(name));
         }
 
         function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {

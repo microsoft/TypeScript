@@ -750,7 +750,7 @@ namespace ts {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 
@@ -761,7 +761,7 @@ namespace ts {
         }
 
         function find(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 

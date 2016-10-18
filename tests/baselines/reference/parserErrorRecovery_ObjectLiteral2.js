@@ -4,4 +4,4 @@ return;
 
 //// [parserErrorRecovery_ObjectLiteral2.js]
 var v = { a: ,
-    return:  };
+    "return":  };

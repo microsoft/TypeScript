@@ -80,6 +80,7 @@ namespace ts {
         // Literals
         NumericLiteral,
         StringLiteral,
+        JsxText,
         RegularExpressionLiteral,
         NoSubstitutionTemplateLiteral,
         // Pseudo-literals
@@ -337,7 +338,6 @@ namespace ts {
         JsxElement,
         JsxSelfClosingElement,
         JsxOpeningElement,
-        JsxText,
         JsxClosingElement,
         JsxAttribute,
         JsxSpreadAttribute,

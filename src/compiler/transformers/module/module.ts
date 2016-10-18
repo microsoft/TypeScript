@@ -960,39 +960,19 @@ namespace ts {
                 const declaration = resolver.getReferencedImportDeclaration(node);
                 if (declaration) {
                     if (isImportClause(declaration)) {
-                        if (languageVersion >= ScriptTarget.ES5) {
-                            return createPropertyAccess(
-                                getGeneratedNameForNode(declaration.parent),
-                                createIdentifier("default"),
-                                /*location*/ node
-                            );
-                        }
-                        else {
-                            // TODO: ES3 transform to handle x.default -> x["default"]
-                            return createElementAccess(
-                                getGeneratedNameForNode(declaration.parent),
-                                createLiteral("default"),
-                                /*location*/ node
-                            );
-                        }
+                        return createPropertyAccess(
+                            getGeneratedNameForNode(declaration.parent),
+                            createIdentifier("default"),
+                            /*location*/ node
+                        );
                     }
                     else if (isImportSpecifier(declaration)) {
                         const name = declaration.propertyName || declaration.name;
-                        if (name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion <= ScriptTarget.ES3) {
-                            // TODO: ES3 transform to handle x.default -> x["default"]
-                            return createElementAccess(
-                                getGeneratedNameForNode(declaration.parent.parent.parent),
-                                createLiteral(name.text),
-                                /*location*/ node
-                            );
-                        }
-                        else {
-                            return createPropertyAccess(
-                                getGeneratedNameForNode(declaration.parent.parent.parent),
-                                getSynthesizedClone(name),
-                                /*location*/ node
-                            );
-                        }
+                        return createPropertyAccess(
+                            getGeneratedNameForNode(declaration.parent.parent.parent),
+                            getSynthesizedClone(name),
+                            /*location*/ node
+                        );
                     }
                 }
             }
@@ -1029,15 +1009,10 @@ namespace ts {
 
         function createExportAssignment(name: Identifier, value: Expression) {
             return createAssignment(
-                name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion === ScriptTarget.ES3
-                    ? createElementAccess(
-                        createIdentifier("exports"),
-                        createLiteral(name.text)
-                    )
-                    : createPropertyAccess(
-                        createIdentifier("exports"),
-                        getSynthesizedClone(name)
-                    ),
+                createPropertyAccess(
+                    createIdentifier("exports"),
+                    getSynthesizedClone(name)
+                ),
                 value
             );
         }

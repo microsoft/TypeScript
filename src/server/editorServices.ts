@@ -17,6 +17,68 @@ namespace ts.server {
         (event: ProjectServiceEvent): void;
     }
 
+    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<string, Map<string, number>> {
+        const map = new StringMap<Map<string, number>>();
+        for (const option of commandLineOptions) {
+            if (typeof option.type === "object") {
+                const optionMap = <Map<string, number>>option.type;
+                // verify that map contains only numbers
+                optionMap.forEach(value => {
+                    Debug.assert(typeof value  === "number");
+                });
+                map.set(option.name, optionMap);
+            }
+        }
+        return map;
+    }
+
+    const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
+    const indentStyle = mapOfMapLike({
+        "none": IndentStyle.None,
+        "block": IndentStyle.Block,
+        "smart": IndentStyle.Smart
+    });
+
+    export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings {
+        if (typeof protocolOptions.indentStyle === "string") {
+            protocolOptions.indentStyle = indentStyle.get(protocolOptions.indentStyle.toLowerCase());
+            Debug.assert(protocolOptions.indentStyle !== undefined);
+        }
+        return <any>protocolOptions;
+    }
+
+    export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin {
+        compilerOptionConverters.forEach((mappedValues, id) => {
+            const propertyValue = protocolOptions[id];
+            if (typeof propertyValue === "string") {
+                const mappedValues = compilerOptionConverters.get(id);
+                protocolOptions[id] = mappedValues.get(propertyValue.toLowerCase());
+            }
+        });
+        return <any>protocolOptions;
+    }
+
+    export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind {
+        return typeof scriptKindName === "string"
+            ? convertScriptKindName(scriptKindName)
+            : scriptKindName;
+    }
+
+    export function convertScriptKindName(scriptKindName: protocol.ScriptKindName) {
+        switch (scriptKindName) {
+            case "JS":
+                return ScriptKind.JS;
+            case "JSX":
+                return ScriptKind.JSX;
+            case "TS":
+                return ScriptKind.TS;
+            case "TSX":
+                return ScriptKind.TSX;
+            default:
+                return ScriptKind.Unknown;
+        }
+    }
+
     /**
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
@@ -63,7 +125,7 @@ namespace ts.server {
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
         getFileName: x => x.fileName,
-        getScriptKind: x => x.scriptKind,
+        getScriptKind: x => tryConvertScriptKindName(x.scriptKind),
         hasMixedContent: x => x.hasMixedContent
     };
 
@@ -215,6 +277,10 @@ namespace ts.server {
             this.ensureInferredProjectsUpToDate();
         }
 
+        getCompilerOptionsForInferredProjects() {
+            return this.compilerOptionsForInferredProjects;
+        }
+
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
             const project = this.findProject(response.projectName);
             if (!project) {
@@ -232,10 +298,10 @@ namespace ts.server {
         }
 
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions): void {
-            this.compilerOptionsForInferredProjects = projectCompilerOptions;
+            this.compilerOptionsForInferredProjects = convertCompilerOptions(projectCompilerOptions);
             this.compileOnSaveForInferredProjects = projectCompilerOptions.compileOnSave;
             for (const proj of this.inferredProjects) {
-                proj.setCompilerOptions(projectCompilerOptions);
+                proj.setCompilerOptions(this.compilerOptionsForInferredProjects);
                 proj.compileOnSaveEnabled = projectCompilerOptions.compileOnSave;
             }
             this.updateProjectGraphs(this.inferredProjects);
@@ -745,12 +811,13 @@ namespace ts.server {
         }
 
         private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typingOptions: TypingOptions) {
+            const compilerOptions = convertCompilerOptions(options);
             const project = new ExternalProject(
                 projectFileName,
                 this,
                 this.documentRegistry,
-                options,
-                /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(options, files, externalFilePropertyReader),
+                compilerOptions,
+                /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(compilerOptions, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave);
 
             this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typingOptions, /*configFileErrors*/ undefined);
@@ -1019,7 +1086,7 @@ namespace ts.server {
             if (args.file) {
                 const info = this.getScriptInfoForNormalizedPath(toNormalizedPath(args.file));
                 if (info) {
-                    info.setFormatOptions(args.formatOptions);
+                    info.setFormatOptions(convertFormatOptions(args.formatOptions));
                     this.logger.info(`Host configuration update for file ${args.file}`);
                 }
             }
@@ -1029,7 +1096,7 @@ namespace ts.server {
                     this.logger.info(`Host information ${args.hostInfo}`);
                 }
                 if (args.formatOptions) {
-                    mergeMapLikes(this.hostConfiguration.formatCodeOptions, args.formatOptions);
+                    mergeMapLikes(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
                     this.logger.info("Format host information updated");
                 }
             }
@@ -1143,7 +1210,7 @@ namespace ts.server {
                     const scriptInfo = this.getScriptInfo(file.fileName);
                     Debug.assert(!scriptInfo || !scriptInfo.isOpen);
                     const normalizedPath = scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName);
-                    this.openClientFileWithNormalizedPath(normalizedPath, file.content, file.scriptKind, file.hasMixedContent);
+                    this.openClientFileWithNormalizedPath(normalizedPath, file.content, tryConvertScriptKindName(file.scriptKind), file.hasMixedContent);
                 }
             }
 
@@ -1236,7 +1303,7 @@ namespace ts.server {
             if (externalProject) {
                 if (!tsConfigFiles) {
                     // external project already exists and not config files were added - update the project and return;
-                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, proj.options, proj.typingOptions, proj.options.compileOnSave, /*configFileErrors*/ undefined);
+                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, convertCompilerOptions(proj.options), proj.typingOptions, proj.options.compileOnSave, /*configFileErrors*/ undefined);
                     return;
                 }
                 // some config files were added to external project (that previously were not there)

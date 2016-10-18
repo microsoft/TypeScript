@@ -1,0 +1,37 @@
+=== tests/cases/compiler/c.js ===
+export default function require(a) { }
+>require : (a: any) => void
+>a : any
+
+export function has(a) { return true }
+>has : (a: any) => boolean
+>a : any
+>true : true
+
+=== tests/cases/compiler/m.js ===
+import require, { has } from "./c"
+>require : (a: any) => void
+>has : (a: any) => boolean
+
+export function hello() { }
+>hello : () => void
+
+if (has('ember-debug')) {
+>has('ember-debug') : boolean
+>has : (a: any) => boolean
+>'ember-debug' : "ember-debug"
+
+    require('ember-debug');
+>require('ember-debug') : void
+>require : (a: any) => void
+>'ember-debug' : "ember-debug"
+}
+
+=== tests/cases/compiler/m2.ts ===
+import { hello } from "./m";
+>hello : () => void
+
+hello();
+>hello() : void
+>hello : () => void
+

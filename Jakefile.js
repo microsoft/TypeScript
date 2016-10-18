@@ -79,6 +79,7 @@ var compilerSources = [
     "transformers/es2016.ts",
     "transformers/es2015.ts",
     "transformers/generators.ts",
+    "transformers/es5.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -115,6 +116,7 @@ var servicesSources = [
     "transformers/es2016.ts",
     "transformers/es2015.ts",
     "transformers/generators.ts",
+    "transformers/es5.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -357,6 +359,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
         if (!fs.existsSync(sourceFiles[i])) {
             fail(sourceFiles[i] + " does not exist!");
         }
+        fs.appendFileSync(temp, "\n\n");
         fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
     }
     // Move the file to the final destination
