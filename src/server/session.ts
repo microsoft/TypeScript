@@ -14,6 +14,17 @@ namespace ts.server {
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
     }
 
+    function shouldSkipSemanticCheck(project: Project) {
+        if (project.getCompilerOptions().skipLibCheck !== undefined) {
+            return false;
+        }
+
+        if ((project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) && project.isJsOnlyProject()) {
+            return true;
+        }
+        return false;
+    }
+
     interface FileStart {
         file: string;
         start: ILineInfo;
@@ -255,12 +266,13 @@ namespace ts.server {
 
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
-                const diags = project.getLanguageService().getSemanticDiagnostics(file);
-
-                if (diags) {
-                    const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                    this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                let diags: Diagnostic[] = [];
+                if (!shouldSkipSemanticCheck(project)) {
+                    diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }
+
+                const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
+                this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
             }
             catch (err) {
                 this.logError(err, "semantic check");
@@ -371,8 +383,11 @@ namespace ts.server {
             });
         }
 
-        private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
+        private getDiagnosticsWorker(args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
             const { project, file } = this.getFileAndProject(args);
+            if (isSemantic && shouldSkipSemanticCheck(project)) {
+                return [];
+            }
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const diagnostics = selector(project, file);
             return includeLinePosition
@@ -451,11 +466,11 @@ namespace ts.server {
         }
 
         private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): protocol.Diagnostic[] | protocol.DiagnosticWithLinePosition[] {
-            return this.getDiagnosticsWorker(args, (project, file) => project.getLanguageService().getSyntacticDiagnostics(file), args.includeLinePosition);
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ false, (project, file) => project.getLanguageService().getSyntacticDiagnostics(file), args.includeLinePosition);
         }
 
         private getSemanticDiagnosticsSync(args: protocol.SemanticDiagnosticsSyncRequestArgs): protocol.Diagnostic[] | protocol.DiagnosticWithLinePosition[] {
-            return this.getDiagnosticsWorker(args, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), args.includeLinePosition);
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), args.includeLinePosition);
         }
 
         private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): protocol.DocumentHighlightsItem[] | DocumentHighlights[] {
@@ -1122,7 +1137,7 @@ namespace ts.server {
                 return combineProjectOutput(
                     projects,
                     project => {
-                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, /*excludeDts*/ project.isJsOnlyProject());
+                        const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, /*excludeDts*/ project.isNonTsProject());
                         if (!navItems) {
                             return [];
                         }
@@ -1160,7 +1175,7 @@ namespace ts.server {
             else {
                 return combineProjectOutput(
                     projects,
-                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, /*excludeDts*/ project.isJsOnlyProject()),
+                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, /*excludeDts*/ project.isNonTsProject()),
                     /*comparer*/ undefined,
                     navigateToItemIsEqualTo);
             }
