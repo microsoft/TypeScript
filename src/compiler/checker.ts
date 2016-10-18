@@ -1366,8 +1366,8 @@ namespace ts {
             }
 
             const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
-            const resolvedOrDiagnostic = resolvedModule && getResolutionOrDiagnostic(compilerOptions, resolvedModule);
-            const sourceFile = typeof resolvedOrDiagnostic === "string" && resolvedModule && host.getSourceFile(resolvedModule.resolvedFileName);
+            const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
+            const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     // merged symbol is module declaration symbol combined with all augmentations
@@ -1389,8 +1389,8 @@ namespace ts {
 
             if (moduleNotFoundError) {
                 // report errors only if it was requested
-                if (resolvedOrDiagnostic && typeof resolvedOrDiagnostic !== "string") {
-                    error(errorNode, resolvedOrDiagnostic.diag, moduleName, resolvedOrDiagnostic.file);
+                if (resolutionDiagnostic) {
+                    error(errorNode, resolutionDiagnostic, moduleName, resolvedModule.resolvedFileName);
                 }
                 else {
                     const tsExtension = tryExtractTypeScriptExtension(moduleName);
@@ -8543,7 +8543,7 @@ namespace ts {
         // An evolving array type tracks the element types that have so far been seen in an
         // 'x.push(value)' or 'x[n] = value' operation along the control flow graph. Evolving
         // array types are ultimately converted into manifest array types (using getFinalArrayType)
-        // and never escape the getFlowTypeOfReference function. 
+        // and never escape the getFlowTypeOfReference function.
         function createEvolvingArrayType(elementType: Type): AnonymousType {
             const result = <AnonymousType>createObjectType(TypeFlags.Anonymous);
             result.elementType = elementType;

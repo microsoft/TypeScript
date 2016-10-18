@@ -1318,10 +1318,8 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFileFromNodeModules = !resolution.resolvedTsFileName;
-                    const resolvedOrDiagnostic = getResolutionOrDiagnostic(options, resolution);
-                    // Ignore it if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs') -- this will be reported by the checker, so just return undefined for now.
-                    const resolvedFileName = typeof resolvedOrDiagnostic === "string" ? resolvedOrDiagnostic : undefined;
+                    const isJsFileFromNodeModules = isFromNodeModulesSearch && !resolution.resolvedTsFileName;
+                    const resolvedFileName = resolution.resolvedFileName;
 
                     if (isFromNodeModulesSearch) {
                         currentNodeModulesDepth++;
@@ -1333,7 +1331,8 @@ namespace ts {
                     // - module name comes from the list of imports
                     // - it's not a top level JavaScript module that exceeded the search max
                     const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
-                    const shouldAddFile = resolvedFileName && !options.noResolve && i < file.imports.length && !elideImport;
+                    // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
+                    const shouldAddFile = resolvedFileName && !getResolutionDiagnostic(options, resolution) && !options.noResolve && i < file.imports.length && !elideImport;
 
                     if (elideImport) {
                         modulesWithElidedImports[file.path] = true;
@@ -1580,24 +1579,23 @@ namespace ts {
 
     /* @internal */
     /**
-     * Extracts the file name from a ResolvedModule, or returns a DiagnosticMessage if we are not set up to use that kind of file.
+     * Returns a DiagnosticMessage if we can't use a resolved module due to its extension.
      * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
      */
-    export function getResolutionOrDiagnostic(options: CompilerOptions, { resolvedTsFileName: ts, resolvedJsFileName: js }: ResolvedModule): string | { file: string, diag: DiagnosticMessage } {
+    export function getResolutionDiagnostic(options: CompilerOptions, { resolvedTsFileName: ts, resolvedJsFileName: js }: ResolvedModule): DiagnosticMessage | undefined {
         if (ts) {
-            return !options.jsx && fileExtensionIs(ts, ".tsx")
-                ? { file: ts, diag: Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set }
-                : ts;
+            return !options.jsx && fileExtensionIs(ts, ".tsx") ? Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set : undefined;
         }
         else {
             if (!options.allowJs) {
-                return { file: js!, diag: Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set };
+                return Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
             }
             else if (!options.jsx && fileExtensionIs(js!, ".jsx")) {
-                return { file: js!, diag: Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set };
+                return Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
             }
-            else
-                return js!;
+            else {
+                return undefined;
+            }
         }
     }
 }
