@@ -368,7 +368,7 @@ namespace ts {
             return emitResolver;
         }
 
-        function error(location: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+        function error(location: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): void {
             const diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2);
@@ -8537,7 +8537,7 @@ namespace ts {
         // An evolving array type tracks the element types that have so far been seen in an
         // 'x.push(value)' or 'x[n] = value' operation along the control flow graph. Evolving
         // array types are ultimately converted into manifest array types (using getFinalArrayType)
-        // and never escape the getFlowTypeOfReference function. 
+        // and never escape the getFlowTypeOfReference function.
         function createEvolvingArrayType(elementType: Type): AnonymousType {
             const result = <AnonymousType>createObjectType(TypeFlags.Anonymous);
             result.elementType = elementType;
