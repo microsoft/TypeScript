@@ -4552,6 +4552,10 @@ namespace ts {
             return getSpreadType([getApparentType(type.left), getApparentType(type.right)], type.symbol);
         }
 
+        function getApparentTypeOfDifference(type: DifferenceType) {
+            return getDifferenceType(getApparentType(type.source), getApparentType(type.minus), type.symbol);
+        }
+
         /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
@@ -4563,6 +4567,9 @@ namespace ts {
             }
             if (type.flags & TypeFlags.Spread) {
                 type = getApparentTypeOfSpread(type as SpreadType);
+            }
+            if (type.flags & TypeFlags.Difference) {
+                type = getApparentTypeOfDifference(type as DifferenceType);
             }
             if (type.flags & TypeFlags.StringLike) {
                 type = globalStringType;
@@ -6373,6 +6380,10 @@ namespace ts {
                 if (type.flags & TypeFlags.Spread) {
                     const spread = type as SpreadType;
                     return getSpreadType([instantiateType(spread.left, mapper), instantiateType(spread.right, mapper)], type.symbol, type.aliasSymbol, mapper.targetTypes);
+                }
+                if (type.flags & TypeFlags.Difference) {
+                    const diff = type as DifferenceType;
+                    return getDifferenceType(instantiateType(diff.source, mapper), instantiateType(diff.minus, mapper), type.symbol, type.aliasSymbol, mapper.targetTypes);
                 }
             }
             return type;
