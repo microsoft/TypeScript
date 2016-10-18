@@ -368,7 +368,7 @@ namespace ts {
             return emitResolver;
         }
 
-        function error(location: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+        function error(location: Node, message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
             const diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2);
@@ -3004,7 +3004,8 @@ namespace ts {
                         : elementType;
                     if (!type) {
                         if (isTupleType(parentType)) {
-                            error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(parentType), getTypeReferenceArity(<TypeReference>parentType), pattern.elements.length);
+                            error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2,
+                                typeToString(parentType), getTypeReferenceArity(<TypeReference>parentType).toString(), pattern.elements.length.toString());
                         }
                         else {
                             error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
@@ -5103,7 +5104,7 @@ namespace ts {
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
                 if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
-                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
+                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length.toString());
                     return unknownType;
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
@@ -5127,7 +5128,7 @@ namespace ts {
             const typeParameters = links.typeParameters;
             if (typeParameters) {
                 if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
-                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, symbolToString(symbol), typeParameters.length);
+                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, symbolToString(symbol), typeParameters.length.toString());
                     return unknownType;
                 }
                 const typeArguments = map(node.typeArguments, getTypeFromTypeNodeNoAlias);
@@ -5270,7 +5271,7 @@ namespace ts {
                 return arity ? emptyGenericType : emptyObjectType;
             }
             if (((<InterfaceType>type).typeParameters ? (<InterfaceType>type).typeParameters.length : 0) !== arity) {
-                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbol.name, arity);
+                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbol.name, arity.toString());
                 return arity ? emptyGenericType : emptyObjectType;
             }
             return <ObjectType>type;
@@ -8537,7 +8538,7 @@ namespace ts {
         // An evolving array type tracks the element types that have so far been seen in an
         // 'x.push(value)' or 'x[n] = value' operation along the control flow graph. Evolving
         // array types are ultimately converted into manifest array types (using getFinalArrayType)
-        // and never escape the getFlowTypeOfReference function. 
+        // and never escape the getFlowTypeOfReference function.
         function createEvolvingArrayType(elementType: Type): AnonymousType {
             const result = <AnonymousType>createObjectType(TypeFlags.Anonymous);
             result.elementType = elementType;
@@ -13630,7 +13631,8 @@ namespace ts {
                         // such as NodeCheckFlags.LexicalThis on "this"expression.
                         checkExpression(element);
                         if (isTupleType(sourceType)) {
-                            error(element, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(sourceType), getTypeReferenceArity(<TypeReference>sourceType), elements.length);
+                            error(element, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2,
+                                typeToString(sourceType), getTypeReferenceArity(<TypeReference>sourceType).toString(), elements.length.toString());
                         }
                         else {
                             error(element, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
