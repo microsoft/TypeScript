@@ -1,4 +1,4 @@
-﻿/// <reference path="..\services\services.ts" />
+/// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
@@ -437,11 +437,11 @@ namespace ts.server {
             }
         }
 
-        reloadScript(filename: NormalizedPath): boolean {
+        reloadScript(filename: NormalizedPath, tempfile: NormalizedPath): boolean {
             const script = this.projectService.getScriptInfoForNormalizedPath(filename);
             if (script) {
                 Debug.assert(script.isAttached(this));
-                script.reloadFromFile();
+                script.reloadFromFile(tempfile);
                 return true;
             }
             return false;

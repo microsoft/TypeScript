@@ -125,12 +125,12 @@ namespace ts.server {
             this.host.writeFile(fileName, snap.getText(0, snap.getLength()));
         }
 
-        reloadFromFile() {
+        reloadFromFile(tempfile?: string) {
             if (this.hasMixedContent) {
                 this.reload("");
             }
             else {
-                this.svc.reloadFromFile(this.fileName);
+                this.svc.reloadFromFile(tempfile || this.fileName);
                 this.markContainingProjectsAsDirty();
             }
         }
