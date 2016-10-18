@@ -593,7 +593,7 @@ namespace ts {
                 }
                 // declaration is after usage
                 // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
-                if(isUsedInFunctionOrNonStaticProperty(usage)){
+                if (isUsedInFunctionOrNonStaticProperty(usage)) {
                     return true;
                 }
                 const sourceFiles = host.getSourceFiles();
@@ -639,7 +639,7 @@ namespace ts {
                 return false;
             }
 
-            function isUsedInFunctionOrNonStaticProperty(usage: Node, container? :Node): boolean {
+            function isUsedInFunctionOrNonStaticProperty(usage: Node, container?: Node): boolean {
                 let current = usage;
                 while (current) {
                     if (current === container) {
