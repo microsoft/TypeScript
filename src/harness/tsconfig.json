@@ -10,7 +10,8 @@
         "stripInternal": true,
         "types": [
             "node", "mocha", "chai"
-        ]
+        ],
+        "target": "es5"
     },
     "files": [
         "../compiler/core.ts",
