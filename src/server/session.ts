@@ -14,7 +14,7 @@ namespace ts.server {
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
     }
 
-    function shouldSkipSematicCheck(project: Project) {
+    function shouldSkipSemanticCheck(project: Project) {
         if (project.getCompilerOptions().skipLibCheck !== undefined) {
             return false;
         }
@@ -267,7 +267,7 @@ namespace ts.server {
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
                 let diags: Diagnostic[] = [];
-                if (!shouldSkipSematicCheck(project)) {
+                if (!shouldSkipSemanticCheck(project)) {
                     diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }
 
@@ -385,7 +385,7 @@ namespace ts.server {
 
         private getDiagnosticsWorker(args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
             const { project, file } = this.getFileAndProject(args);
-            if (isSemantic && shouldSkipSematicCheck(project)) {
+            if (isSemantic && shouldSkipSemanticCheck(project)) {
                 return [];
             }
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
