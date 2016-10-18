@@ -1082,6 +1082,7 @@ namespace ts.Completions {
                 isGlobalCompletion =
                     scopeNode.kind === SyntaxKind.SourceFile ||
                     scopeNode.kind === SyntaxKind.TemplateExpression ||
+                    scopeNode.kind === SyntaxKind.JsxExpression ||
                     isStatement(scopeNode);
             }
 

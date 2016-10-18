@@ -33,6 +33,7 @@
 ////const y = <div /*12*/ />; // no globals in jsx attribute found
 ////const z = <div =/*13*/ />; // no globals in jsx attribute with syntax error
 ////const x = `/*14*/ ${/*15*/}`; // globals only in template expression
+////var user = </*16*/User name=/*17*/{ /*18*/window.isLoggedIn ? window.name : '/*19*/'} />; // globals only in JSX expression (but not in JSX expression strings)
 goTo.marker("1");
 verify.completionListIsGlobal(false);
 goTo.marker("2");
@@ -63,3 +64,11 @@ goTo.marker("14");
 verify.completionListIsGlobal(false);
 goTo.marker("15");
 verify.completionListIsGlobal(true);
+goTo.marker("16");
+verify.completionListIsGlobal(false);
+goTo.marker("17");
+verify.completionListIsGlobal(false);
+goTo.marker("18");
+verify.completionListIsGlobal(true);
+goTo.marker("19");
+verify.completionListIsGlobal(false);
