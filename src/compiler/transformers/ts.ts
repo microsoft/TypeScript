@@ -795,7 +795,7 @@ namespace ts {
         function visitClassExpression(node: ClassExpression): Expression {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
-            const members = transformClassMembers(node, heritageClauses !== undefined);
+            const members = transformClassMembers(node, some(heritageClauses, c => c.token === SyntaxKind.ExtendsKeyword));
 
             const classExpression = setOriginalNode(
                 createClassExpression(
