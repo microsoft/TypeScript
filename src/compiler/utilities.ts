@@ -3034,7 +3034,7 @@ namespace ts {
             }
         }
 
-        if (node.flags & NodeFlags.NestedNamespace) {
+        if (node.flags & (NodeFlags.NestedNamespace | NodeFlags.InJSDocNamespace)) {
             flags |= ModifierFlags.Export;
         }
 

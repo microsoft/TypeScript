@@ -6632,14 +6632,17 @@ namespace ts {
                             const jsDocNamespaceNode = <JSDocNamespaceDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
                             jsDocNamespaceNode.flags |= flags;
                             jsDocNamespaceNode.name = typeNameOrNamespaceName;
-                            jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(NodeFlags.NestedNamespace | flags);
+                            jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(NodeFlags.NestedNamespace);
                             return jsDocNamespaceNode;
                         }
-                        else {
-                            return typeNameOrNamespaceName;
+
+                        if (typeNameOrNamespaceName && flags & NodeFlags.NestedNamespace) {
+                            typeNameOrNamespaceName.flags |= NodeFlags.InJSDocNamespace;
                         }
+                        return typeNameOrNamespaceName;
                     }
                 }
+
 
                 function tryParseChildTag(parentTag: JSDocTypeLiteral): boolean {
                     Debug.assert(token() === SyntaxKind.AtToken);

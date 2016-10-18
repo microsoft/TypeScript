@@ -422,6 +422,7 @@ namespace ts {
         JavaScriptFile =     1 << 20, // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 21, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 22, // If we've computed data from children and cached it in this node
+        InJSDocNamespace = 1 << 23, // if the node is a member in a JSDoc namespace
 
         BlockScoped = Let | Const,
 

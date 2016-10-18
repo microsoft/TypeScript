@@ -54,6 +54,11 @@ namespace ts {
             const body = (<ModuleDeclaration>node).body;
             return body ? getModuleInstanceState(body) : ModuleInstanceState.Instantiated;
         }
+        // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
+        // be considered the same as type alias
+        else if (node.kind === SyntaxKind.Identifier && node.flags & NodeFlags.InJSDocNamespace) {
+            return ModuleInstanceState.NonInstantiated;
+        }
         else {
             return ModuleInstanceState.Instantiated;
         }
@@ -429,7 +434,7 @@ namespace ts {
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefNamespaceMember()) {
+                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace()) {
                     const exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -444,11 +449,8 @@ namespace ts {
                 }
             }
 
-            function isJSDocTypedefNamespaceMember() {
-                return node.kind === SyntaxKind.JSDocTypedefTag &&
-                    container.kind === SyntaxKind.ModuleDeclaration &&
-                    (<JSDocTypedefTag>node).name &&
-                    container === (<JSDocTypedefTag>node).name.parent;
+            function isJSDocTypedefInJSDocNamespace() {
+                return node.kind === SyntaxKind.JSDocTypedefTag && node.name && node.name.flags & NodeFlags.InJSDocNamespace;
             }
         }
 
@@ -1795,17 +1797,14 @@ namespace ts {
                 /* Strict mode checks */
                 case SyntaxKind.Identifier:
                     // for typedef type names with namespaces
-                    if (isInJavaScriptFile(node) && node.parent && node.parent.kind === SyntaxKind.ModuleDeclaration) {
+                    if (node.flags & NodeFlags.InJSDocNamespace) {
                         let parentNode = node.parent;
                         while (parentNode && parentNode.kind !== SyntaxKind.JSDocTypedefTag) {
                             parentNode = parentNode.parent;
                         }
-                        if (parentNode && parentNode.kind === SyntaxKind.JSDocTypedefTag && (<JSDocTypedefTag>parentNode).name === node) {
-                            bindBlockScopedDeclaration(<Declaration>parentNode, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
-                            break;
-                        }
+                        bindBlockScopedDeclaration(<Declaration>parentNode, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        break;
                     }
-
                 case SyntaxKind.ThisKeyword:
                     if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                         node.flowNode = currentFlow;
