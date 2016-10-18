@@ -2998,17 +2998,21 @@ namespace ts {
 
         function getDifferenceType(source: Type, minus: Type, symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (source.flags & TypeFlags.ObjectType && minus.flags & TypeFlags.ObjectType) {
+                // TODO: Maybe we should require the types to be the same as well
                 const members = createMap<Symbol>();
-                for (const prop of getPropertiesOfType(source)) {
-                    if (!getPropertyOfObjectType(minus, prop.name)) {
-                        members[prop.name] = prop;
+                const minusStringIndex = getIndexInfoOfType(minus, IndexKind.String);
+                if (!minusStringIndex) {
+                    for (const prop of getPropertiesOfType(source)) {
+                        if (!getPropertyOfObjectType(minus, prop.name)) {
+                            members[prop.name] = prop;
+                        }
                     }
                 }
-                // TODO: Maybe we should require the call signatures to be exactly the same in order to subtract them
                 const callSignatures = getSignaturesOfType(minus, SignatureKind.Call) !== emptyArray ? emptyArray : getSignaturesOfType(source, SignatureKind.Call);
                 const constructSignatures = getSignaturesOfType(minus, SignatureKind.Construct) !== emptyArray ? emptyArray : getSignaturesOfType(source, SignatureKind.Construct);
-                // TODO: Include indexers
-                return createAnonymousType(symbol, members, callSignatures, constructSignatures, getIndexInfoOfType(source, IndexKind.String), getIndexInfoOfType(minus, IndexKind.Number));
+                const stringIndexInfo = minusStringIndex ? undefined : getIndexInfoOfType(source, IndexKind.String);
+                const numberIndexInfo = minusStringIndex || getIndexInfoOfType(minus, IndexKind.Number) ? undefined : getIndexInfoOfType(source, IndexKind.Number);
+                return createAnonymousType(symbol, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
             }
             const id = getTypeListId([source, minus]);
             if (id in differenceTypes) {
