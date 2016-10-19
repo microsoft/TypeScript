@@ -3302,9 +3302,9 @@ namespace ts {
          */
         resolvedFileName: string;
         /** TypeScript (.d.ts, .ts, .tsx) file that the module was resolved to. This will be preferred over a JS file. */
-        resolvedTsFileName: string | undefined;
+        resolvedTsFileName?: string;
         /** JavaScript (or .jsx) file that the module was resolved to. This should be returned even if '--allowJs' (or '--jsx') is disabled. */
-        resolvedJsFileName: string | undefined;
+        resolvedJsFileName?: string;
         /**
          * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
          * - be a .d.ts file
@@ -3313,13 +3313,6 @@ namespace ts {
          */
         isExternalLibraryImport: boolean;
     }
-
-    /**
-     * For backwards compatibility, a host may choose not to return `resolvedTsFileName` and `resolvedJsFileName` from a result ResolvedModule,
-     * in which case they will be inferred from the file extension.
-     * Prefer to return a full ResolvedModule.
-     */
-    export type ResolvedModuleFromHost = { resolvedFileName: string; isExternalLibraryImport: boolean } | ResolvedModule;
 
     export interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModule | undefined;
@@ -3358,7 +3351,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModuleFromHost[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */

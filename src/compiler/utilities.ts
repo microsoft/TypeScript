@@ -118,18 +118,19 @@ namespace ts {
         sourceFile.resolvedModules[moduleNameText] = resolvedModule;
     }
 
-    /** Host may have omitted resolvedTsFileName and resolvedJsFileName, in which case we should infer them from the file extension of resolvedFileName. */
-    export function convertResolvedModuleFromHost(resolved: ResolvedModuleFromHost | undefined): ResolvedModule | undefined {
+    /** An older host may have omitted resolvedTsFileName and resolvedJsFileName, in which case we should infer them from the file extension of resolvedFileName. */
+    export function convertResolvedModuleFromHost(resolved: ResolvedModule | undefined): ResolvedModule | undefined {
         if (resolved === undefined) {
             return undefined;
         }
-        // `resolvedTsFileName` and `resolvedJsFileName` should be present as properties even if undefined.
-        else if ("resolvedTsFileName" in resolved) {
+        // At least one of `resolevdTsFileName` or `resolvedJsFileName` should be defined.
+        else if (resolved.resolvedTsFileName || resolved.resolvedJsFileName) {
             const { resolvedFileName, resolvedTsFileName, resolvedJsFileName } = resolved as ResolvedModule;
             Debug.assert(resolvedFileName === (resolvedTsFileName || resolvedJsFileName));
-            return resolved as ResolvedModule;
+            return resolved;
         }
         else {
+            // For backwards compatibility, if both `resolvedTsFileName` and `resolvedJsFileName` are undefined, we infer one of them to define.
             const { resolvedFileName, isExternalLibraryImport } = resolved;
             if (fileExtensionIsAny(resolvedFileName, supportedTypeScriptExtensions)) {
                 return { resolvedFileName, resolvedTsFileName: resolvedFileName, resolvedJsFileName: undefined, isExternalLibraryImport };
