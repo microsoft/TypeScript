@@ -9,9 +9,9 @@ namespace ts.server {
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
-        enqueueInstallTypingsRequest: () => {},
-        attach: () => {},
-        onProjectClosed: () => {},
+        enqueueInstallTypingsRequest: noop,
+        attach: noop,
+        onProjectClosed: noop,
         globalTypingsCacheLocation: undefined
     };
 

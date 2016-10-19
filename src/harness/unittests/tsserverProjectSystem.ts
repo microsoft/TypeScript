@@ -23,10 +23,6 @@ namespace ts.projectSystem {
         readonly callback: TI.RequestCompletedAction;
     }
 
-    export function notImplemented(): any {
-        throw new Error("Not yet implemented");
-    }
-
     export const nullLogger: server.Logger = {
         close: () => void 0,
         hasLevel: () => void 0,
@@ -525,8 +521,8 @@ namespace ts.projectSystem {
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly exit = notImplemented;
-        readonly getEnvironmentVariable = notImplemented;
+        readonly exit = notYetImplemented;
+        readonly getEnvironmentVariable = notYetImplemented;
     }
 
     export function makeSessionRequest<T>(command: string, args: T) {
