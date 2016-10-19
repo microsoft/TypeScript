@@ -4515,7 +4515,7 @@ namespace ts {
         }
 
         function getApparentTypeOfSpread(type: SpreadType) {
-            return getSpreadType([getApparentType(type.left), getApparentType(type.right)], type.symbol);
+            return getApparentType(type.right);
         }
 
         /**
@@ -5837,9 +5837,8 @@ namespace ts {
                 left.flags & TypeFlags.Spread &&
                 (left as SpreadType).right.flags & TypeFlags.ObjectType) {
                 // simplify two adjacent object types: T ... { x } ... { y } becomes T ... { x, y }
-                // Note: left.left is always a spread type. Can we use this fact to avoid calling getSpreadType again?
-                return getSpreadType([getSpreadType([right, (left as SpreadType).right], symbol, aliasSymbol, aliasTypeArguments),
-                                      (left as SpreadType).left], symbol, aliasSymbol, aliasTypeArguments);
+                const simplified = getSpreadType([right, (left as SpreadType).right], symbol, aliasSymbol, aliasTypeArguments);
+                return getSpreadType([(left as SpreadType).left, simplified], symbol, aliasSymbol, aliasTypeArguments);
             }
             if (left.flags & TypeFlags.Intersection) {
                 const spreads = map((left as IntersectionType).types,
@@ -6872,7 +6871,7 @@ namespace ts {
 
                 if (source.flags & TypeFlags.Spread && target.flags & TypeFlags.Spread) {
                     // you only see this for spreads with type parameters
-                    if (!(spreadTypeRelatedTo(source as SpreadType, target as SpreadType))) {
+                    if (!(spreadTypeRelatedTo(source as SpreadType, target as SpreadType, /*atRightEdge*/ true))) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
                         }
@@ -6945,13 +6944,14 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function spreadTypeRelatedTo(source: SpreadType, target: SpreadType): boolean {
+            function spreadTypeRelatedTo(source: SpreadType, target: SpreadType, atRightEdge?: boolean): boolean {
                 // If the right side of a spread type is ObjectType, then the left side must be a Spread.
                 // Structural compatibility of the spreads' object types are checked separately in isRelatedTo,
                 // so just skip them for now.
                 if (source.right.flags & TypeFlags.ObjectType || target.right.flags & TypeFlags.ObjectType) {
-                    return spreadTypeRelatedTo(source.right.flags & TypeFlags.ObjectType ? source.left as SpreadType : source,
-                                               target.right.flags & TypeFlags.ObjectType ? target.left as SpreadType : target);
+                    return atRightEdge &&
+                        spreadTypeRelatedTo(source.right.flags & TypeFlags.ObjectType ? source.left as SpreadType : source,
+                                            target.right.flags & TypeFlags.ObjectType ? target.left as SpreadType : target);
                 }
                 // If both right sides are type parameters, then they must be identical for the spread types to be related.
                 // It also means that the left sides are either spread types or object types.
@@ -6964,9 +6964,9 @@ namespace ts {
                     // If the left sides are both spread types, then recursively check them.
                     return spreadTypeRelatedTo(source.left as SpreadType, target.left as SpreadType);
                 }
-                // If the left sides are both object types, then isRelatedTo will check the structural compatibility next.
-                // Otherwise, one side has more type parameters than the other and the spread types are not related.
-                return !!(source.left.flags & TypeFlags.ObjectType && target.left.flags & TypeFlags.ObjectType);
+                // If the left sides are both object types, then we should be at the end and both should be emptyObjectType.
+                // If not, we can't know what properties might have been overwritten, so fail.
+                return source.left === emptyObjectType && target.left === emptyObjectType;
             }
 
             function isIdenticalTo(source: Type, target: Type): Ternary {
