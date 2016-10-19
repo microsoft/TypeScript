@@ -13,34 +13,36 @@ function f<T, U, V>(t: T, u: U, v: V): void {
     const missingU: { ...T, ...V } = o; // error, missing U
     const missingV: { ...T, ...U } = o; // error, missing V
     const atEnd: { ...T, ...U, second: string } = { ...t, ...u, second: 'foo' }; // ok
-    const atBeginning: { first: string, ...T, ...U, } = { first: 'foo', ...t, ...u }; // ok
+    const atBeginning: { first: string, ...T, ...U, } = { first: 'foo', ...t, ...u }; // error, not assignable
 
     const emptyTarget: { } = { ...t, ...u } // ok
     const emptySource: { ...T, ...U } = { }; // error, {} is not assignable to U (or T)
 
+    // error, { sn?: boolean } ...T ... { sn?: number | string } is not assignable to
+    //        T ... { sn?: number | string | boolean }
     let optionalNumber: { sn?: number };
     let optionalString: { sn?: string };
     let optionalBoolean: { sn?: boolean };
     const unionCutoff: { ...T, sn?: number | string | boolean } =
-        { ...optionalBoolean, ...t, ...optionalString, ...optionalNumber } // ok
+        { ...optionalBoolean, ...t, ...optionalString, ...optionalNumber }
     unionCutoff.sn; // ok
     const optionalCutoff = { ...t, ...optionalNumber }; // ok
     optionalCutoff.sn; // ok
 
     const interspersed: { first: string, ...T, second: string, ...U, third: string } =
-        { first: '1', ...t, second: '2', ...u, third: '3' }; // ok
+        { first: '1', ...t, second: '2', ...u, third: '3' }; // error, not assignable
     const interspersedMissingU: { first: string, second: string, ...T, third: string } =
         { first: '1', ...t, second: '2', ...u, third: '3' }; // error, 'U' is missing
     const interspersedOrder1: { first: string, ...T, second: string, ...U, third: string, secondsecond: string } =
-        { first: '1', ...t, second: '2', ...u, third: '3', secondsecond: 'false' }; // ok
+        { first: '1', ...t, second: '2', ...u, third: '3', secondsecond: 'false' }; // error, not assignable
     const interspersedOrder2: { first: string, second: string, secondsecond: string, third: string, ...T, ...U } =
-        { first: '1', ...t, second: '2', ...u, third: '3', secondsecond: 'false' }; // ok
+        { first: '1', ...t, second: '2', ...u, third: '3', secondsecond: 'false' }; // error, not assignable
 
 
     const mismatchFirst: { first: string, ...T, second: string, ...U, third: string } =
-        { firrrrrrst: '1', ...t, second: '2', ...u, third: '3' }; // error, 'first' not found
+        { firrrrrrst: '1', ...t, second: '2', ...u, third: '3' }; // error, not assignable
     const mismatchSecond: { first: string, ...T, second: string, ...U, third: string } =
-        { first: '1', ...t, ssssssssecond: '2', ...u, third: '3' }; // error, 'second' not found
+        { first: '1', ...t, ssssssssecond: '2', ...u, third: '3' }; // error, not assignable
     const mismatchLast: { first: string, ...T, second: string, ...U, third: string } =
-        { first: '1', ...t, second: '2', ...u, thirrrrrrrd: '3' }; // error, 'third' not found
+        { first: '1', ...t, second: '2', ...u, thirrrrrrrd: '3' }; // error, not assignable
 }

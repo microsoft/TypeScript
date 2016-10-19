@@ -21,31 +21,31 @@ function iteratedUnionIntersection<T, U, V>(t: T, u: U, v: V): void {
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 0, 37))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 0, 40))
 
-    let result = { id: 'bar', ...tu, ...uv };
+    let result = { ...tu, ...uv, id: 'foo' };
 >result : Symbol(result, Decl(objectSpreadIntersection.ts, 3, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 3, 18))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 3, 32))
 
-    let expected: ({ id: string, ...T, ...U } & { id: string, ...T, ...V }) | ({ id: string, ...U } & { id: string, ...U, ...V });
+    let expected: ({ ...T, ...U, id: string } & { ...T, ...V, id: string }) | ({ ...U, id: string } & { ...U, ...V, id: string });
 >expected : Symbol(expected, Decl(objectSpreadIntersection.ts, 4, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 4, 20))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 0, 35))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 0, 37))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 4, 49))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 4, 32))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 0, 35))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 0, 40))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 4, 80))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 4, 61))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 0, 37))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 4, 103))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 4, 86))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 0, 37))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 0, 40))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 4, 115))
 
-    let assignable: { id: string, ...(T | U), ...(U & V) } = result;
+    let assignable: { ...(T | U), ...(U & V), id: string } = result;
 >assignable : Symbol(assignable, Decl(objectSpreadIntersection.ts, 5, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 5, 21))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 0, 35))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 0, 37))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 0, 37))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 0, 40))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 5, 45))
 >result : Symbol(result, Decl(objectSpreadIntersection.ts, 3, 7))
 }
 // concrete types work
@@ -95,26 +95,26 @@ function tripleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 15, 30))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 15, 33))
 
-    let result = { id: 'foo', ...tuv };
+    let result = { ...tuv, id: 'bar' };
 >result : Symbol(result, Decl(objectSpreadIntersection.ts, 17, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 17, 18))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 17, 26))
 
-    let expected: { id: string, ...T } & { id: string, ...U } & { id: string, ...V } = result;
+    let expected: { ...T, id: string } & { ...U, id: string } & { ...V, id: string } = result;
 >expected : Symbol(expected, Decl(objectSpreadIntersection.ts, 18, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 18, 19))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 15, 28))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 18, 42))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 18, 25))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 15, 30))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 18, 65))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 18, 48))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 15, 33))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 18, 71))
 >result : Symbol(result, Decl(objectSpreadIntersection.ts, 17, 7))
 
-    let assignable: { id: string, ...(T & U & V) } = result;
+    let assignable: { ...(T & U & V), id: string } = result;
 >assignable : Symbol(assignable, Decl(objectSpreadIntersection.ts, 19, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 19, 21))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 15, 28))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 15, 30))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 15, 33))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 19, 37))
 >result : Symbol(result, Decl(objectSpreadIntersection.ts, 17, 7))
 }
 function iteratedDoubleIntersection<T, U, V>(t: T, u: U, v: V): void {
@@ -139,31 +139,31 @@ function iteratedDoubleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 21, 38))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 21, 41))
 
-    let result = { id: 'bar', ...tu, ...uv };
+    let result = { ...tu, ...uv, id: 'baz' };
 >result : Symbol(result, Decl(objectSpreadIntersection.ts, 24, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 24, 18))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 24, 32))
 
-    let expected: { id: string, ...T, ...U } & { id: string, ...T, ...V } & { id: string, ...U } & { id: string, ...U, ...V };
+    let expected: { ...T, ...U, id: string } & { ...T, ...V, id: string } & { ...U, id: string } & { ...U, ...V, id: string };
 >expected : Symbol(expected, Decl(objectSpreadIntersection.ts, 25, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 25, 19))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 21, 36))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 21, 38))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 25, 48))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 25, 31))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 21, 36))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 21, 41))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 25, 77))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 25, 60))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 21, 38))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 25, 100))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 25, 83))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 21, 38))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 21, 41))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 25, 112))
 
-    let assignable: { id: string, ...(T & U), ...(U & V) } = result;
+    let assignable: { ...(T & U), ...(U & V), id: string } = result;
 >assignable : Symbol(assignable, Decl(objectSpreadIntersection.ts, 26, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 26, 21))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 21, 36))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 21, 38))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 21, 38))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 21, 41))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 26, 45))
 >result : Symbol(result, Decl(objectSpreadIntersection.ts, 24, 7))
 }
 function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
@@ -188,31 +188,31 @@ function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 28, 37))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 28, 40))
 
-    let result = { id: 'bar', ...tu, ...uv };
+    let result = { ...tu, ...uv, id: 'qux' };
 >result : Symbol(result, Decl(objectSpreadIntersection.ts, 31, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 31, 18))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 31, 32))
 
-    let expected: ({ id: string, ...T, ...U } & { id: string, ...U }) | ({ id: string, ...T, ...V } & { id: string, ...U, ...V });
+    let expected: ({ ...T, ...U, id: string } & { ...U, id: string }) | ({ ...T, ...V, id: string } & { ...U, ...V, id: string });
 >expected : Symbol(expected, Decl(objectSpreadIntersection.ts, 32, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 32, 20))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 28, 35))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 28, 37))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 32, 49))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 32, 32))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 28, 37))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 32, 74))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 32, 55))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 28, 35))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 28, 40))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 32, 103))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 32, 86))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 28, 37))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 28, 40))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 32, 115))
 
-    let assignable: { id: string, ...(T & U), ...(U | V) } = result;
+    let assignable: { ...(T & U), ...(U | V), id: string } = result;
 >assignable : Symbol(assignable, Decl(objectSpreadIntersection.ts, 33, 7))
->id : Symbol(id, Decl(objectSpreadIntersection.ts, 33, 21))
 >T : Symbol(T, Decl(objectSpreadIntersection.ts, 28, 35))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 28, 37))
 >U : Symbol(U, Decl(objectSpreadIntersection.ts, 28, 37))
 >V : Symbol(V, Decl(objectSpreadIntersection.ts, 28, 40))
+>id : Symbol(id, Decl(objectSpreadIntersection.ts, 33, 45))
 >result : Symbol(result, Decl(objectSpreadIntersection.ts, 31, 7))
 }
 

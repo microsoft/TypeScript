@@ -21,17 +21,16 @@ function iteratedUnionIntersection<T, U, V>(t: T, u: U, v: V): void {
 >U : U
 >V : V
 
-    let result = { id: 'bar', ...tu, ...uv };
->result : ({ id: string; ...T; ...U } | { id: string; ...U }) & ({ id: string; ...T; ...V } | { id: string; ...U; ...V })
->{ id: 'bar', ...tu, ...uv } : ({ id: string; ...T; ...U } | { id: string; ...U }) & ({ id: string; ...T; ...V } | { id: string; ...U; ...V })
->id : string
->'bar' : "bar"
+    let result = { ...tu, ...uv, id: 'foo' };
+>result : ({ ...U; id: string; } | { ...T; ...U; id: string; } | { ...U; ...T; ...U; id: string; } | { ...T; ...U; ...T; ...U; id: string; }) & ({ ...T; ...V; id: string; } | { ...U; ...T; ...V; id: string; } | { ...U; ...V; id: string; } | { ...T; ...U; ...V; id: string; } | { ...T; ...U; ...T; ...V; id: string; } | { ...U; ...T; ...U; ...V; id: string; })
+>{ ...tu, ...uv, id: 'foo' } : ({ ...U; id: string; } | { ...T; ...U; id: string; } | { ...U; ...T; ...U; id: string; } | { ...T; ...U; ...T; ...U; id: string; }) & ({ ...T; ...V; id: string; } | { ...U; ...T; ...V; id: string; } | { ...U; ...V; id: string; } | { ...T; ...U; ...V; id: string; } | { ...T; ...U; ...T; ...V; id: string; } | { ...U; ...T; ...U; ...V; id: string; })
 >tu : any
 >uv : any
+>id : string
+>'foo' : "foo"
 
-    let expected: ({ id: string, ...T, ...U } & { id: string, ...T, ...V }) | ({ id: string, ...U } & { id: string, ...U, ...V });
->expected : ({ id: string; ...T; ...U } & { id: string; ...T; ...V }) | ({ id: string; ...U } & { id: string; ...U; ...V })
->id : string
+    let expected: ({ ...T, ...U, id: string } & { ...T, ...V, id: string }) | ({ ...U, id: string } & { ...U, ...V, id: string });
+>expected : ({ ...T; ...U; id: string; } & { ...T; ...V; id: string; }) | ({ ...U; id: string; } & { ...U; ...V; id: string; })
 >T : T
 >U : U
 >id : string
@@ -42,15 +41,16 @@ function iteratedUnionIntersection<T, U, V>(t: T, u: U, v: V): void {
 >id : string
 >U : U
 >V : V
+>id : string
 
-    let assignable: { id: string, ...(T | U), ...(U & V) } = result;
->assignable : ({ id: string; ...T; ...U } | { id: string; ...U }) & ({ id: string; ...T; ...V } | { id: string; ...U; ...V })
->id : string
+    let assignable: { ...(T | U), ...(U & V), id: string } = result;
+>assignable : ({ ...U; id: string; } | { ...T; ...U; id: string; } | { ...U; ...T; ...U; id: string; } | { ...T; ...U; ...T; ...U; id: string; }) & ({ ...T; ...V; id: string; } | { ...U; ...T; ...V; id: string; } | { ...U; ...V; id: string; } | { ...T; ...U; ...V; id: string; } | { ...T; ...U; ...T; ...V; id: string; } | { ...U; ...T; ...U; ...V; id: string; })
 >T : T
 >U : U
 >U : U
 >V : V
->result : ({ id: string; ...T; ...U } | { id: string; ...U }) & ({ id: string; ...T; ...V } | { id: string; ...U; ...V })
+>id : string
+>result : ({ ...U; id: string; } | { ...T; ...U; id: string; } | { ...U; ...T; ...U; id: string; } | { ...T; ...U; ...T; ...U; id: string; }) & ({ ...T; ...V; id: string; } | { ...U; ...T; ...V; id: string; } | { ...U; ...V; id: string; } | { ...T; ...U; ...V; id: string; } | { ...T; ...U; ...T; ...V; id: string; } | { ...U; ...T; ...U; ...V; id: string; })
 }
 // concrete types work
 interface A1 { a: number }
@@ -101,30 +101,30 @@ function tripleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >U : U
 >V : V
 
-    let result = { id: 'foo', ...tuv };
->result : { id: string; ...T } & { id: string; ...U } & { id: string; ...V }
->{ id: 'foo', ...tuv } : { id: string; ...T } & { id: string; ...U } & { id: string; ...V }
->id : string
->'foo' : "foo"
+    let result = { ...tuv, id: 'bar' };
+>result : { ...T; id: string; } & { ...U; id: string; } & { ...V; id: string; }
+>{ ...tuv, id: 'bar' } : { ...T; id: string; } & { ...U; id: string; } & { ...V; id: string; }
 >tuv : any
-
-    let expected: { id: string, ...T } & { id: string, ...U } & { id: string, ...V } = result;
->expected : { id: string; ...T } & { id: string; ...U } & { id: string; ...V }
 >id : string
+>'bar' : "bar"
+
+    let expected: { ...T, id: string } & { ...U, id: string } & { ...V, id: string } = result;
+>expected : { ...T; id: string; } & { ...U; id: string; } & { ...V; id: string; }
 >T : T
 >id : string
 >U : U
 >id : string
 >V : V
->result : { id: string; ...T } & { id: string; ...U } & { id: string; ...V }
-
-    let assignable: { id: string, ...(T & U & V) } = result;
->assignable : { id: string; ...T } & { id: string; ...U } & { id: string; ...V }
 >id : string
+>result : { ...T; id: string; } & { ...U; id: string; } & { ...V; id: string; }
+
+    let assignable: { ...(T & U & V), id: string } = result;
+>assignable : { ...T; id: string; } & { ...U; id: string; } & { ...V; id: string; }
 >T : T
 >U : U
 >V : V
->result : { id: string; ...T } & { id: string; ...U } & { id: string; ...V }
+>id : string
+>result : { ...T; id: string; } & { ...U; id: string; } & { ...V; id: string; }
 }
 function iteratedDoubleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >iteratedDoubleIntersection : <T, U, V>(t: T, u: U, v: V) => void
@@ -148,17 +148,16 @@ function iteratedDoubleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >U : U
 >V : V
 
-    let result = { id: 'bar', ...tu, ...uv };
->result : { id: string; ...T; ...U } & { id: string; ...U } & { id: string; ...T; ...V } & { id: string; ...U; ...V }
->{ id: 'bar', ...tu, ...uv } : { id: string; ...T; ...U } & { id: string; ...U } & { id: string; ...T; ...V } & { id: string; ...U; ...V }
->id : string
->'bar' : "bar"
+    let result = { ...tu, ...uv, id: 'baz' };
+>result : { ...T; ...U; id: string; } & { ...U; ...T; ...U; id: string; } & { ...U; id: string; } & { ...T; ...V; id: string; } & { ...U; ...T; ...V; id: string; } & { ...T; ...U; ...V; id: string; } & { ...U; ...V; id: string; }
+>{ ...tu, ...uv, id: 'baz' } : { ...T; ...U; id: string; } & { ...U; ...T; ...U; id: string; } & { ...U; id: string; } & { ...T; ...V; id: string; } & { ...U; ...T; ...V; id: string; } & { ...T; ...U; ...V; id: string; } & { ...U; ...V; id: string; }
 >tu : any
 >uv : any
+>id : string
+>'baz' : "baz"
 
-    let expected: { id: string, ...T, ...U } & { id: string, ...T, ...V } & { id: string, ...U } & { id: string, ...U, ...V };
->expected : { id: string; ...T; ...U } & { id: string; ...T; ...V } & { id: string; ...U } & { id: string; ...U; ...V }
->id : string
+    let expected: { ...T, ...U, id: string } & { ...T, ...V, id: string } & { ...U, id: string } & { ...U, ...V, id: string };
+>expected : { ...T; ...U; id: string; } & { ...T; ...V; id: string; } & { ...U; id: string; } & { ...U; ...V; id: string; }
 >T : T
 >U : U
 >id : string
@@ -169,15 +168,16 @@ function iteratedDoubleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >id : string
 >U : U
 >V : V
+>id : string
 
-    let assignable: { id: string, ...(T & U), ...(U & V) } = result;
->assignable : { id: string; ...T; ...U } & { id: string; ...U } & { id: string; ...T; ...V } & { id: string; ...U; ...V }
->id : string
+    let assignable: { ...(T & U), ...(U & V), id: string } = result;
+>assignable : { ...T; ...U; id: string; } & { ...U; ...T; ...U; id: string; } & { ...U; id: string; } & { ...T; ...V; id: string; } & { ...U; ...T; ...V; id: string; } & { ...T; ...U; ...V; id: string; } & { ...U; ...V; id: string; }
 >T : T
 >U : U
 >U : U
 >V : V
->result : { id: string; ...T; ...U } & { id: string; ...U } & { id: string; ...T; ...V } & { id: string; ...U; ...V }
+>id : string
+>result : { ...T; ...U; id: string; } & { ...U; ...T; ...U; id: string; } & { ...U; id: string; } & { ...T; ...V; id: string; } & { ...U; ...T; ...V; id: string; } & { ...T; ...U; ...V; id: string; } & { ...U; ...V; id: string; }
 }
 function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
 >iteratedIntersectionUnion : <T, U, V>(t: T, u: U, v: V) => void
@@ -201,17 +201,16 @@ function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
 >U : U
 >V : V
 
-    let result = { id: 'bar', ...tu, ...uv };
->result : ({ id: string; ...T; ...U } & { id: string; ...U }) | ({ id: string; ...T; ...V } & { id: string; ...U; ...V })
->{ id: 'bar', ...tu, ...uv } : ({ id: string; ...T; ...U } & { id: string; ...U }) | ({ id: string; ...T; ...V } & { id: string; ...U; ...V })
->id : string
->'bar' : "bar"
+    let result = { ...tu, ...uv, id: 'qux' };
+>result : ({ ...T; ...U; id: string; } & { ...U; ...T; ...U; id: string; } & { ...T; ...U; ...T; ...U; id: string; } & { ...U; id: string; }) | ({ ...T; ...V; id: string; } & { ...U; ...T; ...V; id: string; } & { ...T; ...U; ...T; ...V; id: string; } & { ...T; ...U; ...V; id: string; } & { ...U; ...T; ...U; ...V; id: string; } & { ...U; ...V; id: string; })
+>{ ...tu, ...uv, id: 'qux' } : ({ ...T; ...U; id: string; } & { ...U; ...T; ...U; id: string; } & { ...T; ...U; ...T; ...U; id: string; } & { ...U; id: string; }) | ({ ...T; ...V; id: string; } & { ...U; ...T; ...V; id: string; } & { ...T; ...U; ...T; ...V; id: string; } & { ...T; ...U; ...V; id: string; } & { ...U; ...T; ...U; ...V; id: string; } & { ...U; ...V; id: string; })
 >tu : any
 >uv : any
+>id : string
+>'qux' : "qux"
 
-    let expected: ({ id: string, ...T, ...U } & { id: string, ...U }) | ({ id: string, ...T, ...V } & { id: string, ...U, ...V });
->expected : ({ id: string; ...T; ...U } & { id: string; ...U }) | ({ id: string; ...T; ...V } & { id: string; ...U; ...V })
->id : string
+    let expected: ({ ...T, ...U, id: string } & { ...U, id: string }) | ({ ...T, ...V, id: string } & { ...U, ...V, id: string });
+>expected : ({ ...T; ...U; id: string; } & { ...U; id: string; }) | ({ ...T; ...V; id: string; } & { ...U; ...V; id: string; })
 >T : T
 >U : U
 >id : string
@@ -222,15 +221,16 @@ function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
 >id : string
 >U : U
 >V : V
+>id : string
 
-    let assignable: { id: string, ...(T & U), ...(U | V) } = result;
->assignable : ({ id: string; ...T; ...U } & { id: string; ...U }) | ({ id: string; ...T; ...V } & { id: string; ...U; ...V })
->id : string
+    let assignable: { ...(T & U), ...(U | V), id: string } = result;
+>assignable : ({ ...T; ...U; id: string; } & { ...U; ...T; ...U; id: string; } & { ...T; ...U; ...T; ...U; id: string; } & { ...U; id: string; }) | ({ ...T; ...V; id: string; } & { ...U; ...T; ...V; id: string; } & { ...T; ...U; ...T; ...V; id: string; } & { ...T; ...U; ...V; id: string; } & { ...U; ...T; ...U; ...V; id: string; } & { ...U; ...V; id: string; })
 >T : T
 >U : U
 >U : U
 >V : V
->result : ({ id: string; ...T; ...U } & { id: string; ...U }) | ({ id: string; ...T; ...V } & { id: string; ...U; ...V })
+>id : string
+>result : ({ ...T; ...U; id: string; } & { ...U; ...T; ...U; id: string; } & { ...T; ...U; ...T; ...U; id: string; } & { ...U; id: string; }) | ({ ...T; ...V; id: string; } & { ...U; ...T; ...V; id: string; } & { ...T; ...U; ...T; ...V; id: string; } & { ...T; ...U; ...V; id: string; } & { ...U; ...T; ...U; ...V; id: string; } & { ...U; ...V; id: string; })
 }
 
 
