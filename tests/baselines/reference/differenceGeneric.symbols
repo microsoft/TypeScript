@@ -2,7 +2,7 @@
 interface Gen {
 >Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 
-    x: any;
+    x: number;
 >x : Symbol(Gen.x, Decl(differenceGeneric.ts, 0, 15))
 }
 interface Gen2 {
@@ -12,10 +12,10 @@ interface Gen2 {
 >parent : Symbol(Gen2.parent, Decl(differenceGeneric.ts, 3, 16))
 >Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 
-    millenial: any;
+    millenial: string;
 >millenial : Symbol(Gen2.millenial, Decl(differenceGeneric.ts, 4, 16))
 }
-function cloneAgain<T extends Gen & Gen2>(t: T): T {
+function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen {
 >cloneAgain : Symbol(cloneAgain, Decl(differenceGeneric.ts, 6, 1))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
 >Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
@@ -23,28 +23,84 @@ function cloneAgain<T extends Gen & Gen2>(t: T): T {
 >t : Symbol(t, Decl(differenceGeneric.ts, 7, 42))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
+>Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 
     let y: Gen;
 >y : Symbol(y, Decl(differenceGeneric.ts, 8, 7))
 >Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 
+    // declarations with generics create difference types
     let rest: T - Gen;
->rest : Symbol(rest, Decl(differenceGeneric.ts, 9, 7))
+>rest : Symbol(rest, Decl(differenceGeneric.ts, 10, 7))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
 >Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 
     let rest1: T - Gen - Gen2;
->rest1 : Symbol(rest1, Decl(differenceGeneric.ts, 10, 7))
+>rest1 : Symbol(rest1, Decl(differenceGeneric.ts, 11, 7))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
 >Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 >Gen2 : Symbol(Gen2, Decl(differenceGeneric.ts, 2, 1))
 
     var { x, ...rest2 } = t;
->x : Symbol(x, Decl(differenceGeneric.ts, 11, 9))
->rest2 : Symbol(rest2, Decl(differenceGeneric.ts, 11, 12))
+>x : Symbol(x, Decl(differenceGeneric.ts, 12, 9))
+>rest2 : Symbol(rest2, Decl(differenceGeneric.ts, 12, 12))
 >t : Symbol(t, Decl(differenceGeneric.ts, 7, 42))
 
-    return t;
->t : Symbol(t, Decl(differenceGeneric.ts, 7, 42))
+    // apparent types distribute the intersection constraint correctly
+    rest.parent;
+>rest.parent : Symbol(Gen2.parent, Decl(differenceGeneric.ts, 3, 16))
+>rest : Symbol(rest, Decl(differenceGeneric.ts, 10, 7))
+>parent : Symbol(Gen2.parent, Decl(differenceGeneric.ts, 3, 16))
+
+    rest.millenial;
+>rest.millenial : Symbol(Gen2.millenial, Decl(differenceGeneric.ts, 4, 16))
+>rest : Symbol(rest, Decl(differenceGeneric.ts, 10, 7))
+>millenial : Symbol(Gen2.millenial, Decl(differenceGeneric.ts, 4, 16))
+
+    rest2.parent;
+>rest2.parent : Symbol(Gen2.parent, Decl(differenceGeneric.ts, 3, 16))
+>rest2 : Symbol(rest2, Decl(differenceGeneric.ts, 12, 12))
+>parent : Symbol(Gen2.parent, Decl(differenceGeneric.ts, 3, 16))
+
+    rest2.millenial;
+>rest2.millenial : Symbol(Gen2.millenial, Decl(differenceGeneric.ts, 4, 16))
+>rest2 : Symbol(rest2, Decl(differenceGeneric.ts, 12, 12))
+>millenial : Symbol(Gen2.millenial, Decl(differenceGeneric.ts, 4, 16))
+
+    return rest2;
+>rest2 : Symbol(rest2, Decl(differenceGeneric.ts, 12, 12))
 }
+interface Gen3 extends Gen2 {
+>Gen3 : Symbol(Gen3, Decl(differenceGeneric.ts, 19, 1))
+>Gen2 : Symbol(Gen2, Decl(differenceGeneric.ts, 2, 1))
+
+    x: number;
+>x : Symbol(Gen3.x, Decl(differenceGeneric.ts, 20, 29))
+
+    w: boolean;
+>w : Symbol(Gen3.w, Decl(differenceGeneric.ts, 21, 14))
+}
+let gen3: Gen3;
+>gen3 : Symbol(gen3, Decl(differenceGeneric.ts, 24, 3))
+>Gen3 : Symbol(Gen3, Decl(differenceGeneric.ts, 19, 1))
+
+let rested = cloneAgain(gen3);
+>rested : Symbol(rested, Decl(differenceGeneric.ts, 25, 3))
+>cloneAgain : Symbol(cloneAgain, Decl(differenceGeneric.ts, 6, 1))
+>gen3 : Symbol(gen3, Decl(differenceGeneric.ts, 24, 3))
+
+rested.parent;
+>rested.parent : Symbol(Gen2.parent, Decl(differenceGeneric.ts, 3, 16))
+>rested : Symbol(rested, Decl(differenceGeneric.ts, 25, 3))
+>parent : Symbol(Gen2.parent, Decl(differenceGeneric.ts, 3, 16))
+
+rested.millenial;
+>rested.millenial : Symbol(Gen2.millenial, Decl(differenceGeneric.ts, 4, 16))
+>rested : Symbol(rested, Decl(differenceGeneric.ts, 25, 3))
+>millenial : Symbol(Gen2.millenial, Decl(differenceGeneric.ts, 4, 16))
+
+rested.w;
+>rested.w : Symbol(Gen3.w, Decl(differenceGeneric.ts, 21, 14))
+>rested : Symbol(rested, Decl(differenceGeneric.ts, 25, 3))
+>w : Symbol(Gen3.w, Decl(differenceGeneric.ts, 21, 14))
 

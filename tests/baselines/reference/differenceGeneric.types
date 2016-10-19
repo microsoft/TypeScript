@@ -2,8 +2,8 @@
 interface Gen {
 >Gen : Gen
 
-    x: any;
->x : any
+    x: number;
+>x : number
 }
 interface Gen2 {
 >Gen2 : Gen2
@@ -12,22 +12,24 @@ interface Gen2 {
 >parent : Gen
 >Gen : Gen
 
-    millenial: any;
->millenial : any
+    millenial: string;
+>millenial : string
 }
-function cloneAgain<T extends Gen & Gen2>(t: T): T {
->cloneAgain : <T extends Gen & Gen2>(t: T) => T
+function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen {
+>cloneAgain : <T extends Gen & Gen2>(t: T) => T - Gen
 >T : T
 >Gen : Gen
 >Gen2 : Gen2
 >t : T
 >T : T
 >T : T
+>Gen : Gen
 
     let y: Gen;
 >y : Gen
 >Gen : Gen
 
+    // declarations with generics create difference types
     let rest: T - Gen;
 >rest : T - Gen
 >T : T
@@ -40,11 +42,66 @@ function cloneAgain<T extends Gen & Gen2>(t: T): T {
 >Gen2 : Gen2
 
     var { x, ...rest2 } = t;
->x : any
->rest2 : T - { x: any; }
+>x : number
+>rest2 : T - { x: number; }
 >t : T
 
-    return t;
->t : T
+    // apparent types distribute the intersection constraint correctly
+    rest.parent;
+>rest.parent : Gen
+>rest : T - Gen
+>parent : Gen
+
+    rest.millenial;
+>rest.millenial : string
+>rest : T - Gen
+>millenial : string
+
+    rest2.parent;
+>rest2.parent : Gen
+>rest2 : T - { x: number; }
+>parent : Gen
+
+    rest2.millenial;
+>rest2.millenial : string
+>rest2 : T - { x: number; }
+>millenial : string
+
+    return rest2;
+>rest2 : T - { x: number; }
 }
+interface Gen3 extends Gen2 {
+>Gen3 : Gen3
+>Gen2 : Gen2
+
+    x: number;
+>x : number
+
+    w: boolean;
+>w : boolean
+}
+let gen3: Gen3;
+>gen3 : Gen3
+>Gen3 : Gen3
+
+let rested = cloneAgain(gen3);
+>rested : { w: boolean; parent: Gen; millenial: string; }
+>cloneAgain(gen3) : { w: boolean; parent: Gen; millenial: string; }
+>cloneAgain : <T extends Gen & Gen2>(t: T) => T - Gen
+>gen3 : Gen3
+
+rested.parent;
+>rested.parent : Gen
+>rested : { w: boolean; parent: Gen; millenial: string; }
+>parent : Gen
+
+rested.millenial;
+>rested.millenial : string
+>rested : { w: boolean; parent: Gen; millenial: string; }
+>millenial : string
+
+rested.w;
+>rested.w : boolean
+>rested : { w: boolean; parent: Gen; millenial: string; }
+>w : boolean
 

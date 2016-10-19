@@ -7,9 +7,11 @@ interface Gen2 {
 }
 function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen {
     let y: Gen;
+    // declarations with generics create difference types
     let rest: T - Gen;
     let rest1: T - Gen - Gen2;
     var { x, ...rest2 } = t;
+    // apparent types distribute the intersection constraint correctly
     rest.parent;
     rest.millenial;
     rest2.parent;

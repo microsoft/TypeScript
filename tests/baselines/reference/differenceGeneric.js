@@ -1,18 +1,33 @@
 //// [differenceGeneric.ts]
 interface Gen {
-    x: any;
+    x: number;
 }
 interface Gen2 {
     parent: Gen;
-    millenial: any;
+    millenial: string;
 }
-function cloneAgain<T extends Gen & Gen2>(t: T): T {
+function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen {
     let y: Gen;
+    // declarations with generics create difference types
     let rest: T - Gen;
     let rest1: T - Gen - Gen2;
     var { x, ...rest2 } = t;
-    return t;
+    // apparent types distribute the intersection constraint correctly
+    rest.parent;
+    rest.millenial;
+    rest2.parent;
+    rest2.millenial;
+    return rest2;
 }
+interface Gen3 extends Gen2 {
+    x: number;
+    w: boolean;
+}
+let gen3: Gen3;
+let rested = cloneAgain(gen3);
+rested.parent;
+rested.millenial;
+rested.w;
 
 
 //// [differenceGeneric.js]
@@ -24,8 +39,19 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 function cloneAgain(t) {
     var y;
+    // declarations with generics create difference types
     var rest;
     var rest1;
     var x = t.x, rest2 = __rest(t, ["x"]);
-    return t;
+    // apparent types distribute the intersection constraint correctly
+    rest.parent;
+    rest.millenial;
+    rest2.parent;
+    rest2.millenial;
+    return rest2;
 }
+var gen3;
+var rested = cloneAgain(gen3);
+rested.parent;
+rested.millenial;
+rested.w;
