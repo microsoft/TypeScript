@@ -6981,7 +6981,8 @@ namespace ts {
                     }
                 }
                 if (target.flags & TypeFlags.Difference) {
-                    // could be related just to source -- target is guaranteed to be smaller
+                    // the source may be related to target's source.
+                    // This is allowed because target is basically the same as target.source, but smaller
                     if (result = isRelatedTo(source, (target as DifferenceType).source)) {
                         return result;
                     }
