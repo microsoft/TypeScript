@@ -13,7 +13,11 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -4149,6 +4153,8 @@ interface Date {
       */
     toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 }
+
+
 declare type PropertyKey = string | number | symbol;
 
 interface Array<T> {
@@ -4673,6 +4679,8 @@ interface StringConstructor {
       */
     raw(template: TemplateStringsArray, ...substitutions: any[]): string;
 }
+
+
 interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
@@ -4745,6 +4753,8 @@ interface WeakSetConstructor {
     readonly prototype: WeakSet<any>;
 }
 declare var WeakSet: WeakSetConstructor;
+
+
 interface GeneratorFunction extends Function { }
 
 interface GeneratorFunctionConstructor {
@@ -4757,6 +4767,8 @@ interface GeneratorFunctionConstructor {
     readonly prototype: GeneratorFunction;
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
+
+
 /// <reference path="lib.es2015.symbol.d.ts" />
 
 interface SymbolConstructor {
@@ -5201,7 +5213,9 @@ interface Float64ArrayConstructor {
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
-}/**
+}
+
+/**
  * Represents the completion of an asynchronous operation
  */
 interface Promise<T> {
@@ -5454,7 +5468,9 @@ interface PromiseConstructor {
     resolve(): Promise<void>;
 }
 
-declare var Promise: PromiseConstructor;interface ProxyHandler<T> {
+declare var Promise: PromiseConstructor;
+
+interface ProxyHandler<T> {
     getPrototypeOf? (target: T): any;
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
@@ -5475,7 +5491,9 @@ interface ProxyConstructor {
     revocable<T>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
     new <T>(target: T, handler: ProxyHandler<T>): T
 }
-declare var Proxy: ProxyConstructor;declare namespace Reflect {
+declare var Proxy: ProxyConstructor;
+
+declare namespace Reflect {
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
     function construct(target: Function, argumentsList: ArrayLike<any>, newTarget?: any): any;
     function defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
@@ -5489,7 +5507,9 @@ declare var Proxy: ProxyConstructor;declare namespace Reflect {
     function preventExtensions(target: any): boolean;
     function set(target: any, propertyKey: PropertyKey, value: any, receiver?: any): boolean;
     function setPrototypeOf(target: any, proto: any): boolean;
-}interface Symbol {
+}
+
+interface Symbol {
     /** Returns a string representation of an object. */
     toString(): string;
 
@@ -5524,7 +5544,9 @@ interface SymbolConstructor {
     keyFor(sym: symbol): string | undefined;
 }
 
-declare var Symbol: SymbolConstructor;/// <reference path="lib.es2015.symbol.d.ts" />
+declare var Symbol: SymbolConstructor;
+
+/// <reference path="lib.es2015.symbol.d.ts" />
 
 interface SymbolConstructor {
     /** 
@@ -5851,6 +5873,8 @@ interface Float32Array {
 interface Float64Array {
     readonly [Symbol.toStringTag]: "Float64Array";
 }
+
+
 /////////////////////////////
 /// IE DOM APIs
 /////////////////////////////
@@ -20476,11 +20500,15 @@ type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
 type MouseWheelEvent = WheelEvent;
 type ScrollRestoration = "auto" | "manual";
+
+
 /////////////////////////////
 /// WorkerGlobalScope APIs 
 /////////////////////////////
 // These are only available in a Web Worker 
 declare function importScripts(...urls: string[]): void;
+
+
 
 
 /////////////////////////////
@@ -20772,6 +20800,8 @@ interface DateConstructor {
 interface Date {
     getVarDate: () => VarDate;
 }
+
+
 /// <reference path="lib.dom.d.ts" />
 
 interface DOMTokenList {

@@ -21,15 +21,14 @@ namespace ts {
             args: <string[]>[],
             newLine: "\r\n",
             useCaseSensitiveFileNames: false,
-            write: (s: string) => {
-            },
-            readFile: (path: string, encoding?: string): string => {
+            write: () => { },
+            readFile: (path: string): string => {
                 return path in fileMap ? fileMap[path].content : undefined;
             },
-            writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => {
+            writeFile: (_path: string, _data: string, _writeByteOrderMark?: boolean) => {
                 throw new Error("NYI");
             },
-            resolvePath: (path: string): string => {
+            resolvePath: (_path: string): string => {
                 throw new Error("NYI");
             },
             fileExists: (path: string): boolean => {
@@ -38,31 +37,25 @@ namespace ts {
             directoryExists: (path: string): boolean => {
                 return existingDirectories[path] || false;
             },
-            createDirectory: (path: string) => {
-            },
+            createDirectory: () => { },
             getExecutingFilePath: (): string => {
                 return "";
             },
             getCurrentDirectory: (): string => {
                 return "";
             },
-            getDirectories: (path: string) => [],
-            getEnvironmentVariable: (name: string) => "",
-            readDirectory: (path: string, extension?: string[], exclude?: string[], include?: string[]): string[] => {
+            getDirectories: () => [],
+            getEnvironmentVariable: () => "",
+            readDirectory: (_path: string, _extension?: string[], _exclude?: string[], _include?: string[]): string[] => {
                 throw new Error("NYI");
             },
-            exit: (exitCode?: number) => {
-            },
-            watchFile: (path, callback) => {
-                return {
-                    close: () => { }
-                };
-            },
-            watchDirectory: (path, callback, recursive?) => {
-                return {
-                    close: () => { }
-                };
-            },
+            exit: () => { },
+            watchFile: () => ({
+                close: () => { }
+            }),
+            watchDirectory: () => ({
+                close: () => { }
+            }),
             setTimeout,
             clearTimeout,
             setImmediate,
@@ -75,11 +68,11 @@ namespace ts {
             close() { },
             hasLevel: () => false,
             loggingEnabled: () => false,
-            perftrc: (s: string) => { },
-            info: (s: string) => { },
+            perftrc: () => { },
+            info: () => { },
             startGroup: () => { },
             endGroup: () => { },
-            msg: (s: string, type?: string) => { },
+            msg: () => { },
             getLogFileName: (): string => undefined
         };
 
@@ -116,7 +109,7 @@ namespace ts {
             const originalFileExists = serverHost.fileExists;
             {
                 // patch fileExists to make sure that disk is not touched
-                serverHost.fileExists = (fileName): boolean => {
+                serverHost.fileExists = (): boolean => {
                     assert.isTrue(false, "fileExists should not be called");
                     return false;
                 };
