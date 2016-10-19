@@ -248,7 +248,7 @@ namespace ts.formatting {
             }
         };
 
-        function rangeHasNoErrors(r: TextRange): boolean {
+        function rangeHasNoErrors(): boolean {
             return false;
         }
     }

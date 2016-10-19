@@ -81,7 +81,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host);
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -125,7 +125,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host);
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -221,7 +221,7 @@ namespace ts.projectSystem {
                     enqueueIsCalled = true;
                     super.enqueueInstallTypingsRequest(project, typingOptions);
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -275,7 +275,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host);
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/lodash", "@types/react"];
                     const typingFiles = [lodash, react];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -323,7 +323,7 @@ namespace ts.projectSystem {
                     enqueueIsCalled = true;
                     super.enqueueInstallTypingsRequest(project, typingOptions);
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
                     const typingFiles: FileOrFolder[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -398,7 +398,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host);
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment"];
                     const typingFiles = [commander, express, jquery, moment];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -477,7 +477,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { throttleLimit: 3 });
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
                 }
@@ -567,7 +567,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { throttleLimit: 3 });
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     if (requestKind === TI.NpmInstallRequest) {
                         let typingFiles: (FileOrFolder & { typings: string}) [] = [];
                         if (args.indexOf("@types/commander") >= 0) {
@@ -655,7 +655,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp" });
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -701,7 +701,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp" });
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -766,7 +766,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp" }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
                 }
-                executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest() {
                     assert(false, "runCommand should not be invoked");
                 }
             })();

@@ -290,7 +290,7 @@ namespace ts {
                     return path in files ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
-                writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
+                writeFile: (): void => { throw new Error("NotImplemented"); },
                 getCurrentDirectory: () => currentDirectory,
                 getDirectories: () => [],
                 getCanonicalFileName: fileName => fileName.toLowerCase(),
@@ -300,7 +300,7 @@ namespace ts {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
                     return path in files;
                 },
-                readFile: (fileName): string => { throw new Error("NotImplemented"); }
+                readFile: (): string => { throw new Error("NotImplemented"); }
             };
 
             const program = createProgram(rootFiles, options, host);
@@ -370,7 +370,7 @@ export = C;
                     return path in files ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
-                writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
+                writeFile: (): void => { throw new Error("NotImplemented"); },
                 getCurrentDirectory: () => currentDirectory,
                 getDirectories: () => [],
                 getCanonicalFileName,
@@ -380,7 +380,7 @@ export = C;
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
                     return path in files;
                 },
-                readFile: (fileName): string => { throw new Error("NotImplemented"); }
+                readFile: (): string => { throw new Error("NotImplemented"); }
             };
             const program = createProgram(rootFiles, options, host);
             const diagnostics = sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics().concat(program.getOptionsDiagnostics()));
@@ -1022,7 +1022,7 @@ import b = require("./moduleB");
                 fileExists : fileName => fileName in sourceFiles,
                 getSourceFile: fileName => sourceFiles[fileName],
                 getDefaultLibFileName: () => "lib.d.ts",
-                writeFile(file, text) {
+                writeFile(_file, _text) {
                     throw new Error("NYI");
                 },
                 getCurrentDirectory: () => "/",
