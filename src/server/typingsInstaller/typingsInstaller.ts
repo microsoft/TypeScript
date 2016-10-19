@@ -145,8 +145,7 @@ namespace ts.server.typingsInstaller {
                 req.projectRootPath,
                 this.safeListPath,
                 this.packageNameToTypingLocation,
-                req.typingOptions,
-                req.compilerOptions);
+                req.typingOptions);
 
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);

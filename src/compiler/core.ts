@@ -642,7 +642,7 @@ namespace ts {
             return t => compose(a(t));
         }
         else {
-            return t => u => u;
+            return _ => u => u;
         }
     }
 
@@ -679,10 +679,10 @@ namespace ts {
         }
     }
 
-    function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
+    function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
-        return text.replace(/{(\d+)}/g, (match, index?) => args[+index + baseIndex]);
+        return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
     }
 
     export let localizedDiagnosticMessages: Map<string, string> = undefined;
@@ -691,7 +691,7 @@ namespace ts {
         return localizedDiagnosticMessages && localizedDiagnosticMessages.get(message.key) || message.message;
     }
 
-    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
+    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
         const end = start + length;
 
@@ -721,7 +721,7 @@ namespace ts {
     }
 
     /* internal */
-    export function formatMessage(dummy: any, message: DiagnosticMessage): string {
+    export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
@@ -731,7 +731,7 @@ namespace ts {
         return text;
     }
 
-    export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
+    export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
 
@@ -1362,7 +1362,7 @@ namespace ts {
         basePaths: string[];
     }
 
-    export function getFileMatcherPatterns(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
+    export function getFileMatcherPatterns(path: string, excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
         const absolutePath = combinePaths(currentDirectory, path);
@@ -1379,7 +1379,7 @@ namespace ts {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
-        const patterns = getFileMatcherPatterns(path, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
+        const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
         const regexFlag = useCaseSensitiveFileNames ? "" : "i";
         const includeFileRegex = patterns.includeFilePattern && new RegExp(patterns.includeFilePattern, regexFlag);
@@ -1613,11 +1613,11 @@ namespace ts {
         this.declarations = undefined;
     }
 
-    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, _checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
     }
 
-    function Signature(checker: TypeChecker) {
+    function Signature() {
     }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
@@ -1650,9 +1650,6 @@ namespace ts {
     }
 
     export namespace Debug {
-        declare var process: any;
-        declare var require: any;
-
         export let currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {

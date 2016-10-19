@@ -29,7 +29,7 @@ namespace ts {
         }
     }
 
-    function reportEmittedFiles(files: string[], host: CompilerHost): void {
+    function reportEmittedFiles(files: string[]): void {
         if (!files || files.length == 0) {
             return;
         }
@@ -111,7 +111,7 @@ namespace ts {
         return count;
     }
 
-    function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
+    function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
         const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
         return <string>diagnostic.messageText;
     }
@@ -454,7 +454,7 @@ namespace ts {
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && isWatchSet(compilerOptions) && sys.watchFile) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (_fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -615,7 +615,7 @@ namespace ts {
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
 
-            reportEmittedFiles(emitOutput.emittedFiles, compilerHost);
+            reportEmittedFiles(emitOutput.emittedFiles);
 
             if (emitOutput.emitSkipped && diagnostics.length > 0) {
                 // If the emitter didn't emit anything, then pass that value along.

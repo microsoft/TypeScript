@@ -238,8 +238,9 @@ namespace ts {
         }
 
         isEmpty() {
-            // tslint:disable-next-line:no-unused-variable
             for (const _ in this.data) {
+                // TODO: GH#11734
+                _;
                 return false;
             }
             return true;

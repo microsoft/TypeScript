@@ -5,11 +5,6 @@ namespace ts.server {
         writeMessage(message: string): void;
     }
 
-    interface CompletionEntry extends CompletionInfo {
-        fileName: string;
-        position: number;
-    }
-
     interface RenameEntry extends RenameInfo {
         fileName: string;
         position: number;
@@ -246,7 +241,7 @@ namespace ts.server {
             return response.body[0];
         }
 
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
+        getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {
             throw new Error("Not Implemented Yet.");
         }
 
@@ -278,7 +273,7 @@ namespace ts.server {
             });
         }
 
-        getFormattingEditsForRange(fileName: string, start: number, end: number, options: ts.FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsForRange(fileName: string, start: number, end: number, _options: ts.FormatCodeOptions): ts.TextChange[] {
             const startLineOffset = this.positionToOneBasedLineOffset(fileName, start);
             const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
             const args: protocol.FormatRequestArgs = {
@@ -300,7 +295,7 @@ namespace ts.server {
             return this.getFormattingEditsForRange(fileName, 0, this.host.getScriptSnapshot(fileName).getLength(), options);
         }
 
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, _options: FormatCodeOptions): ts.TextChange[] {
             const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             const args: protocol.FormatOnKeyRequestArgs = {
                 file: fileName,
@@ -390,7 +385,7 @@ namespace ts.server {
             });
         }
 
-        findReferences(fileName: string, position: number): ReferencedSymbol[] {
+        findReferences(_fileName: string, _position: number): ReferencedSymbol[] {
             // Not yet implemented.
             return [];
         }
@@ -419,7 +414,7 @@ namespace ts.server {
             });
         }
 
-        getEmitOutput(fileName: string): EmitOutput {
+        getEmitOutput(_fileName: string): EmitOutput {
             throw new Error("Not Implemented Yet.");
         }
 
@@ -441,7 +436,7 @@ namespace ts.server {
             return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => this.convertDiagnostic(entry, fileName));
         }
 
-        convertDiagnostic(entry: protocol.DiagnosticWithLinePosition, fileName: string): Diagnostic {
+        convertDiagnostic(entry: protocol.DiagnosticWithLinePosition, _fileName: string): Diagnostic {
             let category: DiagnosticCategory;
             for (const id in DiagnosticCategory) {
                 if (typeof id === "string" && entry.category === id.toLowerCase()) {
@@ -566,11 +561,11 @@ namespace ts.server {
                 this.lineOffsetToPosition(fileName, span.end, lineMap));
         }
 
-        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
+        getNameOrDottedNameSpan(_fileName: string, _startPos: number, _endPos: number): TextSpan {
             throw new Error("Not Implemented Yet.");
         }
 
-        getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan {
+        getBreakpointStatementAtPosition(_fileName: string, _position: number): TextSpan {
             throw new Error("Not Implemented Yet.");
         }
 
@@ -660,19 +655,19 @@ namespace ts.server {
             }
         }
 
-        getOutliningSpans(fileName: string): OutliningSpan[] {
+        getOutliningSpans(_fileName: string): OutliningSpan[] {
             throw new Error("Not Implemented Yet.");
         }
 
-        getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+        getTodoComments(_fileName: string, _descriptors: TodoCommentDescriptor[]): TodoComment[] {
             throw new Error("Not Implemented Yet.");
         }
 
-        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
+        getDocCommentTemplateAtPosition(_fileName: string, _position: number): TextInsertion {
             throw new Error("Not Implemented Yet.");
         }
 
-        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
+        isValidBraceCompletionAtPosition(_fileName: string, _position: number, _openingBrace: number): boolean {
             throw new Error("Not Implemented Yet.");
         }
 
@@ -739,23 +734,23 @@ namespace ts.server {
             });
         }
 
-        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number {
+        getIndentationAtPosition(_fileName: string, _position: number, _options: EditorOptions): number {
             throw new Error("Not Implemented Yet.");
         }
 
-        getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        getSyntacticClassifications(_fileName: string, _span: TextSpan): ClassifiedSpan[] {
             throw new Error("Not Implemented Yet.");
         }
 
-        getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        getSemanticClassifications(_fileName: string, _span: TextSpan): ClassifiedSpan[] {
             throw new Error("Not Implemented Yet.");
         }
 
-        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
+        getEncodedSyntacticClassifications(_fileName: string, _span: TextSpan): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 
-        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+        getEncodedSemanticClassifications(_fileName: string, _span: TextSpan): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 
@@ -763,11 +758,11 @@ namespace ts.server {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 
-        getNonBoundSourceFile(fileName: string): SourceFile {
+        getNonBoundSourceFile(_fileName: string): SourceFile {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 
-        getSourceFile(fileName: string): SourceFile {
+        getSourceFile(_fileName: string): SourceFile {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 

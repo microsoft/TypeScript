@@ -72,7 +72,7 @@ namespace ts.projectSystem {
             this.postExecActions.forEach((act, i) => assert.equal(act.requestKind, expected[i], "Unexpected post install action"));
         }
 
-        onProjectClosed(p: server.Project) {
+        onProjectClosed() {
         }
 
         attach(projectService: server.ProjectService) {
@@ -83,7 +83,7 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
+        executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
             switch (requestKind) {
                 case TI.NpmViewRequest:
                 case TI.NpmInstallRequest:
@@ -122,7 +122,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies: dependencies });
     }
 
-    export function getExecutingFilePathFromLibFile(libFilePath: string): string {
+    export function getExecutingFilePathFromLibFile(): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
@@ -154,16 +154,13 @@ namespace ts.projectSystem {
         currentDirectory?: string;
     }
 
-    export function createServerHost(fileOrFolderList: FileOrFolder[],
-        params?: TestServerHostCreationParameters,
-        libFilePath: string = libFile.path): TestServerHost {
-
+    export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
         if (!params) {
             params = {};
         }
         const host = new TestServerHost(
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
-            params.executingFilePath || getExecutingFilePathFromLibFile(libFilePath),
+            params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList);
         host.createFileOrFolder(safeList, /*createParentDirectory*/ true);
@@ -464,7 +461,7 @@ namespace ts.projectSystem {
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
-        setTimeout(callback: TimeOutCallback, time: number, ...args: any[]) {
+        setTimeout(callback: TimeOutCallback, _time: number, ...args: any[]) {
             return this.timeoutCallbacks.register(callback, args);
         };
 
@@ -481,7 +478,7 @@ namespace ts.projectSystem {
             this.timeoutCallbacks.invoke();
         }
 
-        setImmediate(callback: TimeOutCallback, time: number, ...args: any[]) {
+        setImmediate(callback: TimeOutCallback, _time: number, ...args: any[]) {
             return this.immediateCallbacks.register(callback, args);
         }
 
@@ -513,15 +510,14 @@ namespace ts.projectSystem {
             this.reloadFS(filesOrFolders);
         }
 
-        write(s: string) {
-        }
+        write() { }
 
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly exit = () => notImplemented();
-        readonly getEnvironmentVariable = (v: string) => notImplemented();
+        readonly exit = notImplemented;
+        readonly getEnvironmentVariable = notImplemented;
     }
 
     export function makeSessionRequest<T>(command: string, args: T) {

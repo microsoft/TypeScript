@@ -25,8 +25,8 @@ namespace ts {
         export function getSupportedErrorCodes() {
             const supportedErrorCodes: string[] = [];
             codeFixes.forEach((_, key) => {
-                supportedErrorCodes.push(key.toString())
-            })
+                supportedErrorCodes.push(key.toString());
+            });
             return supportedErrorCodes;
         }
 

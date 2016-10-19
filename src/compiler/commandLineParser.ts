@@ -515,8 +515,7 @@ namespace ts {
 
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
-        const namesOfType: string[] = [];
-        forEachKeyInMap(opt.type, key => namesOfType.push(` '${key}'`));
+        const namesOfType = keysOfMap(opt.type).map(key => `'${key}'`).join(", ");
         return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 

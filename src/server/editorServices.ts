@@ -48,7 +48,7 @@ namespace ts.server {
     }
 
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin {
-        compilerOptionConverters.forEach((mappedValues, id) => {
+        forEachKeyInMap(compilerOptionConverters, id => {
             const propertyValue = protocolOptions[id];
             if (typeof propertyValue === "string") {
                 const mappedValues = compilerOptionConverters.get(id);

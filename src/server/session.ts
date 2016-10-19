@@ -1300,7 +1300,7 @@ namespace ts.server {
             }
 
             // No need to analyze lib.d.ts
-            let fileNamesInProject = fileNames.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
+            let fileNamesInProject = fileNames.filter(value => value.indexOf("lib.d.ts") < 0);
 
             // Sort the file name list to make the recently touched files come first
             const highPriorityFiles: NormalizedPath[] = [];
@@ -1500,7 +1500,7 @@ namespace ts.server {
             [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.EncodedSemanticClassificationsRequest) => {
                 return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
             },
-            [CommandNames.Cleanup]: (request: protocol.Request) => {
+            [CommandNames.Cleanup]: () => {
                 this.cleanup();
                 return this.requiredResponse(true);
             },
@@ -1581,7 +1581,7 @@ namespace ts.server {
             [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));
             },
-            [CommandNames.ReloadProjects]: (request: protocol.ReloadProjectsRequest) => {
+            [CommandNames.ReloadProjects]: () => {
                 this.projectService.reloadProjects();
                 return this.notRequired();
             },
@@ -1591,7 +1591,7 @@ namespace ts.server {
             [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.GetSupportedCodeFixes]: (request: protocol.Request) => {
+            [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());
             }
         });

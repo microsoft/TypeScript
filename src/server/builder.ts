@@ -122,7 +122,7 @@ namespace ts.server {
         }
 
         protected forEachFileInfo(action: (fileInfo: T) => any) {
-            this.fileInfos.forEachValue((path: Path, value: T) => action(value));
+            this.fileInfos.forEachValue((_path, value) => action(value));
         }
 
         abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
