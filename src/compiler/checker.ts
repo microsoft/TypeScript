@@ -591,7 +591,11 @@ namespace ts {
                     // nodes are in different files and order cannot be determines
                     return true;
                 }
-
+                // declaration is after usage
+                // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
+                if (isUsedInFunctionOrNonStaticProperty(usage)) {
+                    return true;
+                }
                 const sourceFiles = host.getSourceFiles();
                 return indexOf(sourceFiles, declarationFile) <= indexOf(sourceFiles, useFile);
             }
@@ -605,7 +609,8 @@ namespace ts {
 
             // declaration is after usage
             // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
-            return isUsedInFunctionOrNonStaticProperty(declaration, usage);
+            const container = getEnclosingBlockScopeContainer(declaration);
+            return isUsedInFunctionOrNonStaticProperty(usage, container);
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 const container = getEnclosingBlockScopeContainer(declaration);
@@ -634,8 +639,7 @@ namespace ts {
                 return false;
             }
 
-            function isUsedInFunctionOrNonStaticProperty(declaration: Declaration, usage: Node): boolean {
-                const container = getEnclosingBlockScopeContainer(declaration);
+            function isUsedInFunctionOrNonStaticProperty(usage: Node, container?: Node): boolean {
                 let current = usage;
                 while (current) {
                     if (current === container) {
