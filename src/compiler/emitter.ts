@@ -14,7 +14,7 @@ namespace ts {
     }
 
     const id = (s: SourceFile) => s;
-    const nullTransformers: Transformer[] = [ctx => id];
+    const nullTransformers: Transformer[] = [_ => id];
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
@@ -593,7 +593,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.ThisType:
-                    return emitThisType(<ThisTypeNode>node);
+                    return emitThisType();
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -609,7 +609,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.TemplateSpan:
                     return emitTemplateSpan(<TemplateSpan>node);
                 case SyntaxKind.SemicolonClassElement:
-                    return emitSemicolonClassElement(<SemicolonClassElement>node);
+                    return emitSemicolonClassElement();
 
                 // Statements
                 case SyntaxKind.Block:
@@ -617,7 +617,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.VariableStatement:
                     return emitVariableStatement(<VariableStatement>node);
                 case SyntaxKind.EmptyStatement:
-                    return emitEmptyStatement(<EmptyStatement>node);
+                    return emitEmptyStatement();
                 case SyntaxKind.ExpressionStatement:
                     return emitExpressionStatement(<ExpressionStatement>node);
                 case SyntaxKind.IfStatement:
@@ -1014,7 +1014,7 @@ const _super = (function (geti, seti) {
             write(";");
         }
 
-        function emitSemicolonClassElement(node: SemicolonClassElement) {
+        function emitSemicolonClassElement() {
             write(";");
         }
 
@@ -1084,7 +1084,7 @@ const _super = (function (geti, seti) {
             write(")");
         }
 
-        function emitThisType(node: ThisTypeNode) {
+        function emitThisType() {
             write("this");
         }
 
@@ -1397,7 +1397,7 @@ const _super = (function (geti, seti) {
         // Statements
         //
 
-        function emitBlock(node: Block, format?: ListFormat) {
+        function emitBlock(node: Block) {
             if (isSingleLineEmptyBlock(node)) {
                 writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                 write(" ");
@@ -1425,7 +1425,7 @@ const _super = (function (geti, seti) {
             write(";");
         }
 
-        function emitEmptyStatement(node: EmptyStatement) {
+        function emitEmptyStatement() {
             write(";");
         }
 
@@ -1623,13 +1623,13 @@ const _super = (function (geti, seti) {
 
                     if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(node, body);
+                        emitBlockFunctionBody(body);
                     }
                     else {
                         const savedTempFlags = tempFlags;
                         tempFlags = 0;
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(node, body);
+                        emitBlockFunctionBody(body);
                         tempFlags = savedTempFlags;
                     }
 
@@ -1656,7 +1656,7 @@ const _super = (function (geti, seti) {
             emitWithPrefix(": ", node.type);
         }
 
-        function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
+        function shouldEmitBlockFunctionBodyOnSingleLine(body: Block) {
             // We must emit a function body as a single-line body in the following case:
             // * The body has NodeEmitFlags.SingleLine specified.
 
@@ -1694,12 +1694,12 @@ const _super = (function (geti, seti) {
             return true;
         }
 
-        function emitBlockFunctionBody(parentNode: Node, body: Block) {
+        function emitBlockFunctionBody(body: Block) {
             write(" {");
             increaseIndent();
 
             emitBodyWithDetachedComments(body, body.statements,
-                shouldEmitBlockFunctionBodyOnSingleLine(parentNode, body)
+                shouldEmitBlockFunctionBodyOnSingleLine(body)
                     ? emitBlockFunctionBodyOnSingleLine
                     : emitBlockFunctionBodyWorker);
 

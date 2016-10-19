@@ -531,7 +531,7 @@ namespace ts {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
-    export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
+    export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
@@ -2594,7 +2594,7 @@ namespace ts {
         const options = host.getCompilerOptions();
         // Emit on each source file
         if (options.outFile || options.out) {
-            onBundledEmit(host, sourceFiles);
+            onBundledEmit(sourceFiles);
         }
         else {
             for (const sourceFile of sourceFiles) {
@@ -2627,7 +2627,7 @@ namespace ts {
             action(jsFilePath, sourceMapFilePath, declarationFilePath, [sourceFile], /*isBundledEmit*/ false);
         }
 
-        function onBundledEmit(host: EmitHost, sourceFiles: SourceFile[]) {
+        function onBundledEmit(sourceFiles: SourceFile[]) {
             if (sourceFiles.length) {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);

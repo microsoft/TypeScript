@@ -8,7 +8,10 @@
         "outFile": "../../built/local/tsc.js",
         "sourceMap": true,
         "declaration": true,
-        "stripInternal": true
+        "stripInternal": true,
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "files": [
         "core.ts",

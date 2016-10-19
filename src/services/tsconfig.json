@@ -9,7 +9,8 @@
         "sourceMap": true,
         "stripInternal": true,
         "noResolve": false,
-        "declaration": true
+        "declaration": true,
+        "target": "es5"
     },
     "files": [
         "../compiler/core.ts",

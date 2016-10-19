@@ -3,7 +3,7 @@
 
 namespace ts {
     function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
-    function trace(host: ModuleResolutionHost, message: DiagnosticMessage): void {
+    function trace(host: ModuleResolutionHost): void {
         host.trace(formatMessage.apply(undefined, arguments));
     }
 
