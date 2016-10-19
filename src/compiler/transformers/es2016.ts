@@ -3,7 +3,7 @@
 
 /*@internal*/
 namespace ts {
-    export function transformES7(context: TransformationContext) {
+    export function transformES2016(context: TransformationContext) {
         const { hoistVariableDeclaration } = context;
 
         return transformSourceFile;
@@ -17,10 +17,10 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.ES7) {
+            if (node.transformFlags & TransformFlags.ES2016) {
                 return visitorWorker(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsES7) {
+            else if (node.transformFlags & TransformFlags.ContainsES2016) {
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -39,7 +39,7 @@ namespace ts {
         }
 
         function visitBinaryExpression(node: BinaryExpression): Expression {
-            // We are here because ES7 adds support for the exponentiation operator.
+            // We are here because ES2016 adds support for the exponentiation operator.
             const left = visitNode(node.left, visitor, isExpression);
             const right = visitNode(node.right, visitor, isExpression);
             if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {

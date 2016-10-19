@@ -10,7 +10,8 @@
         "stripInternal": true,
         "types": [
             "node"
-        ]
+        ],
+        "target": "es5"
     },
     "files": [
         "../types.d.ts",

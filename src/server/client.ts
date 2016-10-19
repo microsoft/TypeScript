@@ -424,33 +424,39 @@ namespace ts.server {
         }
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[] {
-            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file: fileName };
+            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file: fileName,  includeLinePosition: true };
 
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest>(CommandNames.SyntacticDiagnosticsSync, args);
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse>(request);
 
-            return (<protocol.Diagnostic[]>response.body).map(entry => this.convertDiagnostic(entry, fileName));
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => this.convertDiagnostic(entry, fileName));
         }
 
         getSemanticDiagnostics(fileName: string): Diagnostic[] {
-            const args: protocol.SemanticDiagnosticsSyncRequestArgs = { file: fileName };
+            const args: protocol.SemanticDiagnosticsSyncRequestArgs = { file: fileName, includeLinePosition: true };
 
             const request = this.processRequest<protocol.SemanticDiagnosticsSyncRequest>(CommandNames.SemanticDiagnosticsSync, args);
             const response = this.processResponse<protocol.SemanticDiagnosticsSyncResponse>(request);
 
-            return (<protocol.Diagnostic[]>response.body).map(entry => this.convertDiagnostic(entry, fileName));
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => this.convertDiagnostic(entry, fileName));
         }
 
-        convertDiagnostic(entry: protocol.Diagnostic, fileName: string): Diagnostic {
-            const start = this.lineOffsetToPosition(fileName, entry.start);
-            const end = this.lineOffsetToPosition(fileName, entry.end);
+        convertDiagnostic(entry: protocol.DiagnosticWithLinePosition, fileName: string): Diagnostic {
+            let category: DiagnosticCategory;
+            for (const id in DiagnosticCategory) {
+                if (typeof id === "string" && entry.category === id.toLowerCase()) {
+                    category = (<any>DiagnosticCategory)[id];
+                }
+            }
+
+            Debug.assert(category !== undefined, "convertDiagnostic: category should not be undefined");
 
             return {
                 file: undefined,
-                start: start,
-                length: end - start,
-                messageText: entry.text,
-                category: undefined,
+                start: entry.start,
+                length: entry.length,
+                messageText: entry.message,
+                category: category,
                 code: entry.code
             };
         }

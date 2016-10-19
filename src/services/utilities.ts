@@ -750,7 +750,7 @@ namespace ts {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 
@@ -761,7 +761,7 @@ namespace ts {
         }
 
         function find(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 
@@ -1339,7 +1339,7 @@ namespace ts {
         const options: TranspileOptions = {
             fileName: "config.js",
             compilerOptions: {
-                target: ScriptTarget.ES6,
+                target: ScriptTarget.ES2015,
                 removeComments: true
             },
             reportDiagnostics: true

@@ -807,6 +807,7 @@ namespace ts {
 
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
+                    visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier),
                     visitNode((<FunctionExpression>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
                     (context.startLexicalEnvironment(), visitNodes((<FunctionExpression>node).parameters, visitor, isParameter)),
@@ -1330,18 +1331,18 @@ namespace ts {
     export namespace Debug {
         export const failNotOptional = shouldAssert(AssertionLevel.Normal)
             ? (message?: string) => assert(false, message || "Node not optional.")
-            : (message?: string) => {};
+            : () => {};
 
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, message?: string) => assert(false, message || "Unexpected node.", () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`)
-            : (node: Node, message?: string) => {};
+            : () => {};
 
         export const assertNode = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
                     test === undefined || test(node),
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
-            : (node: Node, test: (node: Node) => boolean, message?: string) => {};
+            : () => {};
 
         function getFunctionName(func: Function) {
             if (typeof func !== "function") {
