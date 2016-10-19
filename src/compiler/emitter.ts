@@ -14,7 +14,7 @@ namespace ts {
     }
 
     const id = (s: SourceFile) => s;
-    const nullTransformers: Transformer[] = [_ctx => id];
+    const nullTransformers: Transformer[] = [_ => id];
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {

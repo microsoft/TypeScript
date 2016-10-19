@@ -5,7 +5,7 @@ namespace ts {
 
     /* @internal */
     export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
-    export function trace(host: ModuleResolutionHost, _message: DiagnosticMessage): void {
+    export function trace(host: ModuleResolutionHost): void {
         host.trace(formatMessage.apply(undefined, arguments));
     }
 

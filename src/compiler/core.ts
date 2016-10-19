@@ -903,7 +903,7 @@ namespace ts {
             return t => compose(a(t));
         }
         else {
-            return _t => u => u;
+            return _ => u => u;
         }
     }
 

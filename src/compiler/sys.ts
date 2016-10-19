@@ -591,7 +591,7 @@ namespace ts {
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,
-                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || ((_name: string) => ""),
+                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || (() => ""),
                 readDirectory: (path: string, extensions?: string[], excludes?: string[], includes?: string[]) => {
                     const pattern = getFileMatcherPatterns(path, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
                     return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);

@@ -572,10 +572,10 @@ namespace ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode = false;
 
-        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
+        export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
 
-            initializeState(_sourceText, languageVersion, _syntaxCursor, scriptKind);
+            initializeState(sourceText, languageVersion, syntaxCursor, scriptKind);
 
             const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, scriptKind);
 

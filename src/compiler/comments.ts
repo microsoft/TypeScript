@@ -182,9 +182,9 @@ namespace ts {
             }
         }
 
-        function emitTripleSlashLeadingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+        function emitTripleSlashLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
             if (isTripleSlashComment(commentPos, commentEnd)) {
-                emitLeadingComment(commentPos, commentEnd, _kind, hasTrailingNewLine, rangePos);
+                emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
             }
         }
 
