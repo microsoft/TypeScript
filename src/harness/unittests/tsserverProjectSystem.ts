@@ -122,7 +122,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies: dependencies });
     }
 
-    export function getExecutingFilePathFromLibFile(_libFilePath: string): string {
+    export function getExecutingFilePathFromLibFile(): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
@@ -154,16 +154,13 @@ namespace ts.projectSystem {
         currentDirectory?: string;
     }
 
-    export function createServerHost(fileOrFolderList: FileOrFolder[],
-        params?: TestServerHostCreationParameters,
-        libFilePath: string = libFile.path): TestServerHost {
-
+    export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
         if (!params) {
             params = {};
         }
         const host = new TestServerHost(
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
-            params.executingFilePath || getExecutingFilePathFromLibFile(libFilePath),
+            params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList);
         host.createFileOrFolder(safeList, /*createParentDirectory*/ true);
