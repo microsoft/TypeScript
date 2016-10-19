@@ -8045,8 +8045,7 @@ namespace ts {
             return !!(type.flags & TypeFlags.TypeParameter ||
                 type.flags & TypeFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeParameters) ||
                 type.flags & TypeFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
-                type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeParameters(<UnionOrIntersectionType>type) ||
-                type.flags & TypeFlags.Spread && couldSpreadContainTypeParameters(type as SpreadType));
+                type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeParameters(<UnionOrIntersectionType>type));
         }
 
         function couldUnionOrIntersectionContainTypeParameters(type: UnionOrIntersectionType): boolean {
@@ -8054,11 +8053,6 @@ namespace ts {
                 type.couldContainTypeParameters = forEach(type.types, couldContainTypeParameters);
             }
             return type.couldContainTypeParameters;
-        }
-
-        function couldSpreadContainTypeParameters(type: SpreadType): boolean {
-            return !!(type.right.flags & TypeFlags.TypeParameter ||
-                      type.left.flags & TypeFlags.Spread && (type.left as SpreadType).right.flags & TypeFlags.TypeParameter);
         }
 
         function isTypeParameterAtTopLevel(type: Type, typeParameter: TypeParameter): boolean {
@@ -8123,16 +8117,6 @@ namespace ts {
                         source = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>source, matchingTypes);
                         target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
                     }
-                }
-                if (source.flags & TypeFlags.Spread && target.flags & TypeFlags.Spread) {
-                    // only the last type parameter is a valid inference site,
-                    // and only if not followed by object literal properties.
-                    if ((source as SpreadType).right.flags & TypeFlags.TypeParameter &&
-                       (target as SpreadType).right.flags & TypeFlags.TypeParameter) {
-                        inferFromTypes((source as SpreadType).right, (target as SpreadType).right);
-                    }
-
-                    return;
                 }
                 if (target.flags & TypeFlags.TypeParameter) {
                     // If target is a type parameter, make an inference, unless the source type contains
@@ -8210,57 +8194,31 @@ namespace ts {
                 else {
                     source = getApparentType(source);
                     if (source.flags & TypeFlags.ObjectType) {
-                        if (target.flags & TypeFlags.Spread) {
-                            // with an object type as source, a spread target infers to its last type parameter it
-                            // contains, after removing any properties from a object type that precedes the type parameter
-                            // Note that the call to `typeDifference` creates a new anonymous type.
-                            const spread = target as SpreadType;
-                            const parameter = spread.right.flags & TypeFlags.TypeParameter ? spread.right : (spread.left as SpreadType).right;
-                            const object = spread.right.flags & TypeFlags.TypeParameter ? emptyObjectType : spread.right as ResolvedType;
-                            inferFromTypes(getTypeDifference(source, object), parameter);
-                            target = object;
+                        if (isInProcess(source, target)) {
+                            return;
                         }
-                        inferFromStructure(source, target);
+                        if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
+                            return;
+                        }
+                        const key = source.id + "," + target.id;
+                        if (visited[key]) {
+                            return;
+                        }
+                        visited[key] = true;
+                        if (depth === 0) {
+                            sourceStack = [];
+                            targetStack = [];
+                        }
+                        sourceStack[depth] = source;
+                        targetStack[depth] = target;
+                        depth++;
+                        inferFromProperties(source, target);
+                        inferFromSignatures(source, target, SignatureKind.Call);
+                        inferFromSignatures(source, target, SignatureKind.Construct);
+                        inferFromIndexTypes(source, target);
+                        depth--;
                     }
                 }
-            }
-
-            function inferFromStructure(source: Type, target: Type) {
-                if (isInProcess(source, target)) {
-                    return;
-                }
-                if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
-                    return;
-                }
-                const key = source.id + "," + target.id;
-                if (visited[key]) {
-                    return;
-                }
-                visited[key] = true;
-                if (depth === 0) {
-                    sourceStack = [];
-                    targetStack = [];
-                }
-                sourceStack[depth] = source;
-                targetStack[depth] = target;
-                depth++;
-                inferFromProperties(source, target);
-                inferFromSignatures(source, target, SignatureKind.Call);
-                inferFromSignatures(source, target, SignatureKind.Construct);
-                inferFromIndexTypes(source, target);
-                depth--;
-            }
-
-            function getTypeDifference(type: ObjectType, diff: ResolvedType): ResolvedType {
-                const members = createMap<Symbol>();
-                for (const prop of getPropertiesOfObjectType(type)) {
-                    if (!(prop.name in diff.members)) {
-                        members[prop.name] = prop;
-                    }
-                }
-                const stringIndexInfo = getIndexInfoOfType(diff, IndexKind.String) ? undefined : getIndexInfoOfType(type, IndexKind.String);
-                const numberIndexInfo = getIndexInfoOfType(diff, IndexKind.Number) ? undefined : getIndexInfoOfType(type, IndexKind.Number);
-                return createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             }
 
             function inferFromProperties(source: Type, target: Type) {
