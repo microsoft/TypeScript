@@ -3016,6 +3016,20 @@ namespace ts {
                 const numberIndexInfo = minusStringIndex || getIndexInfoOfType(minus, IndexKind.Number) ? undefined : getIndexInfoOfType(source, IndexKind.Number);
                 return createAnonymousType(symbol, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
             }
+            if (source.flags & TypeFlags.Intersection) {
+                return getIntersectionType(map((source as IntersectionType).types, t => getDifferenceType(t, minus, symbol, aliasSymbol, aliasTypeArguments)), aliasSymbol, aliasTypeArguments);
+            }
+            if (minus.flags & TypeFlags.Intersection) {
+                return getIntersectionType(map((minus as IntersectionType).types, t => getDifferenceType(source, t, symbol, aliasSymbol, aliasTypeArguments)), aliasSymbol, aliasTypeArguments);
+            }
+            if (source.flags & TypeFlags.Union) {
+                return getUnionType(map((source as UnionType).types, t => getDifferenceType(t, minus, symbol, aliasSymbol, aliasTypeArguments)), /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
+            }
+            if (minus.flags & TypeFlags.Union) {
+                return getUnionType(map((minus as UnionType).types, t => getDifferenceType(source, t, symbol, aliasSymbol, aliasTypeArguments)), /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
+            }
+            // TODO: Distribute across spread and partial?
+            // spread is inescapable, so perhaps not, although we still want to give the right answers for constrained type parameters
             const id = getTypeListId([source, minus]);
             if (id in differenceTypes) {
                 return differenceTypes[id];
@@ -6954,6 +6968,16 @@ namespace ts {
                     if (result = objectTypeRelatedTo(apparentSource, source, getApparentType(target), reportStructuralErrors)) {
                         errorInfo = saveErrorInfo;
                         return result;
+                    }
+                }
+
+                if (source.flags & TypeFlags.Difference & target.flags & TypeFlags.Difference) {
+                    const ds = source as DifferenceType;
+                    const dt = target as DifferenceType;
+                    if (result = isRelatedTo(ds.source, dt.source)) {
+                        if (result = isRelatedTo(ds.minus, ds.minus)) {
+                            return result;
+                        }
                     }
                 }
 
