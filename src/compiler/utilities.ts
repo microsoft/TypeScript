@@ -2566,7 +2566,7 @@ namespace ts {
         const options = host.getCompilerOptions();
         // Emit on each source file
         if (options.outFile || options.out) {
-            onBundledEmit(host, sourceFiles);
+            onBundledEmit(sourceFiles);
         }
         else {
             for (const sourceFile of sourceFiles) {
@@ -2599,7 +2599,7 @@ namespace ts {
             action(jsFilePath, sourceMapFilePath, declarationFilePath, [sourceFile], /*isBundledEmit*/ false);
         }
 
-        function onBundledEmit(host: EmitHost, sourceFiles: SourceFile[]) {
+        function onBundledEmit(sourceFiles: SourceFile[]) {
             if (sourceFiles.length) {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
