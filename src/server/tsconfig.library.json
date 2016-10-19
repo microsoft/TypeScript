@@ -7,7 +7,8 @@
         "sourceMap": true,
         "stripInternal": true,
         "declaration": true,
-        "types": []
+        "types": [],
+        "target": "es5"
     },
     "files": [
         "../services/shims.ts",

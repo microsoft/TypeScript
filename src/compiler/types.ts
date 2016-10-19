@@ -45,6 +45,7 @@ namespace ts {
         // Literals
         NumericLiteral,
         StringLiteral,
+        JsxText,
         RegularExpressionLiteral,
         NoSubstitutionTemplateLiteral,
         // Pseudo-literals
@@ -303,7 +304,6 @@ namespace ts {
         JsxElement,
         JsxSelfClosingElement,
         JsxOpeningElement,
-        JsxText,
         JsxClosingElement,
         JsxAttribute,
         JsxSpreadAttribute,
@@ -460,6 +460,8 @@ namespace ts {
         // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
         ParameterPropertyModifier = AccessibilityModifier | Readonly,
         NonPublicAccessibilityModifier = Private | Protected,
+
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const
     }
 
     export const enum JsxFlags {
@@ -1929,8 +1931,9 @@ namespace ts {
         TrueCondition  = 1 << 5,  // Condition known to be true
         FalseCondition = 1 << 6,  // Condition known to be false
         SwitchClause   = 1 << 7,  // Switch statement clause
-        Referenced     = 1 << 8,  // Referenced as antecedent once
-        Shared         = 1 << 9,  // Referenced as antecedent more than once
+        ArrayMutation  = 1 << 8,  // Potential array mutation
+        Referenced     = 1 << 9,  // Referenced as antecedent once
+        Shared         = 1 << 10, // Referenced as antecedent more than once
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -1970,6 +1973,13 @@ namespace ts {
         switchStatement: SwitchStatement;
         clauseStart: number;   // Start index of case/default clause range
         clauseEnd: number;     // End index of case/default clause range
+        antecedent: FlowNode;
+    }
+
+    // FlowArrayMutation represents a node potentially mutates an array, i.e. an
+    // operation of the form 'x.push(value)', 'x.unshift(value)' or 'x[n] = value'.
+    export interface FlowArrayMutation extends FlowNode {
+        node: CallExpression | BinaryExpression;
         antecedent: FlowNode;
     }
 
@@ -2792,6 +2802,8 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+        elementType?: Type;      // Element expressions of evolving array type
+        finalArrayType?: Type;   // Final array type of evolving array type
     }
 
     /* @internal */
@@ -3064,8 +3076,7 @@ namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
-        ES6 = 5,
-        ES2015 = ES6,
+        ES2015 = 5,
     }
 
     export const enum JsxEmit {
@@ -3098,9 +3109,10 @@ namespace ts {
     export const enum ScriptTarget {
         ES3 = 0,
         ES5 = 1,
-        ES6 = 2,
-        ES2015 = ES6,
-        Latest = ES6,
+        ES2015 = 2,
+        ES2016 = 3,
+        ES2017 = 4,
+        Latest = ES2017,
     }
 
     export const enum LanguageVariant {
@@ -3387,29 +3399,31 @@ namespace ts {
         ContainsJsx = 1 << 3,
         Experimental = 1 << 4,
         ContainsExperimental = 1 << 5,
-        ES7 = 1 << 6,
-        ContainsES7 = 1 << 7,
-        ES6 = 1 << 8,
-        ContainsES6 = 1 << 9,
-        DestructuringAssignment = 1 << 10,
-        Generator = 1 << 11,
-        ContainsGenerator = 1 << 12,
+        ES2017 = 1 << 6,
+        ContainsES2017 = 1 << 7,
+        ES2016 = 1 << 8,
+        ContainsES2016 = 1 << 9,
+        ES2015 = 1 << 10,
+        ContainsES2015 = 1 << 11,
+        DestructuringAssignment = 1 << 12,
+        Generator = 1 << 13,
+        ContainsGenerator = 1 << 14,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 13,
-        ContainsPropertyInitializer = 1 << 14,
-        ContainsLexicalThis = 1 << 15,
-        ContainsCapturedLexicalThis = 1 << 16,
-        ContainsLexicalThisInComputedPropertyName = 1 << 17,
-        ContainsDefaultValueAssignments = 1 << 18,
-        ContainsParameterPropertyAssignments = 1 << 19,
-        ContainsSpreadExpression = 1 << 20,
-        ContainsComputedPropertyName = 1 << 21,
-        ContainsBlockScopedBinding = 1 << 22,
-        ContainsBindingPattern = 1 << 23,
-        ContainsYield = 1 << 24,
-        ContainsHoistedDeclarationOrCompletion = 1 << 25,
+        ContainsDecorators = 1 << 15,
+        ContainsPropertyInitializer = 1 << 16,
+        ContainsLexicalThis = 1 << 17,
+        ContainsCapturedLexicalThis = 1 << 18,
+        ContainsLexicalThisInComputedPropertyName = 1 << 19,
+        ContainsDefaultValueAssignments = 1 << 20,
+        ContainsParameterPropertyAssignments = 1 << 21,
+        ContainsSpreadExpression = 1 << 22,
+        ContainsComputedPropertyName = 1 << 23,
+        ContainsBlockScopedBinding = 1 << 24,
+        ContainsBindingPattern = 1 << 25,
+        ContainsYield = 1 << 26,
+        ContainsHoistedDeclarationOrCompletion = 1 << 27,
 
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
@@ -3418,14 +3432,15 @@ namespace ts {
         AssertTypeScript = TypeScript | ContainsTypeScript,
         AssertJsx = Jsx | ContainsJsx,
         AssertExperimental = Experimental | ContainsExperimental,
-        AssertES7 = ES7 | ContainsES7,
-        AssertES6 = ES6 | ContainsES6,
+        AssertES2017 = ES2017 | ContainsES2017,
+        AssertES2016 = ES2016 | ContainsES2016,
+        AssertES2015 = ES2015 | ContainsES2015,
         AssertGenerator = Generator | ContainsGenerator,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        NodeExcludes = TypeScript | Jsx | Experimental | ES7 | ES6 | DestructuringAssignment | Generator | HasComputedFlags,
+        NodeExcludes = TypeScript | Jsx | Experimental | ES2017 | ES2016 | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
         ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
         FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
         ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
@@ -3441,7 +3456,7 @@ namespace ts {
         // Masks
         // - Additional bitmasks
         TypeScriptClassSyntaxMask = ContainsParameterPropertyAssignments | ContainsPropertyInitializer | ContainsDecorators,
-        ES6FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
+        ES2015FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
     }
 
     /* @internal */

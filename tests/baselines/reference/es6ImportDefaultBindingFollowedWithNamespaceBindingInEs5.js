@@ -13,7 +13,7 @@ var x: number = nameSpaceBinding.a;
 exports.a = 10;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.js]
 "use strict";
-var es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"), nameSpaceBinding = es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1;
+var nameSpaceBinding = require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0");
 var x = nameSpaceBinding.a;
 
 

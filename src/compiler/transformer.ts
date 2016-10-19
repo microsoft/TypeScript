@@ -2,17 +2,19 @@
 /// <reference path="transformers/ts.ts" />
 /// <reference path="transformers/jsx.ts" />
 /// <reference path="transformers/experimental.ts" />
-/// <reference path="transformers/es7.ts" />
-/// <reference path="transformers/es6.ts" />
+/// <reference path="transformers/es2017.ts" />
+/// <reference path="transformers/es2016.ts" />
+/// <reference path="transformers/es2015.ts" />
 /// <reference path="transformers/generators.ts" />
+/// <reference path="transformers/es5.ts" />
 /// <reference path="transformers/module/module.ts" />
 /// <reference path="transformers/module/system.ts" />
-/// <reference path="transformers/module/es6.ts" />
+/// <reference path="transformers/module/es2015.ts" />
 
 /* @internal */
 namespace ts {
     const moduleTransformerMap = createMap<Transformer>({
-        [ModuleKind.ES6]: transformES6Module,
+        [ModuleKind.ES2015]: transformES2015Module,
         [ModuleKind.System]: transformSystemModule,
         [ModuleKind.AMD]: transformModule,
         [ModuleKind.CommonJS]: transformModule,
@@ -117,11 +119,21 @@ namespace ts {
         }
 
         transformers.push(transformExperimental);
-        transformers.push(transformES7);
+        if (languageVersion < ScriptTarget.ES2017) {
+            transformers.push(transformES2017);
+        }
 
-        if (languageVersion < ScriptTarget.ES6) {
-            transformers.push(transformES6);
+        if (languageVersion < ScriptTarget.ES2016) {
+            transformers.push(transformES2016);
+        }
+
+        if (languageVersion < ScriptTarget.ES2015) {
+            transformers.push(transformES2015);
             transformers.push(transformGenerators);
+        }
+
+        if (languageVersion < ScriptTarget.ES5) {
+            transformers.push(transformES5);
         }
 
         return transformers;
@@ -155,7 +167,7 @@ namespace ts {
             hoistFunctionDeclaration,
             startLexicalEnvironment,
             endLexicalEnvironment,
-            onSubstituteNode: (emitContext, node) => node,
+            onSubstituteNode: (_emitContext, node) => node,
             enableSubstitution,
             isSubstitutionEnabled,
             onEmitNode: (node, emitContext, emitCallback) => emitCallback(node, emitContext),

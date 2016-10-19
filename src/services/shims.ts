@@ -444,7 +444,7 @@ namespace ts {
         }
 
         public readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
-            const pattern = getFileMatcherPatterns(path, extensions, exclude, include,
+            const pattern = getFileMatcherPatterns(path, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
             return JSON.parse(this.shimHost.readDirectory(
                 path,
@@ -509,7 +509,7 @@ namespace ts {
             // Wrap the API changes for 2.0 release. This try/catch
             // should be removed once TypeScript 2.0 has shipped.
             try {
-                const pattern = getFileMatcherPatterns(rootDir, extensions, exclude, include,
+                const pattern = getFileMatcherPatterns(rootDir, exclude, include,
                     this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
                 return JSON.parse(this.shimHost.readDirectory(
                     rootDir,

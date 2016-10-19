@@ -4,7 +4,7 @@
 /*@internal*/
 namespace ts {
 
-    const enum ES6SubstitutionFlags {
+    const enum ES2015SubstitutionFlags {
         /** Enables substitutions for captured `this` */
         CapturedThis = 1 << 0,
         /** Enables substitutions for block-scoped bindings. */
@@ -163,7 +163,7 @@ namespace ts {
         ReplaceWithReturn,
     }
 
-    export function transformES6(context: TransformationContext) {
+    export function transformES2015(context: TransformationContext) {
         const {
             startLexicalEnvironment,
             endLexicalEnvironment,
@@ -197,7 +197,7 @@ namespace ts {
          * They are persisted between each SourceFile transformation and should not
          * be reset.
          */
-        let enabledSubstitutions: ES6SubstitutionFlags;
+        let enabledSubstitutions: ES2015SubstitutionFlags;
 
         return transformSourceFile;
 
@@ -252,7 +252,7 @@ namespace ts {
         }
 
         function shouldCheckNode(node: Node): boolean {
-            return (node.transformFlags & TransformFlags.ES6) !== 0 ||
+            return (node.transformFlags & TransformFlags.ES2015) !== 0 ||
                 node.kind === SyntaxKind.LabeledStatement ||
                 (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node));
         }
@@ -261,7 +261,7 @@ namespace ts {
             if (shouldCheckNode(node)) {
                 return visitJavaScript(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsES6) {
+            else if (node.transformFlags & TransformFlags.ContainsES2015) {
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -396,7 +396,7 @@ namespace ts {
                     return visitYieldExpression(<YieldExpression>node);
 
                 case SyntaxKind.SuperKeyword:
-                    return visitSuperKeyword(<PrimaryExpression>node);
+                    return visitSuperKeyword();
 
                 case SyntaxKind.YieldExpression:
                     // `yield` will be handled by a generators transform.
@@ -681,6 +681,7 @@ namespace ts {
 
             const extendsClauseElement = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
+                /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -1117,7 +1118,7 @@ namespace ts {
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList(
-                                flattenParameterDestructuring(context, parameter, temp, visitor)
+                                flattenParameterDestructuring(parameter, temp, visitor)
                             )
                         ),
                         EmitFlags.CustomPrologue
@@ -1416,6 +1417,7 @@ namespace ts {
             if (getAccessor) {
                 const getterFunction = transformFunctionLikeToExpression(getAccessor, /*location*/ undefined, /*name*/ undefined);
                 setSourceMapRange(getterFunction, getSourceMapRange(getAccessor));
+                setEmitFlags(getterFunction, EmitFlags.NoLeadingComments);
                 const getter = createPropertyAssignment("get", getterFunction);
                 setCommentRange(getter, getCommentRange(getAccessor));
                 properties.push(getter);
@@ -1424,6 +1426,7 @@ namespace ts {
             if (setAccessor) {
                 const setterFunction = transformFunctionLikeToExpression(setAccessor, /*location*/ undefined, /*name*/ undefined);
                 setSourceMapRange(setterFunction, getSourceMapRange(setAccessor));
+                setEmitFlags(setterFunction, EmitFlags.NoLeadingComments);
                 const setter = createPropertyAssignment("set", setterFunction);
                 setCommentRange(setter, getCommentRange(setAccessor));
                 properties.push(setter);
@@ -1509,6 +1512,7 @@ namespace ts {
 
             const expression = setOriginalNode(
                 createFunctionExpression(
+                    /*modifiers*/ undefined,
                     node.asteriskToken,
                     name,
                     /*typeParameters*/ undefined,
@@ -1686,7 +1690,7 @@ namespace ts {
                     if (decl.initializer) {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
-                            assignment = flattenVariableDestructuringToExpression(context, decl, hoistVariableDeclaration, /*nameSubstitution*/ undefined, visitor);
+                            assignment = flattenVariableDestructuringToExpression(decl, hoistVariableDeclaration, /*nameSubstitution*/ undefined, visitor);
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
@@ -1839,7 +1843,7 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 const recordTempVariablesInLine = !enclosingVariableStatement
                     || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
-                return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor,
+                return flattenVariableDestructuring(node, /*value*/ undefined, visitor,
                     recordTempVariablesInLine ? undefined : hoistVariableDeclaration);
             }
 
@@ -1942,7 +1946,6 @@ namespace ts {
                     // This works whether the declaration is a var, let, or const.
                     // It will use rhsIterationValue _a[_i] as the initializer.
                     const declarations = flattenVariableDestructuring(
-                        context,
                         firstOriginalDeclaration,
                         createElementAccess(rhsReference, counter),
                         visitor
@@ -2240,6 +2243,7 @@ namespace ts {
                                 /*type*/ undefined,
                                 setEmitFlags(
                                     createFunctionExpression(
+                                        /*modifiers*/ undefined,
                                         isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
                                         /*name*/ undefined,
                                         /*typeParameters*/ undefined,
@@ -2534,15 +2538,15 @@ namespace ts {
                         break;
 
                     case SyntaxKind.PropertyAssignment:
-                        expressions.push(transformPropertyAssignmentToExpression(node, <PropertyAssignment>property, receiver, node.multiLine));
+                        expressions.push(transformPropertyAssignmentToExpression(<PropertyAssignment>property, receiver, node.multiLine));
                         break;
 
                     case SyntaxKind.ShorthandPropertyAssignment:
-                        expressions.push(transformShorthandPropertyAssignmentToExpression(node, <ShorthandPropertyAssignment>property, receiver, node.multiLine));
+                        expressions.push(transformShorthandPropertyAssignmentToExpression(<ShorthandPropertyAssignment>property, receiver, node.multiLine));
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        expressions.push(transformObjectLiteralMethodDeclarationToExpression(node, <MethodDeclaration>property, receiver, node.multiLine));
+                        expressions.push(transformObjectLiteralMethodDeclarationToExpression(<MethodDeclaration>property, receiver, node.multiLine));
                         break;
 
                     default:
@@ -2559,7 +2563,7 @@ namespace ts {
          * @param property The PropertyAssignment node.
          * @param receiver The receiver for the assignment.
          */
-        function transformPropertyAssignmentToExpression(node: ObjectLiteralExpression, property: PropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
+        function transformPropertyAssignmentToExpression(property: PropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
@@ -2581,7 +2585,7 @@ namespace ts {
          * @param property The ShorthandPropertyAssignment node.
          * @param receiver The receiver for the assignment.
          */
-        function transformShorthandPropertyAssignmentToExpression(node: ObjectLiteralExpression, property: ShorthandPropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
+        function transformShorthandPropertyAssignmentToExpression(property: ShorthandPropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
@@ -2603,7 +2607,7 @@ namespace ts {
          * @param method The MethodDeclaration node.
          * @param receiver The receiver for the assignment.
          */
-        function transformObjectLiteralMethodDeclarationToExpression(node: ObjectLiteralExpression, method: MethodDeclaration, receiver: Expression, startsOnNewLine: boolean) {
+        function transformObjectLiteralMethodDeclarationToExpression(method: MethodDeclaration, receiver: Expression, startsOnNewLine: boolean) {
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
@@ -2793,7 +2797,7 @@ namespace ts {
             // expressions into an array literal.
             const numElements = elements.length;
             const segments = flatten(
-                spanMap(elements, partitionSpread, (partition, visitPartition, start, end) =>
+                spanMap(elements, partitionSpread, (partition, visitPartition, _start, end) =>
                     visitPartition(partition, multiLine, hasTrailingComma && end === numElements)
                 )
             );
@@ -2815,7 +2819,7 @@ namespace ts {
                 : visitSpanOfNonSpreads;
         }
 
-        function visitSpanOfSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
+        function visitSpanOfSpreads(chunk: Expression[]): VisitResult<Expression> {
             return map(chunk, visitExpressionOfSpread);
         }
 
@@ -3004,7 +3008,7 @@ namespace ts {
         /**
          * Visits the `super` keyword
          */
-        function visitSuperKeyword(node: PrimaryExpression): LeftHandSideExpression {
+        function visitSuperKeyword(): LeftHandSideExpression {
             return enclosingNonAsyncFunctionBody
                 && isClassElement(enclosingNonAsyncFunctionBody)
                 && !hasModifier(enclosingNonAsyncFunctionBody, ModifierFlags.Static)
@@ -3034,7 +3038,7 @@ namespace ts {
         function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
             const savedEnclosingFunction = enclosingFunction;
 
-            if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, keep track of the enclosing function.
                 enclosingFunction = node;
             }
@@ -3049,8 +3053,8 @@ namespace ts {
          * contains block-scoped bindings (e.g. `let` or `const`).
          */
         function enableSubstitutionsForBlockScopedBindings() {
-            if ((enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) === 0) {
-                enabledSubstitutions |= ES6SubstitutionFlags.BlockScopedBindings;
+            if ((enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) === 0) {
+                enabledSubstitutions |= ES2015SubstitutionFlags.BlockScopedBindings;
                 context.enableSubstitution(SyntaxKind.Identifier);
             }
         }
@@ -3060,8 +3064,8 @@ namespace ts {
          * contains a captured `this`.
          */
         function enableSubstitutionsForCapturedThis() {
-            if ((enabledSubstitutions & ES6SubstitutionFlags.CapturedThis) === 0) {
-                enabledSubstitutions |= ES6SubstitutionFlags.CapturedThis;
+            if ((enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis) === 0) {
+                enabledSubstitutions |= ES2015SubstitutionFlags.CapturedThis;
                 context.enableSubstitution(SyntaxKind.ThisKeyword);
                 context.enableEmitNotification(SyntaxKind.Constructor);
                 context.enableEmitNotification(SyntaxKind.MethodDeclaration);
@@ -3100,7 +3104,7 @@ namespace ts {
         function substituteIdentifier(node: Identifier) {
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
-            if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
                 const original = getParseTreeNode(node, isIdentifier);
                 if (original && isNameOfDeclarationWithCollidingName(original)) {
                     return getGeneratedNameForNode(original);
@@ -3153,7 +3157,7 @@ namespace ts {
          * @param node An Identifier node.
          */
         function substituteExpressionIdentifier(node: Identifier): Identifier {
-            if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
                 const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
                 if (declaration) {
                     return getGeneratedNameForNode(declaration.name);
@@ -3169,7 +3173,7 @@ namespace ts {
          * @param node The ThisKeyword node.
          */
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
-            if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis
+            if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
                 && enclosingFunction
                 && getEmitFlags(enclosingFunction) & EmitFlags.CapturesThis) {
                 return createIdentifier("_this", /*location*/ node);
