@@ -1,0 +1,242 @@
+=== tests/cases/compiler/intersectionTypeNormalization.ts ===
+interface A { a: string }
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>a : Symbol(A.a, Decl(intersectionTypeNormalization.ts, 0, 13))
+
+interface B { b: string }
+>B : Symbol(B, Decl(intersectionTypeNormalization.ts, 0, 25))
+>b : Symbol(B.b, Decl(intersectionTypeNormalization.ts, 1, 13))
+
+interface C { c: string }
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>c : Symbol(C.c, Decl(intersectionTypeNormalization.ts, 2, 13))
+
+interface D { d: string }
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+>d : Symbol(D.d, Decl(intersectionTypeNormalization.ts, 3, 13))
+
+// Identical ways of writing the same type
+type X1 = (A | B) & (C | D);
+>X1 : Symbol(X1, Decl(intersectionTypeNormalization.ts, 3, 25))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>B : Symbol(B, Decl(intersectionTypeNormalization.ts, 0, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+type X2 = A & (C | D) | B & (C | D)
+>X2 : Symbol(X2, Decl(intersectionTypeNormalization.ts, 6, 28))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+>B : Symbol(B, Decl(intersectionTypeNormalization.ts, 0, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+type X3 = A & C | A & D | B & C | B & D;
+>X3 : Symbol(X3, Decl(intersectionTypeNormalization.ts, 7, 35))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+>B : Symbol(B, Decl(intersectionTypeNormalization.ts, 0, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>B : Symbol(B, Decl(intersectionTypeNormalization.ts, 0, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+var x: X1;
+>x : Symbol(x, Decl(intersectionTypeNormalization.ts, 10, 3), Decl(intersectionTypeNormalization.ts, 11, 3), Decl(intersectionTypeNormalization.ts, 12, 3))
+>X1 : Symbol(X1, Decl(intersectionTypeNormalization.ts, 3, 25))
+
+var x: X2;
+>x : Symbol(x, Decl(intersectionTypeNormalization.ts, 10, 3), Decl(intersectionTypeNormalization.ts, 11, 3), Decl(intersectionTypeNormalization.ts, 12, 3))
+>X2 : Symbol(X2, Decl(intersectionTypeNormalization.ts, 6, 28))
+
+var x: X3;
+>x : Symbol(x, Decl(intersectionTypeNormalization.ts, 10, 3), Decl(intersectionTypeNormalization.ts, 11, 3), Decl(intersectionTypeNormalization.ts, 12, 3))
+>X3 : Symbol(X3, Decl(intersectionTypeNormalization.ts, 7, 35))
+
+interface X { x: string }
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>x : Symbol(X.x, Decl(intersectionTypeNormalization.ts, 14, 13))
+
+interface Y { y: string }
+>Y : Symbol(Y, Decl(intersectionTypeNormalization.ts, 14, 25))
+>y : Symbol(Y.y, Decl(intersectionTypeNormalization.ts, 15, 13))
+
+// Identical ways of writing the same type
+type Y1 = (A | X & Y) & (C | D);
+>Y1 : Symbol(Y1, Decl(intersectionTypeNormalization.ts, 15, 25))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>Y : Symbol(Y, Decl(intersectionTypeNormalization.ts, 14, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+type Y2 = A & (C | D) | X & Y & (C | D)
+>Y2 : Symbol(Y2, Decl(intersectionTypeNormalization.ts, 18, 32))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>Y : Symbol(Y, Decl(intersectionTypeNormalization.ts, 14, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+type Y3 = A & C | A & D | X & Y & C | X & Y & D;
+>Y3 : Symbol(Y3, Decl(intersectionTypeNormalization.ts, 19, 39))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>Y : Symbol(Y, Decl(intersectionTypeNormalization.ts, 14, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>Y : Symbol(Y, Decl(intersectionTypeNormalization.ts, 14, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+var y: Y1;
+>y : Symbol(y, Decl(intersectionTypeNormalization.ts, 22, 3), Decl(intersectionTypeNormalization.ts, 23, 3), Decl(intersectionTypeNormalization.ts, 24, 3))
+>Y1 : Symbol(Y1, Decl(intersectionTypeNormalization.ts, 15, 25))
+
+var y: Y2;
+>y : Symbol(y, Decl(intersectionTypeNormalization.ts, 22, 3), Decl(intersectionTypeNormalization.ts, 23, 3), Decl(intersectionTypeNormalization.ts, 24, 3))
+>Y2 : Symbol(Y2, Decl(intersectionTypeNormalization.ts, 18, 32))
+
+var y: Y3;
+>y : Symbol(y, Decl(intersectionTypeNormalization.ts, 22, 3), Decl(intersectionTypeNormalization.ts, 23, 3), Decl(intersectionTypeNormalization.ts, 24, 3))
+>Y3 : Symbol(Y3, Decl(intersectionTypeNormalization.ts, 19, 39))
+
+interface M { m: string }
+>M : Symbol(M, Decl(intersectionTypeNormalization.ts, 24, 10))
+>m : Symbol(M.m, Decl(intersectionTypeNormalization.ts, 26, 13))
+
+interface N { n: string }
+>N : Symbol(N, Decl(intersectionTypeNormalization.ts, 26, 25))
+>n : Symbol(N.n, Decl(intersectionTypeNormalization.ts, 27, 13))
+
+// Identical ways of writing the same type
+type Z1 = (A | X & (M | N)) & (C | D);
+>Z1 : Symbol(Z1, Decl(intersectionTypeNormalization.ts, 27, 25))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>M : Symbol(M, Decl(intersectionTypeNormalization.ts, 24, 10))
+>N : Symbol(N, Decl(intersectionTypeNormalization.ts, 26, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+type Z2 = A & (C | D) | X & (M | N) & (C | D)
+>Z2 : Symbol(Z2, Decl(intersectionTypeNormalization.ts, 30, 38))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>M : Symbol(M, Decl(intersectionTypeNormalization.ts, 24, 10))
+>N : Symbol(N, Decl(intersectionTypeNormalization.ts, 26, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+type Z3 = A & C | A & D | X & (M | N) & C | X & (M | N) & D;
+>Z3 : Symbol(Z3, Decl(intersectionTypeNormalization.ts, 31, 45))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>M : Symbol(M, Decl(intersectionTypeNormalization.ts, 24, 10))
+>N : Symbol(N, Decl(intersectionTypeNormalization.ts, 26, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>M : Symbol(M, Decl(intersectionTypeNormalization.ts, 24, 10))
+>N : Symbol(N, Decl(intersectionTypeNormalization.ts, 26, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+type Z4 = A & C | A & D | X & M & C | X & N & C | X & M & D | X & N & D;
+>Z4 : Symbol(Z4, Decl(intersectionTypeNormalization.ts, 32, 60))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>A : Symbol(A, Decl(intersectionTypeNormalization.ts, 0, 0))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>M : Symbol(M, Decl(intersectionTypeNormalization.ts, 24, 10))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>N : Symbol(N, Decl(intersectionTypeNormalization.ts, 26, 25))
+>C : Symbol(C, Decl(intersectionTypeNormalization.ts, 1, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>M : Symbol(M, Decl(intersectionTypeNormalization.ts, 24, 10))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+>X : Symbol(X, Decl(intersectionTypeNormalization.ts, 12, 10))
+>N : Symbol(N, Decl(intersectionTypeNormalization.ts, 26, 25))
+>D : Symbol(D, Decl(intersectionTypeNormalization.ts, 2, 25))
+
+var z: Z1;
+>z : Symbol(z, Decl(intersectionTypeNormalization.ts, 35, 3), Decl(intersectionTypeNormalization.ts, 36, 3), Decl(intersectionTypeNormalization.ts, 37, 3), Decl(intersectionTypeNormalization.ts, 38, 3))
+>Z1 : Symbol(Z1, Decl(intersectionTypeNormalization.ts, 27, 25))
+
+var z: Z2;
+>z : Symbol(z, Decl(intersectionTypeNormalization.ts, 35, 3), Decl(intersectionTypeNormalization.ts, 36, 3), Decl(intersectionTypeNormalization.ts, 37, 3), Decl(intersectionTypeNormalization.ts, 38, 3))
+>Z2 : Symbol(Z2, Decl(intersectionTypeNormalization.ts, 30, 38))
+
+var z: Z3;
+>z : Symbol(z, Decl(intersectionTypeNormalization.ts, 35, 3), Decl(intersectionTypeNormalization.ts, 36, 3), Decl(intersectionTypeNormalization.ts, 37, 3), Decl(intersectionTypeNormalization.ts, 38, 3))
+>Z3 : Symbol(Z3, Decl(intersectionTypeNormalization.ts, 31, 45))
+
+var z: Z4;
+>z : Symbol(z, Decl(intersectionTypeNormalization.ts, 35, 3), Decl(intersectionTypeNormalization.ts, 36, 3), Decl(intersectionTypeNormalization.ts, 37, 3), Decl(intersectionTypeNormalization.ts, 38, 3))
+>Z4 : Symbol(Z4, Decl(intersectionTypeNormalization.ts, 32, 60))
+
+// Repro from #9919
+
+type ToString = {
+>ToString : Symbol(ToString, Decl(intersectionTypeNormalization.ts, 38, 10))
+
+    toString(): string;
+>toString : Symbol(toString, Decl(intersectionTypeNormalization.ts, 42, 17))
+}
+
+type BoxedValue = { kind: 'int',    num: number }
+>BoxedValue : Symbol(BoxedValue, Decl(intersectionTypeNormalization.ts, 44, 1))
+>kind : Symbol(kind, Decl(intersectionTypeNormalization.ts, 46, 19))
+>num : Symbol(num, Decl(intersectionTypeNormalization.ts, 46, 32))
+
+                | { kind: 'string', str: string }
+>kind : Symbol(kind, Decl(intersectionTypeNormalization.ts, 47, 19))
+>str : Symbol(str, Decl(intersectionTypeNormalization.ts, 47, 35))
+
+type IntersectionFail = BoxedValue & ToString
+>IntersectionFail : Symbol(IntersectionFail, Decl(intersectionTypeNormalization.ts, 47, 49))
+>BoxedValue : Symbol(BoxedValue, Decl(intersectionTypeNormalization.ts, 44, 1))
+>ToString : Symbol(ToString, Decl(intersectionTypeNormalization.ts, 38, 10))
+
+type IntersectionInline = { kind: 'int',    num: number } & ToString
+>IntersectionInline : Symbol(IntersectionInline, Decl(intersectionTypeNormalization.ts, 49, 45))
+>kind : Symbol(kind, Decl(intersectionTypeNormalization.ts, 51, 27))
+>num : Symbol(num, Decl(intersectionTypeNormalization.ts, 51, 40))
+>ToString : Symbol(ToString, Decl(intersectionTypeNormalization.ts, 38, 10))
+
+                        | { kind: 'string', str: string } & ToString
+>kind : Symbol(kind, Decl(intersectionTypeNormalization.ts, 52, 27))
+>str : Symbol(str, Decl(intersectionTypeNormalization.ts, 52, 43))
+>ToString : Symbol(ToString, Decl(intersectionTypeNormalization.ts, 38, 10))
+
+function getValueAsString(value: IntersectionFail): string {
+>getValueAsString : Symbol(getValueAsString, Decl(intersectionTypeNormalization.ts, 52, 68))
+>value : Symbol(value, Decl(intersectionTypeNormalization.ts, 54, 26))
+>IntersectionFail : Symbol(IntersectionFail, Decl(intersectionTypeNormalization.ts, 47, 49))
+
+    if (value.kind === 'int') {
+>value.kind : Symbol(kind, Decl(intersectionTypeNormalization.ts, 46, 19), Decl(intersectionTypeNormalization.ts, 47, 19))
+>value : Symbol(value, Decl(intersectionTypeNormalization.ts, 54, 26))
+>kind : Symbol(kind, Decl(intersectionTypeNormalization.ts, 46, 19), Decl(intersectionTypeNormalization.ts, 47, 19))
+
+        return '' + value.num;
+>value.num : Symbol(num, Decl(intersectionTypeNormalization.ts, 46, 32))
+>value : Symbol(value, Decl(intersectionTypeNormalization.ts, 54, 26))
+>num : Symbol(num, Decl(intersectionTypeNormalization.ts, 46, 32))
+    }
+    return value.str;
+>value.str : Symbol(str, Decl(intersectionTypeNormalization.ts, 47, 35))
+>value : Symbol(value, Decl(intersectionTypeNormalization.ts, 54, 26))
+>str : Symbol(str, Decl(intersectionTypeNormalization.ts, 47, 35))
+}
