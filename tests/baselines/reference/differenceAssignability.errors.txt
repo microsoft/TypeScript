@@ -1,11 +1,11 @@
-tests/cases/conformance/es6/destructuring/differenceAssignability.ts(13,5): error TS2322: Type 'T - Gen' is not assignable to type 'T'.
-tests/cases/conformance/es6/destructuring/differenceAssignability.ts(14,5): error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T'.
-tests/cases/conformance/es6/destructuring/differenceAssignability.ts(15,5): error TS2322: Type 'T - { x: number; }' is not assignable to type 'T'.
-tests/cases/conformance/es6/destructuring/differenceAssignability.ts(23,5): error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T - { x: number; }'.
-tests/cases/conformance/es6/destructuring/differenceAssignability.ts(25,5): error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T - Gen'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(13,5): error TS2322: Type 'T - Gen' is not assignable to type 'T'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(14,5): error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(15,5): error TS2322: Type 'T - { x: number; }' is not assignable to type 'T'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(23,5): error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T - { x: number; }'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(25,5): error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T - Gen'.
 
 
-==== tests/cases/conformance/es6/destructuring/differenceAssignability.ts (5 errors) ====
+==== tests/cases/conformance/types/difference/differenceAssignability.ts (5 errors) ====
     interface Gen {
         x: number;
     }

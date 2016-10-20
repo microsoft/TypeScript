@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/destructuring/differenceSignatures.ts ===
+=== tests/cases/conformance/types/difference/differenceSignatures.ts ===
 interface A { a: number }
 >A : A
 >a : number

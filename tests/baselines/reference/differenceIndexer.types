@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/destructuring/differenceIndexer.ts ===
+=== tests/cases/conformance/types/difference/differenceIndexer.ts ===
 interface A { a: number }
 >A : A
 >a : number

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/destructuring/differenceGeneric.ts ===
+=== tests/cases/conformance/types/difference/differenceGeneric.ts ===
 interface Gen {
 >Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 

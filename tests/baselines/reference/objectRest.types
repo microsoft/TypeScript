@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/destructuring/objectRest.ts ===
+=== tests/cases/conformance/types/difference/objectRest.ts ===
 let o = { a: 1, b: 'no' }
 >o : { a: number; b: string; }
 >{ a: 1, b: 'no' } : { a: number; b: string; }

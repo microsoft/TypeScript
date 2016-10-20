@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/destructuring/objectRest.ts ===
+=== tests/cases/conformance/types/difference/objectRest.ts ===
 let o = { a: 1, b: 'no' }
 >o : Symbol(o, Decl(objectRest.ts, 0, 3))
 >a : Symbol(a, Decl(objectRest.ts, 0, 9))

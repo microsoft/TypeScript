@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/destructuring/objectRestNegative.ts(2,10): error TS2462: A rest element must be last in a destructuring pattern
-tests/cases/conformance/es6/destructuring/objectRestNegative.ts(3,31): error TS2462: A rest element must be last in a destructuring pattern
+tests/cases/conformance/types/difference/objectRestNegative.ts(2,10): error TS2462: A rest element must be last in a destructuring pattern
+tests/cases/conformance/types/difference/objectRestNegative.ts(3,31): error TS2462: A rest element must be last in a destructuring pattern
 
 
-==== tests/cases/conformance/es6/destructuring/objectRestNegative.ts (2 errors) ====
+==== tests/cases/conformance/types/difference/objectRestNegative.ts (2 errors) ====
     let o = { a: 1, b: 'no' };
     var { ...mustBeLast, a } = o;
              ~~~~~~~~~~
