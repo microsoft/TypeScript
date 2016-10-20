@@ -290,7 +290,7 @@ namespace ts {
                     return path in files ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
-                writeFile: (): void => { throw new Error("NotImplemented"); },
+                writeFile: notImplemented,
                 getCurrentDirectory: () => currentDirectory,
                 getDirectories: () => [],
                 getCanonicalFileName: fileName => fileName.toLowerCase(),
@@ -300,7 +300,7 @@ namespace ts {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
                     return path in files;
                 },
-                readFile: (): string => { throw new Error("NotImplemented"); }
+                readFile: notImplemented
             };
 
             const program = createProgram(rootFiles, options, host);
@@ -370,7 +370,7 @@ export = C;
                     return path in files ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
-                writeFile: (): void => { throw new Error("NotImplemented"); },
+                writeFile: notImplemented,
                 getCurrentDirectory: () => currentDirectory,
                 getDirectories: () => [],
                 getCanonicalFileName,
@@ -380,7 +380,7 @@ export = C;
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
                     return path in files;
                 },
-                readFile: (): string => { throw new Error("NotImplemented"); }
+                readFile: notImplemented
             };
             const program = createProgram(rootFiles, options, host);
             const diagnostics = sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics().concat(program.getOptionsDiagnostics()));
@@ -911,15 +911,11 @@ import b = require("./moduleB");
         });
     });
 
-    function notImplemented(name: string): () => any {
-        return () => assert(`${name} is not implemented and should not be called`);
-    }
-
     describe("ModuleResolutionHost.directoryExists", () => {
         it("No 'fileExists' calls if containing directory is missing", () => {
             const host: ModuleResolutionHost = {
-                readFile: notImplemented("readFile"),
-                fileExists: notImplemented("fileExists"),
+                readFile: notImplemented,
+                fileExists: notImplemented,
                 directoryExists: _ => false
             };
 
@@ -1022,9 +1018,7 @@ import b = require("./moduleB");
                 fileExists : fileName => fileName in sourceFiles,
                 getSourceFile: fileName => sourceFiles[fileName],
                 getDefaultLibFileName: () => "lib.d.ts",
-                writeFile(_file, _text) {
-                    throw new Error("NYI");
-                },
+                writeFile: notImplemented,
                 getCurrentDirectory: () => "/",
                 getDirectories: () => [],
                 getCanonicalFileName: f => f.toLowerCase(),

@@ -1051,7 +1051,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
                 getNewLine: () => getNewLineOrDefaultFromHost(host),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
-                writeFile: () => { },
+                writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality

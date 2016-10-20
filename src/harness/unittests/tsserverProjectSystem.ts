@@ -23,10 +23,6 @@ namespace ts.projectSystem {
         readonly callback: TI.RequestCompletedAction;
     }
 
-    export function notImplemented(): any {
-        throw new Error("Not yet implemented");
-    }
-
     export const nullLogger: server.Logger = {
         close: () => void 0,
         hasLevel: () => void 0,

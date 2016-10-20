@@ -21,15 +21,15 @@ namespace ts {
             args: <string[]>[],
             newLine: "\r\n",
             useCaseSensitiveFileNames: false,
-            write: () => { },
+            write: noop,
             readFile: (path: string): string => {
                 return path in fileMap ? fileMap[path].content : undefined;
             },
             writeFile: (_path: string, _data: string, _writeByteOrderMark?: boolean) => {
-                throw new Error("NYI");
+                return ts.notImplemented();
             },
             resolvePath: (_path: string): string => {
-                throw new Error("NYI");
+                return ts.notImplemented();
             },
             fileExists: (path: string): boolean => {
                 return path in fileMap;
@@ -37,7 +37,7 @@ namespace ts {
             directoryExists: (path: string): boolean => {
                 return existingDirectories[path] || false;
             },
-            createDirectory: () => { },
+            createDirectory: noop,
             getExecutingFilePath: (): string => {
                 return "";
             },
@@ -47,14 +47,14 @@ namespace ts {
             getDirectories: () => [],
             getEnvironmentVariable: () => "",
             readDirectory: (_path: string, _extension?: string[], _exclude?: string[], _include?: string[]): string[] => {
-                throw new Error("NYI");
+                return ts.notImplemented();
             },
-            exit: () => { },
+            exit: noop,
             watchFile: () => ({
-                close: () => { }
+                close: noop
             }),
             watchDirectory: () => ({
-                close: () => { }
+                close: noop
             }),
             setTimeout,
             clearTimeout,
@@ -65,14 +65,14 @@ namespace ts {
 
     function createProject(rootFile: string, serverHost: server.ServerHost): { project: server.Project, rootScriptInfo: server.ScriptInfo } {
         const logger: server.Logger = {
-            close() { },
+            close: noop,
             hasLevel: () => false,
             loggingEnabled: () => false,
-            perftrc: () => { },
-            info: () => { },
-            startGroup: () => { },
-            endGroup: () => { },
-            msg: () => { },
+            perftrc: noop,
+            info: noop,
+            startGroup: noop,
+            endGroup: noop,
+            msg: noop,
             getLogFileName: (): string => undefined
         };
 
@@ -109,10 +109,7 @@ namespace ts {
             const originalFileExists = serverHost.fileExists;
             {
                 // patch fileExists to make sure that disk is not touched
-                serverHost.fileExists = (): boolean => {
-                    assert.isTrue(false, "fileExists should not be called");
-                    return false;
-                };
+                serverHost.fileExists = notImplemented;
 
                 const newContent = `import {x} from "f1"
                 var x: string = 1;`;

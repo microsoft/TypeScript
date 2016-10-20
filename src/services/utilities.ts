@@ -1142,8 +1142,8 @@ namespace ts {
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
-            trackSymbol: () => { },
-            reportInaccessibleThisError: () => { }
+            trackSymbol: noop,
+            reportInaccessibleThisError: noop
         };
 
         function writeIndent() {

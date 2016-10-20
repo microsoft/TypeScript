@@ -111,9 +111,7 @@ namespace ts {
             getDefaultLibFileName(): string {
                 return "lib.d.ts";
             },
-            writeFile() {
-                throw new Error("NYI");
-            },
+            writeFile: notImplemented,
             getCurrentDirectory(): string {
                 return "";
             },
@@ -244,13 +242,13 @@ namespace ts {
 
         it("fails if change affects type references", () => {
             const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
-            updateProgram(program_1, ["a.ts"], { types: ["b"] }, () => { });
+            updateProgram(program_1, ["a.ts"], { types: ["b"] }, noop);
             assert.isTrue(!program_1.structureIsReused);
         });
 
         it("succeeds if change doesn't affect type references", () => {
             const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
-            updateProgram(program_1, ["a.ts"], { types: ["a"] }, () => { });
+            updateProgram(program_1, ["a.ts"], { types: ["a"] }, noop);
             assert.isTrue(program_1.structureIsReused);
         });
 
@@ -276,19 +274,19 @@ namespace ts {
 
         it("fails if module kind changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS });
-            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.AMD }, () => { });
+            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.AMD }, noop);
             assert.isTrue(!program_1.structureIsReused);
         });
 
         it("fails if rootdir changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/b" });
-            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, () => { });
+            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, noop);
             assert.isTrue(!program_1.structureIsReused);
         });
 
         it("fails if config path changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
-            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, () => { });
+            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, noop);
             assert.isTrue(!program_1.structureIsReused);
         });
 

@@ -15,7 +15,7 @@ namespace ts.server.typingsInstaller {
 
     const nullLog: Log = {
         isEnabled: () => false,
-        writeLine: () => {}
+        writeLine: noop
     };
 
     function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost): string {

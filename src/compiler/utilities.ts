@@ -63,11 +63,11 @@ namespace ts {
                 // Completely ignore indentation for string writers.  And map newlines to
                 // a single space.
                 writeLine: () => str += " ",
-                increaseIndent: () => { },
-                decreaseIndent: () => { },
+                increaseIndent: noop,
+                decreaseIndent: noop,
                 clear: () => str = "",
-                trackSymbol: () => { },
-                reportInaccessibleThisError: () => { }
+                trackSymbol: noop,
+                reportInaccessibleThisError: noop
             };
         }
 
