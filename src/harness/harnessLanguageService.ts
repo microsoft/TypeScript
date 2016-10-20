@@ -313,7 +313,7 @@ namespace Harness.LanguageService {
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
 
         readDirectory(_rootDir: string, _extension: string): string {
-            return ts.notYetImplemented();
+            return ts.notImplemented();
         }
         readDirectoryNames = ts.notImplemented;
         readFileNames = ts.notImplemented;
@@ -335,7 +335,7 @@ namespace Harness.LanguageService {
         constructor(private shim: ts.ClassifierShim) {
         }
         getEncodedLexicalClassifications(_text: string, _lexState: ts.EndOfLineState, _classifyKeywordsInGenerics?: boolean): ts.Classifications {
-            return ts.notYetImplemented();
+            return ts.notImplemented();
         }
         getClassificationsForLine(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.ClassificationResult {
             const result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split("\n");
@@ -644,7 +644,7 @@ namespace Harness.LanguageService {
         }
 
         createDirectory(_directoryName: string): void {
-            return ts.notYetImplemented();
+            return ts.notImplemented();
         }
 
         getCurrentDirectory(): string {
@@ -660,7 +660,7 @@ namespace Harness.LanguageService {
         }
 
         readDirectory(_path: string, _extension?: string[], _exclude?: string[], _include?: string[]): string[] {
-            return ts.notYetImplemented();
+            return ts.notImplemented();
         }
 
         watchFile(): ts.FileWatcher {

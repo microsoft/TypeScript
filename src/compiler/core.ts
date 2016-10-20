@@ -872,14 +872,9 @@ namespace ts {
     /** Does nothing. */
     export function noop(): void {}
 
-    /** A function not intended to be implemented. */
+    /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
         throw new Error("Not implemented");
-    }
-
-    /** A function which isn't implemented, but should be eventually. */
-    export function notYetImplemented(): never {
-        throw new Error("TODO: Not yet implemented");
     }
 
     export function memoize<T>(callback: () => T): () => T {

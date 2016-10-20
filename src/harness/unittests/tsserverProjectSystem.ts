@@ -521,8 +521,8 @@ namespace ts.projectSystem {
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly exit = notYetImplemented;
-        readonly getEnvironmentVariable = notYetImplemented;
+        readonly exit = notImplemented;
+        readonly getEnvironmentVariable = notImplemented;
     }
 
     export function makeSessionRequest<T>(command: string, args: T) {

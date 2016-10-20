@@ -1668,7 +1668,7 @@ namespace Harness {
         // This does not need to exist strictly speaking, but many tests will need to be updated if it's removed
         export function compileString(_code: string, _unitName: string, _callback: (result: CompilerResult) => void) {
             // NEWTODO: Re-implement 'compileString'
-            return ts.notYetImplemented();
+            return ts.notImplemented();
         }
 
         export interface GeneratedFile {

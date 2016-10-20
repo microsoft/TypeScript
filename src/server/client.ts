@@ -242,7 +242,7 @@ namespace ts.server {
         }
 
         getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getNavigateToItems(searchValue: string): NavigateToItem[] {
@@ -415,7 +415,7 @@ namespace ts.server {
         }
 
         getEmitOutput(_fileName: string): EmitOutput {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[] {
@@ -457,7 +457,7 @@ namespace ts.server {
         }
 
         getCompilerOptionsDiagnostics(): Diagnostic[] {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getRenameInfo(fileName: string, position: number, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
@@ -562,11 +562,11 @@ namespace ts.server {
         }
 
         getNameOrDottedNameSpan(_fileName: string, _startPos: number, _endPos: number): TextSpan {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getBreakpointStatementAtPosition(_fileName: string, _position: number): TextSpan {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
@@ -656,19 +656,19 @@ namespace ts.server {
         }
 
         getOutliningSpans(_fileName: string): OutliningSpan[] {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getTodoComments(_fileName: string, _descriptors: TodoCommentDescriptor[]): TodoComment[] {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getDocCommentTemplateAtPosition(_fileName: string, _position: number): TextInsertion {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         isValidBraceCompletionAtPosition(_fileName: string, _position: number, _openingBrace: number): boolean {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
@@ -735,23 +735,23 @@ namespace ts.server {
         }
 
         getIndentationAtPosition(_fileName: string, _position: number, _options: EditorOptions): number {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getSyntacticClassifications(_fileName: string, _span: TextSpan): ClassifiedSpan[] {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getSemanticClassifications(_fileName: string, _span: TextSpan): ClassifiedSpan[] {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getEncodedSyntacticClassifications(_fileName: string, _span: TextSpan): Classifications {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getEncodedSemanticClassifications(_fileName: string, _span: TextSpan): Classifications {
-            return notYetImplemented();
+            return notImplemented();
         }
 
         getProgram(): Program {

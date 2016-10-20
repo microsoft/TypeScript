@@ -111,7 +111,7 @@ namespace ts {
             getDefaultLibFileName(): string {
                 return "lib.d.ts";
             },
-            writeFile: notYetImplemented,
+            writeFile: notImplemented,
             getCurrentDirectory(): string {
                 return "";
             },
