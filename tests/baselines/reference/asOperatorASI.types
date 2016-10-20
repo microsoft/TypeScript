@@ -26,3 +26,10 @@ as(Foo); // should emit
 >as : (...args: any[]) => any
 >Foo : typeof Foo
 
+var z = 30
+>z : number
+>30as number : number
+>30 : 30
+
+as number; // should be a type assertion
+
