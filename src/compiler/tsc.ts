@@ -250,8 +250,8 @@ namespace ts {
         let compilerOptions: CompilerOptions;                       // Compiler options for compilation
         let compilerHost: CompilerHost;                             // Compiler host
         let hostGetSourceFile: typeof compilerHost.getSourceFile;   // getSourceFile method from default host
-        let timerHandleForRecompilation: number;                    // Handle for 0.25s wait timer to trigger recompilation
-        let timerHandleForDirectoryChanges: number;                 // Handle for 0.25s wait timer to trigger directory change handler
+        let timerHandleForRecompilation: any;                    // Handle for 0.25s wait timer to trigger recompilation
+        let timerHandleForDirectoryChanges: any;                 // Handle for 0.25s wait timer to trigger directory change handler
 
         // This map stores and reuses results of fileExists check that happen inside 'createProgram'
         // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
@@ -503,10 +503,14 @@ namespace ts {
         }
 
         function startTimerForHandlingDirectoryChanges() {
-            if (timerHandleForDirectoryChanges) {
-                clearTimeout(timerHandleForDirectoryChanges);
+            if (!sys.setTimeout || !sys.clearTimeout) {
+                return;
             }
-            timerHandleForDirectoryChanges = setTimeout(directoryChangeHandler, 250);
+
+            if (timerHandleForDirectoryChanges) {
+                sys.clearTimeout(timerHandleForDirectoryChanges);
+            }
+            timerHandleForDirectoryChanges = sys.setTimeout(directoryChangeHandler, 250);
         }
 
         function directoryChangeHandler() {
@@ -525,10 +529,14 @@ namespace ts {
         // operations (such as saving all modified files in an editor) a chance to complete before we kick
         // off a new compilation.
         function startTimerForRecompilation() {
-            if (timerHandleForRecompilation) {
-                clearTimeout(timerHandleForRecompilation);
+            if (!sys.setTimeout || !sys.clearTimeout) {
+                return;
             }
-            timerHandleForRecompilation = setTimeout(recompile, 250);
+
+            if (timerHandleForRecompilation) {
+                sys.clearTimeout(timerHandleForRecompilation);
+            }
+            timerHandleForRecompilation = sys.setTimeout(recompile, 250);
         }
 
         function recompile() {
