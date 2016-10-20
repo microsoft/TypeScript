@@ -17189,7 +17189,7 @@ namespace ts {
                 if (declaration && getModifierFlags(declaration) & ModifierFlags.Private) {
                     const typeClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(type.symbol);
                     if (!isNodeWithinClass(node, typeClassDeclaration)) {
-                        error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, (<Identifier>node.expression).text);
+                        error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, getFullyQualifiedName(type.symbol));
                     }
                 }
             }
