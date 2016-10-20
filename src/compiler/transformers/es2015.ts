@@ -585,7 +585,7 @@ namespace ts {
             //      }());
 
             const variable = createVariableDeclaration(
-                getDeclarationName(node, /*allowComments*/ true),
+                getLocalName(node, /*allowComments*/ true),
                 /*type*/ undefined,
                 transformClassLikeDeclarationToExpression(node)
             );
@@ -601,14 +601,12 @@ namespace ts {
 
             // Add an `export default` statement for default exports (for `--target es5 --module es6`)
             if (hasModifier(node, ModifierFlags.Export)) {
-                if (hasModifier(node, ModifierFlags.Default)) {
-                    const exportStatement = createExportDefault(getLocalName(node));
-                    setOriginalNode(exportStatement, statement);
-                    statements.push(exportStatement);
-                }
-                else {
-                    statements.push(createExternalModuleExport(getLocalName(node)));
-                }
+                const exportStatement = hasModifier(node, ModifierFlags.Default)
+                    ? createExportDefault(getLocalName(node))
+                    : createExternalModuleExport(getLocalName(node));
+
+                setOriginalNode(exportStatement, statement);
+                statements.push(exportStatement);
             }
 
             const emitFlags = getEmitFlags(node);
@@ -758,7 +756,7 @@ namespace ts {
             if (extendsClauseElement) {
                 statements.push(
                     createStatement(
-                        createExtendsHelper(currentSourceFile.externalHelpersModuleName, getDeclarationName(node)),
+                        createExtendsHelper(currentSourceFile.externalHelpersModuleName, getLocalName(node)),
                         /*location*/ extendsClauseElement
                     )
                 );
@@ -1694,7 +1692,7 @@ namespace ts {
                     if (decl.initializer) {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
-                            assignment = flattenVariableDestructuringToExpression(context, decl, hoistVariableDeclaration, /*nameSubstitution*/ undefined, visitor);
+                            assignment = flattenVariableDestructuringToExpression(context, decl, hoistVariableDeclaration, /*createAssignmentCallback*/ undefined, visitor);
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));

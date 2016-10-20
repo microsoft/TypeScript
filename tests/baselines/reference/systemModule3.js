@@ -67,9 +67,9 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             default_1 = (function () {
-                function class_1() {
+                function default_1() {
                 }
-                return class_1;
+                return default_1;
             }());
             exports_1("default", default_1);
         }

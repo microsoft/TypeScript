@@ -17,8 +17,8 @@ System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function TopLevelFunction() { }
-    var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
     exports_1("TopLevelFunction", TopLevelFunction);
+    var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
     return {
         setters: [],
         execute: function () {

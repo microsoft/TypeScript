@@ -362,6 +362,7 @@ namespace ts {
         // Transformation nodes
         NotEmittedStatement,
         PartiallyEmittedExpression,
+        MergeDeclarationMarker,
         EndOfDeclarationMarker,
 
         // Enum value count
@@ -1156,6 +1157,21 @@ namespace ts {
         right: Expression;
     }
 
+    export interface AssignmentExpression extends BinaryExpression {
+        left: LeftHandSideExpression;
+        operatorToken: Token<SyntaxKind.EqualsToken>;
+    }
+
+    export interface ObjectDestructuringAssignment extends AssignmentExpression {
+        left: ObjectLiteralExpression;
+    }
+
+    export interface ArrayDestructuringAssignment extends AssignmentExpression {
+        left: ArrayLiteralExpression;
+    }
+
+    export type DestructuringAssignment = ObjectDestructuringAssignment | ArrayDestructuringAssignment;
+
     export interface ConditionalExpression extends Expression {
         kind: SyntaxKind.ConditionalExpression;
         condition: Expression;
@@ -1434,6 +1450,14 @@ namespace ts {
     /* @internal */
     export interface EndOfDeclarationMarker extends Statement {
         kind: SyntaxKind.EndOfDeclarationMarker;
+    }
+
+    /**
+     * Marks the beginning of a merged transformed declaration.
+     */
+    /* @internal */
+    export interface MergeDeclarationMarker extends Statement {
+        kind: SyntaxKind.MergeDeclarationMarker;
     }
 
     export interface EmptyStatement extends Statement {
@@ -3380,22 +3404,23 @@ namespace ts {
         Generator = 1 << 10,
         ContainsGenerator = 1 << 11,
         DestructuringAssignment = 1 << 12,
+        ContainsDestructuringAssignment = 1 << 13,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 13,
-        ContainsPropertyInitializer = 1 << 14,
-        ContainsLexicalThis = 1 << 15,
-        ContainsCapturedLexicalThis = 1 << 16,
-        ContainsLexicalThisInComputedPropertyName = 1 << 17,
-        ContainsDefaultValueAssignments = 1 << 18,
-        ContainsParameterPropertyAssignments = 1 << 19,
-        ContainsSpreadElementExpression = 1 << 20,
-        ContainsComputedPropertyName = 1 << 21,
-        ContainsBlockScopedBinding = 1 << 22,
-        ContainsBindingPattern = 1 << 23,
-        ContainsYield = 1 << 24,
-        ContainsHoistedDeclarationOrCompletion = 1 << 25,
+        ContainsDecorators = 1 << 14,
+        ContainsPropertyInitializer = 1 << 15,
+        ContainsLexicalThis = 1 << 16,
+        ContainsCapturedLexicalThis = 1 << 17,
+        ContainsLexicalThisInComputedPropertyName = 1 << 18,
+        ContainsDefaultValueAssignments = 1 << 19,
+        ContainsParameterPropertyAssignments = 1 << 20,
+        ContainsSpreadElementExpression = 1 << 21,
+        ContainsComputedPropertyName = 1 << 22,
+        ContainsBlockScopedBinding = 1 << 23,
+        ContainsBindingPattern = 1 << 24,
+        ContainsYield = 1 << 25,
+        ContainsHoistedDeclarationOrCompletion = 1 << 26,
 
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
@@ -3407,6 +3432,7 @@ namespace ts {
         AssertES2016 = ES2016 | ContainsES2016,
         AssertES2015 = ES2015 | ContainsES2015,
         AssertGenerator = Generator | ContainsGenerator,
+        AssertDestructuringAssignment = DestructuringAssignment | ContainsDestructuringAssignment,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
@@ -3464,7 +3490,6 @@ namespace ts {
         NoNestedComments = 1 << 16,
         ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        ExportBindingName = LocalName | ExportName,
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
         NoIndentation = 1 << 20,                 // Do not indent the node.
         AsyncFunctionBody = 1 << 21,

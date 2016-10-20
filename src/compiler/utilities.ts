@@ -3084,7 +3084,13 @@ namespace ts {
         }
     }
 
-    export function isDestructuringAssignment(node: Node): node is BinaryExpression {
+    export function isAssignmentExpression(node: Node): node is AssignmentExpression {
+        return isBinaryExpression(node)
+            && isAssignmentOperator(node.operatorToken.kind)
+            && isLeftHandSideExpression(node.left);
+    }
+
+    export function isDestructuringAssignment(node: Node): node is DestructuringAssignment {
         if (isBinaryExpression(node)) {
             if (node.operatorToken.kind === SyntaxKind.EqualsToken) {
                 const kind = node.left.kind;
@@ -3522,6 +3528,7 @@ namespace ts {
         const exportSpecifiers = createMap<ExportSpecifier[]>();
         const exportedBindings = createMap<Identifier[]>();
         const uniqueExports = createMap<Identifier>();
+        let hasExportDefault = false;
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
         for (const node of sourceFile.statements) {
@@ -3538,15 +3545,6 @@ namespace ts {
                     if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
                         // import x = require("mod")
                         externalImports.push(<ImportEqualsDeclaration>node);
-                    }
-
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        // export import x = ...
-                        const name = (<ImportEqualsDeclaration>node).name;
-                        if (!uniqueExports[name.text]) {
-                            multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                            uniqueExports[name.text] = name;
-                        }
                     }
 
                     break;
@@ -3590,11 +3588,10 @@ namespace ts {
                     }
                     break;
 
-                case SyntaxKind.VariableDeclaration:
-                    // export var x
+                case SyntaxKind.VariableStatement:
                     if (hasModifier(node, ModifierFlags.Export)) {
                         for (const decl of (<VariableStatement>node).declarationList.declarations) {
-                            collectExportedVariableInfo(decl, exportedBindings, uniqueExports);
+                            collectExportedVariableInfo(decl, uniqueExports);
                         }
                     }
                     break;
@@ -3603,9 +3600,9 @@ namespace ts {
                     if (hasModifier(node, ModifierFlags.Export)) {
                         if (hasModifier(node, ModifierFlags.Default)) {
                             // export default function() { }
-                            if (!uniqueExports["default"]) {
+                            if (!hasExportDefault) {
                                 multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
-                                uniqueExports["default"] = createIdentifier("default");
+                                hasExportDefault = true;
                             }
                         }
                         else {
@@ -3623,8 +3620,9 @@ namespace ts {
                     if (hasModifier(node, ModifierFlags.Export)) {
                         if (hasModifier(node, ModifierFlags.Default)) {
                             // export default class { }
-                            if (!uniqueExports["default"]) {
+                            if (!hasExportDefault) {
                                 multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
+                                hasExportDefault = true;
                             }
                         }
                         else {
@@ -3640,25 +3638,24 @@ namespace ts {
             }
         }
 
-        const exportedNames: Identifier[] = [];
+        let exportedNames: Identifier[];
         for (const key in uniqueExports) {
-            exportedNames.push(uniqueExports[key]);
+            exportedNames = ts.append(exportedNames, uniqueExports[key]);
         }
 
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames };
     }
 
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, exportedNames: Map<Identifier[]>, uniqueExports: Map<Identifier>) {
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<Identifier>) {
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {
-                    collectExportedVariableInfo(element, exportedNames, uniqueExports);
+                    collectExportedVariableInfo(element, uniqueExports);
                 }
             }
         }
         else if (!isGeneratedIdentifier(decl.name)) {
             if (!uniqueExports[decl.name.text]) {
-                multiMapAdd(exportedNames, getOriginalNodeId(decl), decl.name);
                 uniqueExports[decl.name.text] = decl.name;
             }
         }
@@ -3900,6 +3897,14 @@ namespace ts {
     }
 
     // Expression
+
+    export function isArrayLiteralExpression(node: Node): node is ArrayLiteralExpression {
+        return node.kind === SyntaxKind.ArrayLiteralExpression;
+    }
+
+    export function isObjectLiteralExpression(node: Node): node is ObjectLiteralExpression {
+        return node.kind === SyntaxKind.ObjectLiteralExpression;
+    }
 
     export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
         return node.kind === SyntaxKind.PropertyAccessExpression;
@@ -4161,7 +4166,8 @@ namespace ts {
             || kind === SyntaxKind.WhileStatement
             || kind === SyntaxKind.WithStatement
             || kind === SyntaxKind.NotEmittedStatement
-            || kind === SyntaxKind.EndOfDeclarationMarker;
+            || kind === SyntaxKind.EndOfDeclarationMarker
+            || kind === SyntaxKind.MergeDeclarationMarker;
     }
 
     export function isDeclaration(node: Node): node is Declaration {

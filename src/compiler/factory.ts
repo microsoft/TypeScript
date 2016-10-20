@@ -1473,6 +1473,17 @@ namespace ts {
     }
 
     /**
+     * Creates a synthetic element to act as a placeholder for the beginning of a merged declaration in
+     * order to properly emit exports.
+     */
+    export function createMergeDeclarationMarker(original: Node) {
+        const node = <MergeDeclarationMarker>createNode(SyntaxKind.MergeDeclarationMarker);
+        node.emitNode = {};
+        node.original = original;
+        return node;
+    }
+
+    /**
      * Creates a synthetic expression to act as a placeholder for a not-emitted expression in
      * order to preserve comments or sourcemap positions.
      *
@@ -2206,7 +2217,7 @@ namespace ts {
      * Gets whether an identifier should only be referred to by its local name.
      */
     export function isLocalName(node: Identifier) {
-        return (getEmitFlags(node) & EmitFlags.ExportBindingName) === EmitFlags.LocalName;
+        return (getEmitFlags(node) & EmitFlags.LocalName) !== 0;
     }
 
     /**
@@ -2228,32 +2239,7 @@ namespace ts {
      * name points to an exported symbol.
      */
     export function isExportName(node: Identifier) {
-        return (getEmitFlags(node) & EmitFlags.ExportBindingName) === EmitFlags.ExportName;
-    }
-
-    /**
-     * Gets the export binding name of a declaration for use in the left-hand side of assignment
-     * expressions. This is primarily used for declarations that can be referred to by name in the
-     * declaration's immediate scope (classes, enums, namespaces). If the declaration is exported
-     * and the name is the target of an assignment expression, its export binding name should be
-     * substituted with an expression that assigns *both* the local *and* export names of the
-     * declaration. If an export binding name appears in any other position it should be treated
-     * as a local name.
-     *
-     * @param node The declaration.
-     * @param allowComments A value indicating whether comments may be emitted for the name.
-     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
-     */
-    export function getExportBindingName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier {
-        return getName(node, allowComments, allowSourceMaps, EmitFlags.ExportBindingName);
-    }
-
-    /**
-     * Gets whether an identifier should be treated as both an export name and a local name when
-     * it is the target of an assignment expression.
-     */
-    export function isExportBindingName(node: Identifier) {
-        return (getEmitFlags(node) & EmitFlags.ExportBindingName) === EmitFlags.ExportBindingName;
+        return (getEmitFlags(node) & EmitFlags.ExportName) !== 0;
     }
 
     /**

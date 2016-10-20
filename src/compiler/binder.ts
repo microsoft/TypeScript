@@ -2485,7 +2485,7 @@ namespace ts {
             && (leftKind === SyntaxKind.ObjectLiteralExpression
                 || leftKind === SyntaxKind.ArrayLiteralExpression)) {
             // Destructuring assignments are ES6 syntax.
-            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.DestructuringAssignment;
+            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.AsteriskAsteriskToken
             || operatorTokenKind === SyntaxKind.AsteriskAsteriskEqualsToken) {

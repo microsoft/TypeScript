@@ -112,10 +112,6 @@ namespace ts {
 
         transformers.push(transformTypeScript);
 
-        if (moduleKind === ModuleKind.System) {
-            transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
-        }
-
         if (jsx === JsxEmit.React) {
             transformers.push(transformJsx);
         }
@@ -133,10 +129,10 @@ namespace ts {
             transformers.push(transformGenerators);
         }
 
-        if (moduleKind !== ModuleKind.System) {
-            transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
-        }
+        transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
 
+        // The ES5 transformer is last so that it can substitute expressions like `exports.default`
+        // for ES3.
         if (languageVersion < ScriptTarget.ES5) {
             transformers.push(transformES5);
         }

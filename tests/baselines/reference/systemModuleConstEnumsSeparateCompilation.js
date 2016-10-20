@@ -20,8 +20,8 @@ System.register([], function (exports_1, context_1) {
         use(TopLevelConstEnum.X);
         use(M.NonTopLevelConstEnum.X);
     }
-    var TopLevelConstEnum, M;
     exports_1("foo", foo);
+    var TopLevelConstEnum, M;
     return {
         setters: [],
         execute: function () {

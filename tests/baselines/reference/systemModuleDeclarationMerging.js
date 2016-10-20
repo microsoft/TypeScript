@@ -14,8 +14,8 @@ System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function F() { }
-    var C, E;
     exports_1("F", F);
+    var C, E;
     return {
         setters: [],
         execute: function () {

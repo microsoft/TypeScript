@@ -2353,7 +2353,7 @@ namespace ts {
                     context,
                     node,
                     hoistVariableDeclaration,
-                    getNamespaceMemberNameWithSourceMapsAndWithoutComments,
+                    createNamespaceExportExpression,
                     visitor
                 );
             }
@@ -2709,9 +2709,13 @@ namespace ts {
                 return true;
             }
             else {
-                const notEmittedStatement = createNotEmittedStatement(statement);
-                setEmitFlags(notEmittedStatement, EmitFlags.NoComments);
-                statements.push(notEmittedStatement);
+                // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
+                // declaration we do not emit a leading variable declaration. To preserve the
+                // begin/end semantics of the declararation and to properly handle exports
+                // we wrap the leading variable declaration in a `MergeDeclarationMarker`.
+                const mergeMarker = createMergeDeclarationMarker(statement);
+                setEmitFlags(mergeMarker, EmitFlags.NoComments | EmitFlags.HasEndOfDeclarationMarker);
+                statements.push(mergeMarker);
                 return false;
             }
         }
@@ -3061,10 +3065,13 @@ namespace ts {
                     createVariableStatement(
                         visitNodes(node.modifiers, modifierVisitor, isModifier),
                         createVariableDeclarationList([
-                            createVariableDeclaration(
-                                node.name,
-                                /*type*/ undefined,
-                                moduleReference
+                            setOriginalNode(
+                                createVariableDeclaration(
+                                    node.name,
+                                    /*type*/ undefined,
+                                    moduleReference
+                                ),
+                                node
                             )
                         ]),
                         node
@@ -3150,6 +3157,10 @@ namespace ts {
                 ),
                 location
             );
+        }
+
+        function createNamespaceExportExpression(exportName: Identifier, exportValue: Expression, location?: TextRange) {
+            return createAssignment(getNamespaceMemberNameWithSourceMapsAndWithoutComments(exportName), exportValue, location);
         }
 
         function getNamespaceMemberNameWithSourceMapsAndWithoutComments(name: Identifier) {
@@ -3343,11 +3354,11 @@ namespace ts {
 
         function trySubstituteNamespaceExportedName(node: Identifier): Expression {
             // If this is explicitly a local name, do not substitute.
-            if (enabledSubstitutions & applicableSubstitutions && (getEmitFlags(node) & EmitFlags.LocalName) === 0) {
+            if (enabledSubstitutions & applicableSubstitutions && !isLocalName(node)) {
                 // If we are nested within a namespace declaration, we may need to qualifiy
                 // an identifier that is exported from a merged namespace.
                 const container = resolver.getReferencedExportContainer(node, /*prefixLocals*/ false);
-                if (container) {
+                if (container && container.kind !== SyntaxKind.SourceFile) {
                     const substitute =
                         (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
                         (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);

@@ -14,8 +14,8 @@ System.register([], function (exports_1, context_1) {
     function bar() {
         return A.B.C.foo();
     }
-    var A;
     exports_1("bar", bar);
+    var A;
     return {
         setters: [],
         execute: function () {
