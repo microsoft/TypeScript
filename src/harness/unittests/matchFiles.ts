@@ -189,7 +189,10 @@ namespace ts {
                 };
                 const expected: ts.ParsedCommandLine = {
                     options: {},
-                    errors: [],
+                    errors: [
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                    ],
                     fileNames: [],
                     wildcardDirectories: {},
                 };
@@ -207,7 +210,10 @@ namespace ts {
                 };
                 const expected: ts.ParsedCommandLine = {
                     options: {},
-                    errors: [],
+                    errors: [
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                    ],
                     fileNames: [],
                     wildcardDirectories: {},
                 };
@@ -551,7 +557,10 @@ namespace ts {
                 };
                 const expected: ts.ParsedCommandLine = {
                     options: {},
-                    errors: [],
+                    errors: [
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                    ],
                     fileNames: [],
                     wildcardDirectories: {
                         "c:/dev": ts.WatchDirectoryFlags.Recursive
@@ -619,7 +628,7 @@ namespace ts {
             it("with common package folders and no exclusions", () => {
                 const json = {
                     include: [
-                       "**/a.ts"
+                        "**/a.ts"
                     ]
                 };
                 const expected: ts.ParsedCommandLine = {
@@ -701,7 +710,10 @@ namespace ts {
                     options: {
                         allowJs: false
                     },
-                    errors: [],
+                    errors: [
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                    ],
                     fileNames: [],
                     wildcardDirectories: {
                         "c:/dev/js": ts.WatchDirectoryFlags.None
@@ -828,7 +840,10 @@ namespace ts {
                 };
                 const expected: ts.ParsedCommandLine = {
                     options: {},
-                    errors: [],
+                    errors: [
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            "c:/dev", JSON.stringify(json.include), JSON.stringify(json.exclude))]
+                    ,
                     fileNames: [],
                     wildcardDirectories: {}
                 };
@@ -1030,7 +1045,9 @@ namespace ts {
                     const expected: ts.ParsedCommandLine = {
                         options: {},
                         errors: [
-                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**")
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**"),
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                                "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
@@ -1051,7 +1068,10 @@ namespace ts {
                     };
                     const expected: ts.ParsedCommandLine = {
                         options: {},
-                        errors: [],
+                        errors: [
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                                "c:/dev", JSON.stringify(json.include), JSON.stringify(json.exclude))
+                        ],
                         fileNames: [],
                         wildcardDirectories: {}
                     };
@@ -1071,7 +1091,9 @@ namespace ts {
                     const expected: ts.ParsedCommandLine = {
                         options: {},
                         errors: [
-                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, "**/x/**/*")
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, "**/x/**/*"),
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                                "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
@@ -1122,7 +1144,9 @@ namespace ts {
                     const expected: ts.ParsedCommandLine = {
                         options: {},
                         errors: [
-                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/../*")
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/../*"),
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                                "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
@@ -1142,7 +1166,9 @@ namespace ts {
                     const expected: ts.ParsedCommandLine = {
                         options: {},
                         errors: [
-                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/../*")
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/../*"),
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                                "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
@@ -1195,7 +1221,7 @@ namespace ts {
                     const expected: ts.ParsedCommandLine = {
                         options: {},
                         errors: [
-                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0,  "**/y/..")
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/..")
                         ],
                         fileNames: [
                             "c:/dev/a.ts",
@@ -1320,7 +1346,10 @@ namespace ts {
                     };
                     const expected: ts.ParsedCommandLine = {
                         options: {},
-                        errors: [],
+                        errors: [
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                                "c:/dev", JSON.stringify(json.include), JSON.stringify(json.exclude))
+                        ],
                         fileNames: [],
                         wildcardDirectories: {}
                     };

@@ -3077,6 +3077,7 @@
         "category": "Error",
         "code": 17010
     },
+
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
@@ -3085,6 +3086,15 @@
         "category": "Error",
         "code": 18001
     },
+    "No input files were found in config file: '{0}'. 'files' list is empty.": {
+        "category": "Error",
+        "code": 18002
+    },
+    "No input files were found in config file: '{0}'. Here are the contents of include: {1} and exclude: {2} lists.": {
+        "category": "Error",
+        "code": 18003
+    },
+
     "Add missing 'super()' call.": {
         "category": "Message",
         "code": 90001
