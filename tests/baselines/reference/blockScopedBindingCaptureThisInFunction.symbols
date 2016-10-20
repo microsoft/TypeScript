@@ -1,0 +1,11 @@
+=== tests/cases/compiler/blockScopedBindingCaptureThisInFunction.ts ===
+// https://github.com/Microsoft/TypeScript/issues/11038
+() => function () {
+    for (let someKey in {}) {
+>someKey : Symbol(someKey, Decl(blockScopedBindingCaptureThisInFunction.ts, 2, 12))
+
+        this.helloWorld();
+        () => someKey;
+>someKey : Symbol(someKey, Decl(blockScopedBindingCaptureThisInFunction.ts, 2, 12))
+    }
+};

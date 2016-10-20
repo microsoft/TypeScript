@@ -278,14 +278,9 @@
 --------------------------------
 37 >        throw new Error();
 
-    ~~~~~~~~~~~~~                                 => Pos: (549 to 561)  SpanInfo: {"start":557,"length":17}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (549 to 575)  SpanInfo: {"start":557,"length":17}
     >throw new Error()
     >:=> (line 37, col 8) to (line 37, col 25)
-37 >        throw new Error();
-
-                 ~~~~~~~~~~~~~~                   => Pos: (562 to 575)  SpanInfo: {"start":563,"length":11}
-    >new Error()
-    >:=> (line 37, col 14) to (line 37, col 25)
 --------------------------------
 38 >    } catch (e1) {
 

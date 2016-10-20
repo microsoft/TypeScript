@@ -11,7 +11,7 @@ module MsPortal.Controls.Base.ItemList {
 
         // Removing this line fixes the constructor of ItemValue
         options: ViewModel<TValue>;
->options : Symbol(options, Decl(recursivelySpecializedConstructorDeclaration.ts, 2, 40))
+>options : Symbol(Interface.options, Decl(recursivelySpecializedConstructorDeclaration.ts, 2, 40))
 >ViewModel : Symbol(ViewModel, Decl(recursivelySpecializedConstructorDeclaration.ts, 10, 5))
 >TValue : Symbol(TValue, Decl(recursivelySpecializedConstructorDeclaration.ts, 2, 31))
     }    

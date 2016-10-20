@@ -10,10 +10,10 @@ declare module "SubModule" {
 >StaticVar : Symbol(SubModule.StaticVar, Decl(cyclicModuleImport.ts, 2, 21))
 
         public InstanceVar: number;
->InstanceVar : Symbol(InstanceVar, Decl(cyclicModuleImport.ts, 3, 40))
+>InstanceVar : Symbol(SubModule.InstanceVar, Decl(cyclicModuleImport.ts, 3, 40))
 
         public main: MainModule;
->main : Symbol(main, Decl(cyclicModuleImport.ts, 4, 35))
+>main : Symbol(SubModule.main, Decl(cyclicModuleImport.ts, 4, 35))
 >MainModule : Symbol(MainModule, Decl(cyclicModuleImport.ts, 0, 28))
 
         constructor();
@@ -29,7 +29,7 @@ declare module "MainModule" {
 >MainModule : Symbol(MainModule, Decl(cyclicModuleImport.ts, 11, 44))
 
         public SubModule: SubModule;
->SubModule : Symbol(SubModule, Decl(cyclicModuleImport.ts, 12, 22))
+>SubModule : Symbol(MainModule.SubModule, Decl(cyclicModuleImport.ts, 12, 22))
 >SubModule : Symbol(SubModule, Decl(cyclicModuleImport.ts, 10, 29))
 
         constructor();

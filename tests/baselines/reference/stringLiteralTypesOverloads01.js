@@ -9,7 +9,7 @@ function getFalsyPrimitive(x: "boolean" | "string"): boolean | string;
 function getFalsyPrimitive(x: "boolean" | "number"): boolean | number;
 function getFalsyPrimitive(x: "number" | "string"): number | string;
 function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string | boolean;
-function getFalsyPrimitive(x: PrimitiveName) {
+function getFalsyPrimitive(x: PrimitiveName): number | string | boolean {
     if (x === "string") {
         return "";
     }
@@ -109,6 +109,6 @@ declare const boolean: "boolean";
 declare const stringOrNumber: "string" | "number";
 declare const stringOrBoolean: "string" | "boolean";
 declare const booleanOrNumber: "number" | "boolean";
-declare const stringOrBooleanOrNumber: "string" | "boolean" | "number";
+declare const stringOrBooleanOrNumber: PrimitiveName;
 declare namespace Consts2 {
 }

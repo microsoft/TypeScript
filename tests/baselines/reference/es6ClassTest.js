@@ -103,19 +103,20 @@ var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y, z) {
         if (z === void 0) { z = 0; }
-        _super.call(this, x);
-        this.y = y;
-        this.z = z;
-        this.gar = 0;
-        this.zoo = "zoo";
-        this.x = x;
-        this.gar = 5;
+        var _this = _super.call(this, x) || this;
+        _this.y = y;
+        _this.z = z;
+        _this.gar = 0;
+        _this.zoo = "zoo";
+        _this.x = x;
+        _this.gar = 5;
+        return _this;
     }
     Foo.prototype.bar = function () { return 0; };
     Foo.prototype.boo = function (x) { return x; };
-    Foo.statVal = 0;
     return Foo;
 }(Bar));
+Foo.statVal = 0;
 var f = new Foo();
 //class GetSetMonster {
 //  // attack(target) {

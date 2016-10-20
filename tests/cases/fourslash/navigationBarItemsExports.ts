@@ -1,18 +1,52 @@
 /// <reference path="fourslash.ts"/>
 
 
-////export { {| "itemName": "a", "kind": "alias", "parentName": "" |}a } from "a";
+////export { a } from "a";
 ////
-////export { {| "itemName": "B", "kind": "alias", "parentName": "" |}b as B } from "a" 
+////export { b as B } from "a" 
 ////
-////{| "itemName": "e", "kind": "alias", "parentName": "" |} export import e = require("a");
+////export import e = require("a");
 ////
 ////export * from "a"; // no bindings here
 
-test.markers().forEach((marker) => {
-    if (marker.data) {
-        verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
-    }
+verify.navigationTree({
+    "text": "\"navigationBarItemsExports\"",
+    "kind": "module",
+    "childItems": [
+        {
+            "text": "a",
+            "kind": "alias"
+        },
+        {
+            "text": "B",
+            "kind": "alias"
+        },
+        {
+            "text": "e",
+            "kind": "alias",
+            "kindModifiers": "export"
+        }
+    ]
 });
 
-verify.getScriptLexicalStructureListCount(4);
+verify.navigationBar([
+    {
+        "text": "\"navigationBarItemsExports\"",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "a",
+                "kind": "alias"
+            },
+            {
+                "text": "B",
+                "kind": "alias"
+            },
+            {
+                "text": "e",
+                "kind": "alias",
+                "kindModifiers": "export"
+            }
+        ]
+    }
+]);

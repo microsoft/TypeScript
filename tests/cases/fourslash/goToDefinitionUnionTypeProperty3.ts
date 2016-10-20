@@ -9,7 +9,4 @@
 ////
 ////var x = (strings || numbers)./*usage*/specialPop()
 
-goTo.marker("usage");
-verify.definitionCountIs(1);
-goTo.definition();
-verify.caretAtMarker("definition");
+verify.goToDefinition("usage", "definition");

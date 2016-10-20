@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-////export {/*classAliasDefinition*/Class} from "a";
+////export {/*classAliasDefinition*/Class} from "./a";
 
 
 // @Filename: a.ts
@@ -14,8 +14,5 @@
 ////    x;
 ////}
 
-goTo.file("b.ts");
 
-goTo.marker('classAliasDefinition');
-goTo.definition();
-verify.caretAtMarker('classDefinition');
+verify.goToDefinition("classAliasDefinition", "classDefinition");

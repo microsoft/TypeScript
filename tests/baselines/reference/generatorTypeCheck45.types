@@ -19,7 +19,7 @@ declare function foo<T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) 
 foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, should be string
 >foo("", function* () { yield x => x.length }, p => undefined) : string
 >foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T) => T
->"" : string
+>"" : ""
 >function* () { yield x => x.length } : () => IterableIterator<(x: string) => number>
 >yield x => x.length : any
 >x => x.length : (x: string) => number

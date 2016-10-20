@@ -32,15 +32,15 @@ var Base = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     C.prototype.foo = function () {
         var _this = this;
         (function () {
             var obj = (_a = {},
-                _a[_super.prototype.bar.call(_this)] = function () { },
-                _a
-            );
+                _a[_super.prototype.bar.call(_this)] = function () { } // needs capture
+            ,
+                _a);
             var _a;
         });
         return 0;

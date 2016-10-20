@@ -50,52 +50,29 @@
 
 ////var /*23*/r8a = _.map</*error1*/B/*error2*/, string>(c5, (/*8*/x) => { return x.foo() });
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
-goTo.marker('1');
-verify.quickInfoIs('(parameter) x: number');
-goTo.marker('2');
-verify.quickInfoIs('(parameter) x: Collection<number>');
-goTo.marker('3');
-verify.quickInfoIs('(parameter) x: A');
-goTo.marker('4');
-verify.quickInfoIs('(parameter) x: B<any>');
-goTo.marker('5');
-verify.quickInfoIs('(parameter) x: number');
-goTo.marker('6');
-verify.quickInfoIs('var c3: Collection<Collection<number>>');
-goTo.marker('7');
-verify.quickInfoIs('(parameter) x: A');
-goTo.marker('8');
-verify.quickInfoIs('(parameter) x: any'); // Specialized to any because no type argument was specified
-goTo.marker('9');
-verify.quickInfoIs('var r1a: Collection<string>');
-goTo.marker('10');
-verify.quickInfoIs('var r1b: Collection<string>');
-goTo.marker('11');
-verify.quickInfoIs('var r2a: Collection<number>');
-goTo.marker('12');
-verify.quickInfoIs('var r2b: Collection<number>');
-goTo.marker('13');
-verify.quickInfoIs('var r3a: Collection<A>');
-goTo.marker('14');
-verify.quickInfoIs('var r3b: Collection<A>');
-goTo.marker('15');
-verify.quickInfoIs('var r4a: Collection<any>');
-goTo.marker('17');
-verify.quickInfoIs('var r5a: Collection<string>');
-goTo.marker('18');
-verify.quickInfoIs('var r5b: Collection<string>');
-goTo.marker('19');
-verify.quickInfoIs('var r6a: Collection<number>');
-goTo.marker('20');
-verify.quickInfoIs('var r6b: Collection<number>');
-goTo.marker('21');
-verify.quickInfoIs('var r7a: Collection<A>');
-goTo.marker('22');
-verify.quickInfoIs('var r7b: Collection<A>');
-goTo.marker('23');
-verify.quickInfoIs('var r8a: Collection<string>');
+verify.quickInfos({
+    1: "(parameter) x: number",
+    2: "(parameter) x: Collection<number>",
+    3: "(parameter) x: A",
+    4: "(parameter) x: B<any>",
+    5: "(parameter) x: number",
+    6: "var c3: Collection<Collection<number>>",
+    7: "(parameter) x: A",
+    8: "(parameter) x: any", // Specialized to any because no type argument was specified
+    9: "var r1a: Collection<string>",
+    10: "var r1b: Collection<string>",
+    11: "var r2a: Collection<number>",
+    12: "var r2b: Collection<number>",
+    13: "var r3a: Collection<A>",
+    14: "var r3b: Collection<A>",
+    15: "var r4a: Collection<any>",
+    17: "var r5a: Collection<string>",
+    18: "var r5b: Collection<string>",
+    19: "var r6a: Collection<number>",
+    20: "var r6b: Collection<number>",
+    21: "var r7a: Collection<A>",
+    22: "var r7b: Collection<A>",
+    23: "var r8a: Collection<string>"
+});
 
 verify.errorExistsBetweenMarkers('error1', 'error2');

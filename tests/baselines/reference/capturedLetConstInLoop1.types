@@ -1,18 +1,18 @@
 === tests/cases/compiler/capturedLetConstInLoop1.ts ===
 //==== let
 for (let x in {}) {
->x : any
+>x : string
 >{} : {}
 
     (function() { return x});
->(function() { return x}) : () => any
->function() { return x} : () => any
->x : any
+>(function() { return x}) : () => string
+>function() { return x} : () => string
+>x : string
 
     (() => x);
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => string
+>() => x : () => string
+>x : string
 }
 
 for (let x of []) {
@@ -52,8 +52,8 @@ for (let x = 0; x < 1; ++x) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     let x;
 >x : any
@@ -85,8 +85,8 @@ do {
 
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (let y = 0; y < 1; ++y) {
 >y : number
@@ -140,8 +140,8 @@ for (let x = 0, y = 1; x < 1; ++x) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     let x, y;
 >x : any
@@ -183,8 +183,8 @@ do {
 
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (let y = 0; y < 1; ++y) {
 >y : number
@@ -216,18 +216,18 @@ for (let y = 0; y < 1; ++y) {
 
 //=========const
 for (const x in {}) {
->x : any
+>x : string
 >{} : {}
 
     (function() { return x});
->(function() { return x}) : () => any
->function() { return x} : () => any
->x : any
+>(function() { return x}) : () => string
+>function() { return x} : () => string
+>x : string
 
     (() => x);
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => string
+>() => x : () => string
+>x : string
 }
 
 for (const x of []) {
@@ -265,8 +265,8 @@ for (const x = 0; x < 1;) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     const x = 1;
 >x : number
@@ -300,8 +300,8 @@ do {
 
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (const y = 0; y < 1;) {
 >y : number
@@ -351,8 +351,8 @@ for (const x = 0, y = 1; x < 1;) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     const x = 1, y = 1;
 >x : number
@@ -398,8 +398,8 @@ do {
 
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (const y = 0; y < 1;) {
 >y : number

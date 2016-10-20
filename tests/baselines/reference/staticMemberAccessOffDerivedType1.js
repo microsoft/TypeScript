@@ -26,8 +26,8 @@ var SomeBase = (function () {
 var P = (function (_super) {
     __extends(P, _super);
     function P() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
-    P.SomeNumber = P.GetNumber();
     return P;
 }(SomeBase));
+P.SomeNumber = P.GetNumber();

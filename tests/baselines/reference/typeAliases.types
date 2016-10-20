@@ -94,14 +94,14 @@ var x8: T8;
 >T8 : string | boolean
 
 type T9 = () => string;
->T9 : () => string
+>T9 : T9
 
 var x9: () => string;
 >x9 : () => string
 
 var x9: T9;
 >x9 : () => string
->T9 : () => string
+>T9 : T9
 
 type T10 = { x: number };
 >T10 : { x: number; }
@@ -191,7 +191,7 @@ type Meters = number
 enum E { x = 10 }
 >E : E
 >x : E
->10 : number
+>10 : 10
 
 declare function f15(a: string): boolean;
 >f15 : { (a: string): boolean; (a: number): string; }
@@ -231,15 +231,15 @@ f16(x);
 var y: StringAndBoolean = ["1", false];
 >y : [string, boolean]
 >StringAndBoolean : [string, boolean]
->["1", false] : [string, boolean]
->"1" : string
->false : boolean
+>["1", false] : [string, false]
+>"1" : "1"
+>false : false
 
 y[0].toLowerCase();
 >y[0].toLowerCase() : string
 >y[0].toLowerCase : () => string
 >y[0] : string
 >y : [string, boolean]
->0 : number
+>0 : 0
 >toLowerCase : () => string
 

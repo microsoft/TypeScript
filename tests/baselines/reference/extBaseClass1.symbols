@@ -6,7 +6,7 @@ module M {
 >B : Symbol(B, Decl(extBaseClass1.ts, 0, 10))
 
 	    public x=10;
->x : Symbol(x, Decl(extBaseClass1.ts, 1, 20))
+>x : Symbol(B.x, Decl(extBaseClass1.ts, 1, 20))
     }
 
     export class C extends B {

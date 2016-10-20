@@ -10,30 +10,30 @@ interface Array<T> {
 let t: [number, string] = [42, "hello"];
 >t : [number, string]
 >[42, "hello"] : [number, string]
->42 : number
->"hello" : string
+>42 : 42
+>"hello" : "hello"
 
 let a = t.slice();
 >a : [number, string]
 >t.slice() : [number, string]
->t.slice : { (start?: number, end?: number): (number | string)[]; (): [number, string]; }
+>t.slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
 >t : [number, string]
->slice : { (start?: number, end?: number): (number | string)[]; (): [number, string]; }
+>slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
 
 let b = t.slice(1);
->b : (number | string)[]
->t.slice(1) : (number | string)[]
->t.slice : { (start?: number, end?: number): (number | string)[]; (): [number, string]; }
+>b : (string | number)[]
+>t.slice(1) : (string | number)[]
+>t.slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
 >t : [number, string]
->slice : { (start?: number, end?: number): (number | string)[]; (): [number, string]; }
->1 : number
+>slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
+>1 : 1
 
 let c = t.slice(0, 1);
->c : (number | string)[]
->t.slice(0, 1) : (number | string)[]
->t.slice : { (start?: number, end?: number): (number | string)[]; (): [number, string]; }
+>c : (string | number)[]
+>t.slice(0, 1) : (string | number)[]
+>t.slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
 >t : [number, string]
->slice : { (start?: number, end?: number): (number | string)[]; (): [number, string]; }
->0 : number
->1 : number
+>slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
+>0 : 0
+>1 : 1
 

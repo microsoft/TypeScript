@@ -15,7 +15,7 @@
 ////export = A;
 
 // @Filename: cloduleAsBaseClass2_1.ts
-////import B = require('cloduleAsBaseClass2_0');
+////import B = require('./cloduleAsBaseClass2_0');
 ////class D extends B {
 ////    constructor() {
 ////        super(1);
@@ -27,9 +27,6 @@
 ////var d: D;
 ////d./*1*/
 ////D./*2*/
-
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
 
 goTo.marker('1');
 verify.completionListContains('foo');

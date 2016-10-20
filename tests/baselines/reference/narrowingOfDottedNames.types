@@ -1,0 +1,115 @@
+=== tests/cases/compiler/narrowingOfDottedNames.ts ===
+// Repro from #8383
+
+class A {
+>A : A
+
+    prop: { a: string; };
+>prop : { a: string; }
+>a : string
+}
+
+class B {
+>B : B
+
+    prop: { b: string; }
+>prop : { b: string; }
+>b : string
+}
+
+function isA(x: any): x is A {
+>isA : (x: any) => x is A
+>x : any
+>x : any
+>A : A
+
+    return x instanceof A;
+>x instanceof A : boolean
+>x : any
+>A : typeof A
+}
+
+function isB(x: any): x is B {
+>isB : (x: any) => x is B
+>x : any
+>x : any
+>B : B
+
+    return x instanceof B;
+>x instanceof B : boolean
+>x : any
+>B : typeof B
+}
+
+function f1(x: A | B) {
+>f1 : (x: A | B) => void
+>x : A | B
+>A : A
+>B : B
+
+    while (true) {
+>true : true
+
+        if (x instanceof A) {
+>x instanceof A : boolean
+>x : A | B
+>A : typeof A
+
+            x.prop.a;
+>x.prop.a : string
+>x.prop : { a: string; }
+>x : A
+>prop : { a: string; }
+>a : string
+        }
+        else if (x instanceof B) {
+>x instanceof B : boolean
+>x : B
+>B : typeof B
+
+            x.prop.b;
+>x.prop.b : string
+>x.prop : { b: string; }
+>x : B
+>prop : { b: string; }
+>b : string
+        }
+    }
+}
+
+function f2(x: A | B) {
+>f2 : (x: A | B) => void
+>x : A | B
+>A : A
+>B : B
+
+    while (true) {
+>true : true
+
+        if (isA(x)) {
+>isA(x) : boolean
+>isA : (x: any) => x is A
+>x : A | B
+
+            x.prop.a;
+>x.prop.a : string
+>x.prop : { a: string; }
+>x : A
+>prop : { a: string; }
+>a : string
+        }
+        else if (isB(x)) {
+>isB(x) : boolean
+>isB : (x: any) => x is B
+>x : B
+
+            x.prop.b;
+>x.prop.b : string
+>x.prop : { b: string; }
+>x : B
+>prop : { b: string; }
+>b : string
+        }
+    }
+}
+

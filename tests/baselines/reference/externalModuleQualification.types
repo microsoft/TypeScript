@@ -1,7 +1,7 @@
 === tests/cases/compiler/externalModuleQualification.ts ===
 export var ID = "test";
 >ID : string
->"test" : string
+>"test" : "test"
 
 export class DiffEditor<A, B, C> {
 >DiffEditor : DiffEditor<A, B, C>

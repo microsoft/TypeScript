@@ -43,7 +43,7 @@ var Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return VisualizationModel;
 }(Backbone.Model));
@@ -64,8 +64,9 @@ var C = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
-        this.x = moduleA;
+        var _this = _super.apply(this, arguments) || this;
+        _this.x = moduleA;
+        return _this;
     }
     return D;
 }(C));

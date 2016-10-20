@@ -4,7 +4,7 @@ interface IPromise<T> {
 >T : Symbol(T, Decl(propagationOfPromiseInitialization.ts, 0, 19))
 
     then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;
->then : Symbol(then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+>then : Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
 >TResult : Symbol(TResult, Decl(propagationOfPromiseInitialization.ts, 1, 9))
 >successCallback : Symbol(successCallback, Decl(propagationOfPromiseInitialization.ts, 1, 18))
 >promiseValue : Symbol(promiseValue, Decl(propagationOfPromiseInitialization.ts, 1, 36))

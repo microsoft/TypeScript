@@ -1,0 +1,19 @@
+=== tests/cases/compiler/overloadOnConstInObjectLiteralImplementingAnInterface.ts ===
+interface I {
+>I : Symbol(I, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 0, 0))
+
+    x1(a: number, callback: (x: 'hi') => number);
+>x1 : Symbol(I.x1, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 0, 13))
+>a : Symbol(a, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 1, 7))
+>callback : Symbol(callback, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 1, 17))
+>x : Symbol(x, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 1, 29))
+}
+
+var i2: I = { x1: (a: number, cb: (x: 'hi') => number) => { } }; // error
+>i2 : Symbol(i2, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 4, 3))
+>I : Symbol(I, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 0, 0))
+>x1 : Symbol(x1, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 4, 13))
+>a : Symbol(a, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 4, 19))
+>cb : Symbol(cb, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 4, 29))
+>x : Symbol(x, Decl(overloadOnConstInObjectLiteralImplementingAnInterface.ts, 4, 35))
+

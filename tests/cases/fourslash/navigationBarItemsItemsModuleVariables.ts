@@ -19,12 +19,88 @@
 ////    export var z = 0;
 ////}
 goTo.marker("file1");
-verify.getScriptLexicalStructureListContains("Module1", "module");
-verify.getScriptLexicalStructureListContains("x", "var");
 // nothing else should show up
-verify.getScriptLexicalStructureListCount(2);
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "Module1",
+            "kind": "module",
+            "childItems": [
+                {
+                    "text": "x",
+                    "kind": "var",
+                    "kindModifiers": "export"
+                }
+            ]
+        }
+    ]
+});
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "script",
+        "childItems": [
+            {
+                "text": "Module1",
+                "kind": "module"
+            }
+        ]
+    },
+    {
+        "text": "Module1",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "x",
+                "kind": "var",
+                "kindModifiers": "export"
+            }
+        ],
+        "indent": 1
+    }
+]);
 
 goTo.marker("file2");
-verify.getScriptLexicalStructureListContains("Module1.SubModule", "module");
-verify.getScriptLexicalStructureListContains("y", "var");
-verify.getScriptLexicalStructureListCount(2);
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "Module1.SubModule",
+            "kind": "module",
+            "childItems": [
+                {
+                    "text": "y",
+                    "kind": "var",
+                    "kindModifiers": "export"
+                }
+            ]
+        }
+    ]
+});
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "script",
+        "childItems": [
+            {
+                "text": "Module1.SubModule",
+                "kind": "module"
+            }
+        ]
+    },
+    {
+        "text": "Module1.SubModule",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "y",
+                "kind": "var",
+                "kindModifiers": "export"
+            }
+        ],
+        "indent": 1
+    }
+]);

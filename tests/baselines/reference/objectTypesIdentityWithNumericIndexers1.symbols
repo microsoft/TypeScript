@@ -47,23 +47,22 @@ var a: {
     [x: number]: string;
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 25, 5))
 }
-var b: { [x: number]: string; } = { foo: '' };
+var b: { [x: number]: string; } = { 0: '' };
 >b : Symbol(b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 3))
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 10))
->foo : Symbol(foo, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 35))
 
 function foo1(x: A);
->foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 46), Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 20))
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 44), Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 20))
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 14))
 >A : Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
 
 function foo1(x: A); // error
->foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 46), Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 20))
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 44), Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 20))
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 14))
 >A : Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
 
 function foo1(x: any) { }
->foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 46), Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 20))
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 44), Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 20))
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 31, 14))
 
 function foo1b(x: B);

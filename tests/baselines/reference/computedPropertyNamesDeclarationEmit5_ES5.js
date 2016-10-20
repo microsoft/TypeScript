@@ -20,10 +20,11 @@ var v = (_a = {},
         enumerable: true,
         configurable: true
     }),
-    _a
-);
+    _a);
 var _a;
 
 
 //// [computedPropertyNamesDeclarationEmit5_ES5.d.ts]
-declare var v: {};
+declare var v: {
+    [x: string]: any;
+};

@@ -13,16 +13,17 @@ module M {
 }
 
 //// [systemModuleConstEnums.js]
-System.register([], function(exports_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
+    var __moduleName = context_1 && context_1.id;
     function foo() {
         use(0 /* X */);
         use(0 /* X */);
     }
     exports_1("foo", foo);
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
         }
-    }
+    };
 });

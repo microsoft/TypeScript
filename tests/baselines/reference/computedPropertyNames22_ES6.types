@@ -6,8 +6,8 @@ class C {
 >bar : () => number
 
         var obj = {
->obj : {}
->{            [this.bar()]() { }        } : {}
+>obj : { [x: number]: () => void; }
+>{            [this.bar()]() { }        } : { [x: number]: () => void; }
 
             [this.bar()]() { }
 >this.bar() : number
@@ -17,6 +17,6 @@ class C {
 
         };
         return 0;
->0 : number
+>0 : 0
     }
 }

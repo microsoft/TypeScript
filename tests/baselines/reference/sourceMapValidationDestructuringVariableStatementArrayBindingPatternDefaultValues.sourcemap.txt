@@ -1,0 +1,357 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues.js
+mapUrl: sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues.js
+sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues.ts
+-------------------------------------------------------------------
+>>>var robotA = [1, "mower", "mowing"];
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^^^^^^^
+9 >                        ^^
+10>                          ^^^^^^^^
+11>                                  ^
+12>                                   ^
+13>                                    ^^^^^->
+1 >declare var console: {
+  >    log(msg: string): void;
+  >}
+  >type Robot = [number, string, string];
+  >
+2 >var 
+3 >    robotA
+4 >          : Robot = 
+5 >             [
+6 >              1
+7 >               , 
+8 >                 "mower"
+9 >                        , 
+10>                          "mowing"
+11>                                  ]
+12>                                   ;
+1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(5, 5) + SourceIndex(0)
+3 >Emitted(1, 11) Source(5, 11) + SourceIndex(0)
+4 >Emitted(1, 14) Source(5, 21) + SourceIndex(0)
+5 >Emitted(1, 15) Source(5, 22) + SourceIndex(0)
+6 >Emitted(1, 16) Source(5, 23) + SourceIndex(0)
+7 >Emitted(1, 18) Source(5, 25) + SourceIndex(0)
+8 >Emitted(1, 25) Source(5, 32) + SourceIndex(0)
+9 >Emitted(1, 27) Source(5, 34) + SourceIndex(0)
+10>Emitted(1, 35) Source(5, 42) + SourceIndex(0)
+11>Emitted(1, 36) Source(5, 43) + SourceIndex(0)
+12>Emitted(1, 37) Source(5, 44) + SourceIndex(0)
+---
+>>>var robotB = [2, "trimmer", "trimming"];
+1->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^
+6 >              ^
+7 >               ^^
+8 >                 ^^^^^^^^^
+9 >                          ^^
+10>                            ^^^^^^^^^^
+11>                                      ^
+12>                                       ^
+13>                                        ^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >var 
+3 >    robotB
+4 >          : Robot = 
+5 >             [
+6 >              2
+7 >               , 
+8 >                 "trimmer"
+9 >                          , 
+10>                            "trimming"
+11>                                      ]
+12>                                       ;
+1->Emitted(2, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(6, 5) + SourceIndex(0)
+3 >Emitted(2, 11) Source(6, 11) + SourceIndex(0)
+4 >Emitted(2, 14) Source(6, 21) + SourceIndex(0)
+5 >Emitted(2, 15) Source(6, 22) + SourceIndex(0)
+6 >Emitted(2, 16) Source(6, 23) + SourceIndex(0)
+7 >Emitted(2, 18) Source(6, 25) + SourceIndex(0)
+8 >Emitted(2, 27) Source(6, 34) + SourceIndex(0)
+9 >Emitted(2, 29) Source(6, 36) + SourceIndex(0)
+10>Emitted(2, 39) Source(6, 46) + SourceIndex(0)
+11>Emitted(2, 40) Source(6, 47) + SourceIndex(0)
+12>Emitted(2, 41) Source(6, 48) + SourceIndex(0)
+---
+>>>var _a = robotA[1], nameA = _a === void 0 ? "noName" : _a;
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^
+4 >                  ^^
+5 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                         ^
+1->
+  >
+  >let [, 
+2 >
+3 >    nameA = "noName"
+4 >                  
+5 >                    nameA = "noName"
+6 >                                                         ] = robotA;
+1->Emitted(3, 1) Source(8, 8) + SourceIndex(0)
+2 >Emitted(3, 5) Source(8, 8) + SourceIndex(0)
+3 >Emitted(3, 19) Source(8, 24) + SourceIndex(0)
+4 >Emitted(3, 21) Source(8, 8) + SourceIndex(0)
+5 >Emitted(3, 58) Source(8, 24) + SourceIndex(0)
+6 >Emitted(3, 59) Source(8, 35) + SourceIndex(0)
+---
+>>>var _b = robotB[0], numberB = _b === void 0 ? -1 : _b;
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^
+4 >                  ^^
+5 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                     ^
+7 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >let [
+2 >
+3 >    numberB = -1
+4 >                  
+5 >                    numberB = -1
+6 >                                                     ] = robotB;
+1 >Emitted(4, 1) Source(9, 6) + SourceIndex(0)
+2 >Emitted(4, 5) Source(9, 6) + SourceIndex(0)
+3 >Emitted(4, 19) Source(9, 18) + SourceIndex(0)
+4 >Emitted(4, 21) Source(9, 6) + SourceIndex(0)
+5 >Emitted(4, 54) Source(9, 18) + SourceIndex(0)
+6 >Emitted(4, 55) Source(9, 29) + SourceIndex(0)
+---
+>>>var _c = robotA[0], numberA2 = _c === void 0 ? -1 : _c, _d = robotA[1], nameA2 = _d === void 0 ? "noName" : _d, _e = robotA[2], skillA2 = _e === void 0 ? "noSkill" : _e;
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^
+4 >                  ^^
+5 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                      ^^
+7 >                                                        ^^^^^^^^^^^^^^
+8 >                                                                      ^^
+9 >                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                                              ^^
+11>                                                                                                                ^^^^^^^^^^^^^^
+12>                                                                                                                              ^^
+13>                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14>                                                                                                                                                                        ^
+1->
+  >let [
+2 >
+3 >    numberA2 = -1
+4 >                  
+5 >                    numberA2 = -1
+6 >                                                      , 
+7 >                                                        nameA2 = "noName"
+8 >                                                                      
+9 >                                                                        nameA2 = "noName"
+10>                                                                                                              , 
+11>                                                                                                                skillA2 = "noSkill"
+12>                                                                                                                              
+13>                                                                                                                                skillA2 = "noSkill"
+14>                                                                                                                                                                        ] = robotA;
+1->Emitted(5, 1) Source(10, 6) + SourceIndex(0)
+2 >Emitted(5, 5) Source(10, 6) + SourceIndex(0)
+3 >Emitted(5, 19) Source(10, 19) + SourceIndex(0)
+4 >Emitted(5, 21) Source(10, 6) + SourceIndex(0)
+5 >Emitted(5, 55) Source(10, 19) + SourceIndex(0)
+6 >Emitted(5, 57) Source(10, 21) + SourceIndex(0)
+7 >Emitted(5, 71) Source(10, 38) + SourceIndex(0)
+8 >Emitted(5, 73) Source(10, 21) + SourceIndex(0)
+9 >Emitted(5, 111) Source(10, 38) + SourceIndex(0)
+10>Emitted(5, 113) Source(10, 40) + SourceIndex(0)
+11>Emitted(5, 127) Source(10, 59) + SourceIndex(0)
+12>Emitted(5, 129) Source(10, 40) + SourceIndex(0)
+13>Emitted(5, 169) Source(10, 59) + SourceIndex(0)
+14>Emitted(5, 170) Source(10, 70) + SourceIndex(0)
+---
+>>>var _f = [3, "edging", "Trimming edges"][0], numberC2 = _f === void 0 ? -1 : _f;
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                           ^^
+5 >                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                                               ^
+7 >                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >let [
+2 >
+3 >    numberC2 = -1
+4 >                                           
+5 >                                             numberC2 = -1
+6 >                                                                               ] = [3, "edging", "Trimming edges"];
+1 >Emitted(6, 1) Source(12, 6) + SourceIndex(0)
+2 >Emitted(6, 5) Source(12, 6) + SourceIndex(0)
+3 >Emitted(6, 44) Source(12, 19) + SourceIndex(0)
+4 >Emitted(6, 46) Source(12, 6) + SourceIndex(0)
+5 >Emitted(6, 80) Source(12, 19) + SourceIndex(0)
+6 >Emitted(6, 81) Source(12, 55) + SourceIndex(0)
+---
+>>>var _g = [3, "edging", "Trimming edges"], _h = _g[0], numberC = _h === void 0 ? -1 : _h, _j = _g[1], nameC = _j === void 0 ? "noName" : _j, _k = _g[2], skillC = _k === void 0 ? "noSkill" : _k;
+1->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                        ^^
+5 >                                          ^^^^^^^^^^
+6 >                                                    ^^
+7 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                                       ^^
+9 >                                                                                         ^^^^^^^^^^
+10>                                                                                                   ^^
+11>                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+12>                                                                                                                                          ^^
+13>                                                                                                                                            ^^^^^^^^^^
+14>                                                                                                                                                      ^^
+15>                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+16>                                                                                                                                                                                               ^
+1->
+  >let 
+2 >
+3 >    [numberC = -1, nameC = "noName", skillC = "noSkill"] = [3, "edging", "Trimming edges"]
+4 >                                        
+5 >                                          numberC = -1
+6 >                                                    
+7 >                                                      numberC = -1
+8 >                                                                                       , 
+9 >                                                                                         nameC = "noName"
+10>                                                                                                   
+11>                                                                                                     nameC = "noName"
+12>                                                                                                                                          , 
+13>                                                                                                                                            skillC = "noSkill"
+14>                                                                                                                                                      
+15>                                                                                                                                                        skillC = "noSkill"
+16>                                                                                                                                                                                               ] = [3, "edging", "Trimming edges"];
+1->Emitted(7, 1) Source(13, 5) + SourceIndex(0)
+2 >Emitted(7, 5) Source(13, 5) + SourceIndex(0)
+3 >Emitted(7, 41) Source(13, 91) + SourceIndex(0)
+4 >Emitted(7, 43) Source(13, 6) + SourceIndex(0)
+5 >Emitted(7, 53) Source(13, 18) + SourceIndex(0)
+6 >Emitted(7, 55) Source(13, 6) + SourceIndex(0)
+7 >Emitted(7, 88) Source(13, 18) + SourceIndex(0)
+8 >Emitted(7, 90) Source(13, 20) + SourceIndex(0)
+9 >Emitted(7, 100) Source(13, 36) + SourceIndex(0)
+10>Emitted(7, 102) Source(13, 20) + SourceIndex(0)
+11>Emitted(7, 139) Source(13, 36) + SourceIndex(0)
+12>Emitted(7, 141) Source(13, 38) + SourceIndex(0)
+13>Emitted(7, 151) Source(13, 56) + SourceIndex(0)
+14>Emitted(7, 153) Source(13, 38) + SourceIndex(0)
+15>Emitted(7, 192) Source(13, 56) + SourceIndex(0)
+16>Emitted(7, 193) Source(13, 92) + SourceIndex(0)
+---
+>>>var _l = robotA[0], numberA3 = _l === void 0 ? -1 : _l, robotAInfo = robotA.slice(1);
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^
+4 >                  ^^
+5 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                      ^^
+7 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                                    ^
+1 >
+  >
+  >let [
+2 >
+3 >    numberA3 = -1
+4 >                  
+5 >                    numberA3 = -1
+6 >                                                      , 
+7 >                                                        ...robotAInfo
+8 >                                                                                    ] = robotA;
+1 >Emitted(8, 1) Source(15, 6) + SourceIndex(0)
+2 >Emitted(8, 5) Source(15, 6) + SourceIndex(0)
+3 >Emitted(8, 19) Source(15, 19) + SourceIndex(0)
+4 >Emitted(8, 21) Source(15, 6) + SourceIndex(0)
+5 >Emitted(8, 55) Source(15, 19) + SourceIndex(0)
+6 >Emitted(8, 57) Source(15, 21) + SourceIndex(0)
+7 >Emitted(8, 85) Source(15, 34) + SourceIndex(0)
+8 >Emitted(8, 86) Source(15, 45) + SourceIndex(0)
+---
+>>>if (nameA == nameA2) {
+1 >
+2 >^^
+3 >  ^
+4 >   ^
+5 >    ^^^^^
+6 >         ^^^^
+7 >             ^^^^^^
+8 >                   ^
+9 >                    ^
+10>                     ^
+11>                      ^^^^->
+1 >
+  >
+  >
+2 >if
+3 >   
+4 >   (
+5 >    nameA
+6 >          == 
+7 >             nameA2
+8 >                   )
+9 >                     
+10>                     {
+1 >Emitted(9, 1) Source(17, 1) + SourceIndex(0)
+2 >Emitted(9, 3) Source(17, 3) + SourceIndex(0)
+3 >Emitted(9, 4) Source(17, 4) + SourceIndex(0)
+4 >Emitted(9, 5) Source(17, 5) + SourceIndex(0)
+5 >Emitted(9, 10) Source(17, 10) + SourceIndex(0)
+6 >Emitted(9, 14) Source(17, 14) + SourceIndex(0)
+7 >Emitted(9, 20) Source(17, 20) + SourceIndex(0)
+8 >Emitted(9, 21) Source(17, 21) + SourceIndex(0)
+9 >Emitted(9, 22) Source(17, 22) + SourceIndex(0)
+10>Emitted(9, 23) Source(17, 23) + SourceIndex(0)
+---
+>>>    console.log(skillA2);
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^
+5 >               ^
+6 >                ^^^^^^^
+7 >                       ^
+8 >                        ^
+1->
+  >    
+2 >    console
+3 >           .
+4 >            log
+5 >               (
+6 >                skillA2
+7 >                       )
+8 >                        ;
+1->Emitted(10, 5) Source(18, 5) + SourceIndex(0)
+2 >Emitted(10, 12) Source(18, 12) + SourceIndex(0)
+3 >Emitted(10, 13) Source(18, 13) + SourceIndex(0)
+4 >Emitted(10, 16) Source(18, 16) + SourceIndex(0)
+5 >Emitted(10, 17) Source(18, 17) + SourceIndex(0)
+6 >Emitted(10, 24) Source(18, 24) + SourceIndex(0)
+7 >Emitted(10, 25) Source(18, 25) + SourceIndex(0)
+8 >Emitted(10, 26) Source(18, 26) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(11, 1) Source(19, 1) + SourceIndex(0)
+2 >Emitted(11, 2) Source(19, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues.js.map

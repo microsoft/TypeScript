@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "pretty": true,
+        "outFile": "../../../built/local/typingsInstaller.js",
+        "sourceMap": true,
+        "stripInternal": true,
+        "types": [
+            "node"
+        ],
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
+    },
+    "files": [
+        "../types.d.ts",
+        "typingsInstaller.ts",
+        "nodeTypingsInstaller.ts"
+    ]
+}

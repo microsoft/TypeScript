@@ -5,7 +5,7 @@ interface IPromise<T, V> {
 >V : Symbol(V, Decl(promiseIdentityWithConstraints.ts, 0, 21))
 
     then<U extends T, W extends V>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
->then : Symbol(then, Decl(promiseIdentityWithConstraints.ts, 0, 26))
+>then : Symbol(IPromise.then, Decl(promiseIdentityWithConstraints.ts, 0, 26))
 >U : Symbol(U, Decl(promiseIdentityWithConstraints.ts, 1, 9))
 >T : Symbol(T, Decl(promiseIdentityWithConstraints.ts, 0, 19))
 >W : Symbol(W, Decl(promiseIdentityWithConstraints.ts, 1, 21))
@@ -26,7 +26,7 @@ interface Promise<T, V> {
 >V : Symbol(V, Decl(promiseIdentityWithConstraints.ts, 3, 20))
 
     then<U extends T, W extends V>(callback: (x: T) => Promise<U, W>): Promise<U, W>;
->then : Symbol(then, Decl(promiseIdentityWithConstraints.ts, 3, 25))
+>then : Symbol(Promise.then, Decl(promiseIdentityWithConstraints.ts, 3, 25))
 >U : Symbol(U, Decl(promiseIdentityWithConstraints.ts, 4, 9))
 >T : Symbol(T, Decl(promiseIdentityWithConstraints.ts, 3, 18))
 >W : Symbol(W, Decl(promiseIdentityWithConstraints.ts, 4, 21))

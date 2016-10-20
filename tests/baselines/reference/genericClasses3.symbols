@@ -4,11 +4,11 @@ class B<T> {
 >T : Symbol(T, Decl(genericClasses3.ts, 0, 8))
 
     a: T;
->a : Symbol(a, Decl(genericClasses3.ts, 0, 12))
+>a : Symbol(B.a, Decl(genericClasses3.ts, 0, 12))
 >T : Symbol(T, Decl(genericClasses3.ts, 0, 8))
 
     b: T;
->b : Symbol(b, Decl(genericClasses3.ts, 1, 9))
+>b : Symbol(B.b, Decl(genericClasses3.ts, 1, 9))
 >T : Symbol(T, Decl(genericClasses3.ts, 0, 8))
 }
 
@@ -19,7 +19,7 @@ class C<T> extends B<T> {
 >T : Symbol(T, Decl(genericClasses3.ts, 5, 8))
 
     public x: T;
->x : Symbol(x, Decl(genericClasses3.ts, 5, 25))
+>x : Symbol(C.x, Decl(genericClasses3.ts, 5, 25))
 >T : Symbol(T, Decl(genericClasses3.ts, 5, 8))
 }
 

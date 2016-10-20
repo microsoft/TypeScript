@@ -80,14 +80,9 @@
 --------------------------------
 10 >    return greet(msg);
 
-    ~~~~~~~~~~                                    => Pos: (235 to 244)  SpanInfo: {"start":239,"length":17}
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (235 to 257)  SpanInfo: {"start":239,"length":17}
     >return greet(msg)
     >:=> (line 10, col 4) to (line 10, col 21)
-10 >    return greet(msg);
-
-              ~~~~~~~~~~~~~                       => Pos: (245 to 257)  SpanInfo: {"start":246,"length":10}
-    >greet(msg)
-    >:=> (line 10, col 11) to (line 10, col 21)
 --------------------------------
 11 >};
 
@@ -132,17 +127,7 @@
 --------------------------------
 15 >    if (!a()) {
 
-    ~~~~~~~~~                                     => Pos: (322 to 330)  SpanInfo: {"start":326,"length":9}
-    >if (!a())
-    >:=> (line 15, col 4) to (line 15, col 13)
-15 >    if (!a()) {
-
-             ~~~                                  => Pos: (331 to 333)  SpanInfo: {"start":331,"length":3}
-    >a()
-    >:=> (line 15, col 9) to (line 15, col 12)
-15 >    if (!a()) {
-
-                ~~~~                              => Pos: (334 to 337)  SpanInfo: {"start":326,"length":9}
+    ~~~~~~~~~~~~~~~~                              => Pos: (322 to 337)  SpanInfo: {"start":326,"length":9}
     >if (!a())
     >:=> (line 15, col 4) to (line 15, col 13)
 --------------------------------

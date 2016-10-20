@@ -59,40 +59,40 @@ module M {
 >I : Symbol(I, Decl(moduleVisibilityTest1.ts, 27, 15))
 
 		someMethod():number;
->someMethod : Symbol(someMethod, Decl(moduleVisibilityTest1.ts, 30, 21))
+>someMethod : Symbol(I.someMethod, Decl(moduleVisibilityTest1.ts, 30, 21))
 	}
 
 	 class B {public b = 0;}
 >B : Symbol(B, Decl(moduleVisibilityTest1.ts, 32, 2))
->b : Symbol(b, Decl(moduleVisibilityTest1.ts, 34, 11))
+>b : Symbol(B.b, Decl(moduleVisibilityTest1.ts, 34, 11))
 
 	 export class C implements I {
 >C : Symbol(C, Decl(moduleVisibilityTest1.ts, 34, 25))
 >I : Symbol(I, Decl(moduleVisibilityTest1.ts, 27, 15))
 
 		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
->someMethodThatCallsAnOuterMethod : Symbol(someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest1.ts, 36, 31))
+>someMethodThatCallsAnOuterMethod : Symbol(C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest1.ts, 36, 31))
 >OuterInnerAlias.someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 5, 30))
 >OuterInnerAlias : Symbol(OuterInnerAlias, Decl(moduleVisibilityTest1.ts, 8, 1))
 >someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 5, 30))
 
 		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
->someMethodThatCallsAnInnerMethod : Symbol(someMethodThatCallsAnInnerMethod, Decl(moduleVisibilityTest1.ts, 37, 98))
+>someMethodThatCallsAnInnerMethod : Symbol(C.someMethodThatCallsAnInnerMethod, Decl(moduleVisibilityTest1.ts, 37, 98))
 >InnerMod.someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 14, 25))
 >InnerMod : Symbol(InnerMod, Decl(moduleVisibilityTest1.ts, 12, 10))
 >someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 14, 25))
 
 		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
->someMethodThatCallsAnOuterInnerMethod : Symbol(someMethodThatCallsAnOuterInnerMethod, Decl(moduleVisibilityTest1.ts, 38, 86))
+>someMethodThatCallsAnOuterInnerMethod : Symbol(C.someMethodThatCallsAnOuterInnerMethod, Decl(moduleVisibilityTest1.ts, 38, 86))
 >OuterMod.someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 2, 17))
 >OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
 >someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 2, 17))
 
 		public someMethod() { return 0; }
->someMethod : Symbol(someMethod, Decl(moduleVisibilityTest1.ts, 39, 91))
+>someMethod : Symbol(C.someMethod, Decl(moduleVisibilityTest1.ts, 39, 91))
 
 		public someProp = 1;
->someProp : Symbol(someProp, Decl(moduleVisibilityTest1.ts, 40, 35))
+>someProp : Symbol(C.someProp, Decl(moduleVisibilityTest1.ts, 40, 35))
 
 		constructor() {
 		    function someInnerFunc() { return 2; }

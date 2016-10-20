@@ -19,11 +19,11 @@ var x = {
 
     a: 10,
 >a : number
->10 : number
+>10 : 10
 
     b: 20
 >b : number
->20 : number
+>20 : 20
 
 };
 

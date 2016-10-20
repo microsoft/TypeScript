@@ -95,7 +95,7 @@ var Y;
     var BB = (function (_super) {
         __extends(BB, _super);
         function BB() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return BB;
     }(A));
@@ -110,7 +110,7 @@ var Y2;
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return B;
     }(AA));
@@ -144,7 +144,7 @@ var YY;
     var BB = (function (_super) {
         __extends(BB, _super);
         function BB() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return BB;
     }(A));
@@ -159,7 +159,7 @@ var YY2;
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return B;
     }(AA));
@@ -193,7 +193,7 @@ var YYY;
     var BB = (function (_super) {
         __extends(BB, _super);
         function BB() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return BB;
     }(A));
@@ -208,7 +208,7 @@ var YYY2;
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return B;
     }(AA));

@@ -10,12 +10,12 @@ module Test {
 >Bug : Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 13))
 
   getName():string {
->getName : Symbol(getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
+>getName : Symbol(Bug.getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
 
    return "name";
   }
   bug() {
->bug : Symbol(bug, Decl(binopAssignmentShouldHaveType.ts, 6, 3))
+>bug : Symbol(Bug.bug, Decl(binopAssignmentShouldHaveType.ts, 6, 3))
 
    var name:string= null;
 >name : Symbol(name, Decl(binopAssignmentShouldHaveType.ts, 8, 6))
@@ -23,9 +23,9 @@ module Test {
    if ((name= this.getName()).length > 0) {
 >(name= this.getName()).length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >name : Symbol(name, Decl(binopAssignmentShouldHaveType.ts, 8, 6))
->this.getName : Symbol(getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
+>this.getName : Symbol(Bug.getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
 >this : Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 13))
->getName : Symbol(getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
+>getName : Symbol(Bug.getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
 >length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
     console.log(name);

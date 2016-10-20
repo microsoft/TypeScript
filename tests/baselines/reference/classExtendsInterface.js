@@ -2,7 +2,7 @@
 interface Comparable {}
 class A extends Comparable {}
 class B implements Comparable {}
- 
+
 interface Comparable2<T> {}
 class A2<T> extends Comparable2<T> {}
 class B2<T> implements Comparable2<T> {}
@@ -17,7 +17,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var A = (function (_super) {
     __extends(A, _super);
     function A() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return A;
 }(Comparable));
@@ -29,7 +29,7 @@ var B = (function () {
 var A2 = (function (_super) {
     __extends(A2, _super);
     function A2() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return A2;
 }(Comparable2));

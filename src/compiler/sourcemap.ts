@@ -3,41 +3,87 @@
 /* @internal */
 namespace ts {
     export interface SourceMapWriter {
-        getSourceMapData(): SourceMapData;
-        setSourceFile(sourceFile: SourceFile): void;
-        emitPos(pos: number): void;
-        emitStart(range: TextRange): void;
-        emitEnd(range: TextRange): void;
-        getText(): string;
-        getSourceMappingURL(): string;
+        /**
+         * Initialize the SourceMapWriter for a new output file.
+         *
+         * @param filePath The path to the generated output file.
+         * @param sourceMapFilePath The path to the output source map file.
+         * @param sourceFiles The input source files for the program.
+         * @param isBundledEmit A value indicating whether the generated output file is a bundle.
+         */
         initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
+
+        /**
+         * Reset the SourceMapWriter to an empty state.
+         */
         reset(): void;
+
+        /**
+         * Set the current source file.
+         *
+         * @param sourceFile The source file.
+         */
+        setSourceFile(sourceFile: SourceFile): void;
+
+        /**
+         * Emits a mapping.
+         *
+         * If the position is synthetic (undefined or a negative value), no mapping will be
+         * created.
+         *
+         * @param pos The position.
+         */
+        emitPos(pos: number): void;
+
+        /**
+         * Emits a node with possible leading and trailing source maps.
+         *
+         * @param emitContext The current emit context
+         * @param node The node to emit.
+         * @param emitCallback The callback used to emit the node.
+         */
+        emitNodeWithSourceMap(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+
+        /**
+         * Emits a token of a node node with possible leading and trailing source maps.
+         *
+         * @param node The node containing the token.
+         * @param token The token to emit.
+         * @param tokenStartPos The start pos of the token.
+         * @param emitCallback The callback used to emit the token.
+         */
+        emitTokenWithSourceMap(node: Node, token: SyntaxKind, tokenStartPos: number, emitCallback: (token: SyntaxKind, tokenStartPos: number) => number): number;
+
+        /**
+         * Gets the text for the source map.
+         */
+        getText(): string;
+
+        /**
+         * Gets the SourceMappingURL for the source map.
+         */
+        getSourceMappingURL(): string;
+
+        /**
+         * Gets test data for source maps.
+         */
+        getSourceMapData(): SourceMapData;
     }
 
-    const nop = <(...args: any[]) => any>Function.prototype;
-    let nullSourceMapWriter: SourceMapWriter;
-
-    export function getNullSourceMapWriter(): SourceMapWriter {
-        if (nullSourceMapWriter === undefined) {
-            nullSourceMapWriter = {
-                getSourceMapData(): SourceMapData { return undefined; },
-                setSourceFile(sourceFile: SourceFile): void { },
-                emitStart(range: TextRange): void { },
-                emitEnd(range: TextRange): void { },
-                emitPos(pos: number): void { },
-                getText(): string { return undefined; },
-                getSourceMappingURL(): string { return undefined; },
-                initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
-                reset(): void { },
-            };
-        }
-
-        return nullSourceMapWriter;
-    }
+    // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
+    const defaultLastEncodedSourceMapSpan: SourceMapSpan = {
+        emittedLine: 1,
+        emittedColumn: 1,
+        sourceLine: 1,
+        sourceColumn: 1,
+        sourceIndex: 0
+    };
 
     export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
+        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
         let currentSourceFile: SourceFile;
+        let currentSourceText: string;
         let sourceMapDir: string; // The directory in which sourcemap will be
 
         // Current source map file and its index in the sources list
@@ -50,38 +96,46 @@ namespace ts {
 
         // Source map data
         let sourceMapData: SourceMapData;
+        let disabled: boolean = !(compilerOptions.sourceMap || compilerOptions.inlineSourceMap);
 
         return {
+            initialize,
+            reset,
             getSourceMapData: () => sourceMapData,
             setSourceFile,
             emitPos,
-            emitStart,
-            emitEnd,
+            emitNodeWithSourceMap,
+            emitTokenWithSourceMap,
             getText,
             getSourceMappingURL,
-            initialize,
-            reset,
         };
 
+        /**
+         * Initialize the SourceMapWriter for a new output file.
+         *
+         * @param filePath The path to the generated output file.
+         * @param sourceMapFilePath The path to the output source map file.
+         * @param sourceFiles The input source files for the program.
+         * @param isBundledEmit A value indicating whether the generated output file is a bundle.
+         */
         function initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+            if (disabled) {
+                return;
+            }
+
             if (sourceMapData) {
                 reset();
             }
 
             currentSourceFile = undefined;
+            currentSourceText = undefined;
 
             // Current source map file and its index in the sources list
             sourceMapSourceIndex = -1;
 
             // Last recorded and encoded spans
             lastRecordedSourceMapSpan = undefined;
-            lastEncodedSourceMapSpan = {
-                emittedLine: 1,
-                emittedColumn: 1,
-                sourceLine: 1,
-                sourceColumn: 1,
-                sourceIndex: 0
-            };
+            lastEncodedSourceMapSpan = defaultLastEncodedSourceMapSpan;
             lastEncodedNameIndex = 0;
 
             // Initialize source map data
@@ -133,7 +187,14 @@ namespace ts {
             }
         }
 
+        /**
+         * Reset the SourceMapWriter to an empty state.
+         */
         function reset() {
+            if (disabled) {
+                return;
+            }
+
             currentSourceFile = undefined;
             sourceMapDir = undefined;
             sourceMapSourceIndex = undefined;
@@ -179,6 +240,7 @@ namespace ts {
 
             // 5. Relative namePosition 0 based
             if (lastRecordedSourceMapSpan.nameIndex >= 0) {
+                Debug.assert(false, "We do not support name index right now, Make sure to update updateLastEncodedAndRecordedSpans when we start using this");
                 sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.nameIndex - lastEncodedNameIndex);
                 lastEncodedNameIndex = lastRecordedSourceMapSpan.nameIndex;
             }
@@ -187,9 +249,21 @@ namespace ts {
             sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
         }
 
+        /**
+         * Emits a mapping.
+         *
+         * If the position is synthetic (undefined or a negative value), no mapping will be
+         * created.
+         *
+         * @param pos The position.
+         */
         function emitPos(pos: number) {
-            if (pos === -1) {
+            if (disabled || positionIsSynthesized(pos)) {
                 return;
+            }
+
+            if (extendedDiagnostics) {
+                performance.mark("beforeSourcemap");
             }
 
             const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
@@ -227,19 +301,96 @@ namespace ts {
                 lastRecordedSourceMapSpan.sourceColumn = sourceLinePos.character;
                 lastRecordedSourceMapSpan.sourceIndex = sourceMapSourceIndex;
             }
+
+            if (extendedDiagnostics) {
+                performance.mark("afterSourcemap");
+                performance.measure("Source Map", "beforeSourcemap", "afterSourcemap");
+            }
         }
 
-        function emitStart(range: TextRange) {
-            const rangeHasDecorators = !!(range as Node).decorators;
-            emitPos(range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1);
+        /**
+         * Emits a node with possible leading and trailing source maps.
+         *
+         * @param node The node to emit.
+         * @param emitCallback The callback used to emit the node.
+         */
+        function emitNodeWithSourceMap(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
+            if (disabled) {
+                return emitCallback(emitContext, node);
+            }
+
+            if (node) {
+                const emitNode = node.emitNode;
+                const emitFlags = emitNode && emitNode.flags;
+                const { pos, end } = emitNode && emitNode.sourceMapRange || node;
+
+                if (node.kind !== SyntaxKind.NotEmittedStatement
+                    && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
+                    && pos >= 0) {
+                    emitPos(skipTrivia(currentSourceText, pos));
+                }
+
+                if (emitFlags & EmitFlags.NoNestedSourceMaps) {
+                    disabled = true;
+                    emitCallback(emitContext, node);
+                    disabled = false;
+                }
+                else {
+                    emitCallback(emitContext, node);
+                }
+
+                if (node.kind !== SyntaxKind.NotEmittedStatement
+                    && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
+                    && end >= 0) {
+                    emitPos(end);
+                }
+            }
         }
 
-        function emitEnd(range: TextRange) {
-            emitPos(range.end);
+        /**
+         * Emits a token of a node with possible leading and trailing source maps.
+         *
+         * @param node The node containing the token.
+         * @param token The token to emit.
+         * @param tokenStartPos The start pos of the token.
+         * @param emitCallback The callback used to emit the token.
+         */
+        function emitTokenWithSourceMap(node: Node, token: SyntaxKind, tokenPos: number, emitCallback: (token: SyntaxKind, tokenStartPos: number) => number) {
+            if (disabled) {
+                return emitCallback(token, tokenPos);
+            }
+
+            const emitNode = node && node.emitNode;
+            const emitFlags = emitNode && emitNode.flags;
+            const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges[token];
+
+            tokenPos = skipTrivia(currentSourceText, range ? range.pos : tokenPos);
+            if ((emitFlags & EmitFlags.NoTokenLeadingSourceMaps) === 0 && tokenPos >= 0) {
+                emitPos(tokenPos);
+            }
+
+            tokenPos = emitCallback(token, tokenPos);
+
+            if (range) tokenPos = range.end;
+            if ((emitFlags & EmitFlags.NoTokenTrailingSourceMaps) === 0 && tokenPos >= 0) {
+                emitPos(tokenPos);
+            }
+
+            return tokenPos;
         }
 
+        /**
+         * Set the current source file.
+         *
+         * @param sourceFile The source file.
+         */
         function setSourceFile(sourceFile: SourceFile) {
+            if (disabled) {
+                return;
+            }
+
             currentSourceFile = sourceFile;
+            currentSourceText = currentSourceFile.text;
 
             // Add the file to tsFilePaths
             // If sourceroot option: Use the relative path corresponding to the common directory path
@@ -258,15 +409,22 @@ namespace ts {
                 sourceMapData.sourceMapSources.push(source);
 
                 // The one that can be used from program to get the actual source file
-                sourceMapData.inputSourceFileNames.push(sourceFile.fileName);
+                sourceMapData.inputSourceFileNames.push(currentSourceFile.fileName);
 
                 if (compilerOptions.inlineSources) {
-                    sourceMapData.sourceMapSourcesContent.push(sourceFile.text);
+                    sourceMapData.sourceMapSourcesContent.push(currentSourceFile.text);
                 }
             }
         }
 
+        /**
+         * Gets the text for the source map.
+         */
         function getText() {
+            if (disabled) {
+                return;
+            }
+
             encodeLastRecordedSourceMapSpan();
 
             return stringify({
@@ -280,7 +438,14 @@ namespace ts {
             });
         }
 
+        /**
+         * Gets the SourceMappingURL for the source map.
+         */
         function getSourceMappingURL() {
+            if (disabled) {
+                return;
+            }
+
             if (compilerOptions.inlineSourceMap) {
                 // Encode the sourceMap into the sourceMap url
                 const base64SourceMapText = convertToBase64(getText());

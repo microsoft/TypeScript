@@ -9,12 +9,12 @@ async function f() {
 	let await_b = await b;
 	let await_c = await c;
 	let await_d = await d;
-	let await_e = await e; 
+	let await_e = await e;
 }
 
 //// [awaitUnion_es6.js]
 function f() {
-    return __awaiter(this, void 0, Promise, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         let await_a = yield a;
         let await_b = yield b;
         let await_c = yield c;

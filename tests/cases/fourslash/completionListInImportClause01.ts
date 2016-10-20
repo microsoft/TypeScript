@@ -1,4 +1,5 @@
 /// <reference path='fourslash.ts'/>
+// @ModuleResolution: classic
 
 // @Filename: m1.ts
 ////export var foo: number = 1;

@@ -31,10 +31,10 @@ var Foo = (function () {
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     Bar[symbol] = function () {
-        return _super[symbol]();
+        return _super[symbol].call(this);
     };
     return Bar;
 }(Foo));

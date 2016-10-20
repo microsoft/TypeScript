@@ -4,7 +4,7 @@
 var ANY: any;
 >ANY : Symbol(ANY, Decl(incrementOperatorWithAnyOtherType.ts, 2, 3))
 
-var ANY1;
+var ANY1: any;
 >ANY1 : Symbol(ANY1, Decl(incrementOperatorWithAnyOtherType.ts, 3, 3))
 
 var ANY2: any[] = ["", ""];
@@ -19,7 +19,7 @@ class A {
 >A : Symbol(A, Decl(incrementOperatorWithAnyOtherType.ts, 5, 23))
 
     public a: any;
->a : Symbol(a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
+>a : Symbol(A.a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
 }
 module M {
 >M : Symbol(M, Decl(incrementOperatorWithAnyOtherType.ts, 8, 1))

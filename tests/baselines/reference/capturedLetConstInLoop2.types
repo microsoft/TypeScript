@@ -37,7 +37,7 @@ function foo0_1(x) {
 >x : any
 
     for (let x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
         let a = arguments.length;
@@ -47,17 +47,17 @@ function foo0_1(x) {
 >length : number
 
         (function() { return x + a });
->(function() { return x + a }) : () => any
->function() { return x + a } : () => any
->x + a : any
->x : any
+>(function() { return x + a }) : () => string
+>function() { return x + a } : () => string
+>x + a : string
+>x : string
 >a : number
 
         (() => x + a);
->(() => x + a) : () => any
->() => x + a : () => any
->x + a : any
->x : any
+>(() => x + a) : () => string
+>() => x + a : () => string
+>x + a : string
+>x : string
 >a : number
     }
 }
@@ -103,8 +103,8 @@ function foo2(x) {
 
     while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
         let a = arguments.length;
 >a : number
@@ -158,8 +158,8 @@ function foo3(x) {
 
     } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }
 
 function foo4(x) {
@@ -249,8 +249,8 @@ function foo6(x) {
 
     while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
         let x, y;
 >x : any
@@ -317,8 +317,8 @@ function foo7(x) {
 
     } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }
 
 
@@ -400,7 +400,7 @@ function foo0_1_c(x) {
 >x : any
 
     for (const x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
         const a = arguments.length;
@@ -410,17 +410,17 @@ function foo0_1_c(x) {
 >length : number
 
         (function() { return x + a });
->(function() { return x + a }) : () => any
->function() { return x + a } : () => any
->x + a : any
->x : any
+>(function() { return x + a }) : () => string
+>function() { return x + a } : () => string
+>x + a : string
+>x : string
 >a : number
 
         (() => x + a);
->(() => x + a) : () => any
->() => x + a : () => any
->x + a : any
->x : any
+>(() => x + a) : () => string
+>() => x + a : () => string
+>x + a : string
+>x : string
 >a : number
     }
 }
@@ -464,8 +464,8 @@ function foo2_c(x) {
 
     while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
         const a = arguments.length;
 >a : number
@@ -520,8 +520,8 @@ function foo3_c(x) {
 
     } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }
 
 function foo4_c(x) {
@@ -607,8 +607,8 @@ function foo6_c(x) {
 
     while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
         const x = 1, y =1 ;
 >x : number
@@ -679,8 +679,8 @@ function foo7_c(x) {
 
     } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }
 
 

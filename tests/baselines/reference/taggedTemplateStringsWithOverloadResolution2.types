@@ -19,19 +19,19 @@ function foo1(...stuff: any[]): any {
 >undefined : undefined
 }
 
-var a = foo1 `${1}`;          // string
+var a = foo1 `${1}`;
 >a : string
 >foo1 `${1}` : string
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >`${1}` : string
->1 : number
+>1 : 1
 
-var b = foo1([], 1);          // number
+var b = foo1([], 1);
 >b : number
 >foo1([], 1) : number
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >[] : undefined[]
->1 : number
+>1 : 1
 
 function foo2(strs: string[], x: number): number;
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
@@ -52,17 +52,17 @@ function foo2(...stuff: any[]): any {
 >undefined : undefined
 }
 
-var c = foo2 `${1}`;          // number
->c : number
->foo2 `${1}` : number
+var c = foo2 `${1}`;
+>c : string
+>foo2 `${1}` : string
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >`${1}` : string
->1 : number
+>1 : 1
 
-var d = foo2([], 1);          // number
+var d = foo2([], 1);
 >d : number
 >foo2([], 1) : number
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >[] : undefined[]
->1 : number
+>1 : 1
 

@@ -1,7 +1,7 @@
 === tests/cases/compiler/extendNonClassSymbol1.ts ===
 class A { foo() { } }
 >A : Symbol(A, Decl(extendNonClassSymbol1.ts, 0, 0))
->foo : Symbol(foo, Decl(extendNonClassSymbol1.ts, 0, 9))
+>foo : Symbol(A.foo, Decl(extendNonClassSymbol1.ts, 0, 9))
 
 var x = A;
 >x : Symbol(x, Decl(extendNonClassSymbol1.ts, 1, 3))

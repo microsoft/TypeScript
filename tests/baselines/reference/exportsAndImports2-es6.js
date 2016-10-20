@@ -24,6 +24,6 @@ exports.y = t1_1.x;
 exports.x = t1_1.y;
 //// [t3.js]
 "use strict";
-var t1_1 = require("./t1");
+const t1_1 = require("./t1");
 exports.y = t1_1.x;
 exports.x = t1_1.y;

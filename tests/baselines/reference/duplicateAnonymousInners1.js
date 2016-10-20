@@ -41,7 +41,6 @@ var Foo;
     // Inner should show up in intellisense
     Foo.Outer = 0;
 })(Foo || (Foo = {}));
-var Foo;
 (function (Foo) {
     // Should not be an error
     var Helper = (function () {
@@ -49,4 +48,6 @@ var Foo;
         }
         return Helper;
     }());
+    // Inner should not show up in intellisense
+    // Outer should show up in intellisense
 })(Foo || (Foo = {}));

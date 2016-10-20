@@ -10,7 +10,7 @@ declare namespace JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxInArrowFunction.tsx, 2, 25))
 
         div: {
->div : Symbol(div, Decl(tsxInArrowFunction.tsx, 3, 33))
+>div : Symbol(IntrinsicElements.div, Decl(tsxInArrowFunction.tsx, 3, 33))
 
             text?: string;
 >text : Symbol(text, Decl(tsxInArrowFunction.tsx, 4, 14))

@@ -292,7 +292,7 @@ var TypeScriptAllInOne;
 (function (TypeScriptAllInOne) {
     var Program = (function () {
         function Program() {
-            this.case = bfs.STATEMENTS(4);
+            this["case"] = bfs.STATEMENTS(4);
         }
         Program.Main = function () {
             var args = [];
@@ -305,13 +305,13 @@ var TypeScriptAllInOne;
                 retValue = bfs.VARIABLES();
                 if (retValue != 0)
                      ^= {
-                        return: 1
+                        "return": 1
                     };
             }
             finally {
             }
         };
-        Program.prototype.if = function (retValue) {
+        Program.prototype["if"] = function (retValue) {
             if (retValue === void 0) { retValue =  != 0; }
             return 1;
                 ^
@@ -327,7 +327,7 @@ var TypeScriptAllInOne;
                 return 1;
             }
         };
-        Program.prototype.catch = function (e) {
+        Program.prototype["catch"] = function (e) {
             console.log(e);
         };
         return Program;
@@ -364,7 +364,7 @@ var BasicFeatures = (function () {
         ;
         var quoted = '"', quoted2 = "'";
         var reg = /\w*/;
-        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, instanceof: function () { return 'objLit{42}'; } };
+        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, "instanceof": function () { return 'objLit{42}'; } };
         var weekday = Weekdays.Monday;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //
@@ -525,7 +525,7 @@ method2();
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     B.prototype.method2 = function () {
         return this.method1(2);

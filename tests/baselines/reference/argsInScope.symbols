@@ -3,7 +3,7 @@ class C {
 >C : Symbol(C, Decl(argsInScope.ts, 0, 0))
 
     P(ii:number, j:number, k:number) {
->P : Symbol(P, Decl(argsInScope.ts, 0, 9))
+>P : Symbol(C.P, Decl(argsInScope.ts, 0, 9))
 >ii : Symbol(ii, Decl(argsInScope.ts, 1, 6))
 >j : Symbol(j, Decl(argsInScope.ts, 1, 16))
 >k : Symbol(k, Decl(argsInScope.ts, 1, 26))

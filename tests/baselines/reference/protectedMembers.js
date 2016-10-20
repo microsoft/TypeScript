@@ -83,7 +83,6 @@ interface E extends C {
 }
 
 class CC {
-    // Error, constructor cannot be protected
     protected constructor() {
     }
 }
@@ -138,7 +137,7 @@ var C1 = (function () {
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     C2.prototype.f = function () {
         return _super.prototype.f.call(this) + this.x;
@@ -152,7 +151,7 @@ var C2 = (function (_super) {
 var C3 = (function (_super) {
     __extends(C3, _super);
     function C3() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     C3.prototype.f = function () {
         return _super.prototype.f.call(this);
@@ -188,14 +187,14 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     C.foo = function (a, b, c, d, e) {
         a.x = 1; // Error, access must be through C or type derived from C
@@ -209,12 +208,11 @@ var C = (function (_super) {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return D;
 }(C));
 var CC = (function () {
-    // Error, constructor cannot be protected
     function CC() {
     }
     return CC;
@@ -241,7 +239,7 @@ var A2 = (function () {
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return B2;
 }(A2));
@@ -254,7 +252,7 @@ var A3 = (function () {
 var B3 = (function (_super) {
     __extends(B3, _super);
     function B3() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return B3;
 }(A3));

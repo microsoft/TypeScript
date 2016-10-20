@@ -11,8 +11,8 @@ module A {
 >Point : Symbol(Point, Decl(exportImportAlias.ts, 4, 32))
 
         constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(exportImportAlias.ts, 6, 20))
->y : Symbol(y, Decl(exportImportAlias.ts, 6, 37))
+>x : Symbol(Point.x, Decl(exportImportAlias.ts, 6, 20))
+>y : Symbol(Point.y, Decl(exportImportAlias.ts, 6, 37))
     }
     export module B {
 >B : Symbol(B, Decl(exportImportAlias.ts, 7, 5))
@@ -21,7 +21,7 @@ module A {
 >Id : Symbol(Id, Decl(exportImportAlias.ts, 8, 21))
 
             name: string;
->name : Symbol(name, Decl(exportImportAlias.ts, 9, 29))
+>name : Symbol(Id.name, Decl(exportImportAlias.ts, 9, 29))
         }
     }
 }
@@ -79,8 +79,8 @@ module X {
 >Point : Symbol(Point, Decl(exportImportAlias.ts, 29, 21))
 
             constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(exportImportAlias.ts, 31, 24))
->y : Symbol(y, Decl(exportImportAlias.ts, 31, 41))
+>x : Symbol(Point.x, Decl(exportImportAlias.ts, 31, 24))
+>y : Symbol(Point.y, Decl(exportImportAlias.ts, 31, 41))
         }
     }
 }
@@ -118,7 +118,7 @@ module K {
 >L : Symbol(L, Decl(exportImportAlias.ts, 45, 10), Decl(exportImportAlias.ts, 48, 5))
 
         constructor(public name: string) { }
->name : Symbol(name, Decl(exportImportAlias.ts, 47, 20))
+>name : Symbol(L.name, Decl(exportImportAlias.ts, 47, 20))
     }
 
     export module L {
@@ -131,10 +131,10 @@ module K {
 >Point : Symbol(Point, Decl(exportImportAlias.ts, 51, 26))
 
             x: number;
->x : Symbol(x, Decl(exportImportAlias.ts, 52, 32))
+>x : Symbol(Point.x, Decl(exportImportAlias.ts, 52, 32))
 
             y: number;
->y : Symbol(y, Decl(exportImportAlias.ts, 53, 22))
+>y : Symbol(Point.y, Decl(exportImportAlias.ts, 53, 22))
         }
     }
 }

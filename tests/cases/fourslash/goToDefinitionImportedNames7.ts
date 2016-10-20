@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-////import /*classAliasDefinition*/defaultExport from "a";
+////import /*classAliasDefinition*/defaultExport from "./a";
 
 
 // @Filename: a.ts
@@ -10,8 +10,4 @@
 ////}
 ////export default Class;
 
-goTo.file("b.ts");
-
-goTo.marker('classAliasDefinition');
-goTo.definition();
-verify.caretAtMarker('classDefinition');
+verify.goToDefinition("classAliasDefinition", "classDefinition");

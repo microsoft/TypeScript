@@ -13,8 +13,7 @@
 /////*1*/b;
 
 // Resolve without typeCheck
-goTo.marker('1');
-verify.quickInfoIs("var b: string");
+verify.quickInfoAt("1", "var b: string");
 
 // TypeCheck
 verify.numberOfErrorsInCurrentFile(3);

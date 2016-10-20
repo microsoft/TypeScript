@@ -1,15 +1,18 @@
+tests/cases/conformance/jsx/file.tsx(5,11): error TS17008: JSX element 'div' has no corresponding closing tag.
 tests/cases/conformance/jsx/file.tsx(5,19): error TS1109: Expression expected.
 tests/cases/conformance/jsx/file.tsx(8,11): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/jsx/file.tsx(8,12): error TS1005: '}' expected.
-tests/cases/conformance/jsx/file.tsx(9,1): error TS17002: Expected corresponding JSX closing tag for 'div'.
+tests/cases/conformance/jsx/file.tsx(9,1): error TS1005: '</' expected.
 
 
-==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
     
     declare namespace JSX { interface Element { } }
     
     function foo() {
     	var x = <div>  { </div>
+    	         ~~~
+!!! error TS17008: JSX element 'div' has no corresponding closing tag.
     	                 ~~
 !!! error TS1109: Expression expected.
     }
@@ -21,4 +24,4 @@ tests/cases/conformance/jsx/file.tsx(9,1): error TS17002: Expected corresponding
 !!! error TS1005: '}' expected.
     
     
-!!! error TS17002: Expected corresponding JSX closing tag for 'div'.
+!!! error TS1005: '</' expected.

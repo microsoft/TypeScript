@@ -179,7 +179,7 @@ module Portal.Controls.Validators {
 >_validate : (value: TValue) => number
 >value : TValue
 >TValue : TValue
->0 : number
+>0 : 0
     }
 }
 

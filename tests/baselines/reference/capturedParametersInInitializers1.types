@@ -1,0 +1,46 @@
+=== tests/cases/compiler/capturedParametersInInitializers1.ts ===
+// ok - usage is deferred
+function foo1(y = class {c = x}, x = 1) {
+>foo1 : (y?: typeof (Anonymous class), x?: number) => void
+>y : typeof (Anonymous class)
+>class {c = x} : typeof (Anonymous class)
+>c : number
+>x : number
+>x : number
+>1 : 1
+
+    new y().c;
+>new y().c : number
+>new y() : (Anonymous class)
+>y : typeof (Anonymous class)
+>c : number
+}
+
+// ok - used in file
+function foo2(y = function(x: typeof z) {}, z = 1) {
+>foo2 : (y?: (x: number) => void, z?: number) => void
+>y : (x: number) => void
+>function(x: typeof z) {} : (x: number) => void
+>x : number
+>z : number
+>z : number
+>1 : 1
+    
+}
+
+// ok -used in type
+let a;
+>a : any
+
+function foo3(y = { x: <typeof z>a }, z = 1) {
+>foo3 : (y?: { x: number; }, z?: number) => void
+>y : { x: number; }
+>{ x: <typeof z>a } : { x: number; }
+>x : number
+><typeof z>a : number
+>z : number
+>a : any
+>z : number
+>1 : 1
+    
+}

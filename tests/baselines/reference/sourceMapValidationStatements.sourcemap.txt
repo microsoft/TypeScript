@@ -57,57 +57,54 @@ sourceFile:sourceMapValidationStatements.ts
 2 >    ^^^
 3 >       ^
 4 >        ^
-5 >         ^^^
-6 >            ^
-7 >             ^
-8 >              ^^^
-9 >                 ^
-10>                  ^^
-11>                    ^
-12>                     ^^^
-13>                        ^^
-14>                          ^^
-15>                            ^
-16>                             ^^
-17>                               ^^
-18>                                 ^
+5 >         ^^^^
+6 >             ^
+7 >              ^^^
+8 >                 ^
+9 >                  ^^
+10>                    ^
+11>                     ^^^
+12>                        ^^
+13>                          ^^
+14>                            ^
+15>                             ^^
+16>                               ^^
+17>                                 ^
 1->
   >    
 2 >    for
 3 >        
 4 >        (
-5 >         var
-6 >             
-7 >             i
-8 >               = 
-9 >                 0
-10>                  ; 
-11>                    i
-12>                      < 
-13>                        10
-14>                          ; 
-15>                            i
-16>                             ++
-17>                               ) 
-18>                                 {
+5 >         var 
+6 >             i
+7 >               = 
+8 >                 0
+9 >                  ; 
+10>                    i
+11>                      < 
+12>                        10
+13>                          ; 
+14>                            i
+15>                             ++
+16>                               ) 
+17>                                 {
 1->Emitted(4, 5) Source(4, 5) + SourceIndex(0)
 2 >Emitted(4, 8) Source(4, 8) + SourceIndex(0)
 3 >Emitted(4, 9) Source(4, 9) + SourceIndex(0)
 4 >Emitted(4, 10) Source(4, 10) + SourceIndex(0)
-5 >Emitted(4, 13) Source(4, 13) + SourceIndex(0)
-6 >Emitted(4, 14) Source(4, 14) + SourceIndex(0)
-7 >Emitted(4, 15) Source(4, 15) + SourceIndex(0)
-8 >Emitted(4, 18) Source(4, 18) + SourceIndex(0)
-9 >Emitted(4, 19) Source(4, 19) + SourceIndex(0)
-10>Emitted(4, 21) Source(4, 21) + SourceIndex(0)
-11>Emitted(4, 22) Source(4, 22) + SourceIndex(0)
-12>Emitted(4, 25) Source(4, 25) + SourceIndex(0)
-13>Emitted(4, 27) Source(4, 27) + SourceIndex(0)
-14>Emitted(4, 29) Source(4, 29) + SourceIndex(0)
-15>Emitted(4, 30) Source(4, 30) + SourceIndex(0)
-16>Emitted(4, 32) Source(4, 32) + SourceIndex(0)
-17>Emitted(4, 34) Source(4, 34) + SourceIndex(0)
-18>Emitted(4, 35) Source(4, 35) + SourceIndex(0)
+5 >Emitted(4, 14) Source(4, 14) + SourceIndex(0)
+6 >Emitted(4, 15) Source(4, 15) + SourceIndex(0)
+7 >Emitted(4, 18) Source(4, 18) + SourceIndex(0)
+8 >Emitted(4, 19) Source(4, 19) + SourceIndex(0)
+9 >Emitted(4, 21) Source(4, 21) + SourceIndex(0)
+10>Emitted(4, 22) Source(4, 22) + SourceIndex(0)
+11>Emitted(4, 25) Source(4, 25) + SourceIndex(0)
+12>Emitted(4, 27) Source(4, 27) + SourceIndex(0)
+13>Emitted(4, 29) Source(4, 29) + SourceIndex(0)
+14>Emitted(4, 30) Source(4, 30) + SourceIndex(0)
+15>Emitted(4, 32) Source(4, 32) + SourceIndex(0)
+16>Emitted(4, 34) Source(4, 34) + SourceIndex(0)
+17>Emitted(4, 35) Source(4, 35) + SourceIndex(0)
 ---
 >>>        x += i;
 1 >^^^^^^^^
@@ -390,39 +387,36 @@ sourceFile:sourceMapValidationStatements.ts
 2 >    ^^^
 3 >       ^
 4 >        ^
-5 >         ^^^
-6 >            ^
-7 >             ^
-8 >              ^^^^
-9 >                  ^
-10>                   ^
-11>                    ^
-12>                     ^
+5 >         ^^^^
+6 >             ^
+7 >              ^^^^
+8 >                  ^
+9 >                   ^
+10>                    ^
+11>                     ^
 1->
   >    
 2 >    for
 3 >        
 4 >        (
-5 >         var
-6 >             
-7 >             j
-8 >               in 
-9 >                  a
-10>                   )
-11>                     
-12>                     {
+5 >         var 
+6 >             j
+7 >               in 
+8 >                  a
+9 >                   )
+10>                     
+11>                     {
 1->Emitted(24, 5) Source(23, 5) + SourceIndex(0)
 2 >Emitted(24, 8) Source(23, 8) + SourceIndex(0)
 3 >Emitted(24, 9) Source(23, 9) + SourceIndex(0)
 4 >Emitted(24, 10) Source(23, 10) + SourceIndex(0)
-5 >Emitted(24, 13) Source(23, 13) + SourceIndex(0)
-6 >Emitted(24, 14) Source(23, 14) + SourceIndex(0)
-7 >Emitted(24, 15) Source(23, 15) + SourceIndex(0)
-8 >Emitted(24, 19) Source(23, 19) + SourceIndex(0)
-9 >Emitted(24, 20) Source(23, 20) + SourceIndex(0)
-10>Emitted(24, 21) Source(23, 21) + SourceIndex(0)
-11>Emitted(24, 22) Source(23, 22) + SourceIndex(0)
-12>Emitted(24, 23) Source(23, 23) + SourceIndex(0)
+5 >Emitted(24, 14) Source(23, 14) + SourceIndex(0)
+6 >Emitted(24, 15) Source(23, 15) + SourceIndex(0)
+7 >Emitted(24, 19) Source(23, 19) + SourceIndex(0)
+8 >Emitted(24, 20) Source(23, 20) + SourceIndex(0)
+9 >Emitted(24, 21) Source(23, 21) + SourceIndex(0)
+10>Emitted(24, 22) Source(23, 22) + SourceIndex(0)
+11>Emitted(24, 23) Source(23, 23) + SourceIndex(0)
 ---
 >>>        obj.z = a[j];
 1 >^^^^^^^^

@@ -1,0 +1,39 @@
+tests/cases/compiler/errorMessagesIntersectionTypes04.ts(17,5): error TS2322: Type 'A & B' is not assignable to type 'number'.
+tests/cases/compiler/errorMessagesIntersectionTypes04.ts(18,5): error TS2322: Type 'A & B' is not assignable to type 'boolean'.
+tests/cases/compiler/errorMessagesIntersectionTypes04.ts(19,5): error TS2322: Type 'A & B' is not assignable to type 'string'.
+tests/cases/compiler/errorMessagesIntersectionTypes04.ts(21,5): error TS2322: Type '(number & true) | (number & false)' is not assignable to type 'string'.
+  Type 'number & true' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/errorMessagesIntersectionTypes04.ts (4 errors) ====
+    interface A {
+        a;
+    }
+    
+    interface B {
+        b;
+    }
+    
+    function f<T, U extends A, V extends U>(): void {
+        let num: number;
+        let bool: boolean;
+        let str: string;
+    
+        let a_and_b: A & B;
+        let num_and_bool: number & boolean;
+    
+        num = a_and_b;
+        ~~~
+!!! error TS2322: Type 'A & B' is not assignable to type 'number'.
+        bool = a_and_b;
+        ~~~~
+!!! error TS2322: Type 'A & B' is not assignable to type 'boolean'.
+        str = a_and_b;
+        ~~~
+!!! error TS2322: Type 'A & B' is not assignable to type 'string'.
+    
+        str = num_and_bool;
+        ~~~
+!!! error TS2322: Type '(number & true) | (number & false)' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number & true' is not assignable to type 'string'.
+    }

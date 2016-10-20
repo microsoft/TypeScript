@@ -5,7 +5,7 @@ namespace ts.formatting {
 
     export class RuleOperationContext {
         private customContextChecks: { (context: FormattingContext): boolean; }[];
-        
+
         constructor(...funcs: { (context: FormattingContext): boolean; }[]) {
             this.customContextChecks = funcs;
         }
@@ -22,7 +22,7 @@ namespace ts.formatting {
                 return true;
             }
 
-            for (let check of this.customContextChecks) {
+            for (const check of this.customContextChecks) {
                 if (!check(context)) {
                     return false;
                 }

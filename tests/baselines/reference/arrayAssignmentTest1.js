@@ -101,7 +101,7 @@ var C1 = (function () {
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     C2.prototype.C2M1 = function () { return null; };
     return C2;

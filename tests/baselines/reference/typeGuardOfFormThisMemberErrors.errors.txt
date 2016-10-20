@@ -1,27 +1,32 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(29,2): error TS1226: Type predicate 'this is File' is not assignable to 'this is Networked & FileSystemObject'.
-  Type 'File' is not assignable to type 'Networked & FileSystemObject'.
-    Type 'File' is not assignable to type 'Networked'.
-      Property 'host' is missing in type 'File'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(31,2): error TS1226: Type predicate 'this is FileSystemObject' is not assignable to 'this is File'.
-  Type 'FileSystemObject' is not assignable to type 'File'.
-    Property 'content' is missing in type 'FileSystemObject'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(4,10): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(5,17): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(11,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(14,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts (2 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts (4 errors) ====
     // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
     namespace Test {
     	export class FileSystemObject {
     		isFSO: this is FileSystemObject;
+    		       ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     		get isFile(): this is File {
+    		              ~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     			return this instanceof File;
     		}
     		set isFile(param) {
     			// noop
     		}
     		get isDirectory(): this is Directory {
+    		                   ~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     			return this instanceof Directory;
     		}
     		isNetworked: this is (Networked & this);
+    		             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     		constructor(public path: string) {}
     	}
     
@@ -37,15 +42,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.t
     
     	let file: FileSystemObject = new File("foo/bar.txt", "foo");
     	file.isNetworked = file.isFile;
-    	~~~~~~~~~~~~~~~~
-!!! error TS1226: Type predicate 'this is File' is not assignable to 'this is Networked & FileSystemObject'.
-!!! error TS1226:   Type 'File' is not assignable to type 'Networked & FileSystemObject'.
-!!! error TS1226:     Type 'File' is not assignable to type 'Networked'.
-!!! error TS1226:       Property 'host' is missing in type 'File'.
     	file.isFSO = file.isNetworked;
     	file.isFile = file.isFSO;
-    	~~~~~~~~~~~
-!!! error TS1226: Type predicate 'this is FileSystemObject' is not assignable to 'this is File'.
-!!! error TS1226:   Type 'FileSystemObject' is not assignable to type 'File'.
-!!! error TS1226:     Property 'content' is missing in type 'FileSystemObject'.
     }

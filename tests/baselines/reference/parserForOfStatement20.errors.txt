@@ -1,7 +1,10 @@
 tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement20.ts(1,10): error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
+tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement20.ts(1,20): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 
 
-==== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement20.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement20.ts (2 errors) ====
     for (var of = 0 in of) { }
              ~~
 !!! error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
+                       ~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.

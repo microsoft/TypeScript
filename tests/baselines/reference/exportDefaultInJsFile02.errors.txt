@@ -1,0 +1,7 @@
+error TS5055: Cannot write file 'tests/cases/conformance/salsa/myFile02.js' because it would overwrite input file.
+
+
+!!! error TS5055: Cannot write file 'tests/cases/conformance/salsa/myFile02.js' because it would overwrite input file.
+==== tests/cases/conformance/salsa/myFile02.js (0 errors) ====
+    
+    export default "hello";

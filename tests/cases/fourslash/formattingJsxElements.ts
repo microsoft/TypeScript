@@ -46,7 +46,32 @@
 ////            }/>/*6*/
 ////    )
 ////}
-
+////
+////(function () {
+////    return <div
+////className=""/*attrAutoformat*/
+/////*attrIndent*/
+////id={
+////"abc" + "cde"/*expressionAutoformat*/
+/////*expressionIndent*/
+////}
+////        >/*danglingBracketAutoformat*/
+////        </div>/*closingTagAutoformat*/
+////})
+////
+////let h5 = <h5>
+////<span>/*childJsxElementAutoformat*/
+/////*childJsxElementIndent*/
+////<span></span>/*grandchildJsxElementAutoformat*/
+////</span>/*containedClosingTagAutoformat*/
+////</h5>;
+////
+////<div>,{integer}</div>;/*commaInJsxElement*/
+////<div>,   {integer}</div>;/*commaInJsxElement2*/
+////<span>)</span>;/*closingParenInJsxElement*/
+////<span>)   </span>;/*closingParenInJsxElement2*/
+////<Router        routes      =        { 3 }   /      >;/*jsxExpressionSpaces*/
+////<Router routes={                (3)    } />;/*jsxExpressionSpaces2*/
 
 format.document();
 goTo.marker("autoformat");
@@ -60,7 +85,7 @@ goTo.marker("indent1");
 verify.indentationIs(12);
 
 goTo.marker("1");
-verify.currentLineContentIs('            class1= {');
+verify.currentLineContentIs('            class1={');
 goTo.marker("2");
 verify.currentLineContentIs('            }>');
 
@@ -70,7 +95,7 @@ goTo.marker("indent2");
 verify.indentationIs(12);
 
 goTo.marker("3");
-verify.currentLineContentIs('            class2= {');
+verify.currentLineContentIs('            class2={');
 goTo.marker("4");
 verify.currentLineContentIs('            }>');
 
@@ -80,6 +105,44 @@ goTo.marker("indent3");
 verify.indentationIs(12);
 
 goTo.marker("5");
-verify.currentLineContentIs('            class3= {');
+verify.currentLineContentIs('            class3={');
 goTo.marker("6");
-verify.currentLineContentIs('            }/>');
+verify.currentLineContentIs('            } />');
+
+
+goTo.marker("attrAutoformat");
+verify.currentLineContentIs('        className=""');
+goTo.marker("attrIndent");
+verify.indentationIs(8);
+goTo.marker("expressionAutoformat");
+verify.currentLineContentIs('            "abc" + "cde"');
+goTo.marker("expressionIndent");
+verify.indentationIs(12);
+
+goTo.marker("danglingBracketAutoformat")
+// TODO: verify.currentLineContentIs("    >");
+verify.currentLineContentIs("        >");
+goTo.marker("closingTagAutoformat");
+verify.currentLineContentIs("    </div>");
+
+goTo.marker("childJsxElementAutoformat");
+verify.currentLineContentIs("    <span>");
+goTo.marker("childJsxElementIndent");
+verify.indentationIs(8);
+goTo.marker("grandchildJsxElementAutoformat");
+verify.currentLineContentIs("        <span></span>");
+goTo.marker("containedClosingTagAutoformat");
+verify.currentLineContentIs("    </span>");
+
+goTo.marker("commaInJsxElement");
+verify.currentLineContentIs("<div>,{integer}</div>;");
+goTo.marker("commaInJsxElement2");
+verify.currentLineContentIs("<div>,   {integer}</div>;");
+goTo.marker("closingParenInJsxElement");
+verify.currentLineContentIs("<span>)</span>;");
+goTo.marker("closingParenInJsxElement2");
+verify.currentLineContentIs("<span>)   </span>;");
+goTo.marker("jsxExpressionSpaces");
+verify.currentLineContentIs("<Router routes={3} />;");
+goTo.marker("jsxExpressionSpaces2");
+verify.currentLineContentIs("<Router routes={(3)} />;");

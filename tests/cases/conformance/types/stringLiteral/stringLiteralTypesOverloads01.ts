@@ -9,7 +9,7 @@ function getFalsyPrimitive(x: "boolean" | "string"): boolean | string;
 function getFalsyPrimitive(x: "boolean" | "number"): boolean | number;
 function getFalsyPrimitive(x: "number" | "string"): number | string;
 function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string | boolean;
-function getFalsyPrimitive(x: PrimitiveName) {
+function getFalsyPrimitive(x: PrimitiveName): number | string | boolean {
     if (x === "string") {
         return "";
     }

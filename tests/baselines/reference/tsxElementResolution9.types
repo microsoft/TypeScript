@@ -2,8 +2,9 @@
 declare module JSX {
 >JSX : any
 
-	interface Element { }
+	interface Element { something; }
 >Element : Element
+>something : any
 
 	interface IntrinsicElements { }
 >IntrinsicElements : IntrinsicElements
@@ -67,5 +68,5 @@ var Obj3: Obj3;
 ><Obj3 x={42} /> : JSX.Element
 >Obj3 : Obj3
 >x : any
->42 : number
+>42 : 42
 

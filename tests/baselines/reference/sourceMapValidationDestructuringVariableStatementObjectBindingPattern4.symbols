@@ -1,0 +1,10 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.ts ===
+
+var {x = 500,
+>x : Symbol(x, Decl(sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.ts, 1, 5))
+
+     y} = { x: 20, y: "hi" };
+>y : Symbol(y, Decl(sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.ts, 1, 13))
+>x : Symbol(x, Decl(sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.ts, 2, 11))
+>y : Symbol(y, Decl(sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.ts, 2, 18))
+

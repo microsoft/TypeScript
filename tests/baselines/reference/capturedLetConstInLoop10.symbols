@@ -3,7 +3,7 @@ class A {
 >A : Symbol(A, Decl(capturedLetConstInLoop10.ts, 0, 0))
 
     foo() {
->foo : Symbol(foo, Decl(capturedLetConstInLoop10.ts, 0, 9))
+>foo : Symbol(A.foo, Decl(capturedLetConstInLoop10.ts, 0, 9))
 
         for (let x of [0]) {
 >x : Symbol(x, Decl(capturedLetConstInLoop10.ts, 2, 16))
@@ -13,19 +13,19 @@ class A {
 >x : Symbol(x, Decl(capturedLetConstInLoop10.ts, 2, 16))
 
             this.bar(f());
->this.bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>this.bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >this : Symbol(A, Decl(capturedLetConstInLoop10.ts, 0, 0))
->bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >f : Symbol(f, Decl(capturedLetConstInLoop10.ts, 3, 15))
         }
     }
     bar(a: number) {
->bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >a : Symbol(a, Decl(capturedLetConstInLoop10.ts, 7, 8))
     }
 
     baz() {
->baz : Symbol(baz, Decl(capturedLetConstInLoop10.ts, 8, 5))
+>baz : Symbol(A.baz, Decl(capturedLetConstInLoop10.ts, 8, 5))
 
         for (let x of [1]) {
 >x : Symbol(x, Decl(capturedLetConstInLoop10.ts, 11, 16))
@@ -42,20 +42,20 @@ class A {
 >y : Symbol(y, Decl(capturedLetConstInLoop10.ts, 13, 20))
 
                 this.bar(b());
->this.bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>this.bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >this : Symbol(A, Decl(capturedLetConstInLoop10.ts, 0, 0))
->bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >b : Symbol(b, Decl(capturedLetConstInLoop10.ts, 14, 19))
             }
             this.bar(a());
->this.bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>this.bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >this : Symbol(A, Decl(capturedLetConstInLoop10.ts, 0, 0))
->bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >a : Symbol(a, Decl(capturedLetConstInLoop10.ts, 12, 15))
         }
     }
     baz2() {
->baz2 : Symbol(baz2, Decl(capturedLetConstInLoop10.ts, 19, 5))
+>baz2 : Symbol(A.baz2, Decl(capturedLetConstInLoop10.ts, 19, 5))
 
         for (let x of [1]) {
 >x : Symbol(x, Decl(capturedLetConstInLoop10.ts, 21, 16))
@@ -65,9 +65,9 @@ class A {
 >x : Symbol(x, Decl(capturedLetConstInLoop10.ts, 21, 16))
 
             this.bar(a());
->this.bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>this.bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >this : Symbol(A, Decl(capturedLetConstInLoop10.ts, 0, 0))
->bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >a : Symbol(a, Decl(capturedLetConstInLoop10.ts, 22, 15))
 
             for (let y of [1]) {
@@ -78,9 +78,9 @@ class A {
 >y : Symbol(y, Decl(capturedLetConstInLoop10.ts, 24, 20))
 
                 this.bar(b());
->this.bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>this.bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >this : Symbol(A, Decl(capturedLetConstInLoop10.ts, 0, 0))
->bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
+>bar : Symbol(A.bar, Decl(capturedLetConstInLoop10.ts, 6, 5))
 >b : Symbol(b, Decl(capturedLetConstInLoop10.ts, 25, 19))
             }
         }
@@ -91,7 +91,7 @@ class B {
 >B : Symbol(B, Decl(capturedLetConstInLoop10.ts, 30, 1))
 
     foo() {
->foo : Symbol(foo, Decl(capturedLetConstInLoop10.ts, 32, 9))
+>foo : Symbol(B.foo, Decl(capturedLetConstInLoop10.ts, 32, 9))
 
         let a =
 >a : Symbol(a, Decl(capturedLetConstInLoop10.ts, 34, 11))
@@ -105,15 +105,15 @@ class B {
 >x : Symbol(x, Decl(capturedLetConstInLoop10.ts, 36, 24))
 
                     this.bar(f());
->this.bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 41, 5))
+>this.bar : Symbol(B.bar, Decl(capturedLetConstInLoop10.ts, 41, 5))
 >this : Symbol(B, Decl(capturedLetConstInLoop10.ts, 30, 1))
->bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 41, 5))
+>bar : Symbol(B.bar, Decl(capturedLetConstInLoop10.ts, 41, 5))
 >f : Symbol(f, Decl(capturedLetConstInLoop10.ts, 37, 23))
                 }
             }
     }
     bar(a: number) {
->bar : Symbol(bar, Decl(capturedLetConstInLoop10.ts, 41, 5))
+>bar : Symbol(B.bar, Decl(capturedLetConstInLoop10.ts, 41, 5))
 >a : Symbol(a, Decl(capturedLetConstInLoop10.ts, 42, 8))
     }
 }

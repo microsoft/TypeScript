@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "pretty": true,
+        "module": "commonjs",
+        "sourceMap": true,
+        "stripInternal": true,
+        "types": [
+            "node"
+        ],
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
+    },
+    "files": [
+        "cancellationToken.ts"
+    ]
+}

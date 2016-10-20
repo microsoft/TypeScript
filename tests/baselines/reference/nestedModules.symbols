@@ -8,10 +8,10 @@ module A.B.C {
 >Point : Symbol(Point, Decl(nestedModules.ts, 0, 14))
 
         x: number;
->x : Symbol(x, Decl(nestedModules.ts, 1, 28))
+>x : Symbol(Point.x, Decl(nestedModules.ts, 1, 28))
 
         y: number;
->y : Symbol(y, Decl(nestedModules.ts, 2, 18))
+>y : Symbol(Point.y, Decl(nestedModules.ts, 2, 18))
     }
 }
 
@@ -38,8 +38,8 @@ module M2.X {
 >Point : Symbol(Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
 
         x: number; y: number;
->x : Symbol(x, Decl(nestedModules.ts, 14, 28))
->y : Symbol(y, Decl(nestedModules.ts, 15, 18))
+>x : Symbol(Point.x, Decl(nestedModules.ts, 14, 28))
+>y : Symbol(Point.y, Decl(nestedModules.ts, 15, 18))
     }
 }
 

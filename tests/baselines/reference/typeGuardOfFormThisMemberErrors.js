@@ -68,8 +68,9 @@ var Test;
     var File = (function (_super) {
         __extends(File, _super);
         function File(path, content) {
-            _super.call(this, path);
-            this.content = content;
+            var _this = _super.call(this, path) || this;
+            _this.content = content;
+            return _this;
         }
         return File;
     }(FileSystemObject));
@@ -77,7 +78,7 @@ var Test;
     var Directory = (function (_super) {
         __extends(Directory, _super);
         function Directory() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return Directory;
     }(FileSystemObject));
@@ -95,7 +96,7 @@ declare namespace Test {
         path: string;
         isFSO: this is FileSystemObject;
         isFile: this is File;
-        isDirectory: this is Directory;
+        readonly isDirectory: this is Directory;
         isNetworked: this is (Networked & this);
         constructor(path: string);
     }

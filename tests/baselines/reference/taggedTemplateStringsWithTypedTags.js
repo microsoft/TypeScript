@@ -1,6 +1,6 @@
 //// [taggedTemplateStringsWithTypedTags.ts]
 interface I {
-    (stringParts: string[], ...rest: number[]): I;
+    (stringParts: TemplateStringsArray, ...rest: number[]): I;
     g: I;
     h: I;
     member: I;
@@ -43,4 +43,4 @@ var f;
 (_j = ["abc", "def", "ghi"], _j.raw = ["abc", "def", "ghi"], (_k = ["abc", "def", "ghi"], _k.raw = ["abc", "def", "ghi"], f(_k, 1, 2))["member"].member(_j, 1, 2));
 f.thisIsNotATag("abc");
 f.thisIsNotATag("abc" + 1 + "def" + 2 + "ghi");
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+var _a, _b, _c, _d, _e, _f, _h, _g, _k, _j;

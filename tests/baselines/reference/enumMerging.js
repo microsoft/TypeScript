@@ -77,7 +77,6 @@ var M1;
         EImpl1[EImpl1["B"] = 1] = "B";
         EImpl1[EImpl1["C"] = 2] = "C";
     })(EImpl1 || (EImpl1 = {}));
-    var EImpl1;
     (function (EImpl1) {
         EImpl1[EImpl1["D"] = 1] = "D";
         EImpl1[EImpl1["E"] = 2] = "E";
@@ -122,7 +121,6 @@ var M3;
         EInit[EInit["A"] = 0] = "A";
         EInit[EInit["B"] = 1] = "B";
     })(EInit || (EInit = {}));
-    var EInit;
     (function (EInit) {
         EInit[EInit["C"] = 1] = "C";
         EInit[EInit["D"] = 2] = "D";
@@ -160,7 +158,6 @@ var M6;
         var Color = A.Color;
     })(A = M6.A || (M6.A = {}));
 })(M6 || (M6 = {}));
-var M6;
 (function (M6) {
     var A;
     (function (A) {

@@ -6,7 +6,7 @@ module _provider {
 >UsefulClass : Symbol(UsefulClass, Decl(innerAliases2.ts, 0, 18))
 
                                 public foo() {
->foo : Symbol(foo, Decl(innerAliases2.ts, 1, 42))
+>foo : Symbol(UsefulClass.foo, Decl(innerAliases2.ts, 1, 42))
                                 }
                 }
 }

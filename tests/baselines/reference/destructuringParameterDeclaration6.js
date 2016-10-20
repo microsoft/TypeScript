@@ -27,15 +27,22 @@ b2({ while: 1 });
 "use strict";
 // Error
 function a(_a) {
-    var  = _a.while;
+    var  = _a["while"];
 }
 function a1(_a) {
     var public = _a.public;
 }
+function a4(_a) { }
 while (, )
     for (, public; ; )
         ;
 { }
+function a5() {
+    var  = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        [_i - 0] = arguments[_i];
+    }
+}
 while () { }
 function a6() {
     var public = [];
@@ -49,13 +56,13 @@ function a7() {
         a[_i - 0] = arguments[_i];
     }
 }
-a({ while: 1 });
+a({ "while": 1 });
 // No Error
 function b1(_a) {
     var x = _a.public;
 }
 function b2(_a) {
-    var y = _a.while;
+    var y = _a["while"];
 }
 b1({ public: 1 });
-b2({ while: 1 });
+b2({ "while": 1 });

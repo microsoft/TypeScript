@@ -27,11 +27,9 @@ var C = (function () {
     });
     return C;
 }());
-var C;
 (function (C) {
     C.x = 1;
 })(C || (C = {}));
-var C;
 (function (C) {
     function x() { }
     C.x = x;

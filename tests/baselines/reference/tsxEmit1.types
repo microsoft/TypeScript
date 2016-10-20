@@ -45,7 +45,7 @@ var selfClosed5 = <div x={0} y='0' />;
 ><div x={0} y='0' /> : JSX.Element
 >div : any
 >x : any
->0 : number
+>0 : 0
 >y : any
 
 var selfClosed6 = <div x={"1"} y='0' />;
@@ -53,7 +53,7 @@ var selfClosed6 = <div x={"1"} y='0' />;
 ><div x={"1"} y='0' /> : JSX.Element
 >div : any
 >x : any
->"1" : string
+>"1" : "1"
 >y : any
 
 var selfClosed7 = <div x={p} y='p' />;
@@ -61,7 +61,7 @@ var selfClosed7 = <div x={p} y='p' />;
 ><div x={p} y='p' /> : JSX.Element
 >div : any
 >x : any
->p : any
+>p : undefined
 >y : any
 
 var openClosed1 = <div></div>;
@@ -82,7 +82,7 @@ var openClosed3 = <div n='m'>{p}</div>;
 ><div n='m'>{p}</div> : JSX.Element
 >div : any
 >n : any
->p : any
+>p : undefined
 >div : any
 
 var openClosed4 = <div n='m'>{p < p}</div>;
@@ -91,8 +91,8 @@ var openClosed4 = <div n='m'>{p < p}</div>;
 >div : any
 >n : any
 >p < p : boolean
->p : any
->p : any
+>p : undefined
+>p : undefined
 >div : any
 
 var openClosed5 = <div n='m'>{p > p}</div>;
@@ -101,8 +101,8 @@ var openClosed5 = <div n='m'>{p > p}</div>;
 >div : any
 >n : any
 >p > p : boolean
->p : any
->p : any
+>p : undefined
+>p : undefined
 >div : any
 
 class SomeClass {
@@ -180,7 +180,7 @@ var whitespace2 = <div>  {p}    </div>;
 >whitespace2 : JSX.Element
 ><div>  {p}    </div> : JSX.Element
 >div : any
->p : any
+>p : undefined
 >div : any
 
 var whitespace3 = <div>  
@@ -189,7 +189,7 @@ var whitespace3 = <div>
 >div : any
 
       {p}    
->p : any
+>p : undefined
 
       </div>;
 >div : any

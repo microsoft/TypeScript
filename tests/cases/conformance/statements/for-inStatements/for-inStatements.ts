@@ -14,7 +14,7 @@ for (var x in fn()) { }
 for (var x in /[a-z]/) { }
 for (var x in new Date()) { }
 
-var c, d, e;
+var c: any, d: any, e: any;
 
 for (var x in c || d) { }
 for (var x in e ? c : d) { }

@@ -15,7 +15,7 @@ declare module D3 {
 >Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 3, 18))
 
             darker: Color;
->darker : Symbol(darker, Decl(moduleAndInterfaceSharingName4.ts, 4, 32))
+>darker : Symbol(Color.darker, Decl(moduleAndInterfaceSharingName4.ts, 4, 32))
 >Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 3, 18))
         }
     }

@@ -1,0 +1,27 @@
+=== tests/cases/compiler/nestedBlockScopedBindings10.ts ===
+{
+    let x;
+>x : any
+
+    x = 1;
+>x = 1 : 1
+>x : any
+>1 : 1
+}
+
+switch (1) {
+>1 : 1
+
+    case 1:
+>1 : 1
+
+        let y;
+>y : any
+
+        y = 1;
+>y = 1 : 1
+>y : any
+>1 : 1
+
+        break;
+}

@@ -21,7 +21,7 @@ function foo00(x) {
         var v = x;
         (function() { return x + v });
         (() => x + v);
-        if (x == 1) {
+        if (x == "1") {
             return;
         }
     }
@@ -160,7 +160,7 @@ function foo00_c(x) {
         var v = x;
         (function() { return x + v });
         (() => x + v);
-        if (x == 1) {
+        if (x == "1") {
             return;
         }
     }
@@ -298,7 +298,7 @@ function foo00(x) {
         var v = x;
         (function () { return x + v; });
         (() => x + v);
-        if (x == 1) {
+        if (x == "1") {
             return;
         }
     }
@@ -416,7 +416,7 @@ function foo00_c(x) {
         var v = x;
         (function () { return x + v; });
         (() => x + v);
-        if (x == 1) {
+        if (x == "1") {
             return;
         }
     }

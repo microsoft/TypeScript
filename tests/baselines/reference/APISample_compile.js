@@ -16,7 +16,7 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
     var program = ts.createProgram(fileNames, options);
     var emitResult = program.emit();
 
-    var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+    var allDiagnostics = ts.getPreEmitDiagnostics(program);
 
     allDiagnostics.forEach(diagnostic => {
         var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
@@ -45,7 +45,7 @@ var ts = require("typescript");
 function compile(fileNames, options) {
     var program = ts.createProgram(fileNames, options);
     var emitResult = program.emit();
-    var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+    var allDiagnostics = ts.getPreEmitDiagnostics(program);
     allDiagnostics.forEach(function (diagnostic) {
         var _a = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start), line = _a.line, character = _a.character;
         var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');

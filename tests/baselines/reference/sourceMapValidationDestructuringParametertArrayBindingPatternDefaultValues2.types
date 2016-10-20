@@ -1,0 +1,130 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts ===
+declare var console: {
+>console : { log(msg: any): void; }
+
+    log(msg: any): void;
+>log : (msg: any) => void
+>msg : any
+}
+type Robot = [string, string[]];
+>Robot : [string, string[]]
+
+var robotA: Robot = ["trimmer", ["trimming", "edging"]];
+>robotA : [string, string[]]
+>Robot : [string, string[]]
+>["trimmer", ["trimming", "edging"]] : [string, string[]]
+>"trimmer" : "trimmer"
+>["trimming", "edging"] : string[]
+>"trimming" : "trimming"
+>"edging" : "edging"
+
+function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
+>foo1 : ([, skillA]?: [string, string[]]) => void
+> : undefined
+>skillA : string[]
+>["noSkill", "noSkill"] : string[]
+>"noSkill" : "noSkill"
+>"noSkill" : "noSkill"
+>Robot : [string, string[]]
+>["name", ["skill1", "skill2"]] : [string, string[]]
+>"name" : "name"
+>["skill1", "skill2"] : string[]
+>"skill1" : "skill1"
+>"skill2" : "skill2"
+
+    console.log(skillA);
+>console.log(skillA) : void
+>console.log : (msg: any) => void
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>skillA : string[]
+}
+
+function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
+>foo2 : ([nameMB]?: [string, string[]]) => void
+>nameMB : string
+>"noName" : "noName"
+>Robot : [string, string[]]
+>["name", ["skill1", "skill2"]] : [string, string[]]
+>"name" : "name"
+>["skill1", "skill2"] : string[]
+>"skill1" : "skill1"
+>"skill2" : "skill2"
+
+    console.log(nameMB);
+>console.log(nameMB) : void
+>console.log : (msg: any) => void
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>nameMB : string
+}
+
+function foo3([nameMA = "noName", [
+>foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, string[]]) => void
+>nameMA : string
+>"noName" : "noName"
+
+    primarySkillA = "primary",
+>primarySkillA : string
+>"primary" : "primary"
+
+    secondarySkillA = "secondary"
+>secondarySkillA : string
+>"secondary" : "secondary"
+
+] = ["noSkill", "noSkill"]]: Robot) {
+>["noSkill", "noSkill"] : [string, string]
+>"noSkill" : "noSkill"
+>"noSkill" : "noSkill"
+>Robot : [string, string[]]
+
+    console.log(nameMA);
+>console.log(nameMA) : void
+>console.log : (msg: any) => void
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>nameMA : string
+}
+
+foo1(robotA);
+>foo1(robotA) : void
+>foo1 : ([, skillA]?: [string, string[]]) => void
+>robotA : [string, string[]]
+
+foo1(["roomba", ["vaccum", "mopping"]]);
+>foo1(["roomba", ["vaccum", "mopping"]]) : void
+>foo1 : ([, skillA]?: [string, string[]]) => void
+>["roomba", ["vaccum", "mopping"]] : [string, string[]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : string[]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
+
+foo2(robotA);
+>foo2(robotA) : void
+>foo2 : ([nameMB]?: [string, string[]]) => void
+>robotA : [string, string[]]
+
+foo2(["roomba", ["vaccum", "mopping"]]);
+>foo2(["roomba", ["vaccum", "mopping"]]) : void
+>foo2 : ([nameMB]?: [string, string[]]) => void
+>["roomba", ["vaccum", "mopping"]] : [string, string[]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : string[]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
+
+foo3(robotA);
+>foo3(robotA) : void
+>foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, string[]]) => void
+>robotA : [string, string[]]
+
+foo3(["roomba", ["vaccum", "mopping"]]);
+>foo3(["roomba", ["vaccum", "mopping"]]) : void
+>foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, string[]]) => void
+>["roomba", ["vaccum", "mopping"]] : [string, string[]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : string[]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
+

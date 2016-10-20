@@ -1,0 +1,94 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts ===
+declare var console: {
+>console : Symbol(console, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 11))
+
+    log(msg: any): void;
+>log : Symbol(log, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 22))
+>msg : Symbol(msg, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 1, 8))
+}
+type Robot = [number, string, string];
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 2, 1))
+
+var robotA: Robot = [1, "mower", "mowing"];
+>robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 4, 3))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 2, 1))
+
+function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
+>foo1 : Symbol(foo1, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 4, 43))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 6, 16))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 2, 1))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 6, 16))
+}
+
+function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
+>foo2 : Symbol(foo2, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 8, 1))
+>numberB : Symbol(numberB, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 10, 15))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 2, 1))
+
+    console.log(numberB);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 22))
+>numberB : Symbol(numberB, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 10, 15))
+}
+
+function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, "name", "skill"]) {
+>foo3 : Symbol(foo3, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 12, 1))
+>numberA2 : Symbol(numberA2, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 14, 15))
+>nameA2 : Symbol(nameA2, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 14, 29))
+>skillA2 : Symbol(skillA2, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 14, 46))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 2, 1))
+
+    console.log(nameA2);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 22))
+>nameA2 : Symbol(nameA2, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 14, 29))
+}
+
+function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
+>foo4 : Symbol(foo4, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 16, 1))
+>numberA3 : Symbol(numberA3, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 18, 15))
+>robotAInfo : Symbol(robotAInfo, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 18, 29))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 2, 1))
+
+    console.log(robotAInfo);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 0, 22))
+>robotAInfo : Symbol(robotAInfo, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 18, 29))
+}
+
+foo1(robotA);
+>foo1 : Symbol(foo1, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 4, 43))
+>robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 4, 3))
+
+foo1([2, "trimmer", "trimming"]);
+>foo1 : Symbol(foo1, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 4, 43))
+
+foo2(robotA);
+>foo2 : Symbol(foo2, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 8, 1))
+>robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 4, 3))
+
+foo2([2, "trimmer", "trimming"]);
+>foo2 : Symbol(foo2, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 8, 1))
+
+foo3(robotA);
+>foo3 : Symbol(foo3, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 12, 1))
+>robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 4, 3))
+
+foo3([2, "trimmer", "trimming"]);
+>foo3 : Symbol(foo3, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 12, 1))
+
+foo4(robotA);
+>foo4 : Symbol(foo4, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 16, 1))
+>robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 4, 3))
+
+foo4([2, "trimmer", "trimming"]);
+>foo4 : Symbol(foo4, Decl(sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.ts, 16, 1))
+

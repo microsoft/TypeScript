@@ -3,9 +3,9 @@ interface Pair<T1, T2> { first: T1; second: T2; }
 >Pair : Symbol(Pair, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 0))
 >T1 : Symbol(T1, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 15))
 >T2 : Symbol(T2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 18))
->first : Symbol(first, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 24))
+>first : Symbol(Pair.first, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 24))
 >T1 : Symbol(T1, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 15))
->second : Symbol(second, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 35))
+>second : Symbol(Pair.second, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 35))
 >T2 : Symbol(T2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 18))
 
 var x: Pair<string, number>

@@ -1,0 +1,33 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck24.ts ===
+class Foo { x: number }
+>Foo : Symbol(Foo, Decl(generatorTypeCheck24.ts, 0, 0))
+>x : Symbol(Foo.x, Decl(generatorTypeCheck24.ts, 0, 11))
+
+class Bar extends Foo { y: string }
+>Bar : Symbol(Bar, Decl(generatorTypeCheck24.ts, 0, 23))
+>Foo : Symbol(Foo, Decl(generatorTypeCheck24.ts, 0, 0))
+>y : Symbol(Bar.y, Decl(generatorTypeCheck24.ts, 1, 23))
+
+class Baz { z: number }
+>Baz : Symbol(Baz, Decl(generatorTypeCheck24.ts, 1, 35))
+>z : Symbol(Baz.z, Decl(generatorTypeCheck24.ts, 2, 11))
+
+function* g3() {
+>g3 : Symbol(g3, Decl(generatorTypeCheck24.ts, 2, 23))
+
+    yield;
+    yield * [new Foo];
+>Foo : Symbol(Foo, Decl(generatorTypeCheck24.ts, 0, 0))
+
+    yield new Bar;
+>Bar : Symbol(Bar, Decl(generatorTypeCheck24.ts, 0, 23))
+
+    yield new Baz;
+>Baz : Symbol(Baz, Decl(generatorTypeCheck24.ts, 1, 35))
+
+    yield *[new Bar];
+>Bar : Symbol(Bar, Decl(generatorTypeCheck24.ts, 0, 23))
+
+    yield *[new Baz];
+>Baz : Symbol(Baz, Decl(generatorTypeCheck24.ts, 1, 35))
+}

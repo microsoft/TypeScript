@@ -1,6 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
-/* tslint:disable:no-null */
+// In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
+/* tslint:disable:no-null-keyword */
 
 class Test262BaselineRunner extends RunnerBase {
     private static basePath = "internal/cases/test262";
@@ -66,21 +67,21 @@ class Test262BaselineRunner extends RunnerBase {
             });
 
             it("has the expected emitted code", () => {
-                Harness.Baseline.runBaseline("has the expected emitted code", testState.filename + ".output.js", () => {
+                Harness.Baseline.runBaseline(testState.filename + ".output.js", () => {
                     const files = testState.compilerResult.files.filter(f => f.fileName !== Test262BaselineRunner.helpersFilePath);
                     return Harness.Compiler.collateOutputs(files);
-                }, false, Test262BaselineRunner.baselineOptions);
+                }, Test262BaselineRunner.baselineOptions);
             });
 
             it("has the expected errors", () => {
-                Harness.Baseline.runBaseline("has the expected errors", testState.filename + ".errors.txt", () => {
+                Harness.Baseline.runBaseline(testState.filename + ".errors.txt", () => {
                     const errors = testState.compilerResult.errors;
                     if (errors.length === 0) {
                         return null;
                     }
 
                     return Harness.Compiler.getErrorBaseline(testState.inputFiles, errors);
-                }, false, Test262BaselineRunner.baselineOptions);
+                }, Test262BaselineRunner.baselineOptions);
             });
 
             it("satisfies invariants", () => {
@@ -89,20 +90,28 @@ class Test262BaselineRunner extends RunnerBase {
             });
 
             it("has the expected AST", () => {
-                Harness.Baseline.runBaseline("has the expected AST", testState.filename + ".AST.txt", () => {
+                Harness.Baseline.runBaseline(testState.filename + ".AST.txt", () => {
                     const sourceFile = testState.compilerResult.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                     return Utils.sourceFileToJSON(sourceFile);
-                }, false, Test262BaselineRunner.baselineOptions);
+                }, Test262BaselineRunner.baselineOptions);
             });
         });
+    }
+
+    public kind(): TestRunnerKind {
+        return "test262";
+    }
+
+    public enumerateTestFiles() {
+        return ts.map(this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true }), ts.normalizePath);
     }
 
     public initializeTests() {
         // this will set up a series of describe/it blocks to run between the setup and cleanup phases
         if (this.tests.length === 0) {
-            const testFiles = this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true });
+            const testFiles = this.enumerateTestFiles();
             testFiles.forEach(fn => {
-                this.runTest(ts.normalizePath(fn));
+                this.runTest(fn);
             });
         }
         else {

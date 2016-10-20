@@ -4,7 +4,7 @@ declare function use(a: any);
 >a : any
 
 "use strict"
->"use strict" : string
+>"use strict" : "use strict"
 
 var data = [];
 >data : any[]
@@ -12,10 +12,10 @@ var data = [];
 
 for (let x = 0; x < 2; ++x) {
 >x : number
->0 : number
+>0 : 0
 >x < 2 : boolean
 >x : number
->2 : number
+>2 : 2
 >++x : number
 >x : number
 
@@ -35,12 +35,12 @@ use(data[0]() === data[1]());
 >use(data[0]() === data[1]()) : any
 >use : (a: any) => any
 >data[0]() === data[1]() : boolean
->data[0]() : any
->data[0] : any
->data : any[]
->0 : number
->data[1]() : any
->data[1] : any
->data : any[]
->1 : number
+>data[0]() : typeof C
+>data[0] : () => typeof C
+>data : (() => typeof C)[]
+>0 : 0
+>data[1]() : typeof C
+>data[1] : () => typeof C
+>data : (() => typeof C)[]
+>1 : 1
 

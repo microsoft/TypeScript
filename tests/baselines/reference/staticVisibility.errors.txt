@@ -1,5 +1,5 @@
-tests/cases/compiler/staticVisibility.ts(10,9): error TS2304: Cannot find name 's'.
-tests/cases/compiler/staticVisibility.ts(13,9): error TS2304: Cannot find name 'b'.
+tests/cases/compiler/staticVisibility.ts(10,9): error TS2662: Cannot find name 's'. Did you mean the static member 'C1.s'?
+tests/cases/compiler/staticVisibility.ts(13,9): error TS2662: Cannot find name 'b'. Did you mean the static member 'C1.b'?
 tests/cases/compiler/staticVisibility.ts(18,9): error TS2304: Cannot find name 'v'.
 tests/cases/compiler/staticVisibility.ts(19,14): error TS2339: Property 'p' does not exist on type 'typeof C1'.
 tests/cases/compiler/staticVisibility.ts(31,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -19,12 +19,12 @@ tests/cases/compiler/staticVisibility.ts(33,29): error TS2304: Cannot find name 
     
             s = 1; // should be error
             ~
-!!! error TS2304: Cannot find name 's'.
+!!! error TS2662: Cannot find name 's'. Did you mean the static member 'C1.s'?
             C1.s = 1; // should be ok
     
             b(); // should be error
             ~
-!!! error TS2304: Cannot find name 'b'.
+!!! error TS2662: Cannot find name 'b'. Did you mean the static member 'C1.b'?
             C1.b(); // should be ok
         }
     

@@ -1,20 +1,18 @@
-tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(2,29): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(6,29): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(17,9): error TS2381: A signature with an implementation cannot use a string literal type.
-tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(18,9): error TS2381: A signature with an implementation cannot use a string literal type.
+tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(18,9): error TS2345: Argument of type '(x: "bye") => number' is not assignable to parameter of type '(x: "hi") => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '"hi"' is not assignable to type '"bye"'.
+tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(20,9): error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: "hi") => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '"hi"' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/overloadOnConstNoStringImplementation2.ts (4 errors) ====
+==== tests/cases/compiler/overloadOnConstNoStringImplementation2.ts (2 errors) ====
     interface I {
         x1(a: number, callback: (x: 'hi') => number);
-                                ~~~~~~~~~~~~~~~~~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     }
     
     class C implements I {
         x1(a: number, callback: (x: 'hi') => number);
-                                ~~~~~~~~~~~~~~~~~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         x1(a: number, callback: (x: any) => number) {
             callback('hi');
             callback('bye');
@@ -26,10 +24,14 @@ tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(18,9): error TS23
     
     var c: C;
     c.x1(1, (x: 'hi') => { return 1; } );
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2381: A signature with an implementation cannot use a string literal type.
     c.x1(1, (x: 'bye') => { return 1; } ); 
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2381: A signature with an implementation cannot use a string literal type.
+!!! error TS2345: Argument of type '(x: "bye") => number' is not assignable to parameter of type '(x: "hi") => number'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type '"hi"' is not assignable to type '"bye"'.
     c.x1(1, (x: string) => { return 1; } );
     c.x1(1, (x: number) => { return 1; } );
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: "hi") => number'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type '"hi"' is not assignable to type 'number'.

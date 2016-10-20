@@ -17,7 +17,7 @@ export = Widget1
 
 interface Widget1 { name: string; }
 >Widget1 : Symbol(Widget1, Decl(w1.ts, 1, 16))
->name : Symbol(name, Decl(w1.ts, 2, 19))
+>name : Symbol(Widget1.name, Decl(w1.ts, 2, 19))
 
 === tests/cases/compiler/exporter.ts ===
 export import w = require('./w1');

@@ -8,7 +8,10 @@ import foo = require('./foo_0.js');
 var x = foo.foo + 42;
 
 
+//// [foo_0.js]
+"use strict";
+exports.foo = 42;
 //// [foo_1.js]
 "use strict";
-var foo = require('./foo_0.js');
+var foo = require("./foo_0.js");
 var x = foo.foo + 42;

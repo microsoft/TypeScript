@@ -49,33 +49,41 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
+        var _this;
         var x = 1; // should not error
-        _super.call(this);
+        _this = _super.call(this) || this;
+        return _this;
     }
-    B.s = 9;
     return B;
 }(A));
+B.s = 9;
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        this.p = 10;
+        var _this;
+        _this.p = 10;
         var x = 1; // should error
+        return _this;
     }
     return C;
 }(A));
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        this.p = 11;
+        var _this;
+        _this.p = 11;
         var x = 1; // should error
+        return _this;
     }
     return D;
 }(A));
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        this.p = 12;
+        var _this;
+        _this.p = 12;
         var x = 1; // should error
+        return _this;
     }
     return E;
 }(A));

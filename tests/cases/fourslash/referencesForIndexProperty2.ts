@@ -3,7 +3,8 @@
 // References to a unknown index property
 
 ////var a;
-////a[/*1*/"blah"];
+////a["[|blah|]"];
 
-goTo.marker("1");
-verify.referencesCountIs(0);
+goTo.position(test.ranges()[0].start, test.ranges()[0].fileName);
+verify.referencesAre(test.ranges());
+

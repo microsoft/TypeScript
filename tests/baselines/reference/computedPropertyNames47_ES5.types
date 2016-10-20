@@ -8,8 +8,8 @@ enum E2 { x }
 >x : E2
 
 var o = {
->o : {}
->{    [E1.x || E2.x]: 0} : {}
+>o : { [x: number]: number; }
+>{    [E1.x || E2.x]: 0} : { [x: number]: number; }
 
     [E1.x || E2.x]: 0
 >E1.x || E2.x : E1 | E2
@@ -19,6 +19,6 @@ var o = {
 >E2.x : E2
 >E2 : typeof E2
 >x : E2
->0 : number
+>0 : 0
 
 };
