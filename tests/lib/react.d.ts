@@ -2357,17 +2357,13 @@ declare namespace JSX {
 
     interface Element extends React.ReactElement<any> { }
     interface ElementClass extends React.Component<any, any> {
-        render(): JSX.Element;
+        render(): JSX.Element | null;
     }
     interface ElementAttributesProperty { props: {}; }
 
-    interface IntrinsicAttributes {
-        key?: string | number;
-    }
+    interface IntrinsicAttributes extends React.Attributes { }
 
-    interface IntrinsicClassAttributes<T> {
-        ref?: string | ((classInstance: T) => void);
-    }
+    interface IntrinsicClassAttributes<T> extends React.ClassAttributes<T> { }
 
     interface IntrinsicElements {
         // HTML
