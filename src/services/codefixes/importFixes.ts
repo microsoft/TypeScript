@@ -8,7 +8,6 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
             const checker = context.program.getTypeChecker();
             const allFiles = context.program.getSourceFiles();
-            const readFile = context.host.readFile;
             const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
 
             const token = getTokenAtPosition(sourceFile, context.span.start);
@@ -45,7 +44,7 @@ namespace ts.codefix {
                             let moduleSpecifier: string;
                             const sourceDir = getDirectoryPath(sourceFile.fileName);
                             if (file.fileName.indexOf(nodeModulesDir) !== -1) {
-                                moduleSpecifier = convertPathToModuleSpecifier(file.fileName, { sourceFile, readFile, useCaseSensitiveFileNames });
+                                moduleSpecifier = convertPathToModuleSpecifier(file.fileName);
                             }
                             else {
                                 // Try and convert the file path into one relative to the source file
@@ -73,6 +72,38 @@ namespace ts.codefix {
 
             return allActions;
 
+            function convertPathToModuleSpecifier(modulePath: string): string {
+                const i = modulePath.lastIndexOf(nodeModulesDir);
+
+                // This is not a module from the node_module folder, 
+                // so just retun the path
+                if (i === -1) {
+                    return modulePath;
+                }
+
+                // If this is a node module, check to see if the given file is the main export of the module or not. If so,
+                // it can be referenced by just the module name.
+                const moduleDir = getDirectoryPath(modulePath);
+                let nodePackage: any;
+                try {
+                    nodePackage = JSON.parse(context.host.readFile(combinePaths(moduleDir, "package.json")));
+                }
+                catch (e) { }
+
+                // If no main export is explicitly defined, check for the default (index.js)
+                const mainExport = (nodePackage && nodePackage.main) || "index.js";
+                const mainExportPath = normalizePath(isRootedDiskPath(mainExport) ? mainExport : combinePaths(moduleDir, mainExport));
+
+                const moduleSpecifier = removeFileExtension(modulePath.substring(i + nodeModulesDir.length + 1));
+
+                if (compareModuleSpecifiers(modulePath, mainExportPath, getDirectoryPath(sourceFile.fileName), useCaseSensitiveFileNames) === Comparison.EqualTo) {
+                    return getDirectoryPath(moduleSpecifier);
+                }
+                else {
+                    return moduleSpecifier;
+                }
+            }
+
             function getCodeActionForImport(moduleName: string, isEqual: (a: string, b: string) => Comparison = compareStrings): CodeAction {
                 // Check to see if there are already imports being made from this source in the current file
                 const existing = forEach(imports, (importDeclaration) => {
@@ -84,8 +115,9 @@ namespace ts.codefix {
                 if (existing) {
                     return getCodeActionForExistingImport(existing);
                 }
-
-                return getCodeActionForNewImport();
+                else {
+                    return getCodeActionForNewImport();
+                }
 
                 function getCodeActionForExistingImport(declaration: ImportDeclaration): CodeAction {
                     const moduleSpecifier = declaration.moduleSpecifier.getText();
@@ -216,38 +248,13 @@ namespace ts.codefix {
                         Diagnostics.Import_0_from_1,
                         [name, `"${moduleName}"`],
                         newText,
-                        { start: lastDeclaration ? lastEnd : sourceFile.getStart(), length: 0 },
+                        {
+                            start: lastDeclaration ? lastEnd : sourceFile.getStart(),
+                            length: 0
+                        },
                         sourceFile.fileName
                     );
                 }
-            }
-            
-            function convertPathToModuleSpecifier(path: string, host: { sourceFile: SourceFile, readFile: any, useCaseSensitiveFileNames: boolean }): string {
-                const i = path.lastIndexOf(nodeModulesDir);
-                const moduleSpecifier = i !== -1 ? removeFileExtension(path.substring(i + nodeModulesDir.length)) : path;
-
-                // If this is a node module, check to see if the given file is the main export of the module or not. If so,
-                // it can be referenced by just the module name.
-                if (i !== -1) {
-                    const moduleDir = getDirectoryPath(path);
-                    let nodePackage: any;
-                    try {
-                        nodePackage = JSON.parse(host.readFile(combinePaths(moduleDir, "package.json")));
-                    }
-                    catch (e) { }
-
-                    // If no main export is explicitly defined, check for the default (index.js)
-                    const mainExport = (nodePackage && nodePackage.main) || "index.js";
-                    const mainExportPath = isRootedDiskPath(mainExport) ? mainExport : combinePaths(moduleDir, mainExport);
-
-                    const baseDir = getDirectoryPath(host.sourceFile.fileName);
-
-                    if (compareModuleSpecifiers(path, mainExportPath, baseDir, host.useCaseSensitiveFileNames) === Comparison.EqualTo) {
-                        return getDirectoryPath(moduleSpecifier);
-                    }
-                }
-
-                return moduleSpecifier;
             }
 
             function removeQuotes(name: string): string {
