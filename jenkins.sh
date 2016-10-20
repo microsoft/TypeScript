@@ -1,6 +1,4 @@
-#!/bin/bash
-
-ls
+#!/usr/bin/env bash
 
 nvm install $1
 
