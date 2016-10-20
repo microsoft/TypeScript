@@ -5810,11 +5810,6 @@ namespace ts {
                 types.push(rspread.right);
                 return getSpreadType(types, symbol, aliasSymbol, aliasTypeArguments);
             }
-            if (right.flags & TypeFlags.Intersection) {
-                const spreads = map((right as IntersectionType).types,
-                                    t => getSpreadType(types.slice().concat([t]), symbol, aliasSymbol, aliasTypeArguments));
-                return getIntersectionType(spreads, aliasSymbol, aliasTypeArguments);
-            }
             if (right.flags & TypeFlags.Union) {
                 const spreads = map((right as UnionType).types,
                                     t => getSpreadType(types.slice().concat([t]), symbol, aliasSymbol, aliasTypeArguments));
@@ -5839,11 +5834,6 @@ namespace ts {
                 // simplify two adjacent object types: T ... { x } ... { y } becomes T ... { x, y }
                 const simplified = getSpreadType([right, (left as SpreadType).right], symbol, aliasSymbol, aliasTypeArguments);
                 return getSpreadType([(left as SpreadType).left, simplified], symbol, aliasSymbol, aliasTypeArguments);
-            }
-            if (left.flags & TypeFlags.Intersection) {
-                const spreads = map((left as IntersectionType).types,
-                                  t => getSpreadType(types.slice().concat([t, right]), symbol, aliasSymbol, aliasTypeArguments));
-                return getIntersectionType(spreads, aliasSymbol, aliasTypeArguments);
             }
             if (left.flags & TypeFlags.Union) {
                 const spreads = map((left as UnionType).types,
@@ -5901,9 +5891,9 @@ namespace ts {
             }
             const spread = spreadTypes[id] = createObjectType(TypeFlags.Spread, symbol) as SpreadType;
             Debug.assert(!!(left.flags & (TypeFlags.Spread | TypeFlags.ObjectType)), "Left flags: " + left.flags.toString(2));
-            Debug.assert(!!(right.flags & (TypeFlags.TypeParameter | TypeFlags.ObjectType)), "Right flags: " + right.flags.toString(2));
+            Debug.assert(!!(right.flags & (TypeFlags.TypeParameter | TypeFlags.Intersection | TypeFlags.ObjectType)), "Right flags: " + right.flags.toString(2));
             spread.left = left as SpreadType | ResolvedType;
-            spread.right = right as TypeParameter | ResolvedType;
+            spread.right = right as TypeParameter | IntersectionType | ResolvedType;
             spread.aliasSymbol = aliasSymbol;
             spread.aliasTypeArguments = aliasTypeArguments;
             return spread;
@@ -6953,11 +6943,11 @@ namespace ts {
                         spreadTypeRelatedTo(source.right.flags & TypeFlags.ObjectType ? source.left as SpreadType : source,
                                             target.right.flags & TypeFlags.ObjectType ? target.left as SpreadType : target);
                 }
-                // If both right sides are type parameters, then they must be identical for the spread types to be related.
+                // If both right sides are type parameters or intersections, then they must be identical for the spread types to be related.
                 // It also means that the left sides are either spread types or object types.
 
                 // if one left is object and the other is spread, that means the second has another type parameter. which isn't allowed
-                if (target.right.symbol !== source.right.symbol) {
+                if (target.right !== source.right) {
                     return false;
                 }
                 if (source.left.flags & TypeFlags.Spread && target.left.flags & TypeFlags.Spread) {
