@@ -10,32 +10,32 @@ namespace ts.server {
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
         readFile(): string { return void 0; },
-        writeFile(): void {},
+        writeFile: noop,
         resolvePath(): string { return void 0; },
         fileExists: () => false,
         directoryExists: () => false,
         getDirectories: () => [],
-        createDirectory(): void {},
+        createDirectory: noop,
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
         getEnvironmentVariable(): string { return ""; },
         readDirectory(): string[] { return []; },
-        exit(): void { },
+        exit: noop,
         setTimeout() { return 0; },
-        clearTimeout() { },
+        clearTimeout: noop,
         setImmediate: () => 0,
-        clearImmediate() {}
+        clearImmediate: noop
     };
     const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
     const mockLogger: Logger = {
-        close(): void {},
+        close: noop,
         hasLevel(): boolean { return false; },
         loggingEnabled(): boolean { return false; },
-        perftrc(): void {},
-        info(): void {},
-        startGroup(): void {},
-        endGroup(): void {},
-        msg(): void {},
+        perftrc: noop,
+        info: noop,
+        startGroup: noop,
+        endGroup: noop,
+        msg: noop,
         getLogFileName: (): string => undefined
     };
 

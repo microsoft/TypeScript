@@ -869,6 +869,14 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
+    /** Does nothing. */
+    export function noop(): void {}
+
+    /** Throws an error because a function is not implemented. */
+    export function notImplemented(): never {
+        throw new Error("Not implemented");
+    }
+
     export function memoize<T>(callback: () => T): () => T {
         let value: T;
         return () => {
