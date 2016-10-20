@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ls
-cd $WORKSPACE
 
 nvm install $1
 
