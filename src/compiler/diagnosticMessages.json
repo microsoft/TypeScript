@@ -3112,5 +3112,17 @@
     "Implement inherited abstract class": {
         "category": "Message",
         "code": 90007
+    },
+    "Import {0} from {1}": {
+        "category": "Message",
+        "code": 90008
+    },
+    "Change {0} to {1}": {
+        "category": "Message",
+        "code": 90009
+    },
+    "Add {0} to existing import declaration from {1}": {
+        "category": "Message",
+        "code": 90010
     }
 }

@@ -1,4 +1,4 @@
-/* @internal */
+﻿/* @internal */
 namespace ts {
     export interface CodeFix {
         errorCodes: number[];
@@ -11,6 +11,7 @@ namespace ts {
         span: TextSpan;
         program: Program;
         newLineCharacter: string;
+        host: LanguageServiceHost;
     }
 
     export namespace codefix {

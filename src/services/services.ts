@@ -1,4 +1,4 @@
-/// <reference path="..\compiler\program.ts"/>
+﻿/// <reference path="..\compiler\program.ts"/>
 /// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='types.ts' />
@@ -1676,7 +1676,8 @@ namespace ts {
                     sourceFile: sourceFile,
                     span: span,
                     program: program,
-                    newLineCharacter: newLineChar
+                    newLineCharacter: newLineChar,
+                    host: host
                 };
 
                 const fixes = codefix.getFixes(context);
