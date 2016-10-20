@@ -75,7 +75,7 @@ class A {
     view() {
         return [
             Element_1.Element.createElement("meta", { content: "helloworld" }),
-            Element.createElement("meta", { content: c.a.b })
+            Element_1.Element.createElement("meta", { content: c.a.b })
         ];
     }
 }
