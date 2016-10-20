@@ -2612,24 +2612,17 @@ namespace ts {
         Null                    = 1 << 12,
         Never                   = 1 << 13,  // Never type
         TypeParameter           = 1 << 14,  // Type parameter
-        Class                   = 1 << 15,  // Class
-        Interface               = 1 << 16,  // Interface
-        Reference               = 1 << 17,  // Generic type reference
-        Tuple                   = 1 << 18,  // Synthesized generic tuple type
-        Union                   = 1 << 19,  // Union (T | U)
-        Intersection            = 1 << 20,  // Intersection (T & U)
-        Anonymous               = 1 << 21,  // Anonymous
-        Instantiated            = 1 << 22,  // Instantiated anonymous type
+        ObjectType              = 1 << 15,  // Object type
+        Union                   = 1 << 16,  // Union (T | U)
+        Intersection            = 1 << 17,  // Intersection (T & U)
         /* @internal */
-        ObjectLiteral           = 1 << 23,  // Originates in an object literal
+        FreshLiteral            = 1 << 18,  // Fresh literal type
         /* @internal */
-        FreshLiteral            = 1 << 24,  // Fresh literal type
+        ContainsWideningType    = 1 << 19,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
+        ContainsObjectLiteral   = 1 << 20,  // Type is or contains object literal type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
-        /* @internal */
-        ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
+        ContainsAnyFunctionType = 1 << 21,  // Type is or contains object literal type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2646,7 +2639,6 @@ namespace ts {
         NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
-        ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         StructuredOrTypeParameter = StructuredType | TypeParameter,
@@ -2662,6 +2654,16 @@ namespace ts {
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
+
+    export const enum ObjectFlags {
+        Class         = 1 << 0,  // Class
+        Interface     = 1 << 1,  // Interface
+        Reference     = 1 << 2,  // Generic type reference
+        Tuple         = 1 << 3,  // Synthesized generic tuple type
+        Anonymous     = 1 << 4,  // Anonymous
+        Instantiated  = 1 << 5,  // Instantiated anonymous type
+        ObjectLiteral = 1 << 6,  // Originates in an object literal
+    }
 
     // Properties common to all types
     export interface Type {
@@ -2699,7 +2701,7 @@ namespace ts {
 
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
-        _objectTypeBrand: any;
+        objectFlags: ObjectFlags;
         isObjectLiteralPatternWithComputedProperties?: boolean;
     }
 
