@@ -55,3 +55,24 @@ var rested = cloneAgain(gen3);
 rested.parent;
 rested.millenial;
 rested.w;
+
+
+//// [differenceGeneric.d.ts]
+interface Gen {
+    x: number;
+}
+interface Gen2 {
+    parent: Gen;
+    millenial: string;
+}
+declare function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen;
+interface Gen3 extends Gen2 {
+    x: number;
+    w: boolean;
+}
+declare let gen3: Gen3;
+declare let rested: {
+    w: boolean;
+    parent: Gen;
+    millenial: string;
+};

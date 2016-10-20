@@ -1,3 +1,4 @@
+// @declaration: true
 interface Gen {
     x: number;
 }
