@@ -219,7 +219,7 @@ namespace ts {
                 "/apath/tsconfig.json",
                 "tests/cases/unittests",
                 ["/apath/a.ts"],
-                Diagnostics.No_input_files_were_found_in_config_file_Colon_0_files_list_is_empty.code);
+                Diagnostics.The_files_list_in_config_file_0_is_empty.code);
         });
 
         it("generates errors for directory with no .ts files", () => {
@@ -229,7 +229,7 @@ namespace ts {
                 "/apath/tsconfig.json",
                 "tests/cases/unittests",
                 ["/apath/a.js"],
-                Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists.code);
+                Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
         });
 
         it("generates errors for empty directory", () => {
@@ -242,7 +242,7 @@ namespace ts {
                 "/apath/tsconfig.json",
                 "tests/cases/unittests",
                 [],
-                Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists.code);
+                Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
         });
 
         it("generates errors for empty include", () => {
@@ -253,7 +253,7 @@ namespace ts {
                 "/apath/tsconfig.json",
                 "tests/cases/unittests",
                 ["/apath/a.ts"],
-                Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists.code);
+                Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
         });
 
         it("generates errors for includes with outDir", () => {
@@ -267,7 +267,7 @@ namespace ts {
                 "/apath/tsconfig.json",
                 "tests/cases/unittests",
                 ["/apath/a.ts"],
-                Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists.code);
+                Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
         });
     });
 }

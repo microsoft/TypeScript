@@ -193,7 +193,7 @@ namespace ts {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                     ],
                     fileNames: [],
@@ -214,7 +214,7 @@ namespace ts {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                     ],
                     fileNames: [],
@@ -561,7 +561,7 @@ namespace ts {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                     ],
                     fileNames: [],
@@ -714,7 +714,7 @@ namespace ts {
                         allowJs: false
                     },
                     errors: [
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                     ],
                     fileNames: [],
@@ -844,7 +844,7 @@ namespace ts {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))]
                     ,
                     fileNames: [],
@@ -1049,7 +1049,7 @@ namespace ts {
                         options: {},
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**"),
-                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                                 caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                         ],
                         fileNames: [],
@@ -1072,7 +1072,7 @@ namespace ts {
                     const expected: ts.ParsedCommandLine = {
                         options: {},
                         errors: [
-                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                                 caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
                         ],
                         fileNames: [],
@@ -1095,7 +1095,7 @@ namespace ts {
                         options: {},
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, "**/x/**/*"),
-                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                                 caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                         ],
                         fileNames: [],
@@ -1148,7 +1148,7 @@ namespace ts {
                         options: {},
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/../*"),
-                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                                 caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                         ],
                         fileNames: [],
@@ -1170,7 +1170,7 @@ namespace ts {
                         options: {},
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/../*"),
-                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                                 caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                         ],
                         fileNames: [],
@@ -1350,7 +1350,7 @@ namespace ts {
                     const expected: ts.ParsedCommandLine = {
                         options: {},
                         errors: [
-                            ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                            ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                                 caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
                         ],
                         fileNames: [],

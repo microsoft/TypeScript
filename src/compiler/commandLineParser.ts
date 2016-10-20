@@ -907,7 +907,7 @@ namespace ts {
                 if (isArray(json["files"])) {
                     fileNames = <string[]>json["files"];
                     if (fileNames.length === 0) {
-                        errors.push(createCompilerDiagnostic(Diagnostics.No_input_files_were_found_in_config_file_Colon_0_files_list_is_empty, configFileName || "tsconfig.json"));
+                        errors.push(createCompilerDiagnostic(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json"));
                     }
                 }
                 else {
@@ -956,7 +956,7 @@ namespace ts {
             if (result.fileNames.length === 0 && !hasProperty(json, "files") && resolutionStack.length === 0) {
                 errors.push(
                     createCompilerDiagnostic(
-                        Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
+                        Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                         configFileName || "tsconfig.json",
                         JSON.stringify(includeSpecs || []),
                         JSON.stringify(excludeSpecs || [])));

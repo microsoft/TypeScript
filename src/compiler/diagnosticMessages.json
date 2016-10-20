@@ -3086,11 +3086,11 @@
         "category": "Error",
         "code": 18001
     },
-    "No input files were found in config file: '{0}'. 'files' list is empty.": {
+    "The 'files' list in config file '{0}' is empty.": {
         "category": "Error",
         "code": 18002
     },
-    "No input files were found in config file: '{0}'. Here are the contents of include: {1} and exclude: {2} lists.": {
+    "No inputs were found in config file '{0}'. Specified 'include' paths were '{1}' and 'exclude' paths were '{2}'.": {
         "category": "Error",
         "code": 18003
     },
