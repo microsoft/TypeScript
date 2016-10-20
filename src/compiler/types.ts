@@ -2699,6 +2699,7 @@ namespace ts {
 
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
+        _objectTypeBrand: any;
         isObjectLiteralPatternWithComputedProperties?: boolean;
     }
 
@@ -2752,6 +2753,8 @@ namespace ts {
     export interface UnionType extends UnionOrIntersectionType { }
 
     export interface IntersectionType extends UnionOrIntersectionType { }
+
+    export type StructuredType = ObjectType | UnionType | IntersectionType;
 
     /* @internal */
     // An instantiated anonymous type has a target and a mapper
