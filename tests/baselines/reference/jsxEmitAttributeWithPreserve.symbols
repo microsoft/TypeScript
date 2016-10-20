@@ -5,5 +5,5 @@ declare var React: any;
 
 <foo data/>
 >foo : Symbol(unknown)
->data : Symbol(unknown)
+>data : Symbol(data, Decl(jsxEmitAttributeWithPreserve.tsx, 2, 4))
 

@@ -38,7 +38,7 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 // Stateless Component As Props
 <MyComponent AnyComponent={() => <button>test</button>}/>
 >MyComponent : Symbol(MyComponent, Decl(file.tsx, 5, 1))
->AnyComponent : Symbol(ComponentProps.AnyComponent, Decl(file.tsx, 3, 26))
+>AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 15, 12))
 >button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2383, 43))
 >button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2383, 43))
 
@@ -52,7 +52,7 @@ class MyButtonComponent extends React.Component<{},{}> {
 
 <MyComponent AnyComponent={MyButtonComponent} />
 >MyComponent : Symbol(MyComponent, Decl(file.tsx, 5, 1))
->AnyComponent : Symbol(ComponentProps.AnyComponent, Decl(file.tsx, 3, 26))
+>AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 21, 12))
 >MyButtonComponent : Symbol(MyButtonComponent, Decl(file.tsx, 15, 57))
 
 

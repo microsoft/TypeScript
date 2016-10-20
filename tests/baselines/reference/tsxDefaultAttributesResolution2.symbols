@@ -29,5 +29,5 @@ class Poisoned extends React.Component<Prop, {}> {
 let p = <Poisoned x/>;
 >p : Symbol(p, Decl(file.tsx, 13, 3))
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
->x : Symbol(Prop.x, Decl(file.tsx, 3, 16))
+>x : Symbol(x, Decl(file.tsx, 13, 17))
 

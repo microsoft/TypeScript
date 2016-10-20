@@ -64,5 +64,5 @@ var Obj3: Obj3;
 
 <Obj3 x={42} />; // OK
 >Obj3 : Symbol(Obj3, Decl(file.tsx, 17, 9), Decl(file.tsx, 23, 3))
->x : Symbol(unknown)
+>x : Symbol(x, Decl(file.tsx, 24, 5))
 

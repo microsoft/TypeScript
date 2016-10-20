@@ -3992,6 +3992,7 @@ namespace ts {
             || kind === SyntaxKind.ImportEqualsDeclaration
             || kind === SyntaxKind.ImportSpecifier
             || kind === SyntaxKind.InterfaceDeclaration
+            || kind === SyntaxKind.JsxAttribute
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.MethodSignature
             || kind === SyntaxKind.ModuleDeclaration

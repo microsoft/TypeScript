@@ -62,8 +62,8 @@ let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
 >x : Symbol(x, Decl(file.tsx, 26, 3))
 >OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 16, 1))
 >obj : Symbol(obj, Decl(file.tsx, 3, 5))
->y : Symbol(Prop.y, Decl(file.tsx, 13, 8))
->overwrite : Symbol(Prop.overwrite, Decl(file.tsx, 14, 11))
+>y : Symbol(y, Decl(file.tsx, 26, 31))
+>overwrite : Symbol(overwrite, Decl(file.tsx, 26, 33))
 >obj1 : Symbol(obj1, Decl(file.tsx, 4, 5))
 
 let x1 = <OverWriteAttr {...obj1} {...obj3} />
@@ -75,17 +75,17 @@ let x1 = <OverWriteAttr {...obj1} {...obj3} />
 let x2 = <OverWriteAttr x={3} overwrite="hi" {...obj1} {...{y: true}} />
 >x2 : Symbol(x2, Decl(file.tsx, 28, 3))
 >OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 16, 1))
->x : Symbol(Prop.x, Decl(file.tsx, 12, 16))
->overwrite : Symbol(Prop.overwrite, Decl(file.tsx, 14, 11))
+>x : Symbol(x, Decl(file.tsx, 28, 23))
+>overwrite : Symbol(overwrite, Decl(file.tsx, 28, 29))
 >obj1 : Symbol(obj1, Decl(file.tsx, 4, 5))
 >y : Symbol(y, Decl(file.tsx, 28, 60))
 
 let x3 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true, x: 2, overwrite:"world"}} />
 >x3 : Symbol(x3, Decl(file.tsx, 29, 3))
 >OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 16, 1))
->overwrite : Symbol(Prop.overwrite, Decl(file.tsx, 14, 11))
+>overwrite : Symbol(overwrite, Decl(file.tsx, 29, 23))
 >obj1 : Symbol(obj1, Decl(file.tsx, 4, 5))
->x : Symbol(Prop.x, Decl(file.tsx, 12, 16))
+>x : Symbol(x, Decl(file.tsx, 29, 48))
 >y : Symbol(y, Decl(file.tsx, 29, 60))
 >x : Symbol(x, Decl(file.tsx, 29, 68))
 >overwrite : Symbol(overwrite, Decl(file.tsx, 29, 74))

@@ -56,8 +56,8 @@ let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
 >x : Symbol(x, Decl(file.tsx, 25, 3))
 >OverWriteAttr : Symbol(OverWriteAttr, Decl(file.tsx, 16, 1))
 >obj : Symbol(obj, Decl(file.tsx, 3, 5))
->y : Symbol(Prop.y, Decl(file.tsx, 13, 13))
->overwrite : Symbol(Prop.overwrite, Decl(file.tsx, 14, 14))
+>y : Symbol(y, Decl(file.tsx, 25, 31))
+>overwrite : Symbol(overwrite, Decl(file.tsx, 25, 33))
 >obj1 : Symbol(obj1, Decl(file.tsx, 4, 5))
 
 let x1 = <OverWriteAttr {...obj1} {...obj3}  />

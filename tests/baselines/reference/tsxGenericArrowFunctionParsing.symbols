@@ -44,7 +44,7 @@ x3();
 var x4 = <T extends={true}>() => {}</T>;
 >x4 : Symbol(x4, Decl(file.tsx, 19, 3))
 >T : Symbol(T, Decl(file.tsx, 4, 3))
->extends : Symbol(unknown)
+>extends : Symbol(extends, Decl(file.tsx, 19, 11))
 >T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x4.isElement;
@@ -56,7 +56,7 @@ x4.isElement;
 var x5 = <T extends>() => {}</T>;
 >x5 : Symbol(x5, Decl(file.tsx, 23, 3))
 >T : Symbol(T, Decl(file.tsx, 4, 3))
->extends : Symbol(unknown)
+>extends : Symbol(extends, Decl(file.tsx, 23, 11))
 >T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x5.isElement;

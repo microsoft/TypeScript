@@ -74,6 +74,6 @@ let y3 = <Opt x={2} />;
 >y3 : JSX.Element
 ><Opt x={2} /> : JSX.Element
 >Opt : typeof Opt
->x : any
+>x : number
 >2 : 2
 

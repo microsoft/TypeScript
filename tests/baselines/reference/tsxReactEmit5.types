@@ -31,7 +31,7 @@ var spread1 = <div x='' {...foo} y='' />;
 >spread1 : JSX.Element
 ><div x='' {...foo} y='' /> : JSX.Element
 >div : any
->x : any
+>x : string
 >foo : undefined
->y : any
+>y : string
 

@@ -17,5 +17,5 @@ declare var foo: any;
 
 <foo data/>;
 >foo : Symbol(unknown)
->data : Symbol(unknown)
+>data : Symbol(data, Decl(test.tsx, 3, 4))
 

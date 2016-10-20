@@ -60,10 +60,10 @@ let y2 = <Opt {...obj1} y/>;
 >y2 : Symbol(y2, Decl(file.tsx, 23, 3))
 >Opt : Symbol(Opt, Decl(file.tsx, 6, 1))
 >obj1 : Symbol(obj1, Decl(file.tsx, 15, 5))
->y : Symbol(OptionProp.y, Decl(file.tsx, 4, 9))
+>y : Symbol(y, Decl(file.tsx, 23, 23))
 
 let y3 = <Opt x={2} />;
 >y3 : Symbol(y3, Decl(file.tsx, 24, 3))
 >Opt : Symbol(Opt, Decl(file.tsx, 6, 1))
->x : Symbol(OptionProp.x, Decl(file.tsx, 3, 22))
+>x : Symbol(x, Decl(file.tsx, 24, 13))
 

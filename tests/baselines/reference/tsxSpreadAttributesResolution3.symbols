@@ -49,6 +49,6 @@ let p = <Poisoned {...obj} />;
 let y = <Poisoned x="hi" y={2} />;
 >y : Symbol(y, Decl(file.tsx, 21, 3))
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 6, 1))
->x : Symbol(PoisonedProp.x, Decl(file.tsx, 3, 24))
->y : Symbol(PoisonedProp.y, Decl(file.tsx, 4, 14))
+>x : Symbol(x, Decl(file.tsx, 21, 17))
+>y : Symbol(y, Decl(file.tsx, 21, 24))
 

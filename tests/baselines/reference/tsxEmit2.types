@@ -38,7 +38,7 @@ var spreads3 = <div x={p3} {...p1}>{p2}</div>;
 >spreads3 : JSX.Element
 ><div x={p3} {...p1}>{p2}</div> : JSX.Element
 >div : any
->x : any
+>x : undefined
 >p3 : undefined
 >p1 : undefined
 >p2 : undefined
@@ -49,7 +49,7 @@ var spreads4 = <div {...p1} x={p3} >{p2}</div>;
 ><div {...p1} x={p3} >{p2}</div> : JSX.Element
 >div : any
 >p1 : undefined
->x : any
+>x : undefined
 >p3 : undefined
 >p2 : undefined
 >div : any
@@ -58,10 +58,10 @@ var spreads5 = <div x={p2} {...p1} y={p3}>{p2}</div>;
 >spreads5 : JSX.Element
 ><div x={p2} {...p1} y={p3}>{p2}</div> : JSX.Element
 >div : any
->x : any
+>x : undefined
 >p2 : undefined
 >p1 : undefined
->y : any
+>y : undefined
 >p3 : undefined
 >p2 : undefined
 >div : any
