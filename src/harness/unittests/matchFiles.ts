@@ -3,6 +3,7 @@
 
 namespace ts {
     const caseInsensitiveBasePath = "c:/dev/";
+    const caseInsensitiveTsconfigPath = "c:/dev/tsconfig.json";
     const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
         "c:/dev/a.ts",
         "c:/dev/a.d.ts",
@@ -87,6 +88,8 @@ namespace ts {
         "c:/dev/w/.u/e.ts",
         "c:/dev/g.min.js/.g/g.ts"
     ]);
+
+    const defaultExcludes = ["node_modules", "bower_components", "jspm_packages"];
 
     describe("matchFiles", () => {
         describe("with literal file list", () => {
@@ -191,12 +194,12 @@ namespace ts {
                     options: {},
                     errors: [
                         ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                            "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                     ],
                     fileNames: [],
                     wildcardDirectories: {},
                 };
-                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
                 assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                 assert.deepEqual(actual.errors, expected.errors);
@@ -212,12 +215,12 @@ namespace ts {
                     options: {},
                     errors: [
                         ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                            "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                     ],
                     fileNames: [],
                     wildcardDirectories: {},
                 };
-                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
                 assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                 assert.deepEqual(actual.errors, expected.errors);
@@ -559,14 +562,14 @@ namespace ts {
                     options: {},
                     errors: [
                         ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                            "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                     ],
                     fileNames: [],
                     wildcardDirectories: {
                         "c:/dev": ts.WatchDirectoryFlags.Recursive
                     },
                 };
-                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
                 assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                 assert.deepEqual(actual.errors, expected.errors);
@@ -712,14 +715,14 @@ namespace ts {
                     },
                     errors: [
                         ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                            "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                     ],
                     fileNames: [],
                     wildcardDirectories: {
                         "c:/dev/js": ts.WatchDirectoryFlags.None
                     }
                 };
-                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
                 assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                 assert.deepEqual(actual.errors, expected.errors);
@@ -842,12 +845,12 @@ namespace ts {
                     options: {},
                     errors: [
                         ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                            "c:/dev", JSON.stringify(json.include), JSON.stringify(json.exclude))]
+                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))]
                     ,
                     fileNames: [],
                     wildcardDirectories: {}
                 };
-                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
                 assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                 assert.deepEqual(actual.errors, expected.errors);
@@ -1047,12 +1050,12 @@ namespace ts {
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**"),
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                                "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
                     };
-                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);
                     assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                     assert.deepEqual(actual.errors, expected.errors);
@@ -1070,12 +1073,12 @@ namespace ts {
                         options: {},
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                                "c:/dev", JSON.stringify(json.include), JSON.stringify(json.exclude))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
                     };
-                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);
                     assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                     assert.deepEqual(actual.errors, expected.errors);
@@ -1093,12 +1096,12 @@ namespace ts {
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, "**/x/**/*"),
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                                "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
                     };
-                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);
                     assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                     assert.deepEqual(actual.errors, expected.errors);
@@ -1146,12 +1149,12 @@ namespace ts {
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/../*"),
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                                "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
                     };
-                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);
                     assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                     assert.deepEqual(actual.errors, expected.errors);
@@ -1168,12 +1171,12 @@ namespace ts {
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/../*"),
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                                "c:/dev", JSON.stringify(json.include), JSON.stringify(["node_modules", "bower_components", "jspm_packages"]))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
                     };
-                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);
                     assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                     assert.deepEqual(actual.errors, expected.errors);
@@ -1348,12 +1351,12 @@ namespace ts {
                         options: {},
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_were_found_in_config_file_Colon_0_Here_are_the_contents_of_include_Colon_1_and_exclude_Colon_2_lists,
-                                "c:/dev", JSON.stringify(json.include), JSON.stringify(json.exclude))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
                     };
-                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath, undefined, caseInsensitiveTsconfigPath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);
                     assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                     assert.deepEqual(actual.errors, expected.errors);
