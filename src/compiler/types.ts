@@ -2663,6 +2663,7 @@ namespace ts {
         Anonymous     = 1 << 4,  // Anonymous
         Instantiated  = 1 << 5,  // Instantiated anonymous type
         ObjectLiteral = 1 << 6,  // Originates in an object literal
+        EvolvingArray = 1 << 7,  // Evolving array type
     }
 
     // Properties common to all types
@@ -2763,8 +2764,11 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
-        elementType?: Type;      // Element expressions of evolving array type
-        finalArrayType?: Type;   // Final array type of evolving array type
+    }
+
+    export interface EvolvingArrayType extends ObjectType {
+        elementType: Type;      // Element expressions of evolving array type
+        finalArrayType?: Type;  // Final array type of evolving array type
     }
 
     /* @internal */

@@ -115,7 +115,7 @@ namespace ts {
         const intersectionTypes = createMap<IntersectionType>();
         const stringLiteralTypes = createMap<LiteralType>();
         const numericLiteralTypes = createMap<LiteralType>();
-        const evolvingArrayTypes: AnonymousType[] = [];
+        const evolvingArrayTypes: EvolvingArrayType[] = [];
 
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
@@ -8558,26 +8558,26 @@ namespace ts {
         // 'x.push(value)' or 'x[n] = value' operation along the control flow graph. Evolving
         // array types are ultimately converted into manifest array types (using getFinalArrayType)
         // and never escape the getFlowTypeOfReference function.
-        function createEvolvingArrayType(elementType: Type): AnonymousType {
-            const result = <AnonymousType>createObjectType(ObjectFlags.Anonymous);
+        function createEvolvingArrayType(elementType: Type): EvolvingArrayType {
+            const result = <EvolvingArrayType>createObjectType(ObjectFlags.EvolvingArray);
             result.elementType = elementType;
             return result;
         }
 
-        function getEvolvingArrayType(elementType: Type): AnonymousType {
+        function getEvolvingArrayType(elementType: Type): EvolvingArrayType {
             return evolvingArrayTypes[elementType.id] || (evolvingArrayTypes[elementType.id] = createEvolvingArrayType(elementType));
         }
 
         // When adding evolving array element types we do not perform subtype reduction. Instead,
         // we defer subtype reduction until the evolving array type is finalized into a manifest
         // array type.
-        function addEvolvingArrayElementType(evolvingArrayType: AnonymousType, node: Expression): AnonymousType {
+        function addEvolvingArrayElementType(evolvingArrayType: EvolvingArrayType, node: Expression): EvolvingArrayType {
             const elementType = getBaseTypeOfLiteralType(checkExpression(node));
             return isTypeSubsetOf(elementType, evolvingArrayType.elementType) ? evolvingArrayType : getEvolvingArrayType(getUnionType([evolvingArrayType.elementType, elementType]));
         }
 
         function isEvolvingArrayType(type: Type) {
-            return !!(getObjectFlags(type) & ObjectFlags.Anonymous && (<AnonymousType>type).elementType);
+            return !!(getObjectFlags(type) & ObjectFlags.EvolvingArray);
         }
 
         function createFinalArrayType(elementType: Type) {
@@ -8589,16 +8589,16 @@ namespace ts {
         }
 
         // We perform subtype reduction upon obtaining the final array type from an evolving array type.
-        function getFinalArrayType(evolvingArrayType: AnonymousType): Type {
+        function getFinalArrayType(evolvingArrayType: EvolvingArrayType): Type {
             return evolvingArrayType.finalArrayType || (evolvingArrayType.finalArrayType = createFinalArrayType(evolvingArrayType.elementType));
         }
 
         function finalizeEvolvingArrayType(type: Type): Type {
-            return isEvolvingArrayType(type) ? getFinalArrayType(<AnonymousType>type) : type;
+            return isEvolvingArrayType(type) ? getFinalArrayType(<EvolvingArrayType>type) : type;
         }
 
         function getElementTypeOfEvolvingArrayType(type: Type) {
-            return isEvolvingArrayType(type) ? (<AnonymousType>type).elementType : neverType;
+            return isEvolvingArrayType(type) ? (<EvolvingArrayType>type).elementType : neverType;
         }
 
         function isEvolvingArrayTypeList(types: Type[]) {
@@ -8770,7 +8770,7 @@ namespace ts {
                     const flowType = getTypeAtFlowNode(flow.antecedent);
                     const type = getTypeFromFlowType(flowType);
                     if (isEvolvingArrayType(type)) {
-                        let evolvedType = <AnonymousType>type;
+                        let evolvedType = <EvolvingArrayType>type;
                         if (node.kind === SyntaxKind.CallExpression) {
                             for (const arg of (<CallExpression>node).arguments) {
                                 evolvedType = addEvolvingArrayElementType(evolvedType, arg);
