@@ -10,32 +10,32 @@ namespace ts.server {
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
         readFile(): string { return void 0; },
-        writeFile(): void {},
+        writeFile: noop,
         resolvePath(): string { return void 0; },
         fileExists: () => false,
         directoryExists: () => false,
         getDirectories: () => [],
-        createDirectory(): void {},
+        createDirectory: noop,
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
-        getEnvironmentVariable(name: string): string { return ""; },
+        getEnvironmentVariable(): string { return ""; },
         readDirectory(): string[] { return []; },
-        exit(): void { },
-        setTimeout(callback, ms, ...args) { return 0; },
-        clearTimeout(timeoutId) { },
+        exit: noop,
+        setTimeout() { return 0; },
+        clearTimeout: noop,
         setImmediate: () => 0,
-        clearImmediate() {}
+        clearImmediate: noop
     };
     const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
     const mockLogger: Logger = {
-        close(): void {},
+        close: noop,
         hasLevel(): boolean { return false; },
         loggingEnabled(): boolean { return false; },
-        perftrc(s: string): void {},
-        info(s: string): void {},
-        startGroup(): void {},
-        endGroup(): void {},
-        msg(s: string, type?: string): void {},
+        perftrc: noop,
+        info: noop,
+        startGroup: noop,
+        endGroup: noop,
+        msg: noop,
         getLogFileName: (): string => undefined
     };
 
@@ -245,7 +245,7 @@ namespace ts.server {
                     responseRequired: true
                 };
 
-                session.addProtocolHandler(command, (req) => result);
+                session.addProtocolHandler(command, () => result);
 
                 expect(session.executeCommand({
                     command,
@@ -263,9 +263,9 @@ namespace ts.server {
                 };
                 const command = "newhandle";
 
-                session.addProtocolHandler(command, (req) => resp);
+                session.addProtocolHandler(command, () => resp);
 
-                expect(() => session.addProtocolHandler(command, (req) => resp))
+                expect(() => session.addProtocolHandler(command, () => resp))
                 .to.throw(`Protocol handler already exists for command "${command}"`);
             });
         });

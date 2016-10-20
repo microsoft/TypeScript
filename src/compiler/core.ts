@@ -532,6 +532,12 @@ namespace ts {
             : undefined;
     }
 
+    export function replaceElement<T>(array: T[], index: number, value: T): T[] {
+        const result = array.slice(0);
+        result[index] = value;
+        return result;
+    }
+
     /**
      * Performs a binary search, finding the index at which 'value' occurs in 'array'.
      * If no such index is found, returns the 2's-complement of first index at which
@@ -861,6 +867,14 @@ namespace ts {
      */
     export function isArray(value: any): value is any[] {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
+    /** Does nothing. */
+    export function noop(): void {}
+
+    /** Throws an error because a function is not implemented. */
+    export function notImplemented(): never {
+        throw new Error("Not implemented");
     }
 
     export function memoize<T>(callback: () => T): () => T {

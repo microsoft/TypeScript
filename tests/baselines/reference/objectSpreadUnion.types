@@ -48,30 +48,30 @@ function tripleUnion<T, U, V>(t: T, u: U, v: V): void {
 >U : U
 >V : V
 
-    let result = { id: 'foo', ...tuv };
->result : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
->{ id: 'foo', ...tuv } : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
+    let result = { ...tuv, id: 'foo' };
+>result : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
+>{ ...tuv, id: 'foo' } : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
+>tuv : any
 >id : string
 >'foo' : "foo"
->tuv : any
 
-    let expected: { id: string, ...T } | { id: string, ...U } | { id: string, ...V } = result;
->expected : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
->id : string
+    let expected: { ...T, id: string } | { ...U, id: string } | { ...V, id: string } = result;
+>expected : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
 >T : T
 >id : string
 >U : U
 >id : string
 >V : V
->result : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
-
-    let assignable: { id: string, ...(T | U | V) } = result;
->assignable : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
 >id : string
+>result : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
+
+    let assignable: { ...(T | U | V), id: string } = result;
+>assignable : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
 >T : T
 >U : U
 >V : V
->result : { id: string; ...T } | { id: string; ...U } | { id: string; ...V }
+>id : string
+>result : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
 }
 function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 >iteratedDoubleUnion : <T, U, V>(t: T, u: U, v: V) => void
@@ -95,17 +95,16 @@ function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 >U : U
 >V : V
 
-    let result = { id: 'bar', ...tu, ...uv };
->result : { id: string; ...T; ...U } | { id: string; ...U } | { id: string; ...T; ...V } | { id: string; ...U; ...V }
->{ id: 'bar', ...tu, ...uv } : { id: string; ...T; ...U } | { id: string; ...U } | { id: string; ...T; ...V } | { id: string; ...U; ...V }
->id : string
->'bar' : "bar"
+    let result = { ...tu, ...uv, id: 'bar' };
+>result : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...U; ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...T; ...V; id: string; } | { ...U; ...V; id: string; } | { ...T; ...U; ...V; id: string; }
+>{ ...tu, ...uv, id: 'bar' } : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...U; ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...T; ...V; id: string; } | { ...U; ...V; id: string; } | { ...T; ...U; ...V; id: string; }
 >tu : any
 >uv : any
+>id : string
+>'bar' : "bar"
 
-    let expected: { id: string, ...T, ...U } | { id: string, ...T, ...V } | { id: string, ...U } | { id: string, ...U, ...V };
->expected : { id: string; ...T; ...U } | { id: string; ...T; ...V } | { id: string; ...U } | { id: string; ...U; ...V }
->id : string
+    let expected: { ...T, ...U, id: string } | { ...T, ...V, id: string } | { ...U, id: string } | { ...U, ...V, id: string };
+>expected : { ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; id: string; } | { ...U; ...V; id: string; }
 >T : T
 >U : U
 >id : string
@@ -116,15 +115,16 @@ function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 >id : string
 >U : U
 >V : V
+>id : string
 
-    let assignable: { id: string, ...(T | U), ...(U | V) } = result;
->assignable : { id: string; ...T; ...U } | { id: string; ...U } | { id: string; ...T; ...V } | { id: string; ...U; ...V }
->id : string
+    let assignable: { ...(T | U), ...(U | V), id: string } = result;
+>assignable : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...U; ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...T; ...V; id: string; } | { ...U; ...V; id: string; } | { ...T; ...U; ...V; id: string; }
 >T : T
 >U : U
 >U : U
 >V : V
->result : { id: string; ...T; ...U } | { id: string; ...U } | { id: string; ...T; ...V } | { id: string; ...U; ...V }
+>id : string
+>result : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...U; ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...T; ...V; id: string; } | { ...U; ...V; id: string; } | { ...T; ...U; ...V; id: string; }
 }
 
 

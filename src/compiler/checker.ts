@@ -593,7 +593,11 @@ namespace ts {
                     // nodes are in different files and order cannot be determines
                     return true;
                 }
-
+                // declaration is after usage
+                // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
+                if (isUsedInFunctionOrNonStaticProperty(usage)) {
+                    return true;
+                }
                 const sourceFiles = host.getSourceFiles();
                 return indexOf(sourceFiles, declarationFile) <= indexOf(sourceFiles, useFile);
             }
@@ -607,7 +611,8 @@ namespace ts {
 
             // declaration is after usage
             // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
-            return isUsedInFunctionOrNonStaticProperty(declaration, usage);
+            const container = getEnclosingBlockScopeContainer(declaration);
+            return isUsedInFunctionOrNonStaticProperty(usage, container);
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 const container = getEnclosingBlockScopeContainer(declaration);
@@ -636,8 +641,7 @@ namespace ts {
                 return false;
             }
 
-            function isUsedInFunctionOrNonStaticProperty(declaration: Declaration, usage: Node): boolean {
-                const container = getEnclosingBlockScopeContainer(declaration);
+            function isUsedInFunctionOrNonStaticProperty(usage: Node, container?: Node): boolean {
                 let current = usage;
                 while (current) {
                     if (current === container) {
@@ -4575,7 +4579,7 @@ namespace ts {
         }
 
         function getApparentTypeOfSpread(type: SpreadType) {
-            return getSpreadType([getApparentType(type.left), getApparentType(type.right)], type.symbol);
+            return getApparentType(type.right);
         }
 
         function getApparentTypeOfDifference(type: DifferenceType) {
@@ -5747,6 +5751,11 @@ namespace ts {
             }
         }
 
+        // We normalize combinations of intersection and union types based on the distributive property of the '&'
+        // operator. Specifically, because X & (A | B) is equivalent to X & A | X & B, we can transform intersection
+        // types with union type constituents into equivalent union types with intersection type constituents and
+        // effectively ensure that union types are always at the top level in type representations.
+        //
         // We do not perform structural deduplication on intersection types. Intersection types are created only by the &
         // type operator and we can't reduce those because we want to support recursive intersection types. For example,
         // a type alias of the form "type List<T> = T & { next: List<T> }" cannot be reduced during its declaration.
@@ -5755,6 +5764,15 @@ namespace ts {
         function getIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (types.length === 0) {
                 return emptyObjectType;
+            }
+            for (let i = 0; i < types.length; i++) {
+                const type = types[i];
+                if (type.flags & TypeFlags.Union) {
+                    // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
+                    // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
+                    return getUnionType(map((<UnionType>type).types, t => getIntersectionType(replaceElement(types, i, t))),
+                        /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
+                }
             }
             const typeSet = [] as TypeSet;
             addTypesToIntersection(typeSet, types);
@@ -5889,11 +5907,6 @@ namespace ts {
                 types.push(rspread.right);
                 return getSpreadType(types, symbol, aliasSymbol, aliasTypeArguments);
             }
-            if (right.flags & TypeFlags.Intersection) {
-                const spreads = map((right as IntersectionType).types,
-                                    t => getSpreadType(types.slice().concat([t]), symbol, aliasSymbol, aliasTypeArguments));
-                return getIntersectionType(spreads, aliasSymbol, aliasTypeArguments);
-            }
             if (right.flags & TypeFlags.Union) {
                 const spreads = map((right as UnionType).types,
                                     t => getSpreadType(types.slice().concat([t]), symbol, aliasSymbol, aliasTypeArguments));
@@ -5916,14 +5929,8 @@ namespace ts {
                 left.flags & TypeFlags.Spread &&
                 (left as SpreadType).right.flags & TypeFlags.ObjectType) {
                 // simplify two adjacent object types: T ... { x } ... { y } becomes T ... { x, y }
-                // Note: left.left is always a spread type. Can we use this fact to avoid calling getSpreadType again?
-                return getSpreadType([getSpreadType([right, (left as SpreadType).right], symbol, aliasSymbol, aliasTypeArguments),
-                                      (left as SpreadType).left], symbol, aliasSymbol, aliasTypeArguments);
-            }
-            if (left.flags & TypeFlags.Intersection) {
-                const spreads = map((left as IntersectionType).types,
-                                  t => getSpreadType(types.slice().concat([t, right]), symbol, aliasSymbol, aliasTypeArguments));
-                return getIntersectionType(spreads, aliasSymbol, aliasTypeArguments);
+                const simplified = getSpreadType([right, (left as SpreadType).right], symbol, aliasSymbol, aliasTypeArguments);
+                return getSpreadType([(left as SpreadType).left, simplified], symbol, aliasSymbol, aliasTypeArguments);
             }
             if (left.flags & TypeFlags.Union) {
                 const spreads = map((left as UnionType).types,
@@ -5981,9 +5988,9 @@ namespace ts {
             }
             const spread = spreadTypes[id] = createObjectType(TypeFlags.Spread, symbol) as SpreadType;
             Debug.assert(!!(left.flags & (TypeFlags.Spread | TypeFlags.ObjectType)), "Left flags: " + left.flags.toString(2));
-            Debug.assert(!!(right.flags & (TypeFlags.TypeParameter | TypeFlags.ObjectType)), "Right flags: " + right.flags.toString(2));
+            Debug.assert(!!(right.flags & (TypeFlags.TypeParameter | TypeFlags.Intersection | TypeFlags.ObjectType)), "Right flags: " + right.flags.toString(2));
             spread.left = left as SpreadType | ResolvedType;
-            spread.right = right as TypeParameter | ResolvedType;
+            spread.right = right as TypeParameter | IntersectionType | ResolvedType;
             spread.aliasSymbol = aliasSymbol;
             spread.aliasTypeArguments = aliasTypeArguments;
             return spread;
@@ -6906,7 +6913,9 @@ namespace ts {
 
                 const saveErrorInfo = errorInfo;
 
-                // Note that these checks are specifically ordered to produce correct results.
+                // Note that these checks are specifically ordered to produce correct results. In particular,
+                // we need to deconstruct unions before intersections (because unions are always at the top),
+                // and we need to handle "each" relations before "some" relations for the same kind of type.
                 if (source.flags & TypeFlags.Union) {
                     if (relation === comparableRelation) {
                         result = someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
@@ -6914,50 +6923,42 @@ namespace ts {
                     else {
                         result = eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
                     }
-
                     if (result) {
+                        return result;
+                    }
+                }
+                else if (target.flags & TypeFlags.Union) {
+                    if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive))) {
                         return result;
                     }
                 }
                 else if (target.flags & TypeFlags.Intersection) {
-                    result = typeRelatedToEachType(source, target as IntersectionType, reportErrors);
-
-                    if (result) {
+                    if (result = typeRelatedToEachType(source, target as IntersectionType, reportErrors)) {
                         return result;
                     }
                 }
-                else {
-                    // It is necessary to try these "some" checks on both sides because there may be nested "each" checks
-                    // on either side that need to be prioritized. For example, A | B = (A | B) & (C | D) or
-                    // A & B = (A & B) | (C & D).
-                    if (source.flags & TypeFlags.Intersection) {
-                        // Check to see if any constituents of the intersection are immediately related to the target.
-                        //
-                        // Don't report errors though. Checking whether a constituent is related to the source is not actually
-                        // useful and leads to some confusing error messages. Instead it is better to let the below checks
-                        // take care of this, or to not elaborate at all. For instance,
-                        //
-                        //    - For an object type (such as 'C = A & B'), users are usually more interested in structural errors.
-                        //
-                        //    - For a union type (such as '(A | B) = (C & D)'), it's better to hold onto the whole intersection
-                        //          than to report that 'D' is not assignable to 'A' or 'B'.
-                        //
-                        //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
-                        //          breaking the intersection apart.
-                        if (result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false)) {
-                            return result;
-                        }
-                    }
-                    if (target.flags & TypeFlags.Union) {
-                        if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive))) {
-                            return result;
-                        }
+                else if (source.flags & TypeFlags.Intersection) {
+                    // Check to see if any constituents of the intersection are immediately related to the target.
+                    //
+                    // Don't report errors though. Checking whether a constituent is related to the source is not actually
+                    // useful and leads to some confusing error messages. Instead it is better to let the below checks
+                    // take care of this, or to not elaborate at all. For instance,
+                    //
+                    //    - For an object type (such as 'C = A & B'), users are usually more interested in structural errors.
+                    //
+                    //    - For a union type (such as '(A | B) = (C & D)'), it's better to hold onto the whole intersection
+                    //          than to report that 'D' is not assignable to 'A' or 'B'.
+                    //
+                    //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
+                    //          breaking the intersection apart.
+                    if (result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false)) {
+                        return result;
                     }
                 }
 
                 if (source.flags & TypeFlags.Spread && target.flags & TypeFlags.Spread) {
                     // you only see this for spreads with type parameters
-                    if (!(spreadTypeRelatedTo(source as SpreadType, target as SpreadType))) {
+                    if (!(spreadTypeRelatedTo(source as SpreadType, target as SpreadType, /*atRightEdge*/ true))) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
                         }
@@ -7047,28 +7048,29 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function spreadTypeRelatedTo(source: SpreadType, target: SpreadType): boolean {
+            function spreadTypeRelatedTo(source: SpreadType, target: SpreadType, atRightEdge?: boolean): boolean {
                 // If the right side of a spread type is ObjectType, then the left side must be a Spread.
                 // Structural compatibility of the spreads' object types are checked separately in isRelatedTo,
                 // so just skip them for now.
                 if (source.right.flags & TypeFlags.ObjectType || target.right.flags & TypeFlags.ObjectType) {
-                    return spreadTypeRelatedTo(source.right.flags & TypeFlags.ObjectType ? source.left as SpreadType : source,
-                                               target.right.flags & TypeFlags.ObjectType ? target.left as SpreadType : target);
+                    return atRightEdge &&
+                        spreadTypeRelatedTo(source.right.flags & TypeFlags.ObjectType ? source.left as SpreadType : source,
+                                            target.right.flags & TypeFlags.ObjectType ? target.left as SpreadType : target);
                 }
-                // If both right sides are type parameters, then they must be identical for the spread types to be related.
+                // If both right sides are type parameters or intersections, then they must be identical for the spread types to be related.
                 // It also means that the left sides are either spread types or object types.
 
                 // if one left is object and the other is spread, that means the second has another type parameter. which isn't allowed
-                if (target.right.symbol !== source.right.symbol) {
+                if (target.right !== source.right) {
                     return false;
                 }
                 if (source.left.flags & TypeFlags.Spread && target.left.flags & TypeFlags.Spread) {
                     // If the left sides are both spread types, then recursively check them.
                     return spreadTypeRelatedTo(source.left as SpreadType, target.left as SpreadType);
                 }
-                // If the left sides are both object types, then isRelatedTo will check the structural compatibility next.
-                // Otherwise, one side has more type parameters than the other and the spread types are not related.
-                return !!(source.left.flags & TypeFlags.ObjectType && target.left.flags & TypeFlags.ObjectType);
+                // If the left sides are both object types, then we should be at the end and both should be emptyObjectType.
+                // If not, we can't know what properties might have been overwritten, so fail.
+                return source.left === emptyObjectType && target.left === emptyObjectType;
             }
 
             function isIdenticalTo(source: Type, target: Type): Ternary {
@@ -8147,8 +8149,7 @@ namespace ts {
             return !!(type.flags & TypeFlags.TypeParameter ||
                 type.flags & TypeFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeParameters) ||
                 type.flags & TypeFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
-                type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeParameters(<UnionOrIntersectionType>type) ||
-                type.flags & TypeFlags.Spread && couldSpreadContainTypeParameters(type as SpreadType));
+                type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeParameters(<UnionOrIntersectionType>type));
         }
 
         function couldUnionOrIntersectionContainTypeParameters(type: UnionOrIntersectionType): boolean {
@@ -8156,11 +8157,6 @@ namespace ts {
                 type.couldContainTypeParameters = forEach(type.types, couldContainTypeParameters);
             }
             return type.couldContainTypeParameters;
-        }
-
-        function couldSpreadContainTypeParameters(type: SpreadType): boolean {
-            return !!(type.right.flags & TypeFlags.TypeParameter ||
-                      type.left.flags & TypeFlags.Spread && (type.left as SpreadType).right.flags & TypeFlags.TypeParameter);
         }
 
         function isTypeParameterAtTopLevel(type: Type, typeParameter: TypeParameter): boolean {
@@ -8225,16 +8221,6 @@ namespace ts {
                         source = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>source, matchingTypes);
                         target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
                     }
-                }
-                if (source.flags & TypeFlags.Spread && target.flags & TypeFlags.Spread) {
-                    // only the last type parameter is a valid inference site,
-                    // and only if not followed by object literal properties.
-                    if ((source as SpreadType).right.flags & TypeFlags.TypeParameter &&
-                       (target as SpreadType).right.flags & TypeFlags.TypeParameter) {
-                        inferFromTypes((source as SpreadType).right, (target as SpreadType).right);
-                    }
-
-                    return;
                 }
                 if (target.flags & TypeFlags.TypeParameter) {
                     // If target is a type parameter, make an inference, unless the source type contains
@@ -8312,57 +8298,31 @@ namespace ts {
                 else {
                     source = getApparentType(source);
                     if (source.flags & TypeFlags.ObjectType) {
-                        if (target.flags & TypeFlags.Spread) {
-                            // with an object type as source, a spread target infers to its last type parameter it
-                            // contains, after removing any properties from a object type that precedes the type parameter
-                            // Note that the call to `typeDifference` creates a new anonymous type.
-                            const spread = target as SpreadType;
-                            const parameter = spread.right.flags & TypeFlags.TypeParameter ? spread.right : (spread.left as SpreadType).right;
-                            const object = spread.right.flags & TypeFlags.TypeParameter ? emptyObjectType : spread.right as ResolvedType;
-                            inferFromTypes(getTypeDifference(source, object), parameter);
-                            target = object;
+                        if (isInProcess(source, target)) {
+                            return;
                         }
-                        inferFromStructure(source, target);
+                        if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
+                            return;
+                        }
+                        const key = source.id + "," + target.id;
+                        if (visited[key]) {
+                            return;
+                        }
+                        visited[key] = true;
+                        if (depth === 0) {
+                            sourceStack = [];
+                            targetStack = [];
+                        }
+                        sourceStack[depth] = source;
+                        targetStack[depth] = target;
+                        depth++;
+                        inferFromProperties(source, target);
+                        inferFromSignatures(source, target, SignatureKind.Call);
+                        inferFromSignatures(source, target, SignatureKind.Construct);
+                        inferFromIndexTypes(source, target);
+                        depth--;
                     }
                 }
-            }
-
-            function inferFromStructure(source: Type, target: Type) {
-                if (isInProcess(source, target)) {
-                    return;
-                }
-                if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
-                    return;
-                }
-                const key = source.id + "," + target.id;
-                if (visited[key]) {
-                    return;
-                }
-                visited[key] = true;
-                if (depth === 0) {
-                    sourceStack = [];
-                    targetStack = [];
-                }
-                sourceStack[depth] = source;
-                targetStack[depth] = target;
-                depth++;
-                inferFromProperties(source, target);
-                inferFromSignatures(source, target, SignatureKind.Call);
-                inferFromSignatures(source, target, SignatureKind.Construct);
-                inferFromIndexTypes(source, target);
-                depth--;
-            }
-
-            function getTypeDifference(type: ObjectType, diff: ResolvedType): ResolvedType {
-                const members = createMap<Symbol>();
-                for (const prop of getPropertiesOfObjectType(type)) {
-                    if (!(prop.name in diff.members)) {
-                        members[prop.name] = prop;
-                    }
-                }
-                const stringIndexInfo = getIndexInfoOfType(diff, IndexKind.String) ? undefined : getIndexInfoOfType(type, IndexKind.String);
-                const numberIndexInfo = getIndexInfoOfType(diff, IndexKind.Number) ? undefined : getIndexInfoOfType(type, IndexKind.Number);
-                return createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             }
 
             function inferFromProperties(source: Type, target: Type) {
@@ -11550,14 +11510,20 @@ namespace ts {
         function checkJsxOpeningLikeElement(node: JsxOpeningLikeElement) {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
-
             // The reactNamespace symbol should be marked as 'used' so we don't incorrectly elide its import. And if there
             // is no reactNamespace symbol in scope when targeting React emit, we should issue an error.
             const reactRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
             const reactNamespace = compilerOptions.reactNamespace ? compilerOptions.reactNamespace : "React";
             const reactSym = resolveName(node.tagName, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace);
             if (reactSym) {
-                getSymbolLinks(reactSym).referenced = true;
+                // Mark local symbol as referenced here because it might not have been marked
+                // if jsx emit was not react as there wont be error being emitted
+                reactSym.isReferenced = true;
+
+                // If react symbol is alias, mark it as refereced
+                if (reactSym.flags & SymbolFlags.Alias && !isConstEnumOrConstEnumOnlyModule(resolveAlias(reactSym))) {
+                    markAliasSymbolAsReferenced(reactSym);
+                }
             }
 
             const targetAttributesType = getJsxElementAttributesType(node);
@@ -17601,7 +17567,9 @@ namespace ts {
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
 
-                    if (baseType.symbol.valueDeclaration && !isInAmbientContext(baseType.symbol.valueDeclaration)) {
+                    if (baseType.symbol.valueDeclaration &&
+                        !isInAmbientContext(baseType.symbol.valueDeclaration) &&
+                        baseType.symbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration) {
                         if (!isBlockScopedNameDeclaredBeforeUse(baseType.symbol.valueDeclaration, node)) {
                             error(baseTypeNode, Diagnostics.A_class_must_be_declared_after_its_base_class);
                         }

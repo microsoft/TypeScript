@@ -59,8 +59,11 @@ let callableConstructableSpread: { ...PublicX, (n: number): number, new (p: numb
 callableConstructableSpread(12); // error, no call signature
 new callableConstructableSpread(12); // error, no construct signature
 
-// { ...U } is not assignable to U
-function override<U>(initial: U, override: U): U {
+function override<T,U,V>(initial: U, override: U, t: T, v: V): U {
+    // { ... T & V } is not assignable to { ... T & U }
+    let tvs: { ...T & V };
+    let mistake: { ...T & U } = tvs;
+    // { ...U } is not assignable to U
     return { ...initial, ...override };
 }
 
@@ -133,7 +136,10 @@ spreadC.m(); // error 'm' is not in '{ ... c }'
 var callableConstructableSpread;
 callableConstructableSpread(12); // error, no call signature
 new callableConstructableSpread(12); // error, no construct signature
-// { ...U } is not assignable to U
-function override(initial, override) {
+function override(initial, override, t, v) {
+    // { ... T & V } is not assignable to { ... T & U }
+    var tvs;
+    var mistake = tvs;
+    // { ...U } is not assignable to U
     return __assign({}, initial, override);
 }

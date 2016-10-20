@@ -46,26 +46,26 @@ function tripleUnion<T, U, V>(t: T, u: U, v: V): void {
 >U : Symbol(U, Decl(objectSpreadUnion.ts, 8, 23))
 >V : Symbol(V, Decl(objectSpreadUnion.ts, 8, 26))
 
-    let result = { id: 'foo', ...tuv };
+    let result = { ...tuv, id: 'foo' };
 >result : Symbol(result, Decl(objectSpreadUnion.ts, 10, 7))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 10, 18))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 10, 26))
 
-    let expected: { id: string, ...T } | { id: string, ...U } | { id: string, ...V } = result;
+    let expected: { ...T, id: string } | { ...U, id: string } | { ...V, id: string } = result;
 >expected : Symbol(expected, Decl(objectSpreadUnion.ts, 11, 7))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 11, 19))
 >T : Symbol(T, Decl(objectSpreadUnion.ts, 8, 21))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 11, 42))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 11, 25))
 >U : Symbol(U, Decl(objectSpreadUnion.ts, 8, 23))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 11, 65))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 11, 48))
 >V : Symbol(V, Decl(objectSpreadUnion.ts, 8, 26))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 11, 71))
 >result : Symbol(result, Decl(objectSpreadUnion.ts, 10, 7))
 
-    let assignable: { id: string, ...(T | U | V) } = result;
+    let assignable: { ...(T | U | V), id: string } = result;
 >assignable : Symbol(assignable, Decl(objectSpreadUnion.ts, 12, 7))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 12, 21))
 >T : Symbol(T, Decl(objectSpreadUnion.ts, 8, 21))
 >U : Symbol(U, Decl(objectSpreadUnion.ts, 8, 23))
 >V : Symbol(V, Decl(objectSpreadUnion.ts, 8, 26))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 12, 37))
 >result : Symbol(result, Decl(objectSpreadUnion.ts, 10, 7))
 }
 function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
@@ -90,31 +90,31 @@ function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 >U : Symbol(U, Decl(objectSpreadUnion.ts, 14, 31))
 >V : Symbol(V, Decl(objectSpreadUnion.ts, 14, 34))
 
-    let result = { id: 'bar', ...tu, ...uv };
+    let result = { ...tu, ...uv, id: 'bar' };
 >result : Symbol(result, Decl(objectSpreadUnion.ts, 17, 7))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 17, 18))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 17, 32))
 
-    let expected: { id: string, ...T, ...U } | { id: string, ...T, ...V } | { id: string, ...U } | { id: string, ...U, ...V };
+    let expected: { ...T, ...U, id: string } | { ...T, ...V, id: string } | { ...U, id: string } | { ...U, ...V, id: string };
 >expected : Symbol(expected, Decl(objectSpreadUnion.ts, 18, 7))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 18, 19))
 >T : Symbol(T, Decl(objectSpreadUnion.ts, 14, 29))
 >U : Symbol(U, Decl(objectSpreadUnion.ts, 14, 31))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 18, 48))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 18, 31))
 >T : Symbol(T, Decl(objectSpreadUnion.ts, 14, 29))
 >V : Symbol(V, Decl(objectSpreadUnion.ts, 14, 34))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 18, 77))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 18, 60))
 >U : Symbol(U, Decl(objectSpreadUnion.ts, 14, 31))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 18, 100))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 18, 83))
 >U : Symbol(U, Decl(objectSpreadUnion.ts, 14, 31))
 >V : Symbol(V, Decl(objectSpreadUnion.ts, 14, 34))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 18, 112))
 
-    let assignable: { id: string, ...(T | U), ...(U | V) } = result;
+    let assignable: { ...(T | U), ...(U | V), id: string } = result;
 >assignable : Symbol(assignable, Decl(objectSpreadUnion.ts, 19, 7))
->id : Symbol(id, Decl(objectSpreadUnion.ts, 19, 21))
 >T : Symbol(T, Decl(objectSpreadUnion.ts, 14, 29))
 >U : Symbol(U, Decl(objectSpreadUnion.ts, 14, 31))
 >U : Symbol(U, Decl(objectSpreadUnion.ts, 14, 31))
 >V : Symbol(V, Decl(objectSpreadUnion.ts, 14, 34))
+>id : Symbol(id, Decl(objectSpreadUnion.ts, 19, 45))
 >result : Symbol(result, Decl(objectSpreadUnion.ts, 17, 7))
 }
 

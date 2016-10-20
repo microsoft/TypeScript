@@ -18,10 +18,11 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,12): error TS233
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(55,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ x: number; }' has no compatible call signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(63,12): error TS2322: Type '{ ...U }' is not assignable to type 'U'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(64,9): error TS2322: Type '{ ...T & V }' is not assignable to type '{ ...T & U }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS2322: Type '{ ...U }' is not assignable to type 'U'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (18 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (19 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -119,8 +120,13 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(63,12): error TS232
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     
-    // { ...U } is not assignable to U
-    function override<U>(initial: U, override: U): U {
+    function override<T,U,V>(initial: U, override: U, t: T, v: V): U {
+        // { ... T & V } is not assignable to { ... T & U }
+        let tvs: { ...T & V };
+        let mistake: { ...T & U } = tvs;
+            ~~~~~~~
+!!! error TS2322: Type '{ ...T & V }' is not assignable to type '{ ...T & U }'.
+        // { ...U } is not assignable to U
         return { ...initial, ...override };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ ...U }' is not assignable to type 'U'.

@@ -179,7 +179,7 @@ namespace ts.Completions {
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
-                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, node);
+                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
                 }
 
                 // Get completion for string literal from string literal type
@@ -199,7 +199,7 @@ namespace ts.Completions {
             }
         }
 
-        function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo, location: Node) {
+        function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo) {
             const candidates: Signature[] = [];
             const entries: CompletionEntry[] = [];
 
@@ -361,7 +361,7 @@ namespace ts.Completions {
                     /**
                      * Multiple file entries might map to the same truncated name once we remove extensions
                      * (happens iff includeExtensions === false)so we use a set-like data structure. Eg:
-                     * 
+                     *
                      * both foo.ts and foo.tsx become foo
                      */
                     const foundFiles = createMap<boolean>();
@@ -617,7 +617,7 @@ namespace ts.Completions {
 
                 if (typeRoots) {
                     for (const root of typeRoots) {
-                        getCompletionEntriesFromDirectories(host, options, root, span, result);
+                        getCompletionEntriesFromDirectories(host, root, span, result);
                     }
                 }
             }
@@ -626,14 +626,14 @@ namespace ts.Completions {
                 // Also get all @types typings installed in visible node_modules directories
                 for (const packageJson of findPackageJsons(scriptPath)) {
                     const typesDir = combinePaths(getDirectoryPath(packageJson), "node_modules/@types");
-                    getCompletionEntriesFromDirectories(host, options, typesDir, span, result);
+                    getCompletionEntriesFromDirectories(host, typesDir, span, result);
                 }
             }
 
             return result;
         }
 
-        function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, span: TextSpan, result: CompletionEntry[]) {
+        function getCompletionEntriesFromDirectories(host: LanguageServiceHost, directory: string, span: TextSpan, result: CompletionEntry[]) {
             if (host.getDirectories && tryDirectoryExists(host, directory)) {
                 const directories = tryGetDirectories(host, directory);
                 if (directories) {
@@ -1708,11 +1708,11 @@ namespace ts.Completions {
      * to determine if the caret is currently within the string literal and capture the literal fragment
      * for completions.
      * For example, this matches
-     * 
+     *
      * /// <reference path="fragment
-     * 
+     *
      * but not
-     *  
+     *
      * /// <reference path="fragment"
      */
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
