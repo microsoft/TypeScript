@@ -12,7 +12,7 @@ nodeVersions.each { nodeVer ->
     def newJobName = "typescript_node.${nodeVer}"
     def newJob = job(Utilities.getFullJobName(project, newJobName, true)) {
         steps {
-        	shell("HOME=\$WORKSPACE ./jenkins.sh ${nodeVer}")
+        	shell("\$WORKSPACE/jenkins.sh ${nodeVer}")
         }
     }
     

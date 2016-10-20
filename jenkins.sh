@@ -1,5 +1,8 @@
 #!/bin/bash
 
+ls
+cd $WORKSPACE
+
 nvm install $1
 
 npm uninstall typescript
