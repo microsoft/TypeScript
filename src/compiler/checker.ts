@@ -5828,13 +5828,16 @@ namespace ts {
                 types.push(rspread.right);
                 return getSpreadType(types, symbol, aliasSymbol, aliasTypeArguments);
             }
+            if (right.flags & TypeFlags.Intersection) {
+                right = resolveObjectIntersection(right as IntersectionType);
+            }
             if (right.flags & TypeFlags.Union) {
                 const spreads = map((right as UnionType).types,
                                     t => getSpreadType(types.slice().concat([t]), symbol, aliasSymbol, aliasTypeArguments));
                 return getUnionType(spreads, /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
             const atBeginning = types.length === 0;
-            const left = getSpreadType(types, symbol, aliasSymbol, aliasTypeArguments);
+            let left = getSpreadType(types, symbol, aliasSymbol, aliasTypeArguments);
             if (right.flags & (TypeFlags.Primitive & ~TypeFlags.StringLike) || left.flags & TypeFlags.Any) {
                 return left;
             }
@@ -5852,6 +5855,9 @@ namespace ts {
                 // simplify two adjacent object types: T ... { x } ... { y } becomes T ... { x, y }
                 const simplified = getSpreadType([right, (left as SpreadType).right], symbol, aliasSymbol, aliasTypeArguments);
                 return getSpreadType([(left as SpreadType).left, simplified], symbol, aliasSymbol, aliasTypeArguments);
+            }
+            if (left.flags & TypeFlags.Intersection) {
+                left = resolveObjectIntersection(left as IntersectionType);
             }
             if (left.flags & TypeFlags.Union) {
                 const spreads = map((left as UnionType).types,
@@ -5915,6 +5921,20 @@ namespace ts {
             spread.aliasSymbol = aliasSymbol;
             spread.aliasTypeArguments = aliasTypeArguments;
             return spread;
+        }
+
+        function resolveObjectIntersection(intersection: IntersectionType): IntersectionType | ResolvedType {
+            if (find(intersection.types, t => !(t.flags & TypeFlags.ObjectType && !couldContainTypeParameters(t)))) {
+                return intersection;
+            }
+            const properties = getPropertiesOfType(intersection);
+            const members = createMap<Symbol>();
+            for (const property of properties) {
+                members[property.name] = property;
+            }
+            const stringIndex = getIndexInfoOfType(intersection, IndexKind.String);
+            const numberIndex = getIndexInfoOfType(intersection, IndexKind.Number);
+            return createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndex, numberIndex);
         }
 
         function createLiteralType(flags: TypeFlags, text: string) {
