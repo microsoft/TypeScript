@@ -47,27 +47,50 @@ interface A2 { a: string }
 >A2 : A2
 >a : string
 
+interface B1 { b: number }
+>B1 : B1
+>b : number
+
+interface B2 { b: string }
+>B2 : B2
+>b : string
+
 let a12: A1 & A2;
 >a12 : A1 & A2
 >A1 : A1
 >A2 : A2
 
-let result = { ...a12 };
->result : { ...A1 & A2 }
->{ ...a12 } : { ...A1 & A2 }
+let b12: B1 & B2;
+>b12 : B1 & B2
+>B1 : B1
+>B2 : B2
+
+let result = { ...a12, ...b12 };
+>result : { b: number & string; a: number & string; }
+>{ ...a12, ...b12 } : { b: number & string; a: number & string; }
 >a12 : any
+>b12 : any
 
 let sn: number & string = result.a;
 >sn : number & string
 >result.a : number & string
->result : { ...A1 & A2 }
+>result : { b: number & string; a: number & string; }
 >a : number & string
 
-let assignable: { ...(A1 & A2) } = result;
->assignable : { ...A1 & A2 }
+sn = result.b;
+>sn = result.b : number & string
+>sn : number & string
+>result.b : number & string
+>result : { b: number & string; a: number & string; }
+>b : number & string
+
+let assignable: { ...(A1 & A2), ...(B1 & B2) } = result;
+>assignable : { b: number & string; a: number & string; }
 >A1 : A1
 >A2 : A2
->result : { ...A1 & A2 }
+>B1 : B1
+>B2 : B2
+>result : { b: number & string; a: number & string; }
 
 function tripleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >tripleIntersection : <T, U, V>(t: T, u: U, v: V) => void
