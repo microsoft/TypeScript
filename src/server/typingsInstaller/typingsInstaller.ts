@@ -381,8 +381,10 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
                     }
-                    this.sendResponse({ projectName: projectName, kind: "invalidate" });
-                    isInvoked = true;
+                    if (!isInvoked) {
+                        this.sendResponse({ projectName: projectName, kind: "invalidate" });
+                        isInvoked = true;
+                    }
                 });
                 watchers.push(w);
             }
