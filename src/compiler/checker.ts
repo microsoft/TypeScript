@@ -2195,7 +2195,7 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.DotToken);
                         appendSymbolNameOnly(type.symbol, writer);
                     }
-                    else if (getObjectFlags(type) & (ObjectFlags.Class | ObjectFlags.Interface) || type.flags & (TypeFlags.Enum | TypeFlags.TypeParameter)) {
+                    else if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.Enum | TypeFlags.TypeParameter)) {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
@@ -3705,7 +3705,7 @@ namespace ts {
             if (baseType === unknownType) {
                 return;
             }
-            if (!(getObjectFlags(getTargetType(baseType)) & (ObjectFlags.Class | ObjectFlags.Interface))) {
+            if (!(getObjectFlags(getTargetType(baseType)) & ObjectFlags.ClassOrInterface)) {
                 error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
                 return;
             }
@@ -3741,7 +3741,7 @@ namespace ts {
                     for (const node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                         const baseType = getTypeFromTypeNode(node);
                         if (baseType !== unknownType) {
-                            if (getObjectFlags(getTargetType(baseType)) & (ObjectFlags.Class | ObjectFlags.Interface)) {
+                            if (getObjectFlags(getTargetType(baseType)) & ObjectFlags.ClassOrInterface) {
                                 if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
                                     if (type.resolvedBaseTypes === emptyArray) {
                                         type.resolvedBaseTypes = [<ObjectType>baseType];
@@ -4373,7 +4373,7 @@ namespace ts {
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
                         resolveTypeReferenceMembers(<TypeReference>type);
                     }
-                    else if ((<ObjectType>type).objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)) {
+                    else if ((<ObjectType>type).objectFlags & ObjectFlags.ClassOrInterface) {
                         resolveClassOrInterfaceMembers(<InterfaceType>type);
                     }
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
@@ -8575,10 +8575,6 @@ namespace ts {
             return isTypeSubsetOf(elementType, evolvingArrayType.elementType) ? evolvingArrayType : getEvolvingArrayType(getUnionType([evolvingArrayType.elementType, elementType]));
         }
 
-        function isEvolvingArrayType(type: Type) {
-            return !!(getObjectFlags(type) & ObjectFlags.EvolvingArray);
-        }
-
         function createFinalArrayType(elementType: Type) {
             return elementType.flags & TypeFlags.Never ?
                 autoArrayType :
@@ -8593,18 +8589,18 @@ namespace ts {
         }
 
         function finalizeEvolvingArrayType(type: Type): Type {
-            return isEvolvingArrayType(type) ? getFinalArrayType(<EvolvingArrayType>type) : type;
+            return getObjectFlags(type) & ObjectFlags.EvolvingArray ? getFinalArrayType(<EvolvingArrayType>type) : type;
         }
 
         function getElementTypeOfEvolvingArrayType(type: Type) {
-            return isEvolvingArrayType(type) ? (<EvolvingArrayType>type).elementType : neverType;
+            return getObjectFlags(type) & ObjectFlags.EvolvingArray ? (<EvolvingArrayType>type).elementType : neverType;
         }
 
         function isEvolvingArrayTypeList(types: Type[]) {
             let hasEvolvingArrayType = false;
             for (const t of types) {
                 if (!(t.flags & TypeFlags.Never)) {
-                    if (!isEvolvingArrayType(t)) {
+                    if (!(getObjectFlags(t) & ObjectFlags.EvolvingArray)) {
                         return false;
                     }
                     hasEvolvingArrayType = true;
@@ -8655,7 +8651,7 @@ namespace ts {
             // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
-            const resultType = isEvolvingArrayType(evolvedType) && isEvolvingArrayOperationTarget(reference) ? anyArrayType : finalizeEvolvingArrayType(evolvedType);
+            const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? anyArrayType : finalizeEvolvingArrayType(evolvedType);
             if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
@@ -8768,7 +8764,7 @@ namespace ts {
                 if (isMatchingReference(reference, getReferenceCandidate(expr))) {
                     const flowType = getTypeAtFlowNode(flow.antecedent);
                     const type = getTypeFromFlowType(flowType);
-                    if (isEvolvingArrayType(type)) {
+                    if (getObjectFlags(type) & ObjectFlags.EvolvingArray) {
                         let evolvedType = <EvolvingArrayType>type;
                         if (node.kind === SyntaxKind.CallExpression) {
                             for (const arg of (<CallExpression>node).arguments) {
@@ -11249,7 +11245,7 @@ namespace ts {
             }
 
             // TODO: why is the first part of this check here?
-            if (!(getObjectFlags(getTargetType(type)) & (ObjectFlags.Class | ObjectFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
+            if (!(getObjectFlags(getTargetType(type)) & ObjectFlags.ClassOrInterface && hasBaseType(<InterfaceType>type, enclosingClass))) {
                 error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
                 return false;
             }
@@ -17174,8 +17170,8 @@ namespace ts {
                     if (produceDiagnostics) {
                         const t = getTypeFromTypeNode(typeRefNode);
                         if (t !== unknownType) {
-                            const declaredType = (getObjectFlags(t) & ObjectFlags.Reference) ? (<TypeReference>t).target : t;
-                            if (getObjectFlags(declaredType) & (ObjectFlags.Class | ObjectFlags.Interface)) {
+                            const declaredType = getObjectFlags(t) & ObjectFlags.Reference ? (<TypeReference>t).target : t;
+                            if (getObjectFlags(declaredType) & ObjectFlags.ClassOrInterface) {
                                 checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(t, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {

@@ -2655,18 +2655,6 @@ namespace ts {
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
 
-    export const enum ObjectFlags {
-        Class         = 1 << 0,  // Class
-        Interface     = 1 << 1,  // Interface
-        Reference     = 1 << 2,  // Generic type reference
-        Tuple         = 1 << 3,  // Synthesized generic tuple type
-        Anonymous     = 1 << 4,  // Anonymous
-        Instantiated  = 1 << 5,  // Instantiated anonymous type
-        ObjectLiteral = 1 << 6,  // Originates in an object literal
-        EvolvingArray = 1 << 7,  // Evolving array type
-        ObjectLiteralPatternWithComputedProperties = 1 << 8,  // Object literal pattern with computed properties
-    }
-
     // Properties common to all types
     export interface Type {
         flags: TypeFlags;                // Flags
@@ -2699,6 +2687,19 @@ namespace ts {
     // Enum types (TypeFlags.EnumLiteral)
     export interface EnumLiteralType extends LiteralType {
         baseType: EnumType & UnionType;  // Base enum type
+    }
+
+    export const enum ObjectFlags {
+        Class            = 1 << 0,  // Class
+        Interface        = 1 << 1,  // Interface
+        Reference        = 1 << 2,  // Generic type reference
+        Tuple            = 1 << 3,  // Synthesized generic tuple type
+        Anonymous        = 1 << 4,  // Anonymous
+        Instantiated     = 1 << 5,  // Instantiated anonymous type
+        ObjectLiteral    = 1 << 6,  // Originates in an object literal
+        EvolvingArray    = 1 << 7,  // Evolving array type
+        ObjectLiteralPatternWithComputedProperties = 1 << 8,  // Object literal pattern with computed properties
+        ClassOrInterface = Class | Interface
     }
 
     // Object types (TypeFlags.ObjectType)
