@@ -71,6 +71,9 @@ namespace ts.SymbolDisplay {
                 }
                 return unionPropertyKind;
             }
+            if (location.parent && isJsxAttribute(location.parent)) {
+                return ScriptElementKind.jsxAttribute;
+            }
             return ScriptElementKind.memberVariableElement;
         }
 
@@ -373,6 +376,7 @@ namespace ts.SymbolDisplay {
 
                     // For properties, variables and local vars: show the type
                     if (symbolKind === ScriptElementKind.memberVariableElement ||
+                        symbolKind === ScriptElementKind.jsxAttribute ||
                         symbolFlags & SymbolFlags.Variable ||
                         symbolKind === ScriptElementKind.localVariableElement ||
                         isThisExpression) {

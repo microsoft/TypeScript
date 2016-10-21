@@ -31,6 +31,7 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.CatchClause:
+            case SyntaxKind.JsxAttribute:
                 return SemanticMeaning.Value;
 
             case SyntaxKind.TypeParameter:
