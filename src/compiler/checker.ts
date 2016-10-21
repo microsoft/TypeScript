@@ -10371,13 +10371,13 @@ namespace ts {
             const jsxElement = attribute.parent.parent as JsxOpeningLikeElement;
             const attrsType = getAttributesTypeFromJsxOpeningLikeElement(jsxElement);
 
-            if (attribute.kind === SyntaxKind.JsxAttribute) {
+            if (kind === SyntaxKind.JsxAttribute) {
                 if (!attrsType || isTypeAny(attrsType)) {
                     return undefined;
                 }
                 return getTypeOfPropertyOfType(attrsType, (attribute as JsxAttribute).name.text);
             }
-            else if (attribute.kind === SyntaxKind.JsxSpreadAttribute) {
+            else if (kind === SyntaxKind.JsxSpreadAttribute) {
                 return attrsType;
             }
 
@@ -10454,6 +10454,9 @@ namespace ts {
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                    return getAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>parent);
             }
             return undefined;
         }

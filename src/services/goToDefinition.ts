@@ -87,6 +87,18 @@ namespace ts.GoToDefinition {
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
         }
 
+        // TODO (yuisu): comment
+        const container = getContainingObjectLiteralElement(node);
+        if (container) {
+            const contextualType = typeChecker.getContextualType(node.parent.parent as JsxOpeningLikeElement);
+            if (contextualType) {
+                let result: DefinitionInfo[] = [];
+                forEach(getPropertySymbolsFromContextualType(typeChecker, container), contextualSymbol => {
+                    result = result.concat(getDefinitionFromSymbol(typeChecker, contextualSymbol, node));
+                });
+                return result;
+            }
+        }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
