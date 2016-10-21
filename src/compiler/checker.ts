@@ -5803,7 +5803,8 @@ namespace ts {
             return getSpreadType(spreads, node.symbol, aliasSymbol, aliasTypeArguments);
         }
 
-        function getSpreadType(types: Type[], symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getSpreadType(types: Type[], symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]) {
+            // TODO: Move this function's body into callers, except for caching, and leave that back in getSpreadType proper
             if (types.length === 0) {
                 return emptyObjectType;
             }
@@ -5811,9 +5812,18 @@ namespace ts {
             if (id in spreadTypes) {
                 return spreadTypes[id];
             }
-            let right = types.pop();
-            if (right.flags & TypeFlags.StringLike) {
-                right = createAnonymousType(symbol, emptySymbols, emptyArray, emptyArray, undefined, createIndexInfo(stringType, /*isReadonly*/ false));
+            let spread: Type = emptyObjectType;
+            for (const left of types) {
+                spread = getSpreadTypeWorker(spread, left, symbol, aliasSymbol, aliasTypeArguments);
+            }
+            return spread;
+        }
+
+        function getSpreadTypeWorker(left: Type, right: Type, symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            // TODO: Reorder everything now that it's order independent, to be easier to read
+            const id = getTypeListId([left, right]);
+            if (id in spreadTypes) {
+                return spreadTypes[id];
             }
             if (right.flags & TypeFlags.Any) {
                 return anyType;
@@ -5822,23 +5832,21 @@ namespace ts {
                 // spread is right associative and associativity applies, so transform
                 // (T ... U) ... V to T ... (U ... V)
                 const rspread = right as SpreadType;
-                if (rspread.left !== emptyObjectType) {
-                    types.push(rspread.left);
+                if (rspread.left === emptyObjectType) {
+                    return getSpreadTypeWorker(left, rspread.right, symbol, aliasSymbol, aliasTypeArguments);
                 }
-                types.push(rspread.right);
-                return getSpreadType(types, symbol, aliasSymbol, aliasTypeArguments);
+                return getSpreadTypeWorker(getSpreadTypeWorker(left, rspread.left, symbol, aliasSymbol, aliasTypeArguments),
+                                           rspread.right, symbol, aliasSymbol, aliasTypeArguments);
             }
             if (right.flags & TypeFlags.Intersection) {
                 right = resolveObjectIntersection(right as IntersectionType);
             }
             if (right.flags & TypeFlags.Union) {
                 const spreads = map((right as UnionType).types,
-                                    t => getSpreadType(types.slice().concat([t]), symbol, aliasSymbol, aliasTypeArguments));
+                                    t => getSpreadTypeWorker(left, t, symbol, aliasSymbol, aliasTypeArguments));
                 return getUnionType(spreads, /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
-            const atBeginning = types.length === 0;
-            let left = getSpreadType(types, symbol, aliasSymbol, aliasTypeArguments);
-            if (right.flags & (TypeFlags.Primitive & ~TypeFlags.StringLike) || left.flags & TypeFlags.Any) {
+            if (right.flags & TypeFlags.Primitive || left.flags & TypeFlags.Any) {
                 return left;
             }
             if (right.flags & TypeFlags.TypeParameter &&
@@ -5861,19 +5869,21 @@ namespace ts {
             }
             if (left.flags & TypeFlags.Union) {
                 const spreads = map((left as UnionType).types,
-                                  t => getSpreadType(types.slice().concat([t, right]), symbol, aliasSymbol, aliasTypeArguments));
+                                    t => getSpreadTypeWorker(t, right, symbol, aliasSymbol, aliasTypeArguments));
                 return getUnionType(spreads, /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
             if (right.flags & TypeFlags.ObjectType && left.flags & TypeFlags.ObjectType) {
                 const members = createMap<Symbol>();
                 const skippedPrivateMembers = createMap<boolean>();
-                let stringIndexInfo = unionIndexInfos(getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.String));
-                let numberIndexInfo = unionIndexInfos(getIndexInfoOfType(left, IndexKind.Number), getIndexInfoOfType(right, IndexKind.Number));
-                if (atBeginning) {
-                    // only get index info from the entire type once per spread type
-                    stringIndexInfo = unionIndexInfos(stringIndexInfo, getIndexInfoOfSymbol(symbol, IndexKind.String));
-                    numberIndexInfo = unionIndexInfos(numberIndexInfo, getIndexInfoOfSymbol(symbol, IndexKind.Number));
-                }
+
+                // TODO: This is pretty ugly
+                const leftString = getIndexInfoOfType(left, IndexKind.String);
+                const rightString = getIndexInfoOfType(right, IndexKind.String);
+                const leftNumber = getIndexInfoOfType(left, IndexKind.Number);
+                const rightNumber = getIndexInfoOfType(right, IndexKind.Number);
+                const stringIndexInfo = leftString && rightString && unionIndexInfos(leftString, rightString);
+                const numberIndexInfo = leftNumber && rightNumber && unionIndexInfos(leftNumber, rightNumber);
+
                 const isFromSpread = right.symbol !== symbol;
                 for (const rightProp of getPropertiesOfType(right)) {
                     if (getDeclarationModifierFlagsFromSymbol(rightProp) & (ModifierFlags.Private | ModifierFlags.Protected)) {
@@ -5924,7 +5934,7 @@ namespace ts {
         }
 
         function resolveObjectIntersection(intersection: IntersectionType): IntersectionType | ResolvedType {
-            if (find(intersection.types, t => !(t.flags & TypeFlags.ObjectType) || couldContainTypeParameters(t))) {
+            if (find(intersection.types, t => !(t.flags & TypeFlags.ObjectType))) {
                 return intersection;
             }
             const properties = getPropertiesOfType(intersection);
@@ -15266,6 +15276,17 @@ namespace ts {
                     checkIndexConstraints(type);
                     checkTypeForDuplicateIndexSignatures(node);
                     checkObjectTypeForDuplicateDeclarations(node);
+                }
+                if (type.flags & (TypeFlags.ObjectType | TypeFlags.Spread) &&
+                    find(node.members, p => p.kind === SyntaxKind.SpreadTypeElement)) {
+                    const declaredNumberIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.Number);
+                    const declaredStringIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.String);
+                    if (declaredStringIndexer) {
+                        error(declaredStringIndexer, Diagnostics.Type_literals_with_spreads_cannot_contain_an_index_signature);
+                    }
+                    if (declaredNumberIndexer) {
+                        error(declaredNumberIndexer, Diagnostics.Type_literals_with_spreads_cannot_contain_an_index_signature);
+                    }
                 }
             }
         }

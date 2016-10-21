@@ -1971,6 +1971,10 @@
         "category": "Error",
         "code": 2697
     },
+    "Type literals with spreads cannot contain an index signature.": {
+        "category": "Error",
+        "code": 2698
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
