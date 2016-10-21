@@ -2664,6 +2664,7 @@ namespace ts {
         Instantiated  = 1 << 5,  // Instantiated anonymous type
         ObjectLiteral = 1 << 6,  // Originates in an object literal
         EvolvingArray = 1 << 7,  // Evolving array type
+        ObjectLiteralPatternWithComputedProperties = 1 << 8,  // Object literal pattern with computed properties
     }
 
     // Properties common to all types
@@ -2703,7 +2704,6 @@ namespace ts {
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
-        isObjectLiteralPatternWithComputedProperties?: boolean;
     }
 
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)

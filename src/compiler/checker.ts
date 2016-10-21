@@ -3222,7 +3222,7 @@ namespace ts {
                 result.pattern = pattern;
             }
             if (hasComputedProperties) {
-                result.isObjectLiteralPatternWithComputedProperties = true;
+                result.objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
             }
             return result;
         }
@@ -6734,8 +6734,7 @@ namespace ts {
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
-                if (maybeTypeOfKind(target, TypeFlags.ObjectType) &&
-                    (!(target.flags & TypeFlags.ObjectType) || !(target as ObjectType).isObjectLiteralPatternWithComputedProperties)) {
+                if (maybeTypeOfKind(target, TypeFlags.ObjectType) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (!isKnownProperty(target, prop.name)) {
                             if (reportErrors) {
@@ -10599,8 +10598,7 @@ namespace ts {
                             patternWithComputedProperties = true;
                         }
                     }
-                    else if (contextualTypeHasPattern &&
-                             !(contextualType.flags & TypeFlags.ObjectType && (contextualType as ObjectType).isObjectLiteralPatternWithComputedProperties)) {
+                    else if (contextualTypeHasPattern && !(getObjectFlags(contextualType) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                         // If object literal is contextually typed by the implied type of a binding pattern, and if the
                         // binding pattern specifies a default value for the property, make the property optional.
                         const impliedProp = getPropertyOfType(contextualType, member.name);
@@ -10668,7 +10666,7 @@ namespace ts {
             result.flags |= TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
             result.objectFlags |= ObjectFlags.ObjectLiteral;
             if (patternWithComputedProperties) {
-                result.isObjectLiteralPatternWithComputedProperties = true;
+                result.objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
             }
             if (inDestructuringPattern) {
                 result.pattern = node;
