@@ -539,7 +539,7 @@ namespace ts {
         }
 
         function getObjectFlags(type: Type): ObjectFlags {
-            return type.flags & TypeFlags.ObjectType ? (<ObjectType>type).objectFlags : 0;
+            return type.flags & TypeFlags.Object ? (<ObjectType>type).objectFlags : 0;
         }
 
         function isGlobalSourceFile(node: Node) {
@@ -1594,7 +1594,7 @@ namespace ts {
         }
 
         function createObjectType(objectFlags: ObjectFlags, symbol?: Symbol): ObjectType {
-            const type = <ObjectType>createType(TypeFlags.ObjectType);
+            const type = <ObjectType>createType(TypeFlags.Object);
             type.objectFlags = objectFlags;
             type.symbol = symbol;
             return type;
@@ -3600,7 +3600,7 @@ namespace ts {
         }
 
         function isConstructorType(type: Type): boolean {
-            return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Construct).length > 0;
+            return type.flags & TypeFlags.Object && getSignaturesOfType(type, SignatureKind.Construct).length > 0;
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments {
@@ -3637,7 +3637,7 @@ namespace ts {
                     return unknownType;
                 }
                 const baseConstructorType = checkExpression(baseTypeNode.expression);
-                if (baseConstructorType.flags & TypeFlags.ObjectType) {
+                if (baseConstructorType.flags & TypeFlags.Object) {
                     // Resolving the members of a class requires us to resolve the base class of that class.
                     // We force resolution here such that we catch circularities now.
                     resolveStructuredTypeMembers(<ObjectType>baseConstructorType);
@@ -3678,7 +3678,7 @@ namespace ts {
         function resolveBaseTypesOfClass(type: InterfaceType): void {
             type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             const baseConstructorType = <ObjectType>getBaseConstructorTypeOfClass(type);
-            if (!(baseConstructorType.flags & TypeFlags.ObjectType)) {
+            if (!(baseConstructorType.flags & TypeFlags.Object)) {
                 return;
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type);
@@ -4350,7 +4350,7 @@ namespace ts {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
                     const baseConstructorType = getBaseConstructorTypeOfClass(classType);
-                    if (baseConstructorType.flags & TypeFlags.ObjectType) {
+                    if (baseConstructorType.flags & TypeFlags.Object) {
                         members = createSymbolTable(getNamedMembers(members));
                         addInheritedMembers(members, getPropertiesOfObjectType(baseConstructorType));
                     }
@@ -4369,7 +4369,7 @@ namespace ts {
 
         function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
             if (!(<ResolvedType>type).members) {
-                if (type.flags & TypeFlags.ObjectType) {
+                if (type.flags & TypeFlags.Object) {
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
                         resolveTypeReferenceMembers(<TypeReference>type);
                     }
@@ -4392,7 +4392,7 @@ namespace ts {
 
         /** Return properties of an object type or an empty array for other types */
         function getPropertiesOfObjectType(type: Type): Symbol[] {
-            if (type.flags & TypeFlags.ObjectType) {
+            if (type.flags & TypeFlags.Object) {
                 return resolveStructuredTypeMembers(<ObjectType>type).properties;
             }
             return emptyArray;
@@ -4401,7 +4401,7 @@ namespace ts {
         /** If the given type is an object type and that type has a property by the given name,
          * return the symbol for that property. Otherwise return undefined. */
         function getPropertyOfObjectType(type: Type, name: string): Symbol {
-            if (type.flags & TypeFlags.ObjectType) {
+            if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 const symbol = resolved.members[name];
                 if (symbol && symbolIsValue(symbol)) {
@@ -4574,7 +4574,7 @@ namespace ts {
          */
         function getPropertyOfType(type: Type, name: string): Symbol {
             type = getApparentType(type);
-            if (type.flags & TypeFlags.ObjectType) {
+            if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 const symbol = resolved.members[name];
                 if (symbol && symbolIsValue(symbol)) {
@@ -5273,7 +5273,7 @@ namespace ts {
                 return arity ? emptyGenericType : emptyObjectType;
             }
             const type = getDeclaredTypeOfSymbol(symbol);
-            if (!(type.flags & TypeFlags.ObjectType)) {
+            if (!(type.flags & TypeFlags.Object)) {
                 error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbol.name);
                 return arity ? emptyGenericType : emptyObjectType;
             }
@@ -5453,7 +5453,7 @@ namespace ts {
                 const len = typeSet.length;
                 const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearchTypes(typeSet, type);
                 if (index < 0) {
-                    if (!(flags & TypeFlags.ObjectType && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
+                    if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
                         type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
                         typeSet.splice(~index, 0, type);
                     }
@@ -6060,7 +6060,7 @@ namespace ts {
                 if (type.flags & TypeFlags.TypeParameter) {
                     return mapper(<TypeParameter>type);
                 }
-                if (type.flags & TypeFlags.ObjectType) {
+                if (type.flags & TypeFlags.Object) {
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
                         // If the anonymous type originates in a declaration of a function, method, class, or
                         // interface, in an object type literal, or in an object literal expression, we may need
@@ -6147,7 +6147,7 @@ namespace ts {
         }
 
         function getTypeWithoutSignatures(type: Type): Type {
-            if (type.flags & TypeFlags.ObjectType) {
+            if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 if (resolved.constructSignatures.length) {
                     const result = <ResolvedType>createObjectType(ObjectFlags.Anonymous, type.symbol);
@@ -6457,7 +6457,7 @@ namespace ts {
             if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
             }
-            if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
+            if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
                 const id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
                 const related = relation[id];
                 if (related !== undefined) {
@@ -6657,7 +6657,7 @@ namespace ts {
                     // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
                     // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
                     // relates to X. Thus, we include intersection types on the source side here.
-                    if (apparentSource.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
+                    if (apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
                         // Report structural errors only if we haven't reported any errors yet
                         const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo && !(source.flags & TypeFlags.Primitive);
                         if (result = objectTypeRelatedTo(apparentSource, source, target, reportStructuralErrors)) {
@@ -6668,10 +6668,10 @@ namespace ts {
                 }
 
                 if (reportErrors) {
-                    if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.Primitive) {
+                    if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
                     }
-                    else if (source.symbol && source.flags & TypeFlags.ObjectType && globalObjectType === source) {
+                    else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
                     reportRelationError(headMessage, source, target);
@@ -6681,7 +6681,7 @@ namespace ts {
 
             function isIdenticalTo(source: Type, target: Type): Ternary {
                 let result: Ternary;
-                if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
+                if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if all type arguments are identical
                         if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, /*reportErrors*/ false)) {
@@ -6706,7 +6706,7 @@ namespace ts {
             // index signatures, or if the property is actually declared in the object type. In a union or intersection
             // type, a property is considered known if it is known in any constituent type.
             function isKnownProperty(type: Type, name: string): boolean {
-                if (type.flags & TypeFlags.ObjectType) {
+                if (type.flags & TypeFlags.Object) {
                     const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                     if ((relation === assignableRelation || relation === comparableRelation) && (type === globalObjectType || isEmptyObjectType(resolved)) ||
                         resolved.stringIndexInfo ||
@@ -6734,7 +6734,7 @@ namespace ts {
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
-                if (maybeTypeOfKind(target, TypeFlags.ObjectType) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
+                if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (!isKnownProperty(target, prop.name)) {
                             if (reportErrors) {
@@ -7007,7 +7007,7 @@ namespace ts {
             }
 
             function propertiesIdenticalTo(source: Type, target: Type): Ternary {
-                if (!(source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType)) {
+                if (!(source.flags & TypeFlags.Object && target.flags & TypeFlags.Object)) {
                     return Ternary.False;
                 }
                 const sourceProperties = getPropertiesOfObjectType(source);
@@ -7903,7 +7903,7 @@ namespace ts {
                 }
                 else {
                     source = getApparentType(source);
-                    if (source.flags & TypeFlags.ObjectType) {
+                    if (source.flags & TypeFlags.Object) {
                         if (isInProcess(source, target)) {
                             return;
                         }
@@ -8295,7 +8295,7 @@ namespace ts {
                     type === falseType ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
                     type === falseType ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
-            if (flags & TypeFlags.ObjectType) {
+            if (flags & TypeFlags.Object) {
                 return isFunctionObjectType(<ObjectType>type) ?
                     strictNullChecks ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
                     strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
@@ -11732,7 +11732,7 @@ namespace ts {
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
         function getSingleCallSignature(type: Type): Signature {
-            if (type.flags & TypeFlags.ObjectType) {
+            if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 if (resolved.callSignatures.length === 1 && resolved.constructSignatures.length === 0 &&
                     resolved.properties.length === 0 && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
@@ -13571,7 +13571,7 @@ namespace ts {
             if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter)) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -16478,7 +16478,7 @@ namespace ts {
             const rightType = checkNonNullExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
@@ -19245,7 +19245,7 @@ namespace ts {
         }
 
         function isFunctionType(type: Type): boolean {
-            return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Call).length > 0;
+            return type.flags & TypeFlags.Object && getSignaturesOfType(type, SignatureKind.Call).length > 0;
         }
 
         function getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind {

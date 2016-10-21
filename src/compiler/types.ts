@@ -2612,7 +2612,7 @@ namespace ts {
         Null                    = 1 << 12,
         Never                   = 1 << 13,  // Never type
         TypeParameter           = 1 << 14,  // Type parameter
-        ObjectType              = 1 << 15,  // Object type
+        Object                  = 1 << 15,  // Object type
         Union                   = 1 << 16,  // Union (T | U)
         Intersection            = 1 << 17,  // Intersection (T & U)
         /* @internal */
@@ -2640,13 +2640,13 @@ namespace ts {
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
-        StructuredType = ObjectType | Union | Intersection,
+        StructuredType = Object | Union | Intersection,
         StructuredOrTypeParameter = StructuredType | TypeParameter,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | BooleanLike | ESSymbol,
-        NotUnionOrUnit = Any | ESSymbol | ObjectType,
+        NotUnionOrUnit = Any | ESSymbol | Object,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
