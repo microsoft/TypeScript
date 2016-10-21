@@ -569,7 +569,7 @@ namespace ts {
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
             if (staticProperties.length) {
-                addInitializedPropertyStatements(statements, node, staticProperties, getLocalName(node));
+                addInitializedPropertyStatements(statements, staticProperties, getLocalName(node));
             }
 
             // Write any decorators of the node.
@@ -763,7 +763,7 @@ namespace ts {
         function visitClassExpression(node: ClassExpression): Expression {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
-            const members = transformClassMembers(node, heritageClauses !== undefined);
+            const members = transformClassMembers(node, some(heritageClauses, c => c.token === SyntaxKind.ExtendsKeyword));
 
             const classExpression = setOriginalNode(
                 createClassExpression(
@@ -790,7 +790,7 @@ namespace ts {
                 // the body of a class with static initializers.
                 setEmitFlags(classExpression, EmitFlags.Indented | getEmitFlags(classExpression));
                 expressions.push(startOnNewLine(createAssignment(temp, classExpression)));
-                addRange(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp));
+                addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
                 expressions.push(startOnNewLine(temp));
                 return inlineExpressions(expressions);
             }
@@ -836,7 +836,7 @@ namespace ts {
             }
 
             const parameters = transformConstructorParameters(constructor);
-            const body = transformConstructorBody(node, constructor, hasExtendsClause, parameters);
+            const body = transformConstructorBody(node, constructor, hasExtendsClause);
 
             //  constructor(${parameters}) {
             //      ${body}
@@ -890,9 +890,8 @@ namespace ts {
          * @param node The current class.
          * @param constructor The current class constructor.
          * @param hasExtendsClause A value indicating whether the class has an extends clause.
-         * @param parameters The transformed parameters for the constructor.
          */
-        function transformConstructorBody(node: ClassExpression | ClassDeclaration, constructor: ConstructorDeclaration, hasExtendsClause: boolean, parameters: ParameterDeclaration[]) {
+        function transformConstructorBody(node: ClassExpression | ClassDeclaration, constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
             const statements: Statement[] = [];
             let indexOfFirstStatement = 0;
 
@@ -944,7 +943,7 @@ namespace ts {
             //  }
             //
             const properties = getInitializedProperties(node, /*isStatic*/ false);
-            addInitializedPropertyStatements(statements, node, properties, createThis());
+            addInitializedPropertyStatements(statements, properties, createThis());
 
             if (constructor) {
                 // The class already had a constructor, so we should add the existing statements, skipping the initial super call.
@@ -1084,13 +1083,12 @@ namespace ts {
         /**
          * Generates assignment statements for property initializers.
          *
-         * @param node The class node.
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function addInitializedPropertyStatements(statements: Statement[], node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
+        function addInitializedPropertyStatements(statements: Statement[], properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                const statement = createStatement(transformInitializedProperty(node, property, receiver));
+                const statement = createStatement(transformInitializedProperty(property, receiver));
                 setSourceMapRange(statement, moveRangePastModifiers(property));
                 setCommentRange(statement, property);
                 statements.push(statement);
@@ -1100,14 +1098,13 @@ namespace ts {
         /**
          * Generates assignment expressions for property initializers.
          *
-         * @param node The class node.
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function generateInitializedPropertyExpressions(node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
+        function generateInitializedPropertyExpressions(properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
             const expressions: Expression[] = [];
             for (const property of properties) {
-                const expression = transformInitializedProperty(node, property, receiver);
+                const expression = transformInitializedProperty(property, receiver);
                 expression.startsOnNewLine = true;
                 setSourceMapRange(expression, moveRangePastModifiers(property));
                 setCommentRange(expression, property);
@@ -1120,11 +1117,10 @@ namespace ts {
         /**
          * Transforms a property initializer into an assignment statement.
          *
-         * @param node The class containing the property.
          * @param property The property declaration.
          * @param receiver The object receiving the property assignment.
          */
-        function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression) {
+        function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
@@ -2350,7 +2346,6 @@ namespace ts {
             const name = node.name;
             if (isBindingPattern(name)) {
                 return flattenVariableDestructuringToExpression(
-                    context,
                     node,
                     hoistVariableDeclaration,
                     createNamespaceExportExpression,

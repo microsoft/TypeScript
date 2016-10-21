@@ -8,7 +8,10 @@
         "outFile": "../../built/local/tsc.js",
         "sourceMap": true,
         "declaration": true,
-        "stripInternal": true
+        "stripInternal": true,
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "files": [
         "core.ts",
@@ -29,6 +32,7 @@
         "transformers/es2015.ts",
         "transformers/es5.ts",
         "transformers/generators.ts",
+        "transformers/es5.ts",
         "transformers/destructuring.ts",
         "transformers/module/module.ts",
         "transformers/module/system.ts",

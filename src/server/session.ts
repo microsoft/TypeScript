@@ -389,9 +389,9 @@ namespace ts.server {
             });
         }
 
-        private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
+        private getDiagnosticsWorker(args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
             const { project, file } = this.getFileAndProject(args);
-            if (shouldSkipSematicCheck(project)) {
+            if (isSemantic && shouldSkipSematicCheck(project)) {
                 return [];
             }
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
@@ -492,11 +492,11 @@ namespace ts.server {
         }
 
         private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): protocol.Diagnostic[] | protocol.DiagnosticWithLinePosition[] {
-            return this.getDiagnosticsWorker(args, (project, file) => project.getLanguageService().getSyntacticDiagnostics(file), args.includeLinePosition);
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ false, (project, file) => project.getLanguageService().getSyntacticDiagnostics(file), args.includeLinePosition);
         }
 
         private getSemanticDiagnosticsSync(args: protocol.SemanticDiagnosticsSyncRequestArgs): protocol.Diagnostic[] | protocol.DiagnosticWithLinePosition[] {
-            return this.getDiagnosticsWorker(args, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), args.includeLinePosition);
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), args.includeLinePosition);
         }
 
         private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): protocol.DocumentHighlightsItem[] | DocumentHighlights[] {
@@ -807,7 +807,7 @@ namespace ts.server {
         private getIndentation(args: protocol.IndentationRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const position = this.getPosition(args, project.getScriptInfoForNormalizedPath(file));
-            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
             const indentation = project.getLanguageService(/*ensureSynchronized*/ false).getIndentationAtPosition(file, position, options);
             return { position, indentation };
         }
@@ -874,19 +874,19 @@ namespace ts.server {
 
         private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
-            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
             return project.getLanguageService(/*ensureSynchronized*/ false).getFormattingEditsForRange(file, args.position, args.endPosition, options);
         }
 
         private getFormattingEditsForDocumentFull(args: protocol.FormatRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
-            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
             return project.getLanguageService(/*ensureSynchronized*/ false).getFormattingEditsForDocument(file, options);
         }
 
         private getFormattingEditsAfterKeystrokeFull(args: protocol.FormatOnKeyRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
-            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
             return project.getLanguageService(/*ensureSynchronized*/ false).getFormattingEditsAfterKeystroke(file, args.position, args.key, options);
         }
 
@@ -1076,11 +1076,12 @@ namespace ts.server {
 
         private reload(args: protocol.ReloadRequestArgs, reqSeq: number) {
             const file = toNormalizedPath(args.file);
+            const tempFileName = args.tmpfile && toNormalizedPath(args.tmpfile);
             const project = this.projectService.getDefaultProjectForFile(file, /*refreshInferredProjects*/ true);
             if (project) {
                 this.changeSeq++;
                 // make sure no changes happen before this one is finished
-                if (project.reloadScript(file)) {
+                if (project.reloadScript(file, tempFileName)) {
                     this.output(undefined, CommandNames.Reload, reqSeq);
                 }
             }
@@ -1299,7 +1300,7 @@ namespace ts.server {
             }
 
             // No need to analyze lib.d.ts
-            let fileNamesInProject = fileNames.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
+            let fileNamesInProject = fileNames.filter(value => value.indexOf("lib.d.ts") < 0);
 
             // Sort the file name list to make the recently touched files come first
             const highPriorityFiles: NormalizedPath[] = [];
@@ -1426,24 +1427,8 @@ namespace ts.server {
             [CommandNames.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getRenameInfo(request.arguments));
             },
-            [CommandNames.Open]: (request: protocol.Request) => {
-                const openArgs = <protocol.OpenRequestArgs>request.arguments;
-                let scriptKind: ScriptKind;
-                switch (openArgs.scriptKindName) {
-                    case "TS":
-                        scriptKind = ScriptKind.TS;
-                        break;
-                    case "JS":
-                        scriptKind = ScriptKind.JS;
-                        break;
-                    case "TSX":
-                        scriptKind = ScriptKind.TSX;
-                        break;
-                    case "JSX":
-                        scriptKind = ScriptKind.JSX;
-                        break;
-                }
-                this.openClientFile(toNormalizedPath(openArgs.file), openArgs.fileContent, scriptKind);
+            [CommandNames.Open]: (request: protocol.OpenRequest) => {
+                this.openClientFile(toNormalizedPath(request.arguments.file), request.arguments.fileContent, convertScriptKindName(request.arguments.scriptKindName));
                 return this.notRequired();
             },
             [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {
@@ -1515,7 +1500,7 @@ namespace ts.server {
             [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.EncodedSemanticClassificationsRequest) => {
                 return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
             },
-            [CommandNames.Cleanup]: (request: protocol.Request) => {
+            [CommandNames.Cleanup]: () => {
                 this.cleanup();
                 return this.requiredResponse(true);
             },
@@ -1596,7 +1581,7 @@ namespace ts.server {
             [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));
             },
-            [CommandNames.ReloadProjects]: (request: protocol.ReloadProjectsRequest) => {
+            [CommandNames.ReloadProjects]: () => {
                 this.projectService.reloadProjects();
                 return this.notRequired();
             },
@@ -1606,7 +1591,7 @@ namespace ts.server {
             [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.GetSupportedCodeFixes]: (request: protocol.Request) => {
+            [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());
             }
         });

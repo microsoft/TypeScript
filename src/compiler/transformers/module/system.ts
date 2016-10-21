@@ -572,7 +572,9 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 case SyntaxKind.ExportDeclaration:
-                    return visitExportDeclaration(<ExportDeclaration>node);
+                    // ExportDeclarations are elided as they are handled via
+                    // `appendExportsOfDeclaration`.
+                    return undefined;
 
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(<ExportAssignment>node);
@@ -626,16 +628,6 @@ namespace ts {
             }
 
             return singleOrMany(statements);
-        }
-
-        /**
-         * Visits an ExportDeclaration node. ExportDeclarations are elided as they are handled via
-         * `appendExportsOfDeclaration`.
-         *
-         * @param The node to visit.
-         */
-        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
-            return undefined;
         }
 
         /**
@@ -816,7 +808,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration, isExportedDeclaration: boolean): Expression {
             const createAssignment = isExportedDeclaration ? createExportedVariableAssignment : createNonExportedVariableAssignment;
             return isBindingPattern(node.name)
-                ? flattenVariableDestructuringToExpression(context, node, hoistVariableDeclaration, createAssignment, destructuringVisitor)
+                ? flattenVariableDestructuringToExpression(node, hoistVariableDeclaration, createAssignment, destructuringVisitor)
                 : createAssignment(node.name, visitNode(node.initializer, destructuringVisitor, isExpression));
         }
 

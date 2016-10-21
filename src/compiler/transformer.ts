@@ -4,8 +4,8 @@
 /// <reference path="transformers/es2017.ts" />
 /// <reference path="transformers/es2016.ts" />
 /// <reference path="transformers/es2015.ts" />
-/// <reference path="transformers/es5.ts" />
 /// <reference path="transformers/generators.ts" />
+/// <reference path="transformers/es5.ts" />
 /// <reference path="transformers/module/module.ts" />
 /// <reference path="transformers/module/system.ts" />
 /// <reference path="transformers/module/es2015.ts" />
@@ -168,7 +168,7 @@ namespace ts {
             hoistFunctionDeclaration,
             startLexicalEnvironment,
             endLexicalEnvironment,
-            onSubstituteNode: (emitContext, node) => node,
+            onSubstituteNode: (_emitContext, node) => node,
             enableSubstitution,
             isSubstitutionEnabled,
             onEmitNode: (node, emitContext, emitCallback) => emitCallback(node, emitContext),

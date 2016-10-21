@@ -396,7 +396,7 @@ namespace ts {
                     return visitYieldExpression(<YieldExpression>node);
 
                 case SyntaxKind.SuperKeyword:
-                    return visitSuperKeyword(<PrimaryExpression>node);
+                    return visitSuperKeyword();
 
                 case SyntaxKind.YieldExpression:
                     // `yield` will be handled by a generators transform.
@@ -1120,7 +1120,7 @@ namespace ts {
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList(
-                                flattenParameterDestructuring(context, parameter, temp, visitor)
+                                flattenParameterDestructuring(parameter, temp, visitor)
                             )
                         ),
                         EmitFlags.CustomPrologue
@@ -1692,7 +1692,7 @@ namespace ts {
                     if (decl.initializer) {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
-                            assignment = flattenVariableDestructuringToExpression(context, decl, hoistVariableDeclaration, /*createAssignmentCallback*/ undefined, visitor);
+                            assignment = flattenVariableDestructuringToExpression(decl, hoistVariableDeclaration, /*createAssignmentCallback*/ undefined, visitor);
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
@@ -1845,7 +1845,7 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 const recordTempVariablesInLine = !enclosingVariableStatement
                     || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
-                return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor,
+                return flattenVariableDestructuring(node, /*value*/ undefined, visitor,
                     recordTempVariablesInLine ? undefined : hoistVariableDeclaration);
             }
 
@@ -1948,7 +1948,6 @@ namespace ts {
                     // This works whether the declaration is a var, let, or const.
                     // It will use rhsIterationValue _a[_i] as the initializer.
                     const declarations = flattenVariableDestructuring(
-                        context,
                         firstOriginalDeclaration,
                         createElementAccess(rhsReference, counter),
                         visitor
@@ -2550,15 +2549,15 @@ namespace ts {
                         break;
 
                     case SyntaxKind.PropertyAssignment:
-                        expressions.push(transformPropertyAssignmentToExpression(node, <PropertyAssignment>property, receiver, node.multiLine));
+                        expressions.push(transformPropertyAssignmentToExpression(<PropertyAssignment>property, receiver, node.multiLine));
                         break;
 
                     case SyntaxKind.ShorthandPropertyAssignment:
-                        expressions.push(transformShorthandPropertyAssignmentToExpression(node, <ShorthandPropertyAssignment>property, receiver, node.multiLine));
+                        expressions.push(transformShorthandPropertyAssignmentToExpression(<ShorthandPropertyAssignment>property, receiver, node.multiLine));
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        expressions.push(transformObjectLiteralMethodDeclarationToExpression(node, <MethodDeclaration>property, receiver, node.multiLine));
+                        expressions.push(transformObjectLiteralMethodDeclarationToExpression(<MethodDeclaration>property, receiver, node.multiLine));
                         break;
 
                     default:
@@ -2575,7 +2574,7 @@ namespace ts {
          * @param property The PropertyAssignment node.
          * @param receiver The receiver for the assignment.
          */
-        function transformPropertyAssignmentToExpression(node: ObjectLiteralExpression, property: PropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
+        function transformPropertyAssignmentToExpression(property: PropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
@@ -2597,7 +2596,7 @@ namespace ts {
          * @param property The ShorthandPropertyAssignment node.
          * @param receiver The receiver for the assignment.
          */
-        function transformShorthandPropertyAssignmentToExpression(node: ObjectLiteralExpression, property: ShorthandPropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
+        function transformShorthandPropertyAssignmentToExpression(property: ShorthandPropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
@@ -2619,7 +2618,7 @@ namespace ts {
          * @param method The MethodDeclaration node.
          * @param receiver The receiver for the assignment.
          */
-        function transformObjectLiteralMethodDeclarationToExpression(node: ObjectLiteralExpression, method: MethodDeclaration, receiver: Expression, startsOnNewLine: boolean) {
+        function transformObjectLiteralMethodDeclarationToExpression(method: MethodDeclaration, receiver: Expression, startsOnNewLine: boolean) {
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
@@ -2809,7 +2808,7 @@ namespace ts {
             // expressions into an array literal.
             const numElements = elements.length;
             const segments = flatten(
-                spanMap(elements, partitionSpreadElement, (partition, visitPartition, start, end) =>
+                spanMap(elements, partitionSpreadElement, (partition, visitPartition, _start, end) =>
                     visitPartition(partition, multiLine, hasTrailingComma && end === numElements)
                 )
             );
@@ -2831,7 +2830,7 @@ namespace ts {
                 : visitSpanOfNonSpreadElements;
         }
 
-        function visitSpanOfSpreadElements(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
+        function visitSpanOfSpreadElements(chunk: Expression[]): VisitResult<Expression> {
             return map(chunk, visitExpressionOfSpreadElement);
         }
 
@@ -3020,7 +3019,7 @@ namespace ts {
         /**
          * Visits the `super` keyword
          */
-        function visitSuperKeyword(node: PrimaryExpression): LeftHandSideExpression {
+        function visitSuperKeyword(): LeftHandSideExpression {
             return enclosingNonAsyncFunctionBody
                 && isClassElement(enclosingNonAsyncFunctionBody)
                 && !hasModifier(enclosingNonAsyncFunctionBody, ModifierFlags.Static)

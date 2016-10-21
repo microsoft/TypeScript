@@ -568,6 +568,12 @@ namespace ts {
             : array;
     }
 
+    export function replaceElement<T>(array: T[], index: number, value: T): T[] {
+        const result = array.slice(0);
+        result[index] = value;
+        return result;
+    }
+
     /**
      * Performs a binary search, finding the index at which 'value' occurs in 'array'.
      * If no such index is found, returns the 2's-complement of first index at which
@@ -899,6 +905,14 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
+    /** Does nothing. */
+    export function noop(): void {}
+
+    /** Throws an error because a function is not implemented. */
+    export function notImplemented(): never {
+        throw new Error("Not implemented");
+    }
+
     export function memoize<T>(callback: () => T): () => T {
         let value: T;
         return () => {
@@ -939,7 +953,7 @@ namespace ts {
             return t => compose(a(t));
         }
         else {
-            return t => u => u;
+            return _ => u => u;
         }
     }
 
@@ -976,10 +990,10 @@ namespace ts {
         }
     }
 
-    function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
+    function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
-        return text.replace(/{(\d+)}/g, (match, index?) => args[+index + baseIndex]);
+        return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
     }
 
     export let localizedDiagnosticMessages: Map<string> = undefined;
@@ -988,7 +1002,7 @@ namespace ts {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
-    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
+    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
         const end = start + length;
 
@@ -1018,7 +1032,7 @@ namespace ts {
     }
 
     /* internal */
-    export function formatMessage(dummy: any, message: DiagnosticMessage): string {
+    export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
@@ -1028,7 +1042,7 @@ namespace ts {
         return text;
     }
 
-    export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
+    export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
 
@@ -1659,7 +1673,7 @@ namespace ts {
         basePaths: string[];
     }
 
-    export function getFileMatcherPatterns(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
+    export function getFileMatcherPatterns(path: string, excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
         const absolutePath = combinePaths(currentDirectory, path);
@@ -1676,7 +1690,7 @@ namespace ts {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
-        const patterns = getFileMatcherPatterns(path, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
+        const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
         const regexFlag = useCaseSensitiveFileNames ? "" : "i";
         const includeFileRegex = patterns.includeFilePattern && new RegExp(patterns.includeFilePattern, regexFlag);
@@ -1910,11 +1924,11 @@ namespace ts {
         this.declarations = undefined;
     }
 
-    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, _checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
     }
 
-    function Signature(checker: TypeChecker) {
+    function Signature() {
     }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
@@ -1947,9 +1961,6 @@ namespace ts {
     }
 
     export namespace Debug {
-        declare var process: any;
-        declare var require: any;
-
         export let currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
