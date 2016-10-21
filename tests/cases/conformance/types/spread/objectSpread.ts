@@ -35,14 +35,12 @@ let getter: { a: number, c: number } =
     { ...op, c: 7 }
 getter.a = 12;
 
-// null, undefined, functions and primitives besides string result in { }
+// null, undefined, functions and primitives result in { }
 let spreadNull = { ...null };
 let spreadUndefind = { ...undefined };
 let spreadNum = { ...12 };
 let spreadBool = { ...false };
 let spreadFunc = { ...(function () { }) };
-
-// strings get a numeric indexer: [n: number]: string
 let spreadStr = { ...'foo' };
 
 // methods are not enumerable

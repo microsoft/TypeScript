@@ -187,21 +187,21 @@ function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
 >V : V
 
     let result = { ...tu, ...uv, id: 'qux' };
->result : { ...T & U; ...T & U; ...U; id: string; } | { ...T & U; ...T & U; ...V; id: string; }
->{ ...tu, ...uv, id: 'qux' } : { ...T & U; ...T & U; ...U; id: string; } | { ...T & U; ...T & U; ...V; id: string; }
+>result : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
+>{ ...tu, ...uv, id: 'qux' } : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
 >tu : any
 >uv : any
 >id : string
 >'qux' : "qux"
 
     let assignable: { ...(T & U), ...(U | V), id: string } = result;
->assignable : { ...T & U; ...T & U; ...U; id: string; } | { ...T & U; ...T & U; ...V; id: string; }
+>assignable : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
 >T : T
 >U : U
 >U : U
 >V : V
 >id : string
->result : { ...T & U; ...T & U; ...U; id: string; } | { ...T & U; ...T & U; ...V; id: string; }
+>result : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
 }
 
 

@@ -11,8 +11,8 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(30,12): error TS233
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,17): error TS2339: Property 'undefined' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(36,11): error TS2339: Property 'toFixed' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(38,11): error TS2339: Property 'toFixed' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(40,11): error TS2339: Property 'length' does not exist on type '{ [x: number]: string; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(41,11): error TS2339: Property 'charAt' does not exist on type '{ [x: number]: string; }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(40,11): error TS2339: Property 'length' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(41,11): error TS2339: Property 'charAt' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(45,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,12): error TS2339: Property 'b' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(55,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
@@ -87,10 +87,10 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS232
     let spreadStr = { ...'foo' };
     spreadStr.length; // error, no 'length'
               ~~~~~~
-!!! error TS2339: Property 'length' does not exist on type '{ [x: number]: string; }'.
+!!! error TS2339: Property 'length' does not exist on type '{}'.
     spreadStr.charAt(1); // error, no methods either
               ~~~~~~
-!!! error TS2339: Property 'charAt' does not exist on type '{ [x: number]: string; }'.
+!!! error TS2339: Property 'charAt' does not exist on type '{}'.
     let spreadBool = { ...true };
     spreadBool.valueOf(); // error, what were you thinking?
     let spreadFunc = { ...function () { } }
