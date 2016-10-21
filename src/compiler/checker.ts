@@ -5924,7 +5924,7 @@ namespace ts {
         }
 
         function resolveObjectIntersection(intersection: IntersectionType): IntersectionType | ResolvedType {
-            if (find(intersection.types, t => !(t.flags & TypeFlags.ObjectType && !couldContainTypeParameters(t)))) {
+            if (find(intersection.types, t => !(t.flags & TypeFlags.ObjectType) || couldContainTypeParameters(t))) {
                 return intersection;
             }
             const properties = getPropertiesOfType(intersection);
