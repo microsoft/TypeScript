@@ -87,7 +87,8 @@ namespace ts.GoToDefinition {
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
         }
 
-        // TODO (yuisu): comment
+        // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
+        // object literal, lookup the property symbol in the contextual type, and use this for goto-definition
         const container = getContainingObjectLiteralElement(node);
         if (container) {
             const contextualType = typeChecker.getContextualType(node.parent.parent as JsxOpeningLikeElement);
