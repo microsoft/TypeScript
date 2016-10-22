@@ -3,7 +3,6 @@
 
 /*@internal*/
 namespace ts {
-
     const enum ES2015SubstitutionFlags {
         /** Enables substitutions for captured `this` */
         CapturedThis = 1 << 0,
@@ -170,6 +169,7 @@ namespace ts {
             hoistVariableDeclaration,
         } = context;
 
+        const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
         const previousOnSubstituteNode = context.onSubstituteNode;
         const previousOnEmitNode = context.onEmitNode;
@@ -187,6 +187,7 @@ namespace ts {
         let enclosingNonArrowFunction: FunctionLikeDeclaration;
         let enclosingNonAsyncFunctionBody: FunctionLikeDeclaration | ClassElement;
         let isInConstructorWithCapturedSuper: boolean;
+        let helperState: EmitHelperState;
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -209,7 +210,15 @@ namespace ts {
 
             currentSourceFile = node;
             currentText = node.text;
-            return visitNode(node, visitor, isSourceFile);
+            helperState = { currentSourceFile, compilerOptions };
+
+            const visited = visitNode(node, visitor, isSourceFile);
+            addEmitHelpers(visited, helperState.requestedHelpers);
+
+            currentSourceFile = undefined;
+            currentText = undefined;
+            helperState = undefined;
+            return visited;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -778,7 +787,7 @@ namespace ts {
             if (extendsClauseElement) {
                 statements.push(
                     createStatement(
-                        createExtendsHelper(currentSourceFile.externalHelpersModuleName, getLocalName(node)),
+                        createExtendsHelper(helperState, getLocalName(node)),
                         /*location*/ extendsClauseElement
                     )
                 );
@@ -3274,4 +3283,28 @@ namespace ts {
             return isIdentifier(expression) && expression === parameter.name;
         }
     }
+
+    function createExtendsHelper(helperState: EmitHelperState, name: Identifier) {
+        requestEmitHelper(helperState, extendsHelper);
+        return createCall(
+            getHelperName(helperState, "__extends"),
+            /*typeArguments*/ undefined,
+            [
+                name,
+                createIdentifier("_super")
+            ]
+        );
+    }
+
+    const extendsHelper: EmitHelper = {
+        name: "typescript:extends",
+        scoped: false,
+        priority: 0,
+        text: `
+            var __extends = (this && this.__extends) || function (d, b) {
+                for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+                function __() { this.constructor = d; }
+                d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+            };`
+    };
 }

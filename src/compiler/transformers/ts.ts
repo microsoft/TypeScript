@@ -48,7 +48,7 @@ namespace ts {
         let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
         let currentScopeFirstDeclarationsOfName: Map<Node>;
-        let currentExternalHelpersModuleName: Identifier;
+        let helperState: EmitHelperState;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -80,7 +80,23 @@ namespace ts {
                 return node;
             }
 
-            return visitNode(node, visitor, isSourceFile);
+            currentSourceFile = node;
+            currentScope = node;
+            currentScopeFirstDeclarationsOfName = createMap<Node>();
+            helperState = { currentSourceFile, compilerOptions };
+
+            let visited = visitEachChild(node, sourceElementVisitor, context);
+            if (compilerOptions.alwaysStrict) {
+                visited = updateSourceFileNode(visited, ensureUseStrict(visited.statements));
+            }
+
+            addEmitHelpers(visited, helperState.requestedHelpers);
+
+            currentSourceFile = undefined;
+            currentScope = undefined;
+            currentScopeFirstDeclarationsOfName = undefined;
+            helperState = undefined;
+            return visited;
         }
 
         /**
@@ -122,10 +138,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitorWorker(node: Node): VisitResult<Node> {
-            if (node.kind === SyntaxKind.SourceFile) {
-                return visitSourceFile(<SourceFile>node);
-            }
-            else if (node.transformFlags & TransformFlags.TypeScript) {
+            if (node.transformFlags & TransformFlags.TypeScript) {
                 // This node is explicitly marked as TypeScript, so we should transform the node.
                 return visitTypeScript(node);
             }
@@ -251,7 +264,6 @@ namespace ts {
 
             return node;
         }
-
 
         /**
          * Branching visitor, visits a TypeScript syntax node.
@@ -446,7 +458,6 @@ namespace ts {
          */
         function onBeforeVisitNode(node: Node) {
             switch (node.kind) {
-                case SyntaxKind.SourceFile:
                 case SyntaxKind.CaseBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.Block:
@@ -463,50 +474,6 @@ namespace ts {
                     recordEmittedDeclarationInScope(node);
                     break;
             }
-        }
-
-        function visitSourceFile(node: SourceFile) {
-            currentSourceFile = node;
-
-            // ensure "use strict" is emitted in all scenarios in alwaysStrict mode
-            if (compilerOptions.alwaysStrict) {
-                node = ensureUseStrict(node);
-            }
-
-            // If the source file requires any helpers and is an external module, and
-            // the importHelpers compiler option is enabled, emit a synthesized import
-            // statement for the helpers library.
-            if (node.flags & NodeFlags.EmitHelperFlags
-                && compilerOptions.importHelpers
-                && (isExternalModule(node) || compilerOptions.isolatedModules)) {
-                startLexicalEnvironment();
-                const statements: Statement[] = [];
-                const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
-                const externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText);
-                const externalHelpersModuleImport = createImportDeclaration(
-                    /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
-                    createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-                    createLiteral(externalHelpersModuleNameText));
-
-                externalHelpersModuleImport.parent = node;
-                externalHelpersModuleImport.flags &= ~NodeFlags.Synthesized;
-                statements.push(externalHelpersModuleImport);
-
-                currentExternalHelpersModuleName = externalHelpersModuleName;
-                addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
-                addRange(statements, endLexicalEnvironment());
-                currentExternalHelpersModuleName = undefined;
-
-                node = updateSourceFileNode(node, createNodeArray(statements, node.statements));
-                node.externalHelpersModuleName = externalHelpersModuleName;
-            }
-            else {
-                node = visitEachChild(node, sourceElementVisitor, context);
-            }
-
-            setEmitFlags(node, EmitFlags.EmitEmitHelpers | getEmitFlags(node));
-            return node;
         }
 
         /**
@@ -1418,7 +1385,7 @@ namespace ts {
                 : undefined;
 
             const helper = createDecorateHelper(
-                currentExternalHelpersModuleName,
+                helperState,
                 decoratorExpressions,
                 prefix,
                 memberName,
@@ -1456,7 +1423,7 @@ namespace ts {
 
             const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
             const localName = getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-            const decorate = createDecorateHelper(currentExternalHelpersModuleName, decoratorExpressions, localName);
+            const decorate = createDecorateHelper(helperState, decoratorExpressions, localName);
             const expression = createAssignment(localName, classAlias ? createAssignment(classAlias, decorate) : decorate);
             setEmitFlags(expression, EmitFlags.NoComments);
             setSourceMapRange(expression, moveRangePastDecorators(node));
@@ -1484,7 +1451,7 @@ namespace ts {
                 expressions = [];
                 for (const decorator of decorators) {
                     const helper = createParamHelper(
-                        currentExternalHelpersModuleName,
+                        helperState,
                         transformDecorator(decorator),
                         parameterOffset,
                         /*location*/ decorator.expression);
@@ -1514,13 +1481,13 @@ namespace ts {
         function addOldTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 if (shouldAddTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentExternalHelpersModuleName, "design:type", serializeTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(helperState, "design:type", serializeTypeOfNode(node)));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentExternalHelpersModuleName, "design:paramtypes", serializeParameterTypesOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(helperState, "design:paramtypes", serializeParameterTypesOfNode(node)));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentExternalHelpersModuleName, "design:returntype", serializeReturnTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(helperState, "design:returntype", serializeReturnTypeOfNode(node)));
                 }
             }
         }
@@ -1538,7 +1505,7 @@ namespace ts {
                     (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), serializeReturnTypeOfNode(node))));
                 }
                 if (properties) {
-                    decoratorExpressions.push(createMetadataHelper(currentExternalHelpersModuleName, "design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
+                    decoratorExpressions.push(createMetadataHelper(helperState, "design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
                 }
             }
         }
@@ -3404,4 +3371,77 @@ namespace ts {
                 : undefined;
         }
     }
+
+    function createParamHelper(helperState: EmitHelperState, expression: Expression, parameterOffset: number, location?: TextRange) {
+        requestEmitHelper(helperState, paramHelper);
+        return createCall(
+            getHelperName(helperState, "__param"),
+            /*typeArguments*/ undefined,
+            [
+                createLiteral(parameterOffset),
+                expression
+            ],
+            location
+        );
+    }
+
+    function createMetadataHelper(helperState: EmitHelperState, metadataKey: string, metadataValue: Expression) {
+        requestEmitHelper(helperState, metadataHelper);
+        return createCall(
+            getHelperName(helperState, "__metadata"),
+            /*typeArguments*/ undefined,
+            [
+                createLiteral(metadataKey),
+                metadataValue
+            ]
+        );
+    }
+
+    function createDecorateHelper(helperState: EmitHelperState, decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
+        const argumentsArray: Expression[] = [];
+        argumentsArray.push(createArrayLiteral(decoratorExpressions, /*location*/ undefined, /*multiLine*/ true));
+        argumentsArray.push(target);
+        if (memberName) {
+            argumentsArray.push(memberName);
+            if (descriptor) {
+                argumentsArray.push(descriptor);
+            }
+        }
+
+        requestEmitHelper(helperState, decorateHelper);
+        return createCall(getHelperName(helperState, "__decorate"), /*typeArguments*/ undefined, argumentsArray, location);
+    }
+
+    const decorateHelper: EmitHelper = {
+        name: "typescript:decorate",
+        scoped: false,
+        priority: 2,
+        text: `
+            var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+                var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+                if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+                else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+                return c > 3 && r && Object.defineProperty(target, key, r), r;
+            };`
+    };
+
+    const metadataHelper: EmitHelper = {
+        name: "typescript:metadata",
+        scoped: false,
+        priority: 3,
+        text: `
+            var __metadata = (this && this.__metadata) || function (k, v) {
+                if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+            };`
+    };
+
+    const paramHelper: EmitHelper = {
+        name: "typescript:param",
+        scoped: false,
+        priority: 4,
+        text: `
+            var __param = (this && this.__param) || function (paramIndex, decorator) {
+                return function (target, key) { decorator(target, key, paramIndex); }
+            };`
+    };
 }

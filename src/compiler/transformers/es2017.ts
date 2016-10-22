@@ -5,13 +5,12 @@
 namespace ts {
     type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 
+    const enum ES2017SubstitutionFlags {
+        /** Enables substitutions for async methods with `super` calls. */
+        AsyncMethodsWithSuper = 1 << 0
+    }
+
     export function transformES2017(context: TransformationContext) {
-
-        const enum ES2017SubstitutionFlags {
-            /** Enables substitutions for async methods with `super` calls. */
-            AsyncMethodsWithSuper = 1 << 0
-        }
-
         const {
             startLexicalEnvironment,
             endLexicalEnvironment,
@@ -22,7 +21,9 @@ namespace ts {
         const languageVersion = getEmitScriptTarget(compilerOptions);
 
         // These variables contain state that changes as we descend into the tree.
-        let currentSourceFileExternalHelpersModuleName: Identifier;
+        let currentSourceFile: SourceFile;
+        let helperState: EmitHelperState;
+
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
          * They are persisted between each SourceFile transformation and should not be reset.
@@ -58,9 +59,16 @@ namespace ts {
                 return node;
             }
 
-            currentSourceFileExternalHelpersModuleName = node.externalHelpersModuleName;
+            currentSourceFile = node;
+            helperState = { currentSourceFile, compilerOptions };
 
-            return visitEachChild(node, visitor, context);
+            const visited = visitEachChild(node, visitor, context);
+
+            addEmitHelpers(visited, helperState.requestedHelpers);
+
+            currentSourceFile = undefined;
+            helperState = undefined;
+            return visited;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -107,11 +115,11 @@ namespace ts {
         }
 
         /**
-         * Visits an await expression.
+         * Visits an AwaitExpression node.
          *
          * This function will be called any time a ES2017 await expression is encountered.
          *
-         * @param node The await expression node.
+         * @param node The node to visit.
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
             return setOriginalNode(
@@ -125,17 +133,15 @@ namespace ts {
         }
 
         /**
-         * Visits a method declaration of a class.
+         * Visits a MethodDeclaration node.
          *
          * This function will be called when one of the following conditions are met:
          * - The node is marked as async
          *
-         * @param node The method node.
+         * @param node The node to visit.
          */
         function visitMethodDeclaration(node: MethodDeclaration) {
-            if (!isAsyncFunctionLike(node)) {
-                return node;
-            }
+            Debug.assert(hasModifier(node, ModifierFlags.Async));
             const method = createMethod(
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
@@ -150,25 +156,20 @@ namespace ts {
 
             // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
-            setCommentRange(method, node);
-            setSourceMapRange(method, moveRangePastDecorators(node));
             setOriginalNode(method, node);
-
             return method;
         }
 
         /**
-         * Visits a function declaration.
+         * Visits a FunctionDeclaration node.
          *
          * This function will be called when one of the following conditions are met:
          * - The node is marked async
          *
-         * @param node The function node.
+         * @param node The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-            if (!isAsyncFunctionLike(node)) {
-                return node;
-            }
+            Debug.assert(hasModifier(node, ModifierFlags.Async));
             const func = createFunctionDeclaration(
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
@@ -180,23 +181,21 @@ namespace ts {
                 transformFunctionBody(node),
                 /*location*/ node
             );
-            setOriginalNode(func, node);
 
+            setOriginalNode(func, node);
             return func;
         }
 
         /**
-         * Visits a function expression node.
+         * Visits a FunctionExpression node.
          *
          * This function will be called when one of the following conditions are met:
          * - The node is marked async
          *
-         * @param node The function expression node.
+         * @param node The node to visit.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            if (!isAsyncFunctionLike(node)) {
-                return node;
-            }
+            Debug.assert(hasModifier(node, ModifierFlags.Async));
             if (nodeIsMissing(node.body)) {
                 return createOmittedExpression();
             }
@@ -213,19 +212,19 @@ namespace ts {
             );
 
             setOriginalNode(func, node);
-
             return func;
         }
 
         /**
-         * @remarks
+         * Visits an ArrowFunction.
+         *
          * This function will be called when one of the following conditions are met:
          * - The node is marked async
+         *
+         * @param node The node to visit.
          */
         function visitArrowFunction(node: ArrowFunction) {
-            if (!isAsyncFunctionLike(node)) {
-                return node;
-            }
+            Debug.assert(hasModifier(node, ModifierFlags.Async));
             const func = createArrowFunction(
                 visitNodes(node.modifiers, visitor, isModifier),
                 /*typeParameters*/ undefined,
@@ -237,7 +236,6 @@ namespace ts {
             );
 
             setOriginalNode(func, node);
-
             return func;
         }
 
@@ -280,7 +278,7 @@ namespace ts {
                 statements.push(
                     createReturn(
                         createAwaiterHelper(
-                            currentSourceFileExternalHelpersModuleName,
+                            helperState,
                             hasLexicalArguments,
                             promiseConstructor,
                             transformFunctionBodyWorker(<Block>node.body, statementOffset)
@@ -295,11 +293,11 @@ namespace ts {
                 if (languageVersion >= ScriptTarget.ES2015) {
                     if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
                         enableSubstitutionForAsyncMethodsWithSuper();
-                        setEmitFlags(block, EmitFlags.EmitAdvancedSuperHelper);
+                        addEmitHelper(block, advancedAsyncSuperHelper);
                     }
                     else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
                         enableSubstitutionForAsyncMethodsWithSuper();
-                        setEmitFlags(block, EmitFlags.EmitSuperHelper);
+                        addEmitHelper(block, asyncSuperHelper);
                     }
                 }
 
@@ -307,7 +305,7 @@ namespace ts {
             }
             else {
                 return createAwaiterHelper(
-                    currentSourceFileExternalHelpersModuleName,
+                    helperState,
                     hasLexicalArguments,
                     promiseConstructor,
                     <Block>transformConciseBodyWorker(node.body, /*forceBlockFunctionBody*/ true)
@@ -507,4 +505,63 @@ namespace ts {
                 && resolver.getNodeCheckFlags(currentSuperContainer) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
         }
     }
+
+    function createAwaiterHelper(helperState: EmitHelperState, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
+        const generatorFunc = createFunctionExpression(
+            /*modifiers*/ undefined,
+            createToken(SyntaxKind.AsteriskToken),
+            /*name*/ undefined,
+            /*typeParameters*/ undefined,
+            /*parameters*/ [],
+            /*type*/ undefined,
+            body
+        );
+
+        // Mark this node as originally an async function
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody;
+
+        requestEmitHelper(helperState, awaiterHelper);
+        return createCall(
+            getHelperName(helperState, "__awaiter"),
+            /*typeArguments*/ undefined,
+            [
+                createThis(),
+                hasLexicalArguments ? createIdentifier("arguments") : createVoidZero(),
+                promiseConstructor ? createExpressionFromEntityName(promiseConstructor) : createVoidZero(),
+                generatorFunc
+            ]
+        );
+    }
+
+    const awaiterHelper: EmitHelper = {
+        name: "typescript:awaiter",
+        scoped: false,
+        priority: 5,
+        text: `
+            var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+                return new (P || (P = Promise))(function (resolve, reject) {
+                    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+                    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+                    function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+                    step((generator = generator.apply(thisArg, _arguments)).next());
+                });
+            };`
+    };
+
+    const asyncSuperHelper: EmitHelper = {
+        name: "typescript:async-super",
+        scoped: true,
+        text: `
+            const _super = name => super[name];`
+    };
+
+    const advancedAsyncSuperHelper: EmitHelper = {
+        name: "typescript:advanced-async-super",
+        scoped: true,
+        text: `
+            const _super = (function (geti, seti) {
+                const cache = Object.create(null);
+                return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+            })(name => super[name], (name, value) => super[name] = value);`
+    };
 }
