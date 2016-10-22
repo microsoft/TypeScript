@@ -82,13 +82,14 @@ namespace ts {
 
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
             addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
             const updated = updateSourceFileNode(node, createNodeArray(statements, node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues) {
-                setEmitFlags(updated, EmitFlags.EmitExportStar | getEmitFlags(node));
+                addEmitHelper(updated, exportStarHelper);
             }
 
             return updated;
@@ -257,6 +258,7 @@ namespace ts {
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
 
             // Visit each statement of the module body.
+            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
 
             // End the lexical environment for the module body
@@ -270,7 +272,7 @@ namespace ts {
             if (currentModuleInfo.hasExportStarsToExportValues) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
-                setEmitFlags(body, EmitFlags.EmitExportStar);
+                addEmitHelper(body, exportStarHelper);
             }
 
             return body;
@@ -1312,4 +1314,14 @@ namespace ts {
             }
         }
     }
+
+    // emit output for the __export helper function
+    const exportStarHelper: EmitHelper = {
+        name: "typescript:export-star",
+        scoped: true,
+        text: `
+            function __export(m) {
+                for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+            }`
+    };
 }

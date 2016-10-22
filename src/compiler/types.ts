@@ -2081,8 +2081,6 @@ namespace ts {
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
-        // The synthesized identifier for an imported external helpers module.
-        /* @internal */ externalHelpersModuleName?: Identifier;
     }
 
     export interface ScriptReferenceHost {
@@ -3458,20 +3456,18 @@ namespace ts {
 
     /* @internal */
     export interface EmitNode {
-        flags?: EmitFlags;
-        commentRange?: TextRange;
-        sourceMapRange?: TextRange;
-        tokenSourceMapRanges?: Map<TextRange>;
         annotatedNodes?: Node[];                // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
-        constantValue?: number;
+        flags?: EmitFlags;                      // Flags that customize emit
+        commentRange?: TextRange;               // The text range to use when emitting leading or trailing comments
+        sourceMapRange?: TextRange;             // The text range to use when emitting leading or trailing source mappings
+        tokenSourceMapRanges?: Map<TextRange>;  // The text range to use when emitting source mappings for tokens
+        constantValue?: number;                 // The constant value of an expression
+        externalHelpersModuleName?: Identifier; // The local name for an imported helpers module
+        helpers?: EmitHelper[];                 // Emit helpers for the node
     }
 
     /* @internal */
     export const enum EmitFlags {
-        EmitEmitHelpers = 1 << 0,                // Any emit helpers should be written to this node.
-        EmitExportStar = 1 << 1,                 // The export * helper should be written to this node.
-        EmitSuperHelper = 1 << 2,                // Emit the basic _super helper for async methods.
-        EmitAdvancedSuperHelper = 1 << 3,        // Emit the advanced _super helper for async methods.
         UMDDefine = 1 << 4,                      // This node should be replaced with the UMD define helper.
         SingleLine = 1 << 5,                     // The contents of this node should be emitted on a single line.
         AdviseOnEmitNode = 1 << 6,               // The printer should invoke the onEmitNode callback when printing this node.
@@ -3497,6 +3493,14 @@ namespace ts {
         CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
         NoHoisting = 1 << 24,                    // Do not hoist this declaration in --module system
         HasEndOfDeclarationMarker = 1 << 25,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+    }
+
+    /* @internal */
+    export interface EmitHelper {
+        readonly name: string;      // A unique name for this helper.
+        readonly scoped: boolean;   // Indicates whether ther helper MUST be emitted in the current scope.
+        readonly text: string;      // ES3-compatible raw script text.
+        readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
     }
 
     /* @internal */

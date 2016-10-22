@@ -13,7 +13,27 @@ namespace ts {
             }
 
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                return visitEachChild(node, visitor, context);
+                const externalHelpersModuleName = getExternalHelpersModuleName(node);
+                if (externalHelpersModuleName) {
+                    const statements: Statement[] = [];
+                    const statementOffset = addPrologueDirectives(statements, node.statements);
+                    append(statements,
+                        createImportDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
+                            createLiteral(externalHelpersModuleNameText)
+                        )
+                    );
+
+                    addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+                    return updateSourceFileNode(
+                        node,
+                        createNodeArray(statements, node.statements));
+                }
+                else {
+                    return visitEachChild(node, visitor, context);
+                }
             }
 
             return node;
