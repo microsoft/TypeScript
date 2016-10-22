@@ -26,13 +26,17 @@ namespace ts.codefix {
                                     }
 
                                 case SyntaxKind.ForOfStatement:
-                                case SyntaxKind.ForInStatement:
-                                    const forOfStatement = <ForOfStatement | ForInStatement>token.parent.parent.parent;
+                                    const forOfStatement = <ForOfStatement>token.parent.parent.parent;
                                     if (forOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
                                         const forOfInitializer = <VariableDeclarationList>forOfStatement.initializer;
                                         return createCodeFix("{}", forOfInitializer.declarations[0].pos, forOfInitializer.declarations[0].end - forOfInitializer.declarations[0].pos);
                                     }
                                     break;
+
+                                case SyntaxKind.ForInStatement:
+                                    // There is no valid fix in the case of:
+                                    //  for .. in
+                                    return undefined;
 
                                 case SyntaxKind.CatchClause:
                                     const catchClause = <CatchClause>token.parent.parent;
@@ -56,7 +60,6 @@ namespace ts.codefix {
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.PropertyDeclaration:
-                        case SyntaxKind.ArrowFunction:
                             return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
 
                         case SyntaxKind.TypeParameter:
@@ -109,7 +112,7 @@ namespace ts.codefix {
                     return createCodeFix("{}", token.parent.pos, token.parent.end - token.parent.pos);
             }
 
-            return [];
+            return undefined;
 
             function createCodeFix(newText: string, start: number, length: number): CodeAction[] {
                 return [{

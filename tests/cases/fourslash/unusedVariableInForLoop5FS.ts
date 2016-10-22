@@ -2,10 +2,10 @@
 
 // @noUnusedLocals: true
 //// function f1 () {
-////     for ([|const elem in|] ["a", "b", "c"]) {
+////     for (const elem in ["a", "b", "c"]) {
 ////
 ////     }
 //// }
 
-verify.codeFixAtPosition("const {} in ");
+verify.not.codeFixAvailable();
 
