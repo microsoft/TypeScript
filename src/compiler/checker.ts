@@ -5753,19 +5753,19 @@ namespace ts {
         }
 
         function getTypeFromSpreadTypeLiteral(node: Node, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            let spread: Type = emptyObjectType;
             let members: Map<Symbol>;
             let stringIndexInfo: IndexInfo;
             let numberIndexInfo: IndexInfo;
-            const spreads: Type[] = [];
             for (const member of (node as TypeLiteralNode).members) {
                 if (member.kind === SyntaxKind.SpreadTypeElement) {
                     if (members) {
-                        spreads.push(createAnonymousType(node.symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo));
+                        spread = getSpreadTypeWorker(spread, createAnonymousType(node.symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo), node.symbol, aliasSymbol, aliasTypeArguments);
                         members = undefined;
                         stringIndexInfo = undefined;
                         numberIndexInfo = undefined;
                     }
-                    spreads.push(getTypeFromTypeNode((member as SpreadTypeElement).type));
+                    spread = getSpreadTypeWorker(spread, getTypeFromTypeNode((member as SpreadTypeElement).type), node.symbol, aliasSymbol, aliasTypeArguments);
                 }
                 else if (member.kind === SyntaxKind.IndexSignature) {
                     const index = member as IndexSignatureDeclaration;
@@ -5798,23 +5798,7 @@ namespace ts {
                 }
             }
             if (members || stringIndexInfo || numberIndexInfo) {
-                spreads.push(createAnonymousType(node.symbol, members || emptySymbols, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo));
-            }
-            return getSpreadType(spreads, node.symbol, aliasSymbol, aliasTypeArguments);
-        }
-
-        function getSpreadType(types: Type[], symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]) {
-            // TODO: Move this function's body into callers, except for caching, and leave that back in getSpreadType proper
-            if (types.length === 0) {
-                return emptyObjectType;
-            }
-            const id = getTypeListId(types);
-            if (id in spreadTypes) {
-                return spreadTypes[id];
-            }
-            let spread: Type = emptyObjectType;
-            for (const left of types) {
-                spread = getSpreadTypeWorker(spread, left, symbol, aliasSymbol, aliasTypeArguments);
+                spread = getSpreadTypeWorker(spread, createAnonymousType(node.symbol, members || emptySymbols, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo), node.symbol, aliasSymbol, aliasTypeArguments);
             }
             return spread;
         }
@@ -5861,8 +5845,8 @@ namespace ts {
                 left.flags & TypeFlags.Spread &&
                 (left as SpreadType).right.flags & TypeFlags.ObjectType) {
                 // simplify two adjacent object types: T ... { x } ... { y } becomes T ... { x, y }
-                const simplified = getSpreadType([right, (left as SpreadType).right], symbol, aliasSymbol, aliasTypeArguments);
-                return getSpreadType([(left as SpreadType).left, simplified], symbol, aliasSymbol, aliasTypeArguments);
+                const simplified = getSpreadTypeWorker(right, (left as SpreadType).right, symbol, aliasSymbol, aliasTypeArguments);
+                return getSpreadTypeWorker((left as SpreadType).left, simplified, symbol, aliasSymbol, aliasTypeArguments);
             }
             if (left.flags & TypeFlags.Intersection) {
                 left = resolveObjectIntersection(left as IntersectionType);
@@ -6355,7 +6339,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Spread) {
                     const spread = type as SpreadType;
-                    return getSpreadType([instantiateType(spread.left, mapper), instantiateType(spread.right, mapper)], type.symbol, type.aliasSymbol, mapper.targetTypes);
+                    return getSpreadTypeWorker(instantiateType(spread.left, mapper), instantiateType(spread.right, mapper), type.symbol, type.aliasSymbol, mapper.targetTypes);
                 }
             }
             return type;
@@ -10881,7 +10865,9 @@ namespace ts {
 
             let propertiesTable = createMap<Symbol>();
             let propertiesArray: Symbol[] = [];
-            const spreads: Type[] = [];
+            let spread: Type = emptyObjectType;
+            let propagatedFlags: TypeFlags = 0;
+
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
@@ -10947,13 +10933,15 @@ namespace ts {
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadElementExpression) {
                     if (propertiesArray.length > 0) {
-                        spreads.push(createObjectLiteralType());
+                        spread = getSpreadTypeWorker(spread, createObjectLiteralType(), node.symbol);
                         propertiesArray = [];
                         propertiesTable = createMap<Symbol>();
                         hasComputedStringProperty = false;
                         hasComputedNumberProperty = false;
+                        typeFlags = 0;
                     }
-                    spreads.push(checkExpression((memberDecl as SpreadElementExpression).expression));
+                    const type = checkExpression((memberDecl as SpreadElementExpression).expression);
+                    spread = getSpreadTypeWorker(spread, type, node.symbol);
                     continue;
                 }
                 else {
@@ -10995,12 +10983,11 @@ namespace ts {
                 }
             }
 
-            if (spreads.length > 0) {
+            if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spreads.push(createObjectLiteralType());
+                    spread = getSpreadTypeWorker(spread, createObjectLiteralType(), node.symbol);
                 }
-                const propagatedFlags = getPropagatingFlagsOfTypes(spreads, /*excludeKinds*/ TypeFlags.Nullable);
-                const spread = getSpreadType(spreads, node.symbol, undefined, undefined);
+                // TODO: REname getSpreadTypeWorker back to getSpreadType
                 spread.flags |= propagatedFlags;
                 return spread;
             }
@@ -11018,6 +11005,9 @@ namespace ts {
                 }
                 if (inDestructuringPattern) {
                     result.pattern = node;
+                }
+                if (!(result.flags & TypeFlags.Nullable)) {
+                    propagatedFlags |= (result.flags & TypeFlags.PropagatingFlags);
                 }
                 return result;
             }
