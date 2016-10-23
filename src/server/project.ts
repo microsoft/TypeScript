@@ -20,42 +20,16 @@ namespace ts.server {
         }
     }
 
-    function countEachFileTypes(infos: ScriptInfo[]): { js: number, jsx: number, ts: number, tsx: number, dts: number } {
-        const result = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
-        for (const info of infos) {
-            switch (info.scriptKind) {
-                case ScriptKind.JS:
-                    result.js += 1;
-                    break;
-                case ScriptKind.JSX:
-                    result.jsx += 1;
-                    break;
-                case ScriptKind.TS:
-                    fileExtensionIs(info.fileName, ".d.ts")
-                        ? result.dts += 1
-                        : result.ts += 1;
-                    break;
-                case ScriptKind.TSX:
-                    result.tsx += 1;
-                    break;
-            }
-        }
-        return result;
-    }
-
-    function hasOneOrMoreJsAndNoTsFiles(project: Project) {
-        const counts = countEachFileTypes(project.getScriptInfos());
-        return counts.js > 0 && counts.ts === 0 && counts.tsx === 0;
+    function isJsOrDtsFile(info: ScriptInfo) {
+        return info.scriptKind === ScriptKind.JS || info.scriptKind == ScriptKind.JSX || fileExtensionIs(info.fileName, ".d.ts");
     }
 
     export function allRootFilesAreJsOrDts(project: Project): boolean {
-        const counts = countEachFileTypes(project.getRootScriptInfos());
-        return counts.ts === 0 && counts.tsx === 0;
+        return project.getRootScriptInfos().every(isJsOrDtsFile);
     }
 
     export function allFilesAreJsOrDts(project: Project): boolean {
-        const counts = countEachFileTypes(project.getScriptInfos());
-        return counts.ts === 0 && counts.tsx === 0;
+        return project.getScriptInfos().every(isJsOrDtsFile);
     }
 
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
@@ -97,14 +71,9 @@ namespace ts.server {
 
         public typesVersion = 0;
 
-        public isNonTsProject() {
-            this.updateGraph();
-            return allFilesAreJsOrDts(this);
-        }
-
         public isJsOnlyProject() {
             this.updateGraph();
-            return hasOneOrMoreJsAndNoTsFiles(this);
+            return allFilesAreJsOrDts(this);
         }
 
         constructor(

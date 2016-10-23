@@ -405,7 +405,6 @@ namespace ts {
                         allowJs: true,
                         maxNodeModuleJsDepth: 2,
                         allowSyntheticDefaultImports: true,
-                        skipLibCheck: true,
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -434,7 +433,6 @@ namespace ts {
                         allowJs: false,
                         maxNodeModuleJsDepth: 2,
                         allowSyntheticDefaultImports: true,
-                        skipLibCheck: true,
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -458,8 +456,7 @@ namespace ts {
                     {
                         allowJs: true,
                         maxNodeModuleJsDepth: 2,
-                        allowSyntheticDefaultImports: true,
-                        skipLibCheck: true
+                        allowSyntheticDefaultImports: true
                     },
                     errors: [{
                         file: undefined,
@@ -480,8 +477,7 @@ namespace ts {
                     {
                         allowJs: true,
                         maxNodeModuleJsDepth: 2,
-                        allowSyntheticDefaultImports: true,
-                        skipLibCheck: true
+                        allowSyntheticDefaultImports: true
                     },
                     errors: <Diagnostic[]>[]
                 }
