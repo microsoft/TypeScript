@@ -474,7 +474,7 @@ namespace ts {
                 (oldOptions.baseUrl !== options.baseUrl) ||
                 (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
                 !arrayIsEqualTo(oldOptions.lib, options.lib) ||
-                !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
+                !arrayIsEqualTo(oldOptions.typeRoots, options.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
                 !equalOwnProperties(oldOptions.paths, options.paths)) {
                 return false;
