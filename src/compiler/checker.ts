@@ -12681,9 +12681,14 @@ namespace ts {
                 result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
             }
 
-            // Do not report any error if we are doing so for stateless function component as such error will be error will be handle in "resolveCustomJsxElementAttributesType"
-            if (result || isJsxOpeningOrSelfClosingElement) {
+            if (result) {
                 return result;
+            }
+
+            // Do not report any error if we are doing so for stateless function component as such error will be error will be handle in "resolveCustomJsxElementAttributesType".
+            // Just return the latest signature candidate we try so far so that when we report an error we will get better error message.
+            if (isJsxOpeningOrSelfClosingElement) {
+                return candidateForArgumentError;
             }
 
             // No signatures were applicable. Now report errors based on the last applicable signature with

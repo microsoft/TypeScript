@@ -46,7 +46,7 @@ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
 }
 
 // Error
-const b0 = <MainButton to='/some/path' onClick={(e: any)=>{}}>GO</MainButton>;  // extra property; should error from second overload
-const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property; should error from first overload
-const b2 = <MainButton {...{to: 10000}} {...obj2} />;  // extra property; should error from second overload
-const b3 = <MainButton {...obj3} to />;  // Incorrect type; should show error from second overload
+const b0 = <MainButton to='/some/path' onClick={(e: any)=>{}}>GO</MainButton>;  // extra property;
+const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
+const b2 = <MainButton {...{to: 10000}} {...obj2} />;  // extra property;
+const b3 = <MainButton {...obj3} to />;  // Incorrect type;
