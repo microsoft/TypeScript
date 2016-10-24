@@ -883,7 +883,7 @@ namespace ts {
     export interface DifferenceTypeNode extends TypeNode {
         kind: SyntaxKind.DifferenceType;
         source: TypeNode;
-        minus: TypeNode;
+        properties: NodeArray<PropertyName>;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
@@ -2793,8 +2793,8 @@ namespace ts {
     }
 
     export interface DifferenceType extends Type {
-        source: Type; // might be able to refine these like the SpreadType
-        minus: Type;
+        source: Type;
+        properties: PropertyName[];
     }
 
     /* @internal */

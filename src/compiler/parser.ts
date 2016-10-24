@@ -139,7 +139,7 @@ namespace ts {
                 return visitNodes(cbNodes, (<UnionOrIntersectionTypeNode>node).types);
             case SyntaxKind.DifferenceType:
                 return visitNode(cbNode, (node as DifferenceTypeNode).source) ||
-                    visitNode(cbNode, (node as DifferenceTypeNode).minus);
+                    visitNodes(cbNodes, (node as DifferenceTypeNode).properties);
             case SyntaxKind.ParenthesizedType:
                 return visitNode(cbNode, (<ParenthesizedTypeNode>node).type);
             case SyntaxKind.LiteralType:
@@ -1272,8 +1272,10 @@ namespace ts {
                     return token() === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
                     return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.AsteriskToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
+                case ParsingContext.RestProperties:
+                    return isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
-                return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
+                    return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
                 case ParsingContext.HeritageClauseElement:
                     // If we see { } then only consume it as an expression if it is followed by , or {
                     // That way we won't consume the body of a class in its heritage clause.
@@ -1400,6 +1402,7 @@ namespace ts {
                 case ParsingContext.ArrayBindingElements:
                     return token() === SyntaxKind.CloseBracketToken;
                 case ParsingContext.Parameters:
+                case ParsingContext.RestProperties:
                     // Tokens other than ')' and ']' (the latter for index signatures) are here for better error recovery
                     return token() === SyntaxKind.CloseParenToken || token() === SyntaxKind.CloseBracketToken /*|| token === SyntaxKind.OpenBraceToken*/;
                 case ParsingContext.TypeArguments:
@@ -1584,6 +1587,11 @@ namespace ts {
 
                 case ParsingContext.Parameters:
                     return isReusableParameter(node);
+
+                case ParsingContext.RestProperties:
+                    // TODO: This is likely safe to reuse since it doesn't allow expressions.
+                    // Revisit this later.
+                    return false;
 
                 // Any other lists we do not care about reusing nodes in.  But feel free to add if
                 // you can do so safely.  Danger areas involve nodes that may involve speculative
@@ -1782,6 +1790,7 @@ namespace ts {
                 case ParsingContext.BlockStatements: return Diagnostics.Declaration_or_statement_expected;
                 case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
                 case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
+                case ParsingContext.RestProperties: // fallthrough
                 case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
                 case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
                 case ParsingContext.EnumMembers: return Diagnostics.Enum_member_expected;
@@ -2548,20 +2557,27 @@ namespace ts {
             return type;
         }
 
+        function parsePropertyNameObject() {
+            parseExpected(SyntaxKind.OpenParenToken);
+            const list = parseDelimitedList(ParsingContext.RestProperties, parsePropertyName);
+            parseExpected(SyntaxKind.CloseParenToken);
+            return list;
+        }
+
         function parseDifferenceTypeOrHigher(): TypeNode {
             let leftType = parseArrayTypeOrHigher();
             // create left-associative difference types as long as the parser sees `-`
             while (token() === SyntaxKind.MinusToken) {
                 parseTokenNode();
-                leftType = makeDifferenceType(leftType, parseArrayTypeOrHigher());
+                leftType = makeDifferenceType(leftType, parsePropertyNameObject());
             }
             return leftType;
         }
 
-        function makeDifferenceType(source: TypeNode, minus: TypeNode) {
+        function makeDifferenceType(source: TypeNode, properties: NodeArray<PropertyName>) {
             const node = createNode(SyntaxKind.DifferenceType, source.pos) as DifferenceTypeNode;
             node.source = source;
-            node.minus = minus;
+            node.properties = properties;
             return finishNode(node);
         }
 
@@ -5825,6 +5841,7 @@ namespace ts {
             JsxChildren,               // Things between opening and closing JSX tags
             ArrayLiteralMembers,       // Members in array literal
             Parameters,                // Parameters in parameter list
+            RestProperties,            // Property names in a rest type list
             TypeParameters,            // Type parameters in type parameter list
             TypeArguments,             // Type arguments in type argument list
             TupleElementTypes,         // Element types in tuple element type list

@@ -2368,7 +2368,22 @@ namespace ts {
                     writeSpace(writer);
                     writePunctuation(writer, SyntaxKind.MinusToken);
                     writeSpace(writer);
-                    writeType(type.minus, flags);
+                    writePunctuation(writer, SyntaxKind.OpenParenToken);
+                    writeSpace(writer);
+                    let first = true;
+                    for (const property of type.properties) {
+                        if (first) {
+                            first = false;
+                        }
+                        else {
+                            writePunctuation(writer, SyntaxKind.CommaToken);
+                            writeSpace(writer);
+                        }
+                        writer.writeParameter(getTextOfPropertyName(property));
+                    }
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.CloseParenToken);
+
                     if (flags & TypeFormatFlags.InElementType) {
                         writePunctuation(writer, SyntaxKind.CloseParenToken);
                     }
@@ -3002,46 +3017,42 @@ namespace ts {
             return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind);
         }
 
-        function getDifferenceType(source: Type, minus: Type, symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
-            if (source.flags & TypeFlags.ObjectType && minus.flags & TypeFlags.ObjectType) {
-                // TODO: Maybe we should require the types to be the same as well
-                const members = createMap<Symbol>();
-                const minusStringIndex = getIndexInfoOfType(minus, IndexKind.String);
-                if (!minusStringIndex) {
-                    for (const prop of getPropertiesOfType(source)) {
-                        if (!getPropertyOfObjectType(minus, prop.name)) {
-                            members[prop.name] = prop;
-                        }
-                    }
-                }
-                const callSignatures = getSignaturesOfType(minus, SignatureKind.Call) !== emptyArray ? emptyArray : getSignaturesOfType(source, SignatureKind.Call);
-                const constructSignatures = getSignaturesOfType(minus, SignatureKind.Construct) !== emptyArray ? emptyArray : getSignaturesOfType(source, SignatureKind.Construct);
-                const stringIndexInfo = minusStringIndex ? undefined : getIndexInfoOfType(source, IndexKind.String);
-                const numberIndexInfo = minusStringIndex || getIndexInfoOfType(minus, IndexKind.Number) ? undefined : getIndexInfoOfType(source, IndexKind.Number);
-                return createAnonymousType(symbol, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
-            }
+        function getRestType(source: Type, properties: PropertyName[], symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (source.flags & TypeFlags.Intersection) {
-                return getIntersectionType(map((source as IntersectionType).types, t => getDifferenceType(t, minus, symbol, aliasSymbol, aliasTypeArguments)), aliasSymbol, aliasTypeArguments);
-            }
-            if (minus.flags & TypeFlags.Intersection) {
-                return getIntersectionType(map((minus as IntersectionType).types, t => getDifferenceType(source, t, symbol, aliasSymbol, aliasTypeArguments)), aliasSymbol, aliasTypeArguments);
+                // TODO: This has GOT to be wrong
+                return getIntersectionType(map((source as IntersectionType).types, t => getRestType(t, properties, symbol, aliasSymbol, aliasTypeArguments)), aliasSymbol, aliasTypeArguments);
             }
             if (source.flags & TypeFlags.Union) {
-                return getUnionType(map((source as UnionType).types, t => getDifferenceType(t, minus, symbol, aliasSymbol, aliasTypeArguments)), /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
-            }
-            if (minus.flags & TypeFlags.Union) {
-                return getUnionType(map((minus as UnionType).types, t => getDifferenceType(source, t, symbol, aliasSymbol, aliasTypeArguments)), /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
+                // TODO: This might be wrong too
+                return getUnionType(map((source as UnionType).types, t => getRestType(t, properties, symbol, aliasSymbol, aliasTypeArguments)), /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
             // TODO: Distribute across spread and partial?
             // spread is inescapable, so perhaps not, although we still want to give the right answers for constrained type parameters
-            const id = getTypeListId([source, minus]);
+            const id = source.id.toString() + '-' + properties.map(getTextOfPropertyName).join(',');
             if (id in differenceTypes) {
                 return differenceTypes[id];
             }
 
+            // TODO: Simplifications
+
+            if (source.flags & TypeFlags.ObjectType) {
+                const members = createMap<Symbol>();
+                const names = createMap<true>();
+                for (const name of properties) {
+                    names[getTextOfPropertyName(name)] = true;
+                }
+                for (const prop of getPropertiesOfType(source)) {
+                    if (!(prop.name in names)) {
+                        members[prop.name] = prop;
+                    }
+                }
+                const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
+                const numberIndexInfo = getIndexInfoOfType(source, IndexKind.Number);
+                return createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            }
             const difference = differenceTypes[id] = createObjectType(TypeFlags.Difference, symbol) as DifferenceType;
             difference.source = source;
-            difference.minus = minus;
+            difference.properties = properties;
             difference.aliasSymbol = aliasSymbol;
             difference.aliasTypeArguments = aliasTypeArguments;
             return difference;
@@ -3068,16 +3079,13 @@ namespace ts {
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    const literalMembers = createMap<Symbol>();
+                    const literalMembers: PropertyName[] = [];
                     for (const element of pattern.elements) {
-                        if (element.kind === SyntaxKind.OmittedExpression || (element as BindingElement).dotDotDotToken) {
-                            continue;
+                        if (element.kind !== SyntaxKind.OmittedExpression && !(element as BindingElement).dotDotDotToken) {
+                            literalMembers.push(element.propertyName || element.name as Identifier);
                         }
-                        const propertyName = element.propertyName || element.name as Identifier;
-                        const name = getTextOfPropertyName(propertyName);
-                        literalMembers[name] = getSymbolOfNode(element) || getPropertyOfObjectType(parentType, name);
                     }
-                    type = getDifferenceType(parentType, createAnonymousType(declaration.symbol, literalMembers, emptyArray, emptyArray, undefined, undefined), declaration.symbol);
+                    type = getRestType(parentType, literalMembers, declaration.symbol);
                 }
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
@@ -4583,7 +4591,7 @@ namespace ts {
         }
 
         function getApparentTypeOfDifference(type: DifferenceType) {
-            return getDifferenceType(getApparentType(type.source), getApparentType(type.minus), type.symbol);
+            return getRestType(getApparentType(type.source), type.properties, type.symbol);
         }
 
         /**
@@ -5805,11 +5813,8 @@ namespace ts {
         function getTypeFromDifferenceTypeNode(node: DifferenceTypeNode, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getDifferenceType(getTypeFromTypeNodeNoAlias(node.source),
-                                                       getTypeFromTypeNodeNoAlias(node.minus),
-                                                       node.symbol,
-                                                       aliasSymbol,
-                                                       aliasTypeArguments);
+                const source = getTypeFromTypeNodeNoAlias(node.source)
+                links.resolvedType = getRestType(source, node.properties, node.symbol, aliasSymbol, aliasTypeArguments);
             }
             return links.resolvedType;
         }
@@ -6410,7 +6415,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Difference) {
                     const diff = type as DifferenceType;
-                    return getDifferenceType(instantiateType(diff.source, mapper), instantiateType(diff.minus, mapper), type.symbol, type.aliasSymbol, mapper.targetTypes);
+                    return getRestType(instantiateType(diff.source, mapper), diff.properties, type.symbol, type.aliasSymbol, mapper.targetTypes);
                 }
             }
             return type;
@@ -6976,9 +6981,7 @@ namespace ts {
                     const ds = source as DifferenceType;
                     const dt = target as DifferenceType;
                     if (result = isRelatedTo(ds.source, dt.source)) {
-                        if (result = isRelatedTo(ds.minus, ds.minus)) {
-                            return result;
-                        }
+                        return result;
                     }
                 }
                 if (target.flags & TypeFlags.Difference) {

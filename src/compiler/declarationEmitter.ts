@@ -504,8 +504,9 @@ namespace ts {
 
             function emitDifferenceType(type: DifferenceTypeNode) {
                 emitType(type.source);
-                write(" - ");
-                emitType(type.minus);
+                write(" - (");
+                emitSeparatedList(type.properties, ", ", n => writeTextOfNode(currentText, n));
+                write(")");
             }
 
             function emitParenType(type: ParenthesizedTypeNode) {
