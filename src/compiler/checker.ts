@@ -5769,24 +5769,10 @@ namespace ts {
                     const type = getTypeFromTypeNode((member as SpreadTypeElement).type);
                     spread = getSpreadType(spread, type, node.symbol, aliasSymbol, aliasTypeArguments);
                 }
-                else if (member.kind === SyntaxKind.IndexSignature) {
-                    const index = member as IndexSignatureDeclaration;
-                    if (index.parameters.length === 1) {
-                        const parameter = index.parameters[0];
-                        if (parameter && parameter.type) {
-                            const indexInfo = createIndexInfo(index.type ? getTypeFromTypeNode(index.type) : anyType,
-                                                              (getModifierFlags(index) & ModifierFlags.Readonly) !== 0, index);
-                            if (parameter.type.kind === SyntaxKind.StringKeyword) {
-                                stringIndexInfo = indexInfo;
-                            }
-                            else {
-                                numberIndexInfo = indexInfo;
-                            }
-                        }
-                    }
-                }
-                else if (member.kind !== SyntaxKind.CallSignature && member.kind !== SyntaxKind.ConstructSignature) {
-                    // note that spread types don't include call and construct signatures
+                else if (member.kind !== SyntaxKind.IndexSignature &&
+                         member.kind !== SyntaxKind.CallSignature &&
+                         member.kind !== SyntaxKind.ConstructSignature) {
+                    // it is an error for spread types to include index, call or construct signatures
                     const flags = SymbolFlags.Property | SymbolFlags.Transient | (member.questionToken ? SymbolFlags.Optional : 0);
                     const text = getTextOfPropertyName(member.name);
                     const symbol = <TransientSymbol>createSymbol(flags, text);
@@ -15270,15 +15256,11 @@ namespace ts {
                     checkTypeForDuplicateIndexSignatures(node);
                     checkObjectTypeForDuplicateDeclarations(node);
                 }
-                if (type.flags & (TypeFlags.ObjectType | TypeFlags.Spread) &&
-                    find(node.members, p => p.kind === SyntaxKind.SpreadTypeElement)) {
-                    const declaredNumberIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.Number);
-                    const declaredStringIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.String);
-                    if (declaredStringIndexer) {
-                        error(declaredStringIndexer, Diagnostics.Type_literals_with_spreads_cannot_contain_an_index_signature);
-                    }
-                    if (declaredNumberIndexer) {
-                        error(declaredNumberIndexer, Diagnostics.Type_literals_with_spreads_cannot_contain_an_index_signature);
+                if (find(node.members, p => p.kind === SyntaxKind.SpreadTypeElement)) {
+                    for (const signature of filter(node.members, p => p.kind === SyntaxKind.IndexSignature ||
+                                                                      p.kind === SyntaxKind.CallSignature ||
+                                                                      p.kind === SyntaxKind.ConstructSignature)) {
+                        error(signature, Diagnostics.Type_literals_with_spreads_cannot_contain_index_call_or_construct_signatures);
                     }
                 }
             }

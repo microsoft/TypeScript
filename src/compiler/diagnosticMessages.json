@@ -1971,7 +1971,7 @@
         "category": "Error",
         "code": 2697
     },
-    "Type literals with spreads cannot contain an index signature.": {
+    "Type literals with spreads cannot contain index, call or construct signatures.": {
         "category": "Error",
         "code": 2698
     },
