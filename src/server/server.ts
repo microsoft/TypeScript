@@ -181,12 +181,15 @@ namespace ts.server {
         private installer: NodeChildProcess;
         private socket: NodeSocket;
         private projectService: ProjectService;
+        private throttledOperations: ThrottledOperations;
 
         constructor(
             private readonly logger: server.Logger,
+            host: ServerHost,
             eventPort: number,
             readonly globalTypingsCacheLocation: string,
             private newLine: string) {
+            this.throttledOperations = new ThrottledOperations(host);
             if (eventPort) {
                 const s = net.connect({ port: eventPort }, () => {
                     this.socket = s;
@@ -231,12 +234,19 @@ namespace ts.server {
             this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
         }
 
-        enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions): void {
-            const request = createInstallTypingsRequest(project, typingOptions);
+        enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>): void {
+            const request = createInstallTypingsRequest(project, typingOptions, unresolvedImports);
             if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Sending request: ${JSON.stringify(request)}`);
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Scheduling throttled operation: ${JSON.stringify(request)}`);
+                }
             }
-            this.installer.send(request);
+            this.throttledOperations.schedule(project.getProjectName(), /*ms*/ 250, () => {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Sending request: ${JSON.stringify(request)}`);
+                }
+                this.installer.send(request);
+            });
         }
 
         private handleMessage(response: SetTypings | InvalidateCachedTypings) {
@@ -266,7 +276,7 @@ namespace ts.server {
                 useSingleInferredProject,
                 disableAutomaticTypingAcquisition
                     ? nullTypingsInstaller
-                    : new NodeTypingsInstaller(logger, installerEventPort, globalTypingsCacheLocation, host.newLine),
+                    : new NodeTypingsInstaller(logger, host, installerEventPort, globalTypingsCacheLocation, host.newLine),
                 Buffer.byteLength,
                 process.hrtime,
                 logger,
