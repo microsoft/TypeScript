@@ -5794,23 +5794,29 @@ namespace ts {
             return spread;
         }
 
+        /**
+         * Since the source of spread types are object literals and type literals, which are not binary,
+         * this function should be called in a left folding style, with left = previous result of getSpreadType
+         * and right = the new element to be spread.
+         */
         function getSpreadType(left: Type, right: Type, symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
-            // TODO: Reorder everything now that it's order independent, to be easier to read
             const id = getTypeListId([left, right]);
             if (id in spreadTypes) {
                 return spreadTypes[id];
             }
 
-            // non-spreadable types
+            // any spreads to any
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
+            // flatten intersections to objects if all member types are objects
             if (left.flags & TypeFlags.Intersection) {
                 left = resolveObjectIntersection(left as IntersectionType);
             }
             if (right.flags & TypeFlags.Intersection) {
                 right = resolveObjectIntersection(right as IntersectionType);
             }
+            // distribute unions
             if (left.flags & TypeFlags.Union) {
                 const spreads = map((left as UnionType).types,
                                     t => getSpreadType(t, right, symbol, aliasSymbol, aliasTypeArguments));
@@ -5821,7 +5827,14 @@ namespace ts {
                                     t => getSpreadType(left, t, symbol, aliasSymbol, aliasTypeArguments));
                 return getUnionType(spreads, /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
-            if (right.flags & TypeFlags.Primitive) {
+            // skip primitives
+            if (left.flags & TypeFlags.Primitive && right.flags & TypeFlags.Primitive) {
+                return emptyObjectType;
+            }
+            else if (left.flags & TypeFlags.Primitive) {
+                return right;
+            }
+            else if (right.flags & TypeFlags.Primitive) {
                 return left;
             }
 
@@ -5845,7 +5858,7 @@ namespace ts {
                 // (T ... U) ... V to T ... (U ... V)
                 const rspread = right as SpreadType;
                 if (rspread.left === emptyObjectType) {
-                    // U ... ({} ... T) => (U ... T)
+                    // ... U ... ({} ... T) => ... U ... T
                     return getSpreadType(left, rspread.right, symbol, aliasSymbol, aliasTypeArguments);
                 }
                 return getSpreadType(getSpreadType(left, rspread.left, symbol, aliasSymbol, aliasTypeArguments),
