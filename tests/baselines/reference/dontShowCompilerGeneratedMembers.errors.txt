@@ -1,5 +1,5 @@
 tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(3,6): error TS1139: Type parameter declaration expected.
-tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(4,1): error TS1110: Type expected.
+tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(4,1): error TS1005: '(' expected.
 
 
 ==== tests/cases/compiler/dontShowCompilerGeneratedMembers.ts (2 errors) ====
@@ -10,4 +10,4 @@ tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(4,1): error TS1110: Typ
 !!! error TS1139: Type parameter declaration expected.
     };
     ~
-!!! error TS1110: Type expected.
+!!! error TS1005: '(' expected.
