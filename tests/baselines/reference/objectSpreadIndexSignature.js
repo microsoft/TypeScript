@@ -3,6 +3,7 @@ class C {
     a: number;
     c: boolean;
 }
+// index signatures are not allowed in object literals with spread types
 let c: { ...C, b: string, c?: string, [n: number]: string };
 let n: number = c.a;
 let s: string = c[12];
@@ -31,6 +32,7 @@ var C = (function () {
     }
     return C;
 }());
+// index signatures are not allowed in object literals with spread types
 var c;
 var n = c.a;
 var s = c[12];

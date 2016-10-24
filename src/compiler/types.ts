@@ -2643,26 +2643,19 @@ namespace ts {
         Null                    = 1 << 12,
         Never                   = 1 << 13,  // Never type
         TypeParameter           = 1 << 14,  // Type parameter
-        Class                   = 1 << 15,  // Class
-        Interface               = 1 << 16,  // Interface
-        Reference               = 1 << 17,  // Generic type reference
-        Tuple                   = 1 << 18,  // Synthesized generic tuple type
-        Union                   = 1 << 19,  // Union (T | U)
-        Intersection            = 1 << 20,  // Intersection (T & U)
-        Anonymous               = 1 << 21,  // Anonymous
-        Instantiated            = 1 << 22,  // Instantiated anonymous type
+        Object                  = 1 << 15,  // Object type
+        Union                   = 1 << 16,  // Union (T | U)
+        Intersection            = 1 << 17,  // Intersection (T & U)
         /* @internal */
-        ObjectLiteral           = 1 << 23,  // Originates in an object literal
+        FreshLiteral            = 1 << 18,  // Fresh literal type
         /* @internal */
-        FreshLiteral            = 1 << 24,  // Fresh literal type
+        ContainsWideningType    = 1 << 19,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
+        ContainsObjectLiteral   = 1 << 20,  // Type is or contains object literal type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
-        /* @internal */
-        ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
-        Spread                  = 1 << 28,  // Spread types
-        Difference              = 1 << 29,  // No way this will last
+        ContainsAnyFunctionType = 1 << 21,  // Type is or contains object literal type
+        Spread                  = 1 << 22,  // Spread types
+        Difference              = 1 << 23,  // Rest types
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2679,15 +2672,14 @@ namespace ts {
         NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
-        ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
-        StructuredType = ObjectType | Union | Intersection | Spread,
+        StructuredType = Object | Union | Intersection | Spread,
         StructuredOrTypeParameter = StructuredType | TypeParameter,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | BooleanLike | ESSymbol | Spread,
-        NotUnionOrUnit = Any | ESSymbol | ObjectType,
+        NotUnionOrUnit = Any | ESSymbol | Object,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
@@ -2730,9 +2722,22 @@ namespace ts {
         baseType: EnumType & UnionType;  // Base enum type
     }
 
+    export const enum ObjectFlags {
+        Class            = 1 << 0,  // Class
+        Interface        = 1 << 1,  // Interface
+        Reference        = 1 << 2,  // Generic type reference
+        Tuple            = 1 << 3,  // Synthesized generic tuple type
+        Anonymous        = 1 << 4,  // Anonymous
+        Instantiated     = 1 << 5,  // Instantiated anonymous type
+        ObjectLiteral    = 1 << 6,  // Originates in an object literal
+        EvolvingArray    = 1 << 7,  // Evolving array type
+        ObjectLiteralPatternWithComputedProperties = 1 << 8,  // Object literal pattern with computed properties
+        ClassOrInterface = Class | Interface
+    }
+
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
-        isObjectLiteralPatternWithComputedProperties?: boolean;
+        objectFlags: ObjectFlags;
     }
 
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
@@ -2786,6 +2791,8 @@ namespace ts {
 
     export interface IntersectionType extends UnionOrIntersectionType { }
 
+    export type StructuredType = ObjectType | UnionType | IntersectionType;
+
     /* @internal */
     export interface SpreadType extends Type {
         left: SpreadType | ResolvedType;
@@ -2802,8 +2809,11 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
-        elementType?: Type;      // Element expressions of evolving array type
-        finalArrayType?: Type;   // Final array type of evolving array type
+    }
+
+    export interface EvolvingArrayType extends ObjectType {
+        elementType: Type;      // Element expressions of evolving array type
+        finalArrayType?: Type;  // Final array type of evolving array type
     }
 
     /* @internal */
