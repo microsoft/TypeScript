@@ -6,44 +6,22 @@ interface A { a: number }
 interface Call1 { (): void }
 >Call1 : Symbol(Call1, Decl(differenceSignatures.ts, 0, 25))
 
-interface Call2 { (a: number): number }
->Call2 : Symbol(Call2, Decl(differenceSignatures.ts, 1, 28))
->a : Symbol(a, Decl(differenceSignatures.ts, 2, 19))
-
 interface Construct1 { new (): void }
->Construct1 : Symbol(Construct1, Decl(differenceSignatures.ts, 2, 39))
+>Construct1 : Symbol(Construct1, Decl(differenceSignatures.ts, 1, 28))
 
-interface Construct2 { new (a: number): void }
->Construct2 : Symbol(Construct2, Decl(differenceSignatures.ts, 3, 37))
->a : Symbol(a, Decl(differenceSignatures.ts, 4, 28))
-
-let diffCall: Call1 - Call2;
->diffCall : Symbol(diffCall, Decl(differenceSignatures.ts, 5, 3))
->Call1 : Symbol(Call1, Decl(differenceSignatures.ts, 0, 25))
->Call2 : Symbol(Call2, Decl(differenceSignatures.ts, 1, 28))
-
-let diffConstruct: Construct1 - Construct2;
->diffConstruct : Symbol(diffConstruct, Decl(differenceSignatures.ts, 6, 3))
->Construct1 : Symbol(Construct1, Decl(differenceSignatures.ts, 2, 39))
->Construct2 : Symbol(Construct2, Decl(differenceSignatures.ts, 3, 37))
-
-let nodiffCall: Call1 - A;
->nodiffCall : Symbol(nodiffCall, Decl(differenceSignatures.ts, 7, 3))
->Call1 : Symbol(Call1, Decl(differenceSignatures.ts, 0, 25))
->A : Symbol(A, Decl(differenceSignatures.ts, 0, 0))
-
-let noDiffConstruct: Construct1 - A;
->noDiffConstruct : Symbol(noDiffConstruct, Decl(differenceSignatures.ts, 8, 3))
->Construct1 : Symbol(Construct1, Decl(differenceSignatures.ts, 2, 39))
->A : Symbol(A, Decl(differenceSignatures.ts, 0, 0))
-
-let noCall: A - Call1;
->noCall : Symbol(noCall, Decl(differenceSignatures.ts, 9, 3))
->A : Symbol(A, Decl(differenceSignatures.ts, 0, 0))
+let nodiffCall: Call1 - ();
+>nodiffCall : Symbol(nodiffCall, Decl(differenceSignatures.ts, 3, 3))
 >Call1 : Symbol(Call1, Decl(differenceSignatures.ts, 0, 25))
 
-let noConstruct: A - Construct1;
->noConstruct : Symbol(noConstruct, Decl(differenceSignatures.ts, 10, 3))
+let noDiffConstruct: Construct1 - ();
+>noDiffConstruct : Symbol(noDiffConstruct, Decl(differenceSignatures.ts, 4, 3))
+>Construct1 : Symbol(Construct1, Decl(differenceSignatures.ts, 1, 28))
+
+let noCall: A - (a);
+>noCall : Symbol(noCall, Decl(differenceSignatures.ts, 5, 3))
 >A : Symbol(A, Decl(differenceSignatures.ts, 0, 0))
->Construct1 : Symbol(Construct1, Decl(differenceSignatures.ts, 2, 39))
+
+let noConstruct: A - (a);
+>noConstruct : Symbol(noConstruct, Decl(differenceSignatures.ts, 6, 3))
+>A : Symbol(A, Decl(differenceSignatures.ts, 0, 0))
 

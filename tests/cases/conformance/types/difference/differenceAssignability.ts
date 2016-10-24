@@ -5,9 +5,9 @@ interface Gen2 {
     parent: Gen;
     millenial: string;
 }
-function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen {
-    let rest: T - Gen;
-    let rest1: T - Gen - Gen2;
+function cloneAgain<T extends Gen & Gen2>(t: T): T - ( x ) {
+    let rest: T - ( x );
+    let rest1: T - ( x ) - ( parent, millenial );
     var { x, ...rest2 } = t;
     // assignability
     t = rest; // error, might be missing 'x'

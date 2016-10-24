@@ -15,7 +15,7 @@ interface Gen2 {
     millenial: string;
 >millenial : Symbol(Gen2.millenial, Decl(differenceGeneric.ts, 4, 16))
 }
-function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen {
+function cloneAgain<T extends Gen & Gen2>(t: T): T - (x) {
 >cloneAgain : Symbol(cloneAgain, Decl(differenceGeneric.ts, 6, 1))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
 >Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
@@ -23,23 +23,19 @@ function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen {
 >t : Symbol(t, Decl(differenceGeneric.ts, 7, 42))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
->Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 
     let y: Gen;
 >y : Symbol(y, Decl(differenceGeneric.ts, 8, 7))
 >Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 
     // declarations with generics create difference types
-    let rest: T - Gen;
+    let rest: T - (x);
 >rest : Symbol(rest, Decl(differenceGeneric.ts, 10, 7))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
->Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
 
-    let rest1: T - Gen - Gen2;
+    let rest1: T - (x) - (parent, millenial);
 >rest1 : Symbol(rest1, Decl(differenceGeneric.ts, 11, 7))
 >T : Symbol(T, Decl(differenceGeneric.ts, 7, 20))
->Gen : Symbol(Gen, Decl(differenceGeneric.ts, 0, 0))
->Gen2 : Symbol(Gen2, Decl(differenceGeneric.ts, 2, 1))
 
     var { x, ...rest2 } = t;
 >x : Symbol(x, Decl(differenceGeneric.ts, 12, 9))

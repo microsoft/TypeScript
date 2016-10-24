@@ -6,11 +6,11 @@ interface Gen2 {
     parent: Gen;
     millenial: string;
 }
-function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen {
+function cloneAgain<T extends Gen & Gen2>(t: T): T - (x) {
     let y: Gen;
     // declarations with generics create difference types
-    let rest: T - Gen;
-    let rest1: T - Gen - Gen2;
+    let rest: T - (x);
+    let rest1: T - (x) - (parent, millenial);
     var { x, ...rest2 } = t;
     // apparent types distribute the intersection constraint correctly
     rest.parent;

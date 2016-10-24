@@ -1,8 +1,8 @@
-tests/cases/conformance/types/difference/differenceAssignability.ts(13,5): error TS2322: Type 'T - Gen' is not assignable to type 'T'.
-tests/cases/conformance/types/difference/differenceAssignability.ts(14,5): error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T'.
-tests/cases/conformance/types/difference/differenceAssignability.ts(15,5): error TS2322: Type 'T - { x: number; }' is not assignable to type 'T'.
-tests/cases/conformance/types/difference/differenceAssignability.ts(23,5): error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T - { x: number; }'.
-tests/cases/conformance/types/difference/differenceAssignability.ts(25,5): error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T - Gen'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(13,5): error TS2322: Type 'T - ( x )' is not assignable to type 'T'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(14,5): error TS2322: Type 'T - ( x ) - ( parent, millenial )' is not assignable to type 'T'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(15,5): error TS2322: Type 'T - ( x )' is not assignable to type 'T'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(23,5): error TS2322: Type 'T - ( x ) - ( parent, millenial )' is not assignable to type 'T - ( x )'.
+tests/cases/conformance/types/difference/differenceAssignability.ts(25,5): error TS2322: Type 'T - ( x ) - ( parent, millenial )' is not assignable to type 'T - ( x )'.
 
 
 ==== tests/cases/conformance/types/difference/differenceAssignability.ts (5 errors) ====
@@ -13,20 +13,20 @@ tests/cases/conformance/types/difference/differenceAssignability.ts(25,5): error
         parent: Gen;
         millenial: string;
     }
-    function cloneAgain<T extends Gen & Gen2>(t: T): T - Gen {
-        let rest: T - Gen;
-        let rest1: T - Gen - Gen2;
+    function cloneAgain<T extends Gen & Gen2>(t: T): T - ( x ) {
+        let rest: T - ( x );
+        let rest1: T - ( x ) - ( parent, millenial );
         var { x, ...rest2 } = t;
         // assignability
         t = rest; // error, might be missing 'x'
         ~
-!!! error TS2322: Type 'T - Gen' is not assignable to type 'T'.
+!!! error TS2322: Type 'T - ( x )' is not assignable to type 'T'.
         t = rest1; // error, might be missing 'x', 'parent' or 'millenial'
         ~
-!!! error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T'.
+!!! error TS2322: Type 'T - ( x ) - ( parent, millenial )' is not assignable to type 'T'.
         t = rest2; // error, might be missing 'x'
         ~
-!!! error TS2322: Type 'T - { x: number; }' is not assignable to type 'T'.
+!!! error TS2322: Type 'T - ( x )' is not assignable to type 'T'.
         rest = t; // ok
         rest1 = t; // ok
         rest2 = t; // ok
@@ -36,11 +36,11 @@ tests/cases/conformance/types/difference/differenceAssignability.ts(25,5): error
         rest1 = rest2; // ok ... ?
         rest2 = rest1; // error, might be missing 'parent' or 'millenial'
         ~~~~~
-!!! error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T - { x: number; }'.
+!!! error TS2322: Type 'T - ( x ) - ( parent, millenial )' is not assignable to type 'T - ( x )'.
         rest1 = rest; // ok
         rest = rest1; // error, might be missing 'parent' or 'millenial'
         ~~~~
-!!! error TS2322: Type 'T - Gen - Gen2' is not assignable to type 'T - Gen'.
+!!! error TS2322: Type 'T - ( x ) - ( parent, millenial )' is not assignable to type 'T - ( x )'.
         return rest2;
     }
     

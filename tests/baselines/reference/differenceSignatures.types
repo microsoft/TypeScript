@@ -6,44 +6,22 @@ interface A { a: number }
 interface Call1 { (): void }
 >Call1 : Call1
 
-interface Call2 { (a: number): number }
->Call2 : Call2
->a : number
-
 interface Construct1 { new (): void }
 >Construct1 : Construct1
 
-interface Construct2 { new (a: number): void }
->Construct2 : Construct2
->a : number
-
-let diffCall: Call1 - Call2;
->diffCall : {}
->Call1 : Call1
->Call2 : Call2
-
-let diffConstruct: Construct1 - Construct2;
->diffConstruct : {}
->Construct1 : Construct1
->Construct2 : Construct2
-
-let nodiffCall: Call1 - A;
->nodiffCall : () => void
->Call1 : Call1
->A : A
-
-let noDiffConstruct: Construct1 - A;
->noDiffConstruct : new () => void
->Construct1 : Construct1
->A : A
-
-let noCall: A - Call1;
->noCall : { a: number; }
->A : A
+let nodiffCall: Call1 - ();
+>nodiffCall : {}
 >Call1 : Call1
 
-let noConstruct: A - Construct1;
->noConstruct : { a: number; }
->A : A
+let noDiffConstruct: Construct1 - ();
+>noDiffConstruct : {}
 >Construct1 : Construct1
+
+let noCall: A - (a);
+>noCall : {}
+>A : A
+
+let noConstruct: A - (a);
+>noConstruct : {}
+>A : A
 
