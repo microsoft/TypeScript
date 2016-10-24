@@ -2338,6 +2338,8 @@ namespace ts {
                         inObjectTypeLiteral = saveInObjectTypeLiteral;
                     }
                     if (type.right.symbol === container) {
+                        // if type.right was written as part of the spread type, don't surround with ...{ }.
+                        // this gives { a: number, ... T } instead of { ...{ a: number }, ...T }
                         const saveInObjectTypeLiteral = inObjectTypeLiteral;
                         inObjectTypeLiteral = true;
                         writeObjectLiteralType(resolveStructuredTypeMembers(type.right));
