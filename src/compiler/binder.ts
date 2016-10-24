@@ -1007,7 +1007,7 @@ namespace ts {
                 currentFlow = finishFlowLabel(preFinallyLabel);
                 bind(node.finallyBlock);
                 // if flow after finally is unreachable - keep it
-                // otherwise check if flows after try and after catch are unreachable 
+                // otherwise check if flows after try and after catch are unreachable
                 // if yes - convert current flow to unreachable
                 // i.e.
                 // try { return "1" } finally { console.log(1); }
@@ -2425,6 +2425,9 @@ namespace ts {
             case SyntaxKind.HeritageClause:
                 return computeHeritageClause(<HeritageClause>node, subtreeFlags);
 
+            case SyntaxKind.CatchClause:
+                return computeCatchClause(<CatchClause>node, subtreeFlags);
+
             case SyntaxKind.ExpressionWithTypeArguments:
                 return computeExpressionWithTypeArguments(<ExpressionWithTypeArguments>node, subtreeFlags);
 
@@ -2648,6 +2651,17 @@ namespace ts {
             default:
                 Debug.fail("Unexpected token for heritage clause");
                 break;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeCatchClause(node: CatchClause, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+
+        if (node.variableDeclaration && isBindingPattern(node.variableDeclaration.name)) {
+            transformFlags |= TransformFlags.AssertES2015;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
