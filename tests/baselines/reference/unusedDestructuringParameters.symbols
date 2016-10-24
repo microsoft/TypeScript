@@ -1,0 +1,16 @@
+=== tests/cases/compiler/unusedDestructuringParameters.ts ===
+const f = ([a]) => { };
+>f : Symbol(f, Decl(unusedDestructuringParameters.ts, 0, 5))
+>a : Symbol(a, Decl(unusedDestructuringParameters.ts, 0, 12))
+
+f([1]);
+>f : Symbol(f, Decl(unusedDestructuringParameters.ts, 0, 5))
+
+const f2 = ({a}) => { };
+>f2 : Symbol(f2, Decl(unusedDestructuringParameters.ts, 2, 5))
+>a : Symbol(a, Decl(unusedDestructuringParameters.ts, 2, 13))
+
+f2({ a: 10 });
+>f2 : Symbol(f2, Decl(unusedDestructuringParameters.ts, 2, 5))
+>a : Symbol(a, Decl(unusedDestructuringParameters.ts, 3, 4))
+
