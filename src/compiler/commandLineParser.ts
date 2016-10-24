@@ -599,7 +599,13 @@ namespace ts {
                                     i++;
                                     break;
                                 case "boolean":
-                                    options[opt.name] = true;
+                                    // boolean flag has optional value true, false, others
+                                    let optValue = args[i];
+                                    options[opt.name] = optValue !== "false";
+                                    // consume next argument as boolean flag value
+                                    if (optValue === "false" || optValue === "true") {
+                                        i++;
+                                    }
                                     break;
                                 case "string":
                                     options[opt.name] = args[i] || "";
