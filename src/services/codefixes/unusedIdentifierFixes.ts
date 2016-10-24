@@ -91,8 +91,11 @@ namespace ts.codefix {
                                 return removeSingleItem(elements, token);
                             }
 
+                        // handle case where 'import a = A;'
+                        // remove entire line
                         case SyntaxKind.ImportEqualsDeclaration:
-                            return createCodeFix("{}", token.pos, token.end - token.pos);
+                            const importDecl = token.parent;
+                            return createCodeFix("", importDecl.pos, importDecl.end - importDecl.pos);
 
                         case SyntaxKind.EnumDeclaration:
                             return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);

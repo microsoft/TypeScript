@@ -12,5 +12,5 @@
 ////     [|import a = A;|]
 //// }
 
-verify.codeFixAtPosition(" import {} = A;");
+verify.codeFixAtPosition("");
 

@@ -17,4 +17,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition("import {} = require('./file1')");
+verify.codeFixAtPosition("");
