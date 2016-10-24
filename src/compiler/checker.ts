@@ -3039,7 +3039,7 @@ namespace ts {
 
             // TODO: Simplifications
 
-            if (source.flags & TypeFlags.ObjectType) {
+            if (source.flags & TypeFlags.Object) {
                 const members = createMap<Symbol>();
                 const names = createMap<true>();
                 for (const name of properties) {
@@ -3054,7 +3054,8 @@ namespace ts {
                 const numberIndexInfo = getIndexInfoOfType(source, IndexKind.Number);
                 return createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             }
-            const difference = differenceTypes[id] = createObjectType(TypeFlags.Difference, symbol) as DifferenceType;
+            const difference = differenceTypes[id] = createType(TypeFlags.Difference) as DifferenceType;
+            difference.symbol = symbol;
             difference.source = source;
             difference.properties = properties;
             difference.aliasSymbol = aliasSymbol;
