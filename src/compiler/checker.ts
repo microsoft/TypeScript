@@ -3019,16 +3019,14 @@ namespace ts {
 
         function getRestType(source: Type, properties: PropertyName[], symbol: Symbol, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (source.flags & TypeFlags.Intersection) {
-                // TODO: This has GOT to be wrong
                 return getIntersectionType(map((source as IntersectionType).types, t => getRestType(t, properties, symbol, aliasSymbol, aliasTypeArguments)), aliasSymbol, aliasTypeArguments);
             }
             if (source.flags & TypeFlags.Union) {
-                // TODO: This might be wrong too
                 return getUnionType(map((source as UnionType).types, t => getRestType(t, properties, symbol, aliasSymbol, aliasTypeArguments)), /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
             // TODO: Distribute across spread and partial?
             // spread is inescapable, so perhaps not, although we still want to give the right answers for constrained type parameters
-            const id = source.id.toString() + '-' + properties.map(getTextOfPropertyName).join(',');
+            const id = source.id.toString() + "-" + properties.map(getTextOfPropertyName).join(",");
             if (id in differenceTypes) {
                 return differenceTypes[id];
             }
@@ -5813,7 +5811,7 @@ namespace ts {
         function getTypeFromDifferenceTypeNode(node: DifferenceTypeNode, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                const source = getTypeFromTypeNodeNoAlias(node.source)
+                const source = getTypeFromTypeNodeNoAlias(node.source);
                 links.resolvedType = getRestType(source, node.properties, node.symbol, aliasSymbol, aliasTypeArguments);
             }
             return links.resolvedType;
