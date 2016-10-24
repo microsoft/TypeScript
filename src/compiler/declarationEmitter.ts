@@ -413,6 +413,8 @@ namespace ts {
                     return emitIntersectionType(<IntersectionTypeNode>type);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
+                case SyntaxKind.TypeOperator:
+                    return emitTypeOperator(<TypeOperatorNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return emitSignatureDeclarationWithJsDocComments(<FunctionOrConstructorTypeNode>type);
@@ -504,6 +506,12 @@ namespace ts {
                 write("(");
                 emitType(type.type);
                 write(")");
+            }
+
+            function emitTypeOperator(type: TypeOperatorNode) {
+                write(tokenToString(type.operator));
+                write(" ");
+                emitType(type.type);
             }
 
             function emitTypeLiteral(type: TypeLiteralNode) {

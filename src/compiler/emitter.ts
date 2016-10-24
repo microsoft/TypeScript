@@ -594,6 +594,8 @@ const _super = (function (geti, seti) {
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.ThisType:
                     return emitThisType();
+                case SyntaxKind.TypeOperator:
+                    return emitTypeOperator(<TypeOperatorNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -1086,6 +1088,12 @@ const _super = (function (geti, seti) {
 
         function emitThisType() {
             write("this");
+        }
+
+        function emitTypeOperator(node: TypeOperatorNode) {
+            writeTokenText(node.operator);
+            write(" ");
+            emit(node.type);
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
