@@ -1515,7 +1515,9 @@ namespace ts {
             return undefined;
         }
 
-        return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
+        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
+        const terminator = usage === "exclude" ? "($|/)" : "$";
+        return `^(${pattern})${terminator}`;
     }
 
     /**
@@ -1711,9 +1713,7 @@ namespace ts {
                 ? absolute
                 : removeTrailingDirectorySeparator(getDirectoryPath(absolute));
         }
-        else {
-            return absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
-        }
+        return absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
     }
 
     export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {

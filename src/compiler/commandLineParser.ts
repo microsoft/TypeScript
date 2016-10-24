@@ -1295,12 +1295,10 @@ namespace ts {
                 flags: watchRecursivePattern.test(spec) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
             };
         }
-        else if (isImplicitGlob(spec)) {
+        if (isImplicitGlob(spec)) {
             return { key: spec, flags: WatchDirectoryFlags.Recursive };
         }
-        else {
-            return undefined;
-        }
+        return undefined;
     }
 
     /**
