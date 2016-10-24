@@ -4,7 +4,7 @@
 // @Filename: a.js
 //// type a = b;
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'type aliases' can only be used in a .ts file.",
     "start": 5,

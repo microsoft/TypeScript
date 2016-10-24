@@ -4,7 +4,7 @@
 // @Filename: a.js
 //// enum E { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'enum declarations' can only be used in a .ts file.",
     "start": 5,

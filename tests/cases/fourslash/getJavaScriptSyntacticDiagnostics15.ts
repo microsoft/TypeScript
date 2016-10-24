@@ -4,7 +4,7 @@
 // @Filename: a.js
 //// function F(public p) { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'parameter modifiers' can only be used in a .ts file.",
     "start": 11,

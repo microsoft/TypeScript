@@ -4,7 +4,7 @@
 // @Filename: a.js
 //// Foo<number>();
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'type arguments' can only be used in a .ts file.",
     "start": 4,

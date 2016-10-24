@@ -2024,6 +2024,9 @@ namespace ts {
         // as well as code diagnostics).
         /* @internal */ parseDiagnostics: Diagnostic[];
 
+        // Stores file level JavaScript diagnostics reported by the program
+        /* @internal */ parseJavaScriptDiagnostics?: Diagnostic[];
+
         // File level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: Diagnostic[];
 

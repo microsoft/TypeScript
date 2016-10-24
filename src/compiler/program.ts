@@ -725,6 +725,12 @@ namespace ts {
         }
 
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+            // For JavaScript files, we report semantic errors for using TypeScript-only
+            // constructs from within a JavaScript file as syntactic errors.
+            if (isSourceFileJavaScript(sourceFile) && !sourceFile.parseJavaScriptDiagnostics) {
+                sourceFile.parseJavaScriptDiagnostics = getJavaScriptSemanticDiagnosticsForFile(sourceFile);
+                sourceFile.parseDiagnostics = sourceFile.parseDiagnostics.concat(sourceFile.parseJavaScriptDiagnostics);
+            }
             return sourceFile.parseDiagnostics;
         }
 
@@ -757,12 +763,10 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
                 const bindDiagnostics = sourceFile.bindDiagnostics;
-                // For JavaScript files, we don't want to report the normal typescript semantic errors.
-                // Instead, we just report errors for using TypeScript-only constructs from within a
-                // JavaScript file.
-                const checkDiagnostics = isSourceFileJavaScript(sourceFile) ?
-                    getJavaScriptSemanticDiagnosticsForFile(sourceFile) :
-                    typeChecker.getDiagnostics(sourceFile, cancellationToken);
+                // For JavaScript files, we don't want to report semantic errors.
+                // Instead, we'll report errors for using TypeScript-only constructs from within a
+                // JavaScript file when we get syntactic diagnostics for the file.
+                const checkDiagnostics = isSourceFileJavaScript(sourceFile) ? [] : typeChecker.getDiagnostics(sourceFile, cancellationToken);
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 

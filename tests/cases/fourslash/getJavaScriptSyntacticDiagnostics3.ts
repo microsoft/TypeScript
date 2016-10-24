@@ -2,12 +2,12 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// function F<T>() { }
+//// class C<T> { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'type parameter declarations' can only be used in a .ts file.",
-    "start": 11,
+    "start": 8,
     "length": 1,
     "category": "error",
     "code": 8004

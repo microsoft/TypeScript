@@ -9,7 +9,7 @@
 ////}
 
 goTo.file("a.js");
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "\'public\' can only be used in a .ts file.",
     "start": 93,
@@ -25,7 +25,7 @@ verify.getSemanticDiagnostics(`[
 ////}
 
 goTo.file("b.js");
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'types' can only be used in a .ts file.",
     "start": 17,

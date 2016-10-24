@@ -4,7 +4,7 @@
 // @Filename: a.js
 //// interface I { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'interface declarations' can only be used in a .ts file.",
     "start": 10,
