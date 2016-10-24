@@ -2648,7 +2648,9 @@ namespace ts {
         ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
         /* @internal */
         ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
-        Spread                = 1 << 28,    // Spread types
+        Spread                  = 1 << 28,  // Spread types
+        /* @internal */
+        JsxAttributes           = 1 << 29,  // Jsx attributes types
 
         /* @internal */
         Nullable = Undefined | Null,
