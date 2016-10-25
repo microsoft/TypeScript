@@ -40,6 +40,7 @@ namespace ts.server {
         send(message: any, sendHandle?: any): void;
         on(message: "message", f: (m: any) => void): void;
         kill(): void;
+        pid: number;
     }
 
     interface NodeSocket {
@@ -179,6 +180,7 @@ namespace ts.server {
 
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
+        private installerPidReported = false;
         private socket: NodeSocket;
         private projectService: ProjectService;
         private throttledOperations: ThrottledOperations;
@@ -193,8 +195,23 @@ namespace ts.server {
             if (eventPort) {
                 const s = net.connect({ port: eventPort }, () => {
                     this.socket = s;
+                    this.reportInstallerProcessId();
                 });
             }
+        }
+
+        private reportInstallerProcessId() {
+            if (this.installerPidReported) {
+                return;
+            }
+            if (this.socket && this.installer) {
+                this.sendEvent(0, "typingsInstallerPid", { pid: this.installer.pid });
+                this.installerPidReported = true;
+            }
+        }
+
+        private sendEvent(seq: number, event: string, body: any): void {
+            this.socket.write(formatMessage({ seq, type: "event", event, body }, this.logger, Buffer.byteLength, this.newLine), "utf8");
         }
 
         attach(projectService: ProjectService) {
@@ -225,6 +242,8 @@ namespace ts.server {
 
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
+            this.reportInstallerProcessId();
+
             process.on("exit", () => {
                 this.installer.kill();
             });
@@ -255,7 +274,7 @@ namespace ts.server {
             }
             this.projectService.updateTypingsForProject(response);
             if (response.kind == "set" && this.socket) {
-                this.socket.write(formatMessage({ seq: 0, type: "event", message: response }, this.logger, Buffer.byteLength, this.newLine), "utf8");
+                this.sendEvent(0, "setTypings", response);
             }
         }
     }
