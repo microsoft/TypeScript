@@ -7,8 +7,7 @@ namespace ts {
         host.trace(formatMessage.apply(undefined, arguments));
     }
 
-    /* @internal */
-    export function isTraceEnabled(compilerOptions: CompilerOptions, host: ModuleResolutionHost): boolean {
+    function isTraceEnabled(compilerOptions: CompilerOptions, host: ModuleResolutionHost): boolean {
         return compilerOptions.traceResolution && host.trace !== undefined;
     }
 
@@ -77,37 +76,6 @@ namespace ts {
         // We only use this subset of the compiler options.
         compilerOptions: { rootDirs?: string[], baseUrl?: string, paths?: MapLike<string[]>; };
         traceEnabled: boolean;
-    }
-
-    /** LsHost uses a global cache of automatically-installed typings to help it resolve modules. */
-    /* @internal */
-    export function resolveModuleNameForLsHost(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string | undefined, projectName: string): ResolvedModuleWithFailedLookupLocations {
-        const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
-        if (primaryResult.resolvedModule && primaryResult.resolvedModule.resolvedTsFileName) {
-            // return result immediately only if it is .ts, .tsx or .d.ts
-            // otherwise try to load typings from @types
-            return primaryResult;
-        }
-
-        // create different collection of failed lookup locations for second pass
-        // if it will fail and we've already found something during the first pass - we don't want to pollute its results
-        const secondaryLookupFailedLookupLocations: string[] = [];
-        if (globalCache !== undefined) {
-            const traceEnabled = isTraceEnabled(compilerOptions, host);
-            if (traceEnabled) {
-                trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, projectName, moduleName, globalCache);
-            }
-            const state: ModuleResolutionState = { compilerOptions, host, traceEnabled };
-            const resolved = loadModuleFromNodeModules(Extensions.All, moduleName, globalCache, secondaryLookupFailedLookupLocations, state, /*checkOneLevel*/ true);
-            if (resolved) {
-                return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations));
-            }
-        }
-
-        if (!primaryResult.resolvedModule && secondaryLookupFailedLookupLocations.length) {
-            primaryResult.failedLookupLocations = primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations);
-        }
-        return primaryResult;
     }
 
     function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
@@ -849,5 +817,21 @@ namespace ts {
             }
             containingDirectory = parentPath;
         }
+    }
+
+    /**
+     * LSHost may load a module from a global cache of typings.
+     * This is the minumum code needed to expose that functionality; the rest is in LSHost.
+     */
+    /* @internal */
+    export function loadModuleFromGlobalCache(moduleName: string, projectName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string): ResolvedModuleWithFailedLookupLocations {
+        const traceEnabled = isTraceEnabled(compilerOptions, host);
+        if (traceEnabled) {
+            trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, projectName, moduleName, globalCache);
+        }
+        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled };
+        const failedLookupLocations: string[] = [];
+        const resolved = loadModuleFromNodeModules(Extensions.All, moduleName, globalCache, failedLookupLocations, state, /*checkOneLevel*/ true);
+        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations);
     }
 }

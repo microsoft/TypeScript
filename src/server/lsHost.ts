@@ -23,7 +23,19 @@ namespace ts.server {
                 const globalCache = this.project.getTypingOptions().enableAutoDiscovery
                     ? this.project.projectService.typingsInstaller.globalTypingsCacheLocation
                     : undefined;
-                return resolveModuleNameForLsHost(moduleName, containingFile, compilerOptions, host, globalCache, this.project.getProjectName());
+                const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
+                // return result immediately only if it is .ts, .tsx or .d.ts
+                if (!(primaryResult.resolvedModule && primaryResult.resolvedModule.resolvedTsFileName) && globalCache !== undefined) {
+                    // otherwise try to load typings from @types
+
+                    // create different collection of failed lookup locations for second pass
+                    // if it will fail and we've already found something during the first pass - we don't want to pollute its results
+                    const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, this.project.getProjectName(), compilerOptions, host, globalCache);
+                    if (resolvedModule) {
+                        return { resolvedModule, failedLookupLocations: primaryResult.failedLookupLocations.concat(failedLookupLocations) };
+                    }
+                }
+                return primaryResult;
             };
         }
 
