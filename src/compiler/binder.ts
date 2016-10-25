@@ -434,8 +434,8 @@ namespace ts {
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-                const isJSDocTypedefInJSDocNamespace = node.kind === SyntaxKind.JSDocTypedefTag && 
-                    node.name && 
+                const isJSDocTypedefInJSDocNamespace = node.kind === SyntaxKind.JSDocTypedefTag &&
+                    node.name &&
                     node.name.kind === SyntaxKind.Identifier &&
                     (<Identifier>node.name).isInJSDocNamespace;
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
@@ -1798,7 +1798,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     // for typedef type names with namespaces, bind the new jsdoc type symbol here
                     // because it requires all containing namespaces to be in effect, namely the
-                    // current "blockScopeContainer" needs to be set to its immediate namespace parent. 
+                    // current "blockScopeContainer" needs to be set to its immediate namespace parent.
                     if ((<Identifier>node).isInJSDocNamespace) {
                         let parentNode = node.parent;
                         while (parentNode && parentNode.kind !== SyntaxKind.JSDocTypedefTag) {
