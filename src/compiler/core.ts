@@ -1448,6 +1448,10 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function hasExtension(fileName: string): boolean {
+        return getBaseFileName(fileName).indexOf(".") >= 0;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
         return path.length > extension.length && endsWith(path, extension);
     }
@@ -1708,8 +1712,8 @@ namespace ts {
     function getIncludeBasePath(absolute: string): string {
         const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
         if (wildcardOffset < 0) {
-            // No "*" in the path
-            return isImplicitGlob(getBasename(absolute))
+            // No "*" or "?" in the path
+            return !hasExtension(absolute)
                 ? absolute
                 : removeTrailingDirectorySeparator(getDirectoryPath(absolute));
         }
