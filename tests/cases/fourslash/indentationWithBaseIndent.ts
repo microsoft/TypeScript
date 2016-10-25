@@ -205,7 +205,6 @@
 ////          function unterminatedListIndentation(a,
 ////{| "indent": 14 , "baseIndentSize": 10 |}
 
-debugger;
 test.markers().forEach(marker => {
     verify.indentationAtPositionIs(marker.fileName, marker.position, marker.data.indent, ts.IndentStyle.Smart, marker.data.baseIndentSize);
 });
