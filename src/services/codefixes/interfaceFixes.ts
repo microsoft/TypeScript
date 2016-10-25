@@ -76,10 +76,10 @@ namespace ts.codefix {
 
         if (type && type.symbol && type.symbol.declarations) {
             const interfaceMembers = getMembers(<InterfaceDeclaration>type.symbol.declarations[0], checker);
-            for (let j = 0; interfaceMembers && j < interfaceMembers.length; j++) {
-                if (interfaceMembers[j].name && existingMembers.indexOf(interfaceMembers[j].name.getText()) === -1) {
-                    if (interfaceMembers[j].kind === SyntaxKind.PropertySignature) {
-                        const interfaceProperty = <PropertySignature>interfaceMembers[j];
+            for(let interfaceMember of interfaceMembers){
+                if (interfaceMember.name && existingMembers.indexOf(interfaceMember.name.getText()) === -1) {
+                    if (interfaceMember.kind === SyntaxKind.PropertySignature) {
+                        const interfaceProperty = <PropertySignature>interfaceMember;
                         if (trackingAddedMembers.indexOf(interfaceProperty.name.getText()) === -1) {
                             let propertyText = "";
                             if (reference) {
@@ -94,8 +94,8 @@ namespace ts.codefix {
                             trackingAddedMembers.push(interfaceProperty.name.getText());
                         }
                     }
-                    else if (interfaceMembers[j].kind === SyntaxKind.MethodSignature || interfaceMembers[j].kind === SyntaxKind.MethodDeclaration) {
-                        const interfaceMethod = <MethodSignature>interfaceMembers[j];
+                    else if (interfaceMember.kind === SyntaxKind.MethodSignature || interfaceMember.kind === SyntaxKind.MethodDeclaration) {
+                        const interfaceMethod = <MethodSignature>interfaceMember;
                         handleMethods(interfaceMethod, startPos, reference, trackingAddedMembers, changesArray, newLineCharacter);
                     }
                 }
