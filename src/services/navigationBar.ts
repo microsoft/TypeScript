@@ -377,7 +377,6 @@ namespace ts.NavigationBar {
     }
 
     function getItemName(node: Node): string {
-
         if (node.kind === SyntaxKind.ModuleDeclaration) {
             return getModuleName(<ModuleDeclaration>node);
         }
