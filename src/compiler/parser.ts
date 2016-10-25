@@ -411,6 +411,7 @@ namespace ts {
                 return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
                 return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
+                    visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
                     visitNode(cbNode, (<JSDocTypedefTag>node).name) ||
                     visitNode(cbNode, (<JSDocTypedefTag>node).jsDocTypeLiteral);
             case SyntaxKind.JSDocTypeLiteral:
@@ -6552,7 +6553,14 @@ namespace ts {
                     const typedefTag = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag, atToken.pos);
                     typedefTag.atToken = atToken;
                     typedefTag.tagName = tagName;
-                    typedefTag.name = parseJSDocIdentifierName();
+                    typedefTag.fullName = parseJSDocTypeNameWithNamespace(/*flags*/ 0);
+                    if (typedefTag.fullName) {
+                        let rightNode = typedefTag.fullName;
+                        while (rightNode.kind !== SyntaxKind.Identifier) {
+                            rightNode = rightNode.body;
+                        }
+                        typedefTag.name = rightNode;
+                    }
                     typedefTag.typeExpression = typeExpression;
                     skipWhitespace();
 
@@ -6615,7 +6623,26 @@ namespace ts {
                         scanner.setTextPos(resumePos);
                         return finishNode(jsDocTypeLiteral);
                     }
+
+                    function parseJSDocTypeNameWithNamespace(flags: NodeFlags) {
+                        const pos = scanner.getTokenPos();
+                        const typeNameOrNamespaceName = parseJSDocIdentifierName();
+
+                        if (typeNameOrNamespaceName && parseOptional(SyntaxKind.DotToken)) {
+                            const jsDocNamespaceNode = <JSDocNamespaceDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
+                            jsDocNamespaceNode.flags |= flags;
+                            jsDocNamespaceNode.name = typeNameOrNamespaceName;
+                            jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(NodeFlags.NestedNamespace);
+                            return jsDocNamespaceNode;
+                        }
+
+                        if (typeNameOrNamespaceName && flags & NodeFlags.NestedNamespace) {
+                            typeNameOrNamespaceName.isInJSDocNamespace = true;
+                        }
+                        return typeNameOrNamespaceName;
+                    }
                 }
+
 
                 function tryParseChildTag(parentTag: JSDocTypeLiteral): boolean {
                     Debug.assert(token() === SyntaxKind.AtToken);

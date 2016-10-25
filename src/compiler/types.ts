@@ -421,7 +421,7 @@ namespace ts {
         ThisNodeHasError =   1 << 19, // If the parser encountered an error when parsing the code that created this node
         JavaScriptFile =     1 << 20, // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 21, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 22, // If we've computed data from children and cached it in this node
+        HasAggregatedChildData = 1 << 22, // If we've computed data from children and cached it in this node 
 
         BlockScoped = Let | Const,
 
@@ -545,6 +545,7 @@ namespace ts {
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;         // Ensures unique generated identifiers get unique names, but clones get the same name.
+        isInJSDocNamespace?: boolean;                  // if the node is a member in a JSDoc namespace
     }
 
     // Transient identifier node (marked by id === -1)
@@ -1634,12 +1635,17 @@ namespace ts {
     export interface ModuleDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ModuleDeclaration;
         name: Identifier | LiteralExpression;
-        body?: ModuleBlock | NamespaceDeclaration;
+        body?: ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | Identifier;
     }
 
     export interface NamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
         body: ModuleBlock | NamespaceDeclaration;
+    }
+
+    export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
+        name: Identifier;
+        body: JSDocNamespaceDeclaration | Identifier;
     }
 
     export interface ModuleBlock extends Node, Statement {
@@ -1871,6 +1877,7 @@ namespace ts {
 
     export interface JSDocTypedefTag extends JSDocTag, Declaration {
         kind: SyntaxKind.JSDocTypedefTag;
+        fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
         typeExpression?: JSDocTypeExpression;
         jsDocTypeLiteral?: JSDocTypeLiteral;
