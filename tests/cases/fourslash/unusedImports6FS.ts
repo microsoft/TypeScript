@@ -17,4 +17,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition(`import {} from "./file1"`);
+verify.codeFixAtPosition('');

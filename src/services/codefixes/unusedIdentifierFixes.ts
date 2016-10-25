@@ -92,17 +92,19 @@ namespace ts.codefix {
                             }
 
                         // handle case where 'import a = A;'
-                        // remove entire line
                         case SyntaxKind.ImportEqualsDeclaration:
-                            const importDecl = token.parent;
-                            return createCodeFix("", importDecl.pos, importDecl.end - importDecl.pos);
+                            return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
+
+                        // handle case where 'import d from './file'
+                        case SyntaxKind.ImportClause:
+                            return createCodeFix("", token.parent.parent.pos, token.parent.parent.end - token.parent.parent.pos);
+
+                        // handle case where 'import * as a from './file'
+                        case SyntaxKind.NamespaceImport:
+                            return createCodeFix("", token.parent.parent.parent.pos, token.parent.parent.parent.end - token.parent.parent.parent.pos);
 
                         case SyntaxKind.EnumDeclaration:
                             return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
-                    }
-
-                    if (token.parent.parent.kind === SyntaxKind.ImportClause || token.parent.parent.kind === SyntaxKind.ImportDeclaration) {
-                        return createCodeFix("{}", token.parent.pos, token.parent.end - token.parent.pos);
                     }
                     break;
 
@@ -112,7 +114,7 @@ namespace ts.codefix {
 
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.NamespaceImport:
-                    return createCodeFix("{}", token.parent.pos, token.parent.end - token.parent.pos);
+                    return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
             }
 
             return undefined;

@@ -8,13 +8,9 @@
 //// export class Calculator {
 ////     handleChar() { }
 //// }
-////
 //// export function test() {
-////
 //// }
-////
 //// export default function test2() {
-////
 //// }
 
-verify.codeFixAtPosition(`import {} from "./file1"`);
+verify.codeFixAtPosition('');

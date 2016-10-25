@@ -2,7 +2,7 @@
 
 // @noUnusedLocals: true
 // @Filename: file2.ts
-////[| import {/*0*/Calculator,/*1*/ test, test2} from "./file1" |]
+////[| import {Calculator, test, test2} from "./file1" |]
 
 //// test();
 //// test2();

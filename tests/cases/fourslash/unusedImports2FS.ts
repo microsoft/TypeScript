@@ -16,5 +16,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition(`import {Calculator} from "./file1"
-import {} from "./file1"`);
+verify.codeFixAtPosition(`import {Calculator} from "./file1"`);
