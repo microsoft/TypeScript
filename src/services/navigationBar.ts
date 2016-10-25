@@ -638,5 +638,5 @@ namespace ts.NavigationBar {
      * 
      * does not match.
      */
-    const whiteSpaceRegex = /(\s|\t|\n|\r)+/g;
+    const whiteSpaceRegex = /\s+/g;
 }
