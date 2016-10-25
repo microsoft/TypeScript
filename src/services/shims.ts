@@ -1168,7 +1168,8 @@ namespace ts {
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
                     toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
                     info.packageNameToTypingLocation,
-                    info.typingOptions);
+                    info.typingOptions,
+                    info.unresolvedImports);
             });
         }
     }
