@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 /// <reference path="..\..\compiler\commandLineParser.ts" />
 
 namespace ts {
@@ -335,6 +335,39 @@ namespace ts {
                         module: ts.ModuleKind.CommonJS,
                         target: ts.ScriptTarget.ES5,
                         lib: ["lib.es2015.core.d.ts", "lib.es2015.symbol.wellknown.d.ts"],
+                    }
+                });
+        });
+
+        it("Parse explicit boolean flag value", () => {
+            assertParseResult(["--strictNullChecks", "false", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: {
+                        strictNullChecks: false,
+                    }
+                });
+        });
+
+        it("Parse non boolean argument after boolean flag", () => {
+            assertParseResult(["--noImplicitAny", "t", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["t", "0.ts"],
+                    options: {
+                        noImplicitAny: true,
+                    }
+                });
+        });
+
+        it("Parse implicit boolean flag value", () => {
+            assertParseResult(["--strictNullChecks"],
+                {
+                    errors: [],
+                    fileNames: [],
+                    options: {
+                        strictNullChecks: true,
                     }
                 });
         });
