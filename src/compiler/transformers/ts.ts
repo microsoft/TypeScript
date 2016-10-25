@@ -289,6 +289,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.TypeOperator:
+                case SyntaxKind.PropertyAccessType:
                 case SyntaxKind.LiteralType:
                     // TypeScript type nodes are elided.
 
@@ -1858,6 +1859,7 @@ namespace ts {
                     // Fallthrough
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeOperator:
+                case SyntaxKind.PropertyAccessType:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ThisType:

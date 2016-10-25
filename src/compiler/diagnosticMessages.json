@@ -1751,6 +1751,10 @@
         "category": "Error",
         "code": 2535
     },
+    "Property access element type must be a string literal type or a type parameter constrained to 'keyof {0}'.": {
+        "category": "Error",
+        "code": 2536
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

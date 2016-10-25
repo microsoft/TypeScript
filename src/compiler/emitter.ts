@@ -596,6 +596,8 @@ const _super = (function (geti, seti) {
                     return emitThisType();
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>node);
+                case SyntaxKind.PropertyAccessType:
+                    return emitPropertyAccessType(<PropertyAccessTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -1094,6 +1096,13 @@ const _super = (function (geti, seti) {
             writeTokenText(node.operator);
             write(" ");
             emit(node.type);
+        }
+
+        function emitPropertyAccessType(node: PropertyAccessTypeNode) {
+            emit(node.objectType);
+            write("[");
+            emit(node.keyType);
+            write("]");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {

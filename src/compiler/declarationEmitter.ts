@@ -415,6 +415,8 @@ namespace ts {
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>type);
+                case SyntaxKind.PropertyAccessType:
+                    return emitPropertyAccessType(<PropertyAccessTypeNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return emitSignatureDeclarationWithJsDocComments(<FunctionOrConstructorTypeNode>type);
@@ -512,6 +514,13 @@ namespace ts {
                 write(tokenToString(type.operator));
                 write(" ");
                 emitType(type.type);
+            }
+
+            function emitPropertyAccessType(node: PropertyAccessTypeNode) {
+                emitType(node.objectType);
+                write("[");
+                emitType(node.keyType);
+                write("]");
             }
 
             function emitTypeLiteral(type: TypeLiteralNode) {
