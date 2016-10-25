@@ -30,14 +30,14 @@ namespace ts.server {
                     os.tmpdir();
                 break;
             case "linux":
-                basePath = process.env.HOME ||
-                    (os.homedir && os.homedir()) ||
+                basePath = (os.homedir && os.homedir()) ||
+                    process.env.HOME ||
                     ((process.env.LOGNAME || process.env.USER) && `/home/${process.env.LOGNAME || process.env.USER}`) ||
                     os.tmpdir();
                 break;
             case "darwin":
-                const homeDir = process.env.HOME ||
-                        (os.homedir && os.homedir()) ||
+                const homeDir = (os.homedir && os.homedir()) ||
+                        process.env.HOME ||
                         ((process.env.LOGNAME || process.env.USER) && `/Users/${process.env.LOGNAME || process.env.USER}`) ||
                         os.tmpdir();
                 basePath = combinePaths(homeDir, "Library/Application Support/");
