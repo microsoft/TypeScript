@@ -6639,12 +6639,16 @@ namespace ts {
                             return true;
                         case "prop":
                         case "property":
-                            if (!parentTag.jsDocPropertyTags) {
-                                parentTag.jsDocPropertyTags = <NodeArray<JSDocPropertyTag>>[];
-                            }
                             const propertyTag = parsePropertyTag(atToken, tagName);
-                            parentTag.jsDocPropertyTags.push(propertyTag);
-                            return true;
+                            if (propertyTag) {
+                                if (!parentTag.jsDocPropertyTags) {
+                                    parentTag.jsDocPropertyTags = <NodeArray<JSDocPropertyTag>>[];
+                                }
+                                parentTag.jsDocPropertyTags.push(propertyTag);
+                                return true;
+                            }
+                            // Error parsing property tag
+                            return false;
                     }
                     return false;
                 }
