@@ -404,10 +404,10 @@ namespace ts.NavigationBar {
                 if (getModifierFlags(node) & ModifierFlags.Default) {
                     return "default";
                 }
-                // We ma get a string with newlines or other whitespace in the case of an object dereference
+                // We may get a string with newlines or other whitespace in the case of an object dereference
                 // (eg: "app\n.onactivated"), so we should remove the whitespace for readabiltiy in the
                 // navigation bar.
-                return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node).replace(whiteSpaceRegex, "");
+                return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node);
             case SyntaxKind.Constructor:
                 return "constructor";
             case SyntaxKind.ConstructSignature:
@@ -606,11 +606,11 @@ namespace ts.NavigationBar {
         // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
         else if (node.parent.kind === SyntaxKind.BinaryExpression &&
             (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-            return nodeText((node.parent as BinaryExpression).left);
+            return nodeText((node.parent as BinaryExpression).left).replace(whiteSpaceRegex, "");
         }
         // See if it is a property assignment, and if so use the property name
         else if (node.parent.kind === SyntaxKind.PropertyAssignment && (node.parent as PropertyAssignment).name) {
-            return nodeText((node.parent as PropertyAssignment).name);
+            return nodeText((node.parent as PropertyAssignment).name).replace(whiteSpaceRegex, "#");
         }
         // Default exports are named "default"
         else if (getModifierFlags(node) & ModifierFlags.Default) {
