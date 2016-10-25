@@ -377,6 +377,7 @@ namespace ts.NavigationBar {
     }
 
     function getItemName(node: Node): string {
+
         if (node.kind === SyntaxKind.ModuleDeclaration) {
             return getModuleName(<ModuleDeclaration>node);
         }
@@ -403,7 +404,10 @@ namespace ts.NavigationBar {
                 if (getModifierFlags(node) & ModifierFlags.Default) {
                     return "default";
                 }
-                return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node);
+                // We ma get a string with newlines or other whitespace in the case of an object dereference
+                // (eg: "app\n.onactivated"), so we should remove the whitespace for readabiltiy in the
+                // navigation bar.
+                return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node).replace(whiteSpaceRegex, "");
             case SyntaxKind.Constructor:
                 return "constructor";
             case SyntaxKind.ConstructSignature:
@@ -620,4 +624,19 @@ namespace ts.NavigationBar {
     function isFunctionOrClassExpression(node: Node): boolean {
         return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.ClassExpression;
     }
+
+    /**
+     * Matches all whitespace characters in a string. Eg:
+     * 
+     * "app.
+     * 
+     * onactivated"
+     * 
+     * matches because of the newline, whereas
+     * 
+     * "app.onactivated"
+     * 
+     * does not match.
+     */
+    const whiteSpaceRegex = /(\s|\t|\n|\r)+/g;
 }
