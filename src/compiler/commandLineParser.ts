@@ -101,7 +101,7 @@ namespace ts {
                 "amd": ModuleKind.AMD,
                 "system": ModuleKind.System,
                 "umd": ModuleKind.UMD,
-                "es6": ModuleKind.ES6,
+                "es6": ModuleKind.ES2015,
                 "es2015": ModuleKind.ES2015,
             }),
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
@@ -261,8 +261,10 @@ namespace ts {
             type: createMap({
                 "es3": ScriptTarget.ES3,
                 "es5": ScriptTarget.ES5,
-                "es6": ScriptTarget.ES6,
+                "es6": ScriptTarget.ES2015,
                 "es2015": ScriptTarget.ES2015,
+                "es2016": ScriptTarget.ES2016,
+                "es2017": ScriptTarget.ES2017,
             }),
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
@@ -444,6 +446,11 @@ namespace ts {
             name: "importHelpers",
             type: "boolean",
             description: Diagnostics.Import_emit_helpers_from_tslib
+        },
+        {
+            name: "alwaysStrict",
+            type: "boolean",
+            description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
         }
     ];
 
@@ -508,10 +515,7 @@ namespace ts {
 
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
-        const namesOfType: string[] = [];
-        for (const key in opt.type) {
-            namesOfType.push(` '${key}'`);
-        }
+        const namesOfType = Object.keys(opt.type).map(key => `'${key}'`).join(", ");
         return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 
@@ -595,7 +599,13 @@ namespace ts {
                                     i++;
                                     break;
                                 case "boolean":
-                                    options[opt.name] = true;
+                                    // boolean flag has optional value true, false, others
+                                    let optValue = args[i];
+                                    options[opt.name] = optValue !== "false";
+                                    // consume next argument as boolean flag value
+                                    if (optValue === "false" || optValue === "true") {
+                                        i++;
+                                    }
                                     break;
                                 case "string":
                                     options[opt.name] = args[i] || "";
@@ -902,6 +912,9 @@ namespace ts {
             if (hasProperty(json, "files")) {
                 if (isArray(json["files"])) {
                     fileNames = <string[]>json["files"];
+                    if (fileNames.length === 0) {
+                        errors.push(createCompilerDiagnostic(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json"));
+                    }
                 }
                 else {
                     errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));
@@ -944,7 +957,18 @@ namespace ts {
                 includeSpecs = ["**/*"];
             }
 
-            return matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors);
+            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors);
+
+            if (result.fileNames.length === 0 && !hasProperty(json, "files") && resolutionStack.length === 0) {
+                errors.push(
+                    createCompilerDiagnostic(
+                        Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                        configFileName || "tsconfig.json",
+                        JSON.stringify(includeSpecs || []),
+                        JSON.stringify(excludeSpecs || [])));
+            }
+
+            return result;
         }
     }
 
@@ -975,7 +999,7 @@ namespace ts {
         basePath: string, errors: Diagnostic[], configFileName?: string): CompilerOptions {
 
         const options: CompilerOptions = getBaseFileName(configFileName) === "jsconfig.json"
-            ? { allowJs: true, maxNodeModuleJsDepth: 2, allowSyntheticDefaultImports: true }
+            ? { allowJs: true, maxNodeModuleJsDepth: 2, allowSyntheticDefaultImports: true, skipLibCheck: true }
             : {};
         convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
         return options;

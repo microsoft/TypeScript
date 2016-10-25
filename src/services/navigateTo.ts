@@ -6,9 +6,6 @@ namespace ts.NavigateTo {
         const patternMatcher = createPatternMatcher(searchValue);
         let rawItems: RawNavigateToItem[] = [];
 
-        // This means "compare in a case insensitive manner."
-        const baseSensitivity: Intl.CollatorOptions = { sensitivity: "base" };
-
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
         forEach(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
@@ -188,8 +185,8 @@ namespace ts.NavigateTo {
             // We first sort case insensitively.  So "Aaa" will come before "bar".
             // Then we sort case sensitively, so "aaa" will come before "Aaa".
             return i1.matchKind - i2.matchKind ||
-                i1.name.localeCompare(i2.name, undefined, baseSensitivity) ||
-                i1.name.localeCompare(i2.name);
+                ts.compareStringsCaseInsensitive(i1.name, i2.name) ||
+                ts.compareStrings(i1.name, i2.name);
         }
 
         function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {

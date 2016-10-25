@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,19 +45,6 @@ namespace FourSlash {
         markers: Marker[];
 
         ranges: Range[];
-    }
-
-    interface MemberListData {
-        result: {
-            maybeInaccurate: boolean;
-            isMemberCompletion: boolean;
-            entries: {
-                name: string;
-                type: string;
-                kind: string;
-                kindModifiers: string;
-            }[];
-        };
     }
 
     export interface Marker {
@@ -178,15 +165,9 @@ namespace FourSlash {
     // Return object may lack some functionalities for other purposes.
     function createScriptSnapShot(sourceText: string): ts.IScriptSnapshot {
         return {
-            getText: (start: number, end: number) => {
-                return sourceText.substr(start, end - start);
-            },
-            getLength: () => {
-                return sourceText.length;
-            },
-            getChangeRange: (oldSnapshot: ts.IScriptSnapshot) => {
-                return <ts.TextChangeRange>undefined;
-            }
+            getText: (start: number, end: number) => sourceText.substr(start, end - start),
+            getLength: () => sourceText.length,
+            getChangeRange: () => undefined
         };
     }
 
@@ -419,15 +400,14 @@ namespace FourSlash {
         public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, negative: boolean) {
             const startMarker = this.getMarkerByName(startMarkerName);
             const endMarker = this.getMarkerByName(endMarkerName);
-            const predicate = function(errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) {
-                return ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
-            };
+            const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) =>
+                ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
 
             const exists = this.anyErrorInRange(predicate, startMarker, endMarker);
 
             if (exists !== negative) {
                 this.printErrorLog(negative, this.getAllDiagnostics());
-                throw new Error("Failure between markers: " + startMarkerName + ", " + endMarkerName);
+                throw new Error(`Failure between markers: '${startMarkerName}', '${endMarkerName}'`);
             }
         }
 
@@ -471,14 +451,12 @@ namespace FourSlash {
             let predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) => boolean;
 
             if (after) {
-                predicate = function(errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) {
-                    return ((errorMinChar >= startPos) && (errorLimChar >= startPos)) ? true : false;
-                };
+                predicate = (errorMinChar: number, errorLimChar: number, startPos: number) =>
+                    ((errorMinChar >= startPos) && (errorLimChar >= startPos)) ? true : false;
             }
             else {
-                predicate = function(errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) {
-                    return ((errorMinChar <= startPos) && (errorLimChar <= startPos)) ? true : false;
-                };
+                predicate = (errorMinChar: number, errorLimChar: number, startPos: number) =>
+                    ((errorMinChar <= startPos) && (errorLimChar <= startPos)) ? true : false;
             }
 
             const exists = this.anyErrorInRange(predicate, marker);
@@ -741,7 +719,6 @@ namespace FourSlash {
                 this.raiseError("Completion list is not empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition + errorMsg);
             }
         }
-
 
         public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
             const completions = this.getCompletionListAtCaret();
@@ -1180,7 +1157,7 @@ namespace FourSlash {
 
         private alignmentForExtraInfo = 50;
 
-        private spanInfoToString(pos: number, spanInfo: ts.TextSpan, prefixString: string) {
+        private spanInfoToString(spanInfo: ts.TextSpan, prefixString: string) {
             let resultString = "SpanInfo: " + JSON.stringify(spanInfo);
             if (spanInfo) {
                 const spanString = this.activeFile.content.substr(spanInfo.start, spanInfo.length);
@@ -1231,7 +1208,7 @@ namespace FourSlash {
                     startColumn = 0;
                     length = 0;
                 }
-                const spanInfo = this.spanInfoToString(pos, getSpanAtPos(pos), prefixString);
+                const spanInfo = this.spanInfoToString(getSpanAtPos(pos), prefixString);
                 if (previousSpanInfo && previousSpanInfo !== spanInfo) {
                     addSpanInfoString();
                     previousSpanInfo = spanInfo;
@@ -1301,10 +1278,10 @@ namespace FourSlash {
                             }
                         }
 
-                        emitOutput.outputFiles.forEach((outputFile, idx, array) => {
+                        for (const outputFile of emitOutput.outputFiles) {
                             const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
                             resultString = resultString + fileName + outputFile.text;
-                        });
+                        }
                         resultString += Harness.IO.newLine();
                     });
 
@@ -1329,7 +1306,7 @@ namespace FourSlash {
         }
 
         public printBreakpointLocation(pos: number) {
-            Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(pos, this.getBreakpointStatementLocation(pos), "  "));
+            Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(this.getBreakpointStatementLocation(pos), "  "));
         }
 
         public printBreakpointAtCurrentLocation() {
@@ -1611,7 +1588,7 @@ namespace FourSlash {
             if (isFormattingEdit) {
                 const newContent = this.getFileContent(fileName);
 
-                if (newContent.replace(/\s/g, "") !== oldContent.replace(/\s/g, "")) {
+                if (this.removeWhitespace(newContent) !== this.removeWhitespace(oldContent)) {
                     this.raiseError("Formatting operation destroyed non-whitespace content");
                 }
             }
@@ -1675,6 +1652,10 @@ namespace FourSlash {
                     return position;
                 }
             }
+        }
+
+        private removeWhitespace(text: string): string {
+            return text.replace(/\s/g, "");
         }
 
         public goToBOF() {
@@ -1827,7 +1808,7 @@ namespace FourSlash {
             return result;
         }
 
-        private rangeText({fileName, start, end}: Range, more = false): string {
+        private rangeText({fileName, start, end}: Range): string {
             return this.getFileContent(fileName).slice(start, end);
         }
 
@@ -1922,7 +1903,7 @@ namespace FourSlash {
         }
 
         public printNameOrDottedNameSpans(pos: number) {
-            Harness.IO.log(this.spanInfoToString(pos, this.getNameOrDottedNameSpan(pos), "**"));
+            Harness.IO.log(this.spanInfoToString(this.getNameOrDottedNameSpan(pos), "**"));
         }
 
         private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[]) {
@@ -2035,6 +2016,47 @@ namespace FourSlash {
                 if (expectedSpan.start !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {
                     this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.start},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${ts.textSpanEnd(actualCommentSpan)})`);
                 }
+            }
+        }
+
+        private getCodeFixes(errorCode?: number) {
+            const fileName = this.activeFile.fileName;
+            const diagnostics = this.getDiagnostics(fileName);
+
+            if (diagnostics.length === 0) {
+                this.raiseError("Errors expected.");
+            }
+
+            if (diagnostics.length > 1 && errorCode !== undefined) {
+                this.raiseError("When there's more than one error, you must specify the errror to fix.");
+            }
+
+            const diagnostic = !errorCode ? diagnostics[0] : ts.find(diagnostics, d => d.code == errorCode);
+
+            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
+        }
+
+        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.");
+            }
+
+            const actual = this.getCodeFixes(errorCode);
+
+            if (!actual || actual.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            if (actual.length > 1) {
+                this.raiseError("More than 1 codefix returned.");
+            }
+
+            this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
+            const actualText = this.rangeText(ranges[0]);
+
+            if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
+                this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
             }
         }
 
@@ -2211,6 +2233,18 @@ namespace FourSlash {
             }
         }
 
+        public verifyNavigationTree(json: any) {
+            const tree = this.languageService.getNavigationTree(this.activeFile.fileName);
+            if (JSON.stringify(tree, replacer) !== JSON.stringify(json)) {
+                this.raiseError(`verifyNavigationTree failed - expected: ${stringify(json)}, got: ${stringify(tree, replacer)}`);
+            }
+
+            function replacer(key: string, value: any) {
+                // Don't check "spans", and omit falsy values.
+                return key === "spans" ? undefined : (value || undefined);
+            }
+        }
+
         public printNavigationItems(searchValue: string) {
             const items = this.languageService.getNavigateToItems(searchValue);
             const length = items && items.length;
@@ -2306,6 +2340,18 @@ namespace FourSlash {
 
             if (expectedCount !== actualCount) {
                 this.raiseError("verifyDocumentHighlightsAtPositionListCount failed - actual: " + actualCount + ", expected:" + expectedCount);
+            }
+        }
+
+        public verifyCodeFixAvailable(negative: boolean, errorCode?: number) {
+            const fixes = this.getCodeFixes(errorCode);
+
+            if (negative && fixes && fixes.length > 0) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected no fixes, actual: ${fixes.length}`);
+            }
+
+            if (!negative && (fixes === undefined || fixes.length === 0)) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected code fixes, actual: 0`);
             }
         }
 
@@ -3096,6 +3142,10 @@ namespace FourSlashInterface {
         public isValidBraceCompletionAtPosition(openingBrace: string) {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
         }
+
+        public codeFixAvailable(errorCode?: number) {
+            this.state.verifyCodeFixAvailable(this.negative, errorCode);
+        }
     }
 
     export class Verify extends VerifyNegatable {
@@ -3275,8 +3325,16 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
+        public codeFixAtPosition(expectedText: string, errorCode?: number): void {
+            this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        }
+
         public navigationBar(json: any) {
             this.state.verifyNavigationBar(json);
+        }
+
+        public navigationTree(json: any) {
+            this.state.verifyNavigationTree(json);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string) {

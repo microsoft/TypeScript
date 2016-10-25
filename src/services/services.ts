@@ -24,6 +24,8 @@
 /// <reference path='transpile.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='codefixes\codeFixProvider.ts' />
+/// <reference path='codefixes\fixes.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -262,23 +264,23 @@ namespace ts {
             return (sourceFile || this.getSourceFile()).text.substring(this.getStart(), this.getEnd());
         }
 
-        public getChildCount(sourceFile?: SourceFile): number {
+        public getChildCount(): number {
             return 0;
         }
 
-        public getChildAt(index: number, sourceFile?: SourceFile): Node {
+        public getChildAt(): Node {
             return undefined;
         }
 
-        public getChildren(sourceFile?: SourceFile): Node[] {
+        public getChildren(): Node[] {
             return emptyArray;
         }
 
-        public getFirstToken(sourceFile?: SourceFile): Node {
+        public getFirstToken(): Node {
             return undefined;
         }
 
-        public getLastToken(sourceFile?: SourceFile): Node {
+        public getLastToken(): Node {
             return undefined;
         }
     }
@@ -311,7 +313,7 @@ namespace ts {
 
         getDocumentationComment(): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations(this.declarations, this.name, !(this.flags & SymbolFlags.Property));
+                this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations(this.declarations);
             }
 
             return this.documentationComment;
@@ -336,7 +338,7 @@ namespace ts {
         _incrementExpressionBrand: any;
         _unaryExpressionBrand: any;
         _expressionBrand: any;
-        constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
+        constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
         }
     }
@@ -345,6 +347,7 @@ namespace ts {
     class TypeObject implements Type {
         checker: TypeChecker;
         flags: TypeFlags;
+        objectFlags?: ObjectFlags;
         id: number;
         symbol: Symbol;
         constructor(checker: TypeChecker, flags: TypeFlags) {
@@ -379,7 +382,7 @@ namespace ts {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
         }
         getBaseTypes(): ObjectType[] {
-            return this.flags & (TypeFlags.Class | TypeFlags.Interface)
+            return this.flags & TypeFlags.Object && this.objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)
                 ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
         }
@@ -421,10 +424,7 @@ namespace ts {
 
         getDocumentationComment(): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                this.documentationComment = this.declaration ? JsDoc.getJsDocCommentsFromDeclarations(
-                    [this.declaration],
-                    /*name*/ undefined,
-                    /*canUseParsedParamTagComments*/ false) : [];
+                this.documentationComment = this.declaration ? JsDoc.getJsDocCommentsFromDeclarations([this.declaration]) : [];
             }
 
             return this.documentationComment;
@@ -664,6 +664,7 @@ namespace ts {
         return {
             getNodeConstructor: () => NodeObject,
             getTokenConstructor: () => TokenObject,
+
             getIdentifierConstructor: () => IdentifierObject,
             getSourceFileConstructor: () => SourceFileObject,
             getSymbolConstructor: () => SymbolObject,
@@ -730,9 +731,13 @@ namespace ts {
         };
     }
 
-    // Cache host information about script should be refreshed
+    export function getSupportedCodeFixes() {
+        return codefix.getSupportedErrorCodes();
+    }
+
+    // Cache host information about script Should be refreshed
     // at each language service public entry point, since we don't know when
-    // set of scripts handled by the host changes.
+    // the set of scripts handled by the host changes.
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
@@ -795,7 +800,7 @@ namespace ts {
         public getRootFileNames(): string[] {
             const fileNames: string[] = [];
 
-            this.fileNameToEntry.forEachValue((path, value) => {
+            this.fileNameToEntry.forEachValue((_path, value) => {
                 if (value) {
                     fileNames.push(value.hostFileName);
                 }
@@ -1047,7 +1052,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
                 getNewLine: () => getNewLineOrDefaultFromHost(host),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
-                writeFile: (fileName, data, writeByteOrderMark) => { },
+                writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
@@ -1451,7 +1456,7 @@ namespace ts {
             return getNonBoundSourceFile(fileName);
         }
 
-        function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
+        function getNameOrDottedNameSpan(fileName: string, startPos: number, _endPos: number): TextSpan {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Get node at the location
@@ -1516,9 +1521,11 @@ namespace ts {
         }
 
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName));
+        }
 
-            return NavigationBar.getNavigationBarItems(sourceFile);
+        function getNavigationTree(fileName: string): NavigationTree {
+            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName));
         }
 
         function isTsOrTsxFile(fileName: string): boolean {
@@ -1652,6 +1659,34 @@ namespace ts {
             }
 
             return [];
+        }
+
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const span = { start, length: end - start };
+            const newLineChar = getNewLineOrDefaultFromHost(host);
+
+            let allFixes: CodeAction[] = [];
+
+            forEach(errorCodes, error => {
+                cancellationToken.throwIfCancellationRequested();
+
+                const context = {
+                    errorCode: error,
+                    sourceFile: sourceFile,
+                    span: span,
+                    program: program,
+                    newLineCharacter: newLineChar
+                };
+
+                const fixes = codefix.getFixes(context);
+                if (fixes) {
+                    allFixes = allFixes.concat(fixes);
+                }
+            });
+
+            return allFixes;
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
@@ -1868,6 +1903,7 @@ namespace ts {
             getRenameInfo,
             findRenameLocations,
             getNavigationBarItems,
+            getNavigationTree,
             getOutliningSpans,
             getTodoComments,
             getBraceMatchingAtPosition,
@@ -1877,6 +1913,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

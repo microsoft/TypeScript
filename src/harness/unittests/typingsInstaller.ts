@@ -31,11 +31,11 @@ namespace ts.projectSystem {
         function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[], typingFiles: FileOrFolder[], requestKind: TI.RequestKind, cb: TI.RequestCompletedAction): void {
             switch (requestKind) {
                 case TI.NpmInstallRequest:
-                    self.addPostExecAction(requestKind, installedTypings, (err, stdout, stderr) => {
+                    self.addPostExecAction(requestKind, installedTypings, success => {
                         for (const file of typingFiles) {
                             host.createFileOrFolder(file, /*createParentDirectory*/ true);
                         }
-                        cb(err, stdout, stderr);
+                        cb(success);
                     });
                     break;
                 case TI.NpmViewRequest:
@@ -81,7 +81,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host);
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -125,7 +125,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host);
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -221,7 +221,7 @@ namespace ts.projectSystem {
                     enqueueIsCalled = true;
                     super.enqueueInstallTypingsRequest(project, typingOptions);
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -275,7 +275,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host);
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/lodash", "@types/react"];
                     const typingFiles = [lodash, react];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -323,7 +323,7 @@ namespace ts.projectSystem {
                     enqueueIsCalled = true;
                     super.enqueueInstallTypingsRequest(project, typingOptions);
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
                     const typingFiles: FileOrFolder[] = [];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -398,7 +398,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host);
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment"];
                     const typingFiles = [commander, express, jquery, moment];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -477,7 +477,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { throttleLimit: 3 });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
                 }
@@ -567,10 +567,10 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { throttleLimit: 3 });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     if (requestKind === TI.NpmInstallRequest) {
-                        let typingFiles: (FileOrFolder & { typings: string}) [] = [];
-                        if (command.indexOf("commander") >= 0) {
+                        let typingFiles: (FileOrFolder & { typings: string })[] = [];
+                        if (args.indexOf("@types/commander") >= 0) {
                             typingFiles = [commander, jquery, lodash, cordova];
                         }
                         else {
@@ -591,7 +591,7 @@ namespace ts.projectSystem {
                 projectFileName: projectFileName1,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
                 rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
-                typingOptions: { include: ["jquery", "cordova" ] }
+                typingOptions: { include: ["jquery", "cordova"] }
             });
 
             installer.checkPendingCommands([TI.NpmViewRequest, TI.NpmViewRequest, TI.NpmViewRequest]);
@@ -626,7 +626,7 @@ namespace ts.projectSystem {
             installer.executePendingCommands();
 
             checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
-            checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path ]);
+            checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
         });
 
         it("configured projects discover from node_modules", () => {
@@ -655,7 +655,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp" });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -687,10 +687,10 @@ namespace ts.projectSystem {
             const bowerJson = {
                 path: "/bower.json",
                 content: JSON.stringify({
-                        "dependencies": {
-                            "jquery": "^3.1.0"
-                        }
-                    })
+                    "dependencies": {
+                        "jquery": "^3.1.0"
+                    }
+                })
             };
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
@@ -701,7 +701,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp" });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
@@ -720,26 +720,69 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
         });
+
+        it("Malformed package.json should be watched", () => {
+            const f = {
+                path: "/a/b/app.js",
+                content: "var x = require('commander')"
+            };
+            const brokenPackageJson = {
+                path: "/a/b/package.json",
+                content: `{ "dependencies": { "co } }`
+            };
+            const fixedPackageJson = {
+                path: brokenPackageJson.path,
+                content: `{ "dependencies": { "commander": "0.0.2" } }`
+            };
+            const cachePath = "/a/cache/";
+            const commander = {
+                path: cachePath + "node_modules/@types/commander/index.d.ts",
+                content: "export let x: number"
+            };
+            const host = createServerHost([f, brokenPackageJson]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath });
+                }
+                executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/commander"];
+                    const typingFiles = [commander];
+                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                }
+            })();
+            const service = createProjectService(host, { typingsInstaller: installer });
+            service.openClientFile(f.path);
+
+            installer.checkPendingCommands([]);
+
+            host.reloadFS([f, fixedPackageJson]);
+            host.triggerFileWatcherCallback(fixedPackageJson.path, /*removed*/ false);
+            // expected one view and one install request
+            installer.installAll([TI.NpmViewRequest], [TI.NpmInstallRequest]);
+
+            service.checkNumberOfProjects({ inferredProjects: 1 });
+            checkProjectActualFiles(service.inferredProjects[0], [f.path, commander.path]);
+        });
     });
 
     describe("Validate package name:", () => {
-        it ("name cannot be too long", () => {
+        it("name cannot be too long", () => {
             let packageName = "a";
             for (let i = 0; i < 8; i++) {
                 packageName += packageName;
             }
             assert.equal(TI.validatePackageName(packageName), TI.PackageNameValidationResult.NameTooLong);
         });
-        it ("name cannot start with dot", () => {
+        it("name cannot start with dot", () => {
             assert.equal(TI.validatePackageName(".foo"), TI.PackageNameValidationResult.NameStartsWithDot);
         });
-        it ("name cannot start with underscore", () => {
+        it("name cannot start with underscore", () => {
             assert.equal(TI.validatePackageName("_foo"), TI.PackageNameValidationResult.NameStartsWithUnderscore);
         });
-        it ("scoped packages not supported", () => {
+        it("scoped packages not supported", () => {
             assert.equal(TI.validatePackageName("@scope/bar"), TI.PackageNameValidationResult.ScopedPackagesNotSupported);
         });
-        it ("non URI safe characters are not supported", () => {
+        it("non URI safe characters are not supported", () => {
             assert.equal(TI.validatePackageName("  scope  "), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
             assert.equal(TI.validatePackageName("; say ‘Hello from TypeScript!’ #"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
             assert.equal(TI.validatePackageName("a/b/c"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
@@ -747,7 +790,7 @@ namespace ts.projectSystem {
     });
 
     describe("Invalid package names", () => {
-        it ("should not be installed", () => {
+        it("should not be installed", () => {
             const f1 = {
                 path: "/a/b/app.js",
                 content: "let x = 1"
@@ -766,7 +809,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp" }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                executeRequest() {
                     assert(false, "runCommand should not be invoked");
                 }
             })();

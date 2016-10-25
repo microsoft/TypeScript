@@ -6,7 +6,7 @@ class foo {
 
 //// [constructorArgsErrors1.js]
 var foo = (function () {
-    function foo(static a) {
+    function foo(a) {
     }
     return foo;
 }());

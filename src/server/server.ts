@@ -53,14 +53,6 @@ namespace ts.server {
         historySize?: number;
     }
 
-    interface Key {
-        sequence?: string;
-        name?: string;
-        ctrl?: boolean;
-        meta?: boolean;
-        shift?: boolean;
-    }
-
     interface Stats {
         isFile(): boolean;
         isDirectory(): boolean;
@@ -192,7 +184,7 @@ namespace ts.server {
 
         constructor(
             private readonly logger: server.Logger,
-            private readonly eventPort: number,
+            eventPort: number,
             readonly globalTypingsCacheLocation: string,
             private newLine: string) {
             if (eventPort) {
@@ -218,7 +210,7 @@ namespace ts.server {
                     const match = /^--(debug|inspect)(=(\d+))?$/.exec(arg);
                     if (match) {
                         // if port is specified - use port + 1
-                        // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1 
+                        // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
                         const currentPort = match[3] !== undefined
                             ? +match[3]
                             : match[1] === "debug" ? 5858 : 9229;
@@ -265,13 +257,16 @@ namespace ts.server {
             installerEventPort: number,
             canUseEvents: boolean,
             useSingleInferredProject: boolean,
+            disableAutomaticTypingAcquisition: boolean,
             globalTypingsCacheLocation: string,
             logger: server.Logger) {
             super(
                 host,
                 cancellationToken,
                 useSingleInferredProject,
-                new NodeTypingsInstaller(logger, installerEventPort, globalTypingsCacheLocation, host.newLine),
+                disableAutomaticTypingAcquisition
+                    ? nullTypingsInstaller
+                    : new NodeTypingsInstaller(logger, installerEventPort, globalTypingsCacheLocation, host.newLine),
                 Buffer.byteLength,
                 process.hrtime,
                 logger,
@@ -512,12 +507,14 @@ namespace ts.server {
     }
 
     const useSingleInferredProject = sys.args.indexOf("--useSingleInferredProject") >= 0;
+    const disableAutomaticTypingAcquisition = sys.args.indexOf("--disableAutomaticTypingAcquisition") >= 0;
     const ioSession = new IOSession(
         sys,
         cancellationToken,
         eventPort,
         /*canUseEvents*/ eventPort === undefined,
         useSingleInferredProject,
+        disableAutomaticTypingAcquisition,
         getGlobalTypingsCacheLocation(),
         logger);
     process.on("uncaughtException", function (err: Error) {

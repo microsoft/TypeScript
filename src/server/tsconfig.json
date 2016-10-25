@@ -10,7 +10,10 @@
         "stripInternal": true,
         "types": [
             "node"
-        ]
+        ],
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "files": [
         "../services/shims.ts",
@@ -22,7 +25,7 @@
         "typingsCache.ts",
         "project.ts",
         "editorServices.ts",
-        "protocol.d.ts",
+        "protocol.ts",
         "session.ts",
         "server.ts"
     ]

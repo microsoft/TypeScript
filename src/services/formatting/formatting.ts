@@ -248,7 +248,7 @@ namespace ts.formatting {
             }
         };
 
-        function rangeHasNoErrors(r: TextRange): boolean {
+        function rangeHasNoErrors(): boolean {
             return false;
         }
     }
@@ -624,10 +624,11 @@ namespace ts.formatting {
                     return inheritedIndentation;
                 }
 
-                if (isToken(child)) {
+                // JSX text shouldn't affect indenting
+                if (isToken(child) && child.kind !== SyntaxKind.JsxText) {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     const tokenInfo = formattingScanner.readTokenInfo(child);
-                    Debug.assert(tokenInfo.token.end === child.end);
+                    Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
                     return inheritedIndentation;
                 }

@@ -97,7 +97,7 @@ namespace ts {
                 return this.text.length;
             }
 
-            public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
+            public getChangeRange(): TextChangeRange {
                 // Text-based snapshots do not support incremental parsing. Return undefined
                 // to signal that to the caller.
                 return undefined;
@@ -225,6 +225,7 @@ namespace ts {
 
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
+        getNavigationTree(fileName: string): NavigationTree;
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -238,6 +239,8 @@ namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
+
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
@@ -264,6 +267,12 @@ namespace ts {
         classificationType: string; // ClassificationTypeNames
     }
 
+    /**
+     * Navigation bar interface designed for visual studio's dual-column layout.
+     * This does not form a proper tree.
+     * The navbar is returned as a list of top-level items, each of which has a list of child items.
+     * Child items always have an empty array for their `childItems`.
+     */
     export interface NavigationBarItem {
         text: string;
         kind: string;
@@ -273,6 +282,26 @@ namespace ts {
         indent: number;
         bolded: boolean;
         grayed: boolean;
+    }
+
+    /**
+     * Node in a tree of nested declarations in a file.
+     * The top node is always a script or module node.
+     */
+    export interface NavigationTree {
+        /** Name of the declaration, or a short description, e.g. "<class>". */
+        text: string;
+        /** A ScriptElementKind */
+        kind: string;
+        /** ScriptElementKindModifier separated by commas, e.g. "public,abstract" */
+        kindModifiers: string;
+        /**
+         * Spans of the nodes that generated this declaration.
+         * There will be more than one if this is the result of merging.
+         */
+        spans: TextSpan[];
+        /** Present if non-empty */
+        childItems?: NavigationTree[];
     }
 
     export interface TodoCommentDescriptor {
@@ -289,6 +318,18 @@ namespace ts {
     export class TextChange {
         span: TextSpan;
         newText: string;
+    }
+
+    export interface FileTextChanges {
+        fileName: string;
+        textChanges: TextChange[];
+    }
+
+    export interface CodeAction {
+        /** Description of the code action to display in the UI of the editor */
+        description: string;
+        /** Text changes to apply to each file as part of the code action */
+        changes: FileTextChanges[];
     }
 
     export interface TextInsertion {
@@ -362,11 +403,11 @@ namespace ts {
 
     export interface EditorSettings {
         baseIndentSize?: number;
-        indentSize: number;
-        tabSize: number;
-        newLineCharacter: string;
-        convertTabsToSpaces: boolean;
-        indentStyle: IndentStyle;
+        indentSize?: number;
+        tabSize?: number;
+        newLineCharacter?: string;
+        convertTabsToSpaces?: boolean;
+        indentStyle?: IndentStyle;
     }
 
     /* @deprecated - consider using FormatCodeSettings instead */
@@ -387,19 +428,19 @@ namespace ts {
     }
 
     export interface FormatCodeSettings extends EditorSettings {
-        insertSpaceAfterCommaDelimiter: boolean;
-        insertSpaceAfterSemicolonInForStatements: boolean;
-        insertSpaceBeforeAndAfterBinaryOperators: boolean;
-        insertSpaceAfterKeywordsInControlFlowStatements: boolean;
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        insertSpaceAfterCommaDelimiter?: boolean;
+        insertSpaceAfterSemicolonInForStatements?: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         insertSpaceAfterTypeAssertion?: boolean;
-        placeOpenBraceOnNewLineForFunctions: boolean;
-        placeOpenBraceOnNewLineForControlBlocks: boolean;
+        placeOpenBraceOnNewLineForFunctions?: boolean;
+        placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
 
     export interface DefinitionInfo {

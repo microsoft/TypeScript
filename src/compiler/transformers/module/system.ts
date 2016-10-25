@@ -19,7 +19,6 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
         const host = context.getEmitHost();
-        const languageVersion = getEmitScriptTarget(compilerOptions);
         const previousOnSubstituteNode = context.onSubstituteNode;
         const previousOnEmitNode = context.onEmitNode;
         context.onSubstituteNode = onSubstituteNode;
@@ -91,7 +90,7 @@ namespace ts {
             Debug.assert(!exportFunctionForFile);
 
             // Collect information about the external module and dependency groups.
-            ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
+            ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node));
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
@@ -110,6 +109,7 @@ namespace ts {
             const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             const dependencies = createArrayLiteral(map(dependencyGroups, getNameOfDependencyGroup));
             const body = createFunctionExpression(
+                /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -244,6 +244,7 @@ namespace ts {
                             ),
                             createPropertyAssignment("execute",
                                 createFunctionExpression(
+                                    /*modifiers*/ undefined,
                                     /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
                                     /*typeParameters*/ undefined,
@@ -430,6 +431,7 @@ namespace ts {
 
                 setters.push(
                     createFunctionExpression(
+                        /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
@@ -573,28 +575,23 @@ namespace ts {
         }
 
         function visitExportSpecifier(specifier: ExportSpecifier): Statement {
-            if (resolver.getReferencedValueDeclaration(specifier.propertyName || specifier.name)
-                || resolver.isValueAliasDeclaration(specifier)) {
-                recordExportName(specifier.name);
-                return createExportStatement(
-                    specifier.name,
-                    specifier.propertyName || specifier.name
-                );
-            }
-            return undefined;
+            recordExportName(specifier.name);
+            return createExportStatement(
+                specifier.name,
+                specifier.propertyName || specifier.name
+            );
         }
 
         function visitExportAssignment(node: ExportAssignment): Statement {
-            if (!node.isExportEquals) {
-                if (nodeIsSynthesized(node) || resolver.isValueAliasDeclaration(node)) {
-                    return createExportStatement(
-                        createLiteral("default"),
-                        node.expression
-                    );
-                }
+            if (node.isExportEquals) {
+                // Elide `export=` as it is illegal in a SystemJS module.
+                return undefined;
             }
 
-            return undefined;
+            return createExportStatement(
+                createLiteral("default"),
+                node.expression
+            );
         }
 
         /**
@@ -649,7 +646,7 @@ namespace ts {
             }
             else {
                 // If the variable has a BindingPattern, flatten the variable into multiple assignment expressions.
-                return flattenVariableDestructuringToExpression(context, node, hoistVariableDeclaration);
+                return flattenVariableDestructuringToExpression(node, hoistVariableDeclaration);
             }
         }
 
@@ -662,9 +659,11 @@ namespace ts {
             if (hasModifier(node, ModifierFlags.Export)) {
                 // If the function is exported, ensure it has a name and rewrite the function without any export flags.
                 const name = node.name || getGeneratedNameForNode(node);
+                // Keep async modifier for ES2017 transformer
+                const isAsync = hasModifier(node, ModifierFlags.Async);
                 const newNode = createFunctionDeclaration(
                     /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
+                    isAsync ? [<Modifier>createNode(SyntaxKind.AsyncKeyword)] : undefined,
                     node.asteriskToken,
                     name,
                     /*typeParameters*/ undefined,
@@ -796,7 +795,7 @@ namespace ts {
             const name = firstDeclaration.name;
             return isIdentifier(name)
                 ? name
-                : flattenVariableDestructuringToExpression(context, firstDeclaration, hoistVariableDeclaration);
+                : flattenVariableDestructuringToExpression(firstDeclaration, hoistVariableDeclaration);
         }
 
         /**
@@ -1317,12 +1316,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (name.originalKeywordKind && languageVersion === ScriptTarget.ES3) {
-                return createElementAccess(importAlias, createLiteral(name.text));
-            }
-            else {
-                return createPropertyAccess(importAlias, getSynthesizedClone(name));
-            }
+            return createPropertyAccess(importAlias, getSynthesizedClone(name));
         }
 
         function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {

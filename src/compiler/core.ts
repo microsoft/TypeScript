@@ -20,6 +20,9 @@ namespace ts {
 
     const createObject = Object.create;
 
+    // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
+    export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
+
     export function createMap<T>(template?: MapLike<T>): Map<T> {
         const map: Map<T> = createObject(null); // tslint:disable-line:no-null-keyword
 
@@ -265,11 +268,31 @@ namespace ts {
         if (array) {
             result = [];
             for (let i = 0; i < array.length; i++) {
-                const v = array[i];
-                result.push(f(v, i));
+                result.push(f(array[i], i));
             }
         }
         return result;
+    }
+
+    // Maps from T to T and avoids allocation if all elements map to themselves
+    export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                if (result) {
+                    result.push(f(array[i], i));
+                }
+                else {
+                    const item = array[i];
+                    const mapped = f(item, i);
+                    if (item !== mapped) {
+                        result = array.slice(0, i);
+                        result.push(mapped);
+                    }
+                }
+            }
+        }
+        return result || array;
     }
 
     /**
@@ -399,6 +422,17 @@ namespace ts {
         return result;
     }
 
+    export function some<T>(array: T[], predicate?: (value: T) => boolean): boolean {
+        if (array) {
+            for (const v of array) {
+                if (!predicate || predicate(v)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
@@ -496,6 +530,12 @@ namespace ts {
         return array && array.length > 0
             ? array[array.length - 1]
             : undefined;
+    }
+
+    export function replaceElement<T>(array: T[], index: number, value: T): T[] {
+        const result = array.slice(0);
+        result[index] = value;
+        return result;
     }
 
     /**
@@ -829,6 +869,14 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
+    /** Does nothing. */
+    export function noop(): void {}
+
+    /** Throws an error because a function is not implemented. */
+    export function notImplemented(): never {
+        throw new Error("Not implemented");
+    }
+
     export function memoize<T>(callback: () => T): () => T {
         let value: T;
         return () => {
@@ -869,7 +917,7 @@ namespace ts {
             return t => compose(a(t));
         }
         else {
-            return t => u => u;
+            return _ => u => u;
         }
     }
 
@@ -906,10 +954,10 @@ namespace ts {
         }
     }
 
-    function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
+    function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
-        return text.replace(/{(\d+)}/g, (match, index?) => args[+index + baseIndex]);
+        return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
     }
 
     export let localizedDiagnosticMessages: Map<string> = undefined;
@@ -918,7 +966,7 @@ namespace ts {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
-    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
+    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
         const end = start + length;
 
@@ -948,7 +996,7 @@ namespace ts {
     }
 
     /* internal */
-    export function formatMessage(dummy: any, message: DiagnosticMessage): string {
+    export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
@@ -958,7 +1006,7 @@ namespace ts {
         return text;
     }
 
-    export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
+    export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
 
@@ -1016,7 +1064,8 @@ namespace ts {
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
         if (ignoreCase) {
-            if (String.prototype.localeCompare) {
+            if (collator && String.prototype.localeCompare) {
+                // accent means a ≠ b, a ≠ á, a = A
                 const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
                 return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
             }
@@ -1186,12 +1235,6 @@ namespace ts {
         return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
     }
 
-    function getBasename(path: Path): Path;
-    function getBasename(path: string): string;
-    function getBasename(path: string): string {
-        return path.substr(Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
-    }
-
     export function isUrl(path: string) {
         return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
     }
@@ -1209,7 +1252,7 @@ namespace ts {
     export function getEmitModuleKind(compilerOptions: CompilerOptions) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
-            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
+            getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
     }
 
     /* @internal */
@@ -1622,7 +1665,7 @@ namespace ts {
         basePaths: string[];
     }
 
-    export function getFileMatcherPatterns(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
+    export function getFileMatcherPatterns(path: string, excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
         const absolutePath = combinePaths(currentDirectory, path);
@@ -1639,7 +1682,7 @@ namespace ts {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
-        const patterns = getFileMatcherPatterns(path, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
+        const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
         const regexFlag = useCaseSensitiveFileNames ? "" : "i";
         const includeFileRegex = patterns.includeFilePattern && new RegExp(patterns.includeFilePattern, regexFlag);
@@ -1874,11 +1917,11 @@ namespace ts {
         this.declarations = undefined;
     }
 
-    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, _checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
     }
 
-    function Signature(checker: TypeChecker) {
+    function Signature() {
     }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
@@ -1911,9 +1954,6 @@ namespace ts {
     }
 
     export namespace Debug {
-        declare var process: any;
-        declare var require: any;
-
         export let currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {

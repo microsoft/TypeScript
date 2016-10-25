@@ -46,8 +46,7 @@ namespace ts.JsTyping {
         projectRootPath: Path,
         safeListPath: Path,
         packageNameToTypingLocation: Map<string>,
-        typingOptions: TypingOptions,
-        compilerOptions: CompilerOptions):
+        typingOptions: TypingOptions):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
@@ -136,10 +135,12 @@ namespace ts.JsTyping {
          * Get the typing info from common package manager json files like package.json or bower.json
          */
         function getTypingNamesFromJson(jsonPath: string, filesToWatch: string[]) {
+            if (host.fileExists(jsonPath)) {
+                filesToWatch.push(jsonPath);
+            }
             const result = readConfigFile(jsonPath, (path: string) => host.readFile(path));
             if (result.config) {
                 const jsonConfig: PackageJson = result.config;
-                filesToWatch.push(jsonPath);
                 if (jsonConfig.dependencies) {
                     mergeTypings(getOwnKeys(jsonConfig.dependencies));
                 }
