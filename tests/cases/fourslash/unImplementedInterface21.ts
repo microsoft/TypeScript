@@ -10,5 +10,6 @@
 ////     |]f1(){}
 //// }
 
-verify.codeFixAtPosition(`x : false,
-`);
+verify.not.codeFixAvailable();
+// verify.codeFixAtPosition(`x : false,
+// `);

@@ -6,6 +6,7 @@
 ////
 //// var x: C2 = {[|  |]}
 
-verify.codeFixAtPosition(`f1<T extends number>(){
-    throw new Error('Method not Implemented');
-}`);
+verify.not.codeFixAvailable();
+// verify.codeFixAtPosition(`f1<T extends number>(){
+//     throw new Error('Method not Implemented');
+// }`);

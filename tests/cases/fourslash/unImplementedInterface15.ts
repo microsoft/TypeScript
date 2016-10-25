@@ -8,8 +8,9 @@
 ////
 //// |]}
 
-verify.codeFixAtPosition(`
-f1(){
-    throw new Error('Method not Implemented');
-}
-`);
+verify.not.codeFixAvailable();
+// verify.codeFixAtPosition(`
+// f1(){
+//     throw new Error('Method not Implemented');
+// }
+// `);

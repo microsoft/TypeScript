@@ -1,47 +1,6 @@
 /* @internal */
 namespace ts.codefix {
     registerCodeFix({
-        errorCodes: [Diagnostics.Type_0_is_not_assignable_to_type_1.code],
-        getCodeActions: (context: CodeFixContext) => {
-            const sourceFile = context.sourceFile;
-            const start = context.span.start;
-            const token = getTokenAtPosition(sourceFile, start);
-            const checker = context.program.getTypeChecker();
-            let textChanges: TextChange[] = [];
-
-            if (token.kind === SyntaxKind.Identifier && token.parent.kind === SyntaxKind.VariableDeclaration) {
-                const variableDeclaration = <VariableDeclaration>token.parent;
-                const membersAndStartPosObject = getMembersAndStartPosFromReference(variableDeclaration);
-                const variableMembers = membersAndStartPosObject.members;
-                const trackingAddedMembers: string[] = [];
-                const startPos: number = membersAndStartPosObject.startPos;
-
-                if (variableDeclaration.type.kind === SyntaxKind.TypeReference) {
-                    textChanges = textChanges.concat(getChanges(variableDeclaration.type, variableMembers, startPos, checker, /*reference*/ true, trackingAddedMembers, context.newLineCharacter));
-                }
-                else if (variableDeclaration.type.kind === SyntaxKind.UnionType) {
-                    const types = (<UnionTypeNode>variableDeclaration.type).types;
-                    ts.forEach(types, t => {
-                        textChanges = textChanges.concat(getChanges(t, variableMembers, startPos, checker, /*reference*/ true, trackingAddedMembers, context.newLineCharacter));
-                    });
-                }
-            }
-
-            if (textChanges.length > 0) {
-                return [{
-                    description: getLocaleSpecificMessage(Diagnostics.Implement_interface_on_reference),
-                    changes: [{
-                        fileName: sourceFile.fileName,
-                        textChanges: textChanges
-                    }]
-                }];
-            }
-
-            return undefined;
-        }
-    });
-
-    registerCodeFix({
         errorCodes: [Diagnostics.Class_0_incorrectly_implements_interface_1.code],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
