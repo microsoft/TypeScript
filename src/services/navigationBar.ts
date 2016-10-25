@@ -610,7 +610,7 @@ namespace ts.NavigationBar {
         }
         // See if it is a property assignment, and if so use the property name
         else if (node.parent.kind === SyntaxKind.PropertyAssignment && (node.parent as PropertyAssignment).name) {
-            return nodeText((node.parent as PropertyAssignment).name).replace(whiteSpaceRegex, "#");
+            return nodeText((node.parent as PropertyAssignment).name);
         }
         // Default exports are named "default"
         else if (getModifierFlags(node) & ModifierFlags.Default) {
