@@ -2219,6 +2219,11 @@ namespace ts {
                     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
                     }
+                    else if (type.flags & TypeFlags.PropertyName) {
+                        writer.writeKeyword("keyof");
+                        writeSpace(writer);
+                        writeType((<PropertyNameType>type).type, TypeFormatFlags.None);
+                    }
                     else {
                         // Should never get here
                         // { ... }
@@ -5667,18 +5672,24 @@ namespace ts {
             return startsWith(prop.name, "__@") ? neverType : getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(prop.name));
         }
 
-        function getKeyOfType(type: Type): Type {
-            if (getIndexInfoOfType(type, IndexKind.String)) {
-                return getUnionType([stringType, numberType]);
+        function getPropertyNameTypeForTypeParameter(type: TypeParameter) {
+            if (!type.resolvedPropertyNameType) {
+                type.resolvedPropertyNameType = <PropertyNameType>createType(TypeFlags.PropertyName);
+                type.resolvedPropertyNameType.type = type;
             }
-            const propKeysType = getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
-            return getIndexInfoOfType(type, IndexKind.Number) ? getUnionType([numberType, propKeysType]) : propKeysType;
+            return type.resolvedPropertyNameType;
+        }
+
+        function getPropertyNameType(type: Type): Type {
+            return type.flags & TypeFlags.TypeParameter ?
+                getPropertyNameTypeForTypeParameter(<TypeParameter>type) :
+                getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
         }
 
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getKeyOfType(getTypeFromTypeNodeNoAlias(node.type));
+                links.resolvedType = getPropertyNameType(getTypeFromTypeNodeNoAlias(node.type));
             }
             return links.resolvedType;
         }
@@ -6104,6 +6115,9 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType), type.aliasSymbol, mapper.targetTypes);
+                }
+                if (type.flags & TypeFlags.PropertyName) {
+                    return getPropertyNameType(instantiateType((<PropertyNameType>type).type, mapper));
                 }
             }
             return type;
