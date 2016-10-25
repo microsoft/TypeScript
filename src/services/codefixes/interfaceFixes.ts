@@ -8,28 +8,29 @@ namespace ts.codefix {
             const token = getTokenAtPosition(sourceFile, start);
             const checker = context.program.getTypeChecker();
 
-            let textChanges: TextChange[] = [];
-
-            if (token.kind === SyntaxKind.Identifier && token.parent.kind === SyntaxKind.ClassDeclaration) {
+            if (token.kind === SyntaxKind.Identifier && isClassLike(token.parent)) {
                 const classDeclaration = <ClassDeclaration>token.parent;
                 const startPos: number = classDeclaration.members.pos;
-                const classMembers = getClassMembers(classDeclaration);
+                const classMembers = ts.map(getNamedClassMemberDeclarations(classDeclaration), member => member.name.getText());
                 const trackingAddedMembers: string[] = [];
                 const interfaceClauses = ts.getClassImplementsHeritageClauseElements(classDeclaration);
 
-                for (let i = 0; interfaceClauses && i < interfaceClauses.length; i++) {
-                    textChanges = textChanges.concat(getChanges(interfaceClauses[i], classMembers, startPos, checker, /*reference*/ false, trackingAddedMembers, context.newLineCharacter));
-                }
-            }
+                let textChanges: TextChange[] = undefined;
 
-            if (textChanges.length > 0) {
-                return [{
-                    description: getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class),
-                    changes: [{
-                        fileName: sourceFile.fileName,
-                        textChanges: textChanges
-                    }]
-                }];
+                for (let i = 0; interfaceClauses && i < interfaceClauses.length; i++) {
+                    let newChanges = getChanges(interfaceClauses[i], classMembers, startPos, checker, /*reference*/ false, trackingAddedMembers, context.newLineCharacter);
+                    textChanges = textChanges ? textChanges.concat(newChanges) : newChanges;
+                }
+
+                if (textChanges && textChanges.length > 0) {
+                    return [{
+                        description: getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class),
+                        changes: [{
+                            fileName: sourceFile.fileName,
+                            textChanges: textChanges
+                        }]
+                    }];
+                }
             }
 
             return undefined;
@@ -46,13 +47,13 @@ namespace ts.codefix {
 
             let textChanges: TextChange[] = [];
 
-            if (token.kind === SyntaxKind.Identifier && token.parent.kind === SyntaxKind.ClassDeclaration) {
+            if (token.kind === SyntaxKind.Identifier &&  isClassLike(token.parent)) {
                 const classDeclaration = <ClassDeclaration>token.parent;
                 const startPos = classDeclaration.members.pos;
-                const classMembers = getClassMembers(classDeclaration);
+                const abstractClassMembers = ts.map(getNamedClassAbstractMemberDeclarations(classDeclaration), member => member.name.getText());
                 const trackingAddedMembers: string[] = [];
                 const extendsClause = ts.getClassExtendsHeritageClauseElement(classDeclaration);
-                textChanges = textChanges.concat(getChanges(extendsClause, classMembers, startPos, checker, /*reference*/ false, trackingAddedMembers, context.newLineCharacter));
+                textChanges = textChanges.concat(getChanges(extendsClause, abstractClassMembers, startPos, checker, /*reference*/ false, trackingAddedMembers, context.newLineCharacter));
             }
 
             if (textChanges.length > 0) {
@@ -127,14 +128,12 @@ namespace ts.codefix {
         return result;
     }
 
-    function getClassMembers(classDeclaration: ClassDeclaration): string[] {
-        const classMembers: string[] = [];
-        for (let i = 0; classDeclaration.members && i < classDeclaration.members.length; i++) {
-            if (classDeclaration.members[i].name) {
-                classMembers.push(classDeclaration.members[i].name.getText());
-            }
-        }
-        return classMembers;
+    function getNamedClassMemberDeclarations(classDeclaration: ClassDeclaration): ClassElement[] {
+        return classDeclaration.members.filter(member => member.name);
+    }
+
+    function getNamedClassAbstractMemberDeclarations(classDeclaration: ClassDeclaration): ClassElement[] {
+        return getNamedClassMemberDeclarations(classDeclaration).filter(member => getModifierFlags(member) & ModifierFlags.Abstract);
     }
 
     function getMembersAndStartPosFromReference(variableDeclaration: VariableDeclaration): { startPos: number, members: string[] } {
