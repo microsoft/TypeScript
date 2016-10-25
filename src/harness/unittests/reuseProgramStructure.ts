@@ -295,7 +295,7 @@ namespace ts {
             const options: CompilerOptions = { target };
 
             const program_1 = newProgram(files, ["a.ts"], options);
-            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": createTsResolvedModule("b.ts") }));
+            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": createResolvedModule("b.ts") }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
@@ -304,7 +304,7 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": createTsResolvedModule("b.ts") }));
+            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": createResolvedModule("b.ts") }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             // imports has changed - program is not reused
@@ -321,7 +321,7 @@ namespace ts {
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedModulesCache(program_4, "a.ts", createMap({ "b": createTsResolvedModule("b.ts"), "c": undefined }));
+            checkResolvedModulesCache(program_4, "a.ts", createMap({ "b": createResolvedModule("b.ts"), "c": undefined }));
         });
 
         it("resolved type directives cache follows type directives", () => {

@@ -3296,22 +3296,26 @@ namespace ts {
      * else resolution should just return `undefined` instead of a ResolvedModule.
      */
     export interface ResolvedModule {
-        /**
-         * This should always be set to `resolvedTsFileName || resolvedJsFileName`.
-         * Present for backwards compatibility.
-         */
+        /** Path of the file the module was resolved to. */
         resolvedFileName: string;
-        /** TypeScript (.d.ts, .ts, .tsx) file that the module was resolved to. This will be preferred over a JS file. */
-        resolvedTsFileName?: string;
-        /** JavaScript (or .jsx) file that the module was resolved to. This should be returned even if '--allowJs' (or '--jsx') is disabled. */
-        resolvedJsFileName?: string;
+        /** Extension of resolvedFileName. This must match what's at the end of resolvedFileName. */
+        extension: Extension;
         /**
          * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
          * - be a .d.ts file
          * - use top level imports\exports
          * - don't use tripleslash references
          */
-        isExternalLibraryImport: boolean;
+        isExternalLibraryImport?: boolean;
+    }
+
+    export enum Extension {
+        Ts,
+        Tsx,
+        Dts,
+        Js,
+        Jsx,
+        LastTypeScriptExtension = Dts
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {

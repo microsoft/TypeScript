@@ -118,30 +118,6 @@ namespace ts {
         sourceFile.resolvedModules[moduleNameText] = resolvedModule;
     }
 
-    /** An older host may have omitted resolvedTsFileName and resolvedJsFileName, in which case we should infer them from the file extension of resolvedFileName. */
-    export function convertResolvedModuleFromHost(resolved: ResolvedModule | undefined): ResolvedModule | undefined {
-        if (resolved === undefined) {
-            return undefined;
-        }
-        // At least one of `resolevdTsFileName` or `resolvedJsFileName` should be defined.
-        else if (resolved.resolvedTsFileName || resolved.resolvedJsFileName) {
-            const { resolvedFileName, resolvedTsFileName, resolvedJsFileName } = resolved as ResolvedModule;
-            Debug.assert(resolvedFileName === (resolvedTsFileName || resolvedJsFileName));
-            return resolved;
-        }
-        else {
-            // For backwards compatibility, if both `resolvedTsFileName` and `resolvedJsFileName` are undefined, we infer one of them to define.
-            const { resolvedFileName, isExternalLibraryImport } = resolved;
-            if (fileExtensionIsAny(resolvedFileName, supportedTypeScriptExtensions)) {
-                return { resolvedFileName, resolvedTsFileName: resolvedFileName, resolvedJsFileName: undefined, isExternalLibraryImport };
-            }
-            else {
-                Debug.assert(fileExtensionIsAny(resolvedFileName, supportedJavascriptExtensions));
-                return { resolvedFileName, resolvedTsFileName: undefined, resolvedJsFileName: resolvedFileName, isExternalLibraryImport };
-            }
-        }
-    }
-
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
             sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective>();
@@ -157,7 +133,37 @@ namespace ts {
      */
     export function moduleResolutionIsEqualTo(oldResolution: ResolvedModule, newResolution: ResolvedModule): boolean {
         return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
+            oldResolution.extension === newResolution.extension &&
             oldResolution.resolvedFileName === newResolution.resolvedFileName;
+    }
+
+    /** True if an extension is one of the supported TypeScript extensions. */
+    export function extensionIsTypeScript(ext: Extension): boolean {
+        return ext <= Extension.LastTypeScriptExtension;
+    }
+
+    /**
+     * Gets the extension from a path.
+     * Path must have a valid extension.
+     */
+    export function extensionFromPath(path: string): Extension {
+        if (fileExtensionIs(path, ".d.ts")) {
+            return Extension.Dts;
+        }
+        if (fileExtensionIs(path, ".ts")) {
+            return Extension.Ts;
+        }
+        if (fileExtensionIs(path, ".tsx")) {
+            return Extension.Tsx;
+        }
+        if (fileExtensionIs(path, ".js")) {
+            return Extension.Js;
+        }
+        if (fileExtensionIs(path, ".jsx")) {
+            return Extension.Jsx;
+        }
+        Debug.fail(`File ${path} has unknown extension.`);
+        return Extension.Js;
     }
 
     /* @internal */

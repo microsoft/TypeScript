@@ -5,10 +5,8 @@
     "File '/b.ts' does not exist.",
     "File '/b.tsx' does not exist.",
     "File '/b.d.ts' does not exist.",
-    "File '/b.js' exist - use it as a name resolution result.",
     "File '/b/package.json' does not exist.",
     "File '/b/index.ts' exist - use it as a name resolution result.",
     "Resolving real path for '/b/index.ts', result '/b/index.ts'",
-    "Resolving real path for '/b.js', result '/b.js'",
     "======== Module name './b' was successfully resolved to '/b/index.ts'. ========"
 ]

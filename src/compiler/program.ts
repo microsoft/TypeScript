@@ -331,7 +331,15 @@ namespace ts {
 
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModule[];
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile).map(convertResolvedModuleFromHost);
+            resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile).map(resolved => {
+                // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
+                if (!resolved || resolved.extension) {
+                    return resolved;
+                }
+                resolved = clone(resolved);
+                resolved.extension = extensionFromPath(resolved.resolvedFileName);
+                return resolved;
+            });
         }
         else {
             const loader = (moduleName: string, containingFile: string) => resolveModuleName(moduleName, containingFile, options, host).resolvedModule;
@@ -1317,7 +1325,7 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFileFromNodeModules = isFromNodeModulesSearch && !resolution.resolvedTsFileName;
+                    const isJsFileFromNodeModules = isFromNodeModulesSearch && !extensionIsTypeScript(resolution.extension);
                     const resolvedFileName = resolution.resolvedFileName;
 
                     if (isFromNodeModulesSearch) {
@@ -1581,20 +1589,19 @@ namespace ts {
      * Returns a DiagnosticMessage if we can't use a resolved module due to its extension.
      * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
      */
-    export function getResolutionDiagnostic(options: CompilerOptions, { resolvedTsFileName: ts, resolvedJsFileName: js }: ResolvedModule): DiagnosticMessage | undefined {
-        if (ts) {
-            return !options.jsx && fileExtensionIs(ts, ".tsx") ? Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set : undefined;
-        }
-        else {
-            if (!options.allowJs) {
-                return Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
-            }
-            else if (!options.jsx && fileExtensionIs(js!, ".jsx")) {
-                return Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
-            }
-            else {
+    export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModule): DiagnosticMessage | undefined {
+        switch (extension) {
+            case Extension.Ts:
+            case Extension.Dts:
+                // These are always allowed.
                 return undefined;
-            }
+
+            case Extension.Tsx:
+            case Extension.Jsx:
+                return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
+
+            case Extension.Js:
+                return options.allowJs ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
         }
     }
 }
