@@ -6637,7 +6637,7 @@ namespace ts {
                         }
 
                         if (typeNameOrNamespaceName && flags & NodeFlags.NestedNamespace) {
-                            typeNameOrNamespaceName.flags |= NodeFlags.InJSDocNamespace;
+                            typeNameOrNamespaceName.isInJSDocNamespace = true;
                         }
                         return typeNameOrNamespaceName;
                     }
