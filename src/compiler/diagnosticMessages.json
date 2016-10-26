@@ -603,10 +603,6 @@
         "category": "Error",
         "code": 1194
     },
-    "Catch clause variable name must be an identifier.": {
-        "category": "Error",
-        "code": 1195
-    },
     "Catch clause variable cannot have a type annotation.": {
         "category": "Error",
         "code": 1196
@@ -3085,6 +3081,7 @@
         "category": "Error",
         "code": 17010
     },
+
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
@@ -3093,6 +3090,15 @@
         "category": "Error",
         "code": 18001
     },
+    "The 'files' list in config file '{0}' is empty.": {
+        "category": "Error",
+        "code": 18002
+    },
+    "No inputs were found in config file '{0}'. Specified 'include' paths were '{1}' and 'exclude' paths were '{2}'.": {
+        "category": "Error",
+        "code": 18003
+    },
+
     "Add missing 'super()' call.": {
         "category": "Message",
         "code": 90001

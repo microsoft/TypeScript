@@ -119,13 +119,13 @@ namespace ts {
     }
 
     export interface Shim {
-        dispose(dummy: any): void;
+        dispose(_dummy: any): void;
     }
 
     export interface LanguageServiceShim extends Shim {
         languageService: LanguageService;
 
-        dispose(dummy: any): void;
+        dispose(_dummy: any): void;
 
         refresh(throwOnError: boolean): void;
 
@@ -600,7 +600,7 @@ namespace ts {
         constructor(private factory: ShimFactory) {
             factory.registerShim(this);
         }
-        public dispose(dummy: any): void {
+        public dispose(_dummy: any): void {
             this.factory.unregisterShim(this);
         }
     }
@@ -1169,7 +1169,7 @@ namespace ts {
                     toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
                     info.packageNameToTypingLocation,
                     info.typingOptions,
-                    info.compilerOptions);
+                    info.unresolvedImports);
             });
         }
     }

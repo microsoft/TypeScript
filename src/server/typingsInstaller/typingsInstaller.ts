@@ -15,7 +15,7 @@ namespace ts.server.typingsInstaller {
 
     const nullLog: Log = {
         isEnabled: () => false,
-        writeLine: () => {}
+        writeLine: noop
     };
 
     function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost): string {
@@ -26,6 +26,7 @@ namespace ts.server.typingsInstaller {
     export enum PackageNameValidationResult {
         Ok,
         ScopedPackagesNotSupported,
+        EmptyName,
         NameTooLong,
         NameStartsWithDot,
         NameStartsWithUnderscore,
@@ -38,7 +39,9 @@ namespace ts.server.typingsInstaller {
      * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
      */
     export function validatePackageName(packageName: string): PackageNameValidationResult {
-        Debug.assert(!!packageName, "Package name is not specified");
+        if (!packageName) {
+            return PackageNameValidationResult.EmptyName;
+        }
         if (packageName.length > MaxPackageNameLength) {
             return PackageNameValidationResult.NameTooLong;
         }
@@ -146,7 +149,7 @@ namespace ts.server.typingsInstaller {
                 this.safeListPath,
                 this.packageNameToTypingLocation,
                 req.typingOptions,
-                req.compilerOptions);
+                req.unresolvedImports);
 
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);
@@ -239,6 +242,9 @@ namespace ts.server.typingsInstaller {
                     this.missingTypingsSet[typing] = true;
                     if (this.log.isEnabled()) {
                         switch (validationResult) {
+                            case PackageNameValidationResult.EmptyName:
+                                this.log.writeLine(`Package name '${typing}' cannot be empty`);
+                                break;
                             case PackageNameValidationResult.NameTooLong:
                                 this.log.writeLine(`Package name '${typing}' should be less than ${MaxPackageNameLength} characters`);
                                 break;
@@ -382,8 +388,10 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
                     }
-                    this.sendResponse({ projectName: projectName, kind: "invalidate" });
-                    isInvoked = true;
+                    if (!isInvoked) {
+                        this.sendResponse({ projectName: projectName, kind: "invalidate" });
+                        isInvoked = true;
+                    }
                 });
                 watchers.push(w);
             }
@@ -396,6 +404,7 @@ namespace ts.server.typingsInstaller {
                 typingOptions: request.typingOptions,
                 compilerOptions: request.compilerOptions,
                 typings,
+                unresolvedImports: request.unresolvedImports,
                 kind: "set"
             };
         }
