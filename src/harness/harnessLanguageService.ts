@@ -313,14 +313,10 @@ namespace Harness.LanguageService {
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
 
         readDirectory(_rootDir: string, _extension: string): string {
-            throw new Error("NYI");
+            return ts.notImplemented();
         }
-        readDirectoryNames(_path: string): string {
-            throw new Error("Not implemented.");
-        }
-        readFileNames(_path: string): string {
-            throw new Error("Not implemented.");
-        }
+        readDirectoryNames = ts.notImplemented;
+        readFileNames = ts.notImplemented;
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
@@ -339,7 +335,7 @@ namespace Harness.LanguageService {
         constructor(private shim: ts.ClassifierShim) {
         }
         getEncodedLexicalClassifications(_text: string, _lexState: ts.EndOfLineState, _classifyKeywordsInGenerics?: boolean): ts.Classifications {
-            throw new Error("NYI");
+            return ts.notImplemented();
         }
         getClassificationsForLine(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.ClassificationResult {
             const result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split("\n");
@@ -648,7 +644,7 @@ namespace Harness.LanguageService {
         }
 
         createDirectory(_directoryName: string): void {
-            throw new Error("Not Implemented Yet.");
+            return ts.notImplemented();
         }
 
         getCurrentDirectory(): string {
@@ -664,15 +660,15 @@ namespace Harness.LanguageService {
         }
 
         readDirectory(_path: string, _extension?: string[], _exclude?: string[], _include?: string[]): string[] {
-            throw new Error("Not implemented Yet.");
+            return ts.notImplemented();
         }
 
         watchFile(): ts.FileWatcher {
-            return { close() { } };
+            return { close: ts.noop };
         }
 
         watchDirectory(): ts.FileWatcher {
-            return { close() { } };
+            return { close: ts.noop };
         }
 
         close(): void {

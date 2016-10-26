@@ -403,6 +403,9 @@ namespace ts.NavigationBar {
                 if (getModifierFlags(node) & ModifierFlags.Default) {
                     return "default";
                 }
+                // We may get a string with newlines or other whitespace in the case of an object dereference
+                // (eg: "app\n.onactivated"), so we should remove the whitespace for readabiltiy in the
+                // navigation bar.
                 return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node);
             case SyntaxKind.Constructor:
                 return "constructor";
@@ -602,7 +605,7 @@ namespace ts.NavigationBar {
         // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
         else if (node.parent.kind === SyntaxKind.BinaryExpression &&
             (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-            return nodeText((node.parent as BinaryExpression).left);
+            return nodeText((node.parent as BinaryExpression).left).replace(whiteSpaceRegex, "");
         }
         // See if it is a property assignment, and if so use the property name
         else if (node.parent.kind === SyntaxKind.PropertyAssignment && (node.parent as PropertyAssignment).name) {
@@ -620,4 +623,19 @@ namespace ts.NavigationBar {
     function isFunctionOrClassExpression(node: Node): boolean {
         return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.ClassExpression;
     }
+
+    /**
+     * Matches all whitespace characters in a string. Eg:
+     * 
+     * "app.
+     * 
+     * onactivated"
+     * 
+     * matches because of the newline, whereas
+     * 
+     * "app.onactivated"
+     * 
+     * does not match.
+     */
+    const whiteSpaceRegex = /\s+/g;
 }

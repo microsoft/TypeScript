@@ -242,7 +242,7 @@ namespace ts.server {
         }
 
         getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getNavigateToItems(searchValue: string): NavigateToItem[] {
@@ -415,7 +415,7 @@ namespace ts.server {
         }
 
         getEmitOutput(_fileName: string): EmitOutput {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[] {
@@ -457,7 +457,7 @@ namespace ts.server {
         }
 
         getCompilerOptionsDiagnostics(): Diagnostic[] {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getRenameInfo(fileName: string, position: number, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
@@ -562,11 +562,11 @@ namespace ts.server {
         }
 
         getNameOrDottedNameSpan(_fileName: string, _startPos: number, _endPos: number): TextSpan {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getBreakpointStatementAtPosition(_fileName: string, _position: number): TextSpan {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
@@ -656,19 +656,19 @@ namespace ts.server {
         }
 
         getOutliningSpans(_fileName: string): OutliningSpan[] {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getTodoComments(_fileName: string, _descriptors: TodoCommentDescriptor[]): TodoComment[] {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getDocCommentTemplateAtPosition(_fileName: string, _position: number): TextInsertion {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         isValidBraceCompletionAtPosition(_fileName: string, _position: number, _openingBrace: number): boolean {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
@@ -735,23 +735,23 @@ namespace ts.server {
         }
 
         getIndentationAtPosition(_fileName: string, _position: number, _options: EditorOptions): number {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getSyntacticClassifications(_fileName: string, _span: TextSpan): ClassifiedSpan[] {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getSemanticClassifications(_fileName: string, _span: TextSpan): ClassifiedSpan[] {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getEncodedSyntacticClassifications(_fileName: string, _span: TextSpan): Classifications {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getEncodedSemanticClassifications(_fileName: string, _span: TextSpan): Classifications {
-            throw new Error("Not Implemented Yet.");
+            return notImplemented();
         }
 
         getProgram(): Program {

@@ -63,7 +63,7 @@ namespace ts {
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
         let errorNameNode: DeclarationName;
-        const emitJsDocComments = compilerOptions.removeComments ? () => {} : writeJsDocComments;
+        const emitJsDocComments = compilerOptions.removeComments ? noop : writeJsDocComments;
         const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
         let noDeclare: boolean;
 

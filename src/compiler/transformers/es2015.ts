@@ -362,6 +362,9 @@ namespace ts {
                 case SyntaxKind.ObjectLiteralExpression:
                     return visitObjectLiteralExpression(<ObjectLiteralExpression>node);
 
+                case SyntaxKind.CatchClause:
+                    return visitCatchClause(<CatchClause>node);
+
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return visitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
 
@@ -2619,6 +2622,24 @@ namespace ts {
                 expression.startsOnNewLine = true;
             }
             return expression;
+        }
+
+        function visitCatchClause(node: CatchClause): CatchClause {
+            Debug.assert(isBindingPattern(node.variableDeclaration.name));
+
+            const temp = createTempVariable(undefined);
+            const newVariableDeclaration = createVariableDeclaration(temp, undefined, undefined, node.variableDeclaration);
+
+            const vars = flattenVariableDestructuring(node.variableDeclaration, temp, visitor);
+            const list = createVariableDeclarationList(vars, /*location*/node.variableDeclaration, /*flags*/node.variableDeclaration.flags);
+            const destructure = createVariableStatement(undefined, list);
+
+            return updateCatchClause(node, newVariableDeclaration, addStatementToStartOfBlock(node.block, destructure));
+        }
+
+        function addStatementToStartOfBlock(block: Block, statement: Statement): Block {
+            const transformedStatements = visitNodes(block.statements, visitor, isStatement);
+            return updateBlock(block, [statement].concat(transformedStatements));
         }
 
         /**

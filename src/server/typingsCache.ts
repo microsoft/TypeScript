@@ -2,23 +2,25 @@
 
 namespace ts.server {
     export interface ITypingsInstaller {
-        enqueueInstallTypingsRequest(p: Project, typingOptions: TypingOptions): void;
+        enqueueInstallTypingsRequest(p: Project, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
         readonly globalTypingsCacheLocation: string;
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
-        enqueueInstallTypingsRequest: () => {},
-        attach: () => {},
-        onProjectClosed: () => {},
+        enqueueInstallTypingsRequest: noop,
+        attach: noop,
+        onProjectClosed: noop,
         globalTypingsCacheLocation: undefined
     };
 
     class TypingsCacheEntry {
         readonly typingOptions: TypingOptions;
         readonly compilerOptions: CompilerOptions;
-        readonly typings: TypingsArray;
+        readonly typings: SortedReadonlyArray<string>;
+        readonly unresolvedImports: SortedReadonlyArray<string>;
+        /* mainly useful for debugging */
         poisoned: boolean;
     }
 
@@ -62,13 +64,11 @@ namespace ts.server {
         return opt1.allowJs != opt2.allowJs;
     }
 
-    export interface TypingsArray extends ReadonlyArray<string> {
-        " __typingsArrayBrand": any;
-    }
-
-    function toTypingsArray(arr: string[]): TypingsArray {
-        arr.sort();
-        return <any>arr;
+    function unresolvedImportsChanged(imports1: SortedReadonlyArray<string>, imports2: SortedReadonlyArray<string>): boolean {
+        if (imports1 === imports2) {
+            return false;
+        }
+        return !arrayIsEqualTo(imports1, imports2);
     }
 
     export class TypingsCache {
@@ -77,7 +77,7 @@ namespace ts.server {
         constructor(private readonly installer: ITypingsInstaller) {
         }
 
-        getTypingsForProject(project: Project, forceRefresh: boolean): TypingsArray {
+        getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {
             const typingOptions = project.getTypingOptions();
 
             if (!typingOptions || !typingOptions.enableAutoDiscovery) {
@@ -85,37 +85,39 @@ namespace ts.server {
             }
 
             const entry = this.perProjectCache.get(project.getProjectName());
-            const result: TypingsArray = entry ? entry.typings : <any>emptyArray;
-            if (forceRefresh || !entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
+            const result: SortedReadonlyArray<string> = entry ? entry.typings : <any>emptyArray;
+            if (forceRefresh ||
+                !entry ||
+                typingOptionsChanged(typingOptions, entry.typingOptions) ||
+                compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions) ||
+                unresolvedImportsChanged(unresolvedImports, entry.unresolvedImports)) {
                 // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
                 // instead it acts as a placeholder to prevent issuing multiple requests
                 this.perProjectCache.set(project.getProjectName(), {
                     compilerOptions: project.getCompilerOptions(),
                     typingOptions,
                     typings: result,
+                    unresolvedImports,
                     poisoned: true
                 });
                 // something has been changed, issue a request to update typings
-                this.installer.enqueueInstallTypingsRequest(project, typingOptions);
+                this.installer.enqueueInstallTypingsRequest(project, typingOptions, unresolvedImports);
             }
             return result;
         }
 
-        invalidateCachedTypingsForProject(project: Project) {
-            const typingOptions = project.getTypingOptions();
-            if (!typingOptions.enableAutoDiscovery) {
-                return;
-            }
-            this.installer.enqueueInstallTypingsRequest(project, typingOptions);
-        }
-
-        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, newTypings: string[]) {
+        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
             this.perProjectCache.set(projectName, {
                 compilerOptions,
                 typingOptions,
-                typings: toTypingsArray(newTypings),
+                typings: toSortedReadonlyArray(newTypings),
+                unresolvedImports,
                 poisoned: false
             });
+        }
+
+        deleteTypingsForProject(projectName: string) {
+            this.perProjectCache.delete(projectName);
         }
 
         onProjectClosed(project: Project) {

@@ -34,6 +34,8 @@ namespace ts {
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
+        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        clearTimeout?(timeoutId: any): void;
     }
 
     export interface FileWatcher {
@@ -563,7 +565,9 @@ namespace ts {
                     catch (e) {
                         // Could not enable source maps.
                     }
-                }
+                },
+                setTimeout,
+                clearTimeout
             };
             return nodeSystem;
         }

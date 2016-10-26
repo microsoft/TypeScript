@@ -23,10 +23,6 @@ namespace ts.projectSystem {
         readonly callback: TI.RequestCompletedAction;
     }
 
-    export function notImplemented(): any {
-        throw new Error("Not yet implemented");
-    }
-
     export const nullLogger: server.Logger = {
         close: () => void 0,
         hasLevel: () => void 0,
@@ -98,8 +94,8 @@ namespace ts.projectSystem {
             this.projectService.updateTypingsForProject(response);
         }
 
-        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
-            const request = server.createInstallTypingsRequest(project, typingOptions, this.globalTypingsCacheLocation);
+        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions, unresolvedImports: server.SortedReadonlyArray<string>) {
+            const request = server.createInstallTypingsRequest(project, typingOptions, unresolvedImports, this.globalTypingsCacheLocation);
             this.install(request);
         }
 

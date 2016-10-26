@@ -431,6 +431,44 @@ namespace ts {
         return result;
     }
 
+    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equaler?: (a: T, b: T) => boolean): boolean {
+        if (!array1 || !array2) {
+            return array1 === array2;
+        }
+
+        if (array1.length !== array2.length) {
+            return false;
+        }
+
+        for (let i = 0; i < array1.length; i++) {
+            const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
+            if (!equals) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean {
+        return !oldOptions ||
+            (oldOptions.module !== newOptions.module) ||
+            (oldOptions.moduleResolution !== newOptions.moduleResolution) ||
+            (oldOptions.noResolve !== newOptions.noResolve) ||
+            (oldOptions.target !== newOptions.target) ||
+            (oldOptions.noLib !== newOptions.noLib) ||
+            (oldOptions.jsx !== newOptions.jsx) ||
+            (oldOptions.allowJs !== newOptions.allowJs) ||
+            (oldOptions.rootDir !== newOptions.rootDir) ||
+            (oldOptions.configFilePath !== newOptions.configFilePath) ||
+            (oldOptions.baseUrl !== newOptions.baseUrl) ||
+            (oldOptions.maxNodeModuleJsDepth !== newOptions.maxNodeModuleJsDepth) ||
+            !arrayIsEqualTo(oldOptions.lib, newOptions.lib) ||
+            !arrayIsEqualTo(oldOptions.typeRoots, newOptions.typeRoots) ||
+            !arrayIsEqualTo(oldOptions.rootDirs, newOptions.rootDirs) ||
+            !equalOwnProperties(oldOptions.paths, newOptions.paths);
+    }
+
     /**
      * Compacts an array, removing any falsey elements.
      */
@@ -505,6 +543,12 @@ namespace ts {
         return array && array.length > 0
             ? array[array.length - 1]
             : undefined;
+    }
+
+    export function replaceElement<T>(array: T[], index: number, value: T): T[] {
+        const result = array.slice(0);
+        result[index] = value;
+        return result;
     }
 
     /**
@@ -600,6 +644,14 @@ namespace ts {
      */
     export function isArray(value: any): value is any[] {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
+    /** Does nothing. */
+    export function noop(): void {}
+
+    /** Throws an error because a function is not implemented. */
+    export function notImplemented(): never {
+        throw new Error("Not implemented");
     }
 
     export function memoize<T>(callback: () => T): () => T {
@@ -699,8 +751,8 @@ namespace ts {
         Debug.assert(length >= 0, "length must be non-negative, is " + length);
 
         if (file) {
-            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
-            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
+            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${start} > ${file.text.length}`);
+            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${end} > ${file.text.length}`);
         }
 
         let text = getLocaleSpecificMessage(message);
@@ -1250,7 +1302,7 @@ namespace ts {
             return undefined;
         }
 
-        const replaceWildcardCharacter =  usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
+        const replaceWildcardCharacter = usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
         const singleAsteriskRegexFragment = usage === "files" ? singleAsteriskRegexFragmentFiles : singleAsteriskRegexFragmentOther;
 
         /**
@@ -1492,7 +1544,7 @@ namespace ts {
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
-    const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
+    const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
     export function getSupportedExtensions(options?: CompilerOptions): string[] {
         return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;

@@ -690,7 +690,7 @@ namespace Harness {
             export const getCurrentDirectory = () => "";
             export const args = () => <string[]>[];
             export const getExecutingFilePath = () => "";
-            export const exit = () => { };
+            export const exit = ts.noop;
             export const getDirectories = () => <string[]>[];
 
             export let log = (s: string) => console.log(s);
@@ -1668,7 +1668,7 @@ namespace Harness {
         // This does not need to exist strictly speaking, but many tests will need to be updated if it's removed
         export function compileString(_code: string, _unitName: string, _callback: (result: CompilerResult) => void) {
             // NEWTODO: Re-implement 'compileString'
-            throw new Error("compileString NYI");
+            return ts.notImplemented();
         }
 
         export interface GeneratedFile {
