@@ -1793,6 +1793,8 @@ namespace ts {
                 return ScriptKind.TS;
             case ".tsx":
                 return ScriptKind.TSX;
+            case ".json":
+                return ScriptKind.JSON;
             default:
                 return ScriptKind.Unknown;
         }
@@ -1806,6 +1808,7 @@ namespace ts {
     export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
+    export const supportedTypeScriptAndJsonExtensions = supportedTypeScriptExtensions.concat([".json"]);
 
     export function getSupportedExtensions(options?: CompilerOptions): string[] {
         return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;

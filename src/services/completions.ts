@@ -3,6 +3,22 @@
 /* @internal */
 namespace ts.Completions {
     export function getCompletionsAtPosition(host: LanguageServiceHost, typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number): CompletionInfo {
+    // export function getCompletionsAtPosition(_host: LanguageServiceHost, _typeChecker: TypeChecker, _log: (message: string) => void, _compilerOptions: CompilerOptions, _sourceFile: SourceFile, _position: number): CompletionInfo {
+
+        // return {
+        //     isGlobalCompletion: false,
+        //     isMemberCompletion: false,
+        //     isNewIdentifierLocation: false,
+        //     entries: [
+        //         {
+        //             name: "test5",
+        //             kind: ScriptElementKind.classElement,
+        //             kindModifiers: ScriptElementKindModifier.none,
+        //             sortText: "test"
+        //         }
+        //     ]
+        // };
+
         if (isInReferenceComment(sourceFile, position)) {
             return getTripleSlashReferenceCompletion(sourceFile, position);
         }

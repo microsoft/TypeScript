@@ -1,0 +1,45 @@
+=== tests/cases/compiler/data.json ===
+{
+>{    "a": "a",    "b": 42} : { "a": string; "b": number; }
+
+    "a": "a",
+>"a" : "a"
+
+    "b": 42
+>42 : 42
+}
+
+=== tests/cases/compiler/m.ts ===
+const data = require("./data");
+>data : { "a": string; "b": number; }
+>require("./data") : { "a": string; "b": number; }
+>require : NodeRequire
+>"./data" : "./data"
+
+const a = data.a;
+>a : string
+>data.a : string
+>data : { "a": string; "b": number; }
+>a : string
+
+const b = data.b;
+>b : number
+>data.b : number
+>data : { "a": string; "b": number; }
+>b : number
+
+=== tests/cases/compiler/node.d.ts ===
+interface NodeRequireFunction {
+>NodeRequireFunction : NodeRequireFunction
+
+    (id: string): any;
+>id : string
+}
+interface NodeRequire extends NodeRequireFunction {
+>NodeRequire : NodeRequire
+>NodeRequireFunction : NodeRequireFunction
+}
+declare var require: NodeRequire;
+>require : NodeRequire
+>NodeRequire : NodeRequire
+
