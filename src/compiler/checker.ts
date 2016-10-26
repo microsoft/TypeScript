@@ -6980,7 +6980,10 @@ namespace ts {
                     // i.e let x: { } = { x: b }
                     // However, in the case of JsxAttributes, such assignment is not valid
                     // i.e declare function Zero(): Jsx.Element;
-                    //     <Zero x={10} /> // This should be an error
+                    //     <Zero x={10} />   // Error
+                    //     <Zero ignore-x /> // No Error
+                    //     declare function One(l: {"extra-prop": string});
+                    //     <Zero ignore-x /> // Error
                     if ((relation === assignableRelation || relation === comparableRelation) &&
                         (type === globalObjectType || (!isComparingJsxAttributes && isEmptyObjectType(resolved)))) {
                         return true;
@@ -6988,7 +6991,7 @@ namespace ts {
                     else if (resolved.stringIndexInfo || (resolved.numberIndexInfo && isNumericLiteralName(name))) {
                         return true;
                     }
-                    else if (getPropertyOfType(type, name)) {
+                    else if (getPropertyOfType(type, name) || (isComparingJsxAttributes && !isUnhyphenatedJsxName(name))) {
                         return true;
                     }
                 }
@@ -10937,7 +10940,7 @@ namespace ts {
          * @param openingLikeElement a Jsx opening-like element
          * @return a symbol table resulted from resolving "attributes" property or undefined if any of the attribute resolved to any or there is no attributes.
          */
-        function getAttributesSymbolTableFromJsxAttributesProperty(openingLikeElement: JsxOpeningLikeElement): Map<Symbol> | undefined {
+        function getJsxAttributesSymbolArrayFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement): Symbol[] | undefined {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createMap<Symbol>();
             const spreads: Type[] = [];
@@ -10990,13 +10993,9 @@ namespace ts {
                 const spread = getSpreadType(spreads, attributes.symbol);
                 spread.flags |= propagatedFlags;
                 attributesArray = getPropertiesOfType(spread);
-                attributesTable = createMap<Symbol>();
-                forEach(attributesArray, (attr) => {
-                    attributesTable[attr.name] = attr;
-                })
             }
 
-            return attributesTable;
+            return attributesArray;
         }
 
         /**
@@ -11016,9 +11015,13 @@ namespace ts {
          * @param node
          */
         function checkJsxAttributes(node: JsxAttributes) {
-            const symbolTable = getAttributesSymbolTableFromJsxAttributesProperty(node.parent as JsxOpeningLikeElement);
+            const symbolArray = getJsxAttributesSymbolArrayFromAttributesProperty(node.parent as JsxOpeningLikeElement);
             let argAttributesType = anyType as Type;
-            if (symbolTable) {
+            if (symbolArray) {
+                const symbolTable = createMap<Symbol>();
+                forEach(symbolArray, (attr) => {
+                    symbolTable[attr.name] = attr;
+                });
                 argAttributesType = createJsxAttributesType(node, symbolTable);
             }
             return argAttributesType;
@@ -11040,23 +11043,23 @@ namespace ts {
                 targetAttributesType = getCustomJsxElementAttributesType(openingLikeElement);
             }
 
-            const symbolTable = getAttributesSymbolTableFromJsxAttributesProperty(openingLikeElement);
-            // Filter out any hyphenated names as those are not play any role in type-checking unless there are corresponding properties in the target type
-            let attributesTable: Map<Symbol>;
+            const symbolArray = getJsxAttributesSymbolArrayFromAttributesProperty(openingLikeElement);
             // sourceAttributesType is a type of an attributes properties.
             // i.e <div attr1={10} attr2="string" />
             //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes". They resolved to be sourceAttributesType.
             let sourceAttributesType = anyType as Type;
             let isSourceAttributesTypeEmpty = true;
-            if (symbolTable) {
-                attributesTable = createMap<Symbol>();
-                for (const key in symbolTable) {
-                    if (isUnhyphenatedJsxName(key) || getPropertyOfType(targetAttributesType, key)) {
-                        attributesTable[key] = symbolTable[key];
+            if (symbolArray) {
+                // Filter out any hyphenated names as those are not play any role in type-checking unless there are corresponding properties in the target type
+                const symbolTable = createMap<Symbol>();
+                forEach(symbolArray, (attr) => {
+                    if (isUnhyphenatedJsxName(attr.name) || getPropertyOfType(targetAttributesType, attr.name)) {
+                        symbolTable[attr.name] = attr;
                         isSourceAttributesTypeEmpty = false;
                     }
-                }
-                sourceAttributesType = createJsxAttributesType(openingLikeElement.attributes, attributesTable);
+                });
+
+                sourceAttributesType = createJsxAttributesType(openingLikeElement.attributes, symbolTable);
             }
 
             // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
@@ -11999,18 +12002,11 @@ namespace ts {
             let isDecorator: boolean;
             let spreadArgIndex = -1;
 
-
             if (isJsxOpeningLikeElement(node)) {
-                argCount = args.length;
-                // If we are missing the close "/>", the call is incomplete.
-                callIsIncomplete = node.attributes.end === node.end;
-                typeArguments = undefined;
-                // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
-                // However "context" and "updater" are implicit and can't be specify by users.
-                // If there existed "attributes" property, it is still considered correct arity if the number argument is less than parameters
-                return callIsIncomplete ||
-                    argCount === signature.parameters.length ||
-                    (argCount > 0 && argCount <= signature.parameters.length);
+                // For JSX opening-like element, we will ignore regular arity check (which is what is done here).
+                // Instead, the arity check will be done in "checkApplicableSignatureForJsxOpeningLikeElement" as we are required to figure out
+                // all property inside give attributes.
+                return true;
             }
 
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
@@ -12212,6 +12208,48 @@ namespace ts {
             return typeArgumentsAreAssignable;
         }
 
+        /**
+         * Check if the given signature can possibly be a signature called by the JSX opening-like element.
+         * @param node a JSX opening-like element we are trying to figure its call signature
+         * @param signature a candidate signature we are trying whether it is a call signature
+         * @param relation a relationship to check parameter and argument type
+         * @param excludeArgument
+         */
+        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[]) {
+            const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
+            // Stateless function components can have maximum of three arguments: "props", "context", and "updater".            // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,            // can be specified by users through attributes property.             const paramType = getTypeAtPosition(signature, 0);
+
+            // JSX opening-like element has correct arity for stateless-function component if the one of the following condition is true:
+            //      1. callIsInComplete
+            //      2. attributes property has same number of properties as the parameter object type.
+            //         We can figure that out by resolving attributes property and check number of properties in the resolved type
+            // If the call has correct arity, we will then check if the argument type and parameter type is assignable
+
+            const callIsIncomplete = node.attributes.end === node.end;  // If we are missing the close "/>", the call is incomplete
+            const argType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
+            const argProperties = getPropertiesOfType(argType);
+            const paramProperties = getPropertiesOfType(paramType);
+            if (callIsIncomplete ||
+                argProperties.length === paramProperties.length) {
+                if (checkTypeRelatedTo(argType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
+                    return true;
+                }
+            }
+            else {
+                let shouldCheckArgumentAndParameter = true;
+                for (const arg of argProperties) {
+                    if (!getPropertyOfType(paramType, arg.name) && isUnhyphenatedJsxName(arg.name)) {
+                        shouldCheckArgumentAndParameter = false;
+                        break;
+                    }
+                }
+                if (shouldCheckArgumentAndParameter && checkTypeRelatedTo(argType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
             const thisType = getThisTypeOfSignature(signature);
             if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
@@ -12295,8 +12333,9 @@ namespace ts {
                 return undefined;
             }
             else if (isJsxOpeningLikeElement(node)) {
-                args = node.attributes.properties.length > 0 ? [node.attributes] : [];
-            }
+                // For a JSX opening-like element, even though we will recheck the attributes again in "checkApplicableSignatureForJsxOpeningLikeElement" to figure out correct arity.
+                // We still return it here because when using infer type-argument we still have to getEffectiveArgument in trying to infer type-argument.
+                args = node.attributes.properties.length > 0 ? [node.attributes] : [];            }
             else {
                 args = node.arguments || emptyArray;
             }
@@ -12616,7 +12655,7 @@ namespace ts {
             // For a decorator, no arguments are susceptible to contextual typing due to the fact
             // decorators are applied to a declaration by the emitter, and not to an expression.
             let excludeArgument: boolean[];
-            if (!isDecorator) {
+            if (!isDecorator && !isJsxOpeningOrSelfClosingElement) {
                 // We do not need to call `getEffectiveArgumentCount` here as it only
                 // applies when calculating the number of arguments for a decorator.
                 for (let i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
@@ -12789,7 +12828,10 @@ namespace ts {
                             }
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
-                        if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        if (isJsxOpeningOrSelfClosingElement && !checkApplicableSignatureForJsxOpeningLikeElement(<JsxOpeningLikeElement>node, candidate, relation, excludeArgument)) {
+                            break;
+                        }
+                        else if (!isJsxOpeningOrSelfClosingElement && !checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             break;
                         }
                         const index = excludeArgument ? indexOf(excludeArgument, true) : -1;
