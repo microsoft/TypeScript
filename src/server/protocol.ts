@@ -95,6 +95,9 @@ namespace ts.server.protocol {
         /* @internal */
         export type GetCodeFixesFull = "getCodeFixes-full";
         export type GetSupportedCodeFixes = "getSupportedCodeFixes";
+        export type GetCodeRefactorings = "getCodeRefactorings";
+        /* @internal */
+        export type GetCodeRefactoringsFull = "getCodeRefactorings-full";
     }
 
     /**
@@ -394,18 +397,7 @@ namespace ts.server.protocol {
         position?: number;
     }
 
-    /**
-      * Request for the available codefixes at a specific position.
-      */
-    export interface CodeFixRequest extends Request {
-        command: CommandTypes.GetCodeFixes;
-        arguments: CodeFixRequestArgs;
-    }
-
-    /**
-      * Instances of this interface specify errorcodes on a specific location in a sourcefile.
-      */
-    export interface CodeFixRequestArgs extends FileRequestArgs {
+    export interface CodeChangeRequestArgs extends FileRequestArgs{
         /**
           * The line number for the request (1-based).
           */
@@ -437,7 +429,42 @@ namespace ts.server.protocol {
          */
         /* @internal */
         endPosition?: number;
+    }
 
+    /**
+      * Request for the available code refactorings at a specific position.
+      */
+    export interface CodeRefactoringRequest extends Request{
+        command: CommandTypes.GetCodeRefactorings;
+        arguments: CodeRefactoringRequestArgs;
+    }
+
+    /**
+      * Response for GetCoderefactorings request. 
+      */
+    export interface GetCodeRefactoringsResponse extends Response {
+        body?: CodeAction[];
+    }
+
+    /**
+      * Instances of this interface request the available refactorings for a specific location in a sourcefile.
+      */
+    export interface CodeRefactoringRequestArgs extends CodeChangeRequestArgs{
+
+    }
+
+    /**
+      * Request for the available codefixes at a specific position.
+      */
+    export interface CodeFixRequest extends Request {
+        command: CommandTypes.GetCodeFixes;
+        arguments: CodeFixRequestArgs;
+    }
+
+    /**
+      * Instances of this interface specify errorcodes for a specific location in a sourcefile.
+      */
+    export interface CodeFixRequestArgs extends CodeChangeRequestArgs {
         /**
           * Errorcodes we want to get the fixes for.
           */

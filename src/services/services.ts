@@ -26,6 +26,8 @@
 /// <reference path='formatting\smartIndenter.ts' />
 /// <reference path='codefixes\codeFixProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
+/// <reference path='coderefactorings\coderefactoringprovider.ts' />
+/// <reference path='coderefactorings\coderefactorings.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1689,6 +1691,31 @@ namespace ts {
             return allFixes;
         }
 
+        function getCodeRefactoringsAtPosition(fileName: string, start: number, end: number): CodeAction[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const span = { start, length: end - start };
+            const newLineChar = getNewLineOrDefaultFromHost(host);
+
+            let allActions: CodeAction[] = [];
+
+            cancellationToken.throwIfCancellationRequested();
+
+            const context = {
+                sourceFile: sourceFile,
+                span: span,
+                program: program,
+                newLineCharacter: newLineChar
+            };
+
+            const refactorings = coderefactoring.getCodeRefactorings(context);
+            if (refactorings) {
+                allActions = allActions.concat(refactorings);
+            }
+
+            return allActions;
+        }
+
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
@@ -1914,6 +1941,7 @@ namespace ts {
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
             getCodeFixesAtPosition,
+            getCodeRefactoringsAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

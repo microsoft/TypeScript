@@ -151,6 +151,8 @@ namespace ts.server {
         export const GetCodeFixes: protocol.CommandTypes.GetCodeFixes = "getCodeFixes";
         export const GetCodeFixesFull: protocol.CommandTypes.GetCodeFixesFull = "getCodeFixes-full";
         export const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes = "getSupportedCodeFixes";
+        export const GetCodeRefactorings: protocol.CommandTypes.GetCodeRefactorings = "getCodeRefactorings";
+        export const GetCodeRefactoringsFull: protocol.CommandTypes.GetCodeRefactoringsFull = "getCodeRefactorings-full";        
     }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
@@ -1261,6 +1263,33 @@ namespace ts.server {
             }
         }
 
+        private getCodeRefactorings(args: protocol.CodeRefactoringRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[]{
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const startPosition = getStartPosition();
+            const endPosition = getEndPosition();
+
+            const codeActions = project.getLanguageService().getCodeRefactoringsAtPosition(file, startPosition, endPosition);
+            if (!codeActions) {
+                return undefined;
+            }
+            if (simplifiedResult) {
+                return codeActions.map(codeAction => this.mapCodeAction(codeAction, scriptInfo));
+            }
+            else {
+                return codeActions;
+            }
+
+            function getStartPosition() {
+                return args.startPosition !== undefined ? args.startPosition : scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
+            }
+
+            function getEndPosition() {
+                return args.endPosition !== undefined ? args.endPosition : scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
+            }
+        }
+
         private mapCodeAction(codeAction: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
             return {
                 description: codeAction.description,
@@ -1593,7 +1622,13 @@ namespace ts.server {
             },
             [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());
-            }
+            },
+            [CommandNames.GetCodeRefactorings]: (request: protocol.CodeRefactoringRequest) => {
+                return this.requiredResponse(this.getCodeRefactorings(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.GetCodeRefactoringsFull]: (request: protocol.CodeRefactoringRequest) => {
+                return this.requiredResponse(this.getCodeRefactorings(request.arguments, /*simplifiedResult*/ false));
+            },
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
