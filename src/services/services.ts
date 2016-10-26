@@ -3164,7 +3164,7 @@ namespace ts {
                 ruleProvider = new formatting.RulesProvider();
             }
 
-            ruleProvider.ensureUpToDate(options);
+            ruleProvider.ensureUpToDateWorker(options);
             return ruleProvider;
         }
 
@@ -8509,13 +8509,13 @@ namespace ts {
         function getFormattingEditsForRange(fileName: string, start: number, end: number, optionsOrSettings: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const settings = toEditorSettings(optionsOrSettings);
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return formatting.formatSelection(start, end, sourceFile, getRuleProvider(settings), settings);
+            return formatting.formatSelectionWorker(start, end, sourceFile, getRuleProvider(settings), settings);
         }
 
         function getFormattingEditsForDocument(fileName: string, optionsOrSettings: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const settings = toEditorSettings(optionsOrSettings);
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return formatting.formatDocument(sourceFile, getRuleProvider(settings), settings);
+            return formatting.formatDocumentWorker(sourceFile, getRuleProvider(settings), settings);
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, optionsOrSettings: FormatCodeOptions | FormatCodeSettings): TextChange[] {
@@ -8523,13 +8523,13 @@ namespace ts {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             if (key === "}") {
-                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
+                return formatting.formatOnClosingCurlyWorker(position, sourceFile, getRuleProvider(settings), settings);
             }
             else if (key === ";") {
-                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
+                return formatting.formatOnSemicolonWorker(position, sourceFile, getRuleProvider(settings), settings);
             }
             else if (key === "\n") {
-                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+                return formatting.formatOnEnterWorker(position, sourceFile, getRuleProvider(settings), settings);
             }
 
             return [];
