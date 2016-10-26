@@ -118,35 +118,6 @@ namespace ts {
             oldResolution.resolvedFileName === newResolution.resolvedFileName;
     }
 
-    /** True if an extension is one of the supported TypeScript extensions. */
-    export function extensionIsTypeScript(ext: Extension): boolean {
-        return ext <= Extension.LastTypeScriptExtension;
-    }
-
-    /**
-     * Gets the extension from a path.
-     * Path must have a valid extension.
-     */
-    export function extensionFromPath(path: string): Extension {
-        if (fileExtensionIs(path, ".d.ts")) {
-            return Extension.Dts;
-        }
-        if (fileExtensionIs(path, ".ts")) {
-            return Extension.Ts;
-        }
-        if (fileExtensionIs(path, ".tsx")) {
-            return Extension.Tsx;
-        }
-        if (fileExtensionIs(path, ".js")) {
-            return Extension.Js;
-        }
-        if (fileExtensionIs(path, ".jsx")) {
-            return Extension.Jsx;
-        }
-        Debug.fail(`File ${path} has unknown extension.`);
-        return Extension.Js;
-    }
-
     /* @internal */
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
         return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
