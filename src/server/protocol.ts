@@ -442,7 +442,7 @@ namespace ts.server.protocol {
     /**
       * Response for GetCoderefactorings request. 
       */
-    export interface GetCodeRefactoringsResponse extends Response {
+    export interface CodeRefactoringResponse extends Response {
       body?: CodeAction[];
     }
 
@@ -459,6 +459,12 @@ namespace ts.server.protocol {
     export interface CodeFixRequest extends Request {
       command: CommandTypes.GetCodeFixes;
       arguments: CodeFixRequestArgs;
+    }
+
+    
+    export interface CodeFixResponse extends Response {
+        /** The code actions that are available */
+        body?: CodeAction[];
     }
 
     /**
@@ -1392,11 +1398,6 @@ namespace ts.server.protocol {
     export interface FileCodeEdits {
         fileName: string;
         textChanges: CodeEdit[];
-    }
-
-    export interface CodeFixResponse extends Response {
-        /** The code actions that are available */
-        body?: CodeAction[];
     }
 
     export interface CodeAction {

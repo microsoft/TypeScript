@@ -690,6 +690,24 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
         }
 
+        getCodeRefactoringsAtPosition(fileName: string, start: number, end: number): CodeAction[] {
+            const startLineOffset = this.positionToOneBasedLineOffset(fileName, start);
+            const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
+
+            const args: protocol.CodeRefactoringRequestArgs = {
+                file: fileName,
+                startLine: startLineOffset.line,
+                startOffset: startLineOffset.offset,
+                endLine: endLineOffset.line,
+                endOffset: endLineOffset.offset,
+            };
+
+            const request = this.processRequest<protocol.CodeRefactoringRequest>(CommandNames.GetCodeRefactorings, args);
+            const response = this.processResponse<protocol.CodeRefactoringResponse>(request);
+
+            return response.body.map(entry => this.convertCodeActions(entry, fileName));
+        }
+
         convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {
             return {
                 description: entry.description,

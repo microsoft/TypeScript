@@ -458,7 +458,6 @@ namespace Harness.LanguageService {
         getNavigationTree(fileName: string): ts.NavigationTree {
             return unwrapJSONCallResult(this.shim.getNavigationTree(fileName));
         }
-
         getOutliningSpans(fileName: string): ts.OutliningSpan[] {
             return unwrapJSONCallResult(this.shim.getOutliningSpans(fileName));
         }
@@ -487,7 +486,10 @@ namespace Harness.LanguageService {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
         getCodeFixesAtPosition(): ts.CodeAction[] {
-            throw new Error("Not supported on the shim.");
+            throw new Error("getCodeFixesAtPosition not supported on the shim.");
+        }
+        getCodeRefactoringsAtPosition(): ts.CodeAction[] {
+            throw new Error("getCodeRefactoringsAtPosition not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
