@@ -256,7 +256,7 @@ namespace ts {
         }
 
         function returnCapturedThis(node: Node): Node {
-            return setOriginalNode(createReturn(createIdentifier("_this")), node)
+            return setOriginalNode(createReturn(createIdentifier("_this")), node);
         }
 
         function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
