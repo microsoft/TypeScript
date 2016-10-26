@@ -1,3 +1,5 @@
-///<reference path='superFixes.ts' />
-///<reference path='interfaceFixes.ts' />
-///<reference path='changeExtendsToImplementsFix.ts' />
+/// <reference path="fixClassIncorrectlyImplementsInterface.ts" />
+/// <reference path="fixClassDoesntImplementInheritedAbstractMember.ts" />
+/// <reference path="fixClassSuperMustPrecedeThisAccess.ts" />
+/// <reference path="fixConstructorForDerivedNeedSuperCall.ts" />
+/// <reference path="fixExtendsInterfaceBecomesImplements.ts" />

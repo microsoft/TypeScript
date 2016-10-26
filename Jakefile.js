@@ -149,6 +149,7 @@ var servicesSources = [
     "signatureHelp.ts",
     "symbolDisplay.ts",
     "transpile.ts",
+    // Formatting
     "formatting/formatting.ts",
     "formatting/formattingContext.ts",
     "formatting/formattingRequestKind.ts",
@@ -164,7 +165,15 @@ var servicesSources = [
     "formatting/rulesMap.ts",
     "formatting/rulesProvider.ts",
     "formatting/smartIndenter.ts",
-    "formatting/tokenRange.ts"
+    "formatting/tokenRange.ts",
+    // CodeFixes
+    "codeFixes/codeFixProvider.ts",
+    "codeFixes/fixes.ts",
+    "codeFixes/fixExtendsInterfaceBecomesImplements.ts",
+    "codeFixes/fixClassIncorrectlyImplementsInterface.ts",
+    "codeFixes/fixClassDoesntImplementInheritedAbstractMember.ts",
+    "codeFixes/fixClassSuperMustPrecedeThisAccess.ts",
+    "codeFixes/fixConstructorForDerivedNeedSuperCall.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
