@@ -24,7 +24,11 @@ namespace ts.formatting {
             return this.rulesMap;
         }
 
-        public ensureUpToDate(options: ts.FormatCodeSettings) {
+        public ensureUpToDate(options: ts.FormatCodeSettings | ts.FormatCodeOptions) {
+            this.ensureUpToDateWorker(toEditorSettings(options));
+        }
+
+        public ensureUpToDateWorker(options: ts.FormatCodeSettings) {
             if (!this.options || !ts.compareDataObjects(this.options, options)) {
                 const activeRules = this.createActiveRules(options);
                 const rulesMap = RulesMap.create(activeRules);
