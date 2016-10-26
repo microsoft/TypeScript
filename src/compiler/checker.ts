@@ -19505,6 +19505,10 @@ namespace ts {
                         if (typeReferenceDirective) {
                             (typeReferenceDirectives || (typeReferenceDirectives = [])).push(typeReferenceDirective);
                         }
+                        else {
+                            // found at least one entry that does not originate from type reference directive 
+                            return undefined;
+                        }
                     }
                 }
                 return typeReferenceDirectives;
