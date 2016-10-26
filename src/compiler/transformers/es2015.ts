@@ -186,6 +186,7 @@ namespace ts {
         let enclosingFunction: FunctionLikeDeclaration;
         let enclosingNonArrowFunction: FunctionLikeDeclaration;
         let enclosingNonAsyncFunctionBody: FunctionLikeDeclaration | ClassElement;
+        let isInConstructorWithCapturedSuper: boolean;
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -231,14 +232,17 @@ namespace ts {
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
             const savedConvertedLoopState = convertedLoopState;
+            const savedIsInConstructorWithCapturedSuper = isInConstructorWithCapturedSuper;
             if (nodeStartsNewLexicalEnvironment(node)) {
-                // don't treat content of nodes that start new lexical environment as part of converted loop copy
+                // don't treat content of nodes that start new lexical environment as part of converted loop copy or constructor body
+                isInConstructorWithCapturedSuper = false;
                 convertedLoopState = undefined;
             }
 
             onBeforeVisitNode(node);
             const visited = f(node);
 
+            isInConstructorWithCapturedSuper = savedIsInConstructorWithCapturedSuper;
             convertedLoopState = savedConvertedLoopState;
             enclosingFunction = savedEnclosingFunction;
             enclosingNonArrowFunction = savedEnclosingNonArrowFunction;
@@ -251,6 +255,14 @@ namespace ts {
             return visited;
         }
 
+        function returnCapturedThis(node: Node): Node {
+            return setOriginalNode(createReturn(createIdentifier("_this")), node);
+        }
+
+        function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
+            return isInConstructorWithCapturedSuper && node.kind === SyntaxKind.ReturnStatement && !(<ReturnStatement>node).expression;
+        }
+
         function shouldCheckNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ES2015) !== 0 ||
                 node.kind === SyntaxKind.LabeledStatement ||
@@ -258,10 +270,16 @@ namespace ts {
         }
 
         function visitorWorker(node: Node): VisitResult<Node> {
-            if (shouldCheckNode(node)) {
+            if (isReturnVoidStatementInConstructorWithCapturedSuper(node)) {
+                return returnCapturedThis(<ReturnStatement>node);
+            }
+            else if (shouldCheckNode(node)) {
                 return visitJavaScript(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsES2015) {
+            else if (node.transformFlags & TransformFlags.ContainsES2015 || (isInConstructorWithCapturedSuper && !isExpression(node))) {
+                // we want to dive in this branch either if node has children with ES2015 specific syntax
+                // or we are inside constructor that captures result of the super call so all returns without expression should be
+                // rewritten. Note: we skip expressions since returns should never appear there 
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -283,6 +301,7 @@ namespace ts {
         function visitNodesInConvertedLoop(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ReturnStatement:
+                    node = isReturnVoidStatementInConstructorWithCapturedSuper(node) ? returnCapturedThis(node) : node;
                     return visitReturnStatement(<ReturnStatement>node);
 
                 case SyntaxKind.VariableStatement:
@@ -864,7 +883,10 @@ namespace ts {
             }
 
             if (constructor) {
-                const body = saveStateAndInvoke(constructor, constructor => visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
+                const body = saveStateAndInvoke(constructor, constructor => {
+                    isInConstructorWithCapturedSuper = superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture;
+                    return visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset);
+                });
                 addRange(statements, body);
             }
 
