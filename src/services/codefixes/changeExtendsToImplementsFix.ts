@@ -10,8 +10,14 @@ namespace ts.codefix {
 
             if (token.kind === SyntaxKind.Identifier && token.parent.parent.kind === SyntaxKind.HeritageClause) {
                 const children = (<HeritageClause>token.parent.parent).getChildren();
+
+                var hasImplements: boolean = ts.forEach(children, child => child.kind === SyntaxKind.ImplementsKeyword);
+
+                var childInterfaces = children.filter(child => child.kind === SyntaxKind.InterfaceDeclaration)
+
                 ts.forEach(children, child => {
                     if (child.kind === SyntaxKind.ExtendsKeyword) {
+                        // TODO: (arozga) why is there a space before implements
                         textChanges.push({ newText: " implements", span: { start: child.pos, length: child.end - child.pos } });
                     }
                 });
