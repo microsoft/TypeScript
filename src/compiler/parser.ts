@@ -136,9 +136,9 @@ namespace ts {
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
-            case SyntaxKind.PropertyAccessType:
-                return visitNode(cbNode, (<PropertyAccessTypeNode>node).objectType) ||
-                    visitNode(cbNode, (<PropertyAccessTypeNode>node).keyType);
+            case SyntaxKind.IndexedAccessType:
+                return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
+                    visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
             case SyntaxKind.ObjectBindingPattern:
@@ -2523,9 +2523,9 @@ namespace ts {
             let type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 if (isStartOfType()) {
-                    const node = <PropertyAccessTypeNode>createNode(SyntaxKind.PropertyAccessType, type.pos);
+                    const node = <IndexedAccessTypeNode>createNode(SyntaxKind.IndexedAccessType, type.pos);
                     node.objectType = type;
-                    node.keyType = parseType();
+                    node.indexType = parseType();
                     parseExpected(SyntaxKind.CloseBracketToken);
                     type = finishNode(node);
                 }

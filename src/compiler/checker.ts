@@ -2219,15 +2219,15 @@ namespace ts {
                     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
                     }
-                    else if (type.flags & TypeFlags.PropertyName) {
+                    else if (type.flags & TypeFlags.Index) {
                         writer.writeKeyword("keyof");
                         writeSpace(writer);
-                        writeType((<PropertyNameType>type).type, TypeFormatFlags.InElementType);
+                        writeType((<IndexType>type).type, TypeFormatFlags.InElementType);
                     }
-                    else if (type.flags & TypeFlags.PropertyAccess) {
-                        writeType((<PropertyAccessType>type).objectType, TypeFormatFlags.InElementType);
+                    else if (type.flags & TypeFlags.IndexedAccess) {
+                        writeType((<IndexedAccessType>type).objectType, TypeFormatFlags.InElementType);
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writeType((<PropertyAccessType>type).keyType, TypeFormatFlags.None);
+                        writeType((<IndexedAccessType>type).indexType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
                     else {
@@ -5678,43 +5678,43 @@ namespace ts {
             return startsWith(prop.name, "__@") ? neverType : getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(prop.name));
         }
 
-        function getPropertyNameTypeForTypeParameter(type: TypeParameter) {
-            if (!type.resolvedPropertyNameType) {
-                type.resolvedPropertyNameType = <PropertyNameType>createType(TypeFlags.PropertyName);
-                type.resolvedPropertyNameType.type = type;
+        function getIndexTypeForTypeParameter(type: TypeParameter) {
+            if (!type.resolvedIndexType) {
+                type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
+                type.resolvedIndexType.type = type;
             }
-            return type.resolvedPropertyNameType;
+            return type.resolvedIndexType;
         }
 
-        function getPropertyNameType(type: Type): Type {
+        function getIndexType(type: Type): Type {
             return type.flags & TypeFlags.TypeParameter ?
-                getPropertyNameTypeForTypeParameter(<TypeParameter>type) :
+                getIndexTypeForTypeParameter(<TypeParameter>type) :
                 getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
         }
 
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getPropertyNameType(getTypeFromTypeNodeNoAlias(node.type));
+                links.resolvedType = getIndexType(getTypeFromTypeNodeNoAlias(node.type));
             }
             return links.resolvedType;
         }
 
-        function createPropertyAccessType(objectType: Type, keyType: TypeParameter) {
-            const type = <PropertyAccessType>createType(TypeFlags.PropertyAccess);
+        function createIndexedAccessType(objectType: Type, keyType: TypeParameter) {
+            const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
-            type.keyType = keyType;
+            type.indexType = keyType;
             return type;
         }
 
-        function getPropertyAccessTypeForTypeParameter(objectType: Type, keyType: TypeParameter) {
-            const propertyAccessTypes = keyType.resolvedPropertyAccessTypes || (keyType.resolvedPropertyAccessTypes = []);
-            return propertyAccessTypes[objectType.id] || (propertyAccessTypes[objectType.id] = createPropertyAccessType(objectType, keyType));
+        function getIndexedAccessTypeForTypeParameter(objectType: Type, keyType: TypeParameter) {
+            const indexedAccessTypes = keyType.resolvedIndexedAccessTypes || (keyType.resolvedIndexedAccessTypes = []);
+            return indexedAccessTypes[objectType.id] || (indexedAccessTypes[objectType.id] = createIndexedAccessType(objectType, keyType));
         }
 
-        function getPropertyAccessType(objectType: Type, keyType: Type) {
+        function getIndexedAccessType(objectType: Type, keyType: Type) {
             if (keyType.flags & TypeFlags.TypeParameter) {
-                return getPropertyAccessTypeForTypeParameter(objectType, <TypeParameter>keyType);
+                return getIndexedAccessTypeForTypeParameter(objectType, <TypeParameter>keyType);
             }
             if (isTypeOfKind(keyType, TypeFlags.StringLiteral) && !(keyType.flags & TypeFlags.Intersection)) {
                 return mapType(keyType, t => getTypeOfPropertyOfType(objectType, escapeIdentifier((<LiteralType>t).text)) || unknownType);
@@ -5722,29 +5722,29 @@ namespace ts {
             return keyType.flags & TypeFlags.Any ? anyType : unknownType;
         }
 
-        function resolvePropertyAccessTypeNode(node: PropertyAccessTypeNode) {
+        function resolveIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
             const objectType = getTypeFromTypeNodeNoAlias(node.objectType);
-            const keyType = getTypeFromTypeNodeNoAlias(node.keyType);
+            const keyType = getTypeFromTypeNodeNoAlias(node.indexType);
             if (keyType.flags & TypeFlags.TypeParameter &&
-                getConstraintOfTypeParameter(<TypeParameter>keyType) === getPropertyNameType(objectType)) {
-                return getPropertyAccessType(objectType, keyType);
+                getConstraintOfTypeParameter(<TypeParameter>keyType) === getIndexType(objectType)) {
+                return getIndexedAccessType(objectType, keyType);
             }
             if (isTypeOfKind(keyType, TypeFlags.StringLiteral) && !(keyType.flags & TypeFlags.Intersection)) {
                 const missing = forEachType(keyType, t => getTypeOfPropertyOfType(objectType, escapeIdentifier((<LiteralType>t).text)) ? undefined : (<LiteralType>t).text);
                 if (missing) {
-                    error(node.keyType, Diagnostics.Property_0_is_missing_in_type_1, missing, typeToString(objectType));
+                    error(node.indexType, Diagnostics.Property_0_is_missing_in_type_1, missing, typeToString(objectType));
                     return unknownType;
                 }
-                return getPropertyAccessType(objectType, keyType);
+                return getIndexedAccessType(objectType, keyType);
             }
-            error(node.keyType, Diagnostics.Property_access_element_type_must_be_a_string_literal_type_or_a_type_parameter_constrained_to_keyof_0, typeToString(objectType));
+            error(node.indexType, Diagnostics.Property_access_element_type_must_be_a_string_literal_type_or_a_type_parameter_constrained_to_keyof_0, typeToString(objectType));
             return unknownType;
         }
 
-        function getTypeFromPropertyAccessTypeNode(node: PropertyAccessTypeNode) {
+        function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = resolvePropertyAccessTypeNode(node);
+                links.resolvedType = resolveIndexedAccessTypeNode(node);
             }
             return links.resolvedType;
         }
@@ -5910,8 +5910,8 @@ namespace ts {
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node, aliasSymbol, aliasTypeArguments);
                 case SyntaxKind.TypeOperator:
                     return getTypeFromTypeOperatorNode(<TypeOperatorNode>node);
-                case SyntaxKind.PropertyAccessType:
-                    return getTypeFromPropertyAccessTypeNode(<PropertyAccessTypeNode>node);
+                case SyntaxKind.IndexedAccessType:
+                    return getTypeFromIndexedAccessTypeNode(<IndexedAccessTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -6173,11 +6173,11 @@ namespace ts {
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType), type.aliasSymbol, mapper.targetTypes);
                 }
-                if (type.flags & TypeFlags.PropertyName) {
-                    return getPropertyNameType(instantiateType((<PropertyNameType>type).type, mapper));
+                if (type.flags & TypeFlags.Index) {
+                    return getIndexType(instantiateType((<IndexType>type).type, mapper));
                 }
-                if (type.flags & TypeFlags.PropertyAccess) {
-                    return getPropertyAccessType(instantiateType((<PropertyAccessType>type).objectType, mapper), instantiateType((<PropertyAccessType>type).keyType, mapper));
+                if (type.flags & TypeFlags.IndexedAccess) {
+                    return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
                 }
             }
             return type;
@@ -8114,7 +8114,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.PropertyName);
+            return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
         function getInferredType(context: InferenceContext, index: number): Type {
@@ -11520,13 +11520,19 @@ namespace ts {
                 }
             }
 
-            // Obtain base constraint such that we can bail out if the constraint is an unknown type
-            const objectType = getApparentType(checkNonNullExpression(node.expression));
+            let objectType = checkNonNullExpression(node.expression);
             const indexType = node.argumentExpression ? checkExpression(node.argumentExpression) : unknownType;
 
             if (objectType === unknownType || objectType === silentNeverType) {
                 return objectType;
             }
+
+            if (indexType.flags & TypeFlags.TypeParameter &&
+                isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType), getIndexType(objectType))) {
+                return getIndexedAccessType(objectType, indexType);
+            }
+
+            objectType = getApparentType(objectType);
 
             const isConstEnum = isConstEnumObjectType(objectType);
             if (isConstEnum &&
@@ -15043,6 +15049,10 @@ namespace ts {
             forEach(node.types, checkSourceElement);
         }
 
+        function checkIndexedAccessType(node: IndexedAccessTypeNode) {
+            getTypeFromIndexedAccessTypeNode(node);
+        }
+
         function isPrivateWithinAmbient(node: Node): boolean {
             return (getModifierFlags(node) & ModifierFlags.Private) && isInAmbientContext(node);
         }
@@ -18327,6 +18337,8 @@ namespace ts {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TypeOperator:
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+                case SyntaxKind.IndexedAccessType:
+                    return checkIndexedAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:

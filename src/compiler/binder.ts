@@ -3067,7 +3067,7 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.ThisType:
             case SyntaxKind.TypeOperator:
-            case SyntaxKind.PropertyAccessType:
+            case SyntaxKind.IndexedAccessType:
             case SyntaxKind.LiteralType:
                 // Types and signatures are TypeScript syntax, and exclude all other facts.
                 transformFlags = TransformFlags.AssertTypeScript;

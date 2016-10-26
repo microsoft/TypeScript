@@ -218,7 +218,7 @@ namespace ts {
         ParenthesizedType,
         ThisType,
         TypeOperator,
-        PropertyAccessType,
+        IndexedAccessType,
         LiteralType,
         // Binding patterns
         ObjectBindingPattern,
@@ -879,10 +879,10 @@ namespace ts {
         type: TypeNode;
     }
 
-    export interface PropertyAccessTypeNode extends TypeNode {
-        kind: SyntaxKind.PropertyAccessType;
+    export interface IndexedAccessTypeNode extends TypeNode {
+        kind: SyntaxKind.IndexedAccessType;
         objectType: TypeNode;
-        keyType: TypeNode;
+        indexType: TypeNode;
     }
 
     export interface LiteralTypeNode extends TypeNode {
@@ -2630,8 +2630,8 @@ namespace ts {
         Object                  = 1 << 15,  // Object type
         Union                   = 1 << 16,  // Union (T | U)
         Intersection            = 1 << 17,  // Intersection (T & U)
-        PropertyName            = 1 << 18,  // keyof T
-        PropertyAccess          = 1 << 19,  // T[K]
+        Index                   = 1 << 18,  // keyof T
+        IndexedAccess           = 1 << 19,  // T[K]
         /* @internal */
         FreshLiteral            = 1 << 20,  // Fresh literal type
         /* @internal */
@@ -2652,7 +2652,7 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
-        StringLike = String | StringLiteral | PropertyName,
+        StringLike = String | StringLiteral | Index,
         NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -2662,7 +2662,7 @@ namespace ts {
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | PropertyAccess | StringLike | NumberLike | BooleanLike | ESSymbol,
+        Narrowable = Any | StructuredType | TypeParameter | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol,
         NotUnionOrUnit = Any | ESSymbol | Object,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -2825,20 +2825,20 @@ namespace ts {
         /* @internal */
         resolvedApparentType: Type;
         /* @internal */
-        resolvedPropertyNameType: PropertyNameType;
+        resolvedIndexType: IndexType;
         /* @internal */
-        resolvedPropertyAccessTypes: PropertyAccessType[];
+        resolvedIndexedAccessTypes: IndexedAccessType[];
         /* @internal */
         isThisType?: boolean;
     }
 
-    export interface PropertyNameType extends Type {
+    export interface IndexType extends Type {
         type: TypeParameter;
     }
 
-    export interface PropertyAccessType extends Type {
+    export interface IndexedAccessType extends Type {
         objectType: Type;
-        keyType: TypeParameter;
+        indexType: TypeParameter;
     }
 
     export const enum SignatureKind {
