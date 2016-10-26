@@ -242,7 +242,7 @@ namespace ts {
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[];
 
-        getCodeRefactoringsAtPosition(fileName: string, start: number, end: number): CodeAction[];
+        getCodeRefactoringsAtPosition(fileName: string, start: number, end: number, serviceInstance: LanguageService): CodeAction[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 

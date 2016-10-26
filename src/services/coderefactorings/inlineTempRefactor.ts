@@ -1,31 +1,33 @@
 /* @internal */
-namespace ts.codeRefactor {
-    registerCodeRefactor({
-        name: "Inline Temp",
-        nodeLabel: ts.SyntaxKind.VariableDeclaration,
-        getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            let variableDeclaration: VariableDeclaration = <VariableDeclaration>token;
-            if (isValidDeclarationForInlineTempRefactor(variableDeclaration)) {
-                let fileTextChanges: FileTextChanges[] = [];
-                let namePos: number = variableDeclaration.name.pos;
+namespace ts.coderefactoring {
+    registerCodeRefactoring({
+        getCodeActions: (context: CodeRefactoringContext): CodeAction[] => {
+            const sourceFile = context.sourceFile;
+            const start = context.span.start;
+            const variableDeclaration = <VariableDeclaration>getTokenAtPosition(sourceFile, start);
 
+            if (isValidDeclarationForInlineTempRefactor(variableDeclaration)) {
+                const fileTextChanges: FileTextChanges[] = [];
+                const namePos: number = variableDeclaration.name.pos;
                 let variableInitializerText: string = variableDeclaration.initializer.getText();
-                const program = context.service.getProgram();
-                let referenceSymbols: ReferencedSymbol[] = context.service.findReferences(context.sourceFile.fileName, namePos + 1);
+                const program = context.program;
+                const referenceSymbols: ReferencedSymbol[] = context.languageService.findReferences(context.sourceFile.fileName, namePos + 1);
+
                 if (referenceSymbols) {
                     for (const symbol of referenceSymbols) {
                         for (const reference of symbol.references) {
                             if (!reference.isDefinition) {
-                                let fileTextChangesEntry = getOrCreateFileTextChangesEntry(reference, fileTextChanges);
-                                let node: Node = getTouchingPropertyName(program.getSourceFile(reference.fileName), reference.textSpan.start);
+                                const fileTextChangesEntry = getOrCreateFileTextChangesEntry(reference, fileTextChanges);
+                                const node: Node = getTouchingPropertyName(program.getSourceFile(reference.fileName), reference.textSpan.start);
 
                                 if (node.kind === SyntaxKind.Identifier) {
                                     if (node.parent.kind === SyntaxKind.BinaryExpression) {
-                                        let binaryExpression: BinaryExpression = <BinaryExpression>node.parent;
+                                        const binaryExpression: BinaryExpression = <BinaryExpression>node.parent;
                                         if (isNodeOnLeft(node, binaryExpression)) {
                                             variableInitializerText = binaryExpression.right.getText();
                                             handleBinaryExpression(binaryExpression, fileTextChangesEntry);
-                                        } else {
+                                        }
+                                        else {
                                             fileTextChangesEntry.textChanges.push({
                                                 newText: "(" + variableInitializerText + ")",
                                                 span: {
@@ -34,7 +36,8 @@ namespace ts.codeRefactor {
                                                 }
                                             });
                                         }
-                                    } else if (node.parent.kind === SyntaxKind.PropertyAccessExpression || node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.VariableDeclaration) {
+                                    }
+                                    else if (node.parent.kind === SyntaxKind.PropertyAccessExpression || node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.VariableDeclaration) {
                                         fileTextChangesEntry.textChanges.push({
                                             newText: "(" + variableInitializerText + ")",
                                             span: {
@@ -50,8 +53,8 @@ namespace ts.codeRefactor {
                 }
 
                 if (variableDeclaration.parent.kind === SyntaxKind.VariableDeclarationList) {
-                    let variableDeclarationList: VariableDeclarationList = <VariableDeclarationList>variableDeclaration.parent;
-                    let fileTextChangesEntry = getOrCreateFileTextChangesEntryFileName(context.sourceFile.fileName, fileTextChanges);
+                    const variableDeclarationList: VariableDeclarationList = <VariableDeclarationList>variableDeclaration.parent;
+                    const fileTextChangesEntry = getOrCreateFileTextChangesEntryFileName(context.sourceFile.fileName, fileTextChanges);
                     let startPos: number = -1;
                     let length: number = -1;
 
@@ -82,7 +85,7 @@ namespace ts.codeRefactor {
                 }
 
                 return [{
-                    description: getLocaleSpecificMessage(Diagnostics.Inline_Temp),
+                    description: getLocaleSpecificMessage(Diagnostics.Inline_temporary_variable),
                     changes: fileTextChanges
                 }];
             }
@@ -97,11 +100,12 @@ namespace ts.codeRefactor {
             length = binaryExpression.parent.end - binaryExpression.parent.pos;
         }
         else if (binaryExpression.parent.kind === SyntaxKind.BinaryExpression) {
-            let parentBinaryExpression: BinaryExpression = <BinaryExpression>binaryExpression.parent;
+            const parentBinaryExpression: BinaryExpression = <BinaryExpression>binaryExpression.parent;
             if (parentBinaryExpression.left === binaryExpression) {
                 startPos = binaryExpression.pos;
                 length = binaryExpression.end - binaryExpression.pos + 1;
-            } else {
+            }
+            else {
                 startPos = binaryExpression.pos - 1;
                 length = binaryExpression.end - binaryExpression.pos + 1;
             }
