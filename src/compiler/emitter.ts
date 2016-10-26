@@ -2025,9 +2025,7 @@ namespace ts {
             for (let i = 0; i < lines.length; i++) {
                 const line = indentation ? lines[i].slice(indentation) : lines[i];
                 if (line.length) {
-                    if (i > 0) {
-                        writeLine();
-                    }
+                    writeLine();
                     write(line);
                 }
             }

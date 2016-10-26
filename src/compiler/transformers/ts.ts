@@ -2312,12 +2312,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             const name = node.name;
             if (isBindingPattern(name)) {
-                return flattenVariableDestructuringToExpression(
-                    node,
-                    hoistVariableDeclaration,
-                    createNamespaceExportExpression,
-                    visitor
-                );
+                return flattenDestructuringToExpression(node, /*needsValue*/ false, createNamespaceExportExpression, hoistVariableDeclaration, visitor);
             }
             else {
                 return createAssignment(

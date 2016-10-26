@@ -1,5 +1,6 @@
 /// <reference path="../../factory.ts" />
 /// <reference path="../../visitor.ts" />
+/// <reference path="../destructuring.ts" />
 
 /*@internal*/
 namespace ts {
@@ -45,6 +46,7 @@ namespace ts {
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: Map<boolean>; // Set of nodes for which substitution rules should be ignored.
+        let helperState: EmitHelperState;
 
         return transformSourceFile;
 
@@ -62,6 +64,7 @@ namespace ts {
 
             currentSourceFile = node;
             currentModuleInfo = moduleInfoMap[getOriginalNodeId(node)] = collectExternalModuleInfo(node, resolver);
+            helperState = { currentSourceFile, compilerOptions };
 
             // Perform the transformation.
             const transformModule = transformModuleDelegates[moduleKind] || transformModuleDelegates[ModuleKind.None];
@@ -69,6 +72,7 @@ namespace ts {
 
             currentSourceFile = undefined;
             currentModuleInfo = undefined;
+            helperState = undefined;
             return aggregateTransformFlags(updated);
         }
 
@@ -759,10 +763,12 @@ namespace ts {
          */
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
-                return flattenVariableDestructuringToExpression(
+                return flattenDestructuringToExpression(
                     node,
+                    /*needsValue*/ false,
+                    createExportExpression,
                     hoistVariableDeclaration,
-                    createExportExpression
+                    /*visitor*/ undefined
                 );
             }
             else {

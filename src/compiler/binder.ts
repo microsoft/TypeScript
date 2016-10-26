@@ -1007,7 +1007,7 @@ namespace ts {
                 currentFlow = finishFlowLabel(preFinallyLabel);
                 bind(node.finallyBlock);
                 // if flow after finally is unreachable - keep it
-                // otherwise check if flows after try and after catch are unreachable 
+                // otherwise check if flows after try and after catch are unreachable
                 // if yes - convert current flow to unreachable
                 // i.e.
                 // try { return "1" } finally { console.log(1); }
@@ -3077,7 +3077,7 @@ namespace ts {
 
             case SyntaxKind.SpreadElementExpression:
                 // This node is ES6 syntax, but is handled by a containing node.
-                transformFlags |= TransformFlags.ContainsSpreadElementExpression;
+                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsSpreadElementExpression;
                 break;
 
             case SyntaxKind.SuperKeyword:

@@ -1,5 +1,6 @@
 /// <reference path="../factory.ts" />
 /// <reference path="../visitor.ts" />
+/// <reference path="./destructuring.ts" />
 
 /*@internal*/
 namespace ts {
@@ -403,6 +404,9 @@ namespace ts {
 
                 case SyntaxKind.YieldExpression:
                     return visitYieldExpression(<YieldExpression>node);
+
+                case SyntaxKind.SpreadElementExpression:
+                    return visitSpreadElementExpression(<SpreadElementExpression>node);
 
                 case SyntaxKind.SuperKeyword:
                     return visitSuperKeyword();
@@ -1129,7 +1133,7 @@ namespace ts {
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList(
-                                flattenParameterDestructuring(parameter, temp, visitor)
+                                flattenDestructuring(parameter, temp, /*recordTempVariable*/ undefined, visitor)
                             )
                         ),
                         EmitFlags.CustomPrologue
@@ -1660,18 +1664,21 @@ namespace ts {
          */
         function visitParenthesizedExpression(node: ParenthesizedExpression, needsDestructuringValue: boolean): ParenthesizedExpression {
             // If we are here it is most likely because our expression is a destructuring assignment.
-            if (needsDestructuringValue) {
+            if (!needsDestructuringValue) {
+                // By default we always emit the RHS at the end of a flattened destructuring
+                // expression. If we are in a state where we do not need the destructuring value,
+                // we pass that information along to the children that care about it.
                 switch (node.expression.kind) {
                     case SyntaxKind.ParenthesizedExpression:
-                        return createParen(
-                            visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ true),
-                            /*location*/ node
+                        return updateParen(
+                            node,
+                            visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false)
                         );
 
                     case SyntaxKind.BinaryExpression:
-                        return createParen(
-                            visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ true),
-                            /*location*/ node
+                        return updateParen(
+                            node,
+                            visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false)
                         );
                 }
             }
@@ -1689,7 +1696,13 @@ namespace ts {
         function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
             // If we are here it is because this is a destructuring assignment.
             Debug.assert(isDestructuringAssignment(node));
-            return flattenDestructuringAssignment(context, node, needsDestructuringValue, hoistVariableDeclaration, visitor);
+            return flattenDestructuringToExpression(
+                <DestructuringAssignment>node,
+                needsDestructuringValue,
+                createAssignment,
+                hoistVariableDeclaration,
+                visitor
+            );
         }
 
         function visitVariableStatement(node: VariableStatement): Statement {
@@ -1701,15 +1714,17 @@ namespace ts {
                     if (decl.initializer) {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
-                            assignment = flattenVariableDestructuringToExpression(decl, hoistVariableDeclaration, /*createAssignmentCallback*/ undefined, visitor);
+                            assignment = flattenDestructuringToExpression(decl, /*needsValue*/ false, createAssignment, hoistVariableDeclaration, visitor);
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
                         }
-                        (assignments || (assignments = [])).push(assignment);
+
+                        assignments = append(assignments, assignment);
                     }
                 }
                 if (assignments) {
+                    // TODO(rbuckton): use inlineExpressions.
                     return createStatement(reduceLeft(assignments, (acc, v) => createBinary(v, SyntaxKind.CommaToken, acc)), node);
                 }
                 else {
@@ -1854,8 +1869,11 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 const recordTempVariablesInLine = !enclosingVariableStatement
                     || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
-                return flattenVariableDestructuring(node, /*value*/ undefined, visitor,
-                    recordTempVariablesInLine ? undefined : hoistVariableDeclaration);
+                return flattenDestructuring(
+                    node,
+                    /*value*/ undefined,
+                    recordTempVariablesInLine ? undefined : hoistVariableDeclaration,
+                    visitor);
             }
 
             return visitEachChild(node, visitor, context);
@@ -1956,9 +1974,10 @@ namespace ts {
                 if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
                     // This works whether the declaration is a var, let, or const.
                     // It will use rhsIterationValue _a[_i] as the initializer.
-                    const declarations = flattenVariableDestructuring(
+                    const declarations = flattenDestructuring(
                         firstOriginalDeclaration,
                         createElementAccess(rhsReference, counter),
+                        /*recordTempVariable*/ undefined,
                         visitor
                     );
 
@@ -2007,10 +2026,10 @@ namespace ts {
                     // This is a destructuring pattern, so we flatten the destructuring instead.
                     statements.push(
                         createStatement(
-                            flattenDestructuringAssignment(
-                                context,
+                            flattenDestructuringToExpression(
                                 assignment,
                                 /*needsValue*/ false,
+                                createAssignment,
                                 hoistVariableDeclaration,
                                 visitor
                             )
@@ -2840,7 +2859,7 @@ namespace ts {
         }
 
         function visitSpanOfSpreadElements(chunk: Expression[]): VisitResult<Expression> {
-            return map(chunk, visitExpressionOfSpreadElement);
+            return map(chunk, visitSpreadElementExpression);
         }
 
         function visitSpanOfNonSpreadElements(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
@@ -2856,7 +2875,7 @@ namespace ts {
          *
          * @param node A SpreadElementExpression node.
          */
-        function visitExpressionOfSpreadElement(node: SpreadElementExpression) {
+        function visitSpreadElementExpression(node: SpreadElementExpression) {
             return visitNode(node.expression, visitor, isExpression);
         }
 

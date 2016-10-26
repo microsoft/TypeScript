@@ -635,9 +635,9 @@ namespace ts {
 
     export interface ParameterDeclaration extends Declaration {
         kind: SyntaxKind.Parameter;
-        dotDotDotToken?: DotDotDotToken;              // Present on rest parameter
+        dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
         name: BindingName;                  // Declared parameter name
-        questionToken?: QuestionToken;               // Present on optional parameter
+        questionToken?: QuestionToken;      // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
@@ -645,7 +645,7 @@ namespace ts {
     export interface BindingElement extends Declaration {
         kind: SyntaxKind.BindingElement;
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
-        dotDotDotToken?: DotDotDotToken;              // Present on rest binding element
+        dotDotDotToken?: DotDotDotToken;    // Present on rest binding element
         name: BindingName;                  // Declared binding element name
         initializer?: Expression;           // Optional initializer
     }
@@ -671,7 +671,12 @@ namespace ts {
         name?: PropertyName;
     }
 
-    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration;
+    export type ObjectLiteralElementLike
+        = PropertyAssignment
+        | ShorthandPropertyAssignment
+        | MethodDeclaration
+        | AccessorDeclaration
+        ;
 
     export interface PropertyAssignment extends ObjectLiteralElement {
         kind: SyntaxKind.PropertyAssignment;
@@ -712,6 +717,7 @@ namespace ts {
     }
 
     export interface BindingPattern extends Node {
+        kind: SyntaxKind.ObjectBindingPattern | SyntaxKind.ArrayBindingPattern;
         elements: NodeArray<BindingElement | ArrayBindingElement>;
     }
 
@@ -1157,16 +1163,16 @@ namespace ts {
         right: Expression;
     }
 
-    export interface AssignmentExpression extends BinaryExpression {
+    export interface AssignmentExpression<TKind extends AssignmentOperator> extends BinaryExpression {
         left: LeftHandSideExpression;
-        operatorToken: Token<SyntaxKind.EqualsToken>;
+        operatorToken: Token<TKind>;
     }
 
-    export interface ObjectDestructuringAssignment extends AssignmentExpression {
+    export interface ObjectDestructuringAssignment extends AssignmentExpression<SyntaxKind.EqualsToken> {
         left: ObjectLiteralExpression;
     }
 
-    export interface ArrayDestructuringAssignment extends AssignmentExpression {
+    export interface ArrayDestructuringAssignment extends AssignmentExpression<SyntaxKind.EqualsToken> {
         left: ArrayLiteralExpression;
     }
 

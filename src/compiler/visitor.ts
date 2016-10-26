@@ -549,11 +549,11 @@ namespace ts {
     export function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T;
     export function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional: boolean, lift: (node: NodeArray<Node>) => T, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): T;
     export function visitNode(node: Node, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: Node[]) => Node, parenthesize?: (node: Node, parentNode: Node) => Node, parentNode?: Node): Node {
-        if (node === undefined) {
-            return undefined;
+        if (node === undefined || visitor === undefined) {
+            return node;
         }
 
-        const visited = visitor(node);
+        const visited = visitor(aggregateTransformFlags(node));
         if (visited === node) {
             return node;
         }
@@ -621,7 +621,7 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            const visited = node !== undefined ? visitor(node) : undefined;
+            const visited = node !== undefined ? visitor(aggregateTransformFlags(node)) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.

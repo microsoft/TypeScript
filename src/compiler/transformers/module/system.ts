@@ -1,5 +1,6 @@
 /// <reference path="../../factory.ts" />
 /// <reference path="../../visitor.ts" />
+/// <reference path="../destructuring.ts" />
 
 /*@internal*/
 namespace ts {
@@ -40,6 +41,7 @@ namespace ts {
         let hoistedStatements: Statement[];
         let enclosingBlockScopedContainer: Node;
         let noSubstitution: Map<boolean>; // Set of nodes for which substitution rules should be ignored.
+        let helperState: EmitHelperState;
 
         return transformSourceFile;
 
@@ -58,6 +60,7 @@ namespace ts {
             const id = getOriginalNodeId(node);
             currentSourceFile = node;
             enclosingBlockScopedContainer = node;
+            helperState = { currentSourceFile, compilerOptions };
 
             // System modules have the following shape:
             //
@@ -131,6 +134,7 @@ namespace ts {
             contextObject = undefined;
             hoistedStatements = undefined;
             enclosingBlockScopedContainer = undefined;
+            helperState = undefined;
 
             return aggregateTransformFlags(updated);
         }
@@ -818,7 +822,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration, isExportedDeclaration: boolean): Expression {
             const createAssignment = isExportedDeclaration ? createExportedVariableAssignment : createNonExportedVariableAssignment;
             return isBindingPattern(node.name)
-                ? flattenVariableDestructuringToExpression(node, hoistVariableDeclaration, createAssignment, destructuringVisitor)
+                ? flattenDestructuringToExpression(node, /*needsValue*/ false, createAssignment, hoistVariableDeclaration, destructuringVisitor)
                 : createAssignment(node.name, visitNode(node.initializer, destructuringVisitor, isExpression));
         }
 
@@ -1469,9 +1473,8 @@ namespace ts {
          */
         function visitDestructuringAssignment(node: DestructuringAssignment): VisitResult<Expression> {
             if (hasExportedReferenceInDestructuringTarget(node.left)) {
-                return flattenDestructuringAssignment(context, node, /*needsValue*/ true, hoistVariableDeclaration, destructuringVisitor);
+                return flattenDestructuringToExpression(node, /*needsValue*/ true, createAssignment, hoistVariableDeclaration, destructuringVisitor);
             }
-
             return visitEachChild(node, destructuringVisitor, context);
         }
 
@@ -1481,7 +1484,7 @@ namespace ts {
          * @param node The destructuring target.
          */
         function hasExportedReferenceInDestructuringTarget(node: Expression | ObjectLiteralElementLike): boolean {
-            if (isAssignmentExpression(node)) {
+            if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
                 return hasExportedReferenceInDestructuringTarget(node.left);
             }
             else if (isSpreadElementExpression(node)) {

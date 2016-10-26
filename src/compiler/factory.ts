@@ -1699,6 +1699,8 @@ namespace ts {
         }
     }
 
+    // Utilities
+
     export interface CallBinding {
         target: LeftHandSideExpression;
         thisArg: Expression;
@@ -2733,7 +2735,9 @@ namespace ts {
      */
     export function addEmitHelper<T extends Node>(node: T, helper: EmitHelper): T {
         const emitNode = getOrCreateEmitNode(node);
-        emitNode.helpers = append(emitNode.helpers, helper);
+        if (!contains(emitNode.helpers, helper)) {
+            emitNode.helpers = append(emitNode.helpers, helper);
+        }
         return node;
     }
 

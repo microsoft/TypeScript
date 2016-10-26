@@ -65,11 +65,11 @@ function f5(_a) {
 var _f = foo(), bar6 = [{ bar: "bar" }][0][_f];
 var _g = foo.toExponential(), bar7 = [{ bar: "bar" }][0][_g];
 // destructuring assignment
-(_h = { bar: "bar" }, _j = foo, bar = _h[_j], _h);
-(_k = { bar: "bar" }, _l = "bar", bar2 = _k[_l], _k);
-(_m = { bar: "bar" }, _o = foo2(), bar3 = _m[_o], _m);
-_p = foo, bar4 = [{ bar: "bar" }][0][_p];
-_q = foo2(), bar5 = [{ bar: "bar" }][0][_q];
-_r = foo(), bar4 = [{ bar: "bar" }][0][_r];
-_s = (1 + {}), bar4 = [{ bar: "bar" }][0][_s];
-var _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
+(_h = foo, bar = { bar: "bar" }[_h]);
+(_j = "bar", bar2 = { bar: "bar" }[_j]);
+(_k = foo2(), bar3 = { bar: "bar" }[_k]);
+_l = foo, bar4 = [{ bar: "bar" }][0][_l];
+_m = foo2(), bar5 = [{ bar: "bar" }][0][_m];
+_o = foo(), bar4 = [{ bar: "bar" }][0][_o];
+_p = (1 + {}), bar4 = [{ bar: "bar" }][0][_p];
+var _h, _j, _k, _l, _m, _o, _p;
