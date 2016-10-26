@@ -136,6 +136,7 @@ namespace ts.codefix {
         return getNamedClassMemberDeclarations(classDeclaration).filter(member => getModifierFlags(member) & ModifierFlags.Abstract);
     }
 
+    /*
     function getMembersAndStartPosFromReference(variableDeclaration: VariableDeclaration): { startPos: number, members: string[] } {
         const children = variableDeclaration.getChildren();
         const variableMembers: string[] = [];
@@ -157,6 +158,7 @@ namespace ts.codefix {
 
         return { startPos: startPos, members: variableMembers };
     }
+    */
 
     function getDefaultValue(kind: SyntaxKind): string {
         switch (kind) {

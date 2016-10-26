@@ -11,9 +11,13 @@ namespace ts.codefix {
             if (token.kind === SyntaxKind.Identifier && token.parent.parent.kind === SyntaxKind.HeritageClause) {
                 const children = (<HeritageClause>token.parent.parent).getChildren();
 
-                var hasImplements: boolean = ts.forEach(children, child => child.kind === SyntaxKind.ImplementsKeyword);
-
-                var childInterfaces = children.filter(child => child.kind === SyntaxKind.InterfaceDeclaration)
+                // If there is already an implements keyword, we currently have incorrect behavior.
+                // For now, we suppress the quickfix altogether.
+                /*
+                if(ts.forEach(children, child => child.kind === SyntaxKind.ImplementsKeyword)) {
+                    return undefined;
+                }
+                */
 
                 ts.forEach(children, child => {
                     if (child.kind === SyntaxKind.ExtendsKeyword) {
