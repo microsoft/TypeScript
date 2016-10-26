@@ -23,6 +23,7 @@ declare function ThreeThing(l: {y1: string}): JSX.Element;
 declare function ThreeThing(l: {y2: string}): JSX.Element;
 declare function ThreeThing(l: {yy: number, yy1: string}, context: Context, updater: any): JSX.Element;
 
+// OK
 const three1 = <ThreeThing yy={99} yy1="hello world" />;
 const three2 = <ThreeThing y2="Bye" />;
 const three3 = <ThreeThing {...obj2} y2={10} />;  // it is just any so we allow it to pass through

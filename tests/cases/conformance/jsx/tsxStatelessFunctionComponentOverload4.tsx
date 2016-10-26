@@ -23,3 +23,17 @@ const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
 const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
 const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error as there is extra attribute that doesn't match any. Current it is not
 const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribute that doesn't match any. Current it is not
+
+declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
+declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
+
+// Error
+const d1 = <TestingOneThing extra-data />
+const d2 = <TestingOneThing yy="hello" direction="left" />
+
+declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
+declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
+
+// Error
+const e1 = <TestingOptional y1 y3="hello"/>
+const e2 = <TestingOptional y1="hello" y2={1000} y3 />
