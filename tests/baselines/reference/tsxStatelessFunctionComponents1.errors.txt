@@ -1,14 +1,17 @@
-tests/cases/conformance/jsx/file.tsx(12,16): error TS2322: Type '{ naaame: "world"; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
+tests/cases/conformance/jsx/file.tsx(16,16): error TS2322: Type '{ naaame: "world"; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
   Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'.
-tests/cases/conformance/jsx/file.tsx(19,15): error TS2322: Type '{ name: 42; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(24,15): error TS2322: Type '{ name: 42; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
   Type '{ name: 42; }' is not assignable to type '{ name?: string; }'.
     Types of property 'name' are incompatible.
       Type '42' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(21,15): error TS2322: Type '{ naaaaaaame: "no"; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(26,15): error TS2322: Type '{ naaaaaaame: "no"; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
   Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(31,23): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
+  Type '{}' is not assignable to type '{ "prop-name": string; }'.
+    Property '"prop-name"' is missing in type '{}'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
     
     function Greet(x: {name: string}) {
     	return <div>Hello, {x}</div>;
@@ -16,9 +19,13 @@ tests/cases/conformance/jsx/file.tsx(21,15): error TS2322: Type '{ naaaaaaame: "
     function Meet({name = 'world'}) {
     	return <div>Hello, {name}</div>;
     }
+    function MeetAndGreet(k: {"prop-name": string}) {
+    	return <div>Hi Hi</div>;
+    }
     
     // OK
     let a = <Greet name='world' />;
+    let a1 = <Greet name='world' extra-prop />;
     // Error
     let b = <Greet naaame='world' />;
                    ~~~~~~~~~~~~~~
@@ -27,6 +34,7 @@ tests/cases/conformance/jsx/file.tsx(21,15): error TS2322: Type '{ naaaaaaame: "
     
     // OK
     let c = <Meet />;
+    let c1 = <Meet extra-prop/>;
     // OK
     let d = <Meet name='me' />;
     // Error
@@ -41,4 +49,14 @@ tests/cases/conformance/jsx/file.tsx(21,15): error TS2322: Type '{ naaaaaaame: "
                   ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ naaaaaaame: "no"; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
 !!! error TS2322:   Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+    
+    // OK
+    let g = <MeetAndGreet prop-name="Bob" />;
+    // Error
+    let h = <MeetAndGreet extra-prop-name="World" />;
+                          ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
+!!! error TS2322:   Type '{}' is not assignable to type '{ "prop-name": string; }'.
+!!! error TS2322:     Property '"prop-name"' is missing in type '{}'.
+    
     
