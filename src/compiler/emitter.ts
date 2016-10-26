@@ -1276,28 +1276,28 @@ namespace ts {
             writeToken(SyntaxKind.OpenParenToken, openParenPos, node);
             emitExpression(node.expression);
             writeToken(SyntaxKind.CloseParenToken, node.expression.end, node);
-            emitEmbeddedStatement(node.thenStatement);
+            emitEmbeddedStatement(node, node.thenStatement);
             if (node.elseStatement) {
-                writeLine();
+                writeLineOrSpace(node);
                 writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end, node);
                 if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                     write(" ");
                     emit(node.elseStatement);
                 }
                 else {
-                    emitEmbeddedStatement(node.elseStatement);
+                    emitEmbeddedStatement(node, node.elseStatement);
                 }
             }
         }
 
         function emitDoStatement(node: DoStatement) {
             write("do");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
             if (isBlock(node.statement)) {
                 write(" ");
             }
             else {
-                writeLine();
+                writeLineOrSpace(node);
             }
 
             write("while (");
@@ -1309,7 +1309,7 @@ namespace ts {
             write("while (");
             emitExpression(node.expression);
             write(")");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForStatement(node: ForStatement) {
@@ -1322,7 +1322,7 @@ namespace ts {
             write(";");
             emitExpressionWithPrefix(" ", node.incrementor);
             write(")");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForInStatement(node: ForInStatement) {
@@ -1333,7 +1333,7 @@ namespace ts {
             write(" in ");
             emitExpression(node.expression);
             writeToken(SyntaxKind.CloseParenToken, node.expression.end);
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForOfStatement(node: ForOfStatement) {
@@ -1344,7 +1344,7 @@ namespace ts {
             write(" of ");
             emitExpression(node.expression);
             writeToken(SyntaxKind.CloseParenToken, node.expression.end);
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForBinding(node: VariableDeclarationList | Expression) {
@@ -1380,7 +1380,7 @@ namespace ts {
             write("with (");
             emitExpression(node.expression);
             write(")");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitSwitchStatement(node: SwitchStatement) {
@@ -1408,9 +1408,13 @@ namespace ts {
         function emitTryStatement(node: TryStatement) {
             write("try ");
             emit(node.tryBlock);
-            emit(node.catchClause);
+            if (node.catchClause) {
+                writeLineOrSpace(node);
+                emit(node.catchClause);
+            }
+
             if (node.finallyBlock) {
-                writeLine();
+                writeLineOrSpace(node);
                 write("finally ");
                 emit(node.finallyBlock);
             }
@@ -1880,7 +1884,6 @@ namespace ts {
         }
 
         function emitCatchClause(node: CatchClause) {
-            writeLine();
             const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos);
             write(" ");
             writeToken(SyntaxKind.OpenParenToken, openParenPos);
@@ -2087,8 +2090,8 @@ namespace ts {
             }
         }
 
-        function emitEmbeddedStatement(node: Statement) {
-            if (isBlock(node)) {
+        function emitEmbeddedStatement(parent: Node, node: Statement) {
+            if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine) {
                 write(" ");
                 emit(node);
             }
@@ -2250,6 +2253,15 @@ namespace ts {
 
             if (format & ListFormat.BracketsMask) {
                 write(getClosingBracket(format));
+            }
+        }
+
+        function writeLineOrSpace(node: Node) {
+            if (getEmitFlags(node) & EmitFlags.SingleLine) {
+                write(" ");
+            }
+            else {
+                writeLine();
             }
         }
 

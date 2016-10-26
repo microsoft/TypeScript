@@ -21,7 +21,6 @@ namespace ts {
         const {
             startLexicalEnvironment,
             endLexicalEnvironment,
-            hoistVariableDeclaration,
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -46,7 +45,6 @@ namespace ts {
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: Map<boolean>; // Set of nodes for which substitution rules should be ignored.
-        let helperState: EmitHelperState;
 
         return transformSourceFile;
 
@@ -64,15 +62,14 @@ namespace ts {
 
             currentSourceFile = node;
             currentModuleInfo = moduleInfoMap[getOriginalNodeId(node)] = collectExternalModuleInfo(node, resolver);
-            helperState = { currentSourceFile, compilerOptions };
 
             // Perform the transformation.
             const transformModule = transformModuleDelegates[moduleKind] || transformModuleDelegates[ModuleKind.None];
             const updated = transformModule(node);
+            addEmitHelpers(updated, context.readEmitHelpers(/*onlyScoped*/ false));
 
             currentSourceFile = undefined;
             currentModuleInfo = undefined;
-            helperState = undefined;
             return aggregateTransformFlags(updated);
         }
 
@@ -84,15 +81,17 @@ namespace ts {
         function transformCommonJSModule(node: SourceFile) {
             startLexicalEnvironment();
 
-            const statements: Statement[] = [];
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            let statements: Statement[] = [];
+            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, /*ignoreCustomPrologue*/ false, sourceElementVisitor);
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
-            addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
+            addRange(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, createNodeArray(statements, node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues) {
+                // If we have any `export * from ...` declarations
+                // we need to inform the emitter to add the __export helper.
                 addEmitHelper(updated, exportStarHelper);
             }
 
@@ -258,19 +257,19 @@ namespace ts {
         function transformAsynchronousModuleBody(node: SourceFile) {
             startLexicalEnvironment();
 
-            const statements: Statement[] = [];
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            let statements: Statement[] = [];
+            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, /*ignoreCustomPrologue*/ false, sourceElementVisitor);
 
             // Visit each statement of the module body.
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
 
+            // Append the 'export =' statement if provided.
+            addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
+
             // End the lexical environment for the module body
             // and merge any new lexical declarations.
             addRange(statements, endLexicalEnvironment());
-
-            // Append the 'export =' statement if provided.
-            addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
             const body = createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues) {
@@ -764,10 +763,10 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringToExpression(
+                    context,
                     node,
                     /*needsValue*/ false,
                     createExportExpression,
-                    hoistVariableDeclaration,
                     /*visitor*/ undefined
                 );
             }
@@ -1194,6 +1193,15 @@ namespace ts {
          * @param node The node to substitute.
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
+            if (getEmitFlags(node) & EmitFlags.HelperName) {
+                const externalHelpersModuleName = getOrCreateExternalHelpersModuleName(currentSourceFile, compilerOptions);
+                if (externalHelpersModuleName) {
+                    return createPropertyAccess(externalHelpersModuleName, node);
+                }
+
+                return node;
+            }
+
             if (!isGeneratedIdentifier(node) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {

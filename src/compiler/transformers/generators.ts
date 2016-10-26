@@ -231,6 +231,7 @@ namespace ts {
             endLexicalEnvironment,
             hoistFunctionDeclaration,
             hoistVariableDeclaration,
+            readEmitHelpers
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -242,7 +243,6 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let renamedCatchVariables: Map<boolean>;
         let renamedCatchVariableDeclarations: Map<Identifier>;
-        let helperState: EmitHelperState;
 
         let inGeneratorFunctionBody: boolean;
         let inStatementContainingYield: boolean;
@@ -298,13 +298,11 @@ namespace ts {
             }
 
             currentSourceFile = node;
-            helperState = { currentSourceFile, compilerOptions };
 
             const visited = visitEachChild(node, visitor, context);
-            addEmitHelpers(visited, helperState.requestedHelpers);
+            addEmitHelpers(visited, readEmitHelpers(/*onlyScoped*/ false));
 
             currentSourceFile = undefined;
-            helperState = undefined;
             return visited;
         }
 
@@ -449,7 +447,7 @@ namespace ts {
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): Statement {
             // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken) {
                 node = setOriginalNode(
                     createFunctionDeclaration(
                         /*decorators*/ undefined,
@@ -497,7 +495,7 @@ namespace ts {
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
             // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken) {
                 node = setOriginalNode(
                     createFunctionExpression(
                         /*modifiers*/ undefined,
@@ -584,7 +582,7 @@ namespace ts {
             // Build the generator
             startLexicalEnvironment();
 
-            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, /*ignoreCustomPrologue*/ false, visitor);
 
             transformAndEmitStatements(body.statements, statementOffset);
 
@@ -934,7 +932,7 @@ namespace ts {
             const resumeLabel = defineLabel();
             const expression = visitNode(node.expression, visitor, isExpression);
             if (node.asteriskToken) {
-                emitYieldStar(expression, /*location*/ node);
+                emitYieldStar(createValuesHelper(context, expression, /*location*/ node), /*location*/ node);
             }
             else {
                 emitYield(expression, /*location*/ node);
@@ -2590,7 +2588,7 @@ namespace ts {
 
             const buildResult = buildStatements();
             return createGeneratorHelper(
-                helperState,
+                context,
                 setEmitFlags(
                     createFunctionExpression(
                         /*modifiers*/ undefined,
@@ -3083,10 +3081,10 @@ namespace ts {
         }
     }
 
-    function createGeneratorHelper(helperState: EmitHelperState, body: FunctionExpression) {
-        requestEmitHelper(helperState, generatorHelper);
+    function createGeneratorHelper(context: TransformationContext, body: FunctionExpression) {
+        context.requestEmitHelper(generatorHelper);
         return createCall(
-            getHelperName(helperState, "__generator"),
+            getHelperName("__generator"),
             /*typeArguments*/ undefined,
             [createThis(), body]);
     }
@@ -3157,7 +3155,7 @@ namespace ts {
         text: `
             var __generator = (this && this.__generator) || function (thisArg, body) {
                 var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
-                return { next: verb(0), "throw": verb(1), "return": verb(2) };
+                return { next: verb(0), "throw": verb(1), "return": verb(2), __iterator__: function () { return this; } };
                 function verb(n) { return function (v) { return step([n, v]); }; }
                 function step(op) {
                     if (f) throw new TypeError("Generator is already executing.");

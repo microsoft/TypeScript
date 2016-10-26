@@ -41,7 +41,6 @@ namespace ts {
         let hoistedStatements: Statement[];
         let enclosingBlockScopedContainer: Node;
         let noSubstitution: Map<boolean>; // Set of nodes for which substitution rules should be ignored.
-        let helperState: EmitHelperState;
 
         return transformSourceFile;
 
@@ -60,7 +59,6 @@ namespace ts {
             const id = getOriginalNodeId(node);
             currentSourceFile = node;
             enclosingBlockScopedContainer = node;
-            helperState = { currentSourceFile, compilerOptions };
 
             // System modules have the following shape:
             //
@@ -121,6 +119,10 @@ namespace ts {
 
             if (!(compilerOptions.outFile || compilerOptions.out)) {
                 moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
+                addEmitHelpers(moduleBodyBlock, context.readEmitHelpers(/*onlyScoped*/ false));
+            }
+            else {
+                addEmitHelpers(updated, context.readEmitHelpers(/*onlyScoped*/ false));
             }
 
             if (noSubstitution) {
@@ -134,8 +136,6 @@ namespace ts {
             contextObject = undefined;
             hoistedStatements = undefined;
             enclosingBlockScopedContainer = undefined;
-            helperState = undefined;
-
             return aggregateTransformFlags(updated);
         }
 
@@ -224,7 +224,7 @@ namespace ts {
             startLexicalEnvironment();
 
             // Add any prologue directives.
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, /*ignoreCustomPrologue*/ false, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
             statements.push(
@@ -822,7 +822,12 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration, isExportedDeclaration: boolean): Expression {
             const createAssignment = isExportedDeclaration ? createExportedVariableAssignment : createNonExportedVariableAssignment;
             return isBindingPattern(node.name)
-                ? flattenDestructuringToExpression(node, /*needsValue*/ false, createAssignment, hoistVariableDeclaration, destructuringVisitor)
+                ? flattenDestructuringToExpression(
+                    context,
+                    node,
+                    /*needsValue*/ false,
+                    createAssignment,
+                    destructuringVisitor)
                 : createAssignment(node.name, visitNode(node.initializer, destructuringVisitor, isExpression));
         }
 
@@ -1473,7 +1478,12 @@ namespace ts {
          */
         function visitDestructuringAssignment(node: DestructuringAssignment): VisitResult<Expression> {
             if (hasExportedReferenceInDestructuringTarget(node.left)) {
-                return flattenDestructuringToExpression(node, /*needsValue*/ true, createAssignment, hoistVariableDeclaration, destructuringVisitor);
+                return flattenDestructuringToExpression(
+                    context,
+                    node,
+                    /*needsValue*/ true,
+                    createAssignment,
+                    destructuringVisitor);
             }
             return visitEachChild(node, destructuringVisitor, context);
         }
@@ -1612,6 +1622,15 @@ namespace ts {
          * @param node The node to substitute.
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
+            if (getEmitFlags(node) & EmitFlags.HelperName) {
+                const externalHelpersModuleName = getOrCreateExternalHelpersModuleName(currentSourceFile, compilerOptions);
+                if (externalHelpersModuleName) {
+                    return createPropertyAccess(externalHelpersModuleName, node);
+                }
+
+                return node;
+            }
+
             // When we see an identifier in an expression position that
             // points to an imported symbol, we should substitute a qualified
             // reference to the imported symbol if one is needed.

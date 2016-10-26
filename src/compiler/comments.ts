@@ -25,6 +25,8 @@ namespace ts {
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
         let hasWrittenComment = false;
         let disabled: boolean = compilerOptions.removeComments;
+        // let leadingCommentPositions: Map<boolean>;
+        // let trailingCommentPositions: Map<boolean>;
 
         return {
             reset,
@@ -259,7 +261,8 @@ namespace ts {
 
         function forEachLeadingCommentToEmit(pos: number, cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
             // Emit the leading comments only if the container's pos doesn't match because the container should take care of emitting these comments
-            if (containerPos === -1 || pos !== containerPos) {
+            if ((containerPos === -1 || pos !== containerPos) /* && !leadingCommentPositions[pos] */) {
+                // leadingCommentPositions[pos] = true;
                 if (hasDetachedComments(pos)) {
                     forEachLeadingCommentWithoutDetachedComments(cb);
                 }
@@ -271,7 +274,8 @@ namespace ts {
 
         function forEachTrailingCommentToEmit(end: number, cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) => void) {
             // Emit the trailing comments only if the container's end doesn't match because the container should take care of emitting these comments
-            if (containerEnd === -1 || (end !== containerEnd && end !== declarationListContainerEnd)) {
+            if ((containerEnd === -1 || (end !== containerEnd && end !== declarationListContainerEnd)) /*&& !trailingCommentPositions[end] */) {
+                // trailingCommentPositions[end] = true;
                 forEachTrailingCommentRange(currentText, end, cb);
             }
         }
@@ -281,6 +285,8 @@ namespace ts {
             currentText = undefined;
             currentLineMap = undefined;
             detachedCommentsInfo = undefined;
+            // leadingCommentPositions = undefined;
+            // trailingCommentPositions = undefined;
         }
 
         function setSourceFile(sourceFile: SourceFile) {
@@ -288,6 +294,8 @@ namespace ts {
             currentText = currentSourceFile.text;
             currentLineMap = getLineStarts(currentSourceFile);
             detachedCommentsInfo = undefined;
+            // leadingCommentPositions = createMap<boolean>();
+            // trailingCommentPositions = createMap<boolean>();
         }
 
         function hasDetachedComments(pos: number) {

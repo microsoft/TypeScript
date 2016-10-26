@@ -1497,6 +1497,10 @@ namespace ts {
         expression: Expression;
     }
 
+    export interface PrologueDirective extends ExpressionStatement {
+        expression: StringLiteral;
+    }
+
     export interface IfStatement extends Statement {
         kind: SyntaxKind.IfStatement;
         expression: Expression;
@@ -3474,6 +3478,7 @@ namespace ts {
 
     /* @internal */
     export const enum EmitFlags {
+        HelperName = 1 << 0,
         UMDDefine = 1 << 4,                      // This node should be replaced with the UMD define helper.
         SingleLine = 1 << 5,                     // The contents of this node should be emitted on a single line.
         AdviseOnEmitNode = 1 << 6,               // The printer should invoke the onEmitNode callback when printing this node.
@@ -3517,15 +3522,127 @@ namespace ts {
         Unspecified,        // Emitting an otherwise unspecified node
     }
 
+    /* @internal */
+    export interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
+
+        /* @internal */
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+
+        isEmitBlocked(emitFileName: string): boolean;
+
+        writeFile: WriteFileCallback;
+    }
+
     /** Additional context provided to `visitEachChild` */
     /* @internal */
-    export interface LexicalEnvironment {
-        /** Starts a new lexical environment. */
+    export interface TransformationContext {
+        getCompilerOptions(): CompilerOptions;
+        getEmitResolver(): EmitResolver;
+        getEmitHost(): EmitHost;
+
+        /**
+         * Hoists a function declaration to the current lexical environment.
+         */
+        hoistFunctionDeclaration(node: FunctionDeclaration): void;
+
+        /**
+         * Hoists a variable declaration to the current lexical environment.
+         */
+        hoistVariableDeclaration(name: Identifier): void;
+
+        /**
+         * Starts tracking hoisted declarations in a new lexical environment.
+         */
         startLexicalEnvironment(): void;
 
-        /** Ends a lexical environment, returning any declarations. */
+        suspendLexicalEnvironment(): void;
+        resumeLexicalEnvironment(): void;
+
+        /**
+         * Ends a lexical environment, returning any declarations.
+         */
         endLexicalEnvironment(): Statement[];
+
+        /**
+         * Requests an emit helper.
+         */
+        requestEmitHelper(helper: EmitHelper): void;
+
+        /**
+         * Gets and resets the requested emit helpers.
+         *
+         * @param onlyScoped Only read emit helpers whose `scoped` property is `true`.
+         */
+        readEmitHelpers(onlyScoped: boolean): EmitHelper[];
+
+        /**
+         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
+         */
+        enableSubstitution(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether expression substitutions are enabled for the provided node.
+         */
+        isSubstitutionEnabled(node: Node): boolean;
+
+        /**
+         * Hook used by transformers to substitute expressions just before they
+         * are emitted by the pretty printer.
+         */
+        onSubstituteNode?: (emitContext: EmitContext, node: Node) => Node;
+
+        /**
+         * Enables before/after emit notifications in the pretty printer for the provided
+         * SyntaxKind.
+         */
+        enableEmitNotification(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
+         */
+        isEmitNotificationEnabled(node: Node): boolean;
+
+        /**
+         * Hook used to allow transformers to capture state before or after
+         * the printer emits a node.
+         */
+        onEmitNode?: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
     }
+
+    /* @internal */
+    export interface TransformationResult {
+        /**
+         * Gets the transformed source files.
+         */
+        transformed: SourceFile[];
+
+        /**
+         * Emits the substitute for a node, if one is available; otherwise, emits the node.
+         *
+         * @param emitContext The current emit context.
+         * @param node The node to substitute.
+         * @param emitCallback A callback used to emit the node or its substitute.
+         */
+        emitNodeWithSubstitution(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+
+        /**
+         * Emits a node with possible notification.
+         *
+         * @param emitContext The current emit context.
+         * @param node The node to emit.
+         * @param emitCallback A callback used to emit the node.
+         */
+        emitNodeWithNotification(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+    }
+
+    /* @internal */
+    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
 
     export interface TextSpan {

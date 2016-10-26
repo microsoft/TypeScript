@@ -42,10 +42,10 @@ namespace ts {
      * @param visitor An optional visitor used to visit default value initializers of binding patterns.
      */
     export function flattenDestructuringToExpression(
+        context: TransformationContext,
         node: VariableDeclaration | DestructuringAssignment,
         needsValue: boolean,
         createAssignmentCallback: (target: Expression, value: Expression, location?: TextRange) => Expression,
-        recordTempVariable: (node: Identifier) => void,
         visitor?: (node: Node) => VisitResult<Node>): Expression {
 
         let location: TextRange = node;
@@ -87,7 +87,16 @@ namespace ts {
             }
         }
 
-        flattenEffectiveBindingElement(node, value, isDestructuringAssignment(node), emitAssignment, emitTempVariableAssignment, visitor, location);
+        flattenEffectiveBindingElement(
+            context,
+            node,
+            value,
+            isDestructuringAssignment(node),
+            emitAssignment,
+            emitTempVariableAssignment,
+            emitExpression,
+            visitor,
+            location);
 
         if (value && needsValue) {
             expressions.push(value);
@@ -98,22 +107,21 @@ namespace ts {
         function emitAssignment(target: Expression, value: Expression, location: TextRange, original: Node) {
             const expression = createAssignmentCallback(target, value, location);
             expression.original = original;
-            // NOTE: this completely disables source maps, but aligns with the behavior of
-            //       `emitAssignment` in the old emitter.
-            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
-            aggregateTransformFlags(expression);
-            expressions.push(expression);
+            emitExpression(expression);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(recordTempVariable);
-            const expression = createAssignment(name, value, location);
+            const name = createTempVariable(context.hoistVariableDeclaration);
+            emitExpression(createAssignment(name, value, location));
+            return name;
+        }
+
+        function emitExpression(expression: Expression) {
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
             setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
             aggregateTransformFlags(expression);
             expressions.push(expression);
-            return name;
         }
     }
 
@@ -127,14 +135,62 @@ namespace ts {
      * declaring them inline.
      */
     export function flattenDestructuring(
+        context: TransformationContext,
         node: VariableDeclaration | ParameterDeclaration,
-        boundValue?: Expression,
-        recordTempVariable?: (node: Identifier) => void,
+        boundValue: Expression | undefined,
+        recordTempVariablesInLine: boolean,
         visitor?: (node: Node) => VisitResult<Node>) {
 
-        let pendingAssignments: Expression[];
+        let pendingExpressions: Expression[];
+        const pendingDeclarations: { pendingExpressions?: Expression[], name: Identifier, value: Expression, location?: TextRange, original?: Node }[] = [];
         const declarations: VariableDeclaration[] = [];
-        flattenEffectiveBindingElement(node, boundValue, /*skipInitializer*/ false, emitAssignment, emitTempVariableAssignment, visitor, /*location*/ node);
+
+        flattenEffectiveBindingElement(
+            context,
+            node,
+            boundValue,
+            /*skipInitializer*/ false,
+            emitAssignment,
+            emitTempVariableAssignment,
+            emitExpression,
+            visitor,
+            /*location*/ node);
+
+        if (pendingExpressions) {
+            const name = createTempVariable(/*recordTempVariable*/ undefined);
+            if (recordTempVariablesInLine) {
+                pendingDeclarations.push({ name, value: inlineExpressions(pendingExpressions) });
+            }
+            else {
+                context.hoistVariableDeclaration(name);
+                const pendingDeclaration = lastOrUndefined(pendingDeclarations);
+                pendingDeclaration.pendingExpressions = append(
+                    pendingDeclaration.pendingExpressions,
+                    createAssignment(name, pendingDeclaration.value)
+                );
+                addRange(pendingDeclaration.pendingExpressions, pendingExpressions);
+                pendingDeclaration.value = name;
+            }
+        }
+
+        for (const { pendingExpressions, name, value, location, original} of pendingDeclarations) {
+            const declaration = createVariableDeclaration(
+                name,
+                /*type*/ undefined,
+                // pendingExpressions
+                //     ? inlineExpressions(append(pendingExpressions, value))
+                //     : value,
+                inlineExpressions(append(pendingExpressions, value)),
+                location
+            );
+
+            declaration.original = original;
+
+            // NOTE: this completely disables source maps, but aligns with the behavior of
+            //       `emitAssignment` in the old emitter.
+            declarations.push(aggregateTransformFlags(setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps)));
+        }
+
         return declarations;
 
         function emitAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
@@ -143,38 +199,35 @@ namespace ts {
                 return;
             }
 
-            if (pendingAssignments) {
-                pendingAssignments.push(value);
-                value = inlineExpressions(pendingAssignments);
-                pendingAssignments = undefined;
-            }
-
-            const declaration = createVariableDeclaration(name, /*type*/ undefined, value, location);
-            declaration.original = original;
-
-            // NOTE: this completely disables source maps, but aligns with the behavior of
-            //       `emitAssignment` in the old emitter.
-            declarations.push(aggregateTransformFlags(setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps)));
+            pendingDeclarations.push({ pendingExpressions, name, value, location, original });
+            pendingExpressions = undefined;
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(recordTempVariable);
-            if (recordTempVariable) {
-                pendingAssignments = append(pendingAssignments, createAssignment(name, value, location));
-            }
-            else {
+            const name = createTempVariable(/*recordTempVariable*/ undefined);
+            if (recordTempVariablesInLine) {
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
+            else {
+                context.hoistVariableDeclaration(name);
+                emitExpression(createAssignment(name, value, location));
+            }
             return name;
+        }
+
+        function emitExpression(expression: Expression) {
+            pendingExpressions = append(pendingExpressions, expression);
         }
     }
 
     function flattenEffectiveBindingElement(
+        context: TransformationContext,
         bindingElement: EffectiveBindingElement,
         boundValue: Expression | undefined,
         skipInitializer: boolean,
         emitAssignment: (target: Expression, value: Expression, location: TextRange, original: Node) => void,
         emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
+        emitExpression: (value: Expression) => void,
         visitor: ((node: Node) => VisitResult<Node>) | undefined,
         location: TextRange) {
 
@@ -194,19 +247,20 @@ namespace ts {
         if (isEffectiveBindingPattern(bindingTarget)) {
             const elements = getElementsOfEffectiveBindingPattern(bindingTarget);
             const numElements = elements.length;
-            if (numElements !== 1) {
-                // For anything other than a single-element destructuring we need to generate a temporary
-                // to ensure value is evaluated exactly once. Additionally, if we have zero elements
-                // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
-                // so in that case, we'll intentionally create that temporary.
-                const reuseIdentifierExpressions = !isDeclarationBindingElement(bindingElement) || numElements !== 0;
-                boundValue = ensureIdentifier(boundValue, reuseIdentifierExpressions, emitTempVariableAssignment, location);
-            }
-
             if (isEffectiveObjectBindingPattern(bindingTarget)) {
+                if (numElements !== 1) {
+                    // For anything other than a single-element destructuring we need to generate a temporary
+                    // to ensure value is evaluated exactly once. Additionally, if we have zero elements
+                    // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
+                    // so in that case, we'll intentionally create that temporary.
+                    const reuseIdentifierExpressions = !isDeclarationBindingElement(bindingElement) || numElements !== 0;
+                    boundValue = ensureIdentifier(boundValue, reuseIdentifierExpressions, emitTempVariableAssignment, location);
+                }
+
                 for (const element of elements) {
                     // Rewrite element to a declaration with an initializer that fetches property
                     flattenEffectiveBindingElement(
+                        context,
                         element,
                         createDestructuringPropertyAccess(
                             boundValue,
@@ -215,35 +269,55 @@ namespace ts {
                         /*skipInitializer*/ false,
                         emitAssignment,
                         emitTempVariableAssignment,
+                        emitExpression,
                         visitor,
                         /*location*/ element);
                 }
             }
             else {
+                if (!isArrayLiteralExpression(boundValue)) {
+                    // Read the elements of the iterable into an array
+                    boundValue = emitTempVariableAssignment(
+                        createReadHelper(
+                            context,
+                            boundValue,
+                            isEffectiveBindingElementWithRest(elements[numElements - 1])
+                                ? undefined
+                                : numElements,
+                            location
+                        ),
+                        location
+                    );
+                }
+
                 for (let i = 0; i < numElements; i++) {
                     const element = elements[i];
-                    if (!isOmittedExpression(element)) {
-                        if (!isEffectiveBindingElementWithRest(element)) {
-                            // Rewrite element to a declaration that accesses array element at index i
-                            flattenEffectiveBindingElement(
-                                element,
-                                createElementAccess(boundValue, i),
-                                /*skipInitializer*/ false,
-                                emitAssignment,
-                                emitTempVariableAssignment,
-                                visitor,
-                                /*location*/ element);
-                        }
-                        else if (i === numElements - 1) {
-                            flattenEffectiveBindingElement(
-                                element,
-                                createArraySlice(boundValue, i),
-                                /*skipInitializer*/ false,
-                                emitAssignment,
-                                emitTempVariableAssignment,
-                                visitor,
-                                /*location*/ element);
-                        }
+                    if (isOmittedExpression(element)) {
+                        continue;
+                    }
+                    else if (!isEffectiveBindingElementWithRest(element)) {
+                        flattenEffectiveBindingElement(
+                            context,
+                            element,
+                            createElementAccess(boundValue, i),
+                            /*skipInitializer*/ false,
+                            emitAssignment,
+                            emitTempVariableAssignment,
+                            emitExpression,
+                            visitor,
+                            /*location*/ element);
+                    }
+                    else if (i === numElements - 1) {
+                        flattenEffectiveBindingElement(
+                            context,
+                            element,
+                            createArraySlice(boundValue, i),
+                            /*skipInitializer*/ false,
+                            emitAssignment,
+                            emitTempVariableAssignment,
+                            emitExpression,
+                            visitor,
+                            /*location*/ element);
                     }
                 }
             }
