@@ -19,14 +19,8 @@ namespace ts.projectSystem {
 
     export interface PostExecAction {
         readonly requestKind: TI.RequestKind;
-        readonly error: Error;
-        readonly stdout: string;
-        readonly stderr: string;
-        readonly callback: (err: Error, stdout: string, stderr: string) => void;
-    }
-
-    export function notImplemented(): any {
-        throw new Error("Not yet implemented");
+        readonly success: boolean;
+        readonly callback: TI.RequestCompletedAction;
     }
 
     export const nullLogger: server.Logger = {
@@ -54,7 +48,7 @@ namespace ts.projectSystem {
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
         constructor(readonly globalTypingsCacheLocation: string, throttleLimit: number, readonly installTypingHost: server.ServerHost, log?: TI.Log) {
-            super(globalTypingsCacheLocation, "npm", safeList.path, throttleLimit, log);
+            super(globalTypingsCacheLocation, safeList.path, throttleLimit, log);
             this.init();
         }
 
@@ -65,7 +59,7 @@ namespace ts.projectSystem {
             const actionsToRun = this.postExecActions;
             this.postExecActions = [];
             for (const action of actionsToRun) {
-                action.callback(action.error, action.stdout, action.stderr);
+                action.callback(action.success);
             }
         }
 
@@ -74,7 +68,7 @@ namespace ts.projectSystem {
             this.postExecActions.forEach((act, i) => assert.equal(act.requestKind, expected[i], "Unexpected post install action"));
         }
 
-        onProjectClosed(p: server.Project) {
+        onProjectClosed() {
         }
 
         attach(projectService: server.ProjectService) {
@@ -85,7 +79,7 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: (err: Error, stdout: string, stderr: string) => void): void {
+        executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
             switch (requestKind) {
                 case TI.NpmViewRequest:
                 case TI.NpmInstallRequest:
@@ -100,17 +94,15 @@ namespace ts.projectSystem {
             this.projectService.updateTypingsForProject(response);
         }
 
-        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
-            const request = server.createInstallTypingsRequest(project, typingOptions, this.globalTypingsCacheLocation);
+        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions, unresolvedImports: server.SortedReadonlyArray<string>) {
+            const request = server.createInstallTypingsRequest(project, typingOptions, unresolvedImports, this.globalTypingsCacheLocation);
             this.install(request);
         }
 
         addPostExecAction(requestKind: TI.RequestKind, stdout: string | string[], cb: TI.RequestCompletedAction) {
             const out = typeof stdout === "string" ? stdout : createNpmPackageJsonString(stdout);
             const action: PostExecAction = {
-                error: undefined,
-                stdout: out,
-                stderr: "",
+                success: !!out,
                 callback: cb,
                 requestKind
             };
@@ -126,7 +118,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies: dependencies });
     }
 
-    export function getExecutingFilePathFromLibFile(libFilePath: string): string {
+    export function getExecutingFilePathFromLibFile(): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
@@ -139,7 +131,7 @@ namespace ts.projectSystem {
     }
 
     export class TestServerEventManager {
-        private events: server.ProjectServiceEvent[] = [];
+        public events: server.ProjectServiceEvent[] = [];
 
         handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
             this.events.push(event);
@@ -158,27 +150,31 @@ namespace ts.projectSystem {
         currentDirectory?: string;
     }
 
-    export function createServerHost(fileOrFolderList: FileOrFolder[],
-        params?: TestServerHostCreationParameters,
-        libFilePath: string = libFile.path): TestServerHost {
-
+    export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
         if (!params) {
             params = {};
         }
         const host = new TestServerHost(
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
-            params.executingFilePath || getExecutingFilePathFromLibFile(libFilePath),
+            params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList);
         host.createFileOrFolder(safeList, /*createParentDirectory*/ true);
         return host;
     }
 
+    class TestSession extends server.Session {
+        getProjectService() {
+            return this.projectService;
+        }
+    };
+
     export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler) {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
+
+        return new TestSession(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
     }
 
     export interface CreateProjectServiceParameters {
@@ -319,9 +315,9 @@ namespace ts.projectSystem {
 
         count() {
             let n = 0;
-/* tslint:disable:no-unused-variable */
             for (const _ in this.map) {
-/* tslint:enable:no-unused-variable */
+                // TODO: GH#11734
+                _;
                 n++;
             }
             return n;
@@ -470,7 +466,7 @@ namespace ts.projectSystem {
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
-        setTimeout(callback: TimeOutCallback, time: number, ...args: any[]) {
+        setTimeout(callback: TimeOutCallback, _time: number, ...args: any[]) {
             return this.timeoutCallbacks.register(callback, args);
         };
 
@@ -487,7 +483,7 @@ namespace ts.projectSystem {
             this.timeoutCallbacks.invoke();
         }
 
-        setImmediate(callback: TimeOutCallback, time: number, ...args: any[]) {
+        setImmediate(callback: TimeOutCallback, _time: number, ...args: any[]) {
             return this.immediateCallbacks.register(callback, args);
         }
 
@@ -519,13 +515,14 @@ namespace ts.projectSystem {
             this.reloadFS(filesOrFolders);
         }
 
+        write() { }
+
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly write = (s: string) => notImplemented();
-        readonly exit = () => notImplemented();
-        readonly getEnvironmentVariable = (v: string) => notImplemented();
+        readonly exit = notImplemented;
+        readonly getEnvironmentVariable = notImplemented;
     }
 
     export function makeSessionRequest<T>(command: string, args: T) {
@@ -2290,6 +2287,14 @@ namespace ts.projectSystem {
             const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
+
+            for (const event of serverEventManager.events) {
+                if (event.eventName === "configFileDiag") {
+                    assert.equal(event.data.configFileName, configFile.path);
+                    assert.equal(event.data.triggerFile, file.path);
+                    return;
+                }
+            }
         });
 
         it("are generated when the config file doesn't have errors", () => {
@@ -2414,6 +2419,55 @@ namespace ts.projectSystem {
 
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
+        });
+    });
+
+    describe("reload", () => {
+        it("should work with temp file", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const tmp = {
+                path: "/a/b/app.tmp",
+                content: "const y = 42"
+            };
+            const host = createServerHost([f1, tmp]);
+            const session = createSession(host);
+
+            // send open request
+            session.executeCommand(<server.protocol.OpenRequest>{
+                type: "request",
+                command: "open",
+                seq: 1,
+                arguments: { file: f1.path }
+            });
+
+            // reload from tmp file
+            session.executeCommand(<server.protocol.ReloadRequest>{
+                type: "request",
+                command: "reload",
+                seq: 2,
+                arguments: { file: f1.path, tmpfile: tmp.path }
+            });
+
+            // verify content
+            const projectServiice = session.getProjectService();
+            const snap1 = projectServiice.getScriptInfo(f1.path).snap();
+            assert.equal(snap1.getText(0, snap1.getLength()), tmp.content, "content should be equal to the content of temp file");
+
+            // reload from original file file
+            session.executeCommand(<server.protocol.ReloadRequest>{
+                type: "request",
+                command: "reload",
+                seq: 2,
+                arguments: { file: f1.path }
+            });
+
+            // verify content
+            const snap2 = projectServiice.getScriptInfo(f1.path).snap();
+            assert.equal(snap2.getText(0, snap2.getLength()), f1.content, "content should be equal to the content of original file");
+
         });
     });
 }

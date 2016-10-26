@@ -21,16 +21,15 @@ namespace ts {
             args: <string[]>[],
             newLine: "\r\n",
             useCaseSensitiveFileNames: false,
-            write: (s: string) => {
-            },
-            readFile: (path: string, encoding?: string): string => {
+            write: noop,
+            readFile: (path: string): string => {
                 return path in fileMap ? fileMap[path].content : undefined;
             },
-            writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => {
-                throw new Error("NYI");
+            writeFile: (_path: string, _data: string, _writeByteOrderMark?: boolean) => {
+                return ts.notImplemented();
             },
-            resolvePath: (path: string): string => {
-                throw new Error("NYI");
+            resolvePath: (_path: string): string => {
+                return ts.notImplemented();
             },
             fileExists: (path: string): boolean => {
                 return path in fileMap;
@@ -38,31 +37,25 @@ namespace ts {
             directoryExists: (path: string): boolean => {
                 return existingDirectories[path] || false;
             },
-            createDirectory: (path: string) => {
-            },
+            createDirectory: noop,
             getExecutingFilePath: (): string => {
                 return "";
             },
             getCurrentDirectory: (): string => {
                 return "";
             },
-            getDirectories: (path: string) => [],
-            getEnvironmentVariable: (name: string) => "",
-            readDirectory: (path: string, extension?: string[], exclude?: string[], include?: string[]): string[] => {
-                throw new Error("NYI");
+            getDirectories: () => [],
+            getEnvironmentVariable: () => "",
+            readDirectory: (_path: string, _extension?: string[], _exclude?: string[], _include?: string[]): string[] => {
+                return ts.notImplemented();
             },
-            exit: (exitCode?: number) => {
-            },
-            watchFile: (path, callback) => {
-                return {
-                    close: () => { }
-                };
-            },
-            watchDirectory: (path, callback, recursive?) => {
-                return {
-                    close: () => { }
-                };
-            },
+            exit: noop,
+            watchFile: () => ({
+                close: noop
+            }),
+            watchDirectory: () => ({
+                close: noop
+            }),
             setTimeout,
             clearTimeout,
             setImmediate,
@@ -72,14 +65,14 @@ namespace ts {
 
     function createProject(rootFile: string, serverHost: server.ServerHost): { project: server.Project, rootScriptInfo: server.ScriptInfo } {
         const logger: server.Logger = {
-            close() { },
+            close: noop,
             hasLevel: () => false,
             loggingEnabled: () => false,
-            perftrc: (s: string) => { },
-            info: (s: string) => { },
-            startGroup: () => { },
-            endGroup: () => { },
-            msg: (s: string, type?: string) => { },
+            perftrc: noop,
+            info: noop,
+            startGroup: noop,
+            endGroup: noop,
+            msg: noop,
             getLogFileName: (): string => undefined
         };
 
@@ -116,10 +109,7 @@ namespace ts {
             const originalFileExists = serverHost.fileExists;
             {
                 // patch fileExists to make sure that disk is not touched
-                serverHost.fileExists = (fileName): boolean => {
-                    assert.isTrue(false, "fileExists should not be called");
-                    return false;
-                };
+                serverHost.fileExists = notImplemented;
 
                 const newContent = `import {x} from "f1"
                 var x: string = 1;`;

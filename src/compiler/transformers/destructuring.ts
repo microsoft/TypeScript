@@ -51,7 +51,7 @@ namespace ts {
             location = value;
         }
 
-        flattenDestructuring(context, node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
 
         if (needsValue) {
             expressions.push(value);
@@ -87,13 +87,12 @@ namespace ts {
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenParameterDestructuring(
-        context: TransformationContext,
         node: ParameterDeclaration,
         value: Expression,
         visitor?: (node: Node) => VisitResult<Node>) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
@@ -123,7 +122,6 @@ namespace ts {
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenVariableDestructuring(
-        context: TransformationContext,
         node: VariableDeclaration,
         value?: Expression,
         visitor?: (node: Node) => VisitResult<Node>,
@@ -131,7 +129,7 @@ namespace ts {
         const declarations: VariableDeclaration[] = [];
 
         let pendingAssignments: Expression[];
-        flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
@@ -180,7 +178,6 @@ namespace ts {
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenVariableDestructuringToExpression(
-        context: TransformationContext,
         node: VariableDeclaration,
         recordTempVariable: (name: Identifier) => void,
         nameSubstitution?: (name: Identifier) => Expression,
@@ -188,7 +185,7 @@ namespace ts {
 
         const pendingAssignments: Expression[] = [];
 
-        flattenDestructuring(context, node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         const expression = inlineExpressions(pendingAssignments);
         aggregateTransformFlags(expression);
@@ -219,7 +216,6 @@ namespace ts {
     }
 
     function flattenDestructuring(
-        context: TransformationContext,
         root: VariableDeclaration | ParameterDeclaration | BindingElement | BinaryExpression,
         value: Expression,
         location: TextRange,

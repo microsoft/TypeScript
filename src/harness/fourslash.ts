@@ -47,19 +47,6 @@ namespace FourSlash {
         ranges: Range[];
     }
 
-    interface MemberListData {
-        result: {
-            maybeInaccurate: boolean;
-            isMemberCompletion: boolean;
-            entries: {
-                name: string;
-                type: string;
-                kind: string;
-                kindModifiers: string;
-            }[];
-        };
-    }
-
     export interface Marker {
         fileName: string;
         position: number;
@@ -178,15 +165,9 @@ namespace FourSlash {
     // Return object may lack some functionalities for other purposes.
     function createScriptSnapShot(sourceText: string): ts.IScriptSnapshot {
         return {
-            getText: (start: number, end: number) => {
-                return sourceText.substr(start, end - start);
-            },
-            getLength: () => {
-                return sourceText.length;
-            },
-            getChangeRange: (oldSnapshot: ts.IScriptSnapshot) => {
-                return <ts.TextChangeRange>undefined;
-            }
+            getText: (start: number, end: number) => sourceText.substr(start, end - start),
+            getLength: () => sourceText.length,
+            getChangeRange: () => undefined
         };
     }
 
@@ -419,9 +400,8 @@ namespace FourSlash {
         public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, negative: boolean) {
             const startMarker = this.getMarkerByName(startMarkerName);
             const endMarker = this.getMarkerByName(endMarkerName);
-            const predicate = function(errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) {
-                return ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
-            };
+            const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) =>
+                ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
 
             const exists = this.anyErrorInRange(predicate, startMarker, endMarker);
 
@@ -471,14 +451,12 @@ namespace FourSlash {
             let predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) => boolean;
 
             if (after) {
-                predicate = function(errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) {
-                    return ((errorMinChar >= startPos) && (errorLimChar >= startPos)) ? true : false;
-                };
+                predicate = (errorMinChar: number, errorLimChar: number, startPos: number) =>
+                    ((errorMinChar >= startPos) && (errorLimChar >= startPos)) ? true : false;
             }
             else {
-                predicate = function(errorMinChar: number, errorLimChar: number, startPos: number, endPos: number) {
-                    return ((errorMinChar <= startPos) && (errorLimChar <= startPos)) ? true : false;
-                };
+                predicate = (errorMinChar: number, errorLimChar: number, startPos: number) =>
+                    ((errorMinChar <= startPos) && (errorLimChar <= startPos)) ? true : false;
             }
 
             const exists = this.anyErrorInRange(predicate, marker);
@@ -1179,7 +1157,7 @@ namespace FourSlash {
 
         private alignmentForExtraInfo = 50;
 
-        private spanInfoToString(pos: number, spanInfo: ts.TextSpan, prefixString: string) {
+        private spanInfoToString(spanInfo: ts.TextSpan, prefixString: string) {
             let resultString = "SpanInfo: " + JSON.stringify(spanInfo);
             if (spanInfo) {
                 const spanString = this.activeFile.content.substr(spanInfo.start, spanInfo.length);
@@ -1230,7 +1208,7 @@ namespace FourSlash {
                     startColumn = 0;
                     length = 0;
                 }
-                const spanInfo = this.spanInfoToString(pos, getSpanAtPos(pos), prefixString);
+                const spanInfo = this.spanInfoToString(getSpanAtPos(pos), prefixString);
                 if (previousSpanInfo && previousSpanInfo !== spanInfo) {
                     addSpanInfoString();
                     previousSpanInfo = spanInfo;
@@ -1300,10 +1278,10 @@ namespace FourSlash {
                             }
                         }
 
-                        emitOutput.outputFiles.forEach((outputFile, idx, array) => {
+                        for (const outputFile of emitOutput.outputFiles) {
                             const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
                             resultString = resultString + fileName + outputFile.text;
-                        });
+                        }
                         resultString += Harness.IO.newLine();
                     });
 
@@ -1328,7 +1306,7 @@ namespace FourSlash {
         }
 
         public printBreakpointLocation(pos: number) {
-            Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(pos, this.getBreakpointStatementLocation(pos), "  "));
+            Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(this.getBreakpointStatementLocation(pos), "  "));
         }
 
         public printBreakpointAtCurrentLocation() {
@@ -1830,7 +1808,7 @@ namespace FourSlash {
             return result;
         }
 
-        private rangeText({fileName, start, end}: Range, more = false): string {
+        private rangeText({fileName, start, end}: Range): string {
             return this.getFileContent(fileName).slice(start, end);
         }
 
@@ -1925,7 +1903,7 @@ namespace FourSlash {
         }
 
         public printNameOrDottedNameSpans(pos: number) {
-            Harness.IO.log(this.spanInfoToString(pos, this.getNameOrDottedNameSpan(pos), "**"));
+            Harness.IO.log(this.spanInfoToString(this.getNameOrDottedNameSpan(pos), "**"));
         }
 
         private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[]) {

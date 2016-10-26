@@ -173,7 +173,7 @@ namespace Playback {
             path => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path }),
             memoize(path => {
                 // If we read from the file, it must exist
-                if (findFileByPath(wrapper, replayLog.filesRead, path, /*throwFileNotFoundError*/ false)) {
+                if (findFileByPath(replayLog.filesRead, path, /*throwFileNotFoundError*/ false)) {
                     return true;
                 }
                 else {
@@ -217,7 +217,7 @@ namespace Playback {
                 recordLog.filesRead.push(logEntry);
                 return result;
             },
-            memoize(path => findFileByPath(wrapper, replayLog.filesRead, path, /*throwFileNotFoundError*/ true).contents));
+            memoize(path => findFileByPath(replayLog.filesRead, path, /*throwFileNotFoundError*/ true).contents));
 
         wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
             (path, extensions, exclude, include) => {
@@ -226,7 +226,7 @@ namespace Playback {
                 recordLog.directoriesRead.push(logEntry);
                 return result;
             },
-            (path, extensions, exclude) => {
+            path => {
                 // Because extensions is an array of all allowed extension, we will want to merge each of the replayLog.directoriesRead into one
                 // if each of the directoriesRead has matched path with the given path (directory with same path but different extension will considered
                 // different entry).
@@ -244,7 +244,7 @@ namespace Playback {
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
             (path: string, contents: string) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
-            (path: string, contents: string) => noOpReplay("writeFile"));
+            () => noOpReplay("writeFile"));
 
         wrapper.exit = (exitCode) => {
             if (recordLog !== undefined) {
@@ -295,7 +295,7 @@ namespace Playback {
         return results[0].result;
     }
 
-    function findFileByPath(wrapper: { resolvePath(s: string): string }, logArray: IOLogFile[],
+    function findFileByPath(logArray: IOLogFile[],
         expectedPath: string, throwFileNotFoundError: boolean): FileInformation {
         const normalizedName = ts.normalizePath(expectedPath).toLowerCase();
         // Try to find the result through normal fileName
@@ -314,7 +314,7 @@ namespace Playback {
         }
     }
 
-    function noOpReplay(name: string) {
+    function noOpReplay(_name: string) {
         // console.log("Swallowed write operation during replay: " + name);
     }
 
@@ -322,13 +322,17 @@ namespace Playback {
         const wrapper: PlaybackIO = <any>{};
         initWrapper(wrapper, underlying);
 
-        wrapper.directoryName = (path): string => { throw new Error("NotSupported"); };
-        wrapper.createDirectory = (path): void => { throw new Error("NotSupported"); };
-        wrapper.directoryExists = (path): boolean => { throw new Error("NotSupported"); };
-        wrapper.deleteFile = (path): void => { throw new Error("NotSupported"); };
-        wrapper.listFiles = (path, filter, options): string[] => { throw new Error("NotSupported"); };
+        wrapper.directoryName = notSupported;
+        wrapper.createDirectory = notSupported;
+        wrapper.directoryExists = notSupported;
+        wrapper.deleteFile = notSupported;
+        wrapper.listFiles = notSupported;
 
         return wrapper;
+
+        function notSupported(): never {
+            throw new Error("NotSupported");
+        }
     }
 
     export function wrapSystem(underlying: ts.System): PlaybackSystem {

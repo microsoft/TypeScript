@@ -453,7 +453,7 @@ let anyToSpecified: (this: { y: number }, x: number) => number = function(x: num
 >this : { y: number; }
 >y : number
 >x : number
->function(x: number): number { return x + 12; } : (x: number) => number
+>function(x: number): number { return x + 12; } : (this: { y: number; }, x: number) => number
 >x : number
 >x + 12 : number
 >x : number

@@ -15,7 +15,7 @@ namespace ts.server.typingsInstaller {
 
     const nullLog: Log = {
         isEnabled: () => false,
-        writeLine: () => {}
+        writeLine: noop
     };
 
     function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost): string {
@@ -26,6 +26,7 @@ namespace ts.server.typingsInstaller {
     export enum PackageNameValidationResult {
         Ok,
         ScopedPackagesNotSupported,
+        EmptyName,
         NameTooLong,
         NameStartsWithDot,
         NameStartsWithUnderscore,
@@ -35,10 +36,12 @@ namespace ts.server.typingsInstaller {
 
     export const MaxPackageNameLength = 214;
     /**
-     * Validates package name using rules defined at https://docs.npmjs.com/files/package.json 
+     * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
      */
     export function validatePackageName(packageName: string): PackageNameValidationResult {
-        Debug.assert(!!packageName, "Package name is not specified");
+        if (!packageName) {
+            return PackageNameValidationResult.EmptyName;
+        }
         if (packageName.length > MaxPackageNameLength) {
             return PackageNameValidationResult.NameTooLong;
         }
@@ -65,11 +68,11 @@ namespace ts.server.typingsInstaller {
 
     export type RequestKind = typeof NpmViewRequest | typeof NpmInstallRequest;
 
-    export type RequestCompletedAction = (err: Error, stdout: string, stderr: string) => void;
+    export type RequestCompletedAction = (success: boolean) => void;
     type PendingRequest = {
         requestKind: RequestKind;
         requestId: number;
-        command: string;
+        args: string[];
         cwd: string;
         onRequestCompleted: RequestCompletedAction
     };
@@ -88,7 +91,6 @@ namespace ts.server.typingsInstaller {
 
         constructor(
             readonly globalCachePath: string,
-            readonly npmPath: string,
             readonly safeListPath: Path,
             readonly throttleLimit: number,
             protected readonly log = nullLog) {
@@ -132,7 +134,7 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Got install request ${JSON.stringify(req)}`);
             }
 
-            // load existing typing information from the cache 
+            // load existing typing information from the cache
             if (req.cachePath) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Request specifies cache path '${req.cachePath}', loading cached information...`);
@@ -147,7 +149,7 @@ namespace ts.server.typingsInstaller {
                 this.safeListPath,
                 this.packageNameToTypingLocation,
                 req.typingOptions,
-                req.compilerOptions);
+                req.unresolvedImports);
 
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);
@@ -240,6 +242,9 @@ namespace ts.server.typingsInstaller {
                     this.missingTypingsSet[typing] = true;
                     if (this.log.isEnabled()) {
                         switch (validationResult) {
+                            case PackageNameValidationResult.EmptyName:
+                                this.log.writeLine(`Package name '${typing}' cannot be empty`);
+                                break;
                             case PackageNameValidationResult.NameTooLong:
                                 this.log.writeLine(`Package name '${typing}' should be less than ${MaxPackageNameLength} characters`);
                                 break;
@@ -331,13 +336,12 @@ namespace ts.server.typingsInstaller {
             let execInstallCmdCount = 0;
             const filteredTypings: string[] = [];
             for (const typing of typingsToInstall) {
-                execNpmViewTyping(this, typing);
+                filterExistingTypings(this, typing);
             }
 
-            function execNpmViewTyping(self: TypingsInstaller, typing: string) {
-                const command = `${self.npmPath} view @types/${typing} --silent name`;
-                self.execAsync(NpmViewRequest, requestId, command, cachePath, (err, stdout, stderr) => {
-                    if (stdout) {
+            function filterExistingTypings(self: TypingsInstaller, typing: string) {
+                self.execAsync(NpmViewRequest, requestId, [typing], cachePath, ok => {
+                    if (ok) {
                         filteredTypings.push(typing);
                     }
                     execInstallCmdCount++;
@@ -353,9 +357,8 @@ namespace ts.server.typingsInstaller {
                     return;
                 }
                 const scopedTypings = filteredTypings.map(t => "@types/" + t);
-                const command = `${self.npmPath} install ${scopedTypings.join(" ")} --save-dev`;
-                self.execAsync(NpmInstallRequest, requestId, command, cachePath, (err, stdout, stderr) => {
-                    postInstallAction(stdout ? scopedTypings : []);
+                self.execAsync(NpmInstallRequest, requestId, scopedTypings, cachePath, ok => {
+                    postInstallAction(ok ? scopedTypings : []);
                 });
             }
         }
@@ -385,8 +388,10 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
                     }
-                    this.sendResponse({ projectName: projectName, kind: "invalidate" });
-                    isInvoked = true;
+                    if (!isInvoked) {
+                        this.sendResponse({ projectName: projectName, kind: "invalidate" });
+                        isInvoked = true;
+                    }
                 });
                 watchers.push(w);
             }
@@ -399,12 +404,13 @@ namespace ts.server.typingsInstaller {
                 typingOptions: request.typingOptions,
                 compilerOptions: request.compilerOptions,
                 typings,
+                unresolvedImports: request.unresolvedImports,
                 kind: "set"
             };
         }
 
-        private execAsync(requestKind: RequestKind, requestId: number, command: string, cwd: string, onRequestCompleted: RequestCompletedAction): void {
-            this.pendingRunRequests.unshift({ requestKind, requestId, command, cwd, onRequestCompleted });
+        private execAsync(requestKind: RequestKind, requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
+            this.pendingRunRequests.unshift({ requestKind, requestId, args, cwd, onRequestCompleted });
             this.executeWithThrottling();
         }
 
@@ -412,15 +418,15 @@ namespace ts.server.typingsInstaller {
             while (this.inFlightRequestCount < this.throttleLimit && this.pendingRunRequests.length) {
                 this.inFlightRequestCount++;
                 const request = this.pendingRunRequests.pop();
-                this.runCommand(request.requestKind, request.requestId, request.command, request.cwd, (err, stdout, stderr) => {
+                this.executeRequest(request.requestKind, request.requestId, request.args, request.cwd, ok => {
                     this.inFlightRequestCount--;
-                    request.onRequestCompleted(err, stdout, stderr);
+                    request.onRequestCompleted(ok);
                     this.executeWithThrottling();
                 });
             }
         }
 
-        protected abstract runCommand(requestKind: RequestKind, requestId: number, command: string, cwd: string, onRequestCompleted: RequestCompletedAction): void;
+        protected abstract executeRequest(requestKind: RequestKind, requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings): void;
     }
 }

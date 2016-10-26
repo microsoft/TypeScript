@@ -70,13 +70,15 @@ var compilerSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es6.ts",
+    "transformers/module/es2015.ts",
     "transformers/module/system.ts",
     "transformers/module/module.ts",
     "transformers/jsx.ts",
-    "transformers/es7.ts",
+    "transformers/es2017.ts",
+    "transformers/es2016.ts",
+    "transformers/es2015.ts",
     "transformers/generators.ts",
-    "transformers/es6.ts",
+    "transformers/es5.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -104,13 +106,15 @@ var servicesSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es6.ts",
+    "transformers/module/es2015.ts",
     "transformers/module/system.ts",
     "transformers/module/module.ts",
     "transformers/jsx.ts",
-    "transformers/es7.ts",
+    "transformers/es2017.ts",
+    "transformers/es2016.ts",
+    "transformers/es2015.ts",
     "transformers/generators.ts",
-    "transformers/es6.ts",
+    "transformers/es5.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -353,6 +357,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
         if (!fs.existsSync(sourceFiles[i])) {
             fail(sourceFiles[i] + " does not exist!");
         }
+        fs.appendFileSync(temp, "\n\n");
         fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
     }
     // Move the file to the final destination
@@ -442,6 +447,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (opts.stripInternal) {
             options += " --stripInternal";
         }
+
+        options += " --target es5 --noUnusedLocals --noUnusedParameters";
 
         var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");
