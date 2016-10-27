@@ -1938,10 +1938,6 @@ namespace ts {
         return path.substring(0, path.length - extension.length);
     }
 
-    export function isJsxOrTsxExtension(ext: string): boolean {
-        return ext === ".jsx" || ext === ".tsx";
-    }
-
     export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
         return <T>(removeFileExtension(path) + newExtension);
     }
@@ -2133,5 +2129,34 @@ namespace ts {
         // This is a fast way of testing the following conditions:
         //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
         return !(pos >= 0);
+    }
+
+    /** True if an extension is one of the supported TypeScript extensions. */
+    export function extensionIsTypeScript(ext: Extension): boolean {
+        return ext <= Extension.LastTypeScriptExtension;
+    }
+
+    /**
+     * Gets the extension from a path.
+     * Path must have a valid extension.
+     */
+    export function extensionFromPath(path: string): Extension {
+        if (fileExtensionIs(path, ".d.ts")) {
+            return Extension.Dts;
+        }
+        if (fileExtensionIs(path, ".ts")) {
+            return Extension.Ts;
+        }
+        if (fileExtensionIs(path, ".tsx")) {
+            return Extension.Tsx;
+        }
+        if (fileExtensionIs(path, ".js")) {
+            return Extension.Js;
+        }
+        if (fileExtensionIs(path, ".jsx")) {
+            return Extension.Jsx;
+        }
+        Debug.fail(`File ${path} has unknown extension.`);
+        return Extension.Js;
     }
 }

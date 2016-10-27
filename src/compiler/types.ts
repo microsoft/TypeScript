@@ -3347,10 +3347,21 @@ namespace ts {
         getDirectories?(path: string): string[];
     }
 
+    /**
+     * Represents the result of module resolution.
+     * Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
+     * The Program will then filter results based on these flags.
+     *
+     * At least one of `resolvedTsFileName` or `resolvedJsFileName` must be defined,
+     * else resolution should just return `undefined` instead of a ResolvedModule.
+     */
     export interface ResolvedModule {
+        /** Path of the file the module was resolved to. */
         resolvedFileName: string;
-        /*
-         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
+        /** Extension of resolvedFileName. This must match what's at the end of resolvedFileName. */
+        extension: Extension;
+        /**
+         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
          * - be a .d.ts file
          * - use top level imports\exports
          * - don't use tripleslash references
@@ -3358,8 +3369,17 @@ namespace ts {
         isExternalLibraryImport?: boolean;
     }
 
+    export enum Extension {
+        Ts,
+        Tsx,
+        Dts,
+        Js,
+        Jsx,
+        LastTypeScriptExtension = Dts
+    }
+
     export interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModule;
+        resolvedModule: ResolvedModule | undefined;
         failedLookupLocations: string[];
     }
 

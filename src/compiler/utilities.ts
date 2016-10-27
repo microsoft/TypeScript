@@ -108,8 +108,14 @@ namespace ts {
     }
 
     /* @internal */
+    /**
+     * Considers two ResolvedModules equal if they have the same `resolvedFileName`.
+     * Thus `{ ts: foo, js: bar }` is equal to `{ ts: foo, js: baz }` because `ts` is preferred.
+     */
     export function moduleResolutionIsEqualTo(oldResolution: ResolvedModule, newResolution: ResolvedModule): boolean {
-        return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport;
+        return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
+            oldResolution.extension === newResolution.extension &&
+            oldResolution.resolvedFileName === newResolution.resolvedFileName;
     }
 
     /* @internal */
