@@ -727,9 +727,11 @@ namespace ts {
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
             // For JavaScript files, we report semantic errors for using TypeScript-only
             // constructs from within a JavaScript file as syntactic errors.
-            if (isSourceFileJavaScript(sourceFile) && !sourceFile.parseJavaScriptDiagnostics) {
-                sourceFile.parseJavaScriptDiagnostics = getJavaScriptSemanticDiagnosticsForFile(sourceFile);
-                sourceFile.parseDiagnostics = sourceFile.parseDiagnostics.concat(sourceFile.parseJavaScriptDiagnostics);
+            if (isSourceFileJavaScript(sourceFile)) {
+                if (!sourceFile.additionalSyntacticDiagnostics) {
+                    sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
+                }
+                return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
             return sourceFile.parseDiagnostics;
         }
@@ -774,7 +776,7 @@ namespace ts {
             });
         }
 
-        function getJavaScriptSemanticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+        function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
             return runWithCancellationToken(() => {
                 const diagnostics: Diagnostic[] = [];
                 walk(sourceFile);
