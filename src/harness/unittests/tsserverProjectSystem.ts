@@ -249,10 +249,10 @@ namespace ts.projectSystem {
         return entry;
     }
 
-    export function checkMapKeys(caption: string, map: Map<string, any>, expectedKeys: string[]) {
-        assert.equal(mapSize(map), expectedKeys.length, `${caption}: incorrect size of map`);
+    export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
+        assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${keysOfMap(map)}`);
+            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
         }
     }
 
@@ -298,28 +298,38 @@ namespace ts.projectSystem {
     }
 
     export class Callbacks {
-        private map = createMap<number, TimeOutCallback>();
+        private map: { [n: number]: TimeOutCallback } = {};
         private nextId = 1;
 
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
             this.nextId++;
-            this.map.set(timeoutId, cb.bind(undefined, ...args));
+            this.map[timeoutId] = cb.bind(undefined, ...args);
             return timeoutId;
         }
         unregister(id: any) {
             if (typeof id === "number") {
-                this.map.delete(id);
+                delete this.map[id];
             }
         }
 
         count() {
-            return mapSize(this.map);
+            let n = 0;
+            for (const _ in this.map) {
+                // TODO: GH#11734
+                _;
+                n++;
+            }
+            return n;
         }
 
         invoke() {
-            this.map.forEach(callback => { callback(); });
-            this.map.clear();
+            for (const id in this.map) {
+                if (hasProperty(this.map, id)) {
+                    this.map[id]();
+                }
+            }
+            this.map = {};
         }
     }
 
@@ -335,9 +345,8 @@ namespace ts.projectSystem {
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories = createMap<string, { cb: DirectoryWatcherCallback, recursive: boolean }[]>();
-        readonly watchedFiles = createMap<string, FileWatcherCallback[]>();
-
+        readonly watchedDirectories = createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
+        readonly watchedFiles = createMap<FileWatcherCallback[]>();
 
         private filesOrFolders: FileOrFolder[];
 
@@ -432,7 +441,7 @@ namespace ts.projectSystem {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories.get(path);
+            const callbacks = this.watchedDirectories[path];
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -442,7 +451,7 @@ namespace ts.projectSystem {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles.get(path);
+            const callbacks = this.watchedFiles[path];
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);

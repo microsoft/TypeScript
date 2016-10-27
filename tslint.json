@@ -47,7 +47,6 @@
         "prefer-const": true,
         "no-increment-decrement": true,
         "object-literal-surrounding-space": true,
-        "no-type-assertion-whitespace": true,
-        "no-in-operator": true
+        "no-type-assertion-whitespace": true
   }
 }

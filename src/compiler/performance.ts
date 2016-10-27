@@ -16,9 +16,9 @@ namespace ts.performance {
 
     let enabled = false;
     let profilerStart = 0;
-    let counts: Map<string, number>;
-    let marks: Map<string, number>;
-    let measures: Map<string, number>;
+    let counts: Map<number>;
+    let marks: Map<number>;
+    let measures: Map<number>;
 
     /**
      * Marks a performance event.
@@ -27,8 +27,8 @@ namespace ts.performance {
      */
     export function mark(markName: string) {
         if (enabled) {
-            marks.set(markName, timestamp());
-            counts.set(markName, (counts.get(markName) || 0) + 1);
+            marks[markName] = timestamp();
+            counts[markName] = (counts[markName] || 0) + 1;
             profilerEvent(markName);
         }
     }
@@ -44,9 +44,9 @@ namespace ts.performance {
      */
     export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
         if (enabled) {
-            const end = endMarkName && marks.get(endMarkName) || timestamp();
-            const start = startMarkName && marks.get(startMarkName) || profilerStart;
-            measures.set(measureName, (measures.get(measureName) || 0) + (end - start));
+            const end = endMarkName && marks[endMarkName] || timestamp();
+            const start = startMarkName && marks[startMarkName] || profilerStart;
+            measures[measureName] = (measures[measureName] || 0) + (end - start);
         }
     }
 
@@ -56,7 +56,7 @@ namespace ts.performance {
      * @param markName The name of the mark.
      */
     export function getCount(markName: string) {
-        return counts && counts.get(markName) || 0;
+        return counts && counts[markName] || 0;
     }
 
     /**
@@ -65,7 +65,7 @@ namespace ts.performance {
      * @param measureName The name of the measure whose durations should be accumulated.
      */
     export function getDuration(measureName: string) {
-        return measures && measures.get(measureName) || 0;
+        return measures && measures[measureName] || 0;
     }
 
     /**
@@ -74,14 +74,16 @@ namespace ts.performance {
      * @param cb The action to perform for each measure
      */
     export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
-        measures.forEach((duration, measureName) => cb(measureName, duration));
+        for (const key in measures) {
+            cb(key, measures[key]);
+        }
     }
 
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
-        counts = createMap<string, number>();
-        marks = createMap<string, number>();
-        measures = createMap<string, number>();
+        counts = createMap<number>();
+        marks = createMap<number>();
+        measures = createMap<number>();
         enabled = true;
         profilerStart = timestamp();
     }

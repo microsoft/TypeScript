@@ -84,27 +84,27 @@ namespace ts {
     }
 
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
-        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText));
+        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules[moduleNameText]);
     }
 
     export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull {
-        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules.get(moduleNameText) : undefined;
+        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
     }
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = createMap<string, ResolvedModuleFull>();
+            sourceFile.resolvedModules = createMap<ResolvedModuleFull>();
         }
 
-        sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
+        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
     }
 
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames = createMap<string, ResolvedTypeReferenceDirective>();
+            sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective>();
         }
 
-        sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
+        sourceFile.resolvedTypeReferenceDirectiveNames[typeReferenceDirectiveName] = resolvedTypeReferenceDirective;
     }
 
     /* @internal */
@@ -120,13 +120,13 @@ namespace ts {
     }
 
     /* @internal */
-    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<string, T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         if (names.length !== newResolutions.length) {
             return false;
         }
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
-            const oldResolution = oldResolutions && oldResolutions.get(names[i]);
+            const oldResolution = oldResolutions && oldResolutions[names[i]];
             const changed =
                 oldResolution
                     ? !newResolution || !comparer(oldResolution, newResolution)
@@ -2201,7 +2201,7 @@ namespace ts {
 
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
-        const fileDiagnostics = createMap<string, Diagnostic[]>();
+        const fileDiagnostics = createMap<Diagnostic[]>();
 
         let diagnosticsModified = false;
         let modificationCount = 0;
@@ -2219,12 +2219,11 @@ namespace ts {
         }
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
-            const diagnostics = fileDiagnostics.get(newFile.fileName);
-            if (!diagnostics) {
+            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
                 return;
             }
 
-            for (const diagnostic of diagnostics) {
+            for (const diagnostic of fileDiagnostics[newFile.fileName]) {
                 diagnostic.file = newFile;
             }
         }
@@ -2232,10 +2231,10 @@ namespace ts {
         function add(diagnostic: Diagnostic): void {
             let diagnostics: Diagnostic[];
             if (diagnostic.file) {
-                diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
+                diagnostics = fileDiagnostics[diagnostic.file.fileName];
                 if (!diagnostics) {
                     diagnostics = [];
-                    fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
+                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
                 }
             }
             else {
@@ -2255,7 +2254,7 @@ namespace ts {
         function getDiagnostics(fileName?: string): Diagnostic[] {
             sortAndDeduplicate();
             if (fileName) {
-                return fileDiagnostics.get(fileName) || [];
+                return fileDiagnostics[fileName] || [];
             }
 
             const allDiagnostics: Diagnostic[] = [];
@@ -2265,9 +2264,9 @@ namespace ts {
 
             forEach(nonFileDiagnostics, pushDiagnostic);
 
-            fileDiagnostics.forEach(diagnostics => {
-                forEach(diagnostics, pushDiagnostic);
-            });
+            for (const key in fileDiagnostics) {
+                forEach(fileDiagnostics[key], pushDiagnostic);
+            }
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
@@ -2280,7 +2279,9 @@ namespace ts {
             diagnosticsModified = false;
             nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
-            updateMapValues(fileDiagnostics, sortAndDeduplicateDiagnostics);
+            for (const key in fileDiagnostics) {
+                fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
+            }
         }
     }
 
@@ -2290,7 +2291,7 @@ namespace ts {
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap = mapOfMapLike({
+    const escapedCharsMap = createMap({
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -2317,7 +2318,7 @@ namespace ts {
         return s;
 
         function getReplacement(c: string) {
-            return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
     }
 
@@ -3349,19 +3350,18 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache = createMap<SyntaxKind, string>();
+    const syntaxKindCache = createMap<string>();
 
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;
         if (syntaxKindEnum) {
-            const cached = syntaxKindCache.get(kind);
-            if (cached !== undefined) {
-                return cached;
+            if (syntaxKindCache[kind]) {
+                return syntaxKindCache[kind];
             }
 
             for (const name in syntaxKindEnum) {
                 if (syntaxKindEnum[name] === kind) {
-                    return setAndReturn(syntaxKindCache, kind, `${kind}(${name})`);
+                    return syntaxKindCache[kind] = kind.toString() + " (" + name + ")";
                 }
             }
         }
@@ -3498,8 +3498,8 @@ namespace ts {
 
     export interface ExternalModuleInfo {
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
-        exportSpecifiers: Map<string, ExportSpecifier[]>; // export specifiers by name
-        exportedBindings: Map<number, Identifier[]>; // exported names of local declarations
+        exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
+        exportedBindings: Map<Identifier[]>; // exported names of local declarations
         exportedNames: Identifier[]; // all exported names local to module
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
         hasExportStarsToExportValues: boolean; // whether this module contains export*
@@ -3507,9 +3507,9 @@ namespace ts {
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-        const exportSpecifiers = createMap<string, ExportSpecifier[]>();
-        const exportedBindings = createMap<number, Identifier[]>();
-        const uniqueExports = createMap<string, Identifier>();
+        const exportSpecifiers = createMap<ExportSpecifier[]>();
+        const exportedBindings = createMap<Identifier[]>();
+        const uniqueExports = createMap<Identifier>();
         let hasExportDefault = false;
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
@@ -3546,7 +3546,7 @@ namespace ts {
                     else {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            if (!uniqueExports.has(specifier.name.text)) {
+                            if (!uniqueExports[specifier.name.text]) {
                                 const name = specifier.propertyName || specifier.name;
                                 multiMapAdd(exportSpecifiers, name.text, specifier);
 
@@ -3557,7 +3557,7 @@ namespace ts {
                                     multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                                 }
 
-                                uniqueExports.set(specifier.name.text, specifier.name);
+                                uniqueExports[specifier.name.text] = specifier.name;
                             }
                         }
                     }
@@ -3590,9 +3590,9 @@ namespace ts {
                         else {
                             // export function x() { }
                             const name = (<FunctionDeclaration>node).name;
-                            if (!uniqueExports.has(name.text)) {
+                            if (!uniqueExports[name.text]) {
                                 multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(name.text, name);
+                                uniqueExports[name.text] = name;
                             }
                         }
                     }
@@ -3610,9 +3610,9 @@ namespace ts {
                         else {
                             // export class x { }
                             const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports.has(name.text)) {
+                            if (!uniqueExports[name.text]) {
                                 multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(name.text, name);
+                                uniqueExports[name.text] = name;
                             }
                         }
                     }
@@ -3621,14 +3621,14 @@ namespace ts {
         }
 
         let exportedNames: Identifier[];
-        uniqueExports.forEach(exported => {
-            exportedNames = ts.append(exportedNames, exported);
-        });
+        for (const key in uniqueExports) {
+            exportedNames = ts.append(exportedNames, uniqueExports[key]);
+        }
 
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames };
     }
 
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, Identifier>) {
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<Identifier>) {
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {
@@ -3637,8 +3637,8 @@ namespace ts {
             }
         }
         else if (!isGeneratedIdentifier(decl.name)) {
-            if (!uniqueExports.has(decl.name.text)) {
-                uniqueExports.set(decl.name.text, decl.name);
+            if (!uniqueExports[decl.name.text]) {
+                uniqueExports[decl.name.text] = decl.name;
             }
         }
     }

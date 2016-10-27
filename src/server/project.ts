@@ -104,7 +104,7 @@ namespace ts.server {
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
-        private lastReportedFileNames: Map<string, string>;
+        private lastReportedFileNames: Map<string>;
         /**
          * Last version that was reported.
          */
@@ -385,9 +385,9 @@ namespace ts.server {
             }
             let unresolvedImports: string[];
             if (file.resolvedModules) {
-                file.resolvedModules.forEach((resolvedModule, name) => {
+                for (const name in file.resolvedModules) {
                     // pick unresolved non-relative names
-                    if (!resolvedModule && !isExternalModuleNameRelative(name)) {
+                    if (!file.resolvedModules[name] && !isExternalModuleNameRelative(name)) {
                         // for non-scoped names extract part up-to the first slash
                         // for scoped names - extract up to the second slash
                         let trimmed = name.trim();
@@ -401,7 +401,7 @@ namespace ts.server {
                         (unresolvedImports || (unresolvedImports = [])).push(trimmed);
                         result.push(trimmed);
                     }
-                });
+                }
             }
             this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
         }
@@ -427,7 +427,7 @@ namespace ts.server {
             }
 
             // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
+            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files 
             // (can reuse cached imports for files that were not changed)
             // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
             // (can reuse cached imports for files that were not changed)
@@ -568,16 +568,16 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                forEachKeyInMap(currentFiles, id => {
-                    if (!lastReportedFileNames.has(id)) {
+                for (const id in currentFiles) {
+                    if (!hasProperty(lastReportedFileNames, id)) {
                         added.push(id);
                     }
-                });
-                forEachKeyInMap(lastReportedFileNames, id => {
-                    if (!currentFiles.has(id)) {
+                }
+                for (const id in lastReportedFileNames) {
+                    if (!hasProperty(currentFiles, id)) {
                         removed.push(id);
                     }
-                });
+                }
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, changes: { added, removed }, projectErrors: this.projectErrors };
@@ -603,7 +603,7 @@ namespace ts.server {
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
             // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            const referencedFiles = createSet();
+            const referencedFiles = createMap<boolean>();
             if (sourceFile.imports && sourceFile.imports.length > 0) {
                 const checker: TypeChecker = this.program.getTypeChecker();
                 for (const importName of sourceFile.imports) {
@@ -611,7 +611,7 @@ namespace ts.server {
                     if (symbol && symbol.declarations && symbol.declarations[0]) {
                         const declarationSourceFile = symbol.declarations[0].getSourceFile();
                         if (declarationSourceFile) {
-                            referencedFiles.add(declarationSourceFile.path);
+                            referencedFiles[declarationSourceFile.path] = true;
                         }
                     }
                 }
@@ -623,24 +623,26 @@ namespace ts.server {
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
                     const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles.add(referencedPath);
+                    referencedFiles[referencedPath] = true;
                 }
             }
 
             // Handle type reference directives
             if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                sourceFile.resolvedTypeReferenceDirectiveNames.forEach(resolvedTypeReferenceDirective => {
+                for (const typeName in sourceFile.resolvedTypeReferenceDirectiveNames) {
+                    const resolvedTypeReferenceDirective = sourceFile.resolvedTypeReferenceDirectiveNames[typeName];
                     if (!resolvedTypeReferenceDirective) {
-                        return;
+                        continue;
                     }
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles.add(typeFilePath);
-                });
+                    referencedFiles[typeFilePath] = true;
+                }
             }
 
-            return filterSetToArray(referencedFiles, file => this.projectService.host.fileExists(file)) as Path[];
+            const allFileNames = map(Object.keys(referencedFiles), key => <Path>key);
+            return filter(allFileNames, file => this.projectService.host.fileExists(file));
         }
 
         // remove a root file from project
@@ -711,7 +713,7 @@ namespace ts.server {
         private typingOptions: TypingOptions;
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
-        private directoriesWatchedForWildcards: Map<string, FileWatcher>;
+        private directoriesWatchedForWildcards: Map<FileWatcher>;
         private typeRootsWatchers: FileWatcher[];
 
         /** Used for configured projects which may have multiple open roots */
@@ -722,7 +724,7 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
-            private wildcardDirectories: Map<string, WatchDirectoryFlags>,
+            private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
@@ -777,19 +779,18 @@ namespace ts.server {
                 return;
             }
             const configDirectoryPath = getDirectoryPath(this.configFileName);
-
-            this.directoriesWatchedForWildcards = createMap<string, FileWatcher>();
-            this.wildcardDirectories.forEach((flag, directory) => {
+            this.directoriesWatchedForWildcards = reduceProperties(this.wildcardDirectories, (watchers, flag, directory) => {
                 if (comparePaths(configDirectoryPath, directory, ".", !this.projectService.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                     this.projectService.logger.info(`Add ${recursive ? "recursive " : ""}watcher for: ${directory}`);
-                    this.directoriesWatchedForWildcards.set(directory, this.projectService.host.watchDirectory(
+                    watchers[directory] = this.projectService.host.watchDirectory(
                         directory,
                         path => callback(this, path),
                         recursive
-                    ));
+                    );
                 }
-            });
+                return watchers;
+            }, <Map<FileWatcher>>{});
         }
 
         stopWatchingDirectory() {
@@ -813,7 +814,9 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            this.directoriesWatchedForWildcards.forEach(watcher => { watcher.close(); });
+            for (const id in this.directoriesWatchedForWildcards) {
+                this.directoriesWatchedForWildcards[id].close();
+            }
             this.directoriesWatchedForWildcards = undefined;
 
             this.stopWatchingDirectory();

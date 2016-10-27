@@ -239,7 +239,7 @@ namespace ts.NavigationBar {
 
     /** Merge declarations of the same kind. */
     function mergeChildren(children: NavigationBarNode[]): void {
-        const nameToItems = createMap<string, NavigationBarNode | NavigationBarNode[]>();
+        const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, child => {
             const decl = <Declaration>child.node;
             const name = decl.name && nodeText(decl.name);
@@ -248,9 +248,9 @@ namespace ts.NavigationBar {
                 return true;
             }
 
-            const itemsWithSameName = nameToItems.get(name);
+            const itemsWithSameName = nameToItems[name];
             if (!itemsWithSameName) {
-                nameToItems.set(name, child);
+                nameToItems[name] = child;
                 return true;
             }
 
@@ -268,7 +268,7 @@ namespace ts.NavigationBar {
                 if (tryMerge(itemWithSameName, child)) {
                     return false;
                 }
-                nameToItems.set(name, [itemWithSameName, child]);
+                nameToItems[name] = [itemWithSameName, child];
                 return true;
             }
 
@@ -626,15 +626,15 @@ namespace ts.NavigationBar {
 
     /**
      * Matches all whitespace characters in a string. Eg:
-     *
+     * 
      * "app.
-     *
+     * 
      * onactivated"
-     *
+     * 
      * matches because of the newline, whereas
-     *
+     * 
      * "app.onactivated"
-     *
+     * 
      * does not match.
      */
     const whiteSpaceRegex = /\s+/g;
