@@ -149,7 +149,8 @@ namespace ts.server {
                         target: ScriptTarget.ES5,
                         jsx: JsxEmit.React,
                         newLine: NewLineKind.LineFeed,
-                        moduleResolution: ModuleResolutionKind.NodeJs
+                        moduleResolution: ModuleResolutionKind.NodeJs,
+                        allowNonTsExtensions: true // injected by tsserver
                     });
             });
         });
