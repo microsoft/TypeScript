@@ -57,6 +57,7 @@ function measure(marker) {
 }
 
 var compilerSources = [
+    "collections.ts",
     "core.ts",
     "performance.ts",
     "sys.ts",
@@ -93,6 +94,7 @@ var compilerSources = [
 });
 
 var servicesSources = [
+    "collections.ts",
     "core.ts",
     "performance.ts",
     "sys.ts",

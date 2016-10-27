@@ -217,13 +217,13 @@ namespace ts {
         Endfinally = 7,
     }
 
-    const instructionNames = createMap<string>({
-        [Instruction.Return]: "return",
-        [Instruction.Break]: "break",
-        [Instruction.Yield]: "yield",
-        [Instruction.YieldStar]: "yield*",
-        [Instruction.Endfinally]: "endfinally",
-    });
+    const instructionNames = createMap<Instruction, string>([
+        [Instruction.Return, "return"],
+        [Instruction.Break, "break"],
+        [Instruction.Yield, "yield"],
+        [Instruction.YieldStar, "yield*"],
+        [Instruction.Endfinally, "endfinally"],
+    ]);
 
     export function transformGenerators(context: TransformationContext) {
         const {
@@ -240,8 +240,8 @@ namespace ts {
         context.onSubstituteNode = onSubstituteNode;
 
         let currentSourceFile: SourceFile;
-        let renamedCatchVariables: Map<boolean>;
-        let renamedCatchVariableDeclarations: Map<Identifier>;
+        let renamedCatchVariables: Set<string>;
+        let renamedCatchVariableDeclarations: Map<number, Identifier>;
         let helperState: EmitHelperState;
 
         let inGeneratorFunctionBody: boolean;
@@ -1912,12 +1912,12 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier) {
-            if (renamedCatchVariables && hasProperty(renamedCatchVariables, node.text)) {
+            if (renamedCatchVariables && renamedCatchVariables.has(node.text)) {
                 const original = getOriginalNode(node);
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
                     if (declaration) {
-                        const name = getProperty(renamedCatchVariableDeclarations, String(getOriginalNodeId(declaration)));
+                        const name = renamedCatchVariableDeclarations.get(getOriginalNodeId(declaration));
                         if (name) {
                             const clone = getMutableClone(name);
                             setSourceMapRange(clone, node);
@@ -2082,13 +2082,13 @@ namespace ts {
             const name = declareLocal(text);
 
             if (!renamedCatchVariables) {
-                renamedCatchVariables = createMap<boolean>();
-                renamedCatchVariableDeclarations = createMap<Identifier>();
+                renamedCatchVariables = createSet();
+                renamedCatchVariableDeclarations = createMap<number, Identifier>();
                 context.enableSubstitution(SyntaxKind.Identifier);
             }
 
-            renamedCatchVariables[text] = true;
-            renamedCatchVariableDeclarations[getOriginalNodeId(variable)] = name;
+            renamedCatchVariables.add(text);
+            renamedCatchVariableDeclarations.set(getOriginalNodeId(variable), name);
 
             const exception = <ExceptionBlock>peekBlock();
             Debug.assert(exception.state < ExceptionBlockState.Catch);
@@ -2392,7 +2392,7 @@ namespace ts {
          */
         function createInstruction(instruction: Instruction): NumericLiteral {
             const literal = createLiteral(instruction);
-            literal.trailingComment = instructionNames[instruction];
+            literal.trailingComment = instructionNames.get(instruction);
             return literal;
         }
 
