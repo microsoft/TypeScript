@@ -15,6 +15,7 @@
     },
     "files": [
         "core.ts",
+        "collections.ts",
         "performance.ts",
         "sys.ts",
         "types.ts",

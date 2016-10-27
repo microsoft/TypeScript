@@ -133,7 +133,7 @@ namespace ts {
 
         let symbolCount = 0;
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
-        let classifiableNames: Map<string>;
+        let classifiableNames: Set<string>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -147,7 +147,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = bindInStrictMode(file, opts);
-            classifiableNames = createMap<string>();
+            classifiableNames = createSet();
             symbolCount = 0;
             skipTransformFlagAggregation = isDeclarationFile(file);
 
@@ -207,11 +207,11 @@ namespace ts {
             symbol.declarations.push(node);
 
             if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
-                symbol.exports = createMap<Symbol>();
+                symbol.exports = createMap<string, Symbol>();
             }
 
             if (symbolFlags & SymbolFlags.HasMembers && !symbol.members) {
-                symbol.members = createMap<Symbol>();
+                symbol.members = createMap<string, Symbol>();
             }
 
             if (symbolFlags & SymbolFlags.Value) {
@@ -349,17 +349,17 @@ namespace ts {
                 // Otherwise, we'll be merging into a compatible existing symbol (for example when
                 // you have multiple 'vars' with the same name in the same container).  In this case
                 // just add this node into the declarations list of the symbol.
-                symbol = symbolTable[name] || (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                symbol = getOrUpdate(symbolTable, name, name => createSymbol(SymbolFlags.None, name));
 
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames[name] = name;
+                    classifiableNames.add(name);
                 }
 
                 if (symbol.flags & excludes) {
                     if (symbol.isReplaceableByMethod) {
                         // Javascript constructor-declared symbols can be discarded in favor of
                         // prototype symbols like methods.
-                        symbol = symbolTable[name] = createSymbol(SymbolFlags.None, name);
+                        symbol = setAndReturn(symbolTable, name, createSymbol(SymbolFlags.None, name));
                     }
                     else {
                         if (node.name) {
@@ -484,7 +484,7 @@ namespace ts {
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
                 if (containerFlags & ContainerFlags.HasLocals) {
-                    container.locals = createMap<Symbol>();
+                    container.locals = createMap<string, Symbol>();
                 }
                 addToContainerChain(container);
             }
@@ -1525,8 +1525,7 @@ namespace ts {
 
             const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = createMap<Symbol>();
-            typeLiteralSymbol.members[symbol.name] = symbol;
+            typeLiteralSymbol.members = createMap([[symbol.name, symbol]]);
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
@@ -1536,7 +1535,7 @@ namespace ts {
             }
 
             if (inStrictMode) {
-                const seen = createMap<ElementKind>();
+                const seen = createMap<string, ElementKind>();
 
                 for (const prop of node.properties) {
                     if (prop.name.kind !== SyntaxKind.Identifier) {
@@ -1557,9 +1556,9 @@ namespace ts {
                         ? ElementKind.Property
                         : ElementKind.Accessor;
 
-                    const existingKind = seen[identifier.text];
+                    const existingKind = seen.get(identifier.text);
                     if (!existingKind) {
-                        seen[identifier.text] = currentKind;
+                        seen.set(identifier.text, currentKind);
                         continue;
                     }
 
@@ -1592,7 +1591,7 @@ namespace ts {
                 // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
-                        blockScopeContainer.locals = createMap<Symbol>();
+                        blockScopeContainer.locals = createMap<string, Symbol>();
                         addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
@@ -2072,7 +2071,7 @@ namespace ts {
                 }
             }
 
-            file.symbol.globalExports = file.symbol.globalExports || createMap<Symbol>();
+            file.symbol.globalExports = file.symbol.globalExports || createMap<string, Symbol>();
             declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
@@ -2119,7 +2118,7 @@ namespace ts {
             Debug.assert(isInJavaScriptFile(node));
             // Declare a 'member' if the container is an ES5 class or ES6 constructor
             if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
-                container.symbol.members = container.symbol.members || createMap<Symbol>();
+                container.symbol.members = container.symbol.members || createMap<string, Symbol>();
                 // It's acceptable for multiple 'this' assignments of the same identifier to occur
                 declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
             }
@@ -2151,14 +2150,14 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = leftSideOfAssignment;
 
-            const funcSymbol = container.locals[constructorFunction.text];
+            const funcSymbol = container.locals.get(constructorFunction.text);
             if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
                 return;
             }
 
             // Set up the members collection if it doesn't exist already
             if (!funcSymbol.members) {
-                funcSymbol.members = createMap<Symbol>();
+                funcSymbol.members = createMap<string, Symbol>();
             }
 
             // Declare the method/property
@@ -2191,7 +2190,7 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
-                    classifiableNames[node.name.text] = node.name.text;
+                    classifiableNames.add(node.name.text);
                 }
             }
 
@@ -2207,14 +2206,15 @@ namespace ts {
             // module might have an exported variable called 'prototype'.  We can't allow that as
             // that would clash with the built-in 'prototype' for the class.
             const prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
-            if (symbol.exports[prototypeSymbol.name]) {
+            const symbolExport = symbol.exports.get(prototypeSymbol.name);
+            if (symbolExport) {
                 if (node.name) {
                     node.name.parent = node;
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
+                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0],
                     Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
             }
-            symbol.exports[prototypeSymbol.name] = prototypeSymbol;
+            symbol.exports.set(prototypeSymbol.name, prototypeSymbol);
             prototypeSymbol.parent = symbol;
         }
 

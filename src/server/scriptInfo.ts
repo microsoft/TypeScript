@@ -95,7 +95,7 @@ namespace ts.server {
                 if (!this.formatCodeSettings) {
                     this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
                 }
-                mergeMaps(this.formatCodeSettings, formatSettings);
+                mergeMapLikes(this.formatCodeSettings, formatSettings);
             }
         }
 

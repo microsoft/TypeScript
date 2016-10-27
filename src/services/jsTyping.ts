@@ -17,19 +17,19 @@ namespace ts.JsTyping {
 
     interface PackageJson {
         _requiredBy?: string[];
-        dependencies?: Map<string>;
-        devDependencies?: Map<string>;
+        dependencies?: MapLike<string>;
+        devDependencies?: MapLike<string>;
         name?: string;
-        optionalDependencies?: Map<string>;
-        peerDependencies?: Map<string>;
+        optionalDependencies?: MapLike<string>;
+        peerDependencies?: MapLike<string>;
         typings?: string;
     };
 
     // A map of loose file names to library names
     // that we are confident require typings
-    let safeList: Map<string>;
+    let safeList: Map<string, string>;
 
-    const EmptySafeList: Map<string> = createMap<string>();
+    const EmptySafeList = createMap<string, string>();
 
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
@@ -56,13 +56,13 @@ namespace ts.JsTyping {
         fileNames: string[],
         projectRootPath: Path,
         safeListPath: Path,
-        packageNameToTypingLocation: Map<string>,
+        packageNameToTypingLocation: Map<string, string>,
         typingOptions: TypingOptions,
         unresolvedImports: ReadonlyArray<string>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
-        const inferredTypings = createMap<string>();
+        const inferredTypings = createMap<string, string | undefined>();
 
         if (!typingOptions || !typingOptions.enableAutoDiscovery) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
@@ -76,7 +76,7 @@ namespace ts.JsTyping {
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            safeList = result.config ? createMap<string>(result.config) : EmptySafeList;
+            safeList = result.config ? mapOfMapLike<string>(result.config) : EmptySafeList;
         }
 
         const filesToWatch: string[] = [];
@@ -107,34 +107,35 @@ namespace ts.JsTyping {
         // add typings for unresolved imports
         if (unresolvedImports) {
             for (const moduleId of unresolvedImports) {
-                const typingName = moduleId in nodeCoreModules ? "node" : moduleId;
-                if (!(typingName in inferredTypings)) {
-                    inferredTypings[typingName] = undefined;
+                const typingName = nodeCoreModules.has(moduleId) ? "node" : moduleId;
+                if (!inferredTypings.has(typingName)) {
+                    inferredTypings.set(typingName, undefined);
                 }
             }
         }
         // Add the cached typing locations for inferred typings that are already installed
-        for (const name in packageNameToTypingLocation) {
-            if (name in inferredTypings && !inferredTypings[name]) {
-                inferredTypings[name] = packageNameToTypingLocation[name];
+        packageNameToTypingLocation.forEach((typingLocation, name) => {
+            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined) {
+                inferredTypings.set(name, typingLocation);
             }
-        }
+        });
 
         // Remove typings that the user has added to the exclude list
         for (const excludeTypingName of exclude) {
-            delete inferredTypings[excludeTypingName];
+            inferredTypings.delete(excludeTypingName);
         }
 
         const newTypingNames: string[] = [];
         const cachedTypingPaths: string[] = [];
-        for (const typing in inferredTypings) {
-            if (inferredTypings[typing] !== undefined) {
-                cachedTypingPaths.push(inferredTypings[typing]);
+
+        inferredTypings.forEach((inferredTyping, typing) => {
+            if (inferredTyping !== undefined) {
+                cachedTypingPaths.push(inferredTyping);
             }
             else {
                 newTypingNames.push(typing);
             }
-        }
+        });
         return { cachedTypingPaths, newTypingNames, filesToWatch };
 
         /**
@@ -146,8 +147,8 @@ namespace ts.JsTyping {
             }
 
             for (const typing of typingNames) {
-                if (!(typing in inferredTypings)) {
-                    inferredTypings[typing] = undefined;
+                if (!inferredTypings.has(typing)) {
+                    inferredTypings.set(typing, undefined);
                 }
             }
         }
@@ -189,7 +190,7 @@ namespace ts.JsTyping {
             const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
 
             if (safeList !== EmptySafeList) {
-                mergeTypings(filter(cleanedTypingNames, f => f in safeList));
+                mergeTypings(filter(cleanedTypingNames, f => safeList.has(f)));
             }
 
             const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
@@ -236,7 +237,7 @@ namespace ts.JsTyping {
                 }
                 if (packageJson.typings) {
                     const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
-                    inferredTypings[packageJson.name] = absolutePath;
+                    inferredTypings.set(packageJson.name, absolutePath);
                 }
                 else {
                     typingNames.push(packageJson.name);

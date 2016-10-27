@@ -70,15 +70,15 @@ namespace ts {
          * set of labels that occurred inside the converted loop
          * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
          */
-        labels?: Map<string>;
+        labels?: Map<string, string>;
         /*
          * collection of labeled jumps that transfer control outside the converted loop.
          * maps store association 'label -> labelMarker' where
          * - label - value of label as it appear in code
          * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
          */
-        labeledNonLocalBreaks?: Map<string>;
-        labeledNonLocalContinues?: Map<string>;
+        labeledNonLocalBreaks?: Map<string, string>;
+        labeledNonLocalContinues?: Map<string, string>;
 
         /*
          * set of non-labeled jumps that transfer control outside the converted loop
@@ -279,7 +279,7 @@ namespace ts {
             else if (node.transformFlags & TransformFlags.ContainsES2015 || (isInConstructorWithCapturedSuper && !isExpression(node))) {
                 // we want to dive in this branch either if node has children with ES2015 specific syntax
                 // or we are inside constructor that captures result of the super call so all returns without expression should be
-                // rewritten. Note: we skip expressions since returns should never appear there 
+                // rewritten. Note: we skip expressions since returns should never appear there
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -543,7 +543,7 @@ namespace ts {
                 //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
-                    (node.label && convertedLoopState.labels && convertedLoopState.labels[node.label.text]) ||
+                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(node.label.text)) ||
                     (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
 
                 if (!canUseBreakOrContinue) {
@@ -1880,9 +1880,9 @@ namespace ts {
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
             if (convertedLoopState) {
                 if (!convertedLoopState.labels) {
-                    convertedLoopState.labels = createMap<string>();
+                    convertedLoopState.labels = createMap<string, string>();
                 }
-                convertedLoopState.labels[node.label.text] = node.label.text;
+                convertedLoopState.labels.set(node.label.text, node.label.text);
             }
 
             let result: VisitResult<Statement>;
@@ -1894,7 +1894,7 @@ namespace ts {
             }
 
             if (convertedLoopState) {
-                convertedLoopState.labels[node.label.text] = undefined;
+                convertedLoopState.labels.set(node.label.text, undefined);
             }
 
             return result;
@@ -2497,29 +2497,28 @@ namespace ts {
         function setLabeledJump(state: ConvertedLoopState, isBreak: boolean, labelText: string, labelMarker: string): void {
             if (isBreak) {
                 if (!state.labeledNonLocalBreaks) {
-                    state.labeledNonLocalBreaks = createMap<string>();
+                    state.labeledNonLocalBreaks = createMap<string, string>();
                 }
-                state.labeledNonLocalBreaks[labelText] = labelMarker;
+                state.labeledNonLocalBreaks.set(labelText, labelMarker);
             }
             else {
                 if (!state.labeledNonLocalContinues) {
-                    state.labeledNonLocalContinues = createMap<string>();
+                    state.labeledNonLocalContinues = createMap<string, string>();
                 }
-                state.labeledNonLocalContinues[labelText] = labelMarker;
+                state.labeledNonLocalContinues.set(labelText, labelMarker);
             }
         }
 
-        function processLabeledJumps(table: Map<string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState, caseClauses: CaseClause[]): void {
+        function processLabeledJumps(table: Map<string, string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState, caseClauses: CaseClause[]): void {
             if (!table) {
                 return;
             }
-            for (const labelText in table) {
-                const labelMarker = table[labelText];
+            table.forEach((labelMarker, labelText) => {
                 const statements: Statement[] = [];
                 // if there are no outer converted loop or outer label in question is located inside outer converted loop
                 // then emit labeled break\continue
                 // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do
-                if (!outerLoop || (outerLoop.labels && outerLoop.labels[labelText])) {
+                if (!outerLoop || (outerLoop.labels && outerLoop.labels.get(labelText))) {
                     const label = createIdentifier(labelText);
                     statements.push(isBreak ? createBreak(label) : createContinue(label));
                 }
@@ -2528,7 +2527,7 @@ namespace ts {
                     statements.push(createReturn(loopResultName));
                 }
                 caseClauses.push(createCaseClause(createLiteral(labelMarker), statements));
-            }
+            });
         }
 
         function processLoopVariableDeclaration(decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[]) {

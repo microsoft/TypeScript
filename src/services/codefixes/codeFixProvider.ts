@@ -14,25 +14,24 @@ namespace ts {
     }
 
     export namespace codefix {
-        const codeFixes = createMap<CodeFix[]>();
+        const codeFixes = createMap<number, CodeFix[]>();
 
         export function registerCodeFix(action: CodeFix) {
             forEach(action.errorCodes, error => {
-                let fixes = codeFixes[error];
-                if (!fixes) {
-                    fixes = [];
-                    codeFixes[error] = fixes;
-                }
-                fixes.push(action);
+                multiMapAdd(codeFixes, error, action);
             });
         }
 
         export function getSupportedErrorCodes() {
-            return Object.keys(codeFixes);
+            const supportedErrorCodes: string[] = [];
+            codeFixes.forEach((_, key) => {
+                supportedErrorCodes.push(key.toString());
+            });
+            return supportedErrorCodes;
         }
 
         export function getFixes(context: CodeFixContext): CodeAction[] {
-            const fixes = codeFixes[context.errorCode];
+            const fixes = codeFixes.get(context.errorCode);
             let allActions: CodeAction[] = [];
 
             forEach(fixes, f => {

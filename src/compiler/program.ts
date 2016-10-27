@@ -82,7 +82,7 @@ namespace ts {
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
-        const existingDirectories = createMap<boolean>();
+        const existingDirectories = createSet();
 
         function getCanonicalFileName(fileName: string): string {
             // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
@@ -114,11 +114,11 @@ namespace ts {
         }
 
         function directoryExists(directoryPath: string): boolean {
-            if (directoryPath in existingDirectories) {
+            if (existingDirectories.has(directoryPath)) {
                 return true;
             }
             if (sys.directoryExists(directoryPath)) {
-                existingDirectories[directoryPath] = true;
+                existingDirectories.add(directoryPath);
                 return true;
             }
             return false;
@@ -132,21 +132,21 @@ namespace ts {
             }
         }
 
-        let outputFingerprints: Map<OutputFingerprint>;
+        let outputFingerprints: Map<string, OutputFingerprint>;
 
         function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
             if (!outputFingerprints) {
-                outputFingerprints = createMap<OutputFingerprint>();
+                outputFingerprints = createMap<string, OutputFingerprint>();
             }
 
             const hash = sys.createHash(data);
             const mtimeBefore = sys.getModifiedTime(fileName);
 
-            if (mtimeBefore && fileName in outputFingerprints) {
-                const fingerprint = outputFingerprints[fileName];
+            if (mtimeBefore) {
+                const fingerprint = outputFingerprints.get(fileName);
 
                 // If output has not been changed, and the file has no external modification
-                if (fingerprint.byteOrderMark === writeByteOrderMark &&
+                if (fingerprint && fingerprint.byteOrderMark === writeByteOrderMark &&
                     fingerprint.hash === hash &&
                     fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
                     return;
@@ -157,11 +157,11 @@ namespace ts {
 
             const mtimeAfter = sys.getModifiedTime(fileName);
 
-            outputFingerprints[fileName] = {
+            outputFingerprints.set(fileName, {
                 hash,
                 byteOrderMark: writeByteOrderMark,
                 mtime: mtimeAfter
-            };
+            });
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
@@ -279,11 +279,11 @@ namespace ts {
             return [];
         }
         const resolutions: T[] = [];
-        const cache = createMap<T>();
+        const cache = createMap<string, T>();
         for (const name of names) {
-            const result = name in cache
-                ? cache[name]
-                : cache[name] = loader(name, containingFile);
+            const result = cache.has(name)
+                ? cache.get(name)
+                : setAndReturn(cache, name, loader(name, containingFile));
             resolutions.push(result);
         }
         return resolutions;
@@ -295,9 +295,9 @@ namespace ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
-        let classifiableNames: Map<string>;
+        let classifiableNames: Set<string>;
 
-        let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective>();
+        let resolvedTypeReferenceDirectives = createMap<string, ResolvedTypeReferenceDirective>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -312,10 +312,10 @@ namespace ts {
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
         // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
-        const modulesWithElidedImports = createMap<boolean>();
+        const modulesWithElidedImports = createMap<string, boolean>();
 
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
-        const sourceFilesFoundSearchingNodeModules = createMap<boolean>();
+        const sourceFilesFoundSearchingNodeModules = createMap<string, boolean>();
 
         performance.mark("beforeProgram");
 
@@ -448,15 +448,11 @@ namespace ts {
             return commonSourceDirectory;
         }
 
-        function getClassifiableNames() {
+        function getClassifiableNames(): Set<string> {
             if (!classifiableNames) {
                 // Initialize a checker so that all our files are bound.
                 getTypeChecker();
-                classifiableNames = createMap<string>();
-
-                for (const sourceFile of files) {
-                    copyProperties(sourceFile.classifiableNames, classifiableNames);
-                }
+                classifiableNames = setAggregate(files, sourceFile => sourceFile.classifiableNames);
             }
 
             return classifiableNames;
@@ -592,7 +588,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
-                isSourceFileFromExternalLibrary: (file: SourceFile) => !!sourceFilesFoundSearchingNodeModules[file.path],
+                isSourceFileFromExternalLibrary: (file: SourceFile) => !!sourceFilesFoundSearchingNodeModules.get(file.path),
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -1132,8 +1128,8 @@ namespace ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
-            if (filesByName.contains(path)) {
-                const file = filesByName.get(path);
+            let file = filesByName.get(path);
+            if (file !== undefined) {
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems
                 if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
@@ -1142,20 +1138,20 @@ namespace ts {
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
                 // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
-                if (file && sourceFilesFoundSearchingNodeModules[file.path] && currentNodeModulesDepth == 0) {
-                    sourceFilesFoundSearchingNodeModules[file.path] = false;
+                if (file && sourceFilesFoundSearchingNodeModules.get(file.path) && currentNodeModulesDepth == 0) {
+                    sourceFilesFoundSearchingNodeModules.set(file.path, false);
                     if (!options.noResolve) {
                         processReferencedFiles(file, isDefaultLib);
                         processTypeReferenceDirectives(file);
                     }
 
-                    modulesWithElidedImports[file.path] = false;
+                    modulesWithElidedImports.set(file.path, false);
                     processImportedModules(file);
                 }
                 // See if we need to reprocess the imports due to prior skipped imports
-                else if (file && modulesWithElidedImports[file.path]) {
+                else if (file && modulesWithElidedImports.get(file.path)) {
                     if (currentNodeModulesDepth < maxNodeModuleJsDepth) {
-                        modulesWithElidedImports[file.path] = false;
+                        modulesWithElidedImports.set(file.path, false);
                         processImportedModules(file);
                     }
                 }
@@ -1164,7 +1160,7 @@ namespace ts {
             }
 
             // We haven't looked for this file, do so now and cache result
-            const file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
+            file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
                 if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
                     fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
                         Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
@@ -1176,7 +1172,7 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
-                sourceFilesFoundSearchingNodeModules[path] = (currentNodeModulesDepth > 0);
+                sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -1237,7 +1233,7 @@ namespace ts {
             refFile?: SourceFile, refPos?: number, refEnd?: number): void {
 
             // If we already found this library as a primary reference - nothing to do
-            const previousResolution = resolvedTypeReferenceDirectives[typeReferenceDirective];
+            const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective);
             if (previousResolution && previousResolution.primary) {
                 return;
             }
@@ -1274,7 +1270,7 @@ namespace ts {
             }
 
             if (saveResolution) {
-                resolvedTypeReferenceDirectives[typeReferenceDirective] = resolvedTypeReferenceDirective;
+                resolvedTypeReferenceDirectives.set(typeReferenceDirective, resolvedTypeReferenceDirective);
             }
         }
 
@@ -1294,7 +1290,7 @@ namespace ts {
         function processImportedModules(file: SourceFile) {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
-                file.resolvedModules = createMap<ResolvedModuleFull>();
+                file.resolvedModules = createMap<string, ResolvedModuleFull>();
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 Debug.assert(resolutions.length === moduleNames.length);
@@ -1325,7 +1321,7 @@ namespace ts {
                     const shouldAddFile = resolvedFileName && !getResolutionDiagnostic(options, resolution) && !options.noResolve && i < file.imports.length && !elideImport;
 
                     if (elideImport) {
-                        modulesWithElidedImports[file.path] = true;
+                        modulesWithElidedImports.set(file.path, true);
                     }
                     else if (shouldAddFile) {
                         const path = toPath(resolvedFileName, currentDirectory, getCanonicalFileName);
