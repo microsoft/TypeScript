@@ -514,7 +514,8 @@ namespace ts {
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         const containingDirectory = getDirectoryPath(containingFile);
-        const supportedExtensions = getSupportedExtensions(compilerOptions);
+        const isCommonJS = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS;
+        const supportedExtensions = getSupportedExtensions(compilerOptions).concat(isCommonJS ? [".json"] : []);
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];

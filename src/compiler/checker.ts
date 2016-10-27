@@ -1342,8 +1342,8 @@ namespace ts {
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
         }
 
-        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol {
-            return resolveExternalModuleNameWorker(location, moduleReferenceExpression, Diagnostics.Cannot_find_module_0);
+        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, reportModuleNotFoundError = true): Symbol {
+            return resolveExternalModuleNameWorker(location, moduleReferenceExpression, reportModuleNotFoundError ? Diagnostics.Cannot_find_module_0 : undefined);
         }
 
         function resolveExternalModuleNameWorker(location: Node, moduleReferenceExpression: Expression, moduleNotFoundError: DiagnosticMessage): Symbol {
@@ -4881,11 +4881,17 @@ namespace ts {
         }
 
         function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
-            const moduleSym = resolveExternalModuleName(name, name);
+            const nameIsInJavaScriptFile = isInJavaScriptFile(name);
+            const moduleSym = resolveExternalModuleName(name, name, /*reportModuleNotFoundError*/ nameIsInJavaScriptFile);
             if (moduleSym) {
-                const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
-                if (resolvedModuleSymbol) {
-                    return getTypeOfSymbol(resolvedModuleSymbol);
+                const sourceFile = getDeclarationOfKind(moduleSym, SyntaxKind.SourceFile) as SourceFile;
+                const resolvedFileIsJSON = sourceFile && getScriptKindFromFileName(sourceFile.fileName) === ScriptKind.JSON;
+                // Treated as external module import if it is in JavaScript file or when JSON is "required"
+                if (nameIsInJavaScriptFile || resolvedFileIsJSON) {
+                    const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                    if (resolvedModuleSymbol) {
+                        return getTypeOfSymbol(resolvedModuleSymbol);
+                    }
                 }
             }
 
@@ -12824,8 +12830,8 @@ namespace ts {
                 }
             }
 
-            // In JavaScript files, calls to any identifier 'require' are treated as external module imports
-            if (isInJavaScriptFile(node) && isCommonJsRequire(node)) {
+            // Calls to commonjs 'require' are treated as external module imports in JavaScript files or when JSON is "required"
+            if (isCommonJsRequire(node)) {
                 return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
             }
 
@@ -18793,7 +18799,7 @@ namespace ts {
                             (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
-                    if (isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) {
+                    if (isCommonJsRequire(node.parent)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
                 // Fall through

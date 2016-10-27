@@ -583,7 +583,7 @@ namespace ts {
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
-                getSourceFiles: program.getSourceFiles,
+                getSourceFiles: () => filter(program.getSourceFiles(), sourceFile => sourceFile.scriptKind !== ScriptKind.JSON),
                 isSourceFileFromExternalLibrary: (file: SourceFile) => !!sourceFilesFoundSearchingNodeModules[file.path],
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
@@ -984,6 +984,7 @@ namespace ts {
 
             const isJavaScriptFile = isSourceFileJavaScript(file);
             const isExternalModuleFile = isExternalModule(file);
+            const isCommonJS = getEmitModuleKind(options) === ModuleKind.CommonJS;
 
             let imports: LiteralExpression[];
             let moduleAugmentations: LiteralExpression[];
@@ -1001,7 +1002,7 @@ namespace ts {
 
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
-                if (isJavaScriptFile) {
+                if (isJavaScriptFile || isCommonJS) {
                     collectRequireCalls(node);
                 }
             }

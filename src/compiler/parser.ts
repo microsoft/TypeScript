@@ -636,7 +636,17 @@ namespace ts {
             nextToken();
             processReferenceComments(sourceFile);
 
-            sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
+            if (scriptKind === ScriptKind.JSON) {
+                const exportAssignment = <ExportAssignment>createNode(SyntaxKind.ExportAssignment);
+                const json = parseObjectLiteralExpression();
+                exportAssignment.expression = json;
+                exportAssignment.isExportEquals = true;
+                finishNode(exportAssignment);
+                sourceFile.statements = <NodeArray<Statement>>[<Statement>exportAssignment];
+            }
+            else {
+                sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
+            }
             Debug.assert(token() === SyntaxKind.EndOfFileToken);
             sourceFile.endOfFileToken = <EndOfFileToken>parseTokenNode();
 

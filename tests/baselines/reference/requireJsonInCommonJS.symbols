@@ -1,0 +1,39 @@
+=== tests/cases/compiler/data.json ===
+{
+No type information for this code.    "a": "a",
+No type information for this code.    "b": 42
+No type information for this code.}
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/m.ts ===
+const data = require("./data");
+>data : Symbol(data, Decl(m.ts, 0, 5))
+>require : Symbol(require, Decl(node.d.ts, 5, 11))
+>"./data" : Symbol("tests/cases/compiler/data.json", Decl(data.json, 0, 0))
+
+const a = data.a;
+>a : Symbol(a, Decl(m.ts, 1, 5))
+>data.a : Symbol("a", Decl(data.json, 0, 1))
+>data : Symbol(data, Decl(m.ts, 0, 5))
+>a : Symbol("a", Decl(data.json, 0, 1))
+
+const b = data.b;
+>b : Symbol(b, Decl(m.ts, 2, 5))
+>data.b : Symbol("b", Decl(data.json, 1, 13))
+>data : Symbol(data, Decl(m.ts, 0, 5))
+>b : Symbol("b", Decl(data.json, 1, 13))
+
+=== tests/cases/compiler/node.d.ts ===
+interface NodeRequireFunction {
+>NodeRequireFunction : Symbol(NodeRequireFunction, Decl(node.d.ts, 0, 0))
+
+    (id: string): any;
+>id : Symbol(id, Decl(node.d.ts, 1, 5))
+}
+interface NodeRequire extends NodeRequireFunction {
+>NodeRequire : Symbol(NodeRequire, Decl(node.d.ts, 2, 1))
+>NodeRequireFunction : Symbol(NodeRequireFunction, Decl(node.d.ts, 0, 0))
+}
+declare var require: NodeRequire;
+>require : Symbol(require, Decl(node.d.ts, 5, 11))
+>NodeRequire : Symbol(NodeRequire, Decl(node.d.ts, 2, 1))
+

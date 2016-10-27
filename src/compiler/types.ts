@@ -3119,7 +3119,8 @@ namespace ts {
         JS = 1,
         JSX = 2,
         TS = 3,
-        TSX = 4
+        TSX = 4,
+        JSON = 5
     }
 
     export const enum ScriptTarget {
