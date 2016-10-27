@@ -11884,6 +11884,11 @@ namespace ts {
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
+                        // If the parameter and argument are both functions and the parameter has fewer arguments than the argument,
+                        // then this signature is not applicable. Exit early.
+                        if (!reportErrors && isAritySmaller(paramType, arg)) {
+                            return false;
+                        }
                         argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     }
 
@@ -11896,6 +11901,21 @@ namespace ts {
             }
 
             return true;
+        }
+
+        function isAritySmaller(sourceType: Type, target: Expression) {
+            if (isFunctionExpressionOrArrowFunction(target) && isFunctionType(sourceType)) {
+                let targetParameterCount = 0;
+                for (; targetParameterCount < target.parameters.length; targetParameterCount++) {
+                    const param = target.parameters[targetParameterCount];
+                    if (param.initializer || param.questionToken || param.dotDotDotToken || isJSDocOptionalParameter(param)) {
+                        break;
+                    }
+                }
+                const sourceSignatures = getSignaturesOfType(sourceType, SignatureKind.Call);
+                const sourceLengths = sourceSignatures.map(sig => !sig.hasRestParameter ? sig.parameters.length : Number.MAX_VALUE);
+                return forEach(sourceLengths, len => len < targetParameterCount);
+            }
         }
 
         /**
