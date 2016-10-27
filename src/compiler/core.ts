@@ -124,6 +124,13 @@ namespace ts {
         return undefined;
     }
 
+    export function zip<T, U>(arrayA: T[], arrayB: U[], callback: (a: T, b: U, index: number) => void): void {
+        Debug.assert(arrayA.length === arrayB.length);
+        for (let i = 0; i < arrayA.length; i++) {
+            callback(arrayA[i], arrayB[i], i);
+        }
+    }
+
     /**
      * Iterates through `array` by index and performs the callback on each element of array until the callback
      * returns a falsey value, then returns false.
