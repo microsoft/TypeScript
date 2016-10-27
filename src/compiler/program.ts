@@ -333,7 +333,7 @@ namespace ts {
         if (host.resolveModuleNames) {
             resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
-                if (!resolved || resolved.extension) {
+                if (!resolved || resolved.extension !== undefined) {
                     return resolved;
                 }
                 resolved = clone(resolved);
