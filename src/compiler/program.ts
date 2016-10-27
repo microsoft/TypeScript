@@ -1321,6 +1321,7 @@ namespace ts {
                     // - it's not a top level JavaScript module that exceeded the search max
                     const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
                     // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
+                    // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
                     const shouldAddFile = resolvedFileName && !getResolutionDiagnostic(options, resolution) && !options.noResolve && i < file.imports.length && !elideImport;
 
                     if (elideImport) {
@@ -1568,8 +1569,9 @@ namespace ts {
 
     /* @internal */
     /**
-     * Returns a DiagnosticMessage if we can't use a resolved module due to its extension.
+     * Returns a DiagnosticMessage if we won't include a resolved module due to its extension.
      * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
+     * This returns a diagnostic even if the module will be an untyped module.
      */
     export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModule): DiagnosticMessage | undefined {
         switch (extension) {

@@ -1108,22 +1108,7 @@ namespace Harness {
                     const option = getCommandLineOption(name);
                     if (option) {
                         const errors: ts.Diagnostic[] = [];
-                        switch (option.type) {
-                            case "boolean":
-                                options[option.name] = value.toLowerCase() === "true";
-                                break;
-                            case "string":
-                                options[option.name] = value;
-                                break;
-                            // If not a primitive, the possible types are specified in what is effectively a map of options.
-                            case "list":
-                                options[option.name] = ts.parseListTypeOption(<ts.CommandLineOptionOfListType>option, value, errors);
-                                break;
-                            default:
-                                options[option.name] = ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
-                                break;
-                        }
-
+                        options[option.name] = optionValue(option, value, errors);
                         if (errors.length > 0) {
                             throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
                         }
@@ -1132,6 +1117,27 @@ namespace Harness {
                         throw new Error(`Unknown compiler option '${name}'.`);
                     }
                 }
+            }
+        }
+
+        function optionValue(option: ts.CommandLineOption, value: string, errors: ts.Diagnostic[]): any {
+            switch (option.type) {
+                case "boolean":
+                    return value.toLowerCase() === "true";
+                case "string":
+                    return value;
+                case "number": {
+                    const number = parseInt(value, 10);
+                    if (isNaN(number)) {
+                        throw new Error(`Value must be a number, got: ${JSON.stringify(value)}`);
+                    }
+                    return number;
+                }
+                // If not a primitive, the possible types are specified in what is effectively a map of options.
+                case "list":
+                    return ts.parseListTypeOption(<ts.CommandLineOptionOfListType>option, value, errors);
+                default:
+                    return ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
             }
         }
 
