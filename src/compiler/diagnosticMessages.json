@@ -2869,6 +2869,10 @@
         "category": "Error",
         "code": 6143
     },
+    "A package for '{0}' was found at '{1}', but is untyped. Because '--noImplicitAny' is enabled, this package must have a declaration.": {
+        "category": "Error",
+        "code": 6144
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

@@ -1,0 +1,13 @@
+/a.ts(1,22): error TS6144: A package for 'foo' was found at '/node_modules/foo/index.js', but is untyped. Because '--noImplicitAny' is enabled, this package must have a declaration.
+
+
+==== /a.ts (1 errors) ====
+    import * as foo from "foo";
+                         ~~~~~
+!!! error TS6144: A package for 'foo' was found at '/node_modules/foo/index.js', but is untyped. Because '--noImplicitAny' is enabled, this package must have a declaration.
+    
+==== /node_modules/foo/index.js (0 errors) ====
+    // This tests that `--noImplicitAny` disables untyped modules.
+    
+    This file is not processed.
+    
