@@ -1580,13 +1580,19 @@ namespace ts {
             case Extension.Dts:
                 // These are always allowed.
                 return undefined;
-
             case Extension.Tsx:
+                return needJsx();
             case Extension.Jsx:
-                return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
-
+                return needJsx() || needAllowJs();
             case Extension.Js:
-                return options.allowJs ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
+                return needAllowJs();
+        }
+
+        function needJsx() {
+            return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
+        }
+        function needAllowJs() {
+            return options.allowJs ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
         }
     }
 }
