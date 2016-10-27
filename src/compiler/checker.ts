@@ -11906,16 +11906,9 @@ namespace ts {
 
         function isAritySmaller(sourceType: Type, target: Expression) {
             if (isFunctionExpressionOrArrowFunction(target) && isFunctionType(sourceType)) {
-                let targetParameterCount = 0;
-                for (; targetParameterCount < target.parameters.length; targetParameterCount++) {
-                    const param = target.parameters[targetParameterCount];
-                    if (param.initializer || param.questionToken || param.dotDotDotToken || isJSDocOptionalParameter(param)) {
-                        break;
-                    }
-                }
                 const sourceSignatures = getSignaturesOfType(sourceType, SignatureKind.Call);
                 const sourceLengths = sourceSignatures.map(sig => !sig.hasRestParameter ? sig.parameters.length : Number.MAX_VALUE);
-                return forEach(sourceLengths, len => len < targetParameterCount);
+                return forEach(sourceLengths, len => len < target.parameters.length);
             }
 
             return false;

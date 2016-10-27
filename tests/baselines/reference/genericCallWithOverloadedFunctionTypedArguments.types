@@ -122,8 +122,8 @@ module GenericParameter {
 >'' : ""
 
     var r11 = foo6(<T>(x: T, y?: T) => ''); // any => string (+1 overload)
->r11 : { (x: any): string; (x: any, y?: any): string; }
->foo6(<T>(x: T, y?: T) => '') : { (x: any): string; (x: any, y?: any): string; }
+>r11 : any
+>foo6(<T>(x: T, y?: T) => '') : any
 >foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
 ><T>(x: T, y?: T) => '' : <T>(x: T, y?: T) => string
 >T : T
