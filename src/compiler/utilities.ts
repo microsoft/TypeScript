@@ -1440,7 +1440,7 @@ namespace ts {
         }
     }
 
-    function append<T>(previous: T[] | undefined, additional: T[] | undefined): T[] | undefined {
+    function appendMany<T>(previous: T[] | undefined, additional: T[] | undefined): T[] | undefined {
         if (additional) {
             if (!previous) {
                 previous = [];
@@ -1492,11 +1492,11 @@ namespace ts {
                     isVariableOfVariableDeclarationStatement ? node.parent.parent :
                         undefined;
             if (variableStatementNode) {
-                result = append(result, getJSDocs(variableStatementNode, checkParentVariableStatement, getDocs, getTags));
+                result = appendMany(result, getJSDocs(variableStatementNode, checkParentVariableStatement, getDocs, getTags));
             }
             if (node.kind === SyntaxKind.ModuleDeclaration &&
                 node.parent && node.parent.kind === SyntaxKind.ModuleDeclaration) {
-                result = append(result, getJSDocs(node.parent, checkParentVariableStatement, getDocs, getTags));
+                result = appendMany(result, getJSDocs(node.parent, checkParentVariableStatement, getDocs, getTags));
             }
 
             // Also recognize when the node is the RHS of an assignment expression
@@ -1507,30 +1507,30 @@ namespace ts {
                 (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
                 parent.parent.kind === SyntaxKind.ExpressionStatement;
             if (isSourceOfAssignmentExpressionStatement) {
-                result = append(result, getJSDocs(parent.parent, checkParentVariableStatement, getDocs, getTags));
+                result = appendMany(result, getJSDocs(parent.parent, checkParentVariableStatement, getDocs, getTags));
             }
 
             const isPropertyAssignmentExpression = parent && parent.kind === SyntaxKind.PropertyAssignment;
             if (isPropertyAssignmentExpression) {
-                result = append(result, getJSDocs(parent, checkParentVariableStatement, getDocs, getTags));
+                result = appendMany(result, getJSDocs(parent, checkParentVariableStatement, getDocs, getTags));
             }
 
             // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
                 const paramTags = getJSDocParameterTag(node as ParameterDeclaration, checkParentVariableStatement);
                 if (paramTags) {
-                    result = append(result, getTags(paramTags));
+                    result = appendMany(result, getTags(paramTags));
                 }
             }
         }
 
         if (isVariableLike(node) && node.initializer) {
-            result = append(result, getJSDocs(node.initializer, /*checkParentVariableStatement*/ false, getDocs, getTags));
+            result = appendMany(result, getJSDocs(node.initializer, /*checkParentVariableStatement*/ false, getDocs, getTags));
         }
 
         if (node.jsDocComments) {
             if (result) {
-                result = append(result, getDocs(node.jsDocComments));
+                result = appendMany(result, getDocs(node.jsDocComments));
             }
             else {
                 return getDocs(node.jsDocComments);
