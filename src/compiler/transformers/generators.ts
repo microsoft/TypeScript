@@ -2369,7 +2369,7 @@ namespace ts {
                     labelExpressions = [];
                 }
 
-                const expression = <LiteralExpression>createSynthesizedNode(SyntaxKind.NumericLiteral);
+                const expression = createLiteral(-1);
                 if (labelExpressions[label] === undefined) {
                     labelExpressions[label] = [expression];
                 }
@@ -2380,7 +2380,7 @@ namespace ts {
                 return expression;
             }
 
-            return <OmittedExpression>createNode(SyntaxKind.OmittedExpression);
+            return createOmittedExpression();
         }
 
         /**
@@ -2596,7 +2596,7 @@ namespace ts {
                             /*asteriskToken*/ undefined,
                             /*name*/ undefined,
                             /*typeParameters*/ undefined,
-                            [createParameter(state)],
+                            [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, state)],
                             /*type*/ undefined,
                             createBlock(
                                 buildResult,

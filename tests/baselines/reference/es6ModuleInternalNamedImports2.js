@@ -52,9 +52,9 @@ export var M;
     function M_F() { }
     M.M_F = M_F;
     // enum
+    var M_E;
     (function (M_E) {
-    })(M.M_E || (M.M_E = {}));
-    var M_E = M.M_E;
+    })(M_E = M.M_E || (M.M_E = {}));
     // alias
     M.M_A = M_M;
 })(M || (M = {}));
