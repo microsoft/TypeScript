@@ -167,7 +167,7 @@ var servicesSources = [
     "formatting/smartIndenter.ts",
     "formatting/tokenRange.ts",
     // CodeFixes
-    "codeFixes/codeFixProvider.ts",
+    "codeFixProvider.ts",
     "codeFixes/fixes.ts",
     "codeFixes/fixExtendsInterfaceBecomesImplements.ts",
     "codeFixes/fixClassIncorrectlyImplementsInterface.ts",

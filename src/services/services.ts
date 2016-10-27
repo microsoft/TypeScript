@@ -24,7 +24,7 @@
 /// <reference path='transpile.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='codefixes\codeFixProvider.ts' />
+/// <reference path='codeFixProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
 
 namespace ts {
