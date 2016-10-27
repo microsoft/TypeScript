@@ -11007,7 +11007,7 @@ namespace ts {
         /**
          * Check JSXAttributes. This function is used when we are trying to figure out call signature for JSX opening-like element.
          * In "checkApplicableSignatureForJsxOpeningLikeElement", we get type of arguments by checking the JSX opening-like element attributes property with contextual type.
-         * @param node a JSXAttributes to be resolved of its type
+         * @param node a JSXAttributes to be resolved of its typea
          */
         function checkJsxAttributes(node: JsxAttributes) {
             const symbolArray = getJsxAttributesSymbolArrayFromAttributesProperty(node.parent as JsxOpeningLikeElement);
@@ -11021,7 +11021,7 @@ namespace ts {
             }
             return argAttributesType;
         }
-                
+
         /**
          * Check whether the given attributes of JsxOpeningLikeElement is assignable to its corresponding tag-name attributes type.
          *      Resolve the type of attributes of the openingLikeElement through checking type of tag-name
@@ -12149,10 +12149,13 @@ namespace ts {
          */
         function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[]) {
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
-            // Stateless function components can have maximum of three arguments: "props", "context", and "updater".            // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,            // can be specified by users through attributes property.             const paramType = getTypeAtPosition(signature, 0);
+            // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
+            // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
+            // can be specified by users through attributes property.
+            const paramType = getTypeAtPosition(signature, 0);
 
             // JSX opening-like element has correct arity for stateless-function component if the one of the following condition is true:
-            //      1. callIsInComplete
+            //      1. callIsInCompletes
             //      2. attributes property has same number of properties as the parameter object type.
             //         We can figure that out by resolving attributes property and check number of properties in the resolved type
             // If the call has correct arity, we will then check if the argument type and parameter type is assignable
@@ -12267,7 +12270,8 @@ namespace ts {
             else if (isJsxOpeningLikeElement(node)) {
                 // For a JSX opening-like element, even though we will recheck the attributes again in "checkApplicableSignatureForJsxOpeningLikeElement" to figure out correct arity.
                 // We still return it here because when using infer type-argument we still have to getEffectiveArgument in trying to infer type-argument.
-                args = node.attributes.properties.length > 0 ? [node.attributes] : [];            }
+                args = node.attributes.properties.length > 0 ? [node.attributes] : [];
+            }
             else {
                 args = node.arguments || emptyArray;
             }
@@ -13100,7 +13104,7 @@ namespace ts {
             if (callSignatures && callSignatures.length > 0) {
                 let callSignature: Signature;
                 callSignature = resolveCall(openingLikeElement, callSignatures, candidatesOutArray) || callSignatures[0];
-                return callSignature
+                return callSignature;
             }
 
             return undefined;
