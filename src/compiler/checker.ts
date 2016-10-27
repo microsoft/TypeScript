@@ -136,6 +136,7 @@ namespace ts {
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
+        const stringOrNumberType = getUnionType([stringType, numberType]);
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -4473,22 +4474,13 @@ namespace ts {
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
-            if (type.flags & TypeFlags.TypeParameter) {
-                type = getApparentTypeOfTypeParameter(<TypeParameter>type);
-            }
-            if (type.flags & TypeFlags.StringLike) {
-                type = globalStringType;
-            }
-            else if (type.flags & TypeFlags.NumberLike) {
-                type = globalNumberType;
-            }
-            else if (type.flags & TypeFlags.BooleanLike) {
-                type = globalBooleanType;
-            }
-            else if (type.flags & TypeFlags.ESSymbol) {
-                type = getGlobalESSymbolType();
-            }
-            return type;
+            const t = type.flags & TypeFlags.TypeParameter ? getApparentTypeOfTypeParameter(<TypeParameter>type) : type;
+            return t.flags & TypeFlags.StringLike ? globalStringType :
+                t.flags & TypeFlags.NumberLike ? globalNumberType :
+                t.flags & TypeFlags.BooleanLike ? globalBooleanType :
+                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType() :
+                t.flags & TypeFlags.Index ? stringOrNumberType :
+                t;
         }
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: string): Symbol {
@@ -5674,10 +5666,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getLiteralTypeFromPropertyName(prop: Symbol) {
-            return startsWith(prop.name, "__@") ? neverType : getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(prop.name));
-        }
-
         function getIndexTypeForTypeParameter(type: TypeParameter) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
@@ -5686,10 +5674,19 @@ namespace ts {
             return type.resolvedIndexType;
         }
 
+        function getLiteralTypeFromPropertyName(prop: Symbol) {
+            return startsWith(prop.name, "__@") ? neverType : getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(prop.name));
+        }
+
+        function getLiteralTypeFromPropertyNames(type: Type) {
+            return getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
+        }
+
         function getIndexType(type: Type): Type {
-            return type.flags & TypeFlags.TypeParameter ?
-                getIndexTypeForTypeParameter(<TypeParameter>type) :
-                getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
+            return type.flags & TypeFlags.TypeParameter ? getIndexTypeForTypeParameter(<TypeParameter>type) :
+                getIndexInfoOfType(type, IndexKind.String) ? stringOrNumberType :
+                getIndexInfoOfType(type, IndexKind.Number) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type)]) :
+                getLiteralTypeFromPropertyNames(type);
         }
 
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
@@ -5712,33 +5709,45 @@ namespace ts {
             return indexedAccessTypes[objectType.id] || (indexedAccessTypes[objectType.id] = createIndexedAccessType(objectType, keyType));
         }
 
+        function getPropertyTypeForIndexType(objectType: Type, indexType: Type) {
+            return indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.EnumLiteral) && getTypeOfPropertyOfType(objectType, escapeIdentifier((<LiteralType>indexType).text)) ||
+                isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) && getIndexTypeOfType(objectType, IndexKind.Number) ||
+                isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike) && getIndexTypeOfType(objectType, IndexKind.String) ||
+                undefined;
+        }
+
         function getIndexedAccessType(objectType: Type, keyType: Type) {
-            if (keyType.flags & TypeFlags.TypeParameter) {
-                return getIndexedAccessTypeForTypeParameter(objectType, <TypeParameter>keyType);
-            }
-            if (isTypeOfKind(keyType, TypeFlags.StringLiteral) && !(keyType.flags & TypeFlags.Intersection)) {
-                return mapType(keyType, t => getTypeOfPropertyOfType(objectType, escapeIdentifier((<LiteralType>t).text)) || unknownType);
-            }
-            return keyType.flags & TypeFlags.Any ? anyType : unknownType;
+            return keyType.flags & TypeFlags.Any ? anyType :
+                keyType.flags & TypeFlags.TypeParameter ? getIndexedAccessTypeForTypeParameter(objectType, <TypeParameter>keyType) :
+                mapType(keyType, t => getPropertyTypeForIndexType(objectType, t) || unknownType);
         }
 
         function resolveIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
             const objectType = getTypeFromTypeNodeNoAlias(node.objectType);
-            const keyType = getTypeFromTypeNodeNoAlias(node.indexType);
-            if (keyType.flags & TypeFlags.TypeParameter &&
-                getConstraintOfTypeParameter(<TypeParameter>keyType) === getIndexType(objectType)) {
-                return getIndexedAccessType(objectType, keyType);
-            }
-            if (isTypeOfKind(keyType, TypeFlags.StringLiteral) && !(keyType.flags & TypeFlags.Intersection)) {
-                const missing = forEachType(keyType, t => getTypeOfPropertyOfType(objectType, escapeIdentifier((<LiteralType>t).text)) ? undefined : (<LiteralType>t).text);
-                if (missing) {
-                    error(node.indexType, Diagnostics.Property_0_is_missing_in_type_1, missing, typeToString(objectType));
+            const indexType = getTypeFromTypeNodeNoAlias(node.indexType);
+            if (indexType.flags & TypeFlags.TypeParameter) {
+                if (!isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType), getIndexType(objectType))) {
+                    error(node.indexType, Diagnostics.Type_0_is_not_constrained_to_keyof_1, typeToString(indexType), typeToString(objectType));
                     return unknownType;
                 }
-                return getIndexedAccessType(objectType, keyType);
+                return getIndexedAccessType(objectType, indexType);
             }
-            error(node.indexType, Diagnostics.Property_access_element_type_must_be_a_string_literal_type_or_a_type_parameter_constrained_to_keyof_0, typeToString(objectType));
-            return unknownType;
+            const indexTypes = indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Primitive) ? (<UnionType>indexType).types : [indexType];
+            for (const t of indexTypes) {
+                if (!getPropertyTypeForIndexType(objectType, t)) {
+                    if (t.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+                        error(node.indexType, Diagnostics.Property_0_does_not_exist_on_type_1, (<LiteralType>t).text, typeToString(objectType))
+                    }
+                    else if (t.flags & (TypeFlags.String | TypeFlags.Number)) {
+                        error(node.indexType, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(t));
+                    }
+                    else {
+                        error(node.indexType, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(t));
+                    }
+                    return unknownType;
+                }
+            }
+            return getIndexedAccessType(objectType, indexType);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -8604,10 +8613,6 @@ namespace ts {
                 return true;
             }
             return containsType(target.types, source);
-        }
-
-        function forEachType<T>(type: Type, f: (t: Type) => T): T {
-            return type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, f) : f(type);
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {

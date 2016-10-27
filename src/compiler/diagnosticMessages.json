@@ -1751,9 +1751,17 @@
         "category": "Error",
         "code": 2535
     },
-    "Property access element type must be a string literal type or a type parameter constrained to 'keyof {0}'.": {
+    "Type '{0}' is not constrained to 'keyof {1}'.": {
         "category": "Error",
         "code": 2536
+    },
+    "Type '{0}' has no matching index signature for type '{1}'.": {
+        "category": "Error",
+        "code": 2537
+    },
+    "Type '{0}' cannot be used as an index type.": {
+        "category": "Error",
+        "code": 2538
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",

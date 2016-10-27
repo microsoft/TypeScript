@@ -2652,7 +2652,7 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
-        StringLike = String | StringLiteral | Index,
+        StringLike = String | StringLiteral,
         NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -2662,7 +2662,7 @@ namespace ts {
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol,
         NotUnionOrUnit = Any | ESSymbol | Object,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
