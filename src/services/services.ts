@@ -467,7 +467,7 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string, string>;
         public nameTable: Map<string, number>;
-        public resolvedModules: Map<string, ResolvedModule>;
+        public resolvedModules: Map<string, ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<string, ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];

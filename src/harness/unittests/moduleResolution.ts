@@ -1,7 +1,7 @@
 /// <reference path="..\harness.ts" />
 
 namespace ts {
-    export function checkResolvedModule(expected: ResolvedModule, actual: ResolvedModule): boolean {
+    export function checkResolvedModule(expected: ResolvedModuleFull, actual: ResolvedModuleFull): boolean {
         if (!expected === !actual) {
             if (expected) {
                 assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
@@ -13,13 +13,13 @@ namespace ts {
         return false;
     }
 
-    export function checkResolvedModuleWithFailedLookupLocations(actual: ResolvedModuleWithFailedLookupLocations, expectedResolvedModule: ResolvedModule, expectedFailedLookupLocations: string[]): void {
+    export function checkResolvedModuleWithFailedLookupLocations(actual: ResolvedModuleWithFailedLookupLocations, expectedResolvedModule: ResolvedModuleFull, expectedFailedLookupLocations: string[]): void {
         assert.isTrue(actual.resolvedModule !== undefined, "module should be resolved");
         checkResolvedModule(actual.resolvedModule, expectedResolvedModule);
         assert.deepEqual(actual.failedLookupLocations, expectedFailedLookupLocations);
     }
 
-    export function createResolvedModule(resolvedFileName: string, isExternalLibraryImport = false): ResolvedModule {
+    export function createResolvedModule(resolvedFileName: string, isExternalLibraryImport = false): ResolvedModuleFull {
         return { resolvedFileName, extension: extensionFromPath(resolvedFileName), isExternalLibraryImport };
     }
 

@@ -87,13 +87,13 @@ namespace ts {
         return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText));
     }
 
-    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule {
+    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull {
         return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules.get(moduleNameText) : undefined;
     }
 
-    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = new StringMap<ResolvedModule>();
+            sourceFile.resolvedModules = new StringMap<ResolvedModuleFull>();
         }
 
         sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
@@ -108,11 +108,7 @@ namespace ts {
     }
 
     /* @internal */
-    /**
-     * Considers two ResolvedModules equal if they have the same `resolvedFileName`.
-     * Thus `{ ts: foo, js: bar }` is equal to `{ ts: foo, js: baz }` because `ts` is preferred.
-     */
-    export function moduleResolutionIsEqualTo(oldResolution: ResolvedModule, newResolution: ResolvedModule): boolean {
+    export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
         return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
             oldResolution.extension === newResolution.extension &&
             oldResolution.resolvedFileName === newResolution.resolvedFileName;
@@ -406,8 +402,9 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
-    export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
-        return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
+    /** Given a symbol for a module, checks that it is either an untyped import or a shorthand ambient module. */
+    export function isUntypedModuleSymbol(moduleSymbol: Symbol): boolean {
+        return !moduleSymbol.valueDeclaration || isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
     function isShorthandAmbientModule(node: Node): boolean {

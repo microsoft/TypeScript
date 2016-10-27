@@ -2901,6 +2901,10 @@
         "category": "Error",
         "code": 7015
     },
+    "Could not find a declaration file for module '{0}'. '{1}' implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7016
+    },
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
         "code": 7017

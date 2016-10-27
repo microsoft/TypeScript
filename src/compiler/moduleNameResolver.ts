@@ -45,7 +45,7 @@ namespace ts {
     }
 
     /** Adds `isExernalLibraryImport` to a Resolved to get a ResolvedModule. */
-    function resolvedModuleFromResolved({ path, extension }: Resolved, isExternalLibraryImport: boolean): ResolvedModule {
+    function resolvedModuleFromResolved({ path, extension }: Resolved, isExternalLibraryImport: boolean): ResolvedModuleFull {
         return { resolvedFileName: path, extension, isExternalLibraryImport };
     }
 
