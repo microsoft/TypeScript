@@ -79,9 +79,9 @@ namespace ts.performance {
 
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
-        counts = new StringMap<number>();
-        marks = new StringMap<number>();
-        measures = new StringMap<number>();
+        counts = createMap<string, number>();
+        marks = createMap<string, number>();
+        measures = createMap<string, number>();
         enabled = true;
         profilerStart = timestamp();
     }

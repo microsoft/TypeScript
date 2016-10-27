@@ -2245,7 +2245,7 @@ namespace ts {
             const savedCurrentScope = currentScope;
             const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
             currentScope = body;
-            currentScopeFirstDeclarationsOfName = new StringMap<Node>();
+            currentScopeFirstDeclarationsOfName = createMap<string, Node>();
             startLexicalEnvironment();
 
             const statements = visitNodes(body.statements, visitor, isStatement, start);
@@ -2630,7 +2630,7 @@ namespace ts {
             const name = node.symbol && node.symbol.name;
             if (name) {
                 if (!currentScopeFirstDeclarationsOfName) {
-                    currentScopeFirstDeclarationsOfName = new StringMap<Node>();
+                    currentScopeFirstDeclarationsOfName = createMap<string, Node>();
                 }
 
                 setIfNotSet(currentScopeFirstDeclarationsOfName, name, node);
@@ -3218,7 +3218,7 @@ namespace ts {
                 context.enableSubstitution(SyntaxKind.Identifier);
 
                 // Keep track of class aliases.
-                classAliases = new NumberMap<number, Identifier>();
+                classAliases = createMap<number, Identifier>();
             }
         }
 

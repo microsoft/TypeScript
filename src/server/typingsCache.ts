@@ -31,7 +31,7 @@ namespace ts.server {
         if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
             return true;
         }
-        const set = new StringMap<boolean>();
+        const set = createMap<string, boolean>();
         let unique = 0;
 
         for (const v of arr1) {
@@ -72,7 +72,7 @@ namespace ts.server {
     }
 
     export class TypingsCache {
-        private readonly perProjectCache = new StringMap<TypingsCacheEntry>();
+        private readonly perProjectCache = createMap<string, TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
         }

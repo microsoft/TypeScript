@@ -1622,7 +1622,7 @@ namespace ts {
         // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
-        // Set the parent that is in parse tree 
+        // Set the parent that is in parse tree
         // this makes sure that parent chain is intact for checker to traverse complete scope tree
         react.parent = getParseTreeNode(parent);
         return react;
@@ -2806,7 +2806,7 @@ namespace ts {
     }
 
     function mergeTokenSourceMapRanges(sourceRanges: Map<SyntaxKind, TextRange>, destRanges: Map<SyntaxKind, TextRange>): Map<SyntaxKind, TextRange> {
-        if (!destRanges) destRanges = new NumberMap<SyntaxKind, TextRange>();
+        if (!destRanges) destRanges = createMap<SyntaxKind, TextRange>();
         copyMapEntriesFromTo(sourceRanges, destRanges);
         return destRanges;
     }
@@ -2899,7 +2899,7 @@ namespace ts {
      */
     export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
         const emitNode = getOrCreateEmitNode(node);
-        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = new NumberMap<SyntaxKind, TextRange>());
+        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<SyntaxKind, TextRange>());
         tokenSourceMapRanges.set(token, range);
         return node;
     }

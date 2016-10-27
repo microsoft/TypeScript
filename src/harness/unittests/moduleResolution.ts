@@ -32,7 +32,7 @@ namespace ts {
         const map = arrayToMap(files, f => f.name);
 
         if (hasDirectoryExists) {
-            const directories = new StringSet();
+            const directories = createSet();
             for (const f of files) {
                 let name = getDirectoryPath(f.name);
                 while (true) {

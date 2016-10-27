@@ -147,7 +147,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = bindInStrictMode(file, opts);
-            classifiableNames = new StringSet();
+            classifiableNames = createSet();
             symbolCount = 0;
             skipTransformFlagAggregation = isDeclarationFile(file);
 
@@ -207,11 +207,11 @@ namespace ts {
             symbol.declarations.push(node);
 
             if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
-                symbol.exports = new StringMap<Symbol>();
+                symbol.exports = createMap<string, Symbol>();
             }
 
             if (symbolFlags & SymbolFlags.HasMembers && !symbol.members) {
-                symbol.members = new StringMap<Symbol>();
+                symbol.members = createMap<string, Symbol>();
             }
 
             if (symbolFlags & SymbolFlags.Value) {
@@ -484,7 +484,7 @@ namespace ts {
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
                 if (containerFlags & ContainerFlags.HasLocals) {
-                    container.locals = new StringMap<Symbol>();
+                    container.locals = createMap<string, Symbol>();
                 }
                 addToContainerChain(container);
             }
@@ -1525,7 +1525,7 @@ namespace ts {
 
             const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = new StringMap([[symbol.name, symbol]]);
+            typeLiteralSymbol.members = createMap([[symbol.name, symbol]]);
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
@@ -1535,7 +1535,7 @@ namespace ts {
             }
 
             if (inStrictMode) {
-                const seen = new StringMap<ElementKind>();
+                const seen = createMap<string, ElementKind>();
 
                 for (const prop of node.properties) {
                     if (prop.name.kind !== SyntaxKind.Identifier) {
@@ -1591,7 +1591,7 @@ namespace ts {
                 // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
-                        blockScopeContainer.locals = new StringMap<Symbol>();
+                        blockScopeContainer.locals = createMap<string, Symbol>();
                         addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
@@ -2071,7 +2071,7 @@ namespace ts {
                 }
             }
 
-            file.symbol.globalExports = file.symbol.globalExports || new StringMap<Symbol>();
+            file.symbol.globalExports = file.symbol.globalExports || createMap<string, Symbol>();
             declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
@@ -2118,7 +2118,7 @@ namespace ts {
             Debug.assert(isInJavaScriptFile(node));
             // Declare a 'member' if the container is an ES5 class or ES6 constructor
             if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
-                container.symbol.members = container.symbol.members || new StringMap<Symbol>();
+                container.symbol.members = container.symbol.members || createMap<string, Symbol>();
                 // It's acceptable for multiple 'this' assignments of the same identifier to occur
                 declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
             }
@@ -2157,7 +2157,7 @@ namespace ts {
 
             // Set up the members collection if it doesn't exist already
             if (!funcSymbol.members) {
-                funcSymbol.members = new StringMap<Symbol>();
+                funcSymbol.members = createMap<string, Symbol>();
             }
 
             // Declare the method/property

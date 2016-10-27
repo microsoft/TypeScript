@@ -346,7 +346,7 @@ namespace ts.server {
 
             // Use slice to clone the array to avoid manipulating in place
             const queue = fileInfo.referencedBy.slice(0);
-            const fileNameSet = new StringMap<ScriptInfo>();
+            const fileNameSet = createMap<string, ScriptInfo>();
             fileNameSet.set(scriptInfo.fileName, scriptInfo);
             while (queue.length > 0) {
                 const processingFileInfo = queue.pop();

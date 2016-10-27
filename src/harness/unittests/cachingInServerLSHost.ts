@@ -7,7 +7,7 @@ namespace ts {
     }
 
     function createDefaultServerHost(fileMap: Map<string, File>): server.ServerHost {
-        const existingDirectories = new StringSet();
+        const existingDirectories = createSet();
         forEachKeyInMap(fileMap, name => {
             let dir = getDirectoryPath(name);
             let previous: string;

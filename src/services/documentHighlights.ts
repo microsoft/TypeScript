@@ -39,7 +39,7 @@ namespace ts.DocumentHighlights {
                     return undefined;
                 }
 
-                const fileNameToDocumentHighlights = new StringMap<DocumentHighlights>();
+                const fileNameToDocumentHighlights = createMap<string, DocumentHighlights>();
                 const result: DocumentHighlights[] = [];
                 for (const referencedSymbol of referencedSymbols) {
                     for (const referenceEntry of referencedSymbol.references) {

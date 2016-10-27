@@ -63,7 +63,7 @@ namespace ts.server {
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions = new StringMap<T>();
+            const newResolutions = createMap<string, T>();
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
             const lastDeletedFileName = this.project.projectService.lastDeletedFile && this.project.projectService.lastDeletedFile.fileName;

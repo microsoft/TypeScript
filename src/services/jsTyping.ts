@@ -29,7 +29,7 @@ namespace ts.JsTyping {
     // that we are confident require typings
     let safeList: Map<string, string>;
 
-    const EmptySafeList = new StringMap<string>();
+    const EmptySafeList = createMap<string, string>();
 
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
@@ -62,7 +62,7 @@ namespace ts.JsTyping {
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
-        const inferredTypings = new StringMap<string | undefined>();
+        const inferredTypings = createMap<string, string | undefined>();
 
         if (!typingOptions || !typingOptions.enableAutoDiscovery) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };

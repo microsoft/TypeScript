@@ -955,7 +955,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f]);
-            const cache = new StringMap<string>();
+            const cache = createMap<string, string>();
             for (const name of JsTyping.nodeCoreModuleList) {
                 const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enableAutoDiscovery: true }, [name, "somename"]);
                 assert.deepEqual(result.newTypingNames.sort(), ["node", "somename"]);

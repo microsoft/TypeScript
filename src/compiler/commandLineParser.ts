@@ -500,8 +500,8 @@ namespace ts {
             return optionNameMapCache;
         }
 
-        const optionNameMap = new StringMap<CommandLineOption>();
-        const shortOptionNames = new StringMap<string>();
+        const optionNameMap = createMap<string, CommandLineOption>();
+        const shortOptionNames = createMap<string, string>();
         forEach(optionDeclarations, option => {
             optionNameMap.set(option.name.toLowerCase(), option);
             if (option.shortName) {
@@ -741,7 +741,7 @@ namespace ts {
         }
 
         function serializeCompilerOptions(options: CompilerOptions): MapLike<CompilerOptionsValue> {
-            const result = new StringMap<CompilerOptionsValue>();
+            const result = createMap<string, CompilerOptionsValue>();
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {
@@ -1172,12 +1172,12 @@ namespace ts {
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
-        const literalFileMap = new StringMap<string>();
+        const literalFileMap = createMap<string, string>();
 
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap = new StringMap<string>();
+        const wildcardFileMap = createMap<string, string>();
 
         if (include) {
             include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false);
@@ -1276,7 +1276,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories = new StringMap<WatchDirectoryFlags>();
+        const wildcardDirectories = createMap<string, WatchDirectoryFlags>();
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {

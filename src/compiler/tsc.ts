@@ -127,7 +127,7 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap = new NumberMap<DiagnosticCategory, string>([
+    const categoryFormatMap = createMap<DiagnosticCategory, string>([
         [DiagnosticCategory.Warning, yellowForegroundEscapeSequence],
         [DiagnosticCategory.Error, redForegroundEscapeSequence],
         [DiagnosticCategory.Message, blueForegroundEscapeSequence],
@@ -425,7 +425,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = new StringMap<boolean>();
+            cachedExistingFiles = createMap<string, boolean>();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -706,7 +706,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap = new StringMap<string[]>();  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = createMap<string, string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];

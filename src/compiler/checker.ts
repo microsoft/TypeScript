@@ -47,7 +47,7 @@ namespace ts {
         let symbolCount = 0;
 
         const emptyArray: any[] = [];
-        const emptySymbols = new StringMap<Symbol>();
+        const emptySymbols = createMap<string, Symbol>();
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = compilerOptions.target || ScriptTarget.ES3;
@@ -111,10 +111,10 @@ namespace ts {
         };
 
         const tupleTypes: GenericType[] = [];
-        const unionTypes = new StringMap<UnionType>();
-        const intersectionTypes = new StringMap<IntersectionType>();
-        const stringLiteralTypes = new StringMap<LiteralType>();
-        const numericLiteralTypes = new StringMap<LiteralType>();
+        const unionTypes = createMap<string, UnionType>();
+        const intersectionTypes = createMap<string, IntersectionType>();
+        const stringLiteralTypes = createMap<string, LiteralType>();
+        const numericLiteralTypes = createMap<string, LiteralType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
 
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -139,7 +139,7 @@ namespace ts {
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        emptyGenericType.instantiations = new StringMap<TypeReference>();
+        emptyGenericType.instantiations = createMap<string, TypeReference>();
 
         const anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
@@ -155,7 +155,7 @@ namespace ts {
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
-        const globals = new StringMap<Symbol>();
+        const globals = createMap<string, Symbol>();
         /**
          * List of every ambient module with a "*" wildcard.
          * Unlike other ambient modules, these can't be stored in `globals` because symbol tables only deal with exact matches.
@@ -325,7 +325,7 @@ namespace ts {
 
         let jsxElementType: Type;
         /** Things we lazy load from the JSX namespace */
-        const jsxTypes = new StringMap<Type>();
+        const jsxTypes = createMap<string, Type>();
         const JsxNames = {
             JSX: "JSX",
             IntrinsicElements: "IntrinsicElements",
@@ -336,11 +336,11 @@ namespace ts {
             IntrinsicClassAttributes: "IntrinsicClassAttributes"
         };
 
-        const subtypeRelation = new StringMap<RelationComparisonResult>();
-        const assignableRelation = new StringMap<RelationComparisonResult>();
-        const comparableRelation = new StringMap<RelationComparisonResult>();
-        const identityRelation = new StringMap<RelationComparisonResult>();
-        const enumRelation = new StringMap<boolean>();
+        const subtypeRelation = createMap<string, RelationComparisonResult>();
+        const assignableRelation = createMap<string, RelationComparisonResult>();
+        const comparableRelation = createMap<string, RelationComparisonResult>();
+        const identityRelation = createMap<string, RelationComparisonResult>();
+        const enumRelation = createMap<string, boolean>();
 
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         let _displayBuilder: SymbolDisplayBuilder;
@@ -354,7 +354,7 @@ namespace ts {
             ResolvedReturnType
         }
 
-        const builtinGlobals = new StringMap([[undefinedSymbol.name, undefinedSymbol]]);
+        const builtinGlobals = createMap([[undefinedSymbol.name, undefinedSymbol]]);
 
         initializeTypeChecker();
 
@@ -437,11 +437,11 @@ namespace ts {
                     target.declarations.push(node);
                 });
                 if (source.members) {
-                    if (!target.members) target.members = new StringMap<Symbol>();
+                    if (!target.members) target.members = createMap<string, Symbol>();
                     mergeSymbolTable(target.members, source.members);
                 }
                 if (source.exports) {
-                    if (!target.exports) target.exports = new StringMap<Symbol>();
+                    if (!target.exports) target.exports = createMap<string, Symbol>();
                     mergeSymbolTable(target.exports, source.exports);
                 }
                 recordMergedSymbol(target, source);
@@ -1418,7 +1418,7 @@ namespace ts {
                 // This provides a name to the module. See the test tests/cases/fourslash/untypedModuleImport.ts
                 const newSymbol = createSymbol(SymbolFlags.ValueModule, quotedName);
                 // Module symbols are expected to have 'exports', although since this is an untyped module it can be empty.
-                newSymbol.exports = new StringMap<Symbol>();
+                newSymbol.exports = createMap<string, Symbol>();
                 // Cache it so subsequent accesses will return the same module.
                 globals.set(quotedName, newSymbol);
                 return newSymbol;
@@ -1531,8 +1531,8 @@ namespace ts {
                 // All export * declarations are collected in an __export symbol by the binder
                 const exportStars = symbol.exports.get("__export");
                 if (exportStars) {
-                    const nestedSymbols = new StringMap<Symbol>();
-                    const lookupTable = new StringMap<ExportCollisionTracker>();
+                    const nestedSymbols = createMap<string, Symbol>();
+                    const lookupTable = createMap<string, ExportCollisionTracker>();
                     for (const node of exportStars.declarations) {
                         const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier);
                         const exportedSymbols = visit(resolvedModule);
@@ -3237,7 +3237,7 @@ namespace ts {
 
         // Return the type implied by an object binding pattern
         function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
-            const members = new StringMap<Symbol>();
+            const members = createMap<string, Symbol>();
             let hasComputedProperties = false;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
@@ -3842,7 +3842,7 @@ namespace ts {
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
                     type.localTypeParameters = localTypeParameters;
-                    (<GenericType>type).instantiations = new StringMap([[getTypeListId(type.typeParameters), <GenericType>type]]);
+                    (<GenericType>type).instantiations = createMap([[getTypeListId(type.typeParameters), <GenericType>type]]);
                     (<GenericType>type).target = <GenericType>type;
                     (<GenericType>type).typeArguments = type.typeParameters;
                     type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter);
@@ -3884,7 +3884,7 @@ namespace ts {
                     if (typeParameters) {
                         // Initialize the instantiation cache for generic type aliases. The declared type corresponds to
                         // an instantiation of the type alias with the type parameters supplied as type arguments.
-                        links.instantiations = new StringMap([[getTypeListId(links.typeParameters), type]]);
+                        links.instantiations = createMap([[getTypeListId(links.typeParameters), type]]);
                     }
                 }
                 else {
@@ -4572,7 +4572,7 @@ namespace ts {
         // these partial properties when identifying discriminant properties, but otherwise they are filtered out
         // and do not appear to be present in the union type.
         function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: string): Symbol {
-            const properties = type.resolvedProperties || (type.resolvedProperties = new StringMap<Symbol>());
+            const properties = type.resolvedProperties || (type.resolvedProperties = createMap<string, Symbol>());
             let property = properties.get(name);
             if (!property) {
                 property = createUnionOrIntersectionProperty(type, name);
@@ -5393,7 +5393,7 @@ namespace ts {
             type.typeParameters = typeParameters;
             type.outerTypeParameters = undefined;
             type.localTypeParameters = typeParameters;
-            type.instantiations = new StringMap([[getTypeListId(type.typeParameters), <GenericType>type]]);
+            type.instantiations = createMap([[getTypeListId(type.typeParameters), <GenericType>type]]);
             type.target = <GenericType>type;
             type.typeArguments = type.typeParameters;
             type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter);
@@ -6906,7 +6906,7 @@ namespace ts {
                 }
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
-                maybeStack[depth] = new StringMap([[id, RelationComparisonResult.Succeeded]]);
+                maybeStack[depth] = createMap([[id, RelationComparisonResult.Succeeded]]);
                 depth++;
                 const saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;
@@ -7591,7 +7591,7 @@ namespace ts {
         }
 
         function transformTypeOfMembers(type: Type, f: (propertyType: Type) => Type) {
-            const members = new StringMap<Symbol>();
+            const members = createMap<string, Symbol>();
             for (const property of getPropertiesOfObjectType(type)) {
                 const original = getTypeOfSymbol(property);
                 const updated = f(original);
@@ -7814,7 +7814,7 @@ namespace ts {
             let targetStack: Type[];
             let depth = 0;
             let inferiority = 0;
-            const visited = new StringSet();
+            const visited = createSet();
             inferFromTypes(originalSource, originalTarget);
 
             function isInProcess(source: Type, target: Type) {
@@ -8894,7 +8894,7 @@ namespace ts {
                 // If we have previously computed the control flow type for the reference at
                 // this flow loop junction, return the cached type.
                 const id = getFlowNodeId(flow);
-                const cache = flowLoopCaches[id] || (flowLoopCaches[id] = new StringMap<Type>());
+                const cache = flowLoopCaches[id] || (flowLoopCaches[id] = createMap<string, Type>());
                 if (!key) {
                     key = getFlowCacheKey(reference);
                 }
@@ -10594,7 +10594,7 @@ namespace ts {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
 
-            const propertiesTable = new StringMap<Symbol>();
+            const propertiesTable = createMap<string, Symbol>();
             const propertiesArray: Symbol[] = [];
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
@@ -11145,7 +11145,7 @@ namespace ts {
 
             const targetAttributesType = getJsxElementAttributesType(node);
 
-            const nameTable = new StringSet();
+            const nameTable = createSet();
             // Process this array in right-to-left order so we know which
             // attributes (mostly from spreads) are being overwritten and
             // thus should have their types ignored
@@ -14622,8 +14622,8 @@ namespace ts {
                 Property = Getter | Setter
             }
 
-            const instanceNames = new StringMap<Accessor>();
-            const staticNames = new StringMap<Accessor>();
+            const instanceNames = createMap<string, Accessor>();
+            const staticNames = createMap<string, Accessor>();
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
@@ -14672,7 +14672,7 @@ namespace ts {
         }
 
         function checkObjectTypeForDuplicateDeclarations(node: TypeLiteralNode | InterfaceDeclaration) {
-            const names = new StringSet();
+            const names = createSet();
             for (const member of node.members) {
                 if (member.kind == SyntaxKind.PropertySignature) {
                     let memberName: string;
@@ -18490,7 +18490,7 @@ namespace ts {
         }
 
         function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
-            const symbols = new StringMap<Symbol>();
+            const symbols = createMap<string, Symbol>();
             let memberFlags: ModifierFlags = ModifierFlags.None;
 
             if (isInsideWithStatementBody(location)) {
@@ -20315,7 +20315,7 @@ namespace ts {
         }
 
         function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression, inDestructuring: boolean) {
-            const seen = new StringMap<SymbolFlags>();
+            const seen = createMap<string, SymbolFlags>();
             const Property = 1;
             const GetAccessor = 2;
             const SetAccessor = 4;
@@ -20402,7 +20402,7 @@ namespace ts {
         }
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
-            const seen = new StringSet();
+            const seen = createSet();
             for (const attr of node.attributes) {
                 if (attr.kind === SyntaxKind.JsxSpreadAttribute) {
                     continue;

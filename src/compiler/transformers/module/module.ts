@@ -10,7 +10,7 @@ namespace ts {
             importAliasNames: ParameterDeclaration[];
         }
 
-        const transformModuleDelegates = new NumberMap<ModuleKind, (node: SourceFile) => SourceFile>([
+        const transformModuleDelegates = createMap<ModuleKind, (node: SourceFile) => SourceFile>([
             [ModuleKind.None, transformCommonJSModule],
             [ModuleKind.CommonJS, transformCommonJSModule],
             [ModuleKind.AMD, transformAMDModule],
@@ -40,8 +40,8 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes shorthand property assignments for imported/exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
-        const moduleInfoMap = new NumberMap<number, ExternalModuleInfo>(); // The ExternalModuleInfo for each file.
-        const deferredExports = new NumberMap<number, Statement[]>(); // Exports to defer until an EndOfDeclarationMarker is found.
+        const moduleInfoMap = createMap<number, ExternalModuleInfo>(); // The ExternalModuleInfo for each file.
+        const deferredExports = createMap<number, Statement[]>(); // Exports to defer until an EndOfDeclarationMarker is found.
 
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
@@ -1101,7 +1101,7 @@ namespace ts {
             if (node.kind === SyntaxKind.SourceFile) {
                 currentSourceFile = <SourceFile>node;
                 currentModuleInfo = moduleInfoMap.get(getOriginalNodeId(currentSourceFile));
-                noSubstitution = new NumberMap<number, boolean>();
+                noSubstitution = createMap<number, boolean>();
 
                 previousOnEmitNode(emitContext, node, emitCallback);
 

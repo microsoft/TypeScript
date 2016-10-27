@@ -12,7 +12,7 @@
 
 /* @internal */
 namespace ts {
-    const moduleTransformerMap = new NumberMap<ModuleKind, Transformer>([
+    const moduleTransformerMap = createMap<ModuleKind, Transformer>([
         [ModuleKind.ES2015, transformES2015Module],
         [ModuleKind.System, transformSystemModule],
         [ModuleKind.AMD, transformModule],

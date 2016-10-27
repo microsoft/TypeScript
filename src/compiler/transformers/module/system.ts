@@ -28,10 +28,10 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
-        const moduleInfoMap = new NumberMap<number, ExternalModuleInfo>(); // The ExternalModuleInfo for each file.
-        const deferredExports = new NumberMap<number, Statement[]>(); // Exports to defer until an EndOfDeclarationMarker is found.
-        const exportFunctionsMap = new NumberMap<number, Identifier>(); // The export function associated with a source file.
-        const noSubstitutionMap = new NumberMap<number, Map<number, boolean>>(); // Set of nodes for which substitution rules should be ignored for each file.
+        const moduleInfoMap = createMap<number, ExternalModuleInfo>(); // The ExternalModuleInfo for each file.
+        const deferredExports = createMap<number, Statement[]>(); // Exports to defer until an EndOfDeclarationMarker is found.
+        const exportFunctionsMap = createMap<number, Identifier>(); // The export function associated with a source file.
+        const noSubstitutionMap = createMap<number, Map<number, boolean>>(); // Set of nodes for which substitution rules should be ignored for each file.
 
         let currentSourceFile: SourceFile; // The current file.
         let moduleInfo: ExternalModuleInfo; // ExternalModuleInfo for the current file.
@@ -138,7 +138,7 @@ namespace ts {
          * @param externalImports The imports for the file.
          */
         function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {
-            const groupIndices = new StringMap<number>();
+            const groupIndices = createMap<string, number>();
             const dependencyGroups: DependencyGroup[] = [];
             for (let i = 0; i < externalImports.length; i++) {
                 const externalImport = externalImports[i];
@@ -1739,7 +1739,7 @@ namespace ts {
          * @param node The node which should not be substituted.
          */
         function preventSubstitution<T extends Node>(node: T): T {
-            if (noSubstitution === undefined) noSubstitution = new NumberMap<number, boolean>();
+            if (noSubstitution === undefined) noSubstitution = createMap<number, boolean>();
             noSubstitution.set(getNodeId(node), true);
             return node;
         }

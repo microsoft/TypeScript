@@ -922,7 +922,7 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap = new ts.StringMap<ts.SourceFile>([[
+        const libFileNameSourceFileMap = ts.createMap<string, ts.SourceFile>([[
             defaultLibFileName,
             createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         ]]);
@@ -1089,7 +1089,7 @@ namespace Harness {
         let optionsIndex: ts.Map<string, ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
-                optionsIndex = new ts.StringMap<ts.CommandLineOption>();
+                optionsIndex = ts.createMap<string, ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
                     optionsIndex.set(option.name.toLowerCase(), option);
@@ -1452,7 +1452,7 @@ namespace Harness {
 
             const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-            const fullResults = new ts.StringMap<TypeWriterResult[]>();
+            const fullResults = ts.createMap<string, TypeWriterResult[]>();
 
             for (const sourceFile of allFiles) {
                 fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));

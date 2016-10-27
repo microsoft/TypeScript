@@ -279,7 +279,7 @@ namespace ts {
             else if (node.transformFlags & TransformFlags.ContainsES2015 || (isInConstructorWithCapturedSuper && !isExpression(node))) {
                 // we want to dive in this branch either if node has children with ES2015 specific syntax
                 // or we are inside constructor that captures result of the super call so all returns without expression should be
-                // rewritten. Note: we skip expressions since returns should never appear there 
+                // rewritten. Note: we skip expressions since returns should never appear there
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -1880,7 +1880,7 @@ namespace ts {
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
             if (convertedLoopState) {
                 if (!convertedLoopState.labels) {
-                    convertedLoopState.labels = new StringMap<string>();
+                    convertedLoopState.labels = createMap<string, string>();
                 }
                 convertedLoopState.labels.set(node.label.text, node.label.text);
             }
@@ -2497,13 +2497,13 @@ namespace ts {
         function setLabeledJump(state: ConvertedLoopState, isBreak: boolean, labelText: string, labelMarker: string): void {
             if (isBreak) {
                 if (!state.labeledNonLocalBreaks) {
-                    state.labeledNonLocalBreaks = new StringMap<string>();
+                    state.labeledNonLocalBreaks = createMap<string, string>();
                 }
                 state.labeledNonLocalBreaks.set(labelText, labelMarker);
             }
             else {
                 if (!state.labeledNonLocalContinues) {
-                    state.labeledNonLocalContinues = new StringMap<string>();
+                    state.labeledNonLocalContinues = createMap<string, string>();
                 }
                 state.labeledNonLocalContinues.set(labelText, labelMarker);
             }

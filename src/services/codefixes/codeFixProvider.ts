@@ -14,7 +14,7 @@ namespace ts {
     }
 
     export namespace codefix {
-        const codeFixes = new NumberMap<number, CodeFix[]>();
+        const codeFixes = createMap<number, CodeFix[]>();
 
         export function registerCodeFix(action: CodeFix) {
             forEach(action.errorCodes, error => {

@@ -23,7 +23,7 @@ namespace ts {
     export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        const files = new StringMap<T>();
+        const files = createMap<string, T>();
         return {
             get,
             set,

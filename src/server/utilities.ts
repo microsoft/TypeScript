@@ -225,7 +225,7 @@ namespace ts.server {
     }
 
     export class ThrottledOperations {
-        private pendingTimeouts = new StringMap<any>();
+        private pendingTimeouts = createMap<string, any>();
         constructor(private readonly host: ServerHost) {
         }
 

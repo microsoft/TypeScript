@@ -502,7 +502,7 @@ namespace ts {
         }
 
         private computeNamedDeclarations(): Map<string, Declaration[]> {
-            const result = new StringMap<Declaration[]>();
+            const result = createMap<string, Declaration[]>();
 
             forEachChild(this, visit);
 
@@ -1931,7 +1931,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = new StringMap<number>();
+        const nameTable = createMap<string, number>();
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;

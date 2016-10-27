@@ -189,7 +189,7 @@ namespace FourSlash {
 
         public formatCodeSettings: ts.FormatCodeSettings;
 
-        private inputFiles = new ts.StringMap<string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
+        private inputFiles = ts.createMap<string, string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
 
         private static getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[]) {
             let result = "";
@@ -674,7 +674,7 @@ namespace FourSlash {
 
         public noItemsWithSameNameButDifferentKind(): void {
             const completions = this.getCompletionListAtCaret();
-            const uniqueItems = new ts.StringMap<string>();
+            const uniqueItems = ts.createMap<string, string>();
             for (const item of completions.entries) {
                 if (!ts.setIfNotSet(uniqueItems, item.name, item.kind)) {
                     const uniqueItem = uniqueItems.get(item.name);
@@ -1777,7 +1777,7 @@ namespace FourSlash {
         }
 
         private rangesByTextMap(): ts.Map<string, Range[]> {
-            const result = new ts.StringMap<Range[]>();
+            const result = ts.createMap<string, Range[]>();
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
                 ts.multiMapAdd(result, text, range);

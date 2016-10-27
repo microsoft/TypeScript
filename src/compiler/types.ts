@@ -17,7 +17,7 @@ namespace ts {
      */
     export interface Map<K, V> {
         clear(): void;
-        delete(key: K): void;
+        delete(key: K): boolean;
         /**
          * Call `action` for each entry in the map.
          * Since we use a `for-in` loop for our shims, `key` may be a string.
@@ -38,7 +38,7 @@ namespace ts {
     export interface Set<T> {
         add(value: T): void;
         clear(): void;
-        delete(value: T): void;
+        delete(value: T): boolean;
         forEach(action: (value: T) => void): void;
         has(value: T): boolean;
     }

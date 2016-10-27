@@ -46,7 +46,7 @@ namespace ts {
      *       supplant the existing `forEachChild` implementation if performance is not
      *       significantly impacted.
      */
-    const nodeEdgeTraversalMap = new NumberMap<SyntaxKind, NodeTraversalPath>([
+    const nodeEdgeTraversalMap = createMap<SyntaxKind, NodeTraversalPath>([
         [SyntaxKind.QualifiedName, [
             { name: "left", test: isEntityName },
             { name: "right", test: isIdentifier }
