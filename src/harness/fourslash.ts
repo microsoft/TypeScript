@@ -579,7 +579,7 @@ namespace FourSlash {
                 this.raiseError(`goToDefinitions failed - expected to find ${endMarkers.length} definitions but got ${definitions.length}`);
             }
 
-            ts.zip(endMarkers, definitions, (endMarker, definition, i) => {
+            ts.zipWith(endMarkers, definitions, (endMarker, definition, i) => {
                 const marker = this.getMarkerByName(endMarker);
                 if (marker.fileName !== definition.fileName || marker.position !== definition.textSpan.start) {
                     this.raiseError(`goToDefinition failed for definition ${i}: expected ${marker.fileName} at ${marker.position}, got ${definition.fileName} at ${definition.textSpan.start}`);
@@ -601,7 +601,7 @@ namespace FourSlash {
         public verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void {
             const emit = this.languageService.getEmitOutput(this.activeFile.fileName);
             assert.equal(emit.outputFiles.length, expected.length, "Number of emit output files");
-            ts.zip(emit.outputFiles, expected, (outputFile, expected) => {
+            ts.zipWith(emit.outputFiles, expected, (outputFile, expected) => {
                 assert.equal(outputFile.name, expected.name, "FileName");
                 assert.equal(outputFile.text, expected.text, "Content");
             });
@@ -667,7 +667,7 @@ namespace FourSlash {
 
             const entries = this.getCompletionListAtCaret().entries;
             assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
-            ts.zip(entries, items, (entry, item) => {
+            ts.zipWith(entries, items, (entry, item) => {
                 assert.equal(entry.name, item, `Unexpected item in completion list`);
             });
         }
@@ -993,7 +993,7 @@ namespace FourSlash {
                 ranges = ranges.sort((r1, r2) => r1.start - r2.start);
                 references = references.sort((r1, r2) => r1.textSpan.start - r2.textSpan.start);
 
-                ts.zip(references, ranges, (reference, range) => {
+                ts.zipWith(references, ranges, (reference, range) => {
                     if (reference.textSpan.start !== range.start || ts.textSpanEnd(reference.textSpan) !== range.end) {
                         this.raiseError("Rename location results do not match.\n\nExpected: " + stringify(ranges) + "\n\nActual:" + JSON.stringify(references));
                     }
@@ -1891,7 +1891,7 @@ namespace FourSlash {
                     jsonMismatchString());
             }
 
-            ts.zip(expected, actual, (expectedClassification, actualClassification) => {
+            ts.zipWith(expected, actual, (expectedClassification, actualClassification) => {
                 const expectedType: string = (<any>ts.ClassificationTypeNames)[expectedClassification.classificationType];
                 if (expectedType !== actualClassification.classificationType) {
                     this.raiseError("verifyClassifications failed - expected classifications type to be " +
@@ -1966,7 +1966,7 @@ namespace FourSlash {
                 this.raiseError(`verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
             }
 
-            ts.zip(spans, actual, (expectedSpan, actualSpan, i) => {
+            ts.zipWith(spans, actual, (expectedSpan, actualSpan, i) => {
                 if (expectedSpan.start !== actualSpan.textSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.textSpan)) {
                     this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.start},${expectedSpan.end}),  actual: (${actualSpan.textSpan.start},${ts.textSpanEnd(actualSpan.textSpan)})`);
                 }
@@ -1981,7 +1981,7 @@ namespace FourSlash {
                 this.raiseError(`verifyTodoComments failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
             }
 
-            ts.zip(spans, actual, (expectedSpan, actualComment, i) => {
+            ts.zipWith(spans, actual, (expectedSpan, actualComment, i) => {
                 const actualCommentSpan = ts.createTextSpan(actualComment.position, actualComment.message.length);
 
                 if (expectedSpan.start !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {

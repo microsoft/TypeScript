@@ -124,7 +124,7 @@ namespace ts {
         return undefined;
     }
 
-    export function zip<T, U>(arrayA: T[], arrayB: U[], callback: (a: T, b: U, index: number) => void): void {
+    export function zipWith<T, U>(arrayA: T[], arrayB: U[], callback: (a: T, b: U, index: number) => void): void {
         Debug.assert(arrayA.length === arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
             callback(arrayA[i], arrayB[i], i);
