@@ -1363,31 +1363,32 @@ namespace ts {
         const type = checker.getTypeAtLocation(interfaceClause);
         const changesArray: TextChange[] = [];
 
-        if (type && type.symbol && type.symbol.declarations) {
-            const interfaceMembers = getInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], checker);
-            for(let interfaceMember of interfaceMembers){
-                if (interfaceMember.name && existingMembers.indexOf(interfaceMember.name.getText()) === -1) {
-                    if (interfaceMember.kind === SyntaxKind.PropertySignature) {
-                        const interfaceProperty = <PropertySignature>interfaceMember;
-                        if (trackingAddedMembers.indexOf(interfaceProperty.name.getText()) === -1) {
-                            let propertyText = "";
-                            if (reference) {
-                                propertyText = `${interfaceProperty.name.getText()} : ${getDefaultValue(interfaceProperty.type.kind)},${newLineCharacter}`;
-                            }
-                            else {
-                                propertyText = interfaceProperty.getText();
-                                const stringToAdd = !(propertyText.match(/;$/)) ? `;${newLineCharacter}` : newLineCharacter;
-                                propertyText += stringToAdd;
-                            }
-                            changesArray.push({ newText: propertyText, span: { start: startPos, length: 0 } });
-                            trackingAddedMembers.push(interfaceProperty.name.getText());
-                        }
+        if (!(type && type.symbol && type.symbol.declarations && type.symbol.declarations.length > 0)) {
+            return [];
+        }
+
+        const missingMembers = getMissingInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], existingMembers, checker);
+        
+        for (let member of missingMembers) {
+            if (member.kind === SyntaxKind.PropertySignature) {
+                const interfaceProperty = <PropertySignature>member;
+                if (trackingAddedMembers.indexOf(interfaceProperty.name.getText()) === -1) {
+                    let propertyText = "";
+                    if (reference) {
+                        propertyText = `${interfaceProperty.name.getText()} : ${getDefaultValue(interfaceProperty.type.kind)},${newLineCharacter}`;
                     }
-                    else if (interfaceMember.kind === SyntaxKind.MethodSignature || interfaceMember.kind === SyntaxKind.MethodDeclaration) {
-                        const interfaceMethod = <MethodSignature>interfaceMember;
-                        handleMethods(interfaceMethod, startPos, reference, trackingAddedMembers, changesArray, newLineCharacter);
+                    else {
+                        propertyText = interfaceProperty.getText();
+                        const stringToAdd = !(propertyText.match(/;$/)) ? `;${newLineCharacter}` : newLineCharacter;
+                        propertyText += stringToAdd;
                     }
+                    changesArray.push({ newText: propertyText, span: { start: startPos, length: 0 } });
+                    trackingAddedMembers.push(interfaceProperty.name.getText());
                 }
+            }
+            else if (member.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.MethodDeclaration) {
+                const interfaceMethod = <MethodSignature>member;
+                handleMethods(interfaceMethod, startPos, reference, trackingAddedMembers, changesArray, newLineCharacter);
             }
         }
 
@@ -1400,6 +1401,9 @@ namespace ts {
         return changesArray;
     }
 
+    /**
+     * Gets members in an interface and all its base types.
+     */
     function getInterfaceMembers(declaration: InterfaceDeclaration, checker: TypeChecker): TypeElement[] {
         const clauses = getInterfaceBaseTypeNodes(declaration);
         let result: TypeElement[] = [];
@@ -1415,6 +1419,13 @@ namespace ts {
         }
 
         return result;
+    }
+
+    function getMissingInterfaceMembers(declaration: InterfaceDeclaration, existingMembers: string[], checker: TypeChecker): TypeElement[] {
+        let interfaceMembers = getInterfaceMembers(declaration, checker);
+
+        return ts.filter(interfaceMembers, member => !member.name || existingMembers.indexOf(member.name.getText()) === -1);
+
     }
 
     export function getNamedClassMembers(classDeclaration: ClassDeclaration): ClassElement[] {
