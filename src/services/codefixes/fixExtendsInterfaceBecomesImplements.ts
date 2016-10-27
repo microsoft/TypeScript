@@ -13,20 +13,22 @@ namespace ts.codefix {
 
                 // If there is already an implements keyword, we currently have incorrect behavior.
                 // For now, we suppress the quickfix altogether.
-                /*
+                // TODO: (arozga) Fix this.
                 if(ts.forEach(children, child => child.kind === SyntaxKind.ImplementsKeyword)) {
                     return undefined;
                 }
-                */
 
                 ts.forEach(children, child => {
                     if (child.kind === SyntaxKind.ExtendsKeyword) {
-                        // TODO: (arozga) why is there a space before implements
+                        // Note: child.pos points to the space *before* `extends`.
                         textChanges.push({ newText: " implements", span: { start: child.pos, length: child.end - child.pos } });
                     }
                 });
             }
 
+            // TODO: (arozga) Get Separate messages for
+            // 1) Change extends to implements
+            // 2) Move interface to extends clause
             if (textChanges.length > 0) {
                 return [{
                     description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements),
