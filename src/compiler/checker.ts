@@ -11891,7 +11891,8 @@ namespace ts {
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
                         // If the parameter and argument are both functions and the parameter has fewer arguments than the argument,
-                        // then this signature is not applicable. Exit early.
+                        // then this signature is not applicable. Exit early to avoid fixing incorrect
+                        // contextual types to the function expression parameters.
                         if (!reportErrors && isAritySmaller(paramType, arg)) {
                             return false;
                         }
@@ -11922,6 +11923,8 @@ namespace ts {
                 const sourceLengths = sourceSignatures.map(sig => !sig.hasRestParameter ? sig.parameters.length : Number.MAX_VALUE);
                 return forEach(sourceLengths, len => len < targetParameterCount);
             }
+
+            return false;
         }
 
         /**
