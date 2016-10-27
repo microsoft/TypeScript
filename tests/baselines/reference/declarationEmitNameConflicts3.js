@@ -68,10 +68,10 @@ var M;
             return E;
         }(C));
         P.E = E;
+        var D;
         (function (D) {
             D[D["f"] = 0] = "f";
-        })(P.D || (P.D = {}));
-        var D = P.D;
+        })(D = P.D || (P.D = {}));
         P.w = M.D.f; // error, should be typeof M.D.f
         P.x = M.C.f; // error, should be typeof M.C.f
         P.x = M.E.f; // error, should be typeof M.E.f

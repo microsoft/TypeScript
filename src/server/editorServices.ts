@@ -287,13 +287,13 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case "set":
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
-                    project.updateGraph();
+                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.unresolvedImports, response.typings);
                     break;
                 case "invalidate":
-                    this.typingsCache.invalidateCachedTypingsForProject(project);
+                    this.typingsCache.deleteTypingsForProject(response.projectName);
                     break;
             }
+            project.updateGraph();
         }
 
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions): void {

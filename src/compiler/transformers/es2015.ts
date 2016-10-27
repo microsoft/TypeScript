@@ -186,6 +186,7 @@ namespace ts {
         let enclosingFunction: FunctionLikeDeclaration;
         let enclosingNonArrowFunction: FunctionLikeDeclaration;
         let enclosingNonAsyncFunctionBody: FunctionLikeDeclaration | ClassElement;
+        let isInConstructorWithCapturedSuper: boolean;
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -231,14 +232,17 @@ namespace ts {
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
             const savedConvertedLoopState = convertedLoopState;
+            const savedIsInConstructorWithCapturedSuper = isInConstructorWithCapturedSuper;
             if (nodeStartsNewLexicalEnvironment(node)) {
-                // don't treat content of nodes that start new lexical environment as part of converted loop copy
+                // don't treat content of nodes that start new lexical environment as part of converted loop copy or constructor body
+                isInConstructorWithCapturedSuper = false;
                 convertedLoopState = undefined;
             }
 
             onBeforeVisitNode(node);
             const visited = f(node);
 
+            isInConstructorWithCapturedSuper = savedIsInConstructorWithCapturedSuper;
             convertedLoopState = savedConvertedLoopState;
             enclosingFunction = savedEnclosingFunction;
             enclosingNonArrowFunction = savedEnclosingNonArrowFunction;
@@ -251,6 +255,14 @@ namespace ts {
             return visited;
         }
 
+        function returnCapturedThis(node: Node): Node {
+            return setOriginalNode(createReturn(createIdentifier("_this")), node);
+        }
+
+        function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
+            return isInConstructorWithCapturedSuper && node.kind === SyntaxKind.ReturnStatement && !(<ReturnStatement>node).expression;
+        }
+
         function shouldCheckNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ES2015) !== 0 ||
                 node.kind === SyntaxKind.LabeledStatement ||
@@ -258,10 +270,16 @@ namespace ts {
         }
 
         function visitorWorker(node: Node): VisitResult<Node> {
-            if (shouldCheckNode(node)) {
+            if (isReturnVoidStatementInConstructorWithCapturedSuper(node)) {
+                return returnCapturedThis(<ReturnStatement>node);
+            }
+            else if (shouldCheckNode(node)) {
                 return visitJavaScript(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsES2015) {
+            else if (node.transformFlags & TransformFlags.ContainsES2015 || (isInConstructorWithCapturedSuper && !isExpression(node))) {
+                // we want to dive in this branch either if node has children with ES2015 specific syntax
+                // or we are inside constructor that captures result of the super call so all returns without expression should be
+                // rewritten. Note: we skip expressions since returns should never appear there 
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -283,6 +301,7 @@ namespace ts {
         function visitNodesInConvertedLoop(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ReturnStatement:
+                    node = isReturnVoidStatementInConstructorWithCapturedSuper(node) ? returnCapturedThis(node) : node;
                     return visitReturnStatement(<ReturnStatement>node);
 
                 case SyntaxKind.VariableStatement:
@@ -308,8 +327,8 @@ namespace ts {
 
         function visitJavaScript(node: Node): VisitResult<Node> {
             switch (node.kind) {
-                case SyntaxKind.ExportKeyword:
-                    return node;
+                case SyntaxKind.StaticKeyword:
+                    return undefined; // elide static keyword
 
                 case SyntaxKind.ClassDeclaration:
                     return visitClassDeclaration(<ClassDeclaration>node);
@@ -587,47 +606,39 @@ namespace ts {
             //          return C;
             //      }());
 
-            const modifierFlags = getModifierFlags(node);
-            const isExported = modifierFlags & ModifierFlags.Export;
-            const isDefault = modifierFlags & ModifierFlags.Default;
-
-            // Add an `export` modifier to the statement if needed (for `--target es5 --module es6`)
-            const modifiers = isExported && !isDefault
-                ? filter(node.modifiers, isExportModifier)
-                : undefined;
-
-            const statement = createVariableStatement(
-                modifiers,
-                createVariableDeclarationList([
-                    createVariableDeclaration(
-                        getDeclarationName(node, /*allowComments*/ true),
-                        /*type*/ undefined,
-                        transformClassLikeDeclarationToExpression(node)
-                    )
-                ]),
-                /*location*/ node
+            const variable = createVariableDeclaration(
+                getLocalName(node, /*allowComments*/ true),
+                /*type*/ undefined,
+                transformClassLikeDeclarationToExpression(node)
             );
+
+            setOriginalNode(variable, node);
+
+            const statements: Statement[] = [];
+            const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([variable]), /*location*/ node);
 
             setOriginalNode(statement, node);
             startOnNewLine(statement);
+            statements.push(statement);
 
             // Add an `export default` statement for default exports (for `--target es5 --module es6`)
-            if (isExported && isDefault) {
-                const statements: Statement[] = [statement];
-                statements.push(createExportAssignment(
-                    /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
-                    /*isExportEquals*/ false,
-                    getDeclarationName(node, /*allowComments*/ false)
-                ));
-                return statements;
+            if (hasModifier(node, ModifierFlags.Export)) {
+                const exportStatement = hasModifier(node, ModifierFlags.Default)
+                    ? createExportDefault(getLocalName(node))
+                    : createExternalModuleExport(getLocalName(node));
+
+                setOriginalNode(exportStatement, statement);
+                statements.push(exportStatement);
             }
 
-            return statement;
-        }
+            const emitFlags = getEmitFlags(node);
+            if ((emitFlags & EmitFlags.HasEndOfDeclarationMarker) === 0) {
+                // Add a DeclarationMarker as a marker for the end of the declaration
+                statements.push(createEndOfDeclarationMarker(node));
+                setEmitFlags(statement, emitFlags | EmitFlags.HasEndOfDeclarationMarker);
+            }
 
-        function isExportModifier(node: Modifier) {
-            return node.kind === SyntaxKind.ExportKeyword;
+            return singleOrMany(statements);
         }
 
         /**
@@ -688,7 +699,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                extendsClauseElement ? [createParameter("_super")] : [],
+                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "_super")] : [],
                 /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
@@ -767,7 +778,7 @@ namespace ts {
             if (extendsClauseElement) {
                 statements.push(
                     createStatement(
-                        createExtendsHelper(currentSourceFile.externalHelpersModuleName, getDeclarationName(node)),
+                        createExtendsHelper(currentSourceFile.externalHelpersModuleName, getLocalName(node)),
                         /*location*/ extendsClauseElement
                     )
                 );
@@ -864,7 +875,10 @@ namespace ts {
             }
 
             if (constructor) {
-                const body = saveStateAndInvoke(constructor, constructor => visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
+                const body = saveStateAndInvoke(constructor, constructor => {
+                    isInConstructorWithCapturedSuper = superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture;
+                    return visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset);
+                });
                 addRange(statements, body);
             }
 
@@ -1038,7 +1052,12 @@ namespace ts {
                 // evaluated inside the function body.
                 return setOriginalNode(
                     createParameter(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
                         getGeneratedNameForNode(node),
+                        /*questionToken*/ undefined,
+                        /*type*/ undefined,
                         /*initializer*/ undefined,
                         /*location*/ node
                     ),
@@ -1049,7 +1068,12 @@ namespace ts {
                 // Initializers are elided
                 return setOriginalNode(
                     createParameter(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
                         node.name,
+                        /*questionToken*/ undefined,
+                        /*type*/ undefined,
                         /*initializer*/ undefined,
                         /*location*/ node
                     ),
@@ -1693,7 +1717,7 @@ namespace ts {
                     if (decl.initializer) {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
-                            assignment = flattenVariableDestructuringToExpression(decl, hoistVariableDeclaration, /*nameSubstitution*/ undefined, visitor);
+                            assignment = flattenVariableDestructuringToExpression(decl, hoistVariableDeclaration, /*createAssignmentCallback*/ undefined, visitor);
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
@@ -1976,13 +2000,16 @@ namespace ts {
                     statements.push(
                         createVariableStatement(
                             /*modifiers*/ undefined,
-                            createVariableDeclarationList([
-                                createVariableDeclaration(
-                                    firstOriginalDeclaration ? firstOriginalDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
-                                    /*type*/ undefined,
-                                    createElementAccess(rhsReference, counter)
-                                )
-                            ], /*location*/ moveRangePos(initializer, -1)),
+                            setOriginalNode(
+                                createVariableDeclarationList([
+                                    createVariableDeclaration(
+                                        firstOriginalDeclaration ? firstOriginalDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
+                                        /*type*/ undefined,
+                                        createElementAccess(rhsReference, counter)
+                                    )
+                                ], /*location*/ moveRangePos(initializer, -1)),
+                                initializer
+                            ),
                             /*location*/ moveRangeEnd(initializer, -1)
                         )
                     );
@@ -2044,10 +2071,13 @@ namespace ts {
             setEmitFlags(body, EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps);
 
             const forStatement = createFor(
-                createVariableDeclarationList([
-                    createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
-                    createVariableDeclaration(rhsReference, /*type*/ undefined, expression, /*location*/ node.expression)
-                ], /*location*/ node.expression),
+                setEmitFlags(
+                    createVariableDeclarationList([
+                        createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
+                        createVariableDeclaration(rhsReference, /*type*/ undefined, expression, /*location*/ node.expression)
+                    ], /*location*/ node.expression),
+                    EmitFlags.NoHoisting
+                ),
                 createLessThan(
                     counter,
                     createPropertyAccess(rhsReference, "length"),
@@ -2239,25 +2269,28 @@ namespace ts {
             const convertedLoopVariable =
                 createVariableStatement(
                     /*modifiers*/ undefined,
-                    createVariableDeclarationList(
-                        [
-                            createVariableDeclaration(
-                                functionName,
-                                /*type*/ undefined,
-                                setEmitFlags(
-                                    createFunctionExpression(
-                                        /*modifiers*/ undefined,
-                                        isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
-                                        /*name*/ undefined,
-                                        /*typeParameters*/ undefined,
-                                        loopParameters,
-                                        /*type*/ undefined,
-                                        <Block>loopBody
-                                    ),
-                                    loopBodyFlags
+                    setEmitFlags(
+                        createVariableDeclarationList(
+                            [
+                                createVariableDeclaration(
+                                    functionName,
+                                    /*type*/ undefined,
+                                    setEmitFlags(
+                                        createFunctionExpression(
+                                            /*modifiers*/ undefined,
+                                            isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
+                                            /*name*/ undefined,
+                                            /*typeParameters*/ undefined,
+                                            loopParameters,
+                                            /*type*/ undefined,
+                                            <Block>loopBody
+                                        ),
+                                        loopBodyFlags
+                                    )
                                 )
-                            )
-                        ]
+                            ]
+                        ),
+                        EmitFlags.NoHoisting
                     )
                 );
 
@@ -2508,7 +2541,7 @@ namespace ts {
                 }
             }
             else {
-                loopParameters.push(createParameter(name));
+                loopParameters.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
                     const outParamName = createUniqueName("out_" + name.text);
                     loopOutParameters.push({ originalName: name, outParamName });
@@ -3101,9 +3134,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
+         * @param emitContext The context for the emitter.
          * @param node The node to substitute.
-         * @param isExpression A value indicating whether the node is to be used in an expression
-         *                     position.
          */
         function onSubstituteNode(emitContext: EmitContext, node: Node) {
             node = previousOnSubstituteNode(emitContext, node);
@@ -3201,45 +3233,6 @@ namespace ts {
             }
 
             return node;
-        }
-
-        /**
-         * Gets the local name for a declaration for use in expressions.
-         *
-         * A local name will *never* be prefixed with an module or namespace export modifier like
-         * "exports.".
-         *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
-         */
-        function getLocalName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean) {
-            return getDeclarationName(node, allowComments, allowSourceMaps, EmitFlags.LocalName);
-        }
-
-        /**
-         * Gets the name of a declaration, without source map or comments.
-         *
-         * @param node The declaration.
-         * @param allowComments Allow comments for the name.
-         */
-        function getDeclarationName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
-            if (node.name && !isGeneratedIdentifier(node.name)) {
-                const name = getMutableClone(node.name);
-                emitFlags |= getEmitFlags(node.name);
-                if (!allowSourceMaps) {
-                    emitFlags |= EmitFlags.NoSourceMap;
-                }
-                if (!allowComments) {
-                    emitFlags |= EmitFlags.NoComments;
-                }
-                if (emitFlags) {
-                    setEmitFlags(name, emitFlags);
-                }
-                return name;
-            }
-
-            return getGeneratedNameForNode(node);
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
