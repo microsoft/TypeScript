@@ -112,8 +112,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformUMDModule(node: SourceFile) {
-            const define = createIdentifier("define");
-            setEmitFlags(define, EmitFlags.UMDDefine);
+            const define = createRawExpression(umdHelper);
             return transformAsynchronousModule(node, define, /*moduleName*/ undefined, /*includeNonAmdDependencies*/ false);
         }
 
@@ -1324,4 +1323,15 @@ namespace ts {
                 for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
             }`
     };
+
+    // emit output for the UMD helper function.
+    const umdHelper = `
+        (function (dependencies, factory) {
+            if (typeof module === 'object' && typeof module.exports === 'object') {
+                var v = factory(require, exports); if (v !== undefined) module.exports = v;
+            }
+            else if (typeof define === 'function' && define.amd) {
+                define(dependencies, factory);
+            }
+        })`;
 }

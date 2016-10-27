@@ -2087,6 +2087,7 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
+            case SyntaxKind.RawExpression:
                 return 19;
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -3796,7 +3797,8 @@ namespace ts {
             || kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.TrueKeyword
             || kind === SyntaxKind.SuperKeyword
-            || kind === SyntaxKind.NonNullExpression;
+            || kind === SyntaxKind.NonNullExpression
+            || kind === SyntaxKind.RawExpression;
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
@@ -3826,6 +3828,7 @@ namespace ts {
             || kind === SyntaxKind.SpreadElementExpression
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
+            || kind === SyntaxKind.RawExpression
             || isUnaryExpressionKind(kind);
     }
 
