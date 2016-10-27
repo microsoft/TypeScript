@@ -1,7 +1,7 @@
 /// <reference path="visitor.ts" />
 /// <reference path="transformers/ts.ts" />
 /// <reference path="transformers/jsx.ts" />
-/// <reference path="transformers/experimental.ts" />
+/// <reference path="transformers/esnext.ts" />
 /// <reference path="transformers/es2017.ts" />
 /// <reference path="transformers/es2016.ts" />
 /// <reference path="transformers/es2015.ts" />
@@ -117,7 +117,7 @@ namespace ts {
             transformers.push(transformJsx);
         }
 
-        transformers.push(transformExperimental);
+        transformers.push(transformESNext);
         if (languageVersion < ScriptTarget.ES2017) {
             transformers.push(transformES2017);
         }

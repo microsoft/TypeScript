@@ -3,7 +3,7 @@
 
 /*@internal*/
 namespace ts {
-    export function transformExperimental(context: TransformationContext) {
+    export function transformESNext(context: TransformationContext) {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
