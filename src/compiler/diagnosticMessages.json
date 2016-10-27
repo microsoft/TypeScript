@@ -2869,10 +2869,6 @@
         "category": "Error",
         "code": 6143
     },
-    "A package for '{0}' was found at '{1}', but is untyped. Because '--noImplicitAny' is enabled, this package must have a declaration.": {
-        "category": "Error",
-        "code": 6144
-    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2904,6 +2900,10 @@
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
+    },
+    "Could not find a declaration file for module '{0}'. '{1}' implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7016
     },
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
