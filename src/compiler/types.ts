@@ -423,7 +423,7 @@ namespace ts {
         ThisNodeHasError =   1 << 19, // If the parser encountered an error when parsing the code that created this node
         JavaScriptFile =     1 << 20, // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 21, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 22, // If we've computed data from children and cached it in this node 
+        HasAggregatedChildData = 1 << 22, // If we've computed data from children and cached it in this node
 
         BlockScoped = Let | Const,
 
@@ -2083,7 +2083,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<ResolvedModule>;
+        /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
@@ -3352,14 +3352,11 @@ namespace ts {
      * Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
      * The Program will then filter results based on these flags.
      *
-     * At least one of `resolvedTsFileName` or `resolvedJsFileName` must be defined,
-     * else resolution should just return `undefined` instead of a ResolvedModule.
+     * Prefer to return a `ResolvedModuleFull` so that the file type does not have to be inferred.
      */
     export interface ResolvedModule {
         /** Path of the file the module was resolved to. */
         resolvedFileName: string;
-        /** Extension of resolvedFileName. This must match what's at the end of resolvedFileName. */
-        extension: Extension;
         /**
          * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
          * - be a .d.ts file
@@ -3367,6 +3364,18 @@ namespace ts {
          * - don't use tripleslash references
          */
         isExternalLibraryImport?: boolean;
+    }
+
+    /**
+     * ResolvedModule with an explicitly provided `extension` property.
+     * Prefer this over `ResolvedModule`.
+     */
+    export interface ResolvedModuleFull extends ResolvedModule {
+        /**
+         * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
+         * This is optional for backwards-compatibility, but will be added if not provided.
+         */
+        extension: Extension;
     }
 
     export enum Extension {
@@ -3379,7 +3388,7 @@ namespace ts {
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModule | undefined;
+        resolvedModule: ResolvedModuleFull | undefined;
         failedLookupLocations: string[];
     }
 

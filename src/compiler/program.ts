@@ -329,16 +329,16 @@ namespace ts {
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createFileMap<boolean>(getCanonicalFileName);
 
-        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModule[];
+        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
         if (host.resolveModuleNames) {
             resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
-                if (!resolved || resolved.extension !== undefined) {
-                    return resolved;
+                if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
+                    return resolved as ResolvedModuleFull;
                 }
-                resolved = clone(resolved);
-                resolved.extension = extensionFromPath(resolved.resolvedFileName);
-                return resolved;
+                const withExtension = clone(resolved) as ResolvedModuleFull;
+                withExtension.extension = extensionFromPath(resolved.resolvedFileName);
+                return withExtension;
             });
         }
         else {
@@ -1294,7 +1294,7 @@ namespace ts {
         function processImportedModules(file: SourceFile) {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
-                file.resolvedModules = createMap<ResolvedModule>();
+                file.resolvedModules = createMap<ResolvedModuleFull>();
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 Debug.assert(resolutions.length === moduleNames.length);
@@ -1571,7 +1571,7 @@ namespace ts {
      * Returns a DiagnosticMessage if we can't use a resolved module due to its extension.
      * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
      */
-    export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModule): DiagnosticMessage | undefined {
+    export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModuleFull): DiagnosticMessage | undefined {
         switch (extension) {
             case Extension.Ts:
             case Extension.Dts:
