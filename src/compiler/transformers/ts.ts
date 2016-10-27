@@ -47,7 +47,7 @@ namespace ts {
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
-        let currentScopeFirstDeclarationsOfName: Map<string, Node>;
+        let currentScopeFirstDeclarationsOfName: Map<Node>;
         let currentExternalHelpersModuleName: Identifier;
 
         /**
@@ -60,7 +60,7 @@ namespace ts {
          * A map that keeps track of aliases created for classes with decorators to avoid issues
          * with the double-binding behavior of classes.
          */
-        let classAliases: Map<number, Identifier>;
+        let classAliases: Map<Identifier>;
 
         /**
          * Keeps track of whether  we are within any containing namespaces when performing
@@ -783,7 +783,7 @@ namespace ts {
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
-                    classAliases.set(getOriginalNodeId(node), getSynthesizedClone(temp));
+                    classAliases[getOriginalNodeId(node)] = getSynthesizedClone(temp);
                 }
 
                 // To preserve the behavior of the old emitter, we explicitly indent
@@ -1454,7 +1454,7 @@ namespace ts {
                 return undefined;
             }
 
-            const classAlias = classAliases && classAliases.get(getOriginalNodeId(node));
+            const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
             const localName = getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
             const decorate = createDecorateHelper(currentExternalHelpersModuleName, decoratorExpressions, localName);
             const expression = createAssignment(localName, classAlias ? createAssignment(classAlias, decorate) : decorate);
@@ -2245,7 +2245,7 @@ namespace ts {
             const savedCurrentScope = currentScope;
             const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
             currentScope = body;
-            currentScopeFirstDeclarationsOfName = createMap<string, Node>();
+            currentScopeFirstDeclarationsOfName = createMap<Node>();
             startLexicalEnvironment();
 
             const statements = visitNodes(body.statements, visitor, isStatement, start);
@@ -2630,10 +2630,12 @@ namespace ts {
             const name = node.symbol && node.symbol.name;
             if (name) {
                 if (!currentScopeFirstDeclarationsOfName) {
-                    currentScopeFirstDeclarationsOfName = createMap<string, Node>();
+                    currentScopeFirstDeclarationsOfName = createMap<Node>();
                 }
 
-                setIfNotSet(currentScopeFirstDeclarationsOfName, name, node);
+                if (!(name in currentScopeFirstDeclarationsOfName)) {
+                    currentScopeFirstDeclarationsOfName[name] = node;
+                }
             }
         }
 
@@ -2645,7 +2647,7 @@ namespace ts {
             if (currentScopeFirstDeclarationsOfName) {
                 const name = node.symbol && node.symbol.name;
                 if (name) {
-                    return currentScopeFirstDeclarationsOfName.get(name) === node;
+                    return currentScopeFirstDeclarationsOfName[name] === node;
                 }
             }
 
@@ -3186,7 +3188,7 @@ namespace ts {
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                 enableSubstitutionForClassAliases();
                 const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
-                classAliases.set(getOriginalNodeId(node), classAlias);
+                classAliases[getOriginalNodeId(node)] = classAlias;
                 hoistVariableDeclaration(classAlias);
                 return classAlias;
             }
@@ -3218,7 +3220,7 @@ namespace ts {
                 context.enableSubstitution(SyntaxKind.Identifier);
 
                 // Keep track of class aliases.
-                classAliases = createMap<number, Identifier>();
+                classAliases = createMap<Identifier>();
             }
         }
 
@@ -3331,7 +3333,7 @@ namespace ts {
                     // constructor references in static property initializers.
                     const declaration = resolver.getReferencedValueDeclaration(node);
                     if (declaration) {
-                        const classAlias = classAliases.get(declaration.id);
+                        const classAlias = classAliases[declaration.id];
                         if (classAlias) {
                             const clone = getSynthesizedClone(classAlias);
                             setSourceMapRange(clone, node);

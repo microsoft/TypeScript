@@ -491,7 +491,7 @@ namespace ts {
         let currentToken: SyntaxKind;
         let sourceText: string;
         let nodeCount: number;
-        let identifiers: Map<string, string>;
+        let identifiers: Map<string>;
         let identifierCount: number;
 
         let parsingContext: ParsingContext;
@@ -601,7 +601,7 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = createMap<string, string>();
+            identifiers = createMap<string>();
             identifierCount = 0;
             nodeCount = 0;
 
@@ -1104,7 +1104,7 @@ namespace ts {
 
         function internIdentifier(text: string): string {
             text = escapeIdentifier(text);
-            return getOrUpdate(identifiers, text, text => text);
+            return identifiers[text] || (identifiers[text] = text);
         }
 
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues

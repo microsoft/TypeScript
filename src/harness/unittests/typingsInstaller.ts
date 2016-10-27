@@ -955,7 +955,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f]);
-            const cache = createMap<string, string>();
+            const cache = createMap<string>();
             for (const name of JsTyping.nodeCoreModuleList) {
                 const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enableAutoDiscovery: true }, [name, "somename"]);
                 assert.deepEqual(result.newTypingNames.sort(), ["node", "somename"]);
@@ -972,7 +972,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = mapOfMapLike({ "node": node.path });
+            const cache = createMap<string>({ "node": node.path });
             const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enableAutoDiscovery: true }, ["fs", "bar"]);
             assert.deepEqual(result.cachedTypingPaths, [node.path]);
             assert.deepEqual(result.newTypingNames, ["bar"]);

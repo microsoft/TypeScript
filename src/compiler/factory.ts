@@ -1622,7 +1622,7 @@ namespace ts {
         // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
-        // Set the parent that is in parse tree
+        // Set the parent that is in parse tree 
         // this makes sure that parent chain is intact for checker to traverse complete scope tree
         react.parent = getParseTreeNode(parent);
         return react;
@@ -2805,9 +2805,9 @@ namespace ts {
         return destEmitNode;
     }
 
-    function mergeTokenSourceMapRanges(sourceRanges: Map<SyntaxKind, TextRange>, destRanges: Map<SyntaxKind, TextRange>): Map<SyntaxKind, TextRange> {
-        if (!destRanges) destRanges = createMap<SyntaxKind, TextRange>();
-        copyMapEntriesFromTo(sourceRanges, destRanges);
+    function mergeTokenSourceMapRanges(sourceRanges: Map<TextRange>, destRanges: Map<TextRange>) {
+        if (!destRanges) destRanges = createMap<TextRange>();
+        copyProperties(sourceRanges, destRanges);
         return destRanges;
     }
 
@@ -2899,8 +2899,8 @@ namespace ts {
      */
     export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
         const emitNode = getOrCreateEmitNode(node);
-        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<SyntaxKind, TextRange>());
-        tokenSourceMapRanges.set(token, range);
+        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<TextRange>());
+        tokenSourceMapRanges[token] = range;
         return node;
     }
 
@@ -2941,7 +2941,7 @@ namespace ts {
     export function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
         const emitNode = node.emitNode;
         const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
-        return tokenSourceMapRanges && tokenSourceMapRanges.get(token);
+        return tokenSourceMapRanges && tokenSourceMapRanges[token];
     }
 
     /**
@@ -3026,8 +3026,10 @@ namespace ts {
      * Here we check if alternative name was provided for a given moduleName and return it if possible.
      */
     function tryRenameExternalModule(moduleName: LiteralExpression, sourceFile: SourceFile) {
-        const rename = sourceFile.renamedDependencies && sourceFile.renamedDependencies.get(moduleName.text);
-        return rename && createLiteral(rename);
+        if (sourceFile.renamedDependencies && hasProperty(sourceFile.renamedDependencies, moduleName.text)) {
+            return createLiteral(sourceFile.renamedDependencies[moduleName.text]);
+        }
+        return undefined;
     }
 
     /**

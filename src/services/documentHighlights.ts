@@ -39,16 +39,16 @@ namespace ts.DocumentHighlights {
                     return undefined;
                 }
 
-                const fileNameToDocumentHighlights = createMap<string, DocumentHighlights>();
+                const fileNameToDocumentHighlights = createMap<DocumentHighlights>();
                 const result: DocumentHighlights[] = [];
                 for (const referencedSymbol of referencedSymbols) {
                     for (const referenceEntry of referencedSymbol.references) {
                         const fileName = referenceEntry.fileName;
-                        let documentHighlights = fileNameToDocumentHighlights.get(fileName);
+                        let documentHighlights = fileNameToDocumentHighlights[fileName];
                         if (!documentHighlights) {
                             documentHighlights = { fileName, highlightSpans: [] };
 
-                            fileNameToDocumentHighlights.set(fileName, documentHighlights);
+                            fileNameToDocumentHighlights[fileName] = documentHighlights;
                             result.push(documentHighlights);
                         }
 

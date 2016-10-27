@@ -7,22 +7,23 @@ namespace ts.NavigateTo {
         let rawItems: RawNavigateToItem[] = [];
 
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
-        for (const sourceFile of sourceFiles) {
+        forEach(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
 
             if (excludeDtsFiles && fileExtensionIs(sourceFile.fileName, ".d.ts")) {
-                continue;
+                return;
             }
 
-            // Use `someInMap` to break out early.
-            someInMap(sourceFile.getNamedDeclarations(), (declarations, name) => {
+            const nameToDeclarations = sourceFile.getNamedDeclarations();
+            for (const name in nameToDeclarations) {
+                const declarations = nameToDeclarations[name];
                 if (declarations) {
                     // First do a quick check to see if the name of the declaration matches the
                     // last portion of the (possibly) dotted name they're searching for.
                     let matches = patternMatcher.getMatchesForLastSegmentOfPattern(name);
 
                     if (!matches) {
-                        return false;
+                        continue;
                     }
 
                     for (const declaration of declarations) {
@@ -31,13 +32,13 @@ namespace ts.NavigateTo {
                         if (patternMatcher.patternContainsDots) {
                             const containers = getContainers(declaration);
                             if (!containers) {
-                                return true; // Go to the next source file.
+                                return undefined;
                             }
 
                             matches = patternMatcher.getMatches(containers, name);
 
                             if (!matches) {
-                                return false;
+                                continue;
                             }
                         }
 
@@ -46,8 +47,8 @@ namespace ts.NavigateTo {
                         rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });
                     }
                 }
-            });
-        }
+            }
+        });
 
         // Remove imports when the imported declaration is already in the list and has the same name.
         rawItems = filter(rawItems, item => {
