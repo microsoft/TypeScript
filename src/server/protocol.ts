@@ -1018,6 +1018,10 @@ namespace ts.server.protocol {
          *      "TS", "JS", "TSX", "JSX"
          */
         scriptKindName?: ScriptKindName;
+        /**
+         * Used to specify what encoding should be used when reading the file 
+         */
+        encoding?: string;
     }
 
     export type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
