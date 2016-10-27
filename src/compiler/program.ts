@@ -1078,9 +1078,6 @@ namespace ts {
             }
         }
 
-        /**
-          * 'isReference' indicates whether the file was brought in via a reference directive (rather than an import declaration)
-          */
         function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
             let diagnosticArgument: string[];
             let diagnostic: DiagnosticMessage;
