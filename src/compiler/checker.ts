@@ -5697,63 +5697,80 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function createIndexedAccessType(objectType: Type, keyType: TypeParameter) {
+        function createIndexedAccessType(objectType: Type, indexType: TypeParameter) {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
-            type.indexType = keyType;
+            type.indexType = indexType;
             return type;
         }
 
-        function getIndexedAccessTypeForTypeParameter(objectType: Type, keyType: TypeParameter) {
-            const indexedAccessTypes = keyType.resolvedIndexedAccessTypes || (keyType.resolvedIndexedAccessTypes = []);
-            return indexedAccessTypes[objectType.id] || (indexedAccessTypes[objectType.id] = createIndexedAccessType(objectType, keyType));
+        function getIndexedAccessTypeForTypeParameter(objectType: Type, indexType: TypeParameter) {
+            const indexedAccessTypes = indexType.resolvedIndexedAccessTypes || (indexType.resolvedIndexedAccessTypes = []);
+            return indexedAccessTypes[objectType.id] || (indexedAccessTypes[objectType.id] = createIndexedAccessType(objectType, indexType));
         }
 
-        function getPropertyTypeForIndexType(objectType: Type, indexType: Type) {
-            return indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.EnumLiteral) && getTypeOfPropertyOfType(objectType, escapeIdentifier((<LiteralType>indexType).text)) ||
-                isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) && getIndexTypeOfType(objectType, IndexKind.Number) ||
-                isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike) && getIndexTypeOfType(objectType, IndexKind.String) ||
-                undefined;
+        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, errorNode?: Node) {
+            if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.EnumLiteral)) {
+                const propType = getTypeOfPropertyOfType(objectType, escapeIdentifier((<LiteralType>indexType).text));
+                if (propType) {
+                    return propType;
+                }
+            }
+            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike)) {
+                const numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
+                if (numberIndexType) {
+                    return numberIndexType;
+                }
+            }
+            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike)) {
+                const stringIndexType = getIndexTypeOfType(objectType, IndexKind.String);
+                if (stringIndexType) {
+                    return stringIndexType;
+                }
+            }
+            if (errorNode) {
+                if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+                    error(errorNode, Diagnostics.Property_0_does_not_exist_on_type_1, (<LiteralType>indexType).text, typeToString(objectType));
+                }
+                else if (indexType.flags & (TypeFlags.String | TypeFlags.Number)) {
+                    error(errorNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
+                }
+                else {
+                    error(errorNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
+                }
+            }
+            return unknownType;
         }
 
-        function getIndexedAccessType(objectType: Type, keyType: Type) {
-            return keyType.flags & TypeFlags.Any ? anyType :
-                keyType.flags & TypeFlags.TypeParameter ? getIndexedAccessTypeForTypeParameter(objectType, <TypeParameter>keyType) :
-                mapType(keyType, t => getPropertyTypeForIndexType(objectType, t) || unknownType);
-        }
-
-        function resolveIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
-            const objectType = getTypeFromTypeNodeNoAlias(node.objectType);
-            const indexType = getTypeFromTypeNodeNoAlias(node.indexType);
+        function getIndexedAccessType(objectType: Type, indexType: Type, errorNode?: Node) {
             if (indexType.flags & TypeFlags.TypeParameter) {
                 if (!isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType), getIndexType(objectType))) {
-                    error(node.indexType, Diagnostics.Type_0_is_not_constrained_to_keyof_1, typeToString(indexType), typeToString(objectType));
-                    return unknownType;
-                }
-                return getIndexedAccessType(objectType, indexType);
-            }
-            const indexTypes = indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Primitive) ? (<UnionType>indexType).types : [indexType];
-            for (const t of indexTypes) {
-                if (!getPropertyTypeForIndexType(objectType, t)) {
-                    if (t.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
-                        error(node.indexType, Diagnostics.Property_0_does_not_exist_on_type_1, (<LiteralType>t).text, typeToString(objectType))
-                    }
-                    else if (t.flags & (TypeFlags.String | TypeFlags.Number)) {
-                        error(node.indexType, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(t));
-                    }
-                    else {
-                        error(node.indexType, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(t));
+                    if (errorNode) {
+                        error(errorNode, Diagnostics.Type_0_is_not_constrained_to_keyof_1, typeToString(indexType), typeToString(objectType));
                     }
                     return unknownType;
                 }
+                return getIndexedAccessTypeForTypeParameter(objectType, <TypeParameter>indexType);
             }
-            return getIndexedAccessType(objectType, indexType);
+            if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Primitive)) {
+                const propTypes: Type[] = [];
+                for (const t of (<UnionType>indexType).types) {
+                    const propType = getPropertyTypeForIndexType(objectType, t, errorNode);
+                    if (propType === unknownType) {
+                        return unknownType;
+                    }
+                    propTypes.push(propType);
+                }
+                return getUnionType(propTypes);
+            }
+            return getPropertyTypeForIndexType(objectType, indexType, errorNode);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = resolveIndexedAccessTypeNode(node);
+                links.resolvedType = getIndexedAccessType(getTypeFromTypeNodeNoAlias(node.objectType),
+                    getTypeFromTypeNodeNoAlias(node.indexType), node.indexType);
             }
             return links.resolvedType;
         }
