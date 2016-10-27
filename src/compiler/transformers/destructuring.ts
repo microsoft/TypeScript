@@ -17,7 +17,8 @@ namespace ts {
         node: BinaryExpression,
         needsValue: boolean,
         recordTempVariable: (node: Identifier) => void,
-        visitor?: (node: Node) => VisitResult<Node>): Expression {
+        visitor?: (node: Node) => VisitResult<Node>,
+        restOnly?: boolean): Expression {
 
         if (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
             const right = node.right;
@@ -51,7 +52,7 @@ namespace ts {
             location = value;
         }
 
-        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, emitRestAssignment, visitor, restOnly);
 
         if (needsValue) {
             expressions.push(value);
@@ -61,7 +62,7 @@ namespace ts {
         aggregateTransformFlags(expression);
         return expression;
 
-        function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
+        function emitAssignment(name: Identifier | ObjectLiteralExpression, value: Expression, location: TextRange) {
             const expression = createAssignment(name, value, location);
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
@@ -76,6 +77,10 @@ namespace ts {
             const name = createTempVariable(recordTempVariable);
             emitAssignment(name, value, location);
             return name;
+        }
+
+        function emitRestAssignment(elements: ObjectLiteralElementLike[], value: Expression, location: TextRange) {
+            emitAssignment(createObjectLiteral(elements), value, location);
         }
     }
 
@@ -92,11 +97,11 @@ namespace ts {
         visitor?: (node: Node) => VisitResult<Node>) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, visitor);
 
         return declarations;
 
-        function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
+        function emitAssignment(name: Identifier | BindingPattern, value: Expression, location: TextRange) {
             const declaration = createVariableDeclaration(name, /*type*/ undefined, value, location);
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
@@ -112,6 +117,10 @@ namespace ts {
             emitAssignment(name, value, location);
             return name;
         }
+
+        function emitRestAssignment(elements: BindingElement[], value: Expression, location: TextRange) {
+            emitAssignment(createObjectBindingPattern(elements), value, location);
+        }
     }
 
     /**
@@ -125,15 +134,16 @@ namespace ts {
         node: VariableDeclaration,
         value?: Expression,
         visitor?: (node: Node) => VisitResult<Node>,
-        recordTempVariable?: (node: Identifier) => void) {
+        recordTempVariable?: (node: Identifier) => void,
+        restOnly?: boolean) {
         const declarations: VariableDeclaration[] = [];
 
         let pendingAssignments: Expression[];
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, visitor, restOnly);
 
         return declarations;
 
-        function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
+        function emitAssignment(name: Identifier | BindingPattern, value: Expression, location: TextRange, original: Node) {
             if (pendingAssignments) {
                 pendingAssignments.push(value);
                 value = inlineExpressions(pendingAssignments);
@@ -167,6 +177,10 @@ namespace ts {
             }
             return name;
         }
+
+        function emitRestAssignment(elements: BindingElement[], value: Expression, location: TextRange, original: Node) {
+            emitAssignment(createObjectBindingPattern(elements), value, location, original);
+        }
     }
 
     /**
@@ -185,14 +199,14 @@ namespace ts {
 
         const pendingAssignments: Expression[] = [];
 
-        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, visitor);
 
         const expression = inlineExpressions(pendingAssignments);
         aggregateTransformFlags(expression);
         return expression;
 
-        function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
-            const left = nameSubstitution && nameSubstitution(name) || name;
+        function emitAssignment(name: Identifier | ObjectLiteralExpression, value: Expression, location: TextRange, original: Node) {
+            const left = name.kind == SyntaxKind.Identifier && nameSubstitution && nameSubstitution(name) || name;
             emitPendingAssignment(left, value, location, original);
         }
 
@@ -200,6 +214,10 @@ namespace ts {
             const name = createTempVariable(recordTempVariable);
             emitPendingAssignment(name, value, location, /*original*/ undefined);
             return name;
+        }
+
+        function emitRestAssignment(elements: ObjectLiteralElementLike[], value: Expression, location: TextRange, original: Node) {
+            emitAssignment(createObjectLiteral(elements), value, location, original);
         }
 
         function emitPendingAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
@@ -221,19 +239,21 @@ namespace ts {
         location: TextRange,
         emitAssignment: (name: Identifier, value: Expression, location: TextRange, original: Node) => void,
         emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
-        visitor?: (node: Node) => VisitResult<Node>) {
+        emitRestAssignment: (elements: (ObjectLiteralElementLike[] | BindingElement[]), value: Expression, location: TextRange, original: Node) => void,
+        visitor?: (node: Node) => VisitResult<Node>,
+        restOnly?: boolean) {
         if (value && visitor) {
             value = visitNode(value, visitor, isExpression);
         }
 
         if (isBinaryExpression(root)) {
-            emitDestructuringAssignment(root.left, value, location);
+            emitDestructuringAssignment(root.left, value, location, restOnly);
         }
         else {
-            emitBindingElement(root, value);
+            emitBindingElement(root, value, restOnly);
         }
 
-        function emitDestructuringAssignment(bindingTarget: Expression | ShorthandPropertyAssignment, value: Expression, location: TextRange) {
+        function emitDestructuringAssignment(bindingTarget: Expression | ShorthandPropertyAssignment, value: Expression, location: TextRange, restOnly?: boolean) {
             // When emitting target = value use source map node to highlight, including any temporary assignments needed for this
             let target: Expression;
             if (isShorthandPropertyAssignment(bindingTarget)) {
@@ -260,7 +280,7 @@ namespace ts {
             }
 
             if (target.kind === SyntaxKind.ObjectLiteralExpression) {
-                emitObjectLiteralAssignment(<ObjectLiteralExpression>target, value, location);
+                emitObjectLiteralAssignment(<ObjectLiteralExpression>target, value, location, restOnly);
             }
             else if (target.kind === SyntaxKind.ArrayLiteralExpression) {
                 emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, location);
@@ -273,7 +293,7 @@ namespace ts {
             }
         }
 
-        function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression, location: TextRange) {
+        function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression, location: TextRange, restOnly: boolean) {
             const properties = target.properties;
             if (properties.length !== 1) {
                 // For anything but a single element destructuring we need to generate a temporary
@@ -282,12 +302,36 @@ namespace ts {
                 value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
             }
 
-            for (const p of properties) {
-                if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                    const propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
-                    const target = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
-                    // Assignment for target = value.propName should highligh whole property, hence use p as source map node
-                    emitDestructuringAssignment(target, createDestructuringPropertyAccess(value, propName), p);
+            // if isRestOnly, just grab the last one, emit a rest for it, then emitRestAssignment for everything else
+            if (restOnly) {
+                emitRestAssignment(properties.slice(0, properties.length - 1), value, location, target);
+                // assert that the last property is a single identifier, even though it's parsed as an expression
+                const last = properties[properties.length - 1];
+                Debug.assert(last.kind === SyntaxKind.SpreadElementExpression);
+                Debug.assert((last as SpreadElementExpression).expression.kind === SyntaxKind.Identifier);
+                const id = (last as SpreadElementExpression).expression as Identifier;
+                const restCall = createRestCall(value, target.properties, target, p => {
+                    if (p.kind !== SyntaxKind.SpreadElementExpression) {
+                        const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+                        str.pos = target.pos;
+                        str.end = target.end;
+                        // TODO: How do I get the name from a shorthand vs normal property assignment?
+                        // and it COULD be a destructuring thing. I can't remember how those get in there
+                        // (should be a DeclarationName, not a PropertyName)
+                        str.text = getTextOfPropertyName(p.name);
+                        return str;
+                    }
+                });
+                emitAssignment(id, restCall, location, last);
+            }
+            else {
+                for (const p of properties) {
+                    if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                        const propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
+                        const target = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
+                        // Assignment for target = value.propName should highligh whole property, hence use p as source map node
+                        emitDestructuringAssignment(target, createDestructuringPropertyAccess(value, propName), p);
+                    }
                 }
             }
         }
@@ -318,25 +362,19 @@ namespace ts {
 
         /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
          * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`*/
-        function createRestCall(value: Expression, pattern: BindingPattern): Expression {
-            const elements = createSynthesizedNodeArray<LiteralExpression>();
-            for (const element of pattern.elements) {
-                if (isOmittedExpression(element)) {
-                    continue;
-                }
-                if (!element.dotDotDotToken) {
-                    const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
-                    str.pos = pattern.pos;
-                    str.end = pattern.end;
-                    str.text = getTextOfPropertyName(element.propertyName || <Identifier>element.name);
-                    elements.push(str);
+        function createRestCall<T extends Node>(value: Expression, elements: T[], location: TextRange, getPropertyName: (element: T) => StringLiteral): Expression {
+            const propertyNames: LiteralExpression[] = [];
+            for (const element of elements) {
+                const name = getPropertyName(element);
+                if (name) {
+                    propertyNames.push(name);
                 }
             }
-            const properties = createSynthesizedNodeArray([value, createArrayLiteral(elements, pattern)]);
-            return createCall(createIdentifier("__rest"), undefined, properties);
+            const args = createSynthesizedNodeArray([value, createArrayLiteral(propertyNames, location)]);
+            return createCall(createIdentifier("__rest"), undefined, args);
         }
 
-        function emitBindingElement(target: VariableDeclaration | ParameterDeclaration | BindingElement, value: Expression) {
+        function emitBindingElement(target: VariableDeclaration | ParameterDeclaration | BindingElement, value: Expression, restOnly?: boolean) {
             // Any temporary assignments needed to emit target = value should point to target
             const initializer = visitor ? visitNode(target.initializer, visitor, isExpression) : target.initializer;
             if (initializer) {
@@ -349,7 +387,10 @@ namespace ts {
             }
 
             const name = target.name;
-            if (isBindingPattern(name)) {
+            if (!isBindingPattern(name)) {
+                emitAssignment(name, value, target, target);
+            }
+            else {
                 const elements = name.elements;
                 const numElements = elements.length;
                 if (numElements !== 1) {
@@ -359,18 +400,39 @@ namespace ts {
                     // so in that case, we'll intentionally create that temporary.
                     value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ numElements !== 0, target, emitTempVariableAssignment);
                 }
+                const others: BindingElement[] = [];
                 for (let i = 0; i < numElements; i++) {
                     const element = elements[i];
                     if (isOmittedExpression(element)) {
                         continue;
                     }
                     else if (name.kind === SyntaxKind.ObjectBindingPattern) {
-                        // Rewrite element to a declaration with an initializer that fetches property
-                        const propName = element.propertyName || <Identifier>element.name;
-                        const destructuredValue = element.dotDotDotToken ?
-                            createRestCall(value, name) :
-                            createDestructuringPropertyAccess(value, propName);
-                        emitBindingElement(element, destructuredValue);
+                        if (i === numElements - 1 && element.dotDotDotToken) {
+                            if (others.length) {
+                                emitRestAssignment(others, value, target, target);
+                            }
+                            const restCall = createRestCall(value, name.elements, name, element => {
+                                if (isOmittedExpression(element)) {
+                                    return;
+                                }
+                                if (!element.dotDotDotToken) {
+                                    const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+                                    str.pos = name.pos;
+                                    str.end = name.end;
+                                    str.text = getTextOfPropertyName(element.propertyName || <Identifier>element.name);
+                                    return str;
+                                }
+                            });
+                            emitBindingElement(element, restCall);
+                        }
+                        else if (restOnly) {
+                            others.push(element);
+                        }
+                        else {
+                            // Rewrite element to a declaration with an initializer that fetches property
+                            const propName = element.propertyName || <Identifier>element.name;
+                            emitBindingElement(element, createDestructuringPropertyAccess(value, propName));
+                        }
                     }
                     else {
                         if (!element.dotDotDotToken) {
@@ -382,9 +444,6 @@ namespace ts {
                         }
                     }
                 }
-            }
-            else {
-                emitAssignment(name, value, target, target);
             }
         }
 

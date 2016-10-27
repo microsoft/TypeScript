@@ -208,7 +208,8 @@ namespace ts {
 
             currentSourceFile = node;
             currentText = node.text;
-            return visitNode(node, visitor, isSourceFile);
+            const n = visitNode(node, visitor, isSourceFile);
+            return n;
         }
 
         function visitor(node: Node): VisitResult<Node> {

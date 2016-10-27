@@ -3038,7 +3038,6 @@ namespace ts {
             }
 
             // TODO: Simplifications
-
             if (source.flags & TypeFlags.Object) {
                 const members = createMap<Symbol>();
                 const names = createMap<true>();
@@ -6006,10 +6005,10 @@ namespace ts {
             }
             const spread = spreadTypes[id] = createType(TypeFlags.Spread) as SpreadType;
             Debug.assert(!!(left.flags & (TypeFlags.Spread | TypeFlags.Object)), "Left flags: " + left.flags.toString(2));
-            Debug.assert(!!(right.flags & (TypeFlags.TypeParameter | TypeFlags.Intersection | TypeFlags.Object)), "Right flags: " + right.flags.toString(2));
+            Debug.assert(!!(right.flags & (TypeFlags.TypeParameter | TypeFlags.Intersection | TypeFlags.Object | TypeFlags.Difference)), "Right flags: " + right.flags.toString(2));
             spread.symbol = symbol;
             spread.left = left as SpreadType | ResolvedType;
-            spread.right = right as TypeParameter | IntersectionType | ResolvedType;
+            spread.right = right as TypeParameter | IntersectionType | ResolvedType | DifferenceType;
             spread.aliasSymbol = aliasSymbol;
             spread.aliasTypeArguments = aliasTypeArguments;
             return spread;
@@ -14073,7 +14072,7 @@ namespace ts {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(objectLiteralType), declarationNameToString(name));
                 }
             }
-            else {
+            else if (property.kind !== SyntaxKind.SpreadElementExpression) {
                 error(property, Diagnostics.Property_assignment_expected);
             }
         }

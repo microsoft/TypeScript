@@ -646,7 +646,9 @@ namespace ts {
         const operatorToken = typeof operator === "number" ? createToken(operator) : operator;
         const operatorKind = operatorToken.kind;
         const node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, location);
-        node.left = parenthesizeBinaryOperand(operatorKind, left, /*isLeftSideOfBinary*/ true, /*leftOperand*/ undefined);
+        node.left = left.kind === SyntaxKind.ObjectBindingPattern || left.kind === SyntaxKind.ArrayBindingPattern ?
+            left as any as Expression :
+            parenthesizeBinaryOperand(operatorKind, left as Expression, /*isLeftSideOfBinary*/ true, /*leftOperand*/ undefined);
         node.operatorToken = operatorToken;
         node.right = parenthesizeBinaryOperand(operatorKind, right, /*isLeftSideOfBinary*/ false, node.left);
         return node;

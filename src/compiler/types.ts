@@ -2796,7 +2796,7 @@ namespace ts {
     /* @internal */
     export interface SpreadType extends Type {
         left: SpreadType | ResolvedType;
-        right: TypeParameter | IntersectionType | ResolvedType;
+        right: TypeParameter | IntersectionType | DifferenceType | ResolvedType;
     }
 
     export interface DifferenceType extends Type {
