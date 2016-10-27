@@ -151,7 +151,7 @@ namespace ts.server {
                 m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName,  /*logChanges*/ false);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
+        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModuleFull[] {
             return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName,
                 m => m.resolvedModule, r => r.resolvedFileName, /*logChanges*/ true);
         }
