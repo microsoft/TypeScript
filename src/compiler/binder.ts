@@ -2534,7 +2534,7 @@ namespace ts {
             && (leftKind === SyntaxKind.ObjectLiteralExpression
                 || leftKind === SyntaxKind.ArrayLiteralExpression)) {
             // Destructuring assignments are ES6 syntax.
-            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.DestructuringAssignment;
+            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.AsteriskAsteriskToken
             || operatorTokenKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
@@ -2615,9 +2615,9 @@ namespace ts {
 
             // A class with a parameter property assignment, property initializer, or decorator is
             // TypeScript syntax.
-            // An exported declaration may be TypeScript syntax.
+            // An exported declaration may be TypeScript syntax, but is handled by the visitor
+            // for a namespace declaration.
             if ((subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask)
-                || (modifierFlags & ModifierFlags.Export)
                 || node.typeParameters) {
                 transformFlags |= TransformFlags.AssertTypeScript;
             }
@@ -2787,11 +2787,6 @@ namespace ts {
         else {
             transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
-            // If a FunctionDeclaration is exported, then it is either ES6 or TypeScript syntax.
-            if (modifierFlags & ModifierFlags.Export) {
-                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2015;
-            }
-
             // TypeScript-specific modifiers, type parameters, and type annotations are TypeScript
             // syntax.
             if (modifierFlags & ModifierFlags.TypeScriptModifier
@@ -2933,11 +2928,6 @@ namespace ts {
         else {
             transformFlags = subtreeFlags;
 
-            // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
-            if (modifierFlags & ModifierFlags.Export) {
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertTypeScript;
-            }
-
             if (declarationListTransformFlags & TransformFlags.ContainsBindingPattern) {
                 transformFlags |= TransformFlags.AssertES2015;
             }
@@ -3054,12 +3044,6 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertJsx;
                 break;
 
-            case SyntaxKind.ExportKeyword:
-                // This node is both ES6 and TypeScript syntax.
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertTypeScript;
-                break;
-
-            case SyntaxKind.DefaultKeyword:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
             case SyntaxKind.TemplateMiddle:
@@ -3068,6 +3052,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.ForOfStatement:
+            case SyntaxKind.StaticKeyword:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES2015;
                 break;

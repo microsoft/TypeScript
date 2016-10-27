@@ -399,10 +399,15 @@ namespace ts {
 
     export function some<T>(array: T[], predicate?: (value: T) => boolean): boolean {
         if (array) {
-            for (const v of array) {
-                if (!predicate || predicate(v)) {
-                    return true;
+            if (predicate) {
+                for (const v of array) {
+                    if (predicate(v)) {
+                        return true;
+                    }
                 }
+            }
+            else {
+                return array.length > 0;
             }
         }
         return false;
@@ -498,14 +503,35 @@ namespace ts {
         return result;
     }
 
-    export function addRange<T>(to: T[], from: T[]): void {
-        if (to && from) {
-            for (const v of from) {
-                if (v !== undefined) {
-                    to.push(v);
-                }
-            }
+    /**
+     * Appends a value to an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param value The value to append to the array. If `value` is `undefined`, nothing is
+     * appended.
+     */
+    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+        if (value === undefined) return to;
+        if (to === undefined) to = [];
+        to.push(value);
+        return to;
+    }
+
+    /**
+     * Appends a range of value to an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param from The values to append to the array. If `from` is `undefined`, nothing is
+     * appended. If an element of `from` is `undefined`, that element is not appended.
+     */
+    export function addRange<T>(to: T[] | undefined, from: T[] | undefined): T[] | undefined {
+        if (from === undefined) return to;
+        for (const v of from) {
+            to = append(to, v);
         }
+        return to;
     }
 
     export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
@@ -518,31 +544,41 @@ namespace ts {
         return true;
     }
 
+    /**
+     * Returns the first element of an array if non-empty, `undefined` otherwise.
+     */
     export function firstOrUndefined<T>(array: T[]): T {
         return array && array.length > 0
             ? array[0]
             : undefined;
     }
 
+    /**
+     * Returns the last element of an array if non-empty, `undefined` otherwise.
+     */
+    export function lastOrUndefined<T>(array: T[]): T {
+        return array && array.length > 0
+            ? array[array.length - 1]
+            : undefined;
+    }
+
+    /**
+     * Returns the only element of an array if it contains only one element, `undefined` otherwise.
+     */
     export function singleOrUndefined<T>(array: T[]): T {
         return array && array.length === 1
             ? array[0]
             : undefined;
     }
 
+    /**
+     * Returns the only element of an array if it contains only one element; otheriwse, returns the
+     * array.
+     */
     export function singleOrMany<T>(array: T[]): T | T[] {
         return array && array.length === 1
             ? array[0]
             : array;
-    }
-
-    /**
-     * Returns the last element of an array if non-empty, undefined otherwise.
-     */
-    export function lastOrUndefined<T>(array: T[]): T {
-        return array && array.length > 0
-            ? array[array.length - 1]
-            : undefined;
     }
 
     export function replaceElement<T>(array: T[], index: number, value: T): T[] {
@@ -1641,10 +1677,6 @@ namespace ts {
         return path.substring(0, path.length - extension.length);
     }
 
-    export function isJsxOrTsxExtension(ext: string): boolean {
-        return ext === ".jsx" || ext === ".tsx";
-    }
-
     export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
         return <T>(removeFileExtension(path) + newExtension);
     }
@@ -1836,5 +1868,34 @@ namespace ts {
         // This is a fast way of testing the following conditions:
         //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
         return !(pos >= 0);
+    }
+
+    /** True if an extension is one of the supported TypeScript extensions. */
+    export function extensionIsTypeScript(ext: Extension): boolean {
+        return ext <= Extension.LastTypeScriptExtension;
+    }
+
+    /**
+     * Gets the extension from a path.
+     * Path must have a valid extension.
+     */
+    export function extensionFromPath(path: string): Extension {
+        if (fileExtensionIs(path, ".d.ts")) {
+            return Extension.Dts;
+        }
+        if (fileExtensionIs(path, ".ts")) {
+            return Extension.Ts;
+        }
+        if (fileExtensionIs(path, ".tsx")) {
+            return Extension.Tsx;
+        }
+        if (fileExtensionIs(path, ".js")) {
+            return Extension.Js;
+        }
+        if (fileExtensionIs(path, ".jsx")) {
+            return Extension.Jsx;
+        }
+        Debug.fail(`File ${path} has unknown extension.`);
+        return Extension.Js;
     }
 }

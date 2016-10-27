@@ -692,7 +692,7 @@ namespace ts {
 
             // Signature elements
             case SyntaxKind.Parameter:
-                return updateParameterDeclaration(<ParameterDeclaration>node,
+                return updateParameter(<ParameterDeclaration>node,
                     visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
