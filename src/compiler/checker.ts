@@ -10343,6 +10343,10 @@ namespace ts {
             if (!type) {
                 return undefined;
             }
+            // If the contextual signature has fewer parameters than the function expression, do not use it
+            if (isFunctionExpressionOrArrowFunction(node) && isAritySmaller(type, node)) {
+                return undefined;
+            }
             if (!(type.flags & TypeFlags.Union)) {
                 return getNonGenericSignature(type);
             }
@@ -10375,6 +10379,26 @@ namespace ts {
                 result.unionSignatures = signatureList;
             }
             return result;
+        }
+
+        function isAritySmaller(sourceType: Type, target: FunctionExpression | ArrowFunction) {
+            if (isFunctionType(sourceType)) {
+                let targetParameterCount = 0;
+                for (; targetParameterCount < target.parameters.length; targetParameterCount++) {
+                    const param = target.parameters[targetParameterCount];
+                    if (param.initializer || param.questionToken || param.dotDotDotToken || isJSDocOptionalParameter(param)) {
+                        break;
+                    }
+                }
+                if (target.parameters.length && parameterIsThisKeyword(target.parameters[0])) {
+                    targetParameterCount--;
+                }
+                const sourceSignatures = getSignaturesOfType(sourceType, SignatureKind.Call);
+                const sourceLengths = sourceSignatures.map(sig => !sig.hasRestParameter ? sig.parameters.length : Number.MAX_VALUE);
+                return forEach(sourceLengths, len => len < targetParameterCount);
+            }
+
+            return false;
         }
 
         /**
@@ -11890,12 +11914,6 @@ namespace ts {
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
-                        // If the parameter and argument are both functions and the parameter has fewer arguments than the argument,
-                        // then this signature is not applicable. Exit early to avoid fixing incorrect
-                        // contextual types to the function expression parameters.
-                        if (!reportErrors && isAritySmaller(paramType, arg)) {
-                            return false;
-                        }
                         argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     }
 
@@ -11908,16 +11926,6 @@ namespace ts {
             }
 
             return true;
-        }
-
-        function isAritySmaller(sourceType: Type, target: Expression) {
-            if (isFunctionExpressionOrArrowFunction(target) && isFunctionType(sourceType)) {
-                const sourceSignatures = getSignaturesOfType(sourceType, SignatureKind.Call);
-                const sourceLengths = sourceSignatures.map(sig => !sig.hasRestParameter ? sig.parameters.length : Number.MAX_VALUE);
-                return forEach(sourceLengths, len => len < target.parameters.length);
-            }
-
-            return false;
         }
 
         /**
