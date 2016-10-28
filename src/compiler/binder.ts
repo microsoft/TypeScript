@@ -2540,7 +2540,8 @@ namespace ts {
         if (operatorTokenKind === SyntaxKind.EqualsToken &&
             leftKind === SyntaxKind.ObjectLiteralExpression &&
             find((node.left as ObjectLiteralExpression).properties, p => p.kind === SyntaxKind.SpreadElementExpression)) {
-            transformFlags |= TransformFlags.AssertESNext | TransformFlags.DestructuringAssignment;
+            // Destructuring object assignments with rest are ESNext syntax.
+            transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertDestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.EqualsToken &&
                  (leftKind === SyntaxKind.ObjectLiteralExpression || leftKind === SyntaxKind.ArrayLiteralExpression)) {
@@ -2578,12 +2579,10 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsParameterPropertyAssignments;
         }
 
-        // TODO: Add a check for rest destructuring inside ObjectBindingPattern here
         // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
         // it is ES6 syntax and its container must emit default value assignments or parameter destructuring downlevel.
         if (subtreeFlags & TransformFlags.ContainsBindingPattern || initializer || dotDotDotToken) {
             transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsDefaultValueAssignments;
-            // transformFlags |= (subtreeFlags & (TransformFlags.AssertES2015 | TransformFlags.AssertExperimental)) | TransformFlags.ContainsDefaultValueAssignments;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2915,10 +2914,9 @@ namespace ts {
         let transformFlags = subtreeFlags;
         const nameKind = node.name.kind;
 
+        // A VariableDeclaration with an object binding pattern containing a rest element is ESNext syntax.
         if (nameKind === SyntaxKind.ObjectBindingPattern &&
             find((node.name as ObjectBindingPattern).elements, e => !!e.dotDotDotToken)) {
-            // TODO: Have to find all uses of containsbindingpattern/destructuringassignment that assume ES2015
-            // and make them propagate *either* ES2015 or ESNext
             transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsBindingPattern;
         }
         // A VariableDeclaration with a binding pattern is ES6 syntax.
@@ -3012,7 +3010,6 @@ namespace ts {
 
         if (subtreeFlags & TransformFlags.ContainsBindingPattern) {
             transformFlags |= TransformFlags.AssertES2015;
-            // transformFlags |= (subtreeFlags & (TransformFlags.AssertES2015 | TransformFlags.AssertExperimental));
         }
 
         // If a VariableDeclarationList is `let` or `const`, then it is ES6 syntax.
@@ -3155,7 +3152,6 @@ namespace ts {
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 // These nodes are ES6 syntax.
-                // TODO: Unless the object binding pattern has a spread type inside.
                 transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
                 break;
 
@@ -3201,7 +3197,6 @@ namespace ts {
             case SyntaxKind.WhileStatement:
             case SyntaxKind.ForStatement:
             case SyntaxKind.ForInStatement:
-            // TODO: for-of might need to be transformed from ESNext to ES2016
                 // A loop containing a block scoped binding *may* need to be transformed from ES6.
                 if (subtreeFlags & TransformFlags.ContainsBlockScopedBinding) {
                     transformFlags |= TransformFlags.AssertES2015;

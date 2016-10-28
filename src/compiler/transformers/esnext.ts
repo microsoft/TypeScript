@@ -113,7 +113,6 @@ namespace ts {
 
             return visitEachChild(node, visitor, context);
         }
-            
 
         /**
          * Visits a ForOfStatement and converts it into a ES2015-compatible ForOfStatement.

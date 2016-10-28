@@ -209,8 +209,7 @@ namespace ts {
 
             currentSourceFile = node;
             currentText = node.text;
-            const n = visitNode(node, visitor, isSourceFile);
-            return n;
+            return visitNode(node, visitor, isSourceFile);
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -1135,6 +1134,7 @@ namespace ts {
          * @param initializer The initializer for the parameter.
          */
         function addDefaultValueAssignmentForBindingPattern(statements: Statement[], parameter: ParameterDeclaration, name: BindingPattern, initializer: Expression): void {
+            // TODO: This needs to happen for object rest destructuring in ESNext too
             const temp = getGeneratedNameForNode(parameter);
 
             // In cases where a binding pattern is simply '[]' or '{}',
