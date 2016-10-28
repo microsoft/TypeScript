@@ -181,27 +181,33 @@ for (var _19 = 0, _20 = [multiRobotA, multiRobotB]; _19 < _20.length; _19++) {
     console.log(nameMA);
 }
 for (var _23 = 0, robots_4 = robots; _23 < robots_4.length; _23++) {
-    var _24 = robots_4[_23], numberA3 = _24[0], robotAInfo = _24.slice(1);
+    var _24 = robots_4[_23];
+    var numberA3 = _24[0], robotAInfo = _24.slice(1);
     console.log(numberA3);
 }
 for (var _25 = 0, _26 = getRobots(); _25 < _26.length; _25++) {
-    var _27 = _26[_25], numberA3 = _27[0], robotAInfo = _27.slice(1);
+    var _27 = _26[_25];
+    var numberA3 = _27[0], robotAInfo = _27.slice(1);
     console.log(numberA3);
 }
 for (var _28 = 0, _29 = [robotA, robotB]; _28 < _29.length; _28++) {
-    var _30 = _29[_28], numberA3 = _30[0], robotAInfo = _30.slice(1);
+    var _30 = _29[_28];
+    var numberA3 = _30[0], robotAInfo = _30.slice(1);
     console.log(numberA3);
 }
 for (var _31 = 0, multiRobots_4 = multiRobots; _31 < multiRobots_4.length; _31++) {
-    var multiRobotAInfo = multiRobots_4[_31].slice(0);
+    var _32 = multiRobots_4[_31];
+    var multiRobotAInfo = _32.slice(0);
     console.log(multiRobotAInfo);
 }
-for (var _32 = 0, _33 = getMultiRobots(); _32 < _33.length; _32++) {
-    var multiRobotAInfo = _33[_32].slice(0);
+for (var _33 = 0, _34 = getMultiRobots(); _33 < _34.length; _33++) {
+    var _35 = _34[_33];
+    var multiRobotAInfo = _35.slice(0);
     console.log(multiRobotAInfo);
 }
-for (var _34 = 0, _35 = [multiRobotA, multiRobotB]; _34 < _35.length; _34++) {
-    var multiRobotAInfo = _35[_34].slice(0);
+for (var _36 = 0, _37 = [multiRobotA, multiRobotB]; _36 < _37.length; _36++) {
+    var _38 = _37[_36];
+    var multiRobotAInfo = _38.slice(0);
     console.log(multiRobotAInfo);
 }
 //# sourceMappingURL=sourceMapValidationDestructuringForOfArrayBindingPattern.js.map

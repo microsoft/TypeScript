@@ -1,4 +1,5 @@
 === tests/cases/conformance/types/difference/objectRest.ts ===
+
 let o = { a: 1, b: 'no' }
 >o : { a: number; b: string; }
 >{ a: 1, b: 'no' } : { a: number; b: string; }
@@ -55,10 +56,45 @@ var { d: renamed, ...d } = o2;
 >d : { c: string; }
 >o2 : { c: string; d: string; }
 
-function cloneAgain({ ...clone }: { a: number, b: string }): void {
->cloneAgain : ({...clone}: { a: number; b: string; }) => void
->clone : { a: number; b: string; }
+function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
+>cloneAgain : ({a, ...clone}: { a: number; b: string; }) => void
+>a : number
+>clone : { b: string; }
 >a : number
 >b : string
+}
+let array: { x: number, y: string }[];
+>array : { x: number; y: string; }[]
+>x : number
+>y : string
+
+for (let { x, ...restOf } of array) {
+>x : number
+>restOf : { y: string; }
+>array : { x: number; y: string; }[]
+
+    [x, restOf];
+>[x, restOf] : (number | { y: string; })[]
+>x : number
+>restOf : { y: string; }
+}
+let xx: number;
+>xx : number
+
+let rrestOff: { y: string };
+>rrestOff : { y: string; }
+>y : string
+
+for ({ x: xx, ...rrestOff } of array ) {
+>{ x: xx, ...rrestOff } : { y: string; x: number; }
+>x : { x: number; y: string; }
+>xx : number
+>rrestOff : any
+>array : { x: number; y: string; }[]
+
+    [xx, rrestOff];
+>[xx, rrestOff] : (number | { y: string; })[]
+>xx : number
+>rrestOff : { y: string; }
 }
 

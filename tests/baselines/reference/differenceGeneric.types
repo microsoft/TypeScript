@@ -24,10 +24,6 @@ function cloneAgain<T extends Gen & Gen2>(t: T): T - (x) {
 >T : T
 >T : T
 
-    let y: Gen;
->y : Gen
->Gen : Gen
-
     // declarations with generics create difference types
     let rest: T - (x);
 >rest : T - ( x )
@@ -37,9 +33,10 @@ function cloneAgain<T extends Gen & Gen2>(t: T): T - (x) {
 >rest1 : T - ( x ) - ( parent, millenial )
 >T : T
 
-    var { x, ...rest2 } = t;
+    var { x, parent, ...rest2 } = t;
 >x : number
->rest2 : T - ( x )
+>parent : Gen
+>rest2 : T - ( x, parent )
 >t : T
 
     // apparent types distribute the intersection constraint correctly
@@ -53,18 +50,22 @@ function cloneAgain<T extends Gen & Gen2>(t: T): T - (x) {
 >rest : T - ( x )
 >millenial : string
 
-    rest2.parent;
->rest2.parent : Gen
->rest2 : T - ( x )
->parent : Gen
-
     rest2.millenial;
 >rest2.millenial : string
->rest2 : T - ( x )
+>rest2 : T - ( x, parent )
 >millenial : string
 
-    return rest2;
->rest2 : T - ( x )
+    ({ x, parent, ...rest2 } = t);
+>({ x, parent, ...rest2 } = t) : T
+>{ x, parent, ...rest2 } = t : T
+>{ x, parent, ...rest2 } : { x: number; parent: Gen; ...T - ( x, parent ) }
+>x : number
+>parent : Gen
+>rest2 : any
+>t : T
+
+    return rest2; // TODO: T - (x, parent) shouldn't be assignable to T - (x)
+>rest2 : T - ( x, parent )
 }
 interface Gen3 extends Gen2 {
 >Gen3 : Gen3

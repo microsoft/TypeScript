@@ -190,15 +190,18 @@ for (var _54 = 0, _55 = [multiRobotA, multiRobotB]; _54 < _55.length; _54++) {
     console.log(nameMA);
 }
 for (var _62 = 0, robots_4 = robots; _62 < robots_4.length; _62++) {
-    var _63 = robots_4[_62], _64 = _63[0], numberA3 = _64 === void 0 ? -1 : _64, robotAInfo = _63.slice(1);
+    var _63 = robots_4[_62];
+    var _64 = _63[0], numberA3 = _64 === void 0 ? -1 : _64, robotAInfo = _63.slice(1);
     console.log(numberA3);
 }
 for (var _65 = 0, _66 = getRobots(); _65 < _66.length; _65++) {
-    var _67 = _66[_65], _68 = _67[0], numberA3 = _68 === void 0 ? -1 : _68, robotAInfo = _67.slice(1);
+    var _67 = _66[_65];
+    var _68 = _67[0], numberA3 = _68 === void 0 ? -1 : _68, robotAInfo = _67.slice(1);
     console.log(numberA3);
 }
 for (var _69 = 0, _70 = [robotA, robotB]; _69 < _70.length; _69++) {
-    var _71 = _70[_69], _72 = _71[0], numberA3 = _72 === void 0 ? -1 : _72, robotAInfo = _71.slice(1);
+    var _71 = _70[_69];
+    var _72 = _71[0], numberA3 = _72 === void 0 ? -1 : _72, robotAInfo = _71.slice(1);
     console.log(numberA3);
 }
 //# sourceMappingURL=sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.js.map

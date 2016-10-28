@@ -2108,7 +2108,6 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                     ^^^^^^^^^^^^^^^^^^^^^
 10>                                                          ^^
 11>                                                            ^^^^^
-12>                                                                 ^^^^^^^^^^->
 1->
   >
   >
@@ -2134,28 +2133,31 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 10>Emitted(85, 61) Source(78, 39) + SourceIndex(0)
 11>Emitted(85, 66) Source(78, 45) + SourceIndex(0)
 ---
->>>    var _24 = robots_4[_23], numberA3 = _24[0], robotAInfo = _24.slice(1);
+>>>    var _24 = robots_4[_23];
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    robots
+1 >Emitted(86, 5) Source(78, 39) + SourceIndex(0)
+2 >Emitted(86, 28) Source(78, 45) + SourceIndex(0)
+---
+>>>    var numberA3 = _24[0], robotAInfo = _24.slice(1);
 1->^^^^
 2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^
-4 >                           ^^
-5 >                             ^^^^^^^^^^^^^^^^^
-6 >                                              ^^
-7 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
 2 >    
-3 >        [numberA3, ...robotAInfo]
-4 >                           
-5 >                             numberA3
-6 >                                              , 
-7 >                                                ...robotAInfo
-1->Emitted(86, 5) Source(78, 10) + SourceIndex(0)
-2 >Emitted(86, 9) Source(78, 10) + SourceIndex(0)
-3 >Emitted(86, 28) Source(78, 35) + SourceIndex(0)
-4 >Emitted(86, 30) Source(78, 11) + SourceIndex(0)
-5 >Emitted(86, 47) Source(78, 19) + SourceIndex(0)
-6 >Emitted(86, 49) Source(78, 21) + SourceIndex(0)
-7 >Emitted(86, 74) Source(78, 34) + SourceIndex(0)
+3 >        numberA3
+4 >                         , 
+5 >                           ...robotAInfo
+1->Emitted(87, 5) Source(78, 11) + SourceIndex(0)
+2 >Emitted(87, 9) Source(78, 11) + SourceIndex(0)
+3 >Emitted(87, 26) Source(78, 19) + SourceIndex(0)
+4 >Emitted(87, 28) Source(78, 21) + SourceIndex(0)
+5 >Emitted(87, 53) Source(78, 34) + SourceIndex(0)
 ---
 >>>    console.log(numberA3);
 1 >^^^^
@@ -2175,21 +2177,21 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                numberA3
 7 >                        )
 8 >                         ;
-1 >Emitted(87, 5) Source(79, 5) + SourceIndex(0)
-2 >Emitted(87, 12) Source(79, 12) + SourceIndex(0)
-3 >Emitted(87, 13) Source(79, 13) + SourceIndex(0)
-4 >Emitted(87, 16) Source(79, 16) + SourceIndex(0)
-5 >Emitted(87, 17) Source(79, 17) + SourceIndex(0)
-6 >Emitted(87, 25) Source(79, 25) + SourceIndex(0)
-7 >Emitted(87, 26) Source(79, 26) + SourceIndex(0)
-8 >Emitted(87, 27) Source(79, 27) + SourceIndex(0)
+1 >Emitted(88, 5) Source(79, 5) + SourceIndex(0)
+2 >Emitted(88, 12) Source(79, 12) + SourceIndex(0)
+3 >Emitted(88, 13) Source(79, 13) + SourceIndex(0)
+4 >Emitted(88, 16) Source(79, 16) + SourceIndex(0)
+5 >Emitted(88, 17) Source(79, 17) + SourceIndex(0)
+6 >Emitted(88, 25) Source(79, 25) + SourceIndex(0)
+7 >Emitted(88, 26) Source(79, 26) + SourceIndex(0)
+8 >Emitted(88, 27) Source(79, 27) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(88, 2) Source(80, 2) + SourceIndex(0)
+1 >Emitted(89, 2) Source(80, 2) + SourceIndex(0)
 ---
 >>>for (var _25 = 0, _26 = getRobots(); _25 < _26.length; _25++) {
 1->
@@ -2205,7 +2207,6 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                     ^^^^^^^^^^^^^^^^
 12>                                                     ^^
 13>                                                       ^^^^^
-14>                                                            ^^^^^^^^^^->
 1->
   >
 2 >for
@@ -2220,42 +2221,45 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                     getRobots()
 12>                                                     
 13>                                                       getRobots()
-1->Emitted(89, 1) Source(81, 1) + SourceIndex(0)
-2 >Emitted(89, 4) Source(81, 4) + SourceIndex(0)
-3 >Emitted(89, 5) Source(81, 5) + SourceIndex(0)
-4 >Emitted(89, 6) Source(81, 39) + SourceIndex(0)
-5 >Emitted(89, 17) Source(81, 50) + SourceIndex(0)
-6 >Emitted(89, 19) Source(81, 39) + SourceIndex(0)
-7 >Emitted(89, 25) Source(81, 39) + SourceIndex(0)
-8 >Emitted(89, 34) Source(81, 48) + SourceIndex(0)
-9 >Emitted(89, 36) Source(81, 50) + SourceIndex(0)
-10>Emitted(89, 38) Source(81, 39) + SourceIndex(0)
-11>Emitted(89, 54) Source(81, 50) + SourceIndex(0)
-12>Emitted(89, 56) Source(81, 39) + SourceIndex(0)
-13>Emitted(89, 61) Source(81, 50) + SourceIndex(0)
+1->Emitted(90, 1) Source(81, 1) + SourceIndex(0)
+2 >Emitted(90, 4) Source(81, 4) + SourceIndex(0)
+3 >Emitted(90, 5) Source(81, 5) + SourceIndex(0)
+4 >Emitted(90, 6) Source(81, 39) + SourceIndex(0)
+5 >Emitted(90, 17) Source(81, 50) + SourceIndex(0)
+6 >Emitted(90, 19) Source(81, 39) + SourceIndex(0)
+7 >Emitted(90, 25) Source(81, 39) + SourceIndex(0)
+8 >Emitted(90, 34) Source(81, 48) + SourceIndex(0)
+9 >Emitted(90, 36) Source(81, 50) + SourceIndex(0)
+10>Emitted(90, 38) Source(81, 39) + SourceIndex(0)
+11>Emitted(90, 54) Source(81, 50) + SourceIndex(0)
+12>Emitted(90, 56) Source(81, 39) + SourceIndex(0)
+13>Emitted(90, 61) Source(81, 50) + SourceIndex(0)
 ---
->>>    var _27 = _26[_25], numberA3 = _27[0], robotAInfo = _27.slice(1);
+>>>    var _27 = _26[_25];
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    getRobots()
+1 >Emitted(91, 5) Source(81, 39) + SourceIndex(0)
+2 >Emitted(91, 23) Source(81, 50) + SourceIndex(0)
+---
+>>>    var numberA3 = _27[0], robotAInfo = _27.slice(1);
 1->^^^^
 2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^
-4 >                      ^^
-5 >                        ^^^^^^^^^^^^^^^^^
-6 >                                         ^^
-7 >                                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
 2 >    
-3 >        [numberA3, ...robotAInfo]
-4 >                      
-5 >                        numberA3
-6 >                                         , 
-7 >                                           ...robotAInfo
-1->Emitted(90, 5) Source(81, 10) + SourceIndex(0)
-2 >Emitted(90, 9) Source(81, 10) + SourceIndex(0)
-3 >Emitted(90, 23) Source(81, 35) + SourceIndex(0)
-4 >Emitted(90, 25) Source(81, 11) + SourceIndex(0)
-5 >Emitted(90, 42) Source(81, 19) + SourceIndex(0)
-6 >Emitted(90, 44) Source(81, 21) + SourceIndex(0)
-7 >Emitted(90, 69) Source(81, 34) + SourceIndex(0)
+3 >        numberA3
+4 >                         , 
+5 >                           ...robotAInfo
+1->Emitted(92, 5) Source(81, 11) + SourceIndex(0)
+2 >Emitted(92, 9) Source(81, 11) + SourceIndex(0)
+3 >Emitted(92, 26) Source(81, 19) + SourceIndex(0)
+4 >Emitted(92, 28) Source(81, 21) + SourceIndex(0)
+5 >Emitted(92, 53) Source(81, 34) + SourceIndex(0)
 ---
 >>>    console.log(numberA3);
 1 >^^^^
@@ -2275,21 +2279,21 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                numberA3
 7 >                        )
 8 >                         ;
-1 >Emitted(91, 5) Source(82, 5) + SourceIndex(0)
-2 >Emitted(91, 12) Source(82, 12) + SourceIndex(0)
-3 >Emitted(91, 13) Source(82, 13) + SourceIndex(0)
-4 >Emitted(91, 16) Source(82, 16) + SourceIndex(0)
-5 >Emitted(91, 17) Source(82, 17) + SourceIndex(0)
-6 >Emitted(91, 25) Source(82, 25) + SourceIndex(0)
-7 >Emitted(91, 26) Source(82, 26) + SourceIndex(0)
-8 >Emitted(91, 27) Source(82, 27) + SourceIndex(0)
+1 >Emitted(93, 5) Source(82, 5) + SourceIndex(0)
+2 >Emitted(93, 12) Source(82, 12) + SourceIndex(0)
+3 >Emitted(93, 13) Source(82, 13) + SourceIndex(0)
+4 >Emitted(93, 16) Source(82, 16) + SourceIndex(0)
+5 >Emitted(93, 17) Source(82, 17) + SourceIndex(0)
+6 >Emitted(93, 25) Source(82, 25) + SourceIndex(0)
+7 >Emitted(93, 26) Source(82, 26) + SourceIndex(0)
+8 >Emitted(93, 27) Source(82, 27) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(92, 2) Source(83, 2) + SourceIndex(0)
+1 >Emitted(94, 2) Source(83, 2) + SourceIndex(0)
 ---
 >>>for (var _28 = 0, _29 = [robotA, robotB]; _28 < _29.length; _28++) {
 1->
@@ -2307,7 +2311,6 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 13>                                          ^^^^^^^^^^^^^^^^
 14>                                                          ^^
 15>                                                            ^^^^^
-16>                                                                 ^^^^^->
 1->
   >
 2 >for
@@ -2324,44 +2327,47 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 13>                                          [robotA, robotB]
 14>                                                          
 15>                                                            [robotA, robotB]
-1->Emitted(93, 1) Source(84, 1) + SourceIndex(0)
-2 >Emitted(93, 4) Source(84, 4) + SourceIndex(0)
-3 >Emitted(93, 5) Source(84, 5) + SourceIndex(0)
-4 >Emitted(93, 6) Source(84, 39) + SourceIndex(0)
-5 >Emitted(93, 17) Source(84, 55) + SourceIndex(0)
-6 >Emitted(93, 19) Source(84, 39) + SourceIndex(0)
-7 >Emitted(93, 26) Source(84, 40) + SourceIndex(0)
-8 >Emitted(93, 32) Source(84, 46) + SourceIndex(0)
-9 >Emitted(93, 34) Source(84, 48) + SourceIndex(0)
-10>Emitted(93, 40) Source(84, 54) + SourceIndex(0)
-11>Emitted(93, 41) Source(84, 55) + SourceIndex(0)
-12>Emitted(93, 43) Source(84, 39) + SourceIndex(0)
-13>Emitted(93, 59) Source(84, 55) + SourceIndex(0)
-14>Emitted(93, 61) Source(84, 39) + SourceIndex(0)
-15>Emitted(93, 66) Source(84, 55) + SourceIndex(0)
+1->Emitted(95, 1) Source(84, 1) + SourceIndex(0)
+2 >Emitted(95, 4) Source(84, 4) + SourceIndex(0)
+3 >Emitted(95, 5) Source(84, 5) + SourceIndex(0)
+4 >Emitted(95, 6) Source(84, 39) + SourceIndex(0)
+5 >Emitted(95, 17) Source(84, 55) + SourceIndex(0)
+6 >Emitted(95, 19) Source(84, 39) + SourceIndex(0)
+7 >Emitted(95, 26) Source(84, 40) + SourceIndex(0)
+8 >Emitted(95, 32) Source(84, 46) + SourceIndex(0)
+9 >Emitted(95, 34) Source(84, 48) + SourceIndex(0)
+10>Emitted(95, 40) Source(84, 54) + SourceIndex(0)
+11>Emitted(95, 41) Source(84, 55) + SourceIndex(0)
+12>Emitted(95, 43) Source(84, 39) + SourceIndex(0)
+13>Emitted(95, 59) Source(84, 55) + SourceIndex(0)
+14>Emitted(95, 61) Source(84, 39) + SourceIndex(0)
+15>Emitted(95, 66) Source(84, 55) + SourceIndex(0)
 ---
->>>    var _30 = _29[_28], numberA3 = _30[0], robotAInfo = _30.slice(1);
+>>>    var _30 = _29[_28];
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    [robotA, robotB]
+1 >Emitted(96, 5) Source(84, 39) + SourceIndex(0)
+2 >Emitted(96, 23) Source(84, 55) + SourceIndex(0)
+---
+>>>    var numberA3 = _30[0], robotAInfo = _30.slice(1);
 1->^^^^
 2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^
-4 >                      ^^
-5 >                        ^^^^^^^^^^^^^^^^^
-6 >                                         ^^
-7 >                                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
 2 >    
-3 >        [numberA3, ...robotAInfo]
-4 >                      
-5 >                        numberA3
-6 >                                         , 
-7 >                                           ...robotAInfo
-1->Emitted(94, 5) Source(84, 10) + SourceIndex(0)
-2 >Emitted(94, 9) Source(84, 10) + SourceIndex(0)
-3 >Emitted(94, 23) Source(84, 35) + SourceIndex(0)
-4 >Emitted(94, 25) Source(84, 11) + SourceIndex(0)
-5 >Emitted(94, 42) Source(84, 19) + SourceIndex(0)
-6 >Emitted(94, 44) Source(84, 21) + SourceIndex(0)
-7 >Emitted(94, 69) Source(84, 34) + SourceIndex(0)
+3 >        numberA3
+4 >                         , 
+5 >                           ...robotAInfo
+1->Emitted(97, 5) Source(84, 11) + SourceIndex(0)
+2 >Emitted(97, 9) Source(84, 11) + SourceIndex(0)
+3 >Emitted(97, 26) Source(84, 19) + SourceIndex(0)
+4 >Emitted(97, 28) Source(84, 21) + SourceIndex(0)
+5 >Emitted(97, 53) Source(84, 34) + SourceIndex(0)
 ---
 >>>    console.log(numberA3);
 1 >^^^^
@@ -2381,21 +2387,21 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                numberA3
 7 >                        )
 8 >                         ;
-1 >Emitted(95, 5) Source(85, 5) + SourceIndex(0)
-2 >Emitted(95, 12) Source(85, 12) + SourceIndex(0)
-3 >Emitted(95, 13) Source(85, 13) + SourceIndex(0)
-4 >Emitted(95, 16) Source(85, 16) + SourceIndex(0)
-5 >Emitted(95, 17) Source(85, 17) + SourceIndex(0)
-6 >Emitted(95, 25) Source(85, 25) + SourceIndex(0)
-7 >Emitted(95, 26) Source(85, 26) + SourceIndex(0)
-8 >Emitted(95, 27) Source(85, 27) + SourceIndex(0)
+1 >Emitted(98, 5) Source(85, 5) + SourceIndex(0)
+2 >Emitted(98, 12) Source(85, 12) + SourceIndex(0)
+3 >Emitted(98, 13) Source(85, 13) + SourceIndex(0)
+4 >Emitted(98, 16) Source(85, 16) + SourceIndex(0)
+5 >Emitted(98, 17) Source(85, 17) + SourceIndex(0)
+6 >Emitted(98, 25) Source(85, 25) + SourceIndex(0)
+7 >Emitted(98, 26) Source(85, 26) + SourceIndex(0)
+8 >Emitted(98, 27) Source(85, 27) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(96, 2) Source(86, 2) + SourceIndex(0)
+1 >Emitted(99, 2) Source(86, 2) + SourceIndex(0)
 ---
 >>>for (var _31 = 0, multiRobots_4 = multiRobots; _31 < multiRobots_4.length; _31++) {
 1->
@@ -2421,28 +2427,37 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                               multiRobots
 10>                                                                         
 11>                                                                           multiRobots
-1->Emitted(97, 1) Source(87, 1) + SourceIndex(0)
-2 >Emitted(97, 4) Source(87, 4) + SourceIndex(0)
-3 >Emitted(97, 5) Source(87, 5) + SourceIndex(0)
-4 >Emitted(97, 6) Source(87, 34) + SourceIndex(0)
-5 >Emitted(97, 17) Source(87, 45) + SourceIndex(0)
-6 >Emitted(97, 19) Source(87, 34) + SourceIndex(0)
-7 >Emitted(97, 46) Source(87, 45) + SourceIndex(0)
-8 >Emitted(97, 48) Source(87, 34) + SourceIndex(0)
-9 >Emitted(97, 74) Source(87, 45) + SourceIndex(0)
-10>Emitted(97, 76) Source(87, 34) + SourceIndex(0)
-11>Emitted(97, 81) Source(87, 45) + SourceIndex(0)
+1->Emitted(100, 1) Source(87, 1) + SourceIndex(0)
+2 >Emitted(100, 4) Source(87, 4) + SourceIndex(0)
+3 >Emitted(100, 5) Source(87, 5) + SourceIndex(0)
+4 >Emitted(100, 6) Source(87, 34) + SourceIndex(0)
+5 >Emitted(100, 17) Source(87, 45) + SourceIndex(0)
+6 >Emitted(100, 19) Source(87, 34) + SourceIndex(0)
+7 >Emitted(100, 46) Source(87, 45) + SourceIndex(0)
+8 >Emitted(100, 48) Source(87, 34) + SourceIndex(0)
+9 >Emitted(100, 74) Source(87, 45) + SourceIndex(0)
+10>Emitted(100, 76) Source(87, 34) + SourceIndex(0)
+11>Emitted(100, 81) Source(87, 45) + SourceIndex(0)
 ---
->>>    var multiRobotAInfo = multiRobots_4[_31].slice(0);
+>>>    var _32 = multiRobots_4[_31];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                ^^^^^^^^->
 1 >
+2 >    multiRobots
+1 >Emitted(101, 5) Source(87, 34) + SourceIndex(0)
+2 >Emitted(101, 33) Source(87, 45) + SourceIndex(0)
+---
+>>>    var multiRobotAInfo = _32.slice(0);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
 2 >    
 3 >        ...multiRobotAInfo
-1 >Emitted(98, 5) Source(87, 11) + SourceIndex(0)
-2 >Emitted(98, 9) Source(87, 11) + SourceIndex(0)
-3 >Emitted(98, 54) Source(87, 29) + SourceIndex(0)
+1->Emitted(102, 5) Source(87, 11) + SourceIndex(0)
+2 >Emitted(102, 9) Source(87, 11) + SourceIndex(0)
+3 >Emitted(102, 39) Source(87, 29) + SourceIndex(0)
 ---
 >>>    console.log(multiRobotAInfo);
 1 >^^^^
@@ -2462,23 +2477,23 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                multiRobotAInfo
 7 >                               )
 8 >                                ;
-1 >Emitted(99, 5) Source(88, 5) + SourceIndex(0)
-2 >Emitted(99, 12) Source(88, 12) + SourceIndex(0)
-3 >Emitted(99, 13) Source(88, 13) + SourceIndex(0)
-4 >Emitted(99, 16) Source(88, 16) + SourceIndex(0)
-5 >Emitted(99, 17) Source(88, 17) + SourceIndex(0)
-6 >Emitted(99, 32) Source(88, 32) + SourceIndex(0)
-7 >Emitted(99, 33) Source(88, 33) + SourceIndex(0)
-8 >Emitted(99, 34) Source(88, 34) + SourceIndex(0)
+1 >Emitted(103, 5) Source(88, 5) + SourceIndex(0)
+2 >Emitted(103, 12) Source(88, 12) + SourceIndex(0)
+3 >Emitted(103, 13) Source(88, 13) + SourceIndex(0)
+4 >Emitted(103, 16) Source(88, 16) + SourceIndex(0)
+5 >Emitted(103, 17) Source(88, 17) + SourceIndex(0)
+6 >Emitted(103, 32) Source(88, 32) + SourceIndex(0)
+7 >Emitted(103, 33) Source(88, 33) + SourceIndex(0)
+8 >Emitted(103, 34) Source(88, 34) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(100, 2) Source(89, 2) + SourceIndex(0)
+1 >Emitted(104, 2) Source(89, 2) + SourceIndex(0)
 ---
->>>for (var _32 = 0, _33 = getMultiRobots(); _32 < _33.length; _32++) {
+>>>for (var _33 = 0, _34 = getMultiRobots(); _33 < _34.length; _33++) {
 1->
 2 >^^^
 3 >   ^
@@ -2506,30 +2521,39 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                          getMultiRobots()
 12>                                                          
 13>                                                            getMultiRobots()
-1->Emitted(101, 1) Source(90, 1) + SourceIndex(0)
-2 >Emitted(101, 4) Source(90, 4) + SourceIndex(0)
-3 >Emitted(101, 5) Source(90, 5) + SourceIndex(0)
-4 >Emitted(101, 6) Source(90, 34) + SourceIndex(0)
-5 >Emitted(101, 17) Source(90, 50) + SourceIndex(0)
-6 >Emitted(101, 19) Source(90, 34) + SourceIndex(0)
-7 >Emitted(101, 25) Source(90, 34) + SourceIndex(0)
-8 >Emitted(101, 39) Source(90, 48) + SourceIndex(0)
-9 >Emitted(101, 41) Source(90, 50) + SourceIndex(0)
-10>Emitted(101, 43) Source(90, 34) + SourceIndex(0)
-11>Emitted(101, 59) Source(90, 50) + SourceIndex(0)
-12>Emitted(101, 61) Source(90, 34) + SourceIndex(0)
-13>Emitted(101, 66) Source(90, 50) + SourceIndex(0)
+1->Emitted(105, 1) Source(90, 1) + SourceIndex(0)
+2 >Emitted(105, 4) Source(90, 4) + SourceIndex(0)
+3 >Emitted(105, 5) Source(90, 5) + SourceIndex(0)
+4 >Emitted(105, 6) Source(90, 34) + SourceIndex(0)
+5 >Emitted(105, 17) Source(90, 50) + SourceIndex(0)
+6 >Emitted(105, 19) Source(90, 34) + SourceIndex(0)
+7 >Emitted(105, 25) Source(90, 34) + SourceIndex(0)
+8 >Emitted(105, 39) Source(90, 48) + SourceIndex(0)
+9 >Emitted(105, 41) Source(90, 50) + SourceIndex(0)
+10>Emitted(105, 43) Source(90, 34) + SourceIndex(0)
+11>Emitted(105, 59) Source(90, 50) + SourceIndex(0)
+12>Emitted(105, 61) Source(90, 34) + SourceIndex(0)
+13>Emitted(105, 66) Source(90, 50) + SourceIndex(0)
 ---
->>>    var multiRobotAInfo = _33[_32].slice(0);
+>>>    var _35 = _34[_33];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^^^^^^^^^^^^^^^^^->
 1 >
+2 >    getMultiRobots()
+1 >Emitted(106, 5) Source(90, 34) + SourceIndex(0)
+2 >Emitted(106, 23) Source(90, 50) + SourceIndex(0)
+---
+>>>    var multiRobotAInfo = _35.slice(0);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
 2 >    
 3 >        ...multiRobotAInfo
-1 >Emitted(102, 5) Source(90, 11) + SourceIndex(0)
-2 >Emitted(102, 9) Source(90, 11) + SourceIndex(0)
-3 >Emitted(102, 44) Source(90, 29) + SourceIndex(0)
+1->Emitted(107, 5) Source(90, 11) + SourceIndex(0)
+2 >Emitted(107, 9) Source(90, 11) + SourceIndex(0)
+3 >Emitted(107, 39) Source(90, 29) + SourceIndex(0)
 ---
 >>>    console.log(multiRobotAInfo);
 1 >^^^^
@@ -2549,23 +2573,23 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                multiRobotAInfo
 7 >                               )
 8 >                                ;
-1 >Emitted(103, 5) Source(91, 5) + SourceIndex(0)
-2 >Emitted(103, 12) Source(91, 12) + SourceIndex(0)
-3 >Emitted(103, 13) Source(91, 13) + SourceIndex(0)
-4 >Emitted(103, 16) Source(91, 16) + SourceIndex(0)
-5 >Emitted(103, 17) Source(91, 17) + SourceIndex(0)
-6 >Emitted(103, 32) Source(91, 32) + SourceIndex(0)
-7 >Emitted(103, 33) Source(91, 33) + SourceIndex(0)
-8 >Emitted(103, 34) Source(91, 34) + SourceIndex(0)
+1 >Emitted(108, 5) Source(91, 5) + SourceIndex(0)
+2 >Emitted(108, 12) Source(91, 12) + SourceIndex(0)
+3 >Emitted(108, 13) Source(91, 13) + SourceIndex(0)
+4 >Emitted(108, 16) Source(91, 16) + SourceIndex(0)
+5 >Emitted(108, 17) Source(91, 17) + SourceIndex(0)
+6 >Emitted(108, 32) Source(91, 32) + SourceIndex(0)
+7 >Emitted(108, 33) Source(91, 33) + SourceIndex(0)
+8 >Emitted(108, 34) Source(91, 34) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(104, 2) Source(92, 2) + SourceIndex(0)
+1 >Emitted(109, 2) Source(92, 2) + SourceIndex(0)
 ---
->>>for (var _34 = 0, _35 = [multiRobotA, multiRobotB]; _34 < _35.length; _34++) {
+>>>for (var _36 = 0, _37 = [multiRobotA, multiRobotB]; _36 < _37.length; _36++) {
 1->
 2 >^^^
 3 >   ^
@@ -2597,32 +2621,41 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 13>                                                    [multiRobotA, multiRobotB]
 14>                                                                    
 15>                                                                      [multiRobotA, multiRobotB]
-1->Emitted(105, 1) Source(93, 1) + SourceIndex(0)
-2 >Emitted(105, 4) Source(93, 4) + SourceIndex(0)
-3 >Emitted(105, 5) Source(93, 5) + SourceIndex(0)
-4 >Emitted(105, 6) Source(93, 34) + SourceIndex(0)
-5 >Emitted(105, 17) Source(93, 60) + SourceIndex(0)
-6 >Emitted(105, 19) Source(93, 34) + SourceIndex(0)
-7 >Emitted(105, 26) Source(93, 35) + SourceIndex(0)
-8 >Emitted(105, 37) Source(93, 46) + SourceIndex(0)
-9 >Emitted(105, 39) Source(93, 48) + SourceIndex(0)
-10>Emitted(105, 50) Source(93, 59) + SourceIndex(0)
-11>Emitted(105, 51) Source(93, 60) + SourceIndex(0)
-12>Emitted(105, 53) Source(93, 34) + SourceIndex(0)
-13>Emitted(105, 69) Source(93, 60) + SourceIndex(0)
-14>Emitted(105, 71) Source(93, 34) + SourceIndex(0)
-15>Emitted(105, 76) Source(93, 60) + SourceIndex(0)
+1->Emitted(110, 1) Source(93, 1) + SourceIndex(0)
+2 >Emitted(110, 4) Source(93, 4) + SourceIndex(0)
+3 >Emitted(110, 5) Source(93, 5) + SourceIndex(0)
+4 >Emitted(110, 6) Source(93, 34) + SourceIndex(0)
+5 >Emitted(110, 17) Source(93, 60) + SourceIndex(0)
+6 >Emitted(110, 19) Source(93, 34) + SourceIndex(0)
+7 >Emitted(110, 26) Source(93, 35) + SourceIndex(0)
+8 >Emitted(110, 37) Source(93, 46) + SourceIndex(0)
+9 >Emitted(110, 39) Source(93, 48) + SourceIndex(0)
+10>Emitted(110, 50) Source(93, 59) + SourceIndex(0)
+11>Emitted(110, 51) Source(93, 60) + SourceIndex(0)
+12>Emitted(110, 53) Source(93, 34) + SourceIndex(0)
+13>Emitted(110, 69) Source(93, 60) + SourceIndex(0)
+14>Emitted(110, 71) Source(93, 34) + SourceIndex(0)
+15>Emitted(110, 76) Source(93, 60) + SourceIndex(0)
 ---
->>>    var multiRobotAInfo = _35[_34].slice(0);
+>>>    var _38 = _37[_36];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^^^^^^^^^^^^^^^^^->
 1 >
+2 >    [multiRobotA, multiRobotB]
+1 >Emitted(111, 5) Source(93, 34) + SourceIndex(0)
+2 >Emitted(111, 23) Source(93, 60) + SourceIndex(0)
+---
+>>>    var multiRobotAInfo = _38.slice(0);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
 2 >    
 3 >        ...multiRobotAInfo
-1 >Emitted(106, 5) Source(93, 11) + SourceIndex(0)
-2 >Emitted(106, 9) Source(93, 11) + SourceIndex(0)
-3 >Emitted(106, 44) Source(93, 29) + SourceIndex(0)
+1->Emitted(112, 5) Source(93, 11) + SourceIndex(0)
+2 >Emitted(112, 9) Source(93, 11) + SourceIndex(0)
+3 >Emitted(112, 39) Source(93, 29) + SourceIndex(0)
 ---
 >>>    console.log(multiRobotAInfo);
 1 >^^^^
@@ -2642,20 +2675,20 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                multiRobotAInfo
 7 >                               )
 8 >                                ;
-1 >Emitted(107, 5) Source(94, 5) + SourceIndex(0)
-2 >Emitted(107, 12) Source(94, 12) + SourceIndex(0)
-3 >Emitted(107, 13) Source(94, 13) + SourceIndex(0)
-4 >Emitted(107, 16) Source(94, 16) + SourceIndex(0)
-5 >Emitted(107, 17) Source(94, 17) + SourceIndex(0)
-6 >Emitted(107, 32) Source(94, 32) + SourceIndex(0)
-7 >Emitted(107, 33) Source(94, 33) + SourceIndex(0)
-8 >Emitted(107, 34) Source(94, 34) + SourceIndex(0)
+1 >Emitted(113, 5) Source(94, 5) + SourceIndex(0)
+2 >Emitted(113, 12) Source(94, 12) + SourceIndex(0)
+3 >Emitted(113, 13) Source(94, 13) + SourceIndex(0)
+4 >Emitted(113, 16) Source(94, 16) + SourceIndex(0)
+5 >Emitted(113, 17) Source(94, 17) + SourceIndex(0)
+6 >Emitted(113, 32) Source(94, 32) + SourceIndex(0)
+7 >Emitted(113, 33) Source(94, 33) + SourceIndex(0)
+8 >Emitted(113, 34) Source(94, 34) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(108, 2) Source(95, 2) + SourceIndex(0)
+1 >Emitted(114, 2) Source(95, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringForOfArrayBindingPattern.js.map

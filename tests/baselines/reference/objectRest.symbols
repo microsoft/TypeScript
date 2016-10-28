@@ -1,58 +1,90 @@
 === tests/cases/conformance/types/difference/objectRest.ts ===
+
 let o = { a: 1, b: 'no' }
->o : Symbol(o, Decl(objectRest.ts, 0, 3))
->a : Symbol(a, Decl(objectRest.ts, 0, 9))
->b : Symbol(b, Decl(objectRest.ts, 0, 15))
+>o : Symbol(o, Decl(objectRest.ts, 1, 3))
+>a : Symbol(a, Decl(objectRest.ts, 1, 9))
+>b : Symbol(b, Decl(objectRest.ts, 1, 15))
 
 var { ...clone } = o;
->clone : Symbol(clone, Decl(objectRest.ts, 1, 5))
->o : Symbol(o, Decl(objectRest.ts, 0, 3))
+>clone : Symbol(clone, Decl(objectRest.ts, 2, 5))
+>o : Symbol(o, Decl(objectRest.ts, 1, 3))
 
 var { a, ...justB } = o;
->a : Symbol(a, Decl(objectRest.ts, 2, 5), Decl(objectRest.ts, 3, 5))
->justB : Symbol(justB, Decl(objectRest.ts, 2, 8))
->o : Symbol(o, Decl(objectRest.ts, 0, 3))
+>a : Symbol(a, Decl(objectRest.ts, 3, 5), Decl(objectRest.ts, 4, 5))
+>justB : Symbol(justB, Decl(objectRest.ts, 3, 8))
+>o : Symbol(o, Decl(objectRest.ts, 1, 3))
 
 var { a, b: renamed, ...empty } = o;
->a : Symbol(a, Decl(objectRest.ts, 2, 5), Decl(objectRest.ts, 3, 5))
->b : Symbol(b, Decl(objectRest.ts, 0, 15))
->renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
->empty : Symbol(empty, Decl(objectRest.ts, 3, 20))
->o : Symbol(o, Decl(objectRest.ts, 0, 3))
+>a : Symbol(a, Decl(objectRest.ts, 3, 5), Decl(objectRest.ts, 4, 5))
+>b : Symbol(b, Decl(objectRest.ts, 1, 15))
+>renamed : Symbol(renamed, Decl(objectRest.ts, 4, 8), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 6, 5), Decl(objectRest.ts, 10, 5))
+>empty : Symbol(empty, Decl(objectRest.ts, 4, 20))
+>o : Symbol(o, Decl(objectRest.ts, 1, 3))
 
 var { ['b']: renamed, ...justA } = o;
->'b' : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
->renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
->justA : Symbol(justA, Decl(objectRest.ts, 4, 21), Decl(objectRest.ts, 5, 19), Decl(objectRest.ts, 6, 31))
->o : Symbol(o, Decl(objectRest.ts, 0, 3))
+>'b' : Symbol(renamed, Decl(objectRest.ts, 4, 8), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 6, 5), Decl(objectRest.ts, 10, 5))
+>renamed : Symbol(renamed, Decl(objectRest.ts, 4, 8), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 6, 5), Decl(objectRest.ts, 10, 5))
+>justA : Symbol(justA, Decl(objectRest.ts, 5, 21), Decl(objectRest.ts, 6, 19), Decl(objectRest.ts, 7, 31))
+>o : Symbol(o, Decl(objectRest.ts, 1, 3))
 
 var { 'b': renamed, ...justA } = o;
->renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
->justA : Symbol(justA, Decl(objectRest.ts, 4, 21), Decl(objectRest.ts, 5, 19), Decl(objectRest.ts, 6, 31))
->o : Symbol(o, Decl(objectRest.ts, 0, 3))
+>renamed : Symbol(renamed, Decl(objectRest.ts, 4, 8), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 6, 5), Decl(objectRest.ts, 10, 5))
+>justA : Symbol(justA, Decl(objectRest.ts, 5, 21), Decl(objectRest.ts, 6, 19), Decl(objectRest.ts, 7, 31))
+>o : Symbol(o, Decl(objectRest.ts, 1, 3))
 
 var { b: { '0': n, '1': oooo }, ...justA } = o;
->b : Symbol(b, Decl(objectRest.ts, 0, 15))
->n : Symbol(n, Decl(objectRest.ts, 6, 10))
->oooo : Symbol(oooo, Decl(objectRest.ts, 6, 18))
->justA : Symbol(justA, Decl(objectRest.ts, 4, 21), Decl(objectRest.ts, 5, 19), Decl(objectRest.ts, 6, 31))
->o : Symbol(o, Decl(objectRest.ts, 0, 3))
+>b : Symbol(b, Decl(objectRest.ts, 1, 15))
+>n : Symbol(n, Decl(objectRest.ts, 7, 10))
+>oooo : Symbol(oooo, Decl(objectRest.ts, 7, 18))
+>justA : Symbol(justA, Decl(objectRest.ts, 5, 21), Decl(objectRest.ts, 6, 19), Decl(objectRest.ts, 7, 31))
+>o : Symbol(o, Decl(objectRest.ts, 1, 3))
 
 let o2 = { c: 'terrible idea?', d: 'yes' };
->o2 : Symbol(o2, Decl(objectRest.ts, 8, 3))
->c : Symbol(c, Decl(objectRest.ts, 8, 10))
->d : Symbol(d, Decl(objectRest.ts, 8, 31))
+>o2 : Symbol(o2, Decl(objectRest.ts, 9, 3))
+>c : Symbol(c, Decl(objectRest.ts, 9, 10))
+>d : Symbol(d, Decl(objectRest.ts, 9, 31))
 
 var { d: renamed, ...d } = o2;
->d : Symbol(d, Decl(objectRest.ts, 8, 31))
->renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
->d : Symbol(d, Decl(objectRest.ts, 9, 17))
->o2 : Symbol(o2, Decl(objectRest.ts, 8, 3))
+>d : Symbol(d, Decl(objectRest.ts, 9, 31))
+>renamed : Symbol(renamed, Decl(objectRest.ts, 4, 8), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 6, 5), Decl(objectRest.ts, 10, 5))
+>d : Symbol(d, Decl(objectRest.ts, 10, 17))
+>o2 : Symbol(o2, Decl(objectRest.ts, 9, 3))
 
-function cloneAgain({ ...clone }: { a: number, b: string }): void {
->cloneAgain : Symbol(cloneAgain, Decl(objectRest.ts, 9, 30))
->clone : Symbol(clone, Decl(objectRest.ts, 11, 21))
->a : Symbol(a, Decl(objectRest.ts, 11, 35))
->b : Symbol(b, Decl(objectRest.ts, 11, 46))
+function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
+>cloneAgain : Symbol(cloneAgain, Decl(objectRest.ts, 10, 30))
+>a : Symbol(a, Decl(objectRest.ts, 11, 21))
+>clone : Symbol(clone, Decl(objectRest.ts, 11, 24))
+>a : Symbol(a, Decl(objectRest.ts, 11, 38))
+>b : Symbol(b, Decl(objectRest.ts, 11, 49))
+}
+let array: { x: number, y: string }[];
+>array : Symbol(array, Decl(objectRest.ts, 13, 3))
+>x : Symbol(x, Decl(objectRest.ts, 13, 12))
+>y : Symbol(y, Decl(objectRest.ts, 13, 23))
+
+for (let { x, ...restOf } of array) {
+>x : Symbol(x, Decl(objectRest.ts, 14, 10))
+>restOf : Symbol(restOf, Decl(objectRest.ts, 14, 13))
+>array : Symbol(array, Decl(objectRest.ts, 13, 3))
+
+    [x, restOf];
+>x : Symbol(x, Decl(objectRest.ts, 14, 10))
+>restOf : Symbol(restOf, Decl(objectRest.ts, 14, 13))
+}
+let xx: number;
+>xx : Symbol(xx, Decl(objectRest.ts, 17, 3))
+
+let rrestOff: { y: string };
+>rrestOff : Symbol(rrestOff, Decl(objectRest.ts, 18, 3))
+>y : Symbol(y, Decl(objectRest.ts, 18, 15))
+
+for ({ x: xx, ...rrestOff } of array ) {
+>x : Symbol(x, Decl(objectRest.ts, 19, 6))
+>xx : Symbol(xx, Decl(objectRest.ts, 17, 3))
+>array : Symbol(array, Decl(objectRest.ts, 13, 3))
+
+    [xx, rrestOff];
+>xx : Symbol(xx, Decl(objectRest.ts, 17, 3))
+>rrestOff : Symbol(rrestOff, Decl(objectRest.ts, 18, 3))
 }
 
