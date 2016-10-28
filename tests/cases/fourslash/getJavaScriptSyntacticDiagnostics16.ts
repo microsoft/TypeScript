@@ -4,7 +4,7 @@
 // @Filename: a.js
 //// function F(p?) { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'?' can only be used in a .ts file.",
     "start": 12,

@@ -4,7 +4,7 @@
 // @Filename: a.js
 //// function F(a: number) { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'types' can only be used in a .ts file.",
     "start": 14,

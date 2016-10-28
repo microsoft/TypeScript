@@ -2,9 +2,9 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// public function F() { }
+//// public class C { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'public' can only be used in a .ts file.",
     "start": 0,

@@ -4,7 +4,7 @@
 // @Filename: a.js
 //// module M { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'module declarations' can only be used in a .ts file.",
     "start": 7,

@@ -4,7 +4,7 @@
 // @Filename: a.js
 //// class C implements D { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
     "message": "'implements clauses' can only be used in a .ts file.",
     "start": 8,

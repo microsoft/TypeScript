@@ -2,13 +2,13 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// declare var v;
+//// public function F() { }
 
-verify.getSemanticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[
   {
-    "message": "'declare' can only be used in a .ts file.",
+    "message": "'public' can only be used in a .ts file.",
     "start": 0,
-    "length": 7,
+    "length": 6,
     "category": "error",
     "code": 8009
   }
