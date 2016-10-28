@@ -5744,7 +5744,7 @@ namespace ts {
 
         function getIndexedAccessType(objectType: Type, indexType: Type, errorNode?: Node) {
             if (indexType.flags & TypeFlags.TypeParameter) {
-                if (!isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType), getIndexType(objectType))) {
+                if (!isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType) || emptyObjectType, getIndexType(objectType))) {
                     if (errorNode) {
                         error(errorNode, Diagnostics.Type_0_is_not_constrained_to_keyof_1, typeToString(indexType), typeToString(objectType));
                     }
@@ -11549,9 +11549,8 @@ namespace ts {
                 return objectType;
             }
 
-            if (indexType.flags & TypeFlags.TypeParameter &&
-                isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType), getIndexType(objectType))) {
-                return getIndexedAccessType(objectType, indexType);
+            if (indexType.flags & TypeFlags.TypeParameter) {
+                return getIndexedAccessType(objectType, indexType, node.argumentExpression);
             }
 
             objectType = getApparentType(objectType);
