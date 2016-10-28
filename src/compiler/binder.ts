@@ -3160,8 +3160,8 @@ namespace ts {
 
                 if (subtreeFlags & TransformFlags.ContainsSpreadExpression) {
                     // If an ObjectLiteralExpression contains a spread element, then it
-                    // is an ES experimental node.
-                    transformFlags |= TransformFlags.AssertExperimental;
+                    // is an ES next node.
+                    transformFlags |= TransformFlags.AssertESNext;
                 }
 
                 break;
