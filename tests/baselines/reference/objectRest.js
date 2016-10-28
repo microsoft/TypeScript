@@ -21,6 +21,10 @@ let rrestOff: { y: string };
 for ({ x: xx, ...rrestOff } of array ) {
     [xx, rrestOff];
 }
+for (const norest of array.map(a => ({ ...a }))) {
+    [norest.x, norest.y];
+    // x is now a string. who knows why.
+}
 
 
 //// [objectRest.js]
@@ -62,4 +66,8 @@ for (var _d = 0, array_2 = array; _d < array_2.length; _d++) {
     var _e = array_2[_d];
     (xx = _e.x, _e, rrestOff = __rest(_e, ["x"]));
     [xx, rrestOff];
+}
+for (var _f = 0, _g = array.map(function (a) { return (__assign({}, a)); }); _f < _g.length; _f++) {
+    var norest = _g[_f];
+    [norest.x, norest.y];
 }

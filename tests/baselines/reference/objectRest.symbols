@@ -87,4 +87,21 @@ for ({ x: xx, ...rrestOff } of array ) {
 >xx : Symbol(xx, Decl(objectRest.ts, 17, 3))
 >rrestOff : Symbol(rrestOff, Decl(objectRest.ts, 18, 3))
 }
+for (const norest of array.map(a => ({ ...a }))) {
+>norest : Symbol(norest, Decl(objectRest.ts, 22, 10))
+>array.map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>array : Symbol(array, Decl(objectRest.ts, 13, 3))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>a : Symbol(a, Decl(objectRest.ts, 22, 31))
+
+    [norest.x, norest.y];
+>norest.x : Symbol(x, Decl(objectRest.ts, 13, 12))
+>norest : Symbol(norest, Decl(objectRest.ts, 22, 10))
+>x : Symbol(x, Decl(objectRest.ts, 13, 12))
+>norest.y : Symbol(y, Decl(objectRest.ts, 13, 23))
+>norest : Symbol(norest, Decl(objectRest.ts, 22, 10))
+>y : Symbol(y, Decl(objectRest.ts, 13, 23))
+
+    // x is now a string. who knows why.
+}
 

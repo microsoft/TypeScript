@@ -21,3 +21,7 @@ let rrestOff: { y: string };
 for ({ x: xx, ...rrestOff } of array ) {
     [xx, rrestOff];
 }
+for (const norest of array.map(a => ({ ...a }))) {
+    [norest.x, norest.y];
+    // x is now a string. who knows why.
+}
