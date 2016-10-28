@@ -13,10 +13,10 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.Experimental) {
+            if (node.transformFlags & TransformFlags.ESNext) {
                 return visitorWorker(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsExperimental) {
+            else if (node.transformFlags & TransformFlags.ContainsESNext) {
                 return visitEachChild(node, visitor, context);
             }
             else {
