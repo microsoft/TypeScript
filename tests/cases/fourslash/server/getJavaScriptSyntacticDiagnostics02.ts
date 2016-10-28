@@ -9,6 +9,13 @@
 
 verify.getSyntacticDiagnostics(`[
   {
+    "message": "\'types\' can only be used in a .ts file.",
+    "start": 20,
+    "length": 7,
+    "category": "error",
+    "code": 8010
+  },
+  {
     "message": "Variable declaration expected.",
     "start": 67,
     "length": 3,
@@ -28,13 +35,6 @@ verify.getSyntacticDiagnostics(`[
     "length": 3,
     "category": "error",
     "code": 1134
-  },
-  {
-    "message": "\'types\' can only be used in a .ts file.",
-    "start": 20,
-    "length": 7,
-    "category": "error",
-    "code": 8010
   }
 ]`);
 verify.getSemanticDiagnostics(`[]`);
