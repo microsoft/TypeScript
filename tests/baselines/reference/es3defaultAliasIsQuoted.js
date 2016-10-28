@@ -21,8 +21,8 @@ var Foo = (function () {
     }
     return Foo;
 }());
-exports.Foo = Foo;
 Foo.CONSTANT = "Foo";
+exports.Foo = Foo;
 function assert(value) {
     if (!value)
         throw new Error("Assertion failed!");

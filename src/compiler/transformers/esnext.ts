@@ -3,7 +3,7 @@
 
 /*@internal*/
 namespace ts {
-    export function transformExperimental(context: TransformationContext) {
+    export function transformESNext(context: TransformationContext) {
         const { hoistVariableDeclaration } = context;
         let enclosingVariableStatement: VariableStatement;
         return transformSourceFile;

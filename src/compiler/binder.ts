@@ -54,6 +54,11 @@ namespace ts {
             const body = (<ModuleDeclaration>node).body;
             return body ? getModuleInstanceState(body) : ModuleInstanceState.Instantiated;
         }
+        // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
+        // be considered the same as type alias
+        else if (node.kind === SyntaxKind.Identifier && (<Identifier>node).isInJSDocNamespace) {
+            return ModuleInstanceState.NonInstantiated;
+        }
         else {
             return ModuleInstanceState.Instantiated;
         }
@@ -429,7 +434,11 @@ namespace ts {
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-                if (!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
+                const isJSDocTypedefInJSDocNamespace = node.kind === SyntaxKind.JSDocTypedefTag &&
+                    node.name &&
+                    node.name.kind === SyntaxKind.Identifier &&
+                    (<Identifier>node.name).isInJSDocNamespace;
+                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
                     const exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -1831,6 +1840,17 @@ namespace ts {
             switch (node.kind) {
                 /* Strict mode checks */
                 case SyntaxKind.Identifier:
+                    // for typedef type names with namespaces, bind the new jsdoc type symbol here
+                    // because it requires all containing namespaces to be in effect, namely the
+                    // current "blockScopeContainer" needs to be set to its immediate namespace parent.
+                    if ((<Identifier>node).isInJSDocNamespace) {
+                        let parentNode = node.parent;
+                        while (parentNode && parentNode.kind !== SyntaxKind.JSDocTypedefTag) {
+                            parentNode = parentNode.parent;
+                        }
+                        bindBlockScopedDeclaration(<Declaration>parentNode, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        break;
+                    }
                 case SyntaxKind.ThisKeyword:
                     if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                         node.flowNode = currentFlow;
@@ -1958,6 +1978,10 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.JSDocTypedefTag:
+                    if (!(<JSDocTypedefTag>node).fullName || (<JSDocTypedefTag>node).fullName.kind === SyntaxKind.Identifier) {
+                        return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                    }
+                    break;
                 case SyntaxKind.TypeAliasDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 case SyntaxKind.EnumDeclaration:
@@ -2521,7 +2545,7 @@ namespace ts {
         else if (operatorTokenKind === SyntaxKind.EqualsToken &&
                  (leftKind === SyntaxKind.ObjectLiteralExpression || leftKind === SyntaxKind.ArrayLiteralExpression)) {
             // Destructuring assignments are ES6 syntax.
-            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.DestructuringAssignment;
+            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.AsteriskAsteriskToken
             || operatorTokenKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
@@ -2604,9 +2628,9 @@ namespace ts {
 
             // A class with a parameter property assignment, property initializer, or decorator is
             // TypeScript syntax.
-            // An exported declaration may be TypeScript syntax.
+            // An exported declaration may be TypeScript syntax, but is handled by the visitor
+            // for a namespace declaration.
             if ((subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask)
-                || (modifierFlags & ModifierFlags.Export)
                 || node.typeParameters) {
                 transformFlags |= TransformFlags.AssertTypeScript;
             }
@@ -2776,11 +2800,6 @@ namespace ts {
         else {
             transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
-            // If a FunctionDeclaration is exported, then it is either ES6 or TypeScript syntax.
-            if (modifierFlags & ModifierFlags.Export) {
-                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2015;
-            }
-
             // TypeScript-specific modifiers, type parameters, and type annotations are TypeScript
             // syntax.
             if (modifierFlags & ModifierFlags.TypeScriptModifier
@@ -2928,11 +2947,6 @@ namespace ts {
         else {
             transformFlags = subtreeFlags;
 
-            // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
-            if (modifierFlags & ModifierFlags.Export) {
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertTypeScript;
-            }
-
             if (declarationListTransformFlags & TransformFlags.ContainsBindingPattern) {
                 transformFlags |= TransformFlags.AssertES2015;
             }
@@ -3050,16 +3064,10 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertJsx;
                 break;
 
-            case SyntaxKind.ExportKeyword:
-                // This node is both ES6 and TypeScript syntax.
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertTypeScript;
-                break;
-
             case SyntaxKind.ForOfStatement:
                 // for-of might be ESNext if it has a rest destructuring
                 transformFlags |= TransformFlags.AssertExperimental;
                 // FALLTHROUGH
-            case SyntaxKind.DefaultKeyword:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
             case SyntaxKind.TemplateMiddle:
@@ -3067,6 +3075,7 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.StaticKeyword:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES2015;
                 break;

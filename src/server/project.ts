@@ -62,11 +62,42 @@ namespace ts.server {
         projectErrors: Diagnostic[];
     }
 
+    export class UnresolvedImportsMap {
+        readonly perFileMap = createFileMap<ReadonlyArray<string>>();
+        private version = 0;
+
+        public clear() {
+            this.perFileMap.clear();
+            this.version = 0;
+        }
+
+        public getVersion() {
+            return this.version;
+        }
+
+        public remove(path: Path) {
+            this.perFileMap.remove(path);
+            this.version++;
+        }
+
+        public get(path: Path) {
+            return this.perFileMap.get(path);
+        }
+
+        public set(path: Path, value: ReadonlyArray<string>) {
+            this.perFileMap.set(path, value);
+            this.version++;
+        }
+    }
+
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
         private lsHost: ServerLanguageServiceHost;
         private program: ts.Program;
+
+        private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
+        private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
 
         private languageService: LanguageService;
         builder: Builder;
@@ -91,7 +122,7 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
-        private typingFiles: TypingsArray;
+        private typingFiles: SortedReadonlyArray<string>;
 
         protected projectErrors: Diagnostic[];
 
@@ -105,6 +136,10 @@ namespace ts.server {
         public isJsOnlyProject() {
             this.updateGraph();
             return hasOneOrMoreJsAndNoTsFiles(this);
+        }
+
+        public getCachedUnresolvedImportsPerFile_TestOnly() {
+            return this.cachedUnresolvedImportsPerFile;
         }
 
         constructor(
@@ -326,6 +361,7 @@ namespace ts.server {
         removeFile(info: ScriptInfo, detachFromProject = true) {
             this.removeRootFileIfNecessary(info);
             this.lsHost.notifyFileRemoved(info);
+            this.cachedUnresolvedImportsPerFile.remove(info.path);
 
             if (detachFromProject) {
                 info.detachFromProject(this);
@@ -338,6 +374,38 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: string[]) {
+            const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
+            if (cached) {
+                // found cached result - use it and return
+                for (const f of cached) {
+                    result.push(f);
+                }
+                return;
+            }
+            let unresolvedImports: string[];
+            if (file.resolvedModules) {
+                for (const name in file.resolvedModules) {
+                    // pick unresolved non-relative names
+                    if (!file.resolvedModules[name] && !isExternalModuleNameRelative(name)) {
+                        // for non-scoped names extract part up-to the first slash
+                        // for scoped names - extract up to the second slash
+                        let trimmed = name.trim();
+                        let i = trimmed.indexOf("/");
+                        if (i !== -1 && trimmed.charCodeAt(0) === CharacterCodes.at) {
+                            i = trimmed.indexOf("/", i + 1);
+                        }
+                        if (i !== -1) {
+                            trimmed = trimmed.substr(0, i);
+                        }
+                        (unresolvedImports || (unresolvedImports = [])).push(trimmed);
+                        result.push(trimmed);
+                    }
+                }
+            }
+            this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
+        }
+
         /**
          * Updates set of files that contribute to this project
          * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -346,8 +414,35 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return true;
             }
+
+            this.lsHost.startRecordingFilesWithChangedResolutions();
+
             let hasChanges = this.updateGraphWorker();
-            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, hasChanges);
+
+            const changedFiles: ReadonlyArray<Path> = this.lsHost.finishRecordingFilesWithChangedResolutions() || emptyArray;
+
+            for (const file of changedFiles) {
+                // delete cached information for changed files
+                this.cachedUnresolvedImportsPerFile.remove(file);
+            }
+
+            // 1. no changes in structure, no changes in unresolved imports - do nothing
+            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files 
+            // (can reuse cached imports for files that were not changed)
+            // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
+            // (can reuse cached imports for files that were not changed)
+            // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
+            let unresolvedImports: SortedReadonlyArray<string>;
+            if (hasChanges || changedFiles.length) {
+                const result: string[] = [];
+                for (const sourceFile of this.program.getSourceFiles()) {
+                    this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
+                }
+                this.lastCachedUnresolvedImportsList = toSortedReadonlyArray(result);
+            }
+            unresolvedImports = this.lastCachedUnresolvedImportsList;
+
+            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, unresolvedImports, hasChanges);
             if (this.setTypings(cachedTypings)) {
                 hasChanges = this.updateGraphWorker() || hasChanges;
             }
@@ -357,7 +452,7 @@ namespace ts.server {
             return !hasChanges;
         }
 
-        private setTypings(typings: TypingsArray): boolean {
+        private setTypings(typings: SortedReadonlyArray<string>): boolean {
             if (arrayIsEqualTo(this.typingFiles, typings)) {
                 return false;
             }
@@ -430,6 +525,11 @@ namespace ts.server {
                     compilerOptions.allowJs = true;
                 }
                 compilerOptions.allowNonTsExtensions = true;
+                if (changesAffectModuleResolution(this.compilerOptions, compilerOptions)) {
+                    // reset cached unresolved imports if changes in compiler options affected module resolution
+                    this.cachedUnresolvedImportsPerFile.clear();
+                    this.lastCachedUnresolvedImportsList = undefined;
+                }
                 this.compilerOptions = compilerOptions;
                 this.lsHost.setCompilationSettings(compilerOptions);
 
