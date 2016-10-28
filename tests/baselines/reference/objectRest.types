@@ -56,68 +56,17 @@ var { d: renamed, ...d } = o2;
 >d : { c: string; }
 >o2 : { c: string; d: string; }
 
-function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
->cloneAgain : ({a, ...clone}: { a: number; b: string; }) => void
->a : number
->clone : { b: string; }
->a : number
->b : string
-}
-let array: { x: number, y: string }[];
->array : { x: number; y: string; }[]
->x : number
+let complex: { x: { z, ka }, y: string };
+>complex : { x: { z: any; ka: any; }; y: string; }
+>x : { z: any; ka: any; }
+>z : any
+>ka : any
 >y : string
 
-for (let { x, ...restOf } of array) {
->x : number
->restOf : { y: string; }
->array : { x: number; y: string; }[]
-
-    [x, restOf];
->[x, restOf] : (number | { y: string; })[]
->x : number
->restOf : { y: string; }
-}
-let xx: number;
->xx : number
-
-let rrestOff: { y: string };
->rrestOff : { y: string; }
->y : string
-
-for ({ x: xx, ...rrestOff } of array ) {
->{ x: xx, ...rrestOff } : { y: string; x: number; }
->x : { x: number; y: string; }
->xx : number
->rrestOff : any
->array : { x: number; y: string; }[]
-
-    [xx, rrestOff];
->[xx, rrestOff] : (number | { y: string; })[]
->xx : number
->rrestOff : { y: string; }
-}
-for (const norest of array.map(a => ({ ...a }))) {
->norest : { x: number; y: string; }
->array.map(a => ({ ...a })) : { x: number; y: string; }[]
->array.map : { <U>(this: [{ x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }], callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [{ x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }], callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [{ x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }], callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): [U, U, U]; <U>(this: [{ x: number; y: string; }, { x: number; y: string; }], callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): U[]; }
->array : { x: number; y: string; }[]
->map : { <U>(this: [{ x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }], callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [{ x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }], callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [{ x: number; y: string; }, { x: number; y: string; }, { x: number; y: string; }], callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): [U, U, U]; <U>(this: [{ x: number; y: string; }, { x: number; y: string; }], callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any): U[]; }
->a => ({ ...a }) : (a: { x: number; y: string; }) => { x: number; y: string; }
->a : { x: number; y: string; }
->({ ...a }) : { x: number; y: string; }
->{ ...a } : { x: number; y: string; }
->a : any
-
-    [norest.x, norest.y];
->[norest.x, norest.y] : (string | number)[]
->norest.x : number
->norest : { x: number; y: string; }
->x : number
->norest.y : string
->norest : { x: number; y: string; }
->y : string
-
-    // x is now a string. who knows why.
-}
+let { x: { z, ...nested }, ...rest } = complex;
+>x : any
+>z : any
+>nested : { ka: any; }
+>rest : { y: string; }
+>complex : { x: { z: any; ka: any; }; y: string; }
 

@@ -21,10 +21,13 @@ let rrestOff: { y: string };
 for ({ x: xx, ...rrestOff } of array ) {
     [xx, rrestOff];
 }
-for (const norest of array.map(a => ({ ...a }))) {
+for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
     [norest.x, norest.y];
     // x is now a string. who knows why.
 }
+declare function suddenly(f: (a: { x: { z, ka }, y: string }) => void);
+suddenly(({ x: a, ...rest }) => rest.y);
+suddenly(({ x: { z, ...nested }, ...rest }) => rest.y + nested.ka);
 
 
 //// [objectRest.js]
@@ -67,7 +70,15 @@ for (var _d = 0, array_2 = array; _d < array_2.length; _d++) {
     (xx = _e.x, _e, rrestOff = __rest(_e, ["x"]));
     [xx, rrestOff];
 }
-for (var _f = 0, _g = array.map(function (a) { return (__assign({}, a)); }); _f < _g.length; _f++) {
+for (var _f = 0, _g = array.map(function (a) { return (__assign({}, a, { x: 'a string' })); }); _f < _g.length; _f++) {
     var norest = _g[_f];
     [norest.x, norest.y];
 }
+suddenly(function (_a) {
+    var a = _a.x, rest = __rest(_a, ["x"]);
+    return rest.y;
+});
+suddenly(function (_a) {
+    var _b = _a.x, z = _b.z, nested = __rest(_b, ["z"]), rest = __rest(_a, ["x"]);
+    return rest.y + nested.ka;
+});
