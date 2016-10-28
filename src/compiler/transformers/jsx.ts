@@ -234,7 +234,7 @@ namespace ts {
                     return String.fromCharCode(parseInt(hex, 16));
                 }
                 else {
-                    const ch = entities.get(word);
+                    const ch = entities[word];
                     // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
                     return ch ? String.fromCharCode(ch) : match;
                 }
@@ -282,7 +282,7 @@ namespace ts {
         }
     }
 
-    const entities = mapOfMapLike<number>({
+    const entities = createMap<number>({
         "quot": 0x0022,
         "amp": 0x0026,
         "apos": 0x0027,

@@ -31,22 +31,21 @@ namespace ts.server {
         if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
             return true;
         }
-        const set = createMap<string, boolean>();
+        const set: Map<boolean> = createMap<boolean>();
         let unique = 0;
 
         for (const v of arr1) {
-            if (set.get(v) !== true) {
-                set.set(v, true);
+            if (set[v] !== true) {
+                set[v] = true;
                 unique++;
             }
         }
         for (const v of arr2) {
-            const isSet = set.get(v);
-            if (isSet === undefined) {
+            if (!hasProperty(set, v)) {
                 return false;
             }
-            if (isSet === true) {
-                set.set(v, false);
+            if (set[v] === true) {
+                set[v] = false;
                 unique--;
             }
         }
@@ -72,7 +71,7 @@ namespace ts.server {
     }
 
     export class TypingsCache {
-        private readonly perProjectCache = createMap<string, TypingsCacheEntry>();
+        private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
         }
@@ -84,7 +83,7 @@ namespace ts.server {
                 return <any>emptyArray;
             }
 
-            const entry = this.perProjectCache.get(project.getProjectName());
+            const entry = this.perProjectCache[project.getProjectName()];
             const result: SortedReadonlyArray<string> = entry ? entry.typings : <any>emptyArray;
             if (forceRefresh ||
                 !entry ||
@@ -93,13 +92,13 @@ namespace ts.server {
                 unresolvedImportsChanged(unresolvedImports, entry.unresolvedImports)) {
                 // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
                 // instead it acts as a placeholder to prevent issuing multiple requests
-                this.perProjectCache.set(project.getProjectName(), {
+                this.perProjectCache[project.getProjectName()] = {
                     compilerOptions: project.getCompilerOptions(),
                     typingOptions,
                     typings: result,
                     unresolvedImports,
                     poisoned: true
-                });
+                };
                 // something has been changed, issue a request to update typings
                 this.installer.enqueueInstallTypingsRequest(project, typingOptions, unresolvedImports);
             }
@@ -107,21 +106,21 @@ namespace ts.server {
         }
 
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
-            this.perProjectCache.set(projectName, {
+            this.perProjectCache[projectName] = {
                 compilerOptions,
                 typingOptions,
                 typings: toSortedReadonlyArray(newTypings),
                 unresolvedImports,
                 poisoned: false
-            });
+            };
         }
 
         deleteTypingsForProject(projectName: string) {
-            this.perProjectCache.delete(projectName);
+            delete this.perProjectCache[projectName];
         }
 
         onProjectClosed(project: Project) {
-            this.perProjectCache.delete(project.getProjectName());
+            delete this.perProjectCache[project.getProjectName()];
             this.installer.onProjectClosed(project);
         }
     }

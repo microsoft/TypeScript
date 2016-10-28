@@ -59,7 +59,7 @@ namespace ts {
         let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
         let currentLineMap: number[];
-        let currentIdentifiers: Map<string, string>;
+        let currentIdentifiers: Map<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
         let errorNameNode: DeclarationName;
@@ -75,7 +75,7 @@ namespace ts {
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencesOutput = "";
 
-        let usedTypeDirectiveReferences: Set<string>;
+        let usedTypeDirectiveReferences: Map<string>;
 
         // Emit references corresponding to each file
         const emittedReferencedFiles: SourceFile[] = [];
@@ -156,9 +156,9 @@ namespace ts {
         });
 
         if (usedTypeDirectiveReferences) {
-            usedTypeDirectiveReferences.forEach(directive => {
+            for (const directive in usedTypeDirectiveReferences) {
                 referencesOutput += `/// <reference types="${directive}" />${newLine}`;
-            });
+            }
         }
 
         return {
@@ -267,11 +267,11 @@ namespace ts {
             }
 
             if (!usedTypeDirectiveReferences) {
-                usedTypeDirectiveReferences = createSet();
+                usedTypeDirectiveReferences = createMap<string>();
             }
             for (const directive of typeReferenceDirectives) {
-                if (!usedTypeDirectiveReferences.has(directive)) {
-                    usedTypeDirectiveReferences.add(directive);
+                if (!(directive in usedTypeDirectiveReferences)) {
+                    usedTypeDirectiveReferences[directive] = directive;
                 }
             }
         }
@@ -535,14 +535,14 @@ namespace ts {
         // do not need to keep track of created temp names.
         function getExportDefaultTempVariableName(): string {
             const baseName = "_default";
-            if (!currentIdentifiers.has(baseName)) {
+            if (!(baseName in currentIdentifiers)) {
                 return baseName;
             }
             let count = 0;
             while (true) {
                 count++;
                 const name = baseName + "_" + count;
-                if (!currentIdentifiers.has(name)) {
+                if (!(name in currentIdentifiers)) {
                     return name;
                 }
             }

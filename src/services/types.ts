@@ -48,9 +48,9 @@ namespace ts {
     export interface SourceFile {
         /* @internal */ version: string;
         /* @internal */ scriptSnapshot: IScriptSnapshot;
-        /* @internal */ nameTable: Map<string, number>;
+        /* @internal */ nameTable: Map<number>;
 
-        /* @internal */ getNamedDeclarations(): Map<string, Declaration[]>;
+        /* @internal */ getNamedDeclarations(): Map<Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];

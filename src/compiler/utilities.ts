@@ -84,27 +84,27 @@ namespace ts {
     }
 
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
-        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText));
+        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules[moduleNameText]);
     }
 
     export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull {
-        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules.get(moduleNameText) : undefined;
+        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
     }
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = createMap<string, ResolvedModuleFull>();
+            sourceFile.resolvedModules = createMap<ResolvedModuleFull>();
         }
 
-        sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
+        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
     }
 
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames = createMap<string, ResolvedTypeReferenceDirective>();
+            sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective>();
         }
 
-        sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
+        sourceFile.resolvedTypeReferenceDirectiveNames[typeReferenceDirectiveName] = resolvedTypeReferenceDirective;
     }
 
     /* @internal */
@@ -120,13 +120,13 @@ namespace ts {
     }
 
     /* @internal */
-    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<string, T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         if (names.length !== newResolutions.length) {
             return false;
         }
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
-            const oldResolution = oldResolutions && oldResolutions.get(names[i]);
+            const oldResolution = oldResolutions && oldResolutions[names[i]];
             const changed =
                 oldResolution
                     ? !newResolution || !comparer(oldResolution, newResolution)
@@ -2202,7 +2202,7 @@ namespace ts {
 
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
-        const fileDiagnostics = createMap<string, Diagnostic[]>();
+        const fileDiagnostics = createMap<Diagnostic[]>();
 
         let diagnosticsModified = false;
         let modificationCount = 0;
@@ -2220,12 +2220,11 @@ namespace ts {
         }
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
-            const diagnostics = fileDiagnostics.get(newFile.fileName);
-            if (!diagnostics) {
+            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
                 return;
             }
 
-            for (const diagnostic of diagnostics) {
+            for (const diagnostic of fileDiagnostics[newFile.fileName]) {
                 diagnostic.file = newFile;
             }
         }
@@ -2233,10 +2232,10 @@ namespace ts {
         function add(diagnostic: Diagnostic): void {
             let diagnostics: Diagnostic[];
             if (diagnostic.file) {
-                diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
+                diagnostics = fileDiagnostics[diagnostic.file.fileName];
                 if (!diagnostics) {
                     diagnostics = [];
-                    fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
+                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
                 }
             }
             else {
@@ -2256,7 +2255,7 @@ namespace ts {
         function getDiagnostics(fileName?: string): Diagnostic[] {
             sortAndDeduplicate();
             if (fileName) {
-                return fileDiagnostics.get(fileName) || [];
+                return fileDiagnostics[fileName] || [];
             }
 
             const allDiagnostics: Diagnostic[] = [];
@@ -2266,9 +2265,9 @@ namespace ts {
 
             forEach(nonFileDiagnostics, pushDiagnostic);
 
-            fileDiagnostics.forEach(diagnostics => {
-                forEach(diagnostics, pushDiagnostic);
-            });
+            for (const key in fileDiagnostics) {
+                forEach(fileDiagnostics[key], pushDiagnostic);
+            }
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
@@ -2281,7 +2280,9 @@ namespace ts {
             diagnosticsModified = false;
             nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
-            updateMapValues(fileDiagnostics, sortAndDeduplicateDiagnostics);
+            for (const key in fileDiagnostics) {
+                fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
+            }
         }
     }
 
@@ -2291,7 +2292,7 @@ namespace ts {
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap = mapOfMapLike({
+    const escapedCharsMap = createMap({
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -2318,7 +2319,7 @@ namespace ts {
         return s;
 
         function getReplacement(c: string) {
-            return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
     }
 
@@ -3350,19 +3351,18 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache = createMap<SyntaxKind, string>();
+    const syntaxKindCache = createMap<string>();
 
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;
         if (syntaxKindEnum) {
-            const cached = syntaxKindCache.get(kind);
-            if (cached !== undefined) {
-                return cached;
+            if (syntaxKindCache[kind]) {
+                return syntaxKindCache[kind];
             }
 
             for (const name in syntaxKindEnum) {
                 if (syntaxKindEnum[name] === kind) {
-                    return setAndReturn(syntaxKindCache, kind, `${kind}(${name})`);
+                    return syntaxKindCache[kind] = kind.toString() + " (" + name + ")";
                 }
             }
         }

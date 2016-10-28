@@ -15,7 +15,7 @@ namespace ts.server {
 
     export class SessionClient implements LanguageService {
         private sequence: number = 0;
-        private lineMaps = ts.createMap<string, number[]>();
+        private lineMaps: ts.Map<number[]> = ts.createMap<number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry;
 
@@ -31,10 +31,10 @@ namespace ts.server {
         }
 
         private getLineMap(fileName: string): number[] {
-            let lineMap = this.lineMaps.get(fileName);
+            let lineMap = this.lineMaps[fileName];
             if (!lineMap) {
                 const scriptSnapshot = this.host.getScriptSnapshot(fileName);
-                lineMap = setAndReturn(this.lineMaps, fileName, ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength())));
+                lineMap = this.lineMaps[fileName] = ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
             }
             return lineMap;
         }
@@ -140,7 +140,7 @@ namespace ts.server {
 
         changeFile(fileName: string, start: number, end: number, newText: string): void {
             // clear the line map after an edit
-            this.lineMaps.set(fileName, undefined);
+            this.lineMaps[fileName] = undefined;
 
             const lineOffset = this.positionToOneBasedLineOffset(fileName, start);
             const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);

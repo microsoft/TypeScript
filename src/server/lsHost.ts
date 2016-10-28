@@ -5,8 +5,8 @@
 namespace ts.server {
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost, ServerLanguageServiceHost {
         private compilationSettings: ts.CompilerOptions;
-        private readonly resolvedModuleNames = createFileMap<Map<string, ResolvedModuleWithFailedLookupLocations>>();
-        private readonly resolvedTypeReferenceDirectives = createFileMap<Map<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+        private readonly resolvedModuleNames= createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        private readonly resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         private readonly getCanonicalFileName: (fileName: string) => string;
 
         private filesWithChangedSetOfUnresolvedImports: Path[];
@@ -54,7 +54,7 @@ namespace ts.server {
         private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
-            cache: ts.FileMap<Map<string, T>>,
+            cache: ts.FileMap<Map<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R,
             getResultFileName: (result: R) => string | undefined,
@@ -63,22 +63,22 @@ namespace ts.server {
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions = createMap<string, T>();
+            const newResolutions: Map<T> = createMap<T>();
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
             const lastDeletedFileName = this.project.projectService.lastDeletedFile && this.project.projectService.lastDeletedFile.fileName;
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = newResolutions.get(name);
+                let resolution = newResolutions[name];
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile.get(name);
+                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile[name];
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
                     }
                     else {
-                        newResolutions.set(name, resolution = loader(name, containingFile, compilerOptions, this));
+                        newResolutions[name] = resolution = loader(name, containingFile, compilerOptions, this);
                     }
                     if (logChanges && this.filesWithChangedSetOfUnresolvedImports && !resolutionIsEqualTo(existingResolution, resolution)) {
                         this.filesWithChangedSetOfUnresolvedImports.push(path);
