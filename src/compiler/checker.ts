@@ -10305,14 +10305,30 @@ namespace ts {
 
         // If the given type is an object or union type, if that type has a single signature, and if
         // that signature is non-generic, return the signature. Otherwise return undefined.
-        function getNonGenericSignature(type: Type): Signature {
+        function getNonGenericSignature(type: Type, node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
             const signatures = getSignaturesOfStructuredType(type, SignatureKind.Call);
             if (signatures.length === 1) {
                 const signature = signatures[0];
-                if (!signature.typeParameters) {
+                if (!signature.typeParameters && !isAritySmaller(signature, node)) {
                     return signature;
                 }
             }
+        }
+
+        /** If the contextual signature has fewer parameters than the function expression, do not use it */
+        function isAritySmaller(signature: Signature, target: FunctionExpression | ArrowFunction | MethodDeclaration) {
+            let targetParameterCount = 0;
+            for (; targetParameterCount < target.parameters.length; targetParameterCount++) {
+                const param = target.parameters[targetParameterCount];
+                if (param.initializer || param.questionToken || param.dotDotDotToken || isJSDocOptionalParameter(param)) {
+                    break;
+                }
+            }
+            if (target.parameters.length && parameterIsThisKeyword(target.parameters[0])) {
+                targetParameterCount--;
+            }
+            const sourceLength = signature.hasRestParameter ? Number.MAX_VALUE : signature.parameters.length;
+            return sourceLength < targetParameterCount;
         }
 
         function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
@@ -10343,17 +10359,13 @@ namespace ts {
             if (!type) {
                 return undefined;
             }
-            // If the contextual signature has fewer parameters than the function expression, do not use it
-            if (isFunctionExpressionOrArrowFunction(node) && isAritySmaller(type, node)) {
-                return undefined;
-            }
             if (!(type.flags & TypeFlags.Union)) {
-                return getNonGenericSignature(type);
+                return getNonGenericSignature(type, node);
             }
             let signatureList: Signature[];
             const types = (<UnionType>type).types;
             for (const current of types) {
-                const signature = getNonGenericSignature(current);
+                const signature = getNonGenericSignature(current, node);
                 if (signature) {
                     if (!signatureList) {
                         // This signature will contribute to contextual union signature
@@ -10379,26 +10391,6 @@ namespace ts {
                 result.unionSignatures = signatureList;
             }
             return result;
-        }
-
-        function isAritySmaller(sourceType: Type, target: FunctionExpression | ArrowFunction) {
-            if (isFunctionType(sourceType)) {
-                let targetParameterCount = 0;
-                for (; targetParameterCount < target.parameters.length; targetParameterCount++) {
-                    const param = target.parameters[targetParameterCount];
-                    if (param.initializer || param.questionToken || param.dotDotDotToken || isJSDocOptionalParameter(param)) {
-                        break;
-                    }
-                }
-                if (target.parameters.length && parameterIsThisKeyword(target.parameters[0])) {
-                    targetParameterCount--;
-                }
-                const sourceSignatures = getSignaturesOfType(sourceType, SignatureKind.Call);
-                const sourceLengths = sourceSignatures.map(sig => !sig.hasRestParameter ? sig.parameters.length : Number.MAX_VALUE);
-                return forEach(sourceLengths, len => len < targetParameterCount);
-            }
-
-            return false;
         }
 
         /**
