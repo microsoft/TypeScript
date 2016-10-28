@@ -2540,7 +2540,7 @@ namespace ts {
         if (operatorTokenKind === SyntaxKind.EqualsToken &&
             leftKind === SyntaxKind.ObjectLiteralExpression &&
             find((node.left as ObjectLiteralExpression).properties, p => p.kind === SyntaxKind.SpreadElementExpression)) {
-            transformFlags |= TransformFlags.AssertExperimental | TransformFlags.DestructuringAssignment;
+            transformFlags |= TransformFlags.AssertESNext | TransformFlags.DestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.EqualsToken &&
                  (leftKind === SyntaxKind.ObjectLiteralExpression || leftKind === SyntaxKind.ArrayLiteralExpression)) {
@@ -2919,7 +2919,7 @@ namespace ts {
             find((node.name as ObjectBindingPattern).elements, e => !!e.dotDotDotToken)) {
             // TODO: Have to find all uses of containsbindingpattern/destructuringassignment that assume ES2015
             // and make them propagate *either* ES2015 or ESNext
-            transformFlags |= TransformFlags.AssertExperimental | TransformFlags.ContainsBindingPattern;
+            transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsBindingPattern;
         }
         // A VariableDeclaration with a binding pattern is ES6 syntax.
         else if (nameKind === SyntaxKind.ObjectBindingPattern || nameKind === SyntaxKind.ArrayBindingPattern) {
@@ -3066,7 +3066,7 @@ namespace ts {
 
             case SyntaxKind.ForOfStatement:
                 // for-of might be ESNext if it has a rest destructuring
-                transformFlags |= TransformFlags.AssertExperimental;
+                transformFlags |= TransformFlags.AssertESNext;
                 // FALLTHROUGH
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:

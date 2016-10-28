@@ -91,7 +91,6 @@ namespace ts {
          * @param node A BinaryExpression node.
          */
         function visitBinaryExpression(node: BinaryExpression): Expression {
-            // If we are here it is because this is a destructuring assignment.
             Debug.assert(isDestructuringAssignment(node));
             return flattenDestructuringAssignment(context, node, /*needsDestructuringValue*/ true, hoistVariableDeclaration, visitor, /*restOnly*/ true);
         }
@@ -114,6 +113,7 @@ namespace ts {
 
             return visitEachChild(node, visitor, context);
         }
+            
 
         /**
          * Visits a ForOfStatement and converts it into a ES2015-compatible ForOfStatement.
@@ -145,27 +145,8 @@ namespace ts {
             // for (<init> of <expression>) <statement>
             // where <init> is [let] variabledeclarationlist | expression
             const initializer = node.initializer;
-            function isRestBindingPattern(initializer: ForInitializer): boolean {
-                if (isVariableDeclarationList(initializer)) {
-                    const declaration = firstOrUndefined(initializer.declarations);
-                    if (declaration && isBindingPattern(declaration.name)) {
-                        const elements = (declaration.name as ObjectBindingPattern).elements;
-                        return elements.length && !!elements[elements.length - 1].dotDotDotToken;
-                    }
-                }
-                return false;
-            }
-            function isRestAssignment(initializer: ForInitializer): boolean {
-                if (initializer.kind === SyntaxKind.ObjectLiteralExpression) {
-                    const properties = (initializer as ObjectLiteralExpression).properties;
-                    return properties[properties.length - 1].kind === SyntaxKind.SpreadElementExpression;
-                }
-                return false;
-            }
             if (!isRestBindingPattern(initializer) && !isRestAssignment(initializer)) {
-                // TODO: This might break if expression is a spread. So maybe just delegate the visit instead of directly returning.
-                // ... (or if there are spreads in the statement)
-                return node;
+                return visitEachChild(node, visitor, context);
             }
 
             const expression = visitNode(node.expression, visitor, isExpression);
@@ -254,6 +235,25 @@ namespace ts {
             // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
             setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
             return forStatement;
+        }
+
+        function isRestBindingPattern(initializer: ForInitializer): boolean {
+            if (isVariableDeclarationList(initializer)) {
+                const declaration = firstOrUndefined(initializer.declarations);
+                if (declaration && isBindingPattern(declaration.name)) {
+                    const elements = (declaration.name as ObjectBindingPattern).elements;
+                    return elements.length && !!elements[elements.length - 1].dotDotDotToken;
+                }
+            }
+            return false;
+        }
+
+        function isRestAssignment(initializer: ForInitializer): boolean {
+            if (initializer.kind === SyntaxKind.ObjectLiteralExpression) {
+                const properties = (initializer as ObjectLiteralExpression).properties;
+                return properties[properties.length - 1].kind === SyntaxKind.SpreadElementExpression;
+            }
+            return false;
         }
     }
 }
