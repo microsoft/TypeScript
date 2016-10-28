@@ -7,9 +7,9 @@ var use: Overload;
 use((req, res) => {});
 >use((req, res) => {}) : void
 >use : Overload
->(req, res) => {} : (req: number, res: number) => void
->req : number
->res : number
+>(req, res) => {} : (req: any, res: any) => void
+>req : any
+>res : any
 
 interface Overload {
 >Overload : Overload
