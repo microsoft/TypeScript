@@ -141,7 +141,7 @@ namespace ts {
 
         const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral | SymbolFlags.Transient, "__type");
         emptyTypeLiteralSymbol.members = createMap<Symbol>();
-        const cachedEmptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = createMap<TypeReference>();
@@ -5702,7 +5702,7 @@ namespace ts {
             if (!links.resolvedType) {
                 // Deferred resolution of members is handled by resolveObjectTypeMembers
                 if (isEmpty(node.symbol.members) && !aliasSymbol && !aliasTypeArguments) {
-                    links.resolvedType = cachedEmptyTypeLiteralType;
+                    links.resolvedType = emptyTypeLiteralType;
                 }
                 else {
                     const type = createObjectType(ObjectFlags.Anonymous, node.symbol);
