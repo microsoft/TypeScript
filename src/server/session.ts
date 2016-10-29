@@ -374,7 +374,24 @@ namespace ts.server {
 
         private getCompilerOptionsDiagnostics(args: protocol.CompilerOptionsDiagnosticsRequestArgs) {
             const project = this.getProject(args.projectFileName);
-            return this.convertToDiagnosticsWithLinePosition(project.getLanguageService().getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
+            let diagnostics = this.convertToDiagnosticsWithLinePosition(project.getLanguageService().getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
+
+            if (this.shouldAddTsconfigSuggestionMessage(project)) {
+                const tsconfigDiag = createCompilerDiagnostic(Diagnostics.Adding_a_tsconfig_json_file_will_help_organizing_projects_with_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig);
+                diagnostics = concatenate(diagnostics, this.convertToDiagnosticsWithLinePosition([tsconfigDiag], /*scriptInfo*/ undefined));
+            }
+
+            return diagnostics;
+        }
+
+        private shouldAddTsconfigSuggestionMessage(project: Project) {
+            if (project.projectKind === ProjectKind.External && hasBothJsAndTsFiles(project)) {
+                const options = project.getCompilerOptions();
+                if (options && !options.noEmit && !options.outDir && !options.outFile) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private convertToDiagnosticsWithLinePosition(diagnostics: Diagnostic[], scriptInfo: ScriptInfo) {

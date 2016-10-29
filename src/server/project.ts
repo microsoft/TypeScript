@@ -48,6 +48,11 @@ namespace ts.server {
         return counts.js > 0 && counts.ts === 0 && counts.tsx === 0;
     }
 
+    export function hasBothJsAndTsFiles(project: Project) {
+        const counts = countEachFileTypes(project.getRootScriptInfos());
+        return (counts.js + counts.jsx > 0) && (counts.ts + counts.tsx > 0);
+    }
+
     export function allRootFilesAreJsOrDts(project: Project): boolean {
         const counts = countEachFileTypes(project.getRootScriptInfos());
         return counts.ts === 0 && counts.tsx === 0;

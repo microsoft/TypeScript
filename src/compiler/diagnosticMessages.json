@@ -1963,6 +1963,10 @@
         "category": "Error",
         "code": 2696
     },
+    "Adding a tsconfig.json file will help organizing projects with both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
+        "category": "Error",
+        "code": 2697
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
