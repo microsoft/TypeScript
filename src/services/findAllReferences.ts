@@ -228,7 +228,7 @@ namespace ts.FindAllReferences {
 
             // if this symbol is visible from its parent container, e.g. exported, then bail out
             // if symbol correspond to the union property - bail out
-            if (symbol.parent || (symbol.flags & SymbolFlags.Synthesized)) {
+            if (symbol.parent || (symbol.flags & SymbolFlags.SyntheticProperty)) {
                 return undefined;
             }
 

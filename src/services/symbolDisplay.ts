@@ -51,7 +51,7 @@ namespace ts.SymbolDisplay {
         if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
 
         if (flags & SymbolFlags.Property) {
-            if (flags & SymbolFlags.Synthesized) {
+            if (flags & SymbolFlags.SyntheticProperty) {
                 // If union property is result of union of non method (property/accessors/variables), it is labeled as property
                 const unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
                     const rootSymbolFlags = rootSymbol.getFlags();

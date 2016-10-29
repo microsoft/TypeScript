@@ -2490,7 +2490,7 @@ namespace ts {
         Merged                  = 0x02000000,  // Merged symbol (created during program binding)
         Transient               = 0x04000000,  // Transient symbol (created during type check)
         Prototype               = 0x08000000,  // Prototype property (no source representation)
-        Synthesized             = 0x10000000,  // Property in union or intersection type
+        SyntheticProperty       = 0x10000000,  // Property in union or intersection type
         Optional                = 0x20000000,  // Optional property
         ExportStar              = 0x40000000,  // Export * declaration
 
