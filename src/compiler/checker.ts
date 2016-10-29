@@ -138,6 +138,11 @@ namespace ts {
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+
+        const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral | SymbolFlags.Transient | SymbolFlags.Synthesized, "empty");
+        emptyTypeLiteralSymbol.members = createMap<Symbol>();
+        const cachedEmptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = createMap<TypeReference>();
 
@@ -4456,7 +4461,7 @@ namespace ts {
                 for (const key in props) {
                     const prop = props[key];
                     // We need to filter out partial properties in union types
-                    if (!(prop.flags & SymbolFlags.SyntheticProperty && (<TransientSymbol>prop).isPartial)) {
+                    if (!(prop.flags & SymbolFlags.Synthesized && (<TransientSymbol>prop).isPartial)) {
                         result.push(prop);
                     }
                 }
@@ -4560,7 +4565,7 @@ namespace ts {
                 }
                 propTypes.push(type);
             }
-            const result = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | SymbolFlags.SyntheticProperty | commonFlags, name);
+            const result = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | SymbolFlags.Synthesized | commonFlags, name);
             result.containingType = containingType;
             result.hasNonUniformType = hasNonUniformType;
             result.isPartial = isPartial;
@@ -4590,7 +4595,7 @@ namespace ts {
         function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: string): Symbol {
             const property = getUnionOrIntersectionProperty(type, name);
             // We need to filter out partial properties in union types
-            return property && !(property.flags & SymbolFlags.SyntheticProperty && (<TransientSymbol>property).isPartial) ? property : undefined;
+            return property && !(property.flags & SymbolFlags.Synthesized && (<TransientSymbol>property).isPartial) ? property : undefined;
         }
 
         /**
@@ -5696,10 +5701,15 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 // Deferred resolution of members is handled by resolveObjectTypeMembers
-                const type = createObjectType(ObjectFlags.Anonymous, node.symbol);
-                type.aliasSymbol = aliasSymbol;
-                type.aliasTypeArguments = aliasTypeArguments;
-                links.resolvedType = type;
+                if (isEmpty(node.symbol.members) && !aliasSymbol && !aliasTypeArguments) {
+                    links.resolvedType = cachedEmptyTypeLiteralType;
+                }
+                else {
+                    const type = createObjectType(ObjectFlags.Anonymous, node.symbol);
+                    type.aliasSymbol = aliasSymbol;
+                    type.aliasTypeArguments = aliasTypeArguments;
+                    links.resolvedType = type;
+                }
             }
             return links.resolvedType;
         }
@@ -6036,6 +6046,9 @@ namespace ts {
         }
 
         function isSymbolInScopeOfMappedTypeParameter(symbol: Symbol, mapper: TypeMapper) {
+            if (symbol.flags & SymbolFlags.Synthesized) {
+                return false;
+            }
             const mappedTypes = mapper.mappedTypes;
             // Starting with the parent of the symbol's declaration, check if the mapper maps any of
             // the type parameters introduced by enclosing declarations. We just pick the first
@@ -8216,7 +8229,7 @@ namespace ts {
         function isDiscriminantProperty(type: Type, name: string) {
             if (type && type.flags & TypeFlags.Union) {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
-                if (prop && prop.flags & SymbolFlags.SyntheticProperty) {
+                if (prop && prop.flags & SymbolFlags.Synthesized) {
                     if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
                         (<TransientSymbol>prop).isDiscriminantProperty = (<TransientSymbol>prop).hasNonUniformType && isLiteralType(getTypeOfSymbol(prop));
                     }
@@ -19011,7 +19024,7 @@ namespace ts {
         }
 
         function getRootSymbols(symbol: Symbol): Symbol[] {
-            if (symbol.flags & SymbolFlags.SyntheticProperty) {
+            if (symbol.flags & SymbolFlags.Synthesized) {
                 const symbols: Symbol[] = [];
                 const name = symbol.name;
                 forEach(getSymbolLinks(symbol).containingType.types, t => {
