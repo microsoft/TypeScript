@@ -173,7 +173,8 @@ var servicesSources = [
     "codeFixes/fixClassIncorrectlyImplementsInterface.ts",
     "codeFixes/fixClassDoesntImplementInheritedAbstractMember.ts",
     "codeFixes/fixClassSuperMustPrecedeThisAccess.ts",
-    "codeFixes/fixConstructorForDerivedNeedSuperCall.ts"
+    "codeFixes/fixConstructorForDerivedNeedSuperCall.ts",
+    "codeFixes/fixRemoveAbstractModifierInNonAbstractClass.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
