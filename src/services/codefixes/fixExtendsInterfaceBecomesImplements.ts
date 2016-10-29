@@ -6,40 +6,43 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
             const token = getTokenAtPosition(sourceFile, start);
+
+            if (!(token.kind === SyntaxKind.Identifier && token.parent.parent.parent.kind === SyntaxKind.ClassDeclaration)) {
+                return undefined;
+            }
+
             const textChanges: TextChange[] = [];
 
-            if (token.kind === SyntaxKind.Identifier && token.parent.parent.kind === SyntaxKind.HeritageClause) {
-                const children = (<HeritageClause>token.parent.parent).getChildren();
+            const heritageNodes = (<HeritageClause>token.parent.parent).getChildren();
 
-                // If there is already an implements keyword, we currently have incorrect behavior.
-                // For now, we suppress the quickfix altogether.
-                // TODO: (arozga) Fix this.
-                if(ts.forEach(children, child => child.kind === SyntaxKind.ImplementsKeyword)) {
-                    return undefined;
-                }
+            // This should never fail
+            Debug.assert(heritageNodes.length > 0);
+            const extendsIndex = 0;
+            const extendsNode = heritageNodes[0];
 
-                ts.forEach(children, child => {
-                    if (child.kind === SyntaxKind.ExtendsKeyword) {
-                        // Note: child.pos points to the space *before* `extends`.
-                        textChanges.push({ newText: " implements", span: { start: child.pos, length: child.end - child.pos } });
-                    }
-                });
+            Debug.assert(extendsIndex === 0);
+            
+            // We change the extends keyword to implements.
+            textChanges.push({ newText: " implements", span: { start: extendsNode.pos, length: extendsNode.end - extendsNode.pos } });
+
+            try {
+                // If the implements keyword exists, we replace it with a comma.
+                const implementsToken = <HeritageClause>token.parent.parent.parent.getChildren()[2].getChildren()[1];
+                Debug.assert(implementsToken.token === SyntaxKind.ImplementsKeyword);
+                const implementsNode = implementsToken.getChildren()[0];
+                textChanges.push({ newText: ",", span: { start: implementsNode.pos, length: implementsNode.end - implementsToken.pos } });
             }
+            catch (e) {}
 
-            // TODO: (arozga) Get Separate messages for
-            // 1) Change extends to implements
-            // 2) Move interface to extends clause
-            if (textChanges.length > 0) {
-                return [{
-                    description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements),
-                    changes: [{
-                        fileName: sourceFile.fileName,
-                        textChanges: textChanges
-                    }]
-                }];
-            }
-
-            return undefined;
+            return [{
+                // TODO: (arozga) Move the locale-specific conversion further up the stack, since all
+                // the codefixes will need to call this?
+                description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements),
+                changes: [{
+                    fileName: sourceFile.fileName,
+                    textChanges: textChanges
+                }]
+            }];
         }
     });
 }
