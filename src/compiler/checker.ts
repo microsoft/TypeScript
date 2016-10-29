@@ -2180,41 +2180,31 @@ namespace ts {
                         writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
                             ? "any"
                             : (<IntrinsicType>type).intrinsicName);
-                        return;
                     }
-
-                    if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
+                    else if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
                         if (inObjectTypeLiteral) {
                             writer.reportInaccessibleThisError();
                         }
                         writer.writeKeyword("this");
-                        return;
                     }
-
-                    if (getObjectFlags(type) & ObjectFlags.Reference) {
+                    else if (getObjectFlags(type) & ObjectFlags.Reference) {
                         writeTypeReference(<TypeReference>type, nextFlags);
-                        return;
                     }
-
-                    if (type.flags & TypeFlags.EnumLiteral) {
+                    else if (type.flags & TypeFlags.EnumLiteral) {
                         buildSymbolDisplay(getParentOfSymbol(type.symbol), writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                         writePunctuation(writer, SyntaxKind.DotToken);
                         appendSymbolNameOnly(type.symbol, writer);
-                        return;
                     }
-                    if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.Enum | TypeFlags.TypeParameter)) {
+                    else if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.Enum | TypeFlags.TypeParameter)) {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
-                        return;
                     }
-
-                    if (!(flags & TypeFormatFlags.InTypeAlias) &&
-                        (getObjectFlags(type) & ObjectFlags.Anonymous || type.flags & TypeFlags.UnionOrIntersection) &&
+                    else if (!(flags & TypeFormatFlags.InTypeAlias) &&
+                        (getObjectFlags(type) & ObjectFlags.Anonymous && !(<AnonymousType>type).target || type.flags & TypeFlags.UnionOrIntersection) &&
                         type.aliasSymbol &&
                         isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
                         // We emit inferred type as type-alias if type is not in type-alias declaration, existed accessible alias-symbol, type is anonymous or union or intersection.
                         // However, if the type is an anonymous type with type arguments, we need to perform additional check.
-
                         //      1) No type arguments, just emit type-alias as is
                         //      2) Existed type arguments, check if the type arguments full fill all type parameters of the alias-symbol by
                         //         checking whether the target's aliasTypeArguments has the same size as type's aliasTypeArguments:
@@ -2230,55 +2220,31 @@ namespace ts {
                         //                  foo<U>(): Foo<U>;
                         //              };
                         //              declare function foo(): Foo<number>;
-
-                        const typeArguments = type.aliasTypeArguments;
-                        if (!(<AnonymousType>type).target) {
-                            // The given type has no target type then just write out its alias and tyep argument.
-                            writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
-                            return;
-
-                        }
-                        else {
-                            // The given type has target type. Then check hat the type contains same number of type arguments as its target type indicating that
-                            // the given type has instantiate all type parameter. Then just emit type-alias using the current type argument.
-                            // i.e
-                            //      type Foo<T> = { foo<U>(): Foo<U> }
-                            //      function bar() { return {} as Foo<number>;
-                            //      should be emitted as
-                            //      declare type Foo<T> = { foo<U>(): Foo<U>; }
-                            //      declare function bar(): Foo<number>
-                            if (typeArguments && typeArguments.length === (<AnonymousType>type).target.aliasTypeArguments.length) {
-                                writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments.length, nextFlags);
-                                return;
-                            }
-                            // Otherwise type-alias only partially full fill type parameter (as below example), we will want to serialize the type-alias
-                            //       export type Bar<X, Y> = () => [X, Y];
-                            //       export type Foo<Y> = Bar<any, Y>;
-                            //       export const y = (x: Foo<string>) => 1  // this should be emit as "export declare const y: (x: () => [any, string]) => number;"
-                        }
+                        // Otherwise type-alias is point to another generic type-alias then don't write it using alias symbol
+                        //       export type Bar<X, Y> = () => [X, Y];
+                        //       export type Foo<Y> = Bar<any, Y>;
+                        //       export const y = (x: Foo<string>) => 1  // this should be emit as "export declare const y: (x: () => [any, string]) => number;"
+                        const typeArguments = (<AnonymousType>type).aliasTypeArguments;
+                        writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
                     }
-
-                    if (type.flags & TypeFlags.UnionOrIntersection) {
+                    else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
-                        return;
                     }
-                    if (getObjectFlags(type) & ObjectFlags.Anonymous) {
+                    else if (getObjectFlags(type) & ObjectFlags.Anonymous) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
-                        return;
                     }
-
-                    if (type.flags & TypeFlags.StringOrNumberLiteral) {
+                    else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
-                        return;
                     }
-
-                    // Should never get here
-                    // { ... }
-                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                    writeSpace(writer);
-                    writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                    writeSpace(writer);
-                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
+                    else {
+                        // Should never get here
+                        // { ... }
+                        writePunctuation(writer, SyntaxKind.OpenBraceToken);
+                        writeSpace(writer);
+                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
+                        writeSpace(writer);
+                        writePunctuation(writer, SyntaxKind.CloseBraceToken);
+                    }
                 }
 
                 function writeTypeList(types: Type[], delimiter: SyntaxKind) {
