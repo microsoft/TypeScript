@@ -1763,6 +1763,14 @@
         "category": "Error",
         "code": 2538
     },
+    "Cannot assign to '{0}' because it is not a variable.": {
+        "category": "Error",
+        "code": 2539
+    },
+    "Cannot assign to '{0}' because it is a constant or a read-only property.": {
+        "category": "Error",
+        "code": 2540
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

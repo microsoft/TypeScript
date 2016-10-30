@@ -956,10 +956,6 @@ namespace ts {
         operator: PostfixUnaryOperator;
     }
 
-    export interface PostfixExpression extends UnaryExpression {
-        _postfixExpressionBrand: any;
-    }
-
     export interface LeftHandSideExpression extends IncrementExpression {
         _leftHandSideExpressionBrand: any;
     }
