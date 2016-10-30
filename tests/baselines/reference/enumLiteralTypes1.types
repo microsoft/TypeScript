@@ -209,11 +209,11 @@ function f4(a: Choice.Yes, b: YesNo) {
 
     a++;
 >a++ : number
->a : Choice.Yes
+>a : Choice
 
     b++;
 >b++ : number
->b : YesNo
+>b : Choice
 }
 
 declare function g(x: Choice.Yes): string;

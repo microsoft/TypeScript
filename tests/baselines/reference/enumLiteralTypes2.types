@@ -210,7 +210,7 @@ function f4(a: Choice.Yes, b: UnknownYesNo) {
 
     a++;
 >a++ : number
->a : Choice.Yes
+>a : Choice
 
     b++;
 >b++ : number
