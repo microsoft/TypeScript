@@ -1691,7 +1691,7 @@ namespace ts {
             return allFixes;
         }
 
-        function getCodeRefactoringsAtPosition(fileName: string, start: number, end: number): CodeAction[] {
+        function getCodeRefactoringsAtPosition(fileName: string, start: number, end: number, serviceInstance: LanguageService): CodeAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = { start, length: end - start };
@@ -1705,7 +1705,8 @@ namespace ts {
                 sourceFile: sourceFile,
                 span: span,
                 program: program,
-                newLineCharacter: newLineChar
+                newLineCharacter: newLineChar,
+                languageService: serviceInstance
             };
 
             const refactorings = coderefactoring.getCodeRefactorings(context);

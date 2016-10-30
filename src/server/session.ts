@@ -152,7 +152,7 @@ namespace ts.server {
         export const GetCodeFixesFull: protocol.CommandTypes.GetCodeFixesFull = "getCodeFixes-full";
         export const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes = "getSupportedCodeFixes";
         export const GetCodeRefactorings: protocol.CommandTypes.GetCodeRefactorings = "getCodeRefactorings";
-        export const GetCodeRefactoringsFull: protocol.CommandTypes.GetCodeRefactoringsFull = "getCodeRefactorings-full";        
+        export const GetCodeRefactoringsFull: protocol.CommandTypes.GetCodeRefactoringsFull = "getCodeRefactorings-full";
     }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
@@ -1121,8 +1121,8 @@ namespace ts.server {
             return !items
                 ? undefined
                 : simplifiedResult
-                ? this.decorateNavigationBarItems(items, project.getScriptInfoForNormalizedPath(file))
-                : items;
+                    ? this.decorateNavigationBarItems(items, project.getScriptInfoForNormalizedPath(file))
+                    : items;
         }
 
         private decorateNavigationTree(tree: ts.NavigationTree, scriptInfo: ScriptInfo): protocol.NavigationTree {
@@ -1148,8 +1148,8 @@ namespace ts.server {
             return !tree
                 ? undefined
                 : simplifiedResult
-                ? this.decorateNavigationTree(tree, project.getScriptInfoForNormalizedPath(file))
-                : tree;
+                    ? this.decorateNavigationTree(tree, project.getScriptInfoForNormalizedPath(file))
+                    : tree;
         }
 
         private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): protocol.NavtoItem[] | NavigateToItem[] {
@@ -1263,14 +1263,15 @@ namespace ts.server {
             }
         }
 
-        private getCodeRefactorings(args: protocol.CodeRefactoringRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[]{
+        private getCodeRefactorings(args: protocol.CodeRefactoringRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const startPosition = getStartPosition();
             const endPosition = getEndPosition();
 
-            const codeActions = project.getLanguageService().getCodeRefactoringsAtPosition(file, startPosition, endPosition);
+            const languageService = project.getLanguageService();
+            const codeActions = languageService.getCodeRefactoringsAtPosition(file, startPosition, endPosition, languageService);
             if (!codeActions) {
                 return undefined;
             }
@@ -1318,8 +1319,8 @@ namespace ts.server {
             return !spans
                 ? undefined
                 : simplifiedResult
-                ? spans.map(span => this.decorateSpan(span, scriptInfo))
-                : spans;
+                    ? spans.map(span => this.decorateSpan(span, scriptInfo))
+                    : spans;
         }
 
         getDiagnosticsForProject(delay: number, fileName: string) {

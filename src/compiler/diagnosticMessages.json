@@ -3118,5 +3118,9 @@
     "Implement inherited abstract class": {
         "category": "Message",
         "code": 90007
+    },
+    "Inline temporary variable": {
+        "category": "Message",
+        "code": 91001
     }
 }

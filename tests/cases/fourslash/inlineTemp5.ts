@@ -4,7 +4,7 @@
 //// export module m1 {
 ////        function f1() {
 ////            let j:number = 98;
-////            let /*0*/s1:string ="dummy"/*1*/, s3:string = "mmmmm";
+////            let /*0*/s1:string ="dummy", s3:string = "mmmmm";
 ////            j = 87, s1 = "ddddd", s3="rrrr";
 ////            let m1: string = "dummy2", m: string = "dummy", m3: string = s1;
 ////            s1 = "kkk";
@@ -12,10 +12,7 @@
 ////        }
 //// }
 
-verify.codeRefactor({
-    description: "Inline Temp",
-    expectedFileChanges: [
-        {
+verify.refactoringsAtPostion([{
             fileName: "file1.ts",
             expectedText: `
 export module m1 {
@@ -27,7 +24,4 @@ export module m1 {
         let s2: string = ("kkk").replace(("kkk"), "") + m + "some value" + ("kkk");
     }
 }
-`
-        }
-    ]
-});
+`}]);
