@@ -4,9 +4,7 @@
 //// /*0*/class c1 {}/*1*/
 
 
-verify.codeRefactor({
-    description: "Add JSDoc Comments to Class",
-    expectedFileChanges: [{
+verify.refactoringsAtPostion([{
     fileName: "file1.ts",
     expectedText: `
 /**
@@ -14,4 +12,4 @@ verify.codeRefactor({
  */
 class c1 {}
 `
-}]});
+}]);

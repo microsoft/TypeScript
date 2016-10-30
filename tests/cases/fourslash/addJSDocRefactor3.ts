@@ -4,9 +4,7 @@
 //// /*0*/module m1 {}/*1*/
 
 
-verify.codeRefactor({
-    description: "Add JSDoc Comments to Module",
-    expectedFileChanges: [{
+verify.refactoringsAtPostion( [{
     fileName: "file1.ts",
     expectedText: `
 /**
@@ -14,4 +12,4 @@ verify.codeRefactor({
  */
 module m1 {}
 `
-}]});
+}]);

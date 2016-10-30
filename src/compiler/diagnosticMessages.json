@@ -3122,5 +3122,13 @@
     "Inline temporary variable": {
         "category": "Message",
         "code": 91001
+    },
+    "Add JSDoc Comments to Class": {
+        "category": "Message",
+        "code": 91002
+    },
+    "Add JSDoc Comments to Module": {
+        "category": "Message",
+        "code": 91003
     }
 }
