@@ -2074,7 +2074,7 @@ namespace FourSlash {
                 this.raiseError(`Expected 1 or 2 markers, actually found: ${markers.length}`);
             }
             const start = markers[0].position;
-            const end = markers[1] ? markers[1].position : markers[0].position + 1;
+            const end = markers[1] ? markers[1].position : markers[0].position;
 
             const actualRefactorings = this.languageService.getCodeRefactoringsAtPosition(sourceFileName, start, end, this.languageService);
             if (!actualRefactorings || actualRefactorings.length == 0) {
@@ -2100,11 +2100,13 @@ namespace FourSlash {
                 }
 
                 const expectedFile = ts.find(expectedChanges, expected => {
-                    return expected.fileName == file.fileName;
+                    const name = expected.fileName;
+                    const fullName = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
+                    return fullName === file.fileName;
                 });
 
                 if (refactorForFile && !expectedFile) {
-                    this.raiseError(`Applied changes to '${file.fileName}' which was not expected.`)
+                    this.raiseError(`Applied changes to '${file.fileName}' which was not expected.`);
                 }
                 const actualText = this.getFileContent(file.fileName);
                 if (this.removeWhitespace(expectedFile.expectedText) !== this.removeWhitespace(actualText)) {

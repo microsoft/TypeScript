@@ -461,7 +461,6 @@ namespace ts.server.protocol {
       arguments: CodeFixRequestArgs;
     }
 
-    
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
         body?: CodeAction[];
