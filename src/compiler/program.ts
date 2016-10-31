@@ -1538,7 +1538,6 @@ namespace ts {
                     // Report error if the output overwrites input file
                     if (filesByName.contains(emitFilePath)) {
                         let chain: DiagnosticMessageChain;
-                        const options = program.getCompilerOptions();
                         if (!options.configFilePath) {
                             // The program is from either inferred project or 
                             chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Adding_a_tsconfig_json_file_will_help_organizing_projects_with_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig);

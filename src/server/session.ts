@@ -374,9 +374,7 @@ namespace ts.server {
 
         private getCompilerOptionsDiagnostics(args: protocol.CompilerOptionsDiagnosticsRequestArgs) {
             const project = this.getProject(args.projectFileName);
-            const diagnostics = this.convertToDiagnosticsWithLinePosition(project.getLanguageService().getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
-
-            return diagnostics;
+            return this.convertToDiagnosticsWithLinePosition(project.getLanguageService().getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
         }
 
         private convertToDiagnosticsWithLinePosition(diagnostics: Diagnostic[], scriptInfo: ScriptInfo) {
