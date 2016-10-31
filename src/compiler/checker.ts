@@ -498,7 +498,7 @@ namespace ts {
                 const moduleNotFoundError = !isInAmbientContext(moduleName.parent.parent)
                     ? Diagnostics.Invalid_module_name_in_augmentation_module_0_cannot_be_found
                     : undefined;
-                let mainModule = resolveExternalModuleNameWorker(moduleName, moduleName, moduleNotFoundError);
+                let mainModule = resolveExternalModuleNameWorker(moduleName, moduleName, moduleNotFoundError, /*isForAugmentation*/ true);
                 if (!mainModule) {
                     return;
                 }
@@ -1351,16 +1351,16 @@ namespace ts {
             return resolveExternalModuleNameWorker(location, moduleReferenceExpression, Diagnostics.Cannot_find_module_0);
         }
 
-        function resolveExternalModuleNameWorker(location: Node, moduleReferenceExpression: Expression, moduleNotFoundError: DiagnosticMessage): Symbol {
+        function resolveExternalModuleNameWorker(location: Node, moduleReferenceExpression: Expression, moduleNotFoundError: DiagnosticMessage, isForAugmentation = false): Symbol {
             if (moduleReferenceExpression.kind !== SyntaxKind.StringLiteral) {
                 return;
             }
 
             const moduleReferenceLiteral = <LiteralExpression>moduleReferenceExpression;
-            return resolveExternalModule(location, moduleReferenceLiteral.text, moduleNotFoundError, moduleReferenceLiteral);
+            return resolveExternalModule(location, moduleReferenceLiteral.text, moduleNotFoundError, moduleReferenceLiteral, isForAugmentation);
         }
 
-        function resolveExternalModule(location: Node, moduleReference: string, moduleNotFoundError: DiagnosticMessage, errorNode: Node): Symbol {
+        function resolveExternalModule(location: Node, moduleReference: string, moduleNotFoundError: DiagnosticMessage, errorNode: Node, isForAugmentation = false): Symbol {
             // Module names are escaped in our symbol table.  However, string literal values aren't.
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
             const moduleName = escapeIdentifier(moduleReference);
@@ -1380,7 +1380,7 @@ namespace ts {
             }
 
             const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
-            const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
+            let resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
@@ -1403,7 +1403,10 @@ namespace ts {
 
              // May be an untyped module. If so, ignore resolutionDiagnostic.
             if (!isRelative && resolvedModule && !extensionIsTypeScript(resolvedModule.extension)) {
-                if (compilerOptions.noImplicitAny) {
+                if (isForAugmentation) {
+                    resolutionDiagnostic = Diagnostics.Invalid_module_name_in_augmentation_module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
+                }
+                else if (compilerOptions.noImplicitAny) {
                     if (moduleNotFoundError) {
                         error(errorNode,
                             Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
@@ -1412,15 +1415,17 @@ namespace ts {
                     }
                     return undefined;
                 }
-
-                // Create a new symbol to represent the untyped module and store it in globals.
-                // This provides a name to the module. See the test tests/cases/fourslash/untypedModuleImport.ts
-                const newSymbol = createSymbol(SymbolFlags.ValueModule, quotedName);
-                // Module symbols are expected to have 'exports', although since this is an untyped module it can be empty.
-                newSymbol.exports = createMap<Symbol>();
-                // Cache it so subsequent accesses will return the same module.
-                globals[quotedName] = newSymbol;
-                return newSymbol;
+                else {
+                    // Create a new symbol to represent the untyped module and store it in globals.
+                    // This provides a name to the module. See the test tests/cases/fourslash/untypedModuleImport.ts
+                    const newSymbol = createSymbol(SymbolFlags.ValueModule, quotedName);
+                    //newSymbol.declarations = []; //want this?
+                    // Module symbols are expected to have 'exports', although since this is an untyped module it can be empty.
+                    newSymbol.exports = createMap<Symbol>();
+                    // Cache it so subsequent accesses will return the same module.
+                    globals[quotedName] = newSymbol;
+                    return newSymbol;
+                }
             }
 
             if (moduleNotFoundError) {
