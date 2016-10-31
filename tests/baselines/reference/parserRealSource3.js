@@ -126,6 +126,7 @@ module TypeScript {
 var TypeScript;
 (function (TypeScript) {
     // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
+    var NodeType;
     (function (NodeType) {
         NodeType[NodeType["None"] = 0] = "None";
         NodeType[NodeType["Empty"] = 1] = "Empty";
@@ -236,6 +237,5 @@ var TypeScript;
         NodeType[NodeType["Debugger"] = 106] = "Debugger";
         NodeType[NodeType["GeneralNode"] = 71] = "GeneralNode";
         NodeType[NodeType["LastAsg"] = 41] = "LastAsg";
-    })(TypeScript.NodeType || (TypeScript.NodeType = {}));
-    var NodeType = TypeScript.NodeType;
+    })(NodeType = TypeScript.NodeType || (TypeScript.NodeType = {}));
 })(TypeScript || (TypeScript = {}));

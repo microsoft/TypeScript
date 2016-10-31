@@ -365,6 +365,8 @@ namespace ts {
         // Transformation nodes
         NotEmittedStatement,
         PartiallyEmittedExpression,
+        MergeDeclarationMarker,
+        EndOfDeclarationMarker,
 
         // Enum value count
         Count,
@@ -460,7 +462,8 @@ namespace ts {
         ParameterPropertyModifier = AccessibilityModifier | Readonly,
         NonPublicAccessibilityModifier = Private | Protected,
 
-        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const,
+        ExportDefault = Export | Default,
     }
 
     export const enum JsxFlags {
@@ -548,11 +551,20 @@ namespace ts {
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;         // Ensures unique generated identifiers get unique names, but clones get the same name.
+        isInJSDocNamespace?: boolean;                  // if the node is a member in a JSDoc namespace
     }
 
     // Transient identifier node (marked by id === -1)
     export interface TransientIdentifier extends Identifier {
         resolvedSymbol: Symbol;
+    }
+
+    /*@internal*/
+    export interface GeneratedIdentifier extends Identifier {
+        autoGenerateKind: GeneratedIdentifierKind.Auto
+                        | GeneratedIdentifierKind.Loop
+                        | GeneratedIdentifierKind.Unique
+                        | GeneratedIdentifierKind.Node;
     }
 
     export interface QualifiedName extends Node {
@@ -1157,6 +1169,21 @@ namespace ts {
         right: Expression;
     }
 
+    export interface AssignmentExpression extends BinaryExpression {
+        left: LeftHandSideExpression;
+        operatorToken: Token<SyntaxKind.EqualsToken>;
+    }
+
+    export interface ObjectDestructuringAssignment extends AssignmentExpression {
+        left: ObjectLiteralExpression;
+    }
+
+    export interface ArrayDestructuringAssignment extends AssignmentExpression {
+        left: ArrayLiteralExpression;
+    }
+
+    export type DestructuringAssignment = ObjectDestructuringAssignment | ArrayDestructuringAssignment;
+
     export interface ConditionalExpression extends Expression {
         kind: SyntaxKind.ConditionalExpression;
         condition: Expression;
@@ -1429,6 +1456,22 @@ namespace ts {
         kind: SyntaxKind.NotEmittedStatement;
     }
 
+    /**
+     * Marks the end of transformed declaration to properly emit exports.
+     */
+    /* @internal */
+    export interface EndOfDeclarationMarker extends Statement {
+        kind: SyntaxKind.EndOfDeclarationMarker;
+    }
+
+    /**
+     * Marks the beginning of a merged transformed declaration.
+     */
+    /* @internal */
+    export interface MergeDeclarationMarker extends Statement {
+        kind: SyntaxKind.MergeDeclarationMarker;
+    }
+
     export interface EmptyStatement extends Statement {
         kind: SyntaxKind.EmptyStatement;
     }
@@ -1645,12 +1688,17 @@ namespace ts {
     export interface ModuleDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ModuleDeclaration;
         name: Identifier | LiteralExpression;
-        body?: ModuleBlock | NamespaceDeclaration;
+        body?: ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | Identifier;
     }
 
     export interface NamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
         body: ModuleBlock | NamespaceDeclaration;
+    }
+
+    export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
+        name: Identifier;
+        body: JSDocNamespaceDeclaration | Identifier;
     }
 
     export interface ModuleBlock extends Node, Statement {
@@ -1882,6 +1930,7 @@ namespace ts {
 
     export interface JSDocTypedefTag extends JSDocTag, Declaration {
         kind: SyntaxKind.JSDocTypedefTag;
+        fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
         typeExpression?: JSDocTypeExpression;
         jsDocTypeLiteral?: JSDocTypeLiteral;
@@ -2035,6 +2084,9 @@ namespace ts {
         // as well as code diagnostics).
         /* @internal */ parseDiagnostics: Diagnostic[];
 
+        // Stores additional file level diagnostics reported by the program
+        /* @internal */ additionalSyntacticDiagnostics?: Diagnostic[];
+
         // File level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: Diagnostic[];
 
@@ -2045,7 +2097,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<ResolvedModule>;
+        /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
@@ -3060,6 +3112,7 @@ namespace ts {
         packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
         typingOptions: TypingOptions;                   // Used to customize the typing inference process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
+        unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
     }
 
     export enum ModuleKind {
@@ -3118,6 +3171,7 @@ namespace ts {
         Pretty,
     }
 
+    /** Either a parsed command line or a parsed tsconfig.json */
     export interface ParsedCommandLine {
         options: CompilerOptions;
         typingOptions?: TypingOptions;
@@ -3323,10 +3377,18 @@ namespace ts {
         getDirectories?(path: string): string[];
     }
 
+    /**
+     * Represents the result of module resolution.
+     * Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
+     * The Program will then filter results based on these flags.
+     *
+     * Prefer to return a `ResolvedModuleFull` so that the file type does not have to be inferred.
+     */
     export interface ResolvedModule {
+        /** Path of the file the module was resolved to. */
         resolvedFileName: string;
-        /*
-         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
+        /**
+         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
          * - be a .d.ts file
          * - use top level imports\exports
          * - don't use tripleslash references
@@ -3334,8 +3396,29 @@ namespace ts {
         isExternalLibraryImport?: boolean;
     }
 
+    /**
+     * ResolvedModule with an explicitly provided `extension` property.
+     * Prefer this over `ResolvedModule`.
+     */
+    export interface ResolvedModuleFull extends ResolvedModule {
+        /**
+         * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
+         * This is optional for backwards-compatibility, but will be added if not provided.
+         */
+        extension: Extension;
+    }
+
+    export enum Extension {
+        Ts,
+        Tsx,
+        Dts,
+        Js,
+        Jsx,
+        LastTypeScriptExtension = Dts
+    }
+
     export interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModule;
+        resolvedModule: ResolvedModuleFull | undefined;
         failedLookupLocations: string[];
     }
 
@@ -3395,25 +3478,26 @@ namespace ts {
         ContainsES2016 = 1 << 7,
         ES2015 = 1 << 8,
         ContainsES2015 = 1 << 9,
-        DestructuringAssignment = 1 << 10,
-        Generator = 1 << 11,
-        ContainsGenerator = 1 << 12,
+        Generator = 1 << 10,
+        ContainsGenerator = 1 << 11,
+        DestructuringAssignment = 1 << 12,
+        ContainsDestructuringAssignment = 1 << 13,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 13,
-        ContainsPropertyInitializer = 1 << 14,
-        ContainsLexicalThis = 1 << 15,
-        ContainsCapturedLexicalThis = 1 << 16,
-        ContainsLexicalThisInComputedPropertyName = 1 << 17,
-        ContainsDefaultValueAssignments = 1 << 18,
-        ContainsParameterPropertyAssignments = 1 << 19,
-        ContainsSpreadElementExpression = 1 << 20,
-        ContainsComputedPropertyName = 1 << 21,
-        ContainsBlockScopedBinding = 1 << 22,
-        ContainsBindingPattern = 1 << 23,
-        ContainsYield = 1 << 24,
-        ContainsHoistedDeclarationOrCompletion = 1 << 25,
+        ContainsDecorators = 1 << 14,
+        ContainsPropertyInitializer = 1 << 15,
+        ContainsLexicalThis = 1 << 16,
+        ContainsCapturedLexicalThis = 1 << 17,
+        ContainsLexicalThisInComputedPropertyName = 1 << 18,
+        ContainsDefaultValueAssignments = 1 << 19,
+        ContainsParameterPropertyAssignments = 1 << 20,
+        ContainsSpreadElementExpression = 1 << 21,
+        ContainsComputedPropertyName = 1 << 22,
+        ContainsBlockScopedBinding = 1 << 23,
+        ContainsBindingPattern = 1 << 24,
+        ContainsYield = 1 << 25,
+        ContainsHoistedDeclarationOrCompletion = 1 << 26,
 
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
@@ -3425,6 +3509,7 @@ namespace ts {
         AssertES2016 = ES2016 | ContainsES2016,
         AssertES2015 = ES2015 | ContainsES2015,
         AssertGenerator = Generator | ContainsGenerator,
+        AssertDestructuringAssignment = DestructuringAssignment | ContainsDestructuringAssignment,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
@@ -3487,6 +3572,8 @@ namespace ts {
         AsyncFunctionBody = 1 << 21,
         ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
         CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoHoisting = 1 << 24,                    // Do not hoist this declaration in --module system
+        HasEndOfDeclarationMarker = 1 << 25,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
     }
 
     /* @internal */

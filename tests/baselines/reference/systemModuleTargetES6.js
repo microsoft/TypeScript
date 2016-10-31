@@ -20,12 +20,12 @@ System.register([], function (exports_1, context_1) {
     function myFunction() {
         return new MyClass();
     }
+    exports_1("myFunction", myFunction);
     function myFunction2() {
         return new MyClass2();
     }
-    var MyClass, MyClass2;
-    exports_1("myFunction", myFunction);
     exports_1("myFunction2", myFunction2);
+    var MyClass, MyClass2;
     return {
         setters: [],
         execute: function () {
@@ -35,8 +35,8 @@ System.register([], function (exports_1, context_1) {
             MyClass2 = class MyClass2 {
                 static getInstance() { return MyClass2.value; }
             };
-            exports_1("MyClass2", MyClass2);
             MyClass2.value = 42;
+            exports_1("MyClass2", MyClass2);
         }
     };
 });
