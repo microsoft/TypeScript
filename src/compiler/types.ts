@@ -696,6 +696,7 @@ namespace ts {
     // SyntaxKind.BindingElement
     // SyntaxKind.Property
     // SyntaxKind.PropertyAssignment
+    // SyntaxKind.JsxAttribute
     // SyntaxKind.ShorthandPropertyAssignment
     // SyntaxKind.EnumMember
     // SyntaxKind.JSDocPropertyTag

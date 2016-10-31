@@ -762,7 +762,7 @@ namespace ts {
         /**
          * <JsxTagName attribute1 attribute2={0} />
          **/
-        export const jsxAttribute = "attribute";
+        export const jsxAttribute = "JSX attribute";
     }
 
     export namespace ScriptElementKindModifier {

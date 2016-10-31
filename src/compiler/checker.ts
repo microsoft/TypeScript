@@ -3195,6 +3195,11 @@ namespace ts {
                 const type = checkDeclarationInitializer(declaration);
                 return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
             }
+            else if (isJsxAttribute(declaration)) {
+                // For JSX Attribute, if it doesn't have initializer, by default the attribute gets true-type.
+                // <Elem attr /> is sugar for <Elem attr={true} />
+                return trueType;
+            }
 
             // If it is a short-hand property assignment, use the type of the identifier
             if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
