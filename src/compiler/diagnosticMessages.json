@@ -1415,14 +1415,6 @@
         "category": "Error",
         "code": 2448
     },
-    "The operand of an increment or decrement operator cannot be a constant or a read-only property.": {
-        "category": "Error",
-        "code": 2449
-    },
-    "Left-hand side of assignment expression cannot be a constant or a read-only property.": {
-        "category": "Error",
-        "code": 2450
-    },
     "Cannot redeclare block-scoped variable '{0}'.": {
         "category": "Error",
         "code": 2451
@@ -1554,14 +1546,6 @@
     "Export declaration conflicts with exported declaration of '{0}'": {
         "category": "Error",
         "code": 2484
-    },
-    "The left-hand side of a 'for...of' statement cannot be a constant or a read-only property.": {
-        "category": "Error",
-        "code": 2485
-    },
-    "The left-hand side of a 'for...in' statement cannot be a constant or a read-only property.": {
-        "category": "Error",
-        "code": 2486
     },
     "The left-hand side of a 'for...of' statement must be a variable or a property access.": {
         "category": "Error",
@@ -1774,6 +1758,10 @@
     "The target of an assignment must be a variable or a property access.": {
         "category": "Error",
         "code": 2541
+    },
+    "Index signature in type '{0}' only permits reading.": {
+        "category": "Error",
+        "code": 2542
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2921,7 +2909,7 @@
         "category": "Error",
         "code": 7015
     },
-    "Index signature of object type implicitly has an 'any' type.": {
+    "Element implicitly has an 'any' type because type '{0}' has no index signature.": {
         "category": "Error",
         "code": 7017
     },

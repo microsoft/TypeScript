@@ -5709,44 +5709,61 @@ namespace ts {
             return indexedAccessTypes[objectType.id] || (indexedAccessTypes[objectType.id] = createIndexedAccessType(objectType, indexType));
         }
 
-        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, errorNode?: Node) {
+        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
+            const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
             if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.EnumLiteral)) {
-                const propType = getTypeOfPropertyOfType(objectType, escapeIdentifier((<LiteralType>indexType).text));
-                if (propType) {
-                    return propType;
+                const prop = getPropertyOfType(objectType, escapeIdentifier((<LiteralType>indexType).text));
+                if (prop) {
+                    if (accessExpression && isAssignmentTarget(accessExpression) && isReadonlySymbol(prop)) {
+                        error(accessExpression.argumentExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, symbolToString(prop));
+                        return unknownType;
+                    }
+                    return getTypeOfSymbol(prop);
                 }
             }
-            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike)) {
-                const numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
-                if (numberIndexType) {
-                    return numberIndexType;
+            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+                const indexInfo = isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
+                    getIndexInfoOfType(objectType, IndexKind.String) ||
+                    undefined;
+                if (indexInfo) {
+                    if (accessExpression && isAssignmentTarget(accessExpression) && indexInfo.isReadonly) {
+                        error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
+                        return unknownType;
+                    }
+                    return indexInfo.type;
+                }
+                if (accessExpression && !isConstEnumObjectType(objectType)) {
+                    if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !isTypeAny(objectType)) {
+                        if (getIndexTypeOfType(objectType, IndexKind.Number)) {
+                            error(accessExpression.argumentExpression, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);
+                        }
+                        else {
+                            error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(objectType));
+                        }
+                    }
+                    return anyType;
                 }
             }
-            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike)) {
-                const stringIndexType = getIndexTypeOfType(objectType, IndexKind.String);
-                if (stringIndexType) {
-                    return stringIndexType;
-                }
-            }
-            if (errorNode) {
+            if (accessNode) {
+                const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? (<ElementAccessExpression>accessNode).argumentExpression : (<IndexedAccessTypeNode>accessNode).indexType;
                 if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
-                    error(errorNode, Diagnostics.Property_0_does_not_exist_on_type_1, (<LiteralType>indexType).text, typeToString(objectType));
+                    error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, (<LiteralType>indexType).text, typeToString(objectType));
                 }
                 else if (indexType.flags & (TypeFlags.String | TypeFlags.Number)) {
-                    error(errorNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
+                    error(accessNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
                 }
                 else {
-                    error(errorNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
+                    error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
                 }
             }
             return unknownType;
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, errorNode?: Node) {
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
             if (indexType.flags & TypeFlags.TypeParameter) {
                 if (!isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType) || emptyObjectType, getIndexType(objectType))) {
-                    if (errorNode) {
-                        error(errorNode, Diagnostics.Type_0_is_not_constrained_to_keyof_1, typeToString(indexType), typeToString(objectType));
+                    if (accessNode) {
+                        error(accessNode, Diagnostics.Type_0_is_not_constrained_to_keyof_1, typeToString(indexType), typeToString(objectType));
                     }
                     return unknownType;
                 }
@@ -5755,7 +5772,7 @@ namespace ts {
             if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Primitive)) {
                 const propTypes: Type[] = [];
                 for (const t of (<UnionType>indexType).types) {
-                    const propType = getPropertyTypeForIndexType(objectType, t, errorNode);
+                    const propType = getPropertyTypeForIndexType(objectType, t, accessNode);
                     if (propType === unknownType) {
                         return unknownType;
                     }
@@ -5763,14 +5780,13 @@ namespace ts {
                 }
                 return getUnionType(propTypes);
             }
-            return getPropertyTypeForIndexType(objectType, indexType, errorNode);
+            return getPropertyTypeForIndexType(objectType, indexType, accessNode);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getIndexedAccessType(getTypeFromTypeNodeNoAlias(node.objectType),
-                    getTypeFromTypeNodeNoAlias(node.indexType), node.indexType);
+                links.resolvedType = getIndexedAccessType(getTypeFromTypeNodeNoAlias(node.objectType), getTypeFromTypeNodeNoAlias(node.indexType), node);
             }
             return links.resolvedType;
         }
@@ -11546,8 +11562,10 @@ namespace ts {
         }
 
         function checkIndexedAccess(node: ElementAccessExpression): Type {
-            // Grammar checking
-            if (!node.argumentExpression) {
+            const objectType = checkNonNullExpression(node.expression);
+
+            const indexExpression = node.argumentExpression;
+            if (!indexExpression) {
                 const sourceFile = getSourceFileOfNode(node);
                 if (node.parent.kind === SyntaxKind.NewExpression && (<NewExpression>node.parent).expression === node) {
                     const start = skipTrivia(sourceFile.text, node.expression.end);
@@ -11559,87 +11577,36 @@ namespace ts {
                     const end = node.end;
                     grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Expression_expected);
                 }
+                return unknownType;
             }
 
-            let objectType = checkNonNullExpression(node.expression);
-            const indexType = node.argumentExpression ? checkExpression(node.argumentExpression) : unknownType;
+            const indexType = isForInVariableForNumericPropertyNames(indexExpression) ? numberType : checkExpression(indexExpression);
 
             if (objectType === unknownType || objectType === silentNeverType) {
                 return objectType;
             }
 
-            if (indexType.flags & TypeFlags.TypeParameter) {
-                return getIndexedAccessType(objectType, indexType, node.argumentExpression);
-            }
-
-            objectType = getApparentType(objectType);
-
-            const isConstEnum = isConstEnumObjectType(objectType);
-            if (isConstEnum &&
-                (!node.argumentExpression || node.argumentExpression.kind !== SyntaxKind.StringLiteral)) {
-                error(node.argumentExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
+            if (isConstEnumObjectType(objectType) && indexExpression.kind !== SyntaxKind.StringLiteral) {
+                error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return unknownType;
             }
 
-            // TypeScript 1.0 spec (April 2014): 4.10 Property Access
-            // - If IndexExpr is a string literal or a numeric literal and ObjExpr's apparent type has a property with the name
-            //    given by that literal(converted to its string representation in the case of a numeric literal), the property access is of the type of that property.
-            // - Otherwise, if ObjExpr's apparent type has a numeric index signature and IndexExpr is of type Any, the Number primitive type, or an enum type,
-            //    the property access is of the type of that index signature.
-            // - Otherwise, if ObjExpr's apparent type has a string index signature and IndexExpr is of type Any, the String or Number primitive type, or an enum type,
-            //    the property access is of the type of that index signature.
-            // - Otherwise, if IndexExpr is of type Any, the String or Number primitive type, or an enum type, the property access is of type Any.
-
-            // See if we can index as a property.
-            if (node.argumentExpression) {
-                const name = getPropertyNameForIndexedAccess(node.argumentExpression, indexType);
-                if (name !== undefined) {
-                    const prop = getPropertyOfType(objectType, name);
-                    if (prop) {
-                        getNodeLinks(node).resolvedSymbol = prop;
-                        return getTypeOfSymbol(prop);
+            const propName = getPropertyNameForIndexedAccess(indexExpression, indexType);
+            if (propName !== undefined) {
+                const prop = getPropertyOfType(getApparentType(objectType), propName);
+                if (prop) {
+                    getNodeLinks(node).resolvedSymbol = prop;
+                    if (isAssignmentTarget(node)) {
+                        if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
+                            error(indexExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, propName);
+                            return unknownType;
+                        }
                     }
-                    else if (isConstEnum) {
-                        error(node.argumentExpression, Diagnostics.Property_0_does_not_exist_on_const_enum_1, name, symbolToString(objectType.symbol));
-                        return unknownType;
-                    }
+                    return getTypeOfSymbol(prop);
                 }
             }
 
-            // Check for compatible indexer types.
-            const allowedNullableFlags = strictNullChecks ? 0 : TypeFlags.Nullable;
-            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol | allowedNullableFlags)) {
-
-                // Try to use a number indexer.
-                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike | allowedNullableFlags) || isForInVariableForNumericPropertyNames(node.argumentExpression)) {
-                    const numberIndexInfo = getIndexInfoOfType(objectType, IndexKind.Number);
-                    if (numberIndexInfo) {
-                        getNodeLinks(node).resolvedIndexInfo = numberIndexInfo;
-                        return numberIndexInfo.type;
-                    }
-                }
-
-                // Try to use string indexing.
-                const stringIndexInfo = getIndexInfoOfType(objectType, IndexKind.String);
-                if (stringIndexInfo) {
-                    getNodeLinks(node).resolvedIndexInfo = stringIndexInfo;
-                    return stringIndexInfo.type;
-                }
-
-                // Fall back to any.
-                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !isTypeAny(objectType)) {
-                    error(node, getIndexTypeOfType(objectType, IndexKind.Number) ?
-                        Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number :
-                        Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
-                }
-
-                return anyType;
-            }
-
-            // REVIEW: Users should know the type that was actually used.
-            error(node, Diagnostics.An_index_expression_argument_must_be_of_type_string_number_symbol_or_any);
-
-            return unknownType;
+            return getIndexedAccessType(objectType, indexType, node);
         }
 
         /**
@@ -11649,21 +11616,20 @@ namespace ts {
          *    to this symbol, as long as it is a proper symbol reference.
          * Otherwise, returns undefined.
          */
-        function getPropertyNameForIndexedAccess(indexArgumentExpression: Expression, indexArgumentType: Type): string {
-            if (indexArgumentExpression.kind === SyntaxKind.StringLiteral || indexArgumentExpression.kind === SyntaxKind.NumericLiteral) {
-                return (<LiteralExpression>indexArgumentExpression).text;
+        function getPropertyNameForIndexedAccess(indexExpression: Expression, indexType: Type): string {
+            if (indexExpression.kind === SyntaxKind.StringLiteral || indexExpression.kind === SyntaxKind.NumericLiteral) {
+                return (<LiteralExpression>indexExpression).text;
             }
-            if (indexArgumentExpression.kind === SyntaxKind.ElementAccessExpression || indexArgumentExpression.kind === SyntaxKind.PropertyAccessExpression) {
-                const value = getConstantValue(<ElementAccessExpression | PropertyAccessExpression>indexArgumentExpression);
+            if (indexExpression.kind === SyntaxKind.ElementAccessExpression || indexExpression.kind === SyntaxKind.PropertyAccessExpression) {
+                const value = getConstantValue(<ElementAccessExpression | PropertyAccessExpression>indexExpression);
                 if (value !== undefined) {
                     return value.toString();
                 }
             }
-            if (checkThatExpressionIsProperSymbolReference(indexArgumentExpression, indexArgumentType, /*reportError*/ false)) {
-                const rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
+            if (checkThatExpressionIsProperSymbolReference(indexExpression, indexType, /*reportError*/ false)) {
+                const rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexExpression).name).text;
                 return getPropertyNameForKnownSymbolName(rightHandSideName);
             }
-
             return undefined;
         }
 
@@ -13517,40 +13483,12 @@ namespace ts {
             return false;
         }
 
-        function checkReferenceExpression(expr: Expression, invalidReferenceMessage: DiagnosticMessage, constantVariableMessage: DiagnosticMessage): boolean {
+        function checkReferenceExpression(expr: Expression, invalidReferenceMessage: DiagnosticMessage): boolean {
             // References are combinations of identifiers, parentheses, and property accesses.
             const node = skipParentheses(expr);
             if (node.kind !== SyntaxKind.Identifier && node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
                 error(expr, invalidReferenceMessage);
                 return false;
-            }
-            if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
-                return true;
-            }
-            // Because we get the symbol from the resolvedSymbol property, it might be of kind
-            // SymbolFlags.ExportValue. In this case it is necessary to get the actual export
-            // symbol, which will have the correct flags set on it.
-            const links = getNodeLinks(node);
-            const symbol = getExportSymbolOfValueSymbolIfExported(links.resolvedSymbol);
-            if (symbol) {
-                if (symbol !== unknownSymbol && symbol !== argumentsSymbol) {
-                    // Only variables (and not functions, classes, namespaces, enum objects, or enum members)
-                    // are considered references when referenced using a simple identifier.
-                    // if (node.kind === SyntaxKind.Identifier && !(symbol.flags & SymbolFlags.Variable)) {
-                    //     error(expr, invalidReferenceMessage);
-                    //     return false;
-                    // }
-                    if (isReferenceToReadonlyEntity(node, symbol) || isReferenceThroughNamespaceImport(node)) {
-                        error(expr, constantVariableMessage);
-                        return false;
-                    }
-                }
-            }
-            else if (node.kind === SyntaxKind.ElementAccessExpression) {
-                if (links.resolvedIndexInfo && links.resolvedIndexInfo.isReadonly) {
-                    error(expr, constantVariableMessage);
-                    return false;
-                }
             }
             return true;
         }
@@ -13613,9 +13551,7 @@ namespace ts {
                         Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
-                        checkReferenceExpression(node.operand,
-                            Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access,
-                            Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant_or_a_read_only_property);
+                        checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access);
                     }
                     return numberType;
             }
@@ -13631,9 +13567,7 @@ namespace ts {
                 Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
-                checkReferenceExpression(node.operand,
-                    Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access,
-                    Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant_or_a_read_only_property);
+                checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access);
             }
             return numberType;
         }
@@ -13859,7 +13793,7 @@ namespace ts {
 
         function checkReferenceAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             const targetType = checkExpression(target, contextualMapper);
-            if (checkReferenceExpression(target, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant_or_a_read_only_property)) {
+            if (checkReferenceExpression(target, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)) {
                 checkTypeAssignableTo(sourceType, targetType, target, /*headMessage*/ undefined);
             }
             return sourceType;
@@ -14142,11 +14076,7 @@ namespace ts {
                     // requires VarExpr to be classified as a reference
                     // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1)
                     // and the type of the non - compound operation to be assignable to the type of VarExpr.
-                    const ok = checkReferenceExpression(left,
-                        Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
-                        Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant_or_a_read_only_property);
-                    // Use default messages
-                    if (ok) {
+                    if (checkReferenceExpression(left, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
                         checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
                     }
@@ -16588,8 +16518,7 @@ namespace ts {
                 }
                 else {
                     const leftType = checkExpression(varExpr);
-                    checkReferenceExpression(varExpr, /*invalidReferenceMessage*/ Diagnostics.The_left_hand_side_of_a_for_of_statement_must_be_a_variable_or_a_property_access,
-                        /*constantVariableMessage*/ Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_be_a_constant_or_a_read_only_property);
+                    checkReferenceExpression(varExpr, Diagnostics.The_left_hand_side_of_a_for_of_statement_must_be_a_variable_or_a_property_access);
 
                     // iteratedType will be undefined if the rightType was missing properties/signatures
                     // required to get its iteratedType (like [Symbol.iterator] or next). This may be
@@ -16639,8 +16568,7 @@ namespace ts {
                 }
                 else {
                     // run check only former check succeeded to avoid cascading errors
-                    checkReferenceExpression(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_a_variable_or_a_property_access,
-                        Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_constant_or_a_read_only_property);
+                    checkReferenceExpression(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_a_variable_or_a_property_access);
                 }
             }
 
