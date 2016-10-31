@@ -74,10 +74,10 @@ var M;
     M.C = C;
 })(M = exports.M || (exports.M = {}));
 exports.Z = M;
+var E;
 (function (E) {
     E[E["A"] = 0] = "A";
-})(exports.E || (exports.E = {}));
-var E = exports.E;
+})(E = exports.E || (exports.E = {}));
 function foo() { }
 exports.foo = foo;
 (function (foo) {

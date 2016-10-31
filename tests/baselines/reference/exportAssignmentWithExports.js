@@ -10,7 +10,6 @@ var C = (function () {
     }
     return C;
 }());
-exports.C = C;
 var D = (function () {
     function D() {
     }
