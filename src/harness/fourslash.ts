@@ -1278,7 +1278,7 @@ namespace FourSlash {
                                 if (typeof diagnostic.messageText !== "string") {
                                     let chainedMessage = <ts.DiagnosticMessageChain>diagnostic.messageText;
                                     let indentation = " ";
-                                    while (chainedMessage) { 
+                                    while (chainedMessage) {
                                         resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
                                         chainedMessage = chainedMessage.next;
                                         indentation = indentation + " ";
