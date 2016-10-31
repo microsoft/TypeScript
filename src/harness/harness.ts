@@ -220,9 +220,7 @@ namespace Utils {
     }
 
     export function sourceFileToJSON(file: ts.Node): string {
-        return JSON.stringify(file, (k, v) => {
-            return isNodeOrArray(v) ? serializeNode(v) : v;
-        }, "    ");
+        return JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    ");
 
         function getKindName(k: number | string): string {
             if (typeof k === "string") {
@@ -692,7 +690,7 @@ namespace Harness {
             export const getCurrentDirectory = () => "";
             export const args = () => <string[]>[];
             export const getExecutingFilePath = () => "";
-            export const exit = (exitCode: number) => { };
+            export const exit = ts.noop;
             export const getDirectories = () => <string[]>[];
 
             export let log = (s: string) => console.log(s);
@@ -742,7 +740,7 @@ namespace Harness {
                 }
             }
 
-            export function createDirectory(path: string) {
+            export function createDirectory() {
                 // Do nothing (?)
             }
 
@@ -750,7 +748,7 @@ namespace Harness {
                 Http.writeToServerSync(serverRoot + path, "DELETE");
             }
 
-            export function directoryExists(path: string): boolean {
+            export function directoryExists(): boolean {
                 return false;
             }
 
@@ -792,7 +790,7 @@ namespace Harness {
                 return response.status === 200;
             }
 
-            export function _listFilesImpl(path: string, spec?: RegExp, options?: any) {
+            export let listFiles = Utils.memoize((path: string, spec?: RegExp): string[] => {
                 const response = Http.getFileFromServerSync(serverRoot + path);
                 if (response.status === 200) {
                     const results = response.responseText.split(",");
@@ -806,8 +804,7 @@ namespace Harness {
                 else {
                     return [""];
                 }
-            };
-            export let listFiles = Utils.memoize(_listFilesImpl);
+            });
 
             export function readFile(file: string) {
                 const response = Http.getFileFromServerSync(serverRoot + file);
@@ -941,7 +938,17 @@ namespace Harness {
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
-            return options.target === ts.ScriptTarget.ES6 ? es2015DefaultLibFileName : defaultLibFileName;
+            switch (options.target) {
+                case ts.ScriptTarget.ES2017:
+                    return "lib.es2017.d.ts";
+                case ts.ScriptTarget.ES2016:
+                    return "lib.es2016.d.ts";
+                case ts.ScriptTarget.ES2015:
+                    return es2015DefaultLibFileName;
+
+                default:
+                    return defaultLibFileName;
+            }
         }
 
         // Cache these between executions so we don't have to re-parse them for every test
@@ -981,7 +988,7 @@ namespace Harness {
                 }
             }
 
-            function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget) {
+            function getSourceFile(fileName: string) {
                 fileName = ts.normalizePath(fileName);
                 const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
                 if (fileMap.contains(path)) {
@@ -1022,7 +1029,7 @@ namespace Harness {
                 },
                 realpath: realPathMap && ((f: string) => {
                     const path = ts.toPath(f, currentDirectory, getCanonicalFileName);
-                    return realPathMap.contains(path) ? realPathMap.get(path) : path;
+                    return realPathMap.get(path) || path;
                 }),
                 directoryExists: dir => {
                     let path = ts.toPath(dir, currentDirectory, getCanonicalFileName);
@@ -1030,18 +1037,12 @@ namespace Harness {
                     if (path[path.length - 1] === "/") {
                         path = <ts.Path>path.substr(0, path.length - 1);
                     }
-                    let exists = false;
-                    fileMap.forEachValue(key => {
-                        if (key.indexOf(path) === 0 && key[path.length] === "/") {
-                            exists = true;
-                        }
-                    });
-                    return exists;
+                    return mapHasFileInDirectory(path, fileMap) || mapHasFileInDirectory(path, realPathMap);
                 },
                 getDirectories: d => {
                     const path = ts.toPath(d, currentDirectory, getCanonicalFileName);
                     const result: string[] = [];
-                    fileMap.forEachValue((key, value) => {
+                    fileMap.forEachValue(key => {
                         if (key.indexOf(path) === 0 && key.lastIndexOf("/") > path.length) {
                             let dirName = key.substr(path.length, key.indexOf("/", path.length + 1) - path.length);
                             if (dirName[0] === "/") {
@@ -1055,6 +1056,19 @@ namespace Harness {
                     return result;
                 }
             };
+        }
+
+        function mapHasFileInDirectory(directoryPath: ts.Path, map: ts.FileMap<any>): boolean {
+            if (!map) {
+                return false;
+            }
+            let exists = false;
+            map.forEachValue(fileName => {
+                if (!exists && ts.startsWith(fileName, directoryPath) && fileName[directoryPath.length] === "/") {
+                    exists = true;
+                }
+            });
+            return exists;
         }
 
         interface HarnessOptions {
@@ -1101,22 +1115,7 @@ namespace Harness {
                     const option = getCommandLineOption(name);
                     if (option) {
                         const errors: ts.Diagnostic[] = [];
-                        switch (option.type) {
-                            case "boolean":
-                                options[option.name] = value.toLowerCase() === "true";
-                                break;
-                            case "string":
-                                options[option.name] = value;
-                                break;
-                            // If not a primitive, the possible types are specified in what is effectively a map of options.
-                            case "list":
-                                options[option.name] = ts.parseListTypeOption(<ts.CommandLineOptionOfListType>option, value, errors);
-                                break;
-                            default:
-                                options[option.name] = ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
-                                break;
-                        }
-
+                        options[option.name] = optionValue(option, value, errors);
                         if (errors.length > 0) {
                             throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
                         }
@@ -1125,6 +1124,27 @@ namespace Harness {
                         throw new Error(`Unknown compiler option '${name}'.`);
                     }
                 }
+            }
+        }
+
+        function optionValue(option: ts.CommandLineOption, value: string, errors: ts.Diagnostic[]): any {
+            switch (option.type) {
+                case "boolean":
+                    return value.toLowerCase() === "true";
+                case "string":
+                    return value;
+                case "number": {
+                    const number = parseInt(value, 10);
+                    if (isNaN(number)) {
+                        throw new Error(`Value must be a number, got: ${JSON.stringify(value)}`);
+                    }
+                    return number;
+                }
+                // If not a primitive, the possible types are specified in what is effectively a map of options.
+                case "list":
+                    return ts.parseListTypeOption(<ts.CommandLineOptionOfListType>option, value, errors);
+                default:
+                    return ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
             }
         }
 
@@ -1231,7 +1251,7 @@ namespace Harness {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory);
+                const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory || harnessSettings["currentDirectory"]);
                 return { declInputFiles, declOtherFiles, declResult: output.result };
             }
 
@@ -1634,7 +1654,7 @@ namespace Harness {
 
         export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): string {
             // Collect, test, and sort the fileNames
-            outputFiles.sort((a, b) => cleanName(a.fileName).localeCompare(cleanName(b.fileName)));
+            outputFiles.sort((a, b) => ts.compareStrings(cleanName(a.fileName), cleanName(b.fileName)));
 
             // Emit them
             let result = "";
@@ -1659,9 +1679,9 @@ namespace Harness {
         }
 
         // This does not need to exist strictly speaking, but many tests will need to be updated if it's removed
-        export function compileString(code: string, unitName: string, callback: (result: CompilerResult) => void) {
+        export function compileString(_code: string, _unitName: string, _callback: (result: CompilerResult) => void) {
             // NEWTODO: Re-implement 'compileString'
-            throw new Error("compileString NYI");
+            return ts.notImplemented();
         }
 
         export interface GeneratedFile {
@@ -1843,8 +1863,8 @@ namespace Harness {
             // unit tests always list files explicitly
             const parseConfigHost: ts.ParseConfigHost = {
                 useCaseSensitiveFileNames: false,
-                readDirectory: (name) => [],
-                fileExists: (name) => true,
+                readDirectory: () => [],
+                fileExists: () => true,
                 readFile: (name) => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined)
             };
 

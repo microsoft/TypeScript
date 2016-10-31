@@ -16,13 +16,13 @@ module App {
 //// [localImportNameVsGlobalName.js]
 var Keyboard;
 (function (Keyboard) {
+    var Key;
     (function (Key) {
         Key[Key["UP"] = 0] = "UP";
         Key[Key["DOWN"] = 1] = "DOWN";
         Key[Key["LEFT"] = 2] = "LEFT";
         Key[Key["RIGHT"] = 3] = "RIGHT";
-    })(Keyboard.Key || (Keyboard.Key = {}));
-    var Key = Keyboard.Key;
+    })(Key = Keyboard.Key || (Keyboard.Key = {}));
 })(Keyboard || (Keyboard = {}));
 var App;
 (function (App) {

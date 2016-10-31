@@ -1,8 +1,11 @@
 tests/cases/compiler/redeclareParameterInCatchBlock.ts(5,11): error TS2492: Cannot redeclare identifier 'e' in catch clause
 tests/cases/compiler/redeclareParameterInCatchBlock.ts(11,9): error TS2492: Cannot redeclare identifier 'e' in catch clause
+tests/cases/compiler/redeclareParameterInCatchBlock.ts(17,15): error TS2492: Cannot redeclare identifier 'b' in catch clause
+tests/cases/compiler/redeclareParameterInCatchBlock.ts(22,15): error TS2451: Cannot redeclare block-scoped variable 'x'.
+tests/cases/compiler/redeclareParameterInCatchBlock.ts(22,21): error TS2451: Cannot redeclare block-scoped variable 'x'.
 
 
-==== tests/cases/compiler/redeclareParameterInCatchBlock.ts (2 errors) ====
+==== tests/cases/compiler/redeclareParameterInCatchBlock.ts (5 errors) ====
     
     try {
     
@@ -22,10 +25,27 @@ tests/cases/compiler/redeclareParameterInCatchBlock.ts(11,9): error TS2492: Cann
     
     try {
     
+    } catch ([a, b]) {
+        const [c, b] = [0, 1];
+                  ~
+!!! error TS2492: Cannot redeclare identifier 'b' in catch clause
+    }
+    
+    try {
+    
+    } catch ({ a: x, b: x }) {
+                  ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'x'.
+                        ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'x'.
+    
+    }
+    
+    try {
+    
     } catch(e) {
         function test() {
             let e;
         }
     }
-    
     

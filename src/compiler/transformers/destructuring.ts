@@ -51,7 +51,7 @@ namespace ts {
             location = value;
         }
 
-        flattenDestructuring(context, node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
 
         if (needsValue) {
             expressions.push(value);
@@ -87,13 +87,12 @@ namespace ts {
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenParameterDestructuring(
-        context: TransformationContext,
         node: ParameterDeclaration,
         value: Expression,
         visitor?: (node: Node) => VisitResult<Node>) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
@@ -123,7 +122,6 @@ namespace ts {
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenVariableDestructuring(
-        context: TransformationContext,
         node: VariableDeclaration,
         value?: Expression,
         visitor?: (node: Node) => VisitResult<Node>,
@@ -131,7 +129,7 @@ namespace ts {
         const declarations: VariableDeclaration[] = [];
 
         let pendingAssignments: Expression[];
-        flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
@@ -176,37 +174,39 @@ namespace ts {
      *
      * @param node The VariableDeclaration to flatten.
      * @param recordTempVariable A callback used to record new temporary variables.
-     * @param nameSubstitution An optional callback used to substitute binding names.
+     * @param createAssignmentCallback An optional callback used to create assignment expressions
+     * for non-temporary variables.
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenVariableDestructuringToExpression(
-        context: TransformationContext,
         node: VariableDeclaration,
         recordTempVariable: (name: Identifier) => void,
-        nameSubstitution?: (name: Identifier) => Expression,
+        createAssignmentCallback?: (name: Identifier, value: Expression, location?: TextRange) => Expression,
         visitor?: (node: Node) => VisitResult<Node>) {
 
         const pendingAssignments: Expression[] = [];
 
-        flattenDestructuring(context, node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         const expression = inlineExpressions(pendingAssignments);
         aggregateTransformFlags(expression);
         return expression;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
-            const left = nameSubstitution && nameSubstitution(name) || name;
-            emitPendingAssignment(left, value, location, original);
+            const expression = createAssignmentCallback
+                ? createAssignmentCallback(name, value, location)
+                : createAssignment(name, value, location);
+
+            emitPendingAssignment(expression, original);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
             const name = createTempVariable(recordTempVariable);
-            emitPendingAssignment(name, value, location, /*original*/ undefined);
+            emitPendingAssignment(createAssignment(name, value, location), /*original*/ undefined);
             return name;
         }
 
-        function emitPendingAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
-            const expression = createAssignment(name, value, location);
+        function emitPendingAssignment(expression: Expression, original: Node) {
             expression.original = original;
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
@@ -214,13 +214,11 @@ namespace ts {
             setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             pendingAssignments.push(expression);
-            return expression;
         }
     }
 
     function flattenDestructuring(
-        context: TransformationContext,
-        root: BindingElement | BinaryExpression,
+        root: VariableDeclaration | ParameterDeclaration | BindingElement | BinaryExpression,
         value: Expression,
         location: TextRange,
         emitAssignment: (name: Identifier, value: Expression, location: TextRange, original: Node) => void,
@@ -320,7 +318,7 @@ namespace ts {
             }
         }
 
-        function emitBindingElement(target: BindingElement, value: Expression) {
+        function emitBindingElement(target: VariableDeclaration | ParameterDeclaration | BindingElement, value: Expression) {
             // Any temporary assignments needed to emit target = value should point to target
             const initializer = visitor ? visitNode(target.initializer, visitor, isExpression) : target.initializer;
             if (initializer) {

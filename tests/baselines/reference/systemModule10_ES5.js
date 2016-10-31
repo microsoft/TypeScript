@@ -24,10 +24,10 @@ System.register(["file1", "file2"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            exports_1("x", file1_1.x);
-            exports_1("y", file1_1.x);
             exports_1("n", file1_1.default);
             exports_1("n1", file1_1.default);
+            exports_1("x", file1_1.x);
+            exports_1("y", file1_1.x);
             exports_1("n2", n2);
             exports_1("n3", n2);
         }

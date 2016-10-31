@@ -111,13 +111,11 @@ namespace ts {
             getDefaultLibFileName(): string {
                 return "lib.d.ts";
             },
-            writeFile(file, text) {
-                throw new Error("NYI");
-            },
+            writeFile: notImplemented,
             getCurrentDirectory(): string {
                 return "";
             },
-            getDirectories(path: string): string[] {
+            getDirectories(): string[] {
                 return [];
             },
             getCanonicalFileName(fileName): string {
@@ -150,17 +148,6 @@ namespace ts {
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host, oldProgram);
         program.sourceTexts = texts;
         return program;
-    }
-
-    function checkResolvedModule(expected: ResolvedModule, actual: ResolvedModule): boolean {
-        if (!expected === !actual) {
-            if (expected) {
-                assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'isExternalLibraryImport': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
-            }
-            return true;
-        }
-        return false;
     }
 
     function checkResolvedTypeDirective(expected: ResolvedTypeReferenceDirective, actual: ResolvedTypeReferenceDirective): boolean {
@@ -244,17 +231,13 @@ namespace ts {
 
         it("fails if change affects type references", () => {
             const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
-            updateProgram(program_1, ["a.ts"], { types: ["b"] }, files => {
-
-            });
+            updateProgram(program_1, ["a.ts"], { types: ["b"] }, noop);
             assert.isTrue(!program_1.structureIsReused);
         });
 
         it("succeeds if change doesn't affect type references", () => {
             const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
-            updateProgram(program_1, ["a.ts"], { types: ["a"] }, files => {
-
-            });
+            updateProgram(program_1, ["a.ts"], { types: ["a"] }, noop);
             assert.isTrue(program_1.structureIsReused);
         });
 
@@ -280,19 +263,19 @@ namespace ts {
 
         it("fails if module kind changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS });
-            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.AMD }, files => void 0);
+            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.AMD }, noop);
             assert.isTrue(!program_1.structureIsReused);
         });
 
         it("fails if rootdir changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/b" });
-            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, files => void 0);
+            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, noop);
             assert.isTrue(!program_1.structureIsReused);
         });
 
         it("fails if config path changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
-            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, files => void 0);
+            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, noop);
             assert.isTrue(!program_1.structureIsReused);
         });
 
@@ -306,7 +289,7 @@ namespace ts {
             const options: CompilerOptions = { target };
 
             const program_1 = newProgram(files, ["a.ts"], options);
-            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": { resolvedFileName: "b.ts" } }));
+            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": createResolvedModule("b.ts") }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
@@ -315,7 +298,7 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": { resolvedFileName: "b.ts" } }));
+            checkResolvedModulesCache(program_1, "a.ts", createMap({ "b": createResolvedModule("b.ts") }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             // imports has changed - program is not reused
@@ -332,7 +315,7 @@ namespace ts {
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedModulesCache(program_4, "a.ts", createMap({ "b": { resolvedFileName: "b.ts" }, "c": undefined }));
+            checkResolvedModulesCache(program_4, "a.ts", createMap({ "b": createResolvedModule("b.ts"), "c": undefined }));
         });
 
         it("resolved type directives cache follows type directives", () => {

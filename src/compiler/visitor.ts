@@ -692,7 +692,7 @@ namespace ts {
 
             // Signature elements
             case SyntaxKind.Parameter:
-                return updateParameterDeclaration(<ParameterDeclaration>node,
+                return updateParameter(<ParameterDeclaration>node,
                     visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
@@ -799,7 +799,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
                 return updateTaggedTemplate(<TaggedTemplateExpression>node,
                     visitNode((<TaggedTemplateExpression>node).tag, visitor, isExpression),
-                    visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplate));
+                    visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
 
             case SyntaxKind.ParenthesizedExpression:
                 return updateParen(<ParenthesizedExpression>node,
@@ -807,6 +807,7 @@ namespace ts {
 
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
+                    visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier),
                     visitNode((<FunctionExpression>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
                     (context.startLexicalEnvironment(), visitNodes((<FunctionExpression>node).parameters, visitor, isParameter)),
@@ -862,7 +863,7 @@ namespace ts {
 
             case SyntaxKind.TemplateExpression:
                 return updateTemplateExpression(<TemplateExpression>node,
-                    visitNode((<TemplateExpression>node).head, visitor, isTemplateLiteralFragment),
+                    visitNode((<TemplateExpression>node).head, visitor, isTemplateHead),
                     visitNodes((<TemplateExpression>node).templateSpans, visitor, isTemplateSpan));
 
             case SyntaxKind.YieldExpression:
@@ -890,7 +891,7 @@ namespace ts {
             case SyntaxKind.TemplateSpan:
                 return updateTemplateSpan(<TemplateSpan>node,
                     visitNode((<TemplateSpan>node).expression, visitor, isExpression),
-                    visitNode((<TemplateSpan>node).literal, visitor, isTemplateLiteralFragment));
+                    visitNode((<TemplateSpan>node).literal, visitor, isTemplateMiddleOrTemplateTail));
 
             // Element
             case SyntaxKind.Block:
@@ -1330,18 +1331,18 @@ namespace ts {
     export namespace Debug {
         export const failNotOptional = shouldAssert(AssertionLevel.Normal)
             ? (message?: string) => assert(false, message || "Node not optional.")
-            : (message?: string) => {};
+            : noop;
 
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, message?: string) => assert(false, message || "Unexpected node.", () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`)
-            : (node: Node, message?: string) => {};
+            : noop;
 
         export const assertNode = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
                     test === undefined || test(node),
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
-            : (node: Node, test: (node: Node) => boolean, message?: string) => {};
+            : noop;
 
         function getFunctionName(func: Function) {
             if (typeof func !== "function") {

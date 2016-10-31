@@ -10,10 +10,10 @@ var Foo;
 >Foo : any
 
 type
->type : any
+>type : undefined
 
 Foo = string;
->Foo = string : any
+>Foo = string : undefined
 >Foo : any
->string : any
+>string : undefined
 

@@ -4,7 +4,7 @@ namespace ts.server {
 
     export class ScriptInfo {
         /**
-         * All projects that include this file 
+         * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
         private formatCodeSettings: ts.FormatCodeSettings;
@@ -87,11 +87,10 @@ namespace ts.server {
             if (this.containingProjects.length === 0) {
                 return Errors.ThrowNoProject();
             }
-            Debug.assert(this.containingProjects.length !== 0);
             return this.containingProjects[0];
         }
 
-        setFormatOptions(formatSettings: protocol.FormatOptions): void {
+        setFormatOptions(formatSettings: FormatCodeSettings): void {
             if (formatSettings) {
                 if (!this.formatCodeSettings) {
                     this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
@@ -126,12 +125,12 @@ namespace ts.server {
             this.host.writeFile(fileName, snap.getText(0, snap.getLength()));
         }
 
-        reloadFromFile() {
+        reloadFromFile(tempFileName?: NormalizedPath) {
             if (this.hasMixedContent) {
                 this.reload("");
             }
             else {
-                this.svc.reloadFromFile(this.fileName);
+                this.svc.reloadFromFile(tempFileName || this.fileName);
                 this.markContainingProjectsAsDirty();
             }
         }

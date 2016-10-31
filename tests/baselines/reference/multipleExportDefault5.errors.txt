@@ -1,0 +1,11 @@
+tests/cases/conformance/externalModules/multipleExportDefault5.ts(1,25): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/externalModules/multipleExportDefault5.ts(2,22): error TS2528: A module cannot have multiple default exports.
+
+
+==== tests/cases/conformance/externalModules/multipleExportDefault5.ts (2 errors) ====
+    export default function bar() { }
+                            ~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    export default class C {}
+                         ~
+!!! error TS2528: A module cannot have multiple default exports.

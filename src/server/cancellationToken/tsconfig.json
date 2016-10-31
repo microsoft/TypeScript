@@ -10,7 +10,10 @@
         "stripInternal": true,
         "types": [
             "node"
-        ]
+        ],
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "files": [
         "cancellationToken.ts"

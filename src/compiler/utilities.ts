@@ -63,11 +63,11 @@ namespace ts {
                 // Completely ignore indentation for string writers.  And map newlines to
                 // a single space.
                 writeLine: () => str += " ",
-                increaseIndent: () => { },
-                decreaseIndent: () => { },
+                increaseIndent: noop,
+                decreaseIndent: noop,
                 clear: () => str = "",
-                trackSymbol: () => { },
-                reportInaccessibleThisError: () => { }
+                trackSymbol: noop,
+                reportInaccessibleThisError: noop
             };
         }
 
@@ -83,36 +83,17 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equaler?: (a: T, b: T) => boolean): boolean {
-        if (!array1 || !array2) {
-            return array1 === array2;
-        }
-
-        if (array1.length !== array2.length) {
-            return false;
-        }
-
-        for (let i = 0; i < array1.length; i++) {
-            const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
-            if (!equals) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules[moduleNameText]);
     }
 
-    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule {
+    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull {
         return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
     }
 
-    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = createMap<ResolvedModule>();
+            sourceFile.resolvedModules = createMap<ResolvedModuleFull>();
         }
 
         sourceFile.resolvedModules[moduleNameText] = resolvedModule;
@@ -127,8 +108,10 @@ namespace ts {
     }
 
     /* @internal */
-    export function moduleResolutionIsEqualTo(oldResolution: ResolvedModule, newResolution: ResolvedModule): boolean {
-        return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport;
+    export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
+        return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
+            oldResolution.extension === newResolution.extension &&
+            oldResolution.resolvedFileName === newResolution.resolvedFileName;
     }
 
     /* @internal */
@@ -337,7 +320,7 @@ namespace ts {
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, languageVersion: ScriptTarget) {
         // Any template literal or string literal with an extended escape
         // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
-        if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
+        if (languageVersion < ScriptTarget.ES2015 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
             return getQuotedEscapedLiteralText('"', node.text, '"');
         }
 
@@ -345,7 +328,7 @@ namespace ts {
         // the node's parent reference, then simply get the text as it was originally written.
         if (!nodeIsSynthesized(node) && node.parent) {
             const text = getSourceTextOfNodeFromSourceFile(sourceFile, node);
-            if (languageVersion < ScriptTarget.ES6 && isBinaryOrOctalIntegerLiteral(node, text)) {
+            if (languageVersion < ScriptTarget.ES2015 && isBinaryOrOctalIntegerLiteral(node, text)) {
                 return node.text;
             }
             return text;
@@ -406,7 +389,12 @@ namespace ts {
 
     export function isBlockOrCatchScoped(declaration: Declaration) {
         return (getCombinedNodeFlags(declaration) & NodeFlags.BlockScoped) !== 0 ||
-            isCatchClauseVariableDeclaration(declaration);
+            isCatchClauseVariableDeclarationOrBindingElement(declaration);
+    }
+
+    export function isCatchClauseVariableDeclarationOrBindingElement(declaration: Declaration) {
+        const node = getRootDeclaration(declaration);
+        return node.kind === SyntaxKind.VariableDeclaration && node.parent.kind === SyntaxKind.CatchClause;
     }
 
     export function isAmbientModule(node: Node): boolean {
@@ -414,8 +402,9 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
-    export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
-        return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
+    /** Given a symbol for a module, checks that it is either an untyped import or a shorthand ambient module. */
+    export function isUntypedModuleSymbol(moduleSymbol: Symbol): boolean {
+        return !moduleSymbol.valueDeclaration || isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
     function isShorthandAmbientModule(node: Node): boolean {
@@ -489,13 +478,6 @@ namespace ts {
         }
     }
 
-    export function isCatchClauseVariableDeclaration(declaration: Declaration) {
-        return declaration &&
-            declaration.kind === SyntaxKind.VariableDeclaration &&
-            declaration.parent &&
-            declaration.parent.kind === SyntaxKind.CatchClause;
-    }
-
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
@@ -514,7 +496,7 @@ namespace ts {
         }
     }
 
-    export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
+    export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
@@ -620,7 +602,7 @@ namespace ts {
         return !!(getCombinedNodeFlags(node) & NodeFlags.Let);
     }
 
-    export function isSuperCallExpression(n: Node): boolean {
+    export function isSuperCall(n: Node): n is SuperCall {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
     }
 
@@ -906,6 +888,12 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isObjectLiteralOrClassExpressionMethod(node: Node): node is MethodDeclaration {
+        return node.kind === SyntaxKind.MethodDeclaration &&
+            (node.parent.kind === SyntaxKind.ObjectLiteralExpression ||
+            node.parent.kind === SyntaxKind.ClassExpression);
+    }
+
     export function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate {
         return predicate && predicate.kind === TypePredicateKind.Identifier;
     }
@@ -1058,7 +1046,7 @@ namespace ts {
     /**
      * Determines whether a node is a property or element access expression for super.
      */
-    export function isSuperProperty(node: Node): node is (PropertyAccessExpression | ElementAccessExpression) {
+    export function isSuperProperty(node: Node): node is SuperProperty {
         const kind = node.kind;
         return (kind === SyntaxKind.PropertyAccessExpression || kind === SyntaxKind.ElementAccessExpression)
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
@@ -1388,7 +1376,7 @@ namespace ts {
         }
     }
 
-    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport {
         if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
             return <ImportEqualsDeclaration>node;
         }
@@ -1908,6 +1896,10 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
     }
 
+    export function isPushOrUnshiftIdentifier(node: Identifier) {
+        return node.text === "push" || node.text === "unshift";
+    }
+
     export function isModifierKind(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.AbstractKeyword:
@@ -1956,14 +1948,16 @@ namespace ts {
             || positionIsSynthesized(node.end);
     }
 
-    export function getOriginalNode(node: Node): Node {
+    export function getOriginalNode(node: Node): Node;
+    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
+    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
         if (node) {
             while (node.original !== undefined) {
                 node = node.original;
             }
         }
 
-        return node;
+        return !nodeTest || nodeTest(node) ? node : undefined;
     }
 
     /**
@@ -2472,7 +2466,7 @@ namespace ts {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): string {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || isDeclarationFile(file)) {
             return undefined;
@@ -2569,7 +2563,7 @@ namespace ts {
         const options = host.getCompilerOptions();
         // Emit on each source file
         if (options.outFile || options.out) {
-            onBundledEmit(host, sourceFiles);
+            onBundledEmit(sourceFiles);
         }
         else {
             for (const sourceFile of sourceFiles) {
@@ -2602,7 +2596,7 @@ namespace ts {
             action(jsFilePath, sourceMapFilePath, declarationFilePath, [sourceFile], /*isBundledEmit*/ false);
         }
 
-        function onBundledEmit(host: EmitHost, sourceFiles: SourceFile[]) {
+        function onBundledEmit(sourceFiles: SourceFile[]) {
             if (sourceFiles.length) {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
@@ -3041,7 +3035,7 @@ namespace ts {
             }
         }
 
-        if (node.flags & NodeFlags.NestedNamespace) {
+        if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (<Identifier>node).isInJSDocNamespace)) {
             flags |= ModifierFlags.Export;
         }
 
@@ -3085,7 +3079,13 @@ namespace ts {
         }
     }
 
-    export function isDestructuringAssignment(node: Node): node is BinaryExpression {
+    export function isAssignmentExpression(node: Node): node is AssignmentExpression {
+        return isBinaryExpression(node)
+            && isAssignmentOperator(node.operatorToken.kind)
+            && isLeftHandSideExpression(node.left);
+    }
+
+    export function isDestructuringAssignment(node: Node): node is DestructuringAssignment {
         if (isBinaryExpression(node)) {
             if (node.operatorToken.kind === SyntaxKind.EqualsToken) {
                 const kind = node.left.kind;
@@ -3509,50 +3509,69 @@ namespace ts {
         return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
     }
 
-    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver) {
+    export interface ExternalModuleInfo {
+        externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
+        exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
+        exportedBindings: Map<Identifier[]>; // exported names of local declarations
+        exportedNames: Identifier[]; // all exported names local to module
+        exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
+        hasExportStarsToExportValues: boolean; // whether this module contains export*
+    }
+
+    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMap<ExportSpecifier[]>();
+        const exportedBindings = createMap<Identifier[]>();
+        const uniqueExports = createMap<Identifier>();
+        let hasExportDefault = false;
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
         for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
-                    if (!(<ImportDeclaration>node).importClause ||
-                        resolver.isReferencedAliasDeclaration((<ImportDeclaration>node).importClause, /*checkChildren*/ true)) {
-                        // import "mod"
-                        // import x from "mod" where x is referenced
-                        // import * as x from "mod" where x is referenced
-                        // import { x, y } from "mod" where at least one import is referenced
-                        externalImports.push(<ImportDeclaration>node);
-                    }
+                    // import "mod"
+                    // import x from "mod"
+                    // import * as x from "mod"
+                    // import { x, y } from "mod"
+                    externalImports.push(<ImportDeclaration>node);
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(node)) {
-                        // import x = require("mod") where x is referenced
+                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                        // import x = require("mod")
                         externalImports.push(<ImportEqualsDeclaration>node);
                     }
+
                     break;
 
                 case SyntaxKind.ExportDeclaration:
                     if ((<ExportDeclaration>node).moduleSpecifier) {
                         if (!(<ExportDeclaration>node).exportClause) {
                             // export * from "mod"
-                            if (resolver.moduleExportsSomeValue((<ExportDeclaration>node).moduleSpecifier)) {
-                                externalImports.push(<ExportDeclaration>node);
-                                hasExportStarsToExportValues = true;
-                            }
+                            externalImports.push(<ExportDeclaration>node);
+                            hasExportStarsToExportValues = true;
                         }
-                        else if (resolver.isValueAliasDeclaration(node)) {
-                            // export { x, y } from "mod" where at least one export is a value symbol
+                        else {
+                            // export { x, y } from "mod"
                             externalImports.push(<ExportDeclaration>node);
                         }
                     }
                     else {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            const name = (specifier.propertyName || specifier.name).text;
-                            (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
+                            if (!uniqueExports[specifier.name.text]) {
+                                const name = specifier.propertyName || specifier.name;
+                                multiMapAdd(exportSpecifiers, name.text, specifier);
+
+                                const decl = resolver.getReferencedImportDeclaration(name)
+                                    || resolver.getReferencedValueDeclaration(name);
+
+                                if (decl) {
+                                    multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                                }
+
+                                uniqueExports[specifier.name.text] = specifier.name;
+                            }
                         }
                     }
                     break;
@@ -3563,10 +3582,94 @@ namespace ts {
                         exportEquals = <ExportAssignment>node;
                     }
                     break;
+
+                case SyntaxKind.VariableStatement:
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        for (const decl of (<VariableStatement>node).declarationList.declarations) {
+                            collectExportedVariableInfo(decl, uniqueExports);
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.FunctionDeclaration:
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
+                            // export default function() { }
+                            if (!hasExportDefault) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
+                                hasExportDefault = true;
+                            }
+                        }
+                        else {
+                            // export function x() { }
+                            const name = (<FunctionDeclaration>node).name;
+                            if (!uniqueExports[name.text]) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports[name.text] = name;
+                            }
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.ClassDeclaration:
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
+                            // export default class { }
+                            if (!hasExportDefault) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
+                                hasExportDefault = true;
+                            }
+                        }
+                        else {
+                            // export class x { }
+                            const name = (<ClassDeclaration>node).name;
+                            if (!uniqueExports[name.text]) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports[name.text] = name;
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
-        return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues };
+        let exportedNames: Identifier[];
+        for (const key in uniqueExports) {
+            exportedNames = ts.append(exportedNames, uniqueExports[key]);
+        }
+
+        return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames };
+    }
+
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<Identifier>) {
+        if (isBindingPattern(decl.name)) {
+            for (const element of decl.name.elements) {
+                if (!isOmittedExpression(element)) {
+                    collectExportedVariableInfo(element, uniqueExports);
+                }
+            }
+        }
+        else if (!isGeneratedIdentifier(decl.name)) {
+            if (!uniqueExports[decl.name.text]) {
+                uniqueExports[decl.name.text] = decl.name;
+            }
+        }
+    }
+
+    /**
+     * Determines whether a name was originally the declaration name of an enum or namespace
+     * declaration.
+     */
+    export function isDeclarationNameOfEnumOrNamespace(node: Identifier) {
+        const parseNode = getParseTreeNode(node);
+        if (parseNode) {
+            switch (parseNode.parent.kind) {
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                    return parseNode === (<EnumDeclaration | ModuleDeclaration>parseNode.parent).name;
+            }
+        }
+        return false;
     }
 
     export function getInitializedVariables(node: VariableDeclarationList) {
@@ -3638,14 +3741,14 @@ namespace ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
-    function isTemplateLiteralFragmentKind(kind: SyntaxKind) {
-        return kind === SyntaxKind.TemplateHead
-            || kind === SyntaxKind.TemplateMiddle
-            || kind === SyntaxKind.TemplateTail;
+    export function isTemplateHead(node: Node): node is TemplateHead {
+        return node.kind === SyntaxKind.TemplateHead;
     }
 
-    export function isTemplateLiteralFragment(node: Node): node is TemplateLiteralFragment {
-        return isTemplateLiteralFragmentKind(node.kind);
+    export function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail {
+        const kind = node.kind;
+        return kind === SyntaxKind.TemplateMiddle
+            || kind === SyntaxKind.TemplateTail;
     }
 
     // Identifiers
@@ -3654,7 +3757,7 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier;
     }
 
-    export function isGeneratedIdentifier(node: Node): boolean {
+    export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
         // Using `>` here catches both `GeneratedIdentifierKind.None` and `undefined`.
         return isIdentifier(node) && node.autoGenerateKind > GeneratedIdentifierKind.None;
     }
@@ -3790,6 +3893,14 @@ namespace ts {
 
     // Expression
 
+    export function isArrayLiteralExpression(node: Node): node is ArrayLiteralExpression {
+        return node.kind === SyntaxKind.ArrayLiteralExpression;
+    }
+
+    export function isObjectLiteralExpression(node: Node): node is ObjectLiteralExpression {
+        return node.kind === SyntaxKind.ObjectLiteralExpression;
+    }
+
     export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
         return node.kind === SyntaxKind.PropertyAccessExpression;
     }
@@ -3810,7 +3921,7 @@ namespace ts {
         return node.kind === SyntaxKind.CallExpression;
     }
 
-    export function isTemplate(node: Node): node is Template {
+    export function isTemplateLiteral(node: Node): node is TemplateLiteral {
         const kind = node.kind;
         return kind === SyntaxKind.TemplateExpression
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -4049,7 +4160,9 @@ namespace ts {
             || kind === SyntaxKind.VariableStatement
             || kind === SyntaxKind.WhileStatement
             || kind === SyntaxKind.WithStatement
-            || kind === SyntaxKind.NotEmittedStatement;
+            || kind === SyntaxKind.NotEmittedStatement
+            || kind === SyntaxKind.EndOfDeclarationMarker
+            || kind === SyntaxKind.MergeDeclarationMarker;
     }
 
     export function isDeclaration(node: Node): node is Declaration {
@@ -4174,7 +4287,17 @@ namespace ts {
 
 namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
-        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
+        switch (options.target) {
+            case ScriptTarget.ES2017:
+                return "lib.es2017.d.ts";
+            case ScriptTarget.ES2016:
+                return "lib.es2016.d.ts";
+            case ScriptTarget.ES2015:
+                return "lib.es6.d.ts";
+
+            default:
+                return "lib.d.ts";
+        }
     }
 
     export function textSpanEnd(span: TextSpan) {

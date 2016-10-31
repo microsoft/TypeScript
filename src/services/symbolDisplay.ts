@@ -114,12 +114,12 @@ namespace ts.SymbolDisplay {
                 }
 
                 // try get the call/construct signature from the type if it matches
-                let callExpression: CallExpression;
+                let callExpression: CallExpression | NewExpression;
                 if (location.kind === SyntaxKind.CallExpression || location.kind === SyntaxKind.NewExpression) {
-                    callExpression = <CallExpression>location;
+                    callExpression = <CallExpression | NewExpression>location;
                 }
                 else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
-                    callExpression = <CallExpression>location.parent;
+                    callExpression = <CallExpression | NewExpression>location.parent;
                 }
 
                 if (callExpression) {
@@ -173,7 +173,7 @@ namespace ts.SymbolDisplay {
                                     displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                                     displayParts.push(spacePart());
                                 }
-                                if (!(type.flags & TypeFlags.Anonymous) && type.symbol) {
+                                if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous) && type.symbol) {
                                     addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                                 }
                                 addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);

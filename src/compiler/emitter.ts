@@ -14,7 +14,7 @@ namespace ts {
     }
 
     const id = (s: SourceFile) => s;
-    const nullTransformers: Transformer[] = [ctx => id];
+    const nullTransformers: Transformer[] = [_ => id];
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
@@ -68,7 +68,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
@@ -504,15 +504,29 @@ const _super = (function (geti, seti) {
 
                 // Contextual keywords
                 case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.AsKeyword:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.AsyncKeyword:
+                case SyntaxKind.AwaitKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.ConstructorKeyword:
                 case SyntaxKind.DeclareKeyword:
-                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.GetKeyword:
+                case SyntaxKind.IsKeyword:
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.NamespaceKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ReadonlyKeyword:
+                case SyntaxKind.RequireKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.SetKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.TypeKeyword:
+                case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.FromKeyword:
                 case SyntaxKind.GlobalKeyword:
+                case SyntaxKind.OfKeyword:
                     writeTokenText(kind);
                     return;
 
@@ -579,7 +593,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.ThisType:
-                    return emitThisType(<ThisTypeNode>node);
+                    return emitThisType();
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -595,7 +609,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.TemplateSpan:
                     return emitTemplateSpan(<TemplateSpan>node);
                 case SyntaxKind.SemicolonClassElement:
-                    return emitSemicolonClassElement(<SemicolonClassElement>node);
+                    return emitSemicolonClassElement();
 
                 // Statements
                 case SyntaxKind.Block:
@@ -603,7 +617,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.VariableStatement:
                     return emitVariableStatement(<VariableStatement>node);
                 case SyntaxKind.EmptyStatement:
-                    return emitEmptyStatement(<EmptyStatement>node);
+                    return emitEmptyStatement();
                 case SyntaxKind.ExpressionStatement:
                     return emitExpressionStatement(<ExpressionStatement>node);
                 case SyntaxKind.IfStatement:
@@ -655,7 +669,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.ModuleDeclaration:
                     return emitModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.ModuleBlock:
-                    return emitModuleBlock(<Block>node);
+                    return emitModuleBlock(<ModuleBlock>node);
                 case SyntaxKind.CaseBlock:
                     return emitCaseBlock(<CaseBlock>node);
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -1000,7 +1014,7 @@ const _super = (function (geti, seti) {
             write(";");
         }
 
-        function emitSemicolonClassElement(node: SemicolonClassElement) {
+        function emitSemicolonClassElement() {
             write(";");
         }
 
@@ -1070,7 +1084,7 @@ const _super = (function (geti, seti) {
             write(")");
         }
 
-        function emitThisType(node: ThisTypeNode) {
+        function emitThisType() {
             write("this");
         }
 
@@ -1198,12 +1212,14 @@ const _super = (function (geti, seti) {
 
         function emitCallExpression(node: CallExpression) {
             emitExpression(node.expression);
+            emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
         }
 
         function emitNewExpression(node: NewExpression) {
             write("new ");
             emitExpression(node.expression);
+            emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
         }
 
@@ -1381,7 +1397,7 @@ const _super = (function (geti, seti) {
         // Statements
         //
 
-        function emitBlock(node: Block, format?: ListFormat) {
+        function emitBlock(node: Block) {
             if (isSingleLineEmptyBlock(node)) {
                 writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                 write(" ");
@@ -1394,7 +1410,7 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function emitBlockStatements(node: Block) {
+        function emitBlockStatements(node: BlockLike) {
             if (getEmitFlags(node) & EmitFlags.SingleLine) {
                 emitList(node, node.statements, ListFormat.SingleLineBlockStatements);
             }
@@ -1409,7 +1425,7 @@ const _super = (function (geti, seti) {
             write(";");
         }
 
-        function emitEmptyStatement(node: EmptyStatement) {
+        function emitEmptyStatement() {
             write(";");
         }
 
@@ -1575,6 +1591,7 @@ const _super = (function (geti, seti) {
 
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
+            emitWithPrefix(": ", node.type);
             emitExpressionWithPrefix(" = ", node.initializer);
         }
 
@@ -1606,13 +1623,13 @@ const _super = (function (geti, seti) {
 
                     if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(node, body);
+                        emitBlockFunctionBody(body);
                     }
                     else {
                         const savedTempFlags = tempFlags;
                         tempFlags = 0;
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(node, body);
+                        emitBlockFunctionBody(body);
                         tempFlags = savedTempFlags;
                     }
 
@@ -1639,7 +1656,7 @@ const _super = (function (geti, seti) {
             emitWithPrefix(": ", node.type);
         }
 
-        function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
+        function shouldEmitBlockFunctionBodyOnSingleLine(body: Block) {
             // We must emit a function body as a single-line body in the following case:
             // * The body has NodeEmitFlags.SingleLine specified.
 
@@ -1677,12 +1694,12 @@ const _super = (function (geti, seti) {
             return true;
         }
 
-        function emitBlockFunctionBody(parentNode: Node, body: Block) {
+        function emitBlockFunctionBody(body: Block) {
             write(" {");
             increaseIndent();
 
             emitBodyWithDetachedComments(body, body.statements,
-                shouldEmitBlockFunctionBodyOnSingleLine(parentNode, body)
+                shouldEmitBlockFunctionBodyOnSingleLine(body)
                     ? emitBlockFunctionBodyOnSingleLine
                     : emitBlockFunctionBodyWorker);
 
@@ -1795,7 +1812,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitModuleBlock(node: ModuleBlock) {
-            if (isSingleLineEmptyBlock(node)) {
+            if (isEmptyBlock(node)) {
                 write("{ }");
             }
             else {
@@ -2165,7 +2182,7 @@ const _super = (function (geti, seti) {
 
             // Only Emit __extends function when target ES5.
             // For target ES6 and above, we can emit classDeclaration as is.
-            if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
+            if ((languageVersion < ScriptTarget.ES2015) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
                 writeLines(extendsHelper);
                 extendsEmitted = true;
                 helpersEmitted = true;
@@ -2192,9 +2209,12 @@ const _super = (function (geti, seti) {
                 helpersEmitted = true;
             }
 
-            if (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions) {
+            // Only emit __awaiter function when target ES5/ES6.
+            // Only emit __generator function when target ES5.
+            // For target ES2017 and above, we can emit async/await as is.
+            if ((languageVersion < ScriptTarget.ES2017) && (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions)) {
                 writeLines(awaiterHelper);
-                if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES2015) {
                     writeLines(generatorHelper);
                 }
 
@@ -2615,7 +2635,11 @@ const _super = (function (geti, seti) {
 
         function isSingleLineEmptyBlock(block: Block) {
             return !block.multiLine
-                && block.statements.length === 0
+                && isEmptyBlock(block);
+        }
+
+        function isEmptyBlock(block: BlockLike) {
+            return block.statements.length === 0
                 && rangeEndIsOnSameLineAsRangeStart(block, block, currentSourceFile);
         }
 

@@ -63,7 +63,7 @@ namespace ts {
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
         let errorNameNode: DeclarationName;
-        const emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
+        const emitJsDocComments = compilerOptions.removeComments ? noop : writeJsDocComments;
         const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
         let noDeclare: boolean;
 
@@ -580,7 +580,7 @@ namespace ts {
                 writeAsynchronousModuleElements(nodes);
             }
 
-            function getDefaultExportAccessibilityDiagnostic(diagnostic: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+            function getDefaultExportAccessibilityDiagnostic(): SymbolAccessibilityDiagnostic {
                 return {
                     diagnosticMessage: Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
                     errorNode: node
@@ -710,7 +710,7 @@ namespace ts {
             }
             writer.writeLine();
 
-            function getImportEntityNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+            function getImportEntityNameVisibilityError(): SymbolAccessibilityDiagnostic {
                 return {
                     diagnosticMessage: Diagnostics.Import_declaration_0_is_using_private_name_1,
                     errorNode: node,
@@ -888,7 +888,7 @@ namespace ts {
             writeLine();
             enclosingDeclaration = prevEnclosingDeclaration;
 
-            function getTypeAliasDeclarationVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+            function getTypeAliasDeclarationVisibilityError(): SymbolAccessibilityDiagnostic {
                 return {
                     diagnosticMessage: Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1,
                     errorNode: node.type,
@@ -955,7 +955,7 @@ namespace ts {
                     }
                 }
 
-                function getTypeParameterConstraintVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+                function getTypeParameterConstraintVisibilityError(): SymbolAccessibilityDiagnostic {
                     // Type parameter constraints are named by user so we should always be able to name it
                     let diagnosticMessage: DiagnosticMessage;
                     switch (node.parent.kind) {
@@ -1029,7 +1029,7 @@ namespace ts {
                     resolver.writeBaseConstructorTypeOfClass(<ClassLikeDeclaration>enclosingDeclaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue, writer);
                 }
 
-                function getHeritageClauseVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+                function getHeritageClauseVisibilityError(): SymbolAccessibilityDiagnostic {
                     let diagnosticMessage: DiagnosticMessage;
                     // Heritage clause is written by user so it can always be named
                     if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
@@ -1121,7 +1121,7 @@ namespace ts {
             writeLine();
         }
 
-        function emitVariableDeclaration(node: VariableDeclaration) {
+        function emitVariableDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration) {
             // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
             // so there is no check needed to see if declaration is visible
             if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
@@ -1136,7 +1136,7 @@ namespace ts {
                     // If optional property emit ? but in the case of parameterProperty declaration with "?" indicating optional parameter for the constructor
                     // we don't want to emit property declaration with "?"
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
-                        (node.kind === SyntaxKind.Parameter && !isParameterPropertyDeclaration(node))) && hasQuestionToken(node)) {
+                        (node.kind === SyntaxKind.Parameter && !isParameterPropertyDeclaration(<ParameterDeclaration>node))) && hasQuestionToken(node)) {
                         write("?");
                     }
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
@@ -1626,8 +1626,7 @@ namespace ts {
                 }
             }
 
-            function emitBindingElement(bindingElement: BindingElement) {
-
+            function emitBindingElement(bindingElement: BindingElement | OmittedExpression) {
                 if (bindingElement.kind === SyntaxKind.OmittedExpression) {
                     // If bindingElement is an omittedExpression (i.e. containing elision),
                     // we will emit blank space (although this may differ from users' original code,
@@ -1744,7 +1743,7 @@ namespace ts {
             }
             return addedBundledEmitReference;
 
-            function getDeclFileName(emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+            function getDeclFileName(emitFileNames: EmitFileNames, _sourceFiles: SourceFile[], isBundledEmit: boolean) {
                 // Dont add reference path to this file if it is a bundled emit and caller asked not emit bundled file path
                 if (isBundledEmit && !addBundledFileReference) {
                     return;

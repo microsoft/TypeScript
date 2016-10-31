@@ -603,10 +603,6 @@
         "category": "Error",
         "code": 1194
     },
-    "Catch clause variable name must be an identifier.": {
-        "category": "Error",
-        "code": 1195
-    },
     "Catch clause variable cannot have a type annotation.": {
         "category": "Error",
         "code": 1196
@@ -1923,7 +1919,7 @@
         "category": "Error",
         "code": 2685
     },
-    "Identifier '{0}' must be imported from a module": {
+    "'{0}' refers to a UMD global, but the current file is a module. Consider adding an import instead.": {
         "category": "Error",
         "code": 2686
     },
@@ -2697,7 +2693,7 @@
         "category": "Message",
         "code": 6099
     },
-    "'package.json' does not have 'types' field.": {
+    "'package.json' does not have a 'types' or 'main' field.": {
         "category": "Message",
         "code": 6100
     },
@@ -2845,7 +2841,7 @@
         "category": "Message",
         "code": 6136
     },
-    "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
+    "No types specified in 'package.json', so returning 'main' value of '{0}'": {
         "category": "Message",
         "code": 6137
     },
@@ -2860,6 +2856,18 @@
     "Auto discovery for typings is enabled in project '{0}'. Running extra resolution pass for module '{1}' using cache location '{2}'.": {
         "category": "Error",
         "code": 6140
+    },
+    "Parse in strict mode and emit \"use strict\" for each source file": {
+        "category": "Message",
+        "code": 6141
+    },
+    "Module '{0}' was resolved to '{1}', but '--jsx' is not set.": {
+        "category": "Error",
+        "code": 6142
+    },
+    "Module '{0}' was resolved to '{1}', but '--allowJs' is not set.": {
+        "category": "Error",
+        "code": 6143
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2892,6 +2900,10 @@
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
+    },
+    "Could not find a declaration file for module '{0}'. '{1}' implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7016
     },
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",
@@ -2956,6 +2968,10 @@
     "Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.": {
         "category": "Error",
         "code": 7033
+    },
+    "Variable '{0}' implicitly has type '{1}' in some locations where its type cannot be determined.": {
+        "category": "Error",
+        "code": 7034
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -3077,5 +3093,42 @@
     "The path in an 'extends' options must be relative or rooted.": {
         "category": "Error",
         "code": 18001
+    },
+    "The 'files' list in config file '{0}' is empty.": {
+        "category": "Error",
+        "code": 18002
+    },
+    "No inputs were found in config file '{0}'. Specified 'include' paths were '{1}' and 'exclude' paths were '{2}'.": {
+        "category": "Error",
+        "code": 18003
+    },
+
+    "Add missing 'super()' call.": {
+        "category": "Message",
+        "code": 90001
+    },
+    "Make 'super()' call the first statement in the constructor.": {
+        "category": "Message",
+        "code": 90002
+    },
+    "Change 'extends' to 'implements'": {
+        "category": "Message",
+        "code": 90003
+    },
+    "Remove unused identifiers": {
+        "category": "Message",
+        "code": 90004
+    },
+    "Implement interface on reference": {
+        "category": "Message",
+        "code": 90005
+    },
+    "Implement interface on class": {
+        "category": "Message",
+        "code": 90006
+    },
+    "Implement inherited abstract class": {
+        "category": "Message",
+        "code": 90007
     }
 }
