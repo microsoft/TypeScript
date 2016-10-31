@@ -1,0 +1,16 @@
+tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration12_es2017.ts(1,24): error TS1005: '(' expected.
+tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration12_es2017.ts(1,29): error TS1005: '=' expected.
+tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration12_es2017.ts(1,33): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration12_es2017.ts(1,47): error TS1005: '=>' expected.
+
+
+==== tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration12_es2017.ts (4 errors) ====
+    var v = async function await(): Promise<void> { }
+                           ~~~~~
+!!! error TS1005: '(' expected.
+                                ~
+!!! error TS1005: '=' expected.
+                                    ~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+                                                  ~
+!!! error TS1005: '=>' expected.
