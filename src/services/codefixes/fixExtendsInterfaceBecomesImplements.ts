@@ -11,38 +11,36 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const textChanges: TextChange[] = [];
+            const extendsNode = (token.parent.parent as HeritageClause).getChildren()[0];
 
-            const heritageNodes = (<HeritageClause>token.parent.parent).getChildren();
-
-            // This should never fail
-            Debug.assert(heritageNodes.length > 0);
-            const extendsIndex = 0;
-            const extendsNode = heritageNodes[0];
-
-            Debug.assert(extendsIndex === 0);
-            
-            // We change the extends keyword to implements.
-            textChanges.push({ newText: " implements", span: { start: extendsNode.pos, length: extendsNode.end - extendsNode.pos } });
-
-            try {
-                // If the implements keyword exists, we replace it with a comma.
-                const implementsToken = <HeritageClause>token.parent.parent.parent.getChildren()[2].getChildren()[1];
-                Debug.assert(implementsToken.token === SyntaxKind.ImplementsKeyword);
-                const implementsNode = implementsToken.getChildren()[0];
-                textChanges.push({ newText: ",", span: { start: implementsNode.pos, length: implementsNode.end - implementsToken.pos } });
-            }
-            catch (e) {}
-
-            return [{
-                // TODO: (arozga) Move the locale-specific conversion further up the stack, since all
-                // the codefixes will need to call this?
+            let result = [{
                 description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements),
                 changes: [{
                     fileName: sourceFile.fileName,
-                    textChanges: textChanges
+                    textChanges: [{ newText: " implements", span: { start: extendsNode.pos, length: extendsNode.end - extendsNode.pos } }]
                 }]
             }];
+
+            // We check if the implements keyword is present and replace it with a comma if so.
+            const classDeclChildren = (token.parent.parent.parent as ClassDeclaration).getChildren();
+            if (classDeclChildren.length < 3) {
+                return result;
+            }
+
+            let classSyntaxListChildren: Node[];
+            if (classDeclChildren[2].kind !== SyntaxKind.SyntaxList || (classSyntaxListChildren = classDeclChildren[2].getChildren()).length < 2) {
+                return result;
+            }
+
+            let implementsTokenChildren: Node[];
+            if ((classSyntaxListChildren[1] as HeritageClause).token !== SyntaxKind.ImplementsKeyword || (implementsTokenChildren = classSyntaxListChildren[1].getChildren()).length === 0) {
+                return result;
+            }
+
+            const implementsNode = implementsTokenChildren[0];
+            result[0].changes[0].textChanges.push({ newText: ",", span: { start: implementsNode.pos, length: implementsNode.end - implementsNode.pos } });
+
+            return result;
         }
     });
 }
