@@ -11,8 +11,8 @@ tests/cases/compiler/readonlyMembers.ts(36,3): error TS2540: Cannot assign to 'a
 tests/cases/compiler/readonlyMembers.ts(40,3): error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
 tests/cases/compiler/readonlyMembers.ts(49,3): error TS2540: Cannot assign to 'A' because it is a constant or a read-only property.
 tests/cases/compiler/readonlyMembers.ts(56,3): error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
-tests/cases/compiler/readonlyMembers.ts(62,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
-tests/cases/compiler/readonlyMembers.ts(65,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(62,1): error TS2542: Index signature in type '{ readonly [x: string]: string; }' only permits reading.
+tests/cases/compiler/readonlyMembers.ts(65,1): error TS2542: Index signature in type '{ [x: string]: string; readonly [x: number]: string; }' only permits reading.
 
 
 ==== tests/cases/compiler/readonlyMembers.ts (15 errors) ====
@@ -105,10 +105,10 @@ tests/cases/compiler/readonlyMembers.ts(65,1): error TS2450: Left-hand side of a
     let s = xx["foo"];
     xx["foo"] = "abc";  // Error
     ~~~~~~~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+!!! error TS2542: Index signature in type '{ readonly [x: string]: string; }' only permits reading.
     
     let yy: { readonly [x: number]: string, [x: string]: string };
     yy[1] = "abc";  // Error
     ~~~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+!!! error TS2542: Index signature in type '{ [x: string]: string; readonly [x: number]: string; }' only permits reading.
     yy["foo"] = "abc";
