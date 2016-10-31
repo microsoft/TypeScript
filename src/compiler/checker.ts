@@ -1074,7 +1074,7 @@ namespace ts {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
 
             if (moduleSymbol) {
-                const exportDefaultSymbol = isUntypedModuleSymbol(moduleSymbol) ?
+                const exportDefaultSymbol = isShorthandAmbientModuleSymbol(moduleSymbol) ?
                     moduleSymbol :
                     moduleSymbol.exports["export="] ?
                         getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
@@ -1150,7 +1150,7 @@ namespace ts {
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
-                    if (isUntypedModuleSymbol(moduleSymbol)) {
+                    if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
                         return moduleSymbol;
                     }
 
@@ -1380,7 +1380,7 @@ namespace ts {
             }
 
             const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
-            let resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
+            const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
@@ -1404,28 +1404,18 @@ namespace ts {
              // May be an untyped module. If so, ignore resolutionDiagnostic.
             if (!isRelative && resolvedModule && !extensionIsTypeScript(resolvedModule.extension)) {
                 if (isForAugmentation) {
-                    resolutionDiagnostic = Diagnostics.Invalid_module_name_in_augmentation_module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
+                    Debug.assert(!!moduleNotFoundError);
+                    const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
+                    error(errorNode, diag, moduleName, resolvedModule.resolvedFileName);
                 }
-                else if (compilerOptions.noImplicitAny) {
-                    if (moduleNotFoundError) {
-                        error(errorNode,
-                            Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
-                            moduleReference,
-                            resolvedModule.resolvedFileName);
-                    }
-                    return undefined;
+                else if (compilerOptions.noImplicitAny && moduleNotFoundError) {
+                    error(errorNode,
+                        Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
+                        moduleReference,
+                        resolvedModule.resolvedFileName);
                 }
-                else {
-                    // Create a new symbol to represent the untyped module and store it in globals.
-                    // This provides a name to the module. See the test tests/cases/fourslash/untypedModuleImport.ts
-                    const newSymbol = createSymbol(SymbolFlags.ValueModule, quotedName);
-                    //newSymbol.declarations = []; //want this?
-                    // Module symbols are expected to have 'exports', although since this is an untyped module it can be empty.
-                    newSymbol.exports = createMap<Symbol>();
-                    // Cache it so subsequent accesses will return the same module.
-                    globals[quotedName] = newSymbol;
-                    return newSymbol;
-                }
+                // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
+                return undefined;
             }
 
             if (moduleNotFoundError) {
@@ -3495,7 +3485,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (symbol.flags & SymbolFlags.Module && isUntypedModuleSymbol(symbol)) {
+                if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
                     links.type = anyType;
                 }
                 else {
@@ -19068,7 +19058,7 @@ namespace ts {
 
         function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
             let moduleSymbol = resolveExternalModuleName(moduleReferenceExpression.parent, moduleReferenceExpression);
-            if (!moduleSymbol || isUntypedModuleSymbol(moduleSymbol)) {
+            if (!moduleSymbol || isShorthandAmbientModuleSymbol(moduleSymbol)) {
                 // If the module is not found or is shorthand, assume that it may export a value.
                 return true;
             }
