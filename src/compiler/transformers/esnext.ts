@@ -34,6 +34,8 @@ namespace ts {
                     return visitVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.ForOfStatement:
                     return visitForOfStatement(<ForOfStatement>node);
+                case SyntaxKind.ObjectBindingPattern:
+                    return node;
                 default:
                     Debug.failBadSyntaxKind(node);
                     return visitEachChild(node, visitor, context);
@@ -91,8 +93,13 @@ namespace ts {
          * @param node A BinaryExpression node.
          */
         function visitBinaryExpression(node: BinaryExpression): Expression {
-            Debug.assert(isDestructuringAssignment(node));
-            return flattenDestructuringAssignment(context, node, /*needsDestructuringValue*/ true, hoistVariableDeclaration, visitor, /*restOnly*/ true);
+            // TODO: the predicate should also check whether it has a trailing rest (or a nested trailing rest)
+            if (isDestructuringAssignment(node) && find((node.left as ObjectLiteralExpression).properties, p => p.kind === SyntaxKind.SpreadElementExpression)) {
+                return flattenDestructuringAssignment(context, node, /*needsDestructuringValue*/ true, hoistVariableDeclaration, visitor, /*transformRest*/ true, /*transformRestOnly*/ true);
+            }
+
+            // TODO: Should visit children
+            return node;
         }
 
         /**
@@ -101,14 +108,37 @@ namespace ts {
          * @param node A VariableDeclaration node.
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
+            // TODO: Here we now need to handle nested rests and no rests at all
+            // (I think the visit *almost* does this, except we don't call it for the top-level binding-pattern case)
             // If we are here it is because the name contains a binding pattern.
-            if (isBindingPattern(node.name)) {
-                // TOOD: Handle enclosingVariableStatement correctly so that exports work right
-                // (this is the case that Ron warned me about, perhaps? but it doesn't seem to require destructuring or System, so maybe not)
-                const recordTempVariablesInLine = !enclosingVariableStatement
-                    || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
-                return flattenVariableDestructuring(node, /*value*/ undefined, visitor,
-                                                    recordTempVariablesInLine ? undefined : hoistVariableDeclaration, /*restOnly*/ true);
+            if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.AssertESNext) {
+                console.log("definitely ESnext. sure of it!");
+                const hoistTempVariables = enclosingVariableStatement && hasModifier(enclosingVariableStatement, ModifierFlags.Export);
+                // Look for a ... somewhere in the tree. If 
+                const toplevelRest = find(node.name.elements, e => e.kind === SyntaxKind.BindingElement && !!e.dotDotDotToken);
+                let nestedRest = false;
+                visitEachChild(node, child => {
+                    if (child.parent !== node && child.kind === SyntaxKind.BindingElement && (child as BindingElement).dotDotDotToken) {
+                        nestedRest = true;
+                    }
+                    return child;
+                }, context);
+                const restOnly = toplevelRest && !nestedRest;
+                const result = flattenVariableDestructuring(node, /*value*/ undefined, visitor,
+                                                            hoistTempVariables ? hoistVariableDeclaration : undefined, /*transformRest*/ true, restOnly);
+                // result should have one or two items in its declaration list:
+                // 1 if there was only a rest, in which case we are done
+                // 2 if there was a rest plus some other fields, in which case we need to check visit the other fields
+                // TODO: The visit doesn't *handle* input with no rests. Who does that? We technically have to visit everything to make sure that
+                // { x: { y: { z: { ka: { ki: { ... rest } } } } } }
+                // works
+                //if (result.length === 1) {
+                    //return result;
+                //}
+                //else {
+                    //return [visitVariableDeclaration(result[0]), result[1]];
+                //}
+                return result;
             }
 
             return visitEachChild(node, visitor, context);
@@ -145,6 +175,7 @@ namespace ts {
             // where <init> is [let] variabledeclarationlist | expression
             const initializer = node.initializer;
             if (!isRestBindingPattern(initializer) && !isRestAssignment(initializer)) {
+                // TODO: Need to check for patterns recursively
                 return visitEachChild(node, visitor, context);
             }
 
@@ -161,7 +192,8 @@ namespace ts {
                     rhsReference,
                     visitor,
                     /*recordTempVariable*/ undefined,
-                    /*restOnly*/ true
+                    /*transformRest*/ true,
+                    /*restOnly*/ true // TODO: Need to check for patterns recursively :(
                 );
 
                 const declarationList = createVariableDeclarationList(declarations, /*location*/ initializer);

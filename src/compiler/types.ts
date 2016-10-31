@@ -650,7 +650,7 @@ namespace ts {
     export interface BindingElement extends Declaration {
         kind: SyntaxKind.BindingElement;
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
-        dotDotDotToken?: DotDotDotToken;              // Present on rest binding element
+        dotDotDotToken?: DotDotDotToken;    // Present on rest element (in object binding pattern)
         name: BindingName;                  // Declared binding element name
         initializer?: Expression;           // Optional initializer
     }

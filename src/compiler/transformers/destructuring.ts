@@ -18,7 +18,8 @@ namespace ts {
         needsValue: boolean,
         recordTempVariable: (node: Identifier) => void,
         visitor?: (node: Node) => VisitResult<Node>,
-        restOnly?: boolean): Expression {
+        transformRest?: boolean,
+        transformRestOnly?: boolean): Expression {
 
         if (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
             const right = node.right;
@@ -52,7 +53,7 @@ namespace ts {
             location = value;
         }
 
-        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, emitRestAssignment, restOnly, visitor);
+        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, emitRestAssignment, transformRest, transformRestOnly, visitor);
 
         if (needsValue) {
             expressions.push(value);
@@ -101,7 +102,7 @@ namespace ts {
         // ES2015 has already transformed the parameter to a variable declaration.
         // The ESNext transform needs to do this itself.
         // Lots of duplicated code between the two though.
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, /*restOnly*/ false, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, /*transformRest*/ false, /*transformRestOnly*/ false, visitor);
 
         return declarations;
 
@@ -139,11 +140,12 @@ namespace ts {
         value?: Expression,
         visitor?: (node: Node) => VisitResult<Node>,
         recordTempVariable?: (node: Identifier) => void,
-        restOnly?: boolean) {
+        transformRest?: boolean,
+        transformRestOnly?: boolean) {
         const declarations: VariableDeclaration[] = [];
 
         let pendingAssignments: Expression[];
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, restOnly, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, transformRest, transformRestOnly, visitor);
 
         return declarations;
 
@@ -204,7 +206,7 @@ namespace ts {
 
         const pendingAssignments: Expression[] = [];
 
-        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, /*restOnly*/ false, visitor);
+        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, /*restOnly*/ false, /*transformRestOnly*/ false, visitor);
 
         const expression = inlineExpressions(pendingAssignments);
         aggregateTransformFlags(expression);
@@ -248,17 +250,28 @@ namespace ts {
         emitAssignment: (name: Identifier, value: Expression, location: TextRange, original: Node) => void,
         emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
         emitRestAssignment: (elements: (ObjectLiteralElementLike[] | BindingElement[]), value: Expression, location: TextRange, original: Node) => void,
-        restOnly: boolean,
+        transformRest: boolean,
+        transformRestOnly: boolean,
         visitor?: (node: Node) => VisitResult<Node>) {
         if (value && visitor) {
             value = visitNode(value, visitor, isExpression);
         }
 
-        if (isBinaryExpression(root)) {
-            emitDestructuringAssignment(root.left, value, location);
+        if (transformRest) {
+            if (isBinaryExpression(root)) {
+                emitDestructuringAssignment(root.left, value, location);
+            }
+            else {
+                emitBindingElement2(root, value);
+            }
         }
         else {
-            emitBindingElement(root, value);
+            if (isBinaryExpression(root)) {
+                emitDestructuringAssignment(root.left, value, location);
+            }
+            else {
+                emitBindingElement(root, value);
+            }
         }
 
         function emitDestructuringAssignment(bindingTarget: Expression | ShorthandPropertyAssignment, value: Expression, location: TextRange) {
@@ -311,7 +324,7 @@ namespace ts {
             }
 
             // if restOnly, just grab the last one, emit a rest for it, then emitRestAssignment for everything else
-            if (restOnly) {
+            if (transformRestOnly) {
                 emitRestAssignment(properties.slice(0, properties.length - 1), value, location, target);
                 // assert that the last property is a single identifier, even though it's parsed as an expression
                 const last = properties[properties.length - 1];
@@ -396,7 +409,11 @@ namespace ts {
 
             const name = target.name;
             if (!isBindingPattern(name)) {
-                emitAssignment(name, value, target, target);
+                if (transformRest) {
+                }
+                else {
+                    emitAssignment(name, value, target, target);
+                }
             }
             else {
                 const elements = name.elements;
@@ -423,8 +440,9 @@ namespace ts {
                         continue;
                     }
                     else if (name.kind === SyntaxKind.ObjectBindingPattern) {
-                        if (restOnly && i === numElements - 1 && element.dotDotDotToken) {
+                        if (transformRestOnly && i === numElements - 1 && element.dotDotDotToken) {
                             if (others.length) {
+                                // TODO: others still needs to be *visited* just not emitted
                                 emitRestAssignment(others, value, target, target);
                             }
                             const restCall = createRestCall(value, name.elements, name, element => {
@@ -441,8 +459,18 @@ namespace ts {
                             });
                             emitBindingElement(element, restCall);
                         }
-                        else if (restOnly) {
-                            others.push(element);
+                        else if (transformRestOnly) {
+                            // { x: { ka, ...nested }, y, ...rest } = t => { x: { ka, ...nested}, y } = t, rest = __rest(t, ["x", "y"])
+                            //                                          => _x = t.x, { ka } = _x, nested = __rest(_x, ["ka"]), y = t.y, rest = __rest(t, ["x", "y"])
+                            //
+                            // { y, ...rest } => { y } = t, rest = __rest(t, ['y']);
+                            // 1. This should probably be done by a visit of some kind. Which destructuring doesn't really do.
+                            //    Does this mean that esnext has to visit the result to check for more rests?
+                            //    Probably -- aggregateTransformFlags will mark the new declaration appropriately.
+                            // 2. Otherwise, it looks like destructuring has to check children, which seems wrong.
+                            // const propName = element.propertyName || <Identifier>element.name;
+                            // emitBindingElement(element, createDestructuringPropertyAccess(value, propName));
+                            others.push(element); //doSomethingTo(element));
                             // TODO: Push property names into a list too. (See the stolen code below)
                             //const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
                             //str.pos = name.pos;
@@ -465,6 +493,85 @@ namespace ts {
                             emitBindingElement(element, createArraySlice(value, i));
                         }
                     }
+                }
+            }
+        }
+
+        /**
+         * @returns whether or not the target contains a rest (anywhere in the tree?)
+         */
+        function emitBindingElement2(target: VariableDeclaration | ParameterDeclaration | BindingElement, value: Expression) {
+            // Any temporary assignments needed to emit target = value should point to target
+            const initializer = visitor ? visitNode(target.initializer, visitor, isExpression) : target.initializer;
+            if (initializer) {
+                // Combine value and initializer
+                value = value ? createDefaultValueCheck(value, initializer, target) : initializer;
+            }
+            else if (!value) {
+                // Use 'void 0' in absence of value and initializer
+                value = createVoidZero();
+            }
+
+            const name = target.name;
+            if (!isBindingPattern(name)) {
+                // base case -- just return, I think, and do nothing else.
+                emitAssignment(name, value, target, target);
+            }
+            else {
+                const elements = name.elements;
+                const numElements = elements.length;
+                if (numElements !== 1) {
+                    // For anything other than a single-element destructuring we need to generate a temporary
+                    // to ensure value is evaluated exactly once. Additionally, if we have zero elements
+                    // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
+                    // so in that case, we'll intentionally create that temporary.
+                    value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ numElements !== 0, target, emitTempVariableAssignment);
+                }
+                let es2015: BindingElement[] = [];
+                for (let i = 0; i < numElements; i++) {
+                    const element = elements[i];
+                    if (isOmittedExpression(element) || name.kind === SyntaxKind.ArrayBindingPattern) {
+                        continue;
+                    }
+
+                    if (i === numElements - 1 && element.dotDotDotToken) {
+                        if (es2015.length) {
+                            emitRestAssignment(es2015, value, target, target);
+                            es2015 = [];
+                        }
+                        const restCall = createRestCall(value, name.elements, name, element => {
+                            if (isOmittedExpression(element)) {
+                                return;
+                            }
+                            if (!element.dotDotDotToken) {
+                                const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+                                str.pos = name.pos;
+                                str.end = name.end;
+                                str.text = getTextOfPropertyName(element.propertyName || <Identifier>element.name);
+                                return str;
+                            }
+                        });
+                        emitBindingElement2(element, restCall);
+                    }
+                    else {
+                        if (element.transformFlags & TransformFlags.ContainsSpreadExpression) {
+                            if (es2015.length) {
+                                emitRestAssignment(es2015, value, target, target);
+                                es2015 = [];
+                            }
+                            // binding with nested rest -- recur
+                            const propName = element.propertyName || <Identifier>element.name;
+                            // emitAssignment(element.name, , element, element);
+                            emitBindingElement2(element, createDestructuringPropertyAccess(value, propName));
+                        }
+                        else {
+                            // do not emit until we have a complete bundle of ES2015 syntax
+                            es2015.push(element);
+                        }
+                    }
+                }
+                if (es2015.length) {
+                    emitRestAssignment(es2015, value, target, target);
                 }
             }
         }

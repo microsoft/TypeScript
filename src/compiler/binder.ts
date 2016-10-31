@@ -2537,15 +2537,13 @@ namespace ts {
         const operatorTokenKind = node.operatorToken.kind;
         const leftKind = node.left.kind;
 
-        if (operatorTokenKind === SyntaxKind.EqualsToken &&
-            leftKind === SyntaxKind.ObjectLiteralExpression &&
-            find((node.left as ObjectLiteralExpression).properties, p => p.kind === SyntaxKind.SpreadElementExpression)) {
-            // Destructuring object assignments with rest are ESNext syntax.
-            transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertDestructuringAssignment;
+        if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ObjectLiteralExpression) {
+            // Destructuring object assignments with are ES2015 syntax
+            // and possibly ESNext if they contain rest
+            transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
         }
-        else if (operatorTokenKind === SyntaxKind.EqualsToken &&
-                 (leftKind === SyntaxKind.ObjectLiteralExpression || leftKind === SyntaxKind.ArrayLiteralExpression)) {
-            // Destructuring assignments are ES6 syntax.
+        else if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ArrayLiteralExpression) {
+            // Destructuring assignments are ES2015 syntax.
             transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.AsteriskAsteriskToken
@@ -2914,13 +2912,13 @@ namespace ts {
         let transformFlags = subtreeFlags;
         const nameKind = node.name.kind;
 
-        // A VariableDeclaration with an object binding pattern containing a rest element is ESNext syntax.
-        if (nameKind === SyntaxKind.ObjectBindingPattern &&
-            find((node.name as ObjectBindingPattern).elements, e => !!e.dotDotDotToken)) {
-            transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsBindingPattern;
+        // A VariableDeclaration with an object binding pattern is ES2015 syntax
+        // and possibly ESNext syntax if it contains an object binding pattern
+        if (nameKind === SyntaxKind.ObjectBindingPattern) {
+            transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
         }
-        // A VariableDeclaration with a binding pattern is ES6 syntax.
-        else if (nameKind === SyntaxKind.ObjectBindingPattern || nameKind === SyntaxKind.ArrayBindingPattern) {
+        // A VariableDeclaration with an object binding pattern is ES2015 syntax.
+        else if (nameKind === SyntaxKind.ArrayBindingPattern) {
             transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
         }
 
@@ -3135,9 +3133,15 @@ namespace ts {
 
             case SyntaxKind.SpreadExpression:
             case SyntaxKind.SpreadElementExpression:
-                // This node is ES6 or ES future syntax, but is handled by a containing node.
+                // This node is ES2015 or ES next syntax, but is handled by a containing node.
                 transformFlags |= TransformFlags.ContainsSpreadExpression;
                 break;
+
+            case SyntaxKind.BindingElement:
+                if ((node as BindingElement).dotDotDotToken) {
+                    // this node is ES2015 or ES next syntax, but is handled by a containing node.
+                    transformFlags |= TransformFlags.ContainsSpreadExpression;
+                }
 
             case SyntaxKind.SuperKeyword:
                 // This node is ES6 syntax.
@@ -3151,8 +3155,13 @@ namespace ts {
 
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-                // These nodes are ES6 syntax.
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
+                // These nodes are ES2015 or ES Next syntax.
+                if (subtreeFlags & TransformFlags.ContainsSpreadExpression) {
+                    transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsBindingPattern;
+                }
+                else {
+                    transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
+                }
                 break;
 
             case SyntaxKind.Decorator:
