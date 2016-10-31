@@ -1075,7 +1075,7 @@
         "category": "Error",
         "code": 2356
     },
-    "The operand of an increment or decrement operator must be a variable, property or indexer.": {
+    "The operand of an increment or decrement operator must be a variable or a property access.": {
         "category": "Error",
         "code": 2357
     },
@@ -1103,7 +1103,7 @@
         "category": "Error",
         "code": 2363
     },
-    "Invalid left-hand side of assignment expression.": {
+    "The left-hand side of an assignment expression must be a variable or a property access.": {
         "category": "Error",
         "code": 2364
     },
@@ -1263,7 +1263,7 @@
         "category": "Error",
         "code": 2405
     },
-    "Invalid left-hand side in 'for...in' statement.": {
+    "The left-hand side of a 'for...in' statement must be a variable or a property access.": {
         "category": "Error",
         "code": 2406
     },
@@ -1563,7 +1563,7 @@
         "category": "Error",
         "code": 2486
     },
-    "Invalid left-hand side in 'for...of' statement.": {
+    "The left-hand side of a 'for...of' statement must be a variable or a property access.": {
         "category": "Error",
         "code": 2487
     },
@@ -1770,6 +1770,10 @@
     "Cannot assign to '{0}' because it is a constant or a read-only property.": {
         "category": "Error",
         "code": 2540
+    },
+    "The target of an assignment must be a variable or a property access.": {
+        "category": "Error",
+        "code": 2541
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
