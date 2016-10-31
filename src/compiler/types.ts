@@ -3145,6 +3145,7 @@ namespace ts {
         Pretty,
     }
 
+    /** Either a parsed command line or a parsed tsconfig.json */
     export interface ParsedCommandLine {
         options: CompilerOptions;
         typingOptions?: TypingOptions;
