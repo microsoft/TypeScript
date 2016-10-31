@@ -15546,29 +15546,22 @@ namespace ts {
         }
 
         /**
-          * Checks the return type of an async function to ensure it is a compatible
-          * Promise implementation.
-          * @param node The signature to check
-          * @param returnType The return type for the function
-          * @remarks
-          * This checks that an async function has a valid Promise-compatible return type,
-          * and returns the *awaited type* of the promise. An async function has a valid
-          * Promise-compatible return type if the resolved value of the return type has a
-          * construct signature that takes in an `initializer` function that in turn supplies
-          * a `resolve` function as one of its arguments and results in an object with a
-          * callable `then` signature.
-          */
+         * Checks the return type of an async function to ensure it is a compatible
+         * Promise implementation.
+         *
+         * This checks that an async function has a valid Promise-compatible return type,
+         * and returns the *awaited type* of the promise. An async function has a valid
+         * Promise-compatible return type if the resolved value of the return type has a
+         * construct signature that takes in an `initializer` function that in turn supplies
+         * a `resolve` function as one of its arguments and results in an object with a
+         * callable `then` signature.
+         *
+         * @param node The signature to check
+         */
         function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration): Type {
             if (languageVersion >= ScriptTarget.ES2015) {
                 const returnType = getTypeFromTypeNode(node.type);
                 return checkCorrectPromiseType(returnType, node.type, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
-            }
-
-            const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
-            if (globalPromiseConstructorLikeType === emptyObjectType) {
-                // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
-                // compatibility with __awaiter.
-                return unknownType;
             }
 
             // As part of our emit for an async function, we will need to emit the entity name of
@@ -15595,42 +15588,56 @@ namespace ts {
             //      then<U>(...): Promise<U>;
             //  }
             //
-            // When we get the type of the `Promise` symbol here, we get the type of the static
-            // side of the `Promise` class, which would be `{ new <T>(...): Promise<T> }`.
 
+            // Always mark the type node as referenced if it points to a value
+            markTypeNodeAsReferenced(node.type);
+
+            const promiseConstructorName = getEntityNameFromTypeNode(node.type);
             const promiseType = getTypeFromTypeNode(node.type);
-            if (promiseType === unknownType && compilerOptions.isolatedModules) {
-                // If we are compiling with isolatedModules, we may not be able to resolve the
-                // type as a value. As such, we will just return unknownType;
+            if (promiseType === unknownType) {
+                if (!compilerOptions.isolatedModules) {
+                    if (promiseConstructorName) {
+                        error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                    }
+                    else {
+                        error(node.type, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+                    }
+                }
                 return unknownType;
             }
 
-            const promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
-            if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
-                // try to fall back to global promise type.
-                const typeName = promiseConstructor
-                    ? symbolToString(promiseConstructor)
-                    : typeToString(promiseType);
-                return checkCorrectPromiseType(promiseType, node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeName);
+            if (promiseConstructorName === undefined) {
+                error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, typeToString(promiseType));
+                return unknownType;
             }
 
-            // If the Promise constructor, resolved locally, is an alias symbol we should mark it as referenced.
-            checkReturnTypeAnnotationAsExpression(node);
+            const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
+            const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : unknownType;
+            if (promiseConstructorType === unknownType) {
+                error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                return unknownType;
+            }
 
-            // Validate the promise constructor type.
-            const promiseConstructorType = getTypeOfSymbol(promiseConstructor);
-            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
+            const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
+            if (globalPromiseConstructorLikeType === emptyObjectType) {
+                // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
+                // compatibility with __awaiter.
+                error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                return unknownType;
+            }
+
+            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node.type,
+                Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value)) {
                 return unknownType;
             }
 
             // Verify there is no local declaration that could collide with the promise constructor.
-            const promiseName = getEntityNameFromTypeNode(node.type);
-            const promiseNameOrNamespaceRoot = getFirstIdentifier(promiseName);
-            const rootSymbol = getSymbol(node.locals, promiseNameOrNamespaceRoot.text, SymbolFlags.Value);
-            if (rootSymbol) {
-                error(rootSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
-                    promiseNameOrNamespaceRoot.text,
-                    getFullyQualifiedName(promiseConstructor));
+            const rootName = promiseConstructorName && getFirstIdentifier(promiseConstructorName);
+            const collidingSymbol = getSymbol(node.locals, rootName.text, SymbolFlags.Value);
+            if (collidingSymbol) {
+                error(collidingSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
+                    rootName.text,
+                    entityNameToString(promiseConstructorName));
                 return unknownType;
             }
 
@@ -15688,44 +15695,19 @@ namespace ts {
                 errorInfo);
         }
 
-        /** Checks a type reference node as an expression. */
-        function checkTypeNodeAsExpression(node: TypeNode) {
-            // When we are emitting type metadata for decorators, we need to try to check the type
-            // as if it were an expression so that we can emit the type in a value position when we
-            // serialize the type metadata.
-            if (node && node.kind === SyntaxKind.TypeReference) {
-                const root = getFirstIdentifier((<TypeReferenceNode>node).typeName);
-                const meaning = root.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
-                // Resolve type so we know which symbol is referenced
-                const rootSymbol = resolveName(root, root.text, meaning | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                // Resolved symbol is alias
-                if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
-                    const aliasTarget = resolveAlias(rootSymbol);
-                    // If alias has value symbol - mark alias as referenced
-                    if (aliasTarget.flags & SymbolFlags.Value && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
-                        markAliasSymbolAsReferenced(rootSymbol);
-                    }
-                }
-            }
-        }
-
         /**
-          * Checks the type annotation of an accessor declaration or property declaration as
-          * an expression if it is a type reference to a type with a value declaration.
-          */
-        function checkTypeAnnotationAsExpression(node: VariableLikeDeclaration) {
-            checkTypeNodeAsExpression((<PropertyDeclaration>node).type);
-        }
-
-        function checkReturnTypeAnnotationAsExpression(node: FunctionLikeDeclaration) {
-            checkTypeNodeAsExpression(node.type);
-        }
-
-        /** Checks the type annotation of the parameters of a function/method or the constructor of a class as expressions */
-        function checkParameterTypeAnnotationsAsExpressions(node: FunctionLikeDeclaration) {
-            // ensure all type annotations with a value declaration are checked as an expression
-            for (const parameter of node.parameters) {
-                checkTypeAnnotationAsExpression(parameter);
+         * If a TypeNode can be resolved to a value symbol imported from an external module, it is
+         * marked as referenced to prevent import elision.
+         */
+        function markTypeNodeAsReferenced(node: TypeNode) {
+            const typeName = node && getEntityNameFromTypeNode(node);
+            const rootName = typeName && getFirstIdentifier(typeName);
+            const rootSymbol = rootName && resolveName(rootName, rootName.text, (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            if (rootSymbol
+                && rootSymbol.flags & SymbolFlags.Alias
+                && symbolIsValue(rootSymbol)
+                && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
+                markAliasSymbolAsReferenced(rootSymbol);
             }
         }
 
@@ -15751,20 +15733,25 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                         const constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
                         if (constructor) {
-                            checkParameterTypeAnnotationsAsExpressions(constructor);
+                            for (const parameter of constructor.parameters) {
+                                markTypeNodeAsReferenced(parameter.type);
+                            }
                         }
                         break;
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
-                        checkReturnTypeAnnotationAsExpression(<FunctionLikeDeclaration>node);
+                        for (const parameter of (<FunctionLikeDeclaration>node).parameters) {
+                            markTypeNodeAsReferenced(parameter.type);
+                        }
+
+                        markTypeNodeAsReferenced((<FunctionLikeDeclaration>node).type);
                         break;
 
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.Parameter:
-                        checkTypeAnnotationAsExpression(<PropertyDeclaration | ParameterDeclaration>node);
+                        markTypeNodeAsReferenced((<PropertyDeclaration | ParameterDeclaration>node).type);
                         break;
                 }
             }
@@ -18476,9 +18463,33 @@ namespace ts {
         function getDiagnosticsWorker(sourceFile: SourceFile): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
+                // Some global diagnostics are deferred until they are needed and
+                // may not be reported in the firt call to getGlobalDiagnostics.
+                // We should catch these changes and report them.
+                const previousGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
+                const previousGlobalDiagnosticsSize = previousGlobalDiagnostics.length;
+
                 checkSourceFile(sourceFile);
-                return diagnostics.getDiagnostics(sourceFile.fileName);
+
+                const semanticDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
+                const currentGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
+                if (currentGlobalDiagnostics !== previousGlobalDiagnostics) {
+                    // If the arrays are not the same reference, new diagnostics were added.
+                    const deferredGlobalDiagnostics = relativeComplement(previousGlobalDiagnostics, currentGlobalDiagnostics, compareDiagnostics);
+                    return concatenate(deferredGlobalDiagnostics, semanticDiagnostics);
+                }
+                else if (previousGlobalDiagnosticsSize === 0 && currentGlobalDiagnostics.length > 0) {
+                    // If the arrays are the same reference, but the length has changed, a single
+                    // new diagnostic was added as DiagnosticCollection attempts to reuse the
+                    // same array.
+                    return concatenate(currentGlobalDiagnostics, semanticDiagnostics);
+                }
+
+                return semanticDiagnostics;
             }
+
+            // Global diagnostics are always added when a file is not provided to
+            // getDiagnostics
             forEach(host.getSourceFiles(), checkSourceFile);
             return diagnostics.getDiagnostics();
         }

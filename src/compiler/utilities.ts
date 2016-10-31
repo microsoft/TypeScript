@@ -485,6 +485,17 @@ namespace ts {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
+    export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
+        switch (name.kind) {
+            case SyntaxKind.Identifier:
+                return getFullWidth(name) === 0 ? unescapeIdentifier((<Identifier>name).text) : getTextOfNode(name);
+            case SyntaxKind.QualifiedName:
+                return entityNameToString((<QualifiedName>name).left) + "." + entityNameToString((<QualifiedName>name).right);
+            case SyntaxKind.PropertyAccessExpression:
+                return entityNameToString((<PropertyAccessEntityNameExpression>name).expression) + "." + entityNameToString((<PropertyAccessEntityNameExpression>name).name);
+        }
+    }
+
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
@@ -1042,17 +1053,19 @@ namespace ts {
     }
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.TypeReference:
-                    return (<TypeReferenceNode>node).typeName;
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
-                    return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
-                case SyntaxKind.Identifier:
-                case SyntaxKind.QualifiedName:
-                    return (<EntityName><Node>node);
-            }
+        switch (node.kind) {
+            case SyntaxKind.TypeReference:
+            case SyntaxKind.JSDocTypeReference:
+                return (<TypeReferenceNode>node).typeName;
+
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return isEntityNameExpression((<ExpressionWithTypeArguments>node).expression)
+                    ? <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
+                    : undefined;
+
+            case SyntaxKind.Identifier:
+            case SyntaxKind.QualifiedName:
+                return (<EntityName><Node>node);
         }
 
         return undefined;

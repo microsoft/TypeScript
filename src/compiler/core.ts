@@ -446,8 +446,8 @@ namespace ts {
     }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
-        if (!array2 || !array2.length) return array1;
-        if (!array1 || !array1.length) return array2;
+        if (!some(array2)) return array1;
+        if (!some(array1)) return array2;
         return [...array1, ...array2];
     }
 
@@ -525,6 +525,27 @@ namespace ts {
             }
         }
         return result || array;
+    }
+
+    /**
+     * Gets the relative complement of `arrayA` with respect to `b`, returning the elements that
+     * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
+     * based on the provided comparer.
+     */
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: (x: T, y: T) => Comparison = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+        if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
+        const result: T[] = [];
+        outer: for (; offsetB < arrayB.length; offsetB++) {
+            inner: for (; offsetA < arrayA.length; offsetA++) {
+                switch (comparer(arrayB[offsetB], arrayA[offsetA])) {
+                    case Comparison.LessThan: break inner;
+                    case Comparison.EqualTo: continue outer;
+                    case Comparison.GreaterThan: continue inner;
+                }
+            }
+            result.push(arrayB[offsetB]);
+        }
+        return result;
     }
 
     export function sum(array: any[], prop: string): number {
@@ -626,12 +647,12 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number): number {
+    export function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number, offset?: number): number {
         if (!array || array.length === 0) {
             return -1;
         }
 
-        let low = 0;
+        let low = offset || 0;
         let high = array.length - 1;
         comparer = comparer !== undefined
             ? comparer
