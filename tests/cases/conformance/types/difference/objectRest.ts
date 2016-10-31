@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es2015
 
 let o = { a: 1, b: 'no' }
 var { ...clone } = o;
@@ -11,5 +11,9 @@ var { b: { '0': n, '1': oooo }, ...justA } = o;
 let o2 = { c: 'terrible idea?', d: 'yes' };
 var { d: renamed, ...d } = o2;
 
-let complex: { x: { z, ka }, y: string };
-let { x: { z, ...nested }, ...rest } = complex;
+let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
+var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
+
+let complex: { x: { ka, ki }, y: string };
+var { x: { ka, ...nested }, y: other, ...rest } = complex;
+//({x: { ka, ...nested }, y, ...rest} = complex);
