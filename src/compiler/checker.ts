@@ -11459,16 +11459,25 @@ namespace ts {
             }
 
             const propType = getTypeOfSymbol(prop);
+            const assignmentKind = getAssignmentTargetKind(node);
+
+            if (assignmentKind) {
+                if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
+                    error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, right.text);
+                    return unknownType;
+                }
+            }
 
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.
-            if (node.kind !== SyntaxKind.PropertyAccessExpression || isAssignmentTarget(node) ||
+            if (node.kind !== SyntaxKind.PropertyAccessExpression || assignmentKind === AssignmentKind.Definite ||
                 !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) &&
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
-            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+            const flowType = getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+            return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
@@ -13515,7 +13524,7 @@ namespace ts {
                 error(expr, invalidReferenceMessage);
                 return false;
             }
-            if (node.kind === SyntaxKind.Identifier) {
+            if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
                 return true;
             }
             // Because we get the symbol from the resolvedSymbol property, it might be of kind

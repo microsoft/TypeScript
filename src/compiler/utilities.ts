@@ -1649,8 +1649,12 @@ namespace ts {
                 case SyntaxKind.SpreadElementExpression:
                     node = parent;
                     break;
-                case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
+                    if ((<ShorthandPropertyAssignment>parent).name !== node) {
+                        return AssignmentKind.None;
+                    }
+                    // Fall through
+                case SyntaxKind.PropertyAssignment:
                     node = parent.parent;
                     break;
                 default:
