@@ -44,6 +44,14 @@ namespace FourSlash {
 
         markers: Marker[];
 
+        /**
+         * Inserted in source files by surrounding desired text
+         * in a range with `[|` and `|]`. For example,
+         * 
+         * [|text in range|]
+         * 
+         * is a range with `text in range` "selected".
+         */
         ranges: Range[];
     }
 
@@ -82,6 +90,15 @@ namespace FourSlash {
     export interface TextSpan {
         start: number;
         end: number;
+    }
+
+    export interface ErrorIdentifier {
+        code: number;
+        /**
+         * In a file where there is more than one error with code `code`, `count` refers
+         * to which 0-indexed error, sorted by order of occurence, to consider.
+         */
+        count: number;
     }
 
     export import IndentStyle = ts.IndentStyle;
@@ -1575,11 +1592,11 @@ namespace FourSlash {
             let runningOffset = 0;
             edits = edits.sort((a, b) => a.span.start - b.span.start);
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
-            const oldContent = this.getFileContent(this.activeFile.fileName);
-            for (let j = 0; j < edits.length; j++) {
-                this.languageServiceAdapterHost.editScript(fileName, edits[j].span.start + runningOffset, ts.textSpanEnd(edits[j].span) + runningOffset, edits[j].newText);
-                this.updateMarkersForEdit(fileName, edits[j].span.start + runningOffset, ts.textSpanEnd(edits[j].span) + runningOffset, edits[j].newText);
-                const change = (edits[j].span.start - ts.textSpanEnd(edits[j].span)) + edits[j].newText.length;
+            const oldContent = this.getFileContent(fileName);
+            for (const edit of edits) {
+                this.languageServiceAdapterHost.editScript(fileName, edit.span.start + runningOffset, ts.textSpanEnd(edit.span) + runningOffset, edit.newText);
+                this.updateMarkersForEdit(fileName, edit.span.start + runningOffset, ts.textSpanEnd(edit.span) + runningOffset, edit.newText);
+                const change = (edit.span.start - ts.textSpanEnd(edit.span)) + edit.newText.length;
                 runningOffset += change;
                 // TODO: Consider doing this at least some of the time for higher fidelity. Currently causes a failure (bug 707150)
                 // this.languageService.getScriptLexicalStructure(fileName);
@@ -1593,6 +1610,12 @@ namespace FourSlash {
                 }
             }
             return runningOffset;
+        }
+
+        private applyCodeAction(action: ts.CodeAction): void {
+            for (const filechange of action.changes) {
+                this.applyEdits(filechange.fileName, filechange.textChanges, /*isFormattingEdit*/ false);
+            }
         }
 
         public copyFormatOptions(): ts.FormatCodeSettings {
@@ -2019,45 +2042,105 @@ namespace FourSlash {
             }
         }
 
-        private getCodeFixes(errorCode?: number) {
-            const fileName = this.activeFile.fileName;
-            const diagnostics = this.getDiagnostics(fileName);
-
-            if (diagnostics.length === 0) {
-                this.raiseError("Errors expected.");
-            }
-
-            if (diagnostics.length > 1 && errorCode !== undefined) {
-                this.raiseError("When there's more than one error, you must specify the errror to fix.");
-            }
-
-            const diagnostic = !errorCode ? diagnostics[0] : ts.find(diagnostics, d => d.code == errorCode);
-
-            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
-        }
-
+        /**
+         * Compares expected text to the text that would be in the sole range
+         * (ie: [|...|]) in the file after applying the codefix corresponding
+         * to the error with errorCode, or of the sole error in the source file.
+         * 
+         * Because codefixes are only applied on the working file, it is unsafe
+         * to apply this more than once (consider a refactoring across files).
+         */
         public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
             const ranges = this.getRanges();
-            if (ranges.length == 0) {
-                this.raiseError("At least one range should be specified in the testfile.");
+            if (ranges.length !== 1) {
+                this.raiseError("Exactly one range should be specified in the testfile.");
             }
 
-            const actual = this.getCodeFixes(errorCode);
+            const fileName = this.activeFile.fileName;
+            const codeFix: ts.CodeAction = this.getCodeFix(fileName, errorCode ? { code: errorCode, count: 0 } : undefined);
 
-            if (!actual || actual.length == 0) {
-                this.raiseError("No codefixes returned.");
+            if (!codeFix) {
+                this.raiseError("Should find exactly one codefix.");
             }
 
-            if (actual.length > 1) {
-                this.raiseError("More than 1 codefix returned.");
+            const fileChange = ts.find(codeFix.changes, change => change.fileName === fileName);
+            if (!fileChange) {
+                this.raiseError("CodeFix found doesn't provide any changes in this file.");
             }
 
-            this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
+            this.applyEdits(fileChange.fileName, fileChange.textChanges, /*isFormattingEdit*/ false);
             const actualText = this.rangeText(ranges[0]);
 
             if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
                 this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
             }
+        }
+
+        /**
+         * Applies fixes for the errors in fileName and compares the results to
+         * expectedContents after all fixes have been applied.
+         * 
+         * Note: applying one codefix may generate another (eg: remove duplicate implements
+         * may generate an extends -> interface conversion fix).
+         * @param expectedContents The contents of the file after the fixes are applied.
+         * @param fileName The file to check. If not supplied, the current open file is used.
+         * @param errorsToFix An array of errors for which quickfixes will be applied. If not
+         * supplied, all codefixes in the file are applied until none are left, starting from
+         * the first available codefix.
+         * 
+         */
+        public verifyFileAfterCodeFix(expectedContents: string, fileName?: string, errorsToFix?: ErrorIdentifier[]) {
+            fileName = fileName ? fileName : this.activeFile.fileName;
+
+            if (errorsToFix) {
+                for (const error of errorsToFix) {
+                    const fix = this.getCodeFix(fileName, error);
+                    if (fix === undefined) {
+                        this.raiseError(`Couldn't find the ${error.count}'th error with code ${error.code}.`);
+                    }
+                    this.applyCodeAction(fix);
+                }
+            }
+            else {
+                let fix: ts.CodeAction;
+                while (fix = this.getCodeFix(fileName)) {
+                    this.applyCodeAction(fix);
+                }
+            }
+
+            const actualContents: string = this.getFileContent(fileName);
+            if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
+                this.raiseError(`Actual text doesn't match expected text. Actual:\n${actualContents}\n\nExpected:\n${expectedContents}`);
+            }
+        }
+
+        /**
+         * Rerieves a codefix satisfying the parameters, or undefined if no such codefix is found.
+         * @param fileName Path to file where error should be retrieved from.
+         * @param error We get the `error.count`'th codefix with code `error.code`.
+         * 
+         * If undefined, we get the first codefix available.
+         */
+        private getCodeFix(fileName: string, error?: ErrorIdentifier): ts.CodeAction | undefined {
+            const diagnostics: ts.Diagnostic[] = this.getDiagnostics(fileName);
+            const errorCount = error ? error.count : 0;
+
+            let countSeen = 0;
+            for (const diagnostic of diagnostics) {
+                if (error && error.code !== diagnostic.code) {
+                    continue;
+                }
+                const action = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
+                if (action) {
+                    if (action.length > errorCount - countSeen) {
+                        return action[errorCount - countSeen];
+                    }
+                    else {
+                        countSeen += action.length;
+                    }
+                }
+            }
+            return undefined;
         }
 
         public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
@@ -2344,14 +2427,14 @@ namespace FourSlash {
         }
 
         public verifyCodeFixAvailable(negative: boolean, errorCode?: number) {
-            const fixes = this.getCodeFixes(errorCode);
+            const codeFix = this.getCodeFix(this.activeFile.fileName, errorCode ? { code: errorCode, count: 0 } : undefined);
 
-            if (negative && fixes && fixes.length > 0) {
-                this.raiseError(`verifyCodeFixAvailable failed - expected no fixes, actual: ${fixes.length}`);
+            if (negative && codeFix) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found one.`);
             }
 
-            if (!negative && (fixes === undefined || fixes.length === 0)) {
-                this.raiseError(`verifyCodeFixAvailable failed - expected code fixes, actual: 0`);
+            if (!(negative || codeFix)) {
+                this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
             }
         }
 
@@ -3327,6 +3410,10 @@ namespace FourSlashInterface {
 
         public codeFixAtPosition(expectedText: string, errorCode?: number): void {
             this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        }
+
+        public fileAfterCodeFixes(expectedContents: string, fileName?: string, errorsToFix?: FourSlash.ErrorIdentifier[]): void {
+            this.state.verifyFileAfterCodeFix(expectedContents, fileName, errorsToFix);
         }
 
         public navigationBar(json: any) {

@@ -98,6 +98,10 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
+    interface ErrorIdentifier {
+        code: number;
+        count: number
+    }
     class test_ {
         markers(): Marker[];
         markerNames(): string[];
@@ -210,6 +214,7 @@ declare namespace FourSlashInterface {
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
         codeFixAtPosition(expectedText: string, errorCode?: number): void;
+        fileAfterCodeFixes(expectedContents: string, fileName?: string, errorsToFix?: ErrorIdentifier[]): void;
 
         navigationBar(json: any): void;
         navigationTree(json: any): void;
