@@ -1538,18 +1538,13 @@ namespace ts {
                     // Report error if the output overwrites input file
                     if (filesByName.contains(emitFilePath)) {
                         const sourceFile = filesByName.get(emitFilePath);
-                        if (isSourceFileJavaScript(sourceFile) && options.noEmitOverwriteForJsFiles) {
-                            blockEmitingOfFile(emitFileName);
-                        }
-                        else {
-                            blockEmitingOfFile(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
-                        }
+                        blockEmittingOfFile(emitFileName, !(options.noEmitOverwriteForJsFiles && isSourceFileJavaScript(sourceFile)) && Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
                     }
 
                     // Report error if multiple files write into same file
                     if (emitFilesSeen.contains(emitFilePath)) {
                         // Already seen the same emit file - report error
-                        blockEmitingOfFile(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
+                        blockEmittingOfFile(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
                     }
                     else {
                         emitFilesSeen.set(emitFilePath, true);
@@ -1558,7 +1553,7 @@ namespace ts {
             }
         }
 
-        function blockEmitingOfFile(emitFileName: string, message?: DiagnosticMessage) {
+        function blockEmittingOfFile(emitFileName: string, message?: DiagnosticMessage) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName, currentDirectory, getCanonicalFileName), true);
             if (message) {
                 programDiagnostics.add(createCompilerDiagnostic(message, emitFileName));
