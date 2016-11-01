@@ -943,6 +943,12 @@ namespace ts {
 
                     return false;
                 }
+
+                // Since these are syntactic diagnostics, parent might not have been set
+                // this means the sourceFile cannot be infered from the node
+                function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
+                    return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
+                }
             });
         }
 

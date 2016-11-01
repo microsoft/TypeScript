@@ -1,0 +1,12 @@
+=== tests/cases/compiler/a.js ===
+
+@SomeDecorator
+class SomeClass {
+>SomeClass : Symbol(SomeClass, Decl(a.js, 0, 0))
+
+    foo(x: number) {
+>foo : Symbol(SomeClass.foo, Decl(a.js, 2, 17))
+>x : Symbol(x, Decl(a.js, 3, 8))
+
+    }
+}

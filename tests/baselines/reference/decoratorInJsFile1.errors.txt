@@ -1,0 +1,13 @@
+tests/cases/compiler/a.js(2,1): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.
+
+
+==== tests/cases/compiler/a.js (1 errors) ====
+    
+    @SomeDecorator
+    ~~~~~~~~~~~~~~
+!!! error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.
+    class SomeClass {
+        foo(x: number) {
+    
+        }
+    }
