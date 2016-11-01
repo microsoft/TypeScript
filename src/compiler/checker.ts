@@ -16882,7 +16882,8 @@ namespace ts {
             let firstDefaultClause: CaseOrDefaultClause;
             let hasDuplicateDefaultClause = false;
 
-            let expressionType = checkExpression(node.expression);
+            const expressionType = checkExpression(node.expression);
+            const expressionIsLiteral = isLiteralType(expressionType);
             forEach(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
@@ -16905,14 +16906,14 @@ namespace ts {
                     // to or from the type of the 'switch' expression.
                     let caseType = checkExpression(caseClause.expression);
                     const caseIsLiteral = isLiteralType(caseType);
-                    const expressionIsLiteral = isLiteralType(expressionType);
+                    let literalExpressionType = expressionType;
                     if (!caseIsLiteral || !expressionIsLiteral) {
                         caseType = caseIsLiteral ? getBaseTypeOfLiteralType(caseType) : caseType;
-                        expressionType = expressionIsLiteral ? getBaseTypeOfLiteralType(expressionType) : expressionType;
+                        literalExpressionType = getBaseTypeOfLiteralType(expressionType);
                     }
-                    if (!isTypeEqualityComparableTo(expressionType, caseType)) {
+                    if (!isTypeEqualityComparableTo(literalExpressionType, caseType)) {
                         // expressionType is not comparable to caseType, try the reversed check and report errors if it fails
-                        checkTypeComparableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
+                        checkTypeComparableTo(caseType, literalExpressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }
                 forEach(clause.statements, checkSourceElement);
