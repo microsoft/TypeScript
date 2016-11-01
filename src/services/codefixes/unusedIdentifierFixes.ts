@@ -54,14 +54,6 @@ namespace ts.codefix {
                                     }
                             }
 
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ClassDeclaration:
-                        case SyntaxKind.InterfaceDeclaration:
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.ModuleDeclaration:
-                        case SyntaxKind.PropertyDeclaration:
-                            return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
-
                         case SyntaxKind.TypeParameter:
                             const typeParameters = (<DeclarationWithTypeParameters>token.parent.parent).typeParameters;
                             if (typeParameters.length === 1) {
@@ -105,6 +97,12 @@ namespace ts.codefix {
 
                         case SyntaxKind.EnumDeclaration:
                             return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
+
+                        default:
+                            if (isDeclarationName(token)) {
+                                return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
+                            }
+                            break;
                     }
                     break;
 
