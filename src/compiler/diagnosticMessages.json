@@ -3119,7 +3119,7 @@
         "category": "Message",
         "code": 90007
     },
-    "Adding a tsconfig.json file will help organizing projects with both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
+    "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
         "category": "Error",
         "code": 90009
     }
