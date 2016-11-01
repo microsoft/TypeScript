@@ -1,12 +1,14 @@
 /// <reference path='fourslash.ts' />
 
-//// interface I {
-////    f1();
-//// }
-////
-//// class /*0*/C/*1*/ /*2*/extend/*3*/s/*4*/ /*5*/I/*6*/ {/*7*/}
+//// interface I1 { }
+//// class C1 extends I1 { }
+//// interface I2 { }
+//// class C2 extends I2 { }
 
-for (let i = 0; i < 8; ++i) {
-    goTo.marker("" + i);
-    verify.codeFixAtPosition("");
-}
+// verify.codeFixAvailable();
+verify.fileAfterCodeFixes(`
+interface I1 { }
+class C1 implements I1 { }
+interface I2 { }
+class C2 implements I2 { }
+`);
