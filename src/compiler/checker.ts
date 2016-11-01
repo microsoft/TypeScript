@@ -15516,36 +15516,6 @@ namespace ts {
         }
 
         /**
-         * Checks that the return type provided is an instantiation of the global Promise<T> type
-         * and returns the awaited type of the return type.
-         *
-         * @param returnType The return type of a FunctionLikeDeclaration
-         * @param location The node on which to report the error.
-         */
-        function checkCorrectPromiseType(returnType: Type, location: Node, diagnostic: DiagnosticMessage, typeName?: string) {
-            if (returnType === unknownType) {
-                // The return type already had some other error, so we ignore and return
-                // the unknown type.
-                return unknownType;
-            }
-
-            const globalPromiseType = getGlobalPromiseType();
-            if (globalPromiseType === emptyGenericType
-                || globalPromiseType === getTargetType(returnType)) {
-                // Either we couldn't resolve the global promise type, which would have already
-                // reported an error, or we could resolve it and the return type is a valid type
-                // reference to the global type. In either case, we return the awaited type for
-                // the return type.
-                return checkAwaitedType(returnType, location, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
-            }
-
-            // The promise type was not a valid type reference to the global promise type, so we
-            // report an error and return the unknown type.
-            error(location, diagnostic, typeName);
-            return unknownType;
-        }
-
-        /**
          * Checks the return type of an async function to ensure it is a compatible
          * Promise implementation.
          *
@@ -15559,11 +15529,6 @@ namespace ts {
          * @param node The signature to check
          */
         function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration): Type {
-            if (languageVersion >= ScriptTarget.ES2015) {
-                const returnType = getTypeFromTypeNode(node.type);
-                return checkCorrectPromiseType(returnType, node.type, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
-            }
-
             // As part of our emit for an async function, we will need to emit the entity name of
             // the return type annotation as an expression. To meet the necessary runtime semantics
             // for __awaiter, we must also check that the type of the declaration (e.g. the static
@@ -15588,61 +15553,67 @@ namespace ts {
             //      then<U>(...): Promise<U>;
             //  }
             //
+            const returnType = getTypeFromTypeNode(node.type);
 
-            // Always mark the type node as referenced if it points to a value
-            markTypeNodeAsReferenced(node.type);
-
-            const promiseConstructorName = getEntityNameFromTypeNode(node.type);
-            const promiseType = getTypeFromTypeNode(node.type);
-            if (promiseType === unknownType) {
-                if (!compilerOptions.isolatedModules) {
-                    if (promiseConstructorName) {
-                        error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
-                    }
-                    else {
-                        error(node.type, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
-                    }
+            if (languageVersion >= ScriptTarget.ES2015) {
+                if (returnType === unknownType) {
+                    return unknownType;
                 }
-                return unknownType;
+                const globalPromiseType = getGlobalPromiseType();
+                if (globalPromiseType !== emptyGenericType && globalPromiseType !== getTargetType(returnType)) {
+                    // The promise type was not a valid type reference to the global promise type, so we
+                    // report an error and return the unknown type.
+                    error(node.type, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
+                    return unknownType;
+                }
             }
+            else {
+                // Always mark the type node as referenced if it points to a value
+                markTypeNodeAsReferenced(node.type);
 
-            if (promiseConstructorName === undefined) {
-                error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, typeToString(promiseType));
-                return unknownType;
-            }
+                if (returnType === unknownType) {
+                    return unknownType;
+                }
 
-            const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
-            const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : unknownType;
-            if (promiseConstructorType === unknownType) {
-                error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
-                return unknownType;
-            }
+                const promiseConstructorName = getEntityNameFromTypeNode(node.type);
+                if (promiseConstructorName === undefined) {
+                    error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, typeToString(returnType));
+                    return unknownType;
+                }
 
-            const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
-            if (globalPromiseConstructorLikeType === emptyObjectType) {
-                // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
-                // compatibility with __awaiter.
-                error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
-                return unknownType;
-            }
+                const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
+                const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : unknownType;
+                if (promiseConstructorType === unknownType) {
+                    error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                    return unknownType;
+                }
 
-            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node.type,
-                Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value)) {
-                return unknownType;
-            }
+                const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
+                if (globalPromiseConstructorLikeType === emptyObjectType) {
+                    // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
+                    // compatibility with __awaiter.
+                    error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                    return unknownType;
+                }
 
-            // Verify there is no local declaration that could collide with the promise constructor.
-            const rootName = promiseConstructorName && getFirstIdentifier(promiseConstructorName);
-            const collidingSymbol = getSymbol(node.locals, rootName.text, SymbolFlags.Value);
-            if (collidingSymbol) {
-                error(collidingSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
-                    rootName.text,
-                    entityNameToString(promiseConstructorName));
-                return unknownType;
+                if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node.type,
+                    Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value)) {
+                    return unknownType;
+                }
+
+                // Verify there is no local declaration that could collide with the promise constructor.
+                const rootName = promiseConstructorName && getFirstIdentifier(promiseConstructorName);
+                const collidingSymbol = getSymbol(node.locals, rootName.text, SymbolFlags.Value);
+                if (collidingSymbol) {
+                    error(collidingSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
+                        rootName.text,
+                        entityNameToString(promiseConstructorName));
+                    return unknownType;
+                }
             }
 
             // Get and return the awaited type of the return type.
-            return checkAwaitedType(promiseType, node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            return checkAwaitedType(returnType, node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
         }
 
         /** Check a decorator */
