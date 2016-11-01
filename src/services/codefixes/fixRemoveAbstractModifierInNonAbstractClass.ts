@@ -13,13 +13,13 @@ namespace ts.codefix {
             const classDeclaration = <ClassDeclaration>propertyDeclaration.parent;
             const classKeywordStart = classDeclaration.getChildren()[0].getStart();
 
-            let codeFix: CodeAction[] = [
+            return [
                 {
                     description: `Remove abstract modifier from ${propertyDeclaration.name.getText()}.`,
                     changes: [{
                         fileName: sourceFile.fileName,
                         textChanges: [{
-                            span: {start: start, length: context.span.length + /*space*/ 1},
+                            span: { start: start, length: context.span.length + /*space*/ 1 },
                             newText: ""
                         }]
                     }]
@@ -35,8 +35,6 @@ namespace ts.codefix {
                     }]
                 }
             ];
-
-            return codeFix;
         }
     });
 }

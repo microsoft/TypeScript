@@ -1368,8 +1368,8 @@ namespace ts {
         }
 
         const missingMembers = getMissingInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], existingMembers, checker);
-        
-        for (let member of missingMembers) {
+
+        for (const member of missingMembers) {
             if (member.kind === SyntaxKind.PropertySignature) {
                 const interfaceProperty = <PropertySignature>member;
                 if (trackingAddedMembers.indexOf(interfaceProperty.name.getText()) === -1) {
@@ -1422,7 +1422,7 @@ namespace ts {
     }
 
     function getMissingInterfaceMembers(declaration: InterfaceDeclaration, existingMembers: string[], checker: TypeChecker): TypeElement[] {
-        let interfaceMembers = getInterfaceMembers(declaration, checker);
+        const interfaceMembers = getInterfaceMembers(declaration, checker);
 
         return ts.filter(interfaceMembers, member => !member.name || existingMembers.indexOf(member.name.getText()) === -1);
 

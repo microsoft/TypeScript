@@ -18,7 +18,7 @@ namespace ts.codefix {
                 let textChanges: TextChange[] = undefined;
 
                 for (let i = 0; interfaceClauses && i < interfaceClauses.length; i++) {
-                    let newChanges = getCodeFixChanges(interfaceClauses[i], classMembers, startPos, checker, /*reference*/ false, trackingAddedMembers, context.newLineCharacter);
+                    const newChanges = getCodeFixChanges(interfaceClauses[i], classMembers, startPos, checker, /*reference*/ false, trackingAddedMembers, context.newLineCharacter);
                     textChanges = textChanges ? textChanges.concat(newChanges) : newChanges;
                 }
 

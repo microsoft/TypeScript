@@ -13,7 +13,7 @@ namespace ts.codefix {
 
             const extendsNode = (token.parent.parent as HeritageClause).getChildren()[0];
 
-            let result = [{
+            const result = [{
                 description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements),
                 changes: [{
                     fileName: sourceFile.fileName,
