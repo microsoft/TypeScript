@@ -16,6 +16,13 @@ verify.getSyntacticDiagnostics(`[
     "code": 8010
   },
   {
+    "message": "\'types\' can only be used in a .ts file.",
+    "start": 52,
+    "length": 6,
+    "category": "error",
+    "code": 8010
+  },
+  {
     "message": "Variable declaration expected.",
     "start": 67,
     "length": 3,
