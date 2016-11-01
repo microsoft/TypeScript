@@ -50,7 +50,7 @@ function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, a
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
 >arg1 : T
 >a : string
->ignore-prop : any
+>ignore-prop : true
 
     let a1 = <OverloadComponent {...arg2} ignore-pro="hello world" />;
 >a1 : JSX.Element
@@ -70,7 +70,7 @@ function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, a
 ><OverloadComponent {...arg1} ignore-prop /> : JSX.Element
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
 >arg1 : T
->ignore-prop : any
+>ignore-prop : true
 
     let a4 = <OverloadComponent />;
 >a4 : JSX.Element
@@ -90,7 +90,7 @@ function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, a
 ><OverloadComponent {...arg2} ignore-prop {...arg1} /> : JSX.Element
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
 >arg2 : U
->ignore-prop : any
+>ignore-prop : true
 >arg1 : T
 }
 

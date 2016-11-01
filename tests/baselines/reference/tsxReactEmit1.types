@@ -65,7 +65,7 @@ var selfClosed7 = <div x={p} y='p' b />;
 >x : undefined
 >p : undefined
 >y : string
->b : any
+>b : true
 
 var openClosed1 = <div></div>;
 >openClosed1 : JSX.Element
@@ -103,7 +103,7 @@ var openClosed5 = <div n='m' b>{p > p}</div>;
 ><div n='m' b>{p > p}</div> : JSX.Element
 >div : any
 >n : string
->b : any
+>b : true
 >p > p : boolean
 >p : undefined
 >p : undefined

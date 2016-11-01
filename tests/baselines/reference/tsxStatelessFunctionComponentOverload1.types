@@ -54,14 +54,14 @@ const c3 = <OneThing yxx="hello" ignore-prop />
 ><OneThing yxx="hello" ignore-prop /> : JSX.Element
 >OneThing : { (k: { yxx: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
 >yxx : string
->ignore-prop : any
+>ignore-prop : true
 
 const c4 = <OneThing data="hello" data-prop />
 >c4 : JSX.Element
 ><OneThing data="hello" data-prop /> : JSX.Element
 >OneThing : { (k: { yxx: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
 >data : string
->data-prop : any
+>data-prop : true
 
 declare function TestingOneThing({y1: string}): JSX.Element;
 >TestingOneThing : { ({y1: string}: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
@@ -98,8 +98,8 @@ const d1 = <TestingOneThing y1 extra-data />;
 >d1 : JSX.Element
 ><TestingOneThing y1 extra-data /> : JSX.Element
 >TestingOneThing : { ({y1: string}: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
->y1 : any
->extra-data : any
+>y1 : true
+>extra-data : true
 
 const d2 = <TestingOneThing extra-data="hello" />;
 >d2 : JSX.Element
@@ -160,7 +160,7 @@ const e2 = <TestingOptional extra-prop/>
 >e2 : JSX.Element
 ><TestingOptional extra-prop/> : JSX.Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->extra-prop : any
+>extra-prop : true
 
 const e3 = <TestingOptional y1="hello"/>
 >e3 : JSX.Element
@@ -180,15 +180,15 @@ const e5 = <TestingOptional y1 y3/>
 >e5 : JSX.Element
 ><TestingOptional y1 y3/> : JSX.Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->y1 : any
->y3 : any
+>y1 : true
+>y3 : true
 
 const e6 = <TestingOptional y1 y3 y2={10} />
 >e6 : JSX.Element
 ><TestingOptional y1 y3 y2={10} /> : JSX.Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->y1 : any
->y3 : any
+>y1 : true
+>y3 : true
 >y2 : number
 >10 : 10
 

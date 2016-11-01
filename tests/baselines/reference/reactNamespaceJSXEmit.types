@@ -15,7 +15,7 @@ declare var x: any;
 <foo data/>;
 ><foo data/> : any
 >foo : any
->data : any
+>data : true
 
 <Bar x={x} />;
 ><Bar x={x} /> : any

@@ -31,5 +31,5 @@ let p = <Poisoned x/>;
 >p : JSX.Element
 ><Poisoned x/> : JSX.Element
 >Poisoned : typeof Poisoned
->x : any
+>x : true
 

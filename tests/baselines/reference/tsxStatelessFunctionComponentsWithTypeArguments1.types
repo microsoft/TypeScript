@@ -73,7 +73,7 @@ function createComponent<T extends {prop: number}>(arg:T) {
 ><Component {...arg} prop1 /> : JSX.Element
 >Component : <U>(l: U) => JSX.Element
 >arg : T
->prop1 : any
+>prop1 : true
 }
 
 declare function ComponentSpecific<U>(l: {prop: U}): JSX.Element;

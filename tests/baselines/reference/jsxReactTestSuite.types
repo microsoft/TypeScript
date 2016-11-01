@@ -255,7 +255,7 @@ var x =
 
 ={2 } z />;
 >2 : 2
->z : any
+>z : true
 
 <Component
 ><Component    {...this.props} sound="moo" /> : any
@@ -299,7 +299,7 @@ var x =
 >x : any
 >y : number
 >2 : 2
->z : any
+>z : true
 
 <Component x={1} {...y} />;
 ><Component x={1} {...y} /> : any

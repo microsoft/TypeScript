@@ -35,7 +35,7 @@ let render = (ctrl, model) =>
 ><input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" value={model.newTodo} onKeyup={ctrl.addTodo.bind(ctrl, model)} /> : any
 >input : any
 >class : string
->autofocus : any
+>autofocus : true
 >autocomplete : string
 >placeholder : string
 >value : any

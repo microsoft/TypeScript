@@ -64,7 +64,7 @@ let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
 ><OverWriteAttr {...obj} y overwrite="hi" {...obj1} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
 >obj : {}
->y : any
+>y : true
 >overwrite : string
 >obj1 : { x: number; }
 
