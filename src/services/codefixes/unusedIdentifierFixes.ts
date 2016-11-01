@@ -95,9 +95,6 @@ namespace ts.codefix {
                         case SyntaxKind.NamespaceImport:
                             return createCodeFix("", token.parent.parent.parent.pos, token.parent.parent.parent.end - token.parent.parent.parent.pos);
 
-                        case SyntaxKind.EnumDeclaration:
-                            return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
-
                         default:
                             if (isDeclarationName(token)) {
                                 return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
@@ -106,11 +103,9 @@ namespace ts.codefix {
                     }
                     break;
 
-                case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.PropertyDeclaration:
                     return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
 
-                case SyntaxKind.AsteriskToken:
                 case SyntaxKind.NamespaceImport:
                     return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
             }
