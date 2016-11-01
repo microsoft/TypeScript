@@ -1,0 +1,205 @@
+=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty.ts ===
+interface Square {
+>Square : Square
+
+    kind: "square";
+>kind : "square"
+
+    size: number;
+>size : number
+}
+
+interface Rectangle {
+>Rectangle : Rectangle
+
+    kind: "rectangle";
+>kind : "rectangle"
+
+    width: number;
+>width : number
+
+    height: number;
+>height : number
+}
+
+interface Circle {
+>Circle : Circle
+
+    kind: "circle";
+>kind : "circle"
+
+    radius: number;
+>radius : number
+}
+
+type Shape = Square | Rectangle | Circle;
+>Shape : Shape
+>Square : Square
+>Rectangle : Rectangle
+>Circle : Circle
+
+interface Subshape {
+>Subshape : Subshape
+
+    "0": {
+        sub: {
+>sub : { under: { shape: Shape; }; }
+
+            under: {
+>under : { shape: Shape; }
+
+                shape: Shape;
+>shape : Shape
+>Shape : Shape
+            }
+        }
+    }
+}
+function area(s: Shape): number {
+>area : (s: Shape) => number
+>s : Shape
+>Shape : Shape
+
+    switch(s['kind']) {
+>s['kind'] : "square" | "rectangle" | "circle"
+>s : Shape
+>'kind' : string
+
+        case "square": return s.size * s.size;
+>"square" : "square"
+>s.size * s.size : number
+>s.size : number
+>s : Square
+>size : number
+>s.size : number
+>s : Square
+>size : number
+
+        case "rectangle": return s.width * s.height;
+>"rectangle" : "rectangle"
+>s.width * s.height : number
+>s.width : number
+>s : Rectangle
+>width : number
+>s.height : number
+>s : Rectangle
+>height : number
+
+        case "circle": return Math.PI * s.radius * s.radius;
+>"circle" : "circle"
+>Math.PI * s.radius * s.radius : number
+>Math.PI * s.radius : number
+>Math.PI : number
+>Math : Math
+>PI : number
+>s.radius : number
+>s : Circle
+>radius : number
+>s.radius : number
+>s : Circle
+>radius : number
+    }
+}
+
+function subarea(s: Subshape): number {
+>subarea : (s: Subshape) => number
+>s : Subshape
+>Subshape : Subshape
+
+    switch(s[0]["sub"].under["shape"]["kind"]) {
+>s[0]["sub"].under["shape"]["kind"] : "square" | "rectangle" | "circle"
+>s[0]["sub"].under["shape"] : Shape
+>s[0]["sub"].under : { shape: Shape; }
+>s[0]["sub"] : { under: { shape: Shape; }; }
+>s[0] : { sub: { under: { shape: Shape; }; }; }
+>s : Subshape
+>0 : number
+>"sub" : string
+>under : { shape: Shape; }
+>"shape" : string
+>"kind" : string
+
+        case "square": return s[0].sub.under.shape.size * s[0].sub.under.shape.size;
+>"square" : "square"
+>s[0].sub.under.shape.size * s[0].sub.under.shape.size : number
+>s[0].sub.under.shape.size : number
+>s[0].sub.under.shape : Square
+>s[0].sub.under : { shape: Shape; }
+>s[0].sub : { under: { shape: Shape; }; }
+>s[0] : { sub: { under: { shape: Shape; }; }; }
+>s : Subshape
+>0 : number
+>sub : { under: { shape: Shape; }; }
+>under : { shape: Shape; }
+>shape : Square
+>size : number
+>s[0].sub.under.shape.size : number
+>s[0].sub.under.shape : Square
+>s[0].sub.under : { shape: Shape; }
+>s[0].sub : { under: { shape: Shape; }; }
+>s[0] : { sub: { under: { shape: Shape; }; }; }
+>s : Subshape
+>0 : number
+>sub : { under: { shape: Shape; }; }
+>under : { shape: Shape; }
+>shape : Square
+>size : number
+
+        case "rectangle": return s[0]["sub"]["under"]["shape"]["width"] * s[0]["sub"]["under"]["shape"].height;
+>"rectangle" : "rectangle"
+>s[0]["sub"]["under"]["shape"]["width"] * s[0]["sub"]["under"]["shape"].height : number
+>s[0]["sub"]["under"]["shape"]["width"] : number
+>s[0]["sub"]["under"]["shape"] : Rectangle
+>s[0]["sub"]["under"] : { shape: Shape; }
+>s[0]["sub"] : { under: { shape: Shape; }; }
+>s[0] : { sub: { under: { shape: Shape; }; }; }
+>s : Subshape
+>0 : number
+>"sub" : string
+>"under" : string
+>"shape" : string
+>"width" : string
+>s[0]["sub"]["under"]["shape"].height : number
+>s[0]["sub"]["under"]["shape"] : Rectangle
+>s[0]["sub"]["under"] : { shape: Shape; }
+>s[0]["sub"] : { under: { shape: Shape; }; }
+>s[0] : { sub: { under: { shape: Shape; }; }; }
+>s : Subshape
+>0 : number
+>"sub" : string
+>"under" : string
+>"shape" : string
+>height : number
+
+        case "circle": return Math.PI * s[0].sub.under["shape"].radius * s[0]["sub"].under.shape["radius"];
+>"circle" : "circle"
+>Math.PI * s[0].sub.under["shape"].radius * s[0]["sub"].under.shape["radius"] : number
+>Math.PI * s[0].sub.under["shape"].radius : number
+>Math.PI : number
+>Math : Math
+>PI : number
+>s[0].sub.under["shape"].radius : number
+>s[0].sub.under["shape"] : Circle
+>s[0].sub.under : { shape: Shape; }
+>s[0].sub : { under: { shape: Shape; }; }
+>s[0] : { sub: { under: { shape: Shape; }; }; }
+>s : Subshape
+>0 : number
+>sub : { under: { shape: Shape; }; }
+>under : { shape: Shape; }
+>"shape" : string
+>radius : number
+>s[0]["sub"].under.shape["radius"] : number
+>s[0]["sub"].under.shape : Circle
+>s[0]["sub"].under : { shape: Shape; }
+>s[0]["sub"] : { under: { shape: Shape; }; }
+>s[0] : { sub: { under: { shape: Shape; }; }; }
+>s : Subshape
+>0 : number
+>"sub" : string
+>under : { shape: Shape; }
+>shape : Circle
+>"radius" : string
+    }
+}
+

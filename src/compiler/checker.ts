@@ -8183,11 +8183,25 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                     return target.kind === SyntaxKind.ThisKeyword;
                 case SyntaxKind.PropertyAccessExpression:
-                    return target.kind === SyntaxKind.PropertyAccessExpression &&
-                        (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
-                        isMatchingReference((<PropertyAccessExpression>source).expression, (<PropertyAccessExpression>target).expression);
+                case SyntaxKind.ElementAccessExpression:
+                    if (target.kind !== SyntaxKind.PropertyAccessExpression && target.kind !== SyntaxKind.ElementAccessExpression) {
+                        return false;
+                    }
+                    const sourceAccess = source as PropertyAccessExpression | ElementAccessExpression;
+                    const targetAccess = target as PropertyAccessExpression | ElementAccessExpression;
+                    return isMatchingReference(sourceAccess.expression, targetAccess.expression) &&
+                        getAccessedPropertyName(sourceAccess) === getAccessedPropertyName(targetAccess);
+                }
+                return false;
+        }
+
+        function getAccessedPropertyName(access: PropertyAccessExpression | ElementAccessExpression, type?: Type | undefined): string {
+            if (!type) {
+                type = getTypeOfNode(access.expression);
             }
-            return false;
+            return access.kind === SyntaxKind.PropertyAccessExpression ?
+                (access as PropertyAccessExpression).name.text :
+                getPropertyNameForIndexedAccess((access as ElementAccessExpression).argumentExpression, type);
         }
 
         function containsMatchingReference(source: Node, target: Node) {
@@ -8853,7 +8867,9 @@ namespace ts {
                     type = narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                 }
                 else if (isMatchingReferenceDiscriminant(expr)) {
-                    type = narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
+                    type = narrowTypeByDiscriminant(type,
+                                                    expr as PropertyAccessExpression | ElementAccessExpression,
+                                                    t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
@@ -8960,14 +8976,17 @@ namespace ts {
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression) {
-                return expr.kind === SyntaxKind.PropertyAccessExpression &&
-                    declaredType.flags & TypeFlags.Union &&
-                    isMatchingReference(reference, (<PropertyAccessExpression>expr).expression) &&
-                    isDiscriminantProperty(declaredType, (<PropertyAccessExpression>expr).name.text);
+                if (!(declaredType.flags & TypeFlags.Union) ||
+                    expr.kind !== SyntaxKind.PropertyAccessExpression && expr.kind !== SyntaxKind.ElementAccessExpression) {
+                    return false;
+                }
+                const access = expr as PropertyAccessExpression | ElementAccessExpression;
+                const name = getAccessedPropertyName(access, declaredType);
+                return isMatchingReference(reference, access.expression) && isDiscriminantProperty(declaredType, name);
             }
 
-            function narrowTypeByDiscriminant(type: Type, propAccess: PropertyAccessExpression, narrowType: (t: Type) => Type): Type {
-                const propName = propAccess.name.text;
+            function narrowTypeByDiscriminant(type: Type, access: PropertyAccessExpression | ElementAccessExpression, narrowType: (t: Type) => Type): Type {
+                const propName = getAccessedPropertyName(access, type);
                 const propType = getTypeOfPropertyOfType(type, propName);
                 const narrowedPropType = propType && narrowType(propType);
                 return propType === narrowedPropType ? type : filterType(type, t => isTypeComparableTo(getTypeOfPropertyOfType(t, propName), narrowedPropType));
@@ -8978,7 +8997,7 @@ namespace ts {
                     return getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
                 }
                 if (isMatchingReferenceDiscriminant(expr)) {
-                    return narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
+                    return narrowTypeByDiscriminant(type, <PropertyAccessExpression | ElementAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
                 }
                 if (containsMatchingReferenceDiscriminant(reference, expr)) {
                     return declaredType;
@@ -9010,10 +9029,10 @@ namespace ts {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
                         if (isMatchingReferenceDiscriminant(left)) {
-                            return narrowTypeByDiscriminant(type, <PropertyAccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
+                            return narrowTypeByDiscriminant(type, <PropertyAccessExpression | ElementAccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
                         if (isMatchingReferenceDiscriminant(right)) {
-                            return narrowTypeByDiscriminant(type, <PropertyAccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
+                            return narrowTypeByDiscriminant(type, <PropertyAccessExpression | ElementAccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
                             return declaredType;
@@ -11504,7 +11523,7 @@ namespace ts {
                     const prop = getPropertyOfType(objectType, name);
                     if (prop) {
                         getNodeLinks(node).resolvedSymbol = prop;
-                        return getTypeOfSymbol(prop);
+                        return getFlowTypeOfReference(node, getTypeOfSymbol(prop), /*assumeInitialized*/ true, /*flowContainer*/ undefined);
                     }
                     else if (isConstEnum) {
                         error(node.argumentExpression, Diagnostics.Property_0_does_not_exist_on_const_enum_1, name, symbolToString(objectType.symbol));
@@ -14728,7 +14747,8 @@ namespace ts {
                 for (const decl of indexSymbol.declarations) {
                     const declaration = <SignatureDeclaration>decl;
                     if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
-                        switch (declaration.parameters[0].type.kind) {
+                        const workaround = 0;
+                        switch (declaration.parameters[workaround].type.kind) {
                             case SyntaxKind.StringKeyword:
                                 if (!seenStringIndexer) {
                                     seenStringIndexer = true;
