@@ -1538,18 +1538,18 @@ namespace ts {
                     // Report error if the output overwrites input file
                     if (filesByName.contains(emitFilePath)) {
                         const sourceFile = filesByName.get(emitFilePath);
-                        if (isSourceFileJavaScript(sourceFile) && options.noEmitForJsFiles) {
-                            createEmitBlockingDiagnostics(emitFileName);
+                        if (isSourceFileJavaScript(sourceFile) && options.noEmitOverwriteForJsFiles) {
+                            blockEmitingOfFile(emitFileName);
                         }
                         else {
-                            createEmitBlockingDiagnostics(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
+                            blockEmitingOfFile(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
                         }
                     }
 
                     // Report error if multiple files write into same file
                     if (emitFilesSeen.contains(emitFilePath)) {
                         // Already seen the same emit file - report error
-                        createEmitBlockingDiagnostics(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
+                        blockEmitingOfFile(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
                     }
                     else {
                         emitFilesSeen.set(emitFilePath, true);
@@ -1558,7 +1558,7 @@ namespace ts {
             }
         }
 
-        function createEmitBlockingDiagnostics(emitFileName: string, message?: DiagnosticMessage) {
+        function blockEmitingOfFile(emitFileName: string, message?: DiagnosticMessage) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName, currentDirectory, getCanonicalFileName), true);
             if (message) {
                 programDiagnostics.add(createCompilerDiagnostic(message, emitFileName));

@@ -162,7 +162,7 @@ namespace ts.server {
             }
 
             if (this.projectKind === ProjectKind.Inferred) {
-                this.compilerOptions.noEmitForJsFiles = true;
+                this.compilerOptions.noEmitOverwriteForJsFiles = true;
             }
 
             if (languageServiceEnabled) {

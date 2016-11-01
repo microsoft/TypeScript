@@ -2984,7 +2984,7 @@ namespace ts {
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
-        /*@internal*/noEmitForJsFiles?: boolean;
+        /*@internal*/noEmitOverwriteForJsFiles?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
