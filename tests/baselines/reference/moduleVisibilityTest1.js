@@ -86,12 +86,12 @@ var M;
         function someExportedInnerFunc() { return -2; }
         InnerMod.someExportedInnerFunc = someExportedInnerFunc;
     })(InnerMod = M.InnerMod || (M.InnerMod = {}));
+    var E;
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
-    })(M.E || (M.E = {}));
-    var E = M.E;
+    })(E = M.E || (M.E = {}));
     M.x = 5;
     var y = M.x + M.x;
     var B = (function () {

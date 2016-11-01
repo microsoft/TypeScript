@@ -163,7 +163,7 @@
         "category": "Error",
         "code": 1054
     },
-    "Type '{0}' is not a valid async function return type.": {
+    "Type '{0}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.": {
         "category": "Error",
         "code": 1055
     },
@@ -1839,6 +1839,10 @@
         "category": "Error",
         "code": 2664
     },
+    "Invalid module name in augmentation. Module '{0}' resolves to an untyped module at '{1}', which cannot be augmented.": {
+        "category": "Error",
+        "code": 2665
+    },
     "Exports and export assignments are not permitted in module augmentations.": {
         "category": "Error",
         "code": 2666
@@ -2693,7 +2697,7 @@
         "category": "Message",
         "code": 6099
     },
-    "'package.json' does not have 'types' field.": {
+    "'package.json' does not have a 'types' or 'main' field.": {
         "category": "Message",
         "code": 6100
     },
@@ -2841,7 +2845,7 @@
         "category": "Message",
         "code": 6136
     },
-    "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
+    "No types specified in 'package.json', so returning 'main' value of '{0}'": {
         "category": "Message",
         "code": 6137
     },
@@ -2860,6 +2864,14 @@
     "Parse in strict mode and emit \"use strict\" for each source file": {
         "category": "Message",
         "code": 6141
+    },
+    "Module '{0}' was resolved to '{1}', but '--jsx' is not set.": {
+        "category": "Error",
+        "code": 6142
+    },
+    "Module '{0}' was resolved to '{1}', but '--allowJs' is not set.": {
+        "category": "Error",
+        "code": 6143
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2892,6 +2904,10 @@
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
+    },
+    "Could not find a declaration file for module '{0}'. '{1}' implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7016
     },
     "Index signature of object type implicitly has an 'any' type.": {
         "category": "Error",

@@ -341,7 +341,7 @@ declare var IDBCursorWithValue: {
 
 interface IDBDatabase extends EventTarget {
     readonly name: string;
-    readonly objectStoreNames: DOMStringList;
+    readonly objectStoreNames: string[];
     onabort: (this: this, ev: Event) => any;
     onerror: (this: this, ev: ErrorEvent) => any;
     version: number;
@@ -407,7 +407,7 @@ declare var IDBKeyRange: {
 }
 
 interface IDBObjectStore {
-    readonly indexNames: DOMStringList;
+    readonly indexNames: string[];
     keyPath: string | string[];
     readonly name: string;
     readonly transaction: IDBTransaction;
@@ -740,6 +740,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly upload: XMLHttpRequestUpload;
     withCredentials: boolean;
     msCaching?: string;
+    readonly responseURL: string;
     abort(): void;
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string | null;
@@ -902,6 +903,7 @@ declare var WorkerLocation: {
 }
 
 interface WorkerNavigator extends Object, NavigatorID, NavigatorOnLine {
+    readonly hardwareConcurrency: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
