@@ -26,7 +26,7 @@
 /// <reference path='formatting\smartIndenter.ts' />
 /// <reference path='codefixes\codeFixProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
-/// <reference path='coderefactorings\coderefactoringprovider.ts' />
+/// <reference path='coderefactorings\codeRefactoringProvider.ts' />
 /// <reference path='coderefactorings\coderefactorings.ts' />
 
 namespace ts {
