@@ -3,9 +3,7 @@
 //@Filename: file.tsx
 // @jsx: preserve
 // @noLib: true
-// @libFiles: react.d.ts,lib.d.ts
 
-//// import React = require('react');
 //// declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
 
 //// function Baz<T,U>(key1: T, value: U) {
@@ -14,7 +12,7 @@
 //// }
 
 verify.quickInfos({
-    1: "function ComponentWithTwoAttributes<T, U>(l: {\n    key: T;\n   value: U;\n}): any",
-    2: "(attribute) key1: T",
-    3: "(attribute) value: U",
+    1: "function ComponentWithTwoAttributes<T, U>(l: {\n    key1: T;\n    value: U;\n}): any",
+    2: "(JSX attribute) key1: T",
+    3: "(JSX attribute) value: U",
 });

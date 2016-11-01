@@ -3,9 +3,6 @@
 //@Filename: file.tsx
 // @jsx: preserve
 // @noLib: true
-// @libFiles: react.d.ts,lib.d.ts
-
-//// import React = require('react');
 
 //// interface OptionProp {
 ////     propx: 2
@@ -27,7 +24,7 @@
 
 verify.quickInfos({
     1: "class Opt",
-    2: "(attribute) OptionProp.propx: 2",
+    2: "(JSX attribute) propx: number",
     3: "const obj1: OptionProp",
-    4: "(attribute) OptionProp.propx: 2"
+    4: "(JSX attribute) propx: true"
 });

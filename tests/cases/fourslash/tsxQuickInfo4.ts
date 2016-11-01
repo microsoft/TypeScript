@@ -3,9 +3,7 @@
 //@Filename: file.tsx
 // @jsx: preserve
 // @noLib: true
-// @libFiles: react.d.ts,lib.d.ts
 
-//// import React = require('react');
 //// export interface ClickableProps {
 ////     children?: string;
 ////     className?: string;
@@ -41,15 +39,17 @@
 ////     );
 //// }
 
-//// function buildSomeElement2(): JSX.Element {
+//// function buildSomeElement2(): JSX.Element {  
 ////     return (
-////         <MainB/*3*/utton onC/*4*/lick={()=>{}}>GO</MainButton>
+////         <MainB/*3*/utton onC/*4*/lick={()=>{}}>GO</MainButton>;
 ////     );
 //// }
+//// let componenet = <MainButton onClick={()=>{}} ext/*5*/ra-prop>GO</MainButton>;  
 
 verify.quickInfos({
-    1: "function MainButton(linkProps: LinkProps): JSX.Element (+1 Overload)",
-    2: "(attribute) LinkProps.to: string",
-    3: "function MainButton(buttonProps: ButtonProps): JSX.Element (+1 Overload)",
-    4: "(attribute) ButtonProps.onClick: ()=>void",
+    1: "function MainButton(linkProps: LinkProps): any (+1 overload)",
+    2: "(JSX attribute) to: string",
+    3: "function MainButton(buttonProps: ButtonProps): any (+1 overload)",
+    4: "(JSX attribute) onClick: () => void",
+    5: "(JSX attribute) extra-prop: true"
 });

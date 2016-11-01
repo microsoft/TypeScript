@@ -3,9 +3,7 @@
 //@Filename: file.tsx
 // @jsx: preserve
 // @noLib: true
-// @libFiles: react.d.ts,lib.d.ts
 
-//// import React = require('react');
 //// declare function ComponentSpecific<U>(l: {prop: U}): JSX.Element;
 //// declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": number}): JSX.Element;
 

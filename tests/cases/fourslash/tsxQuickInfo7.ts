@@ -3,11 +3,8 @@
 //@Filename: file.tsx
 // @jsx: preserve
 // @noLib: true
-// @libFiles: react.d.ts,lib.d.ts
 
-//// import React = require('react');
-
-//// declare function OverloadComponent<U>(): JSX.Element;
+//// declare function OverloadComponent(): JSX.Element;
 //// declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": boolean}): JSX.Element;
 //// declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
 
@@ -20,12 +17,12 @@
 ////     let a5 = <Overloa/*6*/dComponent {...arg2} ignore-prop="hello" {...arg1} />;
 ////     let a6 = <Overloa/*7*/dComponent {...arg2} ignore-prop {...arg1} />;
 //// }
-"function OverloadComponent<U>(): any (+2 overloads)"
-verify.quickInfos({ 
-    1: "function OverloadComponent<number>(attr: {\n    b: number;\n    a?: string;\n   \"ignore-prop\": boolean\n}): any (+2 overloads)",
+
+verify.quickInfos({
+    1: "function OverloadComponent<number>(attr: {\n    b: number;\n    a?: string;\n    \"ignore-prop\": boolean;\n}): any (+2 overloads)",
     2: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)",
     3: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)",
-    4: "function OverloadComponent<number>(attr: {\n    b: number;\n    a?: string;\n   \"ignore-prop\": boolean\n}): any",
+    4: "function OverloadComponent<number>(attr: {\n    b: number;\n    a?: string;\n    \"ignore-prop\": boolean;\n}): any (+2 overloads)",
     5: "function OverloadComponent(): any (+2 overloads)",
     6: "function OverloadComponent<boolean, number>(attr: {\n    b: number;\n    a: boolean;\n}): any (+2 overloads)",
     7: "function OverloadComponent<boolean, number>(attr: {\n    b: number;\n    a: boolean;\n}): any (+2 overloads)"
