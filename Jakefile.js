@@ -70,14 +70,15 @@ var compilerSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es2015.ts",
-    "transformers/module/system.ts",
-    "transformers/module/module.ts",
     "transformers/jsx.ts",
     "transformers/es2017.ts",
     "transformers/es2016.ts",
     "transformers/es2015.ts",
     "transformers/generators.ts",
+    "transformers/es5.ts",
+    "transformers/module/es2015.ts",
+    "transformers/module/system.ts",
+    "transformers/module/module.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -105,14 +106,15 @@ var servicesSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es2015.ts",
-    "transformers/module/system.ts",
-    "transformers/module/module.ts",
     "transformers/jsx.ts",
     "transformers/es2017.ts",
     "transformers/es2016.ts",
     "transformers/es2015.ts",
     "transformers/generators.ts",
+    "transformers/es5.ts",
+    "transformers/module/es2015.ts",
+    "transformers/module/system.ts",
+    "transformers/module/module.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -445,6 +447,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (opts.stripInternal) {
             options += " --stripInternal";
         }
+
+        options += " --target es5 --noUnusedLocals --noUnusedParameters";
 
         var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");
