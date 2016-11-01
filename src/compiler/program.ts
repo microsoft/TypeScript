@@ -1537,7 +1537,13 @@ namespace ts {
                     const emitFilePath = toPath(emitFileName, currentDirectory, getCanonicalFileName);
                     // Report error if the output overwrites input file
                     if (filesByName.contains(emitFilePath)) {
-                        createEmitBlockingDiagnostics(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
+                        const sourceFile = filesByName.get(emitFilePath);
+                        if (isSourceFileJavaScript(sourceFile) && options.noEmitForJsFiles) {
+                            createEmitBlockingDiagnostics(emitFileName);
+                        }
+                        else {
+                            createEmitBlockingDiagnostics(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
+                        }
                     }
 
                     // Report error if multiple files write into same file
@@ -1552,9 +1558,11 @@ namespace ts {
             }
         }
 
-        function createEmitBlockingDiagnostics(emitFileName: string, message: DiagnosticMessage) {
+        function createEmitBlockingDiagnostics(emitFileName: string, message?: DiagnosticMessage) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName, currentDirectory, getCanonicalFileName), true);
-            programDiagnostics.add(createCompilerDiagnostic(message, emitFileName));
+            if (message) {
+                programDiagnostics.add(createCompilerDiagnostic(message, emitFileName));
+            }
         }
     }
 }
