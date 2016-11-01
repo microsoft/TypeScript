@@ -22,33 +22,17 @@ namespace ts {
             newLine: "\r\n",
             useCaseSensitiveFileNames: false,
             write: noop,
-            readFile: (path: string): string => {
-                return path in fileMap ? fileMap[path].content : undefined;
-            },
-            writeFile: (_path: string, _data: string, _writeByteOrderMark?: boolean) => {
-                return ts.notImplemented();
-            },
-            resolvePath: (_path: string): string => {
-                return ts.notImplemented();
-            },
-            fileExists: (path: string): boolean => {
-                return path in fileMap;
-            },
-            directoryExists: (path: string): boolean => {
-                return existingDirectories[path] || false;
-            },
+            readFile: path => path in fileMap ? fileMap[path].content : undefined,
+            writeFile: notImplemented,
+            resolvePath: notImplemented,
+            fileExists: path => path in fileMap,
+            directoryExists: path => existingDirectories[path] || false,
             createDirectory: noop,
-            getExecutingFilePath: (): string => {
-                return "";
-            },
-            getCurrentDirectory: (): string => {
-                return "";
-            },
+            getExecutingFilePath: () => "",
+            getCurrentDirectory: () => "",
             getDirectories: () => [],
             getEnvironmentVariable: () => "",
-            readDirectory: (_path: string, _extension?: string[], _exclude?: string[], _include?: string[]): string[] => {
-                return ts.notImplemented();
-            },
+            readDirectory: notImplemented,
             exit: noop,
             watchFile: () => ({
                 close: noop
@@ -58,8 +42,8 @@ namespace ts {
             }),
             setTimeout,
             clearTimeout,
-            setImmediate,
-            clearImmediate
+            setImmediate: typeof setImmediate !== "undefined" ? setImmediate : action => setTimeout(action, 0),
+            clearImmediate: typeof clearImmediate !== "undefined" ? clearImmediate : clearTimeout
         };
     }
 
