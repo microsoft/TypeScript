@@ -5713,7 +5713,7 @@ namespace ts {
 
         function getIndexType(type: Type): Type {
             return type.flags & TypeFlags.TypeParameter ? getIndexTypeForTypeParameter(<TypeParameter>type) :
-                getIndexInfoOfType(type, IndexKind.String) ? stringOrNumberType :
+                type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringOrNumberType :
                 getIndexInfoOfType(type, IndexKind.Number) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type)]) :
                 getLiteralTypeFromPropertyNames(type);
         }
