@@ -1,0 +1,18 @@
+tests/cases/compiler/unusedLocalProperty.ts(3,25): error TS6138: Property 'species' is declared but never used.
+
+
+==== tests/cases/compiler/unusedLocalProperty.ts (1 errors) ====
+    declare var console: { log(msg: any): void; }
+    class Animal {
+        constructor(private species: string) {
+                            ~~~~~~~
+!!! error TS6138: Property 'species' is declared but never used.
+        }
+    
+        printSpecies() {
+            let { species } = this;
+            console.log(species);
+        }
+    }
+    
+    
