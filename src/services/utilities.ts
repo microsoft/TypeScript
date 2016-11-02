@@ -1361,13 +1361,13 @@ namespace ts {
 
     export function getCodeFixChanges(interfaceClause: Node, existingMembers: string[], startPos: number, checker: TypeChecker, reference: boolean, trackingAddedMembers: string[], newLineCharacter: string): TextChange[] {
         const type = checker.getTypeAtLocation(interfaceClause);
-        const changesArray: TextChange[] = [];
 
         if (!(type && type.symbol && type.symbol.declarations && type.symbol.declarations.length > 0)) {
             return [];
         }
 
         const missingMembers = getMissingInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], existingMembers, checker);
+        const changesArray: TextChange[] = [];
 
         for (const member of missingMembers) {
             if (member.kind === SyntaxKind.PropertySignature || member.kind === SyntaxKind.PropertyDeclaration) {

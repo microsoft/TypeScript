@@ -168,13 +168,13 @@ var servicesSources = [
     "formatting/tokenRange.ts",
     // CodeFixes
     "codeFixProvider.ts",
-    "codeFixes/fixes.ts",
-    "codeFixes/fixExtendsInterfaceBecomesImplements.ts",
-    "codeFixes/fixClassIncorrectlyImplementsInterface.ts",
-    "codeFixes/fixClassDoesntImplementInheritedAbstractMember.ts",
-    "codeFixes/fixClassSuperMustPrecedeThisAccess.ts",
-    "codeFixes/fixConstructorForDerivedNeedSuperCall.ts",
-    "codeFixes/fixRemoveAbstractModifierInNonAbstractClass.ts"
+    "codefixes/fixes.ts",
+    "codefixes/fixExtendsInterfaceBecomesImplements.ts",
+    "codefixes/fixClassIncorrectlyImplementsInterface.ts",
+    "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
+    "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
+    "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+    "codefixes/fixRemoveAbstractModifierInNonAbstractClass.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
