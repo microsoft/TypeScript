@@ -53,10 +53,11 @@
 
 
 verify.codeFixAtPosition(
-`a: number;
-b: number;
-c: number;
-d: number;
-e: number:
+`
+e: number;
 f: number;
+a: number;
+b: number;
+d: number;
+c: number;
 `);

@@ -1308,7 +1308,7 @@ namespace ts {
 
         /**
          * Resolves a qualified name and any involved aliases.
-         */ 
+         */
         function resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node): Symbol | undefined {
             if (nodeIsMissing(name)) {
                 return undefined;

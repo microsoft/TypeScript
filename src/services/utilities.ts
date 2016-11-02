@@ -1370,7 +1370,7 @@ namespace ts {
         const missingMembers = getMissingInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], existingMembers, checker);
 
         for (const member of missingMembers) {
-            if (member.kind === SyntaxKind.PropertySignature) {
+            if (member.kind === SyntaxKind.PropertySignature || member.kind === SyntaxKind.PropertyDeclaration) {
                 const interfaceProperty = <PropertySignature>member;
                 if (trackingAddedMembers.indexOf(interfaceProperty.name.getText()) === -1) {
                     let propertyText = "";
@@ -1405,17 +1405,17 @@ namespace ts {
      * Gets members in an interface and all its base types.
      */
     function getInterfaceMembers(declaration: InterfaceDeclaration, checker: TypeChecker): TypeElement[] {
+        let result: TypeElement[]  = declaration.members
+            ? declaration.members.filter(member => !(getModifierFlags(member) & ModifierFlags.Private))
+            : [];
         const clauses = getInterfaceBaseTypeNodes(declaration);
-        let result: TypeElement[] = [];
-        for (let i = 0; clauses && i < clauses.length; i++) {
-            const type = checker.getTypeAtLocation(clauses[i]);
-            if (type && type.symbol && type.symbol.declarations) {
-                result = result.concat(getInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], checker));
+        if (clauses) {
+            for (const clause of clauses) {
+                const type = checker.getTypeAtLocation(clause);
+                if (type && type.symbol && type.symbol.declarations) {
+                    result = result.concat(getInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], checker));
+                }
             }
-        }
-
-        if (declaration.members) {
-            result = result.concat(declaration.members);
         }
 
         return result;
@@ -1423,7 +1423,6 @@ namespace ts {
 
     function getMissingInterfaceMembers(declaration: InterfaceDeclaration, existingMembers: string[], checker: TypeChecker): TypeElement[] {
         const interfaceMembers = getInterfaceMembers(declaration, checker);
-
         return ts.filter(interfaceMembers, member => !member.name || existingMembers.indexOf(member.name.getText()) === -1);
 
     }
