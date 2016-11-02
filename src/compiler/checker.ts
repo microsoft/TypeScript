@@ -5761,6 +5761,9 @@ namespace ts {
                 }
             }
             if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+                if (isTypeAny(objectType)) {
+                    return anyType;
+                }
                 const indexInfo = isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
                     getIndexInfoOfType(objectType, IndexKind.String) ||
                     undefined;
@@ -5772,7 +5775,7 @@ namespace ts {
                     return indexInfo.type;
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
-                    if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !isTypeAny(objectType)) {
+                    if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
                         if (getIndexTypeOfType(objectType, IndexKind.Number)) {
                             error(accessExpression.argumentExpression, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);
                         }
@@ -5789,7 +5792,7 @@ namespace ts {
                     error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, (<LiteralType>indexType).text, typeToString(objectType));
                 }
                 else if (indexType.flags & (TypeFlags.String | TypeFlags.Number)) {
-                    error(accessNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
+                    error(indexNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
                 }
                 else {
                     error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
