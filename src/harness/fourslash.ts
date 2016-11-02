@@ -92,11 +92,14 @@ namespace FourSlash {
         end: number;
     }
 
-    export interface ErrorIdentifier {
+    export interface CodeFixIdentifier {
+        /**
+         * Error code to search over for codefix.
+         */
         code: number;
         /**
          * In a file where there is more than one error with code `code`, `count` refers
-         * to which 0-indexed error, sorted by order of occurence, to consider.
+         * to which 0-indexed codefix, sorted by order of occurence, to consider.
          */
         count: number;
     }
@@ -2022,14 +2025,14 @@ namespace FourSlash {
          * Because codefixes are only applied on the working file, it is unsafe
          * to apply this more than once (consider a refactoring across files).
          */
-        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+        public verifyRangeAfterCodeFix(expectedText: string, codeFixIdentifier?: CodeFixIdentifier) {
             const ranges = this.getRanges();
             if (ranges.length !== 1) {
                 this.raiseError("Exactly one range should be specified in the testfile.");
             }
 
             const fileName = this.activeFile.fileName;
-            const codeFix: ts.CodeAction = this.getCodeFix(fileName, errorCode ? { code: errorCode, count: 0 } : undefined);
+            const codeFix: ts.CodeAction = this.getCodeFix(fileName, codeFixIdentifier);
 
             if (!codeFix) {
                 this.raiseError("Should find exactly one codefix.");
@@ -2052,6 +2055,8 @@ namespace FourSlash {
          * Applies fixes for the errors in fileName and compares the results to
          * expectedContents after all fixes have been applied.
          * 
+         * It is safe to apply this multiple times in a single test.
+         *
          * Note: applying one codefix may generate another (eg: remove duplicate implements
          * may generate an extends -> interface conversion fix).
          * @param expectedContents The contents of the file after the fixes are applied.
@@ -2059,30 +2064,27 @@ namespace FourSlash {
          * @param errorsToFix An array of errors for which quickfixes will be applied. If not
          * supplied, all codefixes in the file are applied until none are left, starting from
          * the first available codefix.
-         * 
+         *
          */
-        public verifyFileAfterCodeFix(expectedContents: string, fileName?: string, errorsToFix?: ErrorIdentifier[]) {
+        public verifyFileAfterCodeFix(expectedContents: string, fileName?: string, codeFixIdentifier?: CodeFixIdentifier) {
             fileName = fileName ? fileName : this.activeFile.fileName;
 
-            if (errorsToFix) {
-                for (const error of errorsToFix) {
-                    const fix = this.getCodeFix(fileName, error);
-                    if (fix === undefined) {
-                        this.raiseError(`Couldn't find the ${error.count}'th error with code ${error.code}.`);
-                    }
-                    this.applyCodeAction(fix);
+            const codeFix = this.getCodeFix(fileName, codeFixIdentifier);
+
+            if (codeFix === undefined) {
+                if (codeFixIdentifier) {
+                    this.raiseError(`Couldn't find the ${codeFixIdentifier.count}'th error with code ${codeFixIdentifier.code}.`);
+                }
+                else {
+                    this.raiseError("No code fix could be found.");
                 }
             }
-            else {
-                let fix: ts.CodeAction;
-                while (fix = this.getCodeFix(fileName)) {
-                    this.applyCodeAction(fix);
-                }
-            }
+
+            this.applyCodeAction(codeFix);
 
             const actualContents: string = this.getFileContent(fileName);
             if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
-                this.raiseError(`Actual text doesn't match expected text. Actual:\n${actualContents}\n\nExpected:\n${expectedContents}`);
+                this.raiseError(`Actual text doesn't match expected text. Actual:\n${actualContents}\n\nExpected:\n\n${expectedContents}`);
             }
         }
 
@@ -2093,7 +2095,7 @@ namespace FourSlash {
          * 
          * If undefined, we get the first codefix available.
          */
-        private getCodeFix(fileName: string, error?: ErrorIdentifier): ts.CodeAction | undefined {
+        private getCodeFix(fileName: string, error?: CodeFixIdentifier): ts.CodeAction | undefined {
             const diagnostics: ts.Diagnostic[] = this.getDiagnostics(fileName);
             const errorCount = error ? error.count : 0;
 
@@ -3364,12 +3366,12 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public codeFixAtPosition(expectedText: string, errorCode?: number): void {
-            this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        public rangeAfterCodeFix(expectedText: string, codeFixidentifier?: FourSlash.CodeFixIdentifier): void {
+            this.state.verifyRangeAfterCodeFix(expectedText, codeFixidentifier);
         }
 
-        public fileAfterCodeFixes(expectedContents: string, fileName?: string, errorsToFix?: FourSlash.ErrorIdentifier[]): void {
-            this.state.verifyFileAfterCodeFix(expectedContents, fileName, errorsToFix);
+        public fileAfterCodeFix(expectedContents: string, fileName?: string, codeFixidentifier?: FourSlash.CodeFixIdentifier): void {
+            this.state.verifyFileAfterCodeFix(expectedContents, fileName, codeFixidentifier);
         }
 
         public navigationBar(json: any) {

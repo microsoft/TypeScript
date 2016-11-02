@@ -7,6 +7,6 @@
 //// class C extends A {[|
 //// |]}
 
-verify.codeFixAtPosition(`
+verify.rangeAfterCodeFix(`
 protected abstract x: number;
 `);

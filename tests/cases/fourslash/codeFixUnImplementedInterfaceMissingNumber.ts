@@ -12,5 +12,5 @@
 //// class C1 implements N1.I1 {[|
 //// |]}
 
-verify.codeFixAtPosition(`x: number;
+verify.rangeAfterCodeFix(`x: number;
 `);

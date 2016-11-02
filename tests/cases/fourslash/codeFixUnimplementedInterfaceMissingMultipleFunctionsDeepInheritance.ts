@@ -52,7 +52,7 @@
  */
 
 
-verify.codeFixAtPosition(
+verify.rangeAfterCodeFix(
 `
 e: number;
 f: number;

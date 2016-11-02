@@ -7,7 +7,7 @@
 //// class C extends A {[|
 //// |]}
 
-verify.codeFixAtPosition(`f(){
+verify.rangeAfterCodeFix(`f(){
     throw new Error('Method not Implemented');
 }
 `);

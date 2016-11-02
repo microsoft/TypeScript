@@ -8,7 +8,7 @@
 ////     |]f2(){}
 //// }
 
-verify.codeFixAtPosition(`f1(){
+verify.rangeAfterCodeFix(`f1(){
     throw new Error('Method not Implemented');
 }
 `);

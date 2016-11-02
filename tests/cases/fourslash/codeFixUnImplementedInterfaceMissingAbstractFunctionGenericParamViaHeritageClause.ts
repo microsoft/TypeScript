@@ -12,7 +12,7 @@
 ////     |]f2(){}
 //// }
 
-verify.codeFixAtPosition(`f1<T>(){
+verify.rangeAfterCodeFix(`f1<T>(){
     throw new Error('Method not Implemented');
 }
 `);

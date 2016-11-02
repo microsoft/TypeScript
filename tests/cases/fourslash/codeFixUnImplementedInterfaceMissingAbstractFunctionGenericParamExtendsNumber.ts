@@ -8,7 +8,7 @@
 ////
 //// |]}
 
-verify.codeFixAtPosition(`f1<T extends number>(){
+verify.rangeAfterCodeFix(`f1<T extends number>(){
     throw new Error('Method not Implemented');
 }
 `);

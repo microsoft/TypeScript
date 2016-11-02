@@ -98,7 +98,7 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
-    interface ErrorIdentifier {
+    interface CodeFixIdentifier {
         code: number;
         count: number
     }
@@ -213,8 +213,8 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
-        codeFixAtPosition(expectedText: string, errorCode?: number): void;
-        fileAfterCodeFixes(expectedContents: string, fileName?: string, errorsToFix?: ErrorIdentifier[]): void;
+        rangeAfterCodeFix(expectedText: string, CodeFixIdentifier?: CodeFixIdentifier): void;
+        fileAfterCodeFix(expectedContents: string, fileName?: string, CodeFixIdentifier?: CodeFixIdentifier): void;
 
         navigationBar(json: any): void;
         navigationTree(json: any): void;

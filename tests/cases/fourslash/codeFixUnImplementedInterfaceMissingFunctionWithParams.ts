@@ -12,7 +12,7 @@
 //// class C1 implements N1.I1 {[|
 //// |]}
 
-verify.codeFixAtPosition(`f1(x: number,y: string){
+verify.rangeAfterCodeFix(`f1(x: number,y: string){
     throw new Error('Method not Implemented');
 }
 `);
