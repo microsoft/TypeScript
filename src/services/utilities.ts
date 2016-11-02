@@ -1435,30 +1435,6 @@ namespace ts {
         return getNamedClassMembers(classDeclaration).filter(member => getModifierFlags(member) & ModifierFlags.Abstract);
     }
 
-    /*
-    function getMembersAndStartPosFromReference(variableDeclaration: VariableDeclaration): { startPos: number, members: string[] } {
-        const children = variableDeclaration.getChildren();
-        const variableMembers: string[] = [];
-        let startPos = 0;
-
-        ts.forEach(children, child => {
-            if (child.kind === SyntaxKind.ObjectLiteralExpression) {
-                const properties = (<ObjectLiteralExpression>child).properties;
-                if (properties) {
-                    startPos = properties.pos;
-                }
-                for (let j = 0; properties && j < properties.length; j++) {
-                    if (properties[j].name) {
-                        variableMembers.push(properties[j].name.getText());
-                    }
-                }
-            }
-        });
-
-        return { startPos: startPos, members: variableMembers };
-    }
-    */
-
     function getDefaultValue(kind: SyntaxKind): string {
         switch (kind) {
             case SyntaxKind.StringKeyword:
