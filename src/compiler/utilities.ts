@@ -2556,16 +2556,29 @@ namespace ts {
         }
         else {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
-            return filter(sourceFiles, isNonDeclarationFile);
+            return filterSourceFilesInDirectory(sourceFiles, file => host.isSourceFileFromExternalLibrary(file));
         }
+    }
+
+    /** Don't call this for `--outFile`, just for `--outDir` or plain emit. */
+    export function filterSourceFilesInDirectory(sourceFiles: SourceFile[], isSourceFileFromExternalLibrary: (file: SourceFile) => boolean): SourceFile[] {
+        return filter(sourceFiles, file => shouldEmitInDirectory(file, isSourceFileFromExternalLibrary));
     }
 
     function isNonDeclarationFile(sourceFile: SourceFile) {
         return !isDeclarationFile(sourceFile);
     }
 
+    /**
+     * Whether a file should be emitted in a non-`--outFile` case.
+     * Don't emit if source file is a declaration file, or was located under node_modules
+     */
+    function shouldEmitInDirectory(sourceFile: SourceFile, isSourceFileFromExternalLibrary: (file: SourceFile) => boolean): boolean {
+        return isNonDeclarationFile(sourceFile) && !isSourceFileFromExternalLibrary(sourceFile);
+    }
+
     function isBundleEmitNonExternalModule(sourceFile: SourceFile) {
-        return !isDeclarationFile(sourceFile) && !isExternalModule(sourceFile);
+        return isNonDeclarationFile(sourceFile) && !isExternalModule(sourceFile);
     }
 
     /**
@@ -2653,8 +2666,7 @@ namespace ts {
         else {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
             for (const sourceFile of sourceFiles) {
-                // Don't emit if source file is a declaration file, or was located under node_modules
-                if (!isDeclarationFile(sourceFile) && !host.isSourceFileFromExternalLibrary(sourceFile)) {
+                if (shouldEmitInDirectory(sourceFile, file => host.isSourceFileFromExternalLibrary(file))) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }

@@ -430,13 +430,14 @@ namespace ts {
         return program;
 
         function getCommonSourceDirectory() {
-            if (typeof commonSourceDirectory === "undefined") {
-                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
+            if (commonSourceDirectory === undefined) {
+                const emittedFiles = filterSourceFilesInDirectory(files, isSourceFileFromExternalLibrary);
+                if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
                 }
                 else {
-                    commonSourceDirectory = computeCommonSourceDirectory(files);
+                    commonSourceDirectory = computeCommonSourceDirectory(emittedFiles);
                 }
                 if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
                     // Make sure directory path ends with directory separator so this string can directly
@@ -446,6 +447,10 @@ namespace ts {
                 }
             }
             return commonSourceDirectory;
+        }
+
+        function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
+            return !!sourceFilesFoundSearchingNodeModules[file.path];
         }
 
         function getClassifiableNames() {
@@ -722,7 +727,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
-                isSourceFileFromExternalLibrary: (file: SourceFile) => !!sourceFilesFoundSearchingNodeModules[file.path],
+                isSourceFileFromExternalLibrary,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,

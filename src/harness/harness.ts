@@ -470,19 +470,6 @@ namespace Utils {
     }
 }
 
-namespace Harness.Path {
-    export function getFileName(fullPath: string) {
-        return fullPath.replace(/^.*[\\\/]/, "");
-    }
-
-    export function filePath(fullPath: string) {
-        fullPath = ts.normalizeSlashes(fullPath);
-        const components = fullPath.split("/");
-        const path: string[] = components.slice(0, components.length - 1);
-        return path.join("/") + "/";
-    }
-}
-
 namespace Harness {
     export interface IO {
         newLine(): string;
@@ -1090,7 +1077,9 @@ namespace Harness {
             { name: "suppressOutputPathCheck", type: "boolean" },
             { name: "noImplicitReferences", type: "boolean" },
             { name: "currentDirectory", type: "string" },
-            { name: "symlink", type: "string" }
+            { name: "symlink", type: "string" },
+            // Emitted js baseline will print full paths for every output file
+            { name: "fullEmitPaths", type: "boolean" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
@@ -1588,7 +1577,7 @@ namespace Harness {
 
                     let sourceMapCode = "";
                     for (let i = 0; i < result.sourceMaps.length; i++) {
-                        sourceMapCode += "//// [" + Harness.Path.getFileName(result.sourceMaps[i].fileName) + "]\r\n";
+                        sourceMapCode += "//// [" + ts.getBaseFileName(result.sourceMaps[i].fileName) + "]\r\n";
                         sourceMapCode += getByteOrderMarkText(result.sourceMaps[i]);
                         sourceMapCode += result.sourceMaps[i].code;
                     }
@@ -1611,21 +1600,22 @@ namespace Harness {
                     tsCode += "//// [" + header + "] ////\r\n\r\n";
                 }
                 for (let i = 0; i < tsSources.length; i++) {
-                    tsCode += "//// [" + Harness.Path.getFileName(tsSources[i].unitName) + "]\r\n";
+                    tsCode += "//// [" + ts.getBaseFileName(tsSources[i].unitName) + "]\r\n";
                     tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
                 }
 
                 let jsCode = "";
-                for (let i = 0; i < result.files.length; i++) {
-                    jsCode += "//// [" + Harness.Path.getFileName(result.files[i].fileName) + "]\r\n";
-                    jsCode += getByteOrderMarkText(result.files[i]);
-                    jsCode += result.files[i].code;
+                for (const file of result.files) {
+                    const fileName = harnessSettings["fullEmitPaths"] ? file.fileName : ts.getBaseFileName(file.fileName);
+                    jsCode += "//// [" + fileName + "]\r\n";
+                    jsCode += getByteOrderMarkText(file);
+                    jsCode += file.code;
                 }
 
                 if (result.declFilesCode.length > 0) {
                     jsCode += "\r\n\r\n";
                     for (let i = 0; i < result.declFilesCode.length; i++) {
-                        jsCode += "//// [" + Harness.Path.getFileName(result.declFilesCode[i].fileName) + "]\r\n";
+                        jsCode += "//// [" + ts.getBaseFileName(result.declFilesCode[i].fileName) + "]\r\n";
                         jsCode += getByteOrderMarkText(result.declFilesCode[i]);
                         jsCode += result.declFilesCode[i].code;
                     }
@@ -1848,7 +1838,7 @@ namespace Harness {
             }
 
             // normalize the fileName for the single file case
-            currentFileName = testUnitData.length > 0 || currentFileName ? currentFileName : Path.getFileName(fileName);
+            currentFileName = testUnitData.length > 0 || currentFileName ? currentFileName : ts.getBaseFileName(fileName);
 
             // EOF, push whatever remains
             const newTestFile2 = {
@@ -2012,7 +2002,7 @@ namespace Harness {
 
     export function isDefaultLibraryFile(filePath: string): boolean {
         // We need to make sure that the filePath is prefixed with "lib." not just containing "lib." and end with ".d.ts"
-        const fileName = Path.getFileName(filePath);
+        const fileName = ts.getBaseFileName(filePath);
         return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ".d.ts");
     }
 
