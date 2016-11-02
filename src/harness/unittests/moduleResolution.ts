@@ -1065,5 +1065,69 @@ import b = require("./moduleB");
             assert.equal(diagnostics2.length, 1, "expected one diagnostic");
             assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
         });
+
+        it ("Modules in the same .d.ts file are preferred to external files", () => {
+            const f = {
+                name: "/a/b/c/c/app.d.ts",
+                content: `
+                declare module "fs" {
+                    export interface Stat { id: number }
+                }
+                declare module "fs-client" {
+                    import { Stat } from "fs";
+                    export function foo(): Stat;
+                }`
+            };
+            const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
+            const compilerHost: CompilerHost = {
+                fileExists : fileName => fileName === file.fileName,
+                getSourceFile: fileName => fileName === file.fileName ? file : undefined,
+                getDefaultLibFileName: () => "lib.d.ts",
+                writeFile: notImplemented,
+                getCurrentDirectory: () => "/",
+                getDirectories: () => [],
+                getCanonicalFileName: f => f.toLowerCase(),
+                getNewLine: () => "\r\n",
+                useCaseSensitiveFileNames: () => false,
+                readFile: fileName => fileName === file.fileName ? file.text : undefined,
+                resolveModuleNames() {
+                    assert(false, "resolveModuleNames should not be called");
+                    return undefined;
+                }
+            };
+            createProgram([f.name], {}, compilerHost);
+        });
+
+        it ("Modules in .ts file are not checked in the same file", () => {
+            const f = {
+                name: "/a/b/c/c/app.ts",
+                content: `
+                declare module "fs" {
+                    export interface Stat { id: number }
+                }
+                declare module "fs-client" {
+                    import { Stat } from "fs";
+                    export function foo(): Stat;
+                }`
+            };
+            const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
+            const compilerHost: CompilerHost = {
+                fileExists : fileName => fileName === file.fileName,
+                getSourceFile: fileName => fileName === file.fileName ? file : undefined,
+                getDefaultLibFileName: () => "lib.d.ts",
+                writeFile: notImplemented,
+                getCurrentDirectory: () => "/",
+                getDirectories: () => [],
+                getCanonicalFileName: f => f.toLowerCase(),
+                getNewLine: () => "\r\n",
+                useCaseSensitiveFileNames: () => false,
+                readFile: fileName => fileName === file.fileName ? file.text : undefined,
+                resolveModuleNames(moduleNames: string[], _containingFile: string) {
+                    assert.deepEqual(moduleNames, ["fs"]);
+                    return [undefined];
+                }
+            };
+            createProgram([f.name], {}, compilerHost);
+        });
     });
 }

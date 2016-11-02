@@ -472,6 +472,7 @@ namespace ts {
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
+        public ambientModulesInFile: string[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
