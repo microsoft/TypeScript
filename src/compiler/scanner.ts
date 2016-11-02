@@ -99,6 +99,7 @@ namespace ts {
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,
         "package": SyntaxKind.PackageKeyword,
+        "partial": SyntaxKind.PartialKeyword,
         "private": SyntaxKind.PrivateKeyword,
         "protected": SyntaxKind.ProtectedKeyword,
         "public": SyntaxKind.PublicKeyword,

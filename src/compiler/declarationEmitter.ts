@@ -428,6 +428,8 @@ namespace ts {
                     return emitEntityName(<QualifiedName>type);
                 case SyntaxKind.TypePredicate:
                     return emitTypePredicate(<TypePredicateNode>type);
+                case SyntaxKind.PartialType:
+                    return emitPartialType(<PartialTypeNode>type);
             }
 
             function writeEntityName(entityName: EntityName | Expression) {
@@ -477,6 +479,11 @@ namespace ts {
             function emitTypePredicate(type: TypePredicateNode) {
                 writeTextOfNode(currentText, type.parameterName);
                 write(" is ");
+                emitType(type.type);
+            }
+
+            function emitPartialType(type: PartialTypeNode) {
+                write("partial ");
                 emitType(type.type);
             }
 

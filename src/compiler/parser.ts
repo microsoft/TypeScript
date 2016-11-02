@@ -133,6 +133,8 @@ namespace ts {
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNodes, (<UnionOrIntersectionTypeNode>node).types);
+            case SyntaxKind.PartialType:
+                return visitNode(cbNode, (<PartialTypeNode>node).type);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
@@ -426,9 +428,10 @@ namespace ts {
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
             case SyntaxKind.JSDocLiteralType:
-                    return visitNode(cbNode, (<JSDocLiteralType>node).literal);
+                return visitNode(cbNode, (<JSDocLiteralType>node).literal);
         }
     }
+
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
         performance.mark("beforeParse");
@@ -2042,6 +2045,13 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parsePartialType(): PartialTypeNode {
+            const node = <PartialTypeNode>createNode(SyntaxKind.PartialType);
+            parseExpected(SyntaxKind.PartialKeyword);
+            node.type = parseType();
+            return finishNode(node);
+        }
+
         function parseTypeParameter(): TypeParameterDeclaration {
             const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
             node.name = parseIdentifier();
@@ -2477,6 +2487,9 @@ namespace ts {
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
+                case SyntaxKind.PartialKeyword:
+                    const partialNode = tryParse(parsePartialType);
+                    return partialNode || parseTypeReference();
                 default:
                     return parseTypeReference();
             }

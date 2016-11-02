@@ -1,0 +1,66 @@
+tests/cases/compiler/partialType1.ts(13,10): error TS2345: Argument of type '{ flarp: number; }' is not assignable to parameter of type 'partial State'.
+  Object literal may only specify known properties, and 'flarp' does not exist in type 'partial State'.
+tests/cases/compiler/partialType1.ts(14,8): error TS2345: Argument of type '{ name: number; }' is not assignable to parameter of type 'partial State'.
+  Types of property 'name' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/partialType1.ts(16,8): error TS2345: Argument of type '{ foo: string; }' is not assignable to parameter of type 'partial State'.
+  Types of property 'foo' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/partialType1.ts(21,19): error TS2345: Argument of type '{ flarp: number; }' is not assignable to parameter of type 'partial State'.
+  Object literal may only specify known properties, and 'flarp' does not exist in type 'partial State'.
+tests/cases/compiler/partialType1.ts(22,17): error TS2345: Argument of type '{ name: number; }' is not assignable to parameter of type 'partial State'.
+  Types of property 'name' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/partialType1.ts(24,17): error TS2345: Argument of type '{ foo: string; }' is not assignable to parameter of type 'partial State'.
+  Types of property 'foo' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/partialType1.ts (6 errors) ====
+    interface State {
+        name: string;
+        length: number;
+        foo?: number;
+    }
+    
+    function setState<T>(state: T, updates: partial T) {} 
+    
+    function update(s: partial State) { }
+    
+    update({ name: "bob" });
+    update({ length: 10 });
+    update({ flarp: 5 });
+             ~~~~~~~~
+!!! error TS2345: Argument of type '{ flarp: number; }' is not assignable to parameter of type 'partial State'.
+!!! error TS2345:   Object literal may only specify known properties, and 'flarp' does not exist in type 'partial State'.
+    update({ name: 100 });
+           ~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ name: number; }' is not assignable to parameter of type 'partial State'.
+!!! error TS2345:   Types of property 'name' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    update({ foo: 34 });
+    update({ foo: 'oops' });
+           ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ foo: string; }' is not assignable to parameter of type 'partial State'.
+!!! error TS2345:   Types of property 'foo' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+    
+    const state: State = <any>null;
+    setState(state, { name: "bob" });
+    setState(state, { length: 10 });
+    setState(state, { flarp: 5 });
+                      ~~~~~~~~
+!!! error TS2345: Argument of type '{ flarp: number; }' is not assignable to parameter of type 'partial State'.
+!!! error TS2345:   Object literal may only specify known properties, and 'flarp' does not exist in type 'partial State'.
+    setState(state, { name: 100 });
+                    ~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ name: number; }' is not assignable to parameter of type 'partial State'.
+!!! error TS2345:   Types of property 'name' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    setState(state, { foo: 34 });
+    setState(state, { foo: 'oops' });
+                    ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ foo: string; }' is not assignable to parameter of type 'partial State'.
+!!! error TS2345:   Types of property 'foo' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+    
