@@ -72,6 +72,11 @@
 ////<span>)   </span>;/*closingParenInJsxElement2*/
 ////<Router        routes      =        { 3 }   /      >;/*jsxExpressionSpaces*/
 ////<Router routes={                (3)    } />;/*jsxExpressionSpaces2*/
+////<div>
+////    <div
+////        id="selfClosing"/*multilineSelfClosingElementAttribute*/
+////    />/*multilineSelfClosingElement*/
+////</div>
 
 format.document();
 goTo.marker("autoformat");
@@ -146,3 +151,8 @@ goTo.marker("jsxExpressionSpaces");
 verify.currentLineContentIs("<Router routes={3} />;");
 goTo.marker("jsxExpressionSpaces2");
 verify.currentLineContentIs("<Router routes={(3)} />;");
+
+goTo.marker("multilineSelfClosingElementAttribute");
+verify.currentLineContentIs('        id="selfClosing"');
+goTo.marker("multilineSelfClosingElement");
+verify.currentLineContentIs('    />');
