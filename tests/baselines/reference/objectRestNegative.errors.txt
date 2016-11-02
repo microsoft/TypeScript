@@ -1,0 +1,21 @@
+tests/cases/conformance/types/rest/objectRestNegative.ts(2,10): error TS2462: A rest element must be last in a destructuring pattern
+tests/cases/conformance/types/rest/objectRestNegative.ts(3,31): error TS2462: A rest element must be last in a destructuring pattern
+tests/cases/conformance/types/rest/objectRestNegative.ts(6,17): error TS2700: Rest types may only be created from object types.
+
+
+==== tests/cases/conformance/types/rest/objectRestNegative.ts (3 errors) ====
+    let o = { a: 1, b: 'no' };
+    var { ...mustBeLast, a } = o;
+             ~~~~~~~~~~
+!!! error TS2462: A rest element must be last in a destructuring pattern
+    function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
+                                  ~~~~~~~~~~
+!!! error TS2462: A rest element must be last in a destructuring pattern
+    }
+    function generic<T extends { x, y }>(t: T) {
+        let { x, ...rest } = t;
+                    ~~~~
+!!! error TS2700: Rest types may only be created from object types.
+        return rest;
+    }
+    
