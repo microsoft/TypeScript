@@ -14,9 +14,17 @@ tests/cases/conformance/types/spread/objectSpreadGeneric.ts(38,11): error TS2322
 tests/cases/conformance/types/spread/objectSpreadGeneric.ts(42,11): error TS2322: Type '{ firrrrrrst: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
 tests/cases/conformance/types/spread/objectSpreadGeneric.ts(44,11): error TS2322: Type '{ first: string; ...T; ssssssssecond: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
 tests/cases/conformance/types/spread/objectSpreadGeneric.ts(46,11): error TS2322: Type '{ first: string; ...T; second: string; ...U; thirrrrrrrd: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(57,5): error TS2322: Type '{ ...keyof U }' is not assignable to type '{ ...keyof T }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(58,5): error TS2322: Type '{ ...keyof T }' is not assignable to type '{ ...keyof U }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(61,5): error TS2322: Type '{ ...K }' is not assignable to type '{ ...keyof T }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(62,5): error TS2322: Type '{ ...keyof T }' is not assignable to type '{ ...K }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(63,5): error TS2322: Type '{ ...J }' is not assignable to type '{ ...keyof U }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(64,5): error TS2322: Type '{ ...keyof U }' is not assignable to type '{ ...J }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(70,5): error TS2322: Type '{ ...U[J] }' is not assignable to type '{ ...T[K] }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(71,5): error TS2322: Type '{ ...T[K] }' is not assignable to type '{ ...U[J] }'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadGeneric.ts (16 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadGeneric.ts (24 errors) ====
     function f<T, U, V>(t: T, u: U, v: V): void {
         let o: { ...T, ...U, ...V };
         let uus: { ...U, ...U};
@@ -96,5 +104,45 @@ tests/cases/conformance/types/spread/objectSpreadGeneric.ts(46,11): error TS2322
               ~~~~~~~~~~~~
 !!! error TS2322: Type '{ first: string; ...T; second: string; ...U; thirrrrrrrd: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
             { first: '1', ...t, second: '2', ...u, thirrrrrrrd: '3' }; // error, not assignable
+    }
+    
+    function indexAccessedTest<T, K extends keyof T, U, J extends keyof U>(t: T, u: U, key1: K, key2: J) {
+        let k1: { ...keyof T };
+        let k2: { ...keyof U };
+        let k3: { ...K };
+        let k4: { ...J };
+        k1 = k1; // ok
+        k2 = k2; // ok
+        k1 = k2; // error
+        ~~
+!!! error TS2322: Type '{ ...keyof U }' is not assignable to type '{ ...keyof T }'.
+        k2 = k1; // error
+        ~~
+!!! error TS2322: Type '{ ...keyof T }' is not assignable to type '{ ...keyof U }'.
+        k3 = k3; // ok
+        k4 = k4; // ok
+        k1 = k3; // error
+        ~~
+!!! error TS2322: Type '{ ...K }' is not assignable to type '{ ...keyof T }'.
+        k3 = k1; // error
+        ~~
+!!! error TS2322: Type '{ ...keyof T }' is not assignable to type '{ ...K }'.
+        k2 = k4; // error
+        ~~
+!!! error TS2322: Type '{ ...J }' is not assignable to type '{ ...keyof U }'.
+        k4 = k2; // error
+        ~~
+!!! error TS2322: Type '{ ...keyof U }' is not assignable to type '{ ...J }'.
+    
+        let i1: { ...T[K] };
+        let i2: { ...U[J] };
+        i1 = i1; // ok
+        i2 = i2; // ok
+        i1 = i2; // error
+        ~~
+!!! error TS2322: Type '{ ...U[J] }' is not assignable to type '{ ...T[K] }'.
+        i2 = i1; // error
+        ~~
+!!! error TS2322: Type '{ ...T[K] }' is not assignable to type '{ ...U[J] }'.
     }
     

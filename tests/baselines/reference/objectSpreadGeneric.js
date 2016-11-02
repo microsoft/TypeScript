@@ -48,6 +48,30 @@ function f<T, U, V>(t: T, u: U, v: V): void {
         { first: '1', ...t, second: '2', ...u, thirrrrrrrd: '3' }; // error, not assignable
 }
 
+function indexAccessedTest<T, K extends keyof T, U, J extends keyof U>(t: T, u: U, key1: K, key2: J) {
+    let k1: { ...keyof T };
+    let k2: { ...keyof U };
+    let k3: { ...K };
+    let k4: { ...J };
+    k1 = k1; // ok
+    k2 = k2; // ok
+    k1 = k2; // error
+    k2 = k1; // error
+    k3 = k3; // ok
+    k4 = k4; // ok
+    k1 = k3; // error
+    k3 = k1; // error
+    k2 = k4; // error
+    k4 = k2; // error
+
+    let i1: { ...T[K] };
+    let i2: { ...U[J] };
+    i1 = i1; // ok
+    i2 = i2; // ok
+    i1 = i2; // error
+    i2 = i1; // error
+}
+
 
 //// [objectSpreadGeneric.js]
 var __assign = (this && this.__assign) || Object.assign || function(t) {
@@ -92,4 +116,26 @@ function f(t, u, v) {
     var mismatchFirst = __assign({ firrrrrrst: '1' }, t, { second: '2' }, u, { third: '3' }); // error, not assignable
     var mismatchSecond = __assign({ first: '1' }, t, { ssssssssecond: '2' }, u, { third: '3' }); // error, not assignable
     var mismatchLast = __assign({ first: '1' }, t, { second: '2' }, u, { thirrrrrrrd: '3' }); // error, not assignable
+}
+function indexAccessedTest(t, u, key1, key2) {
+    var k1;
+    var k2;
+    var k3;
+    var k4;
+    k1 = k1; // ok
+    k2 = k2; // ok
+    k1 = k2; // error
+    k2 = k1; // error
+    k3 = k3; // ok
+    k4 = k4; // ok
+    k1 = k3; // error
+    k3 = k1; // error
+    k2 = k4; // error
+    k4 = k2; // error
+    var i1;
+    var i2;
+    i1 = i1; // ok
+    i2 = i2; // ok
+    i1 = i2; // error
+    i2 = i1; // error
 }
