@@ -1537,8 +1537,7 @@ namespace ts {
                     const emitFilePath = toPath(emitFileName, currentDirectory, getCanonicalFileName);
                     // Report error if the output overwrites input file
                     if (filesByName.contains(emitFilePath)) {
-                        const sourceFile = filesByName.get(emitFilePath);
-                        if (options.noEmitOverwriteForJsFiles && isSourceFileJavaScript(sourceFile)) {
+                        if (options.noEmitOverwritenFiles && !options.out && !options.outDir && !options.outFile) {
                             blockEmittingOfFile(emitFileName);
                         }
                         else {
