@@ -300,6 +300,8 @@ namespace ts {
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.TypeOperator:
+                case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.LiteralType:
                     // TypeScript type nodes are elided.
 
@@ -1783,6 +1785,8 @@ namespace ts {
                     }
                     // Fallthrough
                 case SyntaxKind.TypeQuery:
+                case SyntaxKind.TypeOperator:
+                case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ThisType:

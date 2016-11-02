@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts(13,9): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts(13,14): error TS2540: Cannot assign to 'x' because it is a constant or a read-only property.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts(33,7): error TS2415: Class 'E' incorrectly extends base class 'D'.
   Property 'x' is private in type 'D' but not in type 'E'.
 
@@ -17,8 +17,8 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/re
             super(x);
             // Fails, x is readonly
             this.x = 1;
-            ~~~~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+                 ~
+!!! error TS2540: Cannot assign to 'x' because it is a constant or a read-only property.
         }
     }
     
