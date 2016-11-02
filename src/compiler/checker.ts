@@ -6097,10 +6097,10 @@ namespace ts {
             }
             const spread = spreadTypes[id] = createType(TypeFlags.Spread) as SpreadType;
             Debug.assert(!!(left.flags & (TypeFlags.Spread | TypeFlags.Object)), "Left flags: " + left.flags.toString(2));
-            Debug.assert(!!(right.flags & (TypeFlags.TypeParameter | TypeFlags.Intersection | TypeFlags.Object)), "Right flags: " + right.flags.toString(2));
+            Debug.assert(!!(right.flags & (TypeFlags.TypeParameter | TypeFlags.Intersection | TypeFlags.Index | TypeFlags.IndexedAccess | TypeFlags.Object)), "Right flags: " + right.flags.toString(2));
             spread.symbol = symbol;
             spread.left = left as SpreadType | ResolvedType;
-            spread.right = right as TypeParameter | IntersectionType | ResolvedType;
+            spread.right = right as TypeParameter | IntersectionType | IndexType | IndexedAccessType | ResolvedType;
             spread.aliasSymbol = aliasSymbol;
             spread.aliasTypeArguments = aliasTypeArguments;
             return spread;
@@ -7173,7 +7173,8 @@ namespace ts {
                         spreadTypeRelatedTo(source.right.flags & TypeFlags.Object ? source.left as SpreadType : source,
                                             target.right.flags & TypeFlags.Object ? target.left as SpreadType : target);
                 }
-                // If both right sides are type parameters or intersections, then they must be identical for the spread types to be related.
+                // If both right sides are type parameters, intersections, index types or indexed access types,
+                // then they must be identical for the spread types to be related.
                 // It also means that the left sides are either spread types or object types.
 
                 // if one left is object and the other is spread, that means the second has another type parameter. which isn't allowed
