@@ -76,8 +76,6 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
             case SyntaxKind.SpreadElementExpression:
                 return visitNode(cbNode, (<SpreadElementExpression>node).expression);
-            case SyntaxKind.SpreadTypeElement:
-                return visitNode(cbNode, (node as SpreadTypeElement).type);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -2346,10 +2344,6 @@ namespace ts {
             if (token() === SyntaxKind.OpenBracketToken) {
                 return true;
             }
-            // spread elements are type members
-            if (token() === SyntaxKind.DotDotDotToken) {
-                return true;
-            }
             // Try to get the first property-like token following all modifiers
             if (isLiteralPropertyName()) {
                 idToken = token();
@@ -2375,23 +2369,12 @@ namespace ts {
             if (token() === SyntaxKind.NewKeyword && lookAhead(isStartOfConstructSignature)) {
                 return parseSignatureMember(SyntaxKind.ConstructSignature);
             }
-            if (token() === SyntaxKind.DotDotDotToken) {
-                return parseSpreadTypeElement();
-            }
             const fullStart = getNodePos();
             const modifiers = parseModifiers();
             if (isIndexSignature()) {
                 return parseIndexSignatureDeclaration(fullStart, /*decorators*/ undefined, modifiers);
             }
             return parsePropertyOrMethodSignature(fullStart, modifiers);
-        }
-
-        function parseSpreadTypeElement() {
-            const element = createNode(SyntaxKind.SpreadTypeElement, scanner.getStartPos()) as SpreadTypeElement;
-            parseTokenNode<Node>(); // parse `...`
-            element.type = parseType();
-            parseTypeMemberSemicolon();
-            return finishNode(element);
         }
 
         function isStartOfConstructSignature() {
