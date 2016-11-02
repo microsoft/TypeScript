@@ -11504,6 +11504,21 @@ namespace ts {
             diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
         }
 
+        function markPropertyAsReferenced(prop: Symbol) {
+            if (prop &&
+                noUnusedIdentifiers &&
+                (prop.flags & SymbolFlags.ClassMember) &&
+                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
+                if (prop.flags & SymbolFlags.Instantiated) {
+                    getSymbolLinks(prop).target.isReferenced = true;
+
+                }
+                else {
+                    prop.isReferenced = true;
+                }
+            }
+        }
+
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             const type = checkNonNullExpression(left);
             if (isTypeAny(type) || type === silentNeverType) {
@@ -11523,17 +11538,7 @@ namespace ts {
                 return unknownType;
             }
 
-            if (noUnusedIdentifiers &&
-                (prop.flags & SymbolFlags.ClassMember) &&
-                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
-                if (prop.flags & SymbolFlags.Instantiated) {
-                    getSymbolLinks(prop).target.isReferenced = true;
-
-                }
-                else {
-                    prop.isReferenced = true;
-                }
-            }
+            markPropertyAsReferenced(prop);
 
             getNodeLinks(node).resolvedSymbol = prop;
 
@@ -16323,6 +16328,7 @@ namespace ts {
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
+                markPropertyAsReferenced(property);
                 if (parent.initializer && property && getParentOfSymbol(property)) {
                     checkClassPropertyAccess(parent, parent.initializer, parentType, property);
                 }
