@@ -1967,6 +1967,10 @@
         "category": "Error",
         "code": 2696
     },
+    "An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2697
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
