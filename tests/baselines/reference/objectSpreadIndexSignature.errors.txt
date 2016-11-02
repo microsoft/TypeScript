@@ -1,5 +1,5 @@
-tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts(6,39): error TS2698: Type literals with spreads cannot contain index, call or construct signatures.
-tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts(24,20): error TS2698: Type literals with spreads cannot contain index, call or construct signatures.
+tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts(6,39): error TS2699: Type literals with spreads cannot contain index, call or construct signatures.
+tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts(24,20): error TS2699: Type literals with spreads cannot contain index, call or construct signatures.
 
 
 ==== tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts (2 errors) ====
@@ -10,7 +10,7 @@ tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts(24,20): error
     // index signatures are not allowed in object literals with spread types
     let c: { ...C, b: string, c?: string, [n: number]: string };
                                           ~~~~~~~~~~~~~~~~~~~
-!!! error TS2698: Type literals with spreads cannot contain index, call or construct signatures.
+!!! error TS2699: Type literals with spreads cannot contain index, call or construct signatures.
     let n: number = c.a;
     let s: string = c[12];
     interface Indexed {
@@ -30,6 +30,6 @@ tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts(24,20): error
     function f<T>(t: T) {
         let i: { ...T, [n: number]: string };
                        ~~~~~~~~~~~~~~~~~~~
-!!! error TS2698: Type literals with spreads cannot contain index, call or construct signatures.
+!!! error TS2699: Type literals with spreads cannot contain index, call or construct signatures.
     }
     

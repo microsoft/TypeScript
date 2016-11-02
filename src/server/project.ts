@@ -666,14 +666,14 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, public compileOnSaveEnabled: boolean) {
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions) {
             super(ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
                 /*files*/ undefined,
                 languageServiceEnabled,
                 compilerOptions,
-                compileOnSaveEnabled);
+                /*compileOnSaveEnabled*/ false);
 
             this.inferredProjectName = makeInferredProjectName(InferredProject.NextId);
             InferredProject.NextId++;

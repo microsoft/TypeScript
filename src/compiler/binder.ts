@@ -499,8 +499,8 @@ namespace ts {
                 const saveReturnTarget = currentReturnTarget;
                 const saveActiveLabels = activeLabels;
                 const saveHasExplicitReturn = hasExplicitReturn;
-                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !!getImmediatelyInvokedFunctionExpression(node);
-                // An IIFE is considered part of the containing control flow. Return statements behave
+                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasModifier(node, ModifierFlags.Async) && !!getImmediatelyInvokedFunctionExpression(node);
+                // A non-async IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
                 if (isIIFE) {
                     currentReturnTarget = createBranchLabel();
@@ -892,8 +892,13 @@ namespace ts {
 
         function bindDoStatement(node: DoStatement): void {
             const preDoLabel = createLoopLabel();
-            const preConditionLabel = createBranchLabel();
-            const postDoLabel = createBranchLabel();
+            const enclosingLabeledStatement = node.parent.kind === SyntaxKind.LabeledStatement
+                ? lastOrUndefined(activeLabels)
+                : undefined;
+            // if do statement is wrapped in labeled statement then target labels for break/continue with or without 
+            // label should be the same 
+            const preConditionLabel = enclosingLabeledStatement ? enclosingLabeledStatement.continueTarget : createBranchLabel();
+            const postDoLabel = enclosingLabeledStatement ? enclosingLabeledStatement.breakTarget : createBranchLabel();
             addAntecedent(preDoLabel, currentFlow);
             currentFlow = preDoLabel;
             bindIterativeStatement(node.statement, postDoLabel, preConditionLabel);
@@ -1111,8 +1116,11 @@ namespace ts {
             if (!activeLabel.referenced && !options.allowUnusedLabels) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node.label, Diagnostics.Unused_label));
             }
-            addAntecedent(postStatementLabel, currentFlow);
-            currentFlow = finishFlowLabel(postStatementLabel);
+            if (!node.statement || node.statement.kind !== SyntaxKind.DoStatement) {
+                // do statement sets current flow inside bindDoStatement
+                addAntecedent(postStatementLabel, currentFlow);
+                currentFlow = finishFlowLabel(postStatementLabel);
+            }
         }
 
         function bindDestructuringTargetFlow(node: Expression) {
@@ -1204,9 +1212,9 @@ namespace ts {
             }
             else {
                 forEachChild(node, bind);
-                if (operator === SyntaxKind.EqualsToken && !isAssignmentTarget(node)) {
+                if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
                     bindAssignmentTargetFlow(node.left);
-                    if (node.left.kind === SyntaxKind.ElementAccessExpression) {
+                    if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
                         const elementAccess = <ElementAccessExpression>node.left;
                         if (isNarrowableOperand(elementAccess.expression)) {
                             currentFlow = createFlowArrayMutation(currentFlow, node);
@@ -3093,6 +3101,8 @@ namespace ts {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.ThisType:
+            case SyntaxKind.TypeOperator:
+            case SyntaxKind.IndexedAccessType:
             case SyntaxKind.LiteralType:
                 // Types and signatures are TypeScript syntax, and exclude all other facts.
                 transformFlags = TransformFlags.AssertTypeScript;

@@ -298,6 +298,9 @@ namespace ts.server {
 
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions): void {
             this.compilerOptionsForInferredProjects = convertCompilerOptions(projectCompilerOptions);
+            // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
+            // previously we did not expose a way for user to change these settings and this option was enabled by default
+            this.compilerOptionsForInferredProjects.allowNonTsExtensions = true;
             this.compileOnSaveForInferredProjects = projectCompilerOptions.compileOnSave;
             for (const proj of this.inferredProjects) {
                 proj.setCompilerOptions(this.compilerOptionsForInferredProjects);
@@ -1008,7 +1011,7 @@ namespace ts.server {
             const useExistingProject = this.useSingleInferredProject && this.inferredProjects.length;
             const project = useExistingProject
                 ? this.inferredProjects[0]
-                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects, /*compileOnSaveEnabled*/ this.compileOnSaveForInferredProjects);
+                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects);
 
             project.addRoot(root);
 

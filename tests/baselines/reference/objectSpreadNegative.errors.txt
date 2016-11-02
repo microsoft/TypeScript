@@ -16,8 +16,8 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(41,11): error TS233
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(45,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,12): error TS2339: Property 'b' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(55,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(57,48): error TS2698: Type literals with spreads cannot contain index, call or construct signatures.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(57,69): error TS2698: Type literals with spreads cannot contain index, call or construct signatures.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(57,48): error TS2699: Type literals with spreads cannot contain index, call or construct signatures.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(57,69): error TS2699: Type literals with spreads cannot contain index, call or construct signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ x: number; }' has no compatible call signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(64,9): error TS2322: Type '{ ...T & V }' is not assignable to type '{ ...T & U }'.
@@ -116,9 +116,9 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS232
     
     let callableConstructableSpread: { ...PublicX, (n: number): number, new (p: number) };
                                                    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2698: Type literals with spreads cannot contain index, call or construct signatures.
+!!! error TS2699: Type literals with spreads cannot contain index, call or construct signatures.
                                                                         ~~~~~~~~~~~~~~~
-!!! error TS2698: Type literals with spreads cannot contain index, call or construct signatures.
+!!! error TS2699: Type literals with spreads cannot contain index, call or construct signatures.
     callableConstructableSpread(12); // error, no call signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ x: number; }' has no compatible call signatures.

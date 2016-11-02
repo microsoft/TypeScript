@@ -1,0 +1,681 @@
+=== tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts ===
+
+class Shape {
+>Shape : Shape
+
+    name: string;
+>name : string
+
+    width: number;
+>width : number
+
+    height: number;
+>height : number
+
+    visible: boolean;
+>visible : boolean
+}
+
+class Item {
+>Item : Item
+
+    name: string;
+>name : string
+
+    price: number;
+>price : number
+}
+
+class Options {
+>Options : Options
+
+    visible: "yes" | "no";
+>visible : "yes" | "no"
+}
+
+type Dictionary<T> = { [x: string]: T };
+>Dictionary : { [x: string]: T; }
+>T : T
+>x : string
+>T : T
+
+const enum E { A, B, C }
+>E : E
+>A : E.A
+>B : E.B
+>C : E.C
+
+type K00 = keyof any;  // string | number
+>K00 : string | number
+
+type K01 = keyof string;  // number | "toString" | "charAt" | ...
+>K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+
+type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
+>K02 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
+
+type K03 = keyof boolean;  // "valueOf"
+>K03 : "valueOf"
+
+type K04 = keyof void;  // never
+>K04 : never
+
+type K05 = keyof undefined;  // never
+>K05 : never
+
+type K06 = keyof null;  // never
+>K06 : never
+>null : null
+
+type K07 = keyof never;  // never
+>K07 : never
+
+type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
+>K10 : "name" | "width" | "height" | "visible"
+>Shape : Shape
+
+type K11 = keyof Shape[];  // number | "length" | "toString" | ...
+>K11 : number | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>Shape : Shape
+
+type K12 = keyof Dictionary<Shape>;  // string | number
+>K12 : string | number
+>Dictionary : { [x: string]: T; }
+>Shape : Shape
+
+type K13 = keyof {};  // never
+>K13 : never
+
+type K14 = keyof Object;  // "constructor" | "toString" | ...
+>K14 : "toString" | "toLocaleString" | "valueOf" | "constructor" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
+>Object : Object
+
+type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
+>K15 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
+>E : E
+
+type K16 = keyof [string, number];  // number | "0" | "1" | "length" | "toString" | ...
+>K16 : number | "0" | "1" | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+
+type K17 = keyof (Shape | Item);  // "name"
+>K17 : "name"
+>Shape : Shape
+>Item : Item
+
+type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "price"
+>K18 : "name" | "width" | "height" | "visible" | "price"
+>Shape : Shape
+>Item : Item
+
+type KeyOf<T> = keyof T;
+>KeyOf : keyof T
+>T : T
+>T : T
+
+type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
+>K20 : "name" | "width" | "height" | "visible"
+>KeyOf : keyof T
+>Shape : Shape
+
+type K21 = KeyOf<Dictionary<Shape>>;  // string | number
+>K21 : string | number
+>KeyOf : keyof T
+>Dictionary : { [x: string]: T; }
+>Shape : Shape
+
+type NAME = "name";
+>NAME : "name"
+
+type WIDTH_OR_HEIGHT = "width" | "height";
+>WIDTH_OR_HEIGHT : "width" | "height"
+
+type Q10 = Shape["name"];  // string
+>Q10 : string
+>Shape : Shape
+
+type Q11 = Shape["width" | "height"];  // number
+>Q11 : number
+>Shape : Shape
+
+type Q12 = Shape["name" | "visible"];  // string | boolean
+>Q12 : string | boolean
+>Shape : Shape
+
+type Q20 = Shape[NAME];  // string
+>Q20 : string
+>Shape : Shape
+>NAME : "name"
+
+type Q21 = Shape[WIDTH_OR_HEIGHT];  // number
+>Q21 : number
+>Shape : Shape
+>WIDTH_OR_HEIGHT : "width" | "height"
+
+type Q30 = [string, number][0];  // string
+>Q30 : string
+
+type Q31 = [string, number][1];  // number
+>Q31 : number
+
+type Q32 = [string, number][2];  // string | number
+>Q32 : string | number
+
+type Q33 = [string, number][E.A];  // string
+>Q33 : string
+>E : any
+>A : E.A
+
+type Q34 = [string, number][E.B];  // number
+>Q34 : number
+>E : any
+>B : E.B
+
+type Q35 = [string, number][E.C];  // string | number
+>Q35 : string | number
+>E : any
+>C : E.C
+
+type Q36 = [string, number]["0"];  // string
+>Q36 : string
+
+type Q37 = [string, number]["1"];  // string
+>Q37 : number
+
+type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
+>Q40 : boolean | "yes" | "no"
+>Shape : Shape
+>Options : Options
+
+type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
+>Q41 : (true & "yes") | (true & "no") | (false & "yes") | (false & "no")
+>Shape : Shape
+>Options : Options
+
+type Q50 = Dictionary<Shape>["howdy"];  // Shape
+>Q50 : Shape
+>Dictionary : { [x: string]: T; }
+>Shape : Shape
+
+type Q51 = Dictionary<Shape>[123];  // Shape
+>Q51 : Shape
+>Dictionary : { [x: string]: T; }
+>Shape : Shape
+
+type Q52 = Dictionary<Shape>[E.B];  // Shape
+>Q52 : Shape
+>Dictionary : { [x: string]: T; }
+>Shape : Shape
+>E : any
+>B : E.B
+
+declare let cond: boolean;
+>cond : boolean
+
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>T : T
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+
+    return obj[key];
+>obj[key] : T[K]
+>obj : T
+>key : K
+}
+
+function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>T : T
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+>value : T[K]
+>T : T
+>K : K
+
+    obj[key] = value;
+>obj[key] = value : T[K]
+>obj[key] : T[K]
+>obj : T
+>key : K
+>value : T[K]
+}
+
+function f10(shape: Shape) {
+>f10 : (shape: Shape) => void
+>shape : Shape
+>Shape : Shape
+
+    let name = getProperty(shape, "name");  // string
+>name : string
+>getProperty(shape, "name") : string
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : Shape
+>"name" : "name"
+
+    let widthOrHeight = getProperty(shape, cond ? "width" : "height");  // number
+>widthOrHeight : number
+>getProperty(shape, cond ? "width" : "height") : number
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : Shape
+>cond ? "width" : "height" : "width" | "height"
+>cond : boolean
+>"width" : "width"
+>"height" : "height"
+
+    let nameOrVisible = getProperty(shape, cond ? "name" : "visible");  // string | boolean
+>nameOrVisible : string | boolean
+>getProperty(shape, cond ? "name" : "visible") : string | boolean
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : Shape
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+
+    setProperty(shape, "name", "rectangle");
+>setProperty(shape, "name", "rectangle") : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>shape : Shape
+>"name" : "name"
+>"rectangle" : "rectangle"
+
+    setProperty(shape, cond ? "width" : "height", 10);
+>setProperty(shape, cond ? "width" : "height", 10) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>shape : Shape
+>cond ? "width" : "height" : "width" | "height"
+>cond : boolean
+>"width" : "width"
+>"height" : "height"
+>10 : 10
+
+    setProperty(shape, cond ? "name" : "visible", true);  // Technically not safe
+>setProperty(shape, cond ? "name" : "visible", true) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>shape : Shape
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+>true : true
+}
+
+function f11(a: Shape[]) {
+>f11 : (a: Shape[]) => void
+>a : Shape[]
+>Shape : Shape
+
+    let len = getProperty(a, "length");  // number
+>len : number
+>getProperty(a, "length") : number
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>a : Shape[]
+>"length" : "length"
+
+    let shape = getProperty(a, 1000);    // Shape
+>shape : Shape
+>getProperty(a, 1000) : Shape
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>a : Shape[]
+>1000 : 1000
+
+    setProperty(a, 1000, getProperty(a, 1001));
+>setProperty(a, 1000, getProperty(a, 1001)) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>a : Shape[]
+>1000 : 1000
+>getProperty(a, 1001) : Shape
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>a : Shape[]
+>1001 : 1001
+}
+
+function f12(t: [Shape, boolean]) {
+>f12 : (t: [Shape, boolean]) => void
+>t : [Shape, boolean]
+>Shape : Shape
+
+    let len = getProperty(t, "length");
+>len : number
+>getProperty(t, "length") : number
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>t : [Shape, boolean]
+>"length" : "length"
+
+    let s1 = getProperty(t, 0);    // Shape
+>s1 : Shape
+>getProperty(t, 0) : Shape
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>t : [Shape, boolean]
+>0 : 0
+
+    let s2 = getProperty(t, "0");  // Shape
+>s2 : Shape
+>getProperty(t, "0") : Shape
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>t : [Shape, boolean]
+>"0" : "0"
+
+    let b1 = getProperty(t, 1);    // boolean
+>b1 : boolean
+>getProperty(t, 1) : boolean
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>t : [Shape, boolean]
+>1 : 1
+
+    let b2 = getProperty(t, "1");  // boolean
+>b2 : boolean
+>getProperty(t, "1") : boolean
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>t : [Shape, boolean]
+>"1" : "1"
+
+    let x1 = getProperty(t, 2);    // Shape | boolean
+>x1 : boolean | Shape
+>getProperty(t, 2) : boolean | Shape
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>t : [Shape, boolean]
+>2 : 2
+}
+
+function f13(foo: any, bar: any) {
+>f13 : (foo: any, bar: any) => void
+>foo : any
+>bar : any
+
+    let x = getProperty(foo, "x");  // any
+>x : any
+>getProperty(foo, "x") : any
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>foo : any
+>"x" : "x"
+
+    let y = getProperty(foo, 100);  // any
+>y : any
+>getProperty(foo, 100) : any
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>foo : any
+>100 : 100
+
+    let z = getProperty(foo, bar);  // any
+>z : any
+>getProperty(foo, bar) : any
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>foo : any
+>bar : any
+}
+
+class Component<PropType> {
+>Component : Component<PropType>
+>PropType : PropType
+
+    props: PropType;
+>props : PropType
+>PropType : PropType
+
+    getProperty<K extends keyof PropType>(key: K) {
+>getProperty : <K extends keyof PropType>(key: K) => PropType[K]
+>K : K
+>PropType : PropType
+>key : K
+>K : K
+
+        return this.props[key];
+>this.props[key] : PropType[K]
+>this.props : PropType
+>this : this
+>props : PropType
+>key : K
+    }
+    setProperty<K extends keyof PropType>(key: K, value: PropType[K]) {
+>setProperty : <K extends keyof PropType>(key: K, value: PropType[K]) => void
+>K : K
+>PropType : PropType
+>key : K
+>K : K
+>value : PropType[K]
+>PropType : PropType
+>K : K
+
+        this.props[key] = value;
+>this.props[key] = value : PropType[K]
+>this.props[key] : PropType[K]
+>this.props : PropType
+>this : this
+>props : PropType
+>key : K
+>value : PropType[K]
+    }
+}
+
+function f20(component: Component<Shape>) {
+>f20 : (component: Component<Shape>) => void
+>component : Component<Shape>
+>Component : Component<PropType>
+>Shape : Shape
+
+    let name = component.getProperty("name");  // string
+>name : string
+>component.getProperty("name") : string
+>component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component : Component<Shape>
+>getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>"name" : "name"
+
+    let widthOrHeight = component.getProperty(cond ? "width" : "height");  // number
+>widthOrHeight : number
+>component.getProperty(cond ? "width" : "height") : number
+>component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component : Component<Shape>
+>getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>cond ? "width" : "height" : "width" | "height"
+>cond : boolean
+>"width" : "width"
+>"height" : "height"
+
+    let nameOrVisible = component.getProperty(cond ? "name" : "visible");  // string | boolean
+>nameOrVisible : string | boolean
+>component.getProperty(cond ? "name" : "visible") : string | boolean
+>component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component : Component<Shape>
+>getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+
+    component.setProperty("name", "rectangle");
+>component.setProperty("name", "rectangle") : void
+>component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component : Component<Shape>
+>setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>"name" : "name"
+>"rectangle" : "rectangle"
+
+    component.setProperty(cond ? "width" : "height", 10)
+>component.setProperty(cond ? "width" : "height", 10) : void
+>component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component : Component<Shape>
+>setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>cond ? "width" : "height" : "width" | "height"
+>cond : boolean
+>"width" : "width"
+>"height" : "height"
+>10 : 10
+
+    component.setProperty(cond ? "name" : "visible", true);  // Technically not safe
+>component.setProperty(cond ? "name" : "visible", true) : void
+>component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component : Component<Shape>
+>setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+>true : true
+}
+
+function pluck<T, K extends keyof T>(array: T[], key: K) {
+>pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
+>T : T
+>K : K
+>T : T
+>array : T[]
+>T : T
+>key : K
+>K : K
+
+    return array.map(x => x[key]);
+>array.map(x => x[key]) : T[K][]
+>array.map : { <U>(this: [T, T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U]; <U>(this: [T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; }
+>array : T[]
+>map : { <U>(this: [T, T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U]; <U>(this: [T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; }
+>x => x[key] : (x: T) => T[K]
+>x : T
+>x[key] : T[K]
+>x : T
+>key : K
+}
+
+function f30(shapes: Shape[]) {
+>f30 : (shapes: Shape[]) => void
+>shapes : Shape[]
+>Shape : Shape
+
+    let names = pluck(shapes, "name");    // string[]
+>names : string[]
+>pluck(shapes, "name") : string[]
+>pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
+>shapes : Shape[]
+>"name" : "name"
+
+    let widths = pluck(shapes, "width");  // number[]
+>widths : number[]
+>pluck(shapes, "width") : number[]
+>pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
+>shapes : Shape[]
+>"width" : "width"
+
+    let nameOrVisibles = pluck(shapes, cond ? "name" : "visible");  // (string | boolean)[]
+>nameOrVisibles : (string | boolean)[]
+>pluck(shapes, cond ? "name" : "visible") : (string | boolean)[]
+>pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
+>shapes : Shape[]
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+}
+
+function f31<K extends keyof Shape>(key: K) {
+>f31 : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>K : K
+>Shape : Shape
+>key : K
+>K : K
+
+    const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
+>shape : Shape
+>Shape : Shape
+>{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: true; }
+>name : string
+>"foo" : "foo"
+>width : number
+>5 : 5
+>height : number
+>10 : 10
+>visible : boolean
+>true : true
+
+    return shape[key];  // Shape[K]
+>shape[key] : Shape[K]
+>shape : Shape
+>key : K
+}
+
+function f32<K extends "width" | "height">(key: K) {
+>f32 : <K extends "width" | "height">(key: K) => Shape[K]
+>K : K
+>key : K
+>K : K
+
+    const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
+>shape : Shape
+>Shape : Shape
+>{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: true; }
+>name : string
+>"foo" : "foo"
+>width : number
+>5 : 5
+>height : number
+>10 : 10
+>visible : boolean
+>true : true
+
+    return shape[key];  // Shape[K]
+>shape[key] : Shape[K]
+>shape : Shape
+>key : K
+}
+
+class C {
+>C : C
+
+    public x: string;
+>x : string
+
+    protected y: string;
+>y : string
+
+    private z: string;
+>z : string
+}
+
+// Indexed access expressions have always permitted access to private and protected members.
+// For consistency we also permit such access in indexed access types.
+function f40(c: C) {
+>f40 : (c: C) => void
+>c : C
+>C : C
+
+    type X = C["x"];
+>X : string
+>C : C
+
+    type Y = C["y"];
+>Y : string
+>C : C
+
+    type Z = C["z"];
+>Z : string
+>C : C
+
+    let x: X = c["x"];
+>x : string
+>X : string
+>c["x"] : string
+>c : C
+>"x" : "x"
+
+    let y: Y = c["y"];
+>y : string
+>Y : string
+>c["y"] : string
+>c : C
+>"y" : "y"
+
+    let z: Z = c["z"];
+>z : string
+>Z : string
+>c["z"] : string
+>c : C
+>"z" : "z"
+}
