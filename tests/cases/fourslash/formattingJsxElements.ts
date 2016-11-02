@@ -76,6 +76,11 @@
 ////    <div
 ////        id="selfClosing"/*multilineSelfClosingElementAttribute*/
 ////    />/*multilineSelfClosingElement*/
+////    <div
+////        id="opening"/*multilineOpeningElementAttribute*/
+////    >/*multilineOpeningElement*/
+////        <div/>/*multilineOpeningElementChild*/
+////    </div>/*multilineClosingElement*/
 ////</div>
 
 format.document();
@@ -125,8 +130,7 @@ goTo.marker("expressionIndent");
 verify.indentationIs(12);
 
 goTo.marker("danglingBracketAutoformat")
-// TODO: verify.currentLineContentIs("    >");
-verify.currentLineContentIs("        >");
+verify.currentLineContentIs("    >");
 goTo.marker("closingTagAutoformat");
 verify.currentLineContentIs("    </div>");
 
@@ -156,3 +160,12 @@ goTo.marker("multilineSelfClosingElementAttribute");
 verify.currentLineContentIs('        id="selfClosing"');
 goTo.marker("multilineSelfClosingElement");
 verify.currentLineContentIs('    />');
+
+goTo.marker("multilineOpeningElementAttribute");
+verify.currentLineContentIs('        id="opening"');
+goTo.marker("multilineOpeningElement");
+verify.currentLineContentIs('    >');
+goTo.marker("multilineOpeningElementChild");
+verify.currentLineContentIs('        <div />');
+goTo.marker("multilineClosingElement");
+verify.currentLineContentIs('    </div>');

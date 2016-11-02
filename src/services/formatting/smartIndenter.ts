@@ -500,6 +500,7 @@ namespace ts.formatting {
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
                 case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxOpeningElement:
                     return childKind !== SyntaxKind.Unknown;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
