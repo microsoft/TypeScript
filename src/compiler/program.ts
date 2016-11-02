@@ -501,9 +501,16 @@ namespace ts {
                 // - module name is contained in the list of ambient modules that are locally declared in the file
                 // - in the old program module name was resolved to ambient module whose declaration is in non-modified file
                 //   (so the same module declaration will land in the new program)
-                const isKnownToResolveToAmbientModule =
-                    contains(file.ambientModulesInFile, moduleName) ||
-                    isModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName, oldProgramState);
+                let isKnownToResolveToAmbientModule = false;
+                if (contains(file.ambientModulesInFile, moduleName)) {
+                    isKnownToResolveToAmbientModule = true;
+                    if (isTraceEnabled(options, host)) {
+                        trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName, containingFile);
+                    }
+                }
+                else {
+                    isKnownToResolveToAmbientModule = checkModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName, oldProgramState);
+                }
 
                 if (isKnownToResolveToAmbientModule) {
                     if (!unknownModuleNames) {
@@ -548,7 +555,7 @@ namespace ts {
             Debug.assert(j === resolutions.length);
             return result;
 
-            function isModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState?: OldProgramState): boolean {
+            function checkModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState?: OldProgramState): boolean {
                 if (!oldProgramState) {
                     return false;
                 }
@@ -566,6 +573,15 @@ namespace ts {
                     if (contains(oldProgramState.modifiedFilePaths, getSourceFileOfNode(decl).path)) {
                         return false;
                     }
+                }
+                if (isTraceEnabled(options, host)) {
+                    // find first unmodified source file
+                    const firstUnmodifiedFile = forEach(ambientModule.declarations, d => {
+                        const f = getSourceFileOfNode(d);
+                        return !contains(oldProgramState.modifiedFilePaths, f.path) && f;
+                    });
+                    Debug.assert(!!firstUnmodifiedFile);
+                    trace(host, Diagnostics.Module_0_was_resolved_as_ambient_module_declared_in_1_since_this_file_was_not_modified, moduleName, firstUnmodifiedFile.fileName);
                 }
                 return true;
             }

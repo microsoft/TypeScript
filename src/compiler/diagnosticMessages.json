@@ -2889,6 +2889,14 @@
         "category": "Error",
         "code": 6143
     },
+    "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
+        "category": "Message",
+        "code": 6144
+    },
+    "Module '{0}' was resolved as ambient module declared in '{1}' since this file was not modified.": {
+        "category": "Message",
+        "code": 6145
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

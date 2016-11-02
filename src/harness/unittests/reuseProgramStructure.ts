@@ -427,7 +427,9 @@ namespace ts {
             const program_2 = updateProgram(program, program.getRootFileNames(), options, f => {
                 f[0].text = f[0].text.updateProgram("var x = 1;");
             });
-            assert.deepEqual(program_2.host.getTrace(), [], "should reuse 'fs' since node.d.ts was not changed");
+            assert.deepEqual(program_2.host.getTrace(), [
+                "Module 'fs' was resolved as ambient module declared in '/a/b/node.d.ts' since this file was not modified."
+            ], "should reuse 'fs' since node.d.ts was not changed");
 
             const program_3 = updateProgram(program_2, program_2.getRootFileNames(), options, f => {
                 f[0].text = f[0].text.updateProgram("var y = 1;");
