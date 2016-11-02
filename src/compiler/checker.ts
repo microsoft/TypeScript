@@ -2245,7 +2245,7 @@ namespace ts {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
                     }
                     else if (type.flags & TypeFlags.Spread) {
-                        writeSpreadType(<SpreadType>type);
+                        writeSpreadType(type as SpreadType);
                     }
                     else if (getObjectFlags(type) & ObjectFlags.Anonymous) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
@@ -3028,24 +3028,29 @@ namespace ts {
             return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false);
         }
 
-        function getTextOfPropertyName(name: PropertyName): string {
-            switch (name.kind) {
-                case SyntaxKind.Identifier:
-                    return (<Identifier>name).text;
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    return (<LiteralExpression>name).text;
-                case SyntaxKind.ComputedPropertyName:
-                    if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
-                        return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
-                    }
-            }
-
-            return undefined;
-        }
-
         function isComputedNonLiteralName(name: PropertyName): boolean {
             return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind);
+        }
+
+        function getRestType(source: Type, properties: PropertyName[], symbol: Symbol): Type {
+            Debug.assert(!!(source.flags & TypeFlags.Object), "Rest types only support object types right now.");
+            const members = createMap<Symbol>();
+            const names = createMap<true>();
+            for (const name of properties) {
+                names[getTextOfPropertyName(name)] = true;
+            }
+            for (const prop of getPropertiesOfType(source)) {
+                const inNamesToRemove = prop.name in names;
+                const isPrivate = getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected);
+                const isMethod = prop.flags & SymbolFlags.Method;
+                const isSetOnlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
+                if (!inNamesToRemove && !isPrivate && !isMethod && !isSetOnlyAccessor) {
+                    members[prop.name] = prop;
+                }
+            }
+            const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
+            const numberIndexInfo = getIndexInfoOfType(source, IndexKind.Number);
+            return createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
         }
 
         /** Return the inferred type for a binding element */
@@ -3068,26 +3073,41 @@ namespace ts {
 
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
-                // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
-                const name = declaration.propertyName || <Identifier>declaration.name;
-                if (isComputedNonLiteralName(name)) {
-                    // computed properties with non-literal names are treated as 'any'
-                    return anyType;
+                if (declaration.dotDotDotToken) {
+                    if (!(parentType.flags & TypeFlags.Object)) {
+                        error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
+                        return unknownType;
+                    }
+                    const literalMembers: PropertyName[] = [];
+                    for (const element of pattern.elements) {
+                        if (element.kind !== SyntaxKind.OmittedExpression && !(element as BindingElement).dotDotDotToken) {
+                            literalMembers.push(element.propertyName || element.name as Identifier);
+                        }
+                    }
+                    type = getRestType(parentType, literalMembers, declaration.symbol);
                 }
-                if (declaration.initializer) {
-                    getContextualType(declaration.initializer);
-                }
+                else {
+                    // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
+                    const name = declaration.propertyName || <Identifier>declaration.name;
+                    if (isComputedNonLiteralName(name)) {
+                        // computed properties with non-literal names are treated as 'any'
+                        return anyType;
+                    }
+                    if (declaration.initializer) {
+                        getContextualType(declaration.initializer);
+                    }
 
-                // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
-                // or otherwise the type of the string index signature.
-                const text = getTextOfPropertyName(name);
+                    // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
+                    // or otherwise the type of the string index signature.
+                    const text = getTextOfPropertyName(name);
 
-                type = getTypeOfPropertyOfType(parentType, text) ||
-                    isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                    getIndexTypeOfType(parentType, IndexKind.String);
-                if (!type) {
-                    error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
-                    return unknownType;
+                    type = getTypeOfPropertyOfType(parentType, text) ||
+                        isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                        getIndexTypeOfType(parentType, IndexKind.String);
+                    if (!type) {
+                        error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
+                        return unknownType;
+                    }
                 }
             }
             else {
@@ -3295,8 +3315,8 @@ namespace ts {
             let hasComputedProperties = false;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
-                if (isComputedNonLiteralName(name)) {
-                    // do not include computed properties in the implied type
+                if (isComputedNonLiteralName(name) || e.dotDotDotToken) {
+                    // do not include computed properties or rests in the implied type
                     hasComputedProperties = true;
                     return;
                 }
@@ -14097,7 +14117,7 @@ namespace ts {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(objectLiteralType), declarationNameToString(name));
                 }
             }
-            else {
+            else if (property.kind !== SyntaxKind.SpreadElementExpression) {
                 error(property, Diagnostics.Property_assignment_expected);
             }
         }
@@ -14143,7 +14163,7 @@ namespace ts {
                 }
                 else {
                     if (elementIndex < elements.length - 1) {
-                        error(element, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                        error(element, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
                     }
                     else {
                         const restExpression = (<SpreadExpression>element).expression;
@@ -21058,7 +21078,7 @@ namespace ts {
             if (node.dotDotDotToken) {
                 const elements = (<BindingPattern>node.parent).elements;
                 if (node !== lastOrUndefined(elements)) {
-                    return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                    return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
                 }
 
                 if (node.name.kind === SyntaxKind.ArrayBindingPattern || node.name.kind === SyntaxKind.ObjectBindingPattern) {

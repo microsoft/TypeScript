@@ -485,6 +485,22 @@ namespace ts {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
+    export function getTextOfPropertyName(name: PropertyName): string {
+        switch (name.kind) {
+        case SyntaxKind.Identifier:
+            return (<Identifier>name).text;
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NumericLiteral:
+            return (<LiteralExpression>name).text;
+        case SyntaxKind.ComputedPropertyName:
+            if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
+                return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
+            }
+        }
+
+        return undefined;
+    }
+
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:

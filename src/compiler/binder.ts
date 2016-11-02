@@ -1916,6 +1916,9 @@ namespace ts {
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
+                    if ((node as BindingElement).dotDotDotToken && node.parent.kind === SyntaxKind.ObjectBindingPattern) {
+                        emitFlags |= NodeFlags.HasRestAttribute;
+                    }
                     return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
@@ -1931,7 +1934,11 @@ namespace ts {
 
                 case SyntaxKind.SpreadElementExpression:
                 case SyntaxKind.JsxSpreadAttribute:
-                    emitFlags |= NodeFlags.HasSpreadAttribute;
+                    let root = container;
+                    while (root && root.kind !== SyntaxKind.BinaryExpression) {
+                        root = root.parent;
+                    }
+                    emitFlags |= root && isDestructuringAssignment(root) ? NodeFlags.HasRestAttribute : NodeFlags.HasSpreadAttribute;
                     return;
 
                 case SyntaxKind.CallSignature:
@@ -2542,10 +2549,13 @@ namespace ts {
         const operatorTokenKind = node.operatorToken.kind;
         const leftKind = node.left.kind;
 
-        if (operatorTokenKind === SyntaxKind.EqualsToken
-            && (leftKind === SyntaxKind.ObjectLiteralExpression
-                || leftKind === SyntaxKind.ArrayLiteralExpression)) {
-            // Destructuring assignments are ES6 syntax.
+        if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ObjectLiteralExpression) {
+            // Destructuring object assignments with are ES2015 syntax
+            // and possibly ESNext if they contain rest
+            transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
+        }
+        else if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ArrayLiteralExpression) {
+            // Destructuring assignments are ES2015 syntax.
             transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.AsteriskAsteriskToken
@@ -2577,6 +2587,11 @@ namespace ts {
         // If a parameter has an accessibility modifier, then it is TypeScript syntax.
         if (modifierFlags & ModifierFlags.ParameterPropertyModifier) {
             transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsParameterPropertyAssignments;
+        }
+
+        // parameters with object rest destructuring are ES Next syntax
+        if (subtreeFlags & TransformFlags.ContainsSpreadExpression) {
+            transformFlags |= TransformFlags.AssertESNext;
         }
 
         // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
@@ -2812,6 +2827,11 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertES2017;
             }
 
+            // function declarations with object rest destructuring are ES Next syntax
+            if (subtreeFlags & TransformFlags.ContainsSpreadExpression) {
+                transformFlags |= TransformFlags.AssertESNext;
+            }
+
             // If a FunctionDeclaration's subtree has marked the container as needing to capture the
             // lexical this, or the function contains parameters with initializers, then this node is
             // ES6 syntax.
@@ -2848,6 +2868,12 @@ namespace ts {
         if (hasModifier(node, ModifierFlags.Async)) {
             transformFlags |= TransformFlags.AssertES2017;
         }
+
+        // function expressions with object rest destructuring are ES Next syntax
+        if (subtreeFlags & TransformFlags.ContainsSpreadExpression) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+
 
         // If a FunctionExpression's subtree has marked the container as needing to capture the
         // lexical this, or the function contains parameters with initializers, then this node is
@@ -2886,6 +2912,11 @@ namespace ts {
             transformFlags |= TransformFlags.AssertES2017;
         }
 
+        // arrow functions with object rest destructuring are ES Next syntax
+        if (subtreeFlags & TransformFlags.ContainsSpreadExpression) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+
         // If an ArrowFunction contains a lexical this, its container must capture the lexical this.
         if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
             transformFlags |= TransformFlags.ContainsCapturedLexicalThis;
@@ -2914,8 +2945,13 @@ namespace ts {
         let transformFlags = subtreeFlags;
         const nameKind = node.name.kind;
 
-        // A VariableDeclaration with a binding pattern is ES6 syntax.
-        if (nameKind === SyntaxKind.ObjectBindingPattern || nameKind === SyntaxKind.ArrayBindingPattern) {
+        // A VariableDeclaration with an object binding pattern is ES2015 syntax
+        // and possibly ESNext syntax if it contains an object binding pattern
+        if (nameKind === SyntaxKind.ObjectBindingPattern) {
+            transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
+        }
+        // A VariableDeclaration with an object binding pattern is ES2015 syntax.
+        else if (nameKind === SyntaxKind.ArrayBindingPattern) {
             transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
         }
 
@@ -3056,6 +3092,10 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertJsx;
                 break;
 
+            case SyntaxKind.ForOfStatement:
+                // for-of might be ESNext if it has a rest destructuring
+                transformFlags |= TransformFlags.AssertESNext;
+                // FALLTHROUGH
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
             case SyntaxKind.TemplateMiddle:
@@ -3063,7 +3103,6 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.ForOfStatement:
             case SyntaxKind.StaticKeyword:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES2015;
@@ -3129,9 +3168,15 @@ namespace ts {
 
             case SyntaxKind.SpreadExpression:
             case SyntaxKind.SpreadElementExpression:
-                // This node is ES6 or ES future syntax, but is handled by a containing node.
+                // This node is ES2015 or ES next syntax, but is handled by a containing node.
                 transformFlags |= TransformFlags.ContainsSpreadExpression;
                 break;
+
+            case SyntaxKind.BindingElement:
+                if ((node as BindingElement).dotDotDotToken) {
+                    // this node is ES2015 or ES next syntax, but is handled by a containing node.
+                    transformFlags |= TransformFlags.ContainsSpreadExpression;
+                }
 
             case SyntaxKind.SuperKeyword:
                 // This node is ES6 syntax.
@@ -3145,8 +3190,13 @@ namespace ts {
 
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-                // These nodes are ES6 syntax.
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
+                // These nodes are ES2015 or ES Next syntax.
+                if (subtreeFlags & TransformFlags.ContainsSpreadExpression) {
+                    transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsBindingPattern;
+                }
+                else {
+                    transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
+                }
                 break;
 
             case SyntaxKind.Decorator:
