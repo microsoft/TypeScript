@@ -469,7 +469,7 @@ namespace ts {
         }
 
         function resolveModuleNamesReusingOldState(moduleNames: string[], containingFile: string, file: SourceFile, oldProgramState?: OldProgramState) {
-            if (!oldProgramState && !file.ambientModulesInFile.length) {
+            if (!oldProgramState && !file.ambientModuleNames.length) {
                 // if old program state is not supplied and file does not contain locally defined ambient modules
                 // then the best we can do is fallback to the default logic
                 return resolveModuleNamesWorker(moduleNames, containingFile);
@@ -502,7 +502,7 @@ namespace ts {
                 // - in the old program module name was resolved to ambient module whose declaration is in non-modified file
                 //   (so the same module declaration will land in the new program)
                 let isKnownToResolveToAmbientModule = false;
-                if (contains(file.ambientModulesInFile, moduleName)) {
+                if (contains(file.ambientModuleNames, moduleName)) {
                     isKnownToResolveToAmbientModule = true;
                     if (isTraceEnabled(options, host)) {
                         trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName, containingFile);
@@ -568,19 +568,18 @@ namespace ts {
                 if (!(ambientModule && ambientModule.declarations)) {
                     return false;
                 }
-                for (const decl of ambientModule.declarations) {
-                    // at least one of declarations should come from non-modified source file
-                    if (contains(oldProgramState.modifiedFilePaths, getSourceFileOfNode(decl).path)) {
-                        return false;
-                    }
+
+                // at least one of declarations should come from non-modified source file
+                const firstUnmodifiedFile = forEach(ambientModule.declarations, d => {
+                    const f = getSourceFileOfNode(d);
+                    return !contains(oldProgramState.modifiedFilePaths, f.path) && f;
+                });
+
+                if (!firstUnmodifiedFile) {
+                    return false;
                 }
+
                 if (isTraceEnabled(options, host)) {
-                    // find first unmodified source file
-                    const firstUnmodifiedFile = forEach(ambientModule.declarations, d => {
-                        const f = getSourceFileOfNode(d);
-                        return !contains(oldProgramState.modifiedFilePaths, f.path) && f;
-                    });
-                    Debug.assert(!!firstUnmodifiedFile);
                     trace(host, Diagnostics.Module_0_was_resolved_as_ambient_module_declared_in_1_since_this_file_was_not_modified, moduleName, firstUnmodifiedFile.fileName);
                 }
                 return true;
@@ -1151,7 +1150,7 @@ namespace ts {
 
             file.imports = imports || emptyArray;
             file.moduleAugmentations = moduleAugmentations || emptyArray;
-            file.ambientModulesInFile = ambientModules || emptyArray;
+            file.ambientModuleNames = ambientModules || emptyArray;
 
             return;
 

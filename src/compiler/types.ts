@@ -2102,7 +2102,7 @@ namespace ts {
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
-        /* @internal */ ambientModulesInFile: string[];
+        /* @internal */ ambientModuleNames: string[];
         // The synthesized identifier for an imported external helpers module.
         /* @internal */ externalHelpersModuleName?: Identifier;
     }
