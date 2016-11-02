@@ -13550,6 +13550,9 @@ namespace ts {
 
         function checkDeleteExpression(node: DeleteExpression): Type {
             checkExpression(node.expression);
+            checkReferenceExpression(node.expression,
+                Diagnostics.The_operand_of_a_delete_operator_must_be_a_property_reference,
+                Diagnostics.The_operand_of_a_delete_operator_cannot_be_a_read_only_property);
             return booleanType;
         }
 
