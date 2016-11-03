@@ -1537,21 +1537,24 @@ namespace ts {
                     const emitFilePath = toPath(emitFileName, currentDirectory, getCanonicalFileName);
                     // Report error if the output overwrites input file
                     if (filesByName.contains(emitFilePath)) {
-                        let chain: DiagnosticMessageChain;
-                        if (!options.configFilePath) {
-                            // The program is from either an inferred project or an external project
-                            chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig);
+                        if (options.noEmitOverwritenFiles && !options.out && !options.outDir && !options.outFile) {
+                            blockEmittingOfFile(emitFileName);
                         }
-                        chain = chainDiagnosticMessages(chain, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file, emitFileName);
-                        const diagnostic = createCompilerDiagnosticFromMessageChain(chain);
-                        createEmitBlockingDiagnostics(emitFileName, diagnostic);
+                        else {
+                            let chain: DiagnosticMessageChain;
+                            if (!options.configFilePath) {
+                                // The program is from either an inferred project or an external project
+                                chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig);
+                            }
+                            chain = chainDiagnosticMessages(chain, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file, emitFileName);
+                            blockEmittingOfFile(emitFileName, createCompilerDiagnosticFromMessageChain(chain));
+                        }
                     }
 
                     // Report error if multiple files write into same file
                     if (emitFilesSeen.contains(emitFilePath)) {
                         // Already seen the same emit file - report error
-                        const diagnostic = createCompilerDiagnostic(Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files, emitFileName);
-                        createEmitBlockingDiagnostics(emitFileName, diagnostic);
+                        blockEmittingOfFile(emitFileName, createCompilerDiagnostic(Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files, emitFileName));
                     }
                     else {
                         emitFilesSeen.set(emitFilePath, true);
@@ -1560,9 +1563,11 @@ namespace ts {
             }
         }
 
-        function createEmitBlockingDiagnostics(emitFileName: string, diag: Diagnostic) {
+        function blockEmittingOfFile(emitFileName: string, diag?: Diagnostic) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName, currentDirectory, getCanonicalFileName), true);
-            programDiagnostics.add(diag);
+            if (diag) {
+                programDiagnostics.add(diag);
+            }
         }
     }
 }
