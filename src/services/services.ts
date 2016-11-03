@@ -1680,7 +1680,7 @@ namespace ts {
                     host: host
                 };
 
-                const fixes = codefix.getFixes(context);
+                const fixes = codefix.getFixes(context, cancellationToken);
                 if (fixes) {
                     allFixes = allFixes.concat(fixes);
                 }

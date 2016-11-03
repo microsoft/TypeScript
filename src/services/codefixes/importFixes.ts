@@ -1,122 +1,60 @@
 ﻿/* @internal */
 namespace ts.codefix {
-    const nodeModulesDir = "node_modules";
+    const nodeModulesFolderName = "node_modules";
 
     registerCodeFix({
         errorCodes: [Diagnostics.Cannot_find_name_0.code],
-        getCodeActions: (context: CodeFixContext) => {
+        getCodeActions: (context: CodeFixContext, cancellationToken: CancellationToken) => {
             const sourceFile = context.sourceFile;
             const checker = context.program.getTypeChecker();
-            const allFiles = context.program.getSourceFiles();
+            const allSourceFiles = context.program.getSourceFiles();
             const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
 
             const token = getTokenAtPosition(sourceFile, context.span.start);
             const name = token.getText();
             const allActions: CodeAction[] = [];
 
-            // Get existing ImportDeclarations from the source file
-            const imports: ImportDeclaration[] = [];
-            if (sourceFile.statements) {
-                for (const statement of sourceFile.statements) {
-                    if (statement.kind === SyntaxKind.ImportDeclaration) {
-                        imports.push(<ImportDeclaration>statement);
-                    }
-                }
-            }
+            const allPotentialModules = concatenate(checker.getAmbientModules(), map(allSourceFiles, sf => sf.symbol));
 
-            // Check if a matching symbol is exported by any ambient modules that has been declared
-            const ambientModules = checker.getAmbientModules();
-            for (const moduleSymbol of ambientModules) {
+            for (const moduleSymbol of allPotentialModules) {
+                cancellationToken.throwIfCancellationRequested();
+
                 const exports = checker.getExportsOfModule(moduleSymbol) || [];
                 for (const exported of exports) {
                     if (exported.name === name) {
-                        allActions.push(getCodeActionForImport(removeQuotes(moduleSymbol.getName())));
-                    }
-                }
-            }
-
-            // Check if a matching symbol is exported by any files known to the compiler
-            for (const file of allFiles) {
-                const exports = file.symbol && file.symbol.exports;
-                if (exports) {
-                    for (const exported in exports) {
-                        if (exported === name) {
-                            let moduleSpecifier: string;
-                            const sourceDir = getDirectoryPath(sourceFile.fileName);
-                            if (file.fileName.indexOf(nodeModulesDir) !== -1) {
-                                moduleSpecifier = convertPathToModuleSpecifier(file.fileName);
-                            }
-                            else {
-                                // Try and convert the file path into one relative to the source file
-
-                                const pathName = getRelativePathToDirectoryOrUrl(
-                                    sourceDir,
-                                    file.fileName,
-                                    sourceDir,
-                                    createGetCanonicalFileName(useCaseSensitiveFileNames),
-                                    /* isAbsolutePathAnUrl */ false
-                                );
-
-                                // Make sure we got back a path that can be a valid module specifier
-                                const isRootedOrRelative = isExternalModuleNameRelative(pathName) || isRootedDiskPath(pathName);
-                                moduleSpecifier = removeFileExtension(isRootedOrRelative ? pathName : combinePaths(".", pathName));
-                            }
-
-                            allActions.push(getCodeActionForImport(moduleSpecifier, (a, b) =>
-                                compareModuleSpecifiers(a, b, sourceDir, useCaseSensitiveFileNames)
-                            ));
-                        }
+                        allActions.push(getCodeActionForImport(moduleSymbol));
                     }
                 }
             }
 
             return allActions;
 
-            function convertPathToModuleSpecifier(modulePath: string): string {
-                const i = modulePath.lastIndexOf(nodeModulesDir);
-
-                // This is not a module from the node_module folder, 
-                // so just retun the path
-                if (i === -1) {
-                    return modulePath;
-                }
-
-                // If this is a node module, check to see if the given file is the main export of the module or not. If so,
-                // it can be referenced by just the module name.
-                const moduleDir = getDirectoryPath(modulePath);
-                let nodePackage: any;
-                try {
-                    nodePackage = JSON.parse(context.host.readFile(combinePaths(moduleDir, "package.json")));
-                }
-                catch (e) { }
-
-                // If no main export is explicitly defined, check for the default (index.js)
-                const mainExport = (nodePackage && nodePackage.main) || "index.js";
-                const mainExportPath = normalizePath(isRootedDiskPath(mainExport) ? mainExport : combinePaths(moduleDir, mainExport));
-
-                const moduleSpecifier = removeFileExtension(modulePath.substring(i + nodeModulesDir.length + 1));
-
-                if (compareModuleSpecifiers(modulePath, mainExportPath, getDirectoryPath(sourceFile.fileName), useCaseSensitiveFileNames) === Comparison.EqualTo) {
-                    return getDirectoryPath(moduleSpecifier);
-                }
-                else {
-                    return moduleSpecifier;
-                }
-            }
-
-            function getCodeActionForImport(moduleName: string, isEqual: (a: string, b: string) => Comparison = compareStrings): CodeAction {
+            function getCodeActionForImport(moduleSymbol: Symbol): CodeAction {
                 // Check to see if there are already imports being made from this source in the current file
-                const existing = forEach(imports, (importDeclaration) => {
-                    if (isEqual(removeQuotes(importDeclaration.moduleSpecifier.getText()), moduleName) === Comparison.EqualTo) {
-                        return importDeclaration;
+                const existingDeclaration = forEach(sourceFile.imports, importModuleSpecifier => {
+                    const importSymbol = checker.getSymbolAtLocation(importModuleSpecifier);
+                    if (importSymbol === moduleSymbol) {
+                        return getImportDeclaration(importModuleSpecifier);
                     }
                 });
 
-                if (existing) {
-                    return getCodeActionForExistingImport(existing);
+                if (existingDeclaration) {
+                    return getCodeActionForExistingImport(existingDeclaration);
                 }
                 else {
                     return getCodeActionForNewImport();
+                }
+
+                function getImportDeclaration(moduleSpecifier: LiteralExpression) {
+                    let node: Node = moduleSpecifier;
+                    while (node) {
+                        if (node.kind !== SyntaxKind.ImportDeclaration) {
+                            node = node.parent;
+                        }
+
+                        return <ImportDeclaration>node;
+                    }
+                    return undefined;
                 }
 
                 function getCodeActionForExistingImport(declaration: ImportDeclaration): CodeAction {
@@ -231,59 +169,73 @@ namespace ts.codefix {
 
                 function getCodeActionForNewImport(): CodeAction {
                     // Try to insert after any existing imports
-                    let lastDeclaration: ImportDeclaration;
-                    let lastEnd: number;
-                    for (const declaration of imports) {
-                        const end = declaration.getEnd();
-                        if (!lastDeclaration || end > lastEnd) {
-                            lastDeclaration = declaration;
-                            lastEnd = end;
+                    let lastModuleSpecifierEnd = -1;
+                    for (const moduleSpecifier of sourceFile.imports) {
+                        const end = moduleSpecifier.getEnd();
+                        if (!lastModuleSpecifierEnd || end > lastModuleSpecifierEnd) {
+                            lastModuleSpecifierEnd = end;
                         }
                     }
 
-                    let newText = `import { ${name} } from "${moduleName}";`;
-                    newText = lastDeclaration ? context.newLineCharacter + newText : newText + context.newLineCharacter;
+                    const moduleSpecifier = getModuleSpecifierForNewImport();
+                    let newText = `import { ${name} } from "${moduleSpecifier}";`;
+                    newText = lastModuleSpecifierEnd ? context.newLineCharacter + newText : newText + context.newLineCharacter;
 
                     return createCodeAction(
                         Diagnostics.Import_0_from_1,
-                        [name, `"${moduleName}"`],
+                        [name, `"${moduleSpecifier}"`],
                         newText,
                         {
-                            start: lastDeclaration ? lastEnd : sourceFile.getStart(),
+                            start: lastModuleSpecifierEnd >= 0 ? lastModuleSpecifierEnd + 1 : sourceFile.getStart(),
                             length: 0
                         },
                         sourceFile.fileName
                     );
                 }
-            }
 
-            function removeQuotes(name: string): string {
-                if ((startsWith(name, "\"") && endsWith(name, "\"")) || (startsWith(name, "'") && endsWith(name, "'"))) {
-                    return name.substr(1, name.length - 2);
-                }
-                else {
-                    return name;
-                }
-            }
+                function getModuleSpecifierForNewImport(): string {
+                    const sourceDir = getDirectoryPath(sourceFile.fileName);
 
-            function compareModuleSpecifiers(a: string, b: string, basePath: string, useCaseSensitiveFileNames: boolean): Comparison {
-                // Paths to modules can be relative or absolute and may optionally include the file
-                // extension of the module
-                a = removeFileExtension(a);
-                b = removeFileExtension(b);
-                return comparePaths(a, b, basePath, !useCaseSensitiveFileNames);
+                    // If the module is from a module file, then there are typically two cases:
+                    //     1. from a source file in your program
+                    //     2. from a declaration file in a node_modules folder:
+                    //        2.1 the node_modules folder is in the sourceDir or above (can be found by the module resolution)
+                    //        2.2 the node_modules folder is in a subfolder of the sourceDir (cannot be found by the module resolution)
+                    // for case 1 and 2.2, we would return the relative file path as the module specifier;
+                    // for case 2.1, we would just use the module name instead.
+                    if (moduleSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
+                        const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
+
+                        // case 2.1
+                        if (moduleFileName.indexOf(combinePaths(sourceDir, nodeModulesFolderName)) === 0 ||
+                            (moduleFileName.indexOf(sourceDir) < 0 && moduleFileName.indexOf(`${directorySeparator}${nodeModulesFolderName}${directorySeparator}`) >= 0)) {
+                            return moduleSymbol.name;
+                        }
+
+                        // case 1 and case 2.2
+                        const relativePath = getRelativePathToDirectoryOrUrl(
+                            sourceDir,
+                            moduleFileName,
+                            /*currentDirectory*/ sourceDir,
+                            createGetCanonicalFileName(useCaseSensitiveFileNames),
+                            /*isAbsolutePathAnUrl*/ false
+                        );
+
+                        // Make sure we got back a path that can be a valid module specifier
+                        const isRootedOrRelative = isExternalModuleNameRelative(relativePath) || isRootedDiskPath(relativePath);
+                        return removeFileExtension(isRootedOrRelative ? relativePath : combinePaths(".", relativePath));
+
+                    }
+
+                    // the module is not from a module file, so just return the module name.
+                    return moduleSymbol.name;
+                }
             }
 
             function createCodeAction(description: DiagnosticMessage, diagnosticArgs: string[], newText: string, span: TextSpan, fileName: string): CodeAction {
                 return {
                     description: formatMessage.apply(undefined, [undefined, description].concat(<any[]>diagnosticArgs)),
-                    changes: [{
-                        fileName,
-                        textChanges: [{
-                            newText,
-                            span
-                        }]
-                    }]
+                    changes: [{ fileName, textChanges: [{ newText, span }] }]
                 };
             }
         }
