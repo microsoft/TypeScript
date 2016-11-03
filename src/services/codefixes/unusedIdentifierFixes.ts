@@ -8,7 +8,13 @@ namespace ts.codefix {
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
-            const token = getTokenAtPosition(sourceFile, start);
+
+            let token = getTokenAtPosition(sourceFile, start);
+
+            // this handles var ["computed"] = 12;
+            if (token.kind === SyntaxKind.OpenBracketToken) {
+                token = getTokenAtPosition(sourceFile, start + 1);
+            }
 
             switch (token.kind) {
                 case ts.SyntaxKind.Identifier:
@@ -72,34 +78,43 @@ namespace ts.codefix {
                                 return removeSingleItem(functionDeclaration.parameters, token);
                             }
 
-                        case SyntaxKind.ImportSpecifier:
-                            const namedImports = <NamedImports>token.parent.parent;
-                            const elements = namedImports.elements;
-                            if (elements.length === 1) {
-                                // Only 1 import and it is unused. So the entire line could be removed.
-                                return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
-                            }
-                            else {
-                                return removeSingleItem(elements, token);
-                            }
-
                         // handle case where 'import a = A;'
                         case SyntaxKind.ImportEqualsDeclaration:
-                            return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
+                            let importEquals = findImportDeclaration(token);
+                            return createCodeFix("", importEquals.pos, importEquals.end - importEquals.pos);
 
-                        // handle case where 'import d from './file'
-                        case SyntaxKind.ImportClause:
-                            return createCodeFix("", token.parent.parent.pos, token.parent.parent.end - token.parent.parent.pos);
-
-                        // handle case where 'import * as a from './file'
-                        case SyntaxKind.NamespaceImport:
-                            return createCodeFix("", token.parent.parent.parent.pos, token.parent.parent.parent.end - token.parent.parent.parent.pos);
-
-                        default:
-                            if (isDeclarationName(token)) {
-                                return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
+                        case SyntaxKind.ImportSpecifier:
+                            const namedImports = <NamedImports>token.parent.parent;
+                            if (namedImports.elements.length === 1) {
+                                // Only 1 import and it is unused. So the entire declaration should be removed.
+                                let importSpec = findImportDeclaration(token);
+                                return createCodeFix("", importSpec.pos, importSpec.end - importSpec.pos);
                             }
-                            break;
+                            else {
+                                return removeSingleItem(namedImports.elements, token);
+                            }
+
+                        // handle case where "import d, * as ns from './file'" 
+                        // or "'import {a, b as ns} from './file'"
+                        case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'  
+                            const importClause = <ImportClause>token.parent;
+                            if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
+                                const importDecl = findImportDeclaration(importClause);
+                                return createCodeFix("", importDecl.pos, importDecl.end - importDecl.pos);
+                            }
+                            else { // import |d,| * as ns from './file'
+                                return createCodeFix("", importClause.name.pos, importClause.namedBindings.pos - importClause.name.pos);
+                            }
+
+                        case SyntaxKind.NamespaceImport:
+                            const namespaceImport = <NamespaceImport>token.parent;
+                            if(namespaceImport.name == token && !(<ImportClause>namespaceImport.parent).name){
+                                const importDecl = findImportDeclaration(namespaceImport);
+                                return createCodeFix("", importDecl.pos, importDecl.end - importDecl.pos);
+                            } else {
+                                const start = (<ImportClause>namespaceImport.parent).name.end;
+                                return createCodeFix("", start, (<ImportClause>namespaceImport.parent).namedBindings.end - start);
+                            }
                     }
                     break;
 
@@ -109,8 +124,24 @@ namespace ts.codefix {
                 case SyntaxKind.NamespaceImport:
                     return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
             }
+            if (isDeclarationName(token)) {
+                return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
+            }
+            else if (isLiteralComputedPropertyDeclarationName(token)) {
+                return createCodeFix("", token.parent.parent.pos, token.parent.parent.end - token.parent.parent.pos);
+            }
+            else {
+                return undefined;
+            }
 
-            return undefined;
+            function findImportDeclaration(token: Node): Node {
+                let importDecl = token;
+                while (importDecl.kind != SyntaxKind.ImportDeclaration && importDecl.parent) {
+                    importDecl = importDecl.parent;
+                }
+
+                return importDecl;
+            }
 
             function createCodeFix(newText: string, start: number, length: number): CodeAction[] {
                 return [{
@@ -133,3 +164,19 @@ namespace ts.codefix {
         }
     });
 }
+
+const s = "hello";
+
+class C {
+
+
+
+    private ["string"]: string;
+    private "b  iz": string;
+
+    bar() {
+        this
+    }
+}
+
+
