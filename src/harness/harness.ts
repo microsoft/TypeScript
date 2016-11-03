@@ -958,28 +958,38 @@ namespace Harness {
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
 
-            const realPathMap: ts.FileMap<string> = ts.createFileMap<string>();
-            const fileMap: ts.FileMap<() => ts.SourceFile> = ts.createFileMap<() => ts.SourceFile>();
+            /** Maps a symlink name to a realpath. Used only for exposing `realpath`. */
+            const realPathMap = ts.createFileMap<string>();
+            /**
+             * Maps a file name to a source file.
+             * This will have a different SourceFile for every symlink pointing to that file;
+             * if the program resolves realpaths then symlink entries will be ignored.
+             */
+            const fileMap = ts.createFileMap<ts.SourceFile>();
             for (const file of inputFiles) {
                 if (file.content !== undefined) {
                     const fileName = ts.normalizePath(file.unitName);
                     const path = ts.toPath(file.unitName, currentDirectory, getCanonicalFileName);
                     if (file.fileOptions && file.fileOptions["symlink"]) {
-                        const link = file.fileOptions["symlink"];
-                        const linkPath = ts.toPath(link, currentDirectory, getCanonicalFileName);
-                        realPathMap.set(linkPath, fileName);
-                        fileMap.set(path, (): ts.SourceFile => { throw new Error("Symlinks should always be resolved to a realpath first"); });
+                        const links = file.fileOptions["symlink"].split(",");
+                        for (const link of links) {
+                            const linkPath = ts.toPath(link, currentDirectory, getCanonicalFileName);
+                            realPathMap.set(linkPath, fileName);
+                            // Create a different SourceFile for every symlink.
+                            const sourceFile = createSourceFileAndAssertInvariants(linkPath, file.content, scriptTarget);
+                            fileMap.set(linkPath, sourceFile);
+                        }
                     }
                     const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
-                    fileMap.set(path, () => sourceFile);
+                    fileMap.set(path, sourceFile);
                 }
             }
 
             function getSourceFile(fileName: string) {
                 fileName = ts.normalizePath(fileName);
-                const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
-                if (fileMap.contains(path)) {
-                    return fileMap.get(path)();
+                const fromFileMap = fileMap.get(toPath(fileName));
+                if (fromFileMap) {
+                    return fromFileMap;
                 }
                 else if (fileName === fourslashFileName) {
                     const tsFn = "tests/cases/fourslash/" + fourslashFileName;
@@ -998,6 +1008,9 @@ namespace Harness {
                     newLineKind === ts.NewLineKind.LineFeed ? lineFeed :
                         Harness.IO.newLine();
 
+            function toPath(fileName: string): ts.Path {
+                return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+            }
 
             return {
                 getCurrentDirectory: () => currentDirectory,
@@ -1007,24 +1020,19 @@ namespace Harness {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
-                fileExists: fileName => {
-                    const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
-                    return fileMap.contains(path) || (realPathMap && realPathMap.contains(path));
+                fileExists: fileName => fileMap.contains(toPath(fileName)),
+                readFile: (fileName: string): string => fileMap.get(toPath(fileName)).getText(),
+                realpath: (fileName: string): ts.Path => {
+                    const path = toPath(fileName);
+                    return (realPathMap.get(path) as ts.Path) || path;
                 },
-                readFile: (fileName: string): string => {
-                    return fileMap.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName))().getText();
-                },
-                realpath: realPathMap && ((f: string) => {
-                    const path = ts.toPath(f, currentDirectory, getCanonicalFileName);
-                    return realPathMap.get(path) || path;
-                }),
                 directoryExists: dir => {
                     let path = ts.toPath(dir, currentDirectory, getCanonicalFileName);
                     // Strip trailing /, which may exist if the path is a drive root
                     if (path[path.length - 1] === "/") {
                         path = <ts.Path>path.substr(0, path.length - 1);
                     }
-                    return mapHasFileInDirectory(path, fileMap) || mapHasFileInDirectory(path, realPathMap);
+                    return mapHasFileInDirectory(path, fileMap);
                 },
                 getDirectories: d => {
                     const path = ts.toPath(d, currentDirectory, getCanonicalFileName);

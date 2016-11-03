@@ -1,0 +1,13 @@
+=== /src/app.ts ===
+import { x } from "./shared/abc";
+>x : 0
+
+import { x as x2 } from "./shared2/abc";
+>x : 0
+>x2 : 0
+
+x + x2;
+>x + x2 : number
+>x : 0
+>x2 : 0
+

@@ -12,6 +12,5 @@
     "Loading module as file / folder, candidate module location '/jsx'.",
     "File '/jsx.js' does not exist.",
     "File '/jsx.jsx' exist - use it as a name resolution result.",
-    "Resolving real path for '/jsx.jsx', result '/jsx.jsx'",
     "======== Module name './jsx' was successfully resolved to '/jsx.jsx'. ========"
 ]

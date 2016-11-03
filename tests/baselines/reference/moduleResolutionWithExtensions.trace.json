@@ -3,7 +3,6 @@
     "Module resolution kind is not specified, using 'NodeJs'.",
     "Loading module as file / folder, candidate module location '/src/a'.",
     "File '/src/a.ts' exist - use it as a name resolution result.",
-    "Resolving real path for '/src/a.ts', result '/src/a.ts'",
     "======== Module name './a' was successfully resolved to '/src/a.ts'. ========",
     "======== Resolving module './a.js' from '/src/d.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
@@ -13,7 +12,6 @@
     "File '/src/a.js.d.ts' does not exist.",
     "File name '/src/a.js' has a '.js' extension - stripping it",
     "File '/src/a.ts' exist - use it as a name resolution result.",
-    "Resolving real path for '/src/a.ts', result '/src/a.ts'",
     "======== Module name './a.js' was successfully resolved to '/src/a.ts'. ========",
     "======== Resolving module './jquery.js' from '/src/jquery_user_1.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
@@ -25,6 +23,5 @@
     "File '/src/jquery.ts' does not exist.",
     "File '/src/jquery.tsx' does not exist.",
     "File '/src/jquery.d.ts' exist - use it as a name resolution result.",
-    "Resolving real path for '/src/jquery.d.ts', result '/src/jquery.d.ts'",
     "======== Module name './jquery.js' was successfully resolved to '/src/jquery.d.ts'. ========"
 ]

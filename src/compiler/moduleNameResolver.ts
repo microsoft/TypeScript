@@ -548,7 +548,7 @@ namespace ts {
         const result = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
         if (result) {
             const { resolved, isExternalLibraryImport } = result;
-            return createResolvedModuleWithFailedLookupLocations(resolved && resolvedWithRealpath(resolved, host, traceEnabled), isExternalLibraryImport, failedLookupLocations);
+            return createResolvedModuleWithFailedLookupLocations(resolved, isExternalLibraryImport, failedLookupLocations);
         }
         return { resolvedModule: undefined, failedLookupLocations };
 
@@ -563,7 +563,8 @@ namespace ts {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
                 }
                 const resolved = loadModuleFromNodeModules(extensions, moduleName, containingDirectory, failedLookupLocations, state, /*checkOneLevel*/ false);
-                return resolved && { resolved, isExternalLibraryImport: true };
+                // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
+                return resolved && { resolved: resolvedWithRealpath(resolved, host, traceEnabled), isExternalLibraryImport: true };
             }
             else {
                 const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
