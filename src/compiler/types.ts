@@ -2709,7 +2709,7 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeParameter = StructuredType | TypeParameter,
+        StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
