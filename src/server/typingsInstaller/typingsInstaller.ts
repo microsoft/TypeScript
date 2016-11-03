@@ -296,7 +296,7 @@ namespace ts.server.typingsInstaller {
             this.installTypingsAsync(requestId, scopedTypings, cachePath, ok => {
                 if (this.telemetryEnabled) {
                     this.sendResponse(<TypingsInstallEvent>{
-                        kind: "event::install",
+                        kind: EventInstall,
                         packagesToInstall: scopedTypings
                     });
                 }
