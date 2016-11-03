@@ -1,8 +1,9 @@
 tests/cases/compiler/deleteReadonly.ts(8,8): error TS2699: The operand of a delete operator cannot be a read-only property
-tests/cases/compiler/deleteReadonly.ts(18,8): error TS2699: The operand of a delete operator cannot be a read-only property
+tests/cases/compiler/deleteReadonly.ts(18,8): error TS2542: Index signature in type 'B' only permits reading.
+tests/cases/compiler/deleteReadonly.ts(20,12): error TS2542: Index signature in type 'B' only permits reading.
 
 
-==== tests/cases/compiler/deleteReadonly.ts (2 errors) ====
+==== tests/cases/compiler/deleteReadonly.ts (3 errors) ====
     interface A {
       readonly b
     }
@@ -24,5 +25,9 @@ tests/cases/compiler/deleteReadonly.ts(18,8): error TS2699: The operand of a del
     
     delete b['test'];
            ~~~~~~~~~
-!!! error TS2699: The operand of a delete operator cannot be a read-only property
+!!! error TS2542: Index signature in type 'B' only permits reading.
+    
+    delete ((((b['test']))));
+               ~~~~~~~~~
+!!! error TS2542: Index signature in type 'B' only permits reading.
     

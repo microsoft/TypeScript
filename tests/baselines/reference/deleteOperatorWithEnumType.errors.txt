@@ -1,12 +1,12 @@
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(7,31): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(8,31): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(11,31): error TS2699: The operand of a delete operator cannot be a read-only property
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(12,31): error TS2698: The operand of a delete operator must be a property reference
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(12,32): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(15,31): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(15,38): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(16,31): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(16,38): error TS2698: The operand of a delete operator must be a property reference
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(16,45): error TS2698: The operand of a delete operator must be a property reference
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(16,46): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(19,8): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(20,8): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts(21,8): error TS2699: The operand of a delete operator cannot be a read-only property
@@ -32,7 +32,7 @@ tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperator
                                   ~~~~~~~~~~
 !!! error TS2699: The operand of a delete operator cannot be a read-only property
     var ResultIsBoolean4 = delete (ENUM[0] + ENUM1["B"]);
-                                  ~~~~~~~~~~~~~~~~~~~~~~
+                                   ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
     
     // multiple delete  operators
@@ -46,7 +46,7 @@ tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperator
 !!! error TS2698: The operand of a delete operator must be a property reference
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
-                                                ~~~~~~~~~~~~~~~~~~~~~~
+                                                 ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
     
     // miss assignment operators

@@ -18,6 +18,8 @@ var b: B = {
 
 delete b['test'];
 
+delete ((((b['test']))));
+
 
 //// [deleteReadonly.js]
 var a = {
@@ -28,3 +30,4 @@ var b = {
     'test': 'test'
 };
 delete b['test'];
+delete ((((b['test']))));

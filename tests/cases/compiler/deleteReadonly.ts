@@ -16,3 +16,5 @@ var b: B = {
 };
 
 delete b['test'];
+
+delete ((((b['test']))));

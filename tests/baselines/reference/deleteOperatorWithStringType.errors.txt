@@ -1,19 +1,24 @@
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(18,31): error TS2698: The operand of a delete operator must be a property reference
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(19,31): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(22,31): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(23,31): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(24,31): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(30,31): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(31,32): error TS2698: The operand of a delete operator must be a property reference
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(32,32): error TS2698: The operand of a delete operator must be a property reference
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(32,33): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(33,32): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(36,32): error TS2698: The operand of a delete operator must be a property reference
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(36,39): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(37,32): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(37,39): error TS2698: The operand of a delete operator must be a property reference
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(37,46): error TS2698: The operand of a delete operator must be a property reference
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(37,47): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(40,8): error TS2698: The operand of a delete operator must be a property reference
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(41,8): error TS2698: The operand of a delete operator must be a property reference
+tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(42,8): error TS2698: The operand of a delete operator must be a property reference
 tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(43,8): error TS2698: The operand of a delete operator must be a property reference
 
 
-==== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts (13 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts (18 errors) ====
     // delete  operator on string type
     var STRING: string;
     var STRING1: string[] = ["", "abc"];
@@ -32,7 +37,11 @@ tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperator
     
     // string type var
     var ResultIsBoolean1 = delete STRING;
+                                  ~~~~~~
+!!! error TS2698: The operand of a delete operator must be a property reference
     var ResultIsBoolean2 = delete STRING1;
+                                  ~~~~~~~
+!!! error TS2698: The operand of a delete operator must be a property reference
     
     // string type literal
     var ResultIsBoolean3 = delete "";
@@ -56,7 +65,7 @@ tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperator
                                    ~~~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
     var ResultIsBoolean11 = delete (STRING + STRING);
-                                   ~~~~~~~~~~~~~~~~~
+                                    ~~~~~~~~~~~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
     var ResultIsBoolean12 = delete STRING.charAt(0);
                                    ~~~~~~~~~~~~~~~~
@@ -66,12 +75,14 @@ tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperator
     var ResultIsBoolean13 = delete delete STRING;
                                    ~~~~~~~~~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
+                                          ~~~~~~
+!!! error TS2698: The operand of a delete operator must be a property reference
     var ResultIsBoolean14 = delete delete delete (STRING + STRING);
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
                                           ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
-                                                 ~~~~~~~~~~~~~~~~~
+                                                  ~~~~~~~~~~~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
     
     // miss assignment operators
@@ -79,7 +90,11 @@ tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperator
            ~~
 !!! error TS2698: The operand of a delete operator must be a property reference
     delete STRING;
+           ~~~~~~
+!!! error TS2698: The operand of a delete operator must be a property reference
     delete STRING1;
+           ~~~~~~~
+!!! error TS2698: The operand of a delete operator must be a property reference
     delete foo();
            ~~~~~
 !!! error TS2698: The operand of a delete operator must be a property reference
