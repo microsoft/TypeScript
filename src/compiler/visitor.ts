@@ -692,7 +692,7 @@ namespace ts {
 
             // Signature elements
             case SyntaxKind.Parameter:
-                return updateParameterDeclaration(<ParameterDeclaration>node,
+                return updateParameter(<ParameterDeclaration>node,
                     visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
@@ -1331,18 +1331,18 @@ namespace ts {
     export namespace Debug {
         export const failNotOptional = shouldAssert(AssertionLevel.Normal)
             ? (message?: string) => assert(false, message || "Node not optional.")
-            : () => {};
+            : noop;
 
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, message?: string) => assert(false, message || "Unexpected node.", () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`)
-            : () => {};
+            : noop;
 
         export const assertNode = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
                     test === undefined || test(node),
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
-            : () => {};
+            : noop;
 
         function getFunctionName(func: Function) {
             if (typeof func !== "function") {

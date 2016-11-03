@@ -347,6 +347,7 @@ namespace ts {
     class TypeObject implements Type {
         checker: TypeChecker;
         flags: TypeFlags;
+        objectFlags?: ObjectFlags;
         id: number;
         symbol: Symbol;
         constructor(checker: TypeChecker, flags: TypeFlags) {
@@ -381,7 +382,7 @@ namespace ts {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
         }
         getBaseTypes(): ObjectType[] {
-            return this.flags & (TypeFlags.Class | TypeFlags.Interface)
+            return this.flags & TypeFlags.Object && this.objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)
                 ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
         }
@@ -466,11 +467,12 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: Map<number>;
-        public resolvedModules: Map<ResolvedModule>;
+        public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
+        public ambientModuleNames: string[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -1051,7 +1053,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
                 getNewLine: () => getNewLineOrDefaultFromHost(host),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
-                writeFile: () => { },
+                writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
