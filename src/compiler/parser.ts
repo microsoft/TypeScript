@@ -140,8 +140,7 @@ namespace ts {
                 return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
                     visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
             case SyntaxKind.MappedType:
-                return visitNode(cbNode, (<MappedTypeNode>node).iterationTypeName) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).indexType) ||
+                return visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
                     visitNode(cbNode, (<MappedTypeNode>node).type);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
@@ -2411,14 +2410,20 @@ namespace ts {
             return token() === SyntaxKind.OpenBracketToken && nextTokenIsIdentifier() && nextToken() === SyntaxKind.InKeyword;
         }
 
+        function parseMappedTypeParameter() {
+            const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+            node.name = parseIdentifier();
+            parseExpected(SyntaxKind.InKeyword);
+            node.constraint = parseType();
+            return finishNode(node);
+        }
+
         function parseMappedType() {
             const node = <MappedTypeNode>createNode(SyntaxKind.MappedType);
             parseExpected(SyntaxKind.OpenBraceToken);
             node.readonlyToken = parseOptionalToken(SyntaxKind.ReadonlyKeyword);
             parseExpected(SyntaxKind.OpenBracketToken);
-            node.iterationTypeName = parseIdentifier();
-            parseExpected(SyntaxKind.InKeyword);
-            node.indexType = parseType();
+            node.typeParameter = parseMappedTypeParameter();
             parseExpected(SyntaxKind.CloseBracketToken);
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseTypeAnnotation();

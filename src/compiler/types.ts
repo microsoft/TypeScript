@@ -902,8 +902,7 @@ namespace ts {
     export interface MappedTypeNode extends TypeNode {
         kind: SyntaxKind.MappedType;
         readonlyToken?: ReadonlyToken;
-        iterationTypeName: Identifier;
-        indexType: TypeNode;
+        typeParameter: TypeParameterDeclaration;
         questionToken?: QuestionToken;
         type?: TypeNode;
     }

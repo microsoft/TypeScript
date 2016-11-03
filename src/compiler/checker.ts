@@ -5834,6 +5834,18 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromMappedTypeNode(node: MappedTypeNode) {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                getTypeFromTypeNode(node.typeParameter.constraint);
+                if (node.type) {
+                    getTypeFromTypeNode(node.type);
+                }
+                links.resolvedType = unknownType;
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: Node, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -6003,7 +6015,7 @@ namespace ts {
                 case SyntaxKind.IndexedAccessType:
                     return getTypeFromIndexedAccessTypeNode(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
-                    return unknownType;  // !!!
+                    return getTypeFromMappedTypeNode(<MappedTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -15075,7 +15087,7 @@ namespace ts {
         }
 
         function checkMappedType(node: MappedTypeNode) {
-            node; // !!!
+            getTypeFromMappedTypeNode(node);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
@@ -18318,7 +18330,7 @@ namespace ts {
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
                 case SyntaxKind.IndexedAccessType:
                     return checkIndexedAccessType(<IndexedAccessTypeNode>node);
-                case SyntaxKind.IndexedAccessType:
+                case SyntaxKind.MappedType:
                     return checkMappedType(<MappedTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
