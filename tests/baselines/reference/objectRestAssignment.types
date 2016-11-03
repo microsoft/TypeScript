@@ -1,18 +1,16 @@
 === tests/cases/conformance/types/rest/objectRestAssignment.ts ===
-let x;
->x : any
-
-let ka;
+let ka: any;
 >ka : any
 
-let nested;
->nested : any
+let nested: { ki };
+>nested : { ki: any; }
+>ki : any
 
-let other;
->other : any
+let other: number;
+>other : number
 
-let rest;
->rest : any
+let rest: { };
+>rest : {}
 
 let complex: { x: { ka, ki }, y: number };
 >complex : { x: { ka: any; ki: any; }; y: number; }
@@ -24,13 +22,13 @@ let complex: { x: { ka, ki }, y: number };
 ({x: { ka, ...nested }, y: other, ...rest} = complex);
 >({x: { ka, ...nested }, y: other, ...rest} = complex) : { x: { ka: any; ki: any; }; y: number; }
 >{x: { ka, ...nested }, y: other, ...rest} = complex : { x: { ka: any; ki: any; }; y: number; }
->{x: { ka, ...nested }, y: other, ...rest} : { x: { ka: any; }; y: any; }
->x : { ka: any; }
->{ ka, ...nested } : { ka: any; }
+>{x: { ka, ...nested }, y: other, ...rest} : { x: { ki: any; ka: any; }; y: number; }
+>x : { ki: any; ka: any; }
+>{ ka, ...nested } : { ki: any; ka: any; }
 >ka : any
 >nested : any
->y : any
->other : any
+>y : number
+>other : number
 >rest : any
 >complex : { x: { ka: any; ki: any; }; y: number; }
 
