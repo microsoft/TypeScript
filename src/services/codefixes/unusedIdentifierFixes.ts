@@ -80,14 +80,14 @@ namespace ts.codefix {
 
                         // handle case where 'import a = A;'
                         case SyntaxKind.ImportEqualsDeclaration:
-                            let importEquals = findImportDeclaration(token);
+                            const importEquals = findImportDeclaration(token);
                             return createCodeFix("", importEquals.pos, importEquals.end - importEquals.pos);
 
                         case SyntaxKind.ImportSpecifier:
                             const namedImports = <NamedImports>token.parent.parent;
                             if (namedImports.elements.length === 1) {
                                 // Only 1 import and it is unused. So the entire declaration should be removed.
-                                let importSpec = findImportDeclaration(token);
+                                const importSpec = findImportDeclaration(token);
                                 return createCodeFix("", importSpec.pos, importSpec.end - importSpec.pos);
                             }
                             else {
@@ -108,10 +108,11 @@ namespace ts.codefix {
 
                         case SyntaxKind.NamespaceImport:
                             const namespaceImport = <NamespaceImport>token.parent;
-                            if(namespaceImport.name == token && !(<ImportClause>namespaceImport.parent).name){
+                            if (namespaceImport.name == token && !(<ImportClause>namespaceImport.parent).name) {
                                 const importDecl = findImportDeclaration(namespaceImport);
                                 return createCodeFix("", importDecl.pos, importDecl.end - importDecl.pos);
-                            } else {
+                            }
+                            else {
                                 const start = (<ImportClause>namespaceImport.parent).name.end;
                                 return createCodeFix("", start, (<ImportClause>namespaceImport.parent).namedBindings.end - start);
                             }
@@ -164,19 +165,3 @@ namespace ts.codefix {
         }
     });
 }
-
-const s = "hello";
-
-class C {
-
-
-
-    private ["string"]: string;
-    private "b  iz": string;
-
-    bar() {
-        this
-    }
-}
-
-
