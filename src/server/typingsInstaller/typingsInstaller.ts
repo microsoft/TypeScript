@@ -230,7 +230,7 @@ namespace ts.server.typingsInstaller {
                     }
                     else {
                         if (this.log.isEnabled()) {
-                            this.log.writeLine(`Entry for scoped package '${scopedName}' does not exist in local types registry - skipping...`)
+                            this.log.writeLine(`Entry for scoped package '${scopedName}' does not exist in local types registry - skipping...`);
                         }
                     }
                 }
