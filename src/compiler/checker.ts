@@ -3206,7 +3206,8 @@ namespace ts {
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 const type = checkDeclarationInitializer(declaration);
-                return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+                const isOptional = declaration.questionToken || (declaration.initializer && declaration.kind === SyntaxKind.Parameter);
+                return addOptionality(type, isOptional && includeOptionality);
             }
 
             // If it is a short-hand property assignment, use the type of the identifier
