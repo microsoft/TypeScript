@@ -219,6 +219,7 @@ namespace ts {
         ThisType,
         TypeOperator,
         IndexedAccessType,
+        MappedType,
         LiteralType,
         // Binding patterns
         ObjectBindingPattern,
@@ -519,6 +520,7 @@ namespace ts {
     export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
     export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken>;
     export type AtToken = Token<SyntaxKind.AtToken>;
+    export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -895,6 +897,15 @@ namespace ts {
         kind: SyntaxKind.IndexedAccessType;
         objectType: TypeNode;
         indexType: TypeNode;
+    }
+
+    export interface MappedTypeNode extends TypeNode {
+        kind: SyntaxKind.MappedType;
+        readonlyToken?: ReadonlyToken;
+        iterationTypeName: Identifier;
+        indexType: TypeNode;
+        questionToken?: QuestionToken;
+        type?: TypeNode;
     }
 
     export interface LiteralTypeNode extends TypeNode {
