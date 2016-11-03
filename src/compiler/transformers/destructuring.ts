@@ -311,7 +311,10 @@ namespace ts {
             for (let i = 0; i < properties.length; i++) {
                 const p = properties[i];
                 if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                    if (!transformRest || p.transformFlags & TransformFlags.ContainsSpreadExpression) {
+                    if (transformRest && !(p.transformFlags & TransformFlags.ContainsSpreadExpression)) {
+                        es2015.push(p);
+                    }
+                    else {
                         if (es2015.length) {
                             emitRestAssignment(es2015, value, location, target);
                             es2015 = [];
@@ -320,9 +323,6 @@ namespace ts {
                         const bindingTarget = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
                         // Assignment for bindingTarget = value.propName should highlight whole property, hence use p as source map node
                         emitDestructuringAssignment(bindingTarget, createDestructuringPropertyAccess(value, propName), p);
-                    }
-                    else {
-                        es2015.push(p);
                     }
                 }
                 else if (i === properties.length - 1 && p.kind === SyntaxKind.SpreadElementExpression) {
@@ -460,7 +460,11 @@ namespace ts {
                                                     name);
                     emitBindingElement(element, restCall);
                 }
-                else if (!transformRest || element.transformFlags & TransformFlags.ContainsSpreadExpression) {
+                else if (transformRest && !(element.transformFlags & TransformFlags.ContainsSpreadExpression)) {
+                    // do not emit until we have a complete bundle of ES2015 syntax
+                    es2015.push(element);
+                }
+                else {
                     if (es2015.length) {
                         emitRestAssignment(es2015, value, target, target);
                         es2015 = [];
@@ -468,10 +472,6 @@ namespace ts {
                     // Rewrite element to a declaration with an initializer that fetches property
                     const propName = element.propertyName || <Identifier>element.name;
                     emitBindingElement(element, createDestructuringPropertyAccess(value, propName));
-                }
-                else {
-                    // do not emit until we have a complete bundle of ES2015 syntax
-                    es2015.push(element);
                 }
             }
             if (es2015.length) {
