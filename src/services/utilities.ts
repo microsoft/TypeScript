@@ -372,7 +372,7 @@ namespace ts {
     export function isThis(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
-            // case SyntaxKind.ThisType: TODO: GH#9267
+                // case SyntaxKind.ThisType: TODO: GH#9267
                 return true;
             case SyntaxKind.Identifier:
                 // 'this' as a parameter
@@ -1359,6 +1359,90 @@ namespace ts {
         };
     }
 
+        /*
+        const classMembers: TypeElement[]; // TODO: this
+        const implementedInterfaceMembers: TypeElement[] = [];
+        const parentAbstractMembers: TypeElement[] = []
+        const missingMembers: TypeElement[] = [];
+        // const typeWiththis = checker.getTypeWithThisArgument(classType);
+        // const staticType = <ObjectType>checker.getTypeOfSymbol(symbol);
+        // const classType = <InterfaceType>checker.getTypeAtLocation(classDecl);
+        */
+
+    export function getUnimplementedMemberChanges(classDecl: ClassDeclaration, checker: TypeChecker): TextChange[] {
+        const baseTypeNode: ExpressionWithTypeArguments = getClassExtendsHeritageClauseElement(classDecl);
+
+        if (!baseTypeNode)
+        {
+            return [];
+        }
+            const classSymbol = checker.getSymbolAtLocation(classDecl);
+            const classType = <InterfaceType>checker.getDeclaredTypeOfSymbol(classSymbol);
+            
+            const baseTypes = checker.getBaseTypes(classType);
+            Debug.assert(baseTypes.length === 1);
+            const baseType = baseTypes[0];
+
+            const resolvedClassType = checker.resolveStructuredTypeMembers(classType);
+            const resolvedBaseType = checker.resolveStructuredTypeMembers(baseType);
+
+            const missingMembers = filterMissingMembers(resolvedClassType.members, resolvedBaseType.members);
+            return insertionsForMembers(missingMembers);
+        }
+
+        // TODO: (arozga) Get changes for interface as well.
+        // const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
+    }
+
+    function insertionsForMembers(symbols: Symbol[]): TextChange[] {
+        let changes: TextChange[] = [];
+        for (const symbol of symbols) {
+            const decl = getdeclaration
+            switch (member.kind) {
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.PropertyDeclaration:
+                    break;
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.MethodDeclaration:
+                    break;
+                default:
+                    break;
+            }
+        }
+        return changes;
+    }
+
+    // TODO: (arozga) simplify to quadratic time solution.
+    function filterMissingMembers(sourceSymbols: Map<Symbol>, targetSymbols: Map<Symbol>): Symbol[] {
+        let missingMembers: Symbol[] = [];
+        const sortedSourceKeys = Object.keys(sourceSymbols).sort();
+        const sortedTargetKeys = Object.keys(targetSymbols).sort();
+
+        let i = 0;
+        let j = 0;
+        while (i < sortedSourceKeys.length && j < sortedTargetKeys.length) {
+            // TODO: (arozga) convert switch to if else with inequalities (browser compat?)
+            switch (sortedSourceKeys[i].localeCompare(sortedSourceKeys[j])) {
+                case 0:
+                    ++i;
+                    ++j;
+                    break;
+                case -1:
+                    missingMembers.push(sourceSymbols[sortedSourceKeys[i]]);
+                    ++i;
+                    break;
+                case 1:
+                    ++j;
+                default:
+            }
+        }
+
+        return missingMembers;
+    }
+
+    /**
+     * Generates codefix changes to insert
+     */
     export function getCodeFixChanges(interfaceClause: Node, existingMembers: string[], startPos: number, checker: TypeChecker, reference: boolean, trackingAddedMembers: string[], newLineCharacter: string): TextChange[] {
         const type = checker.getTypeAtLocation(interfaceClause);
 
@@ -1366,7 +1450,7 @@ namespace ts {
             return [];
         }
 
-        const missingMembers = getMissingInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], existingMembers, checker);
+        const missingMembers: TypeElement[] = getMissingInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], existingMembers, checker);
         const changesArray: TextChange[] = [];
 
         for (const member of missingMembers) {
@@ -1405,7 +1489,7 @@ namespace ts {
      * Gets members in an interface and all its base types.
      */
     function getInterfaceMembers(declaration: InterfaceDeclaration, checker: TypeChecker): TypeElement[] {
-        let result: TypeElement[]  = declaration.members
+        let result: TypeElement[] = declaration.members
             ? declaration.members.filter(member => !(getModifierFlags(member) & ModifierFlags.Private))
             : [];
         const clauses = getInterfaceBaseTypeNodes(declaration);
@@ -1424,7 +1508,6 @@ namespace ts {
     function getMissingInterfaceMembers(declaration: InterfaceDeclaration, existingMembers: string[], checker: TypeChecker): TypeElement[] {
         const interfaceMembers = getInterfaceMembers(declaration, checker);
         return ts.filter(interfaceMembers, member => !member.name || existingMembers.indexOf(member.name.getText()) === -1);
-
     }
 
     export function getNamedClassMembers(classDeclaration: ClassDeclaration): ClassElement[] {
