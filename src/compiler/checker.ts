@@ -6828,7 +6828,7 @@ namespace ts {
                 if (target.flags & TypeFlags.TypeParameter) {
                     // Given a type parameter K with a constraint keyof T, a type S is
                     // assignable to K if S is assignable to keyof T.
-                    let constraint = getConstraintOfTypeParameter(<TypeParameter>target);
+                    const constraint = getConstraintOfTypeParameter(<TypeParameter>target);
                     if (constraint && constraint.flags & TypeFlags.Index) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
                             return result;
@@ -6838,7 +6838,7 @@ namespace ts {
                 else if (target.flags & TypeFlags.Index) {
                     // Given a type parameter T with a constraint C, a type S is assignable to
                     // keyof T if S is assignable to keyof C.
-                    let constraint = getConstraintOfTypeParameter((<IndexType>target).type);
+                    const constraint = getConstraintOfTypeParameter((<IndexType>target).type);
                     if (constraint) {
                         if (result = isRelatedTo(source, getIndexType(constraint), reportErrors)) {
                             return result;
