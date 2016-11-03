@@ -63,14 +63,8 @@ namespace ts.server.typingsInstaller {
         return PackageNameValidationResult.Ok;
     }
 
-    export const NpmViewRequest: "npm view" = "npm view";
-    export const NpmInstallRequest: "npm install" = "npm install";
-
-    export type RequestKind = typeof NpmViewRequest | typeof NpmInstallRequest;
-
     export type RequestCompletedAction = (success: boolean) => void;
     type PendingRequest = {
-        requestKind: RequestKind;
         requestId: number;
         args: string[];
         cwd: string;
@@ -87,9 +81,10 @@ namespace ts.server.typingsInstaller {
         private installRunCount = 1;
         private inFlightRequestCount = 0;
 
-        abstract readonly installTypingHost: InstallTypingHost;
+        abstract readonly typesRegistry: Map<void>;
 
         constructor(
+            readonly installTypingHost: InstallTypingHost,
             readonly globalCachePath: string,
             readonly safeListPath: Path,
             readonly throttleLimit: number,
@@ -97,9 +92,6 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}'`);
             }
-        }
-
-        init() {
             this.processCacheLocation(this.globalCachePath);
         }
 
@@ -224,7 +216,7 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet[cacheLocation] = true;
         }
 
-        private filterTypings(typingsToInstall: string[]) {
+        private filterAndMapToScopedName(typingsToInstall: string[]) {
             if (typingsToInstall.length === 0) {
                 return typingsToInstall;
             }
@@ -235,7 +227,14 @@ namespace ts.server.typingsInstaller {
                 }
                 const validationResult = validatePackageName(typing);
                 if (validationResult === PackageNameValidationResult.Ok) {
-                    result.push(typing);
+                    if (typing in this.typesRegistry) {
+                        result.push(`@types/${typing}`);
+                    }
+                    else {
+                        if (this.log.isEnabled()) {
+                            this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
+                        }
+                    }
                 }
                 else {
                     // add typing name to missing set so we won't process it again
@@ -267,19 +266,8 @@ namespace ts.server.typingsInstaller {
             return result;
         }
 
-        private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[]) {
-            if (this.log.isEnabled()) {
-                this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
-            }
-            typingsToInstall = this.filterTypings(typingsToInstall);
-            if (typingsToInstall.length === 0) {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`All typings are known to be missing or invalid - no need to go any further`);
-                }
-                return;
-            }
-
-            const npmConfigPath = combinePaths(cachePath, "package.json");
+        protected ensurePackageDirectoryExists(directory: string) {
+            const npmConfigPath = combinePaths(directory, "package.json");
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Npm config file: ${npmConfigPath}`);
             }
@@ -287,23 +275,42 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Npm config file: '${npmConfigPath}' is missing, creating new one...`);
                 }
-                this.ensureDirectoryExists(cachePath, this.installTypingHost);
+                this.ensureDirectoryExists(directory, this.installTypingHost);
                 this.installTypingHost.writeFile(npmConfigPath, "{}");
             }
+        }
 
-            this.runInstall(cachePath, typingsToInstall, installedTypings => {
+        private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[]) {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
+            }
+            const scopedTypings = this.filterAndMapToScopedName(typingsToInstall);
+            if (scopedTypings.length === 0) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`All typings are known to be missing or invalid - no need to go any further`);
+                }
+                return;
+            }
+
+            this.ensurePackageDirectoryExists(cachePath);
+
+            const requestId = this.installRunCount;
+            this.installRunCount++;
+
+            this.installTypingsAsync(requestId, scopedTypings, cachePath, ok => {
+                if (!ok) {
+                    return;
+                }
                 // TODO: watch project directory
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Requested to install typings ${JSON.stringify(typingsToInstall)}, installed typings ${JSON.stringify(installedTypings)}`);
+                    this.log.writeLine(`Requested to install typings ${JSON.stringify(scopedTypings)}, installed typings ${JSON.stringify(scopedTypings)}`);
                 }
-                const installedPackages: Map<true> = createMap<true>();
                 const installedTypingFiles: string[] = [];
-                for (const t of installedTypings) {
+                for (const t of scopedTypings) {
                     const packageName = getBaseFileName(t);
                     if (!packageName) {
                         continue;
                     }
-                    installedPackages[packageName] = true;
                     const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost);
                     if (!typingFile) {
                         continue;
@@ -316,51 +323,9 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Installed typing files ${JSON.stringify(installedTypingFiles)}`);
                 }
-                for (const toInstall of typingsToInstall) {
-                    if (!installedPackages[toInstall]) {
-                        if (this.log.isEnabled()) {
-                            this.log.writeLine(`New missing typing package '${toInstall}'`);
-                        }
-                        this.missingTypingsSet[toInstall] = true;
-                    }
-                }
 
                 this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
             });
-        }
-
-        private runInstall(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
-            const requestId = this.installRunCount;
-
-            this.installRunCount++;
-            let execInstallCmdCount = 0;
-            const filteredTypings: string[] = [];
-            for (const typing of typingsToInstall) {
-                filterExistingTypings(this, typing);
-            }
-
-            function filterExistingTypings(self: TypingsInstaller, typing: string) {
-                self.execAsync(NpmViewRequest, requestId, [typing], cachePath, ok => {
-                    if (ok) {
-                        filteredTypings.push(typing);
-                    }
-                    execInstallCmdCount++;
-                    if (execInstallCmdCount === typingsToInstall.length) {
-                        installFilteredTypings(self, filteredTypings);
-                    }
-                });
-            }
-
-            function installFilteredTypings(self: TypingsInstaller, filteredTypings: string[]) {
-                if (filteredTypings.length === 0) {
-                    postInstallAction([]);
-                    return;
-                }
-                const scopedTypings = filteredTypings.map(t => "@types/" + t);
-                self.execAsync(NpmInstallRequest, requestId, scopedTypings, cachePath, ok => {
-                    postInstallAction(ok ? scopedTypings : []);
-                });
-            }
         }
 
         private ensureDirectoryExists(directory: string, host: InstallTypingHost): void {
@@ -409,8 +374,8 @@ namespace ts.server.typingsInstaller {
             };
         }
 
-        private execAsync(requestKind: RequestKind, requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
-            this.pendingRunRequests.unshift({ requestKind, requestId, args, cwd, onRequestCompleted });
+        private installTypingsAsync(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
+            this.pendingRunRequests.unshift({ requestId, args, cwd, onRequestCompleted });
             this.executeWithThrottling();
         }
 
@@ -418,7 +383,7 @@ namespace ts.server.typingsInstaller {
             while (this.inFlightRequestCount < this.throttleLimit && this.pendingRunRequests.length) {
                 this.inFlightRequestCount++;
                 const request = this.pendingRunRequests.pop();
-                this.executeRequest(request.requestKind, request.requestId, request.args, request.cwd, ok => {
+                this.installWorker(request.requestId, request.args, request.cwd, ok => {
                     this.inFlightRequestCount--;
                     request.onRequestCompleted(ok);
                     this.executeWithThrottling();
@@ -426,7 +391,7 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected abstract executeRequest(requestKind: RequestKind, requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
+        protected abstract installWorker(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings): void;
     }
 }
