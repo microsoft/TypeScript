@@ -284,11 +284,11 @@ namespace ts.server {
                 return;
             }
             switch (response.kind) {
-                case "set":
+                case ActionSet:
                     this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
                     project.updateGraph();
                     break;
-                case "invalidate":
+                case ActionInvalidate:
                     this.typingsCache.invalidateCachedTypingsForProject(project);
                     break;
             }

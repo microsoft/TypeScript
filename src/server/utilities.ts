@@ -1,4 +1,5 @@
 ﻿/// <reference path="types.d.ts" />
+/// <reference path="shared.ts" />
 
 namespace ts.server {
     export enum LogLevel {
@@ -9,6 +10,7 @@ namespace ts.server {
     }
 
     export const emptyArray: ReadonlyArray<any> = [];
+
 
     export interface Logger {
         close(): void;

@@ -36,20 +36,32 @@ declare namespace ts.server {
         readonly kind: "closeProject";
     }
 
+    export type ActionSet = "action::set";
+    export type ActionInvalidate = "action::invalidate";
+    export type EventInstall = "event::install";
+
     export interface TypingInstallerResponse {
-        readonly projectName: string;
-        readonly kind: "set" | "invalidate";
+        readonly kind: ActionSet | ActionInvalidate | EventInstall;
     }
 
-    export interface SetTypings extends TypingInstallerResponse {
+    export interface ProjectResponse extends TypingInstallerResponse {
+        readonly projectName: string;
+    }
+
+    export interface SetTypings extends ProjectResponse {
         readonly typingOptions: ts.TypingOptions;
         readonly compilerOptions: ts.CompilerOptions;
         readonly typings: string[];
-        readonly kind: "set";
+        readonly kind: ActionSet;
     }
 
-    export interface InvalidateCachedTypings extends TypingInstallerResponse {
-        readonly kind: "invalidate";
+    export interface InvalidateCachedTypings extends ProjectResponse {
+        readonly kind: ActionInvalidate;
+    }
+
+    export interface TypingsInstallEvent extends TypingInstallerResponse {
+        readonly packagesToInstall: ReadonlyArray<string>;
+        readonly kind: EventInstall;
     }
 
     export interface InstallTypingHost extends JsTyping.TypingResolutionHost {

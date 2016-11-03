@@ -1940,6 +1940,20 @@ namespace ts.server.protocol {
         childItems?: NavigationTree[];
     }
 
+    export type TypingsInstalledEventName = "typingsInstalled";
+
+    export interface TypingsInstalledEvent extends Event {
+        event: TypingsInstalledEventName;
+        body: TypingsInstalledEventBody;
+    }
+
+    export interface TypingsInstalledEventBody {
+        /**
+         * Comma separated list of installed typing packages
+         */
+        installedPackages: string;
+    }
+
     export interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
     }
