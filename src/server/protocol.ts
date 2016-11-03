@@ -95,6 +95,9 @@ namespace ts.server.protocol {
         /* @internal */
         export type GetCodeFixesFull = "getCodeFixes-full";
         export type GetSupportedCodeFixes = "getSupportedCodeFixes";
+        export type GetCodeRefactorings = "getCodeRefactorings";
+        /* @internal */
+        export type GetCodeRefactoringsFull = "getCodeRefactorings-full";
     }
 
     /**
@@ -394,54 +397,83 @@ namespace ts.server.protocol {
         position?: number;
     }
 
+    export interface CodeChangeRequestArgs extends FileRequestArgs {
+      /**
+        * The line number for the request (1-based).
+        */
+      startLine: number;
+
+      /**
+        * The character offset (on the line) for the request (1-based).
+        */
+      startOffset: number;
+
+      /**
+       * Position (can be specified instead of line/offset pair) 
+       */
+      /* @internal */
+      startPosition?: number;
+
+      /**
+        * The line number for the request (1-based).
+        */
+      endLine: number;
+
+      /**
+        * The character offset (on the line) for the request (1-based).
+        */
+      endOffset: number;
+
+      /**
+       * Position (can be specified instead of line/offset pair) 
+       */
+      /* @internal */
+      endPosition?: number;
+    }
+
+    /**
+      * Request for the available code refactorings at a specific position.
+      */
+    export interface CodeRefactoringRequest extends Request {
+      command: CommandTypes.GetCodeRefactorings;
+      arguments: CodeRefactoringRequestArgs;
+    }
+
+    /**
+      * Response for GetCoderefactorings request. 
+      */
+    export interface CodeRefactoringResponse extends Response {
+      body?: CodeAction[];
+    }
+
+    /**
+      * Instances of this interface request the available refactorings for a specific location in a sourcefile.
+      */
+    export interface CodeRefactoringRequestArgs extends CodeChangeRequestArgs {
+
+    }
+
     /**
       * Request for the available codefixes at a specific position.
       */
     export interface CodeFixRequest extends Request {
-        command: CommandTypes.GetCodeFixes;
-        arguments: CodeFixRequestArgs;
+      command: CommandTypes.GetCodeFixes;
+      arguments: CodeFixRequestArgs;
+    }
+
+    export interface CodeFixResponse extends Response {
+        /** The code actions that are available */
+        body?: CodeAction[];
     }
 
     /**
-      * Instances of this interface specify errorcodes on a specific location in a sourcefile.
+      * Instances of this interface specify errorcodes for a specific location in a sourcefile.
       */
-    export interface CodeFixRequestArgs extends FileRequestArgs {
-        /**
-          * The line number for the request (1-based).
-          */
-        startLine: number;
-
-        /**
-          * The character offset (on the line) for the request (1-based).
-          */
-        startOffset: number;
-
-        /**
-         * Position (can be specified instead of line/offset pair) 
-         */
-        /* @internal */
-        startPosition?: number;
-
-        /**
-          * The line number for the request (1-based).
-          */
-        endLine: number;
-
-        /**
-          * The character offset (on the line) for the request (1-based).
-          */
-        endOffset: number;
-
-        /**
-         * Position (can be specified instead of line/offset pair) 
-         */
-        /* @internal */
-        endPosition?: number;
-
-        /**
-          * Errorcodes we want to get the fixes for.
-          */
-        errorCodes?: number[];
+    export interface CodeFixRequestArgs extends CodeChangeRequestArgs {
+      /**
+        * Errorcodes we want to get the fixes for.
+        */
+      errorCodes?: number[];
     }
 
     /**
@@ -1365,11 +1397,6 @@ namespace ts.server.protocol {
     export interface FileCodeEdits {
         fileName: string;
         textChanges: CodeEdit[];
-    }
-
-    export interface CodeFixResponse extends Response {
-        /** The code actions that are available */
-        body?: CodeAction[];
     }
 
     export interface CodeAction {

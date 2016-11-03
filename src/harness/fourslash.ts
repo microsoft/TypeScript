@@ -84,6 +84,11 @@ namespace FourSlash {
         end: number;
     }
 
+    export interface ExpectedFileChange {
+        fileName: string;
+        expectedText: string;
+    }
+
     export import IndentStyle = ts.IndentStyle;
 
     const entityMap = ts.createMap({
@@ -2031,6 +2036,56 @@ namespace FourSlash {
             }
         }
 
+        public verifyRefactoringAtPosition(expectedChanges: ExpectedFileChange[]) {
+            // file the refactoring is triggered from
+            const sourceFileName = this.activeFile.fileName;
+
+            const markers = this.getMarkers();
+            if (markers.length < 1 || markers.length > 2) {
+                this.raiseError(`Expected 1 or 2 markers, actually found: ${markers.length}`);
+            }
+            const start = markers[0].position;
+            const end = markers[1] ? markers[1].position : markers[0].position;
+
+            const actualRefactorings = this.languageService.getCodeRefactoringsAtPosition(sourceFileName, start, end, this.languageService);
+            if (!actualRefactorings || actualRefactorings.length == 0) {
+                this.raiseError("No code refactorings found.");
+            }
+
+            // for now only assume a single result for each refactoring
+            if (actualRefactorings.length > 1) {
+                this.raiseError("More than 1 refactoring returned.");
+            }
+
+            // for each file:
+            // * optionally apply the changes
+            // * check if the new contents match the expected contents
+            // * if we applied changes, but don't check the content raise an error
+            ts.forEach(this.testData.files, file => {
+                const refactorForFile = ts.find(actualRefactorings[0].changes, change => {
+                    return change.fileName == file.fileName;
+                });
+
+                if (refactorForFile) {
+                    this.applyEdits(file.fileName, refactorForFile.textChanges, /*isFormattingEdit*/ false);
+                }
+
+                const expectedFile = ts.find(expectedChanges, expected => {
+                    const name = expected.fileName;
+                    const fullName = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
+                    return fullName === file.fileName;
+                });
+
+                if (refactorForFile && !expectedFile) {
+                    this.raiseError(`Applied changes to '${file.fileName}' which was not expected.`);
+                }
+                const actualText = this.getFileContent(file.fileName);
+                if (this.removeWhitespace(expectedFile.expectedText) !== this.removeWhitespace(actualText)) {
+                    this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedFile.expectedText}'`);
+                }
+            });
+        }
+
         public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
             const name = "verifyDocCommentTemplate";
             const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -3282,6 +3337,10 @@ namespace FourSlashInterface {
 
         public codeFixAtPosition(expectedText: string, errorCode?: number): void {
             this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        }
+
+        public refactoringsAtPostion(expectedChanges: FourSlash.ExpectedFileChange[]): void {
+            this.state.verifyRefactoringAtPosition(expectedChanges);
         }
 
         public navigationBar(json: any) {
