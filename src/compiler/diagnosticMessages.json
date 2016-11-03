@@ -1983,13 +1983,9 @@
         "category": "Error",
         "code": 2697
     },
-    "Interface declaration cannot contain a spread property.": {
+    "Spread types may only be created from object types.": {
         "category": "Error",
         "code": 2698
-    },
-    "Type literals with spreads cannot contain index, call or construct signatures.": {
-        "category": "Error",
-        "code": 2699
     },
     "Rest types may only be created from object types.": {
         "category": "Error",

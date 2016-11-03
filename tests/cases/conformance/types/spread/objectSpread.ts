@@ -35,13 +35,8 @@ let getter: { a: number, c: number } =
     { ...op, c: 7 }
 getter.a = 12;
 
-// null, undefined, functions and primitives result in { }
-let spreadNull = { ...null };
-let spreadUndefind = { ...undefined };
-let spreadNum = { ...12 };
-let spreadBool = { ...false };
+// functions result in { }
 let spreadFunc = { ...(function () { }) };
-let spreadStr = { ...'foo' };
 
 // methods are not enumerable
 class C { p = 1; m() { } }
@@ -80,19 +75,3 @@ let computedAfter: { a: number, b: string, "at the end": number } =
 let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }
 
-// generics
-function f<T, U>(t: T, u: U): { ...T, ...U, id: string } {
-    return { ...t, ...u, id: 'id' };
-}
-let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
-    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
-let overlap: { id: string, a: number, b: string } =
-    f({ a: 1 }, { a: 2, b: 'extra' })
-let overlapConflict: { id:string, a: string } =
-    f({ a: 1 }, { a: 'mismatch' })
-let overwriteId: { id: string, a: number, c: number, d: string } =
-    f({ a: 1, id: true }, { c: 1, d: 'no' })
-
-class D { m() { }; q = 2; }
-let classesAreWrong: { id: string, ...C, ...D } =
-    f(new C(), new D())
