@@ -33,6 +33,10 @@ namespace ts.server.typingsInstaller {
         }
     }
 
+    interface TypesRegistryFile {
+        entries: MapLike<void>;
+    }
+
     function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<void> {
         if (!host.fileExists(typesRegistryFilePath)) {
             if (log.isEnabled()) {
@@ -41,7 +45,8 @@ namespace ts.server.typingsInstaller {
             return createMap<void>();
         }
         try {
-            return createMap<void>(JSON.parse(host.readFile(typesRegistryFilePath)));
+            const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath));
+            return createMap<void>(content.entries);
         }
         catch (e) {
             if (log.isEnabled()) {
@@ -53,8 +58,7 @@ namespace ts.server.typingsInstaller {
 
     const TypesRegistryPackageName = "types-registry";
     function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
-        // TODO: clarify file name
-        return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${TypesRegistryPackageName}/typings.json`);
+        return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${TypesRegistryPackageName}/index.json`);
     }
 
 
