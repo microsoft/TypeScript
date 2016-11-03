@@ -125,7 +125,7 @@ namespace ts.SymbolDisplay {
                     callExpressionLike = <CallExpression | NewExpression>location.parent;
                 }
                 else if (location.parent && isJsxOpeningLikeElement(location.parent) && isFunctionLike(symbol.valueDeclaration)) {
-                    callExpressionLike = <JsxOpeningLikeElement>location.parent
+                    callExpressionLike = <JsxOpeningLikeElement>location.parent;
                 }
 
                 if (callExpressionLike) {

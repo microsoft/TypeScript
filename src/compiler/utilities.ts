@@ -1092,6 +1092,9 @@ namespace ts {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
         }
+        else if (isJsxOpeningLikeElement(node)) {
+            return node.tagName;
+        }
 
         // Will either be a CallExpression, NewExpression, or Decorator.
         return (<CallExpression | Decorator>node).expression;

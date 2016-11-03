@@ -11242,7 +11242,7 @@ namespace ts {
                     let defaultResult: Type;
                     for (const candidate of candidatesOutArray) {
                         const callReturnType = getReturnTypeOfSignature(candidate);
-                        let paramType = callReturnType && (candidate.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(candidate.parameters[0]));
+                        const paramType = callReturnType && (candidate.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(candidate.parameters[0]));
                         if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
                             let shouldBeCandidate = true;
                             for (const attribute of openingLikeElement.attributes.properties) {
@@ -12263,11 +12263,11 @@ namespace ts {
             const argType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
             const argProperties = getPropertiesOfType(argType);
             const paramProperties = getPropertiesOfType(paramType);
-            if (callIsIncomplete ||
-                argProperties.length === paramProperties.length) {
-                if (checkTypeRelatedTo(argType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
-                    return true;
-                }
+            if (callIsIncomplete) {
+                return true;
+            }
+            else if (argProperties.length === paramProperties.length && checkTypeRelatedTo(argType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
+                return true;
             }
             else {
                 let shouldCheckArgumentAndParameter = true;
