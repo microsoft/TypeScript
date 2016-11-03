@@ -1626,7 +1626,9 @@ namespace ts {
         // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
-        react.parent = parent;
+        // Set the parent that is in parse tree 
+        // this makes sure that parent chain is intact for checker to traverse complete scope tree
+        react.parent = getParseTreeNode(parent);
         return react;
     }
 

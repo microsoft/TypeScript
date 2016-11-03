@@ -84,15 +84,15 @@ var r3 = c[1.0]; // same as indexing by 1 when done numerically
 
 // BUG 823822
 var r7 = i[-1];
->r7 : any
->i[-1] : any
+>r7 : Date
+>i[-1] : Date
 >i : I
 >-1 : -1
 >1 : 1
 
 var r7 = i[-1.0];
->r7 : any
->i[-1.0] : any
+>r7 : Date
+>i[-1.0] : Date
 >i : I
 >-1.0 : -1
 >1.0 : 1
@@ -116,8 +116,8 @@ var r10 = i[0x1]
 >0x1 : 1
 
 var r11 = i[-0x1]
->r11 : any
->i[-0x1] : any
+>r11 : Date
+>i[-0x1] : Date
 >i : I
 >-0x1 : -1
 >0x1 : 1
@@ -129,8 +129,8 @@ var r12 = i[01]
 >01 : 1
 
 var r13 = i[-01]
->r13 : any
->i[-01] : any
+>r13 : Date
+>i[-01] : Date
 >i : I
 >-01 : -1
 >01 : 1
@@ -215,15 +215,15 @@ var r3 = c[1.0]; // same as indexing by 1 when done numerically
 
 // BUG 823822
 var r7 = i[-1]; 
->r7 : any
->i[-1] : any
+>r7 : Date
+>i[-1] : Date
 >i : I
 >-1 : -1
 >1 : 1
 
 var r7 = i[-1.0]; 
->r7 : any
->i[-1.0] : any
+>r7 : Date
+>i[-1.0] : Date
 >i : I
 >-1.0 : -1
 >1.0 : 1
@@ -247,8 +247,8 @@ var r10 = i[0x1]
 >0x1 : 1
 
 var r11 = i[-0x1]
->r11 : any
->i[-0x1] : any
+>r11 : Date
+>i[-0x1] : Date
 >i : I
 >-0x1 : -1
 >0x1 : 1
@@ -260,8 +260,8 @@ var r12 = i[01]
 >01 : 1
 
 var r13 = i[-01]
->r13 : any
->i[-01] : any
+>r13 : Date
+>i[-01] : Date
 >i : I
 >-01 : -1
 >01 : 1
@@ -342,15 +342,15 @@ var r3 = c[1.0]; // same as indexing by 1 when done numerically
 
 // BUG 823822
 var r7 = i[-1];
->r7 : any
->i[-1] : any
+>r7 : Date
+>i[-1] : Date
 >i : I
 >-1 : -1
 >1 : 1
 
 var r7 = i[-1.0];
->r7 : any
->i[-1.0] : any
+>r7 : Date
+>i[-1.0] : Date
 >i : I
 >-1.0 : -1
 >1.0 : 1
@@ -374,8 +374,8 @@ var r10 = i[0x1]
 >0x1 : 1
 
 var r11 = i[-0x1]
->r11 : any
->i[-0x1] : any
+>r11 : Date
+>i[-0x1] : Date
 >i : I
 >-0x1 : -1
 >0x1 : 1
@@ -387,8 +387,8 @@ var r12 = i[01]
 >01 : 1
 
 var r13 = i[-01]
->r13 : any
->i[-01] : any
+>r13 : Date
+>i[-01] : Date
 >i : I
 >-01 : -1
 >01 : 1
@@ -482,15 +482,15 @@ var r3 = c[1.0]; // same as indexing by 1 when done numerically
 
 // BUG 823822
 var r7 = i[-1];
->r7 : any
->i[-1] : any
+>r7 : Date
+>i[-1] : Date
 >i : I
 >-1 : -1
 >1 : 1
 
 var r7 = i[-1.0];
->r7 : any
->i[-1.0] : any
+>r7 : Date
+>i[-1.0] : Date
 >i : I
 >-1.0 : -1
 >1.0 : 1
@@ -514,8 +514,8 @@ var r10 = i[0x1]
 >0x1 : 1
 
 var r11 = i[-0x1]
->r11 : any
->i[-0x1] : any
+>r11 : Date
+>i[-0x1] : Date
 >i : I
 >-0x1 : -1
 >0x1 : 1
@@ -527,8 +527,8 @@ var r12 = i[01]
 >01 : 1
 
 var r13 = i[-01]
->r13 : any
->i[-01] : any
+>r13 : Date
+>i[-01] : Date
 >i : I
 >-01 : -1
 >01 : 1

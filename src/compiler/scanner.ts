@@ -90,6 +90,7 @@ namespace ts {
         "instanceof": SyntaxKind.InstanceOfKeyword,
         "interface": SyntaxKind.InterfaceKeyword,
         "is": SyntaxKind.IsKeyword,
+        "keyof": SyntaxKind.KeyOfKeyword,
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
         "namespace": SyntaxKind.NamespaceKeyword,
@@ -1799,6 +1800,9 @@ namespace ts {
                 case CharacterCodes.comma:
                     pos++;
                     return token = SyntaxKind.CommaToken;
+                case CharacterCodes.dot:
+                    pos++;
+                    return token = SyntaxKind.DotToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
