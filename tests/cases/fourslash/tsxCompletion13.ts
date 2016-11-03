@@ -27,6 +27,7 @@
 //// let opt = <MainButton onClick={()=>{}} /*3*/ />;
 //// let opt = <MainButton onClick={()=>{}} ignore-prop /*4*/ />;
 //// let opt = <MainButton goTo="goTo" /*5*/ />;
+//// let opt = <MainButton wrong /*6*/ />;
 
 goTo.marker("1");
 verify.completionListContains('children');
@@ -42,6 +43,7 @@ verify.completionListContains('goTo');
 goTo.marker("3");
 verify.completionListContains('children');
 verify.completionListContains('className');
+verify.not.completionListContains('goTo');
 
 goTo.marker("4");
 verify.completionListContains('children');
@@ -50,3 +52,10 @@ verify.completionListContains('className');
 goTo.marker("5");
 verify.completionListContains('children');
 verify.completionListContains('className');
+verify.not.completionListContains('onClick');
+
+goTo.marker("6");
+verify.completionListContains('children');
+verify.completionListContains('className');
+verify.completionListContains('onClick');
+verify.completionListContains('goTo');
