@@ -2482,7 +2482,7 @@ namespace ts.projectSystem {
             openFilesForSession([f1], session);
 
             const projectService = session.getProjectService();
-            assert.isNotNull(projectService.inferredProjects[0]);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const projectName = projectService.inferredProjects[0].getProjectName();
 
             const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
