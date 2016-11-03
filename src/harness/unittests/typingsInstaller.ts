@@ -77,7 +77,7 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, tsconfig, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { typesRegistry: createTypesRegistry("@types/jquery") });
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
                 installWorker(requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
@@ -121,7 +121,7 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { typesRegistry: createTypesRegistry("@types/jquery") });
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
                 installWorker(requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
@@ -179,7 +179,7 @@ namespace ts.projectSystem {
             const host = createServerHost([file1]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { typesRegistry: createTypesRegistry("@types/jquery") });
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
                 enqueueInstallTypingsRequest() {
                     assert(false, "auto discovery should not be enabled");
@@ -213,7 +213,7 @@ namespace ts.projectSystem {
             let enqueueIsCalled = false;
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { typesRegistry: createTypesRegistry("@types/jquery") });
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
                 enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
                     enqueueIsCalled = true;
@@ -271,7 +271,7 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, file2, file3]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { typesRegistry: createTypesRegistry("@types/lodash", "@types/react") });
+                    super(host, { typesRegistry: createTypesRegistry("lodash", "react") });
                 }
                 installWorker(requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/lodash", "@types/react"];
@@ -315,7 +315,7 @@ namespace ts.projectSystem {
             let enqueueIsCalled = false;
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { typesRegistry: createTypesRegistry("@types/jquery") });
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
                 enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
                     enqueueIsCalled = true;
@@ -394,7 +394,7 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, file2, file3, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { typesRegistry: createTypesRegistry("@types/jquery", "@types/commander", "@types/moment", "@types/express") });
+                    super(host, { typesRegistry: createTypesRegistry("jquery", "commander", "moment", "express") });
                 }
                 installWorker(requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment"];
@@ -470,7 +470,7 @@ namespace ts.projectSystem {
             const host = createServerHost([lodashJs, commanderJs, file3, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { throttleLimit: 3, typesRegistry: createTypesRegistry("@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash") });
+                    super(host, { throttleLimit: 3, typesRegistry: createTypesRegistry("commander", "express", "jquery", "moment", "lodash") });
                 }
                 installWorker(requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"];
@@ -549,7 +549,7 @@ namespace ts.projectSystem {
             const host = createServerHost([lodashJs, commanderJs, file3]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("@types/commander", "@types/jquery", "@types/lodash", "@types/cordova", "@types/gulp", "@types/grunt") });
+                    super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
                 }
                 installWorker(requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
                     let typingFiles: (FileOrFolder & { typings: string })[] = [];
@@ -628,7 +628,7 @@ namespace ts.projectSystem {
             const host = createServerHost([app, jsconfig, jquery, jqueryPackage]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("@types/jquery") });
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
                 }
                 installWorker(requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
@@ -674,7 +674,7 @@ namespace ts.projectSystem {
             const host = createServerHost([app, jsconfig, bowerJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("@types/jquery") });
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
                 }
                 installWorker(requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
@@ -717,7 +717,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f, brokenPackageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("@types/commander") });
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
                 installWorker(requestId: number, args: string[], cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/commander"];
