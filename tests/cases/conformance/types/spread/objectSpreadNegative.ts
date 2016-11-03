@@ -8,7 +8,9 @@ class PrivateOptionalX {
 class PublicX {
     public x: number;
 }
-let o2: { ...PublicX, ...PrivateOptionalX };
+let publicX: PublicX;
+let privateOptionalX: PrivateOptionalX;
+let o2 = { ...publicX, ...privateOptionalX };
 let sn: number = o2.x; // error, x is private
 let optionalString: { sn?: string };
 let optionalNumber: { sn?: number };
@@ -18,30 +20,27 @@ let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumbe
 // assignability as target
 interface Bool { b: boolean };
 interface Str { s: string };
-let spread: { ...Bool, ...Str } = { s: 'foo' }; // error, missing 'b'
-let b: Bool;
+let spread = { ...{ b: true }, ...{s: "foo" } };
+spread = { s: "foo" };  // error, missing 'b'
+let b = { b: false };
 spread = b; // error, missing 's'
 
 // literal repeats are not allowed, but spread repeats are fine
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
 
-// null and undefined are just skipped
-let spreadNull = { ...null }
-spreadNull.null;
-let spreadUndefined = { ...undefined }
-spreadUndefined.undefined;
-
-// primitives and functions are skipped
+// null, undefined and primitives are not allowed
+let spreadNull = { ...null };
+let spreadUndefind = { ...undefined };
 let spreadNum = { ...12 };
-spreadNum.toFixed(); // error, no methods from number
 let spreadSum = { ...1 + 1 };
 spreadSum.toFixed(); // error, no methods from number
+let spreadBool = { ...false };
+spreadBool.valueOf(); // error, what were you thinking?
 let spreadStr = { ...'foo' };
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
-let spreadBool = { ...true };
-spreadBool.valueOf(); // error, what were you thinking?
+// functions are skipped
 let spreadFunc = { ...function () { } }
 spreadFunc(); // error, no call signature
 
@@ -55,14 +54,18 @@ let c: C = new C()
 let spreadC = { ...c }
 spreadC.m(); // error 'm' is not in '{ ... c }'
 
-let callableConstructableSpread: { ...PublicX, (n: number): number, new (p: number) };
-callableConstructableSpread(12); // error, no call signature
-new callableConstructableSpread(12); // error, no construct signature
-
-function override<T,U,V>(initial: U, override: U, t: T, v: V): U {
-    // { ... T & V } is not assignable to { ... T & U }
-    let tvs: { ...T & V };
-    let mistake: { ...T & U } = tvs;
-    // { ...U } is not assignable to U
+// generics
+function f<T, U>(t: T, u: U) {
+    return { ...t, ...u, id: 'id' };
+}
+function override<U>(initial: U, override: U): U {
     return { ...initial, ...override };
 }
+let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
+    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
+let overlap: { id: string, a: number, b: string } =
+    f({ a: 1 }, { a: 2, b: 'extra' })
+let overlapConflict: { id:string, a: string } =
+    f({ a: 1 }, { a: 'mismatch' })
+let overwriteId: { id: string, a: number, c: number, d: string } =
+    f({ a: 1, id: true }, { c: 1, d: 'no' })
