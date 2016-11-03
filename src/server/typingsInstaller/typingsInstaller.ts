@@ -224,13 +224,12 @@ namespace ts.server.typingsInstaller {
                 }
                 const validationResult = validatePackageName(typing);
                 if (validationResult === PackageNameValidationResult.Ok) {
-                    const scopedName = `@types/${typing}`;
-                    if (scopedName in this.typesRegistry) {
-                        result.push(scopedName);
+                    if (typing in this.typesRegistry) {
+                        result.push(`@types/${typing}`);
                     }
                     else {
                         if (this.log.isEnabled()) {
-                            this.log.writeLine(`Entry for scoped package '${scopedName}' does not exist in local types registry - skipping...`);
+                            this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
                         }
                     }
                 }
