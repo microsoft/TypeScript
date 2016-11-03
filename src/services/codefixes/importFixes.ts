@@ -13,8 +13,17 @@ namespace ts.codefix {
             const token = getTokenAtPosition(sourceFile, context.span.start);
             const name = token.getText();
             const allActions: CodeAction[] = [];
+            let allPotentialModules: Symbol[] = [];
 
-            const allPotentialModules = concatenate(checker.getAmbientModules(), map(allSourceFiles, sf => sf.symbol));
+            const ambientModules = checker.getAmbientModules();
+            if (ambientModules) {
+                allPotentialModules = ambientModules;
+            }
+            for (const otherSourceFile of allSourceFiles) {
+                if (otherSourceFile !== sourceFile && otherSourceFile.symbol) {
+                    allPotentialModules.push(otherSourceFile.symbol);
+                }
+            }
 
             for (const moduleSymbol of allPotentialModules) {
                 cancellationToken.throwIfCancellationRequested();
@@ -191,44 +200,71 @@ namespace ts.codefix {
                         },
                         sourceFile.fileName
                     );
-                }
 
-                function getModuleSpecifierForNewImport(): string {
-                    const sourceDir = getDirectoryPath(sourceFile.fileName);
-
-                    // If the module is from a module file, then there are typically two cases:
-                    //     1. from a source file in your program
-                    //     2. from a declaration file in a node_modules folder:
-                    //        2.1 the node_modules folder is in the sourceDir or above (can be found by the module resolution)
-                    //        2.2 the node_modules folder is in a subfolder of the sourceDir (cannot be found by the module resolution)
-                    // for case 1 and 2.2, we would return the relative file path as the module specifier;
-                    // for case 2.1, we would just use the module name instead.
-                    if (moduleSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
-                        const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
-
-                        // case 2.1
-                        if (moduleFileName.indexOf(combinePaths(sourceDir, nodeModulesFolderName)) === 0 ||
-                            (moduleFileName.indexOf(sourceDir) < 0 && moduleFileName.indexOf(`${directorySeparator}${nodeModulesFolderName}${directorySeparator}`) >= 0)) {
-                            return moduleSymbol.name;
+                    function getModuleSpecifierForNewImport(): string {
+                        if (moduleSymbol.valueDeclaration.kind !== SyntaxKind.SourceFile) {
+                            return stripQuotes(moduleSymbol.name);
                         }
 
-                        // case 1 and case 2.2
-                        const relativePath = getRelativePathToDirectoryOrUrl(
-                            sourceDir,
-                            moduleFileName,
+                        // If the module is from a module file, then there are typically several cases:
+                        //
+                        //     1. from a source file in your program (file path has no node_modules)
+                        //     2. from a file in a node_modules folder:
+                        //        2.1 the node_modules folder is in a subfolder of the sourceDir (cannot be found by the module resolution)
+                        //        2.2 the node_modules folder is in the sourceDir or above (can be found by the module resolution)
+                        //            2.2.1 the module file is the "main" file in package.json (or "index.js" if not specified)
+                        //            2.2.2 the module file is not the "main" file
+                        //
+                        // for case 1 and 2.2, we would return the relative file path as the module specifier;
+                        // for case 2.1, we would just use the module name instead.
+                        const sourceDir = getDirectoryPath(sourceFile.fileName);
+                        const modulePath = (<SourceFile>moduleSymbol.valueDeclaration).fileName;
+
+                        const i = modulePath.lastIndexOf(nodeModulesFolderName);
+
+                        // case 1 and case 2.1: return the relative file path as the module specifier;
+                        if (i === -1 || (modulePath.indexOf(sourceDir) === 0 && modulePath.indexOf(combinePaths(sourceDir, nodeModulesFolderName)) === -1)) {
+                            const relativePath = getRelativePathToDirectoryOrUrl(
+                                sourceDir,
+                                modulePath,
                             /*currentDirectory*/ sourceDir,
-                            createGetCanonicalFileName(useCaseSensitiveFileNames),
+                                createGetCanonicalFileName(useCaseSensitiveFileNames),
                             /*isAbsolutePathAnUrl*/ false
-                        );
+                            );
+                            const isRootedOrRelative = isExternalModuleNameRelative(relativePath) || isRootedDiskPath(relativePath);
+                            return removeFileExtension(isRootedOrRelative ? relativePath : combinePaths(".", relativePath));
+                        }
 
-                        // Make sure we got back a path that can be a valid module specifier
-                        const isRootedOrRelative = isExternalModuleNameRelative(relativePath) || isRootedDiskPath(relativePath);
-                        return removeFileExtension(isRootedOrRelative ? relativePath : combinePaths(".", relativePath));
+                        // case 2.2
+                        // If this is a node module, check to see if the given file is the main export of the module or not. If so,
+                        // it can be referenced by just the module name.
+                        const moduleDir = getDirectoryPath(modulePath);
+                        let nodePackage: any;
+                        try {
+                            nodePackage = JSON.parse(context.host.readFile(combinePaths(moduleDir, "package.json")));
+                        }
+                        catch (e) { }
 
+                        // If no main export is explicitly defined, check for the default (index.js)
+                        const mainExport = (nodePackage && nodePackage.main) || "index.js";
+                        const mainExportPath = normalizePath(isRootedDiskPath(mainExport) ? mainExport : combinePaths(moduleDir, mainExport));
+                        const moduleSpecifier = removeFileExtension(modulePath.substring(i + nodeModulesFolderName.length + 1));
+
+                        if (areModuleSpecifiersEqual(modulePath, mainExportPath)) {
+                            return getDirectoryPath(moduleSpecifier);
+                        }
+                        else {
+                            return moduleSpecifier;
+                        }
                     }
+                }
 
-                    // the module is not from a module file, so just return the module name.
-                    return moduleSymbol.name;
+                function areModuleSpecifiersEqual(a: string, b: string): boolean {
+                    // Paths to modules can be relative or absolute and may optionally include the file
+                    // extension of the module
+                    a = removeFileExtension(a);
+                    b = removeFileExtension(b);
+                    return comparePaths(a, b, getDirectoryPath(sourceFile.fileName), !useCaseSensitiveFileNames) === Comparison.EqualTo;
                 }
             }
 
