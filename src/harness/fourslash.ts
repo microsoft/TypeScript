@@ -1253,7 +1253,18 @@ namespace FourSlash {
                             resultString += "Diagnostics:" + Harness.IO.newLine();
                             const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (const diagnostic of diagnostics) {
-                                resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
+                                if (typeof diagnostic.messageText !== "string") {
+                                    let chainedMessage = <ts.DiagnosticMessageChain>diagnostic.messageText;
+                                    let indentation = " ";
+                                    while (chainedMessage) {
+                                        resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
+                                        chainedMessage = chainedMessage.next;
+                                        indentation = indentation + " ";
+                                    }
+                                }
+                                else {
+                                    resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
+                                }
                             }
                         }
 
