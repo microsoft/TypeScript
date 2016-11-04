@@ -690,6 +690,23 @@ declare namespace ts.server.protocol {
         spans: TextSpan[];
         childItems?: NavigationTree[];
     }
+    type TelemetryEventName = "telemetry";
+    interface TelemetryEvent extends Event {
+        event: TelemetryEventName;
+        body: TelemetryEventBody;
+    }
+    interface TelemetryEventBody {
+        telemetryEventName: string;
+        payload: any;
+    }
+    type TypingsInstalledTelemetryEventName = "typingsInstalled";
+    interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
+        telemetryEventName: TypingsInstalledTelemetryEventName;
+        payload: TypingsInstalledTelemetryEventPayload;
+    }
+    interface TypingsInstalledTelemetryEventPayload {
+        installedPackages: string;
+    }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
     }
@@ -8399,6 +8416,18 @@ declare namespace ts.JsTyping {
     };
 }
 declare namespace ts.server {
+    const ActionSet: ActionSet;
+    const ActionInvalidate: ActionInvalidate;
+    const EventInstall: EventInstall;
+    namespace Arguments {
+        const GlobalCacheLocation = "--globalTypingsCacheLocation";
+        const LogFile = "--logFile";
+        const EnableTelemetry = "--enableTelemetry";
+    }
+    function hasArgument(argumentName: string): boolean;
+    function findArgument(argumentName: string): string;
+}
+declare namespace ts.server {
     enum LogLevel {
         terse = 0,
         normal = 1,
@@ -10902,6 +10931,9 @@ declare namespace ts.server {
         fileName: NormalizedPath;
         project: Project;
     }
+    interface EventSender {
+        event(payload: any, eventName: string): void;
+    }
     namespace CommandNames {
         const Brace: protocol.CommandTypes.Brace;
         const BraceFull: protocol.CommandTypes.BraceFull;
@@ -10973,7 +11005,7 @@ declare namespace ts.server {
         const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes;
     }
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
-    class Session {
+    class Session implements EventSender {
         private host;
         protected readonly typingsInstaller: ITypingsInstaller;
         private byteLength;
