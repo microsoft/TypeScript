@@ -50,7 +50,7 @@ namespace ts.server {
     export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
-            fileNames: project.getFileNames(),
+            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true),
             compilerOptions: project.getCompilerOptions(),
             typingOptions,
             projectRootPath: getProjectRootPath(project),
