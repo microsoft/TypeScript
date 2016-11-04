@@ -3055,4 +3055,194 @@ namespace ts {
     function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
         return tryGetModuleNameFromFile(resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
     }
+
+    export function convertForOf(node: ForOfStatement, convertedLoopBodyStatements: Statement[],
+                                 visitor: (node: Node) => VisitResult<Node>,
+                                 enableSubstitutionsForBlockScopedBindings: () => void,
+                                 context: TransformationContext,
+                                 convertObjectRest?: boolean): ForStatement | ForOfStatement {
+        // The following ES6 code:
+        //
+        //    for (let v of expr) { }
+        //
+        // should be emitted as
+        //
+        //    for (var _i = 0, _a = expr; _i < _a.length; _i++) {
+        //        var v = _a[_i];
+        //    }
+        //
+        // where _a and _i are temps emitted to capture the RHS and the counter,
+        // respectively.
+        // When the left hand side is an expression instead of a let declaration,
+        // the "let v" is not emitted.
+        // When the left hand side is a let/const, the v is renamed if there is
+        // another v in scope.
+        // Note that all assignments to the LHS are emitted in the body, including
+        // all destructuring.
+        // Note also that because an extra statement is needed to assign to the LHS,
+        // for-of bodies are always emitted as blocks.
+
+        const expression = visitNode(node.expression, visitor, isExpression);
+        const initializer = node.initializer;
+        const statements: Statement[] = [];
+
+        // In the case where the user wrote an identifier as the RHS, like this:
+        //
+        //     for (let v of arr) { }
+        //
+        // we don't want to emit a temporary variable for the RHS, just use it directly.
+        const counter = convertObjectRest ? undefined : createLoopVariable();
+        const rhsReference = expression.kind === SyntaxKind.Identifier
+            ? createUniqueName((<Identifier>expression).text)
+            : createTempVariable(/*recordTempVariable*/ undefined);
+        const elementAccess = convertObjectRest ? rhsReference : createElementAccess(rhsReference, counter);
+
+        // Initialize LHS
+        // var v = _a[_i];
+        if (isVariableDeclarationList(initializer)) {
+            if (initializer.flags & NodeFlags.BlockScoped) {
+                enableSubstitutionsForBlockScopedBindings();
+            }
+
+            const firstOriginalDeclaration = firstOrUndefined(initializer.declarations);
+            if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
+                // This works whether the declaration is a var, let, or const.
+                // It will use rhsIterationValue _a[_i] as the initializer.
+                const declarations = flattenVariableDestructuring(
+                    firstOriginalDeclaration,
+                    elementAccess,
+                    visitor,
+                    /*recordTempVariable*/ undefined,
+                    convertObjectRest
+                );
+
+                const declarationList = createVariableDeclarationList(declarations, /*location*/ initializer);
+                setOriginalNode(declarationList, initializer);
+
+                // Adjust the source map range for the first declaration to align with the old
+                // emitter.
+                const firstDeclaration = declarations[0];
+                const lastDeclaration = lastOrUndefined(declarations);
+                setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+
+                statements.push(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        declarationList
+                    )
+                );
+            }
+            else {
+                // The following call does not include the initializer, so we have
+                // to emit it separately.
+                statements.push(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        setOriginalNode(
+                            createVariableDeclarationList([
+                                createVariableDeclaration(
+                                    firstOriginalDeclaration ? firstOriginalDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
+                                    /*type*/ undefined,
+                                    createElementAccess(rhsReference, counter)
+                                )
+                            ], /*location*/ moveRangePos(initializer, -1)),
+                            initializer
+                        ),
+                        /*location*/ moveRangeEnd(initializer, -1)
+                    )
+                );
+            }
+        }
+        else {
+            // Initializer is an expression. Emit the expression in the body, so that it's
+            // evaluated on every iteration.
+            const assignment = createAssignment(initializer, elementAccess);
+            if (isDestructuringAssignment(assignment)) {
+                // This is a destructuring pattern, so we flatten the destructuring instead.
+                statements.push(
+                    createStatement(
+                        flattenDestructuringAssignment(
+                            context,
+                            assignment,
+                            /*needsValue*/ false,
+                            context.hoistVariableDeclaration,
+                            visitor,
+                            convertObjectRest
+                        )
+                    )
+                );
+            }
+            else {
+                // Currently there is not way to check that assignment is binary expression of destructing assignment
+                // so we have to cast never type to binaryExpression
+                (<BinaryExpression>assignment).end = initializer.end;
+                statements.push(createStatement(assignment, /*location*/ moveRangeEnd(initializer, -1)));
+            }
+        }
+
+        let bodyLocation: TextRange;
+        let statementsLocation: TextRange;
+        if (convertedLoopBodyStatements) {
+            addRange(statements, convertedLoopBodyStatements);
+        }
+        else {
+            const statement = visitNode(node.statement, visitor, isStatement);
+            if (isBlock(statement)) {
+                addRange(statements, statement.statements);
+                bodyLocation = statement;
+                statementsLocation = statement.statements;
+            }
+            else {
+                statements.push(statement);
+            }
+        }
+
+        // The old emitter does not emit source maps for the expression
+        setEmitFlags(expression, EmitFlags.NoSourceMap | getEmitFlags(expression));
+
+        // The old emitter does not emit source maps for the block.
+        // We add the location to preserve comments.
+        const body = createBlock(
+            createNodeArray(statements, /*location*/ statementsLocation),
+            /*location*/ bodyLocation
+        );
+
+        setEmitFlags(body, EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps);
+
+        let forStatement: ForStatement | ForOfStatement;
+        if(convertObjectRest) {
+
+            forStatement = createForOf(
+                createVariableDeclarationList([
+                    createVariableDeclaration(rhsReference, /*type*/ undefined, /*initializer*/ undefined, /*location*/ node.expression)
+                ], /*location*/ node.expression),
+                node.expression,
+                body,
+                /*location*/ node
+            );
+        }
+        else {
+            forStatement = createFor(
+                setEmitFlags(
+                    createVariableDeclarationList([
+                        createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
+                        createVariableDeclaration(rhsReference, /*type*/ undefined, expression, /*location*/ node.expression)
+                    ], /*location*/ node.expression),
+                    EmitFlags.NoHoisting
+                ),
+                createLessThan(
+                    counter,
+                    createPropertyAccess(rhsReference, "length"),
+                    /*location*/ node.expression
+                ),
+                createPostfixIncrement(counter, /*location*/ node.expression),
+                body,
+                /*location*/ node
+            );
+        }
+
+        // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
+        setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
+        return forStatement;
+    }
 }
