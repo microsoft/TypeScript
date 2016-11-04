@@ -5,8 +5,6 @@
 namespace ts {
     export function transformESNext(context: TransformationContext) {
         const {
-            startLexicalEnvironment,
-            endLexicalEnvironment,
             hoistVariableDeclaration,
         } = context;
         let currentSourceFile: SourceFile;
@@ -210,6 +208,11 @@ namespace ts {
         }
 
         function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
+            const hasRest = forEach(node.parameters, isObjectRestParameter);
+            const body = hasRest ?
+                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
+                visitEachChild(node.body, visitor, context);
+
             return setOriginalNode(
                 createFunctionDeclaration(
                     /*decorators*/ undefined,
@@ -219,13 +222,17 @@ namespace ts {
                     /*typeParameters*/ undefined,
                     visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
-                    transformFunctionBody(node) as Block,
+                    body,
                     /*location*/ node
                 ),
                 /*original*/ node);
         }
 
         function visitArrowFunction(node: ArrowFunction) {
+            const hasRest = forEach(node.parameters, isObjectRestParameter);
+            const body = hasRest ?
+                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
+                visitEachChild(node.body, visitor, context);
             const func = setOriginalNode(
                 createArrowFunction(
                     /*modifiers*/ undefined,
@@ -233,7 +240,7 @@ namespace ts {
                     visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
                     node.equalsGreaterThanToken,
-                    transformFunctionBody(node),
+                    body,
                     /*location*/ node
                 ),
                 /*original*/ node
@@ -243,6 +250,10 @@ namespace ts {
         }
 
         function visitFunctionExpression(node: FunctionExpression): Expression {
+            const hasRest = forEach(node.parameters, isObjectRestParameter);
+            const body = hasRest ?
+                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
+                visitEachChild(node.body, visitor, context);
             return setOriginalNode(
                 createFunctionExpression(
                     /*modifiers*/ undefined,
@@ -251,173 +262,11 @@ namespace ts {
                     /*typeParameters*/ undefined,
                     visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
-                    transformFunctionBody(node) as Block,
+                    body,
                     /*location*/ node
                 ),
                 /*original*/ node
             );
-        }
-
-        /**
-         * Transforms the body of a function-like node.
-         *
-         * @param node A function-like node.
-         */
-        function transformFunctionBody(node: FunctionLikeDeclaration): Block | Expression {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            if (!hasRest) {
-                return visitEachChild(node.body, visitor, context);
-            }
-
-            let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
-            let singleLine = false; // indicates whether the block *may* be emitted as a single line
-            let statementsLocation: TextRange;
-            let closeBraceLocation: TextRange;
-
-            const statements: Statement[] = [];
-            const body = node.body;
-            let statementOffset: number;
-
-            startLexicalEnvironment();
-            if (isBlock(body)) {
-                // ensureUseStrict is false because no new prologue-directive should be added.
-                // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
-                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
-            }
-
-            addDefaultValueAssignmentsIfNeeded(statements, node);
-
-            // If we added any generated statements, this must be a multi-line block.
-            if (!multiLine && statements.length > 0) {
-                multiLine = true;
-            }
-
-            if (isBlock(body)) {
-                statementsLocation = body.statements;
-                addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
-
-                // If the original body was a multi-line block, this must be a multi-line block.
-                if (!multiLine && body.multiLine) {
-                    multiLine = true;
-                }
-            }
-            else {
-                Debug.assert(node.kind === SyntaxKind.ArrowFunction);
-
-                // To align with the old emitter, we use a synthetic end position on the location
-                // for the statement list we synthesize when we down-level an arrow function with
-                // an expression function body. This prevents both comments and source maps from
-                // being emitted for the end position only.
-                statementsLocation = moveRangeEnd(body, -1);
-
-                const equalsGreaterThanToken = (<ArrowFunction>node).equalsGreaterThanToken;
-                if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
-                    if (rangeEndIsOnSameLineAsRangeStart(equalsGreaterThanToken, body, currentSourceFile)) {
-                        singleLine = true;
-                    }
-                    else {
-                        multiLine = true;
-                    }
-                }
-
-                const expression = visitNode(body, visitor, isExpression);
-                const returnStatement = createReturn(expression, /*location*/ body);
-                setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);
-                statements.push(returnStatement);
-
-                // To align with the source map emit for the old emitter, we set a custom
-                // source map location for the close brace.
-                closeBraceLocation = body;
-            }
-
-            const lexicalEnvironment = endLexicalEnvironment();
-            addRange(statements, lexicalEnvironment);
-
-            // If we added any final generated statements, this must be a multi-line block
-            if (!multiLine && lexicalEnvironment && lexicalEnvironment.length) {
-                multiLine = true;
-            }
-
-            const block = createBlock(createNodeArray(statements, statementsLocation), node.body, multiLine);
-            if (!multiLine && singleLine) {
-                setEmitFlags(block, EmitFlags.SingleLine);
-            }
-
-            if (closeBraceLocation) {
-                setTokenSourceMapRange(block, SyntaxKind.CloseBraceToken, closeBraceLocation);
-            }
-
-            setOriginalNode(block, node.body);
-            return block;
-        }
-
-        function shouldAddDefaultValueAssignments(node: FunctionLikeDeclaration): boolean {
-            return !!(node.transformFlags & TransformFlags.ContainsDefaultValueAssignments);
-        }
-
-        /**
-         * Adds statements to the body of a function-like node if it contains parameters with
-         * binding patterns or initializers.
-         *
-         * @param statements The statements for the new function body.
-         * @param node A function-like node.
-         */
-        function addDefaultValueAssignmentsIfNeeded(statements: Statement[], node: FunctionLikeDeclaration): void {
-            if (!shouldAddDefaultValueAssignments(node)) {
-                return;
-            }
-
-            for (const parameter of node.parameters) {
-                // A rest parameter cannot have a binding pattern or an initializer,
-                // so let's just ignore it.
-                if (parameter.dotDotDotToken) {
-                    continue;
-                }
-
-                if (isBindingPattern(parameter.name)) {
-                    addDefaultValueAssignmentForBindingPattern(statements, parameter);
-                }
-            }
-        }
-
-        /**
-         * Adds statements to the body of a function-like node for parameters with binding patterns
-         *
-         * @param statements The statements for the new function body.
-         * @param parameter The parameter for the function.
-         */
-        function addDefaultValueAssignmentForBindingPattern(statements: Statement[], parameter: ParameterDeclaration): void {
-            const temp = getGeneratedNameForNode(parameter);
-
-            // In cases where a binding pattern is simply '[]' or '{}',
-            // we usually don't want to emit a var declaration; however, in the presence
-            // of an initializer, we must emit that expression to preserve side effects.
-            if ((parameter.name as BindingPattern).elements.length > 0) {
-                statements.push(
-                    setEmitFlags(
-                        createVariableStatement(
-                            /*modifiers*/ undefined,
-                            createVariableDeclarationList(
-                                flattenParameterDestructuring(parameter, temp, visitor, /*transformRest*/ true)
-                            )
-                        ),
-                        EmitFlags.CustomPrologue
-                    )
-                );
-            }
-            else if (parameter.initializer) {
-                statements.push(
-                    setEmitFlags(
-                        createStatement(
-                            createAssignment(
-                                temp,
-                                visitNode(parameter.initializer, visitor, isExpression)
-                            )
-                        ),
-                        EmitFlags.CustomPrologue
-                    )
-                );
-            }
         }
     }
 }
