@@ -30,14 +30,14 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 let array;
-for (var _a of array) {
-    var { x } = _a, restOf = __rest(_a, ["x"]);
+for (var array_1 of array) {
+    var { x } = array_1, restOf = __rest(array_1, ["x"]);
     [x, restOf];
 }
 let xx;
 let rrestOff;
-for (var _b of array) {
-    ({ x: xx } = _b, rrestOff = __rest(_b, ["x"]));
+for (var array_2 of array) {
+    ({ x: xx } = array_2, rrestOff = __rest(array_2, ["x"]));
     [xx, rrestOff];
 }
 for (const norest of array.map(a => (__assign({}, a, { x: 'a string' })))) {
