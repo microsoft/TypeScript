@@ -2497,7 +2497,7 @@ namespace ts {
         RegularEnum             = 0x00000100,  // Enum
         ValueModule             = 0x00000200,  // Instantiated module
         NamespaceModule         = 0x00000400,  // Uninstantiated module
-        TypeLiteral             = 0x00000800,  // Type Literal
+        TypeLiteral             = 0x00000800,  // Type Literal or mapped type
         ObjectLiteral           = 0x00001000,  // Object Literal
         Method                  = 0x00002000,  // Method
         Constructor             = 0x00004000,  // Constructor
@@ -2848,7 +2848,6 @@ namespace ts {
 
     /* @internal */
     export interface MappedType extends ObjectType {
-        declaration: MappedTypeNode;
         typeParameter: TypeParameter;
         templateType: Type;
         target?: MappedType;  // Instantiation target

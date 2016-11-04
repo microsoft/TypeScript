@@ -5884,10 +5884,8 @@ namespace ts {
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
             if (indexType.flags & TypeFlags.TypeParameter) {
-                if (!isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType) || emptyObjectType, getIndexType(objectType))) {
-                    if (accessNode) {
-                        error(accessNode, Diagnostics.Type_0_is_not_constrained_to_keyof_1, typeToString(indexType), typeToString(objectType));
-                    }
+                if (accessNode && !isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType) || emptyObjectType, getIndexType(objectType))) {
+                    error(accessNode, Diagnostics.Type_0_is_not_constrained_to_keyof_1, typeToString(indexType), typeToString(objectType));
                     return unknownType;
                 }
                 return getIndexedAccessTypeForTypeParameter(objectType, <TypeParameter>indexType);
@@ -5919,7 +5917,6 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const type = <MappedType>createObjectType(ObjectFlags.Mapped);
-                type.declaration = node;
                 type.typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
                 type.templateType = node.type ? getTypeFromTypeNode(node.type) : anyType;
                 type.aliasSymbol = aliasSymbol;

@@ -1957,9 +1957,10 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                     return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.MappedType:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocRecordType:
-                    return bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type");
+                    return bindAnonymousDeclaration(<Declaration>node, SymbolFlags.TypeLiteral, "__type");
                 case SyntaxKind.ObjectLiteralExpression:
                     return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:
