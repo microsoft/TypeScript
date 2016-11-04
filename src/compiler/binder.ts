@@ -1935,10 +1935,18 @@ namespace ts {
                 case SyntaxKind.SpreadElementExpression:
                 case SyntaxKind.JsxSpreadAttribute:
                     let root = container;
-                    while (root && root.kind !== SyntaxKind.BinaryExpression) {
+                    let hasRest = false;
+                    while (root.parent) {
+                        if (root.kind === SyntaxKind.ObjectLiteralExpression &&
+                            root.parent.kind === SyntaxKind.BinaryExpression &&
+                            (root.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
+                            (root.parent as BinaryExpression).left === root) {
+                            hasRest = true;
+                            break;
+                        }
                         root = root.parent;
                     }
-                    emitFlags |= root && isDestructuringAssignment(root) ? NodeFlags.HasRestAttribute : NodeFlags.HasSpreadAttribute;
+                    emitFlags |= hasRest ? NodeFlags.HasRestAttribute : NodeFlags.HasSpreadAttribute;
                     return;
 
                 case SyntaxKind.CallSignature:
