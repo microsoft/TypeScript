@@ -2,7 +2,7 @@
 
 //// [index.ts]
 
-export class MyClass{}
+export class MyClass { private x: number; }
 
 //// [index.ts]
 import {MyClass} from "library-a";

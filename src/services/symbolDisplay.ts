@@ -187,7 +187,7 @@ namespace ts.SymbolDisplay {
                                     displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                                     displayParts.push(spacePart());
                                 }
-                                if (!(type.flags & TypeFlags.Anonymous) && type.symbol) {
+                                if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous) && type.symbol) {
                                     addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                                 }
                                 addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);

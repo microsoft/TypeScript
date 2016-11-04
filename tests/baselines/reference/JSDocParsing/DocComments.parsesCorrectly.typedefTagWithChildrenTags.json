@@ -18,6 +18,12 @@
                 "end": 16,
                 "text": "typedef"
             },
+            "fullName": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 23,
+                "text": "People"
+            },
             "name": {
                 "kind": "Identifier",
                 "pos": 17,

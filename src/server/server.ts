@@ -14,21 +14,33 @@ namespace ts.server {
     } = require("child_process");
 
     const os: {
-        homedir(): string
+        homedir?(): string;
+        tmpdir(): string;
     } = require("os");
-
 
     function getGlobalTypingsCacheLocation() {
         let basePath: string;
         switch (process.platform) {
             case "win32":
-                basePath = process.env.LOCALAPPDATA || process.env.APPDATA || os.homedir();
+                basePath = process.env.LOCALAPPDATA ||
+                    process.env.APPDATA ||
+                    (os.homedir && os.homedir()) ||
+                    process.env.USERPROFILE ||
+                    (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
+                    os.tmpdir();
                 break;
             case "linux":
-                basePath = os.homedir();
+                basePath = (os.homedir && os.homedir()) ||
+                    process.env.HOME ||
+                    ((process.env.LOGNAME || process.env.USER) && `/home/${process.env.LOGNAME || process.env.USER}`) ||
+                    os.tmpdir();
                 break;
             case "darwin":
-                basePath = combinePaths(os.homedir(), "Library/Application Support/");
+                const homeDir = (os.homedir && os.homedir()) ||
+                        process.env.HOME ||
+                        ((process.env.LOGNAME || process.env.USER) && `/Users/${process.env.LOGNAME || process.env.USER}`) ||
+                        os.tmpdir();
+                basePath = combinePaths(homeDir, "Library/Application Support/");
                 break;
         }
 
@@ -40,6 +52,7 @@ namespace ts.server {
         send(message: any, sendHandle?: any): void;
         on(message: "message", f: (m: any) => void): void;
         kill(): void;
+        pid: number;
     }
 
     interface NodeSocket {
@@ -51,14 +64,6 @@ namespace ts.server {
         output?: NodeJS.WritableStream;
         terminal?: boolean;
         historySize?: number;
-    }
-
-    interface Key {
-        sequence?: string;
-        name?: string;
-        ctrl?: boolean;
-        meta?: boolean;
-        shift?: boolean;
     }
 
     interface Stats {
@@ -187,19 +192,38 @@ namespace ts.server {
 
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
+        private installerPidReported = false;
         private socket: NodeSocket;
         private projectService: ProjectService;
+        private throttledOperations: ThrottledOperations;
 
         constructor(
             private readonly logger: server.Logger,
-            private readonly eventPort: number,
+            host: ServerHost,
+            eventPort: number,
             readonly globalTypingsCacheLocation: string,
             private newLine: string) {
+            this.throttledOperations = new ThrottledOperations(host);
             if (eventPort) {
                 const s = net.connect({ port: eventPort }, () => {
                     this.socket = s;
+                    this.reportInstallerProcessId();
                 });
             }
+        }
+
+        private reportInstallerProcessId() {
+            if (this.installerPidReported) {
+                return;
+            }
+            if (this.socket && this.installer) {
+                this.sendEvent(0, "typingsInstallerPid", { pid: this.installer.pid });
+                this.installerPidReported = true;
+            }
+        }
+
+        private sendEvent(seq: number, event: string, body: any): void {
+            this.socket.write(formatMessage({ seq, type: "event", event, body }, this.logger, Buffer.byteLength, this.newLine), "utf8");
         }
 
         attach(projectService: ProjectService) {
@@ -218,7 +242,7 @@ namespace ts.server {
                     const match = /^--(debug|inspect)(=(\d+))?$/.exec(arg);
                     if (match) {
                         // if port is specified - use port + 1
-                        // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1 
+                        // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
                         const currentPort = match[3] !== undefined
                             ? +match[3]
                             : match[1] === "debug" ? 5858 : 9229;
@@ -230,6 +254,8 @@ namespace ts.server {
 
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
+            this.reportInstallerProcessId();
+
             process.on("exit", () => {
                 this.installer.kill();
             });
@@ -239,12 +265,19 @@ namespace ts.server {
             this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
         }
 
-        enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions): void {
-            const request = createInstallTypingsRequest(project, typingOptions);
+        enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>): void {
+            const request = createInstallTypingsRequest(project, typingOptions, unresolvedImports);
             if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Sending request: ${JSON.stringify(request)}`);
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Scheduling throttled operation: ${JSON.stringify(request)}`);
+                }
             }
-            this.installer.send(request);
+            this.throttledOperations.schedule(project.getProjectName(), /*ms*/ 250, () => {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Sending request: ${JSON.stringify(request)}`);
+                }
+                this.installer.send(request);
+            });
         }
 
         private handleMessage(response: SetTypings | InvalidateCachedTypings) {
@@ -253,7 +286,7 @@ namespace ts.server {
             }
             this.projectService.updateTypingsForProject(response);
             if (response.kind == "set" && this.socket) {
-                this.socket.write(formatMessage({ seq: 0, type: "event", message: response }, this.logger, Buffer.byteLength, this.newLine), "utf8");
+                this.sendEvent(0, "setTypings", response);
             }
         }
     }
@@ -274,7 +307,7 @@ namespace ts.server {
                 useSingleInferredProject,
                 disableAutomaticTypingAcquisition
                     ? nullTypingsInstaller
-                    : new NodeTypingsInstaller(logger, installerEventPort, globalTypingsCacheLocation, host.newLine),
+                    : new NodeTypingsInstaller(logger, host, installerEventPort, globalTypingsCacheLocation, host.newLine),
                 Buffer.byteLength,
                 process.hrtime,
                 logger,

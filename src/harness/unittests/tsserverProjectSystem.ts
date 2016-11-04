@@ -23,10 +23,6 @@ namespace ts.projectSystem {
         readonly callback: TI.RequestCompletedAction;
     }
 
-    export function notImplemented(): any {
-        throw new Error("Not yet implemented");
-    }
-
     export const nullLogger: server.Logger = {
         close: () => void 0,
         hasLevel: () => void 0,
@@ -72,7 +68,7 @@ namespace ts.projectSystem {
             this.postExecActions.forEach((act, i) => assert.equal(act.requestKind, expected[i], "Unexpected post install action"));
         }
 
-        onProjectClosed(p: server.Project) {
+        onProjectClosed() {
         }
 
         attach(projectService: server.ProjectService) {
@@ -83,7 +79,7 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        executeRequest(requestKind: TI.RequestKind, requestId: number, args: string[], cwd: string, cb: TI.RequestCompletedAction): void {
+        executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
             switch (requestKind) {
                 case TI.NpmViewRequest:
                 case TI.NpmInstallRequest:
@@ -98,8 +94,8 @@ namespace ts.projectSystem {
             this.projectService.updateTypingsForProject(response);
         }
 
-        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
-            const request = server.createInstallTypingsRequest(project, typingOptions, this.globalTypingsCacheLocation);
+        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions, unresolvedImports: server.SortedReadonlyArray<string>) {
+            const request = server.createInstallTypingsRequest(project, typingOptions, unresolvedImports, this.globalTypingsCacheLocation);
             this.install(request);
         }
 
@@ -122,7 +118,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies: dependencies });
     }
 
-    export function getExecutingFilePathFromLibFile(libFilePath: string): string {
+    export function getExecutingFilePathFromLibFile(): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
@@ -135,7 +131,7 @@ namespace ts.projectSystem {
     }
 
     export class TestServerEventManager {
-        private events: server.ProjectServiceEvent[] = [];
+        public events: server.ProjectServiceEvent[] = [];
 
         handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
             this.events.push(event);
@@ -154,27 +150,31 @@ namespace ts.projectSystem {
         currentDirectory?: string;
     }
 
-    export function createServerHost(fileOrFolderList: FileOrFolder[],
-        params?: TestServerHostCreationParameters,
-        libFilePath: string = libFile.path): TestServerHost {
-
+    export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
         if (!params) {
             params = {};
         }
         const host = new TestServerHost(
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
-            params.executingFilePath || getExecutingFilePathFromLibFile(libFilePath),
+            params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList);
         host.createFileOrFolder(safeList, /*createParentDirectory*/ true);
         return host;
     }
 
+    class TestSession extends server.Session {
+        getProjectService() {
+            return this.projectService;
+        }
+    };
+
     export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler) {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        return new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
+
+        return new TestSession(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
     }
 
     export interface CreateProjectServiceParameters {
@@ -315,9 +315,9 @@ namespace ts.projectSystem {
 
         count() {
             let n = 0;
-/* tslint:disable:no-unused-variable */
             for (const _ in this.map) {
-/* tslint:enable:no-unused-variable */
+                // TODO: GH#11734
+                _;
                 n++;
             }
             return n;
@@ -466,7 +466,7 @@ namespace ts.projectSystem {
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
-        setTimeout(callback: TimeOutCallback, time: number, ...args: any[]) {
+        setTimeout(callback: TimeOutCallback, _time: number, ...args: any[]) {
             return this.timeoutCallbacks.register(callback, args);
         };
 
@@ -483,7 +483,7 @@ namespace ts.projectSystem {
             this.timeoutCallbacks.invoke();
         }
 
-        setImmediate(callback: TimeOutCallback, time: number, ...args: any[]) {
+        setImmediate(callback: TimeOutCallback, _time: number, ...args: any[]) {
             return this.immediateCallbacks.register(callback, args);
         }
 
@@ -515,13 +515,14 @@ namespace ts.projectSystem {
             this.reloadFS(filesOrFolders);
         }
 
+        write() { }
+
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly write = (s: string) => notImplemented();
-        readonly exit = () => notImplemented();
-        readonly getEnvironmentVariable = (v: string) => notImplemented();
+        readonly exit = notImplemented;
+        readonly getEnvironmentVariable = notImplemented;
     }
 
     export function makeSessionRequest<T>(command: string, args: T) {
@@ -1658,67 +1659,74 @@ namespace ts.projectSystem {
                 "File '/a/b/node_modules/lib.ts' does not exist.",
                 "File '/a/b/node_modules/lib.tsx' does not exist.",
                 "File '/a/b/node_modules/lib.d.ts' does not exist.",
-                "File '/a/b/node_modules/lib.js' does not exist.",
-                "File '/a/b/node_modules/lib.jsx' does not exist.",
                 "File '/a/b/node_modules/lib/package.json' does not exist.",
                 "File '/a/b/node_modules/lib/index.ts' does not exist.",
                 "File '/a/b/node_modules/lib/index.tsx' does not exist.",
                 "File '/a/b/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/b/node_modules/lib/index.js' does not exist.",
-                "File '/a/b/node_modules/lib/index.jsx' does not exist.",
                 "File '/a/b/node_modules/@types/lib.ts' does not exist.",
                 "File '/a/b/node_modules/@types/lib.tsx' does not exist.",
                 "File '/a/b/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib.js' does not exist.",
-                "File '/a/b/node_modules/@types/lib.jsx' does not exist.",
                 "File '/a/b/node_modules/@types/lib/package.json' does not exist.",
                 "File '/a/b/node_modules/@types/lib/index.ts' does not exist.",
                 "File '/a/b/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/a/b/node_modules/@types/lib/index.d.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.js' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.jsx' does not exist.",
                 "File '/a/node_modules/lib.ts' does not exist.",
                 "File '/a/node_modules/lib.tsx' does not exist.",
                 "File '/a/node_modules/lib.d.ts' does not exist.",
-                "File '/a/node_modules/lib.js' does not exist.",
-                "File '/a/node_modules/lib.jsx' does not exist.",
                 "File '/a/node_modules/lib/package.json' does not exist.",
                 "File '/a/node_modules/lib/index.ts' does not exist.",
                 "File '/a/node_modules/lib/index.tsx' does not exist.",
                 "File '/a/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/node_modules/lib/index.js' does not exist.",
-                "File '/a/node_modules/lib/index.jsx' does not exist.",
                 "File '/a/node_modules/@types/lib.ts' does not exist.",
                 "File '/a/node_modules/@types/lib.tsx' does not exist.",
                 "File '/a/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/a/node_modules/@types/lib.js' does not exist.",
-                "File '/a/node_modules/@types/lib.jsx' does not exist.",
                 "File '/a/node_modules/@types/lib/package.json' does not exist.",
                 "File '/a/node_modules/@types/lib/index.ts' does not exist.",
                 "File '/a/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/a/node_modules/@types/lib/index.d.ts' does not exist.",
-                "File '/a/node_modules/@types/lib/index.js' does not exist.",
-                "File '/a/node_modules/@types/lib/index.jsx' does not exist.",
                 "File '/node_modules/lib.ts' does not exist.",
                 "File '/node_modules/lib.tsx' does not exist.",
                 "File '/node_modules/lib.d.ts' does not exist.",
-                "File '/node_modules/lib.js' does not exist.",
-                "File '/node_modules/lib.jsx' does not exist.",
                 "File '/node_modules/lib/package.json' does not exist.",
                 "File '/node_modules/lib/index.ts' does not exist.",
                 "File '/node_modules/lib/index.tsx' does not exist.",
                 "File '/node_modules/lib/index.d.ts' does not exist.",
-                "File '/node_modules/lib/index.js' does not exist.",
-                "File '/node_modules/lib/index.jsx' does not exist.",
                 "File '/node_modules/@types/lib.ts' does not exist.",
                 "File '/node_modules/@types/lib.tsx' does not exist.",
                 "File '/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/node_modules/@types/lib.js' does not exist.",
-                "File '/node_modules/@types/lib.jsx' does not exist.",
                 "File '/node_modules/@types/lib/package.json' does not exist.",
                 "File '/node_modules/@types/lib/index.ts' does not exist.",
                 "File '/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/node_modules/@types/lib/index.d.ts' does not exist.",
+                "Loading module 'lib' from 'node_modules' folder.",
+                "File '/a/b/node_modules/lib.js' does not exist.",
+                "File '/a/b/node_modules/lib.jsx' does not exist.",
+                "File '/a/b/node_modules/lib/package.json' does not exist.",
+                "File '/a/b/node_modules/lib/index.js' does not exist.",
+                "File '/a/b/node_modules/lib/index.jsx' does not exist.",
+                "File '/a/b/node_modules/@types/lib.js' does not exist.",
+                "File '/a/b/node_modules/@types/lib.jsx' does not exist.",
+                "File '/a/b/node_modules/@types/lib/package.json' does not exist.",
+                "File '/a/b/node_modules/@types/lib/index.js' does not exist.",
+                "File '/a/b/node_modules/@types/lib/index.jsx' does not exist.",
+                "File '/a/node_modules/lib.js' does not exist.",
+                "File '/a/node_modules/lib.jsx' does not exist.",
+                "File '/a/node_modules/lib/package.json' does not exist.",
+                "File '/a/node_modules/lib/index.js' does not exist.",
+                "File '/a/node_modules/lib/index.jsx' does not exist.",
+                "File '/a/node_modules/@types/lib.js' does not exist.",
+                "File '/a/node_modules/@types/lib.jsx' does not exist.",
+                "File '/a/node_modules/@types/lib/package.json' does not exist.",
+                "File '/a/node_modules/@types/lib/index.js' does not exist.",
+                "File '/a/node_modules/@types/lib/index.jsx' does not exist.",
+                "File '/node_modules/lib.js' does not exist.",
+                "File '/node_modules/lib.jsx' does not exist.",
+                "File '/node_modules/lib/package.json' does not exist.",
+                "File '/node_modules/lib/index.js' does not exist.",
+                "File '/node_modules/lib/index.jsx' does not exist.",
+                "File '/node_modules/@types/lib.js' does not exist.",
+                "File '/node_modules/@types/lib.jsx' does not exist.",
+                "File '/node_modules/@types/lib/package.json' does not exist.",
                 "File '/node_modules/@types/lib/index.js' does not exist.",
                 "File '/node_modules/@types/lib/index.jsx' does not exist.",
                 "======== Module name 'lib' was not resolved. ========",
@@ -1726,19 +1734,13 @@ namespace ts.projectSystem {
                 "File '/a/cache/node_modules/lib.ts' does not exist.",
                 "File '/a/cache/node_modules/lib.tsx' does not exist.",
                 "File '/a/cache/node_modules/lib.d.ts' does not exist.",
-                "File '/a/cache/node_modules/lib.js' does not exist.",
-                "File '/a/cache/node_modules/lib.jsx' does not exist.",
                 "File '/a/cache/node_modules/lib/package.json' does not exist.",
                 "File '/a/cache/node_modules/lib/index.ts' does not exist.",
                 "File '/a/cache/node_modules/lib/index.tsx' does not exist.",
                 "File '/a/cache/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/cache/node_modules/lib/index.js' does not exist.",
-                "File '/a/cache/node_modules/lib/index.jsx' does not exist.",
                 "File '/a/cache/node_modules/@types/lib.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib.tsx' does not exist.",
                 "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.js' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.jsx' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.tsx' does not exist.",
@@ -2286,6 +2288,14 @@ namespace ts.projectSystem {
             const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
+
+            for (const event of serverEventManager.events) {
+                if (event.eventName === "configFileDiag") {
+                    assert.equal(event.data.configFileName, configFile.path);
+                    assert.equal(event.data.triggerFile, file.path);
+                    return;
+                }
+            }
         });
 
         it("are generated when the config file doesn't have errors", () => {
@@ -2410,6 +2420,89 @@ namespace ts.projectSystem {
 
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
+        });
+    });
+
+    describe("reload", () => {
+        it("should work with temp file", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const tmp = {
+                path: "/a/b/app.tmp",
+                content: "const y = 42"
+            };
+            const host = createServerHost([f1, tmp]);
+            const session = createSession(host);
+
+            // send open request
+            session.executeCommand(<server.protocol.OpenRequest>{
+                type: "request",
+                command: "open",
+                seq: 1,
+                arguments: { file: f1.path }
+            });
+
+            // reload from tmp file
+            session.executeCommand(<server.protocol.ReloadRequest>{
+                type: "request",
+                command: "reload",
+                seq: 2,
+                arguments: { file: f1.path, tmpfile: tmp.path }
+            });
+
+            // verify content
+            const projectServiice = session.getProjectService();
+            const snap1 = projectServiice.getScriptInfo(f1.path).snap();
+            assert.equal(snap1.getText(0, snap1.getLength()), tmp.content, "content should be equal to the content of temp file");
+
+            // reload from original file file
+            session.executeCommand(<server.protocol.ReloadRequest>{
+                type: "request",
+                command: "reload",
+                seq: 2,
+                arguments: { file: f1.path }
+            });
+
+            // verify content
+            const snap2 = projectServiice.getScriptInfo(f1.path).snap();
+            assert.equal(snap2.getText(0, snap2.getLength()), f1.content, "content should be equal to the content of original file");
+
+        });
+    });
+
+    describe("Inferred projects", () => {
+        it("should support files without extensions", () => {
+            const f = {
+                path: "/a/compile",
+                content: "let x = 1"
+            };
+            const host = createServerHost([f]);
+            const session = createSession(host);
+            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+                seq: 1,
+                type: "request",
+                command: "compilerOptionsForInferredProjects",
+                arguments: {
+                    options: {
+                        allowJs: true
+                    }
+                }
+            });
+            session.executeCommand(<server.protocol.OpenRequest>{
+                seq: 2,
+                type: "request",
+                command: "open",
+                arguments: {
+                    file: f.path,
+                    fileContent: f.content,
+                    scriptKindName: "JS"
+                }
+            });
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [f.path]);
         });
     });
 }

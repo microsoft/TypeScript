@@ -1,44 +1,36 @@
 //// [objectSpreadIndexSignature.ts]
-class C {
-    a: number;
-    c: boolean;
-}
-let c: { ...C, b: string, c?: string, [n: number]: string };
-let n: number = c.a;
-let s: string = c[12];
 interface Indexed {
     [n: string]: number;
     a: number;
 }
-let i: { ...Indexed, b: number };
-n = i[101];
-n = i.b;
 interface Indexed2 {
     [n: string]: boolean;
     c: boolean;
 }
-let ii: { ...Indexed, ...Indexed2, b: boolean, d: number };
-let nb: number | boolean = ii[1001];
-
-function f<T>(t: T) {
-    let i: { ...T, [n: number]: string };
-}
+let indexed: Indexed;
+let indexed2: Indexed2;
+let i = { ...indexed, b: 11 };
+// only indexed has indexer, so i[101]: any
+i[101];
+let ii = { ...indexed, ...indexed2 };
+// both have indexer, so i[1001]: number | boolean
+ii[1001];
 
 
 //// [objectSpreadIndexSignature.js]
-var C = (function () {
-    function C() {
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
     }
-    return C;
-}());
-var c;
-var n = c.a;
-var s = c[12];
-var i;
-n = i[101];
-n = i.b;
-var ii;
-var nb = ii[1001];
-function f(t) {
-    var i;
-}
+    return t;
+};
+var indexed;
+var indexed2;
+var i = __assign({}, indexed, { b: 11 });
+// only indexed has indexer, so i[101]: any
+i[101];
+var ii = __assign({}, indexed, indexed2);
+// both have indexer, so i[1001]: number | boolean
+ii[1001];

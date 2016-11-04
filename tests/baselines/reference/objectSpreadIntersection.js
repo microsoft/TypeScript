@@ -2,37 +2,37 @@
 function iteratedUnionIntersection<T, U, V>(t: T, u: U, v: V): void {
     let tu: T | U;
     let uv: U & V;
-    let result = { id: 'bar', ...tu, ...uv };
-    let expected: ({ id: string, ...T, ...U } & { id: string, ...T, ...V }) | ({ id: string, ...U } & { id: string, ...U, ...V });
-    let assignable: { id: string, ...(T | U), ...(U & V) } = result;
+    let result = { ...tu, ...uv, id: 'foo' };
+    let assignable: { ...(T | U), ...(U & V), id: string } = result;
 }
 // concrete types work
 interface A1 { a: number }
 interface A2 { a: string }
+interface B1 { b: number }
+interface B2 { b: string }
 let a12: A1 & A2;
-let result = { ...a12 };
+let b12: B1 & B2;
+let result = { ...a12, ...b12 };
 let sn: number & string = result.a;
-let assignable: { ...(A1 & A2) } = result;
+sn = result.b;
+let assignable: { ...(A1 & A2), ...(B1 & B2) } = result;
 
 function tripleIntersection<T, U, V>(t: T, u: U, v: V): void {
     let tuv: T & U & V;
-    let result = { id: 'foo', ...tuv };
-    let expected: { id: string, ...T } & { id: string, ...U } & { id: string, ...V } = result;
-    let assignable: { id: string, ...(T & U & V) } = result;
+    let result = { ...tuv, id: 'bar' };
+    let assignable: { ...(T & U & V), id: string } = result;
 }
 function iteratedDoubleIntersection<T, U, V>(t: T, u: U, v: V): void {
     let tu: T & U;
     let uv: U & V;
-    let result = { id: 'bar', ...tu, ...uv };
-    let expected: { id: string, ...T, ...U } & { id: string, ...T, ...V } & { id: string, ...U } & { id: string, ...U, ...V };
-    let assignable: { id: string, ...(T & U), ...(U & V) } = result;
+    let result = { ...tu, ...uv, id: 'baz' };
+    let assignable: { ...(T & U), ...(U & V), id: string } = result;
 }
 function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
     let tu: T & U;
     let uv: U | V;
-    let result = { id: 'bar', ...tu, ...uv };
-    let expected: ({ id: string, ...T, ...U } & { id: string, ...U }) | ({ id: string, ...T, ...V } & { id: string, ...U, ...V });
-    let assignable: { id: string, ...(T & U), ...(U | V) } = result;
+    let result = { ...tu, ...uv, id: 'qux' };
+    let assignable: { ...(T & U), ...(U | V), id: string } = result;
 }
 
 
@@ -49,31 +49,29 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 function iteratedUnionIntersection(t, u, v) {
     var tu;
     var uv;
-    var result = __assign({ id: 'bar' }, tu, uv);
-    var expected;
+    var result = __assign({}, tu, uv, { id: 'foo' });
     var assignable = result;
 }
 var a12;
-var result = __assign({}, a12);
+var b12;
+var result = __assign({}, a12, b12);
 var sn = result.a;
+sn = result.b;
 var assignable = result;
 function tripleIntersection(t, u, v) {
     var tuv;
-    var result = __assign({ id: 'foo' }, tuv);
-    var expected = result;
+    var result = __assign({}, tuv, { id: 'bar' });
     var assignable = result;
 }
 function iteratedDoubleIntersection(t, u, v) {
     var tu;
     var uv;
-    var result = __assign({ id: 'bar' }, tu, uv);
-    var expected;
+    var result = __assign({}, tu, uv, { id: 'baz' });
     var assignable = result;
 }
 function iteratedIntersectionUnion(t, u, v) {
     var tu;
     var uv;
-    var result = __assign({ id: 'bar' }, tu, uv);
-    var expected;
+    var result = __assign({}, tu, uv, { id: 'qux' });
     var assignable = result;
 }

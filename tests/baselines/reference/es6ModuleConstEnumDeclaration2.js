@@ -63,12 +63,12 @@ var x = 0 /* a */;
 var y = 0 /* x */;
 export var m1;
 (function (m1) {
+    var e3;
     (function (e3) {
         e3[e3["a"] = 0] = "a";
         e3[e3["b"] = 1] = "b";
         e3[e3["c"] = 2] = "c";
-    })(m1.e3 || (m1.e3 = {}));
-    var e3 = m1.e3;
+    })(e3 = m1.e3 || (m1.e3 = {}));
     var e4;
     (function (e4) {
         e4[e4["x"] = 0] = "x";
@@ -82,12 +82,12 @@ export var m1;
 })(m1 || (m1 = {}));
 var m2;
 (function (m2) {
+    var e5;
     (function (e5) {
         e5[e5["a"] = 0] = "a";
         e5[e5["b"] = 1] = "b";
         e5[e5["c"] = 2] = "c";
-    })(m2.e5 || (m2.e5 = {}));
-    var e5 = m2.e5;
+    })(e5 = m2.e5 || (m2.e5 = {}));
     var e6;
     (function (e6) {
         e6[e6["x"] = 0] = "x";

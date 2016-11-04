@@ -97,7 +97,7 @@ namespace ts {
                 return this.text.length;
             }
 
-            public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
+            public getChangeRange(): TextChangeRange {
                 // Text-based snapshots do not support incremental parsing. Return undefined
                 // to signal that to the caller.
                 return undefined;

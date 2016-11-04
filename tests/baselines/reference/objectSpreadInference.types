@@ -83,10 +83,10 @@ let c: { c: number };
 >c : { c: number; }
 >c : number
 
-// should infer { t: {}, u: { b: number, c: number }, v: number }
+// can only infer { t: {}, u: {}, v: {} }
 let i1 = infer({ ...b, ...c, a: 12 });
->i1 : { t: {}; u: { c: number; b: number; }; v: number; }
->infer({ ...b, ...c, a: 12 }) : { t: {}; u: { c: number; b: number; }; v: number; }
+>i1 : { t: {}; u: {}; v: {}; }
+>infer({ ...b, ...c, a: 12 }) : { t: {}; u: {}; v: {}; }
 >infer : <T, U, V>(tuv: { ...T; ...U; a: V; }) => { t: T; u: U; v: V; }
 >{ ...b, ...c, a: 12 } : { a: number; c: number; b: number; }
 >b : any
@@ -94,10 +94,10 @@ let i1 = infer({ ...b, ...c, a: 12 });
 >a : number
 >12 : 12
 
-// should infer { t: { a: number, b: number, c: number }, u: {}, v: {} }
+// can only infer { t: {}, u: {}, v: {} }
 let i2 = infer2({ ...b, ...c, a: 12 });
->i2 : { t: { a: number; c: number; b: number; }; u: {}; v: {}; }
->infer2({ ...b, ...c, a: 12 }) : { t: { a: number; c: number; b: number; }; u: {}; v: {}; }
+>i2 : { t: {}; u: {}; v: {}; }
+>infer2({ ...b, ...c, a: 12 }) : { t: {}; u: {}; v: {}; }
 >infer2 : <T, U, V>(utv: { ...U; a: V; ...T }) => { t: T; u: U; v: V; }
 >{ ...b, ...c, a: 12 } : { a: number; c: number; b: number; }
 >b : any
@@ -105,7 +105,7 @@ let i2 = infer2({ ...b, ...c, a: 12 });
 >a : number
 >12 : 12
 
-// should infer { t: {}, u: {}, v: {} }
+// can only infer { t: {}, u: {}, v: {} }
 let i3 = generic(b, c, { a: 12 });
 >i3 : { t: {}; u: {}; v: {}; }
 >generic(b, c, { a: 12 }) : { t: {}; u: {}; v: {}; }
@@ -115,168 +115,4 @@ let i3 = generic(b, c, { a: 12 });
 >{ a: 12 } : { a: number; }
 >a : number
 >12 : 12
-
-interface Preserved {
->Preserved : Preserved
-
-    kind: 0 | 1 | 2 | 3;
->kind : 0 | 1 | 2 | 3
-}
-class C implements Preserved {
->C : C
->Preserved : Preserved
-
-    kind: 0 = 0;
->kind : 0
->0 : 0
-
-    a = 1;
->a : number
->1 : 1
-
-    method() { return "C"; }
->method : () => string
->"C" : "C"
-}
-declare function revive<T extends Preserved>(t: { ...T }): T;
->revive : <T extends Preserved>(t: { ...T }) => T
->T : T
->Preserved : Preserved
->t : { ...T }
->T : T
->T : T
-
-function genericRevive<U extends Preserved>(u: U) {
->genericRevive : <U extends Preserved>(u: U) => U
->U : U
->Preserved : Preserved
->u : U
->U : U
-
-    let us: { ...U };
->us : { ...U }
->U : U
-
-    return revive(us);
->revive(us) : U
->revive : <T extends Preserved>(t: { ...T }) => T
->us : { ...U }
-}
-// result should not have `method`
-let result = revive({ a: 12, kind: 0 });
->result : { a: number; kind: 0; }
->revive({ a: 12, kind: 0 }) : { a: number; kind: 0; }
->revive : <T extends Preserved>(t: { ...T }) => T
->{ a: 12, kind: 0 } : { a: number; kind: 0; }
->a : number
->12 : 12
->kind : number
->0 : 0
-
-// result2 should be of type C and have `method`
-let result2 = revive<C>({ a: 12, kind: 0 });
->result2 : C
->revive<C>({ a: 12, kind: 0 }) : C
->revive : <T extends Preserved>(t: { ...T }) => T
->C : C
->{ a: 12, kind: 0 } : { a: number; kind: 0; }
->a : number
->12 : 12
->kind : number
->0 : 0
-
-declare function destructureRevive<T extends Preserved>(t: { ...T, a: number }): T;
->destructureRevive : <T extends Preserved>(t: { ...T; a: number; }) => T
->T : T
->Preserved : Preserved
->t : { ...T; a: number; }
->T : T
->a : number
->T : T
-
-function genericDestructureRevive<U extends Preserved & { a: number }>(u: U) {
->genericDestructureRevive : <U extends Preserved & { a: number; }>(u: U) => Preserved
->U : U
->Preserved : Preserved
->a : number
->u : U
->U : U
-
-    let us: { ...U };
->us : { ...U }
->U : U
-
-    return destructureRevive(us);
->destructureRevive(us) : Preserved
->destructureRevive : <T extends Preserved>(t: { ...T; a: number; }) => T
->us : { ...U }
-}
-// result3 is just `Preserved` because `a` and `method` both get removed
-let result3 = destructureRevive({ a: 12, kind: 0 });
->result3 : { kind: 0; }
->destructureRevive({ a: 12, kind: 0 }) : { kind: 0; }
->destructureRevive : <T extends Preserved>(t: { ...T; a: number; }) => T
->{ a: 12, kind: 0 } : { a: number; kind: 0; }
->a : number
->12 : 12
->kind : number
->0 : 0
-
-// result4 is still C -- a is not removed -- because we specified the argument explicitly
-let result4 = destructureRevive<C>({ a: 12, kind: 0 });
->result4 : C
->destructureRevive<C>({ a: 12, kind: 0 }) : C
->destructureRevive : <T extends Preserved>(t: { ...T; a: number; }) => T
->C : C
->{ a: 12, kind: 0 } : { a: number; kind: 0; }
->a : number
->12 : 12
->kind : number
->0 : 0
-
-result4.method();
->result4.method() : string
->result4.method : () => string
->result4 : C
->method : () => string
-
-result4.a;
->result4.a : number
->result4 : C
->a : number
-
-declare function removeIndexSignature<T>(t: { ...T, a: number, [s: string]: number, [n: number]: number }): T;
->removeIndexSignature : <T>(t: { ...T; [s: string]: number; [n: number]: number; a: number; }) => T
->T : T
->t : { ...T; [s: string]: number; [n: number]: number; a: number; }
->T : T
->a : number
->s : string
->n : number
->T : T
-
-interface I {
->I : I
-
-    a: number;
->a : number
-
-    b: number;
->b : number
-
-    [s: string]: number;
->s : string
-
-    [n: number]: number;
->n : number
-}
-let i: I;
->i : I
->I : I
-
-let result5 = removeIndexSignature(i);
->result5 : { b: number; }
->removeIndexSignature(i) : { b: number; }
->removeIndexSignature : <T>(t: { ...T; [s: string]: number; [n: number]: number; a: number; }) => T
->i : I
 

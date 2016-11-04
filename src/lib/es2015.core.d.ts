@@ -205,13 +205,13 @@ interface NumberConstructor {
       * number. Only finite values of the type number, result in true.
       * @param number A numeric value.
       */
-    isFinite(number: number): boolean;
+    isFinite(value: any): value is number;
 
     /**
       * Returns true if the value passed is an integer, false otherwise.
       * @param number A numeric value.
       */
-    isInteger(number: number): boolean;
+    isInteger(value: any): value is number;
 
     /**
       * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
@@ -219,13 +219,13 @@ interface NumberConstructor {
       * to a number. Only values of the type number, that are also NaN, result in true.
       * @param number A numeric value.
       */
-    isNaN(number: number): boolean;
+    isNaN(value: any): value is number;
 
     /**
       * Returns true if the value passed is a safe integer.
       * @param number A numeric value.
       */
-    isSafeInteger(number: number): boolean;
+    isSafeInteger(value: any): value is number;
 
     /**
       * The value of the largest integer n such that n and n + 1 are both exactly representable as
@@ -278,7 +278,7 @@ interface ObjectConstructor {
       * @param target The target object to copy to.
       * @param source The source object from which to copy properties.
       */
-    assign<T, U>(target: T, source: U): { ...T, ...U };
+    assign<T, U>(target: T, source: U): T & U;
 
     /**
       * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -287,7 +287,7 @@ interface ObjectConstructor {
       * @param source1 The first source object from which to copy properties.
       * @param source2 The second source object from which to copy properties.
       */
-    assign<T, U, V>(target: T, source1: U, source2: V): { ...T, ...U, ...V };
+    assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
 
     /**
       * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -297,7 +297,7 @@ interface ObjectConstructor {
       * @param source2 The second source object from which to copy properties.
       * @param source3 The third source object from which to copy properties.
       */
-    assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): { ...T, ...U, ...V, ...W };
+    assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
 
     /**
       * Copy the values of all of the enumerable own properties from one or more source objects to a

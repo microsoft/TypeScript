@@ -26,20 +26,20 @@ let broken = [
 //// [enumAssignmentCompat4.js]
 var M;
 (function (M) {
+    var MyEnum;
     (function (MyEnum) {
         MyEnum[MyEnum["BAR"] = 0] = "BAR";
-    })(M.MyEnum || (M.MyEnum = {}));
-    var MyEnum = M.MyEnum;
+    })(MyEnum = M.MyEnum || (M.MyEnum = {}));
     M.object2 = {
         foo: MyEnum.BAR
     };
 })(M || (M = {}));
 var N;
 (function (N) {
+    var MyEnum;
     (function (MyEnum) {
         MyEnum[MyEnum["FOO"] = 0] = "FOO";
-    })(N.MyEnum || (N.MyEnum = {}));
-    var MyEnum = N.MyEnum;
+    })(MyEnum = N.MyEnum || (N.MyEnum = {}));
     ;
     N.object1 = {
         foo: MyEnum.FOO

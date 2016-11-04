@@ -109,12 +109,12 @@ namespace ts {
     export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
     export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
-            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral, location, /*flags*/ undefined);
+            const node = <NumericLiteral>createNode(SyntaxKind.NumericLiteral, location, /*flags*/ undefined);
             node.text = value.toString();
             return node;
         }
         else if (typeof value === "boolean") {
-            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword, location, /*flags*/ undefined);
+            return <BooleanLiteral>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword, location, /*flags*/ undefined);
         }
         else if (typeof value === "string") {
             const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location, /*flags*/ undefined);
@@ -226,20 +226,7 @@ namespace ts {
 
     // Signature elements
 
-    export function createParameter(name: string | Identifier | BindingPattern, initializer?: Expression, location?: TextRange) {
-        return createParameterDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            /*dotDotDotToken*/ undefined,
-            name,
-            /*questionToken*/ undefined,
-            /*type*/ undefined,
-            initializer,
-            location
-        );
-    }
-
-    export function createParameterDeclaration(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: string | Identifier | BindingPattern, questionToken: QuestionToken, type: TypeNode, initializer: Expression, location?: TextRange, flags?: NodeFlags) {
+    export function createParameter(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: string | Identifier | BindingPattern, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags) {
         const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter, location, flags);
         node.decorators = decorators ? createNodeArray(decorators) : undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
@@ -251,9 +238,9 @@ namespace ts {
         return node;
     }
 
-    export function updateParameterDeclaration(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], name: BindingName, type: TypeNode, initializer: Expression) {
+    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], name: BindingName, type: TypeNode, initializer: Expression) {
         if (node.decorators !== decorators || node.modifiers !== modifiers || node.name !== name || node.type !== type || node.initializer !== initializer) {
-            return updateNode(createParameterDeclaration(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node, /*flags*/ node.flags), node);
+            return updateNode(createParameter(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node, /*flags*/ node.flags), node);
         }
 
         return node;
@@ -525,9 +512,9 @@ namespace ts {
         return node;
     }
 
-    export function createFunctionExpression(asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
+    export function createFunctionExpression(modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags) {
         const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression, location, flags);
-        node.modifiers = undefined;
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.asteriskToken = asteriskToken;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = typeParameters ? createNodeArray(typeParameters) : undefined;
@@ -537,9 +524,9 @@ namespace ts {
         return node;
     }
 
-    export function updateFunctionExpression(node: FunctionExpression, name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
-        if (node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
-            return updateNode(createFunctionExpression(node.asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node, node.flags), node);
+    export function updateFunctionExpression(node: FunctionExpression, modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
+        if (node.name !== name || node.modifiers !== modifiers || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
+            return updateNode(createFunctionExpression(modifiers, node.asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node, node.flags), node);
         }
         return node;
     }
@@ -1489,6 +1476,28 @@ namespace ts {
     }
 
     /**
+     * Creates a synthetic element to act as a placeholder for the end of an emitted declaration in
+     * order to properly emit exports.
+     */
+    export function createEndOfDeclarationMarker(original: Node) {
+        const node = <EndOfDeclarationMarker>createNode(SyntaxKind.EndOfDeclarationMarker);
+        node.emitNode = {};
+        node.original = original;
+        return node;
+    }
+
+    /**
+     * Creates a synthetic element to act as a placeholder for the beginning of a merged declaration in
+     * order to properly emit exports.
+     */
+    export function createMergeDeclarationMarker(original: Node) {
+        const node = <MergeDeclarationMarker>createNode(SyntaxKind.MergeDeclarationMarker);
+        node.emitNode = {};
+        node.original = original;
+        return node;
+    }
+
+    /**
      * Creates a synthetic expression to act as a placeholder for a not-emitted expression in
      * order to preserve comments or sourcemap positions.
      *
@@ -1571,18 +1580,6 @@ namespace ts {
         }
     }
 
-    export function createRestParameter(name: string | Identifier) {
-        return createParameterDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createToken(SyntaxKind.DotDotDotToken),
-            name,
-            /*questionToken*/ undefined,
-            /*type*/ undefined,
-            /*initializer*/ undefined
-        );
-    }
-
     export function createFunctionCall(func: Expression, thisArg: Expression, argumentsList: Expression[], location?: TextRange) {
         return createCall(
             createPropertyAccess(func, "call"),
@@ -1639,7 +1636,9 @@ namespace ts {
         // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
-        react.parent = parent;
+        // Set the parent that is in parse tree 
+        // this makes sure that parent chain is intact for checker to traverse complete scope tree
+        react.parent = getParseTreeNode(parent);
         return react;
     }
 
@@ -1674,6 +1673,18 @@ namespace ts {
             argumentsList,
             location
         );
+    }
+
+    export function createExportDefault(expression: Expression) {
+        return createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportEquals*/ false, expression);
+    }
+
+    export function createExternalModuleExport(exportName: Identifier) {
+        return createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([createExportSpecifier(exportName)]));
+    }
+
+    export function createLetStatement(name: Identifier, initializer: Expression, location?: TextRange) {
+        return createVariableStatement(/*modifiers*/ undefined, createLetDeclarationList([createVariableDeclaration(name, /*type*/ undefined, initializer)]), location);
     }
 
     export function createLetDeclarationList(declarations: VariableDeclaration[], location?: TextRange) {
@@ -1750,6 +1761,7 @@ namespace ts {
 
     export function createAwaiterHelper(externalHelpersModuleName: Identifier | undefined, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
         const generatorFunc = createFunctionExpression(
+            /*modifiers*/ undefined,
             createToken(SyntaxKind.AsteriskToken),
             /*name*/ undefined,
             /*typeParameters*/ undefined,
@@ -1794,13 +1806,10 @@ namespace ts {
         return createArrowFunction(
             /*modifiers*/ undefined,
             /*typeParameters*/ undefined,
-            [createParameter("name")],
+            [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "name")],
             /*type*/ undefined,
-            /*equalsGreaterThanToken*/ undefined,
-            createElementAccess(
-                target,
-                createIdentifier("name")
-            )
+            createToken(SyntaxKind.EqualsGreaterThanToken),
+            createElementAccess(target, createIdentifier("name"))
         );
     }
 
@@ -1810,11 +1819,11 @@ namespace ts {
             /*modifiers*/ undefined,
             /*typeParameters*/ undefined,
             [
-                createParameter("name"),
-                createParameter("value")
+                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "name"),
+                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "value")
             ],
             /*type*/ undefined,
-            /*equalsGreaterThanToken*/ undefined,
+            createToken(SyntaxKind.EqualsGreaterThanToken),
             createAssignment(
                 createElementAccess(
                     target,
@@ -1866,7 +1875,7 @@ namespace ts {
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             "value",
-            [createParameter("v")],
+            [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "v")],
             createBlock([
                 createStatement(
                     createCall(
@@ -1886,9 +1895,9 @@ namespace ts {
             createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
-                [createParameter("name")],
+                [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "name")],
                 /*type*/ undefined,
-                /*equalsGreaterThanToken*/ undefined,
+                createToken(SyntaxKind.EqualsGreaterThanToken),
                 createLogicalOr(
                     createElementAccess(
                         createIdentifier("cache"),
@@ -1923,12 +1932,13 @@ namespace ts {
                     createCall(
                         createParen(
                             createFunctionExpression(
+                                /*modifiers*/ undefined,
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,
                                 [
-                                    createParameter("geti"),
-                                    createParameter("seti")
+                                    createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "geti"),
+                                    createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "seti")
                                 ],
                                 /*type*/ undefined,
                                 createBlock([
@@ -1998,7 +2008,7 @@ namespace ts {
         }
         else if (callee.kind === SyntaxKind.SuperKeyword) {
             thisArg = createThis();
-            target = languageVersion < ScriptTarget.ES6 ? createIdentifier("_super", /*location*/ callee) : <PrimaryExpression>callee;
+            target = languageVersion < ScriptTarget.ES2015 ? createIdentifier("_super", /*location*/ callee) : <PrimaryExpression>callee;
         }
         else {
             switch (callee.kind) {
@@ -2104,6 +2114,7 @@ namespace ts {
             const properties: ObjectLiteralElementLike[] = [];
             if (getAccessor) {
                 const getterFunction = createFunctionExpression(
+                    getAccessor.modifiers,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
@@ -2119,6 +2130,7 @@ namespace ts {
 
             if (setAccessor) {
                 const setterFunction = createFunctionExpression(
+                    setAccessor.modifiers,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
@@ -2185,6 +2197,7 @@ namespace ts {
                     createMemberAccessForPropertyName(receiver, method.name, /*location*/ method.name),
                     setOriginalNode(
                         createFunctionExpression(
+                            method.modifiers,
                             method.asteriskToken,
                             /*name*/ undefined,
                             /*typeParameters*/ undefined,
@@ -2200,6 +2213,107 @@ namespace ts {
                 /*original*/ method
             )
         );
+    }
+
+    /**
+     * Gets the local name of a declaration. This is primarily used for declarations that can be
+     * referred to by name in the declaration's immediate scope (classes, enums, namespaces). A
+     * local name will *never* be prefixed with an module or namespace export modifier like
+     * "exports." when emitted as an expression.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName);
+    }
+
+    /**
+     * Gets whether an identifier should only be referred to by its local name.
+     */
+    export function isLocalName(node: Identifier) {
+        return (getEmitFlags(node) & EmitFlags.LocalName) !== 0;
+    }
+
+    /**
+     * Gets the export name of a declaration. This is primarily used for declarations that can be
+     * referred to by name in the declaration's immediate scope (classes, enums, namespaces). An
+     * export name will *always* be prefixed with an module or namespace export modifier like
+     * `"exports."` when emitted as an expression if the name points to an exported symbol.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getExportName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.ExportName);
+    }
+
+    /**
+     * Gets whether an identifier should only be referred to by its export representation if the
+     * name points to an exported symbol.
+     */
+    export function isExportName(node: Identifier) {
+        return (getEmitFlags(node) & EmitFlags.ExportName) !== 0;
+    }
+
+    /**
+     * Gets the name of a declaration for use in declarations.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getDeclarationName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+        return getName(node, allowComments, allowSourceMaps);
+    }
+
+    function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
+        if (node.name && isIdentifier(node.name) && !isGeneratedIdentifier(node.name)) {
+            const name = getMutableClone(node.name);
+            emitFlags |= getEmitFlags(node.name);
+            if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
+            if (!allowComments) emitFlags |= EmitFlags.NoComments;
+            if (emitFlags) setEmitFlags(name, emitFlags);
+            return name;
+        }
+        return getGeneratedNameForNode(node);
+    }
+
+    /**
+     * Gets the exported name of a declaration for use in expressions.
+     *
+     * An exported name will *always* be prefixed with an module or namespace export modifier like
+     * "exports." if the name points to an exported symbol.
+     *
+     * @param ns The namespace identifier.
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression {
+        if (ns && hasModifier(node, ModifierFlags.Export)) {
+            return getNamespaceMemberName(ns, getName(node), allowComments, allowSourceMaps);
+        }
+        return getExportName(node, allowComments, allowSourceMaps);
+    }
+
+    /**
+     * Gets a namespace-qualified name for use in expressions.
+     *
+     * @param ns The namespace identifier.
+     * @param name The name.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
+        const qualifiedName = createPropertyAccess(ns, nodeIsSynthesized(name) ? name : getSynthesizedClone(name), /*location*/ name);
+        let emitFlags: EmitFlags;
+        if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
+        if (!allowComments) emitFlags |= EmitFlags.NoComments;
+        if (emitFlags) setEmitFlags(qualifiedName, emitFlags);
+        return qualifiedName;
     }
 
     // Utilities
@@ -2220,7 +2334,7 @@ namespace ts {
      * @param visitor: Optional callback used to visit any custom prologue directives.
      */
     export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
-        Debug.assert(target.length === 0, "PrologueDirectives should be at the first statement in the target statements array");
+        Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         let statementOffset = 0;
         const numStatements = source.length;
@@ -2233,16 +2347,20 @@ namespace ts {
                 target.push(statement);
             }
             else {
-                if (ensureUseStrict && !foundUseStrict) {
-                    target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
-                    foundUseStrict = true;
-                }
-                if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
-                    target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
-                }
-                else {
-                    break;
-                }
+                break;
+            }
+            statementOffset++;
+        }
+        if (ensureUseStrict && !foundUseStrict) {
+            target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
+        }
+        while (statementOffset < numStatements) {
+            const statement = source[statementOffset];
+            if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
+                target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
+            }
+            else {
+                break;
             }
             statementOffset++;
         }
@@ -2251,7 +2369,7 @@ namespace ts {
 
     /**
      * Ensures "use strict" directive is added
-     * 
+     *
      * @param node source file
      */
     export function ensureUseStrict(node: SourceFile): SourceFile {
