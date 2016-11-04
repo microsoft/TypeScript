@@ -1012,7 +1012,7 @@ namespace Harness {
                 }
             }
 
-            function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget) {
+            function getSourceFile(fileName: string) {
                 fileName = ts.normalizePath(fileName);
                 const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
                 if (fileMap.contains(path)) {

@@ -11102,7 +11102,7 @@ namespace ts {
         function getJsxAttributesSymbolArrayFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement): Symbol[] | undefined {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createMap<Symbol>();
-            const spreads: Type[] = [];
+            let spread: Type = emptyObjectType
             let attributesArray: Symbol[] = [];
             for (const attributeDecl of attributes.properties) {
                 const member = attributeDecl.symbol;
@@ -11130,27 +11130,28 @@ namespace ts {
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesArray.length > 0) {
-                        spreads.push(createJsxAttributesType(attributes, attributesTable));
+                        spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable), attributes.symbol);
                         attributesArray = [];
                         attributesTable = createMap<Symbol>();
                     }
                     const exprType = checkExpression(attributeDecl.expression);
+                    if (!(getWidenedType(exprType).flags & (TypeFlags.Object | TypeFlags.Any))) {
+                        error(attributeDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
+                        return undefined;
+                    }
                     if (isTypeAny(getWidenedType(exprType))) {
                         return undefined;
                     }
-                    spreads.push(exprType);
+                    spread = getSpreadType(spread, exprType, attributes.symbol);
                 }
             }
 
-            if (spreads.length > 0) {
+            if (spread !== emptyObjectType) {
                 if (attributesArray.length > 0) {
-                    spreads.push(createJsxAttributesType(attributes, attributesTable));
+                    spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable), attributes.symbol);
                     attributesArray = [];
                     attributesTable = createMap<Symbol>();
                 }
-                const propagatedFlags = getPropagatingFlagsOfTypes(spreads, /*excludeKinds*/ TypeFlags.Nullable);
-                const spread = getSpreadType(spreads, attributes.symbol);
-                spread.flags |= propagatedFlags;
                 attributesArray = getPropertiesOfType(spread);
             }
 
@@ -11159,13 +11160,14 @@ namespace ts {
 
         /**
          * Create anonymous type from given attributes symbol table.
-         * @param jsxAttributes a JsxAttributes node containing attributes in attributesTable
+         * @param jsxAttributesSymb a JsxAttributes node containing attributes in attributesTable
          * @param attributesTable a symbol table of attributes property
          */
-        function createJsxAttributesType(jsxAttributes: JsxAttributes, attributesTable: Map<Symbol>) {
-            const result = createAnonymousType(jsxAttributes.symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+        function createJsxAttributesType(jsxAttributesSymb: Symbol, attributesTable: Map<Symbol>) {
+            const result = createAnonymousType(jsxAttributesSymb, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
             const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
-            result.flags |= TypeFlags.JsxAttributes | TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
+            result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
+            result.objectFlags |= ObjectFlags.ObjectLiteral;
             return result;
         }
 
@@ -11182,7 +11184,7 @@ namespace ts {
                 forEach(symbolArray, (attr) => {
                     symbolTable[attr.name] = attr;
                 });
-                argAttributesType = createJsxAttributesType(node, symbolTable);
+                argAttributesType = createJsxAttributesType(node.symbol, symbolTable);
             }
             return argAttributesType;
         }
@@ -11219,7 +11221,7 @@ namespace ts {
                     }
                 });
 
-                sourceAttributesType = createJsxAttributesType(openingLikeElement.attributes, symbolTable);
+                sourceAttributesType = createJsxAttributesType(openingLikeElement.attributes.symbol, symbolTable);
             }
 
             // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
@@ -12325,7 +12327,7 @@ namespace ts {
          * @param relation a relationship to check parameter and argument type
          * @param excludeArgument
          */
-        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[]) {
+        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>) {
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
             // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
@@ -12944,7 +12946,7 @@ namespace ts {
                             }
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
-                        if (isJsxOpeningOrSelfClosingElement && !checkApplicableSignatureForJsxOpeningLikeElement(<JsxOpeningLikeElement>node, candidate, relation, excludeArgument)) {
+                        if (isJsxOpeningOrSelfClosingElement && !checkApplicableSignatureForJsxOpeningLikeElement(<JsxOpeningLikeElement>node, candidate, relation)) {
                             break;
                         }
                         else if (!isJsxOpeningOrSelfClosingElement && !checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
