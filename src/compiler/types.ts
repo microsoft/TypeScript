@@ -2245,6 +2245,7 @@ namespace ts {
 
     export interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
+        getTypeOfSymbol(symbol: Symbol): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol;
@@ -2256,6 +2257,7 @@ namespace ts {
         getNonNullableType(type: Type): Type;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
+        getSymbolOfNode(node: Node): Symbol;
         getSymbolAtLocation(node: Node): Symbol;
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
@@ -2760,7 +2762,7 @@ namespace ts {
         objectFlags: ObjectFlags;
     }
 
-    // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
+    /** Class and interface types (TypeFlags.Class and TypeFlags.Interface). */
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
@@ -2780,14 +2782,16 @@ namespace ts {
         declaredNumberIndexInfo: IndexInfo;        // Declared numeric indexing info
     }
 
-    // Type references (TypeFlags.Reference). When a class or interface has type parameters or
-    // a "this" type, references to the class or interface are made using type references. The
-    // typeArguments property specifies the types to substitute for the type parameters of the
-    // class or interface and optionally includes an extra element that specifies the type to
-    // substitute for "this" in the resulting instantiation. When no extra argument is present,
-    // the type reference itself is substituted for "this". The typeArguments property is undefined
-    // if the class or interface has no type parameters and the reference isn't specifying an
-    // explicit "this" argument.
+    /**
+     * Type references (TypeFlags.Reference). When a class or interface has type parameters or
+     * a "this" type, references to the class or interface are made using type references. The
+     * typeArguments property specifies the types to substitute for the type parameters of the
+     * class or interface and optionally includes an extra element that specifies the type to
+     * substitute for "this" in the resulting instantiation. When no extra argument is present,
+     * the type reference itself is substituted for "this". The typeArguments property is undefined
+     * if the class or interface has no type parameters and the reference isn't specifying an
+     * explicit "this" argument.
+     */
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
         typeArguments: Type[];  // Type reference type arguments (undefined if none)
@@ -2825,7 +2829,6 @@ namespace ts {
         finalArrayType?: Type;  // Final array type of evolving array type
     }
 
-    /* @internal */
     // Resolved object, union, or intersection type
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name

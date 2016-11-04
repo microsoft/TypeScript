@@ -74,6 +74,7 @@ namespace ts {
             getGlobalDiagnostics,
             getTypeOfSymbolAtLocation,
             getSymbolsOfParameterPropertyDeclaration,
+            getTypeOfSymbol,
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType,
@@ -84,6 +85,7 @@ namespace ts {
             resolveStructuredTypeMembers,
             getNonNullableType,
             getSymbolsInScope,
+            getSymbolOfNode,
             getSymbolAtLocation,
             getShorthandAssignmentValueSymbol,
             getExportSpecifierLocalTargetSymbol,
@@ -4352,6 +4354,9 @@ namespace ts {
             setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
+        /**
+         * Converts an AnonymousType to a ResolvedType.
+         */
         function resolveAnonymousTypeMembers(type: AnonymousType) {
             const symbol = type.symbol;
             if (type.target) {

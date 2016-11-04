@@ -19,6 +19,7 @@ namespace ts.codefix {
 
                 for (let i = 0; interfaceClauses && i < interfaceClauses.length; i++) {
                     const newChanges = getCodeFixChanges(interfaceClauses[i], classMembers, startPos, checker, /*reference*/ false, trackingAddedMembers, context.newLineCharacter);
+                    // getMissingAbstractMemberChanges(classDeclaration, checker, context.newLineCharacter);
                     textChanges = textChanges ? textChanges.concat(newChanges) : newChanges;
                 }
 
