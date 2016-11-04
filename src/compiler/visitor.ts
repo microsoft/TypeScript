@@ -553,6 +553,7 @@ namespace ts {
             return undefined;
         }
 
+        aggregateTransformFlags(node);
         const visited = visitor(node);
         if (visited === node) {
             return node;
@@ -621,6 +622,7 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
+            aggregateTransformFlags(node);
             const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
