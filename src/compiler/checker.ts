@@ -11197,11 +11197,8 @@ namespace ts {
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
                 // Is this is a stateless function component? See if its single signature's return type is assignable to the JSX Element Type
                 if (jsxElementType) {
-                    // Cached the result of trying to solve opening-like JSX element as a stateless function component (similar to how getResolvedSignature)
-                    // We don't call getResolvedSignature directly because here we have already resolve the type of JSX Element.
-                    const links = getNodeLinks(openingLikeElement);
-                    const callSignature = resolvedStateLessJsxOpeningLikeElement(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
-                    links.resolvedSignature = callSignature;
+                    // We don't call getResolvedSignature because here we have already resolve the type of JSX Element.
+                    const callSignature = getResolvedJSXStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
                     const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                     let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
                     if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
@@ -11232,12 +11229,9 @@ namespace ts {
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
                 // Is this is a stateless function component? See if its single signature's return type is assignable to the JSX Element Type
                 if (jsxElementType) {
-                    // Cached the result of trying to solve opening-like JSX element as a stateless function component (similar to how getResolvedSignature)
-                    // We don't call getResolvedSignature directly because here we have already resolve the type of JSX Element.
-                    const links = getNodeLinks(openingLikeElement);
+                    // We don't call getResolvedSignature because here we have already resolve the type of JSX Element.
                     const candidatesOutArray: Signature[] = [];
-                    const callSignature = resolvedStateLessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
-                    links.resolvedSignature = callSignature;
+                    getResolvedJSXStatelessFunctionSignature(openingLikeElement, elementType, candidatesOutArray);
                     let result: Type;
                     let defaultResult: Type;
                     for (const candidate of candidatesOutArray) {
@@ -12760,9 +12754,11 @@ namespace ts {
             }
 
             // Do not report any error if we are doing so for stateless function component as such error will be error will be handle in "resolveCustomJsxElementAttributesType".
-            // Just return the latest signature candidate we try so far so that when we report an error we will get better error message.
             if (isJsxOpeningOrSelfClosingElement) {
-                return candidateForArgumentError;
+                // If this is a type resolution session, e.g. Language Service, just return undefined as the language service can decide how to proceed with this failure.
+                // (see getDefinitionAtPosition which simply get the symbol and return the first declaration of the JSXopeningLikeElement node)
+                // otherwise, just return the latest signature candidate we try so far so that when we report an error we will get better error message.
+                return produceDiagnostics ? candidateForArgumentError : undefined;
             }
 
             // No signatures were applicable. Now report errors based on the last applicable signature with
@@ -13179,6 +13175,38 @@ namespace ts {
         }
 
         /**
+         * 
+         * @param openingLikeElement
+         * @param elementType
+         * @param candidatesOutArray
+         */
+        function getResolvedJSXStatelessFunctionSignature(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature {
+            Debug.assert(!(elementType.flags & TypeFlags.Union));
+            const links = getNodeLinks(openingLikeElement);
+            // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
+            // However, it is possible that either candidatesOutArray was not passed in the first time,
+            // or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
+            // to correctly fill the candidatesOutArray.
+            const cached = links.resolvedSignature;
+            if (cached && cached !== resolvingSignature && !candidatesOutArray) {
+                return cached;
+            }
+            links.resolvedSignature = resolvingSignature;
+
+            let callSignature = resolvedStateLessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
+            if (!callSignature || callSignature === unknownSignature) {
+                const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
+                callSignature = callSignatures[callSignatures.length - 1];
+            }
+            links.resolvedSignature = callSignature;
+            // If signature resolution originated in control flow type analysis (for example to compute the
+            // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
+            // types from the control flow analysis.
+            links.resolvedSignature = flowLoopStart === flowLoopCount ? callSignature : cached;
+            return callSignature;
+        }
+
+        /**
          * Try treating a given opening-like element as stateless function component and try to resolve a signature.
          * @param openingLikeElement an JsxOpeningLikeElement we want to try resolve its state-less function if possible
          * @param elementType a type of the opening-like JSX element, a result of resolving tagName in opening-like element.
@@ -13187,7 +13215,7 @@ namespace ts {
          * @return a resolved signature if we can find function matching function signature through resolve call or a first signature in the list of functions.
          *         otherwise return undefined if tag-name of the opening-like element doesn't have call signatures
          */
-        function resolvedStateLessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature | undefined {
+        function resolvedStateLessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature {
             if (elementType.flags & TypeFlags.Union) {
                 const types = (elementType as UnionType).types;
                 let result: Signature;
@@ -13202,7 +13230,7 @@ namespace ts {
             const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
             if (callSignatures && callSignatures.length > 0) {
                 let callSignature: Signature;
-                callSignature = resolveCall(openingLikeElement, callSignatures, candidatesOutArray) || callSignatures[0];
+                callSignature = resolveCall(openingLikeElement, callSignatures, candidatesOutArray);
                 return callSignature;
             }
 

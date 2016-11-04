@@ -1078,6 +1078,8 @@ namespace ts {
 
     export function isCallLikeExpression(node: Node): node is CallLikeExpression {
         switch (node.kind) {
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.TaggedTemplateExpression:
