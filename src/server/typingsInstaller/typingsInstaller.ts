@@ -2,6 +2,7 @@
 /// <reference path="../../compiler/moduleNameResolver.ts" />
 /// <reference path="../../services/jsTyping.ts"/>
 /// <reference path="../types.d.ts"/>
+/// <reference path="../shared.ts"/>
 
 namespace ts.server.typingsInstaller {
     interface NpmConfig {
@@ -88,6 +89,7 @@ namespace ts.server.typingsInstaller {
             readonly globalCachePath: string,
             readonly safeListPath: Path,
             readonly throttleLimit: number,
+            readonly telemetryEnabled: boolean,
             protected readonly log = nullLog) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}'`);
@@ -298,9 +300,17 @@ namespace ts.server.typingsInstaller {
             this.installRunCount++;
 
             this.installTypingsAsync(requestId, scopedTypings, cachePath, ok => {
+                if (this.telemetryEnabled) {
+                    this.sendResponse(<TypingsInstallEvent>{
+                        kind: EventInstall,
+                        packagesToInstall: scopedTypings
+                    });
+                }
+
                 if (!ok) {
                     return;
                 }
+
                 // TODO: watch project directory
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Requested to install typings ${JSON.stringify(scopedTypings)}, installed typings ${JSON.stringify(scopedTypings)}`);
@@ -354,7 +364,7 @@ namespace ts.server.typingsInstaller {
                         this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
                     }
                     if (!isInvoked) {
-                        this.sendResponse({ projectName: projectName, kind: "invalidate" });
+                        this.sendResponse({ projectName: projectName, kind: server.ActionInvalidate });
                         isInvoked = true;
                     }
                 });
@@ -370,7 +380,7 @@ namespace ts.server.typingsInstaller {
                 compilerOptions: request.compilerOptions,
                 typings,
                 unresolvedImports: request.unresolvedImports,
-                kind: "set"
+                kind: server.ActionSet
             };
         }
 
@@ -392,6 +402,6 @@ namespace ts.server.typingsInstaller {
         }
 
         protected abstract installWorker(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
-        protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings): void;
+        protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | TypingsInstallEvent): void;
     }
 }

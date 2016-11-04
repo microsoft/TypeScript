@@ -51,8 +51,9 @@ namespace ts.projectSystem {
             throttleLimit: number,
             installTypingHost: server.ServerHost,
             readonly typesRegistry = createMap<void>(),
+            telemetryEnabled?: boolean,
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, log);
+            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, telemetryEnabled, log);
         }
 
         safeFileList = safeList.path;
