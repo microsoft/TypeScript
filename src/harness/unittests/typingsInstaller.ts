@@ -20,12 +20,13 @@ namespace ts.projectSystem {
     }
 
     class Installer extends TestTypingsInstaller {
-        constructor(host: server.ServerHost, p?: InstallerParams, log?: TI.Log) {
+        constructor(host: server.ServerHost, p?: InstallerParams, telemetryEnabled?: boolean, log?: TI.Log) {
             super(
                 (p && p.globalTypingsCacheLocation) || "/a/data",
                 (p && p.throttleLimit) || 5,
                 host,
                 (p && p.typesRegistry),
+                telemetryEnabled,
                 log);
         }
 
@@ -35,15 +36,16 @@ namespace ts.projectSystem {
         }
     }
 
+    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[], typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
+        self.addPostExecAction(installedTypings, success => {
+            for (const file of typingFiles) {
+                host.createFileOrFolder(file, /*createParentDirectory*/ true);
+            }
+            cb(success);
+        });
+    }
+
     describe("typingsInstaller", () => {
-        function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[], typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
-            self.addPostExecAction(installedTypings, success => {
-                for (const file of typingFiles) {
-                    host.createFileOrFolder(file, /*createParentDirectory*/ true);
-                }
-                cb(success);
-            });
-        }
         it("configured projects (typings installed) 1", () => {
             const file1 = {
                 path: "/a/b/app.js",
@@ -905,7 +907,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: "/tmp" }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
+                    super(host, { globalTypingsCacheLocation: "/tmp" }, /*telemetryEnabled*/ false, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, _cb: server.typingsInstaller.RequestCompletedAction) {
                     assert(false, "runCommand should not be invoked");
@@ -947,6 +949,52 @@ namespace ts.projectSystem {
             const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enableAutoDiscovery: true }, ["fs", "bar"]);
             assert.deepEqual(result.cachedTypingPaths, [node.path]);
             assert.deepEqual(result.newTypingNames, ["bar"]);
+        });
+    });
+
+    describe("telemetry events", () => {
+        it ("should be received", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: ""
+            };
+            const package = {
+                path: "/a/package.json",
+                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+            };
+            const cachePath = "/a/cache/";
+            const commander = {
+                path: cachePath + "node_modules/@types/commander/index.d.ts",
+                content: "export let x: number"
+            };
+            const host = createServerHost([f1, package]);
+            let seenTelemetryEvent = false;
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") }, /*telemetryEnabled*/ true);
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/commander"];
+                    const typingFiles = [commander];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+                sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.TypingsInstallEvent) {
+                    if (response.kind === server.EventInstall) {
+                        assert.deepEqual(response.packagesToInstall, ["@types/commander"]);
+                        seenTelemetryEvent = true;
+                        return;
+                    }
+                    super.sendResponse(response);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(f1.path);
+
+            installer.installAll(/*expectedCount*/ 1);
+
+            assert.isTrue(seenTelemetryEvent);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
         });
     });
 }
