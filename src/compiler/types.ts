@@ -2770,10 +2770,11 @@ namespace ts {
         Reference        = 1 << 2,  // Generic type reference
         Tuple            = 1 << 3,  // Synthesized generic tuple type
         Anonymous        = 1 << 4,  // Anonymous
-        Instantiated     = 1 << 5,  // Instantiated anonymous type
-        ObjectLiteral    = 1 << 6,  // Originates in an object literal
-        EvolvingArray    = 1 << 7,  // Evolving array type
-        ObjectLiteralPatternWithComputedProperties = 1 << 8,  // Object literal pattern with computed properties
+        Mapped           = 1 << 5,  // Mapped
+        Instantiated     = 1 << 6,  // Instantiated anonymous or mapped type
+        ObjectLiteral    = 1 << 7,  // Originates in an object literal
+        EvolvingArray    = 1 << 8,  // Evolving array type
+        ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ClassOrInterface = Class | Interface
     }
 
@@ -2840,6 +2841,15 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+    }
+
+    /* @internal */
+    export interface MappedType extends ObjectType {
+        declaration: MappedTypeNode;
+        typeParameter: TypeParameter;
+        templateType: Type;
+        target?: MappedType;  // Instantiation target
+        mapper?: TypeMapper;  // Instantiation mapper
     }
 
     export interface EvolvingArrayType extends ObjectType {

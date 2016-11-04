@@ -2246,6 +2246,9 @@ namespace ts {
                     else if (getObjectFlags(type) & ObjectFlags.Anonymous) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
                     }
+                    else if (getObjectFlags(type) & ObjectFlags.Mapped) {
+                        writeMappedType(<MappedType>type);
+                    }
                     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
                     }
@@ -2535,6 +2538,32 @@ namespace ts {
                     writer.decreaseIndent();
                     writePunctuation(writer, SyntaxKind.CloseBraceToken);
                     inObjectTypeLiteral = saveInObjectTypeLiteral;
+                }
+
+                function writeMappedType(type: MappedType) {
+                    const constraintType = getConstraintTypeFromMappedType(type);
+                    if (constraintType.flags & (TypeFlags.TypeParameter | TypeFlags.Index)) {
+                        writePunctuation(writer, SyntaxKind.OpenBraceToken);
+                        writer.writeLine();
+                        writer.increaseIndent();
+                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                        appendSymbolNameOnly((type.target || type).typeParameter.symbol, writer);
+                        writeSpace(writer);
+                        writeKeyword(writer, SyntaxKind.InKeyword);
+                        writeSpace(writer);
+                        writeType(constraintType, TypeFormatFlags.None);
+                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                        writePunctuation(writer, SyntaxKind.ColonToken);
+                        writeSpace(writer);
+                        writeType(getTemplateTypeFromMappedType(type), TypeFormatFlags.None);
+                        writePunctuation(writer, SyntaxKind.SemicolonToken);
+                        writer.writeLine();
+                        writer.decreaseIndent();
+                        writePunctuation(writer, SyntaxKind.CloseBraceToken);
+                    }
+                    else {
+                        writeLiteralType(type, TypeFormatFlags.None);
+                    }
                 }
             }
 
@@ -4408,6 +4437,46 @@ namespace ts {
             }
         }
 
+        function forEachType<T>(type: Type, f: (t: Type) => T): T {
+            return type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, f) : f(type);
+        }
+
+        // { [P in K]: T }
+        // Get apparent type of K
+        // If apparent type is a 'keyof T', get apparent type of T
+        // For each constituent literal type U
+        // create mapper from P to U
+        // instantiate T using mapper
+        // if U is string or number, create index signature with instantiated type
+        // otherwise create property with name from U and instantiated type
+        function resolveMappedTypeMembers(type: MappedType) {
+            const members: SymbolTable = createMap<Symbol>();
+            let stringIndexInfo: IndexInfo;
+            let numberIndexInfo: IndexInfo;
+            const target = type.target || type;
+            const keyType = getApparentType(getConstraintTypeFromMappedType(type));
+            const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
+            forEachType(iterationType, t => {
+                const iterationMapper = createUnaryTypeMapper(target.typeParameter, t);
+                const templateMapper = type.mapper ? combineTypeMappers(type.mapper, iterationMapper) : iterationMapper;
+                if (t.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.EnumLiteral)) {
+                    const propName = (<LiteralType>t).text;
+                    const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, propName);
+                    prop.type = instantiateType(target.templateType, templateMapper);
+                    members[propName] = prop;
+                }
+            })
+            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+        }
+
+        function getConstraintTypeFromMappedType(type: MappedType) {
+            return instantiateType(getConstraintOfTypeParameter((type.target || type).typeParameter), type.mapper || identityMapper);
+        }
+
+        function getTemplateTypeFromMappedType(type: MappedType) {
+            return instantiateType((type.target || type).templateType, type.mapper || identityMapper);
+        }
+
         function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
             if (!(<ResolvedType>type).members) {
                 if (type.flags & TypeFlags.Object) {
@@ -4419,6 +4488,9 @@ namespace ts {
                     }
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
                         resolveAnonymousTypeMembers(<AnonymousType>type);
+                    }
+                    else if ((<MappedType>type).objectFlags & ObjectFlags.Mapped) {
+                        resolveMappedTypeMembers(<MappedType>type);
                     }
                 }
                 else if (type.flags & TypeFlags.Union) {
@@ -5834,14 +5906,16 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getTypeFromMappedTypeNode(node: MappedTypeNode) {
+        function getTypeFromMappedTypeNode(node: MappedTypeNode, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                getTypeFromTypeNode(node.typeParameter.constraint);
-                if (node.type) {
-                    getTypeFromTypeNode(node.type);
-                }
-                links.resolvedType = unknownType;
+                const type = <MappedType>createObjectType(ObjectFlags.Mapped);
+                type.declaration = node;
+                type.typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
+                type.templateType = node.type ? getTypeFromTypeNode(node.type) : anyType;
+                type.aliasSymbol = aliasSymbol;
+                type.aliasTypeArguments = aliasTypeArguments;
+                links.resolvedType = type;
             }
             return links.resolvedType;
         }
@@ -6015,7 +6089,7 @@ namespace ts {
                 case SyntaxKind.IndexedAccessType:
                     return getTypeFromIndexedAccessTypeNode(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
-                    return getTypeFromMappedTypeNode(<MappedTypeNode>node);
+                    return getTypeFromMappedTypeNode(<MappedTypeNode>node, aliasSymbol, aliasTypeArguments);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -6180,7 +6254,13 @@ namespace ts {
             return result;
         }
 
-        function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper): ObjectType {
+        function instantiateAnonymousOrMappedType(type: AnonymousType | MappedType, mapper: TypeMapper): ObjectType {
+            if (type.objectFlags & ObjectFlags.Instantiated) {
+                // If the type being instantiated is itself a instantiation, fetch the original target and
+                // combine the type mappers.
+                mapper = combineTypeMappers(type.mapper, mapper);
+                type = type.target;
+            }
             if (mapper.instantiations) {
                 const cachedType = <ObjectType>mapper.instantiations[type.id];
                 if (cachedType) {
@@ -6191,7 +6271,7 @@ namespace ts {
                 mapper.instantiations = [];
             }
             // Mark the anonymous type as instantiated such that our infinite instantiation detection logic can recognize it
-            const result = <AnonymousType>createObjectType(ObjectFlags.Anonymous | ObjectFlags.Instantiated, type.symbol);
+            const result = <AnonymousType | MappedType>createObjectType(type.objectFlags | ObjectFlags.Instantiated, type.symbol);
             result.target = type;
             result.mapper = mapper;
             result.aliasSymbol = type.aliasSymbol;
@@ -6268,7 +6348,10 @@ namespace ts {
                         return type.symbol &&
                             type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) &&
                             ((<ObjectType>type).objectFlags & ObjectFlags.Instantiated || isSymbolInScopeOfMappedTypeParameter(type.symbol, mapper)) ?
-                            instantiateAnonymousType(<AnonymousType>type, mapper) : type;
+                            instantiateAnonymousOrMappedType(<AnonymousType>type, mapper) : type;
+                    }
+                    if ((<ObjectType>type).objectFlags & ObjectFlags.Mapped) {
+                        return instantiateAnonymousOrMappedType(<MappedType>type, mapper);
                     }
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
                         return createTypeReference((<TypeReference>type).target, instantiateList((<TypeReference>type).typeArguments, mapper, instantiateType));
