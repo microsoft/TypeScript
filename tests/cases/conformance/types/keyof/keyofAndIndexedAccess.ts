@@ -7,6 +7,10 @@ class Shape {
     visible: boolean;
 }
 
+class TaggedShape extends Shape {
+    tag: string;
+}
+
 class Item {
     name: string;
     price: number;
@@ -149,6 +153,17 @@ function f32<K extends "width" | "height">(key: K) {
     return shape[key];  // Shape[K]
 }
 
+function f33<S extends Shape, K extends keyof S>(shape: S, key: K) {
+    let name = getProperty(shape, "name");
+    let prop = getProperty(shape, key);
+    return prop;
+}
+
+function f34(ts: TaggedShape) {
+    let tag1 = f33(ts, "tag");
+    let tag2 = getProperty(ts, "tag");
+}
+
 class C {
     public x: string;
     protected y: string;
@@ -164,4 +179,36 @@ function f40(c: C) {
     let x: X = c["x"];
     let y: Y = c["y"];
     let z: Z = c["z"];
+}
+
+// Repros from #12011
+
+class Base {
+    get<K extends keyof this>(prop: K) {
+        return this[prop];
+    }
+    set<K extends keyof this>(prop: K, value: this[K]) {
+        this[prop] = value;
+    }
+}
+
+class Person extends Base {
+    parts: number;
+    constructor(parts: number) {
+        super();
+        this.set("parts", parts);
+    }
+    getParts() {
+        return this.get("parts")
+    }
+}
+
+class OtherPerson {
+    parts: number;
+    constructor(parts: number) {
+        setProperty(this, "parts", parts);
+    }
+    getParts() {
+        return getProperty(this, "parts")
+    }
 }

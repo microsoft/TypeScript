@@ -16,6 +16,14 @@ class Shape {
 >visible : boolean
 }
 
+class TaggedShape extends Shape {
+>TaggedShape : TaggedShape
+>Shape : Shape
+
+    tag: string;
+>tag : string
+}
+
 class Item {
 >Item : Item
 
@@ -626,6 +634,55 @@ function f32<K extends "width" | "height">(key: K) {
 >key : K
 }
 
+function f33<S extends Shape, K extends keyof S>(shape: S, key: K) {
+>f33 : <S extends Shape, K extends keyof S>(shape: S, key: K) => S[K]
+>S : S
+>Shape : Shape
+>K : K
+>S : S
+>shape : S
+>S : S
+>key : K
+>K : K
+
+    let name = getProperty(shape, "name");
+>name : string
+>getProperty(shape, "name") : string
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : S
+>"name" : "name"
+
+    let prop = getProperty(shape, key);
+>prop : S[K]
+>getProperty(shape, key) : S[K]
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : S
+>key : K
+
+    return prop;
+>prop : S[K]
+}
+
+function f34(ts: TaggedShape) {
+>f34 : (ts: TaggedShape) => void
+>ts : TaggedShape
+>TaggedShape : TaggedShape
+
+    let tag1 = f33(ts, "tag");
+>tag1 : string
+>f33(ts, "tag") : string
+>f33 : <S extends Shape, K extends keyof S>(shape: S, key: K) => S[K]
+>ts : TaggedShape
+>"tag" : "tag"
+
+    let tag2 = getProperty(ts, "tag");
+>tag2 : string
+>getProperty(ts, "tag") : string
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>ts : TaggedShape
+>"tag" : "tag"
+}
+
 class C {
 >C : C
 
@@ -678,4 +735,98 @@ function f40(c: C) {
 >c["z"] : string
 >c : C
 >"z" : "z"
+}
+
+// Repros from #12011
+
+class Base {
+>Base : Base
+
+    get<K extends keyof this>(prop: K) {
+>get : <K extends keyof this>(prop: K) => this[K]
+>K : K
+>prop : K
+>K : K
+
+        return this[prop];
+>this[prop] : this[K]
+>this : this
+>prop : K
+    }
+    set<K extends keyof this>(prop: K, value: this[K]) {
+>set : <K extends keyof this>(prop: K, value: this[K]) => void
+>K : K
+>prop : K
+>K : K
+>value : this[K]
+>K : K
+
+        this[prop] = value;
+>this[prop] = value : this[K]
+>this[prop] : this[K]
+>this : this
+>prop : K
+>value : this[K]
+    }
+}
+
+class Person extends Base {
+>Person : Person
+>Base : Base
+
+    parts: number;
+>parts : number
+
+    constructor(parts: number) {
+>parts : number
+
+        super();
+>super() : void
+>super : typeof Base
+
+        this.set("parts", parts);
+>this.set("parts", parts) : void
+>this.set : <K extends keyof this>(prop: K, value: this[K]) => void
+>this : this
+>set : <K extends keyof this>(prop: K, value: this[K]) => void
+>"parts" : "parts"
+>parts : number
+    }
+    getParts() {
+>getParts : () => number
+
+        return this.get("parts")
+>this.get("parts") : number
+>this.get : <K extends keyof this>(prop: K) => this[K]
+>this : this
+>get : <K extends keyof this>(prop: K) => this[K]
+>"parts" : "parts"
+    }
+}
+
+class OtherPerson {
+>OtherPerson : OtherPerson
+
+    parts: number;
+>parts : number
+
+    constructor(parts: number) {
+>parts : number
+
+        setProperty(this, "parts", parts);
+>setProperty(this, "parts", parts) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>this : this
+>"parts" : "parts"
+>parts : number
+    }
+    getParts() {
+>getParts : () => number
+
+        return getProperty(this, "parts")
+>getProperty(this, "parts") : number
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>this : this
+>"parts" : "parts"
+    }
 }

@@ -2112,6 +2112,7 @@ namespace ts {
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
+        /* @internal */ ambientModuleNames: string[];
         // The synthesized identifier for an imported external helpers module.
         /* @internal */ externalHelpersModuleName?: Identifier;
     }
@@ -2305,6 +2306,8 @@ namespace ts {
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
+
+        /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -2716,7 +2719,7 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeParameter = StructuredType | TypeParameter,
+        StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
@@ -3075,6 +3078,7 @@ namespace ts {
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
+        /*@internal*/noEmitOverwritenFiles?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
