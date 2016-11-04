@@ -17,6 +17,7 @@
     },
     "files": [
         "../types.d.ts",
+        "../shared.ts",
         "typingsInstaller.ts",
         "nodeTypingsInstaller.ts"
     ]

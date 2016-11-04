@@ -286,10 +286,10 @@ namespace ts.server {
                 return;
             }
             switch (response.kind) {
-                case "set":
+                case ActionSet:
                     this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.unresolvedImports, response.typings);
                     break;
-                case "invalidate":
+                case ActionInvalidate:
                     this.typingsCache.deleteTypingsForProject(response.projectName);
                     break;
             }
