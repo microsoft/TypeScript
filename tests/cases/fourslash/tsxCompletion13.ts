@@ -22,6 +22,7 @@
 //// }
 //// declare function MainButton(buttonProps: ButtonProps): JSX.Element;
 //// declare function MainButton(linkProps: LinkProps): JSX.Element;
+//// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
 //// let opt = <MainButton /*1*/ />;
 //// let opt = <MainButton children="chidlren" /*2*/ />;
 //// let opt = <MainButton onClick={()=>{}} /*3*/ />;
