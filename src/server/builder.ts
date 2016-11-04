@@ -5,15 +5,6 @@
 
 namespace ts.server {
 
-    interface Hash {
-        update(data: any, input_encoding?: string): Hash;
-        digest(encoding: string): any;
-    }
-
-    const crypto: {
-        createHash(algorithm: string): Hash
-    } = require("crypto");
-
     export function shouldEmitFile(scriptInfo: ScriptInfo) {
         return !scriptInfo.hasMixedContent;
     }
@@ -49,9 +40,7 @@ namespace ts.server {
         }
 
         private computeHash(text: string): string {
-            return crypto.createHash("md5")
-                .update(text)
-                .digest("base64");
+            return this.project.projectService.host.createHash(text);
         }
 
         private getSourceFile(): SourceFile {
