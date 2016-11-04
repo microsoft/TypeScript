@@ -262,8 +262,13 @@ namespace ts.server {
             }
             if (response.kind === EventInstall) {
                 if (this.telemetrySender) {
-                    const body: protocol.TypingsInstalledEventBody = { installedPackages: response.packagesToInstall.join(",") };
-                    const eventName:  protocol.TypingsInstalledEventName = "typingsInstalled";
+                    const body: protocol.TypingsInstalledTelemetryEventBody = {
+                        telemetryEventName: "typingsInstalled",
+                        payload: {
+                            installedPackages: response.packagesToInstall.join(",")
+                        }
+                    };
+                    const eventName: protocol.TelemetryEventName = "telemetry";
                     this.telemetrySender.event(body, eventName);
                 }
                 return;

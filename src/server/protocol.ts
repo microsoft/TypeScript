@@ -1940,14 +1940,26 @@ namespace ts.server.protocol {
         childItems?: NavigationTree[];
     }
 
-    export type TypingsInstalledEventName = "typingsInstalled";
+    export type TelemetryEventName = "telemetry";
 
-    export interface TypingsInstalledEvent extends Event {
-        event: TypingsInstalledEventName;
-        body: TypingsInstalledEventBody;
+    export interface TelemetryEvent extends Event {
+        event: TelemetryEventName;
+        body: TelemetryEventBody;
     }
 
-    export interface TypingsInstalledEventBody {
+    export interface TelemetryEventBody {
+        telemetryEventName: string;
+        payload: any;
+    }
+
+    export type TypingsInstalledTelemetryEventName = "typingsInstalled";
+
+    export interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
+        telemetryEventName: TypingsInstalledTelemetryEventName;
+        payload: TypingsInstalledTelemetryEventPayload;
+    }
+
+    export interface TypingsInstalledTelemetryEventPayload {
         /**
          * Comma separated list of installed typing packages
          */
