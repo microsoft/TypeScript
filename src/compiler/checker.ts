@@ -5884,8 +5884,11 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol): ResolvedType {
-            Debug.assert(!!(left.flags & TypeFlags.Object) && !!(right.flags & TypeFlags.Object), "Only object types may be spread.");
+        function getSpreadType(left: Type, right: Type, symbol: Symbol): ResolvedType | IntrinsicType {
+            Debug.assert(!!(left.flags & (TypeFlags.Object | TypeFlags.Any)) && !!(right.flags & (TypeFlags.Object | TypeFlags.Any)), "Only object types may be spread.");
+            if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
+                return anyType;
+            }
             const members = createMap<Symbol>();
             const skippedPrivateMembers = createMap<boolean>();
             let stringIndexInfo: IndexInfo;
@@ -10934,7 +10937,7 @@ namespace ts {
                         typeFlags = 0;
                     }
                     const type = checkExpression((memberDecl as SpreadElementExpression).expression);
-                    if (!(type.flags & TypeFlags.Object)) {
+                    if (!(type.flags & (TypeFlags.Object | TypeFlags.Any))) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
