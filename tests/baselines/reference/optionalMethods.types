@@ -87,7 +87,7 @@ class Bar {
 
     constructor(public d?: number, public e = 10) {}
 >d : number | undefined
->e : number | undefined
+>e : number
 >10 : 10
 
     f() {
@@ -133,9 +133,9 @@ function test2(x: Bar) {
 >d : number | undefined
 
     x.e;
->x.e : number | undefined
+>x.e : number
 >x : Bar
->e : number | undefined
+>e : number
 
     x.f;
 >x.f : () => number

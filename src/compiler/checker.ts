@@ -3206,7 +3206,9 @@ namespace ts {
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 const type = checkDeclarationInitializer(declaration);
-                const isOptional = declaration.questionToken || (declaration.initializer && declaration.kind === SyntaxKind.Parameter);
+                // initialized parameters (but not parameter properties) are optional
+                const isOptional = declaration.questionToken ||
+                    (declaration.kind === SyntaxKind.Parameter && !(getModifierFlags(declaration) & ModifierFlags.ParameterPropertyModifier));
                 return addOptionality(type, isOptional && includeOptionality);
             }
 
