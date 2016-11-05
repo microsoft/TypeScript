@@ -4465,7 +4465,7 @@ namespace ts {
                     prop.type = instantiateType(target.templateType, templateMapper);
                     members[propName] = prop;
                 }
-            })
+            });
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
         }
 
@@ -6122,6 +6122,11 @@ namespace ts {
             return items;
         }
 
+        function instantiateCached<T extends Type>(type: T, mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T {
+            const instantiations = mapper.instantiations || (mapper.instantiations = []);
+            return <T>instantiations[type.id] || (instantiations[type.id] = instantiator(type, mapper));
+        }
+
         function createUnaryTypeMapper(source: Type, target: Type): TypeMapper {
             return t => t === source ? target : t;
         }
@@ -6261,28 +6266,11 @@ namespace ts {
         }
 
         function instantiateAnonymousOrMappedType(type: AnonymousType | MappedType, mapper: TypeMapper): ObjectType {
-            if (type.objectFlags & ObjectFlags.Instantiated) {
-                // If the type being instantiated is itself a instantiation, fetch the original target and
-                // combine the type mappers.
-                mapper = combineTypeMappers(type.mapper, mapper);
-                type = type.target;
-            }
-            if (mapper.instantiations) {
-                const cachedType = <ObjectType>mapper.instantiations[type.id];
-                if (cachedType) {
-                    return cachedType;
-                }
-            }
-            else {
-                mapper.instantiations = [];
-            }
-            // Mark the anonymous type as instantiated such that our infinite instantiation detection logic can recognize it
             const result = <AnonymousType | MappedType>createObjectType(type.objectFlags | ObjectFlags.Instantiated, type.symbol);
-            result.target = type;
-            result.mapper = mapper;
+            result.target = type.objectFlags & ObjectFlags.Instantiated ? type.target : type;
+            result.mapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper, mapper) : mapper;
             result.aliasSymbol = type.aliasSymbol;
             result.aliasTypeArguments = mapper.targetTypes;
-            mapper.instantiations[type.id] = result;
             return result;
         }
 
@@ -6354,10 +6342,10 @@ namespace ts {
                         return type.symbol &&
                             type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) &&
                             ((<ObjectType>type).objectFlags & ObjectFlags.Instantiated || isSymbolInScopeOfMappedTypeParameter(type.symbol, mapper)) ?
-                            instantiateAnonymousOrMappedType(<AnonymousType>type, mapper) : type;
+                            instantiateCached(type, mapper, instantiateAnonymousOrMappedType) : type;
                     }
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Mapped) {
-                        return instantiateAnonymousOrMappedType(<MappedType>type, mapper);
+                        return instantiateCached(type, mapper, instantiateAnonymousOrMappedType);
                     }
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
                         return createTypeReference((<TypeReference>type).target, instantiateList((<TypeReference>type).typeArguments, mapper, instantiateType));
