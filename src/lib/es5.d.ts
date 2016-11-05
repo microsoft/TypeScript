@@ -1343,6 +1343,25 @@ interface ArrayLike<T> {
     readonly [n: number]: T;
 }
 
+interface IteratorResult<T> {
+    done: boolean;
+    value: T;
+}
+
+interface Iterator<T> {
+    next(value?: any): IteratorResult<T>;
+    return?(value?: any): IteratorResult<T>;
+    throw?(e?: any): IteratorResult<T>;
+}
+
+interface PseudoIterable<T> {
+    __iterator__(): Iterator<T>;
+}
+
+interface PseudoIterableIterator<T> extends Iterator<T> {
+    __iterator__(): PseudoIterableIterator<T>;
+}
+
 /**
   * Represents a raw buffer of binary data, which is used to store data for the
   * different typed arrays. ArrayBuffers cannot be read from or written to directly,
