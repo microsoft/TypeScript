@@ -239,11 +239,11 @@ namespace ts {
                 const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
                 const fileName = diagnostic.file.fileName;
                 const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
-                output += `${ relativeFileName }(${ line + 1 },${ character + 1 }): `;
+                output += `${relativeFileName}(${line + 1},${character + 1}): `;
             }
 
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }${ host.getNewLine() }`;
+            output += `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
         }
         return output;
     }
@@ -307,7 +307,7 @@ namespace ts {
         // - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
         // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
         // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
-        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 0;
+        const maxNodeModuleJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 0;
         let currentNodeModulesDepth = 0;
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
@@ -329,9 +329,17 @@ namespace ts {
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createFileMap<boolean>(getCanonicalFileName);
 
-        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModule[];
+        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile);
+            resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile).map(resolved => {
+                // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
+                if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
+                    return resolved as ResolvedModuleFull;
+                }
+                const withExtension = clone(resolved) as ResolvedModuleFull;
+                withExtension.extension = extensionFromPath(resolved.resolvedFileName);
+                return withExtension;
+            });
         }
         else {
             const loader = (moduleName: string, containingFile: string) => resolveModuleName(moduleName, containingFile, options, host).resolvedModule;
@@ -454,6 +462,130 @@ namespace ts {
             return classifiableNames;
         }
 
+        interface OldProgramState {
+            program: Program;
+            file: SourceFile;
+            modifiedFilePaths: Path[];
+        }
+
+        function resolveModuleNamesReusingOldState(moduleNames: string[], containingFile: string, file: SourceFile, oldProgramState?: OldProgramState) {
+            if (!oldProgramState && !file.ambientModuleNames.length) {
+                // if old program state is not supplied and file does not contain locally defined ambient modules
+                // then the best we can do is fallback to the default logic
+                return resolveModuleNamesWorker(moduleNames, containingFile);
+            }
+
+            // at this point we know that either 
+            // - file has local declarations for ambient modules
+            // OR
+            // - old program state is available
+            // OR
+            // - both of items above
+            // With this it is possible that we can tell how some module names from the initial list will be resolved
+            // without doing actual resolution (in particular if some name was resolved to ambient module).
+            // Such names should be excluded from the list of module names that will be provided to `resolveModuleNamesWorker`
+            // since we don't want to resolve them again.
+
+            // this is a list of modules for which we cannot predict resolution so they should be actually resolved
+            let unknownModuleNames: string[];
+            // this is a list of combined results assembles from predicted and resolved results.
+            // Order in this list matches the order in the original list of module names `moduleNames` which is important
+            // so later we can split results to resolutions of modules and resolutions of module augmentations.
+            let result: ResolvedModuleFull[];
+            // a transient placeholder that is used to mark predicted resolution in the result list
+            const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
+
+            for (let i = 0; i < moduleNames.length; i++) {
+                const moduleName = moduleNames[i];
+                // module name is known to be resolved to ambient module if
+                // - module name is contained in the list of ambient modules that are locally declared in the file
+                // - in the old program module name was resolved to ambient module whose declaration is in non-modified file
+                //   (so the same module declaration will land in the new program)
+                let isKnownToResolveToAmbientModule = false;
+                if (contains(file.ambientModuleNames, moduleName)) {
+                    isKnownToResolveToAmbientModule = true;
+                    if (isTraceEnabled(options, host)) {
+                        trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName, containingFile);
+                    }
+                }
+                else {
+                    isKnownToResolveToAmbientModule = checkModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName, oldProgramState);
+                }
+
+                if (isKnownToResolveToAmbientModule) {
+                    if (!unknownModuleNames) {
+                        // found a first module name for which result can be prediced
+                        // this means that this module name should not be passed to `resolveModuleNamesWorker`.
+                        // We'll use a separate list for module names that are definitely unknown.
+                        result = new Array(moduleNames.length);
+                        // copy all module names that appear before the current one in the list
+                        // since they are known to be unknown
+                        unknownModuleNames = moduleNames.slice(0, i);
+                    }
+                    // mark prediced resolution in the result list
+                    result[i] = predictedToResolveToAmbientModuleMarker;
+                }
+                else if (unknownModuleNames) {
+                    // found unknown module name and we are already using separate list for those - add it to the list
+                    unknownModuleNames.push(moduleName);
+                }
+            }
+
+            if (!unknownModuleNames) {
+                // we've looked throught the list but have not seen any predicted resolution
+                // use default logic
+                return resolveModuleNamesWorker(moduleNames, containingFile);
+            }
+
+            const resolutions = unknownModuleNames.length
+                ? resolveModuleNamesWorker(unknownModuleNames, containingFile)
+                : emptyArray;
+
+            // combine results of resolutions and predicted results
+            let j = 0;
+            for (let i = 0; i < result.length; i++) {
+                if (result[i] == predictedToResolveToAmbientModuleMarker) {
+                    result[i] = undefined;
+                }
+                else {
+                    result[i] = resolutions[j];
+                    j++;
+                }
+            }
+            Debug.assert(j === resolutions.length);
+            return result;
+
+            function checkModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState?: OldProgramState): boolean {
+                if (!oldProgramState) {
+                    return false;
+                }
+                const resolutionToFile = getResolvedModule(oldProgramState.file, moduleName);
+                if (resolutionToFile) {
+                    // module used to be resolved to file - ignore it
+                    return false;
+                }
+                const ambientModule = oldProgram.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
+                if (!(ambientModule && ambientModule.declarations)) {
+                    return false;
+                }
+
+                // at least one of declarations should come from non-modified source file
+                const firstUnmodifiedFile = forEach(ambientModule.declarations, d => {
+                    const f = getSourceFileOfNode(d);
+                    return !contains(oldProgramState.modifiedFilePaths, f.path) && f;
+                });
+
+                if (!firstUnmodifiedFile) {
+                    return false;
+                }
+
+                if (isTraceEnabled(options, host)) {
+                    trace(host, Diagnostics.Module_0_was_resolved_as_ambient_module_declared_in_1_since_this_file_was_not_modified, moduleName, firstUnmodifiedFile.fileName);
+                }
+                return true;
+            }
+        }
+
         function tryReuseStructureFromOldProgram(): boolean {
             if (!oldProgram) {
                 return false;
@@ -462,21 +594,7 @@ namespace ts {
             // check properties that can affect structure of the program or module resolution strategy
             // if any of these properties has changed - structure cannot be reused
             const oldOptions = oldProgram.getCompilerOptions();
-            if ((oldOptions.module !== options.module) ||
-                (oldOptions.moduleResolution !== options.moduleResolution) ||
-                (oldOptions.noResolve !== options.noResolve) ||
-                (oldOptions.target !== options.target) ||
-                (oldOptions.noLib !== options.noLib) ||
-                (oldOptions.jsx !== options.jsx) ||
-                (oldOptions.allowJs !== options.allowJs) ||
-                (oldOptions.rootDir !== options.rootDir) ||
-                (oldOptions.configFilePath !== options.configFilePath) ||
-                (oldOptions.baseUrl !== options.baseUrl) ||
-                (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
-                !arrayIsEqualTo(oldOptions.lib, options.lib) ||
-                !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
-                !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
-                !equalOwnProperties(oldOptions.paths, options.paths)) {
+            if (changesAffectModuleResolution(oldOptions, options)) {
                 return false;
             }
 
@@ -495,7 +613,7 @@ namespace ts {
             // check if program source files has changed in the way that can affect structure of the program
             const newSourceFiles: SourceFile[] = [];
             const filePaths: Path[] = [];
-            const modifiedSourceFiles: SourceFile[] = [];
+            const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
 
             for (const oldSourceFile of oldProgram.getSourceFiles()) {
                 let newSourceFile = host.getSourceFileByPath
@@ -538,29 +656,8 @@ namespace ts {
                         return false;
                     }
 
-                    const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
-                    if (resolveModuleNamesWorker) {
-                        const moduleNames = map(concatenate(newSourceFile.imports, newSourceFile.moduleAugmentations), getTextOfLiteral);
-                        const resolutions = resolveModuleNamesWorker(moduleNames, newSourceFilePath);
-                        // ensure that module resolution results are still correct
-                        const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
-                        if (resolutionsChanged) {
-                            return false;
-                        }
-                    }
-                    if (resolveTypeReferenceDirectiveNamesWorker) {
-                        const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, x => x.fileName);
-                        const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath);
-                        // ensure that types resolutions are still correct
-                        const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
-                        if (resolutionsChanged) {
-                            return false;
-                        }
-                    }
-                    // pass the cache of module/types resolutions from the old source file
-                    newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
-                    newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;
-                    modifiedSourceFiles.push(newSourceFile);
+                    // tentatively approve the file
+                    modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
                 }
                 else {
                     // file has no changes - use it as is
@@ -569,6 +666,33 @@ namespace ts {
 
                 // if file has passed all checks it should be safe to reuse it
                 newSourceFiles.push(newSourceFile);
+            }
+
+            const modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
+            // try to verify results of module resolution 
+            for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
+                const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
+                if (resolveModuleNamesWorker) {
+                    const moduleNames = map(concatenate(newSourceFile.imports, newSourceFile.moduleAugmentations), getTextOfLiteral);
+                    const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, { file: oldSourceFile, program: oldProgram, modifiedFilePaths });
+                    // ensure that module resolution results are still correct
+                    const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
+                    if (resolutionsChanged) {
+                        return false;
+                    }
+                }
+                if (resolveTypeReferenceDirectiveNamesWorker) {
+                    const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, x => x.fileName);
+                    const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath);
+                    // ensure that types resolutions are still correct
+                    const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
+                    if (resolutionsChanged) {
+                        return false;
+                    }
+                }
+                // pass the cache of module/types resolutions from the old source file
+                newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
+                newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;
             }
 
             // update fileName -> file mapping
@@ -580,7 +704,7 @@ namespace ts {
             fileProcessingDiagnostics = oldProgram.getFileProcessingDiagnostics();
 
             for (const modifiedFile of modifiedSourceFiles) {
-                fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile);
+                fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
             oldProgram.structureIsReused = true;
@@ -724,7 +848,15 @@ namespace ts {
             }
         }
 
-        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+            // For JavaScript files, we report semantic errors for using TypeScript-only
+            // constructs from within a JavaScript file as syntactic errors.
+            if (isSourceFileJavaScript(sourceFile)) {
+                if (!sourceFile.additionalSyntacticDiagnostics) {
+                    sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
+                }
+                return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
+            }
             return sourceFile.parseDiagnostics;
         }
 
@@ -757,20 +889,18 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
                 const bindDiagnostics = sourceFile.bindDiagnostics;
-                // For JavaScript files, we don't want to report the normal typescript semantic errors.
-                // Instead, we just report errors for using TypeScript-only constructs from within a
-                // JavaScript file.
-                const checkDiagnostics = isSourceFileJavaScript(sourceFile) ?
-                    getJavaScriptSemanticDiagnosticsForFile(sourceFile, cancellationToken) :
-                    typeChecker.getDiagnostics(sourceFile, cancellationToken);
+                // For JavaScript files, we don't want to report semantic errors.
+                // Instead, we'll report errors for using TypeScript-only constructs from within a
+                // JavaScript file when we get syntactic diagnostics for the file.
+                const checkDiagnostics = isSourceFileJavaScript(sourceFile) ? [] : typeChecker.getDiagnostics(sourceFile, cancellationToken);
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
-                return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile);
+                return bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
             });
         }
 
-        function getJavaScriptSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
             return runWithCancellationToken(() => {
                 const diagnostics: Diagnostic[] = [];
                 walk(sourceFile);
@@ -950,8 +1080,7 @@ namespace ts {
             return runWithCancellationToken(() => {
                 const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
-                const writeFile: WriteFileCallback = () => { };
-                return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
+                return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile);
             });
         }
 
@@ -972,12 +1101,8 @@ namespace ts {
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
-        function hasExtension(fileName: string): boolean {
-            return getBaseFileName(fileName).indexOf(".") >= 0;
-        }
-
         function processRootFile(fileName: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(fileName), isDefaultLib, /*isReference*/ true);
+            processSourceFile(normalizePath(fileName), isDefaultLib);
         }
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
@@ -999,9 +1124,11 @@ namespace ts {
 
             const isJavaScriptFile = isSourceFileJavaScript(file);
             const isExternalModuleFile = isExternalModule(file);
+            const isDtsFile = isDeclarationFile(file);
 
             let imports: LiteralExpression[];
             let moduleAugmentations: LiteralExpression[];
+            let ambientModules: string[];
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
             // helpers library.
@@ -1023,6 +1150,7 @@ namespace ts {
 
             file.imports = imports || emptyArray;
             file.moduleAugmentations = moduleAugmentations || emptyArray;
+            file.ambientModuleNames = ambientModules || emptyArray;
 
             return;
 
@@ -1058,6 +1186,10 @@ namespace ts {
                                 (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
                             }
                             else if (!inAmbientModule) {
+                                if (isDtsFile) {
+                                    // for global .d.ts files record name of ambient module
+                                    (ambientModules || (ambientModules = [])).push(moduleName.text);
+                                }
                                 // An AmbientExternalModuleDeclaration declares an external module.
                                 // This type of declaration is permitted only in the global module.
                                 // The StringLiteral must specify a top - level external module name.
@@ -1085,10 +1217,7 @@ namespace ts {
             }
         }
 
-        /**
-          * 'isReference' indicates whether the file was brought in via a reference directive (rather than an import declaration)
-          */
-        function processSourceFile(fileName: string, isDefaultLib: boolean, isReference: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
+        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
             let diagnosticArgument: string[];
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
@@ -1096,7 +1225,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, isReference, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -1106,13 +1235,13 @@ namespace ts {
                 }
             }
             else {
-                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, isReference, refFile, refPos, refEnd);
+                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, isReference, refFile, refPos, refEnd))) {
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
                         diagnosticArgument = [fileName];
@@ -1141,7 +1270,7 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, isReference: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             if (filesByName.contains(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
@@ -1155,18 +1284,18 @@ namespace ts {
                 if (file && sourceFilesFoundSearchingNodeModules[file.path] && currentNodeModulesDepth == 0) {
                     sourceFilesFoundSearchingNodeModules[file.path] = false;
                     if (!options.noResolve) {
-                        processReferencedFiles(file, getDirectoryPath(fileName), isDefaultLib);
+                        processReferencedFiles(file, isDefaultLib);
                         processTypeReferenceDirectives(file);
                     }
 
                     modulesWithElidedImports[file.path] = false;
-                    processImportedModules(file, getDirectoryPath(fileName));
+                    processImportedModules(file);
                 }
                 // See if we need to reprocess the imports due to prior skipped imports
                 else if (file && modulesWithElidedImports[file.path]) {
-                    if (currentNodeModulesDepth < maxNodeModulesJsDepth) {
+                    if (currentNodeModulesDepth < maxNodeModuleJsDepth) {
                         modulesWithElidedImports[file.path] = false;
-                        processImportedModules(file, getDirectoryPath(fileName));
+                        processImportedModules(file);
                     }
                 }
 
@@ -1202,14 +1331,13 @@ namespace ts {
 
                 skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
 
-                const basePath = getDirectoryPath(fileName);
                 if (!options.noResolve) {
-                    processReferencedFiles(file, basePath, isDefaultLib);
+                    processReferencedFiles(file, isDefaultLib);
                     processTypeReferenceDirectives(file);
                 }
 
                 // always process imported modules to record module name resolutions
-                processImportedModules(file, basePath);
+                processImportedModules(file);
 
                 if (isDefaultLib) {
                     files.unshift(file);
@@ -1222,10 +1350,10 @@ namespace ts {
             return file;
         }
 
-        function processReferencedFiles(file: SourceFile, basePath: string, isDefaultLib: boolean) {
+        function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, isDefaultLib, /*isReference*/ true, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, isDefaultLib, file, ref.pos, ref.end);
             });
         }
 
@@ -1256,7 +1384,7 @@ namespace ts {
             if (resolvedTypeReferenceDirective) {
                 if (resolvedTypeReferenceDirective.primary) {
                     // resolved from the primary path
-                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, /*isReference*/ true, refFile, refPos, refEnd);
+                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, refFile, refPos, refEnd);
                 }
                 else {
                     // If we already resolved to this file, it must have been a secondary reference. Check file contents
@@ -1276,7 +1404,7 @@ namespace ts {
                     }
                     else {
                         // First resolution of this library
-                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, /*isReference*/ true, refFile, refPos, refEnd);
+                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, refFile, refPos, refEnd);
                     }
                 }
             }
@@ -1302,41 +1430,46 @@ namespace ts {
             return host.getCanonicalFileName(fileName);
         }
 
-        function processImportedModules(file: SourceFile, basePath: string) {
+        function processImportedModules(file: SourceFile) {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
-                file.resolvedModules = createMap<ResolvedModule>();
+                file.resolvedModules = createMap<ResolvedModuleFull>();
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
-                const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
+                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file);
+                Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
+
+                    if (!resolution) {
+                        continue;
+                    }
+
+                    const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
+                    const isJsFileFromNodeModules = isFromNodeModulesSearch && !extensionIsTypeScript(resolution.extension);
+                    const resolvedFileName = resolution.resolvedFileName;
+
+                    if (isFromNodeModulesSearch) {
+                        currentNodeModulesDepth++;
+                    }
 
                     // add file to program only if:
                     // - resolution was successful
                     // - noResolve is falsy
                     // - module name comes from the list of imports
                     // - it's not a top level JavaScript module that exceeded the search max
-                    const isFromNodeModulesSearch = resolution && resolution.isExternalLibraryImport;
-                    const isJsFileFromNodeModules = isFromNodeModulesSearch && hasJavaScriptFileExtension(resolution.resolvedFileName);
-
-                    if (isFromNodeModulesSearch) {
-                        currentNodeModulesDepth++;
-                    }
-
-                    const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModulesJsDepth;
-                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
+                    const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
+                    // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
+                    // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
+                    const shouldAddFile = resolvedFileName && !getResolutionDiagnostic(options, resolution) && !options.noResolve && i < file.imports.length && !elideImport;
 
                     if (elideImport) {
                         modulesWithElidedImports[file.path] = true;
                     }
                     else if (shouldAddFile) {
-                        findSourceFile(resolution.resolvedFileName,
-                                toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName),
-                                /*isDefaultLib*/ false, /*isReference*/ false,
-                                file,
-                                skipTrivia(file.text, file.imports[i].pos),
-                                file.imports[i].end);
+                        const path = toPath(resolvedFileName, currentDirectory, getCanonicalFileName);
+                        const pos = skipTrivia(file.text, file.imports[i].pos);
+                        findSourceFile(resolvedFileName, path, /*isDefaultLib*/ false, file, pos, file.imports[i].end);
                     }
 
                     if (isFromNodeModulesSearch) {
@@ -1348,7 +1481,6 @@ namespace ts {
                 // no imports - drop cached module resolutions
                 file.resolvedModules = undefined;
             }
-            return;
         }
 
         function computeCommonSourceDirectory(sourceFiles: SourceFile[]): string {
@@ -1541,7 +1673,7 @@ namespace ts {
             if (!options.noEmit && !options.suppressOutputPathCheck) {
                 const emitHost = getEmitHost();
                 const emitFilesSeen = createFileMap<boolean>(!host.useCaseSensitiveFileNames() ? key => key.toLocaleLowerCase() : undefined);
-                forEachExpectedEmitFile(emitHost, (emitFileNames, sourceFiles, isBundledEmit) => {
+                forEachExpectedEmitFile(emitHost, (emitFileNames) => {
                     verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
                     verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
                 });
@@ -1553,13 +1685,24 @@ namespace ts {
                     const emitFilePath = toPath(emitFileName, currentDirectory, getCanonicalFileName);
                     // Report error if the output overwrites input file
                     if (filesByName.contains(emitFilePath)) {
-                        createEmitBlockingDiagnostics(emitFileName, emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
+                        if (options.noEmitOverwritenFiles && !options.out && !options.outDir && !options.outFile) {
+                            blockEmittingOfFile(emitFileName);
+                        }
+                        else {
+                            let chain: DiagnosticMessageChain;
+                            if (!options.configFilePath) {
+                                // The program is from either an inferred project or an external project
+                                chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig);
+                            }
+                            chain = chainDiagnosticMessages(chain, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file, emitFileName);
+                            blockEmittingOfFile(emitFileName, createCompilerDiagnosticFromMessageChain(chain));
+                        }
                     }
 
                     // Report error if multiple files write into same file
                     if (emitFilesSeen.contains(emitFilePath)) {
                         // Already seen the same emit file - report error
-                        createEmitBlockingDiagnostics(emitFileName, emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
+                        blockEmittingOfFile(emitFileName, createCompilerDiagnostic(Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files, emitFileName));
                     }
                     else {
                         emitFilesSeen.set(emitFilePath, true);
@@ -1568,9 +1711,39 @@ namespace ts {
             }
         }
 
-        function createEmitBlockingDiagnostics(emitFileName: string, emitFilePath: Path, message: DiagnosticMessage) {
+        function blockEmittingOfFile(emitFileName: string, diag?: Diagnostic) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName, currentDirectory, getCanonicalFileName), true);
-            programDiagnostics.add(createCompilerDiagnostic(message, emitFileName));
+            if (diag) {
+                programDiagnostics.add(diag);
+            }
+        }
+    }
+
+    /* @internal */
+    /**
+     * Returns a DiagnosticMessage if we won't include a resolved module due to its extension.
+     * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
+     * This returns a diagnostic even if the module will be an untyped module.
+     */
+    export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModuleFull): DiagnosticMessage | undefined {
+        switch (extension) {
+            case Extension.Ts:
+            case Extension.Dts:
+                // These are always allowed.
+                return undefined;
+            case Extension.Tsx:
+                return needJsx();
+            case Extension.Jsx:
+                return needJsx() || needAllowJs();
+            case Extension.Js:
+                return needAllowJs();
+        }
+
+        function needJsx() {
+            return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
+        }
+        function needAllowJs() {
+            return options.allowJs ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
         }
     }
 }

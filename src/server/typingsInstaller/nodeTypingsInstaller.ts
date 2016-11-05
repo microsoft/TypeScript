@@ -126,7 +126,7 @@ namespace ts.server.typingsInstaller {
                 case NpmInstallRequest: {
                         const command = `${this.npmPath} install ${args.join(" ")} --save-dev`;
                         const start = Date.now();
-                        this.exec(command, { cwd }, (err, stdout, stderr) => {
+                        this.exec(command, { cwd }, (_err, stdout, stderr) => {
                             if (this.log.isEnabled()) {
                                 this.log.writeLine(`${requestKind} #${requestId} took: ${Date.now() - start} ms${sys.newLine}stdout: ${stdout}${sys.newLine}stderr: ${stderr}`);
                             }

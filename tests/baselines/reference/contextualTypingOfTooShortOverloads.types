@@ -1,0 +1,143 @@
+=== tests/cases/compiler/contextualTypingOfTooShortOverloads.ts ===
+// small repro from #11875
+var use: Overload;
+>use : Overload
+>Overload : Overload
+
+use((req, res) => {});
+>use((req, res) => {}) : void
+>use : Overload
+>(req, res) => {} : (req: any, res: any) => void
+>req : any
+>res : any
+
+interface Overload {
+>Overload : Overload
+
+    (handler1: (req1: string) => void): void;
+>handler1 : (req1: string) => void
+>req1 : string
+
+    (handler2: (req2: number, res2: number) => void): void;
+>handler2 : (req2: number, res2: number) => void
+>req2 : number
+>res2 : number
+}
+// larger repro from #11875
+let app: MyApp;
+>app : MyApp
+>MyApp : MyApp
+
+app.use((err: any, req, res, next) => { return; });
+>app.use((err: any, req, res, next) => { return; }) : MyApp
+>app.use : IRouterHandler<MyApp> & IRouterMatcher<MyApp>
+>app : MyApp
+>use : IRouterHandler<MyApp> & IRouterMatcher<MyApp>
+>(err: any, req, res, next) => { return; } : (err: any, req: any, res: any, next: any) => void
+>err : any
+>req : any
+>res : any
+>next : any
+
+
+interface MyApp {
+>MyApp : MyApp
+
+    use: IRouterHandler<this> & IRouterMatcher<this>;
+>use : IRouterHandler<this> & IRouterMatcher<this>
+>IRouterHandler : IRouterHandler<T>
+>IRouterMatcher : IRouterMatcher<T>
+}
+
+interface IRouterHandler<T> {
+>IRouterHandler : IRouterHandler<T>
+>T : T
+
+    (...handlers: RequestHandler[]): T;
+>handlers : RequestHandler[]
+>RequestHandler : RequestHandler
+>T : T
+
+    (...handlers: RequestHandlerParams[]): T;
+>handlers : RequestHandlerParams[]
+>RequestHandlerParams : RequestHandlerParams
+>T : T
+}
+
+interface IRouterMatcher<T> {
+>IRouterMatcher : IRouterMatcher<T>
+>T : T
+
+    (path: PathParams, ...handlers: RequestHandler[]): T;
+>path : PathParams
+>PathParams : PathParams
+>handlers : RequestHandler[]
+>RequestHandler : RequestHandler
+>T : T
+
+    (path: PathParams, ...handlers: RequestHandlerParams[]): T;
+>path : PathParams
+>PathParams : PathParams
+>handlers : RequestHandlerParams[]
+>RequestHandlerParams : RequestHandlerParams
+>T : T
+}
+
+type PathParams = string | RegExp | (string | RegExp)[];
+>PathParams : PathParams
+>RegExp : RegExp
+>RegExp : RegExp
+
+type RequestHandlerParams = RequestHandler | ErrorRequestHandler | (RequestHandler | ErrorRequestHandler)[];
+>RequestHandlerParams : RequestHandlerParams
+>RequestHandler : RequestHandler
+>ErrorRequestHandler : ErrorRequestHandler
+>RequestHandler : RequestHandler
+>ErrorRequestHandler : ErrorRequestHandler
+
+interface RequestHandler {
+>RequestHandler : RequestHandler
+
+    (req: Request, res: Response, next: NextFunction): any;
+>req : Request
+>Request : Request
+>res : Response
+>Response : Response
+>next : NextFunction
+>NextFunction : NextFunction
+}
+
+interface ErrorRequestHandler {
+>ErrorRequestHandler : ErrorRequestHandler
+
+    (err: any, req: Request, res: Response, next: NextFunction): any;
+>err : any
+>req : Request
+>Request : Request
+>res : Response
+>Response : Response
+>next : NextFunction
+>NextFunction : NextFunction
+}
+
+interface Request {
+>Request : Request
+
+    method: string;
+>method : string
+}
+
+interface Response {
+>Response : Response
+
+    statusCode: number;
+>statusCode : number
+}
+
+interface NextFunction {
+>NextFunction : NextFunction
+
+    (err?: any): void;
+>err : any
+}
+

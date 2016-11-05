@@ -67,12 +67,12 @@ var Kettle = (function () {
 exports.Kettle = Kettle;
 exports.Pot = 2;
 exports.Pot = 42; // Shouldn't error
+var Utensils;
 (function (Utensils) {
     Utensils[Utensils["Spoon"] = 0] = "Spoon";
     Utensils[Utensils["Fork"] = 1] = "Fork";
     Utensils[Utensils["Knife"] = 2] = "Knife";
-})(exports.Utensils || (exports.Utensils = {}));
-var Utensils = exports.Utensils;
+})(Utensils = exports.Utensils || (exports.Utensils = {}));
 (function (Utensils) {
     Utensils[Utensils["Spork"] = 3] = "Spork";
-})(exports.Utensils || (exports.Utensils = {}));
+})(Utensils = exports.Utensils || (exports.Utensils = {}));

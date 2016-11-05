@@ -54,6 +54,11 @@ namespace ts {
             const body = (<ModuleDeclaration>node).body;
             return body ? getModuleInstanceState(body) : ModuleInstanceState.Instantiated;
         }
+        // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
+        // be considered the same as type alias
+        else if (node.kind === SyntaxKind.Identifier && (<Identifier>node).isInJSDocNamespace) {
+            return ModuleInstanceState.NonInstantiated;
+        }
         else {
             return ModuleInstanceState.Instantiated;
         }
@@ -429,7 +434,11 @@ namespace ts {
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-                if (!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
+                const isJSDocTypedefInJSDocNamespace = node.kind === SyntaxKind.JSDocTypedefTag &&
+                    node.name &&
+                    node.name.kind === SyntaxKind.Identifier &&
+                    (<Identifier>node.name).isInJSDocNamespace;
+                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
                     const exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -490,8 +499,8 @@ namespace ts {
                 const saveReturnTarget = currentReturnTarget;
                 const saveActiveLabels = activeLabels;
                 const saveHasExplicitReturn = hasExplicitReturn;
-                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !!getImmediatelyInvokedFunctionExpression(node);
-                // An IIFE is considered part of the containing control flow. Return statements behave
+                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasModifier(node, ModifierFlags.Async) && !!getImmediatelyInvokedFunctionExpression(node);
+                // A non-async IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
                 if (isIIFE) {
                     currentReturnTarget = createBranchLabel();
@@ -883,8 +892,13 @@ namespace ts {
 
         function bindDoStatement(node: DoStatement): void {
             const preDoLabel = createLoopLabel();
-            const preConditionLabel = createBranchLabel();
-            const postDoLabel = createBranchLabel();
+            const enclosingLabeledStatement = node.parent.kind === SyntaxKind.LabeledStatement
+                ? lastOrUndefined(activeLabels)
+                : undefined;
+            // if do statement is wrapped in labeled statement then target labels for break/continue with or without 
+            // label should be the same 
+            const preConditionLabel = enclosingLabeledStatement ? enclosingLabeledStatement.continueTarget : createBranchLabel();
+            const postDoLabel = enclosingLabeledStatement ? enclosingLabeledStatement.breakTarget : createBranchLabel();
             addAntecedent(preDoLabel, currentFlow);
             currentFlow = preDoLabel;
             bindIterativeStatement(node.statement, postDoLabel, preConditionLabel);
@@ -984,24 +998,44 @@ namespace ts {
         }
 
         function bindTryStatement(node: TryStatement): void {
-            const postFinallyLabel = createBranchLabel();
+            const preFinallyLabel = createBranchLabel();
             const preTryFlow = currentFlow;
             // TODO: Every statement in try block is potentially an exit point!
             bind(node.tryBlock);
-            addAntecedent(postFinallyLabel, currentFlow);
+            addAntecedent(preFinallyLabel, currentFlow);
+
+            const flowAfterTry = currentFlow;
+            let flowAfterCatch = unreachableFlow;
+
             if (node.catchClause) {
                 currentFlow = preTryFlow;
                 bind(node.catchClause);
-                addAntecedent(postFinallyLabel, currentFlow);
+                addAntecedent(preFinallyLabel, currentFlow);
+
+                flowAfterCatch = currentFlow;
             }
             if (node.finallyBlock) {
-                currentFlow = preTryFlow;
+                // in finally flow is combined from pre-try/flow from try/flow from catch
+                // pre-flow is necessary to make sure that finally is reachable even if finally flows in both try and finally blocks are unreachable
+                addAntecedent(preFinallyLabel, preTryFlow);
+                currentFlow = finishFlowLabel(preFinallyLabel);
                 bind(node.finallyBlock);
+                // if flow after finally is unreachable - keep it
+                // otherwise check if flows after try and after catch are unreachable
+                // if yes - convert current flow to unreachable
+                // i.e.
+                // try { return "1" } finally { console.log(1); }
+                // console.log(2); // this line should be unreachable even if flow falls out of finally block
+                if (!(currentFlow.flags & FlowFlags.Unreachable)) {
+                    if ((flowAfterTry.flags & FlowFlags.Unreachable) && (flowAfterCatch.flags & FlowFlags.Unreachable)) {
+                        currentFlow = flowAfterTry === reportedUnreachableFlow || flowAfterCatch === reportedUnreachableFlow
+                            ? reportedUnreachableFlow
+                            : unreachableFlow;
+                    }
+                }
             }
-            // if try statement has finally block and flow after finally block is unreachable - keep it
-            // otherwise use whatever flow was accumulated at postFinallyLabel
-            if (!node.finallyBlock || !(currentFlow.flags & FlowFlags.Unreachable)) {
-                currentFlow = finishFlowLabel(postFinallyLabel);
+            else {
+                currentFlow = finishFlowLabel(preFinallyLabel);
             }
         }
 
@@ -1082,8 +1116,11 @@ namespace ts {
             if (!activeLabel.referenced && !options.allowUnusedLabels) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node.label, Diagnostics.Unused_label));
             }
-            addAntecedent(postStatementLabel, currentFlow);
-            currentFlow = finishFlowLabel(postStatementLabel);
+            if (!node.statement || node.statement.kind !== SyntaxKind.DoStatement) {
+                // do statement sets current flow inside bindDoStatement
+                addAntecedent(postStatementLabel, currentFlow);
+                currentFlow = finishFlowLabel(postStatementLabel);
+            }
         }
 
         function bindDestructuringTargetFlow(node: Expression) {
@@ -1172,9 +1209,9 @@ namespace ts {
             }
             else {
                 forEachChild(node, bind);
-                if (operator === SyntaxKind.EqualsToken && !isAssignmentTarget(node)) {
+                if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
                     bindAssignmentTargetFlow(node.left);
-                    if (node.left.kind === SyntaxKind.ElementAccessExpression) {
+                    if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
                         const elementAccess = <ElementAccessExpression>node.left;
                         if (isNarrowableOperand(elementAccess.expression)) {
                             currentFlow = createFlowArrayMutation(currentFlow, node);
@@ -1197,9 +1234,11 @@ namespace ts {
             const postExpressionLabel = createBranchLabel();
             bindCondition(node.condition, trueLabel, falseLabel);
             currentFlow = finishFlowLabel(trueLabel);
+            bind(node.questionToken);
             bind(node.whenTrue);
             addAntecedent(postExpressionLabel, currentFlow);
             currentFlow = finishFlowLabel(falseLabel);
+            bind(node.colonToken);
             bind(node.whenFalse);
             addAntecedent(postExpressionLabel, currentFlow);
             currentFlow = finishFlowLabel(postExpressionLabel);
@@ -1808,6 +1847,17 @@ namespace ts {
             switch (node.kind) {
                 /* Strict mode checks */
                 case SyntaxKind.Identifier:
+                    // for typedef type names with namespaces, bind the new jsdoc type symbol here
+                    // because it requires all containing namespaces to be in effect, namely the
+                    // current "blockScopeContainer" needs to be set to its immediate namespace parent.
+                    if ((<Identifier>node).isInJSDocNamespace) {
+                        let parentNode = node.parent;
+                        while (parentNode && parentNode.kind !== SyntaxKind.JSDocTypedefTag) {
+                            parentNode = parentNode.parent;
+                        }
+                        bindBlockScopedDeclaration(<Declaration>parentNode, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        break;
+                    }
                 case SyntaxKind.ThisKeyword:
                     if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                         node.flowNode = currentFlow;
@@ -1931,6 +1981,10 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.JSDocTypedefTag:
+                    if (!(<JSDocTypedefTag>node).fullName || (<JSDocTypedefTag>node).fullName.kind === SyntaxKind.Identifier) {
+                        return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                    }
+                    break;
                 case SyntaxKind.TypeAliasDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 case SyntaxKind.EnumDeclaration:
@@ -2052,7 +2106,9 @@ namespace ts {
         function setCommonJsModuleIndicator(node: Node) {
             if (!file.commonJsModuleIndicator) {
                 file.commonJsModuleIndicator = node;
-                bindSourceFileAsExternalModule();
+                if (!file.externalModuleIndicator) {
+                    bindSourceFileAsExternalModule();
+                }
             }
         }
 
@@ -2399,6 +2455,9 @@ namespace ts {
             case SyntaxKind.HeritageClause:
                 return computeHeritageClause(<HeritageClause>node, subtreeFlags);
 
+            case SyntaxKind.CatchClause:
+                return computeCatchClause(<CatchClause>node, subtreeFlags);
+
             case SyntaxKind.ExpressionWithTypeArguments:
                 return computeExpressionWithTypeArguments(<ExpressionWithTypeArguments>node, subtreeFlags);
 
@@ -2485,7 +2544,7 @@ namespace ts {
             && (leftKind === SyntaxKind.ObjectLiteralExpression
                 || leftKind === SyntaxKind.ArrayLiteralExpression)) {
             // Destructuring assignments are ES6 syntax.
-            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.DestructuringAssignment;
+            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.AsteriskAsteriskToken
             || operatorTokenKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
@@ -2566,9 +2625,9 @@ namespace ts {
 
             // A class with a parameter property assignment, property initializer, or decorator is
             // TypeScript syntax.
-            // An exported declaration may be TypeScript syntax.
+            // An exported declaration may be TypeScript syntax, but is handled by the visitor
+            // for a namespace declaration.
             if ((subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask)
-                || (modifierFlags & ModifierFlags.Export)
                 || node.typeParameters) {
                 transformFlags |= TransformFlags.AssertTypeScript;
             }
@@ -2622,6 +2681,17 @@ namespace ts {
             default:
                 Debug.fail("Unexpected token for heritage clause");
                 break;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeCatchClause(node: CatchClause, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+
+        if (node.variableDeclaration && isBindingPattern(node.variableDeclaration.name)) {
+            transformFlags |= TransformFlags.AssertES2015;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2726,11 +2796,6 @@ namespace ts {
         }
         else {
             transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclarationOrCompletion;
-
-            // If a FunctionDeclaration is exported, then it is either ES6 or TypeScript syntax.
-            if (modifierFlags & ModifierFlags.Export) {
-                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES2015;
-            }
 
             // TypeScript-specific modifiers, type parameters, and type annotations are TypeScript
             // syntax.
@@ -2873,11 +2938,6 @@ namespace ts {
         else {
             transformFlags = subtreeFlags;
 
-            // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
-            if (modifierFlags & ModifierFlags.Export) {
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertTypeScript;
-            }
-
             if (declarationListTransformFlags & TransformFlags.ContainsBindingPattern) {
                 transformFlags |= TransformFlags.AssertES2015;
             }
@@ -2994,12 +3054,6 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertJsx;
                 break;
 
-            case SyntaxKind.ExportKeyword:
-                // This node is both ES6 and TypeScript syntax.
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.AssertTypeScript;
-                break;
-
-            case SyntaxKind.DefaultKeyword:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
             case SyntaxKind.TemplateMiddle:
@@ -3008,6 +3062,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.ForOfStatement:
+            case SyntaxKind.StaticKeyword:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES2015;
                 break;
@@ -3044,6 +3099,8 @@ namespace ts {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.ThisType:
+            case SyntaxKind.TypeOperator:
+            case SyntaxKind.IndexedAccessType:
             case SyntaxKind.LiteralType:
                 // Types and signatures are TypeScript syntax, and exclude all other facts.
                 transformFlags = TransformFlags.AssertTypeScript;

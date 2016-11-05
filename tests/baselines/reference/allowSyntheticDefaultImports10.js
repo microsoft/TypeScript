@@ -13,5 +13,5 @@ Foo.default.default.foo();
 //// [a.js]
 "use strict";
 var Foo = require("./b");
-Foo.default.bar();
-Foo.default.default.foo();
+Foo["default"].bar();
+Foo["default"]["default"].foo();

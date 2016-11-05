@@ -553,6 +553,7 @@ namespace ts {
             return undefined;
         }
 
+        aggregateTransformFlags(node);
         const visited = visitor(node);
         if (visited === node) {
             return node;
@@ -621,6 +622,7 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
+            aggregateTransformFlags(node);
             const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
@@ -692,7 +694,7 @@ namespace ts {
 
             // Signature elements
             case SyntaxKind.Parameter:
-                return updateParameterDeclaration(<ParameterDeclaration>node,
+                return updateParameter(<ParameterDeclaration>node,
                     visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
@@ -1331,18 +1333,18 @@ namespace ts {
     export namespace Debug {
         export const failNotOptional = shouldAssert(AssertionLevel.Normal)
             ? (message?: string) => assert(false, message || "Node not optional.")
-            : (message?: string) => {};
+            : noop;
 
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, message?: string) => assert(false, message || "Unexpected node.", () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`)
-            : (node: Node, message?: string) => {};
+            : noop;
 
         export const assertNode = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
                     test === undefined || test(node),
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
-            : (node: Node, test: (node: Node) => boolean, message?: string) => {};
+            : noop;
 
         function getFunctionName(func: Function) {
             if (typeof func !== "function") {

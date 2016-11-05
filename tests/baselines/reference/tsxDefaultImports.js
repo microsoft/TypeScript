@@ -25,9 +25,9 @@ var SomeClass = (function () {
     }
     return SomeClass;
 }());
+SomeClass.E = SomeEnum;
 exports.__esModule = true;
 exports["default"] = SomeClass;
-SomeClass.E = SomeEnum;
 //// [b.js]
 "use strict";
 var a_1 = require("./a");
