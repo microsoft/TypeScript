@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(26,12): error TS2697: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(26,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
 tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(31,12): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(31,12): error TS2697: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(37,12): error TS2697: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(42,12): error TS2697: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(48,12): error TS2697: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(53,12): error TS2697: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(31,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(37,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(42,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(48,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts(53,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflictsEs6.ts (7 errors) ====
@@ -35,7 +35,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameCon
     class StaticPrototype {
         static prototype: number; // error
                ~~~~~~~~~
-!!! error TS2697: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
+!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
         prototype: string; // ok
     }
     
@@ -44,37 +44,37 @@ tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameCon
                ~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'prototype'.
                ~~~~~~~~~
-!!! error TS2697: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
+!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
         prototype() {} // ok
     }
     
     
     class StaticCaller {
-        static caller: number; // // error
+        static caller: number; // error
                ~~~~~~
-!!! error TS2697: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
+!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
         caller: string; // ok
     }
     
     class StaticCallerFn {
-        static caller() {} // // error
+        static caller() {} // error
                ~~~~~~
-!!! error TS2697: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
+!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
         caller() {} // ok
     }
     
     
     class StaticArguments {
-        static arguments: number; // // error
+        static arguments: number; // error
                ~~~~~~~~~
-!!! error TS2697: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
+!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
         arguments: string; // ok
     }
     
     class StaticArgumentsFn {
-        static arguments() {} // // error
+        static arguments() {} // error
                ~~~~~~~~~
-!!! error TS2697: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
+!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
         arguments() {} // ok
     }
     

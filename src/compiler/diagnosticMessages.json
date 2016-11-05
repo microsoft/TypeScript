@@ -1979,18 +1979,14 @@
         "category": "Error",
         "code": 2696
     },
-<<<<<<< HEAD
-    "Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.": {
-        "category": "Error",
-        "code": 2699
-    },
-=======
     "An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
         "category": "Error",
         "code": 2697
     },
-
->>>>>>> upstream/master
+    "Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.": {
+        "category": "Error",
+        "code": 2699
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

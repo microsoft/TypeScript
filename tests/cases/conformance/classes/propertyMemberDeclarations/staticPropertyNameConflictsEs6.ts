@@ -35,22 +35,22 @@ class StaticPrototypeFn {
 
 
 class StaticCaller {
-    static caller: number; // // error
+    static caller: number; // error
     caller: string; // ok
 }
 
 class StaticCallerFn {
-    static caller() {} // // error
+    static caller() {} // error
     caller() {} // ok
 }
 
 
 class StaticArguments {
-    static arguments: number; // // error
+    static arguments: number; // error
     arguments: string; // ok
 }
 
 class StaticArgumentsFn {
-    static arguments() {} // // error
+    static arguments() {} // error
     arguments() {} // ok
 }
