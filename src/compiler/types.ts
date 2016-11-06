@@ -899,7 +899,7 @@ namespace ts {
         indexType: TypeNode;
     }
 
-    export interface MappedTypeNode extends TypeNode {
+    export interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
         readonlyToken?: ReadonlyToken;
         typeParameter: TypeParameterDeclaration;
@@ -2850,7 +2850,9 @@ namespace ts {
     export interface MappedType extends ObjectType {
         typeParameter: TypeParameter;
         templateType: Type;
-        target?: MappedType;  // Instantiation target
+        isReadonly: boolean;
+        isOptional: boolean;
+        // target?: MappedType;  // Instantiation target
         mapper?: TypeMapper;  // Instantiation mapper
     }
 
