@@ -14764,47 +14764,41 @@ namespace ts {
             }
         }
 
-        // Static members may conflict with non-configurable non-writable built-in Function.prototype properties 
+        // Static members may conflict with non-configurable non-writable built-in Function object properties 
         // see https://github.com/microsoft/typescript/issues/442.
         function checkClassForStaticPropertyNameConflicts(node: ClassLikeDeclaration) {
-            const es5_descriptors: PropertyDescriptorMap = {
-                // see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.3
-                // see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.5
-                "name":      { configurable: false, writable: false },
-                "length":    { configurable: false, writable: false },
-                "prototype": { configurable: false, writable: false },
-
-                // see https://github.com/microsoft/typescript/issues/442
-                "caller":    { configurable: false, writable: false },
-                "arguments": { configurable: false, writable: false }
-            };
-            const post_es5_descriptors: PropertyDescriptorMap = {
-                // see http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-the-function-constructor
-                // see http://www.ecma-international.org/ecma-262/6.0/#sec-function-instances
-                "name":      { configurable: true,  writable: false },
-                "length":    { configurable: true,  writable: false },
-                "prototype": { configurable: false, writable: false },
-                "caller":    { configurable: false, writable: false },
-                "arguments": { configurable: false, writable: false }
-            };
             const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
             const className = getSymbolOfNode(node).name;
-
             for (const member of node.members) {
-                const isStatic = forEach(member.modifiers, (m: Modifier) => m.kind === SyntaxKind.StaticKeyword);
-                if (isStatic) {
-                    const memberNameNode = member.name;
-                    if (memberNameNode) {
-                        const memberName = getPropertyNameForPropertyNameNode(memberNameNode);
-                        let descriptor: PropertyDescriptor = undefined;
-                        if (languageVersion <= ScriptTarget.ES5) {
-                            descriptor = es5_descriptors.hasOwnProperty(memberName) ? es5_descriptors[memberName] : undefined;
-                        }
-                        else if (languageVersion > ScriptTarget.ES5) {
-                            descriptor = post_es5_descriptors.hasOwnProperty(memberName) ? post_es5_descriptors[memberName] : undefined;
-                        }
-                        if (descriptor && descriptor.configurable === false && descriptor.writable === false) {
+                const isStatic = forEach(member.modifiers, (m: Modifier) => m.kind  === SyntaxKind.StaticKeyword);
+                const isMethod = member.kind === SyntaxKind.MethodDeclaration;
+                const memberNameNode = member.name;
+                if (isStatic && memberNameNode) {
+                    const memberName = getPropertyNameForPropertyNameNode(memberNameNode);
+                    if (languageVersion <= ScriptTarget.ES5) {  // ES3, ES5
+                        // see also http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.3
+                        // see also http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.5
+                        if (memberName === "prototype" ||
+                            memberName === "name" ||
+                            memberName === "length" ||
+                            memberName === "caller" ||
+                            memberName === "arguments"
+                        ) {
                             error(memberNameNode, message, memberName, className);
+                        }
+                    }
+                    else { // ES6+
+                        // see also http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-the-function-constructor
+                        // see also http://www.ecma-international.org/ecma-262/6.0/#sec-function-instances
+                        if (memberName === "prototype") {
+                            error(memberNameNode, message, memberName, className);
+                        }
+                        else if ((
+                            memberName === "caller" ||
+                            memberName === "arguments" ) &&
+                            isMethod === false
+                        ) {
+                           error(memberNameNode, message, memberName, className);
                         }
                     }
                 }

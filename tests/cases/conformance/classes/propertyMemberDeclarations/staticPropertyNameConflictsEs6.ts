@@ -40,7 +40,7 @@ class StaticCaller {
 }
 
 class StaticCallerFn {
-    static caller() {} // error
+    static caller() {} // ok
     caller() {} // ok
 }
 
@@ -51,6 +51,6 @@ class StaticArguments {
 }
 
 class StaticArgumentsFn {
-    static arguments() {} // error
+    static arguments() {} // ok
     arguments() {} // ok
 }
