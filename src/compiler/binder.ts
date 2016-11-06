@@ -895,8 +895,8 @@ namespace ts {
             const enclosingLabeledStatement = node.parent.kind === SyntaxKind.LabeledStatement
                 ? lastOrUndefined(activeLabels)
                 : undefined;
-            // if do statement is wrapped in labeled statement then target labels for break/continue with or without 
-            // label should be the same 
+            // if do statement is wrapped in labeled statement then target labels for break/continue with or without
+            // label should be the same
             const preConditionLabel = enclosingLabeledStatement ? enclosingLabeledStatement.continueTarget : createBranchLabel();
             const postDoLabel = enclosingLabeledStatement ? enclosingLabeledStatement.breakTarget : createBranchLabel();
             addAntecedent(preDoLabel, currentFlow);
@@ -2291,7 +2291,7 @@ namespace ts {
 
         function bindFunctionDeclaration(node: FunctionDeclaration) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
-                if (isAsyncFunctionLike(node)) {
+                if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
             }
@@ -2308,7 +2308,7 @@ namespace ts {
 
         function bindFunctionExpression(node: FunctionExpression) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
-                if (isAsyncFunctionLike(node)) {
+                if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
             }
@@ -2322,7 +2322,7 @@ namespace ts {
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
-                if (isAsyncFunctionLike(node)) {
+                if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
                 if (nodeIsDecorated(node)) {

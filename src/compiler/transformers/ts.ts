@@ -1670,7 +1670,7 @@ namespace ts {
             if (isFunctionLike(node) && node.type) {
                 return serializeTypeNode(node.type);
             }
-            else if (isAsyncFunctionLike(node)) {
+            else if (isAsyncFunction(node)) {
                 return createIdentifier("Promise");
             }
 

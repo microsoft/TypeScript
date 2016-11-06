@@ -133,7 +133,7 @@ namespace ts {
          * @param node The method node.
          */
         function visitMethodDeclaration(node: MethodDeclaration) {
-            if (!isAsyncFunctionLike(node)) {
+            if (!isAsyncFunction(node)) {
                 return node;
             }
             const method = createMethod(
@@ -166,7 +166,7 @@ namespace ts {
          * @param node The function node.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-            if (!isAsyncFunctionLike(node)) {
+            if (!isAsyncFunction(node)) {
                 return node;
             }
             const func = createFunctionDeclaration(
@@ -194,7 +194,7 @@ namespace ts {
          * @param node The function expression node.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            if (!isAsyncFunctionLike(node)) {
+            if (!isAsyncFunction(node)) {
                 return node;
             }
             if (nodeIsMissing(node.body)) {
@@ -223,7 +223,7 @@ namespace ts {
          * - The node is marked async
          */
         function visitArrowFunction(node: ArrowFunction) {
-            if (!isAsyncFunctionLike(node)) {
+            if (!isAsyncFunction(node)) {
                 return node;
             }
             const func = createArrowFunction(
