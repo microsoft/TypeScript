@@ -2243,11 +2243,8 @@ namespace ts {
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
                     }
-                    else if (getObjectFlags(type) & ObjectFlags.Anonymous) {
+                    else if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
-                    }
-                    else if (getObjectFlags(type) & ObjectFlags.Mapped) {
-                        writeMappedType(<MappedType>type);
                     }
                     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
@@ -2465,6 +2462,13 @@ namespace ts {
                 }
 
                 function writeLiteralType(type: ObjectType, flags: TypeFormatFlags) {
+                    if (type.objectFlags & ObjectFlags.Mapped) {
+                        if (getConstraintTypeFromMappedType(<MappedType>type).flags & (TypeFlags.TypeParameter | TypeFlags.Index)) {
+                            writeMappedType(<MappedType>type);
+                            return;
+                        }
+                    }
+
                     const resolved = resolveStructuredTypeMembers(type);
                     if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
@@ -2541,36 +2545,30 @@ namespace ts {
                 }
 
                 function writeMappedType(type: MappedType) {
-                    const constraintType = getConstraintTypeFromMappedType(type);
-                    if (constraintType.flags & (TypeFlags.TypeParameter | TypeFlags.Index)) {
-                        writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                        writer.writeLine();
-                        writer.increaseIndent();
-                        if (type.isReadonly) {
-                            writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
-                            writeSpace(writer);
-                        }
-                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        appendSymbolNameOnly(type.typeParameter.symbol, writer);
+                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
+                    writer.writeLine();
+                    writer.increaseIndent();
+                    if (type.isReadonly) {
+                        writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
                         writeSpace(writer);
-                        writeKeyword(writer, SyntaxKind.InKeyword);
-                        writeSpace(writer);
-                        writeType(constraintType, TypeFormatFlags.None);
-                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                        if (type.isOptional) {
-                            writePunctuation(writer, SyntaxKind.QuestionToken);
-                        }
-                        writePunctuation(writer, SyntaxKind.ColonToken);
-                        writeSpace(writer);
-                        writeType(getTemplateTypeFromMappedType(type), TypeFormatFlags.None);
-                        writePunctuation(writer, SyntaxKind.SemicolonToken);
-                        writer.writeLine();
-                        writer.decreaseIndent();
-                        writePunctuation(writer, SyntaxKind.CloseBraceToken);
                     }
-                    else {
-                        writeLiteralType(type, TypeFormatFlags.None);
+                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                    appendSymbolNameOnly(type.typeParameter.symbol, writer);
+                    writeSpace(writer);
+                    writeKeyword(writer, SyntaxKind.InKeyword);
+                    writeSpace(writer);
+                    writeType(getConstraintTypeFromMappedType(type), TypeFormatFlags.None);
+                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    if (type.isOptional) {
+                        writePunctuation(writer, SyntaxKind.QuestionToken);
                     }
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
+                    writeType(getTemplateTypeFromMappedType(type), TypeFormatFlags.None);
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
+                    writer.writeLine();
+                    writer.decreaseIndent();
+                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
                 }
             }
 
@@ -5935,7 +5933,7 @@ namespace ts {
         function getTypeFromMappedTypeNode(node: MappedTypeNode, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                const type = <MappedType>createObjectType(ObjectFlags.Mapped);
+                const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
                 type.typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
                 type.templateType = node.type ? getTypeFromTypeNode(node.type) : anyType;
                 type.isReadonly = !!node.readonlyToken;
