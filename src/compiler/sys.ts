@@ -439,7 +439,7 @@ namespace ts {
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
 
-            const noOpFileWatcher: FileWatcher = { close: noop }; 
+            const noOpFileWatcher: FileWatcher = { close: noop };
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,

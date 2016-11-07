@@ -1983,14 +1983,14 @@ namespace ts.projectSystem {
             const host = createServerHost([f, config]);
             const projectService = createProjectService(host);
             projectService.openClientFile(f.path);
-            projectService.checkNumberOfProjects({configuredProjects: 1});
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
 
             projectService.closeClientFile(f.path);
-            projectService.checkNumberOfProjects({configuredProjects: 0});
+            projectService.checkNumberOfProjects({ configuredProjects: 0 });
 
             projectService.openClientFile(f.path);
-            projectService.checkNumberOfProjects({configuredProjects: 1});
-        })
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+        });
     });
 
     describe("prefer typings to js", () => {
