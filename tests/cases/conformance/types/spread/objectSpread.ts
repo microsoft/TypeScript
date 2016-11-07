@@ -38,6 +38,10 @@ getter.a = 12;
 // functions result in { }
 let spreadFunc = { ...(function () { }) };
 
+// any results in any
+let anything: any;
+let spreadAny = { ...anything };
+
 // methods are not enumerable
 class C { p = 1; m() { } }
 let c: C = new C()

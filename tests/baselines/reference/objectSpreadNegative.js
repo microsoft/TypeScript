@@ -123,7 +123,7 @@ spreadStr.charAt(1); // error, no methods either
 var spreadFunc = __assign({}, function () { });
 spreadFunc(); // error, no call signature
 // write-only properties get skipped
-var setterOnly = __assign({ set b(bad: number) { } });
+var setterOnly = __assign({ set b(bad) { } });
 setterOnly.b = 12; // error, 'b' does not exist
 // methods are skipped because they aren't enumerable
 var C = (function () {

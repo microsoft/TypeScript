@@ -692,12 +692,12 @@ namespace ts {
     }
 
     export function createSpread(expression: Expression, location?: TextRange) {
-        const node = <SpreadExpression>createNode(SyntaxKind.SpreadExpression, location);
+        const node = <SpreadElement>createNode(SyntaxKind.SpreadElement, location);
         node.expression = parenthesizeExpressionForList(expression);
         return node;
     }
 
-    export function updateSpread(node: SpreadExpression, expression: Expression) {
+    export function updateSpread(node: SpreadElement, expression: Expression) {
         if (node.expression !== expression) {
             return updateNode(createSpread(expression, node), node);
         }
@@ -1413,14 +1413,27 @@ namespace ts {
         return node;
     }
 
-    export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression) {
+    export function createSpreadAssignment(expression: Expression, location?: TextRange) {
+        const node = <SpreadAssignment>createNode(SyntaxKind.SpreadAssignment, location);
+        node.expression = expression !== undefined ? parenthesizeExpressionForList(expression) : undefined;
+        return node;
+    }
+
+   export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression) {
         if (node.name !== name || node.objectAssignmentInitializer !== objectAssignmentInitializer) {
             return updateNode(createShorthandPropertyAssignment(name, objectAssignmentInitializer, node), node);
         }
         return node;
     }
 
-    // Top-level nodes
+    export function updateSpreadAssignment(node: SpreadAssignment, expression: Expression) {
+        if (node.expression !== expression) {
+            return updateNode(createSpreadAssignment(expression, node), node);
+        }
+        return node;
+    }
+
+   // Top-level nodes
 
     export function updateSourceFileNode(node: SourceFile, statements: Statement[]) {
         if (node.statements !== statements) {

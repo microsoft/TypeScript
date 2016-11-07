@@ -38,6 +38,10 @@ getter.a = 12;
 // functions result in { }
 let spreadFunc = { ...(function () { }) };
 
+// any results in any
+let anything: any;
+let spreadAny = { ...anything };
+
 // methods are not enumerable
 class C { p = 1; m() { } }
 let c: C = new C()
@@ -109,6 +113,9 @@ var getter = __assign({}, op, { c: 7 });
 getter.a = 12;
 // functions result in { }
 var spreadFunc = __assign({}, (function () { }));
+// any results in any
+var anything;
+var spreadAny = __assign({}, anything);
 // methods are not enumerable
 var C = (function () {
     function C() {

@@ -5898,8 +5898,11 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol): ResolvedType {
-            Debug.assert(!!(left.flags & TypeFlags.Object) && !!(right.flags & TypeFlags.Object), "Only object types may be spread.");
+        function getSpreadType(left: Type, right: Type, symbol: Symbol): ResolvedType | IntrinsicType {
+            Debug.assert(!!(left.flags & (TypeFlags.Object | TypeFlags.Any)) && !!(right.flags & (TypeFlags.Object | TypeFlags.Any)), "Only object types may be spread.");
+            if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
+                return anyType;
+            }
             const members = createMap<Symbol>();
             const skippedPrivateMembers = createMap<boolean>();
             let stringIndexInfo: IndexInfo;
@@ -8685,7 +8688,7 @@ namespace ts {
             return getTypeOfDestructuredArrayElement(getAssignedType(node), indexOf(node.elements, element));
         }
 
-        function getAssignedTypeOfSpreadExpression(node: SpreadExpression): Type {
+        function getAssignedTypeOfSpreadExpression(node: SpreadElement): Type {
             return getTypeOfDestructuredSpreadExpression(getAssignedType(<ArrayLiteralExpression>node.parent));
         }
 
@@ -8710,8 +8713,8 @@ namespace ts {
                     return undefinedType;
                 case SyntaxKind.ArrayLiteralExpression:
                     return getAssignedTypeOfArrayLiteralElement(<ArrayLiteralExpression>parent, node);
-                case SyntaxKind.SpreadExpression:
-                    return getAssignedTypeOfSpreadExpression(<SpreadExpression>parent);
+                case SyntaxKind.SpreadElement:
+                    return getAssignedTypeOfSpreadExpression(<SpreadElement>parent);
                 case SyntaxKind.PropertyAssignment:
                     return getAssignedTypeOfPropertyAssignment(<PropertyAssignment>parent);
                 case SyntaxKind.ShorthandPropertyAssignment:
@@ -10752,7 +10755,7 @@ namespace ts {
             return mapper && mapper.context;
         }
 
-        function checkSpreadExpression(node: SpreadExpression, contextualMapper?: TypeMapper): Type {
+        function checkSpreadExpression(node: SpreadElement, contextualMapper?: TypeMapper): Type {
             // It is usually not safe to call checkExpressionCached if we can be contextually typing.
             // You can tell that we are contextually typing because of the contextualMapper parameter.
             // While it is true that a spread element can have a contextual type, it does not do anything
@@ -10774,7 +10777,7 @@ namespace ts {
             const elementTypes: Type[] = [];
             const inDestructuringPattern = isAssignmentTarget(node);
             for (const e of elements) {
-                if (inDestructuringPattern && e.kind === SyntaxKind.SpreadExpression) {
+                if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElement) {
                     // Given the following situation:
                     //    var c: {};
                     //    [...c] = ["", 0];
@@ -10787,7 +10790,7 @@ namespace ts {
                     // get the contextual element type from it. So we do something similar to
                     // getContextualTypeForElementExpression, which will crucially not error
                     // if there is no index type / iterated type.
-                    const restArrayType = checkExpression((<SpreadExpression>e).expression, contextualMapper);
+                    const restArrayType = checkExpression((<SpreadElement>e).expression, contextualMapper);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
                         (languageVersion >= ScriptTarget.ES2015 ? getElementTypeOfIterable(restArrayType, /*errorNode*/ undefined) : undefined);
                     if (restElementType) {
@@ -10798,7 +10801,7 @@ namespace ts {
                     const type = checkExpressionForMutableLocation(e, contextualMapper);
                     elementTypes.push(type);
                 }
-                hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadExpression;
+                hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElement;
             }
             if (!hasSpreadElement) {
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
@@ -10982,7 +10985,7 @@ namespace ts {
                     prop.target = member;
                     member = prop;
                 }
-                else if (memberDecl.kind === SyntaxKind.SpreadElementExpression) {
+                else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (propertiesArray.length > 0) {
                         spread = getSpreadType(spread, createObjectLiteralType(), node.symbol);
                         propertiesArray = [];
@@ -10991,8 +10994,8 @@ namespace ts {
                         hasComputedNumberProperty = false;
                         typeFlags = 0;
                     }
-                    const type = checkExpression((memberDecl as SpreadElementExpression).expression);
-                    if (!(type.flags & TypeFlags.Object)) {
+                    const type = checkExpression((memberDecl as SpreadAssignment).expression);
+                    if (!(type.flags & (TypeFlags.Object | TypeFlags.Any))) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -12135,7 +12138,7 @@ namespace ts {
         function getSpreadArgumentIndex(args: Expression[]): number {
             for (let i = 0; i < args.length; i++) {
                 const arg = args[i];
-                if (arg && arg.kind === SyntaxKind.SpreadExpression) {
+                if (arg && arg.kind === SyntaxKind.SpreadElement) {
                     return i;
                 }
             }
@@ -14266,7 +14269,7 @@ namespace ts {
             const elements = node.elements;
             const element = elements[elementIndex];
             if (element.kind !== SyntaxKind.OmittedExpression) {
-                if (element.kind !== SyntaxKind.SpreadExpression) {
+                if (element.kind !== SyntaxKind.SpreadElement) {
                     const propName = "" + elementIndex;
                     const type = isTypeAny(sourceType)
                         ? sourceType
@@ -14293,7 +14296,7 @@ namespace ts {
                         error(element, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                     }
                     else {
-                        const restExpression = (<SpreadExpression>element).expression;
+                        const restExpression = (<SpreadElement>element).expression;
                         if (restExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>restExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
                             error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
                         }
@@ -14926,8 +14929,8 @@ namespace ts {
                     return checkBinaryExpression(<BinaryExpression>node, contextualMapper);
                 case SyntaxKind.ConditionalExpression:
                     return checkConditionalExpression(<ConditionalExpression>node, contextualMapper);
-                case SyntaxKind.SpreadExpression:
-                    return checkSpreadExpression(<SpreadExpression>node, contextualMapper);
+                case SyntaxKind.SpreadElement:
+                    return checkSpreadExpression(<SpreadElement>node, contextualMapper);
                 case SyntaxKind.OmittedExpression:
                     return undefinedWideningType;
                 case SyntaxKind.YieldExpression:
@@ -20887,7 +20890,7 @@ namespace ts {
             const GetOrSetAccessor = GetAccessor | SetAccessor;
 
             for (const prop of node.properties) {
-                if (prop.kind === SyntaxKind.SpreadElementExpression) {
+                if (prop.kind === SyntaxKind.SpreadAssignment) {
                     continue;
                 }
                 const name = prop.name;
