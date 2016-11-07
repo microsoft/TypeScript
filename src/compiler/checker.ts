@@ -5881,7 +5881,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol): ResolvedType | IntrinsicType {
+        function getSpreadType(left: Type, right: Type, isFromObjectLiteral: boolean): ResolvedType | IntrinsicType {
             Debug.assert(!!(left.flags & (TypeFlags.Object | TypeFlags.Any)) && !!(right.flags & (TypeFlags.Object | TypeFlags.Any)), "Only object types may be spread.");
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
@@ -5900,14 +5900,14 @@ namespace ts {
                 numberIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.Number), getIndexInfoOfType(right, IndexKind.Number));
             }
 
-            const isFromSpread = right.symbol !== symbol;
             for (const rightProp of getPropertiesOfType(right)) {
+                // we approximate own properties as non-methods plus methods that are inside the object literal
+                const isOwnProperty = !(rightProp.flags & SymbolFlags.Method) || isFromObjectLiteral;
+                const isSetterWithoutGetter = rightProp.flags & SymbolFlags.SetAccessor && !(rightProp.flags & SymbolFlags.GetAccessor);
                 if (getDeclarationModifierFlagsFromSymbol(rightProp) & (ModifierFlags.Private | ModifierFlags.Protected)) {
                     skippedPrivateMembers[rightProp.name] = true;
                 }
-                else if (!(rightProp.flags & SymbolFlags.Method && isFromSpread) &&
-                         !(rightProp.flags & SymbolFlags.SetAccessor && !(rightProp.flags & SymbolFlags.GetAccessor))) {
-                    // skip methods from spreads and accessors with setters but no getters
+                else if (isOwnProperty && !isSetterWithoutGetter) {
                     members[rightProp.name] = rightProp;
                 }
             }
@@ -5937,7 +5937,7 @@ namespace ts {
                     members[leftProp.name] = leftProp;
                 }
             }
-            return createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            return createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
         }
 
         function createLiteralType(flags: TypeFlags, text: string) {
@@ -10947,7 +10947,7 @@ namespace ts {
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol);
+                        spread = getSpreadType(spread, createObjectLiteralType(), /*isFromObjectLiteral*/ true);
                         propertiesArray = [];
                         propertiesTable = createMap<Symbol>();
                         hasComputedStringProperty = false;
@@ -10959,7 +10959,7 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol);
+                    spread = getSpreadType(spread, type, /*isFromObjectLiteral*/ false);
                     continue;
                 }
                 else {
@@ -11003,9 +11003,10 @@ namespace ts {
 
             if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol);
+                    spread = getSpreadType(spread, createObjectLiteralType(), /*isFromObjectLiteral*/ true);
                 }
                 spread.flags |= propagatedFlags;
+                spread.symbol = node.symbol;
                 return spread;
             }
 
