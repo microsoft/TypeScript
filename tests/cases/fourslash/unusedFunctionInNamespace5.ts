@@ -18,11 +18,11 @@
 ////
 ////    }
 ////
-////    exp ort let a = function3; |]
+////    export let a = function3; |]
 ////}
 
 verify.codeFixAtPosition(`function function3() {
         function1();
     }
 
-    export let a = function3;`, 6133);
+    export let a = function3;`);

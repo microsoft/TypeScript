@@ -3,8 +3,8 @@
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 //// export {}
-//// [|var x: string, y: number;|]
-//// y;
+//// [|var x: string, z: number;|]
+//// z;
 //// export var y: string;
 
-verify.codeFixAtPosition("var y: number;", 6133);
+verify.codeFixAtPosition("var z: number;");

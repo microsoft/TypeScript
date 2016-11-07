@@ -3,7 +3,7 @@
 // @noUnusedLocals: true
 ////function greeter() {
 ////    [| var x, y = 0; |]
-////    x++;
+////    x+1;
 ////}
 
-verify.codeFixAtPosition("var x;", 6133);
+verify.codeFixAtPosition("var x;");
