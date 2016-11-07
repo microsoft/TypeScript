@@ -4597,7 +4597,7 @@ namespace ts {
                 result.valueDeclaration = declarations[0];
             }
             result.isReadonly = isReadonly;
-            result.type = containingType.flags & TypeFlags.Intersection ? getIntersectionType(propTypes) : getUnionType(propTypes);
+            result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
             return result;
         }
 
@@ -5880,7 +5880,7 @@ namespace ts {
         }
 
         /**
-         * Since the source of spread types are object literals and type literals, which are not binary,
+         * Since the source of spread types are object literals, which are not binary,
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
