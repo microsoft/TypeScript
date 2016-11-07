@@ -1554,7 +1554,7 @@ namespace Harness {
             return file.writeByteOrderMark ? "\u00EF\u00BB\u00BF" : "";
         }
 
-        export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: CompilerResult) {
+        export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: CompilerResult, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
             if (options.inlineSourceMap) {
                 if (result.sourceMaps.length > 0) {
                     throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
@@ -1576,10 +1576,8 @@ namespace Harness {
                     }
 
                     let sourceMapCode = "";
-                    for (let i = 0; i < result.sourceMaps.length; i++) {
-                        sourceMapCode += "//// [" + ts.getBaseFileName(result.sourceMaps[i].fileName) + "]\r\n";
-                        sourceMapCode += getByteOrderMarkText(result.sourceMaps[i]);
-                        sourceMapCode += result.sourceMaps[i].code;
+                    for (const sourceMap of result.sourceMaps) {
+                        sourceMapCode += fileOutput(sourceMap, harnessSettings);
                     }
 
                     return sourceMapCode;
@@ -1606,18 +1604,13 @@ namespace Harness {
 
                 let jsCode = "";
                 for (const file of result.files) {
-                    const fileName = harnessSettings["fullEmitPaths"] ? file.fileName : ts.getBaseFileName(file.fileName);
-                    jsCode += "//// [" + fileName + "]\r\n";
-                    jsCode += getByteOrderMarkText(file);
-                    jsCode += file.code;
+                    jsCode += fileOutput(file, harnessSettings);
                 }
 
                 if (result.declFilesCode.length > 0) {
                     jsCode += "\r\n\r\n";
-                    for (let i = 0; i < result.declFilesCode.length; i++) {
-                        jsCode += "//// [" + ts.getBaseFileName(result.declFilesCode[i].fileName) + "]\r\n";
-                        jsCode += getByteOrderMarkText(result.declFilesCode[i]);
-                        jsCode += result.declFilesCode[i].code;
+                    for (const declFile of result.declFilesCode) {
+                        jsCode += fileOutput(declFile, harnessSettings);
                     }
                 }
 
@@ -1640,6 +1633,11 @@ namespace Harness {
                     /* tslint:enable:no-null-keyword */
                 }
             });
+        }
+
+        function fileOutput(file: GeneratedFile, harnessSettings: Harness.TestCaseParser.CompilerSettings): string {
+            const fileName = harnessSettings["fullEmitPaths"] ? file.fileName : ts.getBaseFileName(file.fileName);
+            return "//// [" + fileName + "]\r\n" + getByteOrderMarkText(file) + file.code;
         }
 
         export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): string {

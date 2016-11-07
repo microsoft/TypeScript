@@ -21,6 +21,10 @@ x + y;
 {
     "compilerOptions": {
         "outDir": "bin",
-        "typeRoots": ["../types"]
+        "typeRoots": ["../types"],
+        "sourceMap": true,
+        "mapRoot": "myMapRoot",
+        "sourceRoot": "mySourceRoot",
+        "declaration": true
     }
 }
