@@ -74,8 +74,8 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
-            case SyntaxKind.SpreadElementExpression:
-                return visitNode(cbNode, (<SpreadElementExpression>node).expression);
+            case SyntaxKind.SpreadAssignment:
+                return visitNode(cbNode, (<SpreadAssignment>node).expression);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -199,8 +199,8 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
                     visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
-            case SyntaxKind.SpreadExpression:
-                return visitNode(cbNode, (<SpreadExpression>node).expression);
+            case SyntaxKind.SpreadElement:
+                return visitNode(cbNode, (<SpreadElement>node).expression);
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
                 return visitNodes(cbNodes, (<Block>node).statements);
@@ -4123,15 +4123,15 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseSpreadExpression(): Expression {
-            const node = <SpreadExpression>createNode(SyntaxKind.SpreadExpression);
+        function parseSpreadElement(): Expression {
+            const node = <SpreadElement>createNode(SyntaxKind.SpreadElement);
             parseExpected(SyntaxKind.DotDotDotToken);
             node.expression = parseAssignmentExpressionOrHigher();
             return finishNode(node);
         }
 
         function parseArgumentOrArrayLiteralElement(): Expression {
-            return token() === SyntaxKind.DotDotDotToken ? parseSpreadExpression() :
+            return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
                 token() === SyntaxKind.CommaToken ? <Expression>createNode(SyntaxKind.OmittedExpression) :
                     parseAssignmentExpressionOrHigher();
         }
@@ -4166,7 +4166,7 @@ namespace ts {
             const fullStart = scanner.getStartPos();
             const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             if (dotDotDotToken) {
-                const spreadElement = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression, fullStart);
+                const spreadElement = <SpreadAssignment>createNode(SyntaxKind.SpreadAssignment, fullStart);
                 spreadElement.expression = parseAssignmentExpressionOrHigher();
                 return addJSDocComment(finishNode(spreadElement));
             }

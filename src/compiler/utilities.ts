@@ -1179,7 +1179,7 @@ namespace ts {
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
-            case SyntaxKind.SpreadExpression:
+            case SyntaxKind.SpreadElement:
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
@@ -1641,7 +1641,7 @@ namespace ts {
                     return (<ForInStatement | ForOfStatement>parent).initializer === node ? AssignmentKind.Definite : AssignmentKind.None;
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.SpreadExpression:
+                case SyntaxKind.SpreadElement:
                     node = parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
@@ -2226,7 +2226,7 @@ namespace ts {
             case SyntaxKind.YieldExpression:
                 return 2;
 
-            case SyntaxKind.SpreadExpression:
+            case SyntaxKind.SpreadElement:
                 return 1;
 
             default:
@@ -3862,7 +3862,7 @@ namespace ts {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAssignment
             || kind === SyntaxKind.ShorthandPropertyAssignment
-            || kind === SyntaxKind.SpreadElementExpression
+            || kind === SyntaxKind.SpreadAssignment
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
@@ -3950,8 +3950,8 @@ namespace ts {
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
-    export function isSpreadExpression(node: Node): node is SpreadExpression {
-        return node.kind === SyntaxKind.SpreadExpression;
+    export function isSpreadExpression(node: Node): node is SpreadElement {
+        return node.kind === SyntaxKind.SpreadElement;
     }
 
     export function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {
@@ -4009,7 +4009,7 @@ namespace ts {
             || kind === SyntaxKind.YieldExpression
             || kind === SyntaxKind.ArrowFunction
             || kind === SyntaxKind.BinaryExpression
-            || kind === SyntaxKind.SpreadExpression
+            || kind === SyntaxKind.SpreadElement
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
             || isUnaryExpressionKind(kind);

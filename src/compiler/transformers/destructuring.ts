@@ -308,11 +308,11 @@ namespace ts {
                 const e = elements[i];
                 if (e.kind !== SyntaxKind.OmittedExpression) {
                     // Assignment for target = value.propName should highligh whole property, hence use e as source map node
-                    if (e.kind !== SyntaxKind.SpreadExpression) {
+                    if (e.kind !== SyntaxKind.SpreadElement) {
                         emitDestructuringAssignment(e, createElementAccess(value, createLiteral(i)), e);
                     }
                     else if (i === numElements - 1) {
-                        emitDestructuringAssignment((<SpreadExpression>e).expression, createArraySlice(value, i), e);
+                        emitDestructuringAssignment((<SpreadElement>e).expression, createArraySlice(value, i), e);
                     }
                 }
             }

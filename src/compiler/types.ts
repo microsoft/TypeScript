@@ -246,7 +246,7 @@ namespace ts {
         ConditionalExpression,
         TemplateExpression,
         YieldExpression,
-        SpreadExpression,
+        SpreadElement,
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
@@ -320,7 +320,7 @@ namespace ts {
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
-        SpreadElementExpression,
+        SpreadAssignment,
 
         // Enum
         EnumMember,
@@ -662,7 +662,6 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    // @kind(SyntaxKind.PropertyDeclaration)
     export interface PropertyDeclaration extends ClassElement {
         kind: SyntaxKind.PropertyDeclaration;
         questionToken?: QuestionToken;               // Present for use with reporting a grammar error
@@ -676,7 +675,7 @@ namespace ts {
         name?: PropertyName;
     }
 
-    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration | SpreadElementExpression;
+    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration | SpreadAssignment;
 
     export interface PropertyAssignment extends ObjectLiteralElement {
         kind: SyntaxKind.PropertyAssignment;
@@ -695,8 +694,8 @@ namespace ts {
         objectAssignmentInitializer?: Expression;
     }
 
-    export interface SpreadElementExpression extends ObjectLiteralElement {
-        kind: SyntaxKind.SpreadElementExpression;
+    export interface SpreadAssignment extends ObjectLiteralElement {
+        kind: SyntaxKind.SpreadAssignment;
         expression: Expression;
     }
 
@@ -1285,9 +1284,8 @@ namespace ts {
         multiLine?: boolean;
     }
 
-    // @kind(SyntaxKind.SpreadExpression)
-    export interface SpreadExpression extends Expression {
-        kind: SyntaxKind.SpreadExpression;
+    export interface SpreadElement extends Expression {
+        kind: SyntaxKind.SpreadElement;
         expression: Expression;
     }
 
