@@ -2,12 +2,15 @@
 /// <reference path="diagnosticInformationMap.generated.ts" />
 
 namespace ts {
-    function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
-    function trace(host: ModuleResolutionHost): void {
+
+    /* @internal */
+    export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
+    export function trace(host: ModuleResolutionHost): void {
         host.trace(formatMessage.apply(undefined, arguments));
     }
 
-    function isTraceEnabled(compilerOptions: CompilerOptions, host: ModuleResolutionHost): boolean {
+    /* @internal */
+    export function isTraceEnabled(compilerOptions: CompilerOptions, host: ModuleResolutionHost): boolean {
         return compilerOptions.traceResolution && host.trace !== undefined;
     }
 

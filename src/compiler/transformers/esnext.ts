@@ -58,12 +58,12 @@ namespace ts {
             let chunkObject: (ShorthandPropertyAssignment | PropertyAssignment)[];
             const objects: Expression[] = [];
             for (const e of elements) {
-                if (e.kind === SyntaxKind.SpreadElementExpression) {
+                if (e.kind === SyntaxKind.SpreadAssignment) {
                     if (chunkObject) {
                         objects.push(createObjectLiteral(chunkObject));
                         chunkObject = undefined;
                     }
-                    const target = (e as SpreadElementExpression).expression;
+                    const target = (e as SpreadAssignment).expression;
                     objects.push(visitNode(target, visitor, isExpression));
                 }
                 else {

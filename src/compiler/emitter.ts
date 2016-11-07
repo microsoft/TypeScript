@@ -741,6 +741,8 @@ const _super = (function (geti, seti) {
                     return emitPropertyAssignment(<PropertyAssignment>node);
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                case SyntaxKind.SpreadAssignment:
+                    return emitSpreadAssignment(node as SpreadAssignment);
 
                 // Enum
                 case SyntaxKind.EnumMember:
@@ -831,8 +833,8 @@ const _super = (function (geti, seti) {
                     return emitTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.YieldExpression:
                     return emitYieldExpression(<YieldExpression>node);
-                case SyntaxKind.SpreadExpression:
-                    return emitSpreadExpression(<SpreadExpression>node);
+                case SyntaxKind.SpreadElement:
+                    return emitSpreadExpression(<SpreadElement>node);
                 case SyntaxKind.ClassExpression:
                     return emitClassExpression(<ClassExpression>node);
                 case SyntaxKind.OmittedExpression:
@@ -1383,7 +1385,7 @@ const _super = (function (geti, seti) {
             emitExpressionWithPrefix(" ", node.expression);
         }
 
-        function emitSpreadExpression(node: SpreadExpression) {
+        function emitSpreadExpression(node: SpreadElement) {
             write("...");
             emitExpression(node.expression);
         }
@@ -2111,6 +2113,13 @@ const _super = (function (geti, seti) {
             }
         }
 
+        function emitSpreadAssignment(node: SpreadAssignment) {
+            if (node.expression) {
+                write("...");
+                emitExpression(node.expression);
+            }
+        }
+
         //
         // Enum
         //
@@ -2214,7 +2223,10 @@ const _super = (function (geti, seti) {
                 helpersEmitted = true;
             }
 
-            if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasSpreadAttribute)) {
+            if ((languageVersion < ScriptTarget.ESNext || currentSourceFile.scriptKind === ScriptKind.JSX || currentSourceFile.scriptKind === ScriptKind.TSX) &&
+                compilerOptions.jsx !== JsxEmit.Preserve &&
+                !assignEmitted &&
+                node.flags & NodeFlags.HasSpreadAttribute) {
                 writeLines(assignHelper);
                 assignEmitted = true;
             }

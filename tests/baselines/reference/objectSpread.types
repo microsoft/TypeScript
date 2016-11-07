@@ -230,6 +230,15 @@ let spreadFunc = { ...(function () { }) };
 >(function () { }) : () => void
 >function () { } : () => void
 
+// any results in any
+let anything: any;
+>anything : any
+
+let spreadAny = { ...anything };
+>spreadAny : any
+>{ ...anything } : any
+>anything : any
+
 // methods are not enumerable
 class C { p = 1; m() { } }
 >C : C

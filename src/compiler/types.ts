@@ -246,7 +246,7 @@ namespace ts {
         ConditionalExpression,
         TemplateExpression,
         YieldExpression,
-        SpreadExpression,
+        SpreadElement,
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
@@ -320,7 +320,7 @@ namespace ts {
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
-        SpreadElementExpression,
+        SpreadAssignment,
 
         // Enum
         EnumMember,
@@ -663,7 +663,6 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    // @kind(SyntaxKind.PropertyDeclaration)
     export interface PropertyDeclaration extends ClassElement {
         kind: SyntaxKind.PropertyDeclaration;
         questionToken?: QuestionToken;               // Present for use with reporting a grammar error
@@ -677,7 +676,7 @@ namespace ts {
         name?: PropertyName;
     }
 
-    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration | SpreadElementExpression;
+    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration | SpreadAssignment;
 
     export interface PropertyAssignment extends ObjectLiteralElement {
         kind: SyntaxKind.PropertyAssignment;
@@ -696,8 +695,8 @@ namespace ts {
         objectAssignmentInitializer?: Expression;
     }
 
-    export interface SpreadElementExpression extends ObjectLiteralElement {
-        kind: SyntaxKind.SpreadElementExpression;
+    export interface SpreadAssignment extends ObjectLiteralElement {
+        kind: SyntaxKind.SpreadAssignment;
         expression: Expression;
     }
 
@@ -1286,9 +1285,8 @@ namespace ts {
         multiLine?: boolean;
     }
 
-    // @kind(SyntaxKind.SpreadExpression)
-    export interface SpreadExpression extends Expression {
-        kind: SyntaxKind.SpreadExpression;
+    export interface SpreadElement extends Expression {
+        kind: SyntaxKind.SpreadElement;
         expression: Expression;
     }
 
@@ -2110,6 +2108,7 @@ namespace ts {
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
+        /* @internal */ ambientModuleNames: string[];
         // The synthesized identifier for an imported external helpers module.
         /* @internal */ externalHelpersModuleName?: Identifier;
     }
@@ -2303,6 +2302,8 @@ namespace ts {
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
+
+        /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -2723,7 +2724,7 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeParameter = StructuredType | TypeParameter,
+        StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
@@ -3072,6 +3073,7 @@ namespace ts {
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
+        /*@internal*/noEmitOverwritenFiles?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
@@ -3174,7 +3176,8 @@ namespace ts {
         ES2015 = 2,
         ES2016 = 3,
         ES2017 = 4,
-        Latest = ES2017,
+        ESNext = 5,
+        Latest = ESNext,
     }
 
     export const enum LanguageVariant {

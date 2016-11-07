@@ -1138,8 +1138,8 @@ namespace ts {
             }
             else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
                 for (const e of (<ArrayLiteralExpression>node).elements) {
-                    if (e.kind === SyntaxKind.SpreadExpression) {
-                        bindAssignmentTargetFlow((<SpreadExpression>e).expression);
+                    if (e.kind === SyntaxKind.SpreadElement) {
+                        bindAssignmentTargetFlow((<SpreadElement>e).expression);
                     }
                     else {
                         bindDestructuringTargetFlow(e);
@@ -1154,8 +1154,8 @@ namespace ts {
                     else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         bindAssignmentTargetFlow((<ShorthandPropertyAssignment>p).name);
                     }
-                    else if (p.kind === SyntaxKind.SpreadElementExpression) {
-                        bindAssignmentTargetFlow((<SpreadElementExpression>p).expression);
+                    else if (p.kind === SyntaxKind.SpreadAssignment) {
+                        bindAssignmentTargetFlow((<SpreadAssignment>p).expression);
                     }
                 }
             }
@@ -1237,9 +1237,11 @@ namespace ts {
             const postExpressionLabel = createBranchLabel();
             bindCondition(node.condition, trueLabel, falseLabel);
             currentFlow = finishFlowLabel(trueLabel);
+            bind(node.questionToken);
             bind(node.whenTrue);
             addAntecedent(postExpressionLabel, currentFlow);
             currentFlow = finishFlowLabel(falseLabel);
+            bind(node.colonToken);
             bind(node.whenFalse);
             addAntecedent(postExpressionLabel, currentFlow);
             currentFlow = finishFlowLabel(postExpressionLabel);
@@ -1932,7 +1934,7 @@ namespace ts {
                 case SyntaxKind.EnumMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
 
-                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.SpreadAssignment:
                 case SyntaxKind.JsxSpreadAttribute:
                     let root = container;
                     let hasRest = false;
@@ -3174,9 +3176,9 @@ namespace ts {
                 }
                 break;
 
-            case SyntaxKind.SpreadExpression:
-            case SyntaxKind.SpreadElementExpression:
-                // This node is ES2015 or ES next syntax, but is handled by a containing node.
+            case SyntaxKind.SpreadElement:
+            case SyntaxKind.SpreadAssignment:
+                // This node is ES6 or ES next syntax, but is handled by a containing node.
                 transformFlags |= TransformFlags.ContainsSpreadExpression;
                 break;
 

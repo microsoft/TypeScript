@@ -107,7 +107,12 @@ namespace ts {
 
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
-            isOptionalParameter
+            isOptionalParameter,
+            tryFindAmbientModuleWithoutAugmentations: moduleName => {
+                // we deliberately exclude augmentations
+                // since we are only interested in declarations of the module itself
+                return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
+            }
         };
 
         const tupleTypes: GenericType[] = [];
@@ -1370,16 +1375,11 @@ namespace ts {
                 return;
             }
 
-            const isRelative = isExternalModuleNameRelative(moduleName);
-            const quotedName = '"' + moduleName + '"';
-            if (!isRelative) {
-                const symbol = getSymbol(globals, quotedName, SymbolFlags.ValueModule);
-                if (symbol) {
-                    // merged symbol is module declaration symbol combined with all augmentations
-                    return getMergedSymbol(symbol);
-                }
+            const ambientModule = tryFindAmbientModule(moduleName, /*withAugmentations*/ true);
+            if (ambientModule) {
+                return ambientModule;
             }
-
+            const isRelative = isExternalModuleNameRelative(moduleName);
             const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
@@ -4617,7 +4617,7 @@ namespace ts {
                 result.valueDeclaration = declarations[0];
             }
             result.isReadonly = isReadonly;
-            result.type = containingType.flags & TypeFlags.Intersection ? getIntersectionType(propTypes) : getUnionType(propTypes);
+            result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
             return result;
         }
 
@@ -4780,6 +4780,15 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
+            if (isExternalModuleNameRelative(moduleName)) {
+                return undefined;
+            }
+            const symbol = getSymbol(globals, `"${moduleName}"`, SymbolFlags.ValueModule);
+            // merged symbol is module declaration symbol combined with all augmentations
+            return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
         }
 
         function isOptionalParameter(node: ParameterDeclaration) {
@@ -5900,12 +5909,15 @@ namespace ts {
         }
 
         /**
-         * Since the source of spread types are object literals and type literals, which are not binary,
+         * Since the source of spread types are object literals, which are not binary,
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol): ResolvedType {
-            Debug.assert(!!(left.flags & TypeFlags.Object) && !!(right.flags & TypeFlags.Object), "Only object types may be spread.");
+        function getSpreadType(left: Type, right: Type, symbol: Symbol): ResolvedType | IntrinsicType {
+            Debug.assert(!!(left.flags & (TypeFlags.Object | TypeFlags.Any)) && !!(right.flags & (TypeFlags.Object | TypeFlags.Any)), "Only object types may be spread.");
+            if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
+                return anyType;
+            }
             const members = createMap<Symbol>();
             const skippedPrivateMembers = createMap<boolean>();
             let stringIndexInfo: IndexInfo;
@@ -6922,6 +6934,27 @@ namespace ts {
                     //          breaking the intersection apart.
                     if (result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false)) {
                         return result;
+                    }
+                }
+
+                if (target.flags & TypeFlags.TypeParameter) {
+                    // Given a type parameter K with a constraint keyof T, a type S is
+                    // assignable to K if S is assignable to keyof T.
+                    const constraint = getConstraintOfTypeParameter(<TypeParameter>target);
+                    if (constraint && constraint.flags & TypeFlags.Index) {
+                        if (result = isRelatedTo(source, constraint, reportErrors)) {
+                            return result;
+                        }
+                    }
+                }
+                else if (target.flags & TypeFlags.Index) {
+                    // Given a type parameter T with a constraint C, a type S is assignable to
+                    // keyof T if S is assignable to keyof C.
+                    const constraint = getConstraintOfTypeParameter((<IndexType>target).type);
+                    if (constraint) {
+                        if (result = isRelatedTo(source, getIndexType(constraint), reportErrors)) {
+                            return result;
+                        }
                     }
                 }
 
@@ -8657,7 +8690,7 @@ namespace ts {
             return getTypeOfDestructuredArrayElement(getAssignedType(node), indexOf(node.elements, element));
         }
 
-        function getAssignedTypeOfSpreadExpression(node: SpreadExpression): Type {
+        function getAssignedTypeOfSpreadExpression(node: SpreadElement): Type {
             return getTypeOfDestructuredSpreadExpression(getAssignedType(<ArrayLiteralExpression>node.parent));
         }
 
@@ -8682,8 +8715,8 @@ namespace ts {
                     return undefinedType;
                 case SyntaxKind.ArrayLiteralExpression:
                     return getAssignedTypeOfArrayLiteralElement(<ArrayLiteralExpression>parent, node);
-                case SyntaxKind.SpreadExpression:
-                    return getAssignedTypeOfSpreadExpression(<SpreadExpression>parent);
+                case SyntaxKind.SpreadElement:
+                    return getAssignedTypeOfSpreadExpression(<SpreadElement>parent);
                 case SyntaxKind.PropertyAssignment:
                     return getAssignedTypeOfPropertyAssignment(<PropertyAssignment>parent);
                 case SyntaxKind.ShorthandPropertyAssignment:
@@ -10714,7 +10747,7 @@ namespace ts {
             return mapper && mapper.context;
         }
 
-        function checkSpreadExpression(node: SpreadExpression, contextualMapper?: TypeMapper): Type {
+        function checkSpreadExpression(node: SpreadElement, contextualMapper?: TypeMapper): Type {
             // It is usually not safe to call checkExpressionCached if we can be contextually typing.
             // You can tell that we are contextually typing because of the contextualMapper parameter.
             // While it is true that a spread element can have a contextual type, it does not do anything
@@ -10736,7 +10769,7 @@ namespace ts {
             const elementTypes: Type[] = [];
             const inDestructuringPattern = isAssignmentTarget(node);
             for (const e of elements) {
-                if (inDestructuringPattern && e.kind === SyntaxKind.SpreadExpression) {
+                if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElement) {
                     // Given the following situation:
                     //    var c: {};
                     //    [...c] = ["", 0];
@@ -10749,7 +10782,7 @@ namespace ts {
                     // get the contextual element type from it. So we do something similar to
                     // getContextualTypeForElementExpression, which will crucially not error
                     // if there is no index type / iterated type.
-                    const restArrayType = checkExpression((<SpreadExpression>e).expression, contextualMapper);
+                    const restArrayType = checkExpression((<SpreadElement>e).expression, contextualMapper);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
                         (languageVersion >= ScriptTarget.ES2015 ? getElementTypeOfIterable(restArrayType, /*errorNode*/ undefined) : undefined);
                     if (restElementType) {
@@ -10760,7 +10793,7 @@ namespace ts {
                     const type = checkExpressionForMutableLocation(e, contextualMapper);
                     elementTypes.push(type);
                 }
-                hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadExpression;
+                hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElement;
             }
             if (!hasSpreadElement) {
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
@@ -10944,7 +10977,7 @@ namespace ts {
                     prop.target = member;
                     member = prop;
                 }
-                else if (memberDecl.kind === SyntaxKind.SpreadElementExpression) {
+                else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (propertiesArray.length > 0) {
                         spread = getSpreadType(spread, createObjectLiteralType(), node.symbol);
                         propertiesArray = [];
@@ -10953,8 +10986,8 @@ namespace ts {
                         hasComputedNumberProperty = false;
                         typeFlags = 0;
                     }
-                    const type = checkExpression((memberDecl as SpreadElementExpression).expression);
-                    if (!(type.flags & TypeFlags.Object)) {
+                    const type = checkExpression((memberDecl as SpreadAssignment).expression);
+                    if (!(type.flags & (TypeFlags.Object | TypeFlags.Any))) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -11649,6 +11682,21 @@ namespace ts {
             diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
         }
 
+        function markPropertyAsReferenced(prop: Symbol) {
+            if (prop &&
+                noUnusedIdentifiers &&
+                (prop.flags & SymbolFlags.ClassMember) &&
+                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
+                if (prop.flags & SymbolFlags.Instantiated) {
+                    getSymbolLinks(prop).target.isReferenced = true;
+
+                }
+                else {
+                    prop.isReferenced = true;
+                }
+            }
+        }
+
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             const type = checkNonNullExpression(left);
             if (isTypeAny(type) || type === silentNeverType) {
@@ -11668,17 +11716,7 @@ namespace ts {
                 return unknownType;
             }
 
-            if (noUnusedIdentifiers &&
-                (prop.flags & SymbolFlags.ClassMember) &&
-                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
-                if (prop.flags & SymbolFlags.Instantiated) {
-                    getSymbolLinks(prop).target.isReferenced = true;
-
-                }
-                else {
-                    prop.isReferenced = true;
-                }
-            }
+            markPropertyAsReferenced(prop);
 
             getNodeLinks(node).resolvedSymbol = prop;
 
@@ -11922,7 +11960,7 @@ namespace ts {
         function getSpreadArgumentIndex(args: Expression[]): number {
             for (let i = 0; i < args.length; i++) {
                 const arg = args[i];
-                if (arg && arg.kind === SyntaxKind.SpreadExpression) {
+                if (arg && arg.kind === SyntaxKind.SpreadElement) {
                     return i;
                 }
             }
@@ -13888,7 +13926,7 @@ namespace ts {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(objectLiteralType), declarationNameToString(name));
                 }
             }
-            else if (property.kind !== SyntaxKind.SpreadElementExpression) {
+            else if (property.kind !== SyntaxKind.SpreadAssignment) {
                 error(property, Diagnostics.Property_assignment_expected);
             }
         }
@@ -13910,7 +13948,7 @@ namespace ts {
             const elements = node.elements;
             const element = elements[elementIndex];
             if (element.kind !== SyntaxKind.OmittedExpression) {
-                if (element.kind !== SyntaxKind.SpreadExpression) {
+                if (element.kind !== SyntaxKind.SpreadElement) {
                     const propName = "" + elementIndex;
                     const type = isTypeAny(sourceType)
                         ? sourceType
@@ -13937,7 +13975,7 @@ namespace ts {
                         error(element, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
                     }
                     else {
-                        const restExpression = (<SpreadExpression>element).expression;
+                        const restExpression = (<SpreadElement>element).expression;
                         if (restExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>restExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
                             error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
                         }
@@ -14570,8 +14608,8 @@ namespace ts {
                     return checkBinaryExpression(<BinaryExpression>node, contextualMapper);
                 case SyntaxKind.ConditionalExpression:
                     return checkConditionalExpression(<ConditionalExpression>node, contextualMapper);
-                case SyntaxKind.SpreadExpression:
-                    return checkSpreadExpression(<SpreadExpression>node, contextualMapper);
+                case SyntaxKind.SpreadElement:
+                    return checkSpreadExpression(<SpreadElement>node, contextualMapper);
                 case SyntaxKind.OmittedExpression:
                     return undefinedWideningType;
                 case SyntaxKind.YieldExpression:
@@ -16470,6 +16508,7 @@ namespace ts {
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
+                markPropertyAsReferenced(property);
                 if (parent.initializer && property && getParentOfSymbol(property)) {
                     checkClassPropertyAccess(parent, parent.initializer, parentType, property);
                 }
@@ -20528,7 +20567,7 @@ namespace ts {
             const GetOrSetAccessor = GetAccessor | SetAccessor;
 
             for (const prop of node.properties) {
-                if (prop.kind === SyntaxKind.SpreadElementExpression) {
+                if (prop.kind === SyntaxKind.SpreadAssignment) {
                     continue;
                 }
                 const name = prop.name;

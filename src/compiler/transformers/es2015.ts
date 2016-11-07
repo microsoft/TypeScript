@@ -2400,7 +2400,7 @@ namespace ts {
          *
          * @param node A SpreadExpression node.
          */
-        function visitExpressionOfSpread(node: SpreadExpression) {
+        function visitExpressionOfSpread(node: SpreadElement) {
             return visitNode(node.expression, visitor, isExpression);
         }
 
@@ -2776,11 +2776,11 @@ namespace ts {
             }
 
             const callArgument = singleOrUndefined((<CallExpression>statementExpression).arguments);
-            if (!callArgument || !nodeIsSynthesized(callArgument) || callArgument.kind !== SyntaxKind.SpreadExpression) {
+            if (!callArgument || !nodeIsSynthesized(callArgument) || callArgument.kind !== SyntaxKind.SpreadElement) {
                 return false;
             }
 
-            const expression = (<SpreadExpression>callArgument).expression;
+            const expression = (<SpreadElement>callArgument).expression;
             return isIdentifier(expression) && expression === parameter.name;
         }
     }

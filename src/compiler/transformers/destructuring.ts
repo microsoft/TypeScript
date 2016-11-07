@@ -325,13 +325,13 @@ namespace ts {
                         emitDestructuringAssignment(bindingTarget, createDestructuringPropertyAccess(value, propName), p);
                     }
                 }
-                else if (i === properties.length - 1 && p.kind === SyntaxKind.SpreadElementExpression) {
-                    Debug.assert((p as SpreadElementExpression).expression.kind === SyntaxKind.Identifier);
+                else if (i === properties.length - 1 && p.kind === SyntaxKind.SpreadAssignment) {
+                    Debug.assert((p as SpreadAssignment).expression.kind === SyntaxKind.Identifier);
                     if (es2015.length) {
                         emitRestAssignment(es2015, value, location, target);
                         es2015 = [];
                     }
-                    const propName = (p as SpreadElementExpression).expression as Identifier;
+                    const propName = (p as SpreadAssignment).expression as Identifier;
                     const restCall = createRestCall(value, target.properties, p => p.name, target);
                     emitDestructuringAssignment(propName, restCall, p);
                 }
@@ -356,11 +356,11 @@ namespace ts {
                 const e = elements[i];
                 if (e.kind !== SyntaxKind.OmittedExpression) {
                     // Assignment for target = value.propName should highligh whole property, hence use e as source map node
-                    if (e.kind !== SyntaxKind.SpreadExpression) {
+                    if (e.kind !== SyntaxKind.SpreadElement) {
                         emitDestructuringAssignment(e, createElementAccess(value, createLiteral(i)), e);
                     }
                     else if (i === numElements - 1) {
-                        emitDestructuringAssignment((<SpreadExpression>e).expression, createArraySlice(value, i), e);
+                        emitDestructuringAssignment((<SpreadElement>e).expression, createArraySlice(value, i), e);
                     }
                 }
             }
