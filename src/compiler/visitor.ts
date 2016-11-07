@@ -1270,66 +1270,6 @@ namespace ts {
         return transformFlags | aggregateTransformFlagsForNode(child);
     }
 
-    /**
-     * Gets the transform flags to exclude when unioning the transform flags of a subtree.
-     *
-     * NOTE: This needs to be kept up-to-date with the exclusions used in `computeTransformFlagsForNode`.
-     *       For performance reasons, `computeTransformFlagsForNode` uses local constant values rather
-     *       than calling this function.
-     */
-    function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
-        if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
-            return TransformFlags.TypeExcludes;
-        }
-
-        switch (kind) {
-            case SyntaxKind.CallExpression:
-            case SyntaxKind.NewExpression:
-            case SyntaxKind.ArrayLiteralExpression:
-                return TransformFlags.ArrayLiteralOrCallOrNewExcludes;
-            case SyntaxKind.ModuleDeclaration:
-                return TransformFlags.ModuleExcludes;
-            case SyntaxKind.Parameter:
-                return TransformFlags.ParameterExcludes;
-            case SyntaxKind.ArrowFunction:
-                return TransformFlags.ArrowFunctionExcludes;
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.FunctionDeclaration:
-                return TransformFlags.FunctionExcludes;
-            case SyntaxKind.VariableDeclarationList:
-                return TransformFlags.VariableDeclarationListExcludes;
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.ClassExpression:
-                return TransformFlags.ClassExcludes;
-            case SyntaxKind.Constructor:
-                return TransformFlags.ConstructorExcludes;
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return TransformFlags.MethodOrAccessorExcludes;
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.NeverKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.SymbolKeyword:
-            case SyntaxKind.VoidKeyword:
-            case SyntaxKind.TypeParameter:
-            case SyntaxKind.PropertySignature:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.CallSignature:
-            case SyntaxKind.ConstructSignature:
-            case SyntaxKind.IndexSignature:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-                return TransformFlags.TypeExcludes;
-            case SyntaxKind.ObjectLiteralExpression:
-                return TransformFlags.ObjectLiteralExcludes;
-            default:
-                return TransformFlags.NodeExcludes;
-        }
-    }
-
     export namespace Debug {
         export const failNotOptional = shouldAssert(AssertionLevel.Normal)
             ? (message?: string) => assert(false, message || "Node not optional.")
