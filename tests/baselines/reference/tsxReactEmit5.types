@@ -24,7 +24,7 @@ import {React} from "./test";
 
 // Should emit test_1.React.createElement
 //  and React.__spread
-var foo;
+var foo: any;
 >foo : any
 
 var spread1 = <div x='' {...foo} y='' />;
@@ -32,6 +32,6 @@ var spread1 = <div x='' {...foo} y='' />;
 ><div x='' {...foo} y='' /> : JSX.Element
 >div : any
 >x : string
->foo : undefined
+>foo : any
 >y : string
 

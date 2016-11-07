@@ -27,7 +27,7 @@ namespace M {
 
 	// Should emit M.React.createElement
 	//  and M.React.__spread
-	var foo;
+	var foo: any;
 >foo : any
 
 	var spread1 = <div x='' {...foo} y='' />;
@@ -35,7 +35,7 @@ namespace M {
 ><div x='' {...foo} y='' /> : JSX.Element
 >div : any
 >x : string
->foo : undefined
+>foo : any
 >y : string
 
 	// Quotes

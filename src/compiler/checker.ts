@@ -557,7 +557,7 @@ namespace ts {
             return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
 
-        function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags): Symbol {
+       function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags): Symbol {
             if (meaning) {
                 const symbol = symbols[name];
                 if (symbol) {
@@ -11168,11 +11168,12 @@ namespace ts {
                         attributesTable = createMap<Symbol>();
                     }
                     const exprType = checkExpression(attributeDecl.expression);
-                    if (!(getWidenedType(exprType).flags & (TypeFlags.Object | TypeFlags.Any))) {
+                    const widenExprType = getWidenedType(exprType);
+                    if (!(widenExprType.flags & (TypeFlags.Object | TypeFlags.Any))) {
                         error(attributeDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return undefined;
                     }
-                    if (isTypeAny(getWidenedType(exprType))) {
+                    if (isTypeAny(widenExprType)) {
                         return undefined;
                     }
                     spread = getSpreadType(spread, exprType, attributes.symbol);
