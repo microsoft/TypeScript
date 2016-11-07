@@ -3550,9 +3550,6 @@ namespace ts {
             if (symbol.flags & SymbolFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
-            if (symbol.flags & SymbolFlags.SyntheticProperty && symbol.syntheticKind === SyntheticSymbolKind.Spread) {
-                return getTypeOfSpreadProperty(symbol);
-            }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
                 return getTypeOfVariableOrParameterOrProperty(symbol);
             }
@@ -3569,14 +3566,6 @@ namespace ts {
                 return getTypeOfAlias(symbol);
             }
             return unknownType;
-        }
-
-        function getTypeOfSpreadProperty(symbol: Symbol) {
-            const links = getSymbolLinks(symbol);
-            if (!links.type) {
-                links.type = getUnionType([getTypeOfSymbol(links.leftSpread), getTypeOfSymbol(links.rightSpread)]);
-            }
-            return links.type;
         }
 
         function getTargetType(type: Type): Type {
@@ -4588,7 +4577,6 @@ namespace ts {
                 propTypes.push(type);
             }
             const result = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | SymbolFlags.SyntheticProperty | commonFlags, name);
-            result.syntheticKind = SyntheticSymbolKind.UnionOrIntersection;
             result.containingType = containingType;
             result.hasNonUniformType = hasNonUniformType;
             result.isPartial = isPartial;
@@ -5932,9 +5920,9 @@ namespace ts {
                     const rightProp = members[leftProp.name];
                     if (rightProp.flags & SymbolFlags.Optional) {
                         const declarations: Declaration[] = concatenate(leftProp.declarations, rightProp.declarations);
-                        const flags = SymbolFlags.Property | SymbolFlags.Transient | SymbolFlags.SyntheticProperty | (leftProp.flags & SymbolFlags.Optional);
+                        const flags = SymbolFlags.Property | SymbolFlags.Transient | (leftProp.flags & SymbolFlags.Optional);
                         const result = <TransientSymbol>createSymbol(flags, leftProp.name);
-                        result.syntheticKind = SyntheticSymbolKind.Spread;
+                        result.type = getUnionType([getTypeOfSymbol(leftProp), getTypeOfSymbol(rightProp)]);
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
                         result.declarations = declarations;
@@ -19220,23 +19208,21 @@ namespace ts {
 
         function getRootSymbols(symbol: Symbol): Symbol[] {
             if (symbol.flags & SymbolFlags.SyntheticProperty) {
-                if (symbol.syntheticKind === SyntheticSymbolKind.Spread) {
-                    const links = getSymbolLinks(symbol);
-                    return [links.leftSpread, links.rightSpread];
-                }
-                else {
-                    const symbols: Symbol[] = [];
-                    const name = symbol.name;
-                    forEach(getSymbolLinks(symbol).containingType.types, t => {
-                        const symbol = getPropertyOfType(t, name);
-                        if (symbol) {
-                            symbols.push(symbol);
-                        }
-                    });
-                    return symbols;
-                }
+                const symbols: Symbol[] = [];
+                const name = symbol.name;
+                forEach(getSymbolLinks(symbol).containingType.types, t => {
+                    const symbol = getPropertyOfType(t, name);
+                    if (symbol) {
+                        symbols.push(symbol);
+                    }
+                });
+                return symbols;
             }
             else if (symbol.flags & SymbolFlags.Transient) {
+                if ((symbol as SymbolLinks).leftSpread) {
+                    const links = symbol as SymbolLinks;
+                    return [links.leftSpread, links.rightSpread];
+                }
                 let target: Symbol;
                 let next = symbol;
                 while (next = getSymbolLinks(next).target) {
