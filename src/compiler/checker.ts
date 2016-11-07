@@ -4488,10 +4488,9 @@ namespace ts {
 
         function getPropertiesOfType(type: Type): Symbol[] {
             type = getApparentType(type);
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                return getPropertiesOfUnionOrIntersectionType(<UnionType>type);
-            }
-            return getPropertiesOfObjectType(type);
+            return type.flags & TypeFlags.UnionOrIntersection ?
+                getPropertiesOfUnionOrIntersectionType(<UnionType>type) :
+                getPropertiesOfObjectType(type);
         }
 
         /**
@@ -4581,9 +4580,6 @@ namespace ts {
             result.hasNonUniformType = hasNonUniformType;
             result.isPartial = isPartial;
             result.declarations = declarations;
-            if (declarations.length) {
-                result.valueDeclaration = declarations[0];
-            }
             result.isReadonly = isReadonly;
             result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
             return result;
@@ -5057,7 +5053,7 @@ namespace ts {
             const declaration = getIndexDeclarationOfSymbol(symbol, kind);
             if (declaration) {
                 return createIndexInfo(declaration.type ? getTypeFromTypeNode(declaration.type) : anyType,
-                                       (getModifierFlags(declaration) & ModifierFlags.Readonly) !== 0, declaration);
+                    (getModifierFlags(declaration) & ModifierFlags.Readonly) !== 0, declaration);
             }
             return undefined;
         }
@@ -5926,9 +5922,6 @@ namespace ts {
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
                         result.declarations = declarations;
-                        if (declarations.length) {
-                            result.valueDeclaration = declarations[0];
-                        }
                         result.isReadonly = isReadonlySymbol(leftProp) || isReadonlySymbol(rightProp);
                         members[leftProp.name] = result;
                     }
@@ -15196,11 +15189,9 @@ namespace ts {
             forEach(node.members, checkSourceElement);
             if (produceDiagnostics) {
                 const type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
-                if (type.flags & TypeFlags.Object) {
-                    checkIndexConstraints(type);
-                    checkTypeForDuplicateIndexSignatures(node);
-                    checkObjectTypeForDuplicateDeclarations(node);
-                }
+                checkIndexConstraints(type);
+                checkTypeForDuplicateIndexSignatures(node);
+                checkObjectTypeForDuplicateDeclarations(node);
             }
         }
 
@@ -17259,7 +17250,7 @@ namespace ts {
                 // perform property check if property or indexer is declared in 'type'
                 // this allows to rule out cases when both property and indexer are inherited from the base class
                 let errorNode: Node;
-                    if (prop.valueDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol) {
+                if (prop.valueDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol) {
                     errorNode = prop.valueDeclaration;
                 }
                 else if (indexDeclaration) {
@@ -20538,7 +20529,7 @@ namespace ts {
                     continue;
                 }
                 const name = prop.name;
-                if (name && name.kind === SyntaxKind.ComputedPropertyName) {
+                if (name.kind === SyntaxKind.ComputedPropertyName) {
                     // If the name is not a ComputedPropertyName, the grammar checking will skip it
                     checkGrammarComputedPropertyName(<ComputedPropertyName>name);
                 }
