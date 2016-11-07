@@ -18,7 +18,6 @@ namespace ts.projectSystem {
     };
 
     export interface PostExecAction {
-        readonly requestKind: TI.RequestKind;
         readonly success: boolean;
         readonly callback: TI.RequestCompletedAction;
     }
@@ -47,9 +46,14 @@ namespace ts.projectSystem {
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
-        constructor(readonly globalTypingsCacheLocation: string, throttleLimit: number, readonly installTypingHost: server.ServerHost, log?: TI.Log) {
-            super(globalTypingsCacheLocation, safeList.path, throttleLimit, log);
-            this.init();
+        constructor(
+            readonly globalTypingsCacheLocation: string,
+            throttleLimit: number,
+            installTypingHost: server.ServerHost,
+            readonly typesRegistry = createMap<void>(),
+            telemetryEnabled?: boolean,
+            log?: TI.Log) {
+            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, telemetryEnabled, log);
         }
 
         safeFileList = safeList.path;
@@ -63,9 +67,8 @@ namespace ts.projectSystem {
             }
         }
 
-        checkPendingCommands(expected: TI.RequestKind[]) {
-            assert.equal(this.postExecActions.length, expected.length, `Expected ${expected.length} post install actions`);
-            this.postExecActions.forEach((act, i) => assert.equal(act.requestKind, expected[i], "Unexpected post install action"));
+        checkPendingCommands(expectedCount: number) {
+            assert.equal(this.postExecActions.length, expectedCount, `Expected ${expectedCount} post install actions`);
         }
 
         onProjectClosed() {
@@ -79,15 +82,8 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
-            switch (requestKind) {
-                case TI.NpmViewRequest:
-                case TI.NpmInstallRequest:
-                    break;
-                default:
-                    assert.isTrue(false, `request ${requestKind} is not supported`);
-            }
-            this.addPostExecAction(requestKind, "success", cb);
+        installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+            this.addPostExecAction("success", cb);
         }
 
         sendResponse(response: server.SetTypings | server.InvalidateCachedTypings) {
@@ -99,12 +95,11 @@ namespace ts.projectSystem {
             this.install(request);
         }
 
-        addPostExecAction(requestKind: TI.RequestKind, stdout: string | string[], cb: TI.RequestCompletedAction) {
+        addPostExecAction(stdout: string | string[], cb: TI.RequestCompletedAction) {
             const out = typeof stdout === "string" ? stdout : createNpmPackageJsonString(stdout);
             const action: PostExecAction = {
                 success: !!out,
-                callback: cb,
-                requestKind
+                callback: cb
             };
             this.postExecActions.push(action);
         }
