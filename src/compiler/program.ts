@@ -420,6 +420,7 @@ namespace ts {
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
+            isSourceFileFromExternalLibrary,
             dropDiagnosticsProducingTypeChecker
         };
 
@@ -722,11 +723,15 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
-                isSourceFileFromExternalLibrary: (file: SourceFile) => !!sourceFilesFoundSearchingNodeModules[file.path],
+                isSourceFileFromExternalLibrary,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
             };
+        }
+
+        function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
+            return sourceFilesFoundSearchingNodeModules[file.path];
         }
 
         function getDiagnosticsProducingTypeChecker() {
