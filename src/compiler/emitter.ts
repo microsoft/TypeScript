@@ -2231,7 +2231,7 @@ const _super = (function (geti, seti) {
                 assignEmitted = true;
             }
 
-            if (!restEmitted && node.flags & NodeFlags.HasRestAttribute) {
+            if (languageVersion < ScriptTarget.ESNext && !restEmitted && node.flags & NodeFlags.HasRestAttribute) {
                 writeLines(restHelper);
                 restEmitted = true;
             }
