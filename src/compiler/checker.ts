@@ -16906,14 +16906,14 @@ namespace ts {
                     // to or from the type of the 'switch' expression.
                     let caseType = checkExpression(caseClause.expression);
                     const caseIsLiteral = isLiteralType(caseType);
-                    let literalExpressionType = expressionType;
+                    let comparedExpressionType = expressionType;
                     if (!caseIsLiteral || !expressionIsLiteral) {
                         caseType = caseIsLiteral ? getBaseTypeOfLiteralType(caseType) : caseType;
-                        literalExpressionType = getBaseTypeOfLiteralType(expressionType);
+                        comparedExpressionType = getBaseTypeOfLiteralType(expressionType);
                     }
-                    if (!isTypeEqualityComparableTo(literalExpressionType, caseType)) {
+                    if (!isTypeEqualityComparableTo(comparedExpressionType, caseType)) {
                         // expressionType is not comparable to caseType, try the reversed check and report errors if it fails
-                        checkTypeComparableTo(caseType, literalExpressionType, caseClause.expression, /*headMessage*/ undefined);
+                        checkTypeComparableTo(caseType, comparedExpressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }
                 forEach(clause.statements, checkSourceElement);
