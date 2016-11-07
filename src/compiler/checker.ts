@@ -5259,21 +5259,27 @@ namespace ts {
             return type;
         }
 
+        function getTypeAliasInstantiation(symbol: Symbol, typeArguments: Type[]): Type {
+            const type = getDeclaredTypeOfSymbol(symbol);
+            const links = getSymbolLinks(symbol);
+            const typeParameters = links.typeParameters;
+            const id = getTypeListId(typeArguments);
+            return links.instantiations[id] || (links.instantiations[id] = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, typeArguments)));
+        }
+
         // Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
         // references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
         // declared type. Instantiations are cached using the type identities of the type arguments as the key.
         function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
-            const links = getSymbolLinks(symbol);
-            const typeParameters = links.typeParameters;
+            const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
                 if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
                     error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, symbolToString(symbol), typeParameters.length);
                     return unknownType;
                 }
                 const typeArguments = map(node.typeArguments, getTypeFromTypeNodeNoAlias);
-                const id = getTypeListId(typeArguments);
-                return links.instantiations[id] || (links.instantiations[id] = instantiateType(type, createTypeMapper(typeParameters, typeArguments)));
+                return getTypeAliasInstantiation(symbol, typeArguments);
             }
             if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
@@ -6365,43 +6371,62 @@ namespace ts {
             return false;
         }
 
+        function isTopLevelTypeAlias(symbol: Symbol) {
+            if (symbol.declarations && symbol.declarations.length) {
+                const declaration = symbol.declarations[0];
+                return declaration.kind === SyntaxKind.SourceFile || declaration.kind === SyntaxKind.ModuleBlock;
+            }
+            return false;
+        }
+
         function instantiateType(type: Type, mapper: TypeMapper): Type {
             if (type && mapper !== identityMapper) {
-                if (type.flags & TypeFlags.TypeParameter) {
-                    return mapper(<TypeParameter>type);
-                }
-                if (type.flags & TypeFlags.Object) {
-                    if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
-                        // If the anonymous type originates in a declaration of a function, method, class, or
-                        // interface, in an object type literal, or in an object literal expression, we may need
-                        // to instantiate the type because it might reference a type parameter. We skip instantiation
-                        // if none of the type parameters that are in scope in the type's declaration are mapped by
-                        // the given mapper, however we can only do that analysis if the type isn't itself an
-                        // instantiation.
-                        return type.symbol &&
-                            type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) &&
-                            ((<ObjectType>type).objectFlags & ObjectFlags.Instantiated || isSymbolInScopeOfMappedTypeParameter(type.symbol, mapper)) ?
-                            instantiateCached(type, mapper, instantiateAnonymousType) : type;
+                if (type.aliasSymbol && isTopLevelTypeAlias(type.aliasSymbol)) {
+                    if (type.aliasTypeArguments) {
+                        return getTypeAliasInstantiation(type.aliasSymbol, instantiateList(type.aliasTypeArguments, mapper, instantiateType));
                     }
-                    if ((<ObjectType>type).objectFlags & ObjectFlags.Mapped) {
-                        return instantiateCached(type, mapper, instantiateMappedType);
-                    }
-                    if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
-                        return createTypeReference((<TypeReference>type).target, instantiateList((<TypeReference>type).typeArguments, mapper, instantiateType));
-                    }
+                    return type;
                 }
-                if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
-                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*subtypeReduction*/ false, type.aliasSymbol, mapper.targetTypes);
+                return instantiateTypeNoAlias(type, mapper);
+            }
+            return type;
+        }
+
+        function instantiateTypeNoAlias(type: Type, mapper: TypeMapper): Type {
+            if (type.flags & TypeFlags.TypeParameter) {
+                return mapper(<TypeParameter>type);
+            }
+            if (type.flags & TypeFlags.Object) {
+                if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
+                    // If the anonymous type originates in a declaration of a function, method, class, or
+                    // interface, in an object type literal, or in an object literal expression, we may need
+                    // to instantiate the type because it might reference a type parameter. We skip instantiation
+                    // if none of the type parameters that are in scope in the type's declaration are mapped by
+                    // the given mapper, however we can only do that analysis if the type isn't itself an
+                    // instantiation.
+                    return type.symbol &&
+                        type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) &&
+                        ((<ObjectType>type).objectFlags & ObjectFlags.Instantiated || isSymbolInScopeOfMappedTypeParameter(type.symbol, mapper)) ?
+                        instantiateCached(type, mapper, instantiateAnonymousType) : type;
                 }
-                if (type.flags & TypeFlags.Intersection) {
-                    return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType), type.aliasSymbol, mapper.targetTypes);
+                if ((<ObjectType>type).objectFlags & ObjectFlags.Mapped) {
+                    return instantiateCached(type, mapper, instantiateMappedType);
                 }
-                if (type.flags & TypeFlags.Index) {
-                    return getIndexType(instantiateType((<IndexType>type).type, mapper));
+                if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
+                    return createTypeReference((<TypeReference>type).target, instantiateList((<TypeReference>type).typeArguments, mapper, instantiateType));
                 }
-                if (type.flags & TypeFlags.IndexedAccess) {
-                    return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
-                }
+            }
+            if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
+                return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*subtypeReduction*/ false, type.aliasSymbol, mapper.targetTypes);
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType), type.aliasSymbol, mapper.targetTypes);
+            }
+            if (type.flags & TypeFlags.Index) {
+                return getIndexType(instantiateType((<IndexType>type).type, mapper));
+            }
+            if (type.flags & TypeFlags.IndexedAccess) {
+                return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
             }
             return type;
         }
