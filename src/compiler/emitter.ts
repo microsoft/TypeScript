@@ -732,6 +732,8 @@ const _super = (function (geti, seti) {
                     return emitPropertyAssignment(<PropertyAssignment>node);
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    return emitSpreadAssignment(node as SpreadAssignment);
 
                 // Enum
                 case SyntaxKind.EnumMember:
@@ -2099,6 +2101,13 @@ const _super = (function (geti, seti) {
             if (node.objectAssignmentInitializer) {
                 write(" = ");
                 emitExpression(node.objectAssignmentInitializer);
+            }
+        }
+
+        function emitSpreadAssignment(node: SpreadAssignment) {
+            if (node.expression) {
+                write("...");
+                emitExpression(node.expression);
             }
         }
 

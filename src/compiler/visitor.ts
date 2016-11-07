@@ -510,6 +510,10 @@ namespace ts {
                 result = reduceNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, f, result);
                 break;
 
+            case SyntaxKind.SpreadAssignment:
+                result = reduceNode((node as SpreadAssignment).expression, f, result);
+                break;
+
             // Top-level nodes
             case SyntaxKind.SourceFile:
                 result = reduceLeft((<SourceFile>node).statements, f, result);
@@ -1125,7 +1129,11 @@ namespace ts {
                     visitNode((<ShorthandPropertyAssignment>node).name, visitor, isIdentifier),
                     visitNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, visitor, isExpression));
 
-            // Top-level nodes
+            case SyntaxKind.SpreadAssignment:
+                return updateSpreadAssignment(node as SpreadAssignment,
+                    visitNode((node as SpreadAssignment).expression, visitor, isExpression));
+
+           // Top-level nodes
             case SyntaxKind.SourceFile:
                 context.startLexicalEnvironment();
                 return updateSourceFileNode(<SourceFile>node,
