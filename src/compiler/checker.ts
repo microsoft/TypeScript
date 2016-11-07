@@ -5933,14 +5933,22 @@ namespace ts {
         function getTypeFromMappedTypeNode(node: MappedTypeNode, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
-                type.typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
-                type.templateType = node.type ? getTypeFromTypeNode(node.type) : anyType;
-                type.isReadonly = !!node.readonlyToken;
-                type.isOptional = !!node.questionToken;
-                type.aliasSymbol = aliasSymbol;
-                type.aliasTypeArguments = aliasTypeArguments;
-                links.resolvedType = type;
+                const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
+                const constraintType = getConstraintOfTypeParameter(typeParameter);
+                const keyType = constraintType && constraintType.flags & TypeFlags.TypeParameter ? getApparentType(constraintType) : constraintType;
+                if (keyType && (keyType.flags & TypeFlags.Index || checkTypeAssignableTo(keyType, stringOrNumberType, node.typeParameter.constraint))) {
+                    const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
+                    type.typeParameter = typeParameter;
+                    type.templateType = node.type ? getTypeFromTypeNode(node.type) : unknownType;
+                    type.isReadonly = !!node.readonlyToken;
+                    type.isOptional = !!node.questionToken;
+                    type.aliasSymbol = aliasSymbol;
+                    type.aliasTypeArguments = aliasTypeArguments;
+                    links.resolvedType = type;
+                }
+                else {
+                    links.resolvedType = unknownType;
+                }
             }
             return links.resolvedType;
         }
