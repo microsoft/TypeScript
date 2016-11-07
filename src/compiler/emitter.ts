@@ -732,7 +732,7 @@ const _super = (function (geti, seti) {
                     return emitPropertyAssignment(<PropertyAssignment>node);
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
-                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.SpreadAssignment:
                     return emitSpreadAssignment(node as SpreadAssignment);
 
                 // Enum
@@ -2214,7 +2214,10 @@ const _super = (function (geti, seti) {
                 helpersEmitted = true;
             }
 
-            if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasSpreadAttribute)) {
+            if ((languageVersion < ScriptTarget.ESNext || currentSourceFile.scriptKind === ScriptKind.JSX || currentSourceFile.scriptKind === ScriptKind.TSX) &&
+                compilerOptions.jsx !== JsxEmit.Preserve &&
+                !assignEmitted &&
+                node.flags & NodeFlags.HasSpreadAttribute) {
                 writeLines(assignHelper);
                 assignEmitted = true;
             }

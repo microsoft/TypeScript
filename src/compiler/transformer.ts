@@ -117,7 +117,10 @@ namespace ts {
             transformers.push(transformJsx);
         }
 
-        transformers.push(transformESNext);
+        if (languageVersion < ScriptTarget.ESNext) {
+            transformers.push(transformESNext);
+        }
+
         if (languageVersion < ScriptTarget.ES2017) {
             transformers.push(transformES2017);
         }

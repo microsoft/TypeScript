@@ -3171,7 +3171,8 @@ namespace ts {
         ES2015 = 2,
         ES2016 = 3,
         ES2017 = 4,
-        Latest = ES2017,
+        ESNext = 5,
+        Latest = ESNext,
     }
 
     export const enum LanguageVariant {
