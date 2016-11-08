@@ -1,0 +1,165 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+
+import React = require('react')
+>React : typeof React
+
+
+declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
+>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
+>K : K
+>V : V
+>l : { key1: K; value: V; }
+>key1 : K
+>K : K
+>value : V
+>V : V
+>JSX : any
+>Element : JSX.Element
+
+// OK
+function Baz<T,U>(key1: T, value: U) {
+>Baz : <T, U>(key1: T, value: U) => void
+>T : T
+>U : U
+>key1 : T
+>T : T
+>value : U
+>U : U
+
+    let a0 = <ComponentWithTwoAttributes key1={key1} value={value} />
+>a0 : JSX.Element
+><ComponentWithTwoAttributes key1={key1} value={value} /> : JSX.Element
+>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
+>key1 : T
+>key1 : T
+>value : U
+>value : U
+
+    let a1 = <ComponentWithTwoAttributes {...{key1, value: value}} key="Component" />
+>a1 : JSX.Element
+><ComponentWithTwoAttributes {...{key1, value: value}} key="Component" /> : JSX.Element
+>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
+>{key1, value: value} : { key1: T; value: U; }
+>key1 : T
+>value : U
+>value : U
+>key : string
+}
+
+// OK
+declare function Component<U>(l: U): JSX.Element;
+>Component : <U>(l: U) => JSX.Element
+>U : U
+>l : U
+>U : U
+>JSX : any
+>Element : JSX.Element
+
+function createComponent<T extends {prop: number}>(arg:T) {
+>createComponent : <T extends { prop: number; }>(arg: T) => void
+>T : T
+>prop : number
+>arg : T
+>T : T
+
+    let a1 = <Component {...arg} />;
+>a1 : JSX.Element
+><Component {...arg} /> : JSX.Element
+>Component : <U>(l: U) => JSX.Element
+>arg : T
+
+    let a2 = <Component {...arg} prop1 />;
+>a2 : JSX.Element
+><Component {...arg} prop1 /> : JSX.Element
+>Component : <U>(l: U) => JSX.Element
+>arg : T
+>prop1 : true
+}
+
+declare function ComponentSpecific<U>(l: {prop: U}): JSX.Element;
+>ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
+>U : U
+>l : { prop: U; }
+>prop : U
+>U : U
+>JSX : any
+>Element : JSX.Element
+
+declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": number}): JSX.Element;
+>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
+>U : U
+>l : { prop: U; "ignore-prop": number; }
+>prop : U
+>U : U
+>JSX : any
+>Element : JSX.Element
+
+// OK
+function Bar<T extends {prop: number}>(arg: T) {
+>Bar : <T extends { prop: number; }>(arg: T) => void
+>T : T
+>prop : number
+>arg : T
+>T : T
+
+    let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number
+>a1 : JSX.Element
+><ComponentSpecific {...arg} ignore-prop="hi" /> : JSX.Element
+>ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
+>arg : T
+>ignore-prop : string
+
+    let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
+>a2 : JSX.Element
+><ComponentSpecific1 {...arg} ignore-prop={10} /> : JSX.Element
+>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
+>arg : T
+>ignore-prop : number
+>10 : 10
+
+    let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
+>a3 : JSX.Element
+><ComponentSpecific {...arg} prop="hello" /> : JSX.Element
+>ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
+>arg : T
+>prop : string
+}
+
+declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
+>Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
+>U : U
+>l : { func: (arg: U) => void; }
+>func : (arg: U) => void
+>arg : U
+>U : U
+>JSX : any
+>Element : JSX.Element
+
+// OK
+function createLink(func: (a: number)=>void) {
+>createLink : (func: (a: number) => void) => void
+>func : (a: number) => void
+>a : number
+
+    let o = <Link func={func} />
+>o : JSX.Element
+><Link func={func} /> : JSX.Element
+>Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
+>func : (a: number) => void
+>func : (a: number) => void
+}
+
+function createLink1(func: (a: number)=>boolean) {
+>createLink1 : (func: (a: number) => boolean) => void
+>func : (a: number) => boolean
+>a : number
+
+    let o = <Link func={func} />
+>o : JSX.Element
+><Link func={func} /> : JSX.Element
+>Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
+>func : (a: number) => boolean
+>func : (a: number) => boolean
+}
+
+
