@@ -2035,7 +2035,7 @@ namespace FourSlash {
             const codeFix: ts.CodeAction = this.getCodeFix(fileName, codeFixIdentifier);
 
             if (!codeFix) {
-                this.raiseError("Should find exactly one codefix.");
+                this.raiseError("Should find exactly one codefix, but none found.");
             }
 
             const fileChange = ts.find(codeFix.changes, change => change.fileName === fileName);
