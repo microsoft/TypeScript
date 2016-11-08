@@ -647,6 +647,23 @@ declare namespace ts.server.protocol {
         spans: TextSpan[];
         childItems?: NavigationTree[];
     }
+    type TelemetryEventName = "telemetry";
+    interface TelemetryEvent extends Event {
+        event: TelemetryEventName;
+        body: TelemetryEventBody;
+    }
+    interface TelemetryEventBody {
+        telemetryEventName: string;
+        payload: any;
+    }
+    type TypingsInstalledTelemetryEventName = "typingsInstalled";
+    interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
+        telemetryEventName: TypingsInstalledTelemetryEventName;
+        payload: TypingsInstalledTelemetryEventPayload;
+    }
+    interface TypingsInstalledTelemetryEventPayload {
+        installedPackages: string;
+    }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
     }
@@ -1974,6 +1991,7 @@ declare namespace ts {
         getTypeCount(): number;
         getFileProcessingDiagnostics(): DiagnosticCollection;
         getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         structureIsReused?: boolean;
     }
     interface SourceMapSpan {
@@ -3096,7 +3114,7 @@ declare namespace ts {
         readFile(path: string, encoding?: string): string;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
+        watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
@@ -7814,6 +7832,18 @@ declare namespace ts.JsTyping {
     };
 }
 declare namespace ts.server {
+    const ActionSet: ActionSet;
+    const ActionInvalidate: ActionInvalidate;
+    const EventInstall: EventInstall;
+    namespace Arguments {
+        const GlobalCacheLocation: string;
+        const LogFile: string;
+        const EnableTelemetry: string;
+    }
+    function hasArgument(argumentName: string): boolean;
+    function findArgument(argumentName: string): string;
+}
+declare namespace ts.server {
     enum LogLevel {
         terse = 0,
         normal = 1,
@@ -9513,7 +9543,7 @@ declare namespace ts.server {
         getRootScriptInfos(): ScriptInfo[];
         getScriptInfos(): ScriptInfo[];
         getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles: boolean): EmitOutput;
-        getFileNames(): NormalizedPath[];
+        getFileNames(excludeFilesFromExternalLibraries?: boolean): NormalizedPath[];
         getAllEmittableFiles(): string[];
         containsScriptInfo(info: ScriptInfo): boolean;
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean;
@@ -9702,6 +9732,9 @@ declare namespace ts.server {
         fileName: NormalizedPath;
         project: Project;
     }
+    interface EventSender {
+        event(payload: any, eventName: string): void;
+    }
     namespace CommandNames {
         const Brace: protocol.CommandTypes.Brace;
         const BraceFull: protocol.CommandTypes.BraceFull;
@@ -9768,7 +9801,7 @@ declare namespace ts.server {
         const CompilerOptionsForInferredProjects: protocol.CommandTypes.CompilerOptionsForInferredProjects;
     }
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
-    class Session {
+    class Session implements EventSender {
         private host;
         protected readonly typingsInstaller: ITypingsInstaller;
         private byteLength;

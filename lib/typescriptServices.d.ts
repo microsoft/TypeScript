@@ -1774,7 +1774,11 @@ declare namespace ts {
         readFile(path: string, encoding?: string): string;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
+        /**
+         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
+         * use native OS file watching
+         */
+        watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
