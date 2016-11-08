@@ -286,10 +286,10 @@ namespace ts.server {
                 return;
             }
             switch (response.kind) {
-                case "set":
+                case ActionSet:
                     this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.unresolvedImports, response.typings);
                     break;
-                case "invalidate":
+                case ActionInvalidate:
                     this.typingsCache.deleteTypingsForProject(response.projectName);
                     break;
             }
@@ -1288,7 +1288,9 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseFileName(normalized) === "tsconfig.json") {
-                    (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
+                    if (this.host.fileExists(normalized)) {
+                        (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
+                    }
                 }
                 else {
                     rootFiles.push(file);
