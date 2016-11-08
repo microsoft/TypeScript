@@ -461,11 +461,15 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 result = reduceNode((<JsxSelfClosingElement | JsxOpeningElement>node).tagName, f, result);
-                result = reduceLeft((<JsxSelfClosingElement | JsxOpeningElement>node).attributes, f, result);
+                result = reduceNode((<JsxSelfClosingElement | JsxOpeningElement>node).attributes, f, result);
                 break;
 
             case SyntaxKind.JsxClosingElement:
                 result = reduceNode((<JsxClosingElement>node).tagName, f, result);
+                break;
+
+            case SyntaxKind.JsxAttributes:
+                result = reduceLeft((<JsxAttributes>node).properties, f, result);
                 break;
 
             case SyntaxKind.JsxAttribute:
@@ -1074,15 +1078,19 @@ namespace ts {
                     visitNodes((<JsxElement>node).children, visitor, isJsxChild),
                     visitNode((<JsxElement>node).closingElement, visitor, isJsxClosingElement));
 
+            case SyntaxKind.JsxAttributes:
+                return updateJsxAttributes(<JsxAttributes>node,
+                    visitNodes((<JsxAttributes>node).properties, visitor, isJsxAttributeLike));
+
             case SyntaxKind.JsxSelfClosingElement:
                 return updateJsxSelfClosingElement(<JsxSelfClosingElement>node,
                     visitNode((<JsxSelfClosingElement>node).tagName, visitor, isJsxTagNameExpression),
-                    visitNodes((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributeLike));
+                    visitNode((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxOpeningElement:
                 return updateJsxOpeningElement(<JsxOpeningElement>node,
                     visitNode((<JsxOpeningElement>node).tagName, visitor, isJsxTagNameExpression),
-                    visitNodes((<JsxOpeningElement>node).attributes, visitor, isJsxAttributeLike));
+                    visitNode((<JsxOpeningElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxClosingElement:
                 return updateJsxClosingElement(<JsxClosingElement>node,

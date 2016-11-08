@@ -1237,28 +1237,28 @@ namespace ts {
         return node;
     }
 
-    export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[], location?: TextRange) {
+    export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, attributes: JsxAttributes, location?: TextRange) {
         const node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, location);
         node.tagName = tagName;
-        node.attributes = createNodeArray(attributes);
+        node.attributes = attributes;
         return node;
     }
 
-    export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]) {
+    export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, attributes: JsxAttributes) {
         if (node.tagName !== tagName || node.attributes !== attributes) {
             return updateNode(createJsxSelfClosingElement(tagName, attributes, node), node);
         }
         return node;
     }
 
-    export function createJsxOpeningElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[], location?: TextRange) {
+    export function createJsxOpeningElement(tagName: JsxTagNameExpression, attributes: JsxAttributes, location?: TextRange) {
         const node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, location);
         node.tagName = tagName;
-        node.attributes = createNodeArray(attributes);
+        node.attributes = attributes;
         return node;
     }
 
-    export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]) {
+    export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributes) {
         if (node.tagName !== tagName || node.attributes !== attributes) {
             return updateNode(createJsxOpeningElement(tagName, attributes, node), node);
         }
@@ -1276,6 +1276,20 @@ namespace ts {
             return updateNode(createJsxClosingElement(tagName, node), node);
         }
         return node;
+    }
+
+    export function createJsxAttributes(properties: JsxAttributeLike[], location?: TextRange) {
+        const jsxAttributes = <JsxAttributes>createNode(SyntaxKind.JsxAttributes, location);
+        setEmitFlags(jsxAttributes, EmitFlags.NoSourceMap);
+        jsxAttributes.properties = createNodeArray(properties);
+        return jsxAttributes;
+    }
+
+    export function updateJsxAttributes(jsxAttributes: JsxAttributes, properties: JsxAttributeLike[]) {
+        if (jsxAttributes.properties !== properties) {
+            return updateNode(createJsxAttributes(properties, jsxAttributes), jsxAttributes);
+        }
+        return jsxAttributes;
     }
 
     export function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression, location?: TextRange) {
