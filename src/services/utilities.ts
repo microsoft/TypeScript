@@ -1364,21 +1364,11 @@ namespace ts {
         if (!baseTypeNode) {
             return "";
         }
-        
+
         const classSymbol = checker.getSymbolOfNode(classDecl);
 
         const InstantiatedExtendsType = <InterfaceType>checker.getTypeFromTypeReference(getClassExtendsHeritageClauseElement(classDecl));
         const resolvedExtendsType = checker.resolveStructuredTypeMembers(InstantiatedExtendsType);
-
-        // TODO: (arozga) Should we use the above or this to get the type of the extended class?
-        /*
-        const classType = <InterfaceType>checker.getTypeOfSymbol(classSymbol);
-        let baseType = checker.getBaseTypes(classType)[0];
-        const resolvedBaseType = checker.resolveStructuredTypeMembers(baseType);
-        if (baseType.objectFlags & ObjectFlags.Reference) {
-            baseType = checker.getTypeFromTypeReference(<TypeReference>baseType);
-        }
-        */
 
         const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedExtendsType.members)), classSymbol.members);
 
@@ -1394,14 +1384,14 @@ namespace ts {
         const classSymbol = checker.getSymbolOfNode(classDecl);
 
         let implementsIntersectionType: IntersectionType | InterfaceType;
-        if(implementedTypeNodes.length > 1) {
+        if (implementedTypeNodes.length > 1) {
             implementsIntersectionType = <IntersectionType>checker.getIntersectionType(implementedTypeNodes.map(checker.getTypeFromTypeReference));
         }
         else {
             implementsIntersectionType = <InterfaceType>checker.getTypeFromTypeReference(implementedTypeNodes[0]);
         }
 
-        const structuredType = checker.resolveStructuredTypeMembers(<IntersectionType | InterfaceType>implementsIntersectionType);        
+        const structuredType = checker.resolveStructuredTypeMembers(<IntersectionType | InterfaceType>implementsIntersectionType);
         const missingMembers = filterMissingMembers(filterNonPrivate(structuredType.members), classSymbol.members);
         return getInsertionsForMembers(missingMembers, classDecl, checker, newlineChar);
     }
@@ -1410,11 +1400,11 @@ namespace ts {
      * Finds the symbols in source but not target, generating a new map with the differences.
      */
     function filterMissingMembers(sourceSymbols: Map<Symbol>, targetSymbols: Map<Symbol>): Map<Symbol> {
-        let result: Map<Symbol> = createMap<Symbol>();
+        const result: Map<Symbol> = createMap<Symbol>();
         outer:
-        for(const sourceName in sourceSymbols) {
-            for(const targetName in targetSymbols) {
-                if(sourceName === targetName) {
+        for (const sourceName in sourceSymbols) {
+            for (const targetName in targetSymbols) {
+                if (sourceName === targetName) {
                     continue outer;
                 }
             }
@@ -1424,7 +1414,7 @@ namespace ts {
     }
 
     function filterSymbolMapByDecl(symbolMap: Map<Symbol>, pred: (decl: Declaration) => boolean): Map<Symbol> {
-        let result = createMap<Symbol>();
+        const result = createMap<Symbol>();
         for (const key in symbolMap) {
             const decl = symbolMap[key].getDeclarations();
             Debug.assert(!!(decl && decl.length));
@@ -1436,8 +1426,6 @@ namespace ts {
     }
 
     function filterAbstract(symbolMap: Map<Symbol>) {
-        // TODO: (arozga) use first or second?
-        // return mapObject(symbolMap, (key, val) => getModifierFlags(val.getDeclarations()[0]) & ModifierFlags.Abstract ? [key, val]: [undefined, undefined] );
         return filterSymbolMapByDecl(symbolMap, decl => !!(getModifierFlags(decl) & ModifierFlags.Abstract));
     }
 
@@ -1447,7 +1435,7 @@ namespace ts {
 
     function getInsertionsForMembers(symbolMap: MapLike<Symbol>, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
         let insertion = "";
-        
+
         for (const symbolName in symbolMap) {
             insertion = insertion.concat(getInsertionForMemberSymbol(symbolMap[symbolName], enclosingDeclaration, checker, newlineChar));
         }
@@ -1455,9 +1443,9 @@ namespace ts {
     }
 
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
-       const name = symbol.getName();
-       const type = checker.getTypeOfSymbol(symbol);
-        
+        const name = symbol.getName();
+        const type = checker.getTypeOfSymbol(symbol);
+
         const decls = symbol.getDeclarations();
         if (!(decls && decls.length)) {
             return "";
@@ -1473,7 +1461,7 @@ namespace ts {
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
                 const sigs = checker.getSignaturesOfType(type, SignatureKind.Call);
-                if(!(sigs && sigs.length > 0)) {
+                if (!(sigs && sigs.length > 0)) {
                     return "";
                 }
                 // TODO: (arozga) Deal with multiple signatures.
@@ -1488,20 +1476,6 @@ namespace ts {
     function getMethodBodyStub(newLineChar: string) {
         return `{${newLineChar}throw new Error('Method not Implemented');${newLineChar}}${newLineChar}`;
     }
-
-    /**
-     * Flattens params into a comma-separated list, sandwiched by prefix
-     * and suffix on either end.
-     */
-    /*
-    function getCommaSeparatedString(params: string[], prefix: string, suffix: string) {
-        let result = prefix;
-        for (let i = 0; params && i < params.length; ++i) {
-            result += (i > 0 ? "," : "") + params[i];
-        }
-        return result + suffix;
-    }
-    */
 
     function getVisibilityPrefix(flags: ModifierFlags): string {
         if (flags & ModifierFlags.Public) {

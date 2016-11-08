@@ -8,7 +8,7 @@ namespace ts.codefix {
             const token = getTokenAtPosition(sourceFile, start);
             const checker = context.program.getTypeChecker();
 
-            if (token.kind === SyntaxKind.Identifier &&  isClassLike(token.parent)) {
+            if (token.kind === SyntaxKind.Identifier && isClassLike(token.parent)) {
                 const classDeclaration = <ClassDeclaration>token.parent;
                 const startPos = classDeclaration.members.pos;
                 // const abstractClassMembers = ts.map(getNamedAbstractClassMembers(classDeclaration), member => member.name.getText());
@@ -22,9 +22,9 @@ namespace ts.codefix {
                         changes: [{
                             fileName: sourceFile.fileName,
                             textChanges: [{
-                                    span: {start: startPos, length: 0},
-                                    newText: insertion
-                                }]
+                                span: { start: startPos, length: 0 },
+                                newText: insertion
+                            }]
                         }]
                     }];
                 }

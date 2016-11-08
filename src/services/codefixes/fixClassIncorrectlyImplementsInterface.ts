@@ -14,7 +14,7 @@ namespace ts.codefix {
 
                 const insertion = getMissingInterfaceMembersInsertion(classDeclaration, checker, context.newLineCharacter);
 
-                if(insertion && insertion.length) {
+                if (insertion && insertion.length) {
                     return [{
                         description: getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class),
                         changes: [{

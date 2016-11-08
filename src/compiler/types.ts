@@ -2257,7 +2257,7 @@ namespace ts {
         getNonNullableType(type: Type): Type;
         getIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type;
         getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type;
-        
+
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolOfNode(node: Node): Symbol;
         getSymbolAtLocation(node: Node): Symbol;
