@@ -7,7 +7,7 @@
 //// class B implements A {[| |]}
 
 verify.rangeAfterCodeFix(`
-f(){
+f(): void{
     throw new Error('Method not Implemented');
 }
 `);

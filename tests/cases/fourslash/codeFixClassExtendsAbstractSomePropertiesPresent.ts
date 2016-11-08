@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts' />
 
-//// interface I {
-////     x: number;
-////     y: number;
-////     z: number;
+//// abstract class A {
+////    abstract x: number;
+////    abstract y: number;
+////    abstract z: number;
 //// }
 ////
-//// class C implements I {[|   |]
+//// class C extends A {[|   |]
 ////    constructor(public x: number) { }
 ////    y: number;
 //// }

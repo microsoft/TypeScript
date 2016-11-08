@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //// class C1 {
-////     f1();
+////     f1() {}
 //// }
 ////
 //// class C2 extends C1 {
@@ -12,7 +12,7 @@
 ////     |]f2(){}
 //// }
 
-verify.rangeAfterCodeFix(`f1(){
+verify.rangeAfterCodeFix(`f1(): void{
     throw new Error('Method not Implemented');
 }
 `);
