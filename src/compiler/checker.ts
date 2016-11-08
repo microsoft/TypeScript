@@ -4233,7 +4233,7 @@ namespace ts {
             for (const baseSig of baseSignatures) {
                 const typeParamCount = baseSig.typeParameters ? baseSig.typeParameters.length : 0;
                 if (typeParamCount === typeArgCount) {
-                    const sig = typeParamCount ? getSignatureInstantiation(baseSig, typeArguments) : cloneSignature(baseSig);
+                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, typeArguments) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
                     result.push(sig);
@@ -4983,6 +4983,12 @@ namespace ts {
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
+            const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
+            const id = getTypeListId(typeArguments);
+            return instantiations[id] || (instantiations[id] = createSignatureInstantiation(signature, typeArguments));
+        }
+
+        function createSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
             return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
         }
 
@@ -6823,6 +6829,27 @@ namespace ts {
                     //          breaking the intersection apart.
                     if (result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false)) {
                         return result;
+                    }
+                }
+
+                if (target.flags & TypeFlags.TypeParameter) {
+                    // Given a type parameter K with a constraint keyof T, a type S is
+                    // assignable to K if S is assignable to keyof T.
+                    const constraint = getConstraintOfTypeParameter(<TypeParameter>target);
+                    if (constraint && constraint.flags & TypeFlags.Index) {
+                        if (result = isRelatedTo(source, constraint, reportErrors)) {
+                            return result;
+                        }
+                    }
+                }
+                else if (target.flags & TypeFlags.Index) {
+                    // Given a type parameter T with a constraint C, a type S is assignable to
+                    // keyof T if S is assignable to keyof C.
+                    const constraint = getConstraintOfTypeParameter((<IndexType>target).type);
+                    if (constraint) {
+                        if (result = isRelatedTo(source, getIndexType(constraint), reportErrors)) {
+                            return result;
+                        }
                     }
                 }
 
@@ -11514,6 +11541,21 @@ namespace ts {
             diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
         }
 
+        function markPropertyAsReferenced(prop: Symbol) {
+            if (prop &&
+                noUnusedIdentifiers &&
+                (prop.flags & SymbolFlags.ClassMember) &&
+                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
+                if (prop.flags & SymbolFlags.Instantiated) {
+                    getSymbolLinks(prop).target.isReferenced = true;
+
+                }
+                else {
+                    prop.isReferenced = true;
+                }
+            }
+        }
+
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             const type = checkNonNullExpression(left);
             if (isTypeAny(type) || type === silentNeverType) {
@@ -11533,17 +11575,7 @@ namespace ts {
                 return unknownType;
             }
 
-            if (noUnusedIdentifiers &&
-                (prop.flags & SymbolFlags.ClassMember) &&
-                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
-                if (prop.flags & SymbolFlags.Instantiated) {
-                    getSymbolLinks(prop).target.isReferenced = true;
-
-                }
-                else {
-                    prop.isReferenced = true;
-                }
-            }
+            markPropertyAsReferenced(prop);
 
             getNodeLinks(node).resolvedSymbol = prop;
 
@@ -16333,6 +16365,7 @@ namespace ts {
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
+                markPropertyAsReferenced(property);
                 if (parent.initializer && property && getParentOfSymbol(property)) {
                     checkClassPropertyAccess(parent, parent.initializer, parentType, property);
                 }

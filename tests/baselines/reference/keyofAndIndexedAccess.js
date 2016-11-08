@@ -7,6 +7,10 @@ class Shape {
     visible: boolean;
 }
 
+class TaggedShape extends Shape {
+    tag: string;
+}
+
 class Item {
     name: string;
     price: number;
@@ -149,6 +153,17 @@ function f32<K extends "width" | "height">(key: K) {
     return shape[key];  // Shape[K]
 }
 
+function f33<S extends Shape, K extends keyof S>(shape: S, key: K) {
+    let name = getProperty(shape, "name");
+    let prop = getProperty(shape, key);
+    return prop;
+}
+
+function f34(ts: TaggedShape) {
+    let tag1 = f33(ts, "tag");
+    let tag2 = getProperty(ts, "tag");
+}
+
 class C {
     public x: string;
     protected y: string;
@@ -166,12 +181,56 @@ function f40(c: C) {
     let z: Z = c["z"];
 }
 
+// Repros from #12011
+
+class Base {
+    get<K extends keyof this>(prop: K) {
+        return this[prop];
+    }
+    set<K extends keyof this>(prop: K, value: this[K]) {
+        this[prop] = value;
+    }
+}
+
+class Person extends Base {
+    parts: number;
+    constructor(parts: number) {
+        super();
+        this.set("parts", parts);
+    }
+    getParts() {
+        return this.get("parts")
+    }
+}
+
+class OtherPerson {
+    parts: number;
+    constructor(parts: number) {
+        setProperty(this, "parts", parts);
+    }
+    getParts() {
+        return getProperty(this, "parts")
+    }
+}
+
 //// [keyofAndIndexedAccess.js]
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var Shape = (function () {
     function Shape() {
     }
     return Shape;
 }());
+var TaggedShape = (function (_super) {
+    __extends(TaggedShape, _super);
+    function TaggedShape() {
+        return _super.apply(this, arguments) || this;
+    }
+    return TaggedShape;
+}(Shape));
 var Item = (function () {
     function Item() {
     }
@@ -249,6 +308,15 @@ function f32(key) {
     var shape = { name: "foo", width: 5, height: 10, visible: true };
     return shape[key]; // Shape[K]
 }
+function f33(shape, key) {
+    var name = getProperty(shape, "name");
+    var prop = getProperty(shape, key);
+    return prop;
+}
+function f34(ts) {
+    var tag1 = f33(ts, "tag");
+    var tag2 = getProperty(ts, "tag");
+}
 var C = (function () {
     function C() {
     }
@@ -261,6 +329,39 @@ function f40(c) {
     var y = c["y"];
     var z = c["z"];
 }
+// Repros from #12011
+var Base = (function () {
+    function Base() {
+    }
+    Base.prototype.get = function (prop) {
+        return this[prop];
+    };
+    Base.prototype.set = function (prop, value) {
+        this[prop] = value;
+    };
+    return Base;
+}());
+var Person = (function (_super) {
+    __extends(Person, _super);
+    function Person(parts) {
+        var _this = _super.call(this) || this;
+        _this.set("parts", parts);
+        return _this;
+    }
+    Person.prototype.getParts = function () {
+        return this.get("parts");
+    };
+    return Person;
+}(Base));
+var OtherPerson = (function () {
+    function OtherPerson(parts) {
+        setProperty(this, "parts", parts);
+    }
+    OtherPerson.prototype.getParts = function () {
+        return getProperty(this, "parts");
+    };
+    return OtherPerson;
+}());
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -269,6 +370,9 @@ declare class Shape {
     width: number;
     height: number;
     visible: boolean;
+}
+declare class TaggedShape extends Shape {
+    tag: string;
 }
 declare class Item {
     name: string;
@@ -342,9 +446,25 @@ declare function pluck<T, K extends keyof T>(array: T[], key: K): T[K][];
 declare function f30(shapes: Shape[]): void;
 declare function f31<K extends keyof Shape>(key: K): Shape[K];
 declare function f32<K extends "width" | "height">(key: K): Shape[K];
+declare function f33<S extends Shape, K extends keyof S>(shape: S, key: K): S[K];
+declare function f34(ts: TaggedShape): void;
 declare class C {
     x: string;
     protected y: string;
     private z;
 }
 declare function f40(c: C): void;
+declare class Base {
+    get<K extends keyof this>(prop: K): this[K];
+    set<K extends keyof this>(prop: K, value: this[K]): void;
+}
+declare class Person extends Base {
+    parts: number;
+    constructor(parts: number);
+    getParts(): number;
+}
+declare class OtherPerson {
+    parts: number;
+    constructor(parts: number);
+    getParts(): number;
+}
