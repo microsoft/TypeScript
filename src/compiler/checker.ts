@@ -11117,7 +11117,7 @@ namespace ts {
         function getJsxAttributesSymbolArrayFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement): Symbol[] | undefined {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createMap<Symbol>();
-            let spread: Type = emptyObjectType
+            let spread: Type = emptyObjectType;
             let attributesArray: Symbol[] = [];
             for (const attributeDecl of attributes.properties) {
                 const member = attributeDecl.symbol;
