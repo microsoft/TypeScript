@@ -2210,6 +2210,17 @@ namespace ts {
      * Path must have a valid extension.
      */
     export function extensionFromPath(path: string): Extension {
+        const ts = tryGetTypeScriptExtensionFromPath(path);
+        if (ts !== undefined) {
+            return ts;
+        }
+        const js = tryGetJavaScriptExtensionFromPath(path);
+        if (js !== undefined) {
+            return js;
+        }
+        Debug.fail(`File ${path} has unknown extension.`);
+    }
+    export function tryGetTypeScriptExtensionFromPath(path: string): Extension | undefined {
         if (fileExtensionIs(path, ".d.ts")) {
             return Extension.Dts;
         }
@@ -2219,13 +2230,13 @@ namespace ts {
         if (fileExtensionIs(path, ".tsx")) {
             return Extension.Tsx;
         }
+    }
+    function tryGetJavaScriptExtensionFromPath(path: string): Extension | undefined {
         if (fileExtensionIs(path, ".js")) {
             return Extension.Js;
         }
         if (fileExtensionIs(path, ".jsx")) {
             return Extension.Jsx;
         }
-        Debug.fail(`File ${path} has unknown extension.`);
-        return Extension.Js;
     }
 }

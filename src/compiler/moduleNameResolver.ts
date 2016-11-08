@@ -514,18 +514,21 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Module_name_0_matched_pattern_1, moduleName, matchedPatternText);
             }
-            for (const subst of state.compilerOptions.paths[matchedPatternText]) {
+            return forEach(state.compilerOptions.paths[matchedPatternText], subst => {
                 const path = matchedStar ? subst.replace("*", matchedStar) : subst;
                 const candidate = normalizePath(combinePaths(state.compilerOptions.baseUrl, path));
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
                 }
-                const resolved = loader(extensions, candidate, failedLookupLocations, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
-                if (resolved) {
-                    return resolved;
+                // A path mapping may have a ".ts" extension; in contrast to an import, which should omit it.
+                const tsExtension = tryGetTypeScriptExtensionFromPath(candidate);
+                if (tsExtension !== undefined) {
+                    const path = tryFile(candidate, failedLookupLocations, /*onlyRecordFailures*/false, state);
+                    return path && { path, extension: tsExtension };
                 }
-            }
-            return undefined;
+
+                return loader(extensions, candidate, failedLookupLocations, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
+            });
         }
         else {
             const candidate = normalizePath(combinePaths(state.compilerOptions.baseUrl, moduleName));

@@ -1,0 +1,9 @@
+=== /a.ts ===
+import { foo } from "foo";
+>foo : Symbol(foo, Decl(a.ts, 0, 8))
+
+=== /foo/foo.ts ===
+
+export function foo() {}
+>foo : Symbol(foo, Decl(foo.ts, 0, 0))
+
