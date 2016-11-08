@@ -6,6 +6,8 @@
 ////
 //// class C implements I<number> { } 
 
-// Don't know how to instantiate in codeFix
+verify.codeFixAvailable();
+
+// TODO: (arozga) Don't know how to instantiate in codeFix
 // if instantiation is invalid.
-verify.not.codeFixAvailable();
+// verify.not.codeFixAvailable();

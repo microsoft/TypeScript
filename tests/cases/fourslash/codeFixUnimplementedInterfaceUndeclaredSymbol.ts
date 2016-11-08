@@ -13,4 +13,7 @@
 //
 // In the latter two cases, it is premature to copy `x:T` into C.
 // Since we can't guess the programmer's intent here, we do nothing.
-verify.not.codeFixAvailable();
+
+verify.codeFixAvailable();
+// TODO: (aozgaa) Acknowledge other errors on class/implemented interface/extended abstract class.
+// verify.not.codeFixAvailable();
