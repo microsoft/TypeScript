@@ -2047,7 +2047,7 @@ namespace FourSlash {
             const actualText = this.rangeText(ranges[0]);
 
             if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
-                this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
+                this.raiseError(`Actual text doesn't match expected text. Actual:\n'${actualText}'\nExpected:\n'${expectedText}'`);
             }
         }
 
@@ -2084,7 +2084,7 @@ namespace FourSlash {
 
             const actualContents: string = this.getFileContent(fileName);
             if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
-                this.raiseError(`Actual text doesn't match expected text. Actual:\n${actualContents}\n\nExpected:\n\n${expectedContents}`);
+                this.raiseError(`Actual text doesn't match expected text. Actual:\n${actualContents}\n\nExpected:\n${expectedContents}`);
             }
         }
 
