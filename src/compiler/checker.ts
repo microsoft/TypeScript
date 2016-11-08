@@ -5816,7 +5816,9 @@ namespace ts {
         }
 
         function getLiteralTypeFromPropertyName(prop: Symbol) {
-            return startsWith(prop.name, "__@") ? neverType : getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(prop.name));
+            return getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier || startsWith(prop.name, "__@") ?
+                neverType :
+                getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(prop.name));
         }
 
         function getLiteralTypeFromPropertyNames(type: Type) {
@@ -7044,7 +7046,7 @@ namespace ts {
                             return result;
                         }
                     }
-                    else if (isGenericMappedType(target)) {
+                    if (isGenericMappedType(target)) {
                         // A type [P in S]: X is related to a type [P in T]: X if T is related to S.
                         if (isGenericMappedType(source) &&
                             isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), /*reportErrors*/ false) &&
