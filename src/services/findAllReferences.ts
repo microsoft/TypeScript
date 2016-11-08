@@ -1358,35 +1358,6 @@ namespace ts.FindAllReferences {
         });
     }
 
-    /**
-     * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
-     */
-    function getContainingObjectLiteralElement(node: Node): ObjectLiteralElement {
-        switch (node.kind) {
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral:
-                if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralPropertyDeclaration(node.parent.parent) ? node.parent.parent : undefined;
-                }
-            // intential fall through
-            case SyntaxKind.Identifier:
-                return isObjectLiteralPropertyDeclaration(node.parent) && node.parent.name === node ? node.parent : undefined;
-        }
-        return undefined;
-    }
-
-    function isObjectLiteralPropertyDeclaration(node: Node): node is ObjectLiteralElement  {
-        switch (node.kind) {
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return true;
-        }
-        return false;
-    }
-
     /** Get `C` given `N` if `N` is in the position `class C extends N` or `class C extends foo.N` where `N` is an identifier. */
     function tryGetClassByExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
         return tryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).parent);
