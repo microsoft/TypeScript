@@ -2257,7 +2257,7 @@ namespace ts {
         getNonNullableType(type: Type): Type;
         getIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type;
         getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type;
-
+        
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolOfNode(node: Node): Symbol;
         getSymbolAtLocation(node: Node): Symbol;
@@ -2267,6 +2267,7 @@ namespace ts {
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): Type;
+        signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
@@ -2348,6 +2349,7 @@ namespace ts {
         InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 0x00000200,  // Writing type in type alias declaration
         UseTypeAliasValue               = 0x00000400,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
+        supressAnyReturnType            = 0x00000800,  // If the return type is any-like, don't offer a return type.
     }
 
     export const enum SymbolFormatFlags {
