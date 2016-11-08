@@ -1,3 +1,5 @@
+// @declaration: true
+
 // Repros from #12066
 
 interface X<A> {
