@@ -1026,7 +1026,7 @@ namespace FourSlash {
                 ts.displayPartsToString(help.suffixDisplayParts), expected);
         }
 
-        public verifyCurrentParameterIsletiable(isVariable: boolean) {
+        public verifyCurrentParameterIsVariable(isVariable: boolean) {
             const signature = this.getActiveSignatureHelpItem();
             assert.isOk(signature);
             assert.equal(isVariable, signature.isVariadic);
@@ -1051,6 +1051,10 @@ namespace FourSlash {
 
         public verifyCurrentSignatureHelpParameterCount(expectedCount: number) {
             assert.equal(this.getActiveSignatureHelpItem().parameters.length, expectedCount);
+        }
+
+        public verifyCurrentSignatureHelpIsVariadic(expected: boolean) {
+            assert.equal(this.getActiveSignatureHelpItem().isVariadic, expected);
         }
 
         public verifyCurrentSignatureHelpDocComment(docComment: string) {
@@ -3229,6 +3233,10 @@ namespace FourSlashInterface {
 
         public signatureHelpCountIs(expected: number) {
             this.state.verifySignatureHelpCount(expected);
+        }
+
+        public signatureHelpCurrentArgumentListIsVariadic(expected: boolean) {
+            this.state.verifyCurrentSignatureHelpIsVariadic(expected);
         }
 
         public signatureHelpArgumentCountIs(expected: number) {
