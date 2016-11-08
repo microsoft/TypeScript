@@ -2,7 +2,7 @@
 namespace ts {
     export interface CodeFix {
         errorCodes: number[];
-        getCodeActions(context: CodeFixContext, cancellationToken?: CancellationToken): CodeAction[] | undefined;
+        getCodeActions(context: CodeFixContext): CodeAction[] | undefined;
     }
 
     export interface CodeFixContext {
@@ -12,6 +12,7 @@ namespace ts {
         program: Program;
         newLineCharacter: string;
         host: LanguageServiceHost;
+        cancellationToken: CancellationToken;
     }
 
     export namespace codefix {
@@ -32,12 +33,12 @@ namespace ts {
             return Object.keys(codeFixes);
         }
 
-        export function getFixes(context: CodeFixContext, cancellationToken: CancellationToken): CodeAction[] {
+        export function getFixes(context: CodeFixContext): CodeAction[] {
             const fixes = codeFixes[context.errorCode];
             let allActions: CodeAction[] = [];
 
             forEach(fixes, f => {
-                const actions = f.getCodeActions(context, cancellationToken);
+                const actions = f.getCodeActions(context);
                 if (actions && actions.length > 0) {
                     allActions = allActions.concat(actions);
                 }

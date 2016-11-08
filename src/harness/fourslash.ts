@@ -2591,7 +2591,7 @@ ${code}
                                 resetLocalData();
                             }
 
-                            currentFileName = basePath + "/" + value;
+                            currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
                             currentFileOptions[key] = value;
                         }
                         else {

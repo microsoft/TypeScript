@@ -56,7 +56,7 @@ namespace ts {
         return { resolvedModule: resolved && resolvedModuleFromResolved(resolved, isExternalLibraryImport), failedLookupLocations };
     }
 
-    function moduleHasNonRelativeName(moduleName: string): boolean {
+    export function moduleHasNonRelativeName(moduleName: string): boolean {
         return !(isRootedDiskPath(moduleName) || isExternalModuleNameRelative(moduleName));
     }
 

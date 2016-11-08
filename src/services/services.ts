@@ -1679,10 +1679,11 @@ namespace ts {
                     span: span,
                     program: program,
                     newLineCharacter: newLineChar,
-                    host: host
+                    host: host,
+                    cancellationToken: cancellationToken
                 };
 
-                const fixes = codefix.getFixes(context, cancellationToken);
+                const fixes = codefix.getFixes(context);
                 if (fixes) {
                     allFixes = allFixes.concat(fixes);
                 }

@@ -102,7 +102,8 @@ namespace ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
-            getExportsOfModule: getExportsOfModuleAsArray,
+            getExportsOfModuleAsArray,
+            getExportsOfModule,
             getAmbientModules,
 
             getJsxElementAttributesType,
