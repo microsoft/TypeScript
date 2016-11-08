@@ -8,5 +8,5 @@
 //// |]}
 
 verify.rangeAfterCodeFix(`
-abstract x: number;
+x: number;
 `);

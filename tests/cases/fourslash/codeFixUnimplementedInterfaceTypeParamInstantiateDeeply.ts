@@ -11,7 +11,7 @@ interface I<T> {
    x: { y: T, z: T[] };
 }
 
-class C<number> implements I<number> {
-    x: { y: number, z: number[] };
+class C implements I<number> {
+    x: { y: number; z: number[]; };
 } 
 `);

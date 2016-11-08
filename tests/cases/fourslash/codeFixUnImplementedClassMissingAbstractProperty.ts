@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
 
-//// abstract class C1 {
+//// abstract class A {
 ////     abstract x: number;
 //// }
 ////
-//// class C3 implements C2 {[| |]}
+//// class C implements A {[| |]}
 
 verify.rangeAfterCodeFix(`
 x: number;

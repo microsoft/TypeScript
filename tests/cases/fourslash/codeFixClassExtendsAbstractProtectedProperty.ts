@@ -8,5 +8,5 @@
 //// |]}
 
 verify.rangeAfterCodeFix(`
-protected abstract x: number;
+protected x: number;
 `);

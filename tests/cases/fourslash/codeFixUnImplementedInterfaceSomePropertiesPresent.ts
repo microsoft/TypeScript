@@ -5,10 +5,11 @@
 ////     y: number;
 //// }
 ////
-//// class C2 implements C {[| |]
-////     x: number
-//// }
+//// class C2 implements I {[|
+////     x: number;
+//// |]}
 
 verify.rangeAfterCodeFix(`
 y: number;
+x: number;
 `);

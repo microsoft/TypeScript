@@ -8,5 +8,5 @@
 //// |]}
 
 verify.rangeAfterCodeFix(`
-x: number & { __iBrand: any }
+x: number & { __iBrand: any; };
 `);
