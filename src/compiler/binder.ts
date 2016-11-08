@@ -1331,6 +1331,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocRecordType:
+                case SyntaxKind.JsxAttributes:
                     return ContainerFlags.IsContainer;
 
                 case SyntaxKind.InterfaceDeclaration:
@@ -1437,6 +1438,7 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.JSDocRecordType:
                 case SyntaxKind.JSDocTypeLiteral:
+                case SyntaxKind.JsxAttributes:
                     // Interface/Object-types always have their children added to the 'members' of
                     // their container. They are only accessible through an instance of their
                     // container, and are never in scope otherwise (even inside the body of the
@@ -1619,6 +1621,14 @@ namespace ts {
             }
 
             return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object");
+        }
+
+        function bindJsxAttributes(node: JsxAttributes) {
+            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__jsxAttributes");
+        }
+
+        function bindJsxAttribute(node: JsxAttribute, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
+            return declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
 
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string) {
@@ -2041,6 +2051,12 @@ namespace ts {
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return bindModuleDeclaration(<ModuleDeclaration>node);
+
+                // Jsx-attributes
+                case SyntaxKind.JsxAttributes:
+                    return bindJsxAttributes(<JsxAttributes>node);
+                case SyntaxKind.JsxAttribute:
+                    return bindJsxAttribute(<JsxAttribute>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
 
                 // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -3118,6 +3134,7 @@ namespace ts {
             case SyntaxKind.JsxText:
             case SyntaxKind.JsxClosingElement:
             case SyntaxKind.JsxAttribute:
+            case SyntaxKind.JsxAttributes:
             case SyntaxKind.JsxSpreadAttribute:
             case SyntaxKind.JsxExpression:
                 // These nodes are Jsx syntax.
