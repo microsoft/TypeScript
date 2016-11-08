@@ -1073,6 +1073,8 @@ namespace ts {
 
     export function isCallLikeExpression(node: Node): node is CallLikeExpression {
         switch (node.kind) {
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.TaggedTemplateExpression:
@@ -1086,6 +1088,9 @@ namespace ts {
     export function getInvokedExpression(node: CallLikeExpression): Expression {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
+        }
+        else if (isJsxOpeningLikeElement(node)) {
+            return node.tagName;
         }
 
         // Will either be a CallExpression, NewExpression, or Decorator.
@@ -4132,6 +4137,7 @@ namespace ts {
             || kind === SyntaxKind.ImportEqualsDeclaration
             || kind === SyntaxKind.ImportSpecifier
             || kind === SyntaxKind.InterfaceDeclaration
+            || kind === SyntaxKind.JsxAttribute
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.MethodSignature
             || kind === SyntaxKind.ModuleDeclaration
@@ -4244,6 +4250,11 @@ namespace ts {
             || kind === SyntaxKind.JsxText;
     }
 
+    export function isJsxAttributes(node: Node): node is JsxAttributes {
+        const kind = node.kind;
+        return kind === SyntaxKind.JsxAttributes;
+    }
+
     export function isJsxAttributeLike(node: Node): node is JsxAttributeLike {
         const kind = node.kind;
         return kind === SyntaxKind.JsxAttribute
@@ -4256,6 +4267,10 @@ namespace ts {
 
     export function isJsxAttribute(node: Node): node is JsxAttribute {
         return node.kind === SyntaxKind.JsxAttribute;
+    }
+
+    export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement {
+        return node.kind === SyntaxKind.JsxOpeningElement || node.kind === SyntaxKind.JsxSelfClosingElement;
     }
 
     export function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression {
