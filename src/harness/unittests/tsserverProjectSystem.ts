@@ -434,6 +434,10 @@ namespace ts.projectSystem {
             };
         }
 
+        createHash(s: string): string {
+            return s;
+        }
+
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
             const callbacks = this.watchedDirectories[path];
