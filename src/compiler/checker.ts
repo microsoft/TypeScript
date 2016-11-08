@@ -2229,7 +2229,7 @@ namespace ts {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
-                    else if (!(flags & TypeFormatFlags.InTypeAlias) && (getObjectFlags(type) & ObjectFlags.Anonymous || type.flags & TypeFlags.UnionOrIntersection) && type.aliasSymbol &&
+                    else if (!(flags & TypeFormatFlags.InTypeAlias) && type.aliasSymbol &&
                         isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
                         const typeArguments = type.aliasTypeArguments;
                         writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
@@ -4486,6 +4486,14 @@ namespace ts {
 
         function getTemplateTypeFromMappedType(type: MappedType) {
             return instantiateType(type.templateType, type.mapper || identityMapper);
+        }
+
+        function isGenericMappedType(type: Type) {
+            if (getObjectFlags(type) & ObjectFlags.Mapped) {
+                const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
+                return !!(constraintType.flags & (TypeFlags.TypeParameter | TypeFlags.Index));
+            }
+            return false;
         }
 
         function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -6996,6 +7004,12 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.Index) {
+                    // A keyof S is related to a keyof T if T is related to S.
+                    if (source.flags & TypeFlags.Index) {
+                        if (result = isRelatedTo((<IndexType>target).type, (<IndexType>source).type, /*reportErrors*/ false)) {
+                            return result;
+                        }
+                    }
                     // Given a type parameter T with a constraint C, a type S is assignable to
                     // keyof T if S is assignable to keyof C.
                     const constraint = getConstraintOfTypeParameter((<IndexType>target).type);
@@ -7030,18 +7044,28 @@ namespace ts {
                             return result;
                         }
                     }
-                    // Even if relationship doesn't hold for unions, intersections, or generic type references,
-                    // it may hold in a structural comparison.
-                    const apparentSource = getApparentType(source);
-                    // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
-                    // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
-                    // relates to X. Thus, we include intersection types on the source side here.
-                    if (apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
-                        // Report structural errors only if we haven't reported any errors yet
-                        const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo && !(source.flags & TypeFlags.Primitive);
-                        if (result = objectTypeRelatedTo(apparentSource, source, target, reportStructuralErrors)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
+                    else if (isGenericMappedType(target)) {
+                        // A type [P in S]: X is related to a type [P in T]: X if T is related to S.
+                        if (isGenericMappedType(source) &&
+                            isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), /*reportErrors*/ false) &&
+                            isTypeIdenticalTo(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target))) {
+                            return Ternary.True;
+                        }
+                    }
+                    else {
+                        // Even if relationship doesn't hold for unions, intersections, or generic type references,
+                        // it may hold in a structural comparison.
+                        const apparentSource = getApparentType(source);
+                        // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
+                        // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
+                        // relates to X. Thus, we include intersection types on the source side here.
+                        if (apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
+                            // Report structural errors only if we haven't reported any errors yet
+                            const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo && !(source.flags & TypeFlags.Primitive);
+                            if (result = objectTypeRelatedTo(apparentSource, source, target, reportStructuralErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
                         }
                     }
                 }
