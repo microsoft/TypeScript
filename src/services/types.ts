@@ -1,4 +1,4 @@
-namespace ts {
+﻿namespace ts {
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
@@ -242,13 +242,16 @@ namespace ts {
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[];
 
-        getCodeRefactoringsAtPosition(fileName: string, start: number, end: number, serviceInstance: LanguageService): CodeAction[];
+        getAvailableCodeRefactoringsAtPosition(fileName: string, start: number, end: number, serviceInstance: LanguageService): CodeRefactoring[];
+
+        getChangesForCodeRefactoringAtPosition(fileName: string, start: number, end: number, refactoringId: string, options: any, serviceInstance: LanguageService): CodeAction[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
         getProgram(): Program;
 
-        /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
+        /* @internal */
+        getNonBoundSourceFile(fileName: string): SourceFile;
 
         /**
          * @internal
@@ -320,6 +323,16 @@ namespace ts {
     export class TextChange {
         span: TextSpan;
         newText: string;
+    }
+
+    export interface CodeRefactoring {
+        /** Description of the code refactoring to display in the UI of the editor */
+        description: string;
+        /** The unique Id for the refactoring so we can invoke it when requested
+          * by the user. */
+        refactoringId: string;
+        /** Template or default input for the refactoring */
+        defaultUserInput?: any;
     }
 
     export interface FileTextChanges {

@@ -1,7 +1,34 @@
-/* @internal */
+﻿/* @internal */
 namespace ts.coderefactoring {
-    registerCodeRefactoring({
-        getCodeActions: (context: CodeRefactoringContext): CodeAction[] => {
+    registerCodeRefactoringFactory({
+        refactoringId: Diagnostics.Inline_temporary_variable.code.toString(),
+        getAvailableRefactorings: (context: CodeRefactoringContext): CodeRefactoring[] => {
+            const sourceFile = context.sourceFile;
+            const identifier = getTokenAtPosition(sourceFile, context.span.start);
+            let variableDeclaration: VariableDeclaration;
+            if (identifier.kind !== SyntaxKind.Identifier || !(isVariableDeclaration(identifier.parent))) {
+                // this refectoring only works on a variable declarations
+                return undefined;
+            }
+            else {
+                variableDeclaration = identifier.parent;
+            }
+
+            const namePos: number = variableDeclaration.name.pos;
+            const referenceSymbols: ReferencedSymbol[] = context.languageService.findReferences(context.sourceFile.fileName, namePos + 1);
+
+            // If there are no referenced symbols this refactoring shouldn't 
+            // do anything        
+            if (!referenceSymbols || referenceSymbols.length === 0) {
+                return undefined;
+            }
+
+            return [{
+                description: getLocaleSpecificMessage(Diagnostics.Inline_temporary_variable),
+                refactoringId: Diagnostics.Inline_temporary_variable.code.toString()
+            }];
+        },
+        getChangesForRefactoring: (context: CodeRefactoringContext): CodeAction[] => {
             const sourceFile = context.sourceFile;
             const identifier = getTokenAtPosition(sourceFile, context.span.start);
             let variableDeclaration: VariableDeclaration;

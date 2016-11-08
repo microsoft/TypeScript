@@ -214,7 +214,7 @@ declare namespace FourSlashInterface {
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
         codeFixAtPosition(expectedText: string, errorCode?: number): void;
-        refactoringsAtPostion(expectedChanges: ExpectedFileChange[]): void;
+        inlineTempAtPosition(expectedChanges: ExpectedFileChange[]): void;
         navigationBar(json: any): void;
         navigationTree(json: any): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;

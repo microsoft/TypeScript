@@ -12,7 +12,7 @@
 ////        }
 //// }
 
-verify.refactoringsAtPostion([{
+verify.inlineTempAtPosition([{
             fileName: "file1.ts",
             expectedText: `
 export module m1 {

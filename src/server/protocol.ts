@@ -98,6 +98,9 @@ namespace ts.server.protocol {
         export type GetCodeRefactorings = "getCodeRefactorings";
         /* @internal */
         export type GetCodeRefactoringsFull = "getCodeRefactorings-full";
+        export type ApplyCodeRefactoring = "applyCodeRefactoring";
+        /* @internal */
+        export type ApplyCodeRefactoringFull = "applyCodeRefactoring-full";
     }
 
     /**
@@ -434,22 +437,39 @@ namespace ts.server.protocol {
     /**
       * Request for the available code refactorings at a specific position.
       */
-    export interface CodeRefactoringRequest extends Request {
+    export interface AvailableCodeRefactoringsRequest extends Request {
       command: CommandTypes.GetCodeRefactorings;
-      arguments: CodeRefactoringRequestArgs;
+      arguments: AvailableCodeRefactoringsRequestArgs;
     }
 
     /**
       * Response for GetCoderefactorings request. 
       */
-    export interface CodeRefactoringResponse extends Response {
-      body?: CodeAction[];
+    export interface AvailableCodeRefactoringResponse extends Response {
+        body?: CodeRefactoring[];
     }
 
     /**
       * Instances of this interface request the available refactorings for a specific location in a sourcefile.
       */
-    export interface CodeRefactoringRequestArgs extends CodeChangeRequestArgs {
+    export interface AvailableCodeRefactoringsRequestArgs extends CodeChangeRequestArgs {
+
+    }
+
+    /**
+      * Request to calculate the changes for a specific code refactoring at a specific position.
+      */
+    export interface ApplyCodeRefactoringRequest extends Request {
+        command: CommandTypes.ApplyCodeRefactoring;
+        arguments: ApplyCodeRefactoringRequestArgs;
+    }
+
+    export interface ApplyCodeRefactoringRequestArgs extends CodeChangeRequestArgs {
+        refactoringId: string;
+        input?: any;
+    }
+
+    export interface ApplyCodeRefactoringResponse extends CodeFixResponse {
 
     }
 

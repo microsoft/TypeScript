@@ -1,4 +1,4 @@
-/// <reference path="session.ts" />
+﻿/// <reference path="session.ts" />
 
 namespace ts.server {
     export interface SessionClientHost extends LanguageServiceHost {
@@ -690,11 +690,12 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
         }
 
-        getCodeRefactoringsAtPosition(fileName: string, start: number, end: number): CodeAction[] {
+
+        getAvailableCodeRefactoringsAtPosition(fileName: string, start: number, end: number, _serviceInstance: LanguageService): CodeRefactoring[] {
             const startLineOffset = this.positionToOneBasedLineOffset(fileName, start);
             const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
 
-            const args: protocol.CodeRefactoringRequestArgs = {
+            const args: protocol.AvailableCodeRefactoringsRequestArgs = {
                 file: fileName,
                 startLine: startLineOffset.line,
                 startOffset: startLineOffset.offset,
@@ -702,8 +703,28 @@ namespace ts.server {
                 endOffset: endLineOffset.offset,
             };
 
-            const request = this.processRequest<protocol.CodeRefactoringRequest>(CommandNames.GetCodeRefactorings, args);
-            const response = this.processResponse<protocol.CodeRefactoringResponse>(request);
+            const request = this.processRequest<protocol.AvailableCodeRefactoringsRequest>(CommandNames.GetCodeRefactorings, args);
+            const response = this.processResponse<protocol.AvailableCodeRefactoringResponse>(request);
+
+            return response.body;
+        }
+
+        getChangesForCodeRefactoringAtPosition(fileName: string, start: number, end: number, refactoringId: string, options: any, _serviceInstance: LanguageService): CodeAction[] {
+            const startLineOffset = this.positionToOneBasedLineOffset(fileName, start);
+            const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
+
+            const args: protocol.ApplyCodeRefactoringRequestArgs = {
+                file: fileName,
+                startLine: startLineOffset.line,
+                startOffset: startLineOffset.offset,
+                endLine: endLineOffset.line,
+                endOffset: endLineOffset.offset,
+                refactoringId: refactoringId,
+                input: options,
+            };
+
+            const request = this.processRequest<protocol.ApplyCodeRefactoringRequest>(CommandNames.ApplyCodeRefactoring, args);
+            const response = this.processResponse<protocol.ApplyCodeRefactoringResponse>(request);
 
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
         }

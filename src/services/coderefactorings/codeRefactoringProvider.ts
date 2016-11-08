@@ -1,31 +1,46 @@
-/* @internal */
+﻿/* @internal */
 namespace ts {
-    export interface CodeRefactoring {
-        getCodeActions(context: CodeRefactoringContext): CodeAction[];
+    export interface CodeRefactoringFactory {
+        refactoringId: string;
+        getAvailableRefactorings(context: CodeRefactoringContext): CodeRefactoring[];
+        getChangesForRefactoring(context: CodeRefactoringContext): CodeAction[];
     }
 
     export interface CodeRefactoringContext extends CodeChangeContext {
         languageService: LanguageService;
+        refactoringId?: string;
+        userInput?: any;
     }
 
     export namespace coderefactoring {
-        const refactorings: CodeRefactoring[] = [];
+        const refactorings = createMap<CodeRefactoringFactory>();
 
-        export function registerCodeRefactoring(refactoring: CodeRefactoring) {
-            refactorings.push(refactoring);
+        export function registerCodeRefactoringFactory(refactoring: CodeRefactoringFactory) {
+            const existing = refactorings[refactoring.refactoringId];
+            if (!existing) {
+                refactorings[refactoring.refactoringId] = refactoring;
+            }
+            else {
+                Debug.fail("Trying to add a duplicate refactoring.");
+            }
         }
 
-        export function getCodeRefactorings(context: CodeRefactoringContext): CodeAction[] {
-            let allActions: CodeAction[] = [];
+        export function getAvailableCodeRefactorings(context: CodeRefactoringContext): CodeRefactoring[] {
+            let allRefactorings: CodeRefactoring[] = [];
 
-            forEach(refactorings, r => {
-                const actions = r.getCodeActions(context);
-                if (actions && actions.length > 0) {
-                    allActions = allActions.concat(actions);
+            for (const key in refactorings) {
+                const factory = refactorings[key];
+                const current = factory.getAvailableRefactorings(context);
+                if (current && current.length > 0) {
+                    allRefactorings = allRefactorings.concat(current);
                 }
-            });
+            }
+            return allRefactorings;
+        }
 
-            return allActions;
+        export function getTextChangesForRefactoring(context: CodeRefactoringContext): CodeAction[] {
+            const factory = refactorings[context.refactoringId];
+            return factory.getChangesForRefactoring(context);
         }
 
         /* @interal */

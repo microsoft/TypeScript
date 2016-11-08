@@ -1,4 +1,4 @@
-/// <reference path="..\compiler\program.ts"/>
+﻿/// <reference path="..\compiler\program.ts"/>
 /// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='types.ts' />
@@ -1691,13 +1691,11 @@ namespace ts {
             return allFixes;
         }
 
-        function getCodeRefactoringsAtPosition(fileName: string, start: number, end: number, serviceInstance: LanguageService): CodeAction[] {
+        function getAvailableCodeRefactoringsAtPosition(fileName: string, start: number, end: number, serviceInstance: LanguageService): CodeRefactoring[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = { start, length: end - start };
             const newLineChar = getNewLineOrDefaultFromHost(host);
-
-            let allActions: CodeAction[] = [];
 
             cancellationToken.throwIfCancellationRequested();
 
@@ -1709,13 +1707,30 @@ namespace ts {
                 languageService: serviceInstance
             };
 
-            const refactorings = coderefactoring.getCodeRefactorings(context);
-            if (refactorings) {
-                allActions = allActions.concat(refactorings);
-            }
-
-            return allActions;
+            return coderefactoring.getAvailableCodeRefactorings(context);
         }
+
+        function getChangesForCodeRefactoringAtPosition(fileName: string, start: number, end: number, refactoringId: string, options: any, serviceInstance: LanguageService): CodeAction[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const span = { start, length: end - start };
+            const newLineChar = getNewLineOrDefaultFromHost(host);
+
+            cancellationToken.throwIfCancellationRequested();
+
+            const context = {
+                sourceFile: sourceFile,
+                span: span,
+                refactoringId,
+                options,
+                program: program,
+                newLineCharacter: newLineChar,
+                languageService: serviceInstance,
+            };
+
+            return coderefactoring.getTextChangesForRefactoring(context);
+        }
+
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
@@ -1942,7 +1957,8 @@ namespace ts {
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
             getCodeFixesAtPosition,
-            getCodeRefactoringsAtPosition,
+            getAvailableCodeRefactoringsAtPosition,
+            getChangesForCodeRefactoringAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

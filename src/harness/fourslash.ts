@@ -484,7 +484,7 @@ namespace FourSlash {
                 endPos = endMarker.position;
             }
 
-            errors.forEach(function(error: ts.Diagnostic) {
+            errors.forEach(function (error: ts.Diagnostic) {
                 if (predicate(error.start, error.start + error.length, startPos, endPos)) {
                     exists = true;
                 }
@@ -501,7 +501,7 @@ namespace FourSlash {
                 Harness.IO.log("Unexpected error(s) found.  Error list is:");
             }
 
-            errors.forEach(function(error: ts.Diagnostic) {
+            errors.forEach(function (error: ts.Diagnostic) {
                 Harness.IO.log("  minChar: " + error.start +
                     ", limChar: " + (error.start + error.length) +
                     ", message: " + ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine()) + "\n");
@@ -2065,7 +2065,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyRefactoringAtPosition(expectedChanges: ExpectedFileChange[]) {
+        public verifyRefactoringAtPosition(expectedChanges: ExpectedFileChange[], refactoringId: string) {
             // file the refactoring is triggered from
             const sourceFileName = this.activeFile.fileName;
 
@@ -2076,7 +2076,7 @@ namespace FourSlash {
             const start = markers[0].position;
             const end = markers[1] ? markers[1].position : markers[0].position;
 
-            const actualRefactorings = this.languageService.getCodeRefactoringsAtPosition(sourceFileName, start, end, this.languageService);
+            const actualRefactorings = this.languageService.getChangesForCodeRefactoringAtPosition(sourceFileName, start, end, refactoringId, /*options*/ undefined, this.languageService);
             if (!actualRefactorings || actualRefactorings.length == 0) {
                 this.raiseError("No code refactorings found.");
             }
@@ -3384,8 +3384,8 @@ namespace FourSlashInterface {
             this.state.verifyCodeFixAtPosition(expectedText, errorCode);
         }
 
-        public refactoringsAtPostion(expectedChanges: FourSlash.ExpectedFileChange[]): void {
-            this.state.verifyRefactoringAtPosition(expectedChanges);
+        public inlineTempAtPosition(expectedChanges: FourSlash.ExpectedFileChange[]): void {
+            this.state.verifyRefactoringAtPosition(expectedChanges, ts.Diagnostics.Inline_temporary_variable.code.toString());
         }
 
         public navigationBar(json: any) {

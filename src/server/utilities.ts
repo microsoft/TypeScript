@@ -204,7 +204,8 @@ namespace ts.server {
         getImplementationAtPosition: throwLanguageServiceIsDisabledError,
         getSourceFile: throwLanguageServiceIsDisabledError,
         getCodeFixesAtPosition: throwLanguageServiceIsDisabledError,
-        getCodeRefactoringsAtPosition: throwLanguageServiceIsDisabledError,
+        getAvailableCodeRefactoringsAtPosition: throwLanguageServiceIsDisabledError,
+        getChangesForCodeRefactoringAtPosition: throwLanguageServiceIsDisabledError,
     };
 
     export interface ServerLanguageServiceHost {
