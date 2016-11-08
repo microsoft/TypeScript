@@ -1,11 +1,13 @@
 /// <reference path="fourslash.ts" />
 
-//// [|import d from "./module"|];
-//// f1/*0*/();
+//// [|import d from "./module";
+//// f1/*0*/();|]
 
 // @Filename: module.ts
 //// export function f1() {}
 //// export var v1 = 5;
 //// export default var d1 = 6;
 
-verify.codeFixAtPosition(`import d, { f1 } from "./module"`);
+verify.codeFixAtPosition(`import d from "./module";
+import { f1 } from "./module";
+f1();`);

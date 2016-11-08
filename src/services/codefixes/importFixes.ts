@@ -119,7 +119,61 @@ namespace ts.codefix {
                             sourceFile.fileName
                         );
                     }
+                    /**
+                     * If the existing import declaration already has a named import list, just
+                     * insert the identifier into that list.
+                     */
+                    else if (declaration.kind === SyntaxKind.ImportDeclaration &&
+                        declaration.importClause &&
+                        declaration.importClause.namedBindings &&
+                        declaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
+                        const textChange = getTextChangeForImportList(declaration.importClause.namedBindings);
+                        return createCodeAction(
+                            Diagnostics.Add_0_to_existing_import_declaration_from_1,
+                            [name, moduleSpecifier],
+                            textChange.newText,
+                            textChange.span,
+                            sourceFile.fileName
+                        );
+                    }
                     return getCodeActionForNewImport(moduleSpecifier, declaration.getEnd());
+
+                    function getTextChangeForImportList(importList: NamedImports): TextChange {
+                        if (importList.elements.length === 0) {
+                            const start = importList.getStart();
+                            return {
+                                newText: `{ ${name} }`,
+                                span: { start, length: importList.getEnd() - start }
+                            };
+                        }
+
+                        // Insert after the last element
+                        const insertPoint = importList.elements[importList.elements.length - 1].getEnd();
+
+                        // If the import list has one import per line, preserve that. Otherwise, insert on same line as last element
+                        let oneImportPerLine: boolean;
+                        if (importList.elements.length === 1) {
+                            /**
+                             * If there is only one symbol being imported, still check to see if it's set up for multi-line imports like this:
+                             *     import {
+                             *         foo
+                             *     } from "./module";
+                             */
+                            const startLine = getLineOfLocalPosition(sourceFile, importList.getStart());
+                            const endLine = getLineOfLocalPosition(sourceFile, importList.getEnd());
+                            oneImportPerLine = endLine - startLine >= 2;
+                        }
+                        else {
+                            const startLine = getLineOfLocalPosition(sourceFile, importList.elements[0].getStart());
+                            const endLine = getLineOfLocalPosition(sourceFile, insertPoint);
+                            oneImportPerLine = endLine - startLine >= importList.elements.length - 1;
+                        }
+
+                        return {
+                            newText: `,${oneImportPerLine ? context.newLineCharacter : ""}${name}`,
+                            span: { start: insertPoint, length: 0 }
+                        };
+                    }
                 }
 
                 function getCodeActionForNewImport(moduleSpecifier?: string, insertPos?: number): CodeAction {
@@ -283,7 +337,7 @@ namespace ts.codefix {
 
                             relativeFileName = removeFileExtension(relativeFileName);
 
-                            if(startsWith(relativeFileName, "@types/")) {
+                            if (startsWith(relativeFileName, "@types/")) {
                                 relativeFileName = relativeFileName.substr(7 /*"@types/.length"*/);
                             }
 
@@ -295,7 +349,7 @@ namespace ts.codefix {
                                     const moduleDirectory = getDirectoryPath(moduleFileName);
                                     const packageJsonContent = JSON.parse(context.host.readFile(combinePaths(moduleDirectory, "package.json")));
                                     if (packageJsonContent && packageJsonContent.main) {
-                                        const mainExportFile = isRootedDiskPath(packageJsonContent.main) 
+                                        const mainExportFile = isRootedDiskPath(packageJsonContent.main)
                                             ? normalizeFileName(packageJsonContent.main)
                                             : getCanonicalFileName(normalizePath(combinePaths(moduleDirectory, packageJsonContent.main)));
                                         if (removeFileExtension(mainExportFile) === removeFileExtension(moduleFileName)) {
@@ -303,7 +357,7 @@ namespace ts.codefix {
                                         }
                                     }
                                 }
-                                catch(e) { }
+                                catch (e) { }
                             }
 
                             return relativeFileName;
