@@ -2255,6 +2255,8 @@ namespace ts {
         resolveStructuredTypeMembers(type: StructuredType): ResolvedType;
         getReturnTypeOfSignature(signature: Signature): Type;
         getNonNullableType(type: Type): Type;
+        getIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type;
+        getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolOfNode(node: Node): Symbol;
@@ -2264,6 +2266,7 @@ namespace ts {
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol;
         getTypeAtLocation(node: Node): Type;
+        getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;

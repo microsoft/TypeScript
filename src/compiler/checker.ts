@@ -81,6 +81,9 @@ namespace ts {
             getSignaturesOfType,
             getIndexTypeOfType,
             getBaseTypes,
+            getUnionType,
+            getIntersectionType,
+            getTypeFromTypeReference,
             getReturnTypeOfSignature,
             resolveStructuredTypeMembers,
             getNonNullableType,
@@ -2037,7 +2040,7 @@ namespace ts {
             return result || types;
         }
 
-        function visibilityToString(flags: ModifierFlags) {
+        function visibilityToString(flags: ModifierFlags): string | undefined {
             if (flags === ModifierFlags.Private) {
                 return "private";
             }
