@@ -5941,7 +5941,7 @@ namespace ts {
             if (!links.resolvedType) {
                 const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
                 const constraintType = getConstraintOfTypeParameter(typeParameter);
-                const keyType = constraintType && constraintType.flags & TypeFlags.TypeParameter ? getApparentType(constraintType) : constraintType;
+                const keyType = constraintType && constraintType.flags & TypeFlags.TypeParameter ? getApparentTypeOfTypeParameter(<TypeParameter>constraintType) : constraintType;
                 if (keyType && (keyType.flags & TypeFlags.Index || checkTypeAssignableTo(keyType, stringOrNumberType, node.typeParameter.constraint))) {
                     const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
                     type.typeParameter = typeParameter;
@@ -8117,9 +8117,11 @@ namespace ts {
         // we perform type inference (i.e. a type parameter of a generic function). We cache
         // results for union and intersection types for performance reasons.
         function couldContainTypeParameters(type: Type): boolean {
+            const objectFlags = getObjectFlags(type);
             return !!(type.flags & TypeFlags.TypeParameter ||
-                getObjectFlags(type) & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeParameters) ||
-                getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
+                objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeParameters) ||
+                objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
+                objectFlags & ObjectFlags.Mapped ||
                 type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeParameters(<UnionOrIntersectionType>type));
         }
 
@@ -8267,6 +8269,19 @@ namespace ts {
                     }
                 }
                 else {
+                    if (getObjectFlags(target) & ObjectFlags.Mapped) {
+                        const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
+                        if (getObjectFlags(source) & ObjectFlags.Mapped) {
+                            inferFromTypes(getConstraintTypeFromMappedType(<MappedType>source), constraintType);
+                            inferFromTypes(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target));
+                            return;
+                        }
+                        if (constraintType.flags & TypeFlags.TypeParameter) {
+                            inferFromTypes(getIndexType(source), constraintType);
+                            inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
+                            return;
+                        }
+                    }
                     source = getApparentType(source);
                     if (source.flags & TypeFlags.Object) {
                         if (isInProcess(source, target)) {
