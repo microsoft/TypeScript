@@ -48,7 +48,6 @@ namespace ts {
         public jsDocComments: JSDoc[];
         public original: Node;
         public transformFlags: TransformFlags;
-        public excludeTransformFlags: TransformFlags;
         private _children: Node[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
@@ -56,7 +55,6 @@ namespace ts {
             this.end = end;
             this.flags = NodeFlags.None;
             this.transformFlags = undefined;
-            this.excludeTransformFlags = undefined;
             this.parent = undefined;
             this.kind = kind;
         }
