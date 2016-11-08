@@ -1359,42 +1359,68 @@ namespace ts {
         };
     }
 
-    /*
-    const classMembers: TypeElement[]; // TODO: this
-    const implementedInterfaceMembers: TypeElement[] = [];
-    const parentAbstractMembers: TypeElement[] = []
-    const missingMembers: TypeElement[] = [];
-    // const typeWiththis = checker.getTypeWithThisArgument(classType);
-    // const staticType = <ObjectType>checker.getTypeOfSymbol(symbol);
-    // const classType = <InterfaceType>checker.getTypeAtLocation(classDecl);
-    */
-
-    // TODO: (arozga) Get changes for interface as well.
-    // const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
     export function getMissingAbstractMemberInsertion(classDecl: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
         const baseTypeNode: ExpressionWithTypeArguments = getClassExtendsHeritageClauseElement(classDecl);
-
         if (!baseTypeNode) {
-            return ""; // TODO: (arozga) undefined?
+            return "";
         }
+        
         const classSymbol = checker.getSymbolOfNode(classDecl);
-        // TODO: (arozga) Should this be getTypeOfSymbol?
-        // We want the once that gets the members. I think that's the instance, so we want typeofsymbol.
+
+        const InstantiatedExtendsType = <InterfaceType>checker.getTypeFromTypeReference(getClassExtendsHeritageClauseElement(classDecl));
+        const resolvedExtendsType = checker.resolveStructuredTypeMembers(InstantiatedExtendsType);
+
+        // TODO: (arozga) Should we use the above or this to get the type of the extended class?
+        /*
         const classType = <InterfaceType>checker.getTypeOfSymbol(classSymbol);
-
-        const baseTypes = checker.getBaseTypes(classType);
-        Debug.assert(baseTypes.length === 1);
-        const baseType = baseTypes[0];
-
-        // TODO: (arozga) Does this give us the correct instantiations for generics?
-        // TODO: (arozga) If not, how do we get them?
-        const resolvedClassType = checker.resolveStructuredTypeMembers(classType);
+        let baseType = checker.getBaseTypes(classType)[0];
         const resolvedBaseType = checker.resolveStructuredTypeMembers(baseType);
+        if (baseType.objectFlags & ObjectFlags.Reference) {
+            baseType = checker.getTypeFromTypeReference(<TypeReference>baseType);
+        }
+        */
 
-        // TODO: (arozga) handle private members as well.
-        const missingMembers = filterMissingMembers(filterAbstract(resolvedBaseType.members), resolvedClassType.members);
+        const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedExtendsType.members)), classSymbol.members);
 
-        return insertionsForMembers(missingMembers, newlineChar);
+        return getInsertionsForMembers(missingMembers, classDecl, checker, newlineChar);
+    }
+
+    export function getMissingInterfaceMembersInsertion(classDecl: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
+        const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
+        if (!implementedTypeNodes || implementedTypeNodes.length === 0) {
+            return "";
+        }
+
+        const classSymbol = checker.getSymbolOfNode(classDecl);
+
+        let implementsIntersectionType: IntersectionType | InterfaceType;
+        if(implementedTypeNodes.length > 1) {
+            implementsIntersectionType = <IntersectionType>checker.getIntersectionType(implementedTypeNodes.map(checker.getTypeFromTypeReference));
+        }
+        else {
+            implementsIntersectionType = <InterfaceType>checker.getTypeFromTypeReference(implementedTypeNodes[0]);
+        }
+
+        const structuredType = checker.resolveStructuredTypeMembers(<IntersectionType | InterfaceType>implementsIntersectionType);        
+        const missingMembers = filterMissingMembers(filterNonPrivate(structuredType.members), classSymbol.members);
+        return getInsertionsForMembers(missingMembers, classDecl, checker, newlineChar);
+    }
+
+    /**
+     * Finds the symbols in source but not target, generating a new map with the differences.
+     */
+    function filterMissingMembers(sourceSymbols: Map<Symbol>, targetSymbols: Map<Symbol>): Map<Symbol> {
+        let result: Map<Symbol> = createMap<Symbol>();
+        outer:
+        for(const sourceName in sourceSymbols) {
+            for(const targetName in targetSymbols) {
+                if(sourceName === targetName) {
+                    continue outer;
+                }
+            }
+            result[sourceName] = sourceSymbols[sourceName];
+        }
+        return result;
     }
 
     function filterSymbolMapByDecl(symbolMap: Map<Symbol>, pred: (decl: Declaration) => boolean): Map<Symbol> {
@@ -1410,6 +1436,8 @@ namespace ts {
     }
 
     function filterAbstract(symbolMap: Map<Symbol>) {
+        // TODO: (arozga) use first or second?
+        // return mapObject(symbolMap, (key, val) => getModifierFlags(val.getDeclarations()[0]) & ModifierFlags.Abstract ? [key, val]: [undefined, undefined] );
         return filterSymbolMapByDecl(symbolMap, decl => !!(getModifierFlags(decl) & ModifierFlags.Abstract));
     }
 
@@ -1417,254 +1445,72 @@ namespace ts {
         return filterSymbolMapByDecl(symbolMap, decl => !(getModifierFlags(decl) & ModifierFlags.Private));
     }
 
-    function insertionsForMembers(symbols: Symbol[], newlineChar: string): string {
+    function getInsertionsForMembers(symbolMap: MapLike<Symbol>, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
         let insertion = "";
-        for (const symbol of symbols) {
-            const decls = symbol.getDeclarations();
-            if(!(decls && decls.length)) {
-                return "";
-            }
-            insertion = insertion.concat(getInsertion(decls[0], newlineChar));
+        
+        for (const symbolName in symbolMap) {
+            insertion = insertion.concat(getInsertionForMemberSymbol(symbolMap[symbolName], enclosingDeclaration, checker, newlineChar));
         }
         return insertion;
     }
 
-    const stubMethodBody = "{\nthrow new Error('Method not Implemented');\n}";
-    const functionPrefix = "function ";
-
-    // TODO: (arozga) needs a re-write that takes the symbol and type (with type parameter instantiations)
-    // and figures out how to print it.
-    function getInsertion(decl: Declaration, newlineChar: string): string {
-        let insertion = "";
-        switch (decl.kind) {
+    function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
+       const name = symbol.getName();
+       const type = checker.getTypeOfSymbol(symbol);
+        
+        const decls = symbol.getDeclarations();
+        if (!(decls && decls.length)) {
+            return "";
+        }
+        const node = decls[0];
+        const visibility = getVisibilityPrefix(getModifierFlags(node));
+        switch (node.kind) {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                insertion = decl.getText();
-                
-                // TODO: (arozga) need to remove trailing comma
-                if (insertion.length && insertion.charAt(insertion.length - 1) !== ";") {
-                    insertion += ";";
-                }
-                return insertion;
+                const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
+                return `${visibility}${name}: ${typeString};${newlineChar}`;
+
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
-                const method = decl as MethodSignature | MethodDeclaration;
-                // TODO: (arozga) figure out how to do proper instantiation of generic values based on heritage clause.
-                const typeParameters = method.typeParameters && method.typeParameters.length > 0 ?
-                    getCommaSeparatedString(method.typeParameters.map(param => param.getText()), "<", ">") : "";
-                const parameters = getCommaSeparatedString(method.parameters.map(param => param.getText()), "(", ")");
-                insertion += functionPrefix + method.name + typeParameters + parameters + stubMethodBody;
-                break;
+                const sigs = checker.getSignaturesOfType(type, SignatureKind.Call);
+                if(!(sigs && sigs.length > 0)) {
+                    return "";
+                }
+                // TODO: (arozga) Deal with multiple signatures.
+                const sigString = checker.signatureToString(sigs[0], enclosingDeclaration, TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.supressAnyReturnType, SignatureKind.Call);
+
+                return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
             default:
-                break;
+                return "";
         }
+    }
 
-        return insertion += newlineChar;
-
-        /**
-         * Flattens params into a comma-separated list, sandwiched by prefix
-         * and suffix on either end.
-         */
-        function getCommaSeparatedString(params: string[], prefix: string, suffix: string) {
-            let result = prefix;
-            for(let i = 0; params && i < params.length; ++i) {
-                result += (i > 0 ? "," : "") + params[i];
-            }
-            return result + suffix;
-        }
+    function getMethodBodyStub(newLineChar: string) {
+        return `{${newLineChar}throw new Error('Method not Implemented');${newLineChar}}${newLineChar}`;
     }
 
     /**
-     * Finds the symbols in source but not target.
+     * Flattens params into a comma-separated list, sandwiched by prefix
+     * and suffix on either end.
      */
-    function filterMissingMembers(sourceSymbols: Map<Symbol>, targetSymbols: Map<Symbol>): Symbol[] {
-        let result: Symbol[] = [];
-        outer:
-        for(const sourceName in sourceSymbols) {
-            for(const targetName in targetSymbols) {
-                if(sourceName === targetName) {
-                    continue outer;
-                }
-            }
-            result.push(sourceSymbols[sourceName]);
-        }
-        return result;
-    }
-
     /*
-    function filterMissingMembers(sourceSymbols: Map<Symbol>, targetSymbols: Map<Symbol>): Symbol[] {
-        let missingMembers: Symbol[] = [];
-        const sortedSourceKeys = Object.keys(sourceSymbols).sort();
-        const sortedTargetKeys = Object.keys(targetSymbols).sort();
-
-        let i = 0;
-        let j = 0;
-        while (i < sortedSourceKeys.length && j < sortedTargetKeys.length) {
-            // TODO: (arozga) convert switch to if else with inequalities (browser compat?)
-            switch (sortedSourceKeys[i].localeCompare(sortedSourceKeys[j])) {
-                case 0:
-                    ++i;
-                    ++j;
-                    break;
-                case -1:
-                    missingMembers.push(sourceSymbols[sortedSourceKeys[i]]);
-                    ++i;
-                    break;
-                case 1:
-                    ++j;
-                default:
-            }
+    function getCommaSeparatedString(params: string[], prefix: string, suffix: string) {
+        let result = prefix;
+        for (let i = 0; params && i < params.length; ++i) {
+            result += (i > 0 ? "," : "") + params[i];
         }
-
-        return missingMembers;
+        return result + suffix;
     }
     */
 
-    /**
-     * Generates codefix changes to insert
-     */
-    export function getCodeFixChanges(interfaceClause: Node, existingMembers: string[], startPos: number, checker: TypeChecker, reference: boolean, trackingAddedMembers: string[], newLineCharacter: string): TextChange[] {
-        const type = checker.getTypeAtLocation(interfaceClause);
-
-        if (!(type && type.symbol && type.symbol.declarations && type.symbol.declarations.length > 0)) {
-            return [];
+    function getVisibilityPrefix(flags: ModifierFlags): string {
+        if (flags & ModifierFlags.Public) {
+            return "public ";
         }
-
-        const missingMembers: TypeElement[] = getMissingInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], existingMembers, checker);
-        const changesArray: TextChange[] = [];
-
-        for (const member of missingMembers) {
-            if (member.kind === SyntaxKind.PropertySignature || member.kind === SyntaxKind.PropertyDeclaration) {
-                const interfaceProperty = <PropertySignature>member;
-                if (trackingAddedMembers.indexOf(interfaceProperty.name.getText()) !== -1) {
-                    continue;
-                }
-
-                let propertyText = "";
-                if (reference) {
-                    propertyText = `${interfaceProperty.name.getText()} : ${getDefaultValue(interfaceProperty.type.kind)},${newLineCharacter}`;
-                }
-                else {
-                    propertyText = interfaceProperty.getText();
-                    const stringToAdd = !(propertyText.match(/;$/)) ? `;${newLineCharacter}` : newLineCharacter;
-                    propertyText += stringToAdd;
-                }
-                changesArray.push({ newText: propertyText, span: { start: startPos, length: 0 } });
-                trackingAddedMembers.push(interfaceProperty.name.getText());
-
-            }
-            else if (member.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.MethodDeclaration) {
-                const interfaceMethod = <MethodSignature>member;
-                handleMethods(interfaceMethod, startPos, reference, trackingAddedMembers, changesArray, newLineCharacter);
-            }
+        else if (flags & ModifierFlags.Protected) {
+            return "protected ";
         }
-
-        if (reference && existingMembers.length === 0 && changesArray.length > 0) {
-            let lastValue = changesArray[changesArray.length - 1].newText;
-            lastValue = `${lastValue.substr(0, lastValue.length - (newLineCharacter.length + 1))} ${newLineCharacter}`;
-            changesArray[changesArray.length - 1].newText = lastValue;
-        }
-
-        return changesArray;
-    }
-
-    /**
-     * Gets members in an interface and all its base types.
-     */
-    function getInterfaceMembers(declaration: InterfaceDeclaration, checker: TypeChecker): TypeElement[] {
-        let result: TypeElement[] = declaration.members
-            ? declaration.members.filter(member => !(getModifierFlags(member) & ModifierFlags.Private))
-            : [];
-        const clauses = getInterfaceBaseTypeNodes(declaration);
-        if (clauses) {
-            for (const clause of clauses) {
-                const type = checker.getTypeAtLocation(clause);
-                if (type && type.symbol && type.symbol.declarations) {
-                    result = result.concat(getInterfaceMembers(<InterfaceDeclaration>type.symbol.declarations[0], checker));
-                }
-            }
-        }
-
-        return result;
-    }
-
-    function getMissingInterfaceMembers(declaration: InterfaceDeclaration, existingMembers: string[], checker: TypeChecker): TypeElement[] {
-        const interfaceMembers = getInterfaceMembers(declaration, checker);
-        return ts.filter(interfaceMembers, member => !member.name || existingMembers.indexOf(member.name.getText()) === -1);
-    }
-
-    export function getNamedClassMembers(classDeclaration: ClassDeclaration): ClassElement[] {
-        return classDeclaration.members.filter(member => member.name);
-    }
-
-    export function getNamedAbstractClassMembers(classDeclaration: ClassDeclaration): ClassElement[] {
-        return getNamedClassMembers(classDeclaration).filter(member => getModifierFlags(member) & ModifierFlags.Abstract);
-    }
-
-    function getDefaultValue(kind: SyntaxKind): string {
-        switch (kind) {
-            case SyntaxKind.StringKeyword:
-                return '""';
-            case SyntaxKind.BooleanKeyword:
-                return "false";
-            case SyntaxKind.NumberKeyword:
-                return "0";
-            default:
-                return "null";
-        }
-    }
-
-    function handleMethods(interfaceMethod: MethodSignature, startPos: number, isReference: boolean, trackingAddedMembers: string[], textChanges: TextChange[], newLineCharacter: string) {
-        const methodBody = "throw new Error('Method not Implemented');";
-
-        if (trackingAddedMembers.indexOf(interfaceMethod.name.getText())) {
-            const methodName = interfaceMethod.name.getText();
-            const typeParameterArray: string[] = [];
-
-            for (let i = 0; interfaceMethod.typeParameters && i < interfaceMethod.typeParameters.length; i++) {
-                typeParameterArray.push(interfaceMethod.typeParameters[i].getText());
-            }
-
-            const parameterArray: string[] = [];
-            for (let j = 0; interfaceMethod.parameters && j < interfaceMethod.parameters.length; j++) {
-                parameterArray.push(interfaceMethod.parameters[j].getText());
-            }
-
-            let methodText = methodName;
-            if (typeParameterArray.length > 0) {
-                methodText += "<";
-            }
-
-            for (let k = 0; k < typeParameterArray.length; k++) {
-                methodText += typeParameterArray[k];
-                if (k !== typeParameterArray.length - 1) {
-                    methodText += ",";
-                }
-            }
-
-            if (typeParameterArray.length > 0) {
-                methodText += ">";
-            }
-
-            methodText += "(";
-            for (let k = 0; k < parameterArray.length; k++) {
-                methodText += parameterArray[k];
-                if (k !== parameterArray.length - 1) {
-                    methodText += ",";
-                }
-            }
-
-            methodText += `)`;
-            if (interfaceMethod.type) {
-                methodText += ":" + interfaceMethod.type.getText();
-            }
-
-            methodText += `{${newLineCharacter}${methodBody}${newLineCharacter}`;
-            methodText = isReference ? methodText.concat(`},${newLineCharacter}`) : methodText.concat(`}${newLineCharacter}`);
-
-            textChanges.push({ newText: methodText, span: { start: startPos, length: 0 } });
-            trackingAddedMembers.push(interfaceMethod.name.getText());
-        }
+        return "";
     }
 
     export function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
