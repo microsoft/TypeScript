@@ -11,24 +11,18 @@ namespace ts.codefix {
             if (token.kind === SyntaxKind.Identifier && isClassLike(token.parent)) {
                 const classDeclaration = <ClassDeclaration>token.parent;
                 const startPos: number = classDeclaration.members.pos;
-                const classMembers = ts.map(getNamedClassMembers(classDeclaration), member => member.name.getText());
-                const trackingAddedMembers: string[] = [];
-                const interfaceClauses = ts.getClassImplementsHeritageClauseElements(classDeclaration);
 
-                let textChanges: TextChange[] = undefined;
+                const insertion = getMissingInterfaceMembersInsertion(classDeclaration, checker, context.newLineCharacter);
 
-                for (let i = 0; interfaceClauses && i < interfaceClauses.length; i++) {
-                    const newChanges = getCodeFixChanges(interfaceClauses[i], classMembers, startPos, checker, /*reference*/ false, trackingAddedMembers, context.newLineCharacter);
-                    // getMissingAbstractMemberChanges(classDeclaration, checker, context.newLineCharacter);
-                    textChanges = textChanges ? textChanges.concat(newChanges) : newChanges;
-                }
-
-                if (textChanges && textChanges.length > 0) {
+                if(insertion && insertion.length) {
                     return [{
                         description: getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class),
                         changes: [{
                             fileName: sourceFile.fileName,
-                            textChanges: textChanges
+                            textChanges: [{
+                                span: { start: startPos, length: 0 },
+                                newText: insertion
+                            }]
                         }]
                     }];
                 }
