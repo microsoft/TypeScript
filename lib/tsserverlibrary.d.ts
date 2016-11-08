@@ -9226,6 +9226,7 @@ declare namespace ts {
     function getModuleInstanceState(node: Node): ModuleInstanceState;
     function bindSourceFile(file: SourceFile, options: CompilerOptions): void;
     function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags): TransformFlags;
+    function getTransformFlagsSubtreeExclusions(kind: SyntaxKind): TransformFlags;
 }
 declare namespace ts {
     function getNodeId(node: Node): number;
