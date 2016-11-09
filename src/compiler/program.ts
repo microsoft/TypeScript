@@ -329,6 +329,9 @@ namespace ts {
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createFileMap<boolean>(getCanonicalFileName);
 
+        // ReactNamespace and jsxFactory information
+        let jsxFactoryEntity: EntityName;
+
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
         if (host.resolveModuleNames) {
             resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile).map(resolved => {
@@ -421,7 +424,8 @@ namespace ts {
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
             isSourceFileFromExternalLibrary,
-            dropDiagnosticsProducingTypeChecker
+            dropDiagnosticsProducingTypeChecker,
+            getJsxFactoryEntity: () => jsxFactoryEntity
         };
 
         verifyCompilerOptions();
@@ -1674,7 +1678,8 @@ namespace ts {
                 if (options.reactNamespace) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory"));
                 }
-                if (!parseIsolatedEntityName(options.jsxFactory, languageVersion)) {
+                jsxFactoryEntity = parseIsolatedEntityName(options.jsxFactory, languageVersion);
+                if (!jsxFactoryEntity) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory));
                 }
             }

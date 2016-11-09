@@ -2177,6 +2177,7 @@ namespace ts {
         getTypeChecker(): TypeChecker;
 
         /* @internal */ getCommonSourceDirectory(): string;
+        /* @internal */ getJsxFactoryEntity(): EntityName;
 
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
@@ -2250,6 +2251,7 @@ namespace ts {
     /* @internal */
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
+        getJsxFactoryEntity(): EntityName;
 
         getSourceFiles(): SourceFile[];
         getSourceFile(fileName: string): SourceFile;
