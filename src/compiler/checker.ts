@@ -7047,11 +7047,12 @@ namespace ts {
                         }
                     }
                     if (isGenericMappedType(target)) {
-                        // A type [P in S]: X is related to a type [P in T]: X if T is related to S.
-                        if (isGenericMappedType(source) &&
-                            isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), /*reportErrors*/ false) &&
-                            isTypeIdenticalTo(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target))) {
-                            return Ternary.True;
+                        // A type [P in S]: X is related to a type [P in T]: Y if T is related to S and X is related to Y.
+                        if (isGenericMappedType(source)) {
+                            if ((result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) &&
+                                (result = isRelatedTo(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target), reportErrors))) {
+                                return result;
+                            }
                         }
                     }
                     else {
