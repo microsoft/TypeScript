@@ -78,6 +78,11 @@ namespace ts {
             description: Diagnostics.Specify_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
         },
         {
+            name: "jsxFactory",
+            type: "string",
+            description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },

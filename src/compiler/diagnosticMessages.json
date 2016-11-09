@@ -2897,6 +2897,10 @@
         "category": "Message",
         "code": 6145
     },
+    "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
+        "category": "Message",
+        "code": 6146
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

@@ -3081,6 +3081,7 @@ namespace ts {
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
+        jsxFactory?: string;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
