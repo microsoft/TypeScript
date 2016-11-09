@@ -13,6 +13,7 @@ namespace ts.server {
 
         private readonly resolveModuleName: typeof resolveModuleName;
         readonly trace: (s: string) => void;
+        readonly realpath?: (path: string) => string;
 
         constructor(private readonly host: ServerHost, private readonly project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
@@ -39,6 +40,10 @@ namespace ts.server {
                 }
                 return primaryResult;
             };
+
+            if (this.host.realpath) {
+                this.realpath = path => this.host.realpath(path);
+            }
         }
 
         public startRecordingFilesWithChangedResolutions() {

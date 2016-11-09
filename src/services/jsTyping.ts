@@ -88,7 +88,7 @@ namespace ts.JsTyping {
         exclude = typingOptions.exclude || [];
 
         const possibleSearchDirs = map(fileNames, getDirectoryPath);
-        if (projectRootPath !== undefined) {
+        if (projectRootPath) {
             possibleSearchDirs.push(projectRootPath);
         }
         searchDirs = deduplicate(possibleSearchDirs);
