@@ -372,7 +372,7 @@ namespace ts {
     export function isThis(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
-                // case SyntaxKind.ThisType: TODO: GH#9267
+            // case SyntaxKind.ThisType: TODO: GH#9267
                 return true;
             case SyntaxKind.Identifier:
                 // 'this' as a parameter
@@ -1360,11 +1360,6 @@ namespace ts {
     }
 
     export function getMissingAbstractMemberInsertion(classDecl: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
-        const baseTypeNode: ExpressionWithTypeArguments = getClassExtendsHeritageClauseElement(classDecl);
-        if (!baseTypeNode) {
-            return "";
-        }
-
         const classSymbol = checker.getSymbolOfNode(classDecl);
 
         const InstantiatedExtendsType = <InterfaceType>checker.getTypeFromTypeReference(getClassExtendsHeritageClauseElement(classDecl));
@@ -1377,9 +1372,6 @@ namespace ts {
 
     export function getMissingInterfaceMembersInsertion(classDecl: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
         const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
-        if (!implementedTypeNodes || implementedTypeNodes.length === 0) {
-            return "";
-        }
 
         const classSymbol = checker.getSymbolOfNode(classDecl);
 
@@ -1445,7 +1437,6 @@ namespace ts {
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
         const name = symbol.getName();
         const type = checker.getTypeOfSymbol(symbol);
-
         const decls = symbol.getDeclarations();
         if (!(decls && decls.length)) {
             return "";
@@ -1465,7 +1456,7 @@ namespace ts {
                     return "";
                 }
                 // TODO: (arozga) Deal with multiple signatures.
-                const sigString = checker.signatureToString(sigs[0], enclosingDeclaration, TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.supressAnyReturnType, SignatureKind.Call);
+                const sigString = checker.signatureToString(sigs[0], enclosingDeclaration, TypeFormatFlags.supressAnyReturnType, SignatureKind.Call);
 
                 return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
             default:

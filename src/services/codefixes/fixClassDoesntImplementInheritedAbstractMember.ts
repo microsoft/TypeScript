@@ -11,11 +11,9 @@ namespace ts.codefix {
             if (token.kind === SyntaxKind.Identifier && isClassLike(token.parent)) {
                 const classDeclaration = <ClassDeclaration>token.parent;
                 const startPos = classDeclaration.members.pos;
-                // const abstractClassMembers = ts.map(getNamedAbstractClassMembers(classDeclaration), member => member.name.getText());
-                // const trackingAddedMembers: string[] = [];
-                // const extendsClause = ts.getClassExtendsHeritageClauseElement(classDeclaration);
-                // const textChanges = getCodeFixChanges(extendsClause, abstractClassMembers, startPos, checker, /*reference*/ false, trackingAddedMembers, context.newLineCharacter);
+
                 const insertion = getMissingAbstractMemberInsertion(classDeclaration, checker, context.newLineCharacter);
+
                 if (insertion.length > 0) {
                     return [{
                         description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class),

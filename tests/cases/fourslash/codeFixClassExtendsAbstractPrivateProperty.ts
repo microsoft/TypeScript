@@ -11,6 +11,5 @@
 // 1) Make x protected, and then insert.
 // 2) Make x private, and then insert.
 // 3) Make x not abstract.
-// So we offer no fixes for now.
-// TODO: (arozga) change this behavior.
+// So we offer no fixes.
 verify.not.codeFixAvailable();

@@ -27,7 +27,6 @@ namespace ts.codefix {
                     }];
                 }
             }
-
             return undefined;
         }
     });

@@ -14,15 +14,7 @@
 ////
 //// |]}
 
-verify.rangeAfterCodeFix(`f1<T>(){
-    throw new Error('Method not Implemented');
-}
-`);
-
-// TODO: (arozga) Include type qualifiers.
-/*
 verify.rangeAfterCodeFix(`f1<T extends number>(){
     throw new Error('Method not Implemented');
 }
 `);
-*/
