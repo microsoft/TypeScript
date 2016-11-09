@@ -1046,7 +1046,7 @@ namespace FourSlash {
                 ts.displayPartsToString(help.suffixDisplayParts), expected);
         }
 
-        public verifyCurrentParameterIsletiable(isVariable: boolean) {
+        public verifyCurrentParameterIsVariable(isVariable: boolean) {
             const signature = this.getActiveSignatureHelpItem();
             assert.isOk(signature);
             assert.equal(isVariable, signature.isVariadic);
@@ -1071,6 +1071,10 @@ namespace FourSlash {
 
         public verifyCurrentSignatureHelpParameterCount(expectedCount: number) {
             assert.equal(this.getActiveSignatureHelpItem().parameters.length, expectedCount);
+        }
+
+        public verifyCurrentSignatureHelpIsVariadic(expected: boolean) {
+            assert.equal(this.getActiveSignatureHelpItem().isVariadic, expected);
         }
 
         public verifyCurrentSignatureHelpDocComment(docComment: string) {
@@ -1273,7 +1277,18 @@ namespace FourSlash {
                             resultString += "Diagnostics:" + Harness.IO.newLine();
                             const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (const diagnostic of diagnostics) {
-                                resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
+                                if (typeof diagnostic.messageText !== "string") {
+                                    let chainedMessage = <ts.DiagnosticMessageChain>diagnostic.messageText;
+                                    let indentation = " ";
+                                    while (chainedMessage) {
+                                        resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
+                                        chainedMessage = chainedMessage.next;
+                                        indentation = indentation + " ";
+                                    }
+                                }
+                                else {
+                                    resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
+                                }
                             }
                         }
 
@@ -3304,6 +3319,10 @@ namespace FourSlashInterface {
 
         public signatureHelpCountIs(expected: number) {
             this.state.verifySignatureHelpCount(expected);
+        }
+
+        public signatureHelpCurrentArgumentListIsVariadic(expected: boolean) {
+            this.state.verifyCurrentSignatureHelpIsVariadic(expected);
         }
 
         public signatureHelpArgumentCountIs(expected: number) {

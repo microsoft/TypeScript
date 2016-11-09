@@ -22,6 +22,11 @@ namespace ts {
 
     interface ProgramWithSourceTexts extends Program {
         sourceTexts?: NamedSourceText[];
+        host: TestCompilerHost;
+    }
+
+    interface TestCompilerHost extends CompilerHost {
+        getTrace(): string[];
     }
 
     class SourceText implements IScriptSnapshot {
@@ -101,10 +106,21 @@ namespace ts {
         return file;
     }
 
-    function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget): CompilerHost {
-        const files = arrayToMap(texts, t => t.name, t => createSourceFileWithText(t.name, t.text, target));
+    function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
+        const files = arrayToMap(texts, t => t.name, t => {
+            if (oldProgram) {
+                const oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
+                if (oldFile && oldFile.sourceText.getVersion() === t.text.getVersion()) {
+                    return oldFile;
+                }
+            }
+            return createSourceFileWithText(t.name, t.text, target);
+        });
+        const trace: string[] = [];
 
         return {
+            trace: s => trace.push(s),
+            getTrace: () => trace,
             getSourceFile(fileName): SourceFile {
                 return files[fileName];
             },
@@ -130,23 +146,25 @@ namespace ts {
             fileExists: fileName => fileName in files,
             readFile: fileName => {
                 return fileName in files ? files[fileName].text : undefined;
-            }
+            },
         };
     }
 
-    function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): Program {
+    function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): ProgramWithSourceTexts {
         const host = createTestCompilerHost(texts, options.target);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host);
         program.sourceTexts = texts;
+        program.host = host;
         return program;
     }
 
-    function updateProgram(oldProgram: Program, rootNames: string[], options: CompilerOptions, updater: (files: NamedSourceText[]) => void) {
+    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: string[], options: CompilerOptions, updater: (files: NamedSourceText[]) => void) {
         const texts: NamedSourceText[] = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
         updater(texts);
-        const host = createTestCompilerHost(texts, options.target);
+        const host = createTestCompilerHost(texts, options.target, oldProgram);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host, oldProgram);
         program.sourceTexts = texts;
+        program.host = host;
         return program;
     }
 
@@ -354,6 +372,112 @@ namespace ts {
             });
             assert.isTrue(!program_3.structureIsReused);
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMap({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+        });
+
+        it("can reuse ambient module declarations from non-modified files", () => {
+            const files = [
+                { name: "/a/b/app.ts", text: SourceText.New("", "import * as fs from 'fs'", "") },
+                { name: "/a/b/node.d.ts", text: SourceText.New("", "", "declare module 'fs' {}") }
+            ];
+            const options = { target: ScriptTarget.ES2015, traceResolution: true };
+            const program = newProgram(files, files.map(f => f.name), options);
+            assert.deepEqual(program.host.getTrace(),
+                [
+                    "======== Resolving module 'fs' from '/a/b/app.ts'. ========",
+                    "Module resolution kind is not specified, using 'Classic'.",
+                    "File '/a/b/fs.ts' does not exist.",
+                    "File '/a/b/fs.tsx' does not exist.",
+                    "File '/a/b/fs.d.ts' does not exist.",
+                    "File '/a/fs.ts' does not exist.",
+                    "File '/a/fs.tsx' does not exist.",
+                    "File '/a/fs.d.ts' does not exist.",
+                    "File '/fs.ts' does not exist.",
+                    "File '/fs.tsx' does not exist.",
+                    "File '/fs.d.ts' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.ts' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.tsx' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
+                    "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/b/node_modules/@types/fs/index.ts' does not exist.",
+                    "File '/a/b/node_modules/@types/fs/index.tsx' does not exist.",
+                    "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
+                    "File '/a/node_modules/@types/fs.ts' does not exist.",
+                    "File '/a/node_modules/@types/fs.tsx' does not exist.",
+                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
+                    "File '/a/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/node_modules/@types/fs/index.ts' does not exist.",
+                    "File '/a/node_modules/@types/fs/index.tsx' does not exist.",
+                    "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
+                    "File '/node_modules/@types/fs.ts' does not exist.",
+                    "File '/node_modules/@types/fs.tsx' does not exist.",
+                    "File '/node_modules/@types/fs.d.ts' does not exist.",
+                    "File '/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/node_modules/@types/fs/index.ts' does not exist.",
+                    "File '/node_modules/@types/fs/index.tsx' does not exist.",
+                    "File '/node_modules/@types/fs/index.d.ts' does not exist.",
+                    "File '/a/b/fs.js' does not exist.",
+                    "File '/a/b/fs.jsx' does not exist.",
+                    "File '/a/fs.js' does not exist.",
+                    "File '/a/fs.jsx' does not exist.",
+                    "File '/fs.js' does not exist.",
+                    "File '/fs.jsx' does not exist.",
+                    "======== Module name 'fs' was not resolved. ========",
+                ], "should look for 'fs'");
+
+            const program_2 = updateProgram(program, program.getRootFileNames(), options, f => {
+                f[0].text = f[0].text.updateProgram("var x = 1;");
+            });
+            assert.deepEqual(program_2.host.getTrace(), [
+                "Module 'fs' was resolved as ambient module declared in '/a/b/node.d.ts' since this file was not modified."
+            ], "should reuse 'fs' since node.d.ts was not changed");
+
+            const program_3 = updateProgram(program_2, program_2.getRootFileNames(), options, f => {
+                f[0].text = f[0].text.updateProgram("var y = 1;");
+                f[1].text = f[1].text.updateProgram("declare var process: any");
+            });
+            assert.deepEqual(program_3.host.getTrace(),
+                [
+                    "======== Resolving module 'fs' from '/a/b/app.ts'. ========",
+                    "Module resolution kind is not specified, using 'Classic'.",
+                    "File '/a/b/fs.ts' does not exist.",
+                    "File '/a/b/fs.tsx' does not exist.",
+                    "File '/a/b/fs.d.ts' does not exist.",
+                    "File '/a/fs.ts' does not exist.",
+                    "File '/a/fs.tsx' does not exist.",
+                    "File '/a/fs.d.ts' does not exist.",
+                    "File '/fs.ts' does not exist.",
+                    "File '/fs.tsx' does not exist.",
+                    "File '/fs.d.ts' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.ts' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.tsx' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
+                    "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/b/node_modules/@types/fs/index.ts' does not exist.",
+                    "File '/a/b/node_modules/@types/fs/index.tsx' does not exist.",
+                    "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
+                    "File '/a/node_modules/@types/fs.ts' does not exist.",
+                    "File '/a/node_modules/@types/fs.tsx' does not exist.",
+                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
+                    "File '/a/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/node_modules/@types/fs/index.ts' does not exist.",
+                    "File '/a/node_modules/@types/fs/index.tsx' does not exist.",
+                    "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
+                    "File '/node_modules/@types/fs.ts' does not exist.",
+                    "File '/node_modules/@types/fs.tsx' does not exist.",
+                    "File '/node_modules/@types/fs.d.ts' does not exist.",
+                    "File '/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/node_modules/@types/fs/index.ts' does not exist.",
+                    "File '/node_modules/@types/fs/index.tsx' does not exist.",
+                    "File '/node_modules/@types/fs/index.d.ts' does not exist.",
+                    "File '/a/b/fs.js' does not exist.",
+                    "File '/a/b/fs.jsx' does not exist.",
+                    "File '/a/fs.js' does not exist.",
+                    "File '/a/fs.jsx' does not exist.",
+                    "File '/fs.js' does not exist.",
+                    "File '/fs.jsx' does not exist.",
+                    "======== Module name 'fs' was not resolved. ========",
+                ], "should look for 'fs' again since node.d.ts was changed");
+
         });
     });
 

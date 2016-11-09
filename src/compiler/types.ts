@@ -168,6 +168,7 @@ namespace ts {
         DeclareKeyword,
         GetKeyword,
         IsKeyword,
+        KeyOfKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
@@ -216,6 +217,8 @@ namespace ts {
         IntersectionType,
         ParenthesizedType,
         ThisType,
+        TypeOperator,
+        IndexedAccessType,
         LiteralType,
         // Binding patterns
         ObjectBindingPattern,
@@ -882,6 +885,18 @@ namespace ts {
         type: TypeNode;
     }
 
+    export interface TypeOperatorNode extends TypeNode {
+        kind: SyntaxKind.TypeOperator;
+        operator: SyntaxKind.KeyOfKeyword;
+        type: TypeNode;
+    }
+
+    export interface IndexedAccessTypeNode extends TypeNode {
+        kind: SyntaxKind.IndexedAccessType;
+        objectType: TypeNode;
+        indexType: TypeNode;
+    }
+
     export interface LiteralTypeNode extends TypeNode {
         kind: SyntaxKind.LiteralType;
         literal: Expression;
@@ -951,10 +966,6 @@ namespace ts {
         kind: SyntaxKind.PostfixUnaryExpression;
         operand: LeftHandSideExpression;
         operator: PostfixUnaryOperator;
-    }
-
-    export interface PostfixExpression extends UnaryExpression {
-        _postfixExpressionBrand: any;
     }
 
     export interface LeftHandSideExpression extends IncrementExpression {
@@ -2091,6 +2102,7 @@ namespace ts {
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
+        /* @internal */ ambientModuleNames: string[];
         // The synthesized identifier for an imported external helpers module.
         /* @internal */ externalHelpersModuleName?: Identifier;
     }
@@ -2180,6 +2192,7 @@ namespace ts {
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
+        /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -2291,6 +2304,8 @@ namespace ts {
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
+
+        /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -2675,14 +2690,16 @@ namespace ts {
         Object                  = 1 << 15,  // Object type
         Union                   = 1 << 16,  // Union (T | U)
         Intersection            = 1 << 17,  // Intersection (T & U)
+        Index                   = 1 << 18,  // keyof T
+        IndexedAccess           = 1 << 19,  // T[K]
         /* @internal */
-        FreshLiteral            = 1 << 18,  // Fresh literal type
+        FreshLiteral            = 1 << 20,  // Fresh literal type
         /* @internal */
-        ContainsWideningType    = 1 << 19,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 21,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 20,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 21,  // Type is or contains object literal type
+        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2701,11 +2718,11 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeParameter = StructuredType | TypeParameter,
+        StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | BooleanLike | ESSymbol,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol,
         NotUnionOrUnit = Any | ESSymbol | Object,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -2869,7 +2886,20 @@ namespace ts {
         /* @internal */
         resolvedApparentType: Type;
         /* @internal */
+        resolvedIndexType: IndexType;
+        /* @internal */
+        resolvedIndexedAccessTypes: IndexedAccessType[];
+        /* @internal */
         isThisType?: boolean;
+    }
+
+    export interface IndexType extends Type {
+        type: TypeParameter;
+    }
+
+    export interface IndexedAccessType extends Type {
+        objectType: Type;
+        indexType: TypeParameter;
     }
 
     export const enum SignatureKind {
@@ -2903,6 +2933,8 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         typePredicate?: TypePredicate;
+        /* @internal */
+        instantiations?: Map<Signature>;    // Generic signature instantiation cache
     }
 
     export const enum IndexKind {
@@ -2920,7 +2952,6 @@ namespace ts {
     export interface TypeMapper {
         (t: TypeParameter): Type;
         mappedTypes?: Type[];       // Types mapped by this mapper
-        targetTypes?: Type[];       // Types substituted for mapped types
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
@@ -3038,6 +3069,7 @@ namespace ts {
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
+        /*@internal*/noEmitOverwritenFiles?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;

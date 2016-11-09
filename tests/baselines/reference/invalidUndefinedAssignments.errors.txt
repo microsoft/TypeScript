@@ -1,9 +1,9 @@
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(4,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(5,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(9,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(4,1): error TS2539: Cannot assign to 'E' because it is not a variable.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(5,3): error TS2540: Cannot assign to 'A' because it is a constant or a read-only property.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(9,1): error TS2539: Cannot assign to 'C' because it is not a variable.
 tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(14,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(21,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(17,1): error TS2539: Cannot assign to 'M' because it is not a variable.
+tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(21,1): error TS2539: Cannot assign to 'i' because it is not a variable.
 
 
 ==== tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts (6 errors) ====
@@ -12,16 +12,16 @@ tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.t
     enum E { A }
     E = x;
     ~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+!!! error TS2539: Cannot assign to 'E' because it is not a variable.
     E.A = x;
-    ~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+      ~
+!!! error TS2540: Cannot assign to 'A' because it is a constant or a read-only property.
     
     class C { foo: string }
     var f: C;
     C = x;
     ~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+!!! error TS2539: Cannot assign to 'C' because it is not a variable.
     
     interface I { foo: string }
     var g: I;
@@ -33,10 +33,10 @@ tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.t
     module M { export var x = 1; }
     M = x;
     ~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+!!! error TS2539: Cannot assign to 'M' because it is not a variable.
     
     function i<T>(a: T) { }
     // BUG 767030
     i = x; 
     ~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+!!! error TS2539: Cannot assign to 'i' because it is not a variable.

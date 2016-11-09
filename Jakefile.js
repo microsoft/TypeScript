@@ -181,6 +181,7 @@ var servicesSources = [
 
 var serverCoreSources = [
     "types.d.ts",
+    "shared.ts",
     "utilities.ts",
     "scriptVersionCache.ts",
     "typingsCache.ts",
@@ -203,6 +204,7 @@ var cancellationTokenSources = [
 
 var typingsInstallerSources = [
     "../types.d.ts",
+    "../shared.ts",
     "typingsInstaller.ts",
     "nodeTypingsInstaller.ts"
 ].map(function (f) {

@@ -90,6 +90,7 @@ namespace ts {
         "instanceof": SyntaxKind.InstanceOfKeyword,
         "interface": SyntaxKind.InterfaceKeyword,
         "is": SyntaxKind.IsKeyword,
+        "keyof": SyntaxKind.KeyOfKeyword,
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
         "namespace": SyntaxKind.NamespaceKeyword,

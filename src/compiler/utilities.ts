@@ -1619,29 +1619,51 @@ namespace ts {
         return node && node.dotDotDotToken !== undefined;
     }
 
+    export const enum AssignmentKind {
+        None, Definite, Compound
+    }
+
+    export function getAssignmentTargetKind(node: Node): AssignmentKind {
+        let parent = node.parent;
+        while (true) {
+            switch (parent.kind) {
+                case SyntaxKind.BinaryExpression:
+                    const binaryOperator = (<BinaryExpression>parent).operatorToken.kind;
+                    return isAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
+                        binaryOperator === SyntaxKind.EqualsToken ? AssignmentKind.Definite : AssignmentKind.Compound :
+                        AssignmentKind.None;
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                    const unaryOperator = (<PrefixUnaryExpression | PostfixUnaryExpression>parent).operator;
+                    return unaryOperator === SyntaxKind.PlusPlusToken || unaryOperator === SyntaxKind.MinusMinusToken ? AssignmentKind.Compound : AssignmentKind.None;
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    return (<ForInStatement | ForOfStatement>parent).initializer === node ? AssignmentKind.Definite : AssignmentKind.None;
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.SpreadElementExpression:
+                    node = parent;
+                    break;
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    if ((<ShorthandPropertyAssignment>parent).name !== node) {
+                        return AssignmentKind.None;
+                    }
+                    // Fall through
+                case SyntaxKind.PropertyAssignment:
+                    node = parent.parent;
+                    break;
+                default:
+                    return AssignmentKind.None;
+            }
+            parent = node.parent;
+        }
+    }
+
     // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
     // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
     // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
     export function isAssignmentTarget(node: Node): boolean {
-        while (node.parent.kind === SyntaxKind.ParenthesizedExpression) {
-            node = node.parent;
-        }
-        while (true) {
-            const parent = node.parent;
-            if (parent.kind === SyntaxKind.ArrayLiteralExpression || parent.kind === SyntaxKind.SpreadElementExpression) {
-                node = parent;
-                continue;
-            }
-            if (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                node = parent.parent;
-                continue;
-            }
-            return parent.kind === SyntaxKind.BinaryExpression &&
-                isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind) &&
-                (<BinaryExpression>parent).left === node ||
-                (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) &&
-                (<ForInStatement | ForOfStatement>parent).initializer === node;
-        }
+        return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
     export function isNodeDescendantOf(node: Node, ancestor: Node): boolean {

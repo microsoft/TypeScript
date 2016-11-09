@@ -24,7 +24,8 @@ namespace ts.server {
         setTimeout() { return 0; },
         clearTimeout: noop,
         setImmediate: () => 0,
-        clearImmediate: noop
+        clearImmediate: noop,
+        createHash: s => s
     };
     const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
     const mockLogger: Logger = {
