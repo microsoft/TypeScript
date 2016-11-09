@@ -3568,8 +3568,7 @@ namespace ts {
         setEmitFlags(body, EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps);
 
         let forStatement: ForStatement | ForOfStatement;
-        if(convertObjectRest) {
-
+        if (convertObjectRest) {
             forStatement = createForOf(
                 createVariableDeclarationList([
                     createVariableDeclaration(rhsReference, /*type*/ undefined, /*initializer*/ undefined, /*location*/ node.expression)

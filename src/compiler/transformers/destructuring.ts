@@ -52,7 +52,7 @@ namespace ts {
             location = value;
         }
 
-        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, emitRestAssignment, transformRest, visitor);
+        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, recordTempVariable, emitRestAssignment, transformRest, visitor);
 
         if (needsValue) {
             expressions.push(value);
@@ -98,7 +98,7 @@ namespace ts {
         transformRest?: boolean) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, transformRest, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, noop, emitRestAssignment, transformRest, visitor);
 
         return declarations;
 
@@ -140,7 +140,7 @@ namespace ts {
         const declarations: VariableDeclaration[] = [];
 
         let pendingAssignments: Expression[];
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, transformRest, visitor);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, recordTempVariable, emitRestAssignment, transformRest, visitor);
 
         return declarations;
 
@@ -201,7 +201,7 @@ namespace ts {
 
         const pendingAssignments: Expression[] = [];
 
-        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, emitRestAssignment, /*transformRest*/ false, visitor);
+        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, noop, emitRestAssignment, /*transformRest*/ false, visitor);
 
         const expression = inlineExpressions(pendingAssignments);
         aggregateTransformFlags(expression);
@@ -244,6 +244,7 @@ namespace ts {
         location: TextRange,
         emitAssignment: (name: Identifier, value: Expression, location: TextRange, original: Node) => void,
         emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
+        recordTempVariable: (node: Identifier) => void,
         emitRestAssignment: (elements: (ObjectLiteralElementLike[] | BindingElement[]), value: Expression, location: TextRange, original: Node) => void,
         transformRest: boolean,
         visitor?: (node: Node) => VisitResult<Node>) {
@@ -307,48 +308,91 @@ namespace ts {
                 value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
             }
 
-            let es2015: ObjectLiteralElementLike[] = [];
+            let bindingElements: ObjectLiteralElementLike[] = [];
             for (let i = 0; i < properties.length; i++) {
                 const p = properties[i];
                 if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                    if (transformRest && !(p.transformFlags & TransformFlags.ContainsSpreadExpression)) {
-                        es2015.push(p);
-                    }
-                    else {
-                        if (es2015.length) {
-                            emitRestAssignment(es2015, value, location, target);
-                            es2015 = [];
+                    if (!transformRest ||
+                        p.transformFlags & TransformFlags.ContainsSpreadExpression ||
+                        (p.kind === SyntaxKind.PropertyAssignment && p.initializer.transformFlags & TransformFlags.ContainsSpreadExpression)) {
+                        if (bindingElements.length) {
+                            emitRestAssignment(bindingElements, value, location, target);
+                            bindingElements = [];
                         }
                         const propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
                         const bindingTarget = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
                         // Assignment for bindingTarget = value.propName should highlight whole property, hence use p as source map node
                         emitDestructuringAssignment(bindingTarget, createDestructuringPropertyAccess(value, propName), p);
                     }
+                    else {
+                        bindingElements.push(p);
+                    }
                 }
                 else if (i === properties.length - 1 && p.kind === SyntaxKind.SpreadAssignment) {
                     Debug.assert((p as SpreadAssignment).expression.kind === SyntaxKind.Identifier);
-                    if (es2015.length) {
-                        emitRestAssignment(es2015, value, location, target);
-                        es2015 = [];
+                    if (bindingElements.length) {
+                        emitRestAssignment(bindingElements, value, location, target);
+                        bindingElements = [];
                     }
                     const propName = (p as SpreadAssignment).expression as Identifier;
                     const restCall = createRestCall(value, target.properties, p => p.name, target);
                     emitDestructuringAssignment(propName, restCall, p);
                 }
             }
-            if (es2015.length) {
-                emitRestAssignment(es2015, value, location, target);
-                es2015 = [];
+            if (bindingElements.length) {
+                emitRestAssignment(bindingElements, value, location, target);
+                bindingElements = [];
             }
         }
 
         function emitArrayLiteralAssignment(target: ArrayLiteralExpression, value: Expression, location: TextRange) {
+            if (transformRest) {
+                emitESNextArrayLiteralAssignment(target, value, location);
+            }
+            else {
+                emitES2015ArrayLiteralAssignment(target, value, location);
+            }
+        }
+
+        function emitESNextArrayLiteralAssignment(target: ArrayLiteralExpression, value: Expression, location: TextRange) {
             const elements = target.elements;
             const numElements = elements.length;
             if (numElements !== 1) {
                 // For anything but a single element destructuring we need to generate a temporary
                 // to ensure value is evaluated exactly once.
-                // When doing so we want to hightlight the passed in source map node since thats the one needing this temp assignment
+                // When doing so we want to highlight the passed-in source map node since thats the one needing this temp assignment
+                value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
+            }
+
+            const expressions: Expression[] = [];
+            const spreadContainingExpressions: [Expression, Identifier][] = [];
+            for (let i = 0; i < numElements; i++) {
+                const e = elements[i];
+                if (e.kind === SyntaxKind.OmittedExpression) {
+                    continue;
+                }
+                if (e.transformFlags & TransformFlags.ContainsSpreadExpression && i < numElements - 1) {
+                    const tmp = createTempVariable(recordTempVariable);
+                    spreadContainingExpressions.push([e, tmp]);
+                    expressions.push(tmp);
+                }
+                else {
+                    expressions.push(e);
+                }
+            }
+            emitAssignment(updateArrayLiteral(target, expressions) as any as Identifier, value, undefined, undefined);
+            for (const [e, tmp] of spreadContainingExpressions) {
+                emitDestructuringAssignment(e, tmp, e);
+            }
+        }
+
+        function emitES2015ArrayLiteralAssignment(target: ArrayLiteralExpression, value: Expression, location: TextRange) {
+            const elements = target.elements;
+            const numElements = elements.length;
+            if (numElements !== 1) {
+                // For anything but a single element destructuring we need to generate a temporary
+                // to ensure value is evaluated exactly once.
+                // When doing so we want to highlight the passed-in source map node since thats the one needing this temp assignment
                 value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
             }
 
@@ -413,7 +457,7 @@ namespace ts {
                     value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ numElements !== 0, target, emitTempVariableAssignment);
                 }
                 if (name.kind === SyntaxKind.ArrayBindingPattern) {
-                    emitArrayBindingElement(name, value);
+                    emitArrayBindingElement(name as ArrayBindingPattern, value);
                 }
                 else {
                     emitObjectBindingElement(target, value);
@@ -421,7 +465,16 @@ namespace ts {
             }
         }
 
-        function emitArrayBindingElement(name: BindingPattern, value: Expression) {
+        function emitArrayBindingElement(name: ArrayBindingPattern, value: Expression) {
+            if (transformRest) {
+                emitESNextArrayBindingElement(name, value);
+            }
+            else {
+                emitES2015ArrayBindingElement(name, value);
+            }
+        }
+
+        function emitES2015ArrayBindingElement(name: ArrayBindingPattern, value: Expression) {
             const elements = name.elements;
             const numElements = elements.length;
             for (let i = 0; i < numElements; i++) {
@@ -439,20 +492,44 @@ namespace ts {
             }
         }
 
+        function emitESNextArrayBindingElement(name: ArrayBindingPattern, value: Expression) {
+            const elements = name.elements;
+            const numElements = elements.length;
+            const bindingElements: BindingElement[] = [];
+            const spreadContainingElements: BindingElement[] = [];
+            for (let i = 0; i < numElements; i++) {
+                const element = elements[i];
+                if (isOmittedExpression(element)) {
+                    continue;
+                }
+                if (element.transformFlags & TransformFlags.ContainsSpreadExpression && i < numElements - 1) {
+                    spreadContainingElements.push(element);
+                    bindingElements.push(createBindingElement(undefined, undefined, getGeneratedNameForNode(element), undefined, value));
+                }
+                else {
+                    bindingElements.push(element);
+                }
+            }
+            emitAssignment(updateArrayBindingPattern(name, bindingElements) as any as Identifier, value, undefined, undefined);
+            for (const element of spreadContainingElements) {
+                emitBindingElement(element, getGeneratedNameForNode(element));
+            }
+        }
+
         function emitObjectBindingElement(target: VariableDeclaration | ParameterDeclaration | BindingElement, value: Expression) {
             const name = target.name as BindingPattern;
             const elements = name.elements;
             const numElements = elements.length;
-            let es2015: BindingElement[] = [];
+            let bindingElements: BindingElement[] = [];
             for (let i = 0; i < numElements; i++) {
                 const element = elements[i];
                 if (isOmittedExpression(element)) {
                     continue;
                 }
                 if (i === numElements - 1 && element.dotDotDotToken) {
-                    if (es2015.length) {
-                        emitRestAssignment(es2015, value, target, target);
-                        es2015 = [];
+                    if (bindingElements.length) {
+                        emitRestAssignment(bindingElements, value, target, target);
+                        bindingElements = [];
                     }
                     const restCall = createRestCall(value,
                                                     name.elements,
@@ -462,21 +539,21 @@ namespace ts {
                 }
                 else if (transformRest && !(element.transformFlags & TransformFlags.ContainsSpreadExpression)) {
                     // do not emit until we have a complete bundle of ES2015 syntax
-                    es2015.push(element);
+                    bindingElements.push(element);
                 }
                 else {
-                    if (es2015.length) {
-                        emitRestAssignment(es2015, value, target, target);
-                        es2015 = [];
+                    if (bindingElements.length) {
+                        emitRestAssignment(bindingElements, value, target, target);
+                        bindingElements = [];
                     }
                     // Rewrite element to a declaration with an initializer that fetches property
                     const propName = element.propertyName || <Identifier>element.name;
                     emitBindingElement(element, createDestructuringPropertyAccess(value, propName));
                 }
             }
-            if (es2015.length) {
-                emitRestAssignment(es2015, value, target, target);
-                es2015 = [];
+            if (bindingElements.length) {
+                emitRestAssignment(bindingElements, value, target, target);
+                bindingElements = [];
             }
         }
 
