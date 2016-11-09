@@ -2,32 +2,6 @@
 /// <reference types="library-a" />
 No type information for this code./// <reference types="library-b" />
 No type information for this code.
-No type information for this code./*
-No type information for this code.# To reproduce in a real project:
-No type information for this code.
-No type information for this code.echo '/// <reference types="library-a" />' > app.ts
-No type information for this code.echo '/// <reference types="library-b" />' >> app.ts
-No type information for this code.
-No type information for this code.mkdir node_modules/@types
-No type information for this code.cd mode_modules/@types
-No type information for this code.mkdir library-a
-No type information for this code.echo 'declare class MyClass { private x: number; }' > library-a/index.d.ts
-No type information for this code.
-No type information for this code.mkdir library-b
-No type information for this code.cd library-b
-No type information for this code.echo '/// <reference types="library-a" />' > index.d.ts
-No type information for this code.
-No type information for this code.mkdir node_modules
-No type information for this code.cd node_modules
-No type information for this code.
-No type information for this code.ln -s ../../library-a ./library-a
-No type information for this code.# Windows: Open command prompt as administrator and run: `mklink /D library-a ..\..\library-a`
-No type information for this code.
-No type information for this code.cd ../../.. # back to root
-No type information for this code.
-No type information for this code.tsc app.ts # Should create `app.js`
-No type information for this code.*/
-No type information for this code.
 No type information for this code.=== /node_modules/@types/library-a/index.d.ts ===
 // Symlinks are always resolved for type reference directives.
 // NOTE: This test would still compile without errors even if they were not,

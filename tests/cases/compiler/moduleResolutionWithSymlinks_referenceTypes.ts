@@ -18,6 +18,15 @@ declare class MyClass { private x: number; }
 /// <reference types="library-a" />
 /// <reference types="library-b" />
 
+// @filename: tsconfig.json
+{
+    "compilerOptions": {
+        // If this is its default of node_modules/@types,
+        // node_modules/@types/library-a will be looked up be fore node_modules/@types/library-b/node_modules/@types/library-a
+        "typeRoots": []
+    }
+}
+
 /*
 # To reproduce in a real project:
 
