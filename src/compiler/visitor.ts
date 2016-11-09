@@ -654,14 +654,61 @@ namespace ts {
     }
 
     /**
+     * Starts a new lexical environment and visits a statement list, ending the lexical environment
+     * and merging hoisted declarations upon completion.
+     */
+    export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext, start?: number, ensureUseStrict?: boolean) {
+        context.startLexicalEnvironment();
+        statements = visitNodes(statements, visitor, isStatement, start);
+        if (ensureUseStrict && !startsWithUseStrict(statements)) {
+            statements = createNodeArray([createStatement(createLiteral("use strict")), ...statements], statements);
+        }
+        statements = mergeLexicalEnvironment(statements, context.endLexicalEnvironment());
+        return statements;
+    }
+
+    /**
+     * Starts a new lexical environment and visits a parameter list, suspending the lexical
+     * environment upon completion.
+     */
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext) {
+        context.startLexicalEnvironment();
+        const updated = visitNodes(nodes, visitor, isParameterDeclaration);
+        context.suspendLexicalEnvironment();
+        return updated;
+    }
+
+    /**
+     * Resumes a suspended lexical environment and visits a function body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
+    export function visitFunctionBody(node: FunctionBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext, optional?: boolean): FunctionBody;
+    /**
+     * Resumes a suspended lexical environment and visits a concise body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
+    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): ConciseBody;
+    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext, optional?: boolean): ConciseBody {
+        context.resumeLexicalEnvironment();
+        const updated = visitNode(node, visitor, isConciseBody, optional);
+        const declarations = context.endLexicalEnvironment();
+        if (some(declarations)) {
+            const block = convertToFunctionBody(updated);
+            const statements = mergeLexicalEnvironment(block.statements, declarations);
+            return updateBlock(block, statements);
+        }
+        return updated;
+    }
+
+    /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
      * @param node The Node whose children will be visited.
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
-    export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): Node {
+    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): T;
+    export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): Node {
         if (node === undefined) {
             return undefined;
         }
@@ -714,41 +761,33 @@ namespace ts {
                     visitNodes((<MethodDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    (context.startLexicalEnvironment(), visitNodes((<MethodDeclaration>node).parameters, visitor, isParameter)),
+                    visitParameterList((<MethodDeclaration>node).parameters, visitor, context),
                     visitNode((<MethodDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<MethodDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<MethodDeclaration>node).body, visitor, context, /*optional*/ true));
 
             case SyntaxKind.Constructor:
                 return updateConstructor(<ConstructorDeclaration>node,
                     visitNodes((<ConstructorDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ConstructorDeclaration>node).modifiers, visitor, isModifier),
-                    (context.startLexicalEnvironment(), visitNodes((<ConstructorDeclaration>node).parameters, visitor, isParameter)),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<ConstructorDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitParameterList((<ConstructorDeclaration>node).parameters, visitor, context),
+                    visitFunctionBody((<ConstructorDeclaration>node).body, visitor, context, /*optional*/ true));
 
             case SyntaxKind.GetAccessor:
                 return updateGetAccessor(<GetAccessorDeclaration>node,
                     visitNodes((<GetAccessorDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<GetAccessorDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<GetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    (context.startLexicalEnvironment(), visitNodes((<GetAccessorDeclaration>node).parameters, visitor, isParameter)),
+                    visitParameterList((<GetAccessorDeclaration>node).parameters, visitor, context),
                     visitNode((<GetAccessorDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<GetAccessorDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<GetAccessorDeclaration>node).body, visitor, context, /*optional*/ true));
 
             case SyntaxKind.SetAccessor:
                 return updateSetAccessor(<SetAccessorDeclaration>node,
                     visitNodes((<SetAccessorDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<SetAccessorDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<SetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    (context.startLexicalEnvironment(), visitNodes((<SetAccessorDeclaration>node).parameters, visitor, isParameter)),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<SetAccessorDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitParameterList((<SetAccessorDeclaration>node).parameters, visitor, context),
+                    visitFunctionBody((<SetAccessorDeclaration>node).body, visitor, context, /*optional*/ true));
 
             // Binding patterns
             case SyntaxKind.ObjectBindingPattern:
@@ -810,21 +849,17 @@ namespace ts {
                     visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier),
                     visitNode((<FunctionExpression>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
-                    (context.startLexicalEnvironment(), visitNodes((<FunctionExpression>node).parameters, visitor, isParameter)),
+                    visitParameterList((<FunctionExpression>node).parameters, visitor, context),
                     visitNode((<FunctionExpression>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<FunctionExpression>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<FunctionExpression>node).body, visitor, context, /*optional*/ true));
 
             case SyntaxKind.ArrowFunction:
                 return updateArrowFunction(<ArrowFunction>node,
                     visitNodes((<ArrowFunction>node).modifiers, visitor, isModifier),
                     visitNodes((<ArrowFunction>node).typeParameters, visitor, isTypeParameter),
-                    (context.startLexicalEnvironment(), visitNodes((<ArrowFunction>node).parameters, visitor, isParameter)),
+                    visitParameterList((<ArrowFunction>node).parameters, visitor, context),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<ArrowFunction>node).body, visitor, isConciseBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
                 return updateDelete(<DeleteExpression>node,
@@ -995,11 +1030,9 @@ namespace ts {
                     visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<FunctionDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    (context.startLexicalEnvironment(), visitNodes((<FunctionDeclaration>node).parameters, visitor, isParameter)),
+                    visitParameterList((<FunctionDeclaration>node).parameters, visitor, context),
                     visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<FunctionDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<FunctionExpression>node).body, visitor, context, /*optional*/ true));
 
             case SyntaxKind.ClassDeclaration:
                 return updateClassDeclaration(<ClassDeclaration>node,
@@ -1129,11 +1162,7 @@ namespace ts {
             case SyntaxKind.SourceFile:
                 context.startLexicalEnvironment();
                 return updateSourceFileNode(<SourceFile>node,
-                    createNodeArray(
-                        concatenate(
-                            visitNodes((<SourceFile>node).statements, visitor, isStatement),
-                            context.endLexicalEnvironment()),
-                        (<SourceFile>node).statements));
+                    visitLexicalEnvironment((<SourceFile>node).statements, visitor, context));
 
             // Transformation nodes
             case SyntaxKind.PartiallyEmittedExpression:
@@ -1166,6 +1195,24 @@ namespace ts {
 
         // return node;
     }
+
+    /**
+     * Merges generated lexical declarations into a new statement list.
+     */
+    export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: Statement[]): NodeArray<Statement>;
+    /**
+     * Appends generated lexical declarations to an array of statements.
+     */
+    export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]): Statement[];
+    export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]) {
+        if (!some(declarations)) {
+            return statements;
+        }
+        return isNodeArray(statements)
+            ? createNodeArray(concatenate(statements, declarations), statements)
+            : addRange(statements, declarations);
+    }
+
 
     /**
      * Merges generated lexical declarations into the FunctionBody of a non-arrow function-like declaration.

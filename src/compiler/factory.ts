@@ -1695,23 +1695,8 @@ namespace ts {
 
     // Helpers
 
-    export interface EmitHelperState {
-        currentSourceFile: SourceFile;
-        compilerOptions: CompilerOptions;
-        requestedHelpers?: EmitHelper[];
-    }
-
-    export function getHelperName(helperState: EmitHelperState, name: string) {
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleName(helperState.currentSourceFile, helperState.compilerOptions);
-        return externalHelpersModuleName
-            ? createPropertyAccess(externalHelpersModuleName, name)
-            : createIdentifier(name);
-    }
-
-    export function requestEmitHelper(helperState: EmitHelperState, helper: EmitHelper) {
-        if (!contains(helperState.requestedHelpers, helper)) {
-            helperState.requestedHelpers = append(helperState.requestedHelpers, helper);
-        }
+    export function getHelperName(name: string) {
+        return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
     export interface CallBinding {
@@ -2061,6 +2046,10 @@ namespace ts {
 
     // Utilities
 
+    export function convertToFunctionBody(node: ConciseBody) {
+        return isBlock(node) ? node : createBlock([createReturn(node, /*location*/ node)], /*location*/ node);
+    }
+
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
         return (node.expression as StringLiteral).text === "use strict";
     }
@@ -2108,6 +2097,13 @@ namespace ts {
             statementOffset++;
         }
         return statementOffset;
+    }
+
+    export function startsWithUseStrict(statements: Statement[]) {
+        const firstStatement = firstOrUndefined(statements);
+        return firstStatement !== undefined
+            && isPrologueDirective(firstStatement)
+            && isUseStrictPrologue(firstStatement);
     }
 
     /**
@@ -2606,7 +2602,7 @@ namespace ts {
      *
      * @param node The node.
      */
-    function getOrCreateEmitNode(node: Node) {
+    export function getOrCreateEmitNode(node: Node) {
         if (!node.emitNode) {
             if (isParseTreeNode(node)) {
                 // To avoid holding onto transformation artifacts, we keep track of any
@@ -2735,14 +2731,25 @@ namespace ts {
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
-    export function getOrCreateExternalHelpersModuleName(node: SourceFile, compilerOptions: CompilerOptions) {
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions) {
         if (compilerOptions.importHelpers && (isExternalModule(node) || compilerOptions.isolatedModules)) {
-            const parseNode = getOriginalNode(node, isSourceFile);
-            const emitNode = getOrCreateEmitNode(parseNode);
-            return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
+            const externalHelpersModuleName = getExternalHelpersModuleName(node);
+            if (externalHelpersModuleName) {
+                return externalHelpersModuleName;
+            }
+
+            const helpers = getEmitHelpers(node);
+            if (helpers) {
+                for (const helper of helpers) {
+                    if (!helper.scoped) {
+                        const parseNode = getOriginalNode(node, isSourceFile);
+                        const emitNode = getOrCreateEmitNode(parseNode);
+                        return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
+                    }
+                }
+            }
         }
     }
-
     /**
      * Adds an EmitHelper to a node.
      */
@@ -2930,7 +2937,7 @@ namespace ts {
         hasExportStarsToExportValues: boolean; // whether this module contains export*
     }
 
-    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver): ExternalModuleInfo {
+    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMap<ExportSpecifier[]>();
         const exportedBindings = createMap<Identifier[]>();
@@ -2940,7 +2947,7 @@ namespace ts {
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
 
-        const externalHelpersModuleName = getExternalHelpersModuleName(sourceFile);
+        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions);
         const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,

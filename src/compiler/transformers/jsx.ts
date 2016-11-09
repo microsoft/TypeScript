@@ -6,7 +6,6 @@ namespace ts {
     export function transformJsx(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
         let currentSourceFile: SourceFile;
-        let helperState: EmitHelperState;
 
         return transformSourceFile;
 
@@ -21,13 +20,11 @@ namespace ts {
             }
 
             currentSourceFile = node;
-            helperState = { currentSourceFile, compilerOptions };
 
             const visited = visitEachChild(node, visitor, context);
-            addEmitHelpers(visited, helperState.requestedHelpers);
+            addEmitHelpers(visited, context.readEmitHelpers());
 
             currentSourceFile = undefined;
-            helperState = undefined;
             return visited;
         }
 
@@ -116,7 +113,7 @@ namespace ts {
                 // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments);
                 if (!objectProperties) {
-                    objectProperties = createAssignHelper(helperState, segments);
+                    objectProperties = createAssignHelper(context, segments);
                 }
             }
 
@@ -538,10 +535,10 @@ namespace ts {
         "diams": 0x2666
     });
 
-    function createAssignHelper(helperState: EmitHelperState, attributesSegments: Expression[]) {
-        requestEmitHelper(helperState, assignHelper);
+    function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
+        context.requestEmitHelper(assignHelper);
         return createCall(
-            getHelperName(helperState, "__assign"),
+            getHelperName("__assign"),
             /*typeArguments*/ undefined,
             attributesSegments
         );

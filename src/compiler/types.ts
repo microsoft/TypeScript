@@ -1503,6 +1503,11 @@ namespace ts {
         expression: Expression;
     }
 
+    /* @internal */
+    export interface PrologueDirective extends ExpressionStatement {
+        expression: StringLiteral;
+    }
+
     export interface IfStatement extends Statement {
         kind: SyntaxKind.IfStatement;
         expression: Expression;
@@ -3541,15 +3546,16 @@ namespace ts {
         NoTrailingComments = 1 << 10,            // Do not emit trailing comments for this node.
         NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
         NoNestedComments = 1 << 11,
-        ExportName = 1 << 12,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        LocalName = 1 << 13,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 14,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        NoIndentation = 1 << 15,                 // Do not indent the node.
-        AsyncFunctionBody = 1 << 16,
-        ReuseTempVariableScope = 1 << 17,        // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 1 << 18,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-        NoHoisting = 1 << 19,                    // Do not hoist this declaration in --module system
-        HasEndOfDeclarationMarker = 1 << 20,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+        HelperName = 1 << 12,
+        ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        Indented = 1 << 15,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoIndentation = 1 << 16,                 // Do not indent the node.
+        AsyncFunctionBody = 1 << 17,
+        ReuseTempVariableScope = 1 << 18,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 19,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoHoisting = 1 << 20,                    // Do not hoist this declaration in --module system
+        HasEndOfDeclarationMarker = 1 << 21,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
     }
 
     /* @internal */
@@ -3568,16 +3574,123 @@ namespace ts {
         Unspecified,        // Emitting an otherwise unspecified node
     }
 
-    /** Additional context provided to `visitEachChild` */
     /* @internal */
-    export interface LexicalEnvironment {
+    export interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
+
+        /* @internal */
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+
+        isEmitBlocked(emitFileName: string): boolean;
+
+        writeFile: WriteFileCallback;
+    }
+
+    /* @internal */
+    export interface TransformationContext {
+        getCompilerOptions(): CompilerOptions;
+        getEmitResolver(): EmitResolver;
+        getEmitHost(): EmitHost;
+
         /** Starts a new lexical environment. */
         startLexicalEnvironment(): void;
 
+        /** Suspends the current lexical environment, usually after visiting a parameter list. */
+        suspendLexicalEnvironment(): void;
+
+        /** Resumes a suspended lexical environment, usually before visiting a function body. */
+        resumeLexicalEnvironment(): void;
+
         /** Ends a lexical environment, returning any declarations. */
         endLexicalEnvironment(): Statement[];
+
+        /**
+         * Hoists a function declaration to the containing scope.
+         */
+        hoistFunctionDeclaration(node: FunctionDeclaration): void;
+
+        /**
+         * Hoists a variable declaration to the containing scope.
+         */
+        hoistVariableDeclaration(node: Identifier): void;
+
+        /**
+         * Records a request for a non-scoped emit helper in the current context.
+         */
+        requestEmitHelper(helper: EmitHelper): void;
+
+        /**
+         * Gets and resets the requested non-scoped emit helpers.
+         */
+        readEmitHelpers(): EmitHelper[] | undefined;
+
+        /**
+         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
+         */
+        enableSubstitution(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether expression substitutions are enabled for the provided node.
+         */
+        isSubstitutionEnabled(node: Node): boolean;
+
+        /**
+         * Hook used by transformers to substitute expressions just before they
+         * are emitted by the pretty printer.
+         */
+        onSubstituteNode?: (emitContext: EmitContext, node: Node) => Node;
+
+        /**
+         * Enables before/after emit notifications in the pretty printer for the provided
+         * SyntaxKind.
+         */
+        enableEmitNotification(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
+         */
+        isEmitNotificationEnabled(node: Node): boolean;
+
+        /**
+         * Hook used to allow transformers to capture state before or after
+         * the printer emits a node.
+         */
+        onEmitNode?: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
     }
 
+    /* @internal */
+    export interface TransformationResult {
+        /**
+         * Gets the transformed source files.
+         */
+        transformed: SourceFile[];
+
+        /**
+         * Emits the substitute for a node, if one is available; otherwise, emits the node.
+         *
+         * @param emitContext The current emit context.
+         * @param node The node to substitute.
+         * @param emitCallback A callback used to emit the node or its substitute.
+         */
+        emitNodeWithSubstitution(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+
+        /**
+         * Emits a node with possible notification.
+         *
+         * @param emitContext The current emit context.
+         * @param node The node to emit.
+         * @param emitCallback A callback used to emit the node.
+         */
+        emitNodeWithNotification(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+    }
+
+    /* @internal */
+    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
     export interface TextSpan {
         start: number;

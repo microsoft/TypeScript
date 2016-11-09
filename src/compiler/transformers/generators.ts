@@ -242,7 +242,6 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let renamedCatchVariables: Map<boolean>;
         let renamedCatchVariableDeclarations: Map<Identifier>;
-        let helperState: EmitHelperState;
 
         let inGeneratorFunctionBody: boolean;
         let inStatementContainingYield: boolean;
@@ -298,13 +297,11 @@ namespace ts {
             }
 
             currentSourceFile = node;
-            helperState = { currentSourceFile, compilerOptions };
 
             const visited = visitEachChild(node, visitor, context);
-            addEmitHelpers(visited, helperState.requestedHelpers);
+            addEmitHelpers(visited, context.readEmitHelpers());
 
             currentSourceFile = undefined;
-            helperState = undefined;
             return visited;
         }
 
@@ -2590,7 +2587,7 @@ namespace ts {
 
             const buildResult = buildStatements();
             return createGeneratorHelper(
-                helperState,
+                context,
                 setEmitFlags(
                     createFunctionExpression(
                         /*modifiers*/ undefined,
@@ -3083,10 +3080,10 @@ namespace ts {
         }
     }
 
-    function createGeneratorHelper(helperState: EmitHelperState, body: FunctionExpression) {
-        requestEmitHelper(helperState, generatorHelper);
+    function createGeneratorHelper(context: TransformationContext, body: FunctionExpression) {
+        context.requestEmitHelper(generatorHelper);
         return createCall(
-            getHelperName(helperState, "__generator"),
+            getHelperName("__generator"),
             /*typeArguments*/ undefined,
             [createThis(), body]);
     }
