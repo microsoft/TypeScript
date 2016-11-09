@@ -174,13 +174,14 @@ namespace ts {
      *
      * @param node The VariableDeclaration to flatten.
      * @param recordTempVariable A callback used to record new temporary variables.
-     * @param nameSubstitution An optional callback used to substitute binding names.
+     * @param createAssignmentCallback An optional callback used to create assignment expressions
+     * for non-temporary variables.
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenVariableDestructuringToExpression(
         node: VariableDeclaration,
         recordTempVariable: (name: Identifier) => void,
-        nameSubstitution?: (name: Identifier) => Expression,
+        createAssignmentCallback?: (name: Identifier, value: Expression, location?: TextRange) => Expression,
         visitor?: (node: Node) => VisitResult<Node>) {
 
         const pendingAssignments: Expression[] = [];
@@ -192,18 +193,20 @@ namespace ts {
         return expression;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
-            const left = nameSubstitution && nameSubstitution(name) || name;
-            emitPendingAssignment(left, value, location, original);
+            const expression = createAssignmentCallback
+                ? createAssignmentCallback(name, value, location)
+                : createAssignment(name, value, location);
+
+            emitPendingAssignment(expression, original);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
             const name = createTempVariable(recordTempVariable);
-            emitPendingAssignment(name, value, location, /*original*/ undefined);
+            emitPendingAssignment(createAssignment(name, value, location), /*original*/ undefined);
             return name;
         }
 
-        function emitPendingAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
-            const expression = createAssignment(name, value, location);
+        function emitPendingAssignment(expression: Expression, original: Node) {
             expression.original = original;
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
@@ -211,7 +214,6 @@ namespace ts {
             setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
 
             pendingAssignments.push(expression);
-            return expression;
         }
     }
 

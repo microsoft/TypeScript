@@ -73,6 +73,10 @@ namespace ts.server {
         project: Project;
     }
 
+    export interface EventSender {
+        event(payload: any, eventName: string): void;
+    }
+
     function allEditsBeforePos(edits: ts.TextChange[], pos: number) {
         for (const edit of edits) {
             if (textSpanEnd(edit.span) >= pos) {
@@ -169,7 +173,7 @@ namespace ts.server {
         return `Content-Length: ${1 + len}\r\n\r\n${json}${newLine}`;
     }
 
-    export class Session {
+    export class Session implements EventSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private errorTimer: any; /*NodeJS.Timer | number*/

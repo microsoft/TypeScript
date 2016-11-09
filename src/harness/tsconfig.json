@@ -32,6 +32,7 @@
         "../compiler/transformers/es2017.ts",
         "../compiler/transformers/es2016.ts",
         "../compiler/transformers/es2015.ts",
+        "../compiler/transformers/es5.ts",
         "../compiler/transformers/generators.ts",
         "../compiler/transformers/es5.ts",
         "../compiler/transformers/destructuring.ts",

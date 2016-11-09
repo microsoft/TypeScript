@@ -50,7 +50,6 @@ namespace ts {
         public jsDocComments: JSDoc[];
         public original: Node;
         public transformFlags: TransformFlags;
-        public excludeTransformFlags: TransformFlags;
         private _children: Node[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
@@ -58,7 +57,6 @@ namespace ts {
             this.end = end;
             this.flags = NodeFlags.None;
             this.transformFlags = undefined;
-            this.excludeTransformFlags = undefined;
             this.parent = undefined;
             this.kind = kind;
         }
@@ -469,11 +467,12 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: Map<number>;
-        public resolvedModules: Map<ResolvedModule>;
+        public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
+        public ambientModuleNames: string[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);

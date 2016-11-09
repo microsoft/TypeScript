@@ -262,7 +262,8 @@ namespace ts {
         }
 
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody | FunctionBody {
-            const nodeType = node.original ? (<FunctionLikeDeclaration>node.original).type : node.type;
+            const original = getOriginalNode(node, isFunctionLike);
+            const nodeType = original.type;
             const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
             const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
             const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
@@ -336,15 +337,16 @@ namespace ts {
         }
 
         function getPromiseConstructor(type: TypeNode) {
-            const typeName = getEntityNameFromTypeNode(type);
-            if (typeName && isEntityName(typeName)) {
-                const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
-                if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
-                    || serializationKind === TypeReferenceSerializationKind.Unknown) {
-                    return typeName;
+            if (type) {
+                const typeName = getEntityNameFromTypeNode(type);
+                if (typeName && isEntityName(typeName)) {
+                    const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
+                    if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
+                        || serializationKind === TypeReferenceSerializationKind.Unknown) {
+                        return typeName;
+                    }
                 }
             }
-
             return undefined;
         }
 

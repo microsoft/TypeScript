@@ -1,4 +1,5 @@
 ﻿/// <reference path="types.d.ts" />
+/// <reference path="shared.ts" />
 
 namespace ts.server {
     export enum LogLevel {
@@ -9,6 +10,7 @@ namespace ts.server {
     }
 
     export const emptyArray: ReadonlyArray<any> = [];
+
 
     export interface Logger {
         close(): void;
@@ -45,12 +47,13 @@ namespace ts.server {
         }
     }
 
-    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, cachePath?: string): DiscoverTypings {
+    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
-            fileNames: project.getFileNames(),
+            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true),
             compilerOptions: project.getCompilerOptions(),
             typingOptions,
+            unresolvedImports,
             projectRootPath: getProjectRootPath(project),
             cachePath,
             kind: "discover"
@@ -211,11 +214,15 @@ namespace ts.server {
     export interface ServerLanguageServiceHost {
         setCompilationSettings(options: CompilerOptions): void;
         notifyFileRemoved(info: ScriptInfo): void;
+        startRecordingFilesWithChangedResolutions(): void;
+        finishRecordingFilesWithChangedResolutions(): Path[];
     }
 
     export const nullLanguageServiceHost: ServerLanguageServiceHost = {
         setCompilationSettings: () => undefined,
-        notifyFileRemoved: () => undefined
+        notifyFileRemoved: () => undefined,
+        startRecordingFilesWithChangedResolutions: () => undefined,
+        finishRecordingFilesWithChangedResolutions: () => undefined
     };
 
     export interface ProjectOptions {
@@ -240,6 +247,11 @@ namespace ts.server {
 
     export function makeInferredProjectName(counter: number) {
         return `/dev/null/inferredProject${counter}*`;
+    }
+
+    export function toSortedReadonlyArray(arr: string[]): SortedReadonlyArray<string> {
+        arr.sort();
+        return <any>arr;
     }
 
     export class ThrottledOperations {

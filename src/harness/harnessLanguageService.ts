@@ -725,6 +725,10 @@ namespace Harness.LanguageService {
         clearImmediate(timeoutId: any): void {
             clearImmediate(timeoutId);
         }
+
+        createHash(s: string) {
+            return s;
+        }
     }
 
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {

@@ -18,12 +18,12 @@ var happyFriday = c.b.Friday;
 "use strict";
 var a;
 (function (a) {
+    var weekend;
     (function (weekend) {
         weekend[weekend["Friday"] = 0] = "Friday";
         weekend[weekend["Saturday"] = 1] = "Saturday";
         weekend[weekend["Sunday"] = 2] = "Sunday";
-    })(a.weekend || (a.weekend = {}));
-    var weekend = a.weekend;
+    })(weekend = a.weekend || (a.weekend = {}));
 })(a = exports.a || (exports.a = {}));
 var c;
 (function (c) {

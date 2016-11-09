@@ -30,6 +30,7 @@
         "transformers/es2017.ts",
         "transformers/es2016.ts",
         "transformers/es2015.ts",
+        "transformers/es5.ts",
         "transformers/generators.ts",
         "transformers/es5.ts",
         "transformers/destructuring.ts",

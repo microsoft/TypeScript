@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference path="shared.ts" />
 /// <reference path="session.ts" />
 // used in fs.writeSync
 /* tslint:disable:no-null-keyword */
@@ -14,21 +15,33 @@ namespace ts.server {
     } = require("child_process");
 
     const os: {
-        homedir(): string
+        homedir?(): string;
+        tmpdir(): string;
     } = require("os");
-
 
     function getGlobalTypingsCacheLocation() {
         let basePath: string;
         switch (process.platform) {
             case "win32":
-                basePath = process.env.LOCALAPPDATA || process.env.APPDATA || os.homedir();
+                basePath = process.env.LOCALAPPDATA ||
+                    process.env.APPDATA ||
+                    (os.homedir && os.homedir()) ||
+                    process.env.USERPROFILE ||
+                    (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
+                    os.tmpdir();
                 break;
             case "linux":
-                basePath = os.homedir();
+                basePath = (os.homedir && os.homedir()) ||
+                    process.env.HOME ||
+                    ((process.env.LOGNAME || process.env.USER) && `/home/${process.env.LOGNAME || process.env.USER}`) ||
+                    os.tmpdir();
                 break;
             case "darwin":
-                basePath = combinePaths(os.homedir(), "Library/Application Support/");
+                const homeDir = (os.homedir && os.homedir()) ||
+                        process.env.HOME ||
+                        ((process.env.LOGNAME || process.env.USER) && `/Users/${process.env.LOGNAME || process.env.USER}`) ||
+                        os.tmpdir();
+                basePath = combinePaths(homeDir, "Library/Application Support/");
                 break;
         }
 
@@ -40,6 +53,7 @@ namespace ts.server {
         send(message: any, sendHandle?: any): void;
         on(message: "message", f: (m: any) => void): void;
         kill(): void;
+        pid: number;
     }
 
     interface NodeSocket {
@@ -179,19 +193,44 @@ namespace ts.server {
 
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
+        private installerPidReported = false;
         private socket: NodeSocket;
         private projectService: ProjectService;
+        private throttledOperations: ThrottledOperations;
+        private telemetrySender: EventSender;
 
         constructor(
+            private readonly telemetryEnabled: boolean,
             private readonly logger: server.Logger,
+            host: ServerHost,
             eventPort: number,
             readonly globalTypingsCacheLocation: string,
             private newLine: string) {
+            this.throttledOperations = new ThrottledOperations(host);
             if (eventPort) {
                 const s = net.connect({ port: eventPort }, () => {
                     this.socket = s;
+                    this.reportInstallerProcessId();
                 });
             }
+        }
+
+        private reportInstallerProcessId() {
+            if (this.installerPidReported) {
+                return;
+            }
+            if (this.socket && this.installer) {
+                this.sendEvent(0, "typingsInstallerPid", { pid: this.installer.pid });
+                this.installerPidReported = true;
+            }
+        }
+
+        private sendEvent(seq: number, event: string, body: any): void {
+            this.socket.write(formatMessage({ seq, type: "event", event, body }, this.logger, Buffer.byteLength, this.newLine), "utf8");
+        }
+
+        setTelemetrySender(telemetrySender: EventSender) {
+            this.telemetrySender = telemetrySender;
         }
 
         attach(projectService: ProjectService) {
@@ -200,9 +239,12 @@ namespace ts.server {
                 this.logger.info("Binding...");
             }
 
-            const args: string[] = ["--globalTypingsCacheLocation", this.globalTypingsCacheLocation];
+            const args: string[] = [Arguments.GlobalCacheLocation, this.globalTypingsCacheLocation];
+            if (this.telemetryEnabled) {
+                args.push(Arguments.EnableTelemetry);
+            }
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
-                args.push("--logFile", combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
+                args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
             }
             const execArgv: string[] = [];
             {
@@ -222,6 +264,8 @@ namespace ts.server {
 
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
+            this.reportInstallerProcessId();
+
             process.on("exit", () => {
                 this.installer.kill();
             });
@@ -231,21 +275,41 @@ namespace ts.server {
             this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
         }
 
-        enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions): void {
-            const request = createInstallTypingsRequest(project, typingOptions);
+        enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>): void {
+            const request = createInstallTypingsRequest(project, typingOptions, unresolvedImports);
             if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Sending request: ${JSON.stringify(request)}`);
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Scheduling throttled operation: ${JSON.stringify(request)}`);
+                }
             }
-            this.installer.send(request);
+            this.throttledOperations.schedule(project.getProjectName(), /*ms*/ 250, () => {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Sending request: ${JSON.stringify(request)}`);
+                }
+                this.installer.send(request);
+            });
         }
 
-        private handleMessage(response: SetTypings | InvalidateCachedTypings) {
+        private handleMessage(response: SetTypings | InvalidateCachedTypings | TypingsInstallEvent) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
             }
+            if (response.kind === EventInstall) {
+                if (this.telemetrySender) {
+                    const body: protocol.TypingsInstalledTelemetryEventBody = {
+                        telemetryEventName: "typingsInstalled",
+                        payload: {
+                            installedPackages: response.packagesToInstall.join(",")
+                        }
+                    };
+                    const eventName: protocol.TelemetryEventName = "telemetry";
+                    this.telemetrySender.event(body, eventName);
+                }
+                return;
+            }
             this.projectService.updateTypingsForProject(response);
-            if (response.kind == "set" && this.socket) {
-                this.socket.write(formatMessage({ seq: 0, type: "event", message: response }, this.logger, Buffer.byteLength, this.newLine), "utf8");
+            if (response.kind == ActionSet && this.socket) {
+                this.sendEvent(0, "setTypings", response);
             }
         }
     }
@@ -259,18 +323,25 @@ namespace ts.server {
             useSingleInferredProject: boolean,
             disableAutomaticTypingAcquisition: boolean,
             globalTypingsCacheLocation: string,
+            telemetryEnabled: boolean,
             logger: server.Logger) {
-            super(
-                host,
-                cancellationToken,
-                useSingleInferredProject,
-                disableAutomaticTypingAcquisition
-                    ? nullTypingsInstaller
-                    : new NodeTypingsInstaller(logger, installerEventPort, globalTypingsCacheLocation, host.newLine),
-                Buffer.byteLength,
-                process.hrtime,
-                logger,
-                canUseEvents);
+                const typingsInstaller = disableAutomaticTypingAcquisition
+                    ? undefined
+                    : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, host.newLine);
+
+                super(
+                    host,
+                    cancellationToken,
+                    useSingleInferredProject,
+                    typingsInstaller || nullTypingsInstaller,
+                    Buffer.byteLength,
+                    process.hrtime,
+                    logger,
+                    canUseEvents);
+
+                if (telemetryEnabled && typingsInstaller) {
+                    typingsInstaller.setTelemetrySender(this);
+                }
         }
 
         exit() {
@@ -497,17 +568,17 @@ namespace ts.server {
 
     let eventPort: number;
     {
-        const index = sys.args.indexOf("--eventPort");
-        if (index >= 0 && index < sys.args.length - 1) {
-            const v = parseInt(sys.args[index + 1]);
-            if (!isNaN(v)) {
-                eventPort = v;
-            }
+        const str = findArgument("--eventPort");
+        const v = str && parseInt(str);
+        if (!isNaN(v)) {
+            eventPort = v;
         }
     }
 
-    const useSingleInferredProject = sys.args.indexOf("--useSingleInferredProject") >= 0;
-    const disableAutomaticTypingAcquisition = sys.args.indexOf("--disableAutomaticTypingAcquisition") >= 0;
+    const useSingleInferredProject = hasArgument("--useSingleInferredProject");
+    const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
+    const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
+
     const ioSession = new IOSession(
         sys,
         cancellationToken,
@@ -516,6 +587,7 @@ namespace ts.server {
         useSingleInferredProject,
         disableAutomaticTypingAcquisition,
         getGlobalTypingsCacheLocation(),
+        telemetryEnabled,
         logger);
     process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");

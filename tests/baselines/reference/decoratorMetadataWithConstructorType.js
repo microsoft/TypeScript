@@ -33,8 +33,8 @@ var B = (function () {
     }
     return B;
 }());
-exports.B = B;
 __decorate([
     decorator,
     __metadata("design:type", A)
 ], B.prototype, "x", void 0);
+exports.B = B;

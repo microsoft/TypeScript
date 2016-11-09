@@ -18,6 +18,10 @@ declare namespace ts.server {
         trace?(s: string): void;
     }
 
+    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+        " __sortedReadonlyArrayBrand": any;
+    }
+
     export interface TypingInstallerRequest {
         readonly projectName: string;
         readonly kind: "discover" | "closeProject";
@@ -26,8 +30,9 @@ declare namespace ts.server {
     export interface DiscoverTypings extends TypingInstallerRequest {
         readonly fileNames: string[];
         readonly projectRootPath: ts.Path;
-        readonly typingOptions: ts.TypingOptions;
         readonly compilerOptions: ts.CompilerOptions;
+        readonly typingOptions: ts.TypingOptions;
+        readonly unresolvedImports: SortedReadonlyArray<string>;
         readonly cachePath?: string;
         readonly kind: "discover";
     }
@@ -36,25 +41,38 @@ declare namespace ts.server {
         readonly kind: "closeProject";
     }
 
+    export type ActionSet = "action::set";
+    export type ActionInvalidate = "action::invalidate";
+    export type EventInstall = "event::install";
+
     export interface TypingInstallerResponse {
-        readonly projectName: string;
-        readonly kind: "set" | "invalidate";
+        readonly kind: ActionSet | ActionInvalidate | EventInstall;
     }
 
-    export interface SetTypings extends TypingInstallerResponse {
+    export interface ProjectResponse extends TypingInstallerResponse {
+        readonly projectName: string;
+    }
+
+    export interface SetTypings extends ProjectResponse {
         readonly typingOptions: ts.TypingOptions;
         readonly compilerOptions: ts.CompilerOptions;
         readonly typings: string[];
-        readonly kind: "set";
+        readonly unresolvedImports: SortedReadonlyArray<string>;
+        readonly kind: ActionSet;
     }
 
-    export interface InvalidateCachedTypings extends TypingInstallerResponse {
-        readonly kind: "invalidate";
+    export interface InvalidateCachedTypings extends ProjectResponse {
+        readonly kind: ActionInvalidate;
+    }
+
+    export interface TypingsInstallEvent extends TypingInstallerResponse {
+        readonly packagesToInstall: ReadonlyArray<string>;
+        readonly kind: EventInstall;
     }
 
     export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
         writeFile(path: string, content: string): void;
         createDirectory(path: string): void;
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
+        watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
     }
 }

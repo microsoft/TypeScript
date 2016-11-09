@@ -250,6 +250,8 @@ namespace ts.server {
             readonly typingsInstaller: ITypingsInstaller = nullTypingsInstaller,
             private readonly eventHandler?: ProjectServiceEventHandler) {
 
+            Debug.assert(!!host.createHash, "'ServerHost.createHash' is required for ProjectService");
+
             this.toCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(host);
@@ -286,18 +288,21 @@ namespace ts.server {
                 return;
             }
             switch (response.kind) {
-                case "set":
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
-                    project.updateGraph();
+                case ActionSet:
+                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.unresolvedImports, response.typings);
                     break;
-                case "invalidate":
-                    this.typingsCache.invalidateCachedTypingsForProject(project);
+                case ActionInvalidate:
+                    this.typingsCache.deleteTypingsForProject(response.projectName);
                     break;
             }
+            project.updateGraph();
         }
 
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions): void {
             this.compilerOptionsForInferredProjects = convertCompilerOptions(projectCompilerOptions);
+            // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
+            // previously we did not expose a way for user to change these settings and this option was enabled by default
+            this.compilerOptionsForInferredProjects.allowNonTsExtensions = true;
             this.compileOnSaveForInferredProjects = projectCompilerOptions.compileOnSave;
             for (const proj of this.inferredProjects) {
                 proj.setCompilerOptions(this.compilerOptionsForInferredProjects);
@@ -1008,7 +1013,7 @@ namespace ts.server {
             const useExistingProject = this.useSingleInferredProject && this.inferredProjects.length;
             const project = useExistingProject
                 ? this.inferredProjects[0]
-                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects, /*compileOnSaveEnabled*/ this.compileOnSaveForInferredProjects);
+                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects);
 
             project.addRoot(root);
 
@@ -1285,7 +1290,9 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseFileName(normalized) === "tsconfig.json") {
-                    (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
+                    if (this.host.fileExists(normalized)) {
+                        (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
+                    }
                 }
                 else {
                     rootFiles.push(file);

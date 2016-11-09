@@ -70,15 +70,15 @@ var compilerSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es2015.ts",
-    "transformers/module/system.ts",
-    "transformers/module/module.ts",
     "transformers/jsx.ts",
     "transformers/es2017.ts",
     "transformers/es2016.ts",
     "transformers/es2015.ts",
     "transformers/generators.ts",
     "transformers/es5.ts",
+    "transformers/module/es2015.ts",
+    "transformers/module/system.ts",
+    "transformers/module/module.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -106,15 +106,15 @@ var servicesSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es2015.ts",
-    "transformers/module/system.ts",
-    "transformers/module/module.ts",
     "transformers/jsx.ts",
     "transformers/es2017.ts",
     "transformers/es2016.ts",
     "transformers/es2015.ts",
     "transformers/generators.ts",
     "transformers/es5.ts",
+    "transformers/module/es2015.ts",
+    "transformers/module/system.ts",
+    "transformers/module/module.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -173,6 +173,7 @@ var servicesSources = [
 
 var serverCoreSources = [
     "types.d.ts",
+    "shared.ts",
     "utilities.ts",
     "scriptVersionCache.ts",
     "typingsCache.ts",
@@ -195,6 +196,7 @@ var cancellationTokenSources = [
 
 var typingsInstallerSources = [
     "../types.d.ts",
+    "../shared.ts",
     "typingsInstaller.ts",
     "nodeTypingsInstaller.ts"
 ].map(function (f) {

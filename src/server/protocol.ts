@@ -2104,6 +2104,32 @@ namespace ts.server.protocol {
         childItems?: NavigationTree[];
     }
 
+    export type TelemetryEventName = "telemetry";
+
+    export interface TelemetryEvent extends Event {
+        event: TelemetryEventName;
+        body: TelemetryEventBody;
+    }
+
+    export interface TelemetryEventBody {
+        telemetryEventName: string;
+        payload: any;
+    }
+
+    export type TypingsInstalledTelemetryEventName = "typingsInstalled";
+
+    export interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
+        telemetryEventName: TypingsInstalledTelemetryEventName;
+        payload: TypingsInstalledTelemetryEventPayload;
+    }
+
+    export interface TypingsInstalledTelemetryEventPayload {
+        /**
+         * Comma separated list of installed typing packages
+         */
+        installedPackages: string;
+    }
+
     export interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
     }
