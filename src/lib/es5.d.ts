@@ -1338,11 +1338,6 @@ interface PromiseLike<T> {
         onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): PromiseLike<TResult1 | TResult2>;
 }
 
-interface ArrayLike<T> {
-    readonly length: number;
-    readonly [n: number]: T;
-}
-
 interface IteratorResult<T> {
     done: boolean;
     value: T;
@@ -1360,6 +1355,11 @@ interface PseudoIterable<T> {
 
 interface PseudoIterableIterator<T> extends Iterator<T> {
     __iterator__(): PseudoIterableIterator<T>;
+}
+
+interface ArrayLike<T> {
+    readonly length: number;
+    readonly [n: number]: T;
 }
 
 /**

@@ -247,16 +247,30 @@ namespace ts {
         if (isEffectiveBindingPattern(bindingTarget)) {
             const elements = getElementsOfEffectiveBindingPattern(bindingTarget);
             const numElements = elements.length;
-            if (isEffectiveObjectBindingPattern(bindingTarget)) {
-                if (numElements !== 1) {
-                    // For anything other than a single-element destructuring we need to generate a temporary
-                    // to ensure value is evaluated exactly once. Additionally, if we have zero elements
-                    // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
-                    // so in that case, we'll intentionally create that temporary.
-                    const reuseIdentifierExpressions = !isDeclarationBindingElement(bindingElement) || numElements !== 0;
-                    boundValue = ensureIdentifier(boundValue, reuseIdentifierExpressions, emitTempVariableAssignment, location);
-                }
+            if (isEffectiveArrayBindingPattern(bindingTarget) && !isArrayLiteralExpression(boundValue)) {
+                // Read the elements of the iterable into an array
+                boundValue = emitTempVariableAssignment(
+                    createReadHelper(
+                        context,
+                        boundValue,
+                        isEffectiveBindingElementWithRest(elements[numElements - 1])
+                            ? undefined
+                            : numElements,
+                        location
+                    ),
+                    location
+                );
+            }
+            else if (numElements !== 1) {
+                // For anything other than a single-element destructuring we need to generate a temporary
+                // to ensure value is evaluated exactly once. Additionally, if we have zero elements
+                // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
+                // so in that case, we'll intentionally create that temporary.
+                const reuseIdentifierExpressions = !isDeclarationBindingElement(bindingElement) || numElements !== 0;
+                boundValue = ensureIdentifier(boundValue, reuseIdentifierExpressions, emitTempVariableAssignment, location);
+            }
 
+            if (isEffectiveObjectBindingPattern(bindingTarget)) {
                 for (const element of elements) {
                     // Rewrite element to a declaration with an initializer that fetches property
                     flattenEffectiveBindingElement(
@@ -275,21 +289,6 @@ namespace ts {
                 }
             }
             else {
-                if (!isArrayLiteralExpression(boundValue)) {
-                    // Read the elements of the iterable into an array
-                    boundValue = emitTempVariableAssignment(
-                        createReadHelper(
-                            context,
-                            boundValue,
-                            isEffectiveBindingElementWithRest(elements[numElements - 1])
-                                ? undefined
-                                : numElements,
-                            location
-                        ),
-                        location
-                    );
-                }
-
                 for (let i = 0; i < numElements; i++) {
                     const element = elements[i];
                     if (isOmittedExpression(element)) {

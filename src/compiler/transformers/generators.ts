@@ -969,24 +969,29 @@ namespace ts {
             //      ar = _a.concat([%sent%, 2]);
 
             const numInitialElements = countInitialNodesWithoutYield(elements);
-            const temp = declareLocal();
-            let hasAssignedTemp = false;
+
+            let temp: Identifier;
             if (numInitialElements > 0) {
+                temp = declareLocal();
                 emitAssignment(temp,
                     createArrayLiteral(
                         visitNodes(elements, visitor, isExpression, 0, numInitialElements)
                     )
                 );
-                hasAssignedTemp = true;
             }
 
             const expressions = reduceLeft(elements, reduceElement, <Expression[]>[], numInitialElements);
-            return hasAssignedTemp
+            return temp
                 ? createArrayConcat(temp, [createArrayLiteral(expressions)])
                 : createArrayLiteral(expressions);
 
             function reduceElement(expressions: Expression[], element: Expression) {
                 if (containsYield(element) && expressions.length > 0) {
+                    const hasAssignedTemp = temp !== undefined;
+                    if (!temp) {
+                        temp = declareLocal();
+                    }
+
                     emitAssignment(
                         temp,
                         hasAssignedTemp
@@ -996,7 +1001,6 @@ namespace ts {
                             )
                             : createArrayLiteral(expressions)
                     );
-                    hasAssignedTemp = true;
                     expressions = [];
                 }
 
@@ -1930,7 +1934,7 @@ namespace ts {
 
         function cacheExpression(node: Expression): Identifier {
             let temp: Identifier;
-            if (isGeneratedIdentifier(node)) {
+            if (isGeneratedIdentifier(node) || getEmitFlags(node) & EmitFlags.HelperName) {
                 return <Identifier>node;
             }
 

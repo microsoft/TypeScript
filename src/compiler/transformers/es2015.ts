@@ -2079,7 +2079,8 @@ namespace ts {
                 // evaluated on every iteration.
                 const assignment = createAssignment(node.initializer, boundValue);
                 if (isDestructuringAssignment(assignment)) {
-                    statements.push(visitNode(createStatement(assignment), visitor, isStatement));
+                    aggregateTransformFlags(assignment);
+                    statements.push(createStatement(visitBinaryExpression(assignment, /*needsDestructuringValue*/ false)));
                 }
                 else {
                     assignment.end = node.initializer.end;

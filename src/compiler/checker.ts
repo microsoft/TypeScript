@@ -10,6 +10,25 @@ namespace ts {
     let nextMergeId = 1;
     let nextFlowId = 1;
 
+    const enum EmitHelper {
+        Extends = 1 << 0,
+        Assign = 1 << 1,
+        Decorate = 1 << 2,
+        Metadata = 1 << 3,
+        Param = 1 << 4,
+        Awaiter = 1 << 5,
+        Generator = 1 << 6,
+        Values = 1 << 7,
+        Step = 1 << 8,
+        Close = 1 << 9,
+        Read = 1 << 10,
+        Spread = 1 << 11,
+        ForOfIncludes = Values | Step | Close,
+        SpreadIncludes = Read | Spread,
+        FirstEmitHelper = Extends,
+        LastEmitHelper = Spread
+    }
+
     export function getNodeId(node: Node): number {
         if (!node.id) {
             node.id = nextNodeId;
@@ -38,6 +57,8 @@ namespace ts {
         // is because diagnostics can be quite expensive, and we want to allow hosts to bail out if
         // they no longer need the information (for example, if the user started editing again).
         let cancellationToken: CancellationToken;
+        let requestedExternalHelpers: EmitHelper;
+        let externalHelpersModule: Symbol;
 
         const Symbol = objectAllocator.getSymbolConstructor();
         const Type = objectAllocator.getTypeConstructor();
@@ -10430,7 +10451,7 @@ namespace ts {
                 const index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false);
+                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*checkAssignability*/ false);
             }
             return undefined;
         }
@@ -10649,6 +10670,10 @@ namespace ts {
             // with this type. It is neither affected by it, nor does it propagate it to its operand.
             // So the fact that contextualMapper is passed is not important, because the operand of a spread
             // element is not contextually typed.
+            if (languageVersion < ScriptTarget.ES2015) {
+                checkEmitHelpers(node, EmitHelper.SpreadIncludes);
+            }
+
             const arrayOrIterableType = checkExpressionCached(node.expression, contextualMapper);
             return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
         }
@@ -10679,7 +10704,7 @@ namespace ts {
                     // if there is no index type / iterated type.
                     const restArrayType = checkExpression((<SpreadElementExpression>e).expression, contextualMapper);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false);
+                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*checkAssignability*/ false);
                     if (restElementType) {
                         elementTypes.push(restElementType);
                     }
@@ -11024,6 +11049,10 @@ namespace ts {
         function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
             const type = checkExpression(node.expression);
             const props = getPropertiesOfType(type);
+            if (compilerOptions.jsx === JsxEmit.React) {
+                checkEmitHelpers(node, EmitHelper.Assign);
+            }
+
             for (const prop of props) {
                 // Is there a corresponding property in the element attributes type? Skip checking of properties
                 // that have already been assigned to, as these are not actually pushed into the resulting type
@@ -13791,6 +13820,10 @@ namespace ts {
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
+            if (languageVersion < ScriptTarget.ES2015) {
+                checkEmitHelpers(node, EmitHelper.Read);
+            }
+
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
@@ -14204,6 +14237,10 @@ namespace ts {
                 if (isInParameterInitializerBeforeContainingFunction(node)) {
                     error(node, Diagnostics.yield_expressions_cannot_be_used_in_a_parameter_initializer);
                 }
+            }
+
+            if (node.asteriskToken && languageVersion < ScriptTarget.ES2015) {
+                checkEmitHelpers(node, EmitHelper.Values);
             }
 
             if (node.expression) {
@@ -14664,6 +14701,17 @@ namespace ts {
                 node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
                 node.kind === SyntaxKind.ConstructSignature) {
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
+            }
+
+            if (isAsyncFunctionLike(node)) {
+                checkEmitHelpers(node, EmitHelper.Awaiter);
+                if (languageVersion < ScriptTarget.ES2015) {
+                    checkEmitHelpers(node, EmitHelper.Generator);
+                }
+            }
+
+            if (isSyntacticallyValidGenerator(node) && languageVersion < ScriptTarget.ES2015) {
+                checkEmitHelpers(node, EmitHelper.Generator);
             }
 
             checkTypeParameters(node.typeParameters);
@@ -15792,7 +15840,15 @@ namespace ts {
                 error(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_to_remove_this_warning);
             }
 
+            checkEmitHelpers(node, EmitHelper.Decorate);
+
+            if (node.kind === SyntaxKind.Parameter) {
+                checkEmitHelpers(node, EmitHelper.Param);
+            }
+
             if (compilerOptions.emitDecoratorMetadata) {
+                checkEmitHelpers(node, EmitHelper.Metadata);
+
                 // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
@@ -16374,6 +16430,10 @@ namespace ts {
 
             // For a binding pattern, check contained binding elements
             if (isBindingPattern(node.name)) {
+                if (node.name.kind === SyntaxKind.ArrayBindingPattern && languageVersion < ScriptTarget.ES2015) {
+                    checkEmitHelpers(node, EmitHelper.Read);
+                }
+
                 forEach((<BindingPattern>node.name).elements, checkSourceElement);
             }
             // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
@@ -16545,6 +16605,10 @@ namespace ts {
         function checkForOfStatement(node: ForOfStatement): void {
             checkGrammarForInOrForOfStatement(node);
 
+            if (node.kind === SyntaxKind.ForOfStatement && languageVersion < ScriptTarget.ES2015) {
+                checkEmitHelpers(node, EmitHelper.ForOfIncludes);
+            }
+
             // Check the LHS and RHS
             // If the LHS is a declaration, just check it as a variable declaration, which will in turn check the RHS
             // via checkRightHandSideOfForOf.
@@ -16651,7 +16715,8 @@ namespace ts {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
-            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput) || unknownType;
+
+            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput, /*checkAssignability*/ true) || anyType;
         }
 
         /**
@@ -16659,13 +16724,17 @@ namespace ts {
          * we want to get the iterated type of an iterable for ES2015 or later, or the iterated type
          * of a pseudo-iterable or element type of an array like for ES2015 or earlier.
          */
-        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
+        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, checkAssignability: boolean): Type {
             if (languageVersion >= ScriptTarget.ES2015) {
-                return getIteratedTypeOfIterable(inputType, errorNode);
+                const iteratedType = getIteratedTypeOfIterable(inputType, errorNode);
+                if (checkAssignability && errorNode && iteratedType) {
+                    checkTypeAssignableTo(inputType, createIterableType(iteratedType), errorNode);
+                }
+                return iteratedType;
             }
             return allowStringInput
-                ? getIteratedTypeOfPseudoIterableOrElementTypeOfArrayOrString(inputType, errorNode)
-                : getIteratedTypeOfPseudoIterableOrElementTypeOfArray(inputType, errorNode);
+                ? getIteratedTypeOfPseudoIterableOrElementTypeOfArrayOrString(inputType, errorNode, checkAssignability)
+                : getIteratedTypeOfPseudoIterableOrElementTypeOfArray(inputType, errorNode, checkAssignability);
         }
 
         /**
@@ -16821,12 +16890,15 @@ namespace ts {
          *   1. Some constituent is neither a string nor an array.
          *   2. Some constituent is a string and target is less than ES5 (because in ES3 string is not indexable).
          */
-        function getIteratedTypeOfPseudoIterableOrElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node): Type {
+        function getIteratedTypeOfPseudoIterableOrElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node, checkAssignability: boolean): Type {
             Debug.assert(languageVersion < ScriptTarget.ES2015);
 
-            const elementType = getIteratedTypeOfIterable(arrayOrStringType, /*errorNode*/ undefined);
-            if (elementType) {
-                return elementType;
+            const iteratedType = getIteratedTypeOfIterable(arrayOrStringType, /*errorNode*/ undefined);
+            if (iteratedType) {
+                if (checkAssignability && errorNode) {
+                    checkTypeAssignableTo(arrayOrStringType, createIterableType(iteratedType), errorNode);
+                }
+                return iteratedType;
             }
 
             // After we remove all types that are StringLike, we will know if there was a string constituent
@@ -16863,8 +16935,8 @@ namespace ts {
                         // But if the input was just number, we want to say that number is not an array type
                         // or a string type.
                         const diagnostic = hasStringConstituent
-                            ? Diagnostics.Type_0_is_not_an_array_type
-                            : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
+                            ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_an_iterator_method_that_returns_an_iterator
+                            : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_an_iterator_method_that_returns_an_iterator;
                         error(errorNode, diagnostic, typeToString(arrayType));
                     }
                 }
@@ -16884,18 +16956,21 @@ namespace ts {
             return arrayElementType;
         }
 
-        function getIteratedTypeOfPseudoIterableOrElementTypeOfArray(inputType: Type, errorNode: Node): Type {
+        function getIteratedTypeOfPseudoIterableOrElementTypeOfArray(inputType: Type, errorNode: Node, checkAssignability: boolean): Type {
             Debug.assert(languageVersion < ScriptTarget.ES2015);
 
-            const elementType = getIteratedTypeOfIterable(inputType, /*errorNode*/ undefined);
-            if (elementType) {
-                return elementType;
+            const iteratedType = getIteratedTypeOfIterable(inputType, /*errorNode*/ undefined);
+            if (iteratedType) {
+                if (checkAssignability && errorNode) {
+                    checkTypeAssignableTo(inputType, createIterableType(iteratedType), errorNode);
+                }
+                return iteratedType;
             }
             if (isArrayLikeType(inputType)) {
                 return getIndexTypeOfType(inputType, IndexKind.Number);
             }
             if (errorNode) {
-                error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
+                error(errorNode, Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_an_iterator_method_that_returns_an_iterator, typeToString(inputType));
             }
             return undefined;
         }
@@ -17281,6 +17356,10 @@ namespace ts {
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
+                if (languageVersion < ScriptTarget.ES2015) {
+                    checkEmitHelpers(node, EmitHelper.Extends);
+                }
+
                 const baseTypes = getBaseTypes(type);
                 if (baseTypes.length && produceDiagnostics) {
                     const baseType = baseTypes[0];
@@ -19714,8 +19793,6 @@ namespace ts {
 
             // Initialize global symbol table
             let augmentations: LiteralExpression[][];
-            let requestedExternalEmitHelpers: NodeFlags = 0;
-            let firstFileRequestingExternalHelpers: SourceFile;
             for (const file of host.getSourceFiles()) {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
@@ -19732,15 +19809,6 @@ namespace ts {
                     for (const id in source) {
                         if (!(id in globals)) {
                             globals[id] = source[id];
-                        }
-                    }
-                }
-                if ((compilerOptions.isolatedModules || isExternalModule(file)) && !file.isDeclarationFile) {
-                    const fileRequestedExternalEmitHelpers = file.flags & NodeFlags.EmitHelperFlags;
-                    if (fileRequestedExternalEmitHelpers) {
-                        requestedExternalEmitHelpers |= fileRequestedExternalEmitHelpers;
-                        if (firstFileRequestingExternalHelpers === undefined) {
-                            firstFileRequestingExternalHelpers = file;
                         }
                     }
                 }
@@ -19808,51 +19876,53 @@ namespace ts {
             const symbol = getGlobalSymbol("ReadonlyArray", SymbolFlags.Type, /*diagnostic*/ undefined);
             globalReadonlyArrayType = symbol && <GenericType>getTypeOfGlobalSymbol(symbol, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
+        }
 
-            // If we have specified that we are importing helpers, we should report global
-            // errors if we cannot resolve the helpers external module, or if it does not have
-            // the necessary helpers exported.
-            if (compilerOptions.importHelpers && firstFileRequestingExternalHelpers) {
-                // Find the first reference to the helpers module.
-                const helpersModule = resolveExternalModule(
-                    firstFileRequestingExternalHelpers,
-                    externalHelpersModuleNameText,
-                    Diagnostics.Cannot_find_module_0,
-                    /*errorNode*/ undefined);
-
-                // If we found the module, report errors if it does not have the necessary exports.
-                if (helpersModule) {
-                    const exports = helpersModule.exports;
-                    if (requestedExternalEmitHelpers & NodeFlags.HasClassExtends && languageVersion < ScriptTarget.ES2015) {
-                        verifyHelperSymbol(exports, "__extends", SymbolFlags.Value);
-                    }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasJsxSpreadAttributes && compilerOptions.jsx !== JsxEmit.Preserve) {
-                        verifyHelperSymbol(exports, "__assign", SymbolFlags.Value);
-                    }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasDecorators) {
-                        verifyHelperSymbol(exports, "__decorate", SymbolFlags.Value);
-                        if (compilerOptions.emitDecoratorMetadata) {
-                            verifyHelperSymbol(exports, "__metadata", SymbolFlags.Value);
+        function checkEmitHelpers(node: Node, helpers: EmitHelper) {
+            if ((requestedExternalHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
+                const sourceFile = getSourceFileOfNode(node);
+                if (isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                    const helpersModule = resolveHelpersModule(sourceFile);
+                    if (helpersModule !== unknownSymbol) {
+                        const uncheckedHelpers = helpers & ~requestedExternalHelpers;
+                        for (let helper = EmitHelper.FirstEmitHelper; helper <= EmitHelper.LastEmitHelper; helper <<= 1) {
+                            if (uncheckedHelpers & helper) {
+                                const name = getHelperName(helper);
+                                const symbol = getSymbol(helpersModule.exports, escapeIdentifier(name), SymbolFlags.Value);
+                                if (!symbol) {
+                                    diagnostics.add(createFileDiagnostic(sourceFile, 0, 0, Diagnostics.Module_0_has_no_exported_member_1, externalHelpersModuleNameText, name));
+                                }
+                            }
                         }
                     }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasParamDecorators) {
-                        verifyHelperSymbol(exports, "__param", SymbolFlags.Value);
-                    }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasAsyncFunctions) {
-                        verifyHelperSymbol(exports, "__awaiter", SymbolFlags.Value);
-                        if (languageVersion < ScriptTarget.ES2015) {
-                            verifyHelperSymbol(exports, "__generator", SymbolFlags.Value);
-                        }
-                    }
+                    requestedExternalHelpers |= helpers;
                 }
             }
         }
 
-        function verifyHelperSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags) {
-            const symbol = getSymbol(symbols, escapeIdentifier(name), meaning);
-            if (!symbol) {
-                error(/*location*/ undefined, Diagnostics.Module_0_has_no_exported_member_1, externalHelpersModuleNameText, name);
+        function getHelperName(helper: EmitHelper) {
+            switch (helper) {
+                case EmitHelper.Extends: return "__extends";
+                case EmitHelper.Assign: return "__assign";
+                case EmitHelper.Decorate: return "__decorate";
+                case EmitHelper.Metadata: return "__metadata";
+                case EmitHelper.Param: return "__param";
+                case EmitHelper.Awaiter: return "__awaiter";
+                case EmitHelper.Generator: return "__generator";
+                case EmitHelper.Values: return "__values";
+                case EmitHelper.Step: return "__step";
+                case EmitHelper.Close: return "__close";
+                case EmitHelper.Read: return "__read";
+                case EmitHelper.Spread: return "__spread";
             }
+        }
+
+        function resolveHelpersModule(node: SourceFile) {
+            if (!externalHelpersModule) {
+                externalHelpersModule = resolveExternalModule(node, externalHelpersModuleNameText, Diagnostics.Cannot_find_module_0, node) || unknownSymbol;
+            }
+
+            return externalHelpersModule;
         }
 
         function createInstantiatedPromiseLikeType(): ObjectType {

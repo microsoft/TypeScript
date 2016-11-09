@@ -417,6 +417,8 @@ namespace ts {
                     "webworker": "lib.webworker.d.ts",
                     "scripthost": "lib.scripthost.d.ts",
                     // ES2015 Or ESNext By-feature options
+                    "iterator": "lib.iterator.d.ts",
+                    "pseudoiterable": "lib.pseudoiterable.d.ts",
                     "es2015.core": "lib.es2015.core.d.ts",
                     "es2015.collection": "lib.es2015.collection.d.ts",
                     "es2015.generator": "lib.es2015.generator.d.ts",

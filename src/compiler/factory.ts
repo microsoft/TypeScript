@@ -1749,7 +1749,7 @@ namespace ts {
         text: `
             var __close = (this && this.__close) || function (r) {
                 var m = !(r && r.done) && r.iterator["return"];
-                if (m) m.call(r.iterator);
+                if (m) return m.call(r.iterator);
             };`
     };
 
@@ -1768,20 +1768,17 @@ namespace ts {
         scoped: false,
         text: `
             var __read = (this && this.__read) || function (o, n) {
-                var m = o.__iterator__;
-                if (!m) return o;
-                var r = { iterator: m.call(o) }, ar = [], e;
-                try { while ((n === void 0 || n-- > 0) && __step(r)) ar.push(r.result.value); }
+                if (!(m = o.__iterator__)) return o;
+                var m, i = m.call(o), ar = [], r, e;
+                try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
                 catch (error) { e = { error: error }; }
-                finally { try { __close(r); } finally { if (e) throw e.error; } }
+                finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
                 return ar;
             };`
     };
 
     export function createReadHelper(context: TransformationContext, iteratorRecord: Expression, count: number | undefined, location?: TextRange) {
-        context.requestEmitHelper(stepHelper);
         context.requestEmitHelper(readHelper);
-        context.requestEmitHelper(closeHelper);
         return createCall(
             getHelperName("__read"),
             /*typeArguments*/ undefined,
@@ -1814,10 +1811,6 @@ namespace ts {
     }
 
     // Utilities
-
-    export function toFunctionBody(node: ConciseBody) {
-        return isBlock(node) ? node : createBlock([createReturn(node, /*location*/ node)], /*location*/ node);
-    }
 
     export interface CallBinding {
         target: LeftHandSideExpression;
@@ -1857,6 +1850,10 @@ namespace ts {
         else if (callee.kind === SyntaxKind.SuperKeyword) {
             thisArg = createThis();
             target = languageVersion < ScriptTarget.ES2015 ? createIdentifier("_super", /*location*/ callee) : <PrimaryExpression>callee;
+        }
+        else if (getEmitFlags(callee) & EmitFlags.HelperName) {
+            thisArg = createVoidZero();
+            target = parenthesizeForAccess(callee);
         }
         else {
             switch (callee.kind) {
@@ -2163,8 +2160,6 @@ namespace ts {
         if (emitFlags) setEmitFlags(qualifiedName, emitFlags);
         return qualifiedName;
     }
-
-    // Utilities
 
     export function convertToFunctionBody(node: ConciseBody) {
         return isBlock(node) ? node : createBlock([createReturn(node, /*location*/ node)], /*location*/ node);

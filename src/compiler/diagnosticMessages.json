@@ -1451,7 +1451,7 @@
         "category": "Error",
         "code": 2460
     },
-    "Type '{0}' is not an array type.": {
+    "Type '{0}' is not an array type or does not have an '__iterator__()' method that returns an iterator.": {
         "category": "Error",
         "code": 2461
     },
@@ -1575,7 +1575,7 @@
         "category": "Error",
         "code": 2494
     },
-    "Type '{0}' is not an array type or a string type.": {
+    "Type '{0}' is not an array type or a string type or does not have an '__iterator__()' method that returns an iterator.": {
         "category": "Error",
         "code": 2495
     },

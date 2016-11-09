@@ -3582,6 +3582,10 @@ namespace ts {
         return node.symbol && getDeclarationOfKind(node.symbol, kind) === node;
     }
 
+    export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
+        return isExternalModule(node) || compilerOptions.isolatedModules;
+    }
+
     // Node tests
     //
     // All node tests in the following list should *not* reference parent pointers so that
