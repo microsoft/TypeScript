@@ -60,7 +60,7 @@ namespace ts {
             currentSourceFile = node;
 
             const visited = visitEachChild(node, visitor, context);
-            addEmitHelpers(visited, context.readEmitHelpers(/*onlyScoped*/ false));
+            addEmitHelpers(visited, context.readEmitHelpers());
 
             currentSourceFile = undefined;
             return visited;
@@ -137,22 +137,17 @@ namespace ts {
          */
         function visitMethodDeclaration(node: MethodDeclaration) {
             Debug.assert(hasModifier(node, ModifierFlags.Async));
-            const method = createMethod(
+            const updated = updateMethod(
+                node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
-                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node),
-                /*location*/ node
+                transformFunctionBody(node)
             );
-
-            // While we emit the source map for the node after skipping decorators and modifiers,
-            // we need to emit the comments for the original range.
-            setOriginalNode(method, node);
-            return method;
+            return updated;
         }
 
         /**
@@ -165,20 +160,18 @@ namespace ts {
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             Debug.assert(hasModifier(node, ModifierFlags.Async));
-            const func = createFunctionDeclaration(
+            const updated = updateFunctionDeclaration(
+                node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
-                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node),
-                /*location*/ node
+                transformFunctionBody(node)
             );
 
-            setOriginalNode(func, node);
-            return func;
+            return updated;
         }
 
         /**
@@ -194,20 +187,16 @@ namespace ts {
             if (nodeIsMissing(node.body)) {
                 return createOmittedExpression();
             }
-
-            const func = createFunctionExpression(
-                /*modifiers*/ undefined,
-                node.asteriskToken,
+            const updated = updateFunctionExpression(
+                node,
+                visitNodes(node.modifiers, visitor, isModifier),
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node),
-                /*location*/ node
+                transformFunctionBody(node)
             );
-
-            setOriginalNode(func, node);
-            return func;
+            return updated;
         }
 
         /**
@@ -220,23 +209,20 @@ namespace ts {
          */
         function visitArrowFunction(node: ArrowFunction) {
             Debug.assert(hasModifier(node, ModifierFlags.Async));
-            const func = createArrowFunction(
+            const updated = updateArrowFunction(
+                node,
                 visitNodes(node.modifiers, visitor, isModifier),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                node.equalsGreaterThanToken,
-                transformFunctionBody(node),
-                /*location*/ node
+                transformFunctionBody(node)
             );
-
-            setOriginalNode(func, node);
-            return func;
+            return updated;
         }
 
         function transformFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
         function transformFunctionBody(node: ArrowFunction): ConciseBody;
-        function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody | FunctionBody {
+        function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
             const original = getOriginalNode(node, isFunctionLike);
             const nodeType = original.type;
             const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
@@ -253,7 +239,7 @@ namespace ts {
 
             if (!isArrowFunction) {
                 let statements: Statement[] = [];
-                const statementOffset = addPrologueDirectives(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, /*ignoreCustomPrologue*/ false, visitor);
+                const statementOffset = addPrologueDirectives(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, visitor);
                 statements.push(
                     createReturn(
                         createAwaiterHelper(
@@ -294,7 +280,7 @@ namespace ts {
 
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
-                    const block = toFunctionBody(expression);
+                    const block = convertToFunctionBody(expression);
                     const statements = mergeLexicalEnvironment(block.statements, declarations);
                     return updateBlock(block, statements);
                 }
@@ -303,32 +289,30 @@ namespace ts {
             }
         }
 
-        function transformFunctionBodyWorker(body: ConciseBody, start = 0) {
+        function transformFunctionBodyWorker(body: ConciseBody, start?: number) {
             if (isBlock(body)) {
                 return updateBlock(
                     body,
-                    visitLexicalEnvironment(body.statements, visitor, context, start)
-                );
+                    visitLexicalEnvironment(body.statements, visitor, context, start));
             }
             else {
                 startLexicalEnvironment();
-                const visited = toFunctionBody(visitNode(body, visitor, isConciseBody));
+                const visited = convertToFunctionBody(visitNode(body, visitor, isConciseBody));
                 const statements = mergeLexicalEnvironment(visited.statements, endLexicalEnvironment());
                 return updateBlock(visited, statements);
             }
         }
 
         function getPromiseConstructor(type: TypeNode) {
-            if (type) {
-                const typeName = getEntityNameFromTypeNode(type);
-                if (typeName && isEntityName(typeName)) {
-                    const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
-                    if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
-                        || serializationKind === TypeReferenceSerializationKind.Unknown) {
-                        return typeName;
-                    }
+            const typeName = type && getEntityNameFromTypeNode(type);
+            if (typeName && isEntityName(typeName)) {
+                const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
+                if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
+                    || serializationKind === TypeReferenceSerializationKind.Unknown) {
+                    return typeName;
                 }
             }
+
             return undefined;
         }
 

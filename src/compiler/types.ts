@@ -367,6 +367,7 @@ namespace ts {
         PartiallyEmittedExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
+        RawExpression,
 
         // Enum value count
         Count,
@@ -1471,6 +1472,16 @@ namespace ts {
     }
 
     /**
+     * Emits a string of raw text in an expression position. Raw text is never transformed, should
+     * be ES3 compliant, and should have the same precedence as PrimaryExpression.
+     */
+    /* @internal */
+    export interface RawExpression extends PrimaryExpression {
+        kind: SyntaxKind.RawExpression;
+        text: string;
+    }
+
+    /**
      * Marks the beginning of a merged transformed declaration.
      */
     /* @internal */
@@ -1509,6 +1520,7 @@ namespace ts {
         expression: Expression;
     }
 
+    /* @internal */
     export interface PrologueDirective extends ExpressionStatement {
         expression: StringLiteral;
     }
@@ -2200,6 +2212,7 @@ namespace ts {
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
+        /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -2717,7 +2730,7 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeParameter = StructuredType | TypeParameter,
+        StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
@@ -2931,6 +2944,8 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         typePredicate?: TypePredicate;
+        /* @internal */
+        instantiations?: Map<Signature>;    // Generic signature instantiation cache
     }
 
     export const enum IndexKind {
@@ -2948,7 +2963,6 @@ namespace ts {
     export interface TypeMapper {
         (t: TypeParameter): Type;
         mappedTypes?: Type[];       // Types mapped by this mapper
-        targetTypes?: Type[];       // Types substituted for mapped types
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
@@ -3066,6 +3080,7 @@ namespace ts {
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
+        /*@internal*/noEmitOverwritenFiles?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
@@ -3558,32 +3573,31 @@ namespace ts {
 
     /* @internal */
     export const enum EmitFlags {
-        HelperName = 1 << 0,
-        UMDDefine = 1 << 4,                      // This node should be replaced with the UMD define helper.
-        SingleLine = 1 << 5,                     // The contents of this node should be emitted on a single line.
-        AdviseOnEmitNode = 1 << 6,               // The printer should invoke the onEmitNode callback when printing this node.
-        NoSubstitution = 1 << 7,                 // Disables further substitution of an expression.
-        CapturesThis = 1 << 8,                   // The function captures a lexical `this`
-        NoLeadingSourceMap = 1 << 9,             // Do not emit a leading source map location for this node.
-        NoTrailingSourceMap = 1 << 10,           // Do not emit a trailing source map location for this node.
+        SingleLine = 1 << 0,                     // The contents of this node should be emitted on a single line.
+        AdviseOnEmitNode = 1 << 1,               // The printer should invoke the onEmitNode callback when printing this node.
+        NoSubstitution = 1 << 2,                 // Disables further substitution of an expression.
+        CapturesThis = 1 << 3,                   // The function captures a lexical `this`
+        NoLeadingSourceMap = 1 << 4,             // Do not emit a leading source map location for this node.
+        NoTrailingSourceMap = 1 << 5,            // Do not emit a trailing source map location for this node.
         NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap, // Do not emit a source map location for this node.
-        NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
-        NoTokenLeadingSourceMaps = 1 << 12,      // Do not emit leading source map location for token nodes.
-        NoTokenTrailingSourceMaps = 1 << 13,     // Do not emit trailing source map location for token nodes.
+        NoNestedSourceMaps = 1 << 6,             // Do not emit source map locations for children of this node.
+        NoTokenLeadingSourceMaps = 1 << 7,       // Do not emit leading source map location for token nodes.
+        NoTokenTrailingSourceMaps = 1 << 8,      // Do not emit trailing source map location for token nodes.
         NoTokenSourceMaps = NoTokenLeadingSourceMaps | NoTokenTrailingSourceMaps, // Do not emit source map locations for tokens of this node.
-        NoLeadingComments = 1 << 14,             // Do not emit leading comments for this node.
-        NoTrailingComments = 1 << 15,            // Do not emit trailing comments for this node.
+        NoLeadingComments = 1 << 9,              // Do not emit leading comments for this node.
+        NoTrailingComments = 1 << 10,            // Do not emit trailing comments for this node.
         NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
-        NoNestedComments = 1 << 16,
-        ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        NoIndentation = 1 << 20,                 // Do not indent the node.
-        AsyncFunctionBody = 1 << 21,
-        ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-        NoHoisting = 1 << 24,                    // Do not hoist this declaration in --module system
-        HasEndOfDeclarationMarker = 1 << 25,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+        NoNestedComments = 1 << 11,
+        HelperName = 1 << 12,
+        ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        Indented = 1 << 15,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoIndentation = 1 << 16,                 // Do not indent the node.
+        AsyncFunctionBody = 1 << 17,
+        ReuseTempVariableScope = 1 << 18,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 19,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoHoisting = 1 << 20,                    // Do not hoist this declaration in --module system
+        HasEndOfDeclarationMarker = 1 << 21,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
     }
 
     /* @internal */
@@ -3618,47 +3632,43 @@ namespace ts {
         writeFile: WriteFileCallback;
     }
 
-    /** Additional context provided to `visitEachChild` */
     /* @internal */
     export interface TransformationContext {
         getCompilerOptions(): CompilerOptions;
         getEmitResolver(): EmitResolver;
         getEmitHost(): EmitHost;
 
+        /** Starts a new lexical environment. */
+        startLexicalEnvironment(): void;
+
+        /** Suspends the current lexical environment, usually after visiting a parameter list. */
+        suspendLexicalEnvironment(): void;
+
+        /** Resumes a suspended lexical environment, usually before visiting a function body. */
+        resumeLexicalEnvironment(): void;
+
+        /** Ends a lexical environment, returning any declarations. */
+        endLexicalEnvironment(): Statement[];
+
         /**
-         * Hoists a function declaration to the current lexical environment.
+         * Hoists a function declaration to the containing scope.
          */
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
 
         /**
-         * Hoists a variable declaration to the current lexical environment.
+         * Hoists a variable declaration to the containing scope.
          */
-        hoistVariableDeclaration(name: Identifier): void;
+        hoistVariableDeclaration(node: Identifier): void;
 
         /**
-         * Starts tracking hoisted declarations in a new lexical environment.
-         */
-        startLexicalEnvironment(): void;
-
-        suspendLexicalEnvironment(): void;
-        resumeLexicalEnvironment(): void;
-
-        /**
-         * Ends a lexical environment, returning any declarations.
-         */
-        endLexicalEnvironment(): Statement[];
-
-        /**
-         * Requests an emit helper.
+         * Records a request for a non-scoped emit helper in the current context.
          */
         requestEmitHelper(helper: EmitHelper): void;
 
         /**
-         * Gets and resets the requested emit helpers.
-         *
-         * @param onlyScoped Only read emit helpers whose `scoped` property is `true`.
+         * Gets and resets the requested non-scoped emit helpers.
          */
-        readEmitHelpers(onlyScoped: boolean): EmitHelper[];
+        readEmitHelpers(): EmitHelper[] | undefined;
 
         /**
          * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
@@ -3723,7 +3733,6 @@ namespace ts {
 
     /* @internal */
     export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
-
 
     export interface TextSpan {
         start: number;

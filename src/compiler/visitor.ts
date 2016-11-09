@@ -553,7 +553,8 @@ namespace ts {
             return node;
         }
 
-        const visited = visitor(aggregateTransformFlags(node));
+        aggregateTransformFlags(node);
+        const visited = visitor(node);
         if (visited === node) {
             return node;
         }
@@ -621,7 +622,8 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            const visited = node !== undefined ? visitor(aggregateTransformFlags(node)) : undefined;
+            aggregateTransformFlags(node);
+            const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
@@ -683,18 +685,17 @@ namespace ts {
      * environment and merging hoisted declarations upon completion.
      */
     export function visitFunctionBody(node: FunctionBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext, optional?: boolean): FunctionBody;
-
     /**
      * Resumes a suspended lexical environment and visits a concise body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
     export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): ConciseBody;
-    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext, optional?: boolean) {
+    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext, optional?: boolean): ConciseBody {
         context.resumeLexicalEnvironment();
         const updated = visitNode(node, visitor, isConciseBody, optional);
         const declarations = context.endLexicalEnvironment();
         if (some(declarations)) {
-            const block = toFunctionBody(updated);
+            const block = convertToFunctionBody(updated);
             const statements = mergeLexicalEnvironment(block.statements, declarations);
             return updateBlock(block, statements);
         }
@@ -764,7 +765,7 @@ namespace ts {
                     visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<MethodDeclaration>node).parameters, visitor, context),
                     visitNode((<MethodDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    visitFunctionBody((<MethodDeclaration>node).body, visitor, context));
+                    visitFunctionBody((<MethodDeclaration>node).body, visitor, context, /*optional*/ true));
 
             case SyntaxKind.Constructor:
                 return updateConstructor(<ConstructorDeclaration>node,
@@ -852,7 +853,7 @@ namespace ts {
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionExpression>node).parameters, visitor, context),
                     visitNode((<FunctionExpression>node).type, visitor, isTypeNode, /*optional*/ true),
-                    visitFunctionBody((<FunctionExpression>node).body, visitor, context));
+                    visitFunctionBody((<FunctionExpression>node).body, visitor, context, /*optional*/ true));
 
             case SyntaxKind.ArrowFunction:
                 return updateArrowFunction(<ArrowFunction>node,
@@ -1033,7 +1034,7 @@ namespace ts {
                     visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionDeclaration>node).parameters, visitor, context),
                     visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    visitFunctionBody((<FunctionDeclaration>node).body, visitor, context, /*optional*/ true));
+                    visitFunctionBody((<FunctionExpression>node).body, visitor, context, /*optional*/ true));
 
             case SyntaxKind.ClassDeclaration:
                 return updateClassDeclaration(<ClassDeclaration>node,
@@ -1287,66 +1288,6 @@ namespace ts {
      */
     function aggregateTransformFlagsForChildNode(transformFlags: TransformFlags, child: Node): TransformFlags {
         return transformFlags | aggregateTransformFlagsForNode(child);
-    }
-
-    /**
-     * Gets the transform flags to exclude when unioning the transform flags of a subtree.
-     *
-     * NOTE: This needs to be kept up-to-date with the exclusions used in `computeTransformFlagsForNode`.
-     *       For performance reasons, `computeTransformFlagsForNode` uses local constant values rather
-     *       than calling this function.
-     */
-    function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
-        if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
-            return TransformFlags.TypeExcludes;
-        }
-
-        switch (kind) {
-            case SyntaxKind.CallExpression:
-            case SyntaxKind.NewExpression:
-            case SyntaxKind.ArrayLiteralExpression:
-                return TransformFlags.ArrayLiteralOrCallOrNewExcludes;
-            case SyntaxKind.ModuleDeclaration:
-                return TransformFlags.ModuleExcludes;
-            case SyntaxKind.Parameter:
-                return TransformFlags.ParameterExcludes;
-            case SyntaxKind.ArrowFunction:
-                return TransformFlags.ArrowFunctionExcludes;
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.FunctionDeclaration:
-                return TransformFlags.FunctionExcludes;
-            case SyntaxKind.VariableDeclarationList:
-                return TransformFlags.VariableDeclarationListExcludes;
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.ClassExpression:
-                return TransformFlags.ClassExcludes;
-            case SyntaxKind.Constructor:
-                return TransformFlags.ConstructorExcludes;
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return TransformFlags.MethodOrAccessorExcludes;
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.NeverKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.SymbolKeyword:
-            case SyntaxKind.VoidKeyword:
-            case SyntaxKind.TypeParameter:
-            case SyntaxKind.PropertySignature:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.CallSignature:
-            case SyntaxKind.ConstructSignature:
-            case SyntaxKind.IndexSignature:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-                return TransformFlags.TypeExcludes;
-            case SyntaxKind.ObjectLiteralExpression:
-                return TransformFlags.ObjectLiteralExcludes;
-            default:
-                return TransformFlags.NodeExcludes;
-        }
     }
 
     export namespace Debug {

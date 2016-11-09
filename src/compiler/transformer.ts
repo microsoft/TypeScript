@@ -73,7 +73,7 @@ namespace ts {
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
 
-        let scopeModificationDisabled: boolean;
+        let scopeModificationDisabled = false;
 
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
@@ -82,8 +82,7 @@ namespace ts {
         let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentSuspended = false;
 
-        let nonScopedEmitHelpers: EmitHelper[];
-        let scopedEmitHelpers: EmitHelper[];
+        let emitHelpers: EmitHelper[];
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
@@ -91,12 +90,12 @@ namespace ts {
             getCompilerOptions: () => host.getCompilerOptions(),
             getEmitResolver: () => resolver,
             getEmitHost: () => host,
-            hoistVariableDeclaration,
-            hoistFunctionDeclaration,
             startLexicalEnvironment,
             suspendLexicalEnvironment,
             resumeLexicalEnvironment,
             endLexicalEnvironment,
+            hoistVariableDeclaration,
+            hoistFunctionDeclaration,
             requestEmitHelper,
             readEmitHelpers,
             onSubstituteNode: (_emitContext, node) => node,
@@ -240,7 +239,6 @@ namespace ts {
             Debug.assert(!scopeModificationDisabled, "Cannot start a lexical environment during the print phase.");
             Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
-
             // Save the current lexical environment. Rather than resizing the array we adjust the
             // stack size variable. This allows us to reuse existing array slots we've
             // already allocated between transformations to avoid allocation and GC overhead during
@@ -252,13 +250,17 @@ namespace ts {
             lexicalEnvironmentFunctionDeclarations = undefined;
         }
 
+        /** Suspends the current lexical environment, usually after visiting a parameter list. */
         function suspendLexicalEnvironment(): void {
+            Debug.assert(!scopeModificationDisabled, "Cannot suspend a lexical environment during the print phase.");
             Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is already suspended.");
             lexicalEnvironmentSuspended = true;
         }
 
+        /** Resumes a suspended lexical environment, usually before visiting a function body. */
         function resumeLexicalEnvironment(): void {
-            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment was not previously suspended.");
+            Debug.assert(!scopeModificationDisabled, "Cannot resume a lexical environment during the print phase.");
+            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended suspended.");
             lexicalEnvironmentSuspended = false;
         }
 
@@ -296,35 +298,24 @@ namespace ts {
             lexicalEnvironmentVariableDeclarations = lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset];
             lexicalEnvironmentFunctionDeclarations = lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset];
             if (lexicalEnvironmentStackOffset === 0) {
-                lexicalEnvironmentVariableDeclarations = [];
-                lexicalEnvironmentFunctionDeclarations = [];
+                lexicalEnvironmentVariableDeclarationsStack = [];
+                lexicalEnvironmentFunctionDeclarationsStack = [];
             }
+
             return statements;
         }
 
         function requestEmitHelper(helper: EmitHelper): void {
             Debug.assert(!scopeModificationDisabled, "Cannot modify the lexical environment during the print phase.");
-            if (helper.scoped) {
-                scopedEmitHelpers = append(scopedEmitHelpers, helper);
-            }
-            else {
-                nonScopedEmitHelpers = append(nonScopedEmitHelpers, helper);
-            }
+            Debug.assert(!helper.scoped, "Cannot request a scoped emit helper.");
+            emitHelpers = append(emitHelpers, helper);
         }
 
-        function readEmitHelpers(onlyScoped: boolean): EmitHelper[] {
+        function readEmitHelpers(): EmitHelper[] | undefined {
             Debug.assert(!scopeModificationDisabled, "Cannot modify the lexical environment during the print phase.");
-            if (onlyScoped) {
-                const helpers = scopedEmitHelpers;
-                scopedEmitHelpers = undefined;
-                return helpers;
-            }
-            else {
-                const helpers = concatenate(nonScopedEmitHelpers, scopedEmitHelpers);
-                scopedEmitHelpers = undefined;
-                nonScopedEmitHelpers = undefined;
-                return helpers;
-            }
+            const helpers = emitHelpers;
+            emitHelpers = undefined;
+            return helpers;
         }
     }
 }

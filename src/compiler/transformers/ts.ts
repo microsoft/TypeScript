@@ -83,7 +83,7 @@ namespace ts {
             currentSourceFile = node;
 
             const visited = saveStateAndInvoke(node, visitSourceFile);
-            addEmitHelpers(visited, context.readEmitHelpers(/*onlyScoped*/ false));
+            addEmitHelpers(visited, context.readEmitHelpers());
 
             currentSourceFile = undefined;
             return visited;
@@ -937,7 +937,7 @@ namespace ts {
             if (ctor.body) {
                 const statements = ctor.body.statements;
                 // add prologue directives to the list (if any)
-                const index = addPrologueDirectives(result, statements, /*ensureUseStrict*/ false, /*ignoreCustomPrologue*/ false, visitor);
+                const index = addPrologueDirectives(result, statements, /*ensureUseStrict*/ false, visitor);
                 if (index === statements.length) {
                     // list contains nothing but prologue directives (or empty) - exit
                     return index;
@@ -3251,7 +3251,6 @@ namespace ts {
                             const clone = getSynthesizedClone(classAlias);
                             setSourceMapRange(clone, node);
                             setCommentRange(clone, node);
-                            debugger;
                             return clone;
                         }
                     }

@@ -1509,6 +1509,19 @@ namespace ts {
         return node;
     }
 
+    /**
+     * Creates a node that emits a string of raw text in an expression position. Raw text is never
+     * transformed, should be ES3 compliant, and should have the same precedence as
+     * PrimaryExpression.
+     *
+     * @param text The raw text of the node.
+     */
+    export function createRawExpression(text: string) {
+        const node = <RawExpression>createNode(SyntaxKind.RawExpression);
+        node.text = text;
+        return node;
+    }
+
     // Compound nodes
 
     export function createComma(left: Expression, right: Expression) {
@@ -1626,7 +1639,7 @@ namespace ts {
         // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
-        // Set the parent that is in parse tree 
+        // Set the parent that is in parse tree
         // this makes sure that parent chain is intact for checker to traverse complete scope tree
         react.parent = getParseTreeNode(parent);
         return react;
@@ -2153,6 +2166,10 @@ namespace ts {
 
     // Utilities
 
+    export function convertToFunctionBody(node: ConciseBody) {
+        return isBlock(node) ? node : createBlock([createReturn(node, /*location*/ node)], /*location*/ node);
+    }
+
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
         return (node.expression as StringLiteral).text === "use strict";
     }
@@ -2168,7 +2185,7 @@ namespace ts {
      * @param ensureUseStrict: boolean determining whether the function need to add prologue-directives
      * @param visitor: Optional callback used to visit any custom prologue directives.
      */
-    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, ignoreCustomPrologue?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
+    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
         Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         let statementOffset = 0;
@@ -2189,17 +2206,15 @@ namespace ts {
         if (ensureUseStrict && !foundUseStrict) {
             target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
         }
-        if (!ignoreCustomPrologue) {
-            while (statementOffset < numStatements) {
-                const statement = source[statementOffset];
-                if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
-                    target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
-                }
-                else {
-                    break;
-                }
-                statementOffset++;
+        while (statementOffset < numStatements) {
+            const statement = source[statementOffset];
+            if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
+                target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
             }
+            else {
+                break;
+            }
+            statementOffset++;
         }
         return statementOffset;
     }
@@ -2717,7 +2732,7 @@ namespace ts {
      *
      * @param node The node.
      */
-    function getOrCreateEmitNode(node: Node) {
+    export function getOrCreateEmitNode(node: Node) {
         if (!node.emitNode) {
             if (isParseTreeNode(node)) {
                 // To avoid holding onto transformation artifacts, we keep track of any
@@ -2846,11 +2861,23 @@ namespace ts {
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
-    export function getOrCreateExternalHelpersModuleName(node: SourceFile, compilerOptions: CompilerOptions) {
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions) {
         if (compilerOptions.importHelpers && (isExternalModule(node) || compilerOptions.isolatedModules)) {
-            const parseNode = getOriginalNode(node, isSourceFile);
-            const emitNode = getOrCreateEmitNode(parseNode);
-            return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
+            const externalHelpersModuleName = getExternalHelpersModuleName(node);
+            if (externalHelpersModuleName) {
+                return externalHelpersModuleName;
+            }
+
+            const helpers = getEmitHelpers(node);
+            if (helpers) {
+                for (const helper of helpers) {
+                    if (!helper.scoped) {
+                        const parseNode = getOriginalNode(node, isSourceFile);
+                        const emitNode = getOrCreateEmitNode(parseNode);
+                        return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
+                    }
+                }
+            }
         }
     }
 
@@ -3043,16 +3070,17 @@ namespace ts {
         hasExportStarsToExportValues: boolean; // whether this module contains export*
     }
 
-    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver): ExternalModuleInfo {
+    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMap<ExportSpecifier[]>();
         const exportedBindings = createMap<Identifier[]>();
-        const uniqueExports = createMap<Identifier>();
+        const uniqueExports = createMap<boolean>();
+        let exportedNames: Identifier[];
         let hasExportDefault = false;
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
 
-        const externalHelpersModuleName = getExternalHelpersModuleName(sourceFile);
+        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions);
         const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
@@ -3107,7 +3135,8 @@ namespace ts {
                                     multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                                 }
 
-                                uniqueExports[specifier.name.text] = specifier.name;
+                                uniqueExports[specifier.name.text] = true;
+                                exportedNames = append(exportedNames, specifier.name);
                             }
                         }
                     }
@@ -3123,7 +3152,7 @@ namespace ts {
                 case SyntaxKind.VariableStatement:
                     if (hasModifier(node, ModifierFlags.Export)) {
                         for (const decl of (<VariableStatement>node).declarationList.declarations) {
-                            collectExportedVariableInfo(decl, uniqueExports);
+                            exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames);
                         }
                     }
                     break;
@@ -3142,7 +3171,8 @@ namespace ts {
                             const name = (<FunctionDeclaration>node).name;
                             if (!uniqueExports[name.text]) {
                                 multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = name;
+                                uniqueExports[name.text] = true;
+                                exportedNames = append(exportedNames, name);
                             }
                         }
                     }
@@ -3162,7 +3192,8 @@ namespace ts {
                             const name = (<ClassDeclaration>node).name;
                             if (!uniqueExports[name.text]) {
                                 multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = name;
+                                uniqueExports[name.text] = true;
+                                exportedNames = append(exportedNames, name);
                             }
                         }
                     }
@@ -3170,26 +3201,23 @@ namespace ts {
             }
         }
 
-        let exportedNames: Identifier[];
-        for (const key in uniqueExports) {
-            exportedNames = ts.append(exportedNames, uniqueExports[key]);
-        }
-
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
     }
 
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<Identifier>) {
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[]) {
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {
-                    collectExportedVariableInfo(element, uniqueExports);
+                    exportedNames = collectExportedVariableInfo(element, uniqueExports, exportedNames);
                 }
             }
         }
         else if (!isGeneratedIdentifier(decl.name)) {
             if (!uniqueExports[decl.name.text]) {
-                uniqueExports[decl.name.text] = decl.name;
+                uniqueExports[decl.name.text] = true;
+                exportedNames = append(exportedNames, decl.name);
             }
         }
+        return exportedNames;
     }
 }

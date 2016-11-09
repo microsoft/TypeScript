@@ -20,18 +20,6 @@ namespace ts {
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
         const delimiters = createDelimiterMap();
         const brackets = createBracketsMap();
-
-        // emit output for the UMD helper function.
-        const umdHelper = `
-(function (dependencies, factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === 'function' && define.amd) {
-        define(dependencies, factory);
-    }
-})`;
-
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
@@ -678,6 +666,8 @@ namespace ts {
                 // Transformation nodes
                 case SyntaxKind.PartiallyEmittedExpression:
                     return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
+                case SyntaxKind.RawExpression:
+                    return writeLines((<RawExpression>node).text);
             }
         }
 
@@ -715,12 +705,7 @@ namespace ts {
         //
 
         function emitIdentifier(node: Identifier) {
-            if (getEmitFlags(node) & EmitFlags.UMDDefine) {
-                writeLines(umdHelper);
-            }
-            else {
-                write(getTextOfNode(node, /*includeTrivia*/ false));
-            }
+            write(getTextOfNode(node, /*includeTrivia*/ false));
         }
 
         //
@@ -2015,7 +2000,7 @@ namespace ts {
                         // Skip the helper if it can be bundled but hasn't already been emitted and we
                         // are emitting a bundled module.
                         if (shouldBundle) {
-                            if (helper.name in bundledHelpers) {
+                            if (bundledHelpers[helper.name]) {
                                 continue;
                             }
 

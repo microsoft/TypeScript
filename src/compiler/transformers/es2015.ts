@@ -211,30 +211,13 @@ namespace ts {
 
             currentSourceFile = node;
             currentText = node.text;
-            currentNode = node;
-            enclosingBlockScopeContainer = node;
 
-            let statements: Statement[] = [];
-
-            startLexicalEnvironment();
-
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, /*ignoreCustomPrologue*/ false, visitor);
-            addCaptureThisForNodeIfNeeded(statements, node);
-            addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
-            addRange(statements, endLexicalEnvironment());
-
-            const updated = updateSourceFileNode(
-                node,
-                createNodeArray(statements, /*location*/ node.statements)
-            );
-
-            addEmitHelpers(updated, context.readEmitHelpers(/*onlyScoped*/ false));
+            const visited = saveStateAndInvoke(node, visitSourceFile);
+            addEmitHelpers(visited, context.readEmitHelpers());
 
             currentSourceFile = undefined;
             currentText = undefined;
-            currentNode = undefined;
-            enclosingBlockScopeContainer = undefined;
-            return updated;
+            return visited;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -280,20 +263,6 @@ namespace ts {
             return visited;
         }
 
-        function returnCapturedThis(node: Node): Node {
-            return setOriginalNode(createReturn(createIdentifier("_this")), node);
-        }
-
-        function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
-            return isInConstructorWithCapturedSuper && node.kind === SyntaxKind.ReturnStatement && !(<ReturnStatement>node).expression;
-        }
-
-        function shouldCheckNode(node: Node): boolean {
-            return (node.transformFlags & TransformFlags.ES2015) !== 0 ||
-                node.kind === SyntaxKind.LabeledStatement ||
-                (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node));
-        }
-
         function onBeforeVisitNode(node: Node) {
             if (currentNode) {
                 if (isBlockScope(currentNode, currentParent)) {
@@ -333,6 +302,20 @@ namespace ts {
 
             currentParent = currentNode;
             currentNode = node;
+        }
+
+        function returnCapturedThis(node: Node): Node {
+            return setOriginalNode(createReturn(createIdentifier("_this")), node);
+        }
+
+        function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
+            return isInConstructorWithCapturedSuper && node.kind === SyntaxKind.ReturnStatement && !(<ReturnStatement>node).expression;
+        }
+
+        function shouldCheckNode(node: Node): boolean {
+            return (node.transformFlags & TransformFlags.ES2015) !== 0 ||
+                node.kind === SyntaxKind.LabeledStatement ||
+                (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node));
         }
 
         function visitorWorker(node: Node): VisitResult<Node> {
@@ -503,7 +486,19 @@ namespace ts {
                     Debug.failBadSyntaxKind(node);
                     return visitEachChild(node, visitor, context);
             }
+        }
 
+        function visitSourceFile(node: SourceFile): SourceFile {
+            const statements: Statement[] = [];
+            startLexicalEnvironment();
+            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
+            addCaptureThisForNodeIfNeeded(statements, node);
+            addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+            addRange(statements, endLexicalEnvironment());
+            return updateSourceFileNode(
+                node,
+                createNodeArray(statements, node.statements)
+            );
         }
 
         function visitSwitchStatement(node: SwitchStatement): SwitchStatement {
@@ -879,7 +874,7 @@ namespace ts {
             }
             else if (constructor) {
                 // Otherwise, try to emit all potential prologue directives first.
-                statementOffset = addPrologueDirectives(statements, constructor.body.statements, /*ensureUseStrict*/ false, /*ignoreCustomPrologue*/ false, visitor);
+                statementOffset = addPrologueDirectives(statements, constructor.body.statements, /*ensureUseStrict*/ false, visitor);
             }
 
             if (constructor) {
@@ -1406,7 +1401,6 @@ namespace ts {
 
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
-
             const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
             const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined);
             setEmitFlags(memberFunction, EmitFlags.NoComments);
@@ -1511,21 +1505,17 @@ namespace ts {
             if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
                 enableSubstitutionsForCapturedThis();
             }
-
-            const func = setOriginalNode(
-                createFunctionExpression(
-                    /*modifiers*/ undefined,
-                    node.asteriskToken,
-                    /*name*/ undefined,
-                    /*typeParameters*/ undefined,
-                    visitParameterList(node.parameters, visitor, context),
-                    /*type*/ undefined,
-                    transformFunctionBody(node),
-                    node
-                ),
-                /*original*/ node
+            const func = createFunctionExpression(
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node),
+                node
             );
-
+            setOriginalNode(func, node);
             setEmitFlags(func, EmitFlags.CapturesThis);
             return func;
         }
@@ -1621,7 +1611,7 @@ namespace ts {
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
-                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, /*ignoreCustomPrologue*/ false, visitor);
+                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
             }
 
             addCaptureThisForNodeIfNeeded(statements, node);

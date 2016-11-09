@@ -9,7 +9,8 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onEmitNode = onEmitNode;
         context.onSubstituteNode = onSubstituteNode;
-        context.enableSubstitution(SyntaxKind.SourceFile);
+        context.enableEmitNotification(SyntaxKind.SourceFile);
+        context.enableSubstitution(SyntaxKind.Identifier);
 
         let currentSourceFile: SourceFile;
         return transformSourceFile;
@@ -20,7 +21,7 @@ namespace ts {
             }
 
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                const externalHelpersModuleName = getExternalHelpersModuleName(node);
+                const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(node, compilerOptions);
                 if (externalHelpersModuleName) {
                     const statements: Statement[] = [];
                     const statementOffset = addPrologueDirectives(statements, node.statements);
@@ -68,7 +69,7 @@ namespace ts {
         //
 
         /**
-         * Hook for node emit notifications.
+         * Hook for node emit.
          *
          * @param emitContext A context hint for the emitter.
          * @param node The node to emit.
@@ -106,7 +107,7 @@ namespace ts {
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
             if (getEmitFlags(node) & EmitFlags.HelperName) {
-                const externalHelpersModuleName = getOrCreateExternalHelpersModuleName(currentSourceFile, compilerOptions);
+                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
                 if (externalHelpersModuleName) {
                     return createPropertyAccess(externalHelpersModuleName, node);
                 }

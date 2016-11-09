@@ -74,7 +74,7 @@ namespace ts {
             // see comment to 'substitutePostfixUnaryExpression' for more details
 
             // Collect information about the external module and dependency groups.
-            moduleInfo = moduleInfoMap[id] = collectExternalModuleInfo(node, resolver);
+            moduleInfo = moduleInfoMap[id] = collectExternalModuleInfo(node, resolver, compilerOptions);
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
@@ -119,10 +119,6 @@ namespace ts {
 
             if (!(compilerOptions.outFile || compilerOptions.out)) {
                 moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
-                addEmitHelpers(moduleBodyBlock, context.readEmitHelpers(/*onlyScoped*/ false));
-            }
-            else {
-                addEmitHelpers(updated, context.readEmitHelpers(/*onlyScoped*/ false));
             }
 
             if (noSubstitution) {
@@ -224,7 +220,7 @@ namespace ts {
             startLexicalEnvironment();
 
             // Add any prologue directives.
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, /*ignoreCustomPrologue*/ false, sourceElementVisitor);
+            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
             statements.push(
@@ -1623,7 +1619,7 @@ namespace ts {
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
             if (getEmitFlags(node) & EmitFlags.HelperName) {
-                const externalHelpersModuleName = getOrCreateExternalHelpersModuleName(currentSourceFile, compilerOptions);
+                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
                 if (externalHelpersModuleName) {
                     return createPropertyAccess(externalHelpersModuleName, node);
                 }

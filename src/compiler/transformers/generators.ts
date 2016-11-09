@@ -230,8 +230,7 @@ namespace ts {
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistFunctionDeclaration,
-            hoistVariableDeclaration,
-            readEmitHelpers
+            hoistVariableDeclaration
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -300,7 +299,7 @@ namespace ts {
             currentSourceFile = node;
 
             const visited = visitEachChild(node, visitor, context);
-            addEmitHelpers(visited, readEmitHelpers(/*onlyScoped*/ false));
+            addEmitHelpers(visited, context.readEmitHelpers());
 
             currentSourceFile = undefined;
             return visited;
@@ -582,7 +581,7 @@ namespace ts {
             // Build the generator
             startLexicalEnvironment();
 
-            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, /*ignoreCustomPrologue*/ false, visitor);
+            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
             transformAndEmitStatements(body.statements, statementOffset);
 

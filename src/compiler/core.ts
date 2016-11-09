@@ -1137,6 +1137,18 @@ namespace ts {
         };
     }
 
+    export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
+        return {
+            file: undefined,
+            start: undefined,
+            length: undefined,
+
+            code: chain.code,
+            category: chain.category,
+            messageText: chain.next ? chain : chain.messageText
+        };
+    }
+
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
