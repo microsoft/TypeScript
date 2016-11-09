@@ -29,6 +29,10 @@ namespace ts.server {
                 : getScriptKindFromFileName(fileName);
         }
 
+        isJavaScriptFile() {
+            return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
+        }
+
         getFormatCodeSettings() {
             return this.formatCodeSettings;
         }
