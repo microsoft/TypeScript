@@ -2381,6 +2381,10 @@
         "category": "Error",
         "code": 5066
     },
+    "Invalid value for 'jsxFactory'. '{0}' is not a valid identifier or qualified-name.": {
+        "category": "Error",
+        "code": 5067
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
