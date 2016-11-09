@@ -450,10 +450,6 @@ namespace ts {
             return commonSourceDirectory;
         }
 
-        function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
-            return !!sourceFilesFoundSearchingNodeModules[file.path];
-        }
-
         function getClassifiableNames() {
             if (!classifiableNames) {
                 // Initialize a checker so that all our files are bound.
