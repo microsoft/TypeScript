@@ -2,6 +2,7 @@
 //@target: es6
 //@module: commonjs
 //@jsxFactory: createElement
+//@sourcemap: true
 
 // @filename: Element.ts
 declare namespace JSX {
