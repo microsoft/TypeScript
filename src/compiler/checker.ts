@@ -14794,11 +14794,13 @@ namespace ts {
                             error(memberNameNode, message, memberName, className);
                         }
                         else if ((
+                            memberName === "name" ||
+                            memberName === "length" ||
                             memberName === "caller" ||
-                            memberName === "arguments" ) &&
+                            memberName === "arguments") &&
                             isMethod === false
                         ) {
-                           error(memberNameNode, message, memberName, className);
+                            error(memberNameNode, message, memberName, className);
                         }
                     }
                 }

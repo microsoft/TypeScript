@@ -2,18 +2,18 @@
 
 
 class StaticName {
-    static name: number; // ok
+    static name: number; // error
     name: string; // ok
 }
 
 class StaticNameFn {
-    static name() {} // ok
+    static name() {}  // ok
     name() {} // ok
 }
 
 
 class StaticLength {
-    static length: number; // ok
+    static length: number;  // error
     length: string; // ok
 }
 
