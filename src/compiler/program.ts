@@ -526,7 +526,8 @@ namespace ts {
 
                     const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                     if (resolveModuleNamesWorker) {
-                        const moduleNames = map(concatenate(newSourceFile.imports, newSourceFile.moduleAugmentations), getTextOfLiteral);
+                        const nonGlobalAugmentation = filter(newSourceFile.moduleAugmentations, (moduleAugmentation) => !(moduleAugmentation.flags & NodeFlags.GlobalAugmentation));
+                        const moduleNames = map(concatenate(newSourceFile.imports, nonGlobalAugmentation), getTextOfLiteral);
                         const resolutions = resolveModuleNamesWorker(moduleNames, newSourceFilePath);
                         // ensure that module resolution results are still correct
                         const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
@@ -1290,7 +1291,8 @@ namespace ts {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = createMap<ResolvedModule>();
-                const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
+                const nonGlobalAugmentation = filter(file.moduleAugmentations, (moduleAugmentation) => !(moduleAugmentation.flags & NodeFlags.GlobalAugmentation));
+                const moduleNames = map(concatenate(file.imports, nonGlobalAugmentation), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];

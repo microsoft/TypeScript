@@ -5418,6 +5418,8 @@ namespace ts {
                 // parse 'global' as name of global scope augmentation
                 node.name = parseIdentifier();
                 node.flags |= NodeFlags.GlobalAugmentation;
+                // We need to store flags at the name as well so we can use it to filter out global augmentation from going through module resolution.
+                node.name.flags |= NodeFlags.GlobalAugmentation;
             }
             else {
                 node.name = parseLiteralNode(/*internName*/ true);
