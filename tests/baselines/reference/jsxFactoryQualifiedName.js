@@ -74,8 +74,8 @@ let c;
 class A {
     view() {
         return [
-            React.createElement("meta", { content: "helloworld" }),
-            React.createElement("meta", { content: c.a.b })
+            Element_1.Element.createElement("meta", { content: "helloworld" }),
+            Element_1.Element.createElement("meta", { content: c.a.b })
         ];
     }
 }

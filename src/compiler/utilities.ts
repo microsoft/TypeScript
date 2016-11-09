@@ -34,6 +34,8 @@ namespace ts {
         /* @internal */
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
 
+        /* @internal */
+        getJsxFactoryEntity(): EntityName;
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;

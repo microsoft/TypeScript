@@ -731,6 +731,7 @@ namespace ts {
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
+                getJsxFactoryEntity: program.getJsxFactoryEntity,
             };
         }
 

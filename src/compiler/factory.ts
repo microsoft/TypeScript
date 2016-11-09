@@ -1628,7 +1628,34 @@ namespace ts {
         return react;
     }
 
-    export function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
+    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
+        if (isQualifiedName(jsxFactory)) {
+            return createPropertyAccess(
+                createJsxFactoryExpressionFromEntityName(
+                    jsxFactory.left,
+                    parent
+                ),
+                setEmitFlags(
+                    getMutableClone(jsxFactory.right),
+                    EmitFlags.NoSourceMap
+                )
+            );
+        }
+        else {
+            return createReactNamespace(jsxFactory.text, parent);
+        }
+    }
+
+    function createJsxFactoryExpression(jsxFactoryEntity: EntityName, reactNamespace: string, parent: JsxOpeningLikeElement): Expression {
+        return jsxFactoryEntity ?
+            createJsxFactoryExpressionFromEntityName(jsxFactoryEntity, parent) :
+            createPropertyAccess(
+                createReactNamespace(reactNamespace, parent),
+                "createElement"
+            );
+    }
+
+    export function createExpressionForJsxElement(jsxFactoryEntity: EntityName, reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
             argumentsList.push(props);
@@ -1651,10 +1678,7 @@ namespace ts {
         }
 
         return createCall(
-            createPropertyAccess(
-                createReactNamespace(reactNamespace, parentElement),
-                "createElement"
-            ),
+            createJsxFactoryExpression(jsxFactoryEntity, reactNamespace, parentElement),
             /*typeArguments*/ undefined,
             argumentsList,
             location
