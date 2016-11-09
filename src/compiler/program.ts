@@ -526,7 +526,8 @@ namespace ts {
 
                     const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                     if (resolveModuleNamesWorker) {
-                        const nonGlobalAugmentation = filter(newSourceFile.moduleAugmentations, (moduleAugmentation) => !(moduleAugmentation.flags & NodeFlags.GlobalAugmentation));
+                        // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
+                        const nonGlobalAugmentation = filter(newSourceFile.moduleAugmentations, (moduleAugmentation) => moduleAugmentation.kind === SyntaxKind.StringLiteral);
                         const moduleNames = map(concatenate(newSourceFile.imports, nonGlobalAugmentation), getTextOfLiteral);
                         const resolutions = resolveModuleNamesWorker(moduleNames, newSourceFilePath);
                         // ensure that module resolution results are still correct
@@ -1291,7 +1292,8 @@ namespace ts {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = createMap<ResolvedModule>();
-                const nonGlobalAugmentation = filter(file.moduleAugmentations, (moduleAugmentation) => !(moduleAugmentation.flags & NodeFlags.GlobalAugmentation));
+                // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
+                const nonGlobalAugmentation = filter(file.moduleAugmentations, (moduleAugmentation) => moduleAugmentation.kind === SyntaxKind.StringLiteral);
                 const moduleNames = map(concatenate(file.imports, nonGlobalAugmentation), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 for (let i = 0; i < moduleNames.length; i++) {
