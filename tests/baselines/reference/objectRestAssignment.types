@@ -32,3 +32,44 @@ let complex: { x: { ka, ki }, y: number };
 >rest : any
 >complex : { x: { ka: any; ki: any; }; y: number; }
 
+// should be:
+let overEmit: { a: { ka: string, x: string }[], b: { z: string, ki: string, ku: string }, ke: string, ko: string };
+>overEmit : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
+>a : { ka: string; x: string; }[]
+>ka : string
+>x : string
+>b : { z: string; ki: string; ku: string; }
+>z : string
+>ki : string
+>ku : string
+>ke : string
+>ko : string
+
+// var _g = overEmit.a, [_h, ...y] = _g, nested2 = __rest(_h, []), _j = overEmit.b, { z } = _j, c = __rest(_j, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
+var { a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit;
+>a : any
+>nested2 : { ka: string; x: string; }
+>y : { ka: string; x: string; }[]
+>b : any
+>z : string
+>c : { ki: string; ku: string; }
+>rest2 : { ke: string; ko: string; }
+>overEmit : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
+
+({ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit);
+>({ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit) : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
+>{ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
+>{ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } : { ke: string; ko: string; a: { ka: string; x: string; }[]; b: { ki: string; ku: string; z: string; }; }
+>a : { ka: string; x: string; }[]
+>[{ ...nested2 }, ...y] : { ka: string; x: string; }[]
+>{ ...nested2 } : { ka: string; x: string; }
+>nested2 : any
+>...y : { ka: string; x: string; }
+>y : { ka: string; x: string; }[]
+>b : { ki: string; ku: string; z: string; }
+>{ z, ...c } : { ki: string; ku: string; z: string; }
+>z : string
+>c : any
+>rest2 : any
+>overEmit : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
+
