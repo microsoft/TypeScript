@@ -195,63 +195,66 @@ namespace ts {
 
         const failedLookupLocations: string[] = [];
 
-        // Check primary library paths
-        if (typeRoots && typeRoots.length) {
+        let resolved = primaryLookup();
+        let primary = true;
+        if (!resolved) {
+            resolved = secondaryLookup();
+            primary = false;
+        }
+
+        let resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
+        if (resolved) {
+            resolved = realpath(resolved, host, traceEnabled);
             if (traceEnabled) {
-                trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
+                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolved, primary);
             }
-            for (const typeRoot of typeRoots) {
-                const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
-                const candidateDirectory = getDirectoryPath(candidate);
+            resolvedTypeReferenceDirective = { primary, resolvedFileName: resolved };
+        }
 
-                const resolved = resolvedTypeScriptOnly(
-                    loadNodeModuleFromDirectory(Extensions.DtsOnly, candidate, failedLookupLocations,
-                        !directoryProbablyExists(candidateDirectory, host), moduleResolutionState));
+        return { resolvedTypeReferenceDirective, failedLookupLocations };
 
-                if (resolved) {
-                    if (traceEnabled) {
-                        trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolved, true);
-                    }
-                    return {
-                        resolvedTypeReferenceDirective: { primary: true, resolvedFileName: resolved },
-                        failedLookupLocations
-                    };
+        function primaryLookup(): string | undefined {
+            // Check primary library paths
+            if (typeRoots && typeRoots.length) {
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
+                }
+                return forEach(typeRoots, typeRoot => {
+                    const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
+                    const candidateDirectory = getDirectoryPath(candidate);
+                    return resolvedTypeScriptOnly(
+                        loadNodeModuleFromDirectory(Extensions.DtsOnly, candidate, failedLookupLocations,
+                            !directoryProbablyExists(candidateDirectory, host), moduleResolutionState));
+                });
+            }
+            else {
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Root_directory_cannot_be_determined_skipping_primary_search_paths);
                 }
             }
         }
-        else {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Root_directory_cannot_be_determined_skipping_primary_search_paths);
-            }
-        }
 
-        let resolvedFile: string;
-        const initialLocationForSecondaryLookup = containingFile && getDirectoryPath(containingFile);
+        function secondaryLookup(): string | undefined {
+            let resolvedFile: string;
+            const initialLocationForSecondaryLookup = containingFile && getDirectoryPath(containingFile);
 
-        if (initialLocationForSecondaryLookup !== undefined) {
-            // check secondary locations
-            if (traceEnabled) {
-                trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
-            }
-            resolvedFile = resolvedTypeScriptOnly(loadModuleFromNodeModules(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, failedLookupLocations, moduleResolutionState, /*checkOneLevel*/ false));
-            if (traceEnabled) {
-                if (resolvedFile) {
-                    trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, false);
+            if (initialLocationForSecondaryLookup !== undefined) {
+                // check secondary locations
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
                 }
-                else {
+                resolvedFile = resolvedTypeScriptOnly(loadModuleFromNodeModules(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, failedLookupLocations, moduleResolutionState, /*checkOneLevel*/ false));
+                if (!resolvedFile && traceEnabled) {
                     trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
                 }
+                return resolvedFile;
+            }
+            else {
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_modules_folder);
+                }
             }
         }
-        else {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_modules_folder);
-            }
-        }
-        return {
-            resolvedTypeReferenceDirective: resolvedFile ? { primary: false, resolvedFileName: resolvedFile } : undefined,
-            failedLookupLocations
-        };
     }
 
     /**
@@ -564,7 +567,7 @@ namespace ts {
                 }
                 const resolved = loadModuleFromNodeModules(extensions, moduleName, containingDirectory, failedLookupLocations, state, /*checkOneLevel*/ false);
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
-                return resolved && { resolved: resolvedWithRealpath(resolved, host, traceEnabled), isExternalLibraryImport: true };
+                return resolved && { resolved: { path: realpath(resolved.path, host, traceEnabled), extension: resolved.extension }, isExternalLibraryImport: true };
             }
             else {
                 const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
@@ -574,16 +577,16 @@ namespace ts {
         }
     }
 
-    function resolvedWithRealpath(resolved: Resolved, host: ModuleResolutionHost, traceEnabled: boolean): Resolved {
+    function realpath(path: string, host: ModuleResolutionHost, traceEnabled: boolean): string {
         if (!host.realpath) {
-            return resolved;
+            return path;
         }
 
-        const real = normalizePath(host.realpath(resolved.path));
+        const real = normalizePath(host.realpath(path));
         if (traceEnabled) {
-            trace(host, Diagnostics.Resolving_real_path_for_0_result_1, resolved.path, real);
+            trace(host, Diagnostics.Resolving_real_path_for_0_result_1, path, real);
         }
-        return { path: real, extension: resolved.extension };
+        return real;
     }
 
     function nodeLoadModuleByRelativeName(extensions: Extensions, candidate: string, failedLookupLocations: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): Resolved | undefined {

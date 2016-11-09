@@ -13,6 +13,7 @@
     "Resolving with primary search path '/types'",
     "File '/types/lib/package.json' does not exist.",
     "File '/types/lib/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/types/lib/index.d.ts', result '/types/lib/index.d.ts'",
     "======== Type reference directive 'lib' was successfully resolved to '/types/lib/index.d.ts', primary: true. ========",
     "======== Resolving module './main' from '/mod1.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
@@ -23,5 +24,6 @@
     "Resolving with primary search path '/types'",
     "File '/types/lib/package.json' does not exist.",
     "File '/types/lib/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/types/lib/index.d.ts', result '/types/lib/index.d.ts'",
     "======== Type reference directive 'lib' was successfully resolved to '/types/lib/index.d.ts', primary: true. ========"
 ]

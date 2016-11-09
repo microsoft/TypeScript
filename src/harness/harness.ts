@@ -1021,7 +1021,14 @@ namespace Harness {
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
                 fileExists: fileName => fileMap.contains(toPath(fileName)),
-                readFile: (fileName: string): string => fileMap.get(toPath(fileName)).getText(),
+                readFile: (fileName: string): string => {
+                    const file = fileMap.get(toPath(fileName));
+                    if (ts.endsWith(fileName, "json")) {
+                        // strip comments
+                        return file.getText();
+                    }
+                    return file.text;
+                },
                 realpath: (fileName: string): ts.Path => {
                     const path = toPath(fileName);
                     return (realPathMap.get(path) as ts.Path) || path;

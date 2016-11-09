@@ -480,7 +480,7 @@ namespace ts {
                 return resolveModuleNamesWorker(moduleNames, containingFile);
             }
 
-            // at this point we know that either 
+            // at this point we know that either
             // - file has local declarations for ambient modules
             // OR
             // - old program state is available
@@ -674,7 +674,7 @@ namespace ts {
             }
 
             const modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
-            // try to verify results of module resolution 
+            // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
@@ -1395,14 +1395,17 @@ namespace ts {
                     // If we already resolved to this file, it must have been a secondary reference. Check file contents
                     // for sameness and possibly issue an error
                     if (previousResolution) {
-                        const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName);
-                        if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
-                            fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd,
-                                Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
-                                typeReferenceDirective,
-                                resolvedTypeReferenceDirective.resolvedFileName,
-                                previousResolution.resolvedFileName
-                            ));
+                        // Don't bother reading the file again if it's the same file.
+                        if (resolvedTypeReferenceDirective.resolvedFileName !== previousResolution.resolvedFileName) {
+                            const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName);
+                            if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
+                                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd,
+                                    Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
+                                    typeReferenceDirective,
+                                    resolvedTypeReferenceDirective.resolvedFileName,
+                                    previousResolution.resolvedFileName
+                                ));
+                            }
                         }
                         // don't overwrite previous resolution result
                         saveResolution = false;

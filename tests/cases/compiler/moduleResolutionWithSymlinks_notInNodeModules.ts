@@ -34,7 +34,5 @@ ln -s ../shared ./shared; ln -s ../shared ./shared2 # Linux
 # Windows: Open command prompt as administrator and run: `mklink /D shared ..\shared; mklink /D shared2 ..\shared`
 
 echo '{ "compilerOptions": { "outDir": "bin" } }' > tsconfig.json
-node ../../../../TypeScript/built/local/tsc.js
-
-# Should create `bin/app.js`, `bin/shared/abc.js`, and `bin/shared2/abc.js`
+tsc # Should create `bin/app.js`, `bin/shared/abc.js`, and `bin/shared2/abc.js`
 */
