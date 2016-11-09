@@ -2883,8 +2883,16 @@ namespace ts {
     // Just a place to cache element types of iterables and iterators
     /* @internal */
     export interface IterableOrIteratorType extends ObjectType, UnionType {
-        iterableElementType?: Type;
-        iteratorElementType?: Type;
+        iteratedTypeOfIterable?: Type;
+        iteratedTypeOfIterator?: Type;
+        iteratedTypeOfAsyncIterable?: Type;
+        iteratedTypeOfAsyncIterator?: Type;
+    }
+
+    /* @internal */
+    export interface PromiseOrAwaitableType extends ObjectType, UnionType {
+        promisedTypeOfPromise?: Type;
+        awaitedTypeOfType?: Type;
     }
 
     // Type parameters (TypeFlags.TypeParameter)

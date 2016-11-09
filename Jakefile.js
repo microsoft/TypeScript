@@ -301,7 +301,8 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
 
 var es2017LibrarySource = [
     "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts"
+    "es2017.sharedmemory.d.ts",
+    "es2017.asynciterable.d.ts"
 ];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {

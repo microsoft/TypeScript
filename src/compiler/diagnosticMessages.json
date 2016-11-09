@@ -175,15 +175,15 @@
         "category": "Error",
         "code": 1057
     },
-    "Operand for 'await' does not have a valid callable 'then' member.": {
+    "Type used as operand to 'await' or the return type of an async function must not contain a callable 'then' member if it is not a promise.": {
         "category": "Error",
         "code": 1058
     },
-    "Return expression in async function does not have a valid callable 'then' member.": {
+    "A promise must have a 'then' method.": {
         "category": "Error",
         "code": 1059
     },
-    "Expression body for async arrow function does not have a valid callable 'then' member.": {
+    "The first parameter of the 'then' method of a promise must be a callback.": {
         "category": "Error",
         "code": 1060
     },
@@ -191,7 +191,7 @@
         "category": "Error",
         "code": 1061
     },
-    "{0} is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
+    "Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
         "category": "Error",
         "code": 1062
     },
@@ -1611,6 +1611,10 @@
         "category": "Error",
         "code": 2503
     },
+    "Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.": {
+        "category": "Error",
+        "code": 2504
+    },
     "A generator cannot have a 'void' type annotation.": {
         "category": "Error",
         "code": 2505
@@ -1666,6 +1670,10 @@
     "A 'this'-based type guard is not compatible with a parameter-based type guard.": {
         "category": "Error",
         "code": 2518
+    },
+    "An async iterator must have a 'next()' method.": {
+        "category": "Error",
+        "code": 2519
     },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
@@ -1758,6 +1766,10 @@
     "Index signature in type '{0}' only permits reading.": {
         "category": "Error",
         "code": 2542
+    },
+    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
+        "category": "Error",
+        "code": 2543
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
