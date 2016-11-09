@@ -20,6 +20,7 @@ namespace ts.codefix {
                 }
             }
 
+            const currentTokenMeaning = getMeaningFromLocation(token);
             for (const moduleSymbol of allPotentialModules) {
                 context.cancellationToken.throwIfCancellationRequested();
 
@@ -27,8 +28,6 @@ namespace ts.codefix {
                 if (!moduleExports) {
                     continue;
                 }
-
-                const currentTokenMeaning = getMeaningFromLocation(token);
 
                 // check the default export
                 const defaultExport = moduleExports["default"];
@@ -85,58 +84,30 @@ namespace ts.codefix {
                 }
 
                 function getCodeActionForExistingImport(declaration: ImportDeclaration | ImportEqualsDeclaration): CodeAction {
-                    let namespacePrefix: string;
-                    let moduleSpecifier: string;
                     if (declaration.kind === SyntaxKind.ImportDeclaration) {
                         const namedBindings = declaration.importClause && declaration.importClause.namedBindings;
-                        if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            namespacePrefix = (<NamespaceImport>namedBindings).name.getText();
+                        if (namedBindings) {
+                            if (namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                return getCodeActionForNamespaceImport(namedBindings.name.getText());
+                            }
+                            /**
+                             * If the existing import declaration already has a named import list, just
+                             * insert the identifier into that list.
+                             */
+                            const textChange = getTextChangeForImportList(namedBindings);
+                            return createCodeAction(
+                                Diagnostics.Add_0_to_existing_import_declaration_from_1,
+                                [name, declaration.moduleSpecifier.getText()],
+                                textChange.newText,
+                                textChange.span,
+                                sourceFile.fileName
+                            );
                         }
 
-                        moduleSpecifier = declaration.moduleSpecifier.getText();
+                        // insert a new import statement in a new lines
+                        return getCodeActionForNewImport(declaration.moduleSpecifier.getText(), declaration.getEnd());
                     }
-                    else {
-                        namespacePrefix = declaration.name.getText();
-                        moduleSpecifier = declaration.moduleReference.getText();
-                    }
-
-                    /**
-                     * Cases:
-                     *     import * as ns from "mod"
-                     *     import default, * as ns from "mod"
-                     *     import ns = require("mod")
-                     *
-                     * Because there is no import list, we alter the reference to include the
-                     * namespace instead of altering the import declaration. For example, "foo" would
-                     * become "ns.foo"
-                     */
-                    if (namespacePrefix) {
-                        return createCodeAction(
-                            Diagnostics.Change_0_to_1,
-                            [name, `${namespacePrefix}.${name}`],
-                            `${namespacePrefix}.`,
-                            { start: token.getStart(), length: 0 },
-                            sourceFile.fileName
-                        );
-                    }
-                    /**
-                     * If the existing import declaration already has a named import list, just
-                     * insert the identifier into that list.
-                     */
-                    else if (declaration.kind === SyntaxKind.ImportDeclaration &&
-                        declaration.importClause &&
-                        declaration.importClause.namedBindings &&
-                        declaration.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
-                        const textChange = getTextChangeForImportList(declaration.importClause.namedBindings);
-                        return createCodeAction(
-                            Diagnostics.Add_0_to_existing_import_declaration_from_1,
-                            [name, moduleSpecifier],
-                            textChange.newText,
-                            textChange.span,
-                            sourceFile.fileName
-                        );
-                    }
-                    return getCodeActionForNewImport(moduleSpecifier, declaration.getEnd());
+                    return getCodeActionForNamespaceImport(declaration.name.getText());
 
                     function getTextChangeForImportList(importList: NamedImports): TextChange {
                         if (importList.elements.length === 0) {
@@ -173,6 +144,26 @@ namespace ts.codefix {
                             newText: `,${oneImportPerLine ? context.newLineCharacter : ""}${name}`,
                             span: { start: insertPoint, length: 0 }
                         };
+                    }
+
+                    function getCodeActionForNamespaceImport(namespacePrefix: string): CodeAction {
+                        /**
+                         * Cases:
+                         *     import * as ns from "mod"
+                         *     import default, * as ns from "mod"
+                         *     import ns = require("mod")
+                         *
+                         * Because there is no import list, we alter the reference to include the
+                         * namespace instead of altering the import declaration. For example, "foo" would
+                         * become "ns.foo"
+                         */
+                        return createCodeAction(
+                            Diagnostics.Change_0_to_1,
+                            [name, `${namespacePrefix}.${name}`],
+                            `${namespacePrefix}.`,
+                            { start: token.getStart(), length: 0 },
+                            sourceFile.fileName
+                        );
                     }
                 }
 
@@ -260,7 +251,6 @@ namespace ts.codefix {
                             relativeName = removeFileExtension(relativeName);
 
                             if (options.paths) {
-                                // TODO: handle longest match support
                                 for (const key in options.paths) {
                                     for (const pattern of options.paths[key]) {
                                         const indexOfStar = pattern.indexOf("*");
