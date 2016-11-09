@@ -870,11 +870,12 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                                 return;
                             }
-                        // pass through
+                            // pass through
+                            let isConstInvalid = true;
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
                             if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
-                                return checkModifiers(<NodeArray<Modifier>>nodes);
+                                return checkModifiers(<NodeArray<Modifier>>nodes, !isConstInvalid);
                             }
                             break;
                         case SyntaxKind.PropertyDeclaration:
@@ -911,23 +912,27 @@ namespace ts {
                     }
                 }
 
-                function checkModifiers(modifiers: NodeArray<Modifier>) {
+                function checkModifiers(modifiers: NodeArray<Modifier>, isConstValid: boolean) {
                     for (const modifier of modifiers) {
                         switch (modifier.kind) {
+                            case SyntaxKind.ConstKeyword:
+                                if (isConstValid) {
+                                    continue;
+                                }
+                                // Fallthrough to report error
                             case SyntaxKind.PublicKeyword:
                             case SyntaxKind.PrivateKeyword:
                             case SyntaxKind.ProtectedKeyword:
                             case SyntaxKind.ReadonlyKeyword:
                             case SyntaxKind.DeclareKeyword:
+                            case SyntaxKind.AbstractKeyword:
                                 diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
                                 break;
 
                             // These are all legal modifiers.
                             case SyntaxKind.StaticKeyword:
                             case SyntaxKind.ExportKeyword:
-                            case SyntaxKind.ConstKeyword:
                             case SyntaxKind.DefaultKeyword:
-                            case SyntaxKind.AbstractKeyword:
                         }
                     }
                 }
