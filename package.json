@@ -76,7 +76,7 @@
         "travis-fold": "latest",
         "ts-node": "latest",
         "tsd": "latest",
-        "tslint": "next",
+        "tslint": "4.0.0-dev.0",
         "typescript": "next"
     },
     "scripts": {

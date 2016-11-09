@@ -446,8 +446,8 @@ namespace ts {
     }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
-        if (!array2 || !array2.length) return array1;
-        if (!array1 || !array1.length) return array2;
+        if (!some(array2)) return array1;
+        if (!some(array1)) return array2;
         return [...array1, ...array2];
     }
 
@@ -525,6 +525,27 @@ namespace ts {
             }
         }
         return result || array;
+    }
+
+    /**
+     * Gets the relative complement of `arrayA` with respect to `b`, returning the elements that
+     * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
+     * based on the provided comparer.
+     */
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: (x: T, y: T) => Comparison = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+        if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
+        const result: T[] = [];
+        outer: for (; offsetB < arrayB.length; offsetB++) {
+            inner: for (; offsetA < arrayA.length; offsetA++) {
+                switch (comparer(arrayB[offsetB], arrayA[offsetA])) {
+                    case Comparison.LessThan: break inner;
+                    case Comparison.EqualTo: continue outer;
+                    case Comparison.GreaterThan: continue inner;
+                }
+            }
+            result.push(arrayB[offsetB]);
+        }
+        return result;
     }
 
     export function sum(array: any[], prop: string): number {
@@ -636,12 +657,12 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number): number {
+    export function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number, offset?: number): number {
         if (!array || array.length === 0) {
             return -1;
         }
 
-        let low = 0;
+        let low = offset || 0;
         let high = array.length - 1;
         comparer = comparer !== undefined
             ? comparer
@@ -1116,6 +1137,18 @@ namespace ts {
         };
     }
 
+    export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
+        return {
+            file: undefined,
+            start: undefined,
+            length: undefined,
+
+            code: chain.code,
+            category: chain.category,
+            messageText: chain.next ? chain : chain.messageText
+        };
+    }
+
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
@@ -1322,7 +1355,7 @@ namespace ts {
      */
     export function getDirectoryPath(path: Path): Path;
     export function getDirectoryPath(path: string): string;
-    export function getDirectoryPath(path: string): any {
+    export function getDirectoryPath(path: string): string {
         return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
     }
 
@@ -1582,6 +1615,10 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function hasExtension(fileName: string): boolean {
+        return getBaseFileName(fileName).indexOf(".") >= 0;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
         return path.length > extension.length && endsWith(path, extension);
     }
@@ -1627,73 +1664,21 @@ namespace ts {
 
         let pattern = "";
         let hasWrittenSubpattern = false;
-        spec: for (const spec of specs) {
+        for (const spec of specs) {
             if (!spec) {
                 continue;
             }
 
-            let subpattern = "";
-            let hasRecursiveDirectoryWildcard = false;
-            let hasWrittenComponent = false;
-            const components = getNormalizedPathComponents(spec, basePath);
-            if (usage !== "exclude" && components[components.length - 1] === "**") {
-                continue spec;
-            }
-
-            // getNormalizedPathComponents includes the separator for the root component.
-            // We need to remove to create our regex correctly.
-            components[0] = removeTrailingDirectorySeparator(components[0]);
-
-            let optionalCount = 0;
-            for (let component of components) {
-                if (component === "**") {
-                    if (hasRecursiveDirectoryWildcard) {
-                        continue spec;
-                    }
-
-                    subpattern += doubleAsteriskRegexFragment;
-                    hasRecursiveDirectoryWildcard = true;
-                    hasWrittenComponent = true;
-                }
-                else {
-                    if (usage === "directories") {
-                        subpattern += "(";
-                        optionalCount++;
-                    }
-
-                    if (hasWrittenComponent) {
-                        subpattern += directorySeparator;
-                    }
-
-                    if (usage !== "exclude") {
-                        // The * and ? wildcards should not match directories or files that start with . if they
-                        // appear first in a component. Dotted directories and files can be included explicitly
-                        // like so: **/.*/.*
-                        if (component.charCodeAt(0) === CharacterCodes.asterisk) {
-                            subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
-                            component = component.substr(1);
-                        }
-                        else if (component.charCodeAt(0) === CharacterCodes.question) {
-                            subpattern += "[^./]";
-                            component = component.substr(1);
-                        }
-                    }
-
-                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
-                    hasWrittenComponent = true;
-                }
-            }
-
-            while (optionalCount > 0) {
-                subpattern += ")?";
-                optionalCount--;
+            const subPattern = getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter);
+            if (subPattern === undefined) {
+                continue;
             }
 
             if (hasWrittenSubpattern) {
                 pattern += "|";
             }
 
-            pattern += "(" + subpattern + ")";
+            pattern += "(" + subPattern + ")";
             hasWrittenSubpattern = true;
         }
 
@@ -1701,7 +1686,83 @@ namespace ts {
             return undefined;
         }
 
-        return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
+        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
+        const terminator = usage === "exclude" ? "($|/)" : "$";
+        return `^(${pattern})${terminator}`;
+    }
+
+    /**
+     * An "includes" path "foo" is implicitly a glob "foo/** /*" (without the space) if its last component has no extension,
+     * and does not contain any glob characters itself.
+     */
+    export function isImplicitGlob(lastPathComponent: string): boolean {
+        return !/[.*?]/.test(lastPathComponent);
+    }
+
+    function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", singleAsteriskRegexFragment: string, doubleAsteriskRegexFragment: string, replaceWildcardCharacter: (match: string) => string): string | undefined {
+        let subpattern = "";
+        let hasRecursiveDirectoryWildcard = false;
+        let hasWrittenComponent = false;
+        const components = getNormalizedPathComponents(spec, basePath);
+        const lastComponent = lastOrUndefined(components);
+        if (usage !== "exclude" && lastComponent === "**") {
+            return undefined;
+        }
+
+        // getNormalizedPathComponents includes the separator for the root component.
+        // We need to remove to create our regex correctly.
+        components[0] = removeTrailingDirectorySeparator(components[0]);
+
+        if (isImplicitGlob(lastComponent)) {
+            components.push("**", "*");
+        }
+
+        let optionalCount = 0;
+        for (let component of components) {
+            if (component === "**") {
+                if (hasRecursiveDirectoryWildcard) {
+                    return undefined;
+                }
+
+                subpattern += doubleAsteriskRegexFragment;
+                hasRecursiveDirectoryWildcard = true;
+            }
+            else {
+                if (usage === "directories") {
+                    subpattern += "(";
+                    optionalCount++;
+                }
+
+                if (hasWrittenComponent) {
+                    subpattern += directorySeparator;
+                }
+
+                if (usage !== "exclude") {
+                    // The * and ? wildcards should not match directories or files that start with . if they
+                    // appear first in a component. Dotted directories and files can be included explicitly
+                    // like so: **/.*/.*
+                    if (component.charCodeAt(0) === CharacterCodes.asterisk) {
+                        subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                        component = component.substr(1);
+                    }
+                    else if (component.charCodeAt(0) === CharacterCodes.question) {
+                        subpattern += "[^./]";
+                        component = component.substr(1);
+                    }
+                }
+
+                subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+            }
+
+            hasWrittenComponent = true;
+        }
+
+        while (optionalCount > 0) {
+            subpattern += ")?";
+            optionalCount--;
+        }
+
+        return subpattern;
     }
 
     function replaceWildCardCharacterFiles(match: string) {
@@ -1788,6 +1849,7 @@ namespace ts {
     function getBasePaths(path: string, includes: string[], useCaseSensitiveFileNames: boolean) {
         // Storage for our results in the form of literal paths (e.g. the paths as written by the user).
         const basePaths: string[] = [path];
+
         if (includes) {
             // Storage for literal base paths amongst the include patterns.
             const includeBasePaths: string[] = [];
@@ -1795,14 +1857,8 @@ namespace ts {
                 // We also need to check the relative paths by converting them to absolute and normalizing
                 // in case they escape the base path (e.g "..\somedirectory")
                 const absolute: string = isRootedDiskPath(include) ? include : normalizePath(combinePaths(path, include));
-
-                const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
-                const includeBasePath = wildcardOffset < 0
-                    ? removeTrailingDirectorySeparator(getDirectoryPath(absolute))
-                    : absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
-
                 // Append the literal and canonical candidate base paths.
-                includeBasePaths.push(includeBasePath);
+                includeBasePaths.push(getIncludeBasePath(absolute));
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
@@ -1810,19 +1866,25 @@ namespace ts {
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path
-            include: for (let i = 0; i < includeBasePaths.length; i++) {
-                const includeBasePath = includeBasePaths[i];
-                for (let j = 0; j < basePaths.length; j++) {
-                    if (containsPath(basePaths[j], includeBasePath, path, !useCaseSensitiveFileNames)) {
-                        continue include;
-                    }
+            for (const includeBasePath of includeBasePaths) {
+                if (ts.every(basePaths, basePath => !containsPath(basePath, includeBasePath, path, !useCaseSensitiveFileNames))) {
+                    basePaths.push(includeBasePath);
                 }
-
-                basePaths.push(includeBasePath);
             }
         }
 
         return basePaths;
+    }
+
+    function getIncludeBasePath(absolute: string): string {
+        const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
+        if (wildcardOffset < 0) {
+            // No "*" or "?" in the path
+            return !hasExtension(absolute)
+                ? absolute
+                : removeTrailingDirectorySeparator(getDirectoryPath(absolute));
+        }
+        return absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
     }
 
     export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {

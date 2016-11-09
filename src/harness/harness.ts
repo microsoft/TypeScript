@@ -1029,7 +1029,7 @@ namespace Harness {
                 },
                 realpath: realPathMap && ((f: string) => {
                     const path = ts.toPath(f, currentDirectory, getCanonicalFileName);
-                    return realPathMap.contains(path) ? realPathMap.get(path) : path;
+                    return realPathMap.get(path) || path;
                 }),
                 directoryExists: dir => {
                     let path = ts.toPath(dir, currentDirectory, getCanonicalFileName);
@@ -1037,13 +1037,7 @@ namespace Harness {
                     if (path[path.length - 1] === "/") {
                         path = <ts.Path>path.substr(0, path.length - 1);
                     }
-                    let exists = false;
-                    fileMap.forEachValue(key => {
-                        if (key.indexOf(path) === 0 && key[path.length] === "/") {
-                            exists = true;
-                        }
-                    });
-                    return exists;
+                    return mapHasFileInDirectory(path, fileMap) || mapHasFileInDirectory(path, realPathMap);
                 },
                 getDirectories: d => {
                     const path = ts.toPath(d, currentDirectory, getCanonicalFileName);
@@ -1062,6 +1056,19 @@ namespace Harness {
                     return result;
                 }
             };
+        }
+
+        function mapHasFileInDirectory(directoryPath: ts.Path, map: ts.FileMap<any>): boolean {
+            if (!map) {
+                return false;
+            }
+            let exists = false;
+            map.forEachValue(fileName => {
+                if (!exists && ts.startsWith(fileName, directoryPath) && fileName[directoryPath.length] === "/") {
+                    exists = true;
+                }
+            });
+            return exists;
         }
 
         interface HarnessOptions {

@@ -1,8 +1,8 @@
-tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(17,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
-tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(19,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
-tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(21,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
-tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(23,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
-tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(25,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(17,6): error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
+tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(19,11): error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
+tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(21,9): error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
+tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(23,15): error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
+tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(25,15): error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
 
 
 ==== tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts (5 errors) ====
@@ -23,22 +23,22 @@ tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(25,1): er
     }
     let base: Base;
     base.value = 12 // error, lhs can't be a readonly property
-    ~~~~~~~~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+         ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
     let identical: Base & Identical;
     identical.value = 12; // error, lhs can't be a readonly property
-    ~~~~~~~~~~~~~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+              ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
     let mutable: Base & Mutable;
     mutable.value = 12; // error, lhs can't be a readonly property
-    ~~~~~~~~~~~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+            ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
     let differentType: Base & DifferentType;
     differentType.value = 12; // error, lhs can't be a readonly property
-    ~~~~~~~~~~~~~~~~~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+                  ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
     let differentName: Base & DifferentName;
     differentName.value = 12; // error, property 'value' doesn't exist
-    ~~~~~~~~~~~~~~~~~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+                  ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a constant or a read-only property.
     

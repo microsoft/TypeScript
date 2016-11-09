@@ -17,7 +17,11 @@ namespace ts {
         readFile(path: string, encoding?: string): string;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
+        /**
+         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that 
+         * use native OS file watching
+         */
+        watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
@@ -439,6 +443,7 @@ namespace ts {
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
 
+            const noOpFileWatcher: FileWatcher = { close: noop };
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -448,7 +453,7 @@ namespace ts {
                 },
                 readFile,
                 writeFile,
-                watchFile: (fileName, callback) => {
+                watchFile: (fileName, callback, pollingInterval) => {
                     if (useNonPollingWatchers) {
                         const watchedFile = watchedFileSet.addFile(fileName, callback);
                         return {
@@ -456,7 +461,7 @@ namespace ts {
                         };
                     }
                     else {
-                        _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);
+                        _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
                         return {
                             close: () => _fs.unwatchFile(fileName, fileChanged)
                         };
@@ -475,7 +480,7 @@ namespace ts {
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     let options: any;
                     if (!directoryExists(directoryName)) {
-                        return;
+                        return noOpFileWatcher;
                     }
 
                     if (isNode4OrLater() && (process.platform === "win32" || process.platform === "darwin")) {
