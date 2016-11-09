@@ -5,17 +5,25 @@ function h([a, [b], [[c]], {x = 10, y: [a, b, c], z: {a1, b1}}]){ }
 function h1([a, [b], [[c]], {x = 10, y = [1, 2, 3], z: {a1, b1}}]){ }
 
 //// [declarationEmitDestructuring2.js]
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
 function f(_a) {
-    var _b = _a === void 0 ? { x: 10, y: [2, 4, 6, 8] } : _a, _c = _b.x, x = _c === void 0 ? 10 : _c, _d = _b.y, _e = _d === void 0 ? [1, 2, 3, 4] : _d, a = _e[0], b = _e[1], c = _e[2], d = _e[3];
+    var _b = _a === void 0 ? { x: 10, y: [2, 4, 6, 8] } : _a, _c = _b.x, x = _c === void 0 ? 10 : _c, _d = _b.y, _e = __read(_d === void 0 ? [1, 2, 3, 4] : _d, 4), a = _e[0], b = _e[1], c = _e[2], d = _e[3];
 }
 function g(_a) {
-    var _b = _a === void 0 ? [1, 2, 3, 4] : _a, a = _b[0], b = _b[1], c = _b[2], d = _b[3];
+    var _b = __read(_a === void 0 ? [1, 2, 3, 4] : _a, 4), a = _b[0], b = _b[1], c = _b[2], d = _b[3];
 }
 function h(_a) {
-    var a = _a[0], b = _a[1][0], c = _a[2][0][0], _b = _a[3], _c = _b.x, x = _c === void 0 ? 10 : _c, _d = _b.y, a = _d[0], b = _d[1], c = _d[2], _e = _b.z, a1 = _e.a1, b1 = _e.b1;
+    var _b = __read(_a, 4), a = _b[0], _c = __read(_b[1], 1), b = _c[0], _d = __read(_b[2], 1), _e = __read(_d[0], 1), c = _e[0], _f = _b[3], _g = _f.x, x = _g === void 0 ? 10 : _g, _h = __read(_f.y, 3), a = _h[0], b = _h[1], c = _h[2], _j = _f.z, a1 = _j.a1, b1 = _j.b1;
 }
 function h1(_a) {
-    var a = _a[0], b = _a[1][0], c = _a[2][0][0], _b = _a[3], _c = _b.x, x = _c === void 0 ? 10 : _c, _d = _b.y, y = _d === void 0 ? [1, 2, 3] : _d, _e = _b.z, a1 = _e.a1, b1 = _e.b1;
+    var _b = __read(_a, 4), a = _b[0], _c = __read(_b[1], 1), b = _c[0], _d = __read(_b[2], 1), _e = __read(_d[0], 1), c = _e[0], _f = _b[3], _g = _f.x, x = _g === void 0 ? 10 : _g, _h = _f.y, y = _h === void 0 ? [1, 2, 3] : _h, _j = _f.z, a1 = _j.a1, b1 = _j.b1;
 }
 
 

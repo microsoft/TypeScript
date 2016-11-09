@@ -34,21 +34,29 @@ foo4(robotA);
 foo4(["roomba", ["vaccum", "mopping"]]);
 
 //// [sourceMapValidationDestructuringParametertArrayBindingPattern2.js]
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
 var robotA = ["trimmer", ["trimming", "edging"]];
 function foo1(_a) {
-    var skillA = _a[1];
+    var _b = __read(_a, 2), skillA = _b[1];
     console.log(skillA);
 }
 function foo2(_a) {
-    var nameMB = _a[0];
+    var _b = __read(_a, 1), nameMB = _b[0];
     console.log(nameMB);
 }
 function foo3(_a) {
-    var nameMA = _a[0], _b = _a[1], primarySkillA = _b[0], secondarySkillA = _b[1];
+    var _b = __read(_a, 2), nameMA = _b[0], _c = __read(_b[1], 2), primarySkillA = _c[0], secondarySkillA = _c[1];
     console.log(nameMA);
 }
 function foo4(_a) {
-    var multiRobotAInfo = _a.slice(0);
+    var _b = __read(_a), multiRobotAInfo = _b.slice(0);
     console.log(multiRobotAInfo);
 }
 foo1(robotA);

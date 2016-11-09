@@ -181,6 +181,14 @@ function f21() {
 
 
 //// [declarationsAndAssignments.js]
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
 function f0() {
     var _a = [1, "hello"];
     var x = [1, "hello"][0];
@@ -192,9 +200,9 @@ function f0() {
 }
 function f1() {
     var a = [1, "hello"];
-    var x = a[0];
-    var x = a[0], y = a[1];
-    var x = a[0], y = a[1], z = a[2];
+    var _a = __read(a, 1), x = _a[0];
+    var _b = __read(a, 2), x = _b[0], y = _b[1];
+    var _c = __read(a, 3), x = _c[0], y = _c[1], z = _c[2];
     var x;
     var y;
     var z;
@@ -213,7 +221,7 @@ function f2() {
     var b;
 }
 function f3() {
-    var _a = [1, ["hello", [true]]], x = _a[0], _b = _a[1], y = _b[0], z = _b[1][0];
+    var _a = [1, ["hello", [true]]], x = _a[0], _b = __read(_a[1], 2), y = _b[0], _c = __read(_b[1], 1), z = _c[0];
     var x;
     var y;
     var z;
@@ -239,8 +247,8 @@ function f8() {
     var _b = [1], d = _b[0], e = _b[1], f = _b[2]; // Error, [1] is a tuple
 }
 function f9() {
-    var _a = {}, a = _a[0], b = _a[1]; // Error, not array type
-    var _b = { 0: 10, 1: 20 }, c = _b[0], d = _b[1]; // Error, not array type
+    var _a = __read({}, 2), a = _a[0], b = _a[1]; // Error, not array type
+    var _b = __read({ 0: 10, 1: 20 }, 2), c = _b[0], d = _b[1]; // Error, not array type
     var _c = [10, 20], e = _c[0], f = _c[1];
 }
 function f10() {
@@ -256,7 +264,7 @@ function f11() {
     var b;
 }
 function f12() {
-    var _a = [1, ["hello", { x: 5, y: true }]], a = _a[0], _b = _a[1], _c = _b === void 0 ? ["abc", { x: 10, y: false }] : _b, b = _c[0], _d = _c[1], x = _d.x, c = _d.y;
+    var _a = [1, ["hello", { x: 5, y: true }]], a = _a[0], _b = _a[1], _c = __read(_b === void 0 ? ["abc", { x: 10, y: false }] : _b, 2), b = _c[0], _d = _c[1], x = _d.x, c = _d.y;
     var a;
     var b;
     var x;
@@ -267,7 +275,7 @@ function f13() {
     var _b = [[x, y], { x: x, y: y }], a = _b[0], b = _b[1];
 }
 function f14(_a) {
-    var _b = _a[0], a = _b === void 0 ? 1 : _b, _c = _a[1], _d = _c[0], b = _d === void 0 ? "hello" : _d, _e = _c[1], x = _e.x, _f = _e.y, c = _f === void 0 ? false : _f;
+    var _b = __read(_a, 2), _c = _b[0], a = _c === void 0 ? 1 : _c, _d = __read(_b[1], 2), _e = _d[0], b = _e === void 0 ? "hello" : _e, _f = _d[1], x = _f.x, _g = _f.y, c = _g === void 0 ? false : _g;
     var a;
     var b;
     var c;
@@ -312,9 +320,9 @@ function f19() {
     _a = [1, 2], a = _a[0], b = _a[1];
     _b = [b, a], a = _b[0], b = _b[1];
     (_c = { b: b, a: a }, a = _c.a, b = _c.b);
-    _d = [[2, 3]][0], _e = _d === void 0 ? [1, 2] : _d, a = _e[0], b = _e[1];
-    var x = (_f = [1, 2], a = _f[0], b = _f[1], _f);
-    var _a, _b, _c, _d, _e, _f;
+    _d = [[2, 3]][0], _e = __read(_d === void 0 ? [1, 2] : _d, 2), a = _e[0], b = _e[1];
+    var x = (_f = [1, 2], _g = __read(_f, 2), a = _g[0], b = _g[1], _f);
+    var _a, _b, _c, _d, _e, _f, _g;
 }
 function f20() {
     var a;

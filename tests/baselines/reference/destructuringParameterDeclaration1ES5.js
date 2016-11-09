@@ -101,13 +101,21 @@ function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type 
 // A parameter declaration may specify either an identifier or a binding pattern.
 // The identifiers specified in parameter declarations and binding patterns
 // in a parameter list must be unique within that parameter list.
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
 // If the declaration includes a type annotation, the parameter is of that type
 function a1(_a) {
-    var a = _a[0], b = _a[1], c = _a[2][0][0];
+    var _b = __read(_a, 3), a = _b[0], b = _b[1], _c = __read(_b[2], 1), _d = __read(_c[0], 1), c = _d[0];
 }
 function a2(o) { }
 function a3(_a) {
-    var j = _a.j, k = _a.k, _b = _a.l, m = _b.m, n = _b.n, _c = _a.q, a = _c[0], b = _c[1], c = _c[2];
+    var j = _a.j, k = _a.k, _b = _a.l, m = _b.m, n = _b.n, _c = __read(_a.q, 3), a = _c[0], b = _c[1], c = _c[2];
 }
 ;
 function a4(_a) {
@@ -130,10 +138,10 @@ function b3(_a) {
     var _b = (_a === void 0 ? { z: { x: "hi", y: { j: 1 } } } : _a).z, x = _b.x, j = _b.y.j;
 }
 function b6(_a) {
-    var _b = _a === void 0 ? [undefined, null, undefined] : _a, a = _b[0], z = _b[1], y = _b[2];
+    var _b = __read(_a === void 0 ? [undefined, null, undefined] : _a, 3), a = _b[0], z = _b[1], y = _b[2];
 }
 function b7(_a) {
-    var _b = _a === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _a, a = _b[0][0], b = _b[1], _c = _b[2][0], c = _c[0], d = _c[1];
+    var _b = __read(_a === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _a, 3), _c = __read(_b[0], 1), a = _c[0], b = _b[1], _d = __read(_b[2], 1), _e = __read(_d[0], 2), c = _e[0], d = _e[1];
 }
 b1([1, 2, 3]); // z is widen to the type any[]
 b2("string", { x: 200, y: "string" });
@@ -158,10 +166,10 @@ function c3(_a) {
     var b = (_a === void 0 ? { b: "hello" } : _a).b;
 }
 function c5(_a) {
-    var a = _a[0], b = _a[1], c = _a[2][0][0];
+    var _b = __read(_a, 3), a = _b[0], b = _b[1], _c = __read(_b[2], 1), _d = __read(_c[0], 1), c = _d[0];
 }
 function c6(_a) {
-    var a = _a[0], b = _a[1], _b = _a[2][0][0], c = _b === void 0 ? 1 : _b;
+    var _b = __read(_a, 3), a = _b[0], b = _b[1], _c = __read(_b[2], 1), _d = __read(_c[0], 1), _e = _d[0], c = _e === void 0 ? 1 : _e;
 }
 c0({ z: { x: 1, y: { j: "world" } } }); // Implied type is { z: {x: any, y: {j: any}} }
 c0({ z: { x: "string", y: { j: true } } }); // Implied type is { z: {x: any, y: {j: any}} }
@@ -184,7 +192,7 @@ var C2 = (function () {
     C2.prototype.d3 = function () { };
     C2.prototype.d4 = function () { };
     C2.prototype.e0 = function (_a) {
-        var a = _a[0], b = _a[1], c = _a[2];
+        var _b = __read(_a, 3), a = _b[0], b = _b[1], c = _b[2];
     };
     return C2;
 }());
@@ -192,13 +200,13 @@ var C3 = (function () {
     function C3() {
     }
     C3.prototype.d3 = function (_a) {
-        var a = _a[0], b = _a[1], c = _a[2];
+        var _b = __read(_a, 3), a = _b[0], b = _b[1], c = _b[2];
     };
     C3.prototype.d4 = function (_a) {
         var x = _a.x, y = _a.y, z = _a.z;
     };
     C3.prototype.e0 = function (_a) {
-        var a = _a[0], b = _a[1], c = _a[2];
+        var _b = __read(_a, 3), a = _b[0], b = _b[1], c = _b[2];
     };
     return C3;
 }());
@@ -219,8 +227,8 @@ function e3(_a) {
     var x = _a.x;
 } // x is an optional with type number
 function e4(_a) {
-    var _b = _a.x, number = _b[0], string = _b[1], any = _b[2];
+    var _b = __read(_a.x, 3), number = _b[0], string = _b[1], any = _b[2];
 } // x has type [any, any, any]
 function e5(_a) {
-    var _b = _a.x, a = _b[0], b = _b[1], c = _b[2];
+    var _b = __read(_a.x, 3), a = _b[0], b = _b[1], c = _b[2];
 } // x has type [any, any, any]

@@ -93,6 +93,14 @@ for (let [...multiRobotAInfo] = ["trimmer", ["trimming", "edging"]], i = 0; i < 
 }
 
 //// [sourceMapValidationDestructuringForArrayBindingPattern.js]
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
 var robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;
@@ -102,73 +110,73 @@ var multiRobotB = ["trimmer", ["trimming", "edging"]];
 function getMultiRobot() {
     return multiRobotA;
 }
-for (var nameA = robotA[1], i = 0; i < 1; i++) {
+for (var _a = __read(robotA, 2), nameA = _a[1], i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (var _a = getRobot(), nameA = _a[1], i = 0; i < 1; i++) {
+for (var _b = __read(getRobot(), 2), nameA = _b[1], i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (var _b = [2, "trimmer", "trimming"], nameA = _b[1], i = 0; i < 1; i++) {
+for (var _c = [2, "trimmer", "trimming"], nameA = _c[1], i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (var _c = multiRobotA[1], primarySkillA = _c[0], secondarySkillA = _c[1], i = 0; i < 1; i++) {
+for (var _d = __read(multiRobotA, 2), _e = __read(_d[1], 2), primarySkillA = _e[0], secondarySkillA = _e[1], i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
-for (var _d = getMultiRobot(), _e = _d[1], primarySkillA = _e[0], secondarySkillA = _e[1], i = 0; i < 1; i++) {
+for (var _f = __read(getMultiRobot(), 2), _g = __read(_f[1], 2), primarySkillA = _g[0], secondarySkillA = _g[1], i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
-for (var _f = ["trimmer", ["trimming", "edging"]], _g = _f[1], primarySkillA = _g[0], secondarySkillA = _g[1], i = 0; i < 1; i++) {
+for (var _h = ["trimmer", ["trimming", "edging"]], _j = __read(_h[1], 2), primarySkillA = _j[0], secondarySkillA = _j[1], i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
-for (var numberB = robotA[0], i = 0; i < 1; i++) {
+for (var _k = __read(robotA, 1), numberB = _k[0], i = 0; i < 1; i++) {
     console.log(numberB);
 }
-for (var numberB = getRobot()[0], i = 0; i < 1; i++) {
+for (var _l = __read(getRobot(), 1), numberB = _l[0], i = 0; i < 1; i++) {
     console.log(numberB);
 }
 for (var numberB = [2, "trimmer", "trimming"][0], i = 0; i < 1; i++) {
     console.log(numberB);
 }
-for (var nameB = multiRobotA[0], i = 0; i < 1; i++) {
+for (var _m = __read(multiRobotA, 1), nameB = _m[0], i = 0; i < 1; i++) {
     console.log(nameB);
 }
-for (var nameB = getMultiRobot()[0], i = 0; i < 1; i++) {
+for (var _o = __read(getMultiRobot(), 1), nameB = _o[0], i = 0; i < 1; i++) {
     console.log(nameB);
 }
 for (var nameB = ["trimmer", ["trimming", "edging"]][0], i = 0; i < 1; i++) {
     console.log(nameB);
 }
-for (var numberA2 = robotA[0], nameA2 = robotA[1], skillA2 = robotA[2], i = 0; i < 1; i++) {
+for (var _p = __read(robotA, 3), numberA2 = _p[0], nameA2 = _p[1], skillA2 = _p[2], i = 0; i < 1; i++) {
     console.log(nameA2);
 }
-for (var _h = getRobot(), numberA2 = _h[0], nameA2 = _h[1], skillA2 = _h[2], i = 0; i < 1; i++) {
+for (var _q = __read(getRobot(), 3), numberA2 = _q[0], nameA2 = _q[1], skillA2 = _q[2], i = 0; i < 1; i++) {
     console.log(nameA2);
 }
-for (var _j = [2, "trimmer", "trimming"], numberA2 = _j[0], nameA2 = _j[1], skillA2 = _j[2], i = 0; i < 1; i++) {
+for (var _r = [2, "trimmer", "trimming"], numberA2 = _r[0], nameA2 = _r[1], skillA2 = _r[2], i = 0; i < 1; i++) {
     console.log(nameA2);
 }
-for (var nameMA = multiRobotA[0], _k = multiRobotA[1], primarySkillA = _k[0], secondarySkillA = _k[1], i = 0; i < 1; i++) {
+for (var _s = __read(multiRobotA, 2), nameMA = _s[0], _t = __read(_s[1], 2), primarySkillA = _t[0], secondarySkillA = _t[1], i = 0; i < 1; i++) {
     console.log(nameMA);
 }
-for (var _l = getMultiRobot(), nameMA = _l[0], _m = _l[1], primarySkillA = _m[0], secondarySkillA = _m[1], i = 0; i < 1; i++) {
+for (var _u = __read(getMultiRobot(), 2), nameMA = _u[0], _v = __read(_u[1], 2), primarySkillA = _v[0], secondarySkillA = _v[1], i = 0; i < 1; i++) {
     console.log(nameMA);
 }
-for (var _o = ["trimmer", ["trimming", "edging"]], nameMA = _o[0], _p = _o[1], primarySkillA = _p[0], secondarySkillA = _p[1], i = 0; i < 1; i++) {
+for (var _w = ["trimmer", ["trimming", "edging"]], nameMA = _w[0], _x = __read(_w[1], 2), primarySkillA = _x[0], secondarySkillA = _x[1], i = 0; i < 1; i++) {
     console.log(nameMA);
 }
-for (var numberA3 = robotA[0], robotAInfo = robotA.slice(1), i = 0; i < 1; i++) {
+for (var _y = __read(robotA), numberA3 = _y[0], robotAInfo = _y.slice(1), i = 0; i < 1; i++) {
     console.log(numberA3);
 }
-for (var _q = getRobot(), numberA3 = _q[0], robotAInfo = _q.slice(1), i = 0; i < 1; i++) {
+for (var _z = __read(getRobot()), numberA3 = _z[0], robotAInfo = _z.slice(1), i = 0; i < 1; i++) {
     console.log(numberA3);
 }
-for (var _r = [2, "trimmer", "trimming"], numberA3 = _r[0], robotAInfo = _r.slice(1), i = 0; i < 1; i++) {
+for (var _0 = [2, "trimmer", "trimming"], numberA3 = _0[0], robotAInfo = _0.slice(1), i = 0; i < 1; i++) {
     console.log(numberA3);
 }
-for (var multiRobotAInfo = multiRobotA.slice(0), i = 0; i < 1; i++) {
+for (var _1 = __read(multiRobotA), multiRobotAInfo = _1.slice(0), i = 0; i < 1; i++) {
     console.log(multiRobotAInfo);
 }
-for (var multiRobotAInfo = getMultiRobot().slice(0), i = 0; i < 1; i++) {
+for (var _2 = __read(getMultiRobot()), multiRobotAInfo = _2.slice(0), i = 0; i < 1; i++) {
     console.log(multiRobotAInfo);
 }
 for (var multiRobotAInfo = ["trimmer", ["trimming", "edging"]].slice(0), i = 0; i < 1; i++) {

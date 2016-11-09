@@ -10,10 +10,28 @@ var entries = Object.entries(o);
 var entries1 = Object.entries(1); // <-- entries: [string, any][]
 
 //// [useObjectValuesAndEntries1.js]
+var __values = (this && this.__values) || function (o) {
+    var i = o.__iterator__ || 0, d;
+    return i ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } };
+};
+var __step = (this && this.__step) || function (r) {
+    return !(r.done || (r.done = (r.result = r.iterator.next()).done));
+};
+var __close = (this && this.__close) || function (r) {
+    var m = !(r && r.done) && r.iterator["return"];
+    if (m) return m.call(r.iterator);
+};
 var o = { a: 1, b: 2 };
-for (var _i = 0, _a = Object.values(o); _i < _a.length; _i++) {
-    var x = _a[_i];
-    var y = x;
+try {
+    for (var iterator_1 = { iterator: __values(Object.values(o)) }; __step(iterator_1);) {
+        var x = iterator_1.result.value;
+        var y = x;
+    }
+}
+catch (e_1_1) { e_1 = { error: e_1_1 }; }
+finally {
+    try { __close(iterator_1); } finally { if (e_1) throw e_1.error; }
 }
 var entries = Object.entries(o);
 var entries1 = Object.entries(1); // <-- entries: [string, any][]
+var e_1;

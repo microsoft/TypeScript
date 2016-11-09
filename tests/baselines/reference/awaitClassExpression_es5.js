@@ -10,9 +10,9 @@ async function func(): Promise<void> {
 //// [awaitClassExpression_es5.js]
 function func() {
     return __awaiter(this, void 0, void 0, function () {
-        var D, _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var D, _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     _a = function (_super) {
                         __extends(D, _super);
@@ -23,7 +23,7 @@ function func() {
                     };
                     return [4 /*yield*/, p];
                 case 1:
-                    D = (_a.apply(void 0, [(_c.sent())]));
+                    D = (_a.apply(void 0, [(_b.sent())]));
                     return [2 /*return*/];
             }
         });

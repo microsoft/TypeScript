@@ -42,6 +42,18 @@ var whitespace3 = <div>
 
 
 //// [file.js]
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 var p;
 var selfClosed1 = React.createElement("div", null);
 var selfClosed2 = React.createElement("div", { x: "1" });
@@ -61,10 +73,10 @@ var SomeClass = (function () {
     SomeClass.prototype.f = function () {
         var _this = this;
         var rewrites1 = React.createElement("div", null, function () { return _this; });
-        var rewrites2 = React.createElement("div", null, [p].concat(p, [p]));
+        var rewrites2 = React.createElement("div", null, __spread([p], p, [p]));
         var rewrites3 = React.createElement("div", null, { p: p });
         var rewrites4 = React.createElement("div", { a: function () { return _this; } });
-        var rewrites5 = React.createElement("div", { a: [p].concat(p, [p]) });
+        var rewrites5 = React.createElement("div", { a: __spread([p], p, [p]) });
         var rewrites6 = React.createElement("div", { a: { p: p } });
     };
     return SomeClass;

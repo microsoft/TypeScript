@@ -59,7 +59,7 @@ function fn1() {
                 case 1:
                     if (!(i < 1))
                         return [3 /*break*/, 4];
-                    return [5 /*yield**/, _loop_1(i)];
+                    return [5 /*yield**/, __values(_loop_1(i))];
                 case 2:
                     _a.sent();
                     _a.label = 3;
@@ -94,7 +94,7 @@ function fn2() {
                 case 1:
                     if (!(i < 1))
                         return [3 /*break*/, 4];
-                    return [5 /*yield**/, _loop_2(i)];
+                    return [5 /*yield**/, __values(_loop_2(i))];
                 case 2:
                     state_1 = _a.sent();
                     if (state_1 === "break")
@@ -131,7 +131,7 @@ function fn3() {
                 case 1:
                     if (!(i < 1))
                         return [3 /*break*/, 4];
-                    return [5 /*yield**/, _loop_3(i)];
+                    return [5 /*yield**/, __values(_loop_3(i))];
                 case 2:
                     _a.sent();
                     _a.label = 3;
@@ -166,7 +166,7 @@ function fn4() {
                 case 1:
                     if (!(i < 1))
                         return [3 /*break*/, 4];
-                    return [5 /*yield**/, _loop_4(i)];
+                    return [5 /*yield**/, __values(_loop_4(i))];
                 case 2:
                     state_2 = _a.sent();
                     if (typeof state_2 === "object")

@@ -30,9 +30,17 @@ var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 
 
 //// [destructuringParameterProperties2.js]
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
 var C1 = (function () {
     function C1(k, _a) {
-        var a = _a[0], b = _a[1], c = _a[2];
+        var _b = __read(_a, 3), a = _b[0], b = _b[1], c = _b[2];
         this.k = k;
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
             this.a = a || k;

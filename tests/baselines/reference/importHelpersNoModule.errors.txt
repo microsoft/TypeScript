@@ -1,9 +1,10 @@
-error TS2307: Cannot find module 'tslib'.
+tests/cases/compiler/external.ts(1,1): error TS2307: Cannot find module 'tslib'.
 
 
-!!! error TS2307: Cannot find module 'tslib'.
-==== tests/cases/compiler/external.ts (0 errors) ====
+==== tests/cases/compiler/external.ts (1 errors) ====
     export class A { }
+    ~~~~~~
+!!! error TS2307: Cannot find module 'tslib'.
     export class B extends A { }
     
     declare var dec: any;

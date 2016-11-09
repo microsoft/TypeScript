@@ -30,15 +30,23 @@ c3 = new C3({x: 0, "y": "y", z: true});
 var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];
 
 //// [destructuringParameterProperties1.js]
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
 var C1 = (function () {
     function C1(_a) {
-        var x = _a[0], y = _a[1], z = _a[2];
+        var _b = __read(_a, 3), x = _b[0], y = _b[1], z = _b[2];
     }
     return C1;
 }());
 var C2 = (function () {
     function C2(_a) {
-        var x = _a[0], y = _a[1], z = _a[2];
+        var _b = __read(_a, 3), x = _b[0], y = _b[1], z = _b[2];
     }
     return C2;
 }());

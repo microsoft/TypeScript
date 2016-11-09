@@ -25,12 +25,30 @@ fold(
 
 //// [typeInferenceFBoundedTypeParams.js]
 // Example from #6037
+var __values = (this && this.__values) || function (o) {
+    var i = o.__iterator__ || 0, d;
+    return i ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } };
+};
+var __step = (this && this.__step) || function (r) {
+    return !(r.done || (r.done = (r.result = r.iterator.next()).done));
+};
+var __close = (this && this.__close) || function (r) {
+    var m = !(r && r.done) && r.iterator["return"];
+    if (m) return m.call(r.iterator);
+};
 function fold(values, result, fold) {
-    for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
-        var value = values_1[_i];
-        result = fold(result, value);
+    try {
+        for (var values_1 = { iterator: __values(values) }; __step(values_1);) {
+            var value = values_1.result.value;
+            result = fold(result, value);
+        }
+    }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try { __close(values_1); } finally { if (e_1) throw e_1.error; }
     }
     return result;
+    var e_1;
 }
 function append(values, value) {
     values.push(value);

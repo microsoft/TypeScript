@@ -72,9 +72,17 @@ function e0({x: [number, number, number]}) { }  // error, duplicate identifier;
 // A parameter declaration may specify either an identifier or a binding pattern.
 // The identifiers specified in parameter declarations and binding patterns
 // in a parameter list must be unique within that parameter list.
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
 // If the declaration includes a type annotation, the parameter is of that type
 function a0(_a) {
-    var a = _a[0], b = _a[1], c = _a[2][0][0];
+    var _b = __read(_a, 3), a = _b[0], b = _b[1], _c = __read(_b[2], 1), _d = __read(_c[0], 1), c = _d[0];
 }
 a0([1, "string", [["world"]]]); // Error
 a0([1, 2, [["world"]], "string"]); // Error
@@ -83,10 +91,10 @@ function b1(z, o) {
     if (o === void 0) { o = { x: 0, y: undefined }; }
 }
 function b2(_a) {
-    var _b = _a === void 0 ? [undefined, null, undefined] : _a, a = _b[0], z = _b[1], y = _b[2];
+    var _b = __read(_a === void 0 ? [undefined, null, undefined] : _a, 3), a = _b[0], z = _b[1], y = _b[2];
 }
 function b3(_a) {
-    var _b = _a === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _a, a = _b[0][0], b = _b[1], _c = _b[2][0], c = _c[0], d = _c[1];
+    var _b = __read(_a === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _a, 3), _c = __read(_b[0], 1), a = _c[0], b = _b[1], _d = __read(_b[2], 1), _e = __read(_d[0], 2), c = _e[0], d = _e[1];
 }
 b1("string", { x: "string", y: true }); // Error
 // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
@@ -103,13 +111,13 @@ function c3(_a) {
     var b = (_a === void 0 ? { b: "hello" } : _a).b;
 }
 function c4(_a, z) {
-    var z = _a[0];
+    var _b = __read(_a, 1), z = _b[0];
 } // Error Duplicate identifier
 function c5(_a) {
-    var a = _a[0], b = _a[1], c = _a[2][0][0];
+    var _b = __read(_a, 3), a = _b[0], b = _b[1], _c = __read(_b[2], 1), _d = __read(_c[0], 1), c = _d[0];
 }
 function c6(_a) {
-    var a = _a[0], b = _a[1], _b = _a[2][0][0], c = _b === void 0 ? 1 : _b;
+    var _b = __read(_a, 3), a = _b[0], b = _b[1], _c = __read(_b[2], 1), _d = __read(_c[0], 1), _e = _d[0], c = _e === void 0 ? 1 : _e;
 }
 c0({ z: 1 }); // Error, implied type is { z: {x: any, y: {j: any}} }
 c1({}); // Error, implied type is {z:number}?
@@ -122,7 +130,7 @@ c6([1, 2, [["string"]]]); // Error, implied type is [any, any, [[number]]]  // U
 // or by including an initializer.  Initializers (including binding property or element initializers) are
 // permitted only when the parameter list occurs in conjunction with a function body
 function d1(_a) {
-    var a = _a[0], b = _a[1], c = _a[2];
+    var _b = __read(_a, 3), a = _b[0], b = _b[1], c = _b[2];
 } // Error, binding pattern can't be optional in implementation signature
 function d2(_a) {
     var x = _a.x, y = _a.y, z = _a.z;
@@ -131,13 +139,13 @@ var C4 = (function () {
     function C4() {
     }
     C4.prototype.d3 = function (_a) {
-        var a = _a[0], b = _a[1], c = _a[2];
+        var _b = __read(_a, 3), a = _b[0], b = _b[1], c = _b[2];
     }; // Error, binding pattern can't be optional in implementation signature
     C4.prototype.d4 = function (_a) {
         var x = _a.x, y = _a.y, c = _a.c;
     };
     C4.prototype.e0 = function (_a) {
-        var a = _a[0], b = _a[1], q = _a[2];
+        var _b = __read(_a, 3), a = _b[0], b = _b[1], q = _b[2];
     };
     return C4;
 }());
@@ -145,5 +153,5 @@ var C4 = (function () {
 // as such annotations would conflict with the already established meaning of colons in object literals.
 // Type annotations must instead be written on the top- level parameter declaration
 function e0(_a) {
-    var _b = _a.x, number = _b[0], number = _b[1], number = _b[2];
+    var _b = __read(_a.x, 3), number = _b[0], number = _b[1], number = _b[2];
 } // error, duplicate identifier;

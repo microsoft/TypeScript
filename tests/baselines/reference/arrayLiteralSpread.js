@@ -24,23 +24,35 @@ function f2() {
 
 
 //// [arrayLiteralSpread.js]
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 function f0() {
     var a = [1, 2, 3];
-    var a1 = a.slice();
-    var a2 = [1].concat(a);
-    var a3 = [1, 2].concat(a);
-    var a4 = a.concat([1]);
-    var a5 = a.concat([1, 2]);
-    var a6 = [1, 2].concat(a, [1, 2]);
-    var a7 = [1].concat(a, [2], a);
-    var a8 = a.concat(a, a);
+    var a1 = __spread(a);
+    var a2 = __spread([1], a);
+    var a3 = __spread([1, 2], a);
+    var a4 = __spread(a, [1]);
+    var a5 = __spread(a, [1, 2]);
+    var a6 = __spread([1, 2], a, [1, 2]);
+    var a7 = __spread([1], a, [2], a);
+    var a8 = __spread(a, a, a);
 }
 function f1() {
     var a = [1, 2, 3];
-    var b = ["hello"].concat(a, [true]);
+    var b = __spread(["hello"], a, [true]);
     var b;
 }
 function f2() {
-    var a = [];
-    var b = [5];
+    var a = __spread([]);
+    var b = __spread([5]);
 }

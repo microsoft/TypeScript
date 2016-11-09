@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldExpression19_es6.ts ===
+function*foo() {
+>foo : () => PseudoIterableIterator<any>
+
+  function bar() {
+>bar : () => void
+
+    function* quux() {
+>quux : () => PseudoIterableIterator<() => PseudoIterableIterator<any>>
+
+      yield(foo);
+>yield(foo) : any
+>(foo) : () => PseudoIterableIterator<any>
+>foo : () => PseudoIterableIterator<any>
+    }
+  }
+}

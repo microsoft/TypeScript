@@ -70,31 +70,43 @@ var [c14, c15, c16] = [1, 2, "string"];
  * AssignmentRestElement:
  *      ...   LeftHandSideExpression
  */
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 // In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
 // An expression of type S is considered assignable to an assignment target V if one of the following is true
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is the type Any, or
-var a0 = undefined[0], a1 = undefined[1];
-var _a = undefined[0], a2 = _a === void 0 ? false : _a, _b = undefined[1], a3 = _b === void 0 ? 1 : _b;
+var _a = __read(undefined, 2), a0 = _a[0], a1 = _a[1];
+var _b = __read(undefined, 2), _c = _b[0], a2 = _c === void 0 ? false : _c, _d = _b[1], a3 = _d === void 0 ? 1 : _d;
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
 //        where N is the numeric index of E in the array assignment pattern, or
-var _c = [2, 3, 4], b0 = _c[0], b1 = _c[1], b2 = _c[2];
-var _d = [1, 2, "string"], b3 = _d[0], b4 = _d[1], b5 = _d[2];
+var _e = [2, 3, 4], b0 = _e[0], b1 = _e[1], b2 = _e[2];
+var _f = [1, 2, "string"], b3 = _f[0], b4 = _f[1], b5 = _f[2];
 function foo() {
     return [1, 2, 3];
 }
-var _e = foo(), b6 = _e[0], b7 = _e[1];
-var b8 = foo().slice(0);
+var _g = __read(foo(), 2), b6 = _g[0], b7 = _g[1];
+var _h = __read(foo()), b8 = _h.slice(0);
 //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
 var temp = [1, 2, 3];
-var _f = temp.slice(), c0 = _f[0], c1 = _f[1];
+var _j = __read(__spread(temp), 2), c0 = _j[0], c1 = _j[1];
 var c2 = [][0];
-var _g = [[[]], [[[[]]]]], c3 = _g[0][0][0], c4 = _g[1][0][0][0][0];
-var _h = [[1], true], c5 = _h[0][0], c6 = _h[1];
-var _j = [1, 2, 3], c7 = _j[1];
-var _k = [1, 2, 3, 4], c8 = _k[3];
-var _l = [1, 2, 3, 4], c9 = _l[3];
-var _m = [1, 2, 3, 4, "hello"], c10 = _m.slice(3);
-var _o = [1, 2, "string"], c11 = _o[0], c12 = _o[1], c13 = _o.slice(2);
-var _p = [1, 2, "string"], c14 = _p[0], c15 = _p[1], c16 = _p[2];
+var _k = [[[]], [[[[]]]]], _l = __read(_k[0], 1), _m = __read(_l[0], 1), c3 = _m[0], _o = __read(_k[1], 1), _p = __read(_o[0], 1), _q = __read(_p[0], 1), _r = __read(_q[0], 1), c4 = _r[0];
+var _s = [[1], true], _t = __read(_s[0], 1), c5 = _t[0], c6 = _s[1];
+var _u = [1, 2, 3], c7 = _u[1];
+var _v = [1, 2, 3, 4], c8 = _v[3];
+var _w = [1, 2, 3, 4], c9 = _w[3];
+var _x = [1, 2, 3, 4, "hello"], c10 = _x.slice(3);
+var _y = [1, 2, "string"], c11 = _y[0], c12 = _y[1], c13 = _y.slice(2);
+var _z = [1, 2, "string"], c14 = _z[0], c15 = _z[1], c16 = _z[2];

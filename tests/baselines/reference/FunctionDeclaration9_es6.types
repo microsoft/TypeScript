@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration9_es6.ts ===
+function * foo() {
+>foo : () => PseudoIterableIterator<any>
+
+  var v = { [yield]: foo }
+>v : { [x: number]: () => PseudoIterableIterator<any>; }
+>{ [yield]: foo } : { [x: number]: () => PseudoIterableIterator<any>; }
+>yield : any
+>foo : () => PseudoIterableIterator<any>
+}

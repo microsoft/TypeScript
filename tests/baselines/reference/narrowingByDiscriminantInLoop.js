@@ -88,25 +88,50 @@ function f2(x: A | B) {
 
 //// [narrowingByDiscriminantInLoop.js]
 // Repro from #9977
+var __values = (this && this.__values) || function (o) {
+    var i = o.__iterator__ || 0, d;
+    return i ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } };
+};
+var __step = (this && this.__step) || function (r) {
+    return !(r.done || (r.done = (r.result = r.iterator.next()).done));
+};
+var __close = (this && this.__close) || function (r) {
+    var m = !(r && r.done) && r.iterator["return"];
+    if (m) return m.call(r.iterator);
+};
 function insertInterface(callbackType) {
-    for (var _i = 0, _a = callbackType.members; _i < _a.length; _i++) {
-        var memberType = _a[_i];
-        if (memberType.type === "const") {
-            memberType.idlType; // string
-        }
-        else if (memberType.type === "operation") {
-            memberType.idlType.origin; // string
-            memberType.idlType;
+    try {
+        for (var iterator_1 = { iterator: __values(callbackType.members) }; __step(iterator_1);) {
+            var memberType = iterator_1.result.value;
+            if (memberType.type === "const") {
+                memberType.idlType; // string
+            }
+            else if (memberType.type === "operation") {
+                memberType.idlType.origin; // string
+                memberType.idlType;
+            }
         }
     }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try { __close(iterator_1); } finally { if (e_1) throw e_1.error; }
+    }
+    var e_1;
 }
 function insertInterface2(callbackType) {
-    for (var _i = 0, _a = callbackType.members; _i < _a.length; _i++) {
-        var memberType = _a[_i];
-        if (memberType.type === "operation") {
-            memberType.idlType.origin; // string
+    try {
+        for (var iterator_2 = { iterator: __values(callbackType.members) }; __step(iterator_2);) {
+            var memberType = iterator_2.result.value;
+            if (memberType.type === "operation") {
+                memberType.idlType.origin; // string
+            }
         }
     }
+    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+    finally {
+        try { __close(iterator_2); } finally { if (e_2) throw e_2.error; }
+    }
+    var e_2;
 }
 function foo(memberType) {
     if (memberType.type === "const") {

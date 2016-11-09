@@ -1,4 +1,4 @@
-tests/cases/compiler/argumentsObjectIterator01_ES5.ts(4,21): error TS2495: Type 'IArguments' is not an array type or a string type.
+tests/cases/compiler/argumentsObjectIterator01_ES5.ts(4,21): error TS2495: Type 'IArguments' is not an array type or a string type or does not have an '__iterator__()' method that returns an iterator.
 
 
 ==== tests/cases/compiler/argumentsObjectIterator01_ES5.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/argumentsObjectIterator01_ES5.ts(4,21): error TS2495: Type 
         let result = [];
         for (let arg of arguments) {
                         ~~~~~~~~~
-!!! error TS2495: Type 'IArguments' is not an array type or a string type.
+!!! error TS2495: Type 'IArguments' is not an array type or a string type or does not have an '__iterator__()' method that returns an iterator.
             result.push(arg + arg);
         }
         return <[any, any, any]>result;
