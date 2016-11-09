@@ -301,7 +301,7 @@ namespace ts.server {
             return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
         }
 
-        getFileNames() {
+        getFileNames(excludeFilesFromExternalLibraries?: boolean) {
             if (!this.program) {
                 return [];
             }
@@ -317,8 +317,14 @@ namespace ts.server {
                 }
                 return rootFiles;
             }
-            const sourceFiles = this.program.getSourceFiles();
-            return sourceFiles.map(sourceFile => asNormalizedPath(sourceFile.fileName));
+            const result: NormalizedPath[] = [];
+            for (const f of this.program.getSourceFiles()) {
+                if (excludeFilesFromExternalLibraries && this.program.isSourceFileFromExternalLibrary(f)) {
+                    continue;
+                }
+                result.push(asNormalizedPath(f.fileName));
+            }
+            return result;
         }
 
         getAllEmittableFiles() {

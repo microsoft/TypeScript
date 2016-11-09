@@ -2229,14 +2229,8 @@ namespace ts {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
-                    else if (!(flags & TypeFormatFlags.InTypeAlias) && ((getObjectFlags(type) & ObjectFlags.Anonymous && !(<AnonymousType>type).target) || type.flags & TypeFlags.UnionOrIntersection) && type.aliasSymbol &&
+                    else if (!(flags & TypeFormatFlags.InTypeAlias) && (getObjectFlags(type) & ObjectFlags.Anonymous || type.flags & TypeFlags.UnionOrIntersection) && type.aliasSymbol &&
                         isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
-                        // We emit inferred type as type-alias at the current localtion if all the following is true
-                        //      the input type is has alias symbol that is accessible
-                        //      the input type is a union, intersection or anonymous type that is fully instantiated (if not we want to keep dive into)
-                        //          e.g.: export type Bar<X, Y> = () => [X, Y];
-                        //                export type Foo<Y> = Bar<any, Y>;
-                        //                export const y = (x: Foo<string>) => 1  // we want to emit as ...x: () => [any, string])
                         const typeArguments = type.aliasTypeArguments;
                         writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
                     }
@@ -4164,8 +4158,8 @@ namespace ts {
             else {
                 mapper = createTypeMapper(typeParameters, typeArguments);
                 members = createInstantiatedSymbolTable(source.declaredProperties, mapper, /*mappingThisOnly*/ typeParameters.length === 1);
-                callSignatures = instantiateList(source.declaredCallSignatures, mapper, instantiateSignature);
-                constructSignatures = instantiateList(source.declaredConstructSignatures, mapper, instantiateSignature);
+                callSignatures = instantiateSignatures(source.declaredCallSignatures, mapper);
+                constructSignatures = instantiateSignatures(source.declaredConstructSignatures, mapper);
                 stringIndexInfo = instantiateIndexInfo(source.declaredStringIndexInfo, mapper);
                 numberIndexInfo = instantiateIndexInfo(source.declaredNumberIndexInfo, mapper);
             }
@@ -4232,7 +4226,7 @@ namespace ts {
             for (const baseSig of baseSignatures) {
                 const typeParamCount = baseSig.typeParameters ? baseSig.typeParameters.length : 0;
                 if (typeParamCount === typeArgCount) {
-                    const sig = typeParamCount ? getSignatureInstantiation(baseSig, typeArguments) : cloneSignature(baseSig);
+                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, typeArguments) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
                     result.push(sig);
@@ -4363,8 +4357,8 @@ namespace ts {
             const symbol = type.symbol;
             if (type.target) {
                 const members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper, /*mappingThisOnly*/ false);
-                const callSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper, instantiateSignature);
-                const constructSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper, instantiateSignature);
+                const callSignatures = instantiateSignatures(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper);
+                const constructSignatures = instantiateSignatures(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper);
                 const stringIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.String), type.mapper);
                 const numberIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.Number), type.mapper);
                 setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
@@ -4982,6 +4976,12 @@ namespace ts {
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
+            const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
+            const id = getTypeListId(typeArguments);
+            return instantiations[id] || (instantiations[id] = createSignatureInstantiation(signature, typeArguments));
+        }
+
+        function createSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
             return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
         }
 
@@ -6037,6 +6037,14 @@ namespace ts {
             return items;
         }
 
+        function instantiateTypes(types: Type[], mapper: TypeMapper) {
+            return instantiateList(types, mapper, instantiateType);
+        }
+
+        function instantiateSignatures(signatures: Signature[], mapper: TypeMapper) {
+            return instantiateList(signatures, mapper, instantiateSignature);
+        }
+
         function createUnaryTypeMapper(source: Type, target: Type): TypeMapper {
             return t => t === source ? target : t;
         }
@@ -6063,7 +6071,6 @@ namespace ts {
                     count == 2 ? createBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
                         createArrayTypeMapper(sources, targets);
             mapper.mappedTypes = sources;
-            mapper.targetTypes = targets;
             return mapper;
         }
 
@@ -6190,7 +6197,7 @@ namespace ts {
             result.target = type;
             result.mapper = mapper;
             result.aliasSymbol = type.aliasSymbol;
-            result.aliasTypeArguments = mapper.targetTypes;
+            result.aliasTypeArguments = instantiateTypes(type.aliasTypeArguments, mapper);
             mapper.instantiations[type.id] = result;
             return result;
         }
@@ -6266,14 +6273,14 @@ namespace ts {
                             instantiateAnonymousType(<AnonymousType>type, mapper) : type;
                     }
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
-                        return createTypeReference((<TypeReference>type).target, instantiateList((<TypeReference>type).typeArguments, mapper, instantiateType));
+                        return createTypeReference((<TypeReference>type).target, instantiateTypes((<TypeReference>type).typeArguments, mapper));
                     }
                 }
                 if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
-                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*subtypeReduction*/ false, type.aliasSymbol, mapper.targetTypes);
+                    return getUnionType(instantiateTypes((<UnionType>type).types, mapper), /*subtypeReduction*/ false, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
                 }
                 if (type.flags & TypeFlags.Intersection) {
-                    return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType), type.aliasSymbol, mapper.targetTypes);
+                    return getIntersectionType(instantiateTypes((<IntersectionType>type).types, mapper), type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
                 }
                 if (type.flags & TypeFlags.Index) {
                     return getIndexType(instantiateType((<IndexType>type).type, mapper));
