@@ -6763,7 +6763,7 @@ namespace ts {
                     target = (<LiteralType>target).regularType;
                 }
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
-                if (source === target) return Ternary.True;
+                if (source === target || typeToString(source) === typeToString(target)) return Ternary.True;
 
                 if (relation === identityRelation) {
                     return isIdenticalTo(source, target);
