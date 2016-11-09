@@ -491,7 +491,7 @@ namespace Harness.LanguageService {
         getAvailableCodeRefactoringsAtPosition(): ts.CodeRefactoring[] {
             throw new Error("getAvailableCodeRefactoringsAtPosition not supported on the shim.");
         }
-        getChangesForCodeRefactoringAtPosition(): ts.CodeAction[] {
+        getChangesForCodeRefactoringAtPosition(): ts.FileTextChanges[] {
             throw new Error("getChangesForCodeRefactoringAtPosition not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {

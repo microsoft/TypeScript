@@ -419,7 +419,7 @@ namespace ts.server {
         }
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[] {
-            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file: fileName,  includeLinePosition: true };
+            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file: fileName, includeLinePosition: true };
 
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest>(CommandNames.SyntacticDiagnosticsSync, args);
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse>(request);
@@ -709,7 +709,7 @@ namespace ts.server {
             return response.body;
         }
 
-        getChangesForCodeRefactoringAtPosition(fileName: string, start: number, end: number, refactoringId: string, options: any, _serviceInstance: LanguageService): CodeAction[] {
+        getChangesForCodeRefactoringAtPosition(fileName: string, start: number, end: number, refactoringId: string, options: any, _serviceInstance: LanguageService): FileTextChanges[] {
             const startLineOffset = this.positionToOneBasedLineOffset(fileName, start);
             const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
 
@@ -726,7 +726,10 @@ namespace ts.server {
             const request = this.processRequest<protocol.ApplyCodeRefactoringRequest>(CommandNames.ApplyCodeRefactoring, args);
             const response = this.processResponse<protocol.ApplyCodeRefactoringResponse>(request);
 
-            return response.body.map(entry => this.convertCodeActions(entry, fileName));
+            return response.body.map(entry => ({
+                fileName: entry.fileName,
+                textChanges: entry.textChanges.map(codeEdit => this.convertCodeEditToTextChange(codeEdit, fileName))
+            }));
         }
 
         convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {
@@ -734,12 +737,12 @@ namespace ts.server {
                 description: entry.description,
                 changes: entry.changes.map(change => ({
                     fileName: change.fileName,
-                    textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
+                    textChanges: change.textChanges.map(textChange => this.convertCodeEditToTextChange(textChange, fileName))
                 }))
             };
         }
 
-        convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): ts.TextChange {
+        convertCodeEditToTextChange(change: protocol.CodeEdit, fileName: string): ts.TextChange {
             const start = this.lineOffsetToPosition(fileName, change.start);
             const end = this.lineOffsetToPosition(fileName, change.end);
 

@@ -28,7 +28,7 @@ namespace ts.coderefactoring {
                 refactoringId: Diagnostics.Inline_temporary_variable.code.toString()
             }];
         },
-        getChangesForRefactoring: (context: CodeRefactoringContext): CodeAction[] => {
+        getChangesForRefactoring: (context: CodeRefactoringContext): FileTextChanges[] => {
             const sourceFile = context.sourceFile;
             const identifier = getTokenAtPosition(sourceFile, context.span.start);
             let variableDeclaration: VariableDeclaration;
@@ -119,10 +119,7 @@ namespace ts.coderefactoring {
                     });
                 }
 
-                return [{
-                    description: getLocaleSpecificMessage(Diagnostics.Inline_temporary_variable),
-                    changes: fileTextChanges
-                }];
+                return fileTextChanges;
             }
         }
     });

@@ -2076,14 +2076,9 @@ namespace FourSlash {
             const start = markers[0].position;
             const end = markers[1] ? markers[1].position : markers[0].position;
 
-            const actualRefactorings = this.languageService.getChangesForCodeRefactoringAtPosition(sourceFileName, start, end, refactoringId, /*options*/ undefined, this.languageService);
-            if (!actualRefactorings || actualRefactorings.length == 0) {
+            const textChanges = this.languageService.getChangesForCodeRefactoringAtPosition(sourceFileName, start, end, refactoringId, /*options*/ undefined, this.languageService);
+            if (!textChanges || textChanges.length == 0) {
                 this.raiseError("No code refactorings found.");
-            }
-
-            // for now only assume a single result for each refactoring
-            if (actualRefactorings.length > 1) {
-                this.raiseError("More than 1 refactoring returned.");
             }
 
             // for each file:
@@ -2091,7 +2086,7 @@ namespace FourSlash {
             // * check if the new contents match the expected contents
             // * if we applied changes, but don't check the content raise an error
             ts.forEach(this.testData.files, file => {
-                const refactorForFile = ts.find(actualRefactorings[0].changes, change => {
+                const refactorForFile = ts.find(textChanges, change => {
                     return change.fileName == file.fileName;
                 });
 

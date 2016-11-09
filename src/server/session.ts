@@ -1289,7 +1289,7 @@ namespace ts.server {
             }
         }
 
-        private getChangesForRefactoring(args: protocol.ApplyCodeRefactoringRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
+        private getChangesForRefactoring(args: protocol.ApplyCodeRefactoringRequestArgs, simplifiedResult: boolean): protocol.FileCodeEdits[] | FileTextChanges[] {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
@@ -1297,16 +1297,19 @@ namespace ts.server {
             const endPosition = getEndPosition();
             const languageService = project.getLanguageService();
 
-            const codeActions = languageService.getChangesForCodeRefactoringAtPosition(file, startPosition, endPosition, args.refactoringId, args.input, languageService);
-            if (!codeActions) {
+            const fileTextChanges = languageService.getChangesForCodeRefactoringAtPosition(file, startPosition, endPosition, args.refactoringId, args.input, languageService);
+            if (!fileTextChanges) {
                 return undefined;
             }
 
             if (simplifiedResult) {
-                return codeActions.map(codeAction => this.mapCodeAction(codeAction, scriptInfo));
+                return fileTextChanges.map(fileTextChange => ({
+                    fileName: fileTextChange.fileName,
+                    textChanges: fileTextChange.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
+                }));
             }
             else {
-                return codeActions;
+                return fileTextChanges;
             }
 
             function getStartPosition() {

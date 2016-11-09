@@ -3,7 +3,7 @@ namespace ts {
     export interface CodeRefactoringFactory {
         refactoringId: string;
         getAvailableRefactorings(context: CodeRefactoringContext): CodeRefactoring[];
-        getChangesForRefactoring(context: CodeRefactoringContext): CodeAction[];
+        getChangesForRefactoring(context: CodeRefactoringContext): FileTextChanges[];
     }
 
     export interface CodeRefactoringContext extends CodeChangeContext {
@@ -38,7 +38,7 @@ namespace ts {
             return allRefactorings;
         }
 
-        export function getTextChangesForRefactoring(context: CodeRefactoringContext): CodeAction[] {
+        export function getTextChangesForRefactoring(context: CodeRefactoringContext): FileTextChanges[] {
             const factory = refactorings[context.refactoringId];
             return factory.getChangesForRefactoring(context);
         }

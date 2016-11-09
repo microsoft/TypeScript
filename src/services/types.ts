@@ -244,7 +244,7 @@
 
         getAvailableCodeRefactoringsAtPosition(fileName: string, start: number, end: number, serviceInstance: LanguageService): CodeRefactoring[];
 
-        getChangesForCodeRefactoringAtPosition(fileName: string, start: number, end: number, refactoringId: string, options: any, serviceInstance: LanguageService): CodeAction[];
+        getChangesForCodeRefactoringAtPosition(fileName: string, start: number, end: number, refactoringId: string, options: any, serviceInstance: LanguageService): FileTextChanges[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 

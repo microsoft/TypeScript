@@ -401,45 +401,45 @@ namespace ts.server.protocol {
     }
 
     export interface CodeChangeRequestArgs extends FileRequestArgs {
-      /**
-        * The line number for the request (1-based).
-        */
-      startLine: number;
+        /**
+          * The line number for the request (1-based).
+          */
+        startLine: number;
 
-      /**
-        * The character offset (on the line) for the request (1-based).
-        */
-      startOffset: number;
+        /**
+          * The character offset (on the line) for the request (1-based).
+          */
+        startOffset: number;
 
-      /**
-       * Position (can be specified instead of line/offset pair) 
-       */
-      /* @internal */
-      startPosition?: number;
+        /**
+         * Position (can be specified instead of line/offset pair) 
+         */
+        /* @internal */
+        startPosition?: number;
 
-      /**
-        * The line number for the request (1-based).
-        */
-      endLine: number;
+        /**
+          * The line number for the request (1-based).
+          */
+        endLine: number;
 
-      /**
-        * The character offset (on the line) for the request (1-based).
-        */
-      endOffset: number;
+        /**
+          * The character offset (on the line) for the request (1-based).
+          */
+        endOffset: number;
 
-      /**
-       * Position (can be specified instead of line/offset pair) 
-       */
-      /* @internal */
-      endPosition?: number;
+        /**
+         * Position (can be specified instead of line/offset pair) 
+         */
+        /* @internal */
+        endPosition?: number;
     }
 
     /**
       * Request for the available code refactorings at a specific position.
       */
     export interface AvailableCodeRefactoringsRequest extends Request {
-      command: CommandTypes.GetCodeRefactorings;
-      arguments: AvailableCodeRefactoringsRequestArgs;
+        command: CommandTypes.GetCodeRefactorings;
+        arguments: AvailableCodeRefactoringsRequestArgs;
     }
 
     /**
@@ -469,16 +469,16 @@ namespace ts.server.protocol {
         input?: any;
     }
 
-    export interface ApplyCodeRefactoringResponse extends CodeFixResponse {
-
+    export interface ApplyCodeRefactoringResponse extends Response {
+        body?: FileCodeEdits[];
     }
 
     /**
       * Request for the available codefixes at a specific position.
       */
     export interface CodeFixRequest extends Request {
-      command: CommandTypes.GetCodeFixes;
-      arguments: CodeFixRequestArgs;
+        command: CommandTypes.GetCodeFixes;
+        arguments: CodeFixRequestArgs;
     }
 
     export interface CodeFixResponse extends Response {
@@ -490,10 +490,10 @@ namespace ts.server.protocol {
       * Instances of this interface specify errorcodes for a specific location in a sourcefile.
       */
     export interface CodeFixRequestArgs extends CodeChangeRequestArgs {
-      /**
-        * Errorcodes we want to get the fixes for.
-        */
-      errorCodes?: number[];
+        /**
+          * Errorcodes we want to get the fixes for.
+          */
+        errorCodes?: number[];
     }
 
     /**

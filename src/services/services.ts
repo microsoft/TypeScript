@@ -1710,7 +1710,7 @@ namespace ts {
             return coderefactoring.getAvailableCodeRefactorings(context);
         }
 
-        function getChangesForCodeRefactoringAtPosition(fileName: string, start: number, end: number, refactoringId: string, options: any, serviceInstance: LanguageService): CodeAction[] {
+        function getChangesForCodeRefactoringAtPosition(fileName: string, start: number, end: number, refactoringId: string, options: any, serviceInstance: LanguageService): FileTextChanges[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = { start, length: end - start };
