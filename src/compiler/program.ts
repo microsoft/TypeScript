@@ -1140,9 +1140,14 @@ namespace ts {
             if (options.importHelpers
                 && (options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
-                const externalHelpersModuleReference = <StringLiteral>createNode(SyntaxKind.StringLiteral);
+                // synthesize 'import "tslib"' declaration
+                const externalHelpersModuleReference = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
                 externalHelpersModuleReference.text = externalHelpersModuleNameText;
-                externalHelpersModuleReference.parent = file;
+                const importDecl = createSynthesizedNode(SyntaxKind.ImportDeclaration);
+
+                importDecl.parent = file;
+                externalHelpersModuleReference.parent = importDecl;
+
                 imports = [externalHelpersModuleReference];
             }
 
