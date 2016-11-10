@@ -1563,6 +1563,7 @@ namespace ts {
 
     export interface ForOfStatement extends IterationStatement {
         kind: SyntaxKind.ForOfStatement;
+        awaitKeyword?: Token<SyntaxKind.AwaitKeyword>;
         initializer: ForInitializer;
         expression: Expression;
     }

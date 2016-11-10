@@ -13531,7 +13531,7 @@ namespace ts {
                     checkAsyncFunctionReturnType(node) : // Async function
                     getTypeFromTypeNode(node.type)); // AsyncGenerator function, Generator function, or normal function
 
-            if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
+            if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
                 // return is not necessary in the body of generators
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
@@ -20055,26 +20055,28 @@ namespace ts {
             getGlobalTemplateStringsArrayType = memoize(() => getGlobalType("TemplateStringsArray"));
 
             if (languageVersion >= ScriptTarget.ES2017) {
-                getGlobalAsyncIteratorType = memoize(() => <GenericType>getGlobalType("AsyncIterator", /*arity*/ 1));
-                getGlobalAsyncIterableType = memoize(() => <GenericType>getGlobalType("AsyncIterable", /*arity*/ 1));
-                getGlobalAsyncIterableIteratorType = memoize(() => <GenericType>getGlobalType("AsyncIterableIterator", /*arity*/ 1));
+                getGlobalAsyncIteratorType = memoize(() => getGlobalType("AsyncIterator", /*arity*/ 1));
+                getGlobalAsyncIterableType = memoize(() => getGlobalType("AsyncIterable", /*arity*/ 1));
+                getGlobalAsyncIterableIteratorType = memoize(() => getGlobalType("AsyncIterableIterator", /*arity*/ 1));
             }
             else {
-                getGlobalAsyncIteratorType = memoize(() => emptyGenericType);
-                getGlobalAsyncIterableType = memoize(() => emptyGenericType);
-                getGlobalAsyncIterableIteratorType = memoize(() => emptyGenericType);
+                getGlobalAsyncIteratorType = memoize(() => getGlobalType("PseudoAsyncIterator", /*arity*/ 1));
+                getGlobalAsyncIterableType = memoize(() => getGlobalType("PseudoAsyncIterable", /*arity*/ 1));
+                getGlobalAsyncIterableIteratorType = memoize(() => getGlobalType("PseudoAsyncIterableIterator", /*arity*/ 1));
             }
 
             if (languageVersion >= ScriptTarget.ES2015) {
                 getGlobalESSymbolType = memoize(() => getGlobalType("Symbol"));
-                getGlobalIterableType = memoize(() => <GenericType>getGlobalType("Iterable", /*arity*/ 1));
-                getGlobalIterableIteratorType = memoize(() => <GenericType>getGlobalType("IterableIterator", /*arity*/ 1));
+                getGlobalIterableType = memoize(() => getGlobalType("Iterable", /*arity*/ 1));
+                getGlobalIterableIteratorType = memoize(() => getGlobalType("IterableIterator", /*arity*/ 1));
             }
             else {
                 getGlobalESSymbolType = memoize(() => emptyObjectType);
-                getGlobalIterableType = memoize(() => <GenericType>getGlobalType("PseudoIterable", /*arity*/ 1));
-                getGlobalIterableIteratorType = memoize(() => <GenericType>getGlobalType("PseudoIterableIterator", /*arity*/ 1));
+                getGlobalIterableType = memoize(() => getGlobalType("PseudoIterable", /*arity*/ 1));
+                getGlobalIterableIteratorType = memoize(() => getGlobalType("PseudoIterableIterator", /*arity*/ 1));
             }
+
+            getGlobalIteratorType = memoize(() => getGlobalType("Iterator", /*arity*/ 1));
 
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);

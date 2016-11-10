@@ -1357,6 +1357,20 @@ interface PseudoIterableIterator<T> extends Iterator<T> {
     __iterator__(): PseudoIterableIterator<T>;
 }
 
+interface PseudoAsyncIterator<T> {
+    next(value?: any): PromiseLike<IteratorResult<T>>;
+    return?(value?: any): PromiseLike<IteratorResult<T>>;
+    throw?(e?: any): PromiseLike<IteratorResult<T>>;
+}
+
+interface PseudoAsyncIterable<T> {
+    __asyncIterator__(): PseudoAsyncIterator<T>;
+}
+
+interface PseudoAsyncIterableIterator<T> extends PseudoAsyncIterator<T> {
+    __asyncIterator__(): PseudoAsyncIterableIterator<T>;
+}
+
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;

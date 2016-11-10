@@ -3062,15 +3062,20 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.ForOfStatement:
             case SyntaxKind.StaticKeyword:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES2015;
                 break;
 
+            case SyntaxKind.ForOfStatement:
+                // This node is either ES2015 syntax or ES2017 syntax (if it is a for-await-of).
+                transformFlags |= (<ForOfStatement>node).awaitKeyword ? TransformFlags.AssertES2017 : TransformFlags.AssertES2015;
+                break;
+
             case SyntaxKind.YieldExpression:
-                // This node is ES6 syntax.
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
+                // This node is either ES2015 syntax (in a generator) or ES2017 syntax (in an async
+                // generator).
+                transformFlags |= TransformFlags.AssertES2017 | TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
                 break;
 
             case SyntaxKind.AnyKeyword:

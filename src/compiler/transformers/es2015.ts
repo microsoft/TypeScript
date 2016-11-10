@@ -1978,19 +1978,6 @@ namespace ts {
             return result;
         }
 
-        function restoreEnclosingLabels(node: Statement, enclosingLabeledStatements: LabeledStatement[]) {
-            if (enclosingLabeledStatements) {
-                for (const labeledStatement of enclosingLabeledStatements) {
-                    node = updateLabel(
-                        labeledStatement,
-                        labeledStatement.label,
-                        node
-                    );
-                }
-            }
-            return node;
-        }
-
         function visitDoStatement(node: DoStatement) {
             return convertIterationStatementBodyIfNecessary(node);
         }

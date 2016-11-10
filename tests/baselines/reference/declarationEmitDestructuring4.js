@@ -12,6 +12,14 @@ function baz4({} = { x: 10 }) { }
 
 
 //// [declarationEmitDestructuring4.js]
+var __read = (this && this.__read) || function (o, n) {
+    if (!(m = o.__iterator__)) return o;
+    var m, i = m.call(o), ar = [], r, e;
+    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    catch (error) { e = { error: error }; }
+    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    return ar;
+};
 // For an array binding pattern with empty elements,
 // we will not make any modification and will emit
 // the similar binding pattern users' have written
@@ -20,7 +28,7 @@ function baz1(_a) {
     _a = [1, 2, 3];
 }
 function baz2(_a) {
-    var _b = (_a === void 0 ? [[1, 2, 3]] : _a)[0];
+    var _b = __read(_a === void 0 ? [[1, 2, 3]] : _a, 1), _c = __read(_b[0], 0);
 }
 function baz3(_a) { }
 function baz4(_a) {

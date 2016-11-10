@@ -253,7 +253,7 @@ namespace ts {
                     createReadHelper(
                         context,
                         boundValue,
-                        isEffectiveBindingElementWithRest(elements[numElements - 1])
+                        numElements > 0 && isEffectiveBindingElementWithRest(elements[numElements - 1])
                             ? undefined
                             : numElements,
                         location
