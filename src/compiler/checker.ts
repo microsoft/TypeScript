@@ -15958,23 +15958,57 @@ namespace ts {
 
         function checkUnusedLocalsAndParameters(node: Node): void {
             if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && noUnusedIdentifiers && !isInAmbientContext(node)) {
-                for (const key in node.locals) {
-                    const local = node.locals[key];
-                    if (!local.isReferenced) {
-                        if (local.valueDeclaration && getRootDeclaration(local.valueDeclaration).kind === SyntaxKind.Parameter) {
-                            const parameter = <ParameterDeclaration>getRootDeclaration(local.valueDeclaration);
-                            if (compilerOptions.noUnusedParameters &&
-                                !isParameterPropertyDeclaration(parameter) &&
-                                !parameterIsThisKeyword(parameter)) {
-                                error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
-                            }
+                if (compilerOptions.noUnusedParameters) {
+                    checkUnusedParameterLocals(node.locals);
+                }
+
+                if (compilerOptions.noUnusedLocals) {
+                    checkUnusedLocals(node.locals);
+                }
+            }
+        }
+
+        function checkUnusedParameterLocals(locals: Map<Symbol>): void {
+            let unusedParameterLocals: Symbol[] | undefined = [];
+
+            for (const key in locals) {
+                const local = locals[key];
+                if (!isLocalParameter(local)) {
+                    continue;
+                }
+
+                const parameter = <ParameterDeclaration>getRootDeclaration(local.valueDeclaration);
+                if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter)) {
+                    if (local.isReferenced) {
+                        if (unusedParameterLocals) {
+                            unusedParameterLocals.length = 0;
                         }
-                        else if (compilerOptions.noUnusedLocals) {
-                            forEach(local.declarations, d => errorUnusedLocal(d.name || d, local.name));
-                        }
+                    } else if (unusedParameterLocals) {
+                        unusedParameterLocals.push(local);
+                    } else {
+                        unusedParameterLocals = [local];
                     }
                 }
             }
+
+            if (unusedParameterLocals) {
+                forEach(unusedParameterLocals, local => error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name));
+            }
+        }
+
+        function checkUnusedLocals(locals: Map<Symbol>): void {
+            for (const key in locals) {
+                const local = locals[key];
+                if (local.isReferenced || isLocalParameter(local)) {
+                    continue;
+                }
+
+                forEach(local.declarations, d => errorUnusedLocal(d.name || d, local.name));
+            }
+        }
+
+        function isLocalParameter(local: Symbol): boolean {
+            return local.valueDeclaration && getRootDeclaration(local.valueDeclaration).kind === SyntaxKind.Parameter;
         }
 
         function errorUnusedLocal(node: Node, name: string) {
