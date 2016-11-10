@@ -18,6 +18,4 @@ function bar() {
 declare type Foo<T> = {
     foo<U>(): Foo<U>;
 };
-declare function bar(): {
-    foo<U>(): any;
-};
+declare function bar(): Foo<number>;

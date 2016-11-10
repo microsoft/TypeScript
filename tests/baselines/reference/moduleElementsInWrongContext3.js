@@ -47,9 +47,8 @@ var P;
             }
             return C;
         }());
-        P.C = C;
-        function bee() { }
-        P.bee = bee;
+        export default C;
+        export function bee() { }
         import I2 = require("foo");
         import * as Foo from "ambient";
         import bar from "ambient";

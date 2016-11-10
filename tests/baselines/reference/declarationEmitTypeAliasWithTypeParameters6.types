@@ -6,7 +6,7 @@ type Foo<T, Y> = {
 >Y : Y
 
     foo<U, J>(): Foo<U, J>
->foo : <U, J>() => { foo<U, J>(): any; }
+>foo : <U, J>() => Foo<U, J>
 >U : U
 >J : J
 >Foo : Foo<T, Y>
@@ -15,7 +15,7 @@ type Foo<T, Y> = {
 
 };
 type SubFoo<R, S> = Foo<S, R>;
->SubFoo : { foo<U, J>(): any; }
+>SubFoo : Foo<S, R>
 >R : R
 >S : S
 >Foo : Foo<T, Y>
@@ -23,11 +23,11 @@ type SubFoo<R, S> = Foo<S, R>;
 >R : R
 
 function foo() {
->foo : () => { foo<U, J>(): any; }
+>foo : () => Foo<string, number>
 
     return {} as SubFoo<number, string>;
->{} as SubFoo<number, string> : { foo<U, J>(): any; }
+>{} as SubFoo<number, string> : Foo<string, number>
 >{} : {}
->SubFoo : { foo<U, J>(): any; }
+>SubFoo : Foo<S, R>
 }
 

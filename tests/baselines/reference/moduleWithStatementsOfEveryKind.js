@@ -151,11 +151,11 @@ var Y;
             return A;
         }());
     })(Module = Y.Module || (Y.Module = {}));
+    var Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
-    })(Y.Color || (Y.Color = {}));
-    var Color = Y.Color;
+    })(Color = Y.Color || (Y.Color = {}));
     Y.x = 12;
     function F(s) {
         return 2;

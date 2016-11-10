@@ -1590,7 +1590,9 @@ namespace ts.Completions {
                 if (m.kind !== SyntaxKind.PropertyAssignment &&
                     m.kind !== SyntaxKind.ShorthandPropertyAssignment &&
                     m.kind !== SyntaxKind.BindingElement &&
-                    m.kind !== SyntaxKind.MethodDeclaration) {
+                    m.kind !== SyntaxKind.MethodDeclaration &&
+                    m.kind !== SyntaxKind.GetAccessor &&
+                    m.kind !== SyntaxKind.SetAccessor) {
                     continue;
                 }
 

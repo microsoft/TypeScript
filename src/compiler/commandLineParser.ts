@@ -78,6 +78,11 @@ namespace ts {
             description: Diagnostics.Specify_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
         },
         {
+            name: "jsxFactory",
+            type: "string",
+            description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },
@@ -265,6 +270,7 @@ namespace ts {
                 "es2015": ScriptTarget.ES2015,
                 "es2016": ScriptTarget.ES2016,
                 "es2017": ScriptTarget.ES2017,
+                "esnext": ScriptTarget.ESNext,
             }),
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
@@ -428,7 +434,8 @@ namespace ts {
                     "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
                     "es2016.array.include": "lib.es2016.array.include.d.ts",
                     "es2017.object": "lib.es2017.object.d.ts",
-                    "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts"
+                    "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts",
+                    "es2017.string": "lib.es2017.string.d.ts",
                 }),
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
@@ -1008,9 +1015,7 @@ namespace ts {
     function convertTypingOptionsFromJsonWorker(jsonOptions: any,
         basePath: string, errors: Diagnostic[], configFileName?: string): TypingOptions {
 
-        const options: TypingOptions = getBaseFileName(configFileName) === "jsconfig.json"
-            ? { enableAutoDiscovery: true, include: [], exclude: [] }
-            : { enableAutoDiscovery: false, include: [], exclude: [] };
+        const options: TypingOptions = { enableAutoDiscovery: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
         convertOptionsFromJson(typingOptionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_typing_option_0, errors);
         return options;
     }
@@ -1263,12 +1268,13 @@ namespace ts {
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
      */
-    function getWildcardDirectories(include: string[], exclude: string[], path: string, useCaseSensitiveFileNames: boolean) {
+    function getWildcardDirectories(include: string[], exclude: string[], path: string, useCaseSensitiveFileNames: boolean): Map<WatchDirectoryFlags> {
         // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
         // of the pattern:
         //
         //  /a/b/**/d   - Watch /a/b recursively to catch changes to any d in any subfolder recursively
         //  /a/b/*/d    - Watch /a/b recursively to catch any d in any immediate subfolder, even if a new subfolder is added
+        //  /a/b        - Watch /a/b recursively to catch changes to anything in any recursive subfoler
         //
         // We watch a directory without recursion if it contains a wildcard in the file segment of
         // the pattern:
@@ -1281,15 +1287,14 @@ namespace ts {
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
-                const name = normalizePath(combinePaths(path, file));
-                if (excludeRegex && excludeRegex.test(name)) {
+                const spec = normalizePath(combinePaths(path, file));
+                if (excludeRegex && excludeRegex.test(spec)) {
                     continue;
                 }
 
-                const match = wildcardDirectoryPattern.exec(name);
+                const match = getWildcardDirectoryFromSpec(spec, useCaseSensitiveFileNames);
                 if (match) {
-                    const key = useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase();
-                    const flags = watchRecursivePattern.test(name) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None;
+                    const { key, flags } = match;
                     const existingFlags = wildcardDirectories[key];
                     if (existingFlags === undefined || existingFlags < flags) {
                         wildcardDirectories[key] = flags;
@@ -1311,6 +1316,20 @@ namespace ts {
         }
 
         return wildcardDirectories;
+    }
+
+    function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: string, flags: WatchDirectoryFlags } | undefined {
+        const match = wildcardDirectoryPattern.exec(spec);
+        if (match) {
+            return {
+                key: useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase(),
+                flags: watchRecursivePattern.test(spec) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
+            };
+        }
+        if (isImplicitGlob(spec)) {
+            return { key: spec, flags: WatchDirectoryFlags.Recursive };
+        }
+        return undefined;
     }
 
     /**

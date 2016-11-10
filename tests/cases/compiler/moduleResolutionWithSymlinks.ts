@@ -4,7 +4,7 @@
 
 // @filename: /src/library-a/index.ts
 // @symlink: /src/library-b/node_modules/library-a/index.ts
-export class MyClass{}
+export class MyClass { private x: number; }
 
 // @filename: /src/library-b/index.ts
 import {MyClass} from "library-a";

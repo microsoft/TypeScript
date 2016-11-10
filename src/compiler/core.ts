@@ -124,6 +124,13 @@ namespace ts {
         return undefined;
     }
 
+    export function zipWith<T, U>(arrayA: T[], arrayB: U[], callback: (a: T, b: U, index: number) => void): void {
+        Debug.assert(arrayA.length === arrayB.length);
+        for (let i = 0; i < arrayA.length; i++) {
+            callback(arrayA[i], arrayB[i], i);
+        }
+    }
+
     /**
      * Iterates through `array` by index and performs the callback on each element of array until the callback
      * returns a falsey value, then returns false.
@@ -424,18 +431,23 @@ namespace ts {
 
     export function some<T>(array: T[], predicate?: (value: T) => boolean): boolean {
         if (array) {
-            for (const v of array) {
-                if (!predicate || predicate(v)) {
-                    return true;
+            if (predicate) {
+                for (const v of array) {
+                    if (predicate(v)) {
+                        return true;
+                    }
                 }
+            }
+            else {
+                return array.length > 0;
             }
         }
         return false;
     }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
-        if (!array2 || !array2.length) return array1;
-        if (!array1 || !array1.length) return array2;
+        if (!some(array2)) return array1;
+        if (!some(array1)) return array2;
         return [...array1, ...array2];
     }
 
@@ -515,6 +527,27 @@ namespace ts {
         return result || array;
     }
 
+    /**
+     * Gets the relative complement of `arrayA` with respect to `b`, returning the elements that
+     * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
+     * based on the provided comparer.
+     */
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: (x: T, y: T) => Comparison = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+        if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
+        const result: T[] = [];
+        outer: for (; offsetB < arrayB.length; offsetB++) {
+            inner: for (; offsetA < arrayA.length; offsetA++) {
+                switch (comparer(arrayB[offsetB], arrayA[offsetA])) {
+                    case Comparison.LessThan: break inner;
+                    case Comparison.EqualTo: continue outer;
+                    case Comparison.GreaterThan: continue inner;
+                }
+            }
+            result.push(arrayB[offsetB]);
+        }
+        return result;
+    }
+
     export function sum(array: any[], prop: string): number {
         let result = 0;
         for (const v of array) {
@@ -523,14 +556,35 @@ namespace ts {
         return result;
     }
 
-    export function addRange<T>(to: T[], from: T[]): void {
-        if (to && from) {
-            for (const v of from) {
-                if (v !== undefined) {
-                    to.push(v);
-                }
-            }
+    /**
+     * Appends a value to an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param value The value to append to the array. If `value` is `undefined`, nothing is
+     * appended.
+     */
+    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+        if (value === undefined) return to;
+        if (to === undefined) to = [];
+        to.push(value);
+        return to;
+    }
+
+    /**
+     * Appends a range of value to an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param from The values to append to the array. If `from` is `undefined`, nothing is
+     * appended. If an element of `from` is `undefined`, that element is not appended.
+     */
+    export function addRange<T>(to: T[] | undefined, from: T[] | undefined): T[] | undefined {
+        if (from === undefined) return to;
+        for (const v of from) {
+            to = append(to, v);
         }
+        return to;
     }
 
     export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
@@ -543,31 +597,41 @@ namespace ts {
         return true;
     }
 
+    /**
+     * Returns the first element of an array if non-empty, `undefined` otherwise.
+     */
     export function firstOrUndefined<T>(array: T[]): T {
         return array && array.length > 0
             ? array[0]
             : undefined;
     }
 
+    /**
+     * Returns the last element of an array if non-empty, `undefined` otherwise.
+     */
+    export function lastOrUndefined<T>(array: T[]): T {
+        return array && array.length > 0
+            ? array[array.length - 1]
+            : undefined;
+    }
+
+    /**
+     * Returns the only element of an array if it contains only one element, `undefined` otherwise.
+     */
     export function singleOrUndefined<T>(array: T[]): T {
         return array && array.length === 1
             ? array[0]
             : undefined;
     }
 
+    /**
+     * Returns the only element of an array if it contains only one element; otheriwse, returns the
+     * array.
+     */
     export function singleOrMany<T>(array: T[]): T | T[] {
         return array && array.length === 1
             ? array[0]
             : array;
-    }
-
-    /**
-     * Returns the last element of an array if non-empty, undefined otherwise.
-     */
-    export function lastOrUndefined<T>(array: T[]): T {
-        return array && array.length > 0
-            ? array[array.length - 1]
-            : undefined;
     }
 
     export function replaceElement<T>(array: T[], index: number, value: T): T[] {
@@ -583,12 +647,12 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number): number {
+    export function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number, offset?: number): number {
         if (!array || array.length === 0) {
             return -1;
         }
 
-        let low = 0;
+        let low = offset || 0;
         let high = array.length - 1;
         comparer = comparer !== undefined
             ? comparer
@@ -874,7 +938,7 @@ namespace ts {
      * Adds the value to an array of values associated with the key, and returns the array.
      * Creates the array if it does not already exist.
      */
-    export function multiMapAdd<V>(map: Map<V[]>, key: string, value: V): V[] {
+    export function multiMapAdd<V>(map: Map<V[]>, key: string | number, value: V): V[] {
         const values = map[key];
         if (values) {
             values.push(value);
@@ -1281,7 +1345,7 @@ namespace ts {
      */
     export function getDirectoryPath(path: Path): Path;
     export function getDirectoryPath(path: string): string;
-    export function getDirectoryPath(path: string): any {
+    export function getDirectoryPath(path: string): string {
         return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
     }
 
@@ -1541,6 +1605,10 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function hasExtension(fileName: string): boolean {
+        return getBaseFileName(fileName).indexOf(".") >= 0;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
         return path.length > extension.length && endsWith(path, extension);
     }
@@ -1586,73 +1654,21 @@ namespace ts {
 
         let pattern = "";
         let hasWrittenSubpattern = false;
-        spec: for (const spec of specs) {
+        for (const spec of specs) {
             if (!spec) {
                 continue;
             }
 
-            let subpattern = "";
-            let hasRecursiveDirectoryWildcard = false;
-            let hasWrittenComponent = false;
-            const components = getNormalizedPathComponents(spec, basePath);
-            if (usage !== "exclude" && components[components.length - 1] === "**") {
-                continue spec;
-            }
-
-            // getNormalizedPathComponents includes the separator for the root component.
-            // We need to remove to create our regex correctly.
-            components[0] = removeTrailingDirectorySeparator(components[0]);
-
-            let optionalCount = 0;
-            for (let component of components) {
-                if (component === "**") {
-                    if (hasRecursiveDirectoryWildcard) {
-                        continue spec;
-                    }
-
-                    subpattern += doubleAsteriskRegexFragment;
-                    hasRecursiveDirectoryWildcard = true;
-                    hasWrittenComponent = true;
-                }
-                else {
-                    if (usage === "directories") {
-                        subpattern += "(";
-                        optionalCount++;
-                    }
-
-                    if (hasWrittenComponent) {
-                        subpattern += directorySeparator;
-                    }
-
-                    if (usage !== "exclude") {
-                        // The * and ? wildcards should not match directories or files that start with . if they
-                        // appear first in a component. Dotted directories and files can be included explicitly
-                        // like so: **/.*/.*
-                        if (component.charCodeAt(0) === CharacterCodes.asterisk) {
-                            subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
-                            component = component.substr(1);
-                        }
-                        else if (component.charCodeAt(0) === CharacterCodes.question) {
-                            subpattern += "[^./]";
-                            component = component.substr(1);
-                        }
-                    }
-
-                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
-                    hasWrittenComponent = true;
-                }
-            }
-
-            while (optionalCount > 0) {
-                subpattern += ")?";
-                optionalCount--;
+            const subPattern = getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter);
+            if (subPattern === undefined) {
+                continue;
             }
 
             if (hasWrittenSubpattern) {
                 pattern += "|";
             }
 
-            pattern += "(" + subpattern + ")";
+            pattern += "(" + subPattern + ")";
             hasWrittenSubpattern = true;
         }
 
@@ -1660,7 +1676,83 @@ namespace ts {
             return undefined;
         }
 
-        return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
+        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
+        const terminator = usage === "exclude" ? "($|/)" : "$";
+        return `^(${pattern})${terminator}`;
+    }
+
+    /**
+     * An "includes" path "foo" is implicitly a glob "foo/** /*" (without the space) if its last component has no extension,
+     * and does not contain any glob characters itself.
+     */
+    export function isImplicitGlob(lastPathComponent: string): boolean {
+        return !/[.*?]/.test(lastPathComponent);
+    }
+
+    function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", singleAsteriskRegexFragment: string, doubleAsteriskRegexFragment: string, replaceWildcardCharacter: (match: string) => string): string | undefined {
+        let subpattern = "";
+        let hasRecursiveDirectoryWildcard = false;
+        let hasWrittenComponent = false;
+        const components = getNormalizedPathComponents(spec, basePath);
+        const lastComponent = lastOrUndefined(components);
+        if (usage !== "exclude" && lastComponent === "**") {
+            return undefined;
+        }
+
+        // getNormalizedPathComponents includes the separator for the root component.
+        // We need to remove to create our regex correctly.
+        components[0] = removeTrailingDirectorySeparator(components[0]);
+
+        if (isImplicitGlob(lastComponent)) {
+            components.push("**", "*");
+        }
+
+        let optionalCount = 0;
+        for (let component of components) {
+            if (component === "**") {
+                if (hasRecursiveDirectoryWildcard) {
+                    return undefined;
+                }
+
+                subpattern += doubleAsteriskRegexFragment;
+                hasRecursiveDirectoryWildcard = true;
+            }
+            else {
+                if (usage === "directories") {
+                    subpattern += "(";
+                    optionalCount++;
+                }
+
+                if (hasWrittenComponent) {
+                    subpattern += directorySeparator;
+                }
+
+                if (usage !== "exclude") {
+                    // The * and ? wildcards should not match directories or files that start with . if they
+                    // appear first in a component. Dotted directories and files can be included explicitly
+                    // like so: **/.*/.*
+                    if (component.charCodeAt(0) === CharacterCodes.asterisk) {
+                        subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                        component = component.substr(1);
+                    }
+                    else if (component.charCodeAt(0) === CharacterCodes.question) {
+                        subpattern += "[^./]";
+                        component = component.substr(1);
+                    }
+                }
+
+                subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+            }
+
+            hasWrittenComponent = true;
+        }
+
+        while (optionalCount > 0) {
+            subpattern += ")?";
+            optionalCount--;
+        }
+
+        return subpattern;
     }
 
     function replaceWildCardCharacterFiles(match: string) {
@@ -1747,6 +1839,7 @@ namespace ts {
     function getBasePaths(path: string, includes: string[], useCaseSensitiveFileNames: boolean) {
         // Storage for our results in the form of literal paths (e.g. the paths as written by the user).
         const basePaths: string[] = [path];
+
         if (includes) {
             // Storage for literal base paths amongst the include patterns.
             const includeBasePaths: string[] = [];
@@ -1754,14 +1847,8 @@ namespace ts {
                 // We also need to check the relative paths by converting them to absolute and normalizing
                 // in case they escape the base path (e.g "..\somedirectory")
                 const absolute: string = isRootedDiskPath(include) ? include : normalizePath(combinePaths(path, include));
-
-                const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
-                const includeBasePath = wildcardOffset < 0
-                    ? removeTrailingDirectorySeparator(getDirectoryPath(absolute))
-                    : absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
-
                 // Append the literal and canonical candidate base paths.
-                includeBasePaths.push(includeBasePath);
+                includeBasePaths.push(getIncludeBasePath(absolute));
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
@@ -1769,19 +1856,25 @@ namespace ts {
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path
-            include: for (let i = 0; i < includeBasePaths.length; i++) {
-                const includeBasePath = includeBasePaths[i];
-                for (let j = 0; j < basePaths.length; j++) {
-                    if (containsPath(basePaths[j], includeBasePath, path, !useCaseSensitiveFileNames)) {
-                        continue include;
-                    }
+            for (const includeBasePath of includeBasePaths) {
+                if (ts.every(basePaths, basePath => !containsPath(basePath, includeBasePath, path, !useCaseSensitiveFileNames))) {
+                    basePaths.push(includeBasePath);
                 }
-
-                basePaths.push(includeBasePath);
             }
         }
 
         return basePaths;
+    }
+
+    function getIncludeBasePath(absolute: string): string {
+        const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
+        if (wildcardOffset < 0) {
+            // No "*" or "?" in the path
+            return !hasExtension(absolute)
+                ? absolute
+                : removeTrailingDirectorySeparator(getDirectoryPath(absolute));
+        }
+        return absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
     }
 
     export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {
@@ -1912,10 +2005,6 @@ namespace ts {
 
     export function removeExtension(path: string, extension: string): string {
         return path.substring(0, path.length - extension.length);
-    }
-
-    export function isJsxOrTsxExtension(ext: string): boolean {
-        return ext === ".jsx" || ext === ".tsx";
     }
 
     export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
@@ -2109,5 +2198,34 @@ namespace ts {
         // This is a fast way of testing the following conditions:
         //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
         return !(pos >= 0);
+    }
+
+    /** True if an extension is one of the supported TypeScript extensions. */
+    export function extensionIsTypeScript(ext: Extension): boolean {
+        return ext <= Extension.LastTypeScriptExtension;
+    }
+
+    /**
+     * Gets the extension from a path.
+     * Path must have a valid extension.
+     */
+    export function extensionFromPath(path: string): Extension {
+        if (fileExtensionIs(path, ".d.ts")) {
+            return Extension.Dts;
+        }
+        if (fileExtensionIs(path, ".ts")) {
+            return Extension.Ts;
+        }
+        if (fileExtensionIs(path, ".tsx")) {
+            return Extension.Tsx;
+        }
+        if (fileExtensionIs(path, ".js")) {
+            return Extension.Js;
+        }
+        if (fileExtensionIs(path, ".jsx")) {
+            return Extension.Jsx;
+        }
+        Debug.fail(`File ${path} has unknown extension.`);
+        return Extension.Js;
     }
 }

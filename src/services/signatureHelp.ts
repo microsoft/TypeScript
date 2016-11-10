@@ -557,7 +557,9 @@ namespace ts.SignatureHelp {
                 addRange(prefixDisplayParts, callTargetDisplayParts);
             }
 
+            let isVariadic: boolean;
             if (isTypeParameterList) {
+                isVariadic = false; // type parameter lists are not variadic
                 prefixDisplayParts.push(punctuationPart(SyntaxKind.LessThanToken));
                 const typeParameters = candidateSignature.typeParameters;
                 signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
@@ -567,6 +569,7 @@ namespace ts.SignatureHelp {
                 addRange(suffixDisplayParts, parameterParts);
             }
             else {
+                isVariadic = candidateSignature.hasRestParameter;
                 const typeParameterParts = mapToDisplayParts(writer =>
                     typeChecker.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
                 addRange(prefixDisplayParts, typeParameterParts);
@@ -582,7 +585,7 @@ namespace ts.SignatureHelp {
             addRange(suffixDisplayParts, returnTypeParts);
 
             return {
-                isVariadic: candidateSignature.hasRestParameter,
+                isVariadic,
                 prefixDisplayParts,
                 suffixDisplayParts,
                 separatorDisplayParts: [punctuationPart(SyntaxKind.CommaToken), spacePart()],
