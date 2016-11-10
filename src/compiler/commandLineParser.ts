@@ -78,6 +78,11 @@ namespace ts {
             description: Diagnostics.Specify_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
         },
         {
+            name: "jsxFactory",
+            type: "string",
+            description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },
@@ -265,6 +270,7 @@ namespace ts {
                 "es2015": ScriptTarget.ES2015,
                 "es2016": ScriptTarget.ES2016,
                 "es2017": ScriptTarget.ES2017,
+                "esnext": ScriptTarget.ESNext,
             }),
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,

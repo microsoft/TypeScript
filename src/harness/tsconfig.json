@@ -29,6 +29,7 @@
         "../compiler/visitor.ts",
         "../compiler/transformers/ts.ts",
         "../compiler/transformers/jsx.ts",
+        "../compiler/transformers/esnext.ts",
         "../compiler/transformers/es2017.ts",
         "../compiler/transformers/es2016.ts",
         "../compiler/transformers/es2015.ts",
