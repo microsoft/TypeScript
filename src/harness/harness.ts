@@ -1483,7 +1483,7 @@ namespace Harness {
             }
 
             if (typesError && symbolsError) {
-                throw new Error(typesError.message + ts.sys.newLine + symbolsError.message);
+                throw new Error(typesError.message + Harness.IO.newLine() + symbolsError.message);
             }
 
             if (typesError) {

@@ -1455,7 +1455,7 @@
         "category": "Error",
         "code": 2461
     },
-    "A rest element must be last in an array destructuring pattern": {
+    "A rest element must be last in a destructuring pattern": {
         "category": "Error",
         "code": 2462
     },
@@ -1982,6 +1982,14 @@
     "An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
         "category": "Error",
         "code": 2697
+    },
+    "Spread types may only be created from object types.": {
+        "category": "Error",
+        "code": 2698
+    },
+    "Rest types may only be created from object types.": {
+        "category": "Error",
+        "code": 2700
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

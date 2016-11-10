@@ -485,6 +485,22 @@ namespace ts {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
+    export function getTextOfPropertyName(name: PropertyName): string {
+        switch (name.kind) {
+        case SyntaxKind.Identifier:
+            return (<Identifier>name).text;
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NumericLiteral:
+            return (<LiteralExpression>name).text;
+        case SyntaxKind.ComputedPropertyName:
+            if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
+                return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
+            }
+        }
+
+        return undefined;
+    }
+
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:
@@ -1179,7 +1195,7 @@ namespace ts {
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
-            case SyntaxKind.SpreadElementExpression:
+            case SyntaxKind.SpreadElement:
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
@@ -1641,7 +1657,7 @@ namespace ts {
                     return (<ForInStatement | ForOfStatement>parent).initializer === node ? AssignmentKind.Definite : AssignmentKind.None;
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.SpreadElement:
                     node = parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
@@ -2226,7 +2242,7 @@ namespace ts {
             case SyntaxKind.YieldExpression:
                 return 2;
 
-            case SyntaxKind.SpreadElementExpression:
+            case SyntaxKind.SpreadElement:
                 return 1;
 
             default:
@@ -3862,6 +3878,7 @@ namespace ts {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAssignment
             || kind === SyntaxKind.ShorthandPropertyAssignment
+            || kind === SyntaxKind.SpreadAssignment
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
@@ -3949,8 +3966,8 @@ namespace ts {
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
-    export function isSpreadElementExpression(node: Node): node is SpreadElementExpression {
-        return node.kind === SyntaxKind.SpreadElementExpression;
+    export function isSpreadExpression(node: Node): node is SpreadElement {
+        return node.kind === SyntaxKind.SpreadElement;
     }
 
     export function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {
@@ -4008,7 +4025,7 @@ namespace ts {
             || kind === SyntaxKind.YieldExpression
             || kind === SyntaxKind.ArrowFunction
             || kind === SyntaxKind.BinaryExpression
-            || kind === SyntaxKind.SpreadElementExpression
+            || kind === SyntaxKind.SpreadElement
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
             || isUnaryExpressionKind(kind);
@@ -4310,6 +4327,7 @@ namespace ts {
 namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         switch (options.target) {
+            case ScriptTarget.ESNext:
             case ScriptTarget.ES2017:
                 return "lib.es2017.d.ts";
             case ScriptTarget.ES2016:

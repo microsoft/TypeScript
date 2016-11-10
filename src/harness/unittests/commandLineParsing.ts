@@ -165,7 +165,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017'",
+                            messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'esnext'",
                             category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
