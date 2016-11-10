@@ -175,8 +175,17 @@ namespace ts {
             const iteratorRecord = isIdentifier(node.expression)
                 ? getGeneratedNameForNode(node.expression)
                 : createUniqueName("iterator");
+
             const expression = visitNode(node.expression, visitor, isExpression);
             const statements: Statement[] = [];
+            const binding = createForOfBindingStatement(
+                node.initializer,
+                createPropertyAccess(
+                    createPropertyAccess(iteratorRecord, "result"),
+                    "value"
+                )
+            );
+            statements.push(visitNode(binding, visitor, isStatement));
             const statement = visitNode(node.statement, visitor, isStatement);
             if (isBlock(statement)) {
                 addRange(statements, statement.statements);
@@ -330,6 +339,7 @@ namespace ts {
                 node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
+                enclosingFunctionFlags & FunctionFlags.Async ? undefined : node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
@@ -359,6 +369,7 @@ namespace ts {
                 node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
+                enclosingFunctionFlags & FunctionFlags.Async ? undefined : node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
@@ -387,6 +398,7 @@ namespace ts {
             const updated = updateFunctionExpression(
                 node,
                 visitNodes(node.modifiers, visitor, isModifier),
+                enclosingFunctionFlags & FunctionFlags.Async ? undefined : node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),

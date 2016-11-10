@@ -1529,6 +1529,7 @@ namespace ts {
             return updateFunctionExpression(
                 node,
                 /*modifiers*/ undefined,
+                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
@@ -1549,6 +1550,7 @@ namespace ts {
                 node,
                 /*decorators*/ undefined,
                 node.modifiers,
+                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),

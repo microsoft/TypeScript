@@ -280,9 +280,9 @@ namespace ts {
         return node;
     }
 
-    export function updateMethod(node: MethodDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
-        if (node.decorators !== decorators || node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
-            return updateNode(createMethod(decorators, modifiers, node.asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node), node);
+    export function updateMethod(node: MethodDeclaration, decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
+        if (node.decorators !== decorators || node.modifiers !== modifiers || node.asteriskToken !== asteriskToken || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
+            return updateNode(createMethod(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node), node);
         }
         return node;
     }
@@ -525,9 +525,9 @@ namespace ts {
         return node;
     }
 
-    export function updateFunctionExpression(node: FunctionExpression, modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
-        if (node.name !== name || node.modifiers !== modifiers || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
-            return updateNode(createFunctionExpression(modifiers, node.asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node), node);
+    export function updateFunctionExpression(node: FunctionExpression, modifiers: Modifier[], asteriskToken: AsteriskToken, name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
+        if (node.modifiers !== modifiers || node.asteriskToken !== asteriskToken || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
+            return updateNode(createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node), node);
         }
         return node;
     }
@@ -1068,9 +1068,9 @@ namespace ts {
         return node;
     }
 
-    export function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
-        if (node.decorators !== decorators || node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
-            return updateNode(createFunctionDeclaration(decorators, modifiers, node.asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node), node);
+    export function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
+        if (node.decorators !== decorators || node.modifiers !== modifiers || node.asteriskToken !== asteriskToken || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body) {
+            return updateNode(createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body, /*location*/ node), node);
         }
         return node;
     }
@@ -1823,6 +1823,28 @@ namespace ts {
             }
         }
         return node;
+    }
+
+    export function createForOfBindingStatement(node: ForInitializer, boundValue: Expression): Statement {
+        if (isVariableDeclarationList(node)) {
+            const firstDeclaration = firstOrUndefined(node.declarations);
+            const updatedDeclaration = updateVariableDeclaration(
+                firstDeclaration,
+                firstDeclaration.name,
+                /*typeNode*/ undefined,
+                boundValue
+            );
+            return createVariableStatement(
+                /*modifiers*/ undefined,
+                updateVariableDeclarationList(node, [updatedDeclaration]),
+                /*location*/ node
+            );
+        }
+        else {
+            const expression = node;
+            const updatedExpression = createAssignment(expression, boundValue, /*location*/ expression);
+            return createStatement(updatedExpression, /*location*/ expression);
+        }
     }
 
     export interface CallBinding {

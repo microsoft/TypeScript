@@ -761,6 +761,7 @@ namespace ts {
                 return updateMethod(<MethodDeclaration>node,
                     visitNodes((<MethodDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<MethodDeclaration>node).modifiers, visitor, isModifier),
+                    (<MethodDeclaration>node).asteriskToken,
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<MethodDeclaration>node).parameters, visitor, context),
@@ -849,6 +850,7 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
                     visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier),
+                    (<FunctionExpression>node).asteriskToken,
                     visitNode((<FunctionExpression>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionExpression>node).parameters, visitor, context),
@@ -1030,6 +1032,7 @@ namespace ts {
                 return updateFunctionDeclaration(<FunctionDeclaration>node,
                     visitNodes((<FunctionDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier),
+                    (<FunctionDeclaration>node).asteriskToken,
                     visitNode((<FunctionDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionDeclaration>node).parameters, visitor, context),

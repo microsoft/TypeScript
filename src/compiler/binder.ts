@@ -929,6 +929,9 @@ namespace ts {
             const postLoopLabel = createBranchLabel();
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
+            if (node.kind === SyntaxKind.ForOfStatement) {
+                bind(node.awaitKeyword);
+            }
             bind(node.expression);
             addAntecedent(postLoopLabel, currentFlow);
             bind(node.initializer);

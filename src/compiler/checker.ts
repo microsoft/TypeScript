@@ -3155,7 +3155,8 @@ namespace ts {
                 // missing properties/signatures required to get its iteratedType (like
                 // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
                 // or it may have led to an error inside getElementTypeOfIterable.
-                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
+                const isForAwaitOf = (<ForOfStatement>declaration.parent.parent).awaitKeyword !== undefined;
+                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression, isForAwaitOf) || anyType;
             }
 
             if (isBindingPattern(declaration.parent)) {
@@ -8631,7 +8632,7 @@ namespace ts {
                 case SyntaxKind.ForInStatement:
                     return stringType;
                 case SyntaxKind.ForOfStatement:
-                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression) || unknownType;
+                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, (<ForOfStatement>parent).awaitKeyword !== undefined) || unknownType;
                 case SyntaxKind.BinaryExpression:
                     return getAssignedTypeOfBinaryExpression(<BinaryExpression>parent);
                 case SyntaxKind.DeleteExpression:
@@ -8675,7 +8676,8 @@ namespace ts {
                 return stringType;
             }
             if (node.parent.parent.kind === SyntaxKind.ForOfStatement) {
-                return checkRightHandSideOfForOf((<ForOfStatement>node.parent.parent).expression) || unknownType;
+                const isForAwaitOf = (<ForOfStatement>node.parent.parent).awaitKeyword !== undefined;
+                return checkRightHandSideOfForOf((<ForOfStatement>node.parent.parent).expression, isForAwaitOf) || unknownType;
             }
             return unknownType;
         }
@@ -16667,7 +16669,7 @@ namespace ts {
             }
             else {
                 const varExpr = <Expression>node.initializer;
-                const iteratedType = checkRightHandSideOfForOf(node.expression);
+                const iteratedType = checkRightHandSideOfForOf(node.expression, node.awaitKeyword !== undefined);
 
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -16754,9 +16756,11 @@ namespace ts {
             }
         }
 
-        function checkRightHandSideOfForOf(rhsExpression: Expression): Type {
+        function checkRightHandSideOfForOf(rhsExpression: Expression, isForAwaitOf: boolean): Type {
             const expressionType = checkNonNullExpression(rhsExpression);
-            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
+            return isForAwaitOf
+                ? checkIteratedTypeOfIterableOrAsyncIterable(expressionType, rhsExpression)
+                : checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
         }
 
         function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
@@ -19327,7 +19331,7 @@ namespace ts {
             //     for ( { a } of elems) {
             //     }
             if (expr.parent.kind === SyntaxKind.ForOfStatement) {
-                const iteratedType = checkRightHandSideOfForOf((<ForOfStatement>expr.parent).expression);
+                const iteratedType = checkRightHandSideOfForOf((<ForOfStatement>expr.parent).expression, (<ForOfStatement>expr.parent).awaitKeyword !== undefined);
                 return checkDestructuringAssignment(expr, iteratedType || unknownType);
             }
             // If this is from "for" initializer
@@ -20792,6 +20796,12 @@ namespace ts {
         function checkGrammarForInOrForOfStatement(forInOrOfStatement: ForInStatement | ForOfStatement): boolean {
             if (checkGrammarStatementInAmbientContext(forInOrOfStatement)) {
                 return true;
+            }
+
+            if (forInOrOfStatement.kind === SyntaxKind.ForOfStatement && forInOrOfStatement.awaitKeyword) {
+                if ((forInOrOfStatement.flags & NodeFlags.AwaitContext) === NodeFlags.None) {
+                    return grammarErrorOnNode(forInOrOfStatement.awaitKeyword, Diagnostics.A_for_await_of_statement_is_only_allowed_within_an_async_function_or_async_generator);
+                }
             }
 
             if (forInOrOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
