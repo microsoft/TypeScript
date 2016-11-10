@@ -15,20 +15,33 @@ namespace ts.server {
     } = require("child_process");
 
     const os: {
-        homedir(): string
+        homedir?(): string;
+        tmpdir(): string;
     } = require("os");
 
     function getGlobalTypingsCacheLocation() {
         let basePath: string;
         switch (process.platform) {
             case "win32":
-                basePath = process.env.LOCALAPPDATA || process.env.APPDATA || os.homedir();
+                basePath = process.env.LOCALAPPDATA ||
+                    process.env.APPDATA ||
+                    (os.homedir && os.homedir()) ||
+                    process.env.USERPROFILE ||
+                    (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
+                    os.tmpdir();
                 break;
             case "linux":
-                basePath = os.homedir();
+                basePath = (os.homedir && os.homedir()) ||
+                    process.env.HOME ||
+                    ((process.env.LOGNAME || process.env.USER) && `/home/${process.env.LOGNAME || process.env.USER}`) ||
+                    os.tmpdir();
                 break;
             case "darwin":
-                basePath = combinePaths(os.homedir(), "Library/Application Support/");
+                const homeDir = (os.homedir && os.homedir()) ||
+                        process.env.HOME ||
+                        ((process.env.LOGNAME || process.env.USER) && `/Users/${process.env.LOGNAME || process.env.USER}`) ||
+                        os.tmpdir();
+                basePath = combinePaths(homeDir, "Library/Application Support/");
                 break;
         }
 

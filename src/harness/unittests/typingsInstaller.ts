@@ -774,7 +774,7 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ inferredProjects: 1 });
             checkProjectActualFiles(service.inferredProjects[0], [file.path]);
 
-            installer.installAll(/*expectedCount*/ 1);
+            installer.installAll(/*expectedCount*/1);
 
             assert.isTrue(host.fileExists(node.path), "typings for 'node' should be created");
             assert.isTrue(host.fileExists(commander.path), "typings for 'commander' should be created");

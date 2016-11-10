@@ -267,9 +267,9 @@ namespace ts {
             case SyntaxKind.VoidExpression:
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.YieldExpression:
-            case SyntaxKind.SpreadElementExpression:
+            case SyntaxKind.SpreadElement:
             case SyntaxKind.NonNullExpression:
-                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElementExpression | NonNullExpression>node).expression, f, result);
+                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElement | NonNullExpression>node).expression, f, result);
                 break;
 
             case SyntaxKind.PrefixUnaryExpression:
@@ -510,6 +510,10 @@ namespace ts {
                 result = reduceNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, f, result);
                 break;
 
+            case SyntaxKind.SpreadAssignment:
+                result = reduceNode((node as SpreadAssignment).expression, f, result);
+                break;
+
             // Top-level nodes
             case SyntaxKind.SourceFile:
                 result = reduceLeft((<SourceFile>node).statements, f, result);
@@ -553,6 +557,7 @@ namespace ts {
             return undefined;
         }
 
+        aggregateTransformFlags(node);
         const visited = visitor(node);
         if (visited === node) {
             return node;
@@ -621,6 +626,7 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
+            aggregateTransformFlags(node);
             const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
@@ -692,7 +698,7 @@ namespace ts {
 
             // Signature elements
             case SyntaxKind.Parameter:
-                return updateParameterDeclaration(<ParameterDeclaration>node,
+                return updateParameter(<ParameterDeclaration>node,
                     visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
@@ -870,9 +876,9 @@ namespace ts {
                 return updateYield(<YieldExpression>node,
                     visitNode((<YieldExpression>node).expression, visitor, isExpression));
 
-            case SyntaxKind.SpreadElementExpression:
-                return updateSpread(<SpreadElementExpression>node,
-                    visitNode((<SpreadElementExpression>node).expression, visitor, isExpression));
+            case SyntaxKind.SpreadElement:
+                return updateSpread(<SpreadElement>node,
+                    visitNode((<SpreadElement>node).expression, visitor, isExpression));
 
             case SyntaxKind.ClassExpression:
                 return updateClassExpression(<ClassExpression>node,
@@ -1125,7 +1131,11 @@ namespace ts {
                     visitNode((<ShorthandPropertyAssignment>node).name, visitor, isIdentifier),
                     visitNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, visitor, isExpression));
 
-            // Top-level nodes
+            case SyntaxKind.SpreadAssignment:
+                return updateSpreadAssignment(node as SpreadAssignment,
+                    visitNode((node as SpreadAssignment).expression, visitor, isExpression));
+
+           // Top-level nodes
             case SyntaxKind.SourceFile:
                 context.startLexicalEnvironment();
                 return updateSourceFileNode(<SourceFile>node,

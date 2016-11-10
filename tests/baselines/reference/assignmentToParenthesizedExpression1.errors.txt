@@ -1,4 +1,4 @@
-tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,2): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
@@ -6,6 +6,6 @@ tests/cases/compiler/assignmentToParenthesizedExpression1.ts(2,2): error TS2695:
     var x;
     (1, x)=0;
     ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
      ~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.

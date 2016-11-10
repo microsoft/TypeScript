@@ -10,7 +10,7 @@ export type Bar<X, Y, Z> = () => [X, Y, Z];
 >Z : Z
 
 export type Baz<M, N> = Bar<M, string, N>;
->Baz : () => [M, string, N]
+>Baz : Bar<M, string, N>
 >M : M
 >N : N
 >Bar : Bar<X, Y, Z>
@@ -18,15 +18,15 @@ export type Baz<M, N> = Bar<M, string, N>;
 >N : N
 
 export type Baa<Y> = Baz<boolean, Y>;
->Baa : () => [boolean, string, Y]
+>Baa : Bar<boolean, string, Y>
 >Y : Y
->Baz : () => [M, string, N]
+>Baz : Bar<M, string, N>
 >Y : Y
 
 export const y = (x: Baa<number>) => 1
->y : (x: () => [boolean, string, number]) => number
->(x: Baa<number>) => 1 : (x: () => [boolean, string, number]) => number
->x : () => [boolean, string, number]
->Baa : () => [boolean, string, Y]
+>y : (x: Bar<boolean, string, number>) => number
+>(x: Baa<number>) => 1 : (x: Bar<boolean, string, number>) => number
+>x : Bar<boolean, string, number>
+>Baa : Bar<boolean, string, Y>
 >1 : 1
 

@@ -1,6 +1,7 @@
 /// <reference path="visitor.ts" />
 /// <reference path="transformers/ts.ts" />
 /// <reference path="transformers/jsx.ts" />
+/// <reference path="transformers/esnext.ts" />
 /// <reference path="transformers/es2017.ts" />
 /// <reference path="transformers/es2016.ts" />
 /// <reference path="transformers/es2015.ts" />
@@ -111,10 +112,13 @@ namespace ts {
         const transformers: Transformer[] = [];
 
         transformers.push(transformTypeScript);
-        transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
 
         if (jsx === JsxEmit.React) {
             transformers.push(transformJsx);
+        }
+
+        if (languageVersion < ScriptTarget.ESNext) {
+            transformers.push(transformESNext);
         }
 
         if (languageVersion < ScriptTarget.ES2017) {
@@ -130,6 +134,10 @@ namespace ts {
             transformers.push(transformGenerators);
         }
 
+        transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
+
+        // The ES5 transformer is last so that it can substitute expressions like `exports.default`
+        // for ES3.
         if (languageVersion < ScriptTarget.ES5) {
             transformers.push(transformES5);
         }

@@ -39,11 +39,11 @@ var Y2;
 })(Y2 || (Y2 = {}));
 var Y4;
 (function (Y4) {
-    static var x = 0;
+    var x = 0;
 })(Y4 || (Y4 = {}));
 var YY;
 (function (YY) {
-    static function fn(x) { }
+    function fn(x) { }
 })(YY || (YY = {}));
 var YY2;
 (function (YY2) {
