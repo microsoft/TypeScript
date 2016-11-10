@@ -2542,18 +2542,18 @@ namespace ts {
                     writePunctuation(writer, SyntaxKind.OpenBraceToken);
                     writer.writeLine();
                     writer.increaseIndent();
-                    if (type.isReadonly) {
+                    if (type.declaration.readonlyToken) {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
                         writeSpace(writer);
                     }
                     writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                    appendSymbolNameOnly(type.typeParameter.symbol, writer);
+                    appendSymbolNameOnly(getTypeParameterFromMappedType(type).symbol, writer);
                     writeSpace(writer);
                     writeKeyword(writer, SyntaxKind.InKeyword);
                     writeSpace(writer);
                     writeType(getConstraintTypeFromMappedType(type), TypeFormatFlags.None);
                     writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                    if (type.isOptional) {
+                    if (type.declaration.questionToken) {
                         writePunctuation(writer, SyntaxKind.QuestionToken);
                     }
                     writePunctuation(writer, SyntaxKind.ColonToken);
@@ -4452,26 +4452,29 @@ namespace ts {
             const members: SymbolTable = createMap<Symbol>();
             let stringIndexInfo: IndexInfo;
             let numberIndexInfo: IndexInfo;
+            const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
+            const templateType = getTemplateTypeFromMappedType(type);
+            const isReadonly = !!type.declaration.readonlyToken;
+            const isOptional = !!type.declaration.questionToken;
             const keyType = constraintType.flags & TypeFlags.TypeParameter ? getApparentType(constraintType) : constraintType;
             const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
             forEachType(iterationType, t => {
-                const iterationMapper = createUnaryTypeMapper(type.typeParameter, t);
+                const iterationMapper = createUnaryTypeMapper(typeParameter, t);
                 const templateMapper = type.mapper ? combineTypeMappers(type.mapper, iterationMapper) : iterationMapper;
-                const propType = instantiateType(type.templateType, templateMapper);
+                const propType = instantiateType(templateType, templateMapper);
                 if (t.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.EnumLiteral)) {
                     const propName = (<LiteralType>t).text;
-                    const optionalFlag = type.isOptional ? SymbolFlags.Optional : 0;
-                    const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | optionalFlag, propName);
-                    prop.type = addOptionality(propType, type.isOptional);
-                    prop.isReadonly = type.isReadonly;
+                    const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
+                    prop.type = addOptionality(propType, isOptional);
+                    prop.isReadonly = isReadonly;
                     members[propName] = prop;
                 }
                 else if (t.flags & TypeFlags.String) {
-                    stringIndexInfo = createIndexInfo(propType, type.isReadonly);
+                    stringIndexInfo = createIndexInfo(propType, isReadonly);
                 }
                 else if (t.flags & TypeFlags.Number) {
-                    numberIndexInfo = createIndexInfo(propType, type.isReadonly);
+                    numberIndexInfo = createIndexInfo(propType, isReadonly);
                 }
             });
             if (stringIndexInfo && numberIndexInfo && isTypeIdenticalTo(stringIndexInfo.type, numberIndexInfo.type)) {
@@ -4480,12 +4483,21 @@ namespace ts {
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
         }
 
+        function getTypeParameterFromMappedType(type: MappedType) {
+            return type.typeParameter ||
+                (type.typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(type.declaration.typeParameter)));
+        }
+
         function getConstraintTypeFromMappedType(type: MappedType) {
-            return instantiateType(getConstraintOfTypeParameter(type.typeParameter), type.mapper || identityMapper);
+            return type.constraintType ||
+                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || unknownType);
         }
 
         function getTemplateTypeFromMappedType(type: MappedType) {
-            return instantiateType(type.templateType, type.mapper || identityMapper);
+            return type.templateType ||
+                (type.templateType = type.declaration.type ?
+                    instantiateType(getTypeFromTypeNode(type.declaration.type), type.mapper || identityMapper) :
+                    unknownType);
         }
 
         function isGenericMappedType(type: Type) {
@@ -5949,22 +5961,11 @@ namespace ts {
         function getTypeFromMappedTypeNode(node: MappedTypeNode, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
-                const constraintType = getConstraintOfTypeParameter(typeParameter);
-                const keyType = constraintType && constraintType.flags & TypeFlags.TypeParameter ? getApparentTypeOfTypeParameter(<TypeParameter>constraintType) : constraintType;
-                if (keyType && (keyType.flags & TypeFlags.Index || checkTypeAssignableTo(keyType, stringOrNumberType, node.typeParameter.constraint))) {
-                    const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
-                    type.typeParameter = typeParameter;
-                    type.templateType = node.type ? getTypeFromTypeNode(node.type) : unknownType;
-                    type.isReadonly = !!node.readonlyToken;
-                    type.isOptional = !!node.questionToken;
-                    type.aliasSymbol = aliasSymbol;
-                    type.aliasTypeArguments = aliasTypeArguments;
-                    links.resolvedType = type;
-                }
-                else {
-                    links.resolvedType = unknownType;
-                }
+                const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
+                type.declaration = node;
+                type.aliasSymbol = aliasSymbol;
+                type.aliasTypeArguments = aliasTypeArguments;
+                links.resolvedType = type;
             }
             return links.resolvedType;
         }
@@ -6326,11 +6327,8 @@ namespace ts {
 
         function instantiateMappedType(type: MappedType, mapper: TypeMapper): MappedType {
             const result = <MappedType>createObjectType(ObjectFlags.Mapped | ObjectFlags.Instantiated, type.symbol);
-            result.typeParameter = type.typeParameter;
-            result.templateType = type.templateType;
-            result.isReadonly = type.isReadonly;
-            result.isOptional = type.isOptional;
-            result.mapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper, mapper) : mapper;
+            result.declaration = type.declaration;
+            result.mapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
             result.aliasSymbol = type.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(type.aliasTypeArguments, mapper);
             return result;
@@ -6390,8 +6388,8 @@ namespace ts {
 
         function isTopLevelTypeAlias(symbol: Symbol) {
             if (symbol.declarations && symbol.declarations.length) {
-                const declaration = symbol.declarations[0];
-                return declaration.kind === SyntaxKind.SourceFile || declaration.kind === SyntaxKind.ModuleBlock;
+                const parentKind = symbol.declarations[0].parent.kind;
+                return parentKind === SyntaxKind.SourceFile || parentKind === SyntaxKind.ModuleBlock;
             }
             return false;
         }
@@ -6400,7 +6398,7 @@ namespace ts {
             if (type && mapper !== identityMapper) {
                 if (type.aliasSymbol && isTopLevelTypeAlias(type.aliasSymbol)) {
                     if (type.aliasTypeArguments) {
-                        return getTypeAliasInstantiation(type.aliasSymbol, instantiateList(type.aliasTypeArguments, mapper, instantiateType));
+                        return getTypeAliasInstantiation(type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
                     }
                     return type;
                 }
@@ -15311,6 +15309,10 @@ namespace ts {
 
         function checkMappedType(node: MappedTypeNode) {
             getTypeFromMappedTypeNode(node);
+            // const type = <MappedType>getTypeFromMappedTypeNode(node);
+            // const constraintType = getConstraintTypeFromMappedType(type);
+            // const keyType = constraintType.flags & TypeFlags.TypeParameter ? getApparentTypeOfTypeParameter(<TypeParameter>constraintType) : constraintType;
+            // checkTypeAssignableTo(keyType, stringOrNumberType, node.typeParameter.constraint);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {

@@ -2849,11 +2849,10 @@ namespace ts {
 
     /* @internal */
     export interface MappedType extends ObjectType {
-        typeParameter: TypeParameter;
-        templateType: Type;
-        isReadonly: boolean;
-        isOptional: boolean;
-        // target?: MappedType;  // Instantiation target
+        declaration: MappedTypeNode;
+        typeParameter?: TypeParameter;
+        constraintType?: Type;
+        templateType?: Type;
         mapper?: TypeMapper;  // Instantiation mapper
     }
 
