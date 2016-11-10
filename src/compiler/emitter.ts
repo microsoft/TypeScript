@@ -42,6 +42,14 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };`;
 
+        const restHelper = `
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && !e.indexOf(p))
+        t[p] = s[p];
+    return t;
+};`;
+
         // emit output for the __decorate helper function
         const decorateHelper = `
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -226,6 +234,7 @@ const _super = (function (geti, seti) {
         let currentFileIdentifiers: Map<string>;
         let extendsEmitted: boolean;
         let assignEmitted: boolean;
+        let restEmitted: boolean;
         let decorateEmitted: boolean;
         let paramEmitted: boolean;
         let awaiterEmitted: boolean;
@@ -594,6 +603,10 @@ const _super = (function (geti, seti) {
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.ThisType:
                     return emitThisType();
+                case SyntaxKind.TypeOperator:
+                    return emitTypeOperator(<TypeOperatorNode>node);
+                case SyntaxKind.IndexedAccessType:
+                    return emitPropertyAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -728,6 +741,8 @@ const _super = (function (geti, seti) {
                     return emitPropertyAssignment(<PropertyAssignment>node);
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                case SyntaxKind.SpreadAssignment:
+                    return emitSpreadAssignment(node as SpreadAssignment);
 
                 // Enum
                 case SyntaxKind.EnumMember:
@@ -818,8 +833,8 @@ const _super = (function (geti, seti) {
                     return emitTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.YieldExpression:
                     return emitYieldExpression(<YieldExpression>node);
-                case SyntaxKind.SpreadElementExpression:
-                    return emitSpreadElementExpression(<SpreadElementExpression>node);
+                case SyntaxKind.SpreadElement:
+                    return emitSpreadExpression(<SpreadElement>node);
                 case SyntaxKind.ClassExpression:
                     return emitClassExpression(<ClassExpression>node);
                 case SyntaxKind.OmittedExpression:
@@ -1086,6 +1101,19 @@ const _super = (function (geti, seti) {
 
         function emitThisType() {
             write("this");
+        }
+
+        function emitTypeOperator(node: TypeOperatorNode) {
+            writeTokenText(node.operator);
+            write(" ");
+            emit(node.type);
+        }
+
+        function emitPropertyAccessType(node: IndexedAccessTypeNode) {
+            emit(node.objectType);
+            write("[");
+            emit(node.indexType);
+            write("]");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
@@ -1357,7 +1385,7 @@ const _super = (function (geti, seti) {
             emitExpressionWithPrefix(" ", node.expression);
         }
 
-        function emitSpreadElementExpression(node: SpreadElementExpression) {
+        function emitSpreadExpression(node: SpreadElement) {
             write("...");
             emitExpression(node.expression);
         }
@@ -2085,6 +2113,13 @@ const _super = (function (geti, seti) {
             }
         }
 
+        function emitSpreadAssignment(node: SpreadAssignment) {
+            if (node.expression) {
+                write("...");
+                emitExpression(node.expression);
+            }
+        }
+
         //
         // Enum
         //
@@ -2188,9 +2223,17 @@ const _super = (function (geti, seti) {
                 helpersEmitted = true;
             }
 
-            if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasJsxSpreadAttributes)) {
+            if ((languageVersion < ScriptTarget.ESNext || currentSourceFile.scriptKind === ScriptKind.JSX || currentSourceFile.scriptKind === ScriptKind.TSX) &&
+                compilerOptions.jsx !== JsxEmit.Preserve &&
+                !assignEmitted &&
+                node.flags & NodeFlags.HasSpreadAttribute) {
                 writeLines(assignHelper);
                 assignEmitted = true;
+            }
+
+            if (languageVersion < ScriptTarget.ESNext && !restEmitted && node.flags & NodeFlags.HasRestAttribute) {
+                writeLines(restHelper);
+                restEmitted = true;
             }
 
             if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {

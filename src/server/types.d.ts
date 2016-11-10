@@ -65,10 +65,6 @@ declare namespace ts.server {
         readonly kind: ActionInvalidate;
     }
 
-    export interface InvalidateCachedTypings extends ProjectResponse {
-        readonly kind: ActionInvalidate;
-    }
-
     export interface TypingsInstallEvent extends TypingInstallerResponse {
         readonly packagesToInstall: ReadonlyArray<string>;
         readonly kind: EventInstall;
@@ -77,6 +73,6 @@ declare namespace ts.server {
     export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
         writeFile(path: string, content: string): void;
         createDirectory(path: string): void;
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
+        watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
     }
 }

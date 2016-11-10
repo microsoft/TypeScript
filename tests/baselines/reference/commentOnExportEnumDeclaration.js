@@ -11,9 +11,9 @@ export enum Color {
 /**
  * comment
  */
+var Color;
 (function (Color) {
     Color[Color["r"] = 0] = "r";
     Color[Color["g"] = 1] = "g";
     Color[Color["b"] = 2] = "b";
-})(exports.Color || (exports.Color = {}));
-var Color = exports.Color;
+})(Color = exports.Color || (exports.Color = {}));

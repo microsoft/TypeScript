@@ -5,53 +5,45 @@
 namespace ts.server {
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost, ServerLanguageServiceHost {
         private compilationSettings: ts.CompilerOptions;
-        private readonly resolvedModuleNames: ts.FileMap<Map<ResolvedModuleWithFailedLookupLocations>>;
-        private readonly resolvedTypeReferenceDirectives: ts.FileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
+        private readonly resolvedModuleNames= createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        private readonly resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         private readonly getCanonicalFileName: (fileName: string) => string;
 
         private filesWithChangedSetOfUnresolvedImports: Path[];
 
         private readonly resolveModuleName: typeof resolveModuleName;
         readonly trace: (s: string) => void;
+        readonly realpath?: (path: string) => string;
 
         constructor(private readonly host: ServerHost, private readonly project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
-            this.resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
-            this.resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
 
             if (host.trace) {
                 this.trace = s => host.trace(s);
             }
 
             this.resolveModuleName = (moduleName, containingFile, compilerOptions, host) => {
+                const globalCache = this.project.getTypingOptions().enableAutoDiscovery
+                    ? this.project.projectService.typingsInstaller.globalTypingsCacheLocation
+                    : undefined;
                 const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
-                if (primaryResult.resolvedModule) {
-                    // return result immediately only if it is .ts, .tsx or .d.ts
+                // return result immediately only if it is .ts, .tsx or .d.ts
+                if (!(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
                     // otherwise try to load typings from @types
-                    if (fileExtensionIsAny(primaryResult.resolvedModule.resolvedFileName, supportedTypeScriptExtensions)) {
-                        return primaryResult;
+
+                    // create different collection of failed lookup locations for second pass
+                    // if it will fail and we've already found something during the first pass - we don't want to pollute its results
+                    const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, this.project.getProjectName(), compilerOptions, host, globalCache);
+                    if (resolvedModule) {
+                        return { resolvedModule, failedLookupLocations: primaryResult.failedLookupLocations.concat(failedLookupLocations) };
                     }
-                }
-                // create different collection of failed lookup locations for second pass
-                // if it will fail and we've already found something during the first pass - we don't want to pollute its results 
-                const secondaryLookupFailedLookupLocations: string[] = [];
-                const globalCache = this.project.projectService.typingsInstaller.globalTypingsCacheLocation;
-                if (this.project.getTypingOptions().enableAutoDiscovery && globalCache) {
-                    const traceEnabled = isTraceEnabled(compilerOptions, host);
-                    if (traceEnabled) {
-                        trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, this.project.getProjectName(), moduleName, globalCache);
-                    }
-                    const state: ModuleResolutionState = { compilerOptions, host, skipTsx: false, traceEnabled };
-                    const resolvedName = loadModuleFromNodeModules(moduleName, globalCache, secondaryLookupFailedLookupLocations, state, /*checkOneLevel*/ true);
-                    if (resolvedName) {
-                        return createResolvedModule(resolvedName, /*isExternalLibraryImport*/ true, primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations));
-                    }
-                }
-                if (!primaryResult.resolvedModule && secondaryLookupFailedLookupLocations.length) {
-                    primaryResult.failedLookupLocations = primaryResult.failedLookupLocations.concat(secondaryLookupFailedLookupLocations);
                 }
                 return primaryResult;
             };
+
+            if (this.host.realpath) {
+                this.realpath = path => this.host.realpath(path);
+            }
         }
 
         public startRecordingFilesWithChangedResolutions() {
@@ -64,12 +56,13 @@ namespace ts.server {
             return collected;
         }
 
-        private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R extends { resolvedFileName?: string }>(
+        private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
             cache: ts.FileMap<Map<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R,
+            getResultFileName: (result: R) => string | undefined,
             logChanges: boolean): R[] {
 
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
@@ -123,7 +116,7 @@ namespace ts.server {
                 if (!oldResult || !newResult) {
                     return false;
                 }
-                return oldResult.resolvedFileName === newResult.resolvedFileName;
+                return getResultFileName(oldResult) === getResultFileName(newResult);
             }
 
             function moduleResolutionIsValid(resolution: T): boolean {
@@ -133,10 +126,7 @@ namespace ts.server {
 
                 const result = getResult(resolution);
                 if (result) {
-                    if (result.resolvedFileName && result.resolvedFileName === lastDeletedFileName) {
-                        return false;
-                    }
-                    return true;
+                    return getResultFileName(result) !== lastDeletedFileName;
                 }
 
                 // consider situation if we have no candidate locations as valid resolution.
@@ -162,11 +152,13 @@ namespace ts.server {
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective, m => m.resolvedTypeReferenceDirective, /*logChanges*/ false);
+            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective,
+                m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName,  /*logChanges*/ false);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
-            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName, m => m.resolvedModule, /*logChanges*/ true);
+        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModuleFull[] {
+            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName,
+                m => m.resolvedModule, r => r.resolvedFileName, /*logChanges*/ true);
         }
 
         getDefaultLibFileName() {

@@ -15,8 +15,8 @@ System.register("b", ["a"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function foo() { new a_1.default(); }
-    var a_1;
     exports_1("default", foo);
+    var a_1;
     return {
         setters: [
             function (a_1_1) {

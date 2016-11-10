@@ -131,7 +131,6 @@ namespace ts.server.typingsInstaller {
 
         protected installWorker(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
             if (this.log.isEnabled()) {
-
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(args)}'.`);
             }
             const command = `${this.npmPath} install ${args.join(" ")} --save-dev`;

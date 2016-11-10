@@ -367,7 +367,7 @@ namespace ts.server.typingsInstaller {
                         this.sendResponse({ projectName: projectName, kind: server.ActionInvalidate });
                         isInvoked = true;
                     }
-                });
+                }, /*pollingInterval*/ 2000);
                 watchers.push(w);
             }
             this.projectWatchers[projectName] = watchers;

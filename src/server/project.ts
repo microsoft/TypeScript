@@ -161,8 +161,8 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
-            if (this.projectKind === ProjectKind.Inferred) {
-                this.compilerOptions.noEmitOverwritenFiles = true;
+            if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
+                this.compilerOptions.noEmitForJsFiles = true;
             }
 
             if (languageServiceEnabled) {
@@ -301,7 +301,7 @@ namespace ts.server {
             return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
         }
 
-        getFileNames() {
+        getFileNames(excludeFilesFromExternalLibraries?: boolean) {
             if (!this.program) {
                 return [];
             }
@@ -317,8 +317,14 @@ namespace ts.server {
                 }
                 return rootFiles;
             }
-            const sourceFiles = this.program.getSourceFiles();
-            return sourceFiles.map(sourceFile => asNormalizedPath(sourceFile.fileName));
+            const result: NormalizedPath[] = [];
+            for (const f of this.program.getSourceFiles()) {
+                if (excludeFilesFromExternalLibraries && this.program.isSourceFileFromExternalLibrary(f)) {
+                    continue;
+                }
+                result.push(asNormalizedPath(f.fileName));
+            }
+            return result;
         }
 
         getAllEmittableFiles() {
@@ -670,14 +676,14 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, public compileOnSaveEnabled: boolean) {
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions) {
             super(ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
                 /*files*/ undefined,
                 languageServiceEnabled,
                 compilerOptions,
-                compileOnSaveEnabled);
+                /*compileOnSaveEnabled*/ false);
 
             this.inferredProjectName = makeInferredProjectName(InferredProject.NextId);
             InferredProject.NextId++;

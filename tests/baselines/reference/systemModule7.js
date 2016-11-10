@@ -21,7 +21,7 @@ System.register([], function (exports_1, context_1) {
             // filename: instantiatedModule.ts
             (function (M) {
                 var x = 1;
-            })(M = M || (M = {}));
+            })(M || (M = {}));
             exports_1("M", M);
         }
     };

@@ -74,6 +74,8 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
+            case SyntaxKind.SpreadAssignment:
+                return visitNode(cbNode, (<SpreadAssignment>node).expression);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -134,7 +136,11 @@ namespace ts {
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNodes, (<UnionOrIntersectionTypeNode>node).types);
             case SyntaxKind.ParenthesizedType:
-                return visitNode(cbNode, (<ParenthesizedTypeNode>node).type);
+            case SyntaxKind.TypeOperator:
+                return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+            case SyntaxKind.IndexedAccessType:
+                return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
+                    visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
             case SyntaxKind.ObjectBindingPattern:
@@ -193,8 +199,8 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
                     visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
-            case SyntaxKind.SpreadElementExpression:
-                return visitNode(cbNode, (<SpreadElementExpression>node).expression);
+            case SyntaxKind.SpreadElement:
+                return visitNode(cbNode, (<SpreadElement>node).expression);
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
                 return visitNodes(cbNodes, (<Block>node).statements);
@@ -434,6 +440,10 @@ namespace ts {
         return result;
     }
 
+    export function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName {
+        return Parser.parseIsolatedEntityName(text, languageVersion);
+    }
+
     export function isExternalModule(file: SourceFile): boolean {
         return file.externalModuleIndicator !== undefined;
     }
@@ -583,6 +593,16 @@ namespace ts {
             clearState();
 
             return result;
+        }
+
+        export function parseIsolatedEntityName(content: string, languageVersion: ScriptTarget): EntityName {
+            initializeState(content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS);
+            // Prime the scanner.
+            nextToken();
+            const entityName = parseEntityName(/*allowReservedWords*/ true);
+            const isInvalid = token() === SyntaxKind.EndOfFileToken && !parseDiagnostics.length;
+            clearState();
+            return isInvalid ? entityName : undefined;
         }
 
         function getLanguageVariant(scriptKind: ScriptKind) {
@@ -1265,9 +1285,11 @@ namespace ts {
                     // which would be a candidate for improved error reporting.
                     return token() === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
-                    return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.AsteriskToken || isLiteralPropertyName();
+                    return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.AsteriskToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
+                case ParsingContext.RestProperties:
+                    return isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
-                    return token() === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
+                    return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
                 case ParsingContext.HeritageClauseElement:
                     // If we see { } then only consume it as an expression if it is followed by , or {
                     // That way we won't consume the body of a class in its heritage clause.
@@ -1394,6 +1416,7 @@ namespace ts {
                 case ParsingContext.ArrayBindingElements:
                     return token() === SyntaxKind.CloseBracketToken;
                 case ParsingContext.Parameters:
+                case ParsingContext.RestProperties:
                     // Tokens other than ')' and ']' (the latter for index signatures) are here for better error recovery
                     return token() === SyntaxKind.CloseParenToken || token() === SyntaxKind.CloseBracketToken /*|| token === SyntaxKind.OpenBraceToken*/;
                 case ParsingContext.TypeArguments:
@@ -1578,6 +1601,9 @@ namespace ts {
 
                 case ParsingContext.Parameters:
                     return isReusableParameter(node);
+
+                case ParsingContext.RestProperties:
+                    return false;
 
                 // Any other lists we do not care about reusing nodes in.  But feel free to add if
                 // you can do so safely.  Danger areas involve nodes that may involve speculative
@@ -1776,6 +1802,7 @@ namespace ts {
                 case ParsingContext.BlockStatements: return Diagnostics.Declaration_or_statement_expected;
                 case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
                 case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
+                case ParsingContext.RestProperties: // fallthrough
                 case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
                 case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
                 case ParsingContext.EnumMembers: return Diagnostics.Enum_member_expected;
@@ -2519,12 +2546,37 @@ namespace ts {
         function parseArrayTypeOrHigher(): TypeNode {
             let type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
-                parseExpected(SyntaxKind.CloseBracketToken);
-                const node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
-                node.elementType = type;
-                type = finishNode(node);
+                if (isStartOfType()) {
+                    const node = <IndexedAccessTypeNode>createNode(SyntaxKind.IndexedAccessType, type.pos);
+                    node.objectType = type;
+                    node.indexType = parseType();
+                    parseExpected(SyntaxKind.CloseBracketToken);
+                    type = finishNode(node);
+                }
+                else {
+                    const node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
+                    node.elementType = type;
+                    parseExpected(SyntaxKind.CloseBracketToken);
+                    type = finishNode(node);
+                }
             }
             return type;
+        }
+
+        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword) {
+            const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
+            parseExpected(operator);
+            node.operator = operator;
+            node.type = parseTypeOperatorOrHigher();
+            return finishNode(node);
+        }
+
+        function parseTypeOperatorOrHigher(): TypeNode {
+            switch (token()) {
+                case SyntaxKind.KeyOfKeyword:
+                    return parseTypeOperator(SyntaxKind.KeyOfKeyword);
+            }
+            return parseArrayTypeOrHigher();
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
@@ -2543,7 +2595,7 @@ namespace ts {
         }
 
         function parseIntersectionTypeOrHigher(): TypeNode {
-            return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseArrayTypeOrHigher, SyntaxKind.AmpersandToken);
+            return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseTypeOperatorOrHigher, SyntaxKind.AmpersandToken);
         }
 
         function parseUnionTypeOrHigher(): TypeNode {
@@ -4093,7 +4145,7 @@ namespace ts {
         }
 
         function parseSpreadElement(): Expression {
-            const node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
+            const node = <SpreadElement>createNode(SyntaxKind.SpreadElement);
             parseExpected(SyntaxKind.DotDotDotToken);
             node.expression = parseAssignmentExpressionOrHigher();
             return finishNode(node);
@@ -4133,6 +4185,12 @@ namespace ts {
 
         function parseObjectLiteralElement(): ObjectLiteralElementLike {
             const fullStart = scanner.getStartPos();
+            const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            if (dotDotDotToken) {
+                const spreadElement = <SpreadAssignment>createNode(SyntaxKind.SpreadAssignment, fullStart);
+                spreadElement.expression = parseAssignmentExpressionOrHigher();
+                return addJSDocComment(finishNode(spreadElement));
+            }
             const decorators = parseDecorators();
             const modifiers = parseModifiers();
 
@@ -4836,6 +4894,7 @@ namespace ts {
 
         function parseObjectBindingElement(): BindingElement {
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
+            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             const tokenIsIdentifier = isIdentifier();
             const propertyName = parsePropertyName();
             if (tokenIsIdentifier && token() !== SyntaxKind.ColonToken) {
@@ -5780,6 +5839,7 @@ namespace ts {
             JsxChildren,               // Things between opening and closing JSX tags
             ArrayLiteralMembers,       // Members in array literal
             Parameters,                // Parameters in parameter list
+            RestProperties,            // Property names in a rest type list
             TypeParameters,            // Type parameters in type parameter list
             TypeArguments,             // Type arguments in type argument list
             TupleElementTypes,         // Element types in tuple element type list
