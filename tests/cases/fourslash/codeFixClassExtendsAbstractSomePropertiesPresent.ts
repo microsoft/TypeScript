@@ -7,7 +7,7 @@
 //// }
 ////
 //// class C extends A {[|   |]
-////    constructor(public x: number) { }
+////    constructor(public x: number) { super(); }
 ////    y: number;
 //// }
 

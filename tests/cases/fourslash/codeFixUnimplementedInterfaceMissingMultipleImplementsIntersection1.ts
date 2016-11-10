@@ -10,8 +10,4 @@
 //// class C implements I1,I2 {[|
 //// |]}
 
-verify.rangeAfterCodeFix(`
-     x: number;
-`);
-
-verify.not.codeFixAvailable();
+verify.codeFixAvailable();

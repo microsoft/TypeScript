@@ -98,10 +98,6 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
-    interface CodeFixIdentifier {
-        code: number;
-        count: number
-    }
     class test_ {
         markers(): Marker[];
         markerNames(): string[];
@@ -214,8 +210,8 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
-        rangeAfterCodeFix(expectedText: string, CodeFixIdentifier?: CodeFixIdentifier): void;
-        fileAfterCodeFix(expectedContents: string, fileName?: string, CodeFixIdentifier?: CodeFixIdentifier): void;
+        rangeAfterCodeFix(expectedText: string): void;
+        fileAfterCodeFix(expectedContents: string, fileName?: string): void;
 
         navigationBar(json: any): void;
         navigationTree(json: any): void;

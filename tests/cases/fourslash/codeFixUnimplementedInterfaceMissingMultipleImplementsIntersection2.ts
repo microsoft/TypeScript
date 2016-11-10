@@ -4,13 +4,11 @@
 ////     x: number;
 //// }
 //// interface I2 {
-////     x: number;
+////     x: string;
 //// }
 ////
-//// class C1 implements I1,I2 {[|
-//// |]}
+//// class C implements I1,I2 {
+////     x: string;
+//// }
 
-verify.rangeAfterCodeFix(`
-x: number;
-`);
 verify.not.codeFixAvailable();
