@@ -336,6 +336,8 @@ namespace ts {
 
         let jsxElementType: Type;
         let _jsxNamespace: string;
+        let _jsxFactoryEntity: EntityName;
+
         /** Things we lazy load from the JSX namespace */
         const jsxTypes = createMap<Type>();
         const JsxNames = {
@@ -377,9 +379,9 @@ namespace ts {
             if (_jsxNamespace === undefined) {
                 _jsxNamespace = "React";
                 if (compilerOptions.jsxFactory) {
-                    const jsxEntity = host.getJsxFactoryEntity();
-                    if (jsxEntity) {
-                        _jsxNamespace = getFirstIdentifier(jsxEntity).text;
+                    _jsxFactoryEntity = parseIsolatedEntityName(compilerOptions.jsxFactory, languageVersion);
+                    if (_jsxFactoryEntity) {
+                        _jsxNamespace = getFirstIdentifier(_jsxFactoryEntity).text;
                     }
                 }
                 else if (compilerOptions.reactNamespace) {
@@ -19613,7 +19615,8 @@ namespace ts {
                 getTypeReferenceDirectivesForEntityName,
                 getTypeReferenceDirectivesForSymbol,
                 isLiteralConstDeclaration,
-                writeLiteralConstValue
+                writeLiteralConstValue,
+                getJsxFactoryEntity: () => _jsxFactoryEntity
             };
 
             // defined here to avoid outer scope pollution

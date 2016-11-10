@@ -114,7 +114,7 @@ namespace ts {
             }
 
             const element = createExpressionForJsxElement(
-                context.getEmitHost().getJsxFactoryEntity(),
+                context.getEmitResolver().getJsxFactoryEntity(),
                 compilerOptions.reactNamespace,
                 tagName,
                 objectProperties,
