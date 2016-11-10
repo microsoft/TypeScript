@@ -420,14 +420,15 @@ namespace ts {
         HasParamDecorators = 1 << 12, // If the file has parameter decorators (initialized by binding)
         HasAsyncFunctions =  1 << 13, // If the file has async functions (initialized by binding)
         HasSpreadAttribute = 1 << 14, // If the file as JSX spread attributes (initialized by binding)
-        DisallowInContext =  1 << 15, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 16, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 17, // If node was parsed as part of a decorator
-        AwaitContext =       1 << 18, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 19, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 20, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 21, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 22, // If we've computed data from children and cached it in this node
+        HasRestAttribute =   1 << 15, // If the file has object destructure elements
+        DisallowInContext =  1 << 16, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 17, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 18, // If node was parsed as part of a decorator
+        AwaitContext =       1 << 19, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 20, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 21, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 22, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 23, // If we've computed data from children and cached it in this node
 
         BlockScoped = Let | Const,
 
@@ -649,7 +650,7 @@ namespace ts {
     export interface BindingElement extends Declaration {
         kind: SyntaxKind.BindingElement;
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
-        dotDotDotToken?: DotDotDotToken;              // Present on rest binding element
+        dotDotDotToken?: DotDotDotToken;    // Present on rest element (in object binding pattern)
         name: BindingName;                  // Declared binding element name
         initializer?: Expression;           // Optional initializer
     }
