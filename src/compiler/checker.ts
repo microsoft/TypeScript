@@ -19970,8 +19970,12 @@ namespace ts {
                     if (requestedExternalEmitHelpers & NodeFlags.HasClassExtends && languageVersion < ScriptTarget.ES2015) {
                         verifyHelperSymbol(exports, "__extends", SymbolFlags.Value);
                     }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasSpreadAttribute && compilerOptions.jsx !== JsxEmit.Preserve) {
+                    if (requestedExternalEmitHelpers & NodeFlags.HasSpreadAttribute &&
+                        (languageVersion < ScriptTarget.ESNext || compilerOptions.jsx === JsxEmit.React)) {
                         verifyHelperSymbol(exports, "__assign", SymbolFlags.Value);
+                    }
+                    if (languageVersion < ScriptTarget.ESNext && requestedExternalEmitHelpers & NodeFlags.HasRestAttribute) {
+                        verifyHelperSymbol(exports, "__rest", SymbolFlags.Value);
                     }
                     if (requestedExternalEmitHelpers & NodeFlags.HasDecorators) {
                         verifyHelperSymbol(exports, "__decorate", SymbolFlags.Value);
