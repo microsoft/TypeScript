@@ -15316,11 +15316,12 @@ namespace ts {
         }
 
         function checkMappedType(node: MappedTypeNode) {
-            getTypeFromMappedTypeNode(node);
-            // const type = <MappedType>getTypeFromMappedTypeNode(node);
-            // const constraintType = getConstraintTypeFromMappedType(type);
-            // const keyType = constraintType.flags & TypeFlags.TypeParameter ? getApparentTypeOfTypeParameter(<TypeParameter>constraintType) : constraintType;
-            // checkTypeAssignableTo(keyType, stringOrNumberType, node.typeParameter.constraint);
+            checkSourceElement(node.typeParameter);
+            checkSourceElement(node.type);
+            const type = <MappedType>getTypeFromMappedTypeNode(node);
+            const constraintType = getConstraintTypeFromMappedType(type);
+            const keyType = constraintType.flags & TypeFlags.TypeParameter ? getApparentTypeOfTypeParameter(<TypeParameter>constraintType) : constraintType;
+            checkTypeAssignableTo(keyType, stringOrNumberType, node.typeParameter.constraint);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
