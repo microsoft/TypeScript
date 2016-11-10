@@ -740,6 +740,7 @@ namespace ts {
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
+        private _mixedContentFileExtensions: string[];
         private currentDirectory: string;
 
         constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
@@ -755,10 +756,16 @@ namespace ts {
 
             // store the compilation settings
             this._compilationSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
+
+            this._mixedContentFileExtensions = host.getMixedContentFileExtensions ? host.getMixedContentFileExtensions() : [];
         }
 
         public compilationSettings() {
             return this._compilationSettings;
+        }
+
+        public mixedContentFileExtensions() {
+            return this._mixedContentFileExtensions;
         }
 
         private createEntry(fileName: string, path: Path) {
@@ -1083,7 +1090,7 @@ namespace ts {
             }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
-            const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
+            const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program, hostCache.mixedContentFileExtensions());
 
             // Release any files we have acquired in the old program but are
             // not part of the new program.

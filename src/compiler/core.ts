@@ -1912,8 +1912,8 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions): string[] {
-        return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
+    export function getSupportedExtensions(options?: CompilerOptions, mixedContentFileExtensions?: string[]): string[] {
+        return options && options.allowJs ? concatenate(allSupportedExtensions, mixedContentFileExtensions) : supportedTypeScriptExtensions;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -1924,10 +1924,10 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, mixedContentFileExtensions?: string[]) {
         if (!fileName) { return false; }
 
-        for (const extension of getSupportedExtensions(compilerOptions)) {
+        for (const extension of getSupportedExtensions(compilerOptions, mixedContentFileExtensions)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }
