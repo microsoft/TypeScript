@@ -1006,11 +1006,10 @@ namespace ts {
                                 return;
                             }
                             // pass through
-                            let isConstInvalid = true;
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
                             if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
-                                return checkModifiers(<NodeArray<Modifier>>nodes, !isConstInvalid);
+                                return checkModifiers(<NodeArray<Modifier>>nodes, parent.kind === SyntaxKind.VariableStatement);
                             }
                             break;
                         case SyntaxKind.PropertyDeclaration:
