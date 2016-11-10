@@ -1,4 +1,4 @@
-﻿/// <reference path="types.d.ts" />
+/// <reference path="types.d.ts" />
 /// <reference path="shared.ts" />
 
 namespace ts.server {
@@ -211,6 +211,7 @@ namespace ts.server {
 
     export interface ServerLanguageServiceHost {
         setCompilationSettings(options: CompilerOptions): void;
+        setFileExtensionMap(fileExtensionMap: FileExtensionMap): void;
         notifyFileRemoved(info: ScriptInfo): void;
         startRecordingFilesWithChangedResolutions(): void;
         finishRecordingFilesWithChangedResolutions(): Path[];
@@ -218,6 +219,7 @@ namespace ts.server {
 
     export const nullLanguageServiceHost: ServerLanguageServiceHost = {
         setCompilationSettings: () => undefined,
+        setFileExtensionMap: () => undefined,
         notifyFileRemoved: () => undefined,
         startRecordingFilesWithChangedResolutions: () => undefined,
         finishRecordingFilesWithChangedResolutions: () => undefined

@@ -13,7 +13,6 @@ namespace ts.server {
         private fileWatcher: FileWatcher;
         private svc: ScriptVersionCache;
 
-        // TODO: allow to update hasMixedContent from the outside
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
@@ -28,6 +27,8 @@ namespace ts.server {
                 ? scriptKind
                 : getScriptKindFromFileName(fileName);
         }
+
+        public hasChanges = false;
 
         getFormatCodeSettings() {
             return this.formatCodeSettings;

@@ -1,4 +1,4 @@
-﻿/// <reference path="..\services\services.ts" />
+/// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
@@ -202,6 +202,7 @@ namespace ts.server {
         enableLanguageService() {
             const lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
             lsHost.setCompilationSettings(this.compilerOptions);
+            lsHost.setFileExtensionMap(this.projectService.hostConfiguration.fileExtensionMap);
             this.languageService = ts.createLanguageService(lsHost, this.documentRegistry);
 
             this.lsHost = lsHost;
@@ -462,6 +463,10 @@ namespace ts.server {
             return !hasChanges;
         }
 
+        private hasChangedFiles() {
+            return this.rootFiles && forEach(this.rootFiles, info => info.hasChanges);
+        }
+
         private setTypings(typings: SortedReadonlyArray<string>): boolean {
             if (arrayIsEqualTo(this.typingFiles, typings)) {
                 return false;
@@ -475,7 +480,7 @@ namespace ts.server {
             const oldProgram = this.program;
             this.program = this.languageService.getProgram();
 
-            let hasChanges = false;
+            let hasChanges = this.hasChangedFiles();
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
@@ -578,6 +583,7 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
+                const updated = this.rootFiles.filter(info => info.hasChanges).map(info => info.fileName);
                 for (const id in currentFiles) {
                     if (!hasProperty(lastReportedFileNames, id)) {
                         added.push(id);
@@ -588,9 +594,12 @@ namespace ts.server {
                         removed.push(id);
                     }
                 }
+                for (const root of this.rootFiles) {
+                    root.hasChanges = false;
+                }
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, changes: { added, removed }, projectErrors: this.projectErrors };
+                return { info, changes: { added, removed, updated }, projectErrors: this.projectErrors };
             }
             else {
                 // unknown version - return everything

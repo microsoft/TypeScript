@@ -289,7 +289,7 @@ namespace ts {
         return resolutions;
     }
 
-    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
+    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, fileExtensionMap?: FileExtensionMap): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -324,7 +324,7 @@ namespace ts {
         let skipDefaultLib = options.noLib;
         const programDiagnostics = createDiagnosticCollection();
         const currentDirectory = host.getCurrentDirectory();
-        const supportedExtensions = getSupportedExtensions(options);
+        const supportedExtensions = getSupportedExtensions(options, fileExtensionMap);
 
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createFileMap<boolean>(getCanonicalFileName);

@@ -5,6 +5,7 @@
 namespace ts.server {
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost, ServerLanguageServiceHost {
         private compilationSettings: ts.CompilerOptions;
+        private fileExtensionMap: FileExtensionMap;
         private readonly resolvedModuleNames= createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         private readonly resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         private readonly getCanonicalFileName: (fileName: string) => string;
@@ -143,6 +144,10 @@ namespace ts.server {
             return this.compilationSettings;
         }
 
+         getFileExtensionMap() {
+            return this.fileExtensionMap;
+        }
+
         useCaseSensitiveFileNames() {
             return this.host.useCaseSensitiveFileNames;
         }
@@ -230,6 +235,10 @@ namespace ts.server {
                 this.resolvedTypeReferenceDirectives.clear();
             }
             this.compilationSettings = opt;
+        }
+
+        setFileExtensionMap(fileExtensionMap: FileExtensionMap) {
+            this.fileExtensionMap = fileExtensionMap || {};
         }
     }
 }

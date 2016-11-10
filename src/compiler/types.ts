@@ -2997,6 +2997,12 @@ namespace ts {
         ThisProperty
     }
 
+    export interface FileExtensionMap {
+        javaScript?: string[];
+        typeScript?: string[];
+        mixedContent?: string[];
+    }
+
     export interface DiagnosticMessage {
         key: string;
         category: DiagnosticCategory;
