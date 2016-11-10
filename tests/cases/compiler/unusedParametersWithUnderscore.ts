@@ -1,7 +1,7 @@
 //@noUnusedLocals:true
 //@noUnusedParameters:true
 
-function f(a, _b, c, ___, d,e___, _f) {
+function f(a, _b, c, ___, d,e___, f, g__, h, i_) {
 }
 
 
@@ -17,7 +17,7 @@ function f4(...arg) {
 function f5(..._arg) {
 }
 
-function f6(arg?, _arg?) {
+function f6(_arg?, arg?) {
 }
 
 var f7 = _ => undefined;

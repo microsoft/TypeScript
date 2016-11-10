@@ -1,22 +1,28 @@
-tests/cases/compiler/unusedParametersWithUnderscore.ts(2,12): error TS6133: 'a' is declared but never used.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(2,19): error TS6133: 'c' is declared but never used.
 tests/cases/compiler/unusedParametersWithUnderscore.ts(2,27): error TS6133: 'd' is declared but never used.
 tests/cases/compiler/unusedParametersWithUnderscore.ts(2,29): error TS6133: 'e___' is declared but never used.
+tests/cases/compiler/unusedParametersWithUnderscore.ts(2,35): error TS6133: 'f' is declared but never used.
+tests/cases/compiler/unusedParametersWithUnderscore.ts(2,38): error TS6133: 'g__' is declared but never used.
+tests/cases/compiler/unusedParametersWithUnderscore.ts(2,43): error TS6133: 'h' is declared but never used.
+tests/cases/compiler/unusedParametersWithUnderscore.ts(2,46): error TS6133: 'i_' is declared but never used.
 tests/cases/compiler/unusedParametersWithUnderscore.ts(12,16): error TS6133: 'arg' is declared but never used.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(18,13): error TS6133: 'arg' is declared but never used.
+tests/cases/compiler/unusedParametersWithUnderscore.ts(18,20): error TS6133: 'arg' is declared but never used.
 
 
-==== tests/cases/compiler/unusedParametersWithUnderscore.ts (6 errors) ====
+==== tests/cases/compiler/unusedParametersWithUnderscore.ts (8 errors) ====
     
-    function f(a, _b, c, ___, d,e___, _f) {
-               ~
-!!! error TS6133: 'a' is declared but never used.
-                      ~
-!!! error TS6133: 'c' is declared but never used.
+    function f(a, _b, c, ___, d,e___, f, g__, h, i_) {
                               ~
 !!! error TS6133: 'd' is declared but never used.
                                 ~~~~
 !!! error TS6133: 'e___' is declared but never used.
+                                      ~
+!!! error TS6133: 'f' is declared but never used.
+                                         ~~~
+!!! error TS6133: 'g__' is declared but never used.
+                                              ~
+!!! error TS6133: 'h' is declared but never used.
+                                                 ~~
+!!! error TS6133: 'i_' is declared but never used.
     }
     
     
@@ -34,8 +40,8 @@ tests/cases/compiler/unusedParametersWithUnderscore.ts(18,13): error TS6133: 'ar
     function f5(..._arg) {
     }
     
-    function f6(arg?, _arg?) {
-                ~~~
+    function f6(_arg?, arg?) {
+                       ~~~
 !!! error TS6133: 'arg' is declared but never used.
     }
     

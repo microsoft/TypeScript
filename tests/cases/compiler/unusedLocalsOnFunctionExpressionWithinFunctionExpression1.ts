@@ -1,7 +1,7 @@
 //@noUnusedLocals:true
 //@noUnusedParameters:true
 
-var greeter = function (person: string, person2: string) {
+var greeter = function (person: string, person2: string, person3: string) {
     var unused = 20;
     var maker = function (child: string): void {
         var unused2 = 22;

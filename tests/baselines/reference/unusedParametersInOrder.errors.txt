@@ -1,0 +1,54 @@
+tests/cases/compiler/unusedParametersInOrder.ts(2,18): error TS6133: 'c' is declared but never used.
+tests/cases/compiler/unusedParametersInOrder.ts(6,20): error TS6133: 'c' is declared but never used.
+tests/cases/compiler/unusedParametersInOrder.ts(10,21): error TS6133: 'c' is declared but never used.
+tests/cases/compiler/unusedParametersInOrder.ts(14,22): error TS6133: 'arg' is declared but never used.
+tests/cases/compiler/unusedParametersInOrder.ts(22,21): error TS6133: 'c' is declared but never used.
+tests/cases/compiler/unusedParametersInOrder.ts(26,17): error TS6133: 'c' is declared but never used.
+tests/cases/compiler/unusedParametersInOrder.ts(28,26): error TS6133: 'c' is declared but never used.
+
+
+==== tests/cases/compiler/unusedParametersInOrder.ts (7 errors) ====
+    
+    function f(a, b, c) {
+                     ~
+!!! error TS6133: 'c' is declared but never used.
+        return b;
+    }
+    
+    function f2({a, b, c}) {
+                       ~
+!!! error TS6133: 'c' is declared but never used.
+        return b;
+    }
+    
+    function f3([a, ,b, c]) {
+                        ~
+!!! error TS6133: 'c' is declared but never used.
+        return b;
+    }
+    
+    function f4(a, b, ...arg) {
+                         ~~~
+!!! error TS6133: 'arg' is declared but never used.
+        return b;
+    }
+    
+    function f5(a, b, ...arg) {
+        return arg;
+    }
+    
+    function f6(a?, b?, c?) {
+                        ~
+!!! error TS6133: 'c' is declared but never used.
+        return b;
+    }
+    
+    var f7 = (a, b, c) => b;
+                    ~
+!!! error TS6133: 'c' is declared but never used.
+    
+    var f8 = function (a, b, c) {
+                             ~
+!!! error TS6133: 'c' is declared but never used.
+        return b;
+    };

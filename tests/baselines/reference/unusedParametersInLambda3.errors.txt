@@ -1,0 +1,14 @@
+tests/cases/compiler/unusedParametersInLambda3.ts(4,23): error TS6133: 'Z' is declared but never used.
+
+
+==== tests/cases/compiler/unusedParametersInLambda3.ts (1 errors) ====
+    
+    class A {
+        public f1() {
+            return (X, Y, Z) => {
+                          ~
+!!! error TS6133: 'Z' is declared but never used.
+                Y;
+            }
+        }
+    }
