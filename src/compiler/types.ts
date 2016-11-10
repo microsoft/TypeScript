@@ -2485,6 +2485,7 @@ namespace ts {
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: SymbolWriter): void;
+        getJsxFactoryEntity(): EntityName;
     }
 
     export const enum SymbolFlags {
@@ -3095,6 +3096,7 @@ namespace ts {
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
+        jsxFactory?: string;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];

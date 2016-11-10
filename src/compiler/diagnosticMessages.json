@@ -2389,6 +2389,10 @@
         "category": "Error",
         "code": 5066
     },
+    "Invalid value for 'jsxFactory'. '{0}' is not a valid identifier or qualified-name.": {
+        "category": "Error",
+        "code": 5067
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2904,6 +2908,10 @@
     "Module '{0}' was resolved as ambient module declared in '{1}' since this file was not modified.": {
         "category": "Message",
         "code": 6145
+    },
+    "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
+        "category": "Message",
+        "code": 6146
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

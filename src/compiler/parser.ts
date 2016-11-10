@@ -440,6 +440,10 @@ namespace ts {
         return result;
     }
 
+    export function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName {
+        return Parser.parseIsolatedEntityName(text, languageVersion);
+    }
+
     export function isExternalModule(file: SourceFile): boolean {
         return file.externalModuleIndicator !== undefined;
     }
@@ -589,6 +593,16 @@ namespace ts {
             clearState();
 
             return result;
+        }
+
+        export function parseIsolatedEntityName(content: string, languageVersion: ScriptTarget): EntityName {
+            initializeState(content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS);
+            // Prime the scanner.
+            nextToken();
+            const entityName = parseEntityName(/*allowReservedWords*/ true);
+            const isInvalid = token() === SyntaxKind.EndOfFileToken && !parseDiagnostics.length;
+            clearState();
+            return isInvalid ? entityName : undefined;
         }
 
         function getLanguageVariant(scriptKind: ScriptKind) {
