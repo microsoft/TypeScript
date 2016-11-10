@@ -6843,9 +6843,15 @@ namespace ts {
                 }
 
                 if (!message) {
-                    message = relation === comparableRelation ?
-                        Diagnostics.Type_0_is_not_comparable_to_type_1 :
-                        Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    if (relation === comparableRelation) {
+                        message = Diagnostics.Type_0_is_not_comparable_to_type_1;
+                    }
+                    else if (sourceType === targetType) {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
+                    }
+                    else {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    }
                 }
 
                 reportError(message, sourceType, targetType);

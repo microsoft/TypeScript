@@ -3178,5 +3178,9 @@
     "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
         "category": "Error",
         "code": 90009
+    },
+    "Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.": {
+        "category": "Error",
+        "code": 90010
     }
 }
