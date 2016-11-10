@@ -471,7 +471,11 @@ namespace ts {
             currentSourceFile = node;
 
             // ensure "use strict" is emitted in all scenarios in alwaysStrict mode
-            if (compilerOptions.alwaysStrict) {
+            // There is no need to emit "use strict" in the following cases:
+            //      1. The file is an external module and target is es2015 or higher
+            //      or 2. The file is an external module and module-kind is es6 or es2015 as such value is not allowed when targeting es5 or lower
+            if (compilerOptions.alwaysStrict &&
+                !(isExternalModule(node) && (compilerOptions.target >= ScriptTarget.ES2015 || compilerOptions.module === ModuleKind.ES2015))) {
                 node = ensureUseStrict(node);
             }
 

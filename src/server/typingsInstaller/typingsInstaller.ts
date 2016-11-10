@@ -69,7 +69,7 @@ namespace ts.server.typingsInstaller {
         requestId: number;
         args: string[];
         cwd: string;
-        onRequestCompleted: RequestCompletedAction
+        onRequestCompleted: RequestCompletedAction;
     };
 
     export abstract class TypingsInstaller {
@@ -380,7 +380,7 @@ namespace ts.server.typingsInstaller {
                 compilerOptions: request.compilerOptions,
                 typings,
                 unresolvedImports: request.unresolvedImports,
-                kind: server.ActionSet
+                kind: ActionSet
             };
         }
 
