@@ -16,11 +16,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-let Testing123_1 = class Testing123 {
+let Testing123 = Testing123_1 = class Testing123 {
 };
-let Testing123 = Testing123_1;
 Testing123 = Testing123_1 = __decorate([
     Something({ v: () => Testing123_1 }),
     __metadata("design:paramtypes", [])
 ], Testing123);
 exports.Testing123 = Testing123;
+var Testing123_1;

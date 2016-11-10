@@ -5,17 +5,17 @@ type Foo<T> = {
 >T : T
 
     foo<U>(): Foo<U>
->foo : <U>() => { foo<U>(): any; }
+>foo : <U>() => Foo<U>
 >U : U
 >Foo : Foo<T>
 >U : U
 
 };
 function bar() {
->bar : () => { foo<U>(): any; }
+>bar : () => Foo<number>
 
     return {} as Foo<number>;
->{} as Foo<number> : { foo<U>(): any; }
+>{} as Foo<number> : Foo<number>
 >{} : {}
 >Foo : Foo<T>
 }

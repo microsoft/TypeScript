@@ -11,7 +11,7 @@ switch (x) {
 
         x++;
 >x++ : number
->x : 5
+>x : number
 
         break;
     case 10:
@@ -19,7 +19,7 @@ switch (x) {
         {
             x--;
 >x-- : number
->x : 10
+>x : number
 
             break;
         }
@@ -39,7 +39,7 @@ switch (x)
 
         x++;
 >x++ : number
->x : 5
+>x : number
 
         break;
     case 10:
@@ -47,7 +47,7 @@ switch (x)
         {
             x--;
 >x-- : number
->x : 10
+>x : number
 
             break;
         }

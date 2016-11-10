@@ -7,6 +7,6 @@
 
 //// [parserEnum4.js]
 "use strict";
+var SignatureFlags;
 (function (SignatureFlags) {
-})(exports.SignatureFlags || (exports.SignatureFlags = {}));
-var SignatureFlags = exports.SignatureFlags;
+})(SignatureFlags = exports.SignatureFlags || (exports.SignatureFlags = {}));

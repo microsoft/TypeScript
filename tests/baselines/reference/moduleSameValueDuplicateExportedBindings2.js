@@ -15,11 +15,11 @@ export enum Animals {
 
 //// [c.js]
 "use strict";
+var Animals;
 (function (Animals) {
     Animals[Animals["Cat"] = 0] = "Cat";
     Animals[Animals["Dog"] = 1] = "Dog";
-})(exports.Animals || (exports.Animals = {}));
-var Animals = exports.Animals;
+})(Animals = exports.Animals || (exports.Animals = {}));
 ;
 //// [b.js]
 "use strict";

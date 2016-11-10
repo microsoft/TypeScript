@@ -1029,7 +1029,7 @@ namespace Harness {
                 },
                 realpath: realPathMap && ((f: string) => {
                     const path = ts.toPath(f, currentDirectory, getCanonicalFileName);
-                    return realPathMap.contains(path) ? realPathMap.get(path) : path;
+                    return realPathMap.get(path) || path;
                 }),
                 directoryExists: dir => {
                     let path = ts.toPath(dir, currentDirectory, getCanonicalFileName);
@@ -1037,13 +1037,7 @@ namespace Harness {
                     if (path[path.length - 1] === "/") {
                         path = <ts.Path>path.substr(0, path.length - 1);
                     }
-                    let exists = false;
-                    fileMap.forEachValue(key => {
-                        if (key.indexOf(path) === 0 && key[path.length] === "/") {
-                            exists = true;
-                        }
-                    });
-                    return exists;
+                    return mapHasFileInDirectory(path, fileMap) || mapHasFileInDirectory(path, realPathMap);
                 },
                 getDirectories: d => {
                     const path = ts.toPath(d, currentDirectory, getCanonicalFileName);
@@ -1062,6 +1056,19 @@ namespace Harness {
                     return result;
                 }
             };
+        }
+
+        function mapHasFileInDirectory(directoryPath: ts.Path, map: ts.FileMap<any>): boolean {
+            if (!map) {
+                return false;
+            }
+            let exists = false;
+            map.forEachValue(fileName => {
+                if (!exists && ts.startsWith(fileName, directoryPath) && fileName[directoryPath.length] === "/") {
+                    exists = true;
+                }
+            });
+            return exists;
         }
 
         interface HarnessOptions {
@@ -1108,22 +1115,7 @@ namespace Harness {
                     const option = getCommandLineOption(name);
                     if (option) {
                         const errors: ts.Diagnostic[] = [];
-                        switch (option.type) {
-                            case "boolean":
-                                options[option.name] = value.toLowerCase() === "true";
-                                break;
-                            case "string":
-                                options[option.name] = value;
-                                break;
-                            // If not a primitive, the possible types are specified in what is effectively a map of options.
-                            case "list":
-                                options[option.name] = ts.parseListTypeOption(<ts.CommandLineOptionOfListType>option, value, errors);
-                                break;
-                            default:
-                                options[option.name] = ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
-                                break;
-                        }
-
+                        options[option.name] = optionValue(option, value, errors);
                         if (errors.length > 0) {
                             throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
                         }
@@ -1132,6 +1124,27 @@ namespace Harness {
                         throw new Error(`Unknown compiler option '${name}'.`);
                     }
                 }
+            }
+        }
+
+        function optionValue(option: ts.CommandLineOption, value: string, errors: ts.Diagnostic[]): any {
+            switch (option.type) {
+                case "boolean":
+                    return value.toLowerCase() === "true";
+                case "string":
+                    return value;
+                case "number": {
+                    const number = parseInt(value, 10);
+                    if (isNaN(number)) {
+                        throw new Error(`Value must be a number, got: ${JSON.stringify(value)}`);
+                    }
+                    return number;
+                }
+                // If not a primitive, the possible types are specified in what is effectively a map of options.
+                case "list":
+                    return ts.parseListTypeOption(<ts.CommandLineOptionOfListType>option, value, errors);
+                default:
+                    return ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
             }
         }
 
@@ -1238,7 +1251,7 @@ namespace Harness {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory);
+                const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory || harnessSettings["currentDirectory"]);
                 return { declInputFiles, declOtherFiles, declResult: output.result };
             }
 
@@ -1470,7 +1483,7 @@ namespace Harness {
             }
 
             if (typesError && symbolsError) {
-                throw new Error(typesError.message + ts.sys.newLine + symbolsError.message);
+                throw new Error(typesError.message + Harness.IO.newLine() + symbolsError.message);
             }
 
             if (typesError) {
@@ -1755,7 +1768,7 @@ namespace Harness {
         }
 
         // Regex for parsing options in the format "@Alpha: Value of any sort"
-        const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
+        const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
         function extractCompilerSettings(content: string): CompilerSettings {
             const opts: CompilerSettings = {};
@@ -1764,7 +1777,7 @@ namespace Harness {
             /* tslint:disable:no-null-keyword */
             while ((match = optionRegex.exec(content)) !== null) {
             /* tslint:enable:no-null-keyword */
-                opts[match[1]] = match[2];
+                opts[match[1]] = match[2].trim();
             }
 
             return opts;
@@ -1792,7 +1805,7 @@ namespace Harness {
                     // Comment line, check for global/file @options and record them
                     optionRegex.lastIndex = 0;
                     const metaDataName = testMetaData[1].toLowerCase();
-                    currentFileOptions[testMetaData[1]] = testMetaData[2];
+                    currentFileOptions[testMetaData[1]] = testMetaData[2].trim();
                     if (metaDataName !== "filename") {
                         continue;
                     }
@@ -1812,12 +1825,12 @@ namespace Harness {
                         // Reset local data
                         currentFileContent = undefined;
                         currentFileOptions = {};
-                        currentFileName = testMetaData[2];
+                        currentFileName = testMetaData[2].trim();
                         refs = [];
                     }
                     else {
                         // First metadata marker in the file
-                        currentFileName = testMetaData[2];
+                        currentFileName = testMetaData[2].trim();
                     }
                 }
                 else {

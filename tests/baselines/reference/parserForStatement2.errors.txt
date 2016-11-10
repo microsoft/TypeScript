@@ -1,11 +1,17 @@
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement2.ts(4,13): error TS2538: Type 'undefined' cannot be used as an index type.
+tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement2.ts(4,20): error TS2538: Type 'undefined' cannot be used as an index type.
 tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement2.ts(4,30): error TS2304: Cannot find name 'd'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement2.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement2.ts (3 errors) ====
     var a;
     var b = [];
     var c;
     for (a in b[c] = b[c] || [], d) {
+                ~
+!!! error TS2538: Type 'undefined' cannot be used as an index type.
+                       ~
+!!! error TS2538: Type 'undefined' cannot be used as an index type.
                                  ~
 !!! error TS2304: Cannot find name 'd'.
     

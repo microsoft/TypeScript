@@ -19,7 +19,9 @@ sourceFile:sourceMapValidationDecorators.ts
 >>>};
 >>>var Greeter = (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^^^^^^^^^->
 1 >declare function ClassDecorator1(target: Function): void;
   >declare function ClassDecorator2(x: number): (target: Function) => void;
   >declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
@@ -30,13 +32,17 @@ sourceFile:sourceMapValidationDecorators.ts
   >@ClassDecorator1
   >@ClassDecorator2(10)
   >
+2 >class 
+3 >    Greeter
 1 >Emitted(10, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(10, 5) Source(10, 7) + SourceIndex(0)
+3 >Emitted(10, 12) Source(10, 14) + SourceIndex(0)
 ---
 >>>    function Greeter(greeting) {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^^^^^^
-1->class Greeter {
+1-> {
   >    
 2 >    constructor(
   >          @ParameterDecorator1 
@@ -729,9 +735,12 @@ sourceFile:sourceMapValidationDecorators.ts
 ---
 >>>Greeter = __decorate([
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^
+3 >       ^^^^^^^^^^^^^^->
 1 >
-1 >Emitted(59, 1) Source(10, 1) + SourceIndex(0)
+2 >Greeter
+1 >Emitted(59, 1) Source(10, 7) + SourceIndex(0)
+2 >Emitted(59, 8) Source(10, 14) + SourceIndex(0)
 ---
 >>>    ClassDecorator1,
 1->^^^^
@@ -846,46 +855,59 @@ sourceFile:sourceMapValidationDecorators.ts
 7 >Emitted(65, 40) Source(17, 31) + SourceIndex(0)
 ---
 >>>], Greeter);
-1 >^^^^^^^^^^^
-2 >           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > 
-  >      ...b: string[]) {
-  >    }
-  >    
-  >    @PropertyDecorator1
-  >    @PropertyDecorator2(40)
-  >    greet() {
-  >        return "<h1>" + this.greeting + "</h1>";
-  >    }
-  >
-  >    @PropertyDecorator1
-  >    @PropertyDecorator2(50)
-  >    private x: string;
-  >
-  >    @PropertyDecorator1
-  >    @PropertyDecorator2(60)
-  >    private static x1: number = 10;
-  >    
-  >    private fn(
-  >      @ParameterDecorator1 
-  >      @ParameterDecorator2(70) 
-  >      x: number) {
-  >        return this.greeting;
-  >    }
-  >
-  >    @PropertyDecorator1
-  >    @PropertyDecorator2(80)
-  >    get greetings() {
-  >        return this.greeting;
-  >    }
-  >
-  >    set greetings(
-  >      @ParameterDecorator1 
-  >      @ParameterDecorator2(90) 
-  >      greetings: string) {
-  >        this.greeting = greetings;
-  >    }    
-  >}
-1 >Emitted(66, 12) Source(54, 2) + SourceIndex(0)
+1 >^^^
+2 >   ^^^^^^^
+3 >          ^
+4 >           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >   Greeter
+3 >           {
+  >              constructor(
+  >                @ParameterDecorator1 
+  >                @ParameterDecorator2(20) 
+  >                public greeting: string, 
+  >                
+  >                @ParameterDecorator1 
+  >                @ParameterDecorator2(30) 
+  >                ...b: string[]) {
+  >              }
+  >              
+  >              @PropertyDecorator1
+  >              @PropertyDecorator2(40)
+  >              greet() {
+  >                  return "<h1>" + this.greeting + "</h1>";
+  >              }
+  >          
+  >              @PropertyDecorator1
+  >              @PropertyDecorator2(50)
+  >              private x: string;
+  >          
+  >              @PropertyDecorator1
+  >              @PropertyDecorator2(60)
+  >              private static x1: number = 10;
+  >              
+  >              private fn(
+  >                @ParameterDecorator1 
+  >                @ParameterDecorator2(70) 
+  >                x: number) {
+  >                  return this.greeting;
+  >              }
+  >          
+  >              @PropertyDecorator1
+  >              @PropertyDecorator2(80)
+  >              get greetings() {
+  >                  return this.greeting;
+  >              }
+  >          
+  >              set greetings(
+  >                @ParameterDecorator1 
+  >                @ParameterDecorator2(90) 
+  >                greetings: string) {
+  >                  this.greeting = greetings;
+  >              }    
+  >          }
+1 >Emitted(66, 4) Source(10, 7) + SourceIndex(0)
+2 >Emitted(66, 11) Source(10, 14) + SourceIndex(0)
+3 >Emitted(66, 12) Source(54, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDecorators.js.map

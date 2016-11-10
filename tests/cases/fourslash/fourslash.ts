@@ -194,6 +194,7 @@ declare namespace FourSlashInterface {
         currentSignatureHelpDocCommentIs(docComment: string): void;
         signatureHelpCountIs(expected: number): void;
         signatureHelpArgumentCountIs(expected: number): void;
+        signatureHelpCurrentArgumentListIsVariadic(expected: boolean);
         currentSignatureParameterCountIs(expected: number): void;
         currentSignatureTypeParameterCountIs(expected: number): void;
         currentSignatureHelpIs(expected: string): void;

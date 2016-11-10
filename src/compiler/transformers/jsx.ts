@@ -113,7 +113,8 @@ namespace ts {
                     || createAssignHelper(currentSourceFile.externalHelpersModuleName, segments);
             }
 
-            const element = createReactCreateElement(
+            const element = createExpressionForJsxElement(
+                context.getEmitResolver().getJsxFactoryEntity(),
                 compilerOptions.reactNamespace,
                 tagName,
                 objectProperties,

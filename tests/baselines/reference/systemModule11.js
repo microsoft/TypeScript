@@ -46,8 +46,8 @@ System.register(["bar"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function foo() { }
-    var x;
     exports_1("foo", foo);
+    var x;
     var exportedNames_1 = {
         "x": true,
         "foo": true
@@ -95,8 +95,6 @@ System.register(["bar"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            exports_1("x", x);
-            exports_1("y1", y);
         }
     };
 });
@@ -139,10 +137,10 @@ System.register(["a"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function foo() { }
-    function default_1() { }
-    var x, z, z1;
     exports_1("foo", foo);
+    function default_1() { }
     exports_1("default", default_1);
+    var x, z, z1;
     return {
         setters: [
             function (a_1_1) {
@@ -153,8 +151,6 @@ System.register(["a"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            exports_1("z", z);
-            exports_1("z2", z1);
         }
     };
 });
