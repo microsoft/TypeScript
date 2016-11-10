@@ -11493,7 +11493,7 @@ namespace ts {
         function checkJsxOpeningLikeElement(node: JsxOpeningLikeElement) {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
-            // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import. 
+            // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
             const reactRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
             const reactNamespace = getJsxNamespace();

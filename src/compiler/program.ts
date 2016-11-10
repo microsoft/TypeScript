@@ -476,7 +476,7 @@ namespace ts {
                 return resolveModuleNamesWorker(moduleNames, containingFile);
             }
 
-            // at this point we know that either 
+            // at this point we know that either
             // - file has local declarations for ambient modules
             // OR
             // - old program state is available
@@ -670,7 +670,7 @@ namespace ts {
             }
 
             const modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
-            // try to verify results of module resolution 
+            // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
@@ -1447,7 +1447,9 @@ namespace ts {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = createMap<ResolvedModuleFull>();
-                const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
+                // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
+                const nonGlobalAugmentation = filter(file.moduleAugmentations, (moduleAugmentation) => moduleAugmentation.kind === SyntaxKind.StringLiteral);
+                const moduleNames = map(concatenate(file.imports, nonGlobalAugmentation), getTextOfLiteral);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
