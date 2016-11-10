@@ -15969,7 +15969,7 @@ namespace ts {
         }
 
         function checkUnusedParameterLocals(locals: Map<Symbol>): void {
-            let unusedParameterLocals: Symbol[] | undefined = [];
+            let unusedParameterLocals: Symbol[] | undefined;
 
             for (const key in locals) {
                 const local = locals[key];
