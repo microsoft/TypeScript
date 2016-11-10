@@ -15979,7 +15979,7 @@ namespace ts {
 
                 const parameter = <ParameterDeclaration>getRootDeclaration(local.valueDeclaration);
                 if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter)) {
-                    if (local.isReferenced) {
+                    if (local.isReferenced || parameterNameStartsWithUnderscore(local.valueDeclaration.name)) {
                         if (unusedParameterLocals) {
                             unusedParameterLocals.length = 0;
                         }
@@ -16021,6 +16021,10 @@ namespace ts {
                 }
             }
             error(node, Diagnostics._0_is_declared_but_never_used, name);
+        }
+
+        function parameterNameStartsWithUnderscore(parameterName: DeclarationName) {
+            return parameterName && isIdentifierThatStartsWithUnderScore(parameterName);
         }
 
         function isIdentifierThatStartsWithUnderScore(node: Node) {
