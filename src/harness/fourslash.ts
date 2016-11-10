@@ -84,6 +84,11 @@ namespace FourSlash {
         end: number;
     }
 
+    export interface ExpectedFileChange {
+        fileName: string;
+        expectedText: string;
+    }
+
     export import IndentStyle = ts.IndentStyle;
 
     const entityMap = ts.createMap({
@@ -478,7 +483,7 @@ namespace FourSlash {
                 endPos = endMarker.position;
             }
 
-            errors.forEach(function(error: ts.Diagnostic) {
+            errors.forEach(function (error: ts.Diagnostic) {
                 if (predicate(error.start, error.start + error.length, startPos, endPos)) {
                     exists = true;
                 }
@@ -495,7 +500,7 @@ namespace FourSlash {
                 Harness.IO.log("Unexpected error(s) found.  Error list is:");
             }
 
-            errors.forEach(function(error: ts.Diagnostic) {
+            errors.forEach(function (error: ts.Diagnostic) {
                 Harness.IO.log("  minChar: " + error.start +
                     ", limChar: " + (error.start + error.length) +
                     ", message: " + ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine()) + "\n");
@@ -2046,6 +2051,51 @@ namespace FourSlash {
             }
         }
 
+        public verifyRefactoringAtPosition(expectedChanges: ExpectedFileChange[], refactoringId: string) {
+            // file the refactoring is triggered from
+            const sourceFileName = this.activeFile.fileName;
+
+            const markers = this.getMarkers();
+            if (markers.length < 1 || markers.length > 2) {
+                this.raiseError(`Expected 1 or 2 markers, actually found: ${markers.length}`);
+            }
+            const start = markers[0].position;
+            const end = markers[1] ? markers[1].position : markers[0].position;
+
+            const textChanges = this.languageService.getChangesForCodeRefactoringAtPosition(sourceFileName, start, end, refactoringId, /*options*/ undefined, this.languageService);
+            if (!textChanges || textChanges.length == 0) {
+                this.raiseError("No code refactorings found.");
+            }
+
+            // for each file:
+            // * optionally apply the changes
+            // * check if the new contents match the expected contents
+            // * if we applied changes, but don't check the content raise an error
+            ts.forEach(this.testData.files, file => {
+                const refactorForFile = ts.find(textChanges, change => {
+                    return change.fileName == file.fileName;
+                });
+
+                if (refactorForFile) {
+                    this.applyEdits(file.fileName, refactorForFile.textChanges, /*isFormattingEdit*/ false);
+                }
+
+                const expectedFile = ts.find(expectedChanges, expected => {
+                    const name = expected.fileName;
+                    const fullName = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
+                    return fullName === file.fileName;
+                });
+
+                if (refactorForFile && !expectedFile) {
+                    this.raiseError(`Applied changes to '${file.fileName}' which was not expected.`);
+                }
+                const actualText = this.getFileContent(file.fileName);
+                if (this.removeWhitespace(expectedFile.expectedText) !== this.removeWhitespace(actualText)) {
+                    this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedFile.expectedText}'`);
+                }
+            });
+        }
+
         public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
             const name = "verifyDocCommentTemplate";
             const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -3301,6 +3351,10 @@ namespace FourSlashInterface {
 
         public codeFixAtPosition(expectedText: string, errorCode?: number): void {
             this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        }
+
+        public inlineTempAtPosition(expectedChanges: FourSlash.ExpectedFileChange[]): void {
+            this.state.verifyRefactoringAtPosition(expectedChanges, ts.Diagnostics.Inline_temporary_variable.code.toString());
         }
 
         public navigationBar(json: any) {

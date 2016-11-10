@@ -95,6 +95,12 @@ namespace ts.server.protocol {
         /* @internal */
         export type GetCodeFixesFull = "getCodeFixes-full";
         export type GetSupportedCodeFixes = "getSupportedCodeFixes";
+        export type GetCodeRefactorings = "getCodeRefactorings";
+        /* @internal */
+        export type GetCodeRefactoringsFull = "getCodeRefactorings-full";
+        export type ApplyCodeRefactoring = "applyCodeRefactoring";
+        /* @internal */
+        export type ApplyCodeRefactoringFull = "applyCodeRefactoring-full";
     }
 
     /**
@@ -394,18 +400,7 @@ namespace ts.server.protocol {
         position?: number;
     }
 
-    /**
-      * Request for the available codefixes at a specific position.
-      */
-    export interface CodeFixRequest extends Request {
-        command: CommandTypes.GetCodeFixes;
-        arguments: CodeFixRequestArgs;
-    }
-
-    /**
-      * Instances of this interface specify errorcodes on a specific location in a sourcefile.
-      */
-    export interface CodeFixRequestArgs extends FileRequestArgs {
+    export interface CodeChangeRequestArgs extends FileRequestArgs {
         /**
           * The line number for the request (1-based).
           */
@@ -437,7 +432,64 @@ namespace ts.server.protocol {
          */
         /* @internal */
         endPosition?: number;
+    }
 
+    /**
+      * Request for the available code refactorings at a specific position.
+      */
+    export interface AvailableCodeRefactoringsRequest extends Request {
+        command: CommandTypes.GetCodeRefactorings;
+        arguments: AvailableCodeRefactoringsRequestArgs;
+    }
+
+    /**
+      * Response for GetCoderefactorings request. 
+      */
+    export interface AvailableCodeRefactoringResponse extends Response {
+        body?: CodeRefactoring[];
+    }
+
+    /**
+      * Instances of this interface request the available refactorings for a specific location in a sourcefile.
+      */
+    export interface AvailableCodeRefactoringsRequestArgs extends CodeChangeRequestArgs {
+
+    }
+
+    /**
+      * Request to calculate the changes for a specific code refactoring at a specific position.
+      */
+    export interface ApplyCodeRefactoringRequest extends Request {
+        command: CommandTypes.ApplyCodeRefactoring;
+        arguments: ApplyCodeRefactoringRequestArgs;
+    }
+
+    export interface ApplyCodeRefactoringRequestArgs extends CodeChangeRequestArgs {
+        refactoringId: string;
+        input?: any;
+    }
+
+    export interface ApplyCodeRefactoringResponse extends Response {
+        body?: FileCodeEdits[];
+    }
+
+    /**
+      * Request for the available codefixes at a specific position.
+      */
+    export interface CodeFixRequest extends Request {
+        command: CommandTypes.GetCodeFixes;
+        arguments: CodeFixRequestArgs;
+    }
+
+    export interface CodeFixResponse extends Response {
+        /** The code actions that are available */
+        body?: CodeAction[];
+    }
+
+    /**
+      * Instances of this interface specify errorcodes for a specific location in a sourcefile.
+      */
+    export interface CodeFixRequestArgs extends CodeChangeRequestArgs {
         /**
           * Errorcodes we want to get the fixes for.
           */
@@ -1365,11 +1417,6 @@ namespace ts.server.protocol {
     export interface FileCodeEdits {
         fileName: string;
         textChanges: CodeEdit[];
-    }
-
-    export interface CodeFixResponse extends Response {
-        /** The code actions that are available */
-        body?: CodeAction[];
     }
 
     export interface CodeAction {

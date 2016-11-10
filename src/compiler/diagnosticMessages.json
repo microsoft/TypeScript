@@ -3178,5 +3178,9 @@
     "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
         "category": "Error",
         "code": 90009
+    },
+    "Inline temporary variable": {
+        "category": "Message",
+        "code": 91001
     }
 }

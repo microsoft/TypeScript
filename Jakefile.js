@@ -166,7 +166,9 @@ var servicesSources = [
     "formatting/rulesMap.ts",
     "formatting/rulesProvider.ts",
     "formatting/smartIndenter.ts",
-    "formatting/tokenRange.ts"
+    "formatting/tokenRange.ts",
+    "coderefactorings/codeRefactoringProvider.ts",
+    "coderefactorings/coderefactorings.ts",
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));

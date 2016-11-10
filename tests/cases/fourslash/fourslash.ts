@@ -117,6 +117,10 @@ declare namespace FourSlashInterface {
         file(index: number, content?: string, scriptKindName?: string): any;
         file(name: string, content?: string, scriptKindName?: string): any;
     }
+    interface ExpectedFileChange {
+        fileName: string;
+        expectedText: string;
+    }
     class verifyNegatable {
         private negative;
         not: verifyNegatable;
@@ -211,7 +215,7 @@ declare namespace FourSlashInterface {
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
         codeFixAtPosition(expectedText: string, errorCode?: number): void;
-
+        inlineTempAtPosition(expectedChanges: ExpectedFileChange[]): void;
         navigationBar(json: any): void;
         navigationTree(json: any): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;

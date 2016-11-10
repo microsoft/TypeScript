@@ -86,7 +86,9 @@
         "formatting/rulesProvider.ts",
         "formatting/smartIndenter.ts",
         "formatting/tokenRange.ts",
-        "codeFixes/codeFixProvider.ts",
-        "codeFixes/fixes.ts"
+        "codefixes/codeFixProvider.ts",
+        "codefixes/fixes.ts",
+        "coderefactorings/codeRefactoringProvider.ts",
+        "coderefactorings/coderefactorings.ts"
     ]
 }

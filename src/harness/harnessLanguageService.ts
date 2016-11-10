@@ -1,4 +1,4 @@
-/// <reference path="..\services\services.ts" />
+﻿/// <reference path="..\services\services.ts" />
 /// <reference path="..\services\shims.ts" />
 /// <reference path="..\server\client.ts" />
 /// <reference path="harness.ts" />
@@ -126,7 +126,7 @@ namespace Harness.LanguageService {
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
-                    protected settings = ts.getDefaultCompilerOptions()) {
+            protected settings = ts.getDefaultCompilerOptions()) {
         }
 
         public getNewLine(): string {
@@ -135,7 +135,7 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            for (const virtualEntry of this.virtualFileSystem.getAllFileEntries()){
+            for (const virtualEntry of this.virtualFileSystem.getAllFileEntries()) {
                 const scriptInfo = virtualEntry.content;
                 if (scriptInfo.isRootFile) {
                     // only include root files here
@@ -211,8 +211,8 @@ namespace Harness.LanguageService {
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
             /*useCaseSensitiveFileNames*/false,
-            this.getCurrentDirectory(),
-            (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
+                this.getCurrentDirectory(),
+                (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
         readFile(path: string): string {
             const snapshot = this.getScriptSnapshot(path);
@@ -458,7 +458,6 @@ namespace Harness.LanguageService {
         getNavigationTree(fileName: string): ts.NavigationTree {
             return unwrapJSONCallResult(this.shim.getNavigationTree(fileName));
         }
-
         getOutliningSpans(fileName: string): ts.OutliningSpan[] {
             return unwrapJSONCallResult(this.shim.getOutliningSpans(fileName));
         }
@@ -487,7 +486,13 @@ namespace Harness.LanguageService {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
         getCodeFixesAtPosition(): ts.CodeAction[] {
-            throw new Error("Not supported on the shim.");
+            throw new Error("getCodeFixesAtPosition not supported on the shim.");
+        }
+        getAvailableCodeRefactoringsAtPosition(): ts.CodeRefactoring[] {
+            throw new Error("getAvailableCodeRefactoringsAtPosition not supported on the shim.");
+        }
+        getChangesForCodeRefactoringAtPosition(): ts.FileTextChanges[] {
+            throw new Error("getChangesForCodeRefactoringAtPosition not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
