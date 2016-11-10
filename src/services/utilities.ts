@@ -1359,32 +1359,19 @@ namespace ts {
         };
     }
 
-    export function getMissingAbstractMemberInsertion(classDecl: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
+    export function getMissingAbstractMembersInsertion(classDecl: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
         const classSymbol = checker.getSymbolOfNode(classDecl);
-
-        const InstantiatedExtendsType = <InterfaceType>checker.getTypeFromTypeReference(getClassExtendsHeritageClauseElement(classDecl));
-        const resolvedExtendsType = checker.resolveStructuredTypeMembers(InstantiatedExtendsType);
-
-        const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedExtendsType.members)), classSymbol.members);
-
+        const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedType.members)), classSymbol.members);
         return getInsertionsForMembers(missingMembers, classDecl, checker, newlineChar);
     }
 
-    export function getMissingInterfaceMembersInsertion(classDecl: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
-        const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
-
+    /**
+     * Finds members of the resolved type that are missing in the class pointed to by class decl
+     * and generates source code for the missing members.
+     */
+    export function getMissingMembersInsertion(classDecl: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
         const classSymbol = checker.getSymbolOfNode(classDecl);
-
-        let implementsIntersectionType: IntersectionType | InterfaceType;
-        if (implementedTypeNodes.length > 1) {
-            implementsIntersectionType = <IntersectionType>checker.getIntersectionType(implementedTypeNodes.map(checker.getTypeFromTypeReference));
-        }
-        else {
-            implementsIntersectionType = <InterfaceType>checker.getTypeFromTypeReference(implementedTypeNodes[0]);
-        }
-
-        const structuredType = checker.resolveStructuredTypeMembers(<IntersectionType | InterfaceType>implementsIntersectionType);
-        const missingMembers = filterMissingMembers(filterNonPrivate(structuredType.members), classSymbol.members);
+        const missingMembers = filterMissingMembers(filterNonPrivate(resolvedType.members), classSymbol.members);
         return getInsertionsForMembers(missingMembers, classDecl, checker, newlineChar);
     }
 

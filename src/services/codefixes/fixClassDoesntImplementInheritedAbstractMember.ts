@@ -9,10 +9,13 @@ namespace ts.codefix {
             const checker = context.program.getTypeChecker();
 
             if (token.kind === SyntaxKind.Identifier && isClassLike(token.parent)) {
-                const classDeclaration = <ClassDeclaration>token.parent;
-                const startPos = classDeclaration.members.pos;
+                const classDecl = <ClassDeclaration>token.parent;
+                const startPos = classDecl.members.pos;
 
-                const insertion = getMissingAbstractMemberInsertion(classDeclaration, checker, context.newLineCharacter);
+                const InstantiatedExtendsType = <InterfaceType>checker.getTypeFromTypeReference(getClassExtendsHeritageClauseElement(classDecl));
+                const resolvedExtendsType = checker.resolveStructuredTypeMembers(InstantiatedExtendsType);
+
+                const insertion = getMissingAbstractMembersInsertion(classDecl, resolvedExtendsType, checker, context.newLineCharacter);
 
                 if (insertion.length > 0) {
                     return [{
