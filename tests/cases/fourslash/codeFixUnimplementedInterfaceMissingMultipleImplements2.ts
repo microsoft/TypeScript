@@ -4,14 +4,16 @@
 ////     x: number;
 //// }
 //// interface I2 {
-////     x: string;
+////     y: number;
 //// }
 ////
 //// class C implements I1,I2 {[|
+////     x: number;
 //// |]}
 
 verify.rangeAfterCodeFix(`
-     x: number;
+y: number;
+x: number;
 `);
 
 verify.not.codeFixAvailable();
