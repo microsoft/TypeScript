@@ -8318,6 +8318,16 @@ namespace ts {
                 if (!couldContainTypeParameters(target)) {
                     return;
                 }
+                if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
+                    // Source and target are types originating in the same generic type alias declaration.
+                    // Simply infer from source type arguments to target type arguments.
+                    const sourceTypes = source.aliasTypeArguments;
+                    const targetTypes = target.aliasTypeArguments;
+                    for (let i = 0; i < sourceTypes.length; i++) {
+                        inferFromTypes(sourceTypes[i], targetTypes[i]);
+                    }
+                    return;
+                }
                 if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union && !(source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) ||
                     source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
                     // Source and target are both unions or both intersections. If source and target
