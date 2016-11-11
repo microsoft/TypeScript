@@ -23,7 +23,12 @@ namespace ts {
         Close = 1 << 9,
         Read = 1 << 10,
         Spread = 1 << 11,
+        AsyncGenerator = 1 << 12,
+        AsyncValues = 1 << 13,
+        AsyncStep = 1 << 14,
+        AsyncDelegator = 1 << 15,
         ForOfIncludes = Values | Step | Close,
+        ForAwaitOfIncludes = AsyncValues | AsyncStep | Close,
         SpreadIncludes = Read | Spread,
         FirstEmitHelper = Extends,
         LastEmitHelper = Spread
@@ -14267,15 +14272,22 @@ namespace ts {
                 }
             }
 
-            if (node.asteriskToken && languageVersion < ScriptTarget.ES2015) {
-                checkEmitHelpers(node, EmitHelper.Values);
-            }
-
             if (node.expression) {
                 const func = getContainingFunction(node);
                 // If the user's code is syntactically correct, the func should always have a star. After all,
                 // we are in a yield context.
                 const functionFlags = func && getFunctionFlags(func);
+                if (node.asteriskToken) {
+                    if (functionFlags & FunctionFlags.Async) {
+                        if (languageVersion < ScriptTarget.ES2017) {
+                            checkEmitHelpers(node, EmitHelper.AsyncDelegator);
+                        }
+                    }
+                    else if (languageVersion < ScriptTarget.ES2015) {
+                        checkEmitHelpers(node, EmitHelper.Values);
+                    }
+                }
+
                 if (functionFlags & FunctionFlags.Generator) {
                     const expressionType = checkExpressionCached(node.expression, /*contextualMapper*/ undefined);
                     let expressionElementType: Type;
@@ -14734,8 +14746,13 @@ namespace ts {
                 }
             }
 
-            if ((functionFlags & FunctionFlags.InvalidGenerator) === FunctionFlags.Generator && languageVersion < ScriptTarget.ES2015) {
-                checkEmitHelpers(node, EmitHelper.Generator);
+            if ((functionFlags & FunctionFlags.InvalidGenerator) === FunctionFlags.Generator) {
+                if (functionFlags & FunctionFlags.Async) {
+                    checkEmitHelpers(node, EmitHelper.AsyncGenerator);
+                }
+                else if (languageVersion < ScriptTarget.ES2015) {
+                    checkEmitHelpers(node, EmitHelper.Generator);
+                }
             }
 
             checkTypeParameters(node.typeParameters);
@@ -16655,8 +16672,15 @@ namespace ts {
         function checkForOfStatement(node: ForOfStatement): void {
             checkGrammarForInOrForOfStatement(node);
 
-            if (node.kind === SyntaxKind.ForOfStatement && languageVersion < ScriptTarget.ES2015) {
-                checkEmitHelpers(node, EmitHelper.ForOfIncludes);
+            if (node.kind === SyntaxKind.ForOfStatement) {
+                if ((<ForOfStatement>node).awaitKeyword) {
+                    if (languageVersion < ScriptTarget.ES2017) {
+                        checkEmitHelpers(node, EmitHelper.ForAwaitOfIncludes);
+                    }
+                }
+                else if (languageVersion < ScriptTarget.ES2015) {
+                    checkEmitHelpers(node, EmitHelper.ForOfIncludes);
+                }
             }
 
             // Check the LHS and RHS
