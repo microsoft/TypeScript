@@ -170,7 +170,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it("Correct Sourcemap output for " + fileName, () => {
-                Harness.Compiler.doSourcemapBaseline(justName, options, result);
+                Harness.Compiler.doSourcemapBaseline(justName, options, result, harnessSettings);
             });
 
             it("Correct type/symbol baselines for " + fileName, () => {
