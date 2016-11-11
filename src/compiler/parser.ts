@@ -676,7 +676,7 @@ namespace ts {
 
 
         function addJSDocComment<T extends Node>(node: T): T {
-            const comments = getJsDocCommentsFromText(node, sourceFile.text);
+            const comments = getJSDocCommentRanges(node, sourceFile.text);
             if (comments) {
                 for (const comment of comments) {
                     const jsDoc = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);

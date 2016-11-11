@@ -638,25 +638,18 @@ namespace ts {
         return getLeadingCommentRanges(text, node.pos);
     }
 
-    export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
-        return getJsDocCommentsFromText(node, sourceFileOfNode.text);
-    }
-
-    export function getJsDocCommentsFromText(node: Node, text: string) {
+    export function getJSDocCommentRanges(node: Node, text: string) {
         const commentRanges = (node.kind === SyntaxKind.Parameter ||
             node.kind === SyntaxKind.TypeParameter ||
             node.kind === SyntaxKind.FunctionExpression ||
             node.kind === SyntaxKind.ArrowFunction) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRangesOfNodeFromText(node, text);
-        return filter(commentRanges, isJsDocComment);
-
-        function isJsDocComment(comment: CommentRange) {
-            // True if the comment starts with '/**' but not if it is '/**/'
-            return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
-                text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
-        }
+        // True if the comment starts with '/**' but not if it is '/**/'
+        return filter(commentRanges, comment =>
+            text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+            text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
+            text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
     }
 
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
@@ -1453,18 +1446,6 @@ namespace ts {
         }
     }
 
-    function append<T>(previous: T[] | undefined, additional: T[] | undefined): T[] | undefined {
-        if (additional) {
-            if (!previous) {
-                previous = [];
-            }
-            for (const x of additional) {
-                previous.push(x);
-            }
-        }
-        return previous;
-    }
-
     export function getJSDocComments(node: Node, checkParentVariableStatement: boolean): string[] {
         return getJSDocs(node, checkParentVariableStatement, docs => map(docs, doc => doc.comment), tags => map(tags, tag => tag.comment));
     }
@@ -1482,7 +1463,6 @@ namespace ts {
     }
 
     function getJSDocs<T>(node: Node, checkParentVariableStatement: boolean, getDocs: (docs: JSDoc[]) => T[], getTags: (tags: JSDocTag[]) => T[]): T[] {
-        // TODO: Get rid of getJsDocComments and friends (note the lowercase 's' in Js)
         // TODO: A lot of this work should be cached, maybe. I guess it's only used in services right now...
         let result: T[] = undefined;
         // prepend documentation from parent sources
@@ -1505,11 +1485,11 @@ namespace ts {
                     isVariableOfVariableDeclarationStatement ? node.parent.parent :
                         undefined;
             if (variableStatementNode) {
-                result = append(result, getJSDocs(variableStatementNode, checkParentVariableStatement, getDocs, getTags));
+                result = concatenate(result, getJSDocs(variableStatementNode, checkParentVariableStatement, getDocs, getTags));
             }
             if (node.kind === SyntaxKind.ModuleDeclaration &&
                 node.parent && node.parent.kind === SyntaxKind.ModuleDeclaration) {
-                result = append(result, getJSDocs(node.parent, checkParentVariableStatement, getDocs, getTags));
+                result = concatenate(result, getJSDocs(node.parent, checkParentVariableStatement, getDocs, getTags));
             }
 
             // Also recognize when the node is the RHS of an assignment expression
@@ -1520,30 +1500,30 @@ namespace ts {
                 (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
                 parent.parent.kind === SyntaxKind.ExpressionStatement;
             if (isSourceOfAssignmentExpressionStatement) {
-                result = append(result, getJSDocs(parent.parent, checkParentVariableStatement, getDocs, getTags));
+                result = concatenate(result, getJSDocs(parent.parent, checkParentVariableStatement, getDocs, getTags));
             }
 
             const isPropertyAssignmentExpression = parent && parent.kind === SyntaxKind.PropertyAssignment;
             if (isPropertyAssignmentExpression) {
-                result = append(result, getJSDocs(parent, checkParentVariableStatement, getDocs, getTags));
+                result = concatenate(result, getJSDocs(parent, checkParentVariableStatement, getDocs, getTags));
             }
 
             // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
                 const paramTags = getJSDocParameterTag(node as ParameterDeclaration, checkParentVariableStatement);
                 if (paramTags) {
-                    result = append(result, getTags(paramTags));
+                    result = concatenate(result, getTags(paramTags));
                 }
             }
         }
 
         if (isVariableLike(node) && node.initializer) {
-            result = append(result, getJSDocs(node.initializer, /*checkParentVariableStatement*/ false, getDocs, getTags));
+            result = concatenate(result, getJSDocs(node.initializer, /*checkParentVariableStatement*/ false, getDocs, getTags));
         }
 
         if (node.jsDocComments) {
             if (result) {
-                result = append(result, getDocs(node.jsDocComments));
+                result = concatenate(result, getDocs(node.jsDocComments));
             }
             else {
                 return getDocs(node.jsDocComments);

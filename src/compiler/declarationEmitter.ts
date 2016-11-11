@@ -371,7 +371,7 @@ namespace ts {
 
         function writeJsDocComments(declaration: Node) {
             if (declaration) {
-                const jsDocComments = getJsDocCommentsFromText(declaration, currentText);
+                const jsDocComments = getJSDocCommentRanges(declaration, currentText);
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, declaration, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentText, currentLineMap, writer, jsDocComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeCommentRange);
