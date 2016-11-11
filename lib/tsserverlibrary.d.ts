@@ -663,6 +663,7 @@ declare namespace ts.server.protocol {
     }
     interface TypingsInstalledTelemetryEventPayload {
         installedPackages: string;
+        installSuccess: boolean;
     }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];

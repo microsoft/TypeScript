@@ -1543,6 +1543,10 @@ declare namespace ts.server.protocol {
          * Comma separated list of installed typing packages
          */
         installedPackages: string;
+        /**
+         * true if install request succeeded, otherwise - false
+         */
+        installSuccess: boolean;
     }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
