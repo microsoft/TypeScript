@@ -786,18 +786,8 @@ namespace ts.server {
             configFilename = normalizePath(configFilename);
 
             const configFileContent = this.host.readFile(configFilename);
-            let errors: Diagnostic[];
 
-            const result = parseConfigFileTextToJson(configFilename, configFileContent);
-            let config = result.config;
-
-            if (result.error) {
-                // try to reparse config file
-                const { configJsonObject: sanitizedConfig, diagnostics } = sanitizeConfigFile(configFilename, configFileContent);
-                config = sanitizedConfig;
-                errors = diagnostics.length ? diagnostics : [result.error];
-            }
-
+            const { config = {}, errors } = parseConfigFileTextToJson(configFilename, configFileContent);
             const parsedCommandLine = parseJsonConfigFileContent(
                 config,
                 this.host,
@@ -806,13 +796,13 @@ namespace ts.server {
                 configFilename);
 
             if (parsedCommandLine.errors.length) {
-                errors = concatenate(errors, parsedCommandLine.errors);
+                errors.push(...parsedCommandLine.errors);
             }
 
             Debug.assert(!!parsedCommandLine.fileNames);
 
             if (parsedCommandLine.fileNames.length === 0) {
-                (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
+                errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
                 return { success: false, configFileErrors: errors };
             }
 

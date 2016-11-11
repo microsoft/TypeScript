@@ -1135,13 +1135,13 @@ namespace ts {
 
                     const result = parseConfigFileTextToJson(fileName, text);
 
-                    if (result.error) {
+                    if (!result.config) {
                         return {
                             options: {},
                             typingOptions: {},
                             files: [],
                             raw: {},
-                            errors: [realizeDiagnostic(result.error, "\r\n")]
+                            errors: realizeDiagnostics(result.errors, "\r\n")
                         };
                     }
 
@@ -1153,7 +1153,7 @@ namespace ts {
                         typingOptions: configFile.typingOptions,
                         files: configFile.fileNames,
                         raw: configFile.raw,
-                        errors: realizeDiagnostics(configFile.errors, "\r\n")
+                        errors: realizeDiagnostics(result.errors.concat(configFile.errors), "\r\n")
                     };
                 });
         }

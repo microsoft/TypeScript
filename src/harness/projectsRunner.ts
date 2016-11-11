@@ -208,12 +208,13 @@ class ProjectRunner extends RunnerBase {
                 configFileName = ts.findConfigFile("", fileExists);
             }
 
+            let errors: ts.Diagnostic[];
             if (configFileName) {
                 const result = ts.readConfigFile(configFileName, getSourceFileText);
-                if (result.error) {
+                if (!result.config) {
                     return {
                         moduleKind,
-                        errors: [result.error]
+                        errors: result.errors
                     };
                 }
 
@@ -228,11 +229,12 @@ class ProjectRunner extends RunnerBase {
                 if (configParseResult.errors.length > 0) {
                     return {
                         moduleKind,
-                        errors: configParseResult.errors
+                        errors: result.errors.concat(configParseResult.errors)
                     };
                 }
                 inputFiles = configParseResult.fileNames;
                 compilerOptions = configParseResult.options;
+                errors = result.errors;
             }
 
             const projectCompilerResult = compileProjectFiles(moduleKind, () => inputFiles, getSourceFileText, writeFile, compilerOptions);
@@ -242,7 +244,7 @@ class ProjectRunner extends RunnerBase {
                 compilerOptions,
                 sourceMapData: projectCompilerResult.sourceMapData,
                 outputFiles,
-                errors: projectCompilerResult.errors,
+                errors: errors ? errors.concat(projectCompilerResult.errors) : projectCompilerResult.errors,
             };
 
             function createCompilerOptions() {

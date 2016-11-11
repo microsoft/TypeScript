@@ -681,13 +681,13 @@ namespace ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFile(fileName: string, readFile: (path: string) => string): { config?: any; error?: Diagnostic } {
+    export function readConfigFile(fileName: string, readFile: (path: string) => string): { config?: any; errors: Diagnostic[] } {
         let text = "";
         try {
             text = readFile(fileName);
         }
         catch (e) {
-            return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
+            return { errors: [createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message)] };
         }
         return parseConfigFileTextToJson(fileName, text);
     }
@@ -697,13 +697,102 @@ namespace ts {
       * @param fileName The path to the config file
       * @param jsonText The text of the config file
       */
-    export function parseConfigFileTextToJson(fileName: string, jsonText: string, stripComments = true): { config?: any; error?: Diagnostic } {
-        try {
-            const jsonTextToParse = stripComments ? removeComments(jsonText) : jsonText;
-            return { config: /\S/.test(jsonTextToParse) ? JSON.parse(jsonTextToParse) : {} };
+    export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config: any; errors: Diagnostic[] } {
+        const { node, errors } = parseJsonText(fileName, jsonText);
+        return {
+            config: convertToJson(node, errors),
+            errors
+        };
+    }
+
+    /**
+     * Convert the json syntax tree into the json value
+     * @param jsonNode
+     * @param errors
+     */
+    function convertToJson(jsonNode: JsonNode, errors: Diagnostic[]): any {
+        if (!jsonNode) {
+            return undefined;
         }
-        catch (e) {
-            return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
+
+        if (jsonNode.kind === SyntaxKind.EndOfFileToken) {
+            return {};
+        }
+
+        const sourceFile = <SourceFile>jsonNode.parent;
+        return convertObjectLiteralExpressionToJson(jsonNode);
+
+        function convertObjectLiteralExpressionToJson(node: ObjectLiteralExpression): any {
+            const result: any = {};
+            for (const element of node.properties) {
+                switch (element.kind) {
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                    case SyntaxKind.SpreadAssignment:
+                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element, Diagnostics.Property_assignment_expected));
+                        break;
+
+                    case SyntaxKind.PropertyAssignment:
+                        if (element.questionToken) {
+                            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.questionToken, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
+                        }
+                        if (!isDoubleQuotedString(element.name)) {
+                            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, Diagnostics.String_literal_with_double_quotes_expected));
+                        }
+                        const keyText = getTextOfPropertyName(element.name);
+                        const value = parseValue(element.initializer);
+                        if (typeof keyText !== undefined && typeof value !== undefined) {
+                            result[keyText] = value;
+                        }
+                }
+            }
+            return result;
+        }
+
+        function convertArrayLiteralExpressionToJson(node: ArrayLiteralExpression): any[] {
+            const result: any[] = [];
+            for (const element of node.elements) {
+                result.push(parseValue(element));
+            }
+            return result;
+        }
+
+        function parseValue(node: Expression): any {
+            switch (node.kind) {
+                case SyntaxKind.TrueKeyword:
+                    return true;
+
+                case SyntaxKind.FalseKeyword:
+                    return false;
+
+                case SyntaxKind.NullKeyword:
+                    return null; // tslint:disable-line:no-null-keyword
+
+                case SyntaxKind.StringLiteral:
+                    if (!isDoubleQuotedString(node)) {
+                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, node, Diagnostics.String_literal_with_double_quotes_expected));
+                    }
+                    return (<StringLiteral>node).text;
+
+                case SyntaxKind.NumericLiteral:
+                    return Number((<NumericLiteral>node).text);
+
+                case SyntaxKind.ObjectLiteralExpression:
+                    return convertObjectLiteralExpressionToJson(<ObjectLiteralExpression>node);
+
+                case SyntaxKind.ArrayLiteralExpression:
+                    return convertArrayLiteralExpressionToJson(<ArrayLiteralExpression>node);
+            }
+
+            // Not in expected format
+            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, node, Diagnostics.String_number_object_array_true_false_or_null_expected));
+            return undefined;
+        }
+
+        function isDoubleQuotedString(node: Node) {
+            return node.kind === SyntaxKind.StringLiteral && getSourceTextOfNodeFromSourceFile(sourceFile, node).charCodeAt(0) === CharacterCodes.doubleQuote;
         }
     }
 
@@ -796,31 +885,6 @@ namespace ts {
     }
 
     /**
-     * Remove the comments from a json like text.
-     * Comments can be single line comments (starting with # or //) or multiline comments using / * * /
-     *
-     * This method replace comment content by whitespace rather than completely remove them to keep positions in json parsing error reporting accurate.
-     */
-    function removeComments(jsonText: string): string {
-        let output = "";
-        const scanner = createScanner(ScriptTarget.ES5, /* skipTrivia */ false, LanguageVariant.Standard, jsonText);
-        let token: SyntaxKind;
-        while ((token = scanner.scan()) !== SyntaxKind.EndOfFileToken) {
-            switch (token) {
-                case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.MultiLineCommentTrivia:
-                    // replace comments with whitespace to preserve original character positions
-                    output += scanner.getTokenText().replace(/\S/g, " ");
-                    break;
-                default:
-                    output += scanner.getTokenText();
-                    break;
-            }
-        }
-        return output;
-    }
-
-    /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
       * @param host Instance of ParseConfigHost used to enumerate files in folder.
@@ -896,8 +960,8 @@ namespace ts {
                 }
             }
             const extendedResult = readConfigFile(extendedConfigPath, path => host.readFile(path));
-            if (extendedResult.error) {
-                errors.push(extendedResult.error);
+            if (extendedResult.errors.length) {
+                errors.push(...extendedResult.errors);
                 return;
             }
             const extendedDirname = getDirectoryPath(extendedConfigPath);

@@ -525,6 +525,8 @@ namespace ts {
     export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
 
+    export type JsonNode = ObjectLiteralExpression | EndOfFileToken;
+
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
         | Token<SyntaxKind.AsyncKeyword>

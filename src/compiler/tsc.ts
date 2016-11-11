@@ -367,9 +367,9 @@ namespace ts {
             }
 
             const result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
+            reportDiagnostics(result.errors, /* compilerHost */ undefined);
             const configObject = result.config;
             if (!configObject) {
-                reportDiagnostics([result.error], /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }

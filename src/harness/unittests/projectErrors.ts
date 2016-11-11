@@ -123,10 +123,7 @@ namespace ts.projectSystem {
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject,  [
-                    "')' expected.",
-                    "Declaration or statement expected.",
-                    "Declaration or statement expected.",
-                    "Failed to parse file '/a/b/tsconfig.json'"
+                    "'{' expected."
                 ]);
             }
             // fix config and trigger watcher
@@ -175,10 +172,7 @@ namespace ts.projectSystem {
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, [
-                    "')' expected.",
-                    "Declaration or statement expected.",
-                    "Declaration or statement expected.",
-                    "Failed to parse file '/a/b/tsconfig.json'"
+                    "'{' expected."
                 ]);
             }
         });

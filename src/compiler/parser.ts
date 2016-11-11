@@ -449,6 +449,17 @@ namespace ts {
         return Parser.parseIsolatedEntityName(text, languageVersion);
     }
 
+    export type ParsedNodeResults<T extends Node> = { node: T; errors: Diagnostic[] };
+
+    /**
+     * Parse json text into SyntaxTree and return node and parse errors if any
+     * @param fileName
+     * @param sourceText
+     */
+    export function parseJsonText(fileName: string, sourceText: string): ParsedNodeResults<JsonNode> {
+        return Parser.parseJsonText(fileName, sourceText);
+    }
+
     export function isExternalModule(file: SourceFile): boolean {
         return file.externalModuleIndicator !== undefined;
     }
@@ -608,6 +619,33 @@ namespace ts {
             const isInvalid = token() === SyntaxKind.EndOfFileToken && !parseDiagnostics.length;
             clearState();
             return isInvalid ? entityName : undefined;
+        }
+
+        export function parseJsonText(fileName: string, sourceText: string): ParsedNodeResults<JsonNode> {
+            initializeState(sourceText, ScriptTarget.ES2015, /*syntaxCursor*/ undefined, ScriptKind.JS);
+            // Set source file so that errors will be reported with this file name
+            sourceFile = <SourceFile>{ kind: SyntaxKind.SourceFile, text: sourceText, fileName };
+            let node: JsonNode;
+            // Prime the scanner.
+            nextToken();
+            if (token() === SyntaxKind.EndOfFileToken) {
+                node = <EndOfFileToken>parseTokenNode();
+            }
+            else if (token() === SyntaxKind.OpenBraceToken ||
+                lookAhead(() => token() === SyntaxKind.StringLiteral)) {
+                node = parseObjectLiteralExpression();
+                parseExpected(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+            }
+            else {
+                parseExpected(SyntaxKind.OpenBraceToken);
+            }
+
+            if (node) {
+                node.parent = sourceFile;
+            }
+            const errors = parseDiagnostics;
+            clearState();
+            return { node, errors };
         }
 
         function getLanguageVariant(scriptKind: ScriptKind) {

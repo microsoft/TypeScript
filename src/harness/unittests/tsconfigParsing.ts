@@ -3,15 +3,18 @@
 
 namespace ts {
     describe("parseConfigFileTextToJson", () => {
-        function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: Diagnostic }) {
+        function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; errors?: Diagnostic[] }) {
             const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
+            if (!expectedConfigObject.errors) {
+                expectedConfigObject.errors = [];
+            }
             assert.equal(JSON.stringify(parsed), JSON.stringify(expectedConfigObject));
         }
 
         function assertParseError(jsonText: string) {
              const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
              assert.isTrue(undefined === parsed.config);
-             assert.isTrue(undefined !== parsed.error);
+             assert.isTrue(!!parsed.errors.length);
         }
 
         function assertParseErrorWithExcludesKeyword(jsonText: string) {
@@ -199,7 +202,7 @@ namespace ts {
                 }
                 "files": ["file1.ts"]
             }`;
-            const { configJsonObject, diagnostics } = sanitizeConfigFile("config.json", content);
+            const { config: configJsonObject, errors: diagnostics } = parseConfigFileTextToJson("config.json", content);
             const expectedResult = {
                 compilerOptions: {
                     allowJs: true,
