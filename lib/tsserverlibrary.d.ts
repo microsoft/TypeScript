@@ -1,5 +1,4 @@
 /// <reference path="../../src/server/types.d.ts" />
-/// <reference types="node" />
 declare namespace ts.server.protocol {
     namespace CommandTypes {
         type Brace = "brace";
@@ -985,170 +984,176 @@ declare namespace ts {
         DeclareKeyword = 123,
         GetKeyword = 124,
         IsKeyword = 125,
-        ModuleKeyword = 126,
-        NamespaceKeyword = 127,
-        NeverKeyword = 128,
-        ReadonlyKeyword = 129,
-        RequireKeyword = 130,
-        NumberKeyword = 131,
-        SetKeyword = 132,
-        StringKeyword = 133,
-        SymbolKeyword = 134,
-        TypeKeyword = 135,
-        UndefinedKeyword = 136,
-        FromKeyword = 137,
-        GlobalKeyword = 138,
-        OfKeyword = 139,
-        QualifiedName = 140,
-        ComputedPropertyName = 141,
-        TypeParameter = 142,
-        Parameter = 143,
-        Decorator = 144,
-        PropertySignature = 145,
-        PropertyDeclaration = 146,
-        MethodSignature = 147,
-        MethodDeclaration = 148,
-        Constructor = 149,
-        GetAccessor = 150,
-        SetAccessor = 151,
-        CallSignature = 152,
-        ConstructSignature = 153,
-        IndexSignature = 154,
-        TypePredicate = 155,
-        TypeReference = 156,
-        FunctionType = 157,
-        ConstructorType = 158,
-        TypeQuery = 159,
-        TypeLiteral = 160,
-        ArrayType = 161,
-        TupleType = 162,
-        UnionType = 163,
-        IntersectionType = 164,
-        ParenthesizedType = 165,
-        ThisType = 166,
-        LiteralType = 167,
-        ObjectBindingPattern = 168,
-        ArrayBindingPattern = 169,
-        BindingElement = 170,
-        ArrayLiteralExpression = 171,
-        ObjectLiteralExpression = 172,
-        PropertyAccessExpression = 173,
-        ElementAccessExpression = 174,
-        CallExpression = 175,
-        NewExpression = 176,
-        TaggedTemplateExpression = 177,
-        TypeAssertionExpression = 178,
-        ParenthesizedExpression = 179,
-        FunctionExpression = 180,
-        ArrowFunction = 181,
-        DeleteExpression = 182,
-        TypeOfExpression = 183,
-        VoidExpression = 184,
-        AwaitExpression = 185,
-        PrefixUnaryExpression = 186,
-        PostfixUnaryExpression = 187,
-        BinaryExpression = 188,
-        ConditionalExpression = 189,
-        TemplateExpression = 190,
-        YieldExpression = 191,
-        SpreadElementExpression = 192,
-        ClassExpression = 193,
-        OmittedExpression = 194,
-        ExpressionWithTypeArguments = 195,
-        AsExpression = 196,
-        NonNullExpression = 197,
-        TemplateSpan = 198,
-        SemicolonClassElement = 199,
-        Block = 200,
-        VariableStatement = 201,
-        EmptyStatement = 202,
-        ExpressionStatement = 203,
-        IfStatement = 204,
-        DoStatement = 205,
-        WhileStatement = 206,
-        ForStatement = 207,
-        ForInStatement = 208,
-        ForOfStatement = 209,
-        ContinueStatement = 210,
-        BreakStatement = 211,
-        ReturnStatement = 212,
-        WithStatement = 213,
-        SwitchStatement = 214,
-        LabeledStatement = 215,
-        ThrowStatement = 216,
-        TryStatement = 217,
-        DebuggerStatement = 218,
-        VariableDeclaration = 219,
-        VariableDeclarationList = 220,
-        FunctionDeclaration = 221,
-        ClassDeclaration = 222,
-        InterfaceDeclaration = 223,
-        TypeAliasDeclaration = 224,
-        EnumDeclaration = 225,
-        ModuleDeclaration = 226,
-        ModuleBlock = 227,
-        CaseBlock = 228,
-        NamespaceExportDeclaration = 229,
-        ImportEqualsDeclaration = 230,
-        ImportDeclaration = 231,
-        ImportClause = 232,
-        NamespaceImport = 233,
-        NamedImports = 234,
-        ImportSpecifier = 235,
-        ExportAssignment = 236,
-        ExportDeclaration = 237,
-        NamedExports = 238,
-        ExportSpecifier = 239,
-        MissingDeclaration = 240,
-        ExternalModuleReference = 241,
-        JsxElement = 242,
-        JsxSelfClosingElement = 243,
-        JsxOpeningElement = 244,
-        JsxClosingElement = 245,
-        JsxAttribute = 246,
-        JsxSpreadAttribute = 247,
-        JsxExpression = 248,
-        CaseClause = 249,
-        DefaultClause = 250,
-        HeritageClause = 251,
-        CatchClause = 252,
-        PropertyAssignment = 253,
-        ShorthandPropertyAssignment = 254,
-        EnumMember = 255,
-        SourceFile = 256,
-        JSDocTypeExpression = 257,
-        JSDocAllType = 258,
-        JSDocUnknownType = 259,
-        JSDocArrayType = 260,
-        JSDocUnionType = 261,
-        JSDocTupleType = 262,
-        JSDocNullableType = 263,
-        JSDocNonNullableType = 264,
-        JSDocRecordType = 265,
-        JSDocRecordMember = 266,
-        JSDocTypeReference = 267,
-        JSDocOptionalType = 268,
-        JSDocFunctionType = 269,
-        JSDocVariadicType = 270,
-        JSDocConstructorType = 271,
-        JSDocThisType = 272,
-        JSDocComment = 273,
-        JSDocTag = 274,
-        JSDocParameterTag = 275,
-        JSDocReturnTag = 276,
-        JSDocTypeTag = 277,
-        JSDocTemplateTag = 278,
-        JSDocTypedefTag = 279,
-        JSDocPropertyTag = 280,
-        JSDocTypeLiteral = 281,
-        JSDocLiteralType = 282,
-        JSDocNullKeyword = 283,
-        JSDocUndefinedKeyword = 284,
-        JSDocNeverKeyword = 285,
-        SyntaxList = 286,
-        NotEmittedStatement = 287,
-        PartiallyEmittedExpression = 288,
-        Count = 289,
+        KeyOfKeyword = 126,
+        ModuleKeyword = 127,
+        NamespaceKeyword = 128,
+        NeverKeyword = 129,
+        ReadonlyKeyword = 130,
+        RequireKeyword = 131,
+        NumberKeyword = 132,
+        SetKeyword = 133,
+        StringKeyword = 134,
+        SymbolKeyword = 135,
+        TypeKeyword = 136,
+        UndefinedKeyword = 137,
+        FromKeyword = 138,
+        GlobalKeyword = 139,
+        OfKeyword = 140,
+        QualifiedName = 141,
+        ComputedPropertyName = 142,
+        TypeParameter = 143,
+        Parameter = 144,
+        Decorator = 145,
+        PropertySignature = 146,
+        PropertyDeclaration = 147,
+        MethodSignature = 148,
+        MethodDeclaration = 149,
+        Constructor = 150,
+        GetAccessor = 151,
+        SetAccessor = 152,
+        CallSignature = 153,
+        ConstructSignature = 154,
+        IndexSignature = 155,
+        TypePredicate = 156,
+        TypeReference = 157,
+        FunctionType = 158,
+        ConstructorType = 159,
+        TypeQuery = 160,
+        TypeLiteral = 161,
+        ArrayType = 162,
+        TupleType = 163,
+        UnionType = 164,
+        IntersectionType = 165,
+        ParenthesizedType = 166,
+        ThisType = 167,
+        TypeOperator = 168,
+        IndexedAccessType = 169,
+        LiteralType = 170,
+        ObjectBindingPattern = 171,
+        ArrayBindingPattern = 172,
+        BindingElement = 173,
+        ArrayLiteralExpression = 174,
+        ObjectLiteralExpression = 175,
+        PropertyAccessExpression = 176,
+        ElementAccessExpression = 177,
+        CallExpression = 178,
+        NewExpression = 179,
+        TaggedTemplateExpression = 180,
+        TypeAssertionExpression = 181,
+        ParenthesizedExpression = 182,
+        FunctionExpression = 183,
+        ArrowFunction = 184,
+        DeleteExpression = 185,
+        TypeOfExpression = 186,
+        VoidExpression = 187,
+        AwaitExpression = 188,
+        PrefixUnaryExpression = 189,
+        PostfixUnaryExpression = 190,
+        BinaryExpression = 191,
+        ConditionalExpression = 192,
+        TemplateExpression = 193,
+        YieldExpression = 194,
+        SpreadElement = 195,
+        ClassExpression = 196,
+        OmittedExpression = 197,
+        ExpressionWithTypeArguments = 198,
+        AsExpression = 199,
+        NonNullExpression = 200,
+        TemplateSpan = 201,
+        SemicolonClassElement = 202,
+        Block = 203,
+        VariableStatement = 204,
+        EmptyStatement = 205,
+        ExpressionStatement = 206,
+        IfStatement = 207,
+        DoStatement = 208,
+        WhileStatement = 209,
+        ForStatement = 210,
+        ForInStatement = 211,
+        ForOfStatement = 212,
+        ContinueStatement = 213,
+        BreakStatement = 214,
+        ReturnStatement = 215,
+        WithStatement = 216,
+        SwitchStatement = 217,
+        LabeledStatement = 218,
+        ThrowStatement = 219,
+        TryStatement = 220,
+        DebuggerStatement = 221,
+        VariableDeclaration = 222,
+        VariableDeclarationList = 223,
+        FunctionDeclaration = 224,
+        ClassDeclaration = 225,
+        InterfaceDeclaration = 226,
+        TypeAliasDeclaration = 227,
+        EnumDeclaration = 228,
+        ModuleDeclaration = 229,
+        ModuleBlock = 230,
+        CaseBlock = 231,
+        NamespaceExportDeclaration = 232,
+        ImportEqualsDeclaration = 233,
+        ImportDeclaration = 234,
+        ImportClause = 235,
+        NamespaceImport = 236,
+        NamedImports = 237,
+        ImportSpecifier = 238,
+        ExportAssignment = 239,
+        ExportDeclaration = 240,
+        NamedExports = 241,
+        ExportSpecifier = 242,
+        MissingDeclaration = 243,
+        ExternalModuleReference = 244,
+        JsxElement = 245,
+        JsxSelfClosingElement = 246,
+        JsxOpeningElement = 247,
+        JsxClosingElement = 248,
+        JsxAttribute = 249,
+        JsxSpreadAttribute = 250,
+        JsxExpression = 251,
+        CaseClause = 252,
+        DefaultClause = 253,
+        HeritageClause = 254,
+        CatchClause = 255,
+        PropertyAssignment = 256,
+        ShorthandPropertyAssignment = 257,
+        SpreadAssignment = 258,
+        EnumMember = 259,
+        SourceFile = 260,
+        JSDocTypeExpression = 261,
+        JSDocAllType = 262,
+        JSDocUnknownType = 263,
+        JSDocArrayType = 264,
+        JSDocUnionType = 265,
+        JSDocTupleType = 266,
+        JSDocNullableType = 267,
+        JSDocNonNullableType = 268,
+        JSDocRecordType = 269,
+        JSDocRecordMember = 270,
+        JSDocTypeReference = 271,
+        JSDocOptionalType = 272,
+        JSDocFunctionType = 273,
+        JSDocVariadicType = 274,
+        JSDocConstructorType = 275,
+        JSDocThisType = 276,
+        JSDocComment = 277,
+        JSDocTag = 278,
+        JSDocParameterTag = 279,
+        JSDocReturnTag = 280,
+        JSDocTypeTag = 281,
+        JSDocTemplateTag = 282,
+        JSDocTypedefTag = 283,
+        JSDocPropertyTag = 284,
+        JSDocTypeLiteral = 285,
+        JSDocLiteralType = 286,
+        JSDocNullKeyword = 287,
+        JSDocUndefinedKeyword = 288,
+        JSDocNeverKeyword = 289,
+        SyntaxList = 290,
+        NotEmittedStatement = 291,
+        PartiallyEmittedExpression = 292,
+        MergeDeclarationMarker = 293,
+        EndOfDeclarationMarker = 294,
+        Count = 295,
         FirstAssignment = 57,
         LastAssignment = 69,
         FirstCompoundAssignment = 58,
@@ -1156,15 +1161,15 @@ declare namespace ts {
         FirstReservedWord = 71,
         LastReservedWord = 106,
         FirstKeyword = 71,
-        LastKeyword = 139,
+        LastKeyword = 140,
         FirstFutureReservedWord = 107,
         LastFutureReservedWord = 115,
-        FirstTypeNode = 155,
-        LastTypeNode = 167,
+        FirstTypeNode = 156,
+        LastTypeNode = 170,
         FirstPunctuation = 16,
         LastPunctuation = 69,
         FirstToken = 0,
-        LastToken = 139,
+        LastToken = 140,
         FirstTriviaToken = 2,
         LastTriviaToken = 7,
         FirstLiteralToken = 8,
@@ -1173,11 +1178,11 @@ declare namespace ts {
         LastTemplateToken = 15,
         FirstBinaryOperator = 26,
         LastBinaryOperator = 69,
-        FirstNode = 140,
-        FirstJSDocNode = 257,
-        LastJSDocNode = 282,
-        FirstJSDocTagNode = 273,
-        LastJSDocTagNode = 285,
+        FirstNode = 141,
+        FirstJSDocNode = 261,
+        LastJSDocNode = 286,
+        FirstJSDocTagNode = 277,
+        LastJSDocTagNode = 289,
     }
     const enum NodeFlags {
         None = 0,
@@ -1195,21 +1200,22 @@ declare namespace ts {
         HasDecorators = 2048,
         HasParamDecorators = 4096,
         HasAsyncFunctions = 8192,
-        HasJsxSpreadAttributes = 16384,
-        DisallowInContext = 32768,
-        YieldContext = 65536,
-        DecoratorContext = 131072,
-        AwaitContext = 262144,
-        ThisNodeHasError = 524288,
-        JavaScriptFile = 1048576,
-        ThisNodeOrAnySubNodesHasError = 2097152,
-        HasAggregatedChildData = 4194304,
+        HasSpreadAttribute = 16384,
+        HasRestAttribute = 32768,
+        DisallowInContext = 65536,
+        YieldContext = 131072,
+        DecoratorContext = 262144,
+        AwaitContext = 524288,
+        ThisNodeHasError = 1048576,
+        JavaScriptFile = 2097152,
+        ThisNodeOrAnySubNodesHasError = 4194304,
+        HasAggregatedChildData = 8388608,
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
-        EmitHelperFlags = 31744,
-        ReachabilityAndEmitFlags = 32128,
-        ContextFlags = 1540096,
-        TypeExcludesFlags = 327680,
+        EmitHelperFlags = 64512,
+        ReachabilityAndEmitFlags = 64896,
+        ContextFlags = 3080192,
+        TypeExcludesFlags = 655360,
     }
     const enum ModifierFlags {
         None = 0,
@@ -1229,6 +1235,7 @@ declare namespace ts {
         ParameterPropertyModifier = 92,
         NonPublicAccessibilityModifier = 24,
         TypeScriptModifier = 2270,
+        ExportDefault = 513,
     }
     const enum JsxFlags {
         None = 0,
@@ -1293,6 +1300,9 @@ declare namespace ts {
     }
     interface TransientIdentifier extends Identifier {
         resolvedSymbol: Symbol;
+    }
+    interface GeneratedIdentifier extends Identifier {
+        autoGenerateKind: GeneratedIdentifierKind.Auto | GeneratedIdentifierKind.Loop | GeneratedIdentifierKind.Unique | GeneratedIdentifierKind.Node;
     }
     interface QualifiedName extends Node {
         kind: SyntaxKind.QualifiedName;
@@ -1380,7 +1390,7 @@ declare namespace ts {
         _objectLiteralBrandBrand: any;
         name?: PropertyName;
     }
-    type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration;
+    type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration | SpreadAssignment;
     interface PropertyAssignment extends ObjectLiteralElement {
         kind: SyntaxKind.PropertyAssignment;
         name: PropertyName;
@@ -1393,6 +1403,10 @@ declare namespace ts {
         questionToken?: QuestionToken;
         equalsToken?: Token<SyntaxKind.EqualsToken>;
         objectAssignmentInitializer?: Expression;
+    }
+    interface SpreadAssignment extends ObjectLiteralElement {
+        kind: SyntaxKind.SpreadAssignment;
+        expression: Expression;
     }
     interface VariableLikeDeclaration extends Declaration {
         propertyName?: PropertyName;
@@ -1516,6 +1530,16 @@ declare namespace ts {
         kind: SyntaxKind.ParenthesizedType;
         type: TypeNode;
     }
+    interface TypeOperatorNode extends TypeNode {
+        kind: SyntaxKind.TypeOperator;
+        operator: SyntaxKind.KeyOfKeyword;
+        type: TypeNode;
+    }
+    interface IndexedAccessTypeNode extends TypeNode {
+        kind: SyntaxKind.IndexedAccessType;
+        objectType: TypeNode;
+        indexType: TypeNode;
+    }
     interface LiteralTypeNode extends TypeNode {
         kind: SyntaxKind.LiteralType;
         literal: Expression;
@@ -1552,9 +1576,6 @@ declare namespace ts {
         kind: SyntaxKind.PostfixUnaryExpression;
         operand: LeftHandSideExpression;
         operator: PostfixUnaryOperator;
-    }
-    interface PostfixExpression extends UnaryExpression {
-        _postfixExpressionBrand: any;
     }
     interface LeftHandSideExpression extends IncrementExpression {
         _leftHandSideExpressionBrand: any;
@@ -1624,6 +1645,17 @@ declare namespace ts {
         operatorToken: BinaryOperatorToken;
         right: Expression;
     }
+    interface AssignmentExpression extends BinaryExpression {
+        left: LeftHandSideExpression;
+        operatorToken: Token<SyntaxKind.EqualsToken>;
+    }
+    interface ObjectDestructuringAssignment extends AssignmentExpression {
+        left: ObjectLiteralExpression;
+    }
+    interface ArrayDestructuringAssignment extends AssignmentExpression {
+        left: ArrayLiteralExpression;
+    }
+    type DestructuringAssignment = ObjectDestructuringAssignment | ArrayDestructuringAssignment;
     interface ConditionalExpression extends Expression {
         kind: SyntaxKind.ConditionalExpression;
         condition: Expression;
@@ -1692,8 +1724,8 @@ declare namespace ts {
         elements: NodeArray<Expression>;
         multiLine?: boolean;
     }
-    interface SpreadElementExpression extends Expression {
-        kind: SyntaxKind.SpreadElementExpression;
+    interface SpreadElement extends Expression {
+        kind: SyntaxKind.SpreadElement;
         expression: Expression;
     }
     interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
@@ -1812,6 +1844,12 @@ declare namespace ts {
     }
     interface NotEmittedStatement extends Statement {
         kind: SyntaxKind.NotEmittedStatement;
+    }
+    interface EndOfDeclarationMarker extends Statement {
+        kind: SyntaxKind.EndOfDeclarationMarker;
+    }
+    interface MergeDeclarationMarker extends Statement {
+        kind: SyntaxKind.MergeDeclarationMarker;
     }
     interface EmptyStatement extends Statement {
         kind: SyntaxKind.EmptyStatement;
@@ -2265,14 +2303,16 @@ declare namespace ts {
         identifierCount: number;
         symbolCount: number;
         parseDiagnostics: Diagnostic[];
+        additionalSyntacticDiagnostics?: Diagnostic[];
         bindDiagnostics: Diagnostic[];
         lineMap: number[];
         classifiableNames?: Map<string>;
-        resolvedModules: Map<ResolvedModule>;
+        resolvedModules: Map<ResolvedModuleFull>;
         resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         imports: LiteralExpression[];
         moduleAugmentations: LiteralExpression[];
         patternAmbientModules?: PatternAmbientModule[];
+        ambientModuleNames: string[];
         externalHelpersModuleName?: Identifier;
     }
     interface ScriptReferenceHost {
@@ -2316,6 +2356,7 @@ declare namespace ts {
         getTypeCount(): number;
         getFileProcessingDiagnostics(): DiagnosticCollection;
         getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         structureIsReused?: boolean;
     }
     interface SourceMapSpan {
@@ -2393,6 +2434,7 @@ declare namespace ts {
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
+        tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
         getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
@@ -2451,6 +2493,10 @@ declare namespace ts {
         Accessible = 0,
         NotAccessible = 1,
         CannotBeNamed = 2,
+    }
+    const enum SyntheticSymbolKind {
+        UnionOrIntersection = 0,
+        Spread = 1,
     }
     const enum TypePredicateKind {
         This = 0,
@@ -2522,6 +2568,7 @@ declare namespace ts {
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: SymbolWriter): void;
+        getJsxFactoryEntity(): EntityName;
     }
     const enum SymbolFlags {
         None = 0,
@@ -2619,6 +2666,8 @@ declare namespace ts {
         mapper?: TypeMapper;
         referenced?: boolean;
         containingType?: UnionOrIntersectionType;
+        leftSpread?: Symbol;
+        rightSpread?: Symbol;
         hasNonUniformType?: boolean;
         isPartial?: boolean;
         isDiscriminantProperty?: boolean;
@@ -2695,10 +2744,12 @@ declare namespace ts {
         Object = 32768,
         Union = 65536,
         Intersection = 131072,
-        FreshLiteral = 262144,
-        ContainsWideningType = 524288,
-        ContainsObjectLiteral = 1048576,
-        ContainsAnyFunctionType = 2097152,
+        Index = 262144,
+        IndexedAccess = 524288,
+        FreshLiteral = 1048576,
+        ContainsWideningType = 2097152,
+        ContainsObjectLiteral = 4194304,
+        ContainsAnyFunctionType = 8388608,
         Nullable = 6144,
         Literal = 480,
         StringOrNumberLiteral = 96,
@@ -2712,11 +2763,11 @@ declare namespace ts {
         EnumLike = 272,
         UnionOrIntersection = 196608,
         StructuredType = 229376,
-        StructuredOrTypeParameter = 245760,
-        Narrowable = 246783,
+        StructuredOrTypeParameter = 507904,
+        Narrowable = 1033215,
         NotUnionOrUnit = 33281,
-        RequiresWidening = 1572864,
-        PropagatingFlags = 3670016,
+        RequiresWidening = 6291456,
+        PropagatingFlags = 14680064,
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {
@@ -2816,7 +2867,16 @@ declare namespace ts {
         target?: TypeParameter;
         mapper?: TypeMapper;
         resolvedApparentType: Type;
+        resolvedIndexType: IndexType;
+        resolvedIndexedAccessTypes: IndexedAccessType[];
         isThisType?: boolean;
+    }
+    interface IndexType extends Type {
+        type: TypeParameter;
+    }
+    interface IndexedAccessType extends Type {
+        objectType: Type;
+        indexType: TypeParameter;
     }
     const enum SignatureKind {
         Call = 0,
@@ -2837,6 +2897,7 @@ declare namespace ts {
         erasedSignatureCache?: Signature;
         isolatedSignatureType?: ObjectType;
         typePredicate?: TypePredicate;
+        instantiations?: Map<Signature>;
     }
     const enum IndexKind {
         String = 0,
@@ -2850,7 +2911,6 @@ declare namespace ts {
     interface TypeMapper {
         (t: TypeParameter): Type;
         mappedTypes?: Type[];
-        targetTypes?: Type[];
         instantiations?: Type[];
         context?: InferenceContext;
     }
@@ -2941,7 +3001,7 @@ declare namespace ts {
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
-        noEmitOverwritenFiles?: boolean;
+        noEmitForJsFiles?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
@@ -2962,6 +3022,7 @@ declare namespace ts {
         project?: string;
         pretty?: DiagnosticStyle;
         reactNamespace?: string;
+        jsxFactory?: string;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
@@ -3031,7 +3092,8 @@ declare namespace ts {
         ES2015 = 2,
         ES2016 = 3,
         ES2017 = 4,
-        Latest = 4,
+        ESNext = 5,
+        Latest = 5,
     }
     const enum LanguageVariant {
         Standard = 0,
@@ -3221,8 +3283,19 @@ declare namespace ts {
         resolvedFileName: string;
         isExternalLibraryImport?: boolean;
     }
+    interface ResolvedModuleFull extends ResolvedModule {
+        extension: Extension;
+    }
+    enum Extension {
+        Ts = 0,
+        Tsx = 1,
+        Dts = 2,
+        Js = 3,
+        Jsx = 4,
+        LastTypeScriptExtension = 2,
+    }
     interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModule;
+        resolvedModule: ResolvedModuleFull | undefined;
         failedLookupLocations: string[];
     }
     interface ResolvedTypeReferenceDirective {
@@ -3255,49 +3328,54 @@ declare namespace ts {
         ContainsTypeScript = 2,
         Jsx = 4,
         ContainsJsx = 8,
-        ES2017 = 16,
-        ContainsES2017 = 32,
-        ES2016 = 64,
-        ContainsES2016 = 128,
-        ES2015 = 256,
-        ContainsES2015 = 512,
-        DestructuringAssignment = 1024,
-        Generator = 2048,
-        ContainsGenerator = 4096,
-        ContainsDecorators = 8192,
-        ContainsPropertyInitializer = 16384,
-        ContainsLexicalThis = 32768,
-        ContainsCapturedLexicalThis = 65536,
-        ContainsLexicalThisInComputedPropertyName = 131072,
-        ContainsDefaultValueAssignments = 262144,
-        ContainsParameterPropertyAssignments = 524288,
-        ContainsSpreadElementExpression = 1048576,
-        ContainsComputedPropertyName = 2097152,
-        ContainsBlockScopedBinding = 4194304,
-        ContainsBindingPattern = 8388608,
-        ContainsYield = 16777216,
-        ContainsHoistedDeclarationOrCompletion = 33554432,
+        ESNext = 16,
+        ContainsESNext = 32,
+        ES2017 = 64,
+        ContainsES2017 = 128,
+        ES2016 = 256,
+        ContainsES2016 = 512,
+        ES2015 = 1024,
+        ContainsES2015 = 2048,
+        Generator = 4096,
+        ContainsGenerator = 8192,
+        DestructuringAssignment = 16384,
+        ContainsDestructuringAssignment = 32768,
+        ContainsDecorators = 65536,
+        ContainsPropertyInitializer = 131072,
+        ContainsLexicalThis = 262144,
+        ContainsCapturedLexicalThis = 524288,
+        ContainsLexicalThisInComputedPropertyName = 1048576,
+        ContainsDefaultValueAssignments = 2097152,
+        ContainsParameterPropertyAssignments = 4194304,
+        ContainsSpreadExpression = 8388608,
+        ContainsComputedPropertyName = 16777216,
+        ContainsBlockScopedBinding = 33554432,
+        ContainsBindingPattern = 67108864,
+        ContainsYield = 134217728,
+        ContainsHoistedDeclarationOrCompletion = 268435456,
         HasComputedFlags = 536870912,
         AssertTypeScript = 3,
         AssertJsx = 12,
-        AssertES2017 = 48,
-        AssertES2016 = 192,
-        AssertES2015 = 768,
-        AssertGenerator = 6144,
-        NodeExcludes = 536874325,
-        ArrowFunctionExcludes = 592227669,
-        FunctionExcludes = 592293205,
-        ConstructorExcludes = 591760725,
-        MethodOrAccessorExcludes = 591760725,
-        ClassExcludes = 539749717,
-        ModuleExcludes = 574729557,
+        AssertESNext = 48,
+        AssertES2017 = 192,
+        AssertES2016 = 768,
+        AssertES2015 = 3072,
+        AssertGenerator = 12288,
+        AssertDestructuringAssignment = 49152,
+        NodeExcludes = 536892757,
+        ArrowFunctionExcludes = 979719509,
+        FunctionExcludes = 980243797,
+        ConstructorExcludes = 975983957,
+        MethodOrAccessorExcludes = 975983957,
+        ClassExcludes = 559895893,
+        ModuleExcludes = 839734613,
         TypeExcludes = -3,
-        ObjectLiteralExcludes = 539110741,
-        ArrayLiteralOrCallOrNewExcludes = 537922901,
-        VariableDeclarationListExcludes = 545262933,
-        ParameterExcludes = 545262933,
-        TypeScriptClassSyntaxMask = 548864,
-        ES2015FunctionSyntaxMask = 327680,
+        ObjectLiteralExcludes = 554784085,
+        ArrayLiteralOrCallOrNewExcludes = 545281365,
+        VariableDeclarationListExcludes = 604001621,
+        ParameterExcludes = 604001621,
+        TypeScriptClassSyntaxMask = 4390912,
+        ES2015FunctionSyntaxMask = 2621440,
     }
     interface EmitNode {
         flags?: EmitFlags;
@@ -3335,6 +3413,8 @@ declare namespace ts {
         AsyncFunctionBody = 2097152,
         ReuseTempVariableScope = 4194304,
         CustomPrologue = 8388608,
+        NoHoisting = 16777216,
+        HasEndOfDeclarationMarker = 33554432,
     }
     const enum EmitContext {
         SourceFile = 0,
@@ -3395,6 +3475,7 @@ declare namespace ts {
         GreaterThan = 1,
     }
     function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined;
+    function zipWith<T, U>(arrayA: T[], arrayB: U[], callback: (a: T, b: U, index: number) => void): void;
     function every<T>(array: T[], callback: (element: T, index: number) => boolean): boolean;
     function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined;
     function findMap<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U;
@@ -3419,15 +3500,17 @@ declare namespace ts {
     function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equaler?: (a: T, b: T) => boolean): boolean;
     function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean;
     function compact<T>(array: T[]): T[];
+    function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer?: (x: T, y: T) => Comparison, offsetA?: number, offsetB?: number): T[] | undefined;
     function sum(array: any[], prop: string): number;
-    function addRange<T>(to: T[], from: T[]): void;
+    function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
+    function addRange<T>(to: T[] | undefined, from: T[] | undefined): T[] | undefined;
     function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number): boolean;
     function firstOrUndefined<T>(array: T[]): T;
+    function lastOrUndefined<T>(array: T[]): T;
     function singleOrUndefined<T>(array: T[]): T;
     function singleOrMany<T>(array: T[]): T | T[];
-    function lastOrUndefined<T>(array: T[]): T;
     function replaceElement<T>(array: T[], index: number, value: T): T[];
-    function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number): number;
+    function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number, offset?: number): number;
     function reduceLeft<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
     function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
     function reduceRight<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
@@ -3450,7 +3533,7 @@ declare namespace ts {
     function cloneMap<T>(map: Map<T>): Map<T>;
     function clone<T>(object: T): T;
     function extend<T1, T2>(first: T1, second: T2): T1 & T2;
-    function multiMapAdd<V>(map: Map<V[]>, key: string, value: V): V[];
+    function multiMapAdd<V>(map: Map<V[]>, key: string | number, value: V): V[];
     function multiMapRemove<V>(map: Map<V[]>, key: string, value: V): void;
     function isArray(value: any): value is any[];
     function noop(): void;
@@ -3498,9 +3581,11 @@ declare namespace ts {
     function containsPath(parent: string, child: string, currentDirectory: string, ignoreCase?: boolean): boolean;
     function startsWith(str: string, prefix: string): boolean;
     function endsWith(str: string, suffix: string): boolean;
+    function hasExtension(fileName: string): boolean;
     function fileExtensionIs(path: string, extension: string): boolean;
     function fileExtensionIsAny(path: string, extensions: string[]): boolean;
     function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string;
+    function isImplicitGlob(lastPathComponent: string): boolean;
     interface FileSystemEntries {
         files: string[];
         directories: string[];
@@ -3535,7 +3620,6 @@ declare namespace ts {
     function removeFileExtension(path: string): string;
     function tryRemoveExtension(path: string, extension: string): string | undefined;
     function removeExtension(path: string, extension: string): string;
-    function isJsxOrTsxExtension(ext: string): boolean;
     function changeExtension<T extends string | Path>(path: T, newExtension: string): T;
     interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
@@ -3569,6 +3653,8 @@ declare namespace ts {
     function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined;
     function tryParsePattern(pattern: string): Pattern | undefined;
     function positionIsSynthesized(pos: number): boolean;
+    function extensionIsTypeScript(ext: Extension): boolean;
+    function extensionFromPath(path: string): Extension;
 }
 declare namespace ts {
     type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
@@ -3586,7 +3672,7 @@ declare namespace ts {
         readFile(path: string, encoding?: string): string;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
+        watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
@@ -3863,7 +3949,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Type_0_is_not_a_valid_async_function_return_type: {
+        Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5225,7 +5311,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer: {
+        The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5267,7 +5353,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Invalid_left_hand_side_of_assignment_expression: {
+        The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5507,7 +5593,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Invalid_left_hand_side_in_for_in_statement: {
+        The_left_hand_side_of_a_for_in_statement_must_be_a_variable_or_a_property_access: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5735,18 +5821,6 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant_or_a_read_only_property: {
-            code: number;
-            category: DiagnosticCategory;
-            key: string;
-            message: string;
-        };
-        Left_hand_side_of_assignment_expression_cannot_be_a_constant_or_a_read_only_property: {
-            code: number;
-            category: DiagnosticCategory;
-            key: string;
-            message: string;
-        };
         Cannot_redeclare_block_scoped_variable_0: {
             code: number;
             category: DiagnosticCategory;
@@ -5813,7 +5887,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        A_rest_element_must_be_last_in_an_array_destructuring_pattern: {
+        A_rest_element_must_be_last_in_a_destructuring_pattern: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5945,19 +6019,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        The_left_hand_side_of_a_for_of_statement_cannot_be_a_constant_or_a_read_only_property: {
-            code: number;
-            category: DiagnosticCategory;
-            key: string;
-            message: string;
-        };
-        The_left_hand_side_of_a_for_in_statement_cannot_be_a_constant_or_a_read_only_property: {
-            code: number;
-            category: DiagnosticCategory;
-            key: string;
-            message: string;
-        };
-        Invalid_left_hand_side_in_for_of_statement: {
+        The_left_hand_side_of_a_for_of_statement_must_be_a_variable_or_a_property_access: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -6239,6 +6301,48 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Type_0_is_not_constrained_to_keyof_1: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Type_0_has_no_matching_index_signature_for_type_1: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Type_0_cannot_be_used_as_an_index_type: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Cannot_assign_to_0_because_it_is_not_a_variable: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        The_target_of_an_assignment_must_be_a_variable_or_a_property_access: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Index_signature_in_type_0_only_permits_reading: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         JSX_element_attributes_type_0_may_not_be_a_union_type: {
             code: number;
             category: DiagnosticCategory;
@@ -6372,6 +6476,12 @@ declare namespace ts {
             message: string;
         };
         Invalid_module_name_in_augmentation_module_0_cannot_be_found: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -6558,6 +6668,24 @@ declare namespace ts {
             message: string;
         };
         The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Spread_types_may_only_be_created_from_object_types: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Rest_types_may_only_be_created_from_object_types: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -7157,6 +7285,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Concatenate_and_emit_output_to_single_file: {
             code: number;
             category: DiagnosticCategory;
@@ -7655,7 +7789,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        package_json_does_not_have_types_field: {
+        package_json_does_not_have_a_types_or_main_field: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -7877,7 +8011,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        No_types_specified_in_package_json_but_allowJs_is_set_so_returning_main_value_of_0: {
+        No_types_specified_in_package_json_so_returning_main_value_of_0: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -7902,6 +8036,36 @@ declare namespace ts {
             message: string;
         };
         Parse_in_strict_mode_and_emit_use_strict_for_each_source_file: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Module_0_was_resolved_to_1_but_jsx_is_not_set: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Module_0_was_resolved_to_1_but_allowJs_is_not_set: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Module_0_was_resolved_as_ambient_module_declared_in_1_since_this_file_was_not_modified: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -7955,7 +8119,13 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Index_signature_of_object_type_implicitly_has_an_any_type: {
+        Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -8297,6 +8467,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
     };
 }
 declare namespace ts {
@@ -8516,26 +8692,19 @@ declare namespace ts.server {
 declare namespace ts {
     function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
     function isTraceEnabled(compilerOptions: CompilerOptions, host: ModuleResolutionHost): boolean;
-    function createResolvedModule(resolvedFileName: string, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations;
-    interface ModuleResolutionState {
-        host: ModuleResolutionHost;
-        compilerOptions: CompilerOptions;
-        traceEnabled: boolean;
-        skipTsx: boolean;
-    }
     function getEffectiveTypeRoots(options: CompilerOptions, host: {
         directoryExists?: (directoryName: string) => boolean;
         getCurrentDirectory?: () => string;
     }): string[] | undefined;
-    function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
+    function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
     function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[];
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
     function directoryProbablyExists(directoryName: string, host: {
         directoryExists?: (directoryName: string) => boolean;
     }): boolean;
-    function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, checkOneLevel: boolean): string;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    function loadModuleFromGlobalCache(moduleName: string, projectName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string): ResolvedModuleWithFailedLookupLocations;
 }
 declare namespace ts {
     const externalHelpersModuleNameText = "tslib";
@@ -8562,10 +8731,10 @@ declare namespace ts {
     function releaseStringWriter(writer: StringSymbolWriter): void;
     function getFullWidth(node: Node): number;
     function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean;
-    function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule;
-    function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void;
+    function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull;
+    function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void;
     function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void;
-    function moduleResolutionIsEqualTo(oldResolution: ResolvedModule, newResolution: ResolvedModule): boolean;
+    function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean;
     function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean;
     function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean;
     function containsParseError(node: Node): boolean;
@@ -8600,7 +8769,10 @@ declare namespace ts {
     function isBlockScope(node: Node, parentNode: Node): boolean;
     function getEnclosingBlockScopeContainer(node: Node): Node;
     function declarationNameToString(name: DeclarationName): string;
+    function getTextOfPropertyName(name: PropertyName): string;
+    function entityNameToString(name: EntityNameOrEntityNameExpression): string;
     function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic;
+    function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic;
     function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic;
     function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan;
     function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan;
@@ -8672,6 +8844,12 @@ declare namespace ts {
     function hasDeclaredRestParameter(s: SignatureDeclaration): boolean;
     function isRestParameter(node: ParameterDeclaration): boolean;
     function isDeclaredRestParam(node: ParameterDeclaration): boolean;
+    const enum AssignmentKind {
+        None = 0,
+        Definite = 1,
+        Compound = 2,
+    }
+    function getAssignmentTargetKind(node: Node): AssignmentKind;
     function isAssignmentTarget(node: Node): boolean;
     function isNodeDescendantOf(node: Node, ancestor: Node): boolean;
     function isInAmbientContext(node: Node): boolean;
@@ -8704,6 +8882,7 @@ declare namespace ts {
     function nodeStartsNewLexicalEnvironment(node: Node): boolean;
     function nodeIsSynthesized(node: TextRange): boolean;
     function getOriginalNode(node: Node): Node;
+    function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
     function isParseTreeNode(node: Node): boolean;
     function getParseTreeNode(node: Node): Node;
     function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
@@ -8716,7 +8895,7 @@ declare namespace ts {
     function getExpressionAssociativity(expression: Expression): Associativity;
     function getOperatorAssociativity(kind: SyntaxKind, operator: SyntaxKind, hasArguments?: boolean): Associativity;
     function getExpressionPrecedence(expression: Expression): 0 | 1 | -1 | 2 | 4 | 3 | 16 | 10 | 5 | 6 | 11 | 8 | 19 | 18 | 17 | 15 | 14 | 13 | 12 | 9 | 7;
-    function getOperator(expression: Expression): SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.NumericLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral | SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.DotToken | SyntaxKind.DotDotDotToken | SyntaxKind.SemicolonToken | SyntaxKind.CommaToken | SyntaxKind.LessThanToken | SyntaxKind.LessThanSlashToken | SyntaxKind.GreaterThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.EqualsEqualsToken | SyntaxKind.ExclamationEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.EqualsGreaterThanToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.AsteriskToken | SyntaxKind.AsteriskAsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken | SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken | SyntaxKind.ExclamationToken | SyntaxKind.TildeToken | SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken | SyntaxKind.QuestionToken | SyntaxKind.ColonToken | SyntaxKind.AtToken | SyntaxKind.EqualsToken | SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken | SyntaxKind.Identifier | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.LetKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.StaticKeyword | SyntaxKind.YieldKeyword | SyntaxKind.AbstractKeyword | SyntaxKind.AsKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.GetKeyword | SyntaxKind.IsKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.RequireKeyword | SyntaxKind.NumberKeyword | SyntaxKind.SetKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.TypeKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.FromKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.OfKeyword | SyntaxKind.QualifiedName | SyntaxKind.ComputedPropertyName | SyntaxKind.TypeParameter | SyntaxKind.Parameter | SyntaxKind.Decorator | SyntaxKind.PropertySignature | SyntaxKind.PropertyDeclaration | SyntaxKind.MethodSignature | SyntaxKind.MethodDeclaration | SyntaxKind.Constructor | SyntaxKind.GetAccessor | SyntaxKind.SetAccessor | SyntaxKind.CallSignature | SyntaxKind.ConstructSignature | SyntaxKind.IndexSignature | SyntaxKind.TypePredicate | SyntaxKind.TypeReference | SyntaxKind.FunctionType | SyntaxKind.ConstructorType | SyntaxKind.TypeQuery | SyntaxKind.TypeLiteral | SyntaxKind.ArrayType | SyntaxKind.TupleType | SyntaxKind.UnionType | SyntaxKind.IntersectionType | SyntaxKind.ParenthesizedType | SyntaxKind.ThisType | SyntaxKind.LiteralType | SyntaxKind.ObjectBindingPattern | SyntaxKind.ArrayBindingPattern | SyntaxKind.BindingElement | SyntaxKind.ArrayLiteralExpression | SyntaxKind.ObjectLiteralExpression | SyntaxKind.PropertyAccessExpression | SyntaxKind.ElementAccessExpression | SyntaxKind.CallExpression | SyntaxKind.NewExpression | SyntaxKind.TaggedTemplateExpression | SyntaxKind.TypeAssertionExpression | SyntaxKind.ParenthesizedExpression | SyntaxKind.FunctionExpression | SyntaxKind.ArrowFunction | SyntaxKind.DeleteExpression | SyntaxKind.TypeOfExpression | SyntaxKind.VoidExpression | SyntaxKind.AwaitExpression | SyntaxKind.ConditionalExpression | SyntaxKind.TemplateExpression | SyntaxKind.YieldExpression | SyntaxKind.SpreadElementExpression | SyntaxKind.ClassExpression | SyntaxKind.OmittedExpression | SyntaxKind.ExpressionWithTypeArguments | SyntaxKind.AsExpression | SyntaxKind.NonNullExpression | SyntaxKind.TemplateSpan | SyntaxKind.SemicolonClassElement | SyntaxKind.Block | SyntaxKind.VariableStatement | SyntaxKind.EmptyStatement | SyntaxKind.ExpressionStatement | SyntaxKind.IfStatement | SyntaxKind.DoStatement | SyntaxKind.WhileStatement | SyntaxKind.ForStatement | SyntaxKind.ForInStatement | SyntaxKind.ForOfStatement | SyntaxKind.ContinueStatement | SyntaxKind.BreakStatement | SyntaxKind.ReturnStatement | SyntaxKind.WithStatement | SyntaxKind.SwitchStatement | SyntaxKind.LabeledStatement | SyntaxKind.ThrowStatement | SyntaxKind.TryStatement | SyntaxKind.DebuggerStatement | SyntaxKind.VariableDeclaration | SyntaxKind.VariableDeclarationList | SyntaxKind.FunctionDeclaration | SyntaxKind.ClassDeclaration | SyntaxKind.InterfaceDeclaration | SyntaxKind.TypeAliasDeclaration | SyntaxKind.EnumDeclaration | SyntaxKind.ModuleDeclaration | SyntaxKind.ModuleBlock | SyntaxKind.CaseBlock | SyntaxKind.NamespaceExportDeclaration | SyntaxKind.ImportEqualsDeclaration | SyntaxKind.ImportDeclaration | SyntaxKind.ImportClause | SyntaxKind.NamespaceImport | SyntaxKind.NamedImports | SyntaxKind.ImportSpecifier | SyntaxKind.ExportAssignment | SyntaxKind.ExportDeclaration | SyntaxKind.NamedExports | SyntaxKind.ExportSpecifier | SyntaxKind.MissingDeclaration | SyntaxKind.ExternalModuleReference | SyntaxKind.JsxElement | SyntaxKind.JsxSelfClosingElement | SyntaxKind.JsxOpeningElement | SyntaxKind.JsxClosingElement | SyntaxKind.JsxAttribute | SyntaxKind.JsxSpreadAttribute | SyntaxKind.JsxExpression | SyntaxKind.CaseClause | SyntaxKind.DefaultClause | SyntaxKind.HeritageClause | SyntaxKind.CatchClause | SyntaxKind.PropertyAssignment | SyntaxKind.ShorthandPropertyAssignment | SyntaxKind.EnumMember | SyntaxKind.SourceFile | SyntaxKind.JSDocTypeExpression | SyntaxKind.JSDocAllType | SyntaxKind.JSDocUnknownType | SyntaxKind.JSDocArrayType | SyntaxKind.JSDocUnionType | SyntaxKind.JSDocTupleType | SyntaxKind.JSDocNullableType | SyntaxKind.JSDocNonNullableType | SyntaxKind.JSDocRecordType | SyntaxKind.JSDocRecordMember | SyntaxKind.JSDocTypeReference | SyntaxKind.JSDocOptionalType | SyntaxKind.JSDocFunctionType | SyntaxKind.JSDocVariadicType | SyntaxKind.JSDocConstructorType | SyntaxKind.JSDocThisType | SyntaxKind.JSDocComment | SyntaxKind.JSDocTag | SyntaxKind.JSDocParameterTag | SyntaxKind.JSDocReturnTag | SyntaxKind.JSDocTypeTag | SyntaxKind.JSDocTemplateTag | SyntaxKind.JSDocTypedefTag | SyntaxKind.JSDocPropertyTag | SyntaxKind.JSDocTypeLiteral | SyntaxKind.JSDocLiteralType | SyntaxKind.JSDocNullKeyword | SyntaxKind.JSDocUndefinedKeyword | SyntaxKind.JSDocNeverKeyword | SyntaxKind.SyntaxList | SyntaxKind.NotEmittedStatement | SyntaxKind.PartiallyEmittedExpression | SyntaxKind.Count;
+    function getOperator(expression: Expression): SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.NumericLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral | SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.DotToken | SyntaxKind.DotDotDotToken | SyntaxKind.SemicolonToken | SyntaxKind.CommaToken | SyntaxKind.LessThanToken | SyntaxKind.LessThanSlashToken | SyntaxKind.GreaterThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.EqualsEqualsToken | SyntaxKind.ExclamationEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.EqualsGreaterThanToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.AsteriskToken | SyntaxKind.AsteriskAsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken | SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken | SyntaxKind.ExclamationToken | SyntaxKind.TildeToken | SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken | SyntaxKind.QuestionToken | SyntaxKind.ColonToken | SyntaxKind.AtToken | SyntaxKind.EqualsToken | SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken | SyntaxKind.Identifier | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.LetKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.StaticKeyword | SyntaxKind.YieldKeyword | SyntaxKind.AbstractKeyword | SyntaxKind.AsKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.GetKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.RequireKeyword | SyntaxKind.NumberKeyword | SyntaxKind.SetKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.TypeKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.FromKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.OfKeyword | SyntaxKind.QualifiedName | SyntaxKind.ComputedPropertyName | SyntaxKind.TypeParameter | SyntaxKind.Parameter | SyntaxKind.Decorator | SyntaxKind.PropertySignature | SyntaxKind.PropertyDeclaration | SyntaxKind.MethodSignature | SyntaxKind.MethodDeclaration | SyntaxKind.Constructor | SyntaxKind.GetAccessor | SyntaxKind.SetAccessor | SyntaxKind.CallSignature | SyntaxKind.ConstructSignature | SyntaxKind.IndexSignature | SyntaxKind.TypePredicate | SyntaxKind.TypeReference | SyntaxKind.FunctionType | SyntaxKind.ConstructorType | SyntaxKind.TypeQuery | SyntaxKind.TypeLiteral | SyntaxKind.ArrayType | SyntaxKind.TupleType | SyntaxKind.UnionType | SyntaxKind.IntersectionType | SyntaxKind.ParenthesizedType | SyntaxKind.ThisType | SyntaxKind.TypeOperator | SyntaxKind.IndexedAccessType | SyntaxKind.LiteralType | SyntaxKind.ObjectBindingPattern | SyntaxKind.ArrayBindingPattern | SyntaxKind.BindingElement | SyntaxKind.ArrayLiteralExpression | SyntaxKind.ObjectLiteralExpression | SyntaxKind.PropertyAccessExpression | SyntaxKind.ElementAccessExpression | SyntaxKind.CallExpression | SyntaxKind.NewExpression | SyntaxKind.TaggedTemplateExpression | SyntaxKind.TypeAssertionExpression | SyntaxKind.ParenthesizedExpression | SyntaxKind.FunctionExpression | SyntaxKind.ArrowFunction | SyntaxKind.DeleteExpression | SyntaxKind.TypeOfExpression | SyntaxKind.VoidExpression | SyntaxKind.AwaitExpression | SyntaxKind.ConditionalExpression | SyntaxKind.TemplateExpression | SyntaxKind.YieldExpression | SyntaxKind.SpreadElement | SyntaxKind.ClassExpression | SyntaxKind.OmittedExpression | SyntaxKind.ExpressionWithTypeArguments | SyntaxKind.AsExpression | SyntaxKind.NonNullExpression | SyntaxKind.TemplateSpan | SyntaxKind.SemicolonClassElement | SyntaxKind.Block | SyntaxKind.VariableStatement | SyntaxKind.EmptyStatement | SyntaxKind.ExpressionStatement | SyntaxKind.IfStatement | SyntaxKind.DoStatement | SyntaxKind.WhileStatement | SyntaxKind.ForStatement | SyntaxKind.ForInStatement | SyntaxKind.ForOfStatement | SyntaxKind.ContinueStatement | SyntaxKind.BreakStatement | SyntaxKind.ReturnStatement | SyntaxKind.WithStatement | SyntaxKind.SwitchStatement | SyntaxKind.LabeledStatement | SyntaxKind.ThrowStatement | SyntaxKind.TryStatement | SyntaxKind.DebuggerStatement | SyntaxKind.VariableDeclaration | SyntaxKind.VariableDeclarationList | SyntaxKind.FunctionDeclaration | SyntaxKind.ClassDeclaration | SyntaxKind.InterfaceDeclaration | SyntaxKind.TypeAliasDeclaration | SyntaxKind.EnumDeclaration | SyntaxKind.ModuleDeclaration | SyntaxKind.ModuleBlock | SyntaxKind.CaseBlock | SyntaxKind.NamespaceExportDeclaration | SyntaxKind.ImportEqualsDeclaration | SyntaxKind.ImportDeclaration | SyntaxKind.ImportClause | SyntaxKind.NamespaceImport | SyntaxKind.NamedImports | SyntaxKind.ImportSpecifier | SyntaxKind.ExportAssignment | SyntaxKind.ExportDeclaration | SyntaxKind.NamedExports | SyntaxKind.ExportSpecifier | SyntaxKind.MissingDeclaration | SyntaxKind.ExternalModuleReference | SyntaxKind.JsxElement | SyntaxKind.JsxSelfClosingElement | SyntaxKind.JsxOpeningElement | SyntaxKind.JsxClosingElement | SyntaxKind.JsxAttribute | SyntaxKind.JsxSpreadAttribute | SyntaxKind.JsxExpression | SyntaxKind.CaseClause | SyntaxKind.DefaultClause | SyntaxKind.HeritageClause | SyntaxKind.CatchClause | SyntaxKind.PropertyAssignment | SyntaxKind.ShorthandPropertyAssignment | SyntaxKind.SpreadAssignment | SyntaxKind.EnumMember | SyntaxKind.SourceFile | SyntaxKind.JSDocTypeExpression | SyntaxKind.JSDocAllType | SyntaxKind.JSDocUnknownType | SyntaxKind.JSDocArrayType | SyntaxKind.JSDocUnionType | SyntaxKind.JSDocTupleType | SyntaxKind.JSDocNullableType | SyntaxKind.JSDocNonNullableType | SyntaxKind.JSDocRecordType | SyntaxKind.JSDocRecordMember | SyntaxKind.JSDocTypeReference | SyntaxKind.JSDocOptionalType | SyntaxKind.JSDocFunctionType | SyntaxKind.JSDocVariadicType | SyntaxKind.JSDocConstructorType | SyntaxKind.JSDocThisType | SyntaxKind.JSDocComment | SyntaxKind.JSDocTag | SyntaxKind.JSDocParameterTag | SyntaxKind.JSDocReturnTag | SyntaxKind.JSDocTypeTag | SyntaxKind.JSDocTemplateTag | SyntaxKind.JSDocTypedefTag | SyntaxKind.JSDocPropertyTag | SyntaxKind.JSDocTypeLiteral | SyntaxKind.JSDocLiteralType | SyntaxKind.JSDocNullKeyword | SyntaxKind.JSDocUndefinedKeyword | SyntaxKind.JSDocNeverKeyword | SyntaxKind.SyntaxList | SyntaxKind.NotEmittedStatement | SyntaxKind.PartiallyEmittedExpression | SyntaxKind.MergeDeclarationMarker | SyntaxKind.EndOfDeclarationMarker | SyntaxKind.Count;
     function getOperatorPrecedence(nodeKind: SyntaxKind, operatorKind: SyntaxKind, hasArguments?: boolean): 0 | 1 | -1 | 2 | 4 | 3 | 16 | 10 | 5 | 6 | 11 | 8 | 19 | 18 | 17 | 15 | 14 | 13 | 12 | 9 | 7;
     function createDiagnosticCollection(): DiagnosticCollection;
     function escapeString(s: string): string;
@@ -8787,7 +8966,8 @@ declare namespace ts {
     function isLogicalOperator(token: SyntaxKind): boolean;
     function isAssignmentOperator(token: SyntaxKind): boolean;
     function tryGetClassExtendingExpressionWithTypeArguments(node: Node): ClassLikeDeclaration | undefined;
-    function isDestructuringAssignment(node: Node): node is BinaryExpression;
+    function isAssignmentExpression(node: Node): node is AssignmentExpression;
+    function isDestructuringAssignment(node: Node): node is DestructuringAssignment;
     function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean;
     function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean;
     function isEntityNameExpression(node: Expression): node is EntityNameExpression;
@@ -8817,12 +8997,16 @@ declare namespace ts {
     function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile): boolean;
     function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: SourceFile): boolean;
     function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile): number;
-    function collectExternalModuleInfo(sourceFile: SourceFile): {
-        externalImports: (ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration)[];
+    interface ExternalModuleInfo {
+        externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         exportSpecifiers: Map<ExportSpecifier[]>;
-        exportEquals: ExportAssignment;
+        exportedBindings: Map<Identifier[]>;
+        exportedNames: Identifier[];
+        exportEquals: ExportAssignment | undefined;
         hasExportStarsToExportValues: boolean;
-    };
+    }
+    function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver): ExternalModuleInfo;
+    function isDeclarationNameOfEnumOrNamespace(node: Identifier): boolean;
     function getInitializedVariables(node: VariableDeclarationList): VariableDeclaration[];
     function isMergedWithClass(node: Node): boolean;
     function isFirstDeclarationOfKind(node: Node, kind: SyntaxKind): boolean;
@@ -8835,7 +9019,7 @@ declare namespace ts {
     function isTemplateHead(node: Node): node is TemplateHead;
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
     function isIdentifier(node: Node): node is Identifier;
-    function isGeneratedIdentifier(node: Node): boolean;
+    function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier;
     function isModifier(node: Node): node is Modifier;
     function isQualifiedName(node: Node): node is QualifiedName;
     function isComputedPropertyName(node: Node): node is ComputedPropertyName;
@@ -8853,13 +9037,15 @@ declare namespace ts {
     function isBindingPattern(node: Node): node is BindingPattern;
     function isBindingElement(node: Node): node is BindingElement;
     function isArrayBindingElement(node: Node): node is ArrayBindingElement;
+    function isArrayLiteralExpression(node: Node): node is ArrayLiteralExpression;
+    function isObjectLiteralExpression(node: Node): node is ObjectLiteralExpression;
     function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression;
     function isElementAccessExpression(node: Node): node is ElementAccessExpression;
     function isBinaryExpression(node: Node): node is BinaryExpression;
     function isConditionalExpression(node: Node): node is ConditionalExpression;
     function isCallExpression(node: Node): node is CallExpression;
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
-    function isSpreadElementExpression(node: Node): node is SpreadElementExpression;
+    function isSpreadExpression(node: Node): node is SpreadElement;
     function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments;
     function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression;
     function isUnaryExpression(node: Node): node is UnaryExpression;
@@ -8955,9 +9141,8 @@ declare namespace ts {
     function createNull(): PrimaryExpression;
     function createComputedPropertyName(expression: Expression, location?: TextRange): ComputedPropertyName;
     function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName;
-    function createParameter(name: string | Identifier | BindingPattern, initializer?: Expression, location?: TextRange): ParameterDeclaration;
-    function createParameterDeclaration(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: string | Identifier | BindingPattern, questionToken: QuestionToken, type: TypeNode, initializer: Expression, location?: TextRange, flags?: NodeFlags): ParameterDeclaration;
-    function updateParameterDeclaration(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], name: BindingName, type: TypeNode, initializer: Expression): ParameterDeclaration;
+    function createParameter(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: string | Identifier | BindingPattern, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags): ParameterDeclaration;
+    function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], name: BindingName, type: TypeNode, initializer: Expression): ParameterDeclaration;
     function createProperty(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, questionToken: QuestionToken, type: TypeNode, initializer: Expression, location?: TextRange): PropertyDeclaration;
     function updateProperty(node: PropertyDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, type: TypeNode, initializer: Expression): PropertyDeclaration;
     function createMethod(decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags): MethodDeclaration;
@@ -9014,8 +9199,8 @@ declare namespace ts {
     function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: TemplateSpan[]): TemplateExpression;
     function createYield(asteriskToken: AsteriskToken, expression: Expression, location?: TextRange): YieldExpression;
     function updateYield(node: YieldExpression, expression: Expression): YieldExpression;
-    function createSpread(expression: Expression, location?: TextRange): SpreadElementExpression;
-    function updateSpread(node: SpreadElementExpression, expression: Expression): SpreadElementExpression;
+    function createSpread(expression: Expression, location?: TextRange): SpreadElement;
+    function updateSpread(node: SpreadElement, expression: Expression): SpreadElement;
     function createClassExpression(modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[], location?: TextRange): ClassExpression;
     function updateClassExpression(node: ClassExpression, modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[]): ClassExpression;
     function createOmittedExpression(location?: TextRange): OmittedExpression;
@@ -9111,9 +9296,13 @@ declare namespace ts {
     function createPropertyAssignment(name: string | PropertyName, initializer: Expression, location?: TextRange): PropertyAssignment;
     function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment;
     function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer: Expression, location?: TextRange): ShorthandPropertyAssignment;
+    function createSpreadAssignment(expression: Expression, location?: TextRange): SpreadAssignment;
     function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression): ShorthandPropertyAssignment;
+    function updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment;
     function updateSourceFileNode(node: SourceFile, statements: Statement[]): SourceFile;
     function createNotEmittedStatement(original: Node): NotEmittedStatement;
+    function createEndOfDeclarationMarker(original: Node): EndOfDeclarationMarker;
+    function createMergeDeclarationMarker(original: Node): MergeDeclarationMarker;
     function createPartiallyEmittedExpression(expression: Expression, original?: Node, location?: TextRange): PartiallyEmittedExpression;
     function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     function createComma(left: Expression, right: Expression): Expression;
@@ -9129,13 +9318,15 @@ declare namespace ts {
     function createLogicalNot(operand: Expression): PrefixUnaryExpression;
     function createVoidZero(): VoidExpression;
     function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression;
-    function createRestParameter(name: string | Identifier): ParameterDeclaration;
     function createFunctionCall(func: Expression, thisArg: Expression, argumentsList: Expression[], location?: TextRange): CallExpression;
     function createFunctionApply(func: Expression, thisArg: Expression, argumentsExpression: Expression, location?: TextRange): CallExpression;
     function createArraySlice(array: Expression, start?: number | Expression): CallExpression;
     function createArrayConcat(array: Expression, values: Expression[]): CallExpression;
     function createMathPow(left: Expression, right: Expression, location?: TextRange): CallExpression;
-    function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression;
+    function createExpressionForJsxElement(jsxFactoryEntity: EntityName, reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression;
+    function createExportDefault(expression: Expression): ExportAssignment;
+    function createExternalModuleExport(exportName: Identifier): ExportDeclaration;
+    function createLetStatement(name: Identifier, initializer: Expression, location?: TextRange): VariableStatement;
     function createLetDeclarationList(declarations: VariableDeclaration[], location?: TextRange): VariableDeclarationList;
     function createConstDeclarationList(declarations: VariableDeclaration[], location?: TextRange): VariableDeclarationList;
     function createHelperName(externalHelpersModuleName: Identifier | undefined, name: string): Identifier | PropertyAccessExpression;
@@ -9157,6 +9348,13 @@ declare namespace ts {
     function createExpressionFromEntityName(node: EntityName | Expression): Expression;
     function createExpressionForPropertyName(memberName: PropertyName): Expression;
     function createExpressionForObjectLiteralElementLike(node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression;
+    function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+    function isLocalName(node: Identifier): boolean;
+    function getExportName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+    function isExportName(node: Identifier): boolean;
+    function getDeclarationName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+    function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression;
+    function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression;
     function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number;
     function ensureUseStrict(node: SourceFile): SourceFile;
     function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression): Expression;
@@ -9201,11 +9399,18 @@ declare namespace ts {
     function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile): Identifier;
     function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions): StringLiteral;
     function tryGetModuleNameFromFile(file: SourceFile, host: EmitHost, options: CompilerOptions): StringLiteral;
+    function transformFunctionBody(node: FunctionLikeDeclaration, visitor: (node: Node) => VisitResult<Node>, currentSourceFile: SourceFile, context: TransformationContext, enableSubstitutionsForCapturedThis: () => void, convertObjectRest?: boolean): Block;
+    function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node, enableSubstitutionsForCapturedThis: () => void): void;
+    function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, enableSubstitutionsForCapturedThis?: () => void, originalStatement?: Statement): void;
+    function addDefaultValueAssignmentsIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, visitor: (node: Node) => VisitResult<Node>, convertObjectRest: boolean): void;
+    function addRestParameterIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): void;
+    function convertForOf(node: ForOfStatement, convertedLoopBodyStatements: Statement[], visitor: (node: Node) => VisitResult<Node>, enableSubstitutionsForBlockScopedBindings: () => void, context: TransformationContext, convertObjectRest?: boolean): ForStatement | ForOfStatement;
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
+    function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName;
     function isExternalModule(file: SourceFile): boolean;
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     function parseIsolatedJSDocComment(content: string, start?: number, length?: number): {
@@ -9252,16 +9457,19 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    function flattenDestructuringAssignment(context: TransformationContext, node: BinaryExpression, needsValue: boolean, recordTempVariable: (node: Identifier) => void, visitor?: (node: Node) => VisitResult<Node>): Expression;
-    function flattenParameterDestructuring(node: ParameterDeclaration, value: Expression, visitor?: (node: Node) => VisitResult<Node>): VariableDeclaration[];
-    function flattenVariableDestructuring(node: VariableDeclaration, value?: Expression, visitor?: (node: Node) => VisitResult<Node>, recordTempVariable?: (node: Identifier) => void): VariableDeclaration[];
-    function flattenVariableDestructuringToExpression(node: VariableDeclaration, recordTempVariable: (name: Identifier) => void, nameSubstitution?: (name: Identifier) => Expression, visitor?: (node: Node) => VisitResult<Node>): Expression;
+    function flattenDestructuringAssignment(context: TransformationContext, node: BinaryExpression, needsValue: boolean, recordTempVariable: (node: Identifier) => void, visitor?: (node: Node) => VisitResult<Node>, transformRest?: boolean): Expression;
+    function flattenParameterDestructuring(node: ParameterDeclaration, value: Expression, visitor?: (node: Node) => VisitResult<Node>, transformRest?: boolean): VariableDeclaration[];
+    function flattenVariableDestructuring(node: VariableDeclaration, value?: Expression, visitor?: (node: Node) => VisitResult<Node>, recordTempVariable?: (node: Identifier) => void, transformRest?: boolean): VariableDeclaration[];
+    function flattenVariableDestructuringToExpression(node: VariableDeclaration, recordTempVariable: (name: Identifier) => void, createAssignmentCallback?: (name: Identifier, value: Expression, location?: TextRange) => Expression, visitor?: (node: Node) => VisitResult<Node>): Expression;
 }
 declare namespace ts {
     function transformTypeScript(context: TransformationContext): (node: SourceFile) => SourceFile;
 }
 declare namespace ts {
     function transformJsx(context: TransformationContext): (node: SourceFile) => SourceFile;
+}
+declare namespace ts {
+    function transformESNext(context: TransformationContext): (node: SourceFile) => SourceFile;
 }
 declare namespace ts {
     function transformES2017(context: TransformationContext): (node: SourceFile) => SourceFile;
@@ -9342,7 +9550,7 @@ declare namespace ts {
     function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult;
 }
 declare namespace ts {
-    const version = "2.1.2";
+    const version = "2.1.3";
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: (fileName: string) => string): string;
@@ -9356,6 +9564,7 @@ declare namespace ts {
     function formatDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string;
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;
+    function getResolutionDiagnostic(options: CompilerOptions, {extension}: ResolvedModuleFull): DiagnosticMessage | undefined;
 }
 declare namespace ts {
     interface Node {
@@ -10609,16 +10818,17 @@ declare namespace ts.server {
         private filesWithChangedSetOfUnresolvedImports;
         private readonly resolveModuleName;
         readonly trace: (s: string) => void;
+        readonly realpath?: (path: string) => string;
         constructor(host: ServerHost, project: Project, cancellationToken: HostCancellationToken);
         startRecordingFilesWithChangedResolutions(): void;
         finishRecordingFilesWithChangedResolutions(): Path[];
-        private resolveNamesWithLocalCache<T, R>(names, containingFile, cache, loader, getResult, logChanges);
+        private resolveNamesWithLocalCache<T, R>(names, containingFile, cache, loader, getResult, getResultFileName, logChanges);
         getProjectVersion(): string;
         getCompilationSettings(): CompilerOptions;
         useCaseSensitiveFileNames(): boolean;
         getCancellationToken(): HostCancellationToken;
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModuleFull[];
         getDefaultLibFileName(): string;
         getScriptSnapshot(filename: string): ts.IScriptSnapshot;
         getScriptFileNames(): string[];
@@ -10740,7 +10950,7 @@ declare namespace ts.server {
         getRootScriptInfos(): ScriptInfo[];
         getScriptInfos(): ScriptInfo[];
         getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles: boolean): EmitOutput;
-        getFileNames(): NormalizedPath[];
+        getFileNames(excludeFilesFromExternalLibraries?: boolean): NormalizedPath[];
         getAllEmittableFiles(): string[];
         containsScriptInfo(info: ScriptInfo): boolean;
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean;
@@ -10763,11 +10973,10 @@ declare namespace ts.server {
         private removeRootFileIfNecessary(info);
     }
     class InferredProject extends Project {
-        compileOnSaveEnabled: boolean;
         private static NextId;
         private readonly inferredProjectName;
         directoriesWatchedForTsconfig: string[];
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, compileOnSaveEnabled: boolean);
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions);
         getProjectName(): string;
         getProjectRootPath(): string;
         close(): void;
@@ -11348,7 +11557,7 @@ declare namespace ts {
         private files;
         private loggingEnabled;
         private tracingEnabled;
-        resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
+        resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModuleFull[];
         resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         directoryExists: (directoryName: string) => boolean;
         constructor(shimHost: LanguageServiceShimHost);
