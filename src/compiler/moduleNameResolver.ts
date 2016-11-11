@@ -519,7 +519,7 @@ namespace ts {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
                 }
                 // A path mapping may have a ".ts" extension; in contrast to an import, which should omit it.
-                const tsExtension = tryGetTypeScriptExtensionFromPath(candidate);
+                const tsExtension = tryGetExtensionFromPath(candidate);
                 if (tsExtension !== undefined) {
                     const path = tryFile(candidate, failedLookupLocations, /*onlyRecordFailures*/false, state);
                     return path && { path, extension: tsExtension };

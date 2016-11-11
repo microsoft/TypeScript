@@ -14,12 +14,8 @@
     "File '/node_modules/foo/index.ts' does not exist.",
     "File '/node_modules/foo/index.tsx' does not exist.",
     "File '/node_modules/foo/index.d.ts' does not exist.",
-    "File '/node_modules/@types/foo.ts' does not exist.",
-    "File '/node_modules/@types/foo.tsx' does not exist.",
     "File '/node_modules/@types/foo.d.ts' does not exist.",
     "File '/node_modules/@types/foo/package.json' does not exist.",
-    "File '/node_modules/@types/foo/index.ts' does not exist.",
-    "File '/node_modules/@types/foo/index.tsx' does not exist.",
     "File '/node_modules/@types/foo/index.d.ts' does not exist.",
     "'baseUrl' option is set to '/', using this value to resolve non-relative module name 'foo'",
     "'paths' option is specified, looking for a pattern to match module name 'foo'.",
@@ -32,10 +28,5 @@
     "File '/node_modules/foo/package.json' does not exist.",
     "File '/node_modules/foo/index.js' does not exist.",
     "File '/node_modules/foo/index.jsx' does not exist.",
-    "File '/node_modules/@types/foo.js' does not exist.",
-    "File '/node_modules/@types/foo.jsx' does not exist.",
-    "File '/node_modules/@types/foo/package.json' does not exist.",
-    "File '/node_modules/@types/foo/index.js' does not exist.",
-    "File '/node_modules/@types/foo/index.jsx' does not exist.",
     "======== Module name 'foo' was not resolved. ========"
 ]
