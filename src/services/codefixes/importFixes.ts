@@ -21,7 +21,7 @@ namespace ts.codefix {
 
             const allPotentialModules = checker.getAmbientModules();
             for (const otherSourceFile of allSourceFiles) {
-                if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile) && otherSourceFile.symbol) {
+                if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
                     allPotentialModules.push(otherSourceFile.symbol);
                 }
             }

@@ -385,6 +385,10 @@ var x = 0;`, {
             options: { compilerOptions: { reactNamespace: "react" }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'jsxFactory'", "x;", {
+            options: { compilerOptions: { jsxFactory: "createElement" }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'removeComments'", "x;", {
             options: { compilerOptions: { removeComments: true }, fileName: "input.js", reportDiagnostics: true }
         });

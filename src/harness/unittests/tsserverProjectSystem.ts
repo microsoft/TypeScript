@@ -434,6 +434,10 @@ namespace ts.projectSystem {
             };
         }
 
+        createHash(s: string): string {
+            return s;
+        }
+
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
             const callbacks = this.watchedDirectories[path];
@@ -1658,12 +1662,8 @@ namespace ts.projectSystem {
                 "File '/a/b/node_modules/lib/index.ts' does not exist.",
                 "File '/a/b/node_modules/lib/index.tsx' does not exist.",
                 "File '/a/b/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib.tsx' does not exist.",
                 "File '/a/b/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/b/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/a/b/node_modules/@types/lib/index.d.ts' does not exist.",
                 "File '/a/node_modules/lib.ts' does not exist.",
                 "File '/a/node_modules/lib.tsx' does not exist.",
@@ -1672,12 +1672,8 @@ namespace ts.projectSystem {
                 "File '/a/node_modules/lib/index.ts' does not exist.",
                 "File '/a/node_modules/lib/index.tsx' does not exist.",
                 "File '/a/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/node_modules/@types/lib.ts' does not exist.",
-                "File '/a/node_modules/@types/lib.tsx' does not exist.",
                 "File '/a/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/node_modules/@types/lib/index.ts' does not exist.",
-                "File '/a/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/a/node_modules/@types/lib/index.d.ts' does not exist.",
                 "File '/node_modules/lib.ts' does not exist.",
                 "File '/node_modules/lib.tsx' does not exist.",
@@ -1686,12 +1682,8 @@ namespace ts.projectSystem {
                 "File '/node_modules/lib/index.ts' does not exist.",
                 "File '/node_modules/lib/index.tsx' does not exist.",
                 "File '/node_modules/lib/index.d.ts' does not exist.",
-                "File '/node_modules/@types/lib.ts' does not exist.",
-                "File '/node_modules/@types/lib.tsx' does not exist.",
                 "File '/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/node_modules/@types/lib/package.json' does not exist.",
-                "File '/node_modules/@types/lib/index.ts' does not exist.",
-                "File '/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/node_modules/@types/lib/index.d.ts' does not exist.",
                 "Loading module 'lib' from 'node_modules' folder.",
                 "File '/a/b/node_modules/lib.js' does not exist.",
@@ -1699,46 +1691,23 @@ namespace ts.projectSystem {
                 "File '/a/b/node_modules/lib/package.json' does not exist.",
                 "File '/a/b/node_modules/lib/index.js' does not exist.",
                 "File '/a/b/node_modules/lib/index.jsx' does not exist.",
-                "File '/a/b/node_modules/@types/lib.js' does not exist.",
-                "File '/a/b/node_modules/@types/lib.jsx' does not exist.",
-                "File '/a/b/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.js' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.jsx' does not exist.",
                 "File '/a/node_modules/lib.js' does not exist.",
                 "File '/a/node_modules/lib.jsx' does not exist.",
                 "File '/a/node_modules/lib/package.json' does not exist.",
                 "File '/a/node_modules/lib/index.js' does not exist.",
                 "File '/a/node_modules/lib/index.jsx' does not exist.",
-                "File '/a/node_modules/@types/lib.js' does not exist.",
-                "File '/a/node_modules/@types/lib.jsx' does not exist.",
-                "File '/a/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/node_modules/@types/lib/index.js' does not exist.",
-                "File '/a/node_modules/@types/lib/index.jsx' does not exist.",
                 "File '/node_modules/lib.js' does not exist.",
                 "File '/node_modules/lib.jsx' does not exist.",
                 "File '/node_modules/lib/package.json' does not exist.",
                 "File '/node_modules/lib/index.js' does not exist.",
                 "File '/node_modules/lib/index.jsx' does not exist.",
-                "File '/node_modules/@types/lib.js' does not exist.",
-                "File '/node_modules/@types/lib.jsx' does not exist.",
-                "File '/node_modules/@types/lib/package.json' does not exist.",
-                "File '/node_modules/@types/lib/index.js' does not exist.",
-                "File '/node_modules/@types/lib/index.jsx' does not exist.",
                 "======== Module name 'lib' was not resolved. ========",
                 `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
-                "File '/a/cache/node_modules/lib.ts' does not exist.",
-                "File '/a/cache/node_modules/lib.tsx' does not exist.",
                 "File '/a/cache/node_modules/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/lib/package.json' does not exist.",
-                "File '/a/cache/node_modules/lib/index.ts' does not exist.",
-                "File '/a/cache/node_modules/lib/index.tsx' does not exist.",
                 "File '/a/cache/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.tsx' does not exist.",
                 "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/cache/node_modules/@types/lib/index.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
             ]);
             checkProjectActualFiles(proj, [file1.path, lib.path]);
@@ -2570,6 +2539,23 @@ namespace ts.projectSystem {
                 arguments: { projectFileName: projectName }
             }).response;
             assert.isTrue(diags.length === 0);
+        });
+    });
+
+    describe("import helpers", () => {
+        it("should not crash in tsserver", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: "export async function foo() { return 100; }"
+            };
+            const tslib = {
+                path: "/a/node_modules/tslib/index.d.ts",
+                content: ""
+            };
+            const host = createServerHost([f1, tslib]);
+            const service = createProjectService(host);
+            service.openExternalProject({ projectFileName: "p", rootFiles: [toExternalFile(f1.path)], options: { importHelpers: true } });
+            service.checkNumberOfProjects({ externalProjects: 1 });
         });
     });
 }

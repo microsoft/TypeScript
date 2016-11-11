@@ -161,8 +161,8 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
-            if (this.projectKind === ProjectKind.Inferred) {
-                this.compilerOptions.noEmitOverwritenFiles = true;
+            if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
+                this.compilerOptions.noEmitForJsFiles = true;
             }
 
             if (languageServiceEnabled) {
