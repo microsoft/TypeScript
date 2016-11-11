@@ -32,7 +32,6 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
                     return visitBinaryExpression(<BinaryExpression>node);
-
                 default:
                     Debug.failBadSyntaxKind(node);
                     return visitEachChild(node, visitor, context);

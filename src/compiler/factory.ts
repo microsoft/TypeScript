@@ -692,12 +692,12 @@ namespace ts {
     }
 
     export function createSpread(expression: Expression, location?: TextRange) {
-        const node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression, location);
+        const node = <SpreadElement>createNode(SyntaxKind.SpreadElement, location);
         node.expression = parenthesizeExpressionForList(expression);
         return node;
     }
 
-    export function updateSpread(node: SpreadElementExpression, expression: Expression) {
+    export function updateSpread(node: SpreadElement, expression: Expression) {
         if (node.expression !== expression) {
             return updateNode(createSpread(expression, node), node);
         }
@@ -1399,14 +1399,27 @@ namespace ts {
         return node;
     }
 
-    export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression) {
+    export function createSpreadAssignment(expression: Expression, location?: TextRange) {
+        const node = <SpreadAssignment>createNode(SyntaxKind.SpreadAssignment, location);
+        node.expression = expression !== undefined ? parenthesizeExpressionForList(expression) : undefined;
+        return node;
+    }
+
+   export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression) {
         if (node.name !== name || node.objectAssignmentInitializer !== objectAssignmentInitializer) {
             return updateNode(createShorthandPropertyAssignment(name, objectAssignmentInitializer, node), node);
         }
         return node;
     }
 
-    // Top-level nodes
+    export function updateSpreadAssignment(node: SpreadAssignment, expression: Expression) {
+        if (node.expression !== expression) {
+            return updateNode(createSpreadAssignment(expression, node), node);
+        }
+        return node;
+    }
+
+   // Top-level nodes
 
     export function updateSourceFileNode(node: SourceFile, statements: Statement[]) {
         if (node.statements !== statements) {
@@ -1628,7 +1641,34 @@ namespace ts {
         return react;
     }
 
-    export function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
+    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
+        if (isQualifiedName(jsxFactory)) {
+            return createPropertyAccess(
+                createJsxFactoryExpressionFromEntityName(
+                    jsxFactory.left,
+                    parent
+                ),
+                setEmitFlags(
+                    getMutableClone(jsxFactory.right),
+                    EmitFlags.NoSourceMap
+                )
+            );
+        }
+        else {
+            return createReactNamespace(jsxFactory.text, parent);
+        }
+    }
+
+    function createJsxFactoryExpression(jsxFactoryEntity: EntityName, reactNamespace: string, parent: JsxOpeningLikeElement): Expression {
+        return jsxFactoryEntity ?
+            createJsxFactoryExpressionFromEntityName(jsxFactoryEntity, parent) :
+            createPropertyAccess(
+                createReactNamespace(reactNamespace, parent),
+                "createElement"
+            );
+    }
+
+    export function createExpressionForJsxElement(jsxFactoryEntity: EntityName, reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
             argumentsList.push(props);
@@ -1651,10 +1691,7 @@ namespace ts {
         }
 
         return createCall(
-            createPropertyAccess(
-                createReactNamespace(reactNamespace, parentElement),
-                "createElement"
-            ),
+            createJsxFactoryExpression(jsxFactoryEntity, reactNamespace, parentElement),
             /*typeArguments*/ undefined,
             argumentsList,
             location
@@ -3054,5 +3091,539 @@ namespace ts {
 
     function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
         return tryGetModuleNameFromFile(resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
+    }
+
+    /**
+     * Transforms the body of a function-like node.
+     *
+     * @param node A function-like node.
+     */
+    export function transformFunctionBody(node: FunctionLikeDeclaration,
+                                          visitor: (node: Node) => VisitResult<Node>,
+                                          currentSourceFile: SourceFile,
+                                          context: TransformationContext,
+                                          enableSubstitutionsForCapturedThis: () => void,
+                                          convertObjectRest?: boolean) {
+        let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
+        let singleLine = false; // indicates whether the block *may* be emitted as a single line
+        let statementsLocation: TextRange;
+        let closeBraceLocation: TextRange;
+
+        const statements: Statement[] = [];
+        const body = node.body;
+        let statementOffset: number;
+
+        context.startLexicalEnvironment();
+        if (isBlock(body)) {
+            // ensureUseStrict is false because no new prologue-directive should be added.
+            // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
+            statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+        }
+
+        addCaptureThisForNodeIfNeeded(statements, node, enableSubstitutionsForCapturedThis);
+        addDefaultValueAssignmentsIfNeeded(statements, node, visitor, convertObjectRest);
+        addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
+
+        // If we added any generated statements, this must be a multi-line block.
+        if (!multiLine && statements.length > 0) {
+            multiLine = true;
+        }
+
+        if (isBlock(body)) {
+            statementsLocation = body.statements;
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
+
+            // If the original body was a multi-line block, this must be a multi-line block.
+            if (!multiLine && body.multiLine) {
+                multiLine = true;
+            }
+        }
+        else {
+            Debug.assert(node.kind === SyntaxKind.ArrowFunction);
+
+            // To align with the old emitter, we use a synthetic end position on the location
+            // for the statement list we synthesize when we down-level an arrow function with
+            // an expression function body. This prevents both comments and source maps from
+            // being emitted for the end position only.
+            statementsLocation = moveRangeEnd(body, -1);
+
+            const equalsGreaterThanToken = (<ArrowFunction>node).equalsGreaterThanToken;
+            if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
+                if (rangeEndIsOnSameLineAsRangeStart(equalsGreaterThanToken, body, currentSourceFile)) {
+                    singleLine = true;
+                }
+                else {
+                    multiLine = true;
+                }
+            }
+
+            const expression = visitNode(body, visitor, isExpression);
+            const returnStatement = createReturn(expression, /*location*/ body);
+            setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);
+            statements.push(returnStatement);
+
+            // To align with the source map emit for the old emitter, we set a custom
+            // source map location for the close brace.
+            closeBraceLocation = body;
+        }
+
+        const lexicalEnvironment = context.endLexicalEnvironment();
+        addRange(statements, lexicalEnvironment);
+
+        // If we added any final generated statements, this must be a multi-line block
+        if (!multiLine && lexicalEnvironment && lexicalEnvironment.length) {
+            multiLine = true;
+        }
+
+        const block = createBlock(createNodeArray(statements, statementsLocation), node.body, multiLine);
+        if (!multiLine && singleLine) {
+            setEmitFlags(block, EmitFlags.SingleLine);
+        }
+
+        if (closeBraceLocation) {
+            setTokenSourceMapRange(block, SyntaxKind.CloseBraceToken, closeBraceLocation);
+        }
+
+        setOriginalNode(block, node.body);
+        return block;
+    }
+
+    /**
+     * Adds a statement to capture the `this` of a function declaration if it is needed.
+     *
+     * @param statements The statements for the new function body.
+     * @param node A node.
+     */
+    export function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node, enableSubstitutionsForCapturedThis: () => void): void {
+        if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
+            captureThisForNode(statements, node, createThis(), enableSubstitutionsForCapturedThis);
+        }
+    }
+
+    export function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, enableSubstitutionsForCapturedThis?: () => void, originalStatement?: Statement): void {
+        enableSubstitutionsForCapturedThis();
+        const captureThisStatement = createVariableStatement(
+            /*modifiers*/ undefined,
+            createVariableDeclarationList([
+                createVariableDeclaration(
+                    "_this",
+                    /*type*/ undefined,
+                    initializer
+                )
+            ]),
+            originalStatement
+        );
+
+        setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
+        setSourceMapRange(captureThisStatement, node);
+        statements.push(captureThisStatement);
+    }
+
+    /**
+     * Gets a value indicating whether we need to add default value assignments for a
+     * function-like node.
+     *
+     * @param node A function-like node.
+     */
+    function shouldAddDefaultValueAssignments(node: FunctionLikeDeclaration): boolean {
+        return (node.transformFlags & TransformFlags.ContainsDefaultValueAssignments) !== 0;
+    }
+
+    /**
+     * Adds statements to the body of a function-like node if it contains parameters with
+     * binding patterns or initializers.
+     *
+     * @param statements The statements for the new function body.
+     * @param node A function-like node.
+     */
+    export function addDefaultValueAssignmentsIfNeeded(statements: Statement[],
+                                                       node: FunctionLikeDeclaration,
+                                                       visitor: (node: Node) => VisitResult<Node>,
+                                                       convertObjectRest: boolean): void {
+        if (!shouldAddDefaultValueAssignments(node)) {
+            return;
+        }
+
+        for (const parameter of node.parameters) {
+            const { name, initializer, dotDotDotToken } = parameter;
+
+            // A rest parameter cannot have a binding pattern or an initializer,
+            // so let's just ignore it.
+            if (dotDotDotToken) {
+                continue;
+            }
+
+            if (isBindingPattern(name)) {
+                addDefaultValueAssignmentForBindingPattern(statements, parameter, name, initializer, visitor, convertObjectRest);
+            }
+            else if (initializer) {
+                addDefaultValueAssignmentForInitializer(statements, parameter, name, initializer, visitor);
+            }
+        }
+    }
+
+    /**
+     * Adds statements to the body of a function-like node for parameters with binding patterns
+     *
+     * @param statements The statements for the new function body.
+     * @param parameter The parameter for the function.
+     * @param name The name of the parameter.
+     * @param initializer The initializer for the parameter.
+     */
+    function addDefaultValueAssignmentForBindingPattern(statements: Statement[],
+                                                        parameter: ParameterDeclaration,
+                                                        name: BindingPattern, initializer: Expression,
+                                                        visitor: (node: Node) => VisitResult<Node>,
+                                                        convertObjectRest: boolean): void {
+        const temp = getGeneratedNameForNode(parameter);
+
+        // In cases where a binding pattern is simply '[]' or '{}',
+        // we usually don't want to emit a var declaration; however, in the presence
+        // of an initializer, we must emit that expression to preserve side effects.
+        if (name.elements.length > 0) {
+            statements.push(
+                setEmitFlags(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        createVariableDeclarationList(
+                            flattenParameterDestructuring(parameter, temp, visitor, convertObjectRest)
+                        )
+                    ),
+                    EmitFlags.CustomPrologue
+                )
+            );
+        }
+        else if (initializer) {
+            statements.push(
+                setEmitFlags(
+                    createStatement(
+                        createAssignment(
+                            temp,
+                            visitNode(initializer, visitor, isExpression)
+                        )
+                    ),
+                    EmitFlags.CustomPrologue
+                )
+            );
+        }
+    }
+
+    /**
+     * Adds statements to the body of a function-like node for parameters with initializers.
+     *
+     * @param statements The statements for the new function body.
+     * @param parameter The parameter for the function.
+     * @param name The name of the parameter.
+     * @param initializer The initializer for the parameter.
+     */
+    function addDefaultValueAssignmentForInitializer(statements: Statement[],
+                                                     parameter: ParameterDeclaration,
+                                                     name: Identifier,
+                                                     initializer: Expression,
+                                                     visitor: (node: Node) => VisitResult<Node>): void {
+        initializer = visitNode(initializer, visitor, isExpression);
+        const statement = createIf(
+            createStrictEquality(
+                getSynthesizedClone(name),
+                createVoidZero()
+            ),
+            setEmitFlags(
+                createBlock([
+                    createStatement(
+                        createAssignment(
+                            setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
+                            setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer)),
+                            /*location*/ parameter
+                        )
+                    )
+                ], /*location*/ parameter),
+                EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps
+            ),
+            /*elseStatement*/ undefined,
+            /*location*/ parameter
+        );
+        statement.startsOnNewLine = true;
+        setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue);
+        statements.push(statement);
+    }
+
+    /**
+     * Gets a value indicating whether we need to add statements to handle a rest parameter.
+     *
+     * @param node A ParameterDeclaration node.
+     * @param inConstructorWithSynthesizedSuper A value indicating whether the parameter is
+     *                                          part of a constructor declaration with a
+     *                                          synthesized call to `super`
+     */
+    function shouldAddRestParameter(node: ParameterDeclaration, inConstructorWithSynthesizedSuper: boolean) {
+        return node && node.dotDotDotToken && node.name.kind === SyntaxKind.Identifier && !inConstructorWithSynthesizedSuper;
+    }
+
+    /**
+     * Adds statements to the body of a function-like node if it contains a rest parameter.
+     *
+     * @param statements The statements for the new function body.
+     * @param node A function-like node.
+     * @param inConstructorWithSynthesizedSuper A value indicating whether the parameter is
+     *                                          part of a constructor declaration with a
+     *                                          synthesized call to `super`
+     */
+    export function addRestParameterIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): void {
+        const parameter = lastOrUndefined(node.parameters);
+        if (!shouldAddRestParameter(parameter, inConstructorWithSynthesizedSuper)) {
+            return;
+        }
+
+        // `declarationName` is the name of the local declaration for the parameter.
+        const declarationName = getMutableClone(<Identifier>parameter.name);
+        setEmitFlags(declarationName, EmitFlags.NoSourceMap);
+
+        // `expressionName` is the name of the parameter used in expressions.
+        const expressionName = getSynthesizedClone(<Identifier>parameter.name);
+        const restIndex = node.parameters.length - 1;
+        const temp = createLoopVariable();
+
+        // var param = [];
+        statements.push(
+            setEmitFlags(
+                createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                            declarationName,
+                            /*type*/ undefined,
+                            createArrayLiteral([])
+                        )
+                    ]),
+                    /*location*/ parameter
+                ),
+                EmitFlags.CustomPrologue
+            )
+        );
+
+        // for (var _i = restIndex; _i < arguments.length; _i++) {
+        //   param[_i - restIndex] = arguments[_i];
+        // }
+        const forStatement = createFor(
+            createVariableDeclarationList([
+                createVariableDeclaration(temp, /*type*/ undefined, createLiteral(restIndex))
+            ], /*location*/ parameter),
+            createLessThan(
+                temp,
+                createPropertyAccess(createIdentifier("arguments"), "length"),
+                /*location*/ parameter
+            ),
+            createPostfixIncrement(temp, /*location*/ parameter),
+            createBlock([
+                startOnNewLine(
+                    createStatement(
+                        createAssignment(
+                            createElementAccess(
+                                expressionName,
+                                createSubtract(temp, createLiteral(restIndex))
+                            ),
+                            createElementAccess(createIdentifier("arguments"), temp)
+                        ),
+                        /*location*/ parameter
+                    )
+                )
+            ])
+        );
+
+        setEmitFlags(forStatement, EmitFlags.CustomPrologue);
+        startOnNewLine(forStatement);
+        statements.push(forStatement);
+    }
+
+
+
+
+    export function convertForOf(node: ForOfStatement, convertedLoopBodyStatements: Statement[],
+                                 visitor: (node: Node) => VisitResult<Node>,
+                                 enableSubstitutionsForBlockScopedBindings: () => void,
+                                 context: TransformationContext,
+                                 convertObjectRest?: boolean): ForStatement | ForOfStatement {
+        // The following ES6 code:
+        //
+        //    for (let v of expr) { }
+        //
+        // should be emitted as
+        //
+        //    for (var _i = 0, _a = expr; _i < _a.length; _i++) {
+        //        var v = _a[_i];
+        //    }
+        //
+        // where _a and _i are temps emitted to capture the RHS and the counter,
+        // respectively.
+        // When the left hand side is an expression instead of a let declaration,
+        // the "let v" is not emitted.
+        // When the left hand side is a let/const, the v is renamed if there is
+        // another v in scope.
+        // Note that all assignments to the LHS are emitted in the body, including
+        // all destructuring.
+        // Note also that because an extra statement is needed to assign to the LHS,
+        // for-of bodies are always emitted as blocks.
+
+        const expression = visitNode(node.expression, visitor, isExpression);
+        const initializer = node.initializer;
+        const statements: Statement[] = [];
+
+        // In the case where the user wrote an identifier as the RHS, like this:
+        //
+        //     for (let v of arr) { }
+        //
+        // we don't want to emit a temporary variable for the RHS, just use it directly.
+        const counter = convertObjectRest ? undefined : createLoopVariable();
+        const rhsReference = expression.kind === SyntaxKind.Identifier
+            ? createUniqueName((<Identifier>expression).text)
+            : createTempVariable(/*recordTempVariable*/ undefined);
+        const elementAccess = convertObjectRest ? rhsReference : createElementAccess(rhsReference, counter);
+
+        // Initialize LHS
+        // var v = _a[_i];
+        if (isVariableDeclarationList(initializer)) {
+            if (initializer.flags & NodeFlags.BlockScoped) {
+                enableSubstitutionsForBlockScopedBindings();
+            }
+
+            const firstOriginalDeclaration = firstOrUndefined(initializer.declarations);
+            if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
+                // This works whether the declaration is a var, let, or const.
+                // It will use rhsIterationValue _a[_i] as the initializer.
+                const declarations = flattenVariableDestructuring(
+                    firstOriginalDeclaration,
+                    elementAccess,
+                    visitor,
+                    /*recordTempVariable*/ undefined,
+                    convertObjectRest
+                );
+
+                const declarationList = createVariableDeclarationList(declarations, /*location*/ initializer);
+                setOriginalNode(declarationList, initializer);
+
+                // Adjust the source map range for the first declaration to align with the old
+                // emitter.
+                const firstDeclaration = declarations[0];
+                const lastDeclaration = lastOrUndefined(declarations);
+                setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+
+                statements.push(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        declarationList
+                    )
+                );
+            }
+            else {
+                // The following call does not include the initializer, so we have
+                // to emit it separately.
+                statements.push(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        setOriginalNode(
+                            createVariableDeclarationList([
+                                createVariableDeclaration(
+                                    firstOriginalDeclaration ? firstOriginalDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
+                                    /*type*/ undefined,
+                                    createElementAccess(rhsReference, counter)
+                                )
+                            ], /*location*/ moveRangePos(initializer, -1)),
+                            initializer
+                        ),
+                        /*location*/ moveRangeEnd(initializer, -1)
+                    )
+                );
+            }
+        }
+        else {
+            // Initializer is an expression. Emit the expression in the body, so that it's
+            // evaluated on every iteration.
+            const assignment = createAssignment(initializer, elementAccess);
+            if (isDestructuringAssignment(assignment)) {
+                // This is a destructuring pattern, so we flatten the destructuring instead.
+                statements.push(
+                    createStatement(
+                        flattenDestructuringAssignment(
+                            context,
+                            assignment,
+                            /*needsValue*/ false,
+                            context.hoistVariableDeclaration,
+                            visitor,
+                            convertObjectRest
+                        )
+                    )
+                );
+            }
+            else {
+                // Currently there is not way to check that assignment is binary expression of destructing assignment
+                // so we have to cast never type to binaryExpression
+                (<BinaryExpression>assignment).end = initializer.end;
+                statements.push(createStatement(assignment, /*location*/ moveRangeEnd(initializer, -1)));
+            }
+        }
+
+        let bodyLocation: TextRange;
+        let statementsLocation: TextRange;
+        if (convertedLoopBodyStatements) {
+            addRange(statements, convertedLoopBodyStatements);
+        }
+        else {
+            const statement = visitNode(node.statement, visitor, isStatement);
+            if (isBlock(statement)) {
+                addRange(statements, statement.statements);
+                bodyLocation = statement;
+                statementsLocation = statement.statements;
+            }
+            else {
+                statements.push(statement);
+            }
+        }
+
+        // The old emitter does not emit source maps for the expression
+        setEmitFlags(expression, EmitFlags.NoSourceMap | getEmitFlags(expression));
+
+        // The old emitter does not emit source maps for the block.
+        // We add the location to preserve comments.
+        const body = createBlock(
+            createNodeArray(statements, /*location*/ statementsLocation),
+            /*location*/ bodyLocation
+        );
+
+        setEmitFlags(body, EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps);
+
+        let forStatement: ForStatement | ForOfStatement;
+        if (convertObjectRest) {
+            forStatement = createForOf(
+                createVariableDeclarationList([
+                    createVariableDeclaration(rhsReference, /*type*/ undefined, /*initializer*/ undefined, /*location*/ node.expression)
+                ], /*location*/ node.expression),
+                node.expression,
+                body,
+                /*location*/ node
+            );
+        }
+        else {
+            forStatement = createFor(
+                setEmitFlags(
+                    createVariableDeclarationList([
+                        createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
+                        createVariableDeclaration(rhsReference, /*type*/ undefined, expression, /*location*/ node.expression)
+                    ], /*location*/ node.expression),
+                    EmitFlags.NoHoisting
+                ),
+                createLessThan(
+                    counter,
+                    createPropertyAccess(rhsReference, "length"),
+                    /*location*/ node.expression
+                ),
+                createPostfixIncrement(counter, /*location*/ node.expression),
+                body,
+                /*location*/ node
+            );
+        }
+
+        // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
+        setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
+        return forStatement;
     }
 }

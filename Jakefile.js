@@ -71,6 +71,7 @@ var compilerSources = [
     "transformers/destructuring.ts",
     "transformers/ts.ts",
     "transformers/jsx.ts",
+    "transformers/esnext.ts",
     "transformers/es2017.ts",
     "transformers/es2016.ts",
     "transformers/es2015.ts",
@@ -107,6 +108,7 @@ var servicesSources = [
     "transformers/destructuring.ts",
     "transformers/ts.ts",
     "transformers/jsx.ts",
+    "transformers/esnext.ts",
     "transformers/es2017.ts",
     "transformers/es2016.ts",
     "transformers/es2015.ts",
@@ -171,6 +173,7 @@ var servicesSources = [
 
 var serverCoreSources = [
     "types.d.ts",
+    "shared.ts",
     "utilities.ts",
     "scriptVersionCache.ts",
     "typingsCache.ts",
@@ -193,6 +196,7 @@ var cancellationTokenSources = [
 
 var typingsInstallerSources = [
     "../types.d.ts",
+    "../shared.ts",
     "typingsInstaller.ts",
     "nodeTypingsInstaller.ts"
 ].map(function (f) {
@@ -299,7 +303,8 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
 
 var es2017LibrarySource = [
     "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts"
+    "es2017.sharedmemory.d.ts",
+    "es2017.string.d.ts",
 ];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {

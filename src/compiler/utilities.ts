@@ -192,7 +192,7 @@ namespace ts {
     export function nodePosToString(node: Node): string {
         const file = getSourceFileOfNode(node);
         const loc = getLineAndCharacterOfPosition(file, node.pos);
-        return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
+        return `${file.fileName}(${loc.line + 1},${loc.character + 1})`;
     }
 
     export function getStartPosOfNode(node: Node): number {
@@ -439,7 +439,7 @@ namespace ts {
     }
 
     export function isBlockScope(node: Node, parentNode: Node) {
-        switch (node.kind)  {
+        switch (node.kind) {
             case SyntaxKind.SourceFile:
             case SyntaxKind.CaseBlock:
             case SyntaxKind.CatchClause:
@@ -485,6 +485,22 @@ namespace ts {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
+    export function getTextOfPropertyName(name: PropertyName): string {
+        switch (name.kind) {
+        case SyntaxKind.Identifier:
+            return (<Identifier>name).text;
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NumericLiteral:
+            return (<LiteralExpression>name).text;
+        case SyntaxKind.ComputedPropertyName:
+            if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
+                return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
+            }
+        }
+
+        return undefined;
+    }
+
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:
@@ -498,6 +514,10 @@ namespace ts {
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
+        return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
+    }
+
+    export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
         const span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
     }
@@ -624,9 +644,9 @@ namespace ts {
 
     export function getJsDocCommentsFromText(node: Node, text: string) {
         const commentRanges = (node.kind === SyntaxKind.Parameter ||
-                               node.kind === SyntaxKind.TypeParameter ||
-                               node.kind === SyntaxKind.FunctionExpression ||
-                               node.kind === SyntaxKind.ArrowFunction) ?
+            node.kind === SyntaxKind.TypeParameter ||
+            node.kind === SyntaxKind.FunctionExpression ||
+            node.kind === SyntaxKind.ArrowFunction) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRangesOfNodeFromText(node, text);
         return filter(commentRanges, isJsDocComment);
@@ -891,7 +911,7 @@ namespace ts {
     export function isObjectLiteralOrClassExpressionMethod(node: Node): node is MethodDeclaration {
         return node.kind === SyntaxKind.MethodDeclaration &&
             (node.parent.kind === SyntaxKind.ObjectLiteralExpression ||
-            node.parent.kind === SyntaxKind.ClassExpression);
+                node.parent.kind === SyntaxKind.ClassExpression);
     }
 
     export function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate {
@@ -1113,8 +1133,8 @@ namespace ts {
                 // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
                 return (<FunctionLikeDeclaration>node.parent).body !== undefined
                     && (node.parent.kind === SyntaxKind.Constructor
-                    || node.parent.kind === SyntaxKind.MethodDeclaration
-                    || node.parent.kind === SyntaxKind.SetAccessor)
+                        || node.parent.kind === SyntaxKind.MethodDeclaration
+                        || node.parent.kind === SyntaxKind.SetAccessor)
                     && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
         }
 
@@ -1179,7 +1199,7 @@ namespace ts {
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
-            case SyntaxKind.SpreadElementExpression:
+            case SyntaxKind.SpreadElement:
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
@@ -1461,7 +1481,7 @@ namespace ts {
         }, tags => tags);
     }
 
-   function getJSDocs<T>(node: Node, checkParentVariableStatement: boolean, getDocs: (docs: JSDoc[]) => T[], getTags: (tags: JSDocTag[]) => T[]): T[] {
+    function getJSDocs<T>(node: Node, checkParentVariableStatement: boolean, getDocs: (docs: JSDoc[]) => T[], getTags: (tags: JSDocTag[]) => T[]): T[] {
         // TODO: Get rid of getJsDocComments and friends (note the lowercase 's' in Js)
         // TODO: A lot of this work should be cached, maybe. I guess it's only used in services right now...
         let result: T[] = undefined;
@@ -1482,8 +1502,8 @@ namespace ts {
 
             const variableStatementNode =
                 isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent :
-                isVariableOfVariableDeclarationStatement ? node.parent.parent :
-                undefined;
+                    isVariableOfVariableDeclarationStatement ? node.parent.parent :
+                        undefined;
             if (variableStatementNode) {
                 result = append(result, getJSDocs(variableStatementNode, checkParentVariableStatement, getDocs, getTags));
             }
@@ -1641,14 +1661,14 @@ namespace ts {
                     return (<ForInStatement | ForOfStatement>parent).initializer === node ? AssignmentKind.Definite : AssignmentKind.None;
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.SpreadElement:
                     node = parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
                     if ((<ShorthandPropertyAssignment>parent).name !== node) {
                         return AssignmentKind.None;
                     }
-                    // Fall through
+                // Fall through
                 case SyntaxKind.PropertyAssignment:
                     node = parent.parent;
                     break;
@@ -2226,7 +2246,7 @@ namespace ts {
             case SyntaxKind.YieldExpression:
                 return 2;
 
-            case SyntaxKind.SpreadElementExpression:
+            case SyntaxKind.SpreadElement:
                 return 1;
 
             default:
@@ -2550,13 +2570,17 @@ namespace ts {
         if (options.outFile || options.out) {
             const moduleKind = getEmitModuleKind(options);
             const moduleEmitEnabled = moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
-            const sourceFiles = host.getSourceFiles();
+            const sourceFiles = getAllEmittableSourceFiles();
             // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
             return filter(sourceFiles, moduleEmitEnabled ? isNonDeclarationFile : isBundleEmitNonExternalModule);
         }
         else {
-            const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
+            const sourceFiles = targetSourceFile === undefined ? getAllEmittableSourceFiles() : [targetSourceFile];
             return filterSourceFilesInDirectory(sourceFiles, file => host.isSourceFileFromExternalLibrary(file));
+        }
+
+        function getAllEmittableSourceFiles() {
+            return options.noEmitForJsFiles ? filter(host.getSourceFiles(), sourceFile => !isSourceFileJavaScript(sourceFile)) : host.getSourceFiles();
         }
     }
 
@@ -2602,7 +2626,7 @@ namespace ts {
         }
         else {
             for (const sourceFile of sourceFiles) {
-                 // Don't emit if source file is a declaration file, or was located under node_modules
+                // Don't emit if source file is a declaration file, or was located under node_modules
                 if (!isDeclarationFile(sourceFile) && !host.isSourceFileFromExternalLibrary(sourceFile)) {
                     onSingleFileEmit(host, sourceFile);
                 }
@@ -2664,7 +2688,7 @@ namespace ts {
             onBundledEmit(host);
         }
         else {
-            const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
+            const sourceFiles = targetSourceFile === undefined ? getSourceFilesToEmit(host) : [targetSourceFile];
             for (const sourceFile of sourceFiles) {
                 if (shouldEmitInDirectory(sourceFile, file => host.isSourceFileFromExternalLibrary(file))) {
                     onSingleFileEmit(host, sourceFile);
@@ -2701,11 +2725,11 @@ namespace ts {
         function onBundledEmit(host: EmitHost) {
             // Can emit only sources that are not declaration file and are either non module code or module with
             // --module or --target es6 specified. Files included by searching under node_modules are also not emitted.
-            const bundledSources = filter(host.getSourceFiles(),
+            const bundledSources = filter(getSourceFilesToEmit(host),
                 sourceFile => !isDeclarationFile(sourceFile) &&
-                              !host.isSourceFileFromExternalLibrary(sourceFile) &&
-                              (!isExternalModule(sourceFile) ||
-                               !!getEmitModuleKind(options)));
+                    !host.isSourceFileFromExternalLibrary(sourceFile) &&
+                    (!isExternalModule(sourceFile) ||
+                        !!getEmitModuleKind(options)));
             if (bundledSources.length) {
                 const jsFilePath = options.outFile || options.out;
                 const emitFileNames: EmitFileNames = {
@@ -2891,7 +2915,7 @@ namespace ts {
         writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void,
         node: TextRange, newLine: string, removeComments: boolean) {
         let leadingComments: CommentRange[];
-        let currentDetachedCommentInfo: {nodePos: number, detachedCommentEndPos: number};
+        let currentDetachedCommentInfo: { nodePos: number, detachedCommentEndPos: number };
         if (removeComments) {
             // removeComments is true, only reserve pinned comment at the top of file
             // For example:
@@ -3238,10 +3262,10 @@ namespace ts {
 
     function stringifyValue(value: any): string {
         return typeof value === "string" ? `"${escapeString(value)}"`
-             : typeof value === "number" ? isFinite(value) ? String(value) : "null"
-             : typeof value === "boolean" ? value ? "true" : "false"
-             : typeof value === "object" && value ? isArray(value) ? cycleCheck(stringifyArray, value) : cycleCheck(stringifyObject, value)
-             : /*fallback*/ "null";
+            : typeof value === "number" ? isFinite(value) ? String(value) : "null"
+                : typeof value === "boolean" ? value ? "true" : "false"
+                    : typeof value === "object" && value ? isArray(value) ? cycleCheck(stringifyArray, value) : cycleCheck(stringifyObject, value)
+                        : /*fallback*/ "null";
     }
 
     function cycleCheck(cb: (value: any) => string, value: any) {
@@ -3266,7 +3290,7 @@ namespace ts {
 
     function stringifyProperty(memo: string, value: any, key: string) {
         return value === undefined || typeof value === "function" || key === "__cycle" ? memo
-             : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringifyValue(value)}`;
+            : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringifyValue(value)}`;
     }
 
     const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -3511,7 +3535,7 @@ namespace ts {
      * @param token The token.
      */
     export function createTokenRange(pos: number, token: SyntaxKind): TextRange {
-        return createRange(pos,  pos + tokenToString(token).length);
+        return createRange(pos, pos + tokenToString(token).length);
     }
 
     export function rangeIsOnSingleLine(range: TextRange, sourceFile: SourceFile) {
@@ -3874,6 +3898,7 @@ namespace ts {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAssignment
             || kind === SyntaxKind.ShorthandPropertyAssignment
+            || kind === SyntaxKind.SpreadAssignment
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
@@ -3961,8 +3986,8 @@ namespace ts {
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
-    export function isSpreadElementExpression(node: Node): node is SpreadElementExpression {
-        return node.kind === SyntaxKind.SpreadElementExpression;
+    export function isSpreadExpression(node: Node): node is SpreadElement {
+        return node.kind === SyntaxKind.SpreadElement;
     }
 
     export function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {
@@ -4020,7 +4045,7 @@ namespace ts {
             || kind === SyntaxKind.YieldExpression
             || kind === SyntaxKind.ArrowFunction
             || kind === SyntaxKind.BinaryExpression
-            || kind === SyntaxKind.SpreadElementExpression
+            || kind === SyntaxKind.SpreadElement
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
             || isUnaryExpressionKind(kind);
@@ -4322,6 +4347,7 @@ namespace ts {
 namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         switch (options.target) {
+            case ScriptTarget.ESNext:
             case ScriptTarget.ES2017:
                 return "lib.es2017.d.ts";
             case ScriptTarget.ES2016:

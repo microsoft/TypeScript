@@ -18,7 +18,6 @@ namespace ts.projectSystem {
     };
 
     export interface PostExecAction {
-        readonly requestKind: TI.RequestKind;
         readonly success: boolean;
         readonly callback: TI.RequestCompletedAction;
     }
@@ -47,9 +46,14 @@ namespace ts.projectSystem {
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
-        constructor(readonly globalTypingsCacheLocation: string, throttleLimit: number, readonly installTypingHost: server.ServerHost, log?: TI.Log) {
-            super(globalTypingsCacheLocation, safeList.path, throttleLimit, log);
-            this.init();
+        constructor(
+            readonly globalTypingsCacheLocation: string,
+            throttleLimit: number,
+            installTypingHost: server.ServerHost,
+            readonly typesRegistry = createMap<void>(),
+            telemetryEnabled?: boolean,
+            log?: TI.Log) {
+            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, telemetryEnabled, log);
         }
 
         safeFileList = safeList.path;
@@ -63,9 +67,8 @@ namespace ts.projectSystem {
             }
         }
 
-        checkPendingCommands(expected: TI.RequestKind[]) {
-            assert.equal(this.postExecActions.length, expected.length, `Expected ${expected.length} post install actions`);
-            this.postExecActions.forEach((act, i) => assert.equal(act.requestKind, expected[i], "Unexpected post install action"));
+        checkPendingCommands(expectedCount: number) {
+            assert.equal(this.postExecActions.length, expectedCount, `Expected ${expectedCount} post install actions`);
         }
 
         onProjectClosed() {
@@ -79,15 +82,8 @@ namespace ts.projectSystem {
             return this.installTypingHost;
         }
 
-        executeRequest(requestKind: TI.RequestKind, _requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
-            switch (requestKind) {
-                case TI.NpmViewRequest:
-                case TI.NpmInstallRequest:
-                    break;
-                default:
-                    assert.isTrue(false, `request ${requestKind} is not supported`);
-            }
-            this.addPostExecAction(requestKind, "success", cb);
+        installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+            this.addPostExecAction("success", cb);
         }
 
         sendResponse(response: server.SetTypings | server.InvalidateCachedTypings) {
@@ -99,12 +95,11 @@ namespace ts.projectSystem {
             this.install(request);
         }
 
-        addPostExecAction(requestKind: TI.RequestKind, stdout: string | string[], cb: TI.RequestCompletedAction) {
+        addPostExecAction(stdout: string | string[], cb: TI.RequestCompletedAction) {
             const out = typeof stdout === "string" ? stdout : createNpmPackageJsonString(stdout);
             const action: PostExecAction = {
                 success: !!out,
-                callback: cb,
-                requestKind
+                callback: cb
             };
             this.postExecActions.push(action);
         }
@@ -437,6 +432,10 @@ namespace ts.projectSystem {
                 directoryName,
                 close: () => multiMapRemove(this.watchedDirectories, path, cbWithRecursive)
             };
+        }
+
+        createHash(s: string): string {
+            return s;
         }
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
@@ -1969,6 +1968,33 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, libES2015Promise.path, app.path]);
         });
+
+        it("should handle non-existing directories in config file", () => {
+            const f = {
+                path: "/a/src/app.ts",
+                content: "let x = 1;"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {},
+                    include: [
+                        "src/**/*",
+                        "notexistingfolder/*"
+                    ]
+                })
+            };
+            const host = createServerHost([f, config]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(f.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+
+            projectService.closeClientFile(f.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 0 });
+
+            projectService.openClientFile(f.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+        });
     });
 
     describe("prefer typings to js", () => {
@@ -2227,6 +2253,27 @@ namespace ts.projectSystem {
             assert.equal(diags.length, 0);
         });
 
+        it("should property handle missing config files", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            const projectName = "project1";
+            const host = createServerHost([f1]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
+
+            // should have one external project since config file is missing
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+
+            host.reloadFS([f1, config]);
+            projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+        });
     });
 
     describe("add the missing module file for inferred project", () => {
@@ -2503,6 +2550,47 @@ namespace ts.projectSystem {
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f.path]);
+        });
+    });
+
+    describe("No overwrite emit error", () => {
+        it("for inferred project", () => {
+            const f1 = {
+                path: "/a/b/f1.js",
+                content: "function test1() { }"
+            };
+            const host = createServerHost([f1, libFile]);
+            const session = createSession(host);
+            openFilesForSession([f1], session);
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const projectName = projectService.inferredProjects[0].getProjectName();
+
+            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 2,
+                arguments: { projectFileName: projectName }
+            }).response;
+            assert.isTrue(diags.length === 0);
+        });
+    });
+
+    describe("import helpers", () => {
+        it("should not crash in tsserver", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: "export async function foo() { return 100; }"
+            };
+            const tslib = {
+                path: "/a/node_modules/tslib/index.d.ts",
+                content: ""
+            };
+            const host = createServerHost([f1, tslib]);
+            const service = createProjectService(host);
+            service.openExternalProject({ projectFileName: "p", rootFiles: [toExternalFile(f1.path)], options: { importHelpers: true } });
+            service.checkNumberOfProjects({ externalProjects: 1 });
         });
     });
 }

@@ -18,6 +18,7 @@
     "files": [
         "../services/shims.ts",
         "../services/utilities.ts",
+        "shared.ts",
         "utilities.ts",
         "scriptVersionCache.ts",
         "scriptInfo.ts",

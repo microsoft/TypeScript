@@ -16,6 +16,10 @@ class C {
     }
 }
 
+const o = { a: 1 };
+const y = { ...o };
+const { ...x } = y;
+
 // @filename: script.ts
 class A { }
 class B extends A { }

@@ -1472,7 +1472,7 @@ namespace Harness {
             }
 
             if (typesError && symbolsError) {
-                throw new Error(typesError.message + ts.sys.newLine + symbolsError.message);
+                throw new Error(typesError.message + Harness.IO.newLine() + symbolsError.message);
             }
 
             if (typesError) {
@@ -1756,7 +1756,7 @@ namespace Harness {
         }
 
         // Regex for parsing options in the format "@Alpha: Value of any sort"
-        const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
+        const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
         function extractCompilerSettings(content: string): CompilerSettings {
             const opts: CompilerSettings = {};
@@ -1765,7 +1765,7 @@ namespace Harness {
             /* tslint:disable:no-null-keyword */
             while ((match = optionRegex.exec(content)) !== null) {
             /* tslint:enable:no-null-keyword */
-                opts[match[1]] = match[2];
+                opts[match[1]] = match[2].trim();
             }
 
             return opts;
@@ -1793,7 +1793,7 @@ namespace Harness {
                     // Comment line, check for global/file @options and record them
                     optionRegex.lastIndex = 0;
                     const metaDataName = testMetaData[1].toLowerCase();
-                    currentFileOptions[testMetaData[1]] = testMetaData[2];
+                    currentFileOptions[testMetaData[1]] = testMetaData[2].trim();
                     if (metaDataName !== "filename") {
                         continue;
                     }
@@ -1813,12 +1813,12 @@ namespace Harness {
                         // Reset local data
                         currentFileContent = undefined;
                         currentFileOptions = {};
-                        currentFileName = testMetaData[2];
+                        currentFileName = testMetaData[2].trim();
                         refs = [];
                     }
                     else {
                         // First metadata marker in the file
-                        currentFileName = testMetaData[2];
+                        currentFileName = testMetaData[2].trim();
                     }
                 }
                 else {
