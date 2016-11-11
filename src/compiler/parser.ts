@@ -142,7 +142,9 @@ namespace ts {
                 return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
                     visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
             case SyntaxKind.MappedType:
-                return visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
+                return visitNode(cbNode, (<MappedTypeNode>node).readonlyToken) ||
+                    visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
+                    visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
                     visitNode(cbNode, (<MappedTypeNode>node).type);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
