@@ -2291,13 +2291,14 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
-        getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[];
-        getExportsOfModule(moduleSymbol: Symbol): Map<Symbol> | undefined;
+        getExportsOfModule(moduleSymbol: Symbol): Symbol[];
 
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
+
+        tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 

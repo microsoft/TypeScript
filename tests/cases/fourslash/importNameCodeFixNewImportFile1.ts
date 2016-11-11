@@ -10,8 +10,9 @@
 // @Filename: tripleSlashReference.ts
 //// var x = 5;/*dummy*/
 
-verify.codeFixAtPosition(
+verify.codeFixAtPosition([
 `/// <reference path="./tripleSlashReference.ts" />
 import { f1 } from "./module";
+
 f1();`
-);
+]);

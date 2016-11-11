@@ -2018,27 +2018,31 @@ namespace FourSlash {
             return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
         }
 
-        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+        public verifyCodeFixAtPosition(expectedTextArray: string[], errorCode?: number) {
             const ranges = this.getRanges();
             if (ranges.length == 0) {
                 this.raiseError("At least one range should be specified in the testfile.");
             }
 
-            const actual = this.getCodeFixes(errorCode);
+            const codeFixes = this.getCodeFixes(errorCode);
 
-            if (!actual || actual.length == 0) {
+            if (!codeFixes || codeFixes.length == 0) {
                 this.raiseError("No codefixes returned.");
             }
 
-            if (actual.length > 1) {
-                this.raiseError("More than 1 codefix returned.");
+            const actualTextArray: string[] = [];
+            const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(codeFixes[0].changes[0].fileName);
+            const originalContent = scriptInfo.content;
+            for (const codeFix of codeFixes) {
+                this.applyEdits(codeFix.changes[0].fileName, codeFix.changes[0].textChanges, /*isFormattingEdit*/ false);
+                actualTextArray.push(this.normalizeNewlines(this.rangeText(ranges[0])));
+                scriptInfo.updateContent(originalContent);
             }
-
-            this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
-            const actualText = this.rangeText(ranges[0]);
-
-            if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
-                this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
+            const sortedExpectedArray = ts.map(expectedTextArray, str => this.normalizeNewlines(str)).sort();
+            const sortedActualArray = actualTextArray.sort();
+            if (!ts.arrayIsEqualTo(sortedExpectedArray, sortedActualArray)) {
+                this.raiseError(
+                    `Actual text array doesn't match expected text array. \nActual: \n'${sortedActualArray.join('\n\n')}'\n---\nExpected: \n'${sortedExpectedArray.join('\n\n')}'`);
             }
         }
 
@@ -2073,6 +2077,10 @@ namespace FourSlash {
                 const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
                 return "# - " + representation + lineEnding;
             });
+        }
+
+        private normalizeNewlines(str: string) {
+            return str.replace(/\r?\n/g, "\n");
         }
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
@@ -3291,8 +3299,8 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public codeFixAtPosition(expectedText: string, errorCode?: number): void {
-            this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        public codeFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
+            this.state.verifyCodeFixAtPosition(expectedTextArray, errorCode);
         }
 
         public navigationBar(json: any) {

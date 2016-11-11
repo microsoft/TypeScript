@@ -12,7 +12,8 @@
 // @Filename: ../node_modules/fake-module/package.json
 //// {}
 
-verify.codeFixAtPosition(
+verify.codeFixAtPosition([
 `import { f1 } from "fake-module";
+
 f1();`
-);
+]);

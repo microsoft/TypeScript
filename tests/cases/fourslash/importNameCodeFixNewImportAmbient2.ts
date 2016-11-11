@@ -1,9 +1,9 @@
 /// <reference path="fourslash.ts" />
 
-//// [|/*
-////  * I'm a license or something
-////  */
-//// f1/*0*/();|]
+////[|/*
+//// * I'm a license or something
+//// */
+////f1/*0*/();|]
 
 // @Filename: ambientModule.ts
 //// declare module "ambient-module" {
@@ -11,10 +11,11 @@
 ////    export var v1;
 //// }
 
-verify.codeFixAtPosition(
+verify.codeFixAtPosition([
 `/*
-* I'm a license or something
-*/
+ * I'm a license or something
+ */
 import { f1 } from "ambient-module";
+
 f1();`
-);
+]);

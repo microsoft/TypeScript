@@ -975,7 +975,7 @@ namespace ts.Completions {
 
                 if (symbol && symbol.flags & SymbolFlags.HasExports) {
                     // Extract module or enum members
-                    const exportedSymbols = typeChecker.getExportsOfModuleAsArray(symbol);
+                    const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                     forEach(exportedSymbols, symbol => {
                         if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                             symbols.push(symbol);
@@ -1320,7 +1320,7 @@ namespace ts.Completions {
             let exports: Symbol[];
             const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importOrExportDeclaration.moduleSpecifier);
             if (moduleSpecifierSymbol) {
-                exports = typeChecker.getExportsOfModuleAsArray(moduleSpecifierSymbol);
+                exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
             }
 
             symbols = exports ? filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements) : emptyArray;

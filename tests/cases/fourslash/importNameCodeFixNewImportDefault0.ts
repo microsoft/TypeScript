@@ -5,7 +5,8 @@
 // @Filename: module.ts
 //// export default function f1() { };
 
-verify.codeFixAtPosition(
+verify.codeFixAtPosition([
 `import f1 from "./module";
+
 f1();`
-);
+]);

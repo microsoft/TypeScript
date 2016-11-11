@@ -15,7 +15,8 @@
 ////     }
 //// }
 
-verify.codeFixAtPosition(
-    `import { foo } from "random";
+verify.codeFixAtPosition([
+`import { foo } from "random";
+
 foo();`
-);
+]);

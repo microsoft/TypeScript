@@ -18,7 +18,8 @@
 // @Filename: ../node_modules/fake-module/package.json
 //// { "main":"./notindex.js", "typings":"./notindex.d.ts" }
 
-verify.codeFixAtPosition(
+verify.codeFixAtPosition([
 `import { f1 } from "fake-module";
+
 f1();`
-);
+]);

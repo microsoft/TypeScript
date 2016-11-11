@@ -12,7 +12,8 @@
 // @Filename: a/b.ts
 //// export function f1() { };
 
-verify.codeFixAtPosition(
+verify.codeFixAtPosition([
 `import { f1 } from "b";
+
 f1();`
-);
+]);

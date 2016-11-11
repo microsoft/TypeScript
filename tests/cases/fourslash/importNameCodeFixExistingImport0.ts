@@ -7,4 +7,4 @@
 //// export function f1() {}
 //// export var v1 = 5;
 
-verify.codeFixAtPosition(`{ v1, f1 }`);
+verify.codeFixAtPosition([`{ v1, f1 }`]);

@@ -15,7 +15,8 @@
 ////     }
 //// }
 
-verify.codeFixAtPosition(
-    `import { foo } from "a";
+verify.codeFixAtPosition([
+`import { foo } from "a";
+
 foo();`
-);
+]);

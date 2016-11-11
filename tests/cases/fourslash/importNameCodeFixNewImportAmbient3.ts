@@ -22,9 +22,8 @@
 ////    export var v3;
 //// }
 
-verify.codeFixAtPosition(
-`
-import * as ns from "yet-another-ambient-module";
+verify.codeFixAtPosition([
+`import * as ns from "yet-another-ambient-module";
 import { v1 } from "ambient-module";
 var x = v1 + 5;`
-);
+]);
