@@ -683,10 +683,6 @@
         "category": "Error",
         "code": 1219
     },
-    "Generators are only available when targeting ECMAScript 2015 or higher.": {
-        "category": "Error",
-        "code": 1220
-    },
     "Generators are not allowed in an ambient context.": {
         "category": "Error",
         "code": 1221
@@ -1754,6 +1750,10 @@
     "Enum type '{0}' has members with initializers that are not literals.": {
         "category": "Error",
         "code": 2535
+    },
+    "The 'arguments' object cannot be referenced in a generator function or method in ES3 and ES5. Consider using a standard function or method.": {
+        "category": "Error",
+        "code": 2536
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",

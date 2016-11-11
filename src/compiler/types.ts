@@ -412,15 +412,16 @@ namespace ts {
         HasDecorators =      1 << 11, // If the file has decorators (initialized by binding)
         HasParamDecorators = 1 << 12, // If the file has parameter decorators (initialized by binding)
         HasAsyncFunctions =  1 << 13, // If the file has async functions (initialized by binding)
-        HasJsxSpreadAttributes = 1 << 14, // If the file as JSX spread attributes (initialized by binding)
-        DisallowInContext =  1 << 15, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 16, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 17, // If node was parsed as part of a decorator
-        AwaitContext =       1 << 18, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 19, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 20, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 21, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 22, // If we've computed data from children and cached it in this node
+        HasGenerators =      1 << 14, // If the file has generators (initialized by binding)
+        HasJsxSpreadAttributes = 1 << 15, // If the file as JSX spread attributes (initialized by binding)
+        DisallowInContext =  1 << 16, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 17, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 18, // If node was parsed as part of a decorator
+        AwaitContext =       1 << 19, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 20, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 21, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 22, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 23, // If we've computed data from children and cached it in this node
 
         BlockScoped = Let | Const,
 
@@ -3158,9 +3159,8 @@ namespace ts {
         LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
         NoIndentation = 1 << 20,                 // Do not indent the node.
-        AsyncFunctionBody = 1 << 21,
-        ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        ReuseTempVariableScope = 1 << 21,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 22,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
     }
 
     /** Additional context provided to `visitEachChild` */

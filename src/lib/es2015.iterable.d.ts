@@ -1,22 +1,11 @@
 /// <reference path="lib.es2015.symbol.d.ts" />
 
 interface SymbolConstructor {
-    /** 
-      * A method that returns the default iterator for an object. Called by the semantics of the 
+    /**
+      * A method that returns the default iterator for an object. Called by the semantics of the
       * for-of statement.
       */
     readonly iterator: symbol;
-}
-
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
-}
-
-interface Iterator<T> {
-    next(value?: any): IteratorResult<T>;
-    return?(value?: any): IteratorResult<T>;
-    throw?(e?: any): IteratorResult<T>;
 }
 
 interface Iterable<T> {
@@ -31,17 +20,17 @@ interface Array<T> {
     /** Iterator */
     [Symbol.iterator](): IterableIterator<T>;
 
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, T]>;
 
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
 
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<T>;
@@ -55,7 +44,7 @@ interface ArrayConstructor {
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
     from<T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
-    
+
     /**
       * Creates an array from an iterable object.
       * @param iterable An iterable object to convert to an array.
@@ -126,15 +115,15 @@ interface Promise<T> { }
 
 interface PromiseConstructor {
     /**
-     * Creates a Promise that is resolved with an array of results when all of the provided Promises 
+     * Creates a Promise that is resolved with an array of results when all of the provided Promises
      * resolve, or rejected when any Promise is rejected.
      * @param values An array of Promises.
      * @returns A new Promise.
      */
     all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>;
-    
+
     /**
-     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved 
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
      * or rejected.
      * @param values An array of Promises.
      * @returns A new Promise.
@@ -152,20 +141,20 @@ interface String {
 }
 
 /**
-  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested 
+  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
   * number of bytes could not be allocated an exception is raised.
   */
 interface Int8Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, number]>;
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<number>;
@@ -184,20 +173,20 @@ interface Int8ArrayConstructor {
 }
 
 /**
-  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the 
+  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, number]>;
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<number>;
@@ -216,22 +205,22 @@ interface Uint8ArrayConstructor {
 }
 
 /**
-  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0. 
+  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
   * If the requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8ClampedArray {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, number]>;
 
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
 
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<number>;
@@ -251,22 +240,22 @@ interface Uint8ClampedArrayConstructor {
 }
 
 /**
-  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the 
+  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int16Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, number]>;
 
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
 
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<number>;
@@ -285,20 +274,20 @@ interface Int16ArrayConstructor {
 }
 
 /**
-  * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the 
+  * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint16Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, number]>;
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<number>;
@@ -317,20 +306,20 @@ interface Uint16ArrayConstructor {
 }
 
 /**
-  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the 
+  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int32Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, number]>;
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<number>;
@@ -349,20 +338,20 @@ interface Int32ArrayConstructor {
 }
 
 /**
-  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the 
+  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint32Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, number]>;
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<number>;
@@ -386,15 +375,15 @@ interface Uint32ArrayConstructor {
   */
 interface Float32Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, number]>;
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<number>;
@@ -413,20 +402,20 @@ interface Float32ArrayConstructor {
 }
 
 /**
-  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested 
+  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
   * number of bytes could not be allocated an exception is raised.
   */
 interface Float64Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
+    /**
       * Returns an array of key, value pairs for every entry in the array
       */
     entries(): IterableIterator<[number, number]>;
-    /** 
+    /**
       * Returns an list of keys in the array
       */
     keys(): IterableIterator<number>;
-    /** 
+    /**
       * Returns an list of values in the array
       */
     values(): IterableIterator<number>;

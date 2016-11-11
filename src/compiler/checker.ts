@@ -5200,6 +5200,11 @@ namespace ts {
             return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
         }
 
+        function tryGetGlobalType(name: string, arity = 0, fallbackType?: ObjectType): ObjectType {
+            const symbol = getGlobalSymbol(name, SymbolFlags.Type, /*diagnostic*/ undefined);
+            return symbol ? getTypeOfGlobalSymbol(symbol, arity) : fallbackType;
+        }
+
         /**
          * Returns a type that is inside a namespace at the global scope, e.g.
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
@@ -5231,8 +5236,18 @@ namespace ts {
             return createTypeFromGenericGlobalType(getGlobalIterableType(), [elementType]);
         }
 
+        function createGeneratorReturnType(elementType: Type): Type {
+            return languageVersion >= ScriptTarget.ES6
+                ? createIterableIteratorType(elementType)
+                : createIteratorType(elementType);
+        }
+
         function createIterableIteratorType(elementType: Type): Type {
             return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(), [elementType]);
+        }
+
+        function createIteratorType(elementType: Type): Type {
+            return createTypeFromGenericGlobalType(getGlobalIteratorType(), [elementType]);
         }
 
         function createArrayType(elementType: Type): Type {
@@ -8847,6 +8862,9 @@ namespace ts {
                     }
                     else if (hasModifier(container, ModifierFlags.Async)) {
                         error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES3_and_ES5_Consider_using_a_standard_function_or_method);
+                    }
+                    else if (container.asteriskToken) {
+                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_a_generator_function_or_method_in_ES3_and_ES5_Consider_using_a_standard_function_or_method);
                     }
                 }
 
@@ -12517,7 +12535,7 @@ namespace ts {
                 if (funcIsGenerator) {
                     types = checkAndAggregateYieldOperandTypes(func, contextualMapper);
                     if (types.length === 0) {
-                        const iterableIteratorAny = createIterableIteratorType(anyType);
+                        const iterableIteratorAny = createGeneratorReturnType(anyType);
                         if (compilerOptions.noImplicitAny) {
                             error(func.asteriskToken,
                                 Diagnostics.Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type, typeToString(iterableIteratorAny));
@@ -12542,7 +12560,7 @@ namespace ts {
                 if (!type) {
                     if (funcIsGenerator) {
                         error(func, Diagnostics.No_best_common_type_exists_among_yield_expressions);
-                        return createIterableIteratorType(unknownType);
+                        return createGeneratorReturnType(unknownType);
                     }
                     else {
                         error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
@@ -12552,7 +12570,7 @@ namespace ts {
                 }
 
                 if (funcIsGenerator) {
-                    type = createIterableIteratorType(type);
+                    type = createGeneratorReturnType(type);
                 }
             }
             if (!contextualSignature) {
@@ -12576,7 +12594,9 @@ namespace ts {
 
                     if (yieldExpression.asteriskToken) {
                         // A yield* expression effectively yields everything that its operand yields
-                        type = checkElementTypeOfIterable(type, yieldExpression.expression);
+                        type = languageVersion >= ScriptTarget.ES6
+                            ? checkElementTypeOfIterable(type, yieldExpression.expression)
+                            : checkElementTypeOfIterator(type, yieldExpression.expression);
                     }
 
                     if (!contains(aggregatedTypes, type)) {
@@ -13458,8 +13478,11 @@ namespace ts {
                     let expressionElementType: Type;
                     const nodeIsYieldStar = !!node.asteriskToken;
                     if (nodeIsYieldStar) {
-                        expressionElementType = checkElementTypeOfIterable(expressionType, node.expression);
+                        expressionElementType = languageVersion >= ScriptTarget.ES6
+                            ? checkElementTypeOfIterable(expressionType, node.expression)
+                            : checkElementTypeOfIterator(expressionType, node.expression);
                     }
+
                     // There is no point in doing an assignability check if the function
                     // has no explicit return type because the return type is directly computed
                     // from the yield expressions.
@@ -13936,14 +13959,14 @@ namespace ts {
                 }
 
                 if (node.type) {
-                    if (languageVersion >= ScriptTarget.ES6 && isSyntacticallyValidGenerator(node)) {
+                    if (isSyntacticallyValidGenerator(node)) {
                         const returnType = getTypeFromTypeNode(node.type);
                         if (returnType === voidType) {
                             error(node.type, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                         }
                         else {
                             const generatorElementType = getElementTypeOfIterableIterator(returnType) || anyType;
-                            const iterableIteratorInstantiation = createIterableIteratorType(generatorElementType);
+                            const iterableIteratorInstantiation = createGeneratorReturnType(generatorElementType);
 
                             // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
                             // However, that would not catch the error in the following case.
@@ -15943,6 +15966,20 @@ namespace ts {
             // passed in is actually an Iterable.
             if (errorNode && elementType) {
                 checkTypeAssignableTo(iterable, createIterableType(elementType), errorNode);
+            }
+
+            return elementType || anyType;
+        }
+
+        /**
+         * When errorNode is undefined, it means we should not report any errors.
+         */
+        function checkElementTypeOfIterator(iterator: Type, errorNode: Node) {
+            const elementType = getElementTypeOfIterator(iterator, errorNode);
+            // Now even though we have extracted the elementType, we will have to validate that the type
+            // passed in is actually an Iterator.
+            if (errorNode && elementType) {
+                checkTypeAssignableTo(iterator, createIteratorType(elementType), errorNode);
             }
 
             return elementType || anyType;
@@ -18985,7 +19022,7 @@ namespace ts {
             else {
                 getGlobalESSymbolType = memoize(() => emptyObjectType);
                 getGlobalIterableType = memoize(() => emptyGenericType);
-                getGlobalIteratorType = memoize(() => emptyGenericType);
+                getGlobalIteratorType = memoize(() => <GenericType>tryGetGlobalType("Iterator", /*arity*/ 1, emptyGenericType));
                 getGlobalIterableIteratorType = memoize(() => emptyGenericType);
             }
 
@@ -19602,9 +19639,6 @@ namespace ts {
                 }
                 if (!node.body) {
                     return grammarErrorOnNode(node.asteriskToken, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
-                }
-                if (languageVersion < ScriptTarget.ES6) {
-                    return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_only_available_when_targeting_ECMAScript_2015_or_higher);
                 }
             }
         }

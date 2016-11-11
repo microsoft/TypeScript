@@ -73,7 +73,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         const generatorHelper = `
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (sent[0] === 1) throw sent[1]; return sent[1]; }, trys: [], stack: [] }, sent, f;
+    var _ = { label: 0, sent: function() { if (sent[0] === 1) throw sent[1]; return sent[1]; }, trys: [], stack: [] }, sent, star, f;
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (1) {
@@ -83,9 +83,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 case 2: return { value: op[1], done: true };
             }
             try {
-                switch (f = 1, op[0]) {
+                f = 1;
+                if (star) {
+                    var v = star[["next", "throw", "return"][op[0]]];
+                    if (v && !(v = v.call(star, op[1])).done) return v;
+                    if (v) op = [0, v.value];
+                    star = void 0; continue;
+                }
+                switch (op[0]) {
                     case 0: case 1: sent = op; break;
                     case 4: return _.label++, { value: op[1], done: false };
+                    case 5: _.label++, star = op[1], op = [0]; continue;
                     case 7: op = _.stack.pop(), _.trys.pop(); continue;
                     default:
                         var r = _.trys.length > 0 && _.trys[_.trys.length - 1];
@@ -99,8 +107,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 }
                 op = body.call(thisArg, _);
             }
-            catch (e) { op = [6, e]; }
-            finally { f = 0, sent = void 0; }
+            catch (e) { op = [6, e], star = void 0; }
+            finally { f = 0, sent = v = void 0; }
         }
     }
     return {
@@ -179,6 +187,7 @@ const _super = (function (geti, seti) {
         let decorateEmitted: boolean;
         let paramEmitted: boolean;
         let awaiterEmitted: boolean;
+        let generatorEmitted: boolean;
         let isOwnFileEmit: boolean;
         let emitSkipped = false;
 
@@ -291,6 +300,7 @@ const _super = (function (geti, seti) {
             decorateEmitted = false;
             paramEmitted = false;
             awaiterEmitted = false;
+            generatorEmitted = false;
             isOwnFileEmit = false;
         }
 
@@ -2167,11 +2177,14 @@ const _super = (function (geti, seti) {
 
             if (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions) {
                 writeLines(awaiterHelper);
-                if (languageVersion < ScriptTarget.ES6) {
-                    writeLines(generatorHelper);
-                }
-
                 awaiterEmitted = true;
+                helpersEmitted = true;
+            }
+
+            if (!generatorEmitted && node.flags & (NodeFlags.HasAsyncFunctions | NodeFlags.HasGenerators)
+                && languageVersion < ScriptTarget.ES6) {
+                writeLines(generatorHelper);
+                generatorEmitted = true;
                 helpersEmitted = true;
             }
 

@@ -442,8 +442,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): Statement {
-            // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken) {
                 node = setOriginalNode(
                     createFunctionDeclaration(
                         /*decorators*/ undefined,
@@ -490,8 +489,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            // Currently, we only support generators that were originally async functions.
-            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken) {
                 node = setOriginalNode(
                     createFunctionExpression(
                         /*asteriskToken*/ undefined,
@@ -572,10 +570,10 @@ namespace ts {
             operationLocations = undefined;
             state = createTempVariable(/*recordTempVariable*/ undefined);
 
-            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
-
             // Build the generator
             startLexicalEnvironment();
+
+            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
             transformAndEmitStatements(body.statements, statementOffset);
 
@@ -609,7 +607,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitVariableStatement(node: VariableStatement): Statement {
-            if (node.transformFlags & TransformFlags.ContainsYield) {
+            if (node.emitFlags & NodeEmitFlags.CustomPrologue) {
+                return visitEachChild(node, visitor, context);
+            }
+            else if (node.transformFlags & TransformFlags.ContainsYield) {
                 transformAndEmitVariableDeclarationList(node.declarationList);
                 return undefined;
             }
@@ -906,7 +907,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitYieldExpression(node: YieldExpression) {
+        function visitYieldExpression(node: YieldExpression): LeftHandSideExpression {
             // [source]
             //      x = yield a();
             //
@@ -915,9 +916,15 @@ namespace ts {
             //  .mark resumeLabel
             //      x = %sent%;
 
-            // NOTE: we are explicitly not handling YieldStar at this time.
             const resumeLabel = defineLabel();
-            emitYield(visitNode(node.expression, visitor, isExpression), /*location*/ node);
+            const expression = visitNode(node.expression, visitor, isExpression);
+            if (node.asteriskToken) {
+                emitYieldStar(expression, /*location*/ node);
+            }
+            else {
+                emitYield(expression, /*location*/ node);
+            }
+
             markLabel(resumeLabel);
             return createGeneratorResume();
         }
@@ -1421,6 +1428,10 @@ namespace ts {
         }
 
         function visitForStatement(node: ForStatement) {
+            if (node.emitFlags & NodeEmitFlags.CustomPrologue) {
+                return visitEachChild(node, visitor, context);
+            }
+
             if (inStatementContainingYield) {
                 beginScriptLoopBlock();
             }
@@ -2488,6 +2499,16 @@ namespace ts {
          */
         function emitYield(expression?: Expression, location?: TextRange): void {
             emitWorker(OpCode.Yield, [expression], location);
+        }
+
+        /**
+         * Emits a Yield operation for the provided expression.
+         *
+         * @param expression An optional value for the yield operation.
+         * @param location An optional source map location for the assignment.
+         */
+        function emitYieldStar(expression?: Expression, location?: TextRange): void {
+            emitWorker(OpCode.YieldStar, [expression], location);
         }
 
         /**
