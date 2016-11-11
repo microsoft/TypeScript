@@ -2018,7 +2018,31 @@ namespace FourSlash {
             return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
         }
 
-        public verifyCodeFixAtPosition(expectedTextArray: string[], errorCode?: number) {
+        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.");
+            }
+
+            const actual = this.getCodeFixes(errorCode);
+
+            if (!actual || actual.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            if (actual.length > 1) {
+                this.raiseError("More than 1 codefix returned.");
+            }
+
+            this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
+            const actualText = this.rangeText(ranges[0]);
+
+            if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
+                this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
+            }
+        }
+
+        public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
             const ranges = this.getRanges();
             if (ranges.length == 0) {
                 this.raiseError("At least one range should be specified in the testfile.");
@@ -2042,7 +2066,7 @@ namespace FourSlash {
             const sortedActualArray = actualTextArray.sort();
             if (!ts.arrayIsEqualTo(sortedExpectedArray, sortedActualArray)) {
                 this.raiseError(
-                    `Actual text array doesn't match expected text array. \nActual: \n'${sortedActualArray.join('\n\n')}'\n---\nExpected: \n'${sortedExpectedArray.join('\n\n')}'`);
+                    `Actual text array doesn't match expected text array. \nActual: \n"${sortedActualArray.join("\n\n")}"\n---\nExpected: \n'${sortedExpectedArray.join("\n\n")}'`);
             }
         }
 
@@ -3299,8 +3323,12 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public codeFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
-            this.state.verifyCodeFixAtPosition(expectedTextArray, errorCode);
+        public codeFixAtPosition(expectedText: string, errorCode?: number): void {
+            this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        }
+
+        public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
+            this.state.verifyImportFixAtPosition(expectedTextArray, errorCode);
         }
 
         public navigationBar(json: any) {

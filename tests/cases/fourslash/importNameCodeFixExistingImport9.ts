@@ -9,7 +9,7 @@
 //// export function f1() {}
 //// export var v1 = 5;
 
-verify.codeFixAtPosition([
+verify.importFixAtPosition([
 `{
     v1,
 f1

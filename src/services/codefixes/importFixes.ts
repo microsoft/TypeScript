@@ -21,7 +21,7 @@ namespace ts.codefix {
 
             const allPotentialModules = checker.getAmbientModules();
             for (const otherSourceFile of allSourceFiles) {
-                if (otherSourceFile !== sourceFile && otherSourceFile.symbol) {
+                if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile) && otherSourceFile.symbol) {
                     allPotentialModules.push(otherSourceFile.symbol);
                 }
             }
@@ -203,24 +203,15 @@ namespace ts.codefix {
                         // original text: import { foo, bar } from "module"
                         // change to: import { foo, bar, name } from "module"
                         const insertPoint = importList.elements[importList.elements.length - 1].getEnd();
-                        // If the import list has one import per line, preserve that. Otherwise, insert on same line as last element
-                        let oneImportPerLine: boolean;
-                        if (importList.elements.length === 1) {
-                            /**
-                             * If there is only one symbol being imported, still check to see if it's set up for multi-line imports like this:
-                             *     import {
-                             *         foo
-                             *     } from "./module";
-                             */
-                            const startLine = getLineOfLocalPosition(sourceFile, importList.getStart());
-                            const endLine = getLineOfLocalPosition(sourceFile, importList.getEnd());
-                            oneImportPerLine = endLine - startLine >= 2;
-                        }
-                        else {
-                            const startLine = getLineOfLocalPosition(sourceFile, importList.elements[0].getStart());
-                            const endLine = getLineOfLocalPosition(sourceFile, insertPoint);
-                            oneImportPerLine = endLine - startLine >= importList.elements.length - 1;
-                        }
+                        /**
+                         * If the import list has one import per line, preserve that. Otherwise, insert on same line as last element
+                         *     import {
+                         *         foo
+                         *     } from "./module";
+                         */
+                        const startLine = getLineOfLocalPosition(sourceFile, importList.getStart());
+                        const endLine = getLineOfLocalPosition(sourceFile, importList.getEnd());
+                        const oneImportPerLine = endLine - startLine > importList.elements.length;
 
                         return {
                             newText: `,${oneImportPerLine ? context.newLineCharacter : " "}${newImportText}`,

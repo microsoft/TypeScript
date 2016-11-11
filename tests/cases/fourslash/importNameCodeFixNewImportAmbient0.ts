@@ -8,7 +8,7 @@
 ////    export var v1;
 //// }
 
-verify.codeFixAtPosition([
+verify.importFixAtPosition([
 `import { f1 } from "ambient-module";
 
 f1();`

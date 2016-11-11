@@ -11,7 +11,7 @@
 ////    export var v1;
 //// }
 
-verify.codeFixAtPosition([
+verify.importFixAtPosition([
 `/*
  * I'm a license or something
  */

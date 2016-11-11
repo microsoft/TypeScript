@@ -7,4 +7,4 @@
 ////    }
 ////}
 
-verify.codeFixAtPosition(['super();']);
+verify.codeFixAtPosition('super();');

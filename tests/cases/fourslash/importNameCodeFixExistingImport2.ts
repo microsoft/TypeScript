@@ -7,7 +7,7 @@
 //// export function f1() {}
 //// export var v1 = 5;
 
-verify.codeFixAtPosition([
+verify.importFixAtPosition([
 `import * as ns from "./module";
 import { f1 } from "./module";
 f1();`,

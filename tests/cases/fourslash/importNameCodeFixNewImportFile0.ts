@@ -6,7 +6,7 @@
 //// export function f1() {}
 //// export var v1 = 5;
 
-verify.codeFixAtPosition([
+verify.importFixAtPosition([
 `import { f1 } from "./module";
 
 f1();`

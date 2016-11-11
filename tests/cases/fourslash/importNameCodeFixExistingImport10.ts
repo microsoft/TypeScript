@@ -12,7 +12,7 @@
 //// export var v2 = 5;
 //// export var v3 = 5;
 
-verify.codeFixAtPosition([
+verify.importFixAtPosition([
 `{
     v1,
     v2,

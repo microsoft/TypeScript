@@ -16,7 +16,7 @@
 ////     }
 //// }
 
-verify.codeFixAtPosition([
+verify.importFixAtPosition([
 `import { foo } from "./f2";
 
 foo();`

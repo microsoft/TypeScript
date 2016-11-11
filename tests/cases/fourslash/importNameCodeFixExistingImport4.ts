@@ -8,7 +8,7 @@
 //// export var v1 = 5;
 //// export default var d1 = 6;
 
-verify.codeFixAtPosition([
+verify.importFixAtPosition([
 `import d, { f1 } from "./module";
 f1();`
 ]);

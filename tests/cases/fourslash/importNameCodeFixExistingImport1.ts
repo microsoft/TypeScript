@@ -8,4 +8,4 @@
 //// export var v1 = 5;
 //// export default var d1 = 6;
 
-verify.codeFixAtPosition([`{ v1, f1 }`]);
+verify.importFixAtPosition([`{ v1, f1 }`]);
