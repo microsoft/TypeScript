@@ -1,0 +1,15 @@
+tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): error TS90010: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+
+
+==== tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts (1 errors) ====
+    interface T { }
+    declare const a: T;
+    class Foo<T> {
+        x: T;
+        fn() {
+            this.x = a;
+            ~~~~~~
+!!! error TS90010: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+        }
+    }
+    

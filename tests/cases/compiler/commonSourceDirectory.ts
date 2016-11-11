@@ -6,13 +6,25 @@
 // @filename: /node_modules/foo/index.ts
 export const x = 0;
 
+// @filename: /types/bar.d.ts
+declare module "bar" {
+    export const y = 0;
+}
+
 // @filename: /app/index.ts
+/// <reference path="../types/bar.d.ts"/>
 import { x } from "foo";
-x + 1;
+import { y } from "bar";
+x + y;
 
 // @filename: /app/tsconfig.json
 {
     "compilerOptions": {
-        "outDir": "bin"
+        "outDir": "bin",
+        "typeRoots": ["../types"],
+        "sourceMap": true,
+        "mapRoot": "myMapRoot",
+        "sourceRoot": "mySourceRoot",
+        "declaration": true
     }
 }

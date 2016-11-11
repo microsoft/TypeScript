@@ -5,12 +5,25 @@
 
 export const x = 0;
 
+//// [bar.d.ts]
+declare module "bar" {
+    export const y = 0;
+}
+
 //// [index.ts]
+/// <reference path="../types/bar.d.ts"/>
 import { x } from "foo";
-x + 1;
+import { y } from "bar";
+x + y;
 
 
 //// [/app/bin/index.js]
 "use strict";
+/// <reference path="../types/bar.d.ts"/>
 var foo_1 = require("foo");
-foo_1.x + 1;
+var bar_1 = require("bar");
+foo_1.x + bar_1.y;
+//# sourceMappingURL=/app/myMapRoot/index.js.map
+
+//// [/app/bin/index.d.ts]
+/// <reference path="../../types/bar.d.ts" />

@@ -1487,7 +1487,7 @@ namespace Harness {
             }
 
             if (typesError && symbolsError) {
-                throw new Error(typesError.message + ts.sys.newLine + symbolsError.message);
+                throw new Error(typesError.message + Harness.IO.newLine() + symbolsError.message);
             }
 
             if (typesError) {
@@ -1569,7 +1569,7 @@ namespace Harness {
             return file.writeByteOrderMark ? "\u00EF\u00BB\u00BF" : "";
         }
 
-        export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: CompilerResult) {
+        export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: CompilerResult, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
             if (options.inlineSourceMap) {
                 if (result.sourceMaps.length > 0) {
                     throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
@@ -1591,10 +1591,8 @@ namespace Harness {
                     }
 
                     let sourceMapCode = "";
-                    for (let i = 0; i < result.sourceMaps.length; i++) {
-                        sourceMapCode += "//// [" + ts.getBaseFileName(result.sourceMaps[i].fileName) + "]\r\n";
-                        sourceMapCode += getByteOrderMarkText(result.sourceMaps[i]);
-                        sourceMapCode += result.sourceMaps[i].code;
+                    for (const sourceMap of result.sourceMaps) {
+                        sourceMapCode += fileOutput(sourceMap, harnessSettings);
                     }
 
                     return sourceMapCode;
@@ -1621,18 +1619,13 @@ namespace Harness {
 
                 let jsCode = "";
                 for (const file of result.files) {
-                    const fileName = harnessSettings["fullEmitPaths"] ? file.fileName : ts.getBaseFileName(file.fileName);
-                    jsCode += "//// [" + fileName + "]\r\n";
-                    jsCode += getByteOrderMarkText(file);
-                    jsCode += file.code;
+                    jsCode += fileOutput(file, harnessSettings);
                 }
 
                 if (result.declFilesCode.length > 0) {
                     jsCode += "\r\n\r\n";
-                    for (let i = 0; i < result.declFilesCode.length; i++) {
-                        jsCode += "//// [" + ts.getBaseFileName(result.declFilesCode[i].fileName) + "]\r\n";
-                        jsCode += getByteOrderMarkText(result.declFilesCode[i]);
-                        jsCode += result.declFilesCode[i].code;
+                    for (const declFile of result.declFilesCode) {
+                        jsCode += fileOutput(declFile, harnessSettings);
                     }
                 }
 
@@ -1655,6 +1648,11 @@ namespace Harness {
                     /* tslint:enable:no-null-keyword */
                 }
             });
+        }
+
+        function fileOutput(file: GeneratedFile, harnessSettings: Harness.TestCaseParser.CompilerSettings): string {
+            const fileName = harnessSettings["fullEmitPaths"] ? file.fileName : ts.getBaseFileName(file.fileName);
+            return "//// [" + fileName + "]\r\n" + getByteOrderMarkText(file) + file.code;
         }
 
         export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): string {
@@ -1773,7 +1771,7 @@ namespace Harness {
         }
 
         // Regex for parsing options in the format "@Alpha: Value of any sort"
-        const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
+        const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
         function extractCompilerSettings(content: string): CompilerSettings {
             const opts: CompilerSettings = {};
@@ -1782,7 +1780,7 @@ namespace Harness {
             /* tslint:disable:no-null-keyword */
             while ((match = optionRegex.exec(content)) !== null) {
             /* tslint:enable:no-null-keyword */
-                opts[match[1]] = match[2];
+                opts[match[1]] = match[2].trim();
             }
 
             return opts;
@@ -1810,7 +1808,7 @@ namespace Harness {
                     // Comment line, check for global/file @options and record them
                     optionRegex.lastIndex = 0;
                     const metaDataName = testMetaData[1].toLowerCase();
-                    currentFileOptions[testMetaData[1]] = testMetaData[2];
+                    currentFileOptions[testMetaData[1]] = testMetaData[2].trim();
                     if (metaDataName !== "filename") {
                         continue;
                     }
@@ -1830,12 +1828,12 @@ namespace Harness {
                         // Reset local data
                         currentFileContent = undefined;
                         currentFileOptions = {};
-                        currentFileName = testMetaData[2];
+                        currentFileName = testMetaData[2].trim();
                         refs = [];
                     }
                     else {
                         // First metadata marker in the file
-                        currentFileName = testMetaData[2];
+                        currentFileName = testMetaData[2].trim();
                     }
                 }
                 else {

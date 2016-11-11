@@ -5,7 +5,7 @@
 namespace ts {
     /** The version of the TypeScript compiler release */
 
-    export const version = "2.1.0";
+    export const version = "2.2.0";
 
     const emptyArray: any[] = [];
 
@@ -909,48 +909,24 @@ namespace ts {
         function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
             return runWithCancellationToken(() => {
                 const diagnostics: Diagnostic[] = [];
+                let parent: Node = sourceFile;
                 walk(sourceFile);
 
                 return diagnostics;
 
-                function walk(node: Node): boolean {
-                    if (!node) {
-                        return false;
-                    }
+                function walk(node: Node) {
+                    // Return directly from the case if the given node doesnt want to visit each child
+                    // Otherwise break to visit each child
 
-                    switch (node.kind) {
-                        case SyntaxKind.ImportEqualsDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
-                            return true;
-                        case SyntaxKind.ExportAssignment:
-                            if ((<ExportAssignment>node).isExportEquals) {
-                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
-                                return true;
+                    switch (parent.kind) {
+                        case SyntaxKind.Parameter:
+                        case SyntaxKind.PropertyDeclaration:
+                            if ((<ParameterDeclaration | PropertyDeclaration>parent).questionToken === node) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
+                                return;
                             }
-                            break;
-                        case SyntaxKind.ClassDeclaration:
-                            let classDeclaration = <ClassDeclaration>node;
-                            if (checkModifiers(classDeclaration.modifiers) ||
-                                checkTypeParameters(classDeclaration.typeParameters)) {
-                                return true;
-                            }
-                            break;
-                        case SyntaxKind.HeritageClause:
-                            let heritageClause = <HeritageClause>node;
-                            if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
-                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
-                                return true;
-                            }
-                            break;
-                        case SyntaxKind.InterfaceDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_a_ts_file));
-                            return true;
-                        case SyntaxKind.ModuleDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_a_ts_file));
-                            return true;
-                        case SyntaxKind.TypeAliasDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_a_ts_file));
-                            return true;
+
+                        // Pass through
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
@@ -960,124 +936,151 @@ namespace ts {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ArrowFunction:
                         case SyntaxKind.FunctionDeclaration:
-                            const functionDeclaration = <FunctionLikeDeclaration>node;
-                            if (checkModifiers(functionDeclaration.modifiers) ||
-                                checkTypeParameters(functionDeclaration.typeParameters) ||
-                                checkTypeAnnotation(functionDeclaration.type)) {
-                                return true;
-                            }
-                            break;
-                        case SyntaxKind.VariableStatement:
-                            const variableStatement = <VariableStatement>node;
-                            if (checkModifiers(variableStatement.modifiers)) {
-                                return true;
-                            }
-                            break;
                         case SyntaxKind.VariableDeclaration:
-                            const variableDeclaration = <VariableDeclaration>node;
-                            if (checkTypeAnnotation(variableDeclaration.type)) {
-                                return true;
+                            // type annotation
+                            if ((<FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration>parent).type === node) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.types_can_only_be_used_in_a_ts_file));
+                                return;
+                            }
+                    }
+
+                    switch (node.kind) {
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
+                            return;
+                        case SyntaxKind.ExportAssignment:
+                            if ((<ExportAssignment>node).isExportEquals) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
+                                return;
+                            }
+                            break;
+                        case SyntaxKind.HeritageClause:
+                            let heritageClause = <HeritageClause>node;
+                            if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
+                                return;
+                            }
+                            break;
+                        case SyntaxKind.InterfaceDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_a_ts_file));
+                            return;
+                        case SyntaxKind.ModuleDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_a_ts_file));
+                            return;
+                        case SyntaxKind.TypeAliasDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_a_ts_file));
+                            return;
+                        case SyntaxKind.EnumDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
+                            return;
+                        case SyntaxKind.TypeAssertionExpression:
+                            let typeAssertionExpression = <TypeAssertion>node;
+                            diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
+                            return;
+                    }
+
+                    const prevParent = parent;
+                    parent = node;
+                    forEachChild(node, walk, walkArray);
+                    parent = prevParent;
+                }
+
+                function walkArray(nodes: NodeArray<Node>) {
+                    if (parent.decorators === nodes && !options.experimentalDecorators) {
+                        diagnostics.push(createDiagnosticForNode(parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_to_remove_this_warning));
+                    }
+
+                    switch (parent.kind) {
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.FunctionDeclaration:
+                            // Check type parameters
+                            if (nodes === (<ClassDeclaration | FunctionLikeDeclaration>parent).typeParameters) {
+                                diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
+                                return;
+                            }
+                            // pass through
+                        case SyntaxKind.VariableStatement:
+                            // Check modifiers
+                            if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
+                                return checkModifiers(<NodeArray<Modifier>>nodes, parent.kind === SyntaxKind.VariableStatement);
+                            }
+                            break;
+                        case SyntaxKind.PropertyDeclaration:
+                            // Check modifiers of property declaration
+                            if (nodes === (<PropertyDeclaration>parent).modifiers) {
+                                for (const modifier of <NodeArray<Modifier>>nodes) {
+                                    if (modifier.kind !== SyntaxKind.StaticKeyword) {
+                                        diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
+                                    }
+                                }
+                                return;
+                            }
+                            break;
+                        case SyntaxKind.Parameter:
+                            // Check modifiers of parameter declaration
+                            if (nodes === (<ParameterDeclaration>parent).modifiers) {
+                                diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
+                                return;
                             }
                             break;
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
-                            const expression = <CallExpression>node;
-                            if (expression.typeArguments && expression.typeArguments.length > 0) {
-                                const start = expression.typeArguments.pos;
-                                diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
-                                    Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
-                                return true;
+                        case SyntaxKind.ExpressionWithTypeArguments:
+                            // Check type arguments
+                            if (nodes === (<CallExpression | NewExpression | ExpressionWithTypeArguments>parent).typeArguments) {
+                                diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
+                                return;
                             }
                             break;
-                        case SyntaxKind.Parameter:
-                            const parameter = <ParameterDeclaration>node;
-                            if (parameter.modifiers) {
-                                const start = parameter.modifiers.pos;
-                                diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
-                                    Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
-                                return true;
-                            }
-                            if (parameter.questionToken) {
-                                diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
-                                return true;
-                            }
-                            if (parameter.type) {
-                                diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_a_ts_file));
-                                return true;
-                            }
-                            break;
-                        case SyntaxKind.PropertyDeclaration:
-                            const propertyDeclaration = <PropertyDeclaration>node;
-                            if (propertyDeclaration.modifiers) {
-                                for (const modifier of propertyDeclaration.modifiers) {
-                                    if (modifier.kind !== SyntaxKind.StaticKeyword) {
-                                        diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
-                                        return true;
-                                    }
+                    }
+
+                    for (const node of nodes) {
+                        walk(node);
+                    }
+                }
+
+                function checkModifiers(modifiers: NodeArray<Modifier>, isConstValid: boolean) {
+                    for (const modifier of modifiers) {
+                        switch (modifier.kind) {
+                            case SyntaxKind.ConstKeyword:
+                                if (isConstValid) {
+                                    continue;
                                 }
-                            }
-                            if (checkTypeAnnotation((<PropertyDeclaration>node).type)) {
-                                return true;
-                            }
-                            break;
-                        case SyntaxKind.EnumDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
-                            return true;
-                        case SyntaxKind.TypeAssertionExpression:
-                            let typeAssertionExpression = <TypeAssertion>node;
-                            diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
-                            return true;
-                        case SyntaxKind.Decorator:
-                            if (!options.experimentalDecorators) {
-                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_to_remove_this_warning));
-                            }
-                            return true;
-                    }
+                                // Fallthrough to report error
+                            case SyntaxKind.PublicKeyword:
+                            case SyntaxKind.PrivateKeyword:
+                            case SyntaxKind.ProtectedKeyword:
+                            case SyntaxKind.ReadonlyKeyword:
+                            case SyntaxKind.DeclareKeyword:
+                            case SyntaxKind.AbstractKeyword:
+                                diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
+                                break;
 
-                    return forEachChild(node, walk);
-                }
-
-                function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
-                    if (typeParameters) {
-                        const start = typeParameters.pos;
-                        diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
-                        return true;
-                    }
-                    return false;
-                }
-
-                function checkTypeAnnotation(type: TypeNode): boolean {
-                    if (type) {
-                        diagnostics.push(createDiagnosticForNode(type, Diagnostics.types_can_only_be_used_in_a_ts_file));
-                        return true;
-                    }
-
-                    return false;
-                }
-
-                function checkModifiers(modifiers: NodeArray<Modifier>): boolean {
-                    if (modifiers) {
-                        for (const modifier of modifiers) {
-                            switch (modifier.kind) {
-                                case SyntaxKind.PublicKeyword:
-                                case SyntaxKind.PrivateKeyword:
-                                case SyntaxKind.ProtectedKeyword:
-                                case SyntaxKind.ReadonlyKeyword:
-                                case SyntaxKind.DeclareKeyword:
-                                    diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
-                                    return true;
-
-                                // These are all legal modifiers.
-                                case SyntaxKind.StaticKeyword:
-                                case SyntaxKind.ExportKeyword:
-                                case SyntaxKind.ConstKeyword:
-                                case SyntaxKind.DefaultKeyword:
-                                case SyntaxKind.AbstractKeyword:
-                            }
+                            // These are all legal modifiers.
+                            case SyntaxKind.StaticKeyword:
+                            case SyntaxKind.ExportKeyword:
+                            case SyntaxKind.DefaultKeyword:
                         }
                     }
+                }
 
-                    return false;
+                function createDiagnosticForNodeArray(nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
+                    const start = nodes.pos;
+                    return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2);
+                }
+
+                // Since these are syntactic diagnostics, parent might not have been set
+                // this means the sourceFile cannot be infered from the node
+                function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
+                    return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
                 }
             });
         }
@@ -1141,9 +1144,14 @@ namespace ts {
             if (options.importHelpers
                 && (options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
-                const externalHelpersModuleReference = <StringLiteral>createNode(SyntaxKind.StringLiteral);
+                // synthesize 'import "tslib"' declaration
+                const externalHelpersModuleReference = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
                 externalHelpersModuleReference.text = externalHelpersModuleNameText;
-                externalHelpersModuleReference.parent = file;
+                const importDecl = createSynthesizedNode(SyntaxKind.ImportDeclaration);
+
+                importDecl.parent = file;
+                externalHelpersModuleReference.parent = importDecl;
+
                 imports = [externalHelpersModuleReference];
             }
 
@@ -1443,7 +1451,9 @@ namespace ts {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = createMap<ResolvedModuleFull>();
-                const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
+                // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
+                const nonGlobalAugmentation = filter(file.moduleAugmentations, (moduleAugmentation) => moduleAugmentation.kind === SyntaxKind.StringLiteral);
+                const moduleNames = map(concatenate(file.imports, nonGlobalAugmentation), getTextOfLiteral);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
@@ -1674,7 +1684,15 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
 
-            if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
+            if (options.jsxFactory) {
+                if (options.reactNamespace) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory"));
+                }
+                if (!parseIsolatedEntityName(options.jsxFactory, languageVersion)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory));
+                }
+            }
+            else if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
             }
 
@@ -1694,18 +1712,13 @@ namespace ts {
                     const emitFilePath = toPath(emitFileName, currentDirectory, getCanonicalFileName);
                     // Report error if the output overwrites input file
                     if (filesByName.contains(emitFilePath)) {
-                        if (options.noEmitOverwritenFiles && !options.out && !options.outDir && !options.outFile) {
-                            blockEmittingOfFile(emitFileName);
+                        let chain: DiagnosticMessageChain;
+                        if (!options.configFilePath) {
+                            // The program is from either an inferred project or an external project
+                            chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig);
                         }
-                        else {
-                            let chain: DiagnosticMessageChain;
-                            if (!options.configFilePath) {
-                                // The program is from either an inferred project or an external project
-                                chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig);
-                            }
-                            chain = chainDiagnosticMessages(chain, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file, emitFileName);
-                            blockEmittingOfFile(emitFileName, createCompilerDiagnosticFromMessageChain(chain));
-                        }
+                        chain = chainDiagnosticMessages(chain, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file, emitFileName);
+                        blockEmittingOfFile(emitFileName, createCompilerDiagnosticFromMessageChain(chain));
                     }
 
                     // Report error if multiple files write into same file
@@ -1720,11 +1733,9 @@ namespace ts {
             }
         }
 
-        function blockEmittingOfFile(emitFileName: string, diag?: Diagnostic) {
+        function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName, currentDirectory, getCanonicalFileName), true);
-            if (diag) {
-                programDiagnostics.add(diag);
-            }
+            programDiagnostics.add(diag);
         }
     }
 
