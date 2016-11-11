@@ -6,7 +6,6 @@
     "Module name 'foo', matched pattern 'foo'.",
     "Trying substitution 'foo/foo.ts', candidate module location: 'foo/foo.ts'.",
     "File '/foo/foo.ts' exist - use it as a name resolution result.",
-    "Resolving real path for '/foo/foo.ts', result '/foo/foo.ts'",
     "======== Module name 'foo' was successfully resolved to '/foo/foo.ts'. ========",
     "======== Resolving module 'bar' from '/a.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
@@ -15,6 +14,5 @@
     "Module name 'bar', matched pattern 'bar'.",
     "Trying substitution 'bar/bar.js', candidate module location: 'bar/bar.js'.",
     "File '/bar/bar.js' exist - use it as a name resolution result.",
-    "Resolving real path for '/bar/bar.js', result '/bar/bar.js'",
     "======== Module name 'bar' was successfully resolved to '/bar/bar.js'. ========"
 ]
