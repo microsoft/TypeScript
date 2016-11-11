@@ -922,9 +922,14 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
+        // Cache of lib files from "built/local"
         const libFileNameSourceFileMap = ts.createMap<ts.SourceFile>({
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         });
+
+        // Cache of lib files from  "tests/lib/"
+        const testLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
+        const es6TestLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
@@ -966,7 +971,8 @@ namespace Harness {
             useCaseSensitiveFileNames: boolean,
             // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
             currentDirectory: string,
-            newLineKind?: ts.NewLineKind): ts.CompilerHost {
+            newLineKind?: ts.NewLineKind,
+            libFiles?: string): ts.CompilerHost {
 
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -988,6 +994,24 @@ namespace Harness {
                 }
             }
 
+            if (libFiles) {
+                // Because @libFiles don't change between execution. We would cache the result of the files and reuse it to speed help compilation
+                for (const fileName of libFiles.split(",")) {
+                    const libFileName = "tests/lib/" + fileName;
+
+                    if (scriptTarget <= ts.ScriptTarget.ES5) {
+                        if (!testLibFileNameSourceFileMap[libFileName]) {
+                            testLibFileNameSourceFileMap[libFileName] = createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget);
+                        }
+                    }
+                    else {
+                        if (!es6TestLibFileNameSourceFileMap[libFileName]) {
+                            es6TestLibFileNameSourceFileMap[libFileName] = createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget);
+                        }
+                    }
+                }
+            }
+
             function getSourceFile(fileName: string) {
                 fileName = ts.normalizePath(fileName);
                 const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -998,6 +1022,9 @@ namespace Harness {
                     const tsFn = "tests/cases/fourslash/" + fourslashFileName;
                     fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
                     return fourslashSourceFile;
+                }
+                else if (ts.startsWith(fileName, "tests/lib/")) {
+                    return scriptTarget <= ts.ScriptTarget.ES5 ? testLibFileNameSourceFileMap[fileName] : es6TestLibFileNameSourceFileMap[fileName];
                 }
                 else {
                     // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
@@ -1203,7 +1230,8 @@ namespace Harness {
             if (options.libFiles) {
                 for (const fileName of options.libFiles.split(",")) {
                     const libFileName = "tests/lib/" + fileName;
-                    programFiles.push({ unitName: libFileName, content: normalizeLineEndings(IO.readFile(libFileName), Harness.IO.newLine()) });
+                    // Content is undefined here because in createCompilerHost we will create sourceFile for the lib file and cache the result
+                    programFiles.push({ unitName: libFileName, content: undefined });
                 }
             }
 
@@ -1216,7 +1244,8 @@ namespace Harness {
                 options.target,
                 useCaseSensitiveFileNames,
                 currentDirectory,
-                options.newLine);
+                options.newLine,
+                options.libFiles);
 
             let traceResults: string[];
             if (options.traceResolution) {

@@ -14,7 +14,7 @@ var Obj1: Obj1type;
 interface Obj2type {
 	new(n: string): { q?: number; pr: any };
 }
-var obj2: Obj2type;
+var Obj2: Obj2type;
 <Obj2 x={10} />; // OK
 
 interface Obj3type {
@@ -34,7 +34,7 @@ var Obj4: Obj4type;
 //// [file.jsx]
 var Obj1;
 <Obj1 x={10}/>; // OK
-var obj2;
+var Obj2;
 <Obj2 x={10}/>; // OK
 var Obj3;
 <Obj3 x={10}/>; // Error
