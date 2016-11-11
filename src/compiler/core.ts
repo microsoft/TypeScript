@@ -1898,6 +1898,8 @@ namespace ts {
                 return ScriptKind.TS;
             case ".tsx":
                 return ScriptKind.TSX;
+            case ".html":
+                return ScriptKind.HTML;
             default:
                 return ScriptKind.Unknown;
         }
@@ -1906,9 +1908,9 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".ts.html", ".d.ts"];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
+    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts.html", ".ts", ".tsx"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
@@ -1988,7 +1990,7 @@ namespace ts {
         }
     }
 
-    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
+    const extensionsToRemove = [".d.ts", ".ts.html", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
             const extensionless = tryRemoveExtension(path, ext);
@@ -2212,6 +2214,9 @@ namespace ts {
     export function extensionFromPath(path: string): Extension {
         if (fileExtensionIs(path, ".d.ts")) {
             return Extension.Dts;
+        }
+        if (fileExtensionIs(path, ".ts.html")) {
+            return Extension.tsHTML;
         }
         if (fileExtensionIs(path, ".ts")) {
             return Extension.Ts;

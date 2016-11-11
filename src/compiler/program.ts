@@ -1673,6 +1673,11 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
 
+            if (options.html) {
+                // TODO
+                // programDiagnostics.add(createCompilerDiagnostic(Diagnostics..., "HTML"));
+            }
+
             if (options.jsxFactory) {
                 if (options.reactNamespace) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory"));

@@ -3059,6 +3059,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
+        html?: boolean;
         importHelpers?: boolean;
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
@@ -3170,7 +3171,8 @@ namespace ts {
         JS = 1,
         JSX = 2,
         TS = 3,
-        TSX = 4
+        TSX = 4,
+        HTML = 5
     }
 
     export const enum ScriptTarget {
@@ -3434,6 +3436,7 @@ namespace ts {
     export enum Extension {
         Ts,
         Tsx,
+        tsHTML,
         Dts,
         Js,
         Jsx,

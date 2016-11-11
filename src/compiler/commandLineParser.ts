@@ -51,6 +51,12 @@ namespace ts {
             type: "boolean"
         },
         {
+            name: "html",
+            type: "boolean"
+            // TODO
+            // description: "<script type=\"ts/module\">...</script>"
+        },
+        {
             name: "init",
             type: "boolean",
             description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,

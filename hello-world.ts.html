@@ -1,0 +1,32 @@
+<html>
+<title>node built/local/tsc.js --html hello-world.ts.html</title>
+<body>
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+        border: 1px solid red;
+        margin-top: 10px;
+        padding: 0px 5px;
+      }
+    </style>
+    <p>Test <slot></slot></p>
+  </template>
+  <script type="ts/module">
+    class HelloWorld extends HTMLElement {
+      _hello: string = "Hello World"
+      constructor() {
+        super()
+        const t = document.querySelector('template')
+        if (t == null) return;
+        const instance = t.content.cloneNode(true)
+        const shadowRoot = this.attachShadow({ mode: 'open' })
+        shadowRoot.appendChild(instance)
+      }
+    }
+    customElements.define('hello-world', HelloWorld);  
+  </script>
+  <hello-world>Hello World</hello-world>
+</body>
+</html>
