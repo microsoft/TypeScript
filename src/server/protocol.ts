@@ -1964,6 +1964,10 @@ namespace ts.server.protocol {
          * Comma separated list of installed typing packages
          */
         installedPackages: string;
+        /**
+         * true if install request succeeded, otherwise - false
+         */
+        installSuccess: boolean;
     }
 
     export interface NavBarResponse extends Response {
