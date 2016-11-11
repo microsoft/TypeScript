@@ -328,8 +328,9 @@ namespace ts {
                         bindingElements.push(p);
                     }
                 }
-                else if (i === properties.length - 1 && p.kind === SyntaxKind.SpreadAssignment) {
-                    Debug.assert((p as SpreadAssignment).expression.kind === SyntaxKind.Identifier);
+                else if (i === properties.length - 1 &&
+                         p.kind === SyntaxKind.SpreadAssignment &&
+                         p.expression.kind === SyntaxKind.Identifier) {
                     if (bindingElements.length) {
                         emitRestAssignment(bindingElements, value, location, target);
                         bindingElements = [];

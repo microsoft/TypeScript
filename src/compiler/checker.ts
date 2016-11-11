@@ -13941,7 +13941,12 @@ namespace ts {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(objectLiteralType), declarationNameToString(name));
                 }
             }
-            else if (property.kind !== SyntaxKind.SpreadAssignment) {
+            else if (property.kind === SyntaxKind.SpreadAssignment) {
+                if (property.expression.kind !== SyntaxKind.Identifier) {
+                    error(property.expression, Diagnostics.An_object_rest_element_must_be_an_identifier);
+                }
+            }
+            else {
                 error(property, Diagnostics.Property_assignment_expected);
             }
         }

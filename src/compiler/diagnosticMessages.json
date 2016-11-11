@@ -1991,6 +1991,10 @@
         "category": "Error",
         "code": 2700
     },
+    "An object rest element must be an identifier.": {
+        "category": "Error",
+        "code": 2701
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
