@@ -4,3 +4,4 @@
 /// <reference path="fixConstructorForDerivedNeedSuperCall.ts" />
 /// <reference path="fixExtendsInterfaceBecomesImplements.ts" />
 /// <reference path="fixRemoveAbstractModifierInNonAbstractClass.ts" />
+/// <reference path="fixForgottenThisPropertyAccess.ts" />

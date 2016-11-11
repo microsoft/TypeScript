@@ -91,6 +91,7 @@
         "codeFixes/fixClassIncorrectlyImplementsInterface.ts",
         "codeFixes/fixClassDoesntImplementInheritedAbstractMember.ts",
         "codeFixes/fixClassSuperMustPrecedeThisAccess.ts",
-        "codeFixes/fixConstructorForDerivedNeedSuperCall.ts"
+        "codeFixes/fixConstructorForDerivedNeedSuperCall.ts",
+        "codefixes/fixForgottenThisPropertyAccess.ts"
     ]
 }
