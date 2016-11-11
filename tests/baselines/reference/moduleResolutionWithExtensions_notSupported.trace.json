@@ -4,7 +4,6 @@
     "Loading module as file / folder, candidate module location '/tsx'.",
     "File '/tsx.ts' does not exist.",
     "File '/tsx.tsx' exist - use it as a name resolution result.",
-    "Resolving real path for '/tsx.tsx', result '/tsx.tsx'",
     "======== Module name './tsx' was successfully resolved to '/tsx.tsx'. ========",
     "======== Resolving module './jsx' from '/a.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
@@ -19,7 +18,6 @@
     "Loading module as file / folder, candidate module location '/jsx'.",
     "File '/jsx.js' does not exist.",
     "File '/jsx.jsx' exist - use it as a name resolution result.",
-    "Resolving real path for '/jsx.jsx', result '/jsx.jsx'",
     "======== Module name './jsx' was successfully resolved to '/jsx.jsx'. ========",
     "======== Resolving module './js' from '/a.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
@@ -33,6 +31,5 @@
     "File '/js/index.d.ts' does not exist.",
     "Loading module as file / folder, candidate module location '/js'.",
     "File '/js.js' exist - use it as a name resolution result.",
-    "Resolving real path for '/js.js', result '/js.js'",
     "======== Module name './js' was successfully resolved to '/js.js'. ========"
 ]
