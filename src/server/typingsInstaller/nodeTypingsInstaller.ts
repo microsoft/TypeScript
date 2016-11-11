@@ -139,8 +139,8 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms${sys.newLine}stdout: ${stdout}${sys.newLine}stderr: ${stderr}`);
                 }
-                // treat any output on stdout as success
-                onRequestCompleted(!!stdout);
+                // treat absence of error as success
+                onRequestCompleted(!err);
             });
         }
     }
