@@ -492,5 +492,45 @@ namespace ts.projectSystem {
             assert.isTrue(host.fileExists(expectedEmittedFileName));
             assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
+
+        it("shoud not emit js files in external projects", () => {
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "consonle.log('file1');"
+            };
+            // file2 has errors. The emitting should not be blocked.
+            const file2 = {
+                path: "/a/b/file2.js",
+                content: "console.log'file2');"
+            };
+            const file3 = {
+                path: "/a/b/file3.js",
+                content: "console.log('file3');"
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost([file1, file2, file3, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([file1.path, file2.path]),
+                options: {
+                    allowJs: true,
+                    outFile: "dist.js",
+                    compileOnSave: true
+                },
+                projectFileName: externalProjectName
+            });
+
+            const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path });
+            session.executeCommand(emitRequest);
+
+            const expectedOutFileName = "/a/b/dist.js";
+            assert.isTrue(host.fileExists(expectedOutFileName));
+            const outFileContent = host.readFile(expectedOutFileName);
+            assert.isTrue(outFileContent.indexOf(file1.content) !== -1);
+            assert.isTrue(outFileContent.indexOf(file2.content) === -1);
+            assert.isTrue(outFileContent.indexOf(file3.content) === -1);
+        });
     });
 }

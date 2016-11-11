@@ -250,6 +250,8 @@ namespace ts.server {
             readonly typingsInstaller: ITypingsInstaller = nullTypingsInstaller,
             private readonly eventHandler?: ProjectServiceEventHandler) {
 
+            Debug.assert(!!host.createHash, "'ServerHost.createHash' is required for ProjectService");
+
             this.toCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(host);

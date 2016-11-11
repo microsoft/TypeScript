@@ -43,7 +43,8 @@ namespace ts {
             setTimeout,
             clearTimeout,
             setImmediate: typeof setImmediate !== "undefined" ? setImmediate : action => setTimeout(action, 0),
-            clearImmediate: typeof clearImmediate !== "undefined" ? clearImmediate : clearTimeout
+            clearImmediate: typeof clearImmediate !== "undefined" ? clearImmediate : clearTimeout,
+            createHash: s => s
         };
     }
 
