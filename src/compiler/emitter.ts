@@ -68,7 +68,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         // emit output for the __param helper function
         const paramHelper = `
 var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
+    return function (target, key) { return decorator(target, key, paramIndex); }
 };`;
 
         // emit output for the __awaiter helper function
