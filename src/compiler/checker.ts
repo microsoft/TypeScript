@@ -4484,33 +4484,33 @@ namespace ts {
             }
         }
 
-        function forEachType<T>(type: Type, f: (t: Type) => T): T {
-            return type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, f) : f(type);
-        }
-
-        // { [P in K]: T }
-        // Get apparent type of K
-        // If apparent type is a 'keyof T', get apparent type of T
-        // For each constituent literal type U
-        // create mapper from P to U
-        // instantiate T using mapper
-        // if U is string or number, create index signature with instantiated type
-        // otherwise create property with name from U and instantiated type
+        /** Resolve the members of a mapped type { [P in K]: T } */
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createMap<Symbol>();
             let stringIndexInfo: IndexInfo;
             let numberIndexInfo: IndexInfo;
+            // In { [P in K]: T }, we refer to P as the type parameter type, K as the constraint type,
+            // and T as the template type.
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(type);
             const isReadonly = !!type.declaration.readonlyToken;
             const isOptional = !!type.declaration.questionToken;
+            // First, if the constraint type is a type parameter, obtain the base constraint. Then,
+            // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
+            // Finally, iterate over the constituents of the resulting iteration type.
             const keyType = constraintType.flags & TypeFlags.TypeParameter ? getApparentType(constraintType) : constraintType;
             const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
             forEachType(iterationType, t => {
+                // Create a mapper from T to the current iteration type constituent. Then, if the
+                // mapped type is itself an instantiated type, combine the iteration mapper with the
+                // instantiation mapper.
                 const iterationMapper = createUnaryTypeMapper(typeParameter, t);
                 const templateMapper = type.mapper ? combineTypeMappers(type.mapper, iterationMapper) : iterationMapper;
                 const propType = instantiateType(templateType, templateMapper);
+                // If the current iteration type constituent is a literal type, create a property.
+                // Otherwise, for type string create a string index signature and for type number
+                // create a numeric index signature.
                 if (t.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.EnumLiteral)) {
                     const propName = (<LiteralType>t).text;
                     const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
@@ -4525,6 +4525,8 @@ namespace ts {
                     numberIndexInfo = createIndexInfo(propType, isReadonly);
                 }
             });
+            // If we created both a string and a numeric string index signature, and if the two index
+            // signatures have identical types, discard the redundant numeric index signature.
             if (stringIndexInfo && numberIndexInfo && isTypeIdenticalTo(stringIndexInfo.type, numberIndexInfo.type)) {
                 numberIndexInfo = undefined;
             }
@@ -9058,6 +9060,10 @@ namespace ts {
                 return true;
             }
             return containsType(target.types, source);
+        }
+
+        function forEachType<T>(type: Type, f: (t: Type) => T): T {
+            return type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, f) : f(type);
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
