@@ -105,7 +105,7 @@ namespace ts {
          * @param node A BinaryExpression node.
          */
         function visitBinaryExpression(node: BinaryExpression): Expression {
-            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.AssertESNext) {
+            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsESNext) {
                 return flattenDestructuringAssignment(context, node, /*needsDestructuringValue*/ true, hoistVariableDeclaration, visitor, /*transformRest*/ true);
             }
 

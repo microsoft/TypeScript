@@ -3125,19 +3125,21 @@ namespace ts {
         }
     }
 
-    export function isAssignmentExpression(node: Node): node is AssignmentExpression {
+    export function isAssignmentExpression(node: Node, excludeCompoundAssignment: true): node is AssignmentExpression<EqualsToken>;
+    export function isAssignmentExpression(node: Node, excludeCompoundAssignment?: false): node is AssignmentExpression<AssignmentOperatorToken>;
+    export function isAssignmentExpression(node: Node, excludeCompoundAssignment?: boolean): node is AssignmentExpression<AssignmentOperatorToken> {
         return isBinaryExpression(node)
-            && isAssignmentOperator(node.operatorToken.kind)
+            && (excludeCompoundAssignment
+                ? node.operatorToken.kind === SyntaxKind.EqualsToken
+                : isAssignmentOperator(node.operatorToken.kind))
             && isLeftHandSideExpression(node.left);
     }
 
     export function isDestructuringAssignment(node: Node): node is DestructuringAssignment {
-        if (isBinaryExpression(node)) {
-            if (node.operatorToken.kind === SyntaxKind.EqualsToken) {
-                const kind = node.left.kind;
-                return kind === SyntaxKind.ObjectLiteralExpression
-                    || kind === SyntaxKind.ArrayLiteralExpression;
-            }
+        if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
+            const kind = node.left.kind;
+            return kind === SyntaxKind.ObjectLiteralExpression
+                || kind === SyntaxKind.ArrayLiteralExpression;
         }
 
         return false;
@@ -3917,6 +3919,14 @@ namespace ts {
     }
 
     // Binding patterns
+
+    export function isArrayBindingPattern(node: Node): node is ArrayBindingPattern {
+        return node.kind === SyntaxKind.ArrayBindingPattern;
+    }
+
+    export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern {
+        return node.kind === SyntaxKind.ObjectBindingPattern;
+    }
 
     export function isBindingPattern(node: Node): node is BindingPattern {
         if (node) {

@@ -701,6 +701,7 @@ namespace ts {
                 return updateParameter(<ParameterDeclaration>node,
                     visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
+                    (<ParameterDeclaration>node).dotDotDotToken,
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
                     visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
                     visitNode((<ParameterDeclaration>node).initializer, visitor, isExpression, /*optional*/ true));
@@ -767,6 +768,7 @@ namespace ts {
 
             case SyntaxKind.BindingElement:
                 return updateBindingElement(<BindingElement>node,
+                    (<BindingElement>node).dotDotDotToken,
                     visitNode((<BindingElement>node).propertyName, visitor, isPropertyName, /*optional*/ true),
                     visitNode((<BindingElement>node).name, visitor, isBindingName),
                     visitNode((<BindingElement>node).initializer, visitor, isExpression, /*optional*/ true));
@@ -1287,11 +1289,39 @@ namespace ts {
             ? (node: Node, message?: string) => assert(false, message || "Unexpected node.", () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`)
             : noop;
 
+        export const assertEachNode = shouldAssert(AssertionLevel.Normal)
+            ? (nodes: Node[], test: (node: Node) => boolean, message?: string) => assert(
+                    test === undefined || every(nodes, test),
+                    message || "Unexpected node.",
+                    () => `Node array did not pass test '${getFunctionName(test)}'.`)
+            : noop;
+
         export const assertNode = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
                     test === undefined || test(node),
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
+            : noop;
+
+        export const assertOptionalNode = shouldAssert(AssertionLevel.Normal)
+            ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
+                    test === undefined || node === undefined || test(node),
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
+            : noop;
+
+        export const assertOptionalToken = shouldAssert(AssertionLevel.Normal)
+            ? (node: Node, kind: SyntaxKind, message?: string) => assert(
+                    kind === undefined || node === undefined || node.kind === kind,
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} was not a '${formatSyntaxKind(kind)}' token.`)
+            : noop;
+
+        export const assertMissingNode = shouldAssert(AssertionLevel.Normal)
+            ? (node: Node, message?: string) => assert(
+                    node === undefined,
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} was unexpected'.`)
             : noop;
 
         function getFunctionName(func: Function) {

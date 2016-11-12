@@ -1175,16 +1175,18 @@ namespace ts {
         right: Expression;
     }
 
-    export interface AssignmentExpression extends BinaryExpression {
+    export type AssignmentOperatorToken = Token<AssignmentOperator>;
+
+    export interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
         left: LeftHandSideExpression;
-        operatorToken: Token<SyntaxKind.EqualsToken>;
+        operatorToken: TOperator;
     }
 
-    export interface ObjectDestructuringAssignment extends AssignmentExpression {
+    export interface ObjectDestructuringAssignment extends AssignmentExpression<EqualsToken> {
         left: ObjectLiteralExpression;
     }
 
-    export interface ArrayDestructuringAssignment extends AssignmentExpression {
+    export interface ArrayDestructuringAssignment extends AssignmentExpression<EqualsToken> {
         left: ArrayLiteralExpression;
     }
 

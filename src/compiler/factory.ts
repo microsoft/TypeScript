@@ -238,9 +238,9 @@ namespace ts {
         return node;
     }
 
-    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], name: BindingName, type: TypeNode, initializer: Expression) {
-        if (node.decorators !== decorators || node.modifiers !== modifiers || node.name !== name || node.type !== type || node.initializer !== initializer) {
-            return updateNode(createParameter(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node, /*flags*/ node.flags), node);
+    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: BindingName, type: TypeNode, initializer: Expression) {
+        if (node.decorators !== decorators || node.modifiers !== modifiers || node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.type !== type || node.initializer !== initializer) {
+            return updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node, /*flags*/ node.flags), node);
         }
 
         return node;
@@ -378,9 +378,9 @@ namespace ts {
         return node;
     }
 
-    export function updateBindingElement(node: BindingElement, propertyName: PropertyName, name: BindingName, initializer: Expression) {
-        if (node.propertyName !== propertyName || node.name !== name || node.initializer !== initializer) {
-            return updateNode(createBindingElement(propertyName, node.dotDotDotToken, name, initializer, node), node);
+    export function updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken, propertyName: PropertyName, name: BindingName, initializer: Expression) {
+        if (node.propertyName !== propertyName || node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.initializer !== initializer) {
+            return updateNode(createBindingElement(propertyName, dotDotDotToken, name, initializer, node), node);
         }
         return node;
     }
@@ -1635,7 +1635,7 @@ namespace ts {
         // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
-        // Set the parent that is in parse tree 
+        // Set the parent that is in parse tree
         // this makes sure that parent chain is intact for checker to traverse complete scope tree
         react.parent = getParseTreeNode(parent);
         return react;
