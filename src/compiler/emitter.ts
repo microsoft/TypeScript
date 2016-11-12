@@ -23,8 +23,11 @@ namespace ts {
 
         // emit output for the __extends helper function
         const extendsHelper = `
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+var __extends = (this && this.__extends) || function(d, b) {
+    var desc;
+    for (var p in b) {
+        if ((desc = Object.getOwnPropertyDescriptor(b, p))) Object.defineProperty(d, p, desc);
+    }
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };`;
