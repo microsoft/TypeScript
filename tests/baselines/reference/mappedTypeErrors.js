@@ -42,7 +42,7 @@ type T12 = Pick<Shape, "name" | "foo">;  // Error
 type T13 = Pick<Shape, keyof Named>;
 type T14 = Pick<Shape, keyof Point>;  // Error
 type T15 = Pick<Shape, never>;
-type T16 = Pick<Shape, undefined>;
+type T16 = Pick<Shape, undefined>;  // Error
 
 function f1<T>(x: T) {
     let y: Pick<Shape, T>;  // Error

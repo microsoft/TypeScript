@@ -79,7 +79,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(51,24): error TS2344: T
 !!! error TS2344: Type '"x" | "y"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
 !!! error TS2344:   Type '"x"' is not assignable to type '"name" | "width" | "height" | "visible"'.
     type T15 = Pick<Shape, never>;
-    type T16 = Pick<Shape, undefined>;
+    type T16 = Pick<Shape, undefined>;  // Error
                            ~~~~~~~~~
 !!! error TS2344: Type 'undefined' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
     
