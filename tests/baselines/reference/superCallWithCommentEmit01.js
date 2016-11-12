@@ -25,9 +25,8 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B(text) {
-        return 
         // this is subclass constructor
-        _super.call(this, text) || this;
+        return _super.call(this, text) || this;
     }
     return B;
 }(A));
