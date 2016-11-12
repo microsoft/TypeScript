@@ -1,0 +1,18 @@
+tests/cases/conformance/types/typeRelationships/comparable/optionalProperties01.ts(9,14): error TS2352: Type '{ required1: string; optional: string; }' cannot be converted to type 'Foo'.
+  Property 'required2' is missing in type '{ required1: string; optional: string; }'.
+
+
+==== tests/cases/conformance/types/typeRelationships/comparable/optionalProperties01.ts (1 errors) ====
+    
+    interface Foo {
+      required1: string;
+      required2: string;
+      optional?: string;
+    }
+    
+    const foo1 = { required1: "hello" } as Foo;
+    const foo2 = { required1: "hello", optional: "bar" } as Foo;
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type '{ required1: string; optional: string; }' cannot be converted to type 'Foo'.
+!!! error TS2352:   Property 'required2' is missing in type '{ required1: string; optional: string; }'.
+    
