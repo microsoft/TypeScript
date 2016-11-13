@@ -2668,6 +2668,7 @@ namespace ts {
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
+        maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate 
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
