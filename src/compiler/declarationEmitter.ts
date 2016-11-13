@@ -416,7 +416,9 @@ namespace ts {
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>type);
                 case SyntaxKind.IndexedAccessType:
-                    return emitPropertyAccessType(<IndexedAccessTypeNode>type);
+                    return emitIndexedAccessType(<IndexedAccessTypeNode>type);
+                case SyntaxKind.MappedType:
+                    return emitMappedType(<MappedTypeNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return emitSignatureDeclarationWithJsDocComments(<FunctionOrConstructorTypeNode>type);
@@ -516,11 +518,37 @@ namespace ts {
                 emitType(type.type);
             }
 
-            function emitPropertyAccessType(node: IndexedAccessTypeNode) {
+            function emitIndexedAccessType(node: IndexedAccessTypeNode) {
                 emitType(node.objectType);
                 write("[");
                 emitType(node.indexType);
                 write("]");
+            }
+
+            function emitMappedType(node: MappedTypeNode) {
+                const prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node;
+                write("{");
+                writeLine();
+                increaseIndent();
+                if (node.readonlyToken) {
+                    write("readonly ");
+                }
+                write("[");
+                writeEntityName(node.typeParameter.name);
+                write(" in ");
+                emitType(node.typeParameter.constraint);
+                write("]");
+                if (node.questionToken) {
+                    write("?");
+                }
+                write(": ");
+                emitType(node.type);
+                write(";");
+                writeLine();
+                decreaseIndent();
+                write("}");
+                enclosingDeclaration = prevEnclosingDeclaration;
             }
 
             function emitTypeLiteral(type: TypeLiteralNode) {

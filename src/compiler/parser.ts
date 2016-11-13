@@ -141,6 +141,11 @@ namespace ts {
             case SyntaxKind.IndexedAccessType:
                 return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
                     visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
+            case SyntaxKind.MappedType:
+                return visitNode(cbNode, (<MappedTypeNode>node).readonlyToken) ||
+                    visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
+                    visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
+                    visitNode(cbNode, (<MappedTypeNode>node).type);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
             case SyntaxKind.ObjectBindingPattern:
@@ -2422,6 +2427,36 @@ namespace ts {
             return members;
         }
 
+        function isStartOfMappedType() {
+            nextToken();
+            if (token() === SyntaxKind.ReadonlyKeyword) {
+                nextToken();
+            }
+            return token() === SyntaxKind.OpenBracketToken && nextTokenIsIdentifier() && nextToken() === SyntaxKind.InKeyword;
+        }
+
+        function parseMappedTypeParameter() {
+            const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+            node.name = parseIdentifier();
+            parseExpected(SyntaxKind.InKeyword);
+            node.constraint = parseType();
+            return finishNode(node);
+        }
+
+        function parseMappedType() {
+            const node = <MappedTypeNode>createNode(SyntaxKind.MappedType);
+            parseExpected(SyntaxKind.OpenBraceToken);
+            node.readonlyToken = parseOptionalToken(SyntaxKind.ReadonlyKeyword);
+            parseExpected(SyntaxKind.OpenBracketToken);
+            node.typeParameter = parseMappedTypeParameter();
+            parseExpected(SyntaxKind.CloseBracketToken);
+            node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            node.type = parseTypeAnnotation();
+            parseSemicolon();
+            parseExpected(SyntaxKind.CloseBraceToken);
+            return finishNode(node);
+        }
+
         function parseTupleType(): TupleTypeNode {
             const node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
             node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
@@ -2495,7 +2530,7 @@ namespace ts {
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
-                    return parseTypeLiteral();
+                    return lookAhead(isStartOfMappedType) ? parseMappedType() : parseTypeLiteral();
                 case SyntaxKind.OpenBracketToken:
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:

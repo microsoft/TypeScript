@@ -606,7 +606,9 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>node);
                 case SyntaxKind.IndexedAccessType:
-                    return emitPropertyAccessType(<IndexedAccessTypeNode>node);
+                    return emitIndexedAccessType(<IndexedAccessTypeNode>node);
+                case SyntaxKind.MappedType:
+                    return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -1109,11 +1111,34 @@ const _super = (function (geti, seti) {
             emit(node.type);
         }
 
-        function emitPropertyAccessType(node: IndexedAccessTypeNode) {
+        function emitIndexedAccessType(node: IndexedAccessTypeNode) {
             emit(node.objectType);
             write("[");
             emit(node.indexType);
             write("]");
+        }
+
+        function emitMappedType(node: MappedTypeNode) {
+            write("{");
+            writeLine();
+            increaseIndent();
+            if (node.readonlyToken) {
+                write("readonly ");
+            }
+            write("[");
+            emit(node.typeParameter.name);
+            write(" in ");
+            emit(node.typeParameter.constraint);
+            write("]");
+            if (node.questionToken) {
+                write("?");
+            }
+            write(": ");
+            emit(node.type);
+            write(";");
+            writeLine();
+            decreaseIndent();
+            write("}");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
