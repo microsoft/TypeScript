@@ -42,7 +42,7 @@ tests/cases/conformance/jsx/file.tsx(34,29): error TS2322: Type '{ y1: "hello"; 
         yy: 10,
         yy1: "hello"
     }
-    let obj2 = undefined;
+    let obj2: any;
     
     // Error
     const c0 = <OneThing extraProp />;  // extra property;

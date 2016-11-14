@@ -22,7 +22,7 @@ let obj2 = {
     "ignore-prop": "hello"
 }
 
-let defaultObj = undefined;
+let defaultObj: any;
 
 // OK
 const c1 = <OneThing />

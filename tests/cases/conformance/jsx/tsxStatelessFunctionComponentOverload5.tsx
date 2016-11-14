@@ -36,7 +36,7 @@ let obj2 = {
     onClick: ()=>{}
 }
 
-let obj3 = undefined;
+let obj3: any;
 
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
 export function MainButton(linkProps: LinkProps): JSX.Element;

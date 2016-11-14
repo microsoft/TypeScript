@@ -8,7 +8,7 @@ let obj = {
     yy: 10,
     yy1: "hello"
 }
-let obj2 = undefined;
+let obj2: any;
 
 // Error
 const c0 = <OneThing extraProp />;  // extra property;
@@ -42,7 +42,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
         yy: 10,
         yy1: "hello"
     };
-    var obj2 = undefined;
+    var obj2;
     // Error
     var c0 = <OneThing extraProp/>; // extra property;
     var c1 = <OneThing yy={10}/>; // missing property;

@@ -18,7 +18,7 @@ let obj2 = {
     "ignore-prop": "hello"
 }
 
-let defaultObj = undefined;
+let defaultObj: any;
 
 // OK
 const c1 = <OneThing />
@@ -47,7 +47,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
         yy: 500,
         "ignore-prop": "hello"
     };
-    var defaultObj = undefined;
+    var defaultObj;
     // OK
     var c1 = <OneThing />;
     var c2 = <OneThing {...obj}/>;

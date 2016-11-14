@@ -50,9 +50,8 @@ let obj2 = {
 >"hello" : "hello"
 }
 
-let defaultObj = undefined;
+let defaultObj: any;
 >defaultObj : any
->undefined : undefined
 
 // OK
 const c1 = <OneThing />

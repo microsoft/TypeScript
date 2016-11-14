@@ -47,9 +47,8 @@ let obj = {
     to: "boo"
 >to : Symbol(to, Decl(file.tsx, 21, 19))
 }
-let obj1 = undefined;
+let obj1: any;
 >obj1 : Symbol(obj1, Decl(file.tsx, 24, 3))
->undefined : Symbol(undefined)
 
 let obj2 = {
 >obj2 : Symbol(obj2, Decl(file.tsx, 25, 3))

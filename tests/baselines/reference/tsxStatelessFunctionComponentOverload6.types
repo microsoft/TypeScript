@@ -50,9 +50,8 @@ let obj = {
 >to : string
 >"boo" : "boo"
 }
-let obj1 = undefined;
+let obj1: any;
 >obj1 : any
->undefined : undefined
 
 let obj2 = {
 >obj2 : { onClick: () => void; }

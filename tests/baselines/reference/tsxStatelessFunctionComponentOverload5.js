@@ -32,7 +32,7 @@ let obj2 = {
     onClick: ()=>{}
 }
 
-let obj3 = undefined;
+let obj3: any;
 
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
 export function MainButton(linkProps: LinkProps): JSX.Element;
@@ -70,7 +70,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
     var obj2 = {
         onClick: function () { }
     };
-    var obj3 = undefined;
+    var obj3;
     function MainButton(props) {
         var linkProps = props;
         if (linkProps.to) {

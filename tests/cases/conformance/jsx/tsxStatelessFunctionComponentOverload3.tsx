@@ -10,7 +10,7 @@ interface Context {
 declare function ZeroThingOrTwoThing(): JSX.Element;
 declare function ZeroThingOrTwoThing(l: {yy: number, yy1: string}, context: Context): JSX.Element;
 
-let obj2 = undefined;
+let obj2: any;
 
 // OK
 const two1 = <ZeroThingOrTwoThing />;
