@@ -18,11 +18,11 @@ namespace ts.codefix {
             const implementedTypes = implementedTypeNodes.map(checker.getTypeFromTypeReference);
             const resolvedImplementedTypes = implementedTypes.map(checker.resolveStructuredTypeMembers);
 
-            let result: CodeAction[] | undefined = undefined;
+            const result: CodeAction[] = [];
 
             for (const resolvedType of resolvedImplementedTypes) {
                 const insertion = getMissingMembersInsertion(classDecl, resolvedType, checker, context.newLineCharacter);
-                result = pushAction(insertion, getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class), result);
+                pushAction(result, insertion, getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class));
             }
 
             // TODO: (arozga) Get this working and figure out how to test it reliably.
@@ -30,15 +30,15 @@ namespace ts.codefix {
             // If there are multiple objects, we additionally try to generate a combined fix that simultaneously implements all types.
             const intersectionType = checker.getIntersectionType(implementedTypes);
             if(intersectionType.flags & TypeFlags.Intersection) {
-                const resolvedIntersectionType = checker.resolveStructuredTypeMembers(<IntersectionType>intersectionType)
+                const resolvedIntersectionType = checker.resolveStructuredTypeMembers(<IntersectionType>intersectionType);
                 const insertion = getMissingMembersInsertion(classDecl, resolvedIntersectionType, checker, context.newLineCharacter);
-                result = pushAction(insertion, "stubbed locale message", result)
+                pushAction(result, insertion, "stubbed locale message")
             }
             */
 
             return result;
 
-            function pushAction(insertion: string, description: string, result?: CodeAction[]): CodeAction[] {
+            function pushAction(result: CodeAction[], insertion: string, description: string): void {
                 if (insertion && insertion.length) {
                     const newAction: CodeAction = {
                         description: description,
@@ -50,14 +50,8 @@ namespace ts.codefix {
                             }]
                         }]
                     };
-                    if (result) {
-                        result.push(newAction);
-                    }
-                    else {
-                        result = [newAction];
-                    }
+                    result.push(newAction);
                 }
-                return result;
             }
         }
     });
