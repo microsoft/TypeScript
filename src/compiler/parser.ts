@@ -1,6 +1,5 @@
 /// <reference path="utilities.ts"/>
 /// <reference path="scanner.ts"/>
-/// <reference path="factory.ts"/>
 
 namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;

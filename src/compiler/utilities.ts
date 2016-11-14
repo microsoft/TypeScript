@@ -1261,12 +1261,6 @@ namespace ts {
         return false;
     }
 
-    export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
-        const moduleState = getModuleInstanceState(node);
-        return moduleState === ModuleInstanceState.Instantiated ||
-            (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
-    }
-
     export function isExternalModuleImportEqualsDeclaration(node: Node) {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
@@ -2040,11 +2034,6 @@ namespace ts {
         }
 
         return originalSourceFiles;
-    }
-
-    export function getOriginalNodeId(node: Node) {
-        node = getOriginalNode(node);
-        return node ? getNodeId(node) : 0;
     }
 
     export const enum Associativity {
@@ -3928,6 +3917,16 @@ namespace ts {
             || kind === SyntaxKind.SuperKeyword
             || kind === SyntaxKind.NonNullExpression
             || kind === SyntaxKind.RawExpression;
+    }
+
+    export function skipPartiallyEmittedExpressions(node: Expression): Expression;
+    export function skipPartiallyEmittedExpressions(node: Node): Node;
+    export function skipPartiallyEmittedExpressions(node: Node) {
+        while (node.kind === SyntaxKind.PartiallyEmittedExpression) {
+            node = (<PartiallyEmittedExpression>node).expression;
+        }
+
+        return node;
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {

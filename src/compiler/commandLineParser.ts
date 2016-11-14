@@ -2,7 +2,7 @@
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
 /// <reference path="diagnosticInformationMap.generated.ts"/>
-/// <reference path="scanner.ts"/>
+/// <reference path="parser.ts"/>
 
 namespace ts {
     /* @internal */
