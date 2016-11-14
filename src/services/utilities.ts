@@ -1439,7 +1439,7 @@ namespace ts {
                     return "";
                 }
                 // TODO: (arozga) Deal with multiple signatures.
-                const sigString = checker.signatureToString(signatures[0], enclosingDeclaration, TypeFormatFlags.supressAnyReturnType, SignatureKind.Call);
+                const sigString = checker.signatureToString(signatures[0], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
 
                 return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
             default:

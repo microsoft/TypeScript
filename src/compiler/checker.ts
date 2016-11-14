@@ -2682,7 +2682,7 @@ namespace ts {
 
             function buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const returnType = getReturnTypeOfSignature(signature);
-                if (flags & TypeFormatFlags.supressAnyReturnType && isTypeAny(returnType)) {
+                if (flags & TypeFormatFlags.SuppressAnyReturnType && isTypeAny(returnType)) {
                     return;
                 }
 
