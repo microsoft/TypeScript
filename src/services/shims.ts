@@ -1064,7 +1064,7 @@ namespace ts {
                 if (resolvedFileName && !compilerOptions.allowJs && fileExtensionIs(resolvedFileName, ".js")) {
                     return {
                         resolvedFileName: undefined,
-                        failedLookupLocations: undefined
+                        failedLookupLocations: []
                     };
                 }
                 return {
