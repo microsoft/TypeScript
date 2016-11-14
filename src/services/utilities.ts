@@ -1359,20 +1359,20 @@ namespace ts {
         };
     }
 
-    export function getMissingAbstractMembersInsertion(classDecl: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
-        const classSymbol = checker.getSymbolOfNode(classDecl);
+    export function getMissingAbstractMembersInsertion(classDeclaration: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
+        const classSymbol = checker.getSymbolOfNode(classDeclaration);
         const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedType.members)), classSymbol.members);
-        return getInsertionsForMembers(missingMembers, classDecl, checker, newlineChar);
+        return getInsertionsForMembers(missingMembers, classDeclaration, checker, newlineChar);
     }
 
     /**
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
      */
-    export function getMissingMembersInsertion(classDecl: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
-        const classSymbol = checker.getSymbolOfNode(classDecl);
+    export function getMissingMembersInsertion(classDeclaration: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
+        const classSymbol = checker.getSymbolOfNode(classDeclaration);
         const missingMembers = filterMissingMembers(filterNonPrivate(resolvedType.members), classSymbol.members);
-        return getInsertionsForMembers(missingMembers, classDecl, checker, newlineChar);
+        return getInsertionsForMembers(missingMembers, classDeclaration, checker, newlineChar);
     }
 
     /**
@@ -1388,12 +1388,12 @@ namespace ts {
         return result;
     }
 
-    function filterSymbolMapByDecl(symbolMap: Map<Symbol>, pred: (decl: Declaration) => boolean): Map<Symbol> {
+    function filterSymbolMapByDeclaration(symbolMap: Map<Symbol>, pred: (decl: Declaration) => boolean): Map<Symbol> {
         const result = createMap<Symbol>();
         for (const key in symbolMap) {
-            const decl = symbolMap[key].getDeclarations();
-            Debug.assert(!!(decl && decl.length));
-            if (pred(decl[0])) {
+            const declaration = symbolMap[key].getDeclarations();
+            Debug.assert(!!(declaration && declaration.length));
+            if (pred(declaration[0])) {
                 result[key] = symbolMap[key];
             }
         }
@@ -1401,11 +1401,11 @@ namespace ts {
     }
 
     function filterAbstract(symbolMap: Map<Symbol>) {
-        return filterSymbolMapByDecl(symbolMap, decl => !!(getModifierFlags(decl) & ModifierFlags.Abstract));
+        return filterSymbolMapByDeclaration(symbolMap, decl => !!(getModifierFlags(decl) & ModifierFlags.Abstract));
     }
 
     function filterNonPrivate(symbolMap: Map<Symbol>) {
-        return filterSymbolMapByDecl(symbolMap, decl => !(getModifierFlags(decl) & ModifierFlags.Private));
+        return filterSymbolMapByDeclaration(symbolMap, decl => !(getModifierFlags(decl) & ModifierFlags.Private));
     }
 
     function getInsertionsForMembers(symbolMap: MapLike<Symbol>, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
@@ -1420,11 +1420,11 @@ namespace ts {
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
         const name = symbol.getName();
         const type = checker.getTypeOfSymbol(symbol);
-        const decls = symbol.getDeclarations();
-        if (!(decls && decls.length)) {
+        const declarations = symbol.getDeclarations();
+        if (!(declarations && declarations.length)) {
             return "";
         }
-        const node = decls[0];
+        const node = declarations[0];
         const visibility = getVisibilityPrefix(getModifierFlags(node));
         switch (node.kind) {
             case SyntaxKind.PropertySignature:
@@ -1434,12 +1434,12 @@ namespace ts {
 
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
-                const sigs = checker.getSignaturesOfType(type, SignatureKind.Call);
-                if (!(sigs && sigs.length > 0)) {
+                const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
+                if (!(signatures && signatures.length > 0)) {
                     return "";
                 }
                 // TODO: (arozga) Deal with multiple signatures.
-                const sigString = checker.signatureToString(sigs[0], enclosingDeclaration, TypeFormatFlags.supressAnyReturnType, SignatureKind.Call);
+                const sigString = checker.signatureToString(signatures[0], enclosingDeclaration, TypeFormatFlags.supressAnyReturnType, SignatureKind.Call);
 
                 return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
             default:
