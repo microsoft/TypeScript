@@ -1014,7 +1014,7 @@ namespace ts {
                 const returnStatement = createReturn(superCallExpression);
 
                 if (superCallExpression.kind !== SyntaxKind.BinaryExpression
-                    && (superCallExpression as BinaryExpression).left.kind !== SyntaxKind.CallExpression) {
+                    || (superCallExpression as BinaryExpression).left.kind !== SyntaxKind.CallExpression) {
                     Debug.fail("Assumed generated super call would have form 'super.call(...) || this'.");
                 }
 
