@@ -9936,8 +9936,7 @@ namespace ts {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
-                if (languageVersion === ScriptTarget.ES2015
-                    && declaration.kind === SyntaxKind.ClassDeclaration
+                if (declaration.kind === SyntaxKind.ClassDeclaration
                     && nodeIsDecorated(declaration)) {
                     let container = getContainingClass(node);
                     while (container !== undefined) {
