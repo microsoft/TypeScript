@@ -17261,7 +17261,11 @@ namespace ts {
             // based on whether the remaining type is the same as the initial type.
             let arrayType = arrayOrStringType;
             if (arrayOrStringType.flags & TypeFlags.Union) {
-                arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)), /*subtypeReduction*/ true);
+                const arrayTypes = (arrayOrStringType as UnionType).types;
+                const filteredTypes = filter(arrayTypes, t => !(t.flags & TypeFlags.StringLike));
+                if (filteredTypes !== arrayTypes) {
+                    arrayType = getUnionType(filteredTypes, /*subtypeReduction*/ true);
+                }
             }
             else if (arrayOrStringType.flags & TypeFlags.StringLike) {
                 arrayType = neverType;
