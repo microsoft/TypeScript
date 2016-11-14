@@ -3089,6 +3089,10 @@
         "category": "Error",
         "code": 9003
     },
+    "Language service is disabled.": {
+        "category": "Error",
+        "code": 9004
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
