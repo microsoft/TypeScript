@@ -6,3 +6,6 @@ function generic<T extends { x, y }>(t: T) {
     let { x, ...rest } = t;
     return rest;
 }
+
+let rest: { b: string }
+({a, ...rest.b + rest.b} = o);

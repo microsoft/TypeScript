@@ -4362,13 +4362,13 @@ interface NumberConstructor {
       * number. Only finite values of the type number, result in true.
       * @param number A numeric value.
       */
-    isFinite(number: number): boolean;
+    isFinite(value: any): value is number;
 
     /**
       * Returns true if the value passed is an integer, false otherwise.
       * @param number A numeric value.
       */
-    isInteger(number: number): boolean;
+    isInteger(value: any): value is number;
 
     /**
       * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
@@ -4376,13 +4376,13 @@ interface NumberConstructor {
       * to a number. Only values of the type number, that are also NaN, result in true.
       * @param number A numeric value.
       */
-    isNaN(number: number): boolean;
+    isNaN(value: any): value is number;
 
     /**
       * Returns true if the value passed is a safe integer.
       * @param number A numeric value.
       */
-    isSafeInteger(number: number): boolean;
+    isSafeInteger(value: any): value is number;
 
     /**
       * The value of the largest integer n such that n and n + 1 are both exactly representable as
@@ -5471,7 +5471,7 @@ interface PromiseConstructor {
 declare var Promise: PromiseConstructor;
 
 interface ProxyHandler<T> {
-    getPrototypeOf? (target: T): any;
+    getPrototypeOf? (target: T): {} | null;
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
@@ -5484,7 +5484,7 @@ interface ProxyHandler<T> {
     enumerate? (target: T): PropertyKey[];
     ownKeys? (target: T): PropertyKey[];
     apply? (target: T, thisArg: any, argArray?: any): any;
-    construct? (target: T, thisArg: any, argArray?: any): any;
+    construct? (target: T, argArray: any, newTarget?: any): {};
 }
 
 interface ProxyConstructor {
@@ -5492,6 +5492,7 @@ interface ProxyConstructor {
     new <T>(target: T, handler: ProxyHandler<T>): T
 }
 declare var Proxy: ProxyConstructor;
+
 
 declare namespace Reflect {
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
@@ -7555,6 +7556,7 @@ interface CSSStyleDeclaration {
     writingMode: string | null;
     zIndex: string | null;
     zoom: string | null;
+    resize: string | null;
     getPropertyPriority(propertyName: string): string;
     getPropertyValue(propertyName: string): string;
     item(index: number): string;
@@ -7624,6 +7626,7 @@ declare var CanvasGradient: {
 }
 
 interface CanvasPattern {
+    setTransform(matrix: SVGMatrix): void;
 }
 
 declare var CanvasPattern: {
@@ -8049,7 +8052,7 @@ interface DataTransfer {
     effectAllowed: string;
     readonly files: FileList;
     readonly items: DataTransferItemList;
-    readonly types: DOMStringList;
+    readonly types: string[];
     clearData(format?: string): boolean;
     getData(format: string): string;
     setData(format: string, data: string): boolean;
@@ -14478,7 +14481,7 @@ interface MouseEvent extends UIEvent {
     readonly x: number;
     readonly y: number;
     getModifierState(keyArg: string): boolean;
-    initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget): void;
+    initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget | null): void;
 }
 
 declare var MouseEvent: {
@@ -14591,6 +14594,7 @@ interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorConte
     readonly plugins: PluginArray;
     readonly pointerEnabled: boolean;
     readonly webdriver: boolean;
+    readonly hardwareConcurrency: number;
     getGamepads(): Gamepad[];
     javaEnabled(): boolean;
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
@@ -14608,18 +14612,18 @@ interface Node extends EventTarget {
     readonly attributes: NamedNodeMap;
     readonly baseURI: string | null;
     readonly childNodes: NodeList;
-    readonly firstChild: Node;
-    readonly lastChild: Node;
+    readonly firstChild: Node | null;
+    readonly lastChild: Node | null;
     readonly localName: string | null;
     readonly namespaceURI: string | null;
-    readonly nextSibling: Node;
+    readonly nextSibling: Node | null;
     readonly nodeName: string;
     readonly nodeType: number;
     nodeValue: string | null;
     readonly ownerDocument: Document;
-    readonly parentElement: HTMLElement;
-    readonly parentNode: Node;
-    readonly previousSibling: Node;
+    readonly parentElement: HTMLElement | null;
+    readonly parentNode: Node | null;
+    readonly previousSibling: Node | null;
     textContent: string | null;
     appendChild(newChild: Node): Node;
     cloneNode(deep?: boolean): Node;
@@ -18729,7 +18733,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly devicePixelRatio: number;
     readonly doNotTrack: string;
     readonly document: Document;
-    event: Event;
+    event: Event | undefined;
     readonly external: External;
     readonly frameElement: Element;
     readonly frames: Window;
@@ -19031,6 +19035,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly upload: XMLHttpRequestUpload;
     withCredentials: boolean;
     msCaching?: string;
+    readonly responseURL: string;
     abort(): void;
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string | null;
@@ -20177,7 +20182,7 @@ declare var defaultStatus: string;
 declare var devicePixelRatio: number;
 declare var doNotTrack: string;
 declare var document: Document;
-declare var event: Event;
+declare var event: Event | undefined;
 declare var external: External;
 declare var frameElement: Element;
 declare var frames: Window;

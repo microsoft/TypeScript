@@ -219,6 +219,7 @@ namespace ts {
         ThisType,
         TypeOperator,
         IndexedAccessType,
+        MappedType,
         LiteralType,
         // Binding patterns
         ObjectBindingPattern,
@@ -521,6 +522,7 @@ namespace ts {
     export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
     export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken>;
     export type AtToken = Token<SyntaxKind.AtToken>;
+    export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -900,6 +902,14 @@ namespace ts {
         kind: SyntaxKind.IndexedAccessType;
         objectType: TypeNode;
         indexType: TypeNode;
+    }
+
+    export interface MappedTypeNode extends TypeNode, Declaration {
+        kind: SyntaxKind.MappedType;
+        readonlyToken?: ReadonlyToken;
+        typeParameter: TypeParameterDeclaration;
+        questionToken?: QuestionToken;
+        type?: TypeNode;
     }
 
     export interface LiteralTypeNode extends TypeNode {
@@ -2544,7 +2554,7 @@ namespace ts {
         RegularEnum             = 0x00000100,  // Enum
         ValueModule             = 0x00000200,  // Instantiated module
         NamespaceModule         = 0x00000400,  // Uninstantiated module
-        TypeLiteral             = 0x00000800,  // Type Literal
+        TypeLiteral             = 0x00000800,  // Type Literal or mapped type
         ObjectLiteral           = 0x00001000,  // Object Literal
         Method                  = 0x00002000,  // Method
         Constructor             = 0x00004000,  // Constructor
@@ -2711,6 +2721,7 @@ namespace ts {
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
+        maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate 
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
@@ -2822,10 +2833,11 @@ namespace ts {
         Reference        = 1 << 2,  // Generic type reference
         Tuple            = 1 << 3,  // Synthesized generic tuple type
         Anonymous        = 1 << 4,  // Anonymous
-        Instantiated     = 1 << 5,  // Instantiated anonymous type
-        ObjectLiteral    = 1 << 6,  // Originates in an object literal
-        EvolvingArray    = 1 << 7,  // Evolving array type
-        ObjectLiteralPatternWithComputedProperties = 1 << 8,  // Object literal pattern with computed properties
+        Mapped           = 1 << 5,  // Mapped
+        Instantiated     = 1 << 6,  // Instantiated anonymous or mapped type
+        ObjectLiteral    = 1 << 7,  // Originates in an object literal
+        EvolvingArray    = 1 << 8,  // Evolving array type
+        ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ClassOrInterface = Class | Interface
     }
 
@@ -2892,6 +2904,15 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+    }
+
+    /* @internal */
+    export interface MappedType extends ObjectType {
+        declaration: MappedTypeNode;
+        typeParameter?: TypeParameter;
+        constraintType?: Type;
+        templateType?: Type;
+        mapper?: TypeMapper;  // Instantiation mapper
     }
 
     export interface EvolvingArrayType extends ObjectType {

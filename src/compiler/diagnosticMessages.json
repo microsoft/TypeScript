@@ -1991,6 +1991,10 @@
         "category": "Error",
         "code": 2700
     },
+    "An object rest element must be an identifier.": {
+        "category": "Error",
+        "code": 2701
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3084,6 +3088,10 @@
     "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
+    },
+    "Language service is disabled.": {
+        "category": "Error",
+        "code": 9004
     },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",

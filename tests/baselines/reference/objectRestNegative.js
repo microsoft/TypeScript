@@ -8,6 +8,9 @@ function generic<T extends { x, y }>(t: T) {
     return rest;
 }
 
+let rest: { b: string }
+({a, ...rest.b + rest.b} = o);
+
 
 //// [objectRestNegative.js]
 var __rest = (this && this.__rest) || function (s, e) {
@@ -25,3 +28,5 @@ function generic(t) {
     var x = t.x, rest = __rest(t, ["x"]);
     return rest;
 }
+var rest;
+(a = o.a, o, o);
