@@ -492,6 +492,15 @@ namespace ts {
             return ts.getPositionOfLineAndCharacter(this, line, character);
         }
 
+        public getLineEndOfPosition(pos: number): number {
+            const { line } = this.getLineAndCharacterOfPosition(pos);
+            const lineStarts = this.getLineStarts();
+            if (line >= lineStarts.length) {
+                return this.getEnd();
+            }
+            return lineStarts[line + 1] - 1;
+        }
+
         public getNamedDeclarations(): Map<Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();

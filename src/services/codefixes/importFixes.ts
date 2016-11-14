@@ -142,7 +142,7 @@ namespace ts.codefix {
                             // case:
                             // import foo = require("foo")
                             namespaceImportDeclaration = declaration;
-                            existingModuleSpecifier = declaration.name.getText();
+                            existingModuleSpecifier = getModuleSpecifierFromImportEqualsDeclaration(declaration);
                         }
                     }
 
@@ -173,6 +173,13 @@ namespace ts.codefix {
                         actions.push(getCodeActionForNewImport(existingModuleSpecifier));
                     }
                     return actions;
+
+                    function getModuleSpecifierFromImportEqualsDeclaration(declaration: ImportEqualsDeclaration) {
+                        if (declaration.moduleReference && declaration.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                            return declaration.moduleReference.expression.getText();
+                        }
+                        return declaration.moduleReference.getText();
+                    }
 
                     function getTextChangeForImportClause(importClause: ImportClause): TextChange {
                         const newImportText = isDefault ? `default as ${name}` : name;
@@ -227,6 +234,7 @@ namespace ts.codefix {
                         else {
                             namespacePrefix = declaration.name.getText();
                         }
+                        namespacePrefix = stripQuotes(namespacePrefix);
 
                         /**
                          * Cases:
@@ -258,7 +266,7 @@ namespace ts.codefix {
                             lastModuleSpecifierEnd = end;
                         }
                     }
-                    const insertPos = lastModuleSpecifierEnd > 0 ? lastModuleSpecifierEnd + 1 : sourceFile.getStart();
+                    const insertPos = lastModuleSpecifierEnd > 0 ? sourceFile.getLineEndOfPosition(lastModuleSpecifierEnd) : sourceFile.getStart();
 
                     const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
                     const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier || getModuleSpecifierForNewImport());
