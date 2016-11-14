@@ -135,7 +135,7 @@ namespace ts {
          */
         function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
             if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsESNext) {
-                return flattenDestructuringToExpression(
+                return flattenDestructuringAssignment(
                     context,
                     node,
                     needsDestructuringValue,
@@ -156,7 +156,7 @@ namespace ts {
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
             if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.AssertESNext) {
-                return flattenDestructuringToDeclarations(context, node, /*boundValue*/ undefined, /*skipInitializer*/ false, /*recordTempVariablesInLine*/ true, FlattenLevel.ObjectRest, visitor);
+                return flattenDestructuringBinding(context, node, /*boundValue*/ undefined, /*skipInitializer*/ false, /*recordTempVariablesInLine*/ true, FlattenLevel.ObjectRest, visitor);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -202,14 +202,14 @@ namespace ts {
                 const declaration = firstOrUndefined(initializer.declarations);
                 return declaration && declaration.name &&
                     declaration.name.kind === SyntaxKind.ObjectBindingPattern &&
-                    !!(declaration.name.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest));
+                    !!(declaration.name.transformFlags & TransformFlags.ContainsObjectRest);
             }
             return false;
         }
 
         function isRestAssignment(initializer: ForInitializer) {
             return initializer.kind === SyntaxKind.ObjectLiteralExpression &&
-                initializer.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest);
+                initializer.transformFlags & TransformFlags.ContainsObjectRest;
         }
 
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
@@ -238,7 +238,7 @@ namespace ts {
         function isObjectRestParameter(node: ParameterDeclaration) {
             return node.name &&
                 node.name.kind === SyntaxKind.ObjectBindingPattern &&
-                !!(node.name.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest));
+                !!(node.name.transformFlags & TransformFlags.ContainsObjectRest);
         }
 
         function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {

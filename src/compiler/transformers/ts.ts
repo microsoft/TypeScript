@@ -2353,7 +2353,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             const name = node.name;
             if (isBindingPattern(name)) {
-                return flattenDestructuringToExpression(
+                return flattenDestructuringAssignment(
                     context,
                     node,
                     /*needsValue*/ false,

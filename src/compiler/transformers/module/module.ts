@@ -756,7 +756,7 @@ namespace ts {
          */
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
-                return flattenDestructuringToExpression(
+                return flattenDestructuringAssignment(
                     context,
                     node,
                     /*needsValue*/ false,

@@ -1365,7 +1365,7 @@ namespace ts {
         function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
             // If we are here it is because this is a destructuring assignment.
             Debug.assert(isDestructuringAssignment(node));
-            return flattenDestructuringToExpression(
+            return flattenDestructuringAssignment(
                 context,
                 <DestructuringAssignment>node,
                 needsDestructuringValue,
@@ -1383,7 +1383,7 @@ namespace ts {
                     if (decl.initializer) {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
-                            assignment = flattenDestructuringToExpression(
+                            assignment = flattenDestructuringAssignment(
                                 context,
                                 decl,
                                 /*needsValue*/ false,
@@ -1543,8 +1543,7 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 const recordTempVariablesInLine = !enclosingVariableStatement
                     || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
-                debugger;
-                return flattenDestructuringToDeclarations(
+                return flattenDestructuringBinding(
                     context,
                     node,
                     /*value*/ undefined,
@@ -2181,7 +2180,7 @@ namespace ts {
             const temp = createTempVariable(undefined);
             const newVariableDeclaration = createVariableDeclaration(temp, undefined, undefined, node.variableDeclaration);
 
-            const vars = flattenDestructuringToDeclarations(context, node.variableDeclaration, temp, /*skipInitializer*/ false, /*recordTempVariablesInLine*/ true, FlattenLevel.All, visitor);
+            const vars = flattenDestructuringBinding(context, node.variableDeclaration, temp, /*skipInitializer*/ false, /*recordTempVariablesInLine*/ true, FlattenLevel.All, visitor);
             const list = createVariableDeclarationList(vars, /*location*/node.variableDeclaration, /*flags*/node.variableDeclaration.flags);
             const destructure = createVariableStatement(undefined, list);
 

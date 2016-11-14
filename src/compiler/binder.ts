@@ -1280,7 +1280,7 @@ namespace ts {
         function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {
             const name = !isOmittedExpression(node) ? node.name : undefined;
             if (isBindingPattern(name)) {
-                for (const child of name.elements) {
+                for (const child of <ArrayBindingElement[]>name.elements) {
                     bindInitializedVariableFlow(child);
                 }
             }
@@ -2629,7 +2629,7 @@ namespace ts {
         }
 
         // parameters with object rest destructuring are ES Next syntax
-        if (subtreeFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest)) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -2867,7 +2867,7 @@ namespace ts {
             }
 
             // function declarations with object rest destructuring are ES Next syntax
-            if (subtreeFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest)) {
+            if (subtreeFlags & TransformFlags.ContainsObjectRest) {
                 transformFlags |= TransformFlags.AssertESNext;
             }
 
@@ -2909,7 +2909,7 @@ namespace ts {
         }
 
         // function expressions with object rest destructuring are ES Next syntax
-        if (subtreeFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest)) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -2952,7 +2952,7 @@ namespace ts {
         }
 
         // arrow functions with object rest destructuring are ES Next syntax
-        if (subtreeFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest)) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -2982,16 +2982,11 @@ namespace ts {
 
     function computeVariableDeclaration(node: VariableDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const nameKind = node.name.kind;
+        transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
 
-        // A VariableDeclaration with an object binding pattern is ES2015 syntax
-        // and possibly ESNext syntax if it contains an object binding pattern
-        if (nameKind === SyntaxKind.ObjectBindingPattern) {
-            transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
-        }
-        // A VariableDeclaration with an object binding pattern is ES2015 syntax.
-        else if (nameKind === SyntaxKind.ArrayBindingPattern) {
-            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
+        // A VariableDeclaration containing ObjectRest is ESNext syntax
+        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
+            transformFlags |= TransformFlags.AssertESNext;
         }
 
         // Type annotations are TypeScript syntax.
@@ -3213,13 +3208,6 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsSpread | TransformFlags.ContainsObjectSpread;
                 break;
 
-            case SyntaxKind.BindingElement:
-                transformFlags |= TransformFlags.AssertES2015;
-                if ((<BindingElement>node).dotDotDotToken) {
-                    transformFlags |= TransformFlags.ContainsRest;
-                }
-                break;
-
             case SyntaxKind.SuperKeyword:
                 // This node is ES6 syntax.
                 transformFlags |= TransformFlags.AssertES2015;
@@ -3232,7 +3220,7 @@ namespace ts {
 
             case SyntaxKind.ObjectBindingPattern:
                 transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
-                if (subtreeFlags & TransformFlags.ContainsSpread) {
+                if (subtreeFlags & TransformFlags.ContainsRest) {
                     transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectRest;
                 }
                 excludeFlags = TransformFlags.BindingPatternExcludes;
@@ -3241,6 +3229,13 @@ namespace ts {
             case SyntaxKind.ArrayBindingPattern:
                 transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
                 excludeFlags = TransformFlags.BindingPatternExcludes;
+                break;
+
+            case SyntaxKind.BindingElement:
+                transformFlags |= TransformFlags.AssertES2015;
+                if ((<BindingElement>node).dotDotDotToken) {
+                    transformFlags |= TransformFlags.ContainsRest;
+                }
                 break;
 
             case SyntaxKind.Decorator:

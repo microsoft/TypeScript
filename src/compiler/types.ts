@@ -722,21 +722,19 @@ namespace ts {
         name: PropertyName;
     }
 
-    export interface BindingPattern extends Node {
-        elements: NodeArray<BindingElement | ArrayBindingElement>;
-    }
-
-    export interface ObjectBindingPattern extends BindingPattern {
+    export interface ObjectBindingPattern extends Node {
         kind: SyntaxKind.ObjectBindingPattern;
         elements: NodeArray<BindingElement>;
     }
 
-    export type ArrayBindingElement = BindingElement | OmittedExpression;
-
-    export interface ArrayBindingPattern extends BindingPattern {
+    export interface ArrayBindingPattern extends Node {
         kind: SyntaxKind.ArrayBindingPattern;
         elements: NodeArray<ArrayBindingElement>;
     }
+
+    export type BindingPattern = (ObjectBindingPattern | ArrayBindingPattern) & { elements: NodeArray<ArrayBindingElement>; };
+
+    export type ArrayBindingElement = BindingElement | OmittedExpression;
 
     /**
      * Several node kinds share function-like features such as a signature,
@@ -1191,7 +1189,49 @@ namespace ts {
         left: ArrayLiteralExpression;
     }
 
-    export type DestructuringAssignment = ObjectDestructuringAssignment | ArrayDestructuringAssignment;
+    export type DestructuringAssignment
+        = ObjectDestructuringAssignment
+        | ArrayDestructuringAssignment
+        ;
+
+    export type BindingOrAssignmentElement
+        = VariableDeclaration
+        | ParameterDeclaration
+        | BindingElement
+        | PropertyAssignment // AssignmentProperty
+        | ShorthandPropertyAssignment // AssignmentProperty
+        | SpreadAssignment // AssignmentRestProperty
+        | OmittedExpression // Elision
+        | SpreadElement // AssignmentRestElement
+        | ArrayLiteralExpression // ArrayAssignmentPattern
+        | ObjectLiteralExpression // ObjectAssignmentPattern
+        | AssignmentExpression<EqualsToken> // AssignmentElement
+        | Identifier // DestructuringAssignmentTarget
+        | PropertyAccessExpression // DestructuringAssignmentTarget
+        | ElementAccessExpression // DestructuringAssignmentTarget
+        ;
+
+    export type BindingOrAssignmentElementRestIndicator
+        = DotDotDotToken // from BindingElement
+        | SpreadElement // AssignmentRestElement
+        | SpreadAssignment // AssignmentRestProperty
+        ;
+
+    export type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Expression;
+
+    export type ObjectBindingOrAssignmentPattern
+        = ObjectBindingPattern
+        | ObjectLiteralExpression // ObjectAssignmentPattern
+        ;
+
+    export type ArrayBindingOrAssignmentPattern
+        = ArrayBindingPattern
+        | ArrayLiteralExpression // ArrayAssignmentPattern
+        ;
+
+    export type AssignmentPattern = ObjectLiteralExpression | ArrayLiteralExpression;
+
+    export type BindingOrAssignmentPattern = ObjectBindingOrAssignmentPattern | ArrayBindingOrAssignmentPattern;
 
     export interface ConditionalExpression extends Expression {
         kind: SyntaxKind.ConditionalExpression;
@@ -3554,10 +3594,10 @@ namespace ts {
         TypeExcludes = ~ContainsTypeScript,
         ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName | ContainsObjectSpread,
         ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpread,
-        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectSpread,
+        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectRest,
         ParameterExcludes = NodeExcludes,
-        CatchClauseExcludes = NodeExcludes | ContainsObjectSpread,
-        BindingPatternExcludes = NodeExcludes | ContainsSpread,
+        CatchClauseExcludes = NodeExcludes | ContainsObjectRest,
+        BindingPatternExcludes = NodeExcludes | ContainsRest,
 
         // Masks
         // - Additional bitmasks
