@@ -6,7 +6,7 @@ interface Context {
 declare function ZeroThingOrTwoThing(): JSX.Element;
 declare function ZeroThingOrTwoThing(l: {yy: number, yy1: string}, context: Context): JSX.Element;
 
-let obj2 = undefined;
+let obj2: any;
 
 // OK
 const two1 = <ZeroThingOrTwoThing />;
@@ -25,7 +25,7 @@ const three2 = <ThreeThing y2="Bye" />;
 const three3 = <ThreeThing {...obj2} y2={10} />;  // it is just any so we allow it to pass through
 
 //// [file.jsx]
-var obj2 = undefined;
+var obj2;
 // OK
 var two1 = <ZeroThingOrTwoThing />;
 var two2 = <ZeroThingOrTwoThing yy={100} yy1="hello"/>;

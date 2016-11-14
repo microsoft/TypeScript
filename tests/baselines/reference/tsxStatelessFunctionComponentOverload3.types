@@ -21,9 +21,8 @@ declare function ZeroThingOrTwoThing(l: {yy: number, yy1: string}, context: Cont
 >JSX : any
 >Element : JSX.Element
 
-let obj2 = undefined;
+let obj2: any;
 >obj2 : any
->undefined : undefined
 
 // OK
 const two1 = <ZeroThingOrTwoThing />;
@@ -43,7 +42,7 @@ const two3 = <ZeroThingOrTwoThing {...obj2} />;  // it is just any so we allow i
 >two3 : JSX.Element
 ><ZeroThingOrTwoThing {...obj2} /> : JSX.Element
 >ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
->obj2 : undefined
+>obj2 : any
 
 const two4 = <ZeroThingOrTwoThing  yy={1000} {...obj2} />;  // it is just any so we allow it to pass through
 >two4 : JSX.Element
@@ -51,13 +50,13 @@ const two4 = <ZeroThingOrTwoThing  yy={1000} {...obj2} />;  // it is just any so
 >ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
 >yy : number
 >1000 : 1000
->obj2 : undefined
+>obj2 : any
 
 const two5 = <ZeroThingOrTwoThing  {...obj2} yy={1000} />;  // it is just any so we allow it to pass through
 >two5 : JSX.Element
 ><ZeroThingOrTwoThing  {...obj2} yy={1000} /> : JSX.Element
 >ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
->obj2 : undefined
+>obj2 : any
 >yy : number
 >1000 : 1000
 
@@ -105,7 +104,7 @@ const three3 = <ThreeThing {...obj2} y2={10} />;  // it is just any so we allow 
 >three3 : JSX.Element
 ><ThreeThing {...obj2} y2={10} /> : JSX.Element
 >ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
->obj2 : undefined
+>obj2 : any
 >y2 : number
 >10 : 10
 

@@ -42,9 +42,8 @@ let obj2 = {
     "ignore-prop": "hello"
 }
 
-let defaultObj = undefined;
+let defaultObj: any;
 >defaultObj : Symbol(defaultObj, Decl(file.tsx, 19, 3))
->undefined : Symbol(undefined)
 
 // OK
 const c1 = <OneThing />

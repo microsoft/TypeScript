@@ -27,7 +27,7 @@ let obj = {
     children: "hi",
     to: "boo"
 }
-let obj1 = undefined;
+let obj1: any;
 let obj2 = {
     onClick: () => {}
 }

@@ -12,7 +12,7 @@ let obj = {
     yy: 10,
     yy1: "hello"
 }
-let obj2 = undefined;
+let obj2: any;
 
 // Error
 const c0 = <OneThing extraProp />;  // extra property;

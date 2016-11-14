@@ -50,9 +50,8 @@ let obj = {
 >to : string
 >"boo" : "boo"
 }
-let obj1 = undefined;
+let obj1: any;
 >obj1 : any
->undefined : undefined
 
 let obj2 = {
 >obj2 : { onClick: () => void; }
@@ -156,13 +155,13 @@ const b4 = <MainButton {...obj1} />;  // any; just pick the first overload
 >b4 : JSX.Element
 ><MainButton {...obj1} /> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->obj1 : undefined
+>obj1 : any
 
 const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the second overload
 >b5 : JSX.Element
 ><MainButton {...obj1} to="/to/somewhere" /> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->obj1 : undefined
+>obj1 : any
 >to : string
 
 const b6 = <MainButton {...obj2} />;

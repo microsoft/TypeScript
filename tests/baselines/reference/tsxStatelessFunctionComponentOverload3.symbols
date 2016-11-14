@@ -21,9 +21,8 @@ declare function ZeroThingOrTwoThing(l: {yy: number, yy1: string}, context: Cont
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
-let obj2 = undefined;
+let obj2: any;
 >obj2 : Symbol(obj2, Decl(file.tsx, 7, 3))
->undefined : Symbol(undefined)
 
 // OK
 const two1 = <ZeroThingOrTwoThing />;

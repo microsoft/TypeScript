@@ -23,7 +23,7 @@ let obj = {
     children: "hi",
     to: "boo"
 }
-let obj1 = undefined;
+let obj1: any;
 let obj2 = {
     onClick: () => {}
 }
@@ -65,7 +65,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
         children: "hi",
         to: "boo"
     };
-    var obj1 = undefined;
+    var obj1;
     var obj2 = {
         onClick: function () { }
     };
