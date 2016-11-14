@@ -1427,14 +1427,13 @@ namespace ts {
         attributes: JsxAttributes;
     }
 
-    // @kind(SyntaxKind.JsxAttribute)
     export interface JsxAttribute extends ObjectLiteralElement {
+        kind: SyntaxKind.JsxAttribute;
         name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
         initializer?: StringLiteral | JsxExpression;
     }
 
-    // @kind(SyntaxKind.JsxSpreadAttribute)
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         kind: SyntaxKind.JsxSpreadAttribute;
         expression: Expression;

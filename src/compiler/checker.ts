@@ -7013,7 +7013,7 @@ namespace ts {
                         return true;
                     }
                     else if (getPropertyOfType(type, name) || (isComparingJsxAttributes && !isUnhyphenatedJsxName(name))) {
-                        // For JSXAttributes, if the attribute has hyphenated name considered the attribute to be known
+                        // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                         return true;
                     }
                 }
@@ -10527,27 +10527,19 @@ namespace ts {
 
         function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give JSXAttributes a contextual type
-            // which is a type of the parameter  of the signature we are trying out. This is not the case if it is a statefull Jsx (i.e ReactComponenet class)
+            // which is a type of the parameter  of the signature we are trying out. This is not the case if it is a stateful JSX (i.e ReactComponenet class)
             // So if that is the case, just return the type of the JsxAttribute in such contextual type with out going into resolving of the JsxOpeningLikeElement again
-            if ((<JsxAttributes>attribute.parent).contextualType) {
-                return isJsxAttribute(attribute) ? getTypeOfPropertyOfType((<JsxAttributes>attribute.parent).contextualType, attribute.name.text) : undefined;
-            }
+            const attributesType = getContextualType(<Expression>attribute.parent) || getAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>attribute.parent.parent);
 
-            const kind = attribute.kind;
-            const jsxElement = attribute.parent.parent as JsxOpeningLikeElement;
-            const attrsType = getAttributesTypeFromJsxOpeningLikeElement(jsxElement);
-
-            if (kind === SyntaxKind.JsxAttribute) {
-                if (!attrsType || isTypeAny(attrsType)) {
+            if (isJsxAttribute(attribute)) {
+                if (!attributesType || isTypeAny(attributesType)) {
                     return undefined;
                 }
-                return getTypeOfPropertyOfType(attrsType, (attribute as JsxAttribute).name.text);
+                return getTypeOfPropertyOfType(attributesType, (attribute as JsxAttribute).name.text);
             }
-            else if (kind === SyntaxKind.JsxSpreadAttribute) {
-                return attrsType;
+            else {
+                return attributesType;
             }
-
-            Debug.fail(`Expected JsxAttribute or JsxSpreadAttribute, got ts.SyntaxKind[${kind}]`);
         }
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
@@ -11228,7 +11220,7 @@ namespace ts {
             let sourceAttributesType = anyType as Type;
             let isSourceAttributesTypeEmpty = true;
             if (symbolArray) {
-                // Filter out any hyphenated names as those are not play any role in type-checking unless there are corresponding properties in the target type
+                // Filter out any hyphenated names as those do not play any role in type-checking unless there are corresponding properties in the target type
                 const symbolTable = createMap<Symbol>();
                 forEach(symbolArray, (attr) => {
                     if (isUnhyphenatedJsxName(attr.name) || getPropertyOfType(targetAttributesType, attr.name)) {
