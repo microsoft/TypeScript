@@ -22,7 +22,11 @@ namespace ts.codefix {
             }];
 
             // We check if the implements keyword is present and replace it with a comma if so.
-            const classDeclChildren = (token.parent.parent.parent as ClassDeclaration).getChildren();
+            const classDeclNode = getAncestor(token, SyntaxKind.ClassDeclaration);
+            if (!classDeclNode) {
+                return result;
+            }
+            const classDeclChildren = classDeclNode.getChildren();
             if (classDeclChildren.length < 3) {
                 return result;
             }
