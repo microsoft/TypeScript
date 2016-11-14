@@ -25,17 +25,6 @@ namespace ts.codefix {
                 pushAction(result, insertion, getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class));
             }
 
-            // TODO: (arozga) Get this working and figure out how to test it reliably.
-            /*
-            // If there are multiple objects, we additionally try to generate a combined fix that simultaneously implements all types.
-            const intersectionType = checker.getIntersectionType(implementedTypes);
-            if(intersectionType.flags & TypeFlags.Intersection) {
-                const resolvedIntersectionType = checker.resolveStructuredTypeMembers(<IntersectionType>intersectionType);
-                const insertion = getMissingMembersInsertion(classDecl, resolvedIntersectionType, checker, context.newLineCharacter);
-                pushAction(result, insertion, "stubbed locale message")
-            }
-            */
-
             return result;
 
             function pushAction(result: CodeAction[], insertion: string, description: string): void {
