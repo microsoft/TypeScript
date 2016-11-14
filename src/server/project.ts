@@ -93,6 +93,7 @@ namespace ts.server {
     const emptyResult: any[] = [];
     const getEmptyResult = () => emptyResult;
     const getUndefined = () => <any>undefined;
+    const emptyEncodedSemanticClassifications = { spans: emptyResult, endOfLineState: EndOfLineState.None };
 
     export function createNoSemanticFeaturesWrapper(realLanguageService: LanguageService): LanguageService {
         return {
@@ -100,14 +101,15 @@ namespace ts.server {
             getSyntacticDiagnostics: (fileName) =>
                 fileName ? realLanguageService.getSyntacticDiagnostics(fileName) : emptyResult,
             getSemanticDiagnostics: getEmptyResult,
-            getCompilerOptionsDiagnostics: getEmptyResult,
+            getCompilerOptionsDiagnostics: () =>
+                realLanguageService.getCompilerOptionsDiagnostics(),
             getSyntacticClassifications: (fileName, span) =>
                 realLanguageService.getSyntacticClassifications(fileName, span),
             getEncodedSyntacticClassifications: (fileName, span) =>
                 realLanguageService.getEncodedSyntacticClassifications(fileName, span),
             getSemanticClassifications: getEmptyResult,
             getEncodedSemanticClassifications: () =>
-                ({ spans: [], endOfLineState: EndOfLineState.None }),
+                emptyEncodedSemanticClassifications,
             getCompletionsAtPosition: getUndefined,
             findReferences: getEmptyResult,
             getCompletionEntryDetails: getUndefined,
