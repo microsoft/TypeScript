@@ -4,7 +4,7 @@ tests/cases/conformance/jsx/file.tsx(50,24): error TS2322: Type '{ to: string; o
   Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
 tests/cases/conformance/jsx/file.tsx(51,24): error TS2322: Type '{ onClick: () => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(52,24): error TS2322: Type '{ onClick: (k: any) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(52,24): error TS2322: Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
 tests/cases/conformance/jsx/file.tsx(54,24): error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
@@ -81,7 +81,7 @@ tests/cases/conformance/jsx/file.tsx(57,24): error TS2322: Type '{ data-format: 
 !!! error TS2322:   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
     const b3 = <MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} />;  // extra property
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ onClick: (k: any) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+!!! error TS2322: Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
 !!! error TS2322:   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
     const b4 = <MainButton {...obj3} to />;  // Should error because Incorrect type; but attributes are any so everything is allowed
     const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
