@@ -218,7 +218,7 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet[cacheLocation] = true;
         }
 
-        private filterAndMapToScopedName(typingsToInstall: string[]) {
+        private filterTypings(typingsToInstall: string[]) {
             if (typingsToInstall.length === 0) {
                 return typingsToInstall;
             }
@@ -230,7 +230,7 @@ namespace ts.server.typingsInstaller {
                 const validationResult = validatePackageName(typing);
                 if (validationResult === PackageNameValidationResult.Ok) {
                     if (typing in this.typesRegistry) {
-                        result.push(`@types/${typing}`);
+                        result.push(typing);
                     }
                     else {
                         if (this.log.isEnabled()) {
@@ -286,7 +286,8 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
             }
-            const scopedTypings = this.filterAndMapToScopedName(typingsToInstall);
+            const filteredTypings = this.filterTypings(typingsToInstall);
+            const scopedTypings = filteredTypings.map(x => `@types/${x}`);
             if (scopedTypings.length === 0) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`All typings are known to be missing or invalid - no need to go any further`);
@@ -303,11 +304,18 @@ namespace ts.server.typingsInstaller {
                 if (this.telemetryEnabled) {
                     this.sendResponse(<TypingsInstallEvent>{
                         kind: EventInstall,
-                        packagesToInstall: scopedTypings
+                        packagesToInstall: scopedTypings,
+                        installSuccess: ok
                     });
                 }
 
                 if (!ok) {
+                    if (this.log.isEnabled()) {
+                        this.log.writeLine(`install request failed, marking packages as missing to prevent repeated requests: ${JSON.stringify(filteredTypings)}`);
+                    }
+                    for (const typing of filteredTypings) {
+                        this.missingTypingsSet[typing] = true;
+                    }
                     return;
                 }
 
