@@ -279,7 +279,7 @@ namespace ts {
             else if (node.transformFlags & TransformFlags.ContainsES2015 || (isInConstructorWithCapturedSuper && !isExpression(node))) {
                 // we want to dive in this branch either if node has children with ES2015 specific syntax
                 // or we are inside constructor that captures result of the super call so all returns without expression should be
-                // rewritten. Note: we skip expressions since returns should never appear there 
+                // rewritten. Note: we skip expressions since returns should never appear there
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -861,7 +861,7 @@ namespace ts {
             }
 
             if (constructor) {
-                addDefaultValueAssignmentsIfNeeded(statements, constructor, visitor, /*convertObjectRest*/ false);
+                addDefaultValueAssignmentsIfNeeded(context, statements, constructor, visitor, /*convertObjectRest*/ false);
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
                 Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
 
@@ -1328,16 +1328,10 @@ namespace ts {
             // If we are here it is most likely because our expression is a destructuring assignment.
             switch (node.expression.kind) {
                 case SyntaxKind.ParenthesizedExpression:
-                    return updateStatement(node,
-                        visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false)
-                    );
-
+                    return updateStatement(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
                 case SyntaxKind.BinaryExpression:
-                    return updateStatement(node,
-                        visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false)
-                    );
+                    return updateStatement(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
             }
-
             return visitEachChild(node, visitor, context);
         }
 
@@ -1350,22 +1344,14 @@ namespace ts {
          */
         function visitParenthesizedExpression(node: ParenthesizedExpression, needsDestructuringValue: boolean): ParenthesizedExpression {
             // If we are here it is most likely because our expression is a destructuring assignment.
-            if (needsDestructuringValue) {
+            if (!needsDestructuringValue) {
                 switch (node.expression.kind) {
                     case SyntaxKind.ParenthesizedExpression:
-                        return createParen(
-                            visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ true),
-                            /*location*/ node
-                        );
-
+                        return updateParen(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
                     case SyntaxKind.BinaryExpression:
-                        return createParen(
-                            visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ true),
-                            /*location*/ node
-                        );
+                        return updateParen(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
                 }
             }
-
             return visitEachChild(node, visitor, context);
         }
 
@@ -1379,7 +1365,13 @@ namespace ts {
         function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
             // If we are here it is because this is a destructuring assignment.
             Debug.assert(isDestructuringAssignment(node));
-            return flattenDestructuringAssignment(context, node, needsDestructuringValue, hoistVariableDeclaration, visitor);
+            return flattenDestructuringToExpression(
+                context,
+                <DestructuringAssignment>node,
+                needsDestructuringValue,
+                FlattenLevel.All,
+                /*createAssignmentCallback*/ undefined,
+                visitor);
         }
 
         function visitVariableStatement(node: VariableStatement): Statement {
@@ -1391,7 +1383,14 @@ namespace ts {
                     if (decl.initializer) {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
-                            assignment = flattenVariableDestructuringToExpression(decl, hoistVariableDeclaration, /*createAssignmentCallback*/ undefined, visitor);
+                            assignment = flattenDestructuringToExpression(
+                                context,
+                                decl,
+                                /*needsValue*/ false,
+                                FlattenLevel.All,
+                                /*createAssignmentCallback*/ undefined,
+                                visitor
+                            );
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
@@ -1544,8 +1543,16 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 const recordTempVariablesInLine = !enclosingVariableStatement
                     || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
-                return flattenVariableDestructuring(node, /*value*/ undefined, visitor,
-                    recordTempVariablesInLine ? undefined : hoistVariableDeclaration);
+                debugger;
+                return flattenDestructuringToDeclarations(
+                    context,
+                    node,
+                    /*value*/ undefined,
+                    /*skipInitializer*/ false,
+                    recordTempVariablesInLine,
+                    FlattenLevel.All,
+                    visitor
+                );
             }
 
             return visitEachChild(node, visitor, context);
@@ -2174,7 +2181,7 @@ namespace ts {
             const temp = createTempVariable(undefined);
             const newVariableDeclaration = createVariableDeclaration(temp, undefined, undefined, node.variableDeclaration);
 
-            const vars = flattenVariableDestructuring(node.variableDeclaration, temp, visitor);
+            const vars = flattenDestructuringToDeclarations(context, node.variableDeclaration, temp, /*skipInitializer*/ false, /*recordTempVariablesInLine*/ true, FlattenLevel.All, visitor);
             const list = createVariableDeclarationList(vars, /*location*/node.variableDeclaration, /*flags*/node.variableDeclaration.flags);
             const destructure = createVariableStatement(undefined, list);
 
@@ -2261,7 +2268,7 @@ namespace ts {
                 setEmitFlags(thisArg, EmitFlags.NoSubstitution);
             }
             let resultingCall: CallExpression | BinaryExpression;
-            if (node.transformFlags & TransformFlags.ContainsSpreadExpression) {
+            if (node.transformFlags & TransformFlags.ContainsSpread) {
                 // [source]
                 //      f(...a, b)
                 //      x.m(...a, b)
@@ -2323,7 +2330,7 @@ namespace ts {
          */
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
             // We are here because we contain a SpreadElementExpression.
-            Debug.assert((node.transformFlags & TransformFlags.ContainsSpreadExpression) !== 0);
+            Debug.assert((node.transformFlags & TransformFlags.ContainsSpread) !== 0);
 
             // [source]
             //      new C(...a)

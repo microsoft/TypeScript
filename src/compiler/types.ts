@@ -506,6 +506,7 @@ namespace ts {
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
+        /* @internal */ transformFlags?: TransformFlags;
     }
 
     export interface Token<TKind extends SyntaxKind> extends Node {
@@ -3495,45 +3496,46 @@ namespace ts {
         // - Flags used to indicate that a node or subtree contains syntax that requires transformation.
         TypeScript = 1 << 0,
         ContainsTypeScript = 1 << 1,
-        Jsx = 1 << 2,
-        ContainsJsx = 1 << 3,
-        ESNext = 1 << 4,
-        ContainsESNext = 1 << 5,
-        ES2017 = 1 << 6,
-        ContainsES2017 = 1 << 7,
-        ES2016 = 1 << 8,
-        ContainsES2016 = 1 << 9,
-        ES2015 = 1 << 10,
-        ContainsES2015 = 1 << 11,
-        Generator = 1 << 12,
-        ContainsGenerator = 1 << 13,
-        DestructuringAssignment = 1 << 14,
-        ContainsDestructuringAssignment = 1 << 15,
+        ContainsJsx = 1 << 2,
+        ESNext = 1 << 3,
+        ContainsESNext = 1 << 4,
+        ContainsES2017 = 1 << 5,
+        ES2016 = 1 << 6,
+        ContainsES2016 = 1 << 7,
+        ES2015 = 1 << 8,
+        ContainsES2015 = 1 << 9,
+        Generator = 1 << 10,
+        ContainsGenerator = 1 << 11,
+        DestructuringAssignment = 1 << 12,
+        ContainsDestructuringAssignment = 1 << 13,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 16,
-        ContainsPropertyInitializer = 1 << 17,
-        ContainsLexicalThis = 1 << 18,
-        ContainsCapturedLexicalThis = 1 << 19,
-        ContainsLexicalThisInComputedPropertyName = 1 << 20,
-        ContainsDefaultValueAssignments = 1 << 21,
-        ContainsParameterPropertyAssignments = 1 << 22,
-        ContainsSpreadExpression = 1 << 23,
-        ContainsComputedPropertyName = 1 << 24,
-        ContainsBlockScopedBinding = 1 << 25,
-        ContainsBindingPattern = 1 << 26,
-        ContainsYield = 1 << 27,
-        ContainsHoistedDeclarationOrCompletion = 1 << 28,
+        ContainsDecorators = 1 << 14,
+        ContainsPropertyInitializer = 1 << 15,
+        ContainsLexicalThis = 1 << 16,
+        ContainsCapturedLexicalThis = 1 << 17,
+        ContainsLexicalThisInComputedPropertyName = 1 << 18,
+        ContainsDefaultValueAssignments = 1 << 19,
+        ContainsParameterPropertyAssignments = 1 << 20,
+        ContainsSpread = 1 << 21,
+        ContainsRest = ContainsSpread,
+        ContainsObjectSpread = 1 << 22,
+        ContainsObjectRest = ContainsObjectSpread,
+        ContainsComputedPropertyName = 1 << 23,
+        ContainsBlockScopedBinding = 1 << 24,
+        ContainsBindingPattern = 1 << 25,
+        ContainsYield = 1 << 26,
+        ContainsHoistedDeclarationOrCompletion = 1 << 27,
 
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
         AssertTypeScript = TypeScript | ContainsTypeScript,
-        AssertJsx = Jsx | ContainsJsx,
+        AssertJsx = ContainsJsx,
         AssertESNext = ESNext | ContainsESNext,
-        AssertES2017 = ES2017 | ContainsES2017,
+        AssertES2017 = ContainsES2017,
         AssertES2016 = ES2016 | ContainsES2016,
         AssertES2015 = ES2015 | ContainsES2015,
         AssertGenerator = Generator | ContainsGenerator,
@@ -3542,18 +3544,20 @@ namespace ts {
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        NodeExcludes = TypeScript | Jsx | ESNext | ES2017 | ES2016 | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
-        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
-        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
-        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
-        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
+        NodeExcludes = TypeScript | ESNext | ES2016 | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
+        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
+        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
+        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
+        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
         ClassExcludes = NodeExcludes | ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments | ContainsLexicalThisInComputedPropertyName,
         ModuleExcludes = NodeExcludes | ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
         TypeExcludes = ~ContainsTypeScript,
-        ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
-        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpreadExpression,
-        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern,
-        ParameterExcludes = NodeExcludes | ContainsBindingPattern,
+        ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName | ContainsObjectSpread,
+        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpread,
+        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectSpread,
+        ParameterExcludes = NodeExcludes,
+        CatchClauseExcludes = NodeExcludes | ContainsObjectSpread,
+        BindingPatternExcludes = NodeExcludes | ContainsSpread,
 
         // Masks
         // - Additional bitmasks
@@ -3621,7 +3625,6 @@ namespace ts {
         /** Ends a lexical environment, returning any declarations. */
         endLexicalEnvironment(): Statement[];
     }
-
 
     export interface TextSpan {
         start: number;

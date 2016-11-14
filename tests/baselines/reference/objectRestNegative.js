@@ -17,9 +17,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 var o = { a: 1, b: 'no' };
-var mustBeLast = o.mustBeLast, a = o.a;
+var a = o.a;
 function stillMustBeLast(_a) {
-    var mustBeLast = _a.mustBeLast, a = _a.a;
+    var a = _a.a;
 }
 function generic(t) {
     var x = t.x, rest = __rest(t, ["x"]);

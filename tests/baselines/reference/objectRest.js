@@ -53,9 +53,9 @@ let nestedrest;
 var { x } = nestedrest, _a = nestedrest.n1, { y } = _a, _b = _a.n2, { z } = _b, nr = __rest(_b.n3, []), restrest = __rest(nestedrest, ["x", "n1"]);
 let complex;
 var _c = complex.x, { ka } = _c, nested = __rest(_c, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]);
-(_d = complex.x, { ka } = _d, nested = __rest(_d, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]), complex);
+(_d = complex.x, { ka } = _d, nested = __rest(_d, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]));
 var _e = { x: 1, y: 2 }, { x } = _e, fresh = __rest(_e, ["x"]);
-(_f = { x: 1, y: 2 }, { x } = _f, fresh = __rest(_f, ["x"]), _f);
+(_f = { x: 1, y: 2 }, { x } = _f, fresh = __rest(_f, ["x"]));
 class Removable {
     set z(value) { }
     get both() { return 12; }

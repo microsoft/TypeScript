@@ -2353,9 +2353,11 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             const name = node.name;
             if (isBindingPattern(name)) {
-                return flattenVariableDestructuringToExpression(
+                return flattenDestructuringToExpression(
+                    context,
                     node,
-                    hoistVariableDeclaration,
+                    /*needsValue*/ false,
+                    FlattenLevel.All,
                     createNamespaceExportExpression,
                     visitor
                 );

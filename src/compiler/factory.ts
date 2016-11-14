@@ -2341,6 +2341,13 @@ namespace ts {
 
     // Utilities
 
+    export function convertToFunctionBody(node: ConciseBody) {
+        if (isBlock(node)) {
+            return node;
+        }
+        return createBlock([createReturn(node, node)], node);
+    }
+
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
         return (node.expression as StringLiteral).text === "use strict";
     }
@@ -3121,7 +3128,7 @@ namespace ts {
         }
 
         addCaptureThisForNodeIfNeeded(statements, node, enableSubstitutionsForCapturedThis);
-        addDefaultValueAssignmentsIfNeeded(statements, node, visitor, convertObjectRest);
+        addDefaultValueAssignmentsIfNeeded(context, statements, node, visitor, convertObjectRest);
         addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
 
         // If we added any generated statements, this must be a multi-line block.
@@ -3236,7 +3243,8 @@ namespace ts {
      * @param statements The statements for the new function body.
      * @param node A function-like node.
      */
-    export function addDefaultValueAssignmentsIfNeeded(statements: Statement[],
+    export function addDefaultValueAssignmentsIfNeeded(context: TransformationContext,
+                                                       statements: Statement[],
                                                        node: FunctionLikeDeclaration,
                                                        visitor: (node: Node) => VisitResult<Node>,
                                                        convertObjectRest: boolean): void {
@@ -3254,7 +3262,7 @@ namespace ts {
             }
 
             if (isBindingPattern(name)) {
-                addDefaultValueAssignmentForBindingPattern(statements, parameter, name, initializer, visitor, convertObjectRest);
+                addDefaultValueAssignmentForBindingPattern(context, statements, parameter, name, initializer, visitor, convertObjectRest);
             }
             else if (initializer) {
                 addDefaultValueAssignmentForInitializer(statements, parameter, name, initializer, visitor);
@@ -3270,7 +3278,8 @@ namespace ts {
      * @param name The name of the parameter.
      * @param initializer The initializer for the parameter.
      */
-    function addDefaultValueAssignmentForBindingPattern(statements: Statement[],
+    function addDefaultValueAssignmentForBindingPattern(context: TransformationContext,
+                                                        statements: Statement[],
                                                         parameter: ParameterDeclaration,
                                                         name: BindingPattern, initializer: Expression,
                                                         visitor: (node: Node) => VisitResult<Node>,
@@ -3286,7 +3295,17 @@ namespace ts {
                     createVariableStatement(
                         /*modifiers*/ undefined,
                         createVariableDeclarationList(
-                            flattenParameterDestructuring(parameter, temp, visitor, convertObjectRest)
+                            flattenDestructuringToDeclarations(
+                                context,
+                                parameter,
+                                temp,
+                                /*skipInitializer*/ convertObjectRest,
+                                /*recordTempVariablesInLine*/ true,
+                                convertObjectRest
+                                    ? FlattenLevel.ObjectRest
+                                    : FlattenLevel.All,
+                                visitor
+                            )
                         )
                     ),
                     EmitFlags.CustomPrologue
@@ -3490,12 +3509,16 @@ namespace ts {
             if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
                 // This works whether the declaration is a var, let, or const.
                 // It will use rhsIterationValue _a[_i] as the initializer.
-                const declarations = flattenVariableDestructuring(
+                const declarations = flattenDestructuringToDeclarations(
+                    context,
                     firstOriginalDeclaration,
                     elementAccess,
-                    visitor,
-                    /*recordTempVariable*/ undefined,
+                    /*skipInitializer*/ false,
+                    /*recordTempVariablesInLine*/ true,
                     convertObjectRest
+                        ? FlattenLevel.ObjectRest
+                        : FlattenLevel.All,
+                    visitor
                 );
 
                 const declarationList = createVariableDeclarationList(declarations, /*location*/ initializer);
@@ -3543,13 +3566,15 @@ namespace ts {
                 // This is a destructuring pattern, so we flatten the destructuring instead.
                 statements.push(
                     createStatement(
-                        flattenDestructuringAssignment(
+                        flattenDestructuringToExpression(
                             context,
                             assignment,
                             /*needsValue*/ false,
-                            context.hoistVariableDeclaration,
-                            visitor,
                             convertObjectRest
+                                ? FlattenLevel.ObjectRest
+                                : FlattenLevel.All,
+                            /*createAssignmentCallback*/ undefined,
+                            visitor
                         )
                     )
                 );

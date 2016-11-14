@@ -4,9 +4,6 @@
 /*@internal*/
 namespace ts {
     export function transformESNext(context: TransformationContext) {
-        const {
-            hoistVariableDeclaration,
-        } = context;
         let currentSourceFile: SourceFile;
         return transformSourceFile;
 
@@ -20,7 +17,7 @@ namespace ts {
                 return visitorWorker(node);
             }
             else if (node.transformFlags & TransformFlags.ContainsESNext) {
-                return visitEachChild(node, visitor, context);
+                return visitNodeContainingESNext(node);
             }
             else {
                 return node;
@@ -32,7 +29,7 @@ namespace ts {
                 case SyntaxKind.ObjectLiteralExpression:
                     return visitObjectLiteralExpression(node as ObjectLiteralExpression);
                 case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(node as BinaryExpression);
+                    return visitBinaryExpression(node as BinaryExpression, /*needsDestructuringValue*/ true);
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.ForOfStatement:
@@ -52,6 +49,16 @@ namespace ts {
                     Debug.failBadSyntaxKind(node);
                     return visitEachChild(node, visitor, context);
             }
+        }
+
+        function visitNodeContainingESNext(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.ExpressionStatement:
+                    return visitExpressionStatement(node as ExpressionStatement);
+                case SyntaxKind.ParenthesizedExpression:
+                    return visitParenthesizedExpression(node as ParenthesizedExpression, /*needsDestructuringValue*/ true);
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         function chunkObjectLiteralElements(elements: ObjectLiteralElement[]): Expression[] {
@@ -99,14 +106,43 @@ namespace ts {
             return createCall(createIdentifier("__assign"), undefined, objects);
         }
 
+        function visitExpressionStatement(node: ExpressionStatement): ExpressionStatement {
+            switch (node.expression.kind) {
+                case SyntaxKind.ParenthesizedExpression:
+                    return updateStatement(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
+                case SyntaxKind.BinaryExpression:
+                    return updateStatement(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitParenthesizedExpression(node: ParenthesizedExpression, needsDestructuringValue: boolean): ParenthesizedExpression {
+            if (!needsDestructuringValue) {
+                switch (node.expression.kind) {
+                    case SyntaxKind.ParenthesizedExpression:
+                        return updateParen(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
+                    case SyntaxKind.BinaryExpression:
+                        return updateParen(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
+                }
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
         /**
          * Visits a BinaryExpression that contains a destructuring assignment.
          *
          * @param node A BinaryExpression node.
          */
-        function visitBinaryExpression(node: BinaryExpression): Expression {
+        function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
             if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsESNext) {
-                return flattenDestructuringAssignment(context, node, /*needsDestructuringValue*/ true, hoistVariableDeclaration, visitor, /*transformRest*/ true);
+                return flattenDestructuringToExpression(
+                    context,
+                    node,
+                    needsDestructuringValue,
+                    FlattenLevel.ObjectRest,
+                    /*createAssignmentCallback*/ undefined,
+                    visitor
+                );
             }
 
             return visitEachChild(node, visitor, context);
@@ -120,10 +156,8 @@ namespace ts {
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
             if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.AssertESNext) {
-                const result = flattenVariableDestructuring(node, /*value*/ undefined, visitor, /*recordTempVariable*/ undefined, /*transformRest*/ true);
-                return result;
+                return flattenDestructuringToDeclarations(context, node, /*boundValue*/ undefined, /*skipInitializer*/ false, /*recordTempVariablesInLine*/ true, FlattenLevel.ObjectRest, visitor);
             }
-
             return visitEachChild(node, visitor, context);
         }
 
@@ -168,14 +202,14 @@ namespace ts {
                 const declaration = firstOrUndefined(initializer.declarations);
                 return declaration && declaration.name &&
                     declaration.name.kind === SyntaxKind.ObjectBindingPattern &&
-                    !!(declaration.name.transformFlags & TransformFlags.ContainsSpreadExpression);
+                    !!(declaration.name.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest));
             }
             return false;
         }
 
         function isRestAssignment(initializer: ForInitializer) {
             return initializer.kind === SyntaxKind.ObjectLiteralExpression &&
-                initializer.transformFlags & TransformFlags.ContainsSpreadExpression;
+                initializer.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest);
         }
 
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
@@ -204,7 +238,7 @@ namespace ts {
         function isObjectRestParameter(node: ParameterDeclaration) {
             return node.name &&
                 node.name.kind === SyntaxKind.ObjectBindingPattern &&
-                !!(node.name.transformFlags & TransformFlags.ContainsSpreadExpression);
+                !!(node.name.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest));
         }
 
         function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
