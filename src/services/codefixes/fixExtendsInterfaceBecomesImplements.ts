@@ -6,43 +6,36 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
             const token = getTokenAtPosition(sourceFile, start);
-
-            if (!(token.kind === SyntaxKind.Identifier && token.parent.parent.parent.kind === SyntaxKind.ClassDeclaration)) {
+            const classDeclNode = getAncestor(token, SyntaxKind.ClassDeclaration) as ClassDeclaration;
+            if (!(token.kind === SyntaxKind.Identifier && classDeclNode && classDeclNode.kind === SyntaxKind.ClassDeclaration)) {
                 return undefined;
             }
 
-            const extendsNode = (token.parent.parent as HeritageClause).getChildren()[0];
+            const heritageClauses = classDeclNode.heritageClauses;
+            if (!(heritageClauses && heritageClauses.length > 0)) {
+                return undefined;
+            }
+
+            const extendsToken = heritageClauses[0].getFirstToken();
+            if (!(extendsToken && extendsToken.kind === SyntaxKind.ExtendsKeyword)) {
+                return undefined;
+            }
 
             const result = [{
                 description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements),
                 changes: [{
                     fileName: sourceFile.fileName,
-                    textChanges: [{ newText: " implements", span: { start: extendsNode.pos, length: extendsNode.end - extendsNode.pos } }]
+                    textChanges: [{ newText: " implements", span: { start: extendsToken.pos, length: extendsToken.end - extendsToken.pos } }]
                 }]
             }];
 
             // We check if the implements keyword is present and replace it with a comma if so.
-            const classDeclNode = getAncestor(token, SyntaxKind.ClassDeclaration);
-            if (!classDeclNode) {
-                return result;
+            for (let i = 1; i < heritageClauses.length; i++) {
+                const keywordToken = heritageClauses[i].getFirstToken();
+                if (keywordToken) {
+                    result[0].changes[0].textChanges.push({ newText: ",", span: { start: keywordToken.pos, length: keywordToken.end - keywordToken.pos } });
+                }
             }
-            const classDeclChildren = classDeclNode.getChildren();
-            if (classDeclChildren.length < 3) {
-                return result;
-            }
-
-            let classSyntaxListChildren: Node[];
-            if (classDeclChildren[2].kind !== SyntaxKind.SyntaxList || (classSyntaxListChildren = classDeclChildren[2].getChildren()).length < 2) {
-                return result;
-            }
-
-            let implementsTokenChildren: Node[];
-            if ((classSyntaxListChildren[1] as HeritageClause).token !== SyntaxKind.ImplementsKeyword || (implementsTokenChildren = classSyntaxListChildren[1].getChildren()).length === 0) {
-                return result;
-            }
-
-            const implementsNode = implementsTokenChildren[0];
-            result[0].changes[0].textChanges.push({ newText: ",", span: { start: implementsNode.pos, length: implementsNode.end - implementsNode.pos } });
 
             return result;
         }
