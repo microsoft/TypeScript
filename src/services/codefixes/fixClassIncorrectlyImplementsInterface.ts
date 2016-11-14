@@ -8,10 +8,11 @@ namespace ts.codefix {
             const token = getTokenAtPosition(sourceFile, start);
             const checker = context.program.getTypeChecker();
 
-            if (!(token.kind === SyntaxKind.Identifier && isClassLike(token.parent))) {
+            const classDecl = getAncestor(token, SyntaxKind.ClassDeclaration) as ClassDeclaration;
+            if (!(classDecl && isClassLike(classDecl))) {
                 return undefined;
             }
-            const classDecl = <ClassDeclaration>token.parent;
+
             const startPos: number = classDecl.members.pos;
 
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
