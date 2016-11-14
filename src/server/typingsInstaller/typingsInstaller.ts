@@ -19,9 +19,17 @@ namespace ts.server.typingsInstaller {
         writeLine: noop
     };
 
-    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost): string {
-        const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
-        return result.resolvedModule && result.resolvedModule.resolvedFileName;
+    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string {
+        try {
+            const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
+            return result.resolvedModule && result.resolvedModule.resolvedFileName;
+        }
+        catch (e) {
+            if (log.isEnabled()) {
+                log.writeLine(`Failed to resolve ${packageName} in folder '${cachePath}': ${(<Error>e).message}`);
+            }
+            return undefined;
+        }
     }
 
     export enum PackageNameValidationResult {
@@ -192,8 +200,9 @@ namespace ts.server.typingsInstaller {
                         if (!packageName) {
                             continue;
                         }
-                        const typingFile = typingToFileName(cacheLocation, packageName, this.installTypingHost);
+                        const typingFile = typingToFileName(cacheLocation, packageName, this.installTypingHost, this.log);
                         if (!typingFile) {
+                            this.missingTypingsSet[packageName] = true;
                             continue;
                         }
                         const existingTypingFile = this.packageNameToTypingLocation[packageName];
@@ -321,16 +330,13 @@ namespace ts.server.typingsInstaller {
 
                 // TODO: watch project directory
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Requested to install typings ${JSON.stringify(scopedTypings)}, installed typings ${JSON.stringify(scopedTypings)}`);
+                    this.log.writeLine(`Installed typings ${JSON.stringify(scopedTypings)}`);
                 }
                 const installedTypingFiles: string[] = [];
-                for (const t of scopedTypings) {
-                    const packageName = getBaseFileName(t);
-                    if (!packageName) {
-                        continue;
-                    }
-                    const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost);
+                for (const packageName of filteredTypings) {
+                    const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost, this.log);
                     if (!typingFile) {
+                        this.missingTypingsSet[packageName] = true;
                         continue;
                     }
                     if (!this.packageNameToTypingLocation[packageName]) {
