@@ -1380,14 +1380,10 @@ namespace ts {
      */
     function filterMissingMembers(sourceSymbols: Map<Symbol>, targetSymbols: Map<Symbol>): Map<Symbol> {
         const result: Map<Symbol> = createMap<Symbol>();
-        outer:
         for (const sourceName in sourceSymbols) {
-            for (const targetName in targetSymbols) {
-                if (sourceName === targetName) {
-                    continue outer;
-                }
+            if (!(sourceName in targetSymbols)) {
+                result[sourceName] = sourceSymbols[sourceName];
             }
-            result[sourceName] = sourceSymbols[sourceName];
         }
         return result;
     }
