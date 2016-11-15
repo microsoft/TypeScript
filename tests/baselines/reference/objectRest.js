@@ -43,13 +43,16 @@ var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
+    if (typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, s = Object.getOwnPropertySymbols(s); i < s.length; i++) if (e.indexOf(s[i]) > 0)
+            t[i] = s[i];
     return t;
 };
 var o = { a: 1, b: 'no' };
 var clone = __rest(o, []);
 var { a } = o, justB = __rest(o, ["a"]);
 var { a, b: renamed } = o, empty = __rest(o, ["a", "b"]);
-var _a = 'b', renamed = o[_a], justA = __rest(o, [_a + ""]);
+var _a = 'b', renamed = o[_a], justA = __rest(o, [typeof _a === "symbol" ? _a : _a + ""]);
 var { 'b': renamed } = o, justA = __rest(o, ["b"]);
 var { b: { '0': n, '1': oooo } } = o, justA = __rest(o, ["b"]);
 let o2 = { c: 'terrible idea?', d: 'yes' };
@@ -71,6 +74,6 @@ var removable = new Removable();
 var { removed } = removable, removableRest = __rest(removable, ["removed"]);
 let computed = 'b';
 let computed2 = 'a';
-var _h = computed, stillNotGreat = o[_h], _j = computed2, soSo = o[_j], o = __rest(o, [_h + "", _j + ""]);
-(_k = computed, stillNotGreat = o[_k], _l = computed2, soSo = o[_l], o = __rest(o, [_k + "", _l + ""]), o);
+var _h = computed, stillNotGreat = o[_h], _j = computed2, soSo = o[_j], o = __rest(o, [typeof _h === "symbol" ? _h : _h + "", typeof _j === "symbol" ? _j : _j + ""]);
+(_k = computed, stillNotGreat = o[_k], _l = computed2, soSo = o[_l], o = __rest(o, [typeof _k === "symbol" ? _k : _k + "", typeof _l === "symbol" ? _l : _l + ""]), o);
 var _e, _g, _k, _l;
