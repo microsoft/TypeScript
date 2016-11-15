@@ -1,20 +1,15 @@
 // @strictNullChecks: true
 // @declaration: true
 
-type Partial<T> = {
-    [P in keyof T]?: T[P];
-};
-
-type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-};
-
-type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-}
-
-type Record<K extends string | number, T> = {
-    [_ in K]: T;
+function verifyLibTypes<T, K extends keyof T, U>() {
+    var x1: Partial<T>;
+    var x1: { [P in keyof T]?: T[P] };
+    var x2: Readonly<T>;
+    var x2: { readonly [P in keyof T]: T[P] };
+    var x3: Pick<T, K>;
+    var x3: { [P in K]: T[P] };
+    var x4: Record<K, U>;
+    var x4: { [P in K]: U };
 }
 
 type Proxy<T> = {

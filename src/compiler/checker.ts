@@ -4550,6 +4550,10 @@ namespace ts {
                     unknownType);
         }
 
+        function getErasedTemplateTypeFromMappedType(type: MappedType) {
+            return instantiateType(getTemplateTypeFromMappedType(type), createUnaryTypeMapper(getTypeParameterFromMappedType(type), anyType));
+        }
+
         function isGenericMappedType(type: Type) {
             if (getObjectFlags(type) & ObjectFlags.Mapped) {
                 const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
@@ -7190,29 +7194,18 @@ namespace ts {
                             return result;
                         }
                     }
-                    if (isGenericMappedType(target)) {
-                        // A type [P in S]: X is related to a type [P in T]: Y if T is related to S and X is related to Y.
-                        if (isGenericMappedType(source)) {
-                            if ((result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) &&
-                                (result = isRelatedTo(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target), reportErrors))) {
-                                return result;
-                            }
-                        }
-                    }
-                    else {
-                        // Even if relationship doesn't hold for unions, intersections, or generic type references,
-                        // it may hold in a structural comparison.
-                        const apparentSource = getApparentType(source);
-                        // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
-                        // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
-                        // relates to X. Thus, we include intersection types on the source side here.
-                        if (apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
-                            // Report structural errors only if we haven't reported any errors yet
-                            const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo && !(source.flags & TypeFlags.Primitive);
-                            if (result = objectTypeRelatedTo(apparentSource, source, target, reportStructuralErrors)) {
-                                errorInfo = saveErrorInfo;
-                                return result;
-                            }
+                    // Even if relationship doesn't hold for unions, intersections, or generic type references,
+                    // it may hold in a structural comparison.
+                    const apparentSource = getApparentType(source);
+                    // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
+                    // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
+                    // relates to X. Thus, we include intersection types on the source side here.
+                    if (apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
+                        // Report structural errors only if we haven't reported any errors yet
+                        const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo && !(source.flags & TypeFlags.Primitive);
+                        if (result = objectTypeRelatedTo(apparentSource, source, target, reportStructuralErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
                         }
                     }
                 }
@@ -7441,6 +7434,9 @@ namespace ts {
                 if (expandingFlags === 3) {
                     result = Ternary.Maybe;
                 }
+                else if (isGenericMappedType(source) || isGenericMappedType(target)) {
+                    result = mappedTypeRelatedTo(source, target, reportErrors);
+                }
                 else {
                     result = propertiesRelatedTo(source, target, reportErrors);
                     if (result) {
@@ -7470,6 +7466,30 @@ namespace ts {
                     relation[id] = reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed;
                 }
                 return result;
+            }
+
+            // A type [P in S]: X is related to a type [P in T]: Y if T is related to S and X is related to Y.
+            function mappedTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+                if (isGenericMappedType(source) && isGenericMappedType(target)) {
+                    let result: Ternary;
+                    if (relation === identityRelation) {
+                        const readonlyMatches = !(<MappedType>source).declaration.readonlyToken === !(<MappedType>target).declaration.readonlyToken;
+                        const optionalMatches = !(<MappedType>source).declaration.questionToken === !(<MappedType>target).declaration.questionToken;
+                        if (readonlyMatches && optionalMatches) {
+                            if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
+                                return result & isRelatedTo(getErasedTemplateTypeFromMappedType(<MappedType>source), getErasedTemplateTypeFromMappedType(<MappedType>target), reportErrors);
+                            }
+                        }
+                    }
+                    else {
+                        if (relation === comparableRelation || !(<MappedType>source).declaration.questionToken || (<MappedType>target).declaration.questionToken) {
+                            if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
+                                return result & isRelatedTo(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target), reportErrors);
+                            }
+                        }
+                    }
+                }
+                return Ternary.False;
             }
 
             function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
