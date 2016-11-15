@@ -5,8 +5,6 @@
 /// <reference path="../shared.ts"/>
 
 namespace ts.server.typingsInstaller {
-    const typingsInstallerVersion = "2.0.9";
-
     interface NpmConfig {
         devDependencies: MapLike<any>;
     }
@@ -311,7 +309,7 @@ namespace ts.server.typingsInstaller {
                         kind: EventInstall,
                         packagesToInstall: scopedTypings,
                         installSuccess: ok,
-                        typingsInstallerVersion
+                        typingsInstallerVersion: ts.version // qualified explicitly to prevent occasional shadowing
                     });
                 }
 
