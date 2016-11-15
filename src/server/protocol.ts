@@ -1968,6 +1968,11 @@ namespace ts.server.protocol {
          * true if install request succeeded, otherwise - false
          */
         installSuccess: boolean;
+
+        /**
+         * version of typings installer
+         */
+        typingsInstallerVersion: string;
     }
 
     export interface NavBarResponse extends Response {

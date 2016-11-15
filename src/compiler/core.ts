@@ -3,6 +3,9 @@
 
 /* @internal */
 namespace ts {
+
+    export const version = "2.0.9";
+
     /**
      * Ternary values are defined such that
      * x & y is False if either x or y is False.
