@@ -1359,7 +1359,7 @@ namespace ts {
         };
     }
 
-    export function getMissingAbstractMembersInsertion(classDeclaration: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
+    export function getMissingAbstractMembersInsertion(classDeclaration: ClassLikeDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
         const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedType.members)), classDeclaration.symbol.members);
         return getInsertionsForMembers(missingMembers, classDeclaration, checker, newlineChar);
     }
@@ -1368,7 +1368,7 @@ namespace ts {
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
      */
-    export function getMissingMembersInsertion(classDeclaration: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
+    export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
         const missingMembers = filterMissingMembers(filterNonPrivate(resolvedType.members), classDeclaration.symbol.members);
         return getInsertionsForMembers(missingMembers, classDeclaration, checker, newlineChar);
     }
@@ -1406,7 +1406,7 @@ namespace ts {
         return filterSymbolMapByDeclaration(symbolMap, decl => !(getModifierFlags(decl) & ModifierFlags.Private));
     }
 
-    function getInsertionsForMembers(symbolMap: MapLike<Symbol>, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
+    function getInsertionsForMembers(symbolMap: MapLike<Symbol>, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
         let insertion = "";
 
         for (const symbolName in symbolMap) {
@@ -1415,7 +1415,7 @@ namespace ts {
         return insertion;
     }
 
-    function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
+    function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
         const name = symbol.getName();
         const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
         const declarations = symbol.getDeclarations();

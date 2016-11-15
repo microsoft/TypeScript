@@ -6,8 +6,8 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
             const token = getTokenAtPosition(sourceFile, start);
-            const classDeclNode = getAncestor(token, SyntaxKind.ClassDeclaration) as ClassDeclaration;
-            if (!(token.kind === SyntaxKind.Identifier && classDeclNode && classDeclNode.kind === SyntaxKind.ClassDeclaration)) {
+            const classDeclNode = getContainingClass(token);
+            if (!(token.kind === SyntaxKind.Identifier && isClassLike(classDeclNode))) {
                 return undefined;
             }
 

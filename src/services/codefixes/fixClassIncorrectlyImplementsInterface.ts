@@ -8,8 +8,8 @@ namespace ts.codefix {
             const token = getTokenAtPosition(sourceFile, start);
             const checker = context.program.getTypeChecker();
 
-            const classDecl = getAncestor(token, SyntaxKind.ClassDeclaration) as ClassDeclaration;
-            if (!(classDecl && isClassLike(classDecl))) {
+            const classDecl = getContainingClass(token);
+            if (!classDecl) {
                 return undefined;
             }
 
