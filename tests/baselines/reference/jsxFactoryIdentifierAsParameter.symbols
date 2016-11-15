@@ -1,0 +1,25 @@
+=== tests/cases/compiler/test.tsx ===
+
+declare module JSX {
+>JSX : Symbol(JSX, Decl(test.tsx, 0, 0))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(test.tsx, 1, 20))
+
+        [s: string]: any;
+>s : Symbol(s, Decl(test.tsx, 3, 9))
+    }
+}
+
+export class AppComponent {
+>AppComponent : Symbol(AppComponent, Decl(test.tsx, 5, 1))
+
+    render(createElement) {
+>render : Symbol(AppComponent.render, Decl(test.tsx, 7, 27))
+>createElement : Symbol(createElement, Decl(test.tsx, 8, 11))
+
+        return <div />;
+>div : Symbol(unknown)
+    }
+}
+

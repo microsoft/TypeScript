@@ -128,7 +128,8 @@ const es2016LibrarySourceMap = es2016LibrarySource.map(function(source) {
 
 const es2017LibrarySource = [
     "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts"
+    "es2017.sharedmemory.d.ts",
+    "es2017.string.d.ts",
 ];
 
 const es2017LibrarySourceMap = es2017LibrarySource.map(function(source) {

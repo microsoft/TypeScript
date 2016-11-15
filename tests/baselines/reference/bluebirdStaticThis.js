@@ -146,12 +146,12 @@ var x;
 var arr;
 var foo;
 var fooProm;
-fooProm = Promise.try(Promise, function () {
+fooProm = Promise["try"](Promise, function () {
     return foo;
 });
-fooProm = Promise.try(Promise, function () {
+fooProm = Promise["try"](Promise, function () {
     return foo;
 }, arr);
-fooProm = Promise.try(Promise, function () {
+fooProm = Promise["try"](Promise, function () {
     return foo;
 }, arr, x);

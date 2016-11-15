@@ -19,7 +19,6 @@ define(["require", "exports"], function (require, exports) {
 //// [client.js]
 define(["require", "exports", "server"], function (require, exports, server_1) {
     "use strict";
-    var nameSpaceBinding = server_1;
     exports.x = server_1.default;
 });
 

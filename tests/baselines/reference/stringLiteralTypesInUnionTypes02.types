@@ -19,7 +19,7 @@ if (x === "foo") {
 
     let a = x;
 >a : string
->x : string
+>x : "foo"
 }
 else if (x !== "bar") {
 >x !== "bar" : boolean
@@ -35,7 +35,7 @@ else if (x !== "bar") {
 else {
     let c = x;
 >c : string
->x : string
+>x : "bar"
 
     let d = y;
 >d : string
@@ -43,7 +43,7 @@ else {
 
     let e: (typeof x) | (typeof y) = c || d;
 >e : string
->x : string
+>x : "bar"
 >y : string
 >c || d : string
 >c : string

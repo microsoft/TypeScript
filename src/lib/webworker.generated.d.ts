@@ -740,6 +740,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly upload: XMLHttpRequestUpload;
     withCredentials: boolean;
     msCaching?: string;
+    readonly responseURL: string;
     abort(): void;
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string | null;
@@ -902,6 +903,7 @@ declare var WorkerLocation: {
 }
 
 interface WorkerNavigator extends Object, NavigatorID, NavigatorOnLine {
+    readonly hardwareConcurrency: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 

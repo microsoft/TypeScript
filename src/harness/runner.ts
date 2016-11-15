@@ -222,5 +222,5 @@ else {
 }
 if (!runUnitTests) {
     // patch `describe` to skip unit tests
-    describe = <any>(function () { });
+    describe = ts.noop as any;
 }

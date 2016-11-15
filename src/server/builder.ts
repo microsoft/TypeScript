@@ -1,19 +1,9 @@
 ﻿/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
-/// <reference path="protocol.d.ts" />
 /// <reference path="session.ts" />
 /// <reference types="node" />
 
 namespace ts.server {
-
-    interface Hash {
-        update(data: any, input_encoding?: string): Hash;
-        digest(encoding: string): any;
-    }
-
-    const crypto: {
-        createHash(algorithm: string): Hash
-    } = require("crypto");
 
     export function shouldEmitFile(scriptInfo: ScriptInfo) {
         return !scriptInfo.hasMixedContent;
@@ -50,9 +40,7 @@ namespace ts.server {
         }
 
         private computeHash(text: string): string {
-            return crypto.createHash("md5")
-                .update(text)
-                .digest("base64");
+            return this.project.projectService.host.createHash(text);
         }
 
         private getSourceFile(): SourceFile {
@@ -123,7 +111,7 @@ namespace ts.server {
         }
 
         protected forEachFileInfo(action: (fileInfo: T) => any) {
-            this.fileInfos.forEachValue((path: Path, value: T) => action(value));
+            this.fileInfos.forEachValue((_path, value) => action(value));
         }
 
         abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];

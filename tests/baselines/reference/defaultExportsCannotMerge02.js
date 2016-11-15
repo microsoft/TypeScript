@@ -33,7 +33,7 @@ var Decl = (function () {
     return Decl;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = exports.Decl;
+exports.default = Decl;
 //// [m2.js]
 "use strict";
 var m1_1 = require("m1");

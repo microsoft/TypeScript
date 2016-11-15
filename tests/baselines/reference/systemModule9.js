@@ -70,7 +70,6 @@ System.register(["file1", "file2", "file3", "file4", "file5", "file6", "file7"],
             ns2.f();
             ns3.f();
             y = true;
-            exports_1("x", x);
             exports_1("z", y);
         }
     };

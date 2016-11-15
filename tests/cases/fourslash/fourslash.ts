@@ -194,6 +194,7 @@ declare namespace FourSlashInterface {
         currentSignatureHelpDocCommentIs(docComment: string): void;
         signatureHelpCountIs(expected: number): void;
         signatureHelpArgumentCountIs(expected: number): void;
+        signatureHelpCurrentArgumentListIsVariadic(expected: boolean);
         currentSignatureParameterCountIs(expected: number): void;
         currentSignatureTypeParameterCountIs(expected: number): void;
         currentSignatureHelpIs(expected: string): void;
@@ -212,6 +213,7 @@ declare namespace FourSlashInterface {
         codeFixAtPosition(expectedText: string, errorCode?: number): void;
 
         navigationBar(json: any): void;
+        navigationTree(json: any): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;

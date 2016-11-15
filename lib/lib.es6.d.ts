@@ -13,7 +13,11 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -259,6 +263,9 @@ interface Function {
       * @param argArray A list of arguments to be passed to the new function.
       */
     bind(this: Function, thisArg: any, ...argArray: any[]): any;
+
+    /** Returns a string representation of a function. */
+    toString(): string;
 
     prototype: any;
     readonly length: number;
@@ -1216,6 +1223,30 @@ interface Array<T> {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
     forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U];
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
@@ -4122,6 +4153,8 @@ interface Date {
       */
     toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 }
+
+
 declare type PropertyKey = string | number | symbol;
 
 interface Array<T> {
@@ -4325,17 +4358,17 @@ interface NumberConstructor {
 
     /**
       * Returns true if passed value is finite.
-      * Unlike the global isFininte, Number.isFinite doesn't forcibly convert the parameter to a
+      * Unlike the global isFinite, Number.isFinite doesn't forcibly convert the parameter to a
       * number. Only finite values of the type number, result in true.
       * @param number A numeric value.
       */
-    isFinite(number: number): boolean;
+    isFinite(value: any): value is number;
 
     /**
       * Returns true if the value passed is an integer, false otherwise.
       * @param number A numeric value.
       */
-    isInteger(number: number): boolean;
+    isInteger(value: any): value is number;
 
     /**
       * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
@@ -4343,13 +4376,13 @@ interface NumberConstructor {
       * to a number. Only values of the type number, that are also NaN, result in true.
       * @param number A numeric value.
       */
-    isNaN(number: number): boolean;
+    isNaN(value: any): value is number;
 
     /**
       * Returns true if the value passed is a safe integer.
       * @param number A numeric value.
       */
-    isSafeInteger(number: number): boolean;
+    isSafeInteger(value: any): value is number;
 
     /**
       * The value of the largest integer n such that n and n + 1 are both exactly representable as
@@ -4646,6 +4679,8 @@ interface StringConstructor {
       */
     raw(template: TemplateStringsArray, ...substitutions: any[]): string;
 }
+
+
 interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
@@ -4718,6 +4753,8 @@ interface WeakSetConstructor {
     readonly prototype: WeakSet<any>;
 }
 declare var WeakSet: WeakSetConstructor;
+
+
 interface GeneratorFunction extends Function { }
 
 interface GeneratorFunctionConstructor {
@@ -4730,6 +4767,8 @@ interface GeneratorFunctionConstructor {
     readonly prototype: GeneratorFunction;
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
+
+
 /// <reference path="lib.es2015.symbol.d.ts" />
 
 interface SymbolConstructor {
@@ -5174,7 +5213,9 @@ interface Float64ArrayConstructor {
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
-}/**
+}
+
+/**
  * Represents the completion of an asynchronous operation
  */
 interface Promise<T> {
@@ -5427,8 +5468,10 @@ interface PromiseConstructor {
     resolve(): Promise<void>;
 }
 
-declare var Promise: PromiseConstructor;interface ProxyHandler<T> {
-    getPrototypeOf? (target: T): any;
+declare var Promise: PromiseConstructor;
+
+interface ProxyHandler<T> {
+    getPrototypeOf? (target: T): {} | null;
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
@@ -5441,14 +5484,17 @@ declare var Promise: PromiseConstructor;interface ProxyHandler<T> {
     enumerate? (target: T): PropertyKey[];
     ownKeys? (target: T): PropertyKey[];
     apply? (target: T, thisArg: any, argArray?: any): any;
-    construct? (target: T, thisArg: any, argArray?: any): any;
+    construct? (target: T, argArray: any, newTarget?: any): {};
 }
 
 interface ProxyConstructor {
     revocable<T>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
     new <T>(target: T, handler: ProxyHandler<T>): T
 }
-declare var Proxy: ProxyConstructor;declare namespace Reflect {
+declare var Proxy: ProxyConstructor;
+
+
+declare namespace Reflect {
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
     function construct(target: Function, argumentsList: ArrayLike<any>, newTarget?: any): any;
     function defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
@@ -5462,7 +5508,9 @@ declare var Proxy: ProxyConstructor;declare namespace Reflect {
     function preventExtensions(target: any): boolean;
     function set(target: any, propertyKey: PropertyKey, value: any, receiver?: any): boolean;
     function setPrototypeOf(target: any, proto: any): boolean;
-}interface Symbol {
+}
+
+interface Symbol {
     /** Returns a string representation of an object. */
     toString(): string;
 
@@ -5497,7 +5545,9 @@ interface SymbolConstructor {
     keyFor(sym: symbol): string | undefined;
 }
 
-declare var Symbol: SymbolConstructor;/// <reference path="lib.es2015.symbol.d.ts" />
+declare var Symbol: SymbolConstructor;
+
+/// <reference path="lib.es2015.symbol.d.ts" />
 
 interface SymbolConstructor {
     /** 
@@ -5824,6 +5874,8 @@ interface Float32Array {
 interface Float64Array {
     readonly [Symbol.toStringTag]: "Float64Array";
 }
+
+
 /////////////////////////////
 /// IE DOM APIs
 /////////////////////////////
@@ -7504,6 +7556,7 @@ interface CSSStyleDeclaration {
     writingMode: string | null;
     zIndex: string | null;
     zoom: string | null;
+    resize: string | null;
     getPropertyPriority(propertyName: string): string;
     getPropertyValue(propertyName: string): string;
     item(index: number): string;
@@ -7573,6 +7626,7 @@ declare var CanvasGradient: {
 }
 
 interface CanvasPattern {
+    setTransform(matrix: SVGMatrix): void;
 }
 
 declare var CanvasPattern: {
@@ -7998,7 +8052,7 @@ interface DataTransfer {
     effectAllowed: string;
     readonly files: FileList;
     readonly items: DataTransferItemList;
-    readonly types: DOMStringList;
+    readonly types: string[];
     clearData(format?: string): boolean;
     getData(format: string): string;
     setData(format: string, data: string): boolean;
@@ -13361,11 +13415,12 @@ declare var HashChangeEvent: {
 interface History {
     readonly length: number;
     readonly state: any;
-    back(distance?: any): void;
-    forward(distance?: any): void;
-    go(delta?: any): void;
-    pushState(statedata: any, title?: string, url?: string): void;
-    replaceState(statedata: any, title?: string, url?: string): void;
+    scrollRestoration: ScrollRestoration;
+    back(): void;
+    forward(): void;
+    go(delta?: number): void;
+    pushState(data: any, title: string, url?: string | null): void;
+    replaceState(data: any, title: string, url?: string | null): void;
 }
 
 declare var History: {
@@ -14426,7 +14481,7 @@ interface MouseEvent extends UIEvent {
     readonly x: number;
     readonly y: number;
     getModifierState(keyArg: string): boolean;
-    initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget): void;
+    initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget | null): void;
 }
 
 declare var MouseEvent: {
@@ -14539,6 +14594,7 @@ interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorConte
     readonly plugins: PluginArray;
     readonly pointerEnabled: boolean;
     readonly webdriver: boolean;
+    readonly hardwareConcurrency: number;
     getGamepads(): Gamepad[];
     javaEnabled(): boolean;
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
@@ -14556,18 +14612,18 @@ interface Node extends EventTarget {
     readonly attributes: NamedNodeMap;
     readonly baseURI: string | null;
     readonly childNodes: NodeList;
-    readonly firstChild: Node;
-    readonly lastChild: Node;
+    readonly firstChild: Node | null;
+    readonly lastChild: Node | null;
     readonly localName: string | null;
     readonly namespaceURI: string | null;
-    readonly nextSibling: Node;
+    readonly nextSibling: Node | null;
     readonly nodeName: string;
     readonly nodeType: number;
     nodeValue: string | null;
     readonly ownerDocument: Document;
-    readonly parentElement: HTMLElement;
-    readonly parentNode: Node;
-    readonly previousSibling: Node;
+    readonly parentElement: HTMLElement | null;
+    readonly parentNode: Node | null;
+    readonly previousSibling: Node | null;
     textContent: string | null;
     appendChild(newChild: Node): Node;
     cloneNode(deep?: boolean): Node;
@@ -18677,7 +18733,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly devicePixelRatio: number;
     readonly doNotTrack: string;
     readonly document: Document;
-    event: Event;
+    event: Event | undefined;
     readonly external: External;
     readonly frameElement: Element;
     readonly frames: Window;
@@ -18937,7 +18993,6 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-    [index: number]: Window;
 }
 
 declare var Window: {
@@ -18968,7 +19023,7 @@ declare var XMLDocument: {
 }
 
 interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
-    onreadystatechange: (this: this, ev: ProgressEvent) => any;
+    onreadystatechange: (this: this, ev: Event) => any;
     readonly readyState: number;
     readonly response: any;
     readonly responseText: string;
@@ -18980,6 +19035,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly upload: XMLHttpRequestUpload;
     withCredentials: boolean;
     msCaching?: string;
+    readonly responseURL: string;
     abort(): void;
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string | null;
@@ -18995,13 +19051,13 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly LOADING: number;
     readonly OPENED: number;
     readonly UNSENT: number;
-    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "load", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "loadstart", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "readystatechange", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "readystatechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "timeout", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -19342,183 +19398,183 @@ interface NavigatorUserMedia {
 }
 
 interface NodeSelector {
-    querySelector(selectors: "a"): HTMLAnchorElement;
-    querySelector(selectors: "abbr"): HTMLElement;
-    querySelector(selectors: "acronym"): HTMLElement;
-    querySelector(selectors: "address"): HTMLElement;
-    querySelector(selectors: "applet"): HTMLAppletElement;
-    querySelector(selectors: "area"): HTMLAreaElement;
-    querySelector(selectors: "article"): HTMLElement;
-    querySelector(selectors: "aside"): HTMLElement;
-    querySelector(selectors: "audio"): HTMLAudioElement;
-    querySelector(selectors: "b"): HTMLElement;
-    querySelector(selectors: "base"): HTMLBaseElement;
-    querySelector(selectors: "basefont"): HTMLBaseFontElement;
-    querySelector(selectors: "bdo"): HTMLElement;
-    querySelector(selectors: "big"): HTMLElement;
-    querySelector(selectors: "blockquote"): HTMLQuoteElement;
-    querySelector(selectors: "body"): HTMLBodyElement;
-    querySelector(selectors: "br"): HTMLBRElement;
-    querySelector(selectors: "button"): HTMLButtonElement;
-    querySelector(selectors: "canvas"): HTMLCanvasElement;
-    querySelector(selectors: "caption"): HTMLTableCaptionElement;
-    querySelector(selectors: "center"): HTMLElement;
-    querySelector(selectors: "circle"): SVGCircleElement;
-    querySelector(selectors: "cite"): HTMLElement;
-    querySelector(selectors: "clippath"): SVGClipPathElement;
-    querySelector(selectors: "code"): HTMLElement;
-    querySelector(selectors: "col"): HTMLTableColElement;
-    querySelector(selectors: "colgroup"): HTMLTableColElement;
-    querySelector(selectors: "datalist"): HTMLDataListElement;
-    querySelector(selectors: "dd"): HTMLElement;
-    querySelector(selectors: "defs"): SVGDefsElement;
-    querySelector(selectors: "del"): HTMLModElement;
-    querySelector(selectors: "desc"): SVGDescElement;
-    querySelector(selectors: "dfn"): HTMLElement;
-    querySelector(selectors: "dir"): HTMLDirectoryElement;
-    querySelector(selectors: "div"): HTMLDivElement;
-    querySelector(selectors: "dl"): HTMLDListElement;
-    querySelector(selectors: "dt"): HTMLElement;
-    querySelector(selectors: "ellipse"): SVGEllipseElement;
-    querySelector(selectors: "em"): HTMLElement;
-    querySelector(selectors: "embed"): HTMLEmbedElement;
-    querySelector(selectors: "feblend"): SVGFEBlendElement;
-    querySelector(selectors: "fecolormatrix"): SVGFEColorMatrixElement;
-    querySelector(selectors: "fecomponenttransfer"): SVGFEComponentTransferElement;
-    querySelector(selectors: "fecomposite"): SVGFECompositeElement;
-    querySelector(selectors: "feconvolvematrix"): SVGFEConvolveMatrixElement;
-    querySelector(selectors: "fediffuselighting"): SVGFEDiffuseLightingElement;
-    querySelector(selectors: "fedisplacementmap"): SVGFEDisplacementMapElement;
-    querySelector(selectors: "fedistantlight"): SVGFEDistantLightElement;
-    querySelector(selectors: "feflood"): SVGFEFloodElement;
-    querySelector(selectors: "fefunca"): SVGFEFuncAElement;
-    querySelector(selectors: "fefuncb"): SVGFEFuncBElement;
-    querySelector(selectors: "fefuncg"): SVGFEFuncGElement;
-    querySelector(selectors: "fefuncr"): SVGFEFuncRElement;
-    querySelector(selectors: "fegaussianblur"): SVGFEGaussianBlurElement;
-    querySelector(selectors: "feimage"): SVGFEImageElement;
-    querySelector(selectors: "femerge"): SVGFEMergeElement;
-    querySelector(selectors: "femergenode"): SVGFEMergeNodeElement;
-    querySelector(selectors: "femorphology"): SVGFEMorphologyElement;
-    querySelector(selectors: "feoffset"): SVGFEOffsetElement;
-    querySelector(selectors: "fepointlight"): SVGFEPointLightElement;
-    querySelector(selectors: "fespecularlighting"): SVGFESpecularLightingElement;
-    querySelector(selectors: "fespotlight"): SVGFESpotLightElement;
-    querySelector(selectors: "fetile"): SVGFETileElement;
-    querySelector(selectors: "feturbulence"): SVGFETurbulenceElement;
-    querySelector(selectors: "fieldset"): HTMLFieldSetElement;
-    querySelector(selectors: "figcaption"): HTMLElement;
-    querySelector(selectors: "figure"): HTMLElement;
-    querySelector(selectors: "filter"): SVGFilterElement;
-    querySelector(selectors: "font"): HTMLFontElement;
-    querySelector(selectors: "footer"): HTMLElement;
-    querySelector(selectors: "foreignobject"): SVGForeignObjectElement;
-    querySelector(selectors: "form"): HTMLFormElement;
-    querySelector(selectors: "frame"): HTMLFrameElement;
-    querySelector(selectors: "frameset"): HTMLFrameSetElement;
-    querySelector(selectors: "g"): SVGGElement;
-    querySelector(selectors: "h1"): HTMLHeadingElement;
-    querySelector(selectors: "h2"): HTMLHeadingElement;
-    querySelector(selectors: "h3"): HTMLHeadingElement;
-    querySelector(selectors: "h4"): HTMLHeadingElement;
-    querySelector(selectors: "h5"): HTMLHeadingElement;
-    querySelector(selectors: "h6"): HTMLHeadingElement;
-    querySelector(selectors: "head"): HTMLHeadElement;
-    querySelector(selectors: "header"): HTMLElement;
-    querySelector(selectors: "hgroup"): HTMLElement;
-    querySelector(selectors: "hr"): HTMLHRElement;
-    querySelector(selectors: "html"): HTMLHtmlElement;
-    querySelector(selectors: "i"): HTMLElement;
-    querySelector(selectors: "iframe"): HTMLIFrameElement;
-    querySelector(selectors: "image"): SVGImageElement;
-    querySelector(selectors: "img"): HTMLImageElement;
-    querySelector(selectors: "input"): HTMLInputElement;
-    querySelector(selectors: "ins"): HTMLModElement;
-    querySelector(selectors: "isindex"): HTMLUnknownElement;
-    querySelector(selectors: "kbd"): HTMLElement;
-    querySelector(selectors: "keygen"): HTMLElement;
-    querySelector(selectors: "label"): HTMLLabelElement;
-    querySelector(selectors: "legend"): HTMLLegendElement;
-    querySelector(selectors: "li"): HTMLLIElement;
-    querySelector(selectors: "line"): SVGLineElement;
-    querySelector(selectors: "lineargradient"): SVGLinearGradientElement;
-    querySelector(selectors: "link"): HTMLLinkElement;
-    querySelector(selectors: "listing"): HTMLPreElement;
-    querySelector(selectors: "map"): HTMLMapElement;
-    querySelector(selectors: "mark"): HTMLElement;
-    querySelector(selectors: "marker"): SVGMarkerElement;
-    querySelector(selectors: "marquee"): HTMLMarqueeElement;
-    querySelector(selectors: "mask"): SVGMaskElement;
-    querySelector(selectors: "menu"): HTMLMenuElement;
-    querySelector(selectors: "meta"): HTMLMetaElement;
-    querySelector(selectors: "metadata"): SVGMetadataElement;
-    querySelector(selectors: "meter"): HTMLMeterElement;
-    querySelector(selectors: "nav"): HTMLElement;
-    querySelector(selectors: "nextid"): HTMLUnknownElement;
-    querySelector(selectors: "nobr"): HTMLElement;
-    querySelector(selectors: "noframes"): HTMLElement;
-    querySelector(selectors: "noscript"): HTMLElement;
-    querySelector(selectors: "object"): HTMLObjectElement;
-    querySelector(selectors: "ol"): HTMLOListElement;
-    querySelector(selectors: "optgroup"): HTMLOptGroupElement;
-    querySelector(selectors: "option"): HTMLOptionElement;
-    querySelector(selectors: "p"): HTMLParagraphElement;
-    querySelector(selectors: "param"): HTMLParamElement;
-    querySelector(selectors: "path"): SVGPathElement;
-    querySelector(selectors: "pattern"): SVGPatternElement;
-    querySelector(selectors: "picture"): HTMLPictureElement;
-    querySelector(selectors: "plaintext"): HTMLElement;
-    querySelector(selectors: "polygon"): SVGPolygonElement;
-    querySelector(selectors: "polyline"): SVGPolylineElement;
-    querySelector(selectors: "pre"): HTMLPreElement;
-    querySelector(selectors: "progress"): HTMLProgressElement;
-    querySelector(selectors: "q"): HTMLQuoteElement;
-    querySelector(selectors: "radialgradient"): SVGRadialGradientElement;
-    querySelector(selectors: "rect"): SVGRectElement;
-    querySelector(selectors: "rt"): HTMLElement;
-    querySelector(selectors: "ruby"): HTMLElement;
-    querySelector(selectors: "s"): HTMLElement;
-    querySelector(selectors: "samp"): HTMLElement;
-    querySelector(selectors: "script"): HTMLScriptElement;
-    querySelector(selectors: "section"): HTMLElement;
-    querySelector(selectors: "select"): HTMLSelectElement;
-    querySelector(selectors: "small"): HTMLElement;
-    querySelector(selectors: "source"): HTMLSourceElement;
-    querySelector(selectors: "span"): HTMLSpanElement;
-    querySelector(selectors: "stop"): SVGStopElement;
-    querySelector(selectors: "strike"): HTMLElement;
-    querySelector(selectors: "strong"): HTMLElement;
-    querySelector(selectors: "style"): HTMLStyleElement;
-    querySelector(selectors: "sub"): HTMLElement;
-    querySelector(selectors: "sup"): HTMLElement;
-    querySelector(selectors: "svg"): SVGSVGElement;
-    querySelector(selectors: "switch"): SVGSwitchElement;
-    querySelector(selectors: "symbol"): SVGSymbolElement;
-    querySelector(selectors: "table"): HTMLTableElement;
-    querySelector(selectors: "tbody"): HTMLTableSectionElement;
-    querySelector(selectors: "td"): HTMLTableDataCellElement;
-    querySelector(selectors: "template"): HTMLTemplateElement;
-    querySelector(selectors: "text"): SVGTextElement;
-    querySelector(selectors: "textpath"): SVGTextPathElement;
-    querySelector(selectors: "textarea"): HTMLTextAreaElement;
-    querySelector(selectors: "tfoot"): HTMLTableSectionElement;
-    querySelector(selectors: "th"): HTMLTableHeaderCellElement;
-    querySelector(selectors: "thead"): HTMLTableSectionElement;
-    querySelector(selectors: "title"): HTMLTitleElement;
-    querySelector(selectors: "tr"): HTMLTableRowElement;
-    querySelector(selectors: "track"): HTMLTrackElement;
-    querySelector(selectors: "tspan"): SVGTSpanElement;
-    querySelector(selectors: "tt"): HTMLElement;
-    querySelector(selectors: "u"): HTMLElement;
-    querySelector(selectors: "ul"): HTMLUListElement;
-    querySelector(selectors: "use"): SVGUseElement;
-    querySelector(selectors: "var"): HTMLElement;
-    querySelector(selectors: "video"): HTMLVideoElement;
-    querySelector(selectors: "view"): SVGViewElement;
-    querySelector(selectors: "wbr"): HTMLElement;
-    querySelector(selectors: "x-ms-webview"): MSHTMLWebViewElement;
-    querySelector(selectors: "xmp"): HTMLPreElement;
-    querySelector(selectors: string): Element;
+    querySelector(selectors: "a"): HTMLAnchorElement | null;
+    querySelector(selectors: "abbr"): HTMLElement | null;
+    querySelector(selectors: "acronym"): HTMLElement | null;
+    querySelector(selectors: "address"): HTMLElement | null;
+    querySelector(selectors: "applet"): HTMLAppletElement | null;
+    querySelector(selectors: "area"): HTMLAreaElement | null;
+    querySelector(selectors: "article"): HTMLElement | null;
+    querySelector(selectors: "aside"): HTMLElement | null;
+    querySelector(selectors: "audio"): HTMLAudioElement | null;
+    querySelector(selectors: "b"): HTMLElement | null;
+    querySelector(selectors: "base"): HTMLBaseElement | null;
+    querySelector(selectors: "basefont"): HTMLBaseFontElement | null;
+    querySelector(selectors: "bdo"): HTMLElement | null;
+    querySelector(selectors: "big"): HTMLElement | null;
+    querySelector(selectors: "blockquote"): HTMLQuoteElement | null;
+    querySelector(selectors: "body"): HTMLBodyElement | null;
+    querySelector(selectors: "br"): HTMLBRElement | null;
+    querySelector(selectors: "button"): HTMLButtonElement | null;
+    querySelector(selectors: "canvas"): HTMLCanvasElement | null;
+    querySelector(selectors: "caption"): HTMLTableCaptionElement | null;
+    querySelector(selectors: "center"): HTMLElement | null;
+    querySelector(selectors: "circle"): SVGCircleElement | null;
+    querySelector(selectors: "cite"): HTMLElement | null;
+    querySelector(selectors: "clippath"): SVGClipPathElement | null;
+    querySelector(selectors: "code"): HTMLElement | null;
+    querySelector(selectors: "col"): HTMLTableColElement | null;
+    querySelector(selectors: "colgroup"): HTMLTableColElement | null;
+    querySelector(selectors: "datalist"): HTMLDataListElement | null;
+    querySelector(selectors: "dd"): HTMLElement | null;
+    querySelector(selectors: "defs"): SVGDefsElement | null;
+    querySelector(selectors: "del"): HTMLModElement | null;
+    querySelector(selectors: "desc"): SVGDescElement | null;
+    querySelector(selectors: "dfn"): HTMLElement | null;
+    querySelector(selectors: "dir"): HTMLDirectoryElement | null;
+    querySelector(selectors: "div"): HTMLDivElement | null;
+    querySelector(selectors: "dl"): HTMLDListElement | null;
+    querySelector(selectors: "dt"): HTMLElement | null;
+    querySelector(selectors: "ellipse"): SVGEllipseElement | null;
+    querySelector(selectors: "em"): HTMLElement | null;
+    querySelector(selectors: "embed"): HTMLEmbedElement | null;
+    querySelector(selectors: "feblend"): SVGFEBlendElement | null;
+    querySelector(selectors: "fecolormatrix"): SVGFEColorMatrixElement | null;
+    querySelector(selectors: "fecomponenttransfer"): SVGFEComponentTransferElement | null;
+    querySelector(selectors: "fecomposite"): SVGFECompositeElement | null;
+    querySelector(selectors: "feconvolvematrix"): SVGFEConvolveMatrixElement | null;
+    querySelector(selectors: "fediffuselighting"): SVGFEDiffuseLightingElement | null;
+    querySelector(selectors: "fedisplacementmap"): SVGFEDisplacementMapElement | null;
+    querySelector(selectors: "fedistantlight"): SVGFEDistantLightElement | null;
+    querySelector(selectors: "feflood"): SVGFEFloodElement | null;
+    querySelector(selectors: "fefunca"): SVGFEFuncAElement | null;
+    querySelector(selectors: "fefuncb"): SVGFEFuncBElement | null;
+    querySelector(selectors: "fefuncg"): SVGFEFuncGElement | null;
+    querySelector(selectors: "fefuncr"): SVGFEFuncRElement | null;
+    querySelector(selectors: "fegaussianblur"): SVGFEGaussianBlurElement | null;
+    querySelector(selectors: "feimage"): SVGFEImageElement | null;
+    querySelector(selectors: "femerge"): SVGFEMergeElement | null;
+    querySelector(selectors: "femergenode"): SVGFEMergeNodeElement | null;
+    querySelector(selectors: "femorphology"): SVGFEMorphologyElement | null;
+    querySelector(selectors: "feoffset"): SVGFEOffsetElement | null;
+    querySelector(selectors: "fepointlight"): SVGFEPointLightElement | null;
+    querySelector(selectors: "fespecularlighting"): SVGFESpecularLightingElement | null;
+    querySelector(selectors: "fespotlight"): SVGFESpotLightElement | null;
+    querySelector(selectors: "fetile"): SVGFETileElement | null;
+    querySelector(selectors: "feturbulence"): SVGFETurbulenceElement | null;
+    querySelector(selectors: "fieldset"): HTMLFieldSetElement | null;
+    querySelector(selectors: "figcaption"): HTMLElement | null;
+    querySelector(selectors: "figure"): HTMLElement | null;
+    querySelector(selectors: "filter"): SVGFilterElement | null;
+    querySelector(selectors: "font"): HTMLFontElement | null;
+    querySelector(selectors: "footer"): HTMLElement | null;
+    querySelector(selectors: "foreignobject"): SVGForeignObjectElement | null;
+    querySelector(selectors: "form"): HTMLFormElement | null;
+    querySelector(selectors: "frame"): HTMLFrameElement | null;
+    querySelector(selectors: "frameset"): HTMLFrameSetElement | null;
+    querySelector(selectors: "g"): SVGGElement | null;
+    querySelector(selectors: "h1"): HTMLHeadingElement | null;
+    querySelector(selectors: "h2"): HTMLHeadingElement | null;
+    querySelector(selectors: "h3"): HTMLHeadingElement | null;
+    querySelector(selectors: "h4"): HTMLHeadingElement | null;
+    querySelector(selectors: "h5"): HTMLHeadingElement | null;
+    querySelector(selectors: "h6"): HTMLHeadingElement | null;
+    querySelector(selectors: "head"): HTMLHeadElement | null;
+    querySelector(selectors: "header"): HTMLElement | null;
+    querySelector(selectors: "hgroup"): HTMLElement | null;
+    querySelector(selectors: "hr"): HTMLHRElement | null;
+    querySelector(selectors: "html"): HTMLHtmlElement | null;
+    querySelector(selectors: "i"): HTMLElement | null;
+    querySelector(selectors: "iframe"): HTMLIFrameElement | null;
+    querySelector(selectors: "image"): SVGImageElement | null;
+    querySelector(selectors: "img"): HTMLImageElement | null;
+    querySelector(selectors: "input"): HTMLInputElement | null;
+    querySelector(selectors: "ins"): HTMLModElement | null;
+    querySelector(selectors: "isindex"): HTMLUnknownElement | null;
+    querySelector(selectors: "kbd"): HTMLElement | null;
+    querySelector(selectors: "keygen"): HTMLElement | null;
+    querySelector(selectors: "label"): HTMLLabelElement | null;
+    querySelector(selectors: "legend"): HTMLLegendElement | null;
+    querySelector(selectors: "li"): HTMLLIElement | null;
+    querySelector(selectors: "line"): SVGLineElement | null;
+    querySelector(selectors: "lineargradient"): SVGLinearGradientElement | null;
+    querySelector(selectors: "link"): HTMLLinkElement | null;
+    querySelector(selectors: "listing"): HTMLPreElement | null;
+    querySelector(selectors: "map"): HTMLMapElement | null;
+    querySelector(selectors: "mark"): HTMLElement | null;
+    querySelector(selectors: "marker"): SVGMarkerElement | null;
+    querySelector(selectors: "marquee"): HTMLMarqueeElement | null;
+    querySelector(selectors: "mask"): SVGMaskElement | null;
+    querySelector(selectors: "menu"): HTMLMenuElement | null;
+    querySelector(selectors: "meta"): HTMLMetaElement | null;
+    querySelector(selectors: "metadata"): SVGMetadataElement | null;
+    querySelector(selectors: "meter"): HTMLMeterElement | null;
+    querySelector(selectors: "nav"): HTMLElement | null;
+    querySelector(selectors: "nextid"): HTMLUnknownElement | null;
+    querySelector(selectors: "nobr"): HTMLElement | null;
+    querySelector(selectors: "noframes"): HTMLElement | null;
+    querySelector(selectors: "noscript"): HTMLElement | null;
+    querySelector(selectors: "object"): HTMLObjectElement | null;
+    querySelector(selectors: "ol"): HTMLOListElement | null;
+    querySelector(selectors: "optgroup"): HTMLOptGroupElement | null;
+    querySelector(selectors: "option"): HTMLOptionElement | null;
+    querySelector(selectors: "p"): HTMLParagraphElement | null;
+    querySelector(selectors: "param"): HTMLParamElement | null;
+    querySelector(selectors: "path"): SVGPathElement | null;
+    querySelector(selectors: "pattern"): SVGPatternElement | null;
+    querySelector(selectors: "picture"): HTMLPictureElement | null;
+    querySelector(selectors: "plaintext"): HTMLElement | null;
+    querySelector(selectors: "polygon"): SVGPolygonElement | null;
+    querySelector(selectors: "polyline"): SVGPolylineElement | null;
+    querySelector(selectors: "pre"): HTMLPreElement | null;
+    querySelector(selectors: "progress"): HTMLProgressElement | null;
+    querySelector(selectors: "q"): HTMLQuoteElement | null;
+    querySelector(selectors: "radialgradient"): SVGRadialGradientElement | null;
+    querySelector(selectors: "rect"): SVGRectElement | null;
+    querySelector(selectors: "rt"): HTMLElement | null;
+    querySelector(selectors: "ruby"): HTMLElement | null;
+    querySelector(selectors: "s"): HTMLElement | null;
+    querySelector(selectors: "samp"): HTMLElement | null;
+    querySelector(selectors: "script"): HTMLScriptElement | null;
+    querySelector(selectors: "section"): HTMLElement | null;
+    querySelector(selectors: "select"): HTMLSelectElement | null;
+    querySelector(selectors: "small"): HTMLElement | null;
+    querySelector(selectors: "source"): HTMLSourceElement | null;
+    querySelector(selectors: "span"): HTMLSpanElement | null;
+    querySelector(selectors: "stop"): SVGStopElement | null;
+    querySelector(selectors: "strike"): HTMLElement | null;
+    querySelector(selectors: "strong"): HTMLElement | null;
+    querySelector(selectors: "style"): HTMLStyleElement | null;
+    querySelector(selectors: "sub"): HTMLElement | null;
+    querySelector(selectors: "sup"): HTMLElement | null;
+    querySelector(selectors: "svg"): SVGSVGElement | null;
+    querySelector(selectors: "switch"): SVGSwitchElement | null;
+    querySelector(selectors: "symbol"): SVGSymbolElement | null;
+    querySelector(selectors: "table"): HTMLTableElement | null;
+    querySelector(selectors: "tbody"): HTMLTableSectionElement | null;
+    querySelector(selectors: "td"): HTMLTableDataCellElement | null;
+    querySelector(selectors: "template"): HTMLTemplateElement | null;
+    querySelector(selectors: "text"): SVGTextElement | null;
+    querySelector(selectors: "textpath"): SVGTextPathElement | null;
+    querySelector(selectors: "textarea"): HTMLTextAreaElement | null;
+    querySelector(selectors: "tfoot"): HTMLTableSectionElement | null;
+    querySelector(selectors: "th"): HTMLTableHeaderCellElement | null;
+    querySelector(selectors: "thead"): HTMLTableSectionElement | null;
+    querySelector(selectors: "title"): HTMLTitleElement | null;
+    querySelector(selectors: "tr"): HTMLTableRowElement | null;
+    querySelector(selectors: "track"): HTMLTrackElement | null;
+    querySelector(selectors: "tspan"): SVGTSpanElement | null;
+    querySelector(selectors: "tt"): HTMLElement | null;
+    querySelector(selectors: "u"): HTMLElement | null;
+    querySelector(selectors: "ul"): HTMLUListElement | null;
+    querySelector(selectors: "use"): SVGUseElement | null;
+    querySelector(selectors: "var"): HTMLElement | null;
+    querySelector(selectors: "video"): HTMLVideoElement | null;
+    querySelector(selectors: "view"): SVGViewElement | null;
+    querySelector(selectors: "wbr"): HTMLElement | null;
+    querySelector(selectors: "x-ms-webview"): MSHTMLWebViewElement | null;
+    querySelector(selectors: "xmp"): HTMLPreElement | null;
+    querySelector(selectors: string): Element | null;
     querySelectorAll(selectors: "a"): NodeListOf<HTMLAnchorElement>;
     querySelectorAll(selectors: "abbr"): NodeListOf<HTMLElement>;
     querySelectorAll(selectors: "acronym"): NodeListOf<HTMLElement>;
@@ -20126,7 +20182,7 @@ declare var defaultStatus: string;
 declare var devicePixelRatio: number;
 declare var doNotTrack: string;
 declare var document: Document;
-declare var event: Event;
+declare var event: Event | undefined;
 declare var external: External;
 declare var frameElement: Element;
 declare var frames: Window;
@@ -20448,11 +20504,16 @@ type ScrollLogicalPosition = "start" | "center" | "end" | "nearest";
 type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
 type MouseWheelEvent = WheelEvent;
+type ScrollRestoration = "auto" | "manual";
+
+
 /////////////////////////////
 /// WorkerGlobalScope APIs 
 /////////////////////////////
 // These are only available in a Web Worker 
 declare function importScripts(...urls: string[]): void;
+
+
 
 
 /////////////////////////////
@@ -20744,6 +20805,8 @@ interface DateConstructor {
 interface Date {
     getVarDate: () => VarDate;
 }
+
+
 /// <reference path="lib.dom.d.ts" />
 
 interface DOMTokenList {

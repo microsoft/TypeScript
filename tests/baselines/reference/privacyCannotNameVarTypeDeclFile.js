@@ -161,11 +161,11 @@ var publicClassWithWithPrivatePropertyTypes = (function () {
     }
     return publicClassWithWithPrivatePropertyTypes;
 }());
-exports.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
 publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget1(); // Error
 publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty = exporter.createExportedWidget1();
 publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget3(); // Error
 publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty1 = exporter.createExportedWidget3();
+exports.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
 var privateClassWithWithPrivatePropertyTypes = (function () {
     function privateClassWithWithPrivatePropertyTypes() {
         this.myPublicProperty = exporter.createExportedWidget1();
@@ -190,9 +190,9 @@ var publicClassWithPrivateModulePropertyTypes = (function () {
     }
     return publicClassWithPrivateModulePropertyTypes;
 }());
-exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
 publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget2(); // Error
 publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget4(); // Error
+exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
 exports.publicVarWithPrivateModulePropertyTypes = exporter.createExportedWidget2(); // Error
 exports.publicVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4(); // Error
 var privateClassWithPrivateModulePropertyTypes = (function () {

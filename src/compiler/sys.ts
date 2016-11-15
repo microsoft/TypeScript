@@ -17,7 +17,11 @@ namespace ts {
         readFile(path: string, encoding?: string): string;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
+        /**
+         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that 
+         * use native OS file watching
+         */
+        watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
@@ -34,6 +38,8 @@ namespace ts {
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
+        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        clearTimeout?(timeoutId: any): void;
     }
 
     export interface FileWatcher {
@@ -46,13 +52,9 @@ namespace ts {
     }
 
     declare var require: any;
-    declare var module: any;
     declare var process: any;
     declare var global: any;
     declare var __filename: string;
-    declare var Buffer: {
-        new (str: string, encoding?: string): any;
-    };
 
     declare class Enumerator {
         public atEnd(): boolean;
@@ -324,7 +326,7 @@ namespace ts {
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
-            function readFile(fileName: string, encoding?: string): string {
+            function readFile(fileName: string, _encoding?: string): string {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
@@ -441,6 +443,7 @@ namespace ts {
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
 
+            const noOpFileWatcher: FileWatcher = { close: noop };
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -450,7 +453,7 @@ namespace ts {
                 },
                 readFile,
                 writeFile,
-                watchFile: (fileName, callback) => {
+                watchFile: (fileName, callback, pollingInterval) => {
                     if (useNonPollingWatchers) {
                         const watchedFile = watchedFileSet.addFile(fileName, callback);
                         return {
@@ -458,7 +461,7 @@ namespace ts {
                         };
                     }
                     else {
-                        _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);
+                        _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
                         return {
                             close: () => _fs.unwatchFile(fileName, fileChanged)
                         };
@@ -476,6 +479,10 @@ namespace ts {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     let options: any;
+                    if (!directoryExists(directoryName)) {
+                        return noOpFileWatcher;
+                    }
+
                     if (isNode4OrLater() && (process.platform === "win32" || process.platform === "darwin")) {
                         options = { persistent: true, recursive: !!recursive };
                     }
@@ -560,7 +567,9 @@ namespace ts {
                     catch (e) {
                         // Could not enable source maps.
                     }
-                }
+                },
+                setTimeout,
+                clearTimeout
             };
             return nodeSystem;
         }
@@ -572,7 +581,7 @@ namespace ts {
                 args: ChakraHost.args,
                 useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
                 write: ChakraHost.echo,
-                readFile(path: string, encoding?: string) {
+                readFile(path: string, _encoding?: string) {
                     // encoding is automatically handled by the implementation in ChakraHost
                     return ChakraHost.readFile(path);
                 },
@@ -591,9 +600,9 @@ namespace ts {
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,
-                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || ((name: string) => ""),
+                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || (() => ""),
                 readDirectory: (path: string, extensions?: string[], excludes?: string[], includes?: string[]) => {
-                    const pattern = getFileMatcherPatterns(path, extensions, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
+                    const pattern = getFileMatcherPatterns(path, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
                     return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
                 },
                 exit: ChakraHost.quit,

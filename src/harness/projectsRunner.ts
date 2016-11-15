@@ -178,7 +178,7 @@ class ProjectRunner extends RunnerBase {
             function createCompilerHost(): ts.CompilerHost {
                 return {
                     getSourceFile,
-                    getDefaultLibFileName: options => Harness.Compiler.defaultLibFileName,
+                    getDefaultLibFileName: () => Harness.Compiler.defaultLibFileName,
                     writeFile,
                     getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
@@ -421,7 +421,7 @@ class ProjectRunner extends RunnerBase {
                 return undefined;
             }
 
-            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
+            function writeFile() {
             }
         }
 

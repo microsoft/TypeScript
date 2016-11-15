@@ -90,7 +90,7 @@ namespace ts.FindAllReferences {
             getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
         }
         else {
-            const internedName = getInternedName(symbol, node, declarations);
+            const internedName = getInternedName(symbol, node);
             for (const sourceFile of sourceFiles) {
                 cancellationToken.throwIfCancellationRequested();
 
@@ -175,7 +175,7 @@ namespace ts.FindAllReferences {
             return undefined;
         }
 
-        function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
+        function getInternedName(symbol: Symbol, location: Node): string {
             // If this is an export or import specifier it could have been renamed using the 'as' syntax.
             // If so we want to search for whatever under the cursor.
             if (isImportOrExportSpecifierName(location)) {

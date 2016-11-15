@@ -1,4 +1,5 @@
 ﻿/// <reference path="types.d.ts" />
+/// <reference path="shared.ts" />
 
 namespace ts.server {
     export enum LogLevel {
@@ -45,12 +46,13 @@ namespace ts.server {
         }
     }
 
-    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, cachePath?: string): DiscoverTypings {
+    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
-            fileNames: project.getFileNames(),
+            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true),
             compilerOptions: project.getCompilerOptions(),
             typingOptions,
+            unresolvedImports,
             projectRootPath: getProjectRootPath(project),
             cachePath,
             kind: "discover"
@@ -157,63 +159,6 @@ namespace ts.server {
             }
         };
     }
-    function throwLanguageServiceIsDisabledError() {
-        throw new Error("LanguageService is disabled");
-    }
-
-    export const nullLanguageService: LanguageService = {
-        cleanupSemanticCache: (): any => throwLanguageServiceIsDisabledError(),
-        getSyntacticDiagnostics: (): any => throwLanguageServiceIsDisabledError(),
-        getSemanticDiagnostics: (): any => throwLanguageServiceIsDisabledError(),
-        getCompilerOptionsDiagnostics: (): any => throwLanguageServiceIsDisabledError(),
-        getSyntacticClassifications: (): any => throwLanguageServiceIsDisabledError(),
-        getEncodedSyntacticClassifications: (): any => throwLanguageServiceIsDisabledError(),
-        getSemanticClassifications: (): any => throwLanguageServiceIsDisabledError(),
-        getEncodedSemanticClassifications: (): any => throwLanguageServiceIsDisabledError(),
-        getCompletionsAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        findReferences: (): any => throwLanguageServiceIsDisabledError(),
-        getCompletionEntryDetails: (): any => throwLanguageServiceIsDisabledError(),
-        getQuickInfoAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        findRenameLocations: (): any => throwLanguageServiceIsDisabledError(),
-        getNameOrDottedNameSpan: (): any => throwLanguageServiceIsDisabledError(),
-        getBreakpointStatementAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getBraceMatchingAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getSignatureHelpItems: (): any => throwLanguageServiceIsDisabledError(),
-        getDefinitionAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getRenameInfo: (): any => throwLanguageServiceIsDisabledError(),
-        getTypeDefinitionAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getReferencesAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getDocumentHighlights: (): any => throwLanguageServiceIsDisabledError(),
-        getOccurrencesAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getNavigateToItems: (): any => throwLanguageServiceIsDisabledError(),
-        getNavigationBarItems: (): any => throwLanguageServiceIsDisabledError(),
-        getOutliningSpans: (): any => throwLanguageServiceIsDisabledError(),
-        getTodoComments: (): any => throwLanguageServiceIsDisabledError(),
-        getIndentationAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getFormattingEditsForRange: (): any => throwLanguageServiceIsDisabledError(),
-        getFormattingEditsForDocument: (): any => throwLanguageServiceIsDisabledError(),
-        getFormattingEditsAfterKeystroke: (): any => throwLanguageServiceIsDisabledError(),
-        getDocCommentTemplateAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        isValidBraceCompletionAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getEmitOutput: (): any => throwLanguageServiceIsDisabledError(),
-        getProgram: (): any => throwLanguageServiceIsDisabledError(),
-        getNonBoundSourceFile: (): any => throwLanguageServiceIsDisabledError(),
-        dispose: (): any => throwLanguageServiceIsDisabledError(),
-        getCompletionEntrySymbol: (): any => throwLanguageServiceIsDisabledError(),
-        getImplementationAtPosition: (): any => throwLanguageServiceIsDisabledError(),
-        getSourceFile: (): any => throwLanguageServiceIsDisabledError(),
-        getCodeFixesAtPosition: (): any => throwLanguageServiceIsDisabledError()
-    };
-
-    export interface ServerLanguageServiceHost {
-        setCompilationSettings(options: CompilerOptions): void;
-        notifyFileRemoved(info: ScriptInfo): void;
-    }
-
-    export const nullLanguageServiceHost: ServerLanguageServiceHost = {
-        setCompilationSettings: () => undefined,
-        notifyFileRemoved: () => undefined
-    };
 
     export interface ProjectOptions {
         /**
@@ -239,6 +184,11 @@ namespace ts.server {
         return `/dev/null/inferredProject${counter}*`;
     }
 
+    export function toSortedReadonlyArray(arr: string[]): SortedReadonlyArray<string> {
+        arr.sort();
+        return <any>arr;
+    }
+
     export class ThrottledOperations {
         private pendingTimeouts: Map<any> = createMap<any>();
         constructor(private readonly host: ServerHost) {
@@ -249,7 +199,7 @@ namespace ts.server {
                 // another operation was already scheduled for this id - cancel it
                 this.host.clearTimeout(this.pendingTimeouts[operationId]);
             }
-            // schedule new operation, pass arguments  
+            // schedule new operation, pass arguments
             this.pendingTimeouts[operationId] = this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb);
         }
 

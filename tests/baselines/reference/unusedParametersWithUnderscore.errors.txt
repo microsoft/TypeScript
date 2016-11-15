@@ -2,15 +2,11 @@ tests/cases/compiler/unusedParametersWithUnderscore.ts(2,12): error TS6133: 'a' 
 tests/cases/compiler/unusedParametersWithUnderscore.ts(2,19): error TS6133: 'c' is declared but never used.
 tests/cases/compiler/unusedParametersWithUnderscore.ts(2,27): error TS6133: 'd' is declared but never used.
 tests/cases/compiler/unusedParametersWithUnderscore.ts(2,29): error TS6133: 'e___' is declared but never used.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(6,14): error TS6133: '_a' is declared but never used.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(6,18): error TS6133: '___b' is declared but never used.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(9,14): error TS6133: '_a' is declared but never used.
-tests/cases/compiler/unusedParametersWithUnderscore.ts(9,19): error TS6133: '___b' is declared but never used.
 tests/cases/compiler/unusedParametersWithUnderscore.ts(12,16): error TS6133: 'arg' is declared but never used.
 tests/cases/compiler/unusedParametersWithUnderscore.ts(18,13): error TS6133: 'arg' is declared but never used.
 
 
-==== tests/cases/compiler/unusedParametersWithUnderscore.ts (10 errors) ====
+==== tests/cases/compiler/unusedParametersWithUnderscore.ts (6 errors) ====
     
     function f(a, _b, c, ___, d,e___, _f) {
                ~
@@ -25,17 +21,9 @@ tests/cases/compiler/unusedParametersWithUnderscore.ts(18,13): error TS6133: 'ar
     
     
     function f2({_a, __b}) {
-                 ~~
-!!! error TS6133: '_a' is declared but never used.
-                     ~~~
-!!! error TS6133: '___b' is declared but never used.
     }
     
     function f3([_a, ,__b]) {
-                 ~~
-!!! error TS6133: '_a' is declared but never used.
-                      ~~~
-!!! error TS6133: '___b' is declared but never used.
     }
     
     function f4(...arg) {

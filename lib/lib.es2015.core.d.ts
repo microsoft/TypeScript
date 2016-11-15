@@ -13,7 +13,11 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 declare type PropertyKey = string | number | symbol;
 
 interface Array<T> {
@@ -217,17 +221,17 @@ interface NumberConstructor {
 
     /**
       * Returns true if passed value is finite.
-      * Unlike the global isFininte, Number.isFinite doesn't forcibly convert the parameter to a
+      * Unlike the global isFinite, Number.isFinite doesn't forcibly convert the parameter to a
       * number. Only finite values of the type number, result in true.
       * @param number A numeric value.
       */
-    isFinite(number: number): boolean;
+    isFinite(value: any): value is number;
 
     /**
       * Returns true if the value passed is an integer, false otherwise.
       * @param number A numeric value.
       */
-    isInteger(number: number): boolean;
+    isInteger(value: any): value is number;
 
     /**
       * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
@@ -235,13 +239,13 @@ interface NumberConstructor {
       * to a number. Only values of the type number, that are also NaN, result in true.
       * @param number A numeric value.
       */
-    isNaN(number: number): boolean;
+    isNaN(value: any): value is number;
 
     /**
       * Returns true if the value passed is a safe integer.
       * @param number A numeric value.
       */
-    isSafeInteger(number: number): boolean;
+    isSafeInteger(value: any): value is number;
 
     /**
       * The value of the largest integer n such that n and n + 1 are both exactly representable as

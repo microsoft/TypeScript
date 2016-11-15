@@ -14,7 +14,7 @@ var a3 = void 0;
 >0 : 0
 
 var b1 = [];
->b1 : never[]
+>b1 : any[]
 >[] : never[]
 
 var b2 = [,];

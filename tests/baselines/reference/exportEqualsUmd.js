@@ -11,6 +11,6 @@ export = { ["hi"]: "there" };
     }
 })(["require", "exports"], function (require, exports) {
     "use strict";
-    return _a = {}, _a["hi"] = "there", _a;
     var _a;
+    return _a = {}, _a["hi"] = "there", _a;
 });

@@ -10,10 +10,14 @@
         "stripInternal": true,
         "types": [
             "node"
-        ]
+        ],
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "files": [
         "../types.d.ts",
+        "../shared.ts",
         "typingsInstaller.ts",
         "nodeTypingsInstaller.ts"
     ]

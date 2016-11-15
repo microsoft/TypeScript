@@ -496,6 +496,7 @@ namespace ts {
             if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionExpression(
+                        /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
@@ -955,7 +956,7 @@ namespace ts {
          * @param elements The elements to visit.
          * @param multiLine Whether array literals created should be emitted on multiple lines.
          */
-        function visitElements(elements: NodeArray<Expression>, multiLine: boolean) {
+        function visitElements(elements: NodeArray<Expression>, _multiLine?: boolean) {
             // [source]
             //      ar = [1, yield, 2];
             //
@@ -1101,7 +1102,7 @@ namespace ts {
                     createFunctionApply(
                         cacheExpression(visitNode(target, visitor, isLeftHandSideExpression)),
                         thisArg,
-                        visitElements(node.arguments, /*multiLine*/ false),
+                        visitElements(node.arguments),
                         /*location*/ node
                     ),
                     node
@@ -1130,7 +1131,7 @@ namespace ts {
                         createFunctionApply(
                             cacheExpression(visitNode(target, visitor, isExpression)),
                             thisArg,
-                            visitElements(node.arguments, /*multiLine*/ false)
+                            visitElements(node.arguments)
                         ),
                         /*typeArguments*/ undefined,
                         [],
@@ -2368,7 +2369,7 @@ namespace ts {
                     labelExpressions = [];
                 }
 
-                const expression = <LiteralExpression>createSynthesizedNode(SyntaxKind.NumericLiteral);
+                const expression = createLiteral(-1);
                 if (labelExpressions[label] === undefined) {
                     labelExpressions[label] = [expression];
                 }
@@ -2379,7 +2380,7 @@ namespace ts {
                 return expression;
             }
 
-            return <OmittedExpression>createNode(SyntaxKind.OmittedExpression);
+            return createOmittedExpression();
         }
 
         /**
@@ -2591,10 +2592,11 @@ namespace ts {
                     createThis(),
                     setEmitFlags(
                         createFunctionExpression(
+                            /*modifiers*/ undefined,
                             /*asteriskToken*/ undefined,
                             /*name*/ undefined,
                             /*typeParameters*/ undefined,
-                            [createParameter(state)],
+                            [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, state)],
                             /*type*/ undefined,
                             createBlock(
                                 buildResult,

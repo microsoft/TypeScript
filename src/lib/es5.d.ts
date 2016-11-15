@@ -244,6 +244,9 @@ interface Function {
       */
     bind(this: Function, thisArg: any, ...argArray: any[]): any;
 
+    /** Returns a string representation of a function. */
+    toString(): string;
+
     prototype: any;
     readonly length: number;
 

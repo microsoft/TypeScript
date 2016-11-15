@@ -26,6 +26,85 @@
 ////    (class { });
 ////})
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "<function>",
+            "kind": "function",
+            "childItems": [
+                {
+                    "text": "nest",
+                    "kind": "function",
+                    "childItems": [
+                        {
+                            "text": "moreNest",
+                            "kind": "function"
+                        }
+                    ]
+                },
+                {
+                    "text": "x",
+                    "kind": "function",
+                    "childItems": [
+                        {
+                            "text": "xx",
+                            "kind": "function"
+                        }
+                    ]
+                },
+                {
+                    "text": "y",
+                    "kind": "const",
+                    "childItems": [
+                        {
+                            "text": "foo",
+                            "kind": "function"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "text": "<function>",
+            "kind": "function",
+            "childItems": [
+                {
+                    "text": "<function>",
+                    "kind": "function"
+                },
+                {
+                    "text": "z",
+                    "kind": "function"
+                }
+            ]
+        },
+        {
+            "text": "classes",
+            "kind": "function",
+            "childItems": [
+                {
+                    "text": "<class>",
+                    "kind": "class"
+                },
+                {
+                    "text": "cls2",
+                    "kind": "class"
+                },
+                {
+                    "text": "cls3",
+                    "kind": "class"
+                }
+            ]
+        },
+        {
+            "text": "global.cls",
+            "kind": "class"
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",
