@@ -233,7 +233,7 @@ namespace ts.server.typingsInstaller {
             }
             const result: string[] = [];
             for (const typing of typingsToInstall) {
-                if (this.missingTypingsSet[typing]) {
+                if (this.missingTypingsSet[typing] || this.packageNameToTypingLocation[typing]) {
                     continue;
                 }
                 const validationResult = validatePackageName(typing);
@@ -314,7 +314,8 @@ namespace ts.server.typingsInstaller {
                     this.sendResponse(<TypingsInstallEvent>{
                         kind: EventInstall,
                         packagesToInstall: scopedTypings,
-                        installSuccess: ok
+                        installSuccess: ok,
+                        typingsInstallerVersion: ts.version // qualified explicitly to prevent occasional shadowing
                     });
                 }
 
