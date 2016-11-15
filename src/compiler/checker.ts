@@ -11193,9 +11193,8 @@ namespace ts {
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
 
-            let i = 0;
             let offset = 0;
-            for (i = 0; i < node.properties.length; i++) {
+            for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
                 let member = memberDecl.symbol;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||

@@ -326,7 +326,7 @@ namespace ts {
                         // Assignment for bindingTarget = value.propName should highlight whole property, hence use p as source map node
                         const propAccess = createDestructuringPropertyAccess(value, propName);
                         if (isComputedPropertyName(propName)) {
-                            (computedTempVariables = computedTempVariables || []).push((propAccess as ElementAccessExpression).argumentExpression);
+                            computedTempVariables = append(computedTempVariables, (propAccess as ElementAccessExpression).argumentExpression);
                         }
                         emitDestructuringAssignment(bindingTarget, propAccess, p);
                     }
@@ -428,18 +428,11 @@ namespace ts {
                 }
                 if (isComputedPropertyName(getPropertyName(element))) {
                     // get the temp name and put that in there instead, like `_tmp + ""`
-                    const stringifiedTemp = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
-                    stringifiedTemp.pos = location.pos;
-                    stringifiedTemp.end = location.end;
-                    stringifiedTemp.text = "";
-                    propertyNames.push(createBinary(computedTempVariables.shift(), SyntaxKind.PlusToken, stringifiedTemp));
+                    propertyNames.push(createBinary(computedTempVariables.shift(), SyntaxKind.PlusToken, createLiteral("")));
                 }
                 else {
-                    const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
-                    str.pos = location.pos;
-                    str.end = location.end;
-                    str.text = getTextOfPropertyName(getPropertyName(element));
-                    propertyNames.push(str);
+                    const propName = getTextOfPropertyName(getPropertyName(element));
+                    propertyNames.push(createLiteral(propName, location));
                 }
             }
             const args = createSynthesizedNodeArray([value, createArrayLiteral(propertyNames, location)]);
@@ -569,11 +562,10 @@ namespace ts {
                         bindingElements = [];
                     }
                     // Rewrite element to a declaration with an initializer that fetches property
-                    // TODO: Probably save the result of createDestructuringPropertyAccess if propName is a computed property
                     const propName = element.propertyName || <Identifier>element.name;
                     const propAccess = createDestructuringPropertyAccess(value, propName);
                     if (isComputedPropertyName(propName)) {
-                        (computedTempVariables = computedTempVariables || []).push((propAccess as ElementAccessExpression).argumentExpression);
+                        computedTempVariables = append(computedTempVariables, (propAccess as ElementAccessExpression).argumentExpression);
                     }
                     emitBindingElement(element, propAccess);
                 }

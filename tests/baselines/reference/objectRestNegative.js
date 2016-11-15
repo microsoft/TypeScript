@@ -15,7 +15,7 @@ let rest: { b: string }
 //// [objectRestNegative.js]
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) === -1)
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     return t;
 };
