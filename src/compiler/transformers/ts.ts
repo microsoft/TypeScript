@@ -330,6 +330,7 @@ namespace ts {
                 case SyntaxKind.ThisType:
                 case SyntaxKind.TypeOperator:
                 case SyntaxKind.IndexedAccessType:
+                case SyntaxKind.MappedType:
                 case SyntaxKind.LiteralType:
                     // TypeScript type nodes are elided.
 
@@ -470,9 +471,10 @@ namespace ts {
         }
 
         function visitSourceFile(node: SourceFile) {
+            const alwaysStrict = compilerOptions.alwaysStrict && !(isExternalModule(node) && moduleKind === ModuleKind.ES2015);
             return updateSourceFileNode(
                 node,
-                visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, compilerOptions.alwaysStrict));
+                visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
         }
 
         /**
@@ -1748,6 +1750,7 @@ namespace ts {
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeOperator:
                 case SyntaxKind.IndexedAccessType:
+                case SyntaxKind.MappedType:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ThisType:
@@ -2247,6 +2250,7 @@ namespace ts {
             const name = node.name;
             if (isBindingPattern(name)) {
                 return flattenVariableDestructuringToExpression(
+                    context,
                     node,
                     hoistVariableDeclaration,
                     createNamespaceExportExpression,
@@ -3350,7 +3354,6 @@ namespace ts {
             ]
         );
     }
-
 
     const decorateHelper: EmitHelper = {
         name: "typescript:decorate",

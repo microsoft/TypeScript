@@ -267,9 +267,9 @@ namespace ts {
             case SyntaxKind.VoidExpression:
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.YieldExpression:
-            case SyntaxKind.SpreadElementExpression:
+            case SyntaxKind.SpreadElement:
             case SyntaxKind.NonNullExpression:
-                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElementExpression | NonNullExpression>node).expression, f, result);
+                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElement | NonNullExpression>node).expression, f, result);
                 break;
 
             case SyntaxKind.PrefixUnaryExpression:
@@ -508,6 +508,10 @@ namespace ts {
             case SyntaxKind.ShorthandPropertyAssignment:
                 result = reduceNode((<ShorthandPropertyAssignment>node).name, f, result);
                 result = reduceNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, f, result);
+                break;
+
+            case SyntaxKind.SpreadAssignment:
+                result = reduceNode((node as SpreadAssignment).expression, f, result);
                 break;
 
             // Top-level nodes
@@ -907,9 +911,9 @@ namespace ts {
                 return updateYield(<YieldExpression>node,
                     visitNode((<YieldExpression>node).expression, visitor, isExpression));
 
-            case SyntaxKind.SpreadElementExpression:
-                return updateSpread(<SpreadElementExpression>node,
-                    visitNode((<SpreadElementExpression>node).expression, visitor, isExpression));
+            case SyntaxKind.SpreadElement:
+                return updateSpread(<SpreadElement>node,
+                    visitNode((<SpreadElement>node).expression, visitor, isExpression));
 
             case SyntaxKind.ClassExpression:
                 return updateClassExpression(<ClassExpression>node,
@@ -1160,7 +1164,11 @@ namespace ts {
                     visitNode((<ShorthandPropertyAssignment>node).name, visitor, isIdentifier),
                     visitNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, visitor, isExpression));
 
-            // Top-level nodes
+            case SyntaxKind.SpreadAssignment:
+                return updateSpreadAssignment(node as SpreadAssignment,
+                    visitNode((node as SpreadAssignment).expression, visitor, isExpression));
+
+           // Top-level nodes
             case SyntaxKind.SourceFile:
                 context.startLexicalEnvironment();
                 return updateSourceFileNode(<SourceFile>node,

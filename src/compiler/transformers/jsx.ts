@@ -1,5 +1,6 @@
 /// <reference path="../factory.ts" />
 /// <reference path="../visitor.ts" />
+/// <reference path="./esnext.ts" />
 
 /*@internal*/
 namespace ts {
@@ -117,7 +118,8 @@ namespace ts {
                 }
             }
 
-            const element = createReactCreateElement(
+            const element = createExpressionForJsxElement(
+                context.getEmitResolver().getJsxFactoryEntity(),
                 compilerOptions.reactNamespace,
                 tagName,
                 objectProperties,
@@ -534,28 +536,4 @@ namespace ts {
         "hearts": 0x2665,
         "diams": 0x2666
     });
-
-    function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
-        context.requestEmitHelper(assignHelper);
-        return createCall(
-            getHelperName("__assign"),
-            /*typeArguments*/ undefined,
-            attributesSegments
-        );
-    }
-
-    const assignHelper: EmitHelper = {
-        name: "typescript:assign",
-        scoped: false,
-        priority: 1,
-        text: `
-            var __assign = (this && this.__assign) || Object.assign || function(t) {
-                for (var s, i = 1, n = arguments.length; i < n; i++) {
-                    s = arguments[i];
-                    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                        t[p] = s[p];
-                }
-                return t;
-            };`
-    };
 }

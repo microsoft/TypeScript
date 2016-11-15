@@ -818,7 +818,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration, isExportedDeclaration: boolean): Expression {
             const createAssignment = isExportedDeclaration ? createExportedVariableAssignment : createNonExportedVariableAssignment;
             return isBindingPattern(node.name)
-                ? flattenVariableDestructuringToExpression(node, hoistVariableDeclaration, createAssignment, destructuringVisitor)
+                ? flattenVariableDestructuringToExpression(context, node, hoistVariableDeclaration, createAssignment, destructuringVisitor)
                 : createAssignment(node.name, visitNode(node.initializer, destructuringVisitor, isExpression));
         }
 
@@ -1484,7 +1484,7 @@ namespace ts {
             if (isAssignmentExpression(node)) {
                 return hasExportedReferenceInDestructuringTarget(node.left);
             }
-            else if (isSpreadElementExpression(node)) {
+            else if (isSpreadExpression(node)) {
                 return hasExportedReferenceInDestructuringTarget(node.expression);
             }
             else if (isObjectLiteralExpression(node)) {

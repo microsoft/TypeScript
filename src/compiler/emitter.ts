@@ -421,7 +421,9 @@ namespace ts {
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>node);
                 case SyntaxKind.IndexedAccessType:
-                    return emitPropertyAccessType(<IndexedAccessTypeNode>node);
+                    return emitIndexedAccessType(<IndexedAccessTypeNode>node);
+                case SyntaxKind.MappedType:
+                    return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -556,6 +558,8 @@ namespace ts {
                     return emitPropertyAssignment(<PropertyAssignment>node);
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                case SyntaxKind.SpreadAssignment:
+                    return emitSpreadAssignment(node as SpreadAssignment);
 
                 // Enum
                 case SyntaxKind.EnumMember:
@@ -646,8 +650,8 @@ namespace ts {
                     return emitTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.YieldExpression:
                     return emitYieldExpression(<YieldExpression>node);
-                case SyntaxKind.SpreadElementExpression:
-                    return emitSpreadElementExpression(<SpreadElementExpression>node);
+                case SyntaxKind.SpreadElement:
+                    return emitSpreadExpression(<SpreadElement>node);
                 case SyntaxKind.ClassExpression:
                     return emitClassExpression(<ClassExpression>node);
                 case SyntaxKind.OmittedExpression:
@@ -919,11 +923,34 @@ namespace ts {
             emit(node.type);
         }
 
-        function emitPropertyAccessType(node: IndexedAccessTypeNode) {
+        function emitIndexedAccessType(node: IndexedAccessTypeNode) {
             emit(node.objectType);
             write("[");
             emit(node.indexType);
             write("]");
+        }
+
+        function emitMappedType(node: MappedTypeNode) {
+            write("{");
+            writeLine();
+            increaseIndent();
+            if (node.readonlyToken) {
+                write("readonly ");
+            }
+            write("[");
+            emit(node.typeParameter.name);
+            write(" in ");
+            emit(node.typeParameter.constraint);
+            write("]");
+            if (node.questionToken) {
+                write("?");
+            }
+            write(": ");
+            emit(node.type);
+            write(";");
+            writeLine();
+            decreaseIndent();
+            write("}");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
@@ -1195,7 +1222,7 @@ namespace ts {
             emitExpressionWithPrefix(" ", node.expression);
         }
 
-        function emitSpreadElementExpression(node: SpreadElementExpression) {
+        function emitSpreadExpression(node: SpreadElement) {
             write("...");
             emitExpression(node.expression);
         }
@@ -1920,6 +1947,13 @@ namespace ts {
             if (node.objectAssignmentInitializer) {
                 write(" = ");
                 emitExpression(node.objectAssignmentInitializer);
+            }
+        }
+
+        function emitSpreadAssignment(node: SpreadAssignment) {
+            if (node.expression) {
+                write("...");
+                emitExpression(node.expression);
             }
         }
 

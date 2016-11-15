@@ -759,6 +759,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenVariableDestructuringToExpression(
+                    context,
                     node,
                     hoistVariableDeclaration,
                     createExportExpression
