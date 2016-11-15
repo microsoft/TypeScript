@@ -46,6 +46,11 @@ namespace ts {
                     return visitFunctionExpression(node as FunctionExpression);
                 case SyntaxKind.ArrowFunction:
                     return visitArrowFunction(node as ArrowFunction);
+                case SyntaxKind.MethodDeclaration:
+                    return visitMethodDeclaration(node as MethodDeclaration);
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return visitAccessorDeclaration(node as AccessorDeclaration);
                 case SyntaxKind.Parameter:
                     return visitParameter(node as ParameterDeclaration);
                 default:
@@ -208,11 +213,6 @@ namespace ts {
         }
 
         function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            const body = hasRest ?
-                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
-                visitEachChild(node.body, visitor, context);
-
             return setOriginalNode(
                 createFunctionDeclaration(
                     /*decorators*/ undefined,
@@ -222,17 +222,13 @@ namespace ts {
                     /*typeParameters*/ undefined,
                     visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
-                    body,
+                    transformFunctionBodyIfNeeded(node),
                     /*location*/ node
                 ),
                 /*original*/ node);
         }
 
         function visitArrowFunction(node: ArrowFunction) {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            const body = hasRest ?
-                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
-                visitEachChild(node.body, visitor, context);
             const func = setOriginalNode(
                 createArrowFunction(
                     /*modifiers*/ undefined,
@@ -240,7 +236,7 @@ namespace ts {
                     visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
                     node.equalsGreaterThanToken,
-                    body,
+                    transformFunctionBodyIfNeeded(node),
                     /*location*/ node
                 ),
                 /*original*/ node
@@ -250,10 +246,6 @@ namespace ts {
         }
 
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            const body = hasRest ?
-                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
-                visitEachChild(node.body, visitor, context);
             return setOriginalNode(
                 createFunctionExpression(
                     /*modifiers*/ undefined,
@@ -262,11 +254,62 @@ namespace ts {
                     /*typeParameters*/ undefined,
                     visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
-                    body,
+                    transformFunctionBodyIfNeeded(node),
                     /*location*/ node
                 ),
                 /*original*/ node
             );
+        }
+
+        function visitMethodDeclaration(node: MethodDeclaration): MethodDeclaration {
+            return setOriginalNode(
+                createMethod(
+                    /*decorators*/ undefined,
+                    node.modifiers,
+                    node.asteriskToken,
+                    node.name,
+                    /*typeParameters*/ undefined,
+                    visitNodes(node.parameters, visitor, isParameter),
+                    /*type*/ undefined,
+                    transformFunctionBodyIfNeeded(node),
+                    /*location*/ node
+                ),
+                /*original*/ node);
+        }
+
+        function visitAccessorDeclaration(node: AccessorDeclaration): AccessorDeclaration {
+            if (node.kind === SyntaxKind.GetAccessor) {
+                return setOriginalNode(
+                    createGetAccessor(
+                        /*decorators*/ undefined,
+                        node.modifiers,
+                        node.name,
+                        visitNodes(node.parameters, visitor, isParameter),
+                        /*type*/ undefined,
+                        transformFunctionBodyIfNeeded(node),
+                        /*location*/ node
+                    ),
+                    /*original*/ node);
+            }
+            else {
+                return setOriginalNode(
+                    createSetAccessor(
+                        /*decorators*/ undefined,
+                        node.modifiers,
+                        node.name,
+                        visitNodes(node.parameters, visitor, isParameter),
+                        transformFunctionBodyIfNeeded(node),
+                        /*location*/ node
+                    ),
+                    /*original*/ node);
+            }
+        }
+
+        function transformFunctionBodyIfNeeded(node: FunctionLikeDeclaration): Block {
+            const hasRest = forEach(node.parameters, isObjectRestParameter);
+            return hasRest ?
+                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) :
+                visitEachChild(node.body, visitor, context) as Block;
         }
     }
 }

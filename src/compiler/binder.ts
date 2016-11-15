@@ -2771,6 +2771,11 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
+        // a method declaration with object rest destructuring is ES Next syntax
+        if (subtreeFlags & TransformFlags.ContainsSpreadExpression) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+
         // An async method declaration is ES2017 syntax.
         if (hasModifier(node, ModifierFlags.Async)) {
             transformFlags |= TransformFlags.AssertES2017;
@@ -2795,6 +2800,11 @@ namespace ts {
             || node.type
             || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // a method declaration with object rest destructuring is ES Next syntax
+        if (subtreeFlags & TransformFlags.ContainsSpreadExpression) {
+            transformFlags |= TransformFlags.AssertESNext;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
