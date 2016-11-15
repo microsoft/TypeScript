@@ -11106,7 +11106,7 @@ namespace ts {
          * @param openingLikeElement a Jsx opening-like element
          * @return an anonymous type (similar to the one returned by checkObjectLiteral) in which its properties are attributes property.
          */
-        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?:(symbol: Symbol)=>boolean) {
+        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?: (symbol: Symbol) => boolean) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createMap<Symbol>();
             let spread: Type = emptyObjectType;
@@ -12335,12 +12335,6 @@ namespace ts {
          * @param excludeArgument
          */
         function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>) {
-            const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
-            // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
-            // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
-            // can be specified by users through attributes property.
-            const paramType = getTypeAtPosition(signature, 0);
-
             // JSX opening-like element has correct arity for stateless-function component if the one of the following condition is true:
             //      1. callIsIncomplete 
             //      2. attributes property has same number of properties as the parameter object type.
@@ -12352,6 +12346,11 @@ namespace ts {
                 return true;
             }
 
+            const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
+            // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
+            // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
+            // can be specified by users through attributes property.
+            const paramType = getTypeAtPosition(signature, 0);
             const argType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
             const argProperties = getPropertiesOfType(argType);
             const paramProperties = getPropertiesOfType(paramType);
@@ -12849,7 +12848,7 @@ namespace ts {
                 return result;
             }
 
-            // Do not report any error if we are doing so for stateless function component as such error will be error will be handle in "resolveCustomJsxElementAttributesType".
+            // Do not report any error if we are doing so for stateless function component as such error will be handled in "resolveCustomJsxElementAttributesType".
             if (isJsxOpeningOrSelfClosingElement) {
                 // If resolveCall was called by the language service, return undefined to let the language service decide what to do. (see getDefinitionAtPosition)
                 // Otherwise, return the last candidate we tried so that error reporting can use it.
@@ -13285,7 +13284,7 @@ namespace ts {
             }
             links.resolvedSignature = resolvingSignature;
 
-            let callSignature = resolvedStatelessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
+            let callSignature = resolveStatelessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
             if (!callSignature || callSignature === unknownSignature) {
                 const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
                 callSignature = callSignatures[callSignatures.length - 1];
@@ -13307,14 +13306,14 @@ namespace ts {
          * @return a resolved signature if we can find function matching function signature through resolve call or a first signature in the list of functions.
          *         otherwise return undefined if tag-name of the opening-like element doesn't have call signatures
          */
-        function resolvedStatelessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature {
+        function resolveStatelessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature {
             if (elementType.flags & TypeFlags.Union) {
                 const types = (elementType as UnionType).types;
                 let result: Signature;
-                types.map(type => {
+                for (const type of types) {
                     // This is mainly to fill in all the candidates if there is one.
-                    result = result || resolvedStatelessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
-                });
+                    result = result || resolveStatelessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
+                }
 
                 return result;
             }
@@ -13341,7 +13340,7 @@ namespace ts {
                     return resolveDecorator(<Decorator>node, candidatesOutArray);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
-                    return resolvedStatelessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray);
+                    return resolveStatelessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray);
             }
             Debug.fail("Branch in 'resolveSignature' should be unreachable.");
         }
