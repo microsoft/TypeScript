@@ -493,7 +493,7 @@ namespace ts {
         case SyntaxKind.NumericLiteral:
             return (<LiteralExpression>name).text;
         case SyntaxKind.ComputedPropertyName:
-            if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
+            if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression)) {
                 return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
             }
         }
@@ -1262,6 +1262,7 @@ namespace ts {
                     case SyntaxKind.Decorator:
                     case SyntaxKind.JsxExpression:
                     case SyntaxKind.JsxSpreadAttribute:
+                    case SyntaxKind.SpreadAssignment:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
@@ -1879,8 +1880,10 @@ namespace ts {
         return isFunctionLike(node) && hasModifier(node, ModifierFlags.Async) && !isAccessor(node);
     }
 
-    export function isStringOrNumericLiteral(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral;
+    export function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
+        const kind = node.kind;
+        return kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.NumericLiteral;
     }
 
     /**
@@ -1896,7 +1899,7 @@ namespace ts {
 
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
-            !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind) &&
+            !isStringOrNumericLiteral((<ComputedPropertyName>name).expression) &&
             !isWellKnownSymbolSyntactically((<ComputedPropertyName>name).expression);
     }
 
@@ -1909,7 +1912,7 @@ namespace ts {
         return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
-    export function getPropertyNameForPropertyNameNode(name: DeclarationName): string {
+    export function getPropertyNameForPropertyNameNode(name: DeclarationName | ParameterDeclaration): string {
         if (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral || name.kind === SyntaxKind.Parameter) {
             return (<Identifier | LiteralExpression>name).text;
         }

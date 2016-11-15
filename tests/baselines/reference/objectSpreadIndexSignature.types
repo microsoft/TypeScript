@@ -28,7 +28,7 @@ let indexed2: Indexed2;
 let i = { ...indexed, b: 11 };
 >i : { b: number; a: number; }
 >{ ...indexed, b: 11 } : { b: number; a: number; }
->indexed : any
+>indexed : Indexed
 >b : number
 >11 : 11
 
@@ -41,8 +41,8 @@ i[101];
 let ii = { ...indexed, ...indexed2 };
 >ii : { [x: string]: number | boolean; c: boolean; a: number; }
 >{ ...indexed, ...indexed2 } : { [x: string]: number | boolean; c: boolean; a: number; }
->indexed : any
->indexed2 : any
+>indexed : Indexed
+>indexed2 : Indexed2
 
 // both have indexer, so i[1001]: number | boolean
 ii[1001];

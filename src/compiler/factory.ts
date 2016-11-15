@@ -102,12 +102,12 @@ namespace ts {
 
     // Literals
 
-    export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
+    export function createLiteral(textSource: StringLiteral | NumericLiteral | Identifier, location?: TextRange): StringLiteral;
     export function createLiteral(value: string, location?: TextRange): StringLiteral;
     export function createLiteral(value: number, location?: TextRange): NumericLiteral;
     export function createLiteral(value: boolean, location?: TextRange): BooleanLiteral;
     export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
+    export function createLiteral(value: string | number | boolean | StringLiteral | NumericLiteral | Identifier, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
             const node = <NumericLiteral>createNode(SyntaxKind.NumericLiteral, location, /*flags*/ undefined);
             node.text = value.toString();
@@ -3796,7 +3796,10 @@ namespace ts {
                 // `"a"` in `let { "a": b } = ...`
                 // `1` in `let { 1: b } = ...`
                 if ((<BindingElement>bindingElement).propertyName) {
-                    return (<BindingElement>bindingElement).propertyName;
+                    const propertyName = (<BindingElement>bindingElement).propertyName;
+                    return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
+                        ? propertyName.expression
+                        : propertyName;
                 }
 
                 break;
@@ -3807,7 +3810,10 @@ namespace ts {
                 // `"a"` in `({ "a": b } = ...)`
                 // `1` in `({ 1: b } = ...)`
                 if ((<PropertyAssignment>bindingElement).name) {
-                    return (<PropertyAssignment>bindingElement).name;
+                    const propertyName = (<PropertyAssignment>bindingElement).name;
+                    return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
+                        ? propertyName.expression
+                        : propertyName;
                 }
 
                 break;
@@ -3819,7 +3825,9 @@ namespace ts {
 
         const target = getTargetOfBindingOrAssignmentElement(bindingElement);
         if (target && isPropertyName(target)) {
-            return target;
+            return isComputedPropertyName(target) && isStringOrNumericLiteral(target.expression)
+                ? target.expression
+                : target;
         }
 
         Debug.fail("Invalid property name for binding element.");

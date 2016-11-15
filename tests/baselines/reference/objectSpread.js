@@ -87,6 +87,9 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
         s = arguments[i];
         for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
             t[p] = s[p];
+        if (typeof Object.getOwnPropertySymbols === "function")
+            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
+                t[p[i]] = s[p[i]];
     }
     return t;
 };
@@ -105,7 +108,7 @@ var combinedMid = __assign({}, o, { b: 'ok' }, o2);
 var combinedAfter = __assign({}, o, o2, { b: 'ok' });
 var combinedNested = __assign({}, __assign({ a: 4 }, { b: false, c: 'overriden' }), { d: 'actually new' }, { a: 5, d: 'maybe new' });
 var combinedNestedChangeType = __assign({}, __assign({ a: 1 }, { b: false, c: 'overriden' }), { c: -1 });
-var propertyNested = __assign({ a: __assign({}, o) });
+var propertyNested = { a: __assign({}, o) };
 // accessors don't copy the descriptor
 // (which means that readonly getters become read/write properties)
 var op = { get a() { return 6; } };
