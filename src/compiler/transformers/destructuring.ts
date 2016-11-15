@@ -304,17 +304,19 @@ namespace ts {
             if (properties.length !== 1) {
                 // For anything but a single element destructuring we need to generate a temporary
                 // to ensure value is evaluated exactly once.
-                // When doing so we want to hightlight the passed in source map node since thats the one needing this temp assignment
+                // When doing so we want to highlight the passed in source map node since that's the one needing this temp assignment
                 value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
             }
 
             let bindingElements: ObjectLiteralElementLike[] = [];
+            let computedTempVariables: Expression[];
             for (let i = 0; i < properties.length; i++) {
                 const p = properties[i];
                 if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     if (!transformRest ||
                         p.transformFlags & TransformFlags.ContainsSpreadExpression ||
-                        (p.kind === SyntaxKind.PropertyAssignment && p.initializer.transformFlags & TransformFlags.ContainsSpreadExpression)) {
+                        (p.kind === SyntaxKind.PropertyAssignment && p.initializer.transformFlags & TransformFlags.ContainsSpreadExpression) ||
+                        isComputedPropertyName(p.name)) {
                         if (bindingElements.length) {
                             emitRestAssignment(bindingElements, value, location, target);
                             bindingElements = [];
@@ -322,7 +324,11 @@ namespace ts {
                         const propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
                         const bindingTarget = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
                         // Assignment for bindingTarget = value.propName should highlight whole property, hence use p as source map node
-                        emitDestructuringAssignment(bindingTarget, createDestructuringPropertyAccess(value, propName), p);
+                        const propAccess = createDestructuringPropertyAccess(value, propName);
+                        if (isComputedPropertyName(propName)) {
+                            computedTempVariables = append(computedTempVariables, (propAccess as ElementAccessExpression).argumentExpression);
+                        }
+                        emitDestructuringAssignment(bindingTarget, propAccess, p);
                     }
                     else {
                         bindingElements.push(p);
@@ -336,7 +342,7 @@ namespace ts {
                         bindingElements = [];
                     }
                     const propName = (p as SpreadAssignment).expression as Identifier;
-                    const restCall = createRestCall(value, target.properties, p => p.name, target);
+                    const restCall = createRestCall(value, target.properties, p => p.name, target, computedTempVariables);
                     emitDestructuringAssignment(propName, restCall, p);
                 }
             }
@@ -413,17 +419,28 @@ namespace ts {
 
         /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
          * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`*/
-        function createRestCall<T extends Node>(value: Expression, elements: T[], getPropertyName: (element: T) => PropertyName, location: TextRange): Expression {
-            const propertyNames: LiteralExpression[] = [];
+        function createRestCall<T extends Node>(value: Expression, elements: T[], getPropertyName: (element: T) => PropertyName, location: TextRange, computedTempVariables: Expression[]): Expression {
+            const propertyNames: Expression[] = [];
             for (let i = 0; i < elements.length - 1; i++) {
-                if (isOmittedExpression(elements[i])) {
+                const element = elements[i];
+                if (isOmittedExpression(element)) {
                     continue;
                 }
-                const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
-                str.pos = location.pos;
-                str.end = location.end;
-                str.text = getTextOfPropertyName(getPropertyName(elements[i]));
-                propertyNames.push(str);
+                if (isComputedPropertyName(getPropertyName(element))) {
+                    // get the temp name and put that in there instead, like `_tmp + ""`
+                    const temp = computedTempVariables.shift();
+                    propertyNames.push(createConditional(createBinary(createTypeOf(temp),
+                                                                      SyntaxKind.EqualsEqualsEqualsToken,
+                                                                      createLiteral("symbol")),
+                                                         createToken(SyntaxKind.QuestionToken),
+                                                         temp,
+                                                         createToken(SyntaxKind.ColonToken),
+                                                         createBinary(temp, SyntaxKind.PlusToken, createLiteral(""))));
+                }
+                else {
+                    const propName = getTextOfPropertyName(getPropertyName(element));
+                    propertyNames.push(createLiteral(propName, location));
+                }
             }
             const args = createSynthesizedNodeArray([value, createArrayLiteral(propertyNames, location)]);
             return createCall(createIdentifier("__rest"), undefined, args);
@@ -522,6 +539,7 @@ namespace ts {
             const elements = name.elements;
             const numElements = elements.length;
             let bindingElements: BindingElement[] = [];
+            let computedTempVariables: Expression[];
             for (let i = 0; i < numElements; i++) {
                 const element = elements[i];
                 if (isOmittedExpression(element)) {
@@ -533,12 +551,15 @@ namespace ts {
                         bindingElements = [];
                     }
                     const restCall = createRestCall(value,
-                                                    name.elements,
+                                                    elements, // name.elements,
                                                     element => (element as BindingElement).propertyName || <Identifier>(element as BindingElement).name,
-                                                    name);
+                                                    name,
+                                                    computedTempVariables);
                     emitBindingElement(element, restCall);
                 }
-                else if (transformRest && !(element.transformFlags & TransformFlags.ContainsSpreadExpression)) {
+                else if (transformRest &&
+                         !(element.transformFlags & TransformFlags.ContainsSpreadExpression) &&
+                         !isComputedPropertyName(element.propertyName || element.name)) {
                     // do not emit until we have a complete bundle of ES2015 syntax
                     bindingElements.push(element);
                 }
@@ -549,7 +570,11 @@ namespace ts {
                     }
                     // Rewrite element to a declaration with an initializer that fetches property
                     const propName = element.propertyName || <Identifier>element.name;
-                    emitBindingElement(element, createDestructuringPropertyAccess(value, propName));
+                    const propAccess = createDestructuringPropertyAccess(value, propName);
+                    if (isComputedPropertyName(propName)) {
+                        computedTempVariables = append(computedTempVariables, (propAccess as ElementAccessExpression).argumentExpression);
+                    }
+                    emitBindingElement(element, propAccess);
                 }
             }
             if (bindingElements.length) {

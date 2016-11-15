@@ -27,6 +27,7 @@ let indexed2: Indexed2;
 
 let i = { ...indexed, b: 11 };
 >i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 10, 3))
+>indexed : Symbol(indexed, Decl(objectSpreadIndexSignature.ts, 8, 3))
 >b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 10, 21))
 
 // only indexed has indexer, so i[101]: any
@@ -35,6 +36,8 @@ i[101];
 
 let ii = { ...indexed, ...indexed2 };
 >ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 13, 3))
+>indexed : Symbol(indexed, Decl(objectSpreadIndexSignature.ts, 8, 3))
+>indexed2 : Symbol(indexed2, Decl(objectSpreadIndexSignature.ts, 9, 3))
 
 // both have indexer, so i[1001]: number | boolean
 ii[1001];

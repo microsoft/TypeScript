@@ -32,57 +32,57 @@ function f(
 >optionalUnionStops : { sn: string | number; }
 >sn : string | number
 >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
->definiteBoolean : any
->definiteString : any
->optionalNumber : any
+>definiteBoolean : { sn: boolean; }
+>definiteString : { sn: string; }
+>optionalNumber : { sn?: number | undefined; }
 
     let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 >optionalUnionDuplicates : { sn: string | number; }
 >sn : string | number
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
->definiteBoolean : any
->definiteString : any
->optionalString : any
->optionalNumber : any
+>definiteBoolean : { sn: boolean; }
+>definiteString : { sn: string; }
+>optionalString : { sn?: string | undefined; }
+>optionalNumber : { sn?: number | undefined; }
 
     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
 >allOptional : { sn?: string | number | undefined; }
 >sn : string | number | undefined
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
->optionalString : any
->optionalNumber : any
+>optionalString : { sn?: string | undefined; }
+>optionalNumber : { sn?: number | undefined; }
 
     // undefined
     let undefinedUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
 >undefinedUnionStops : { sn: string | number; }
 >sn : string | number
 >{ ...definiteBoolean, ...definiteString, ...undefinedNumber } : { sn: string | number; }
->definiteBoolean : any
->definiteString : any
->undefinedNumber : any
+>definiteBoolean : { sn: boolean; }
+>definiteString : { sn: string; }
+>undefinedNumber : { sn: number | undefined; }
 
     let undefinedUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber };
 >undefinedUnionDuplicates : { sn: string | number; }
 >sn : string | number
 >{ ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber } : { sn: string | number; }
->definiteBoolean : any
->definiteString : any
->undefinedString : any
->undefinedNumber : any
+>definiteBoolean : { sn: boolean; }
+>definiteString : { sn: string; }
+>undefinedString : { sn: string | undefined; }
+>undefinedNumber : { sn: number | undefined; }
 
     let allUndefined: { sn: string | number | undefined } = { ...undefinedString, ...undefinedNumber };
 >allUndefined : { sn: string | number | undefined; }
 >sn : string | number | undefined
 >{ ...undefinedString, ...undefinedNumber } : { sn: string | number | undefined; }
->undefinedString : any
->undefinedNumber : any
+>undefinedString : { sn: string | undefined; }
+>undefinedNumber : { sn: number | undefined; }
 
     let undefinedWithOptionalContinues: { sn: string | number | boolean } = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
 >undefinedWithOptionalContinues : { sn: string | number | boolean; }
 >sn : string | number | boolean
 >{ ...definiteBoolean, ...undefinedString, ...optionalNumber } : { sn: string | number | boolean; }
->definiteBoolean : any
->undefinedString : any
->optionalNumber : any
+>definiteBoolean : { sn: boolean; }
+>undefinedString : { sn: string | undefined; }
+>optionalNumber : { sn?: number | undefined; }
 }
 
