@@ -1528,6 +1528,8 @@ namespace ts {
         return <Expression>createBinary(left, SyntaxKind.LessThanToken, right, location);
     }
 
+    export function createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression, location?: TextRange): DestructuringAssignment;
+    export function createAssignment(left: Expression, right: Expression, location?: TextRange): BinaryExpression;
     export function createAssignment(left: Expression, right: Expression, location?: TextRange) {
         return createBinary(left, SyntaxKind.EqualsToken, right, location);
     }
@@ -2345,7 +2347,7 @@ namespace ts {
         if (isBlock(node)) {
             return node;
         }
-        return createBlock([createReturn(node, node)], node);
+        return createBlock([createReturn(node, node)], node, /*multiLine*/ true);
     }
 
     function isUseStrictPrologue(node: ExpressionStatement): boolean {

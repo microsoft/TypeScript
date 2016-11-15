@@ -54,7 +54,7 @@ namespace ts {
             }
         }
 
-        const expressions: Expression[] = [];
+        let expressions: Expression[];
         const host: FlattenHost = {
             context,
             level,
@@ -92,17 +92,21 @@ namespace ts {
         flattenBindingOrAssignmentElement(host, node, value, location, /*skipInitializer*/ isDestructuringAssignment(node));
 
         if (value && needsValue) {
+            if (!some(expressions)) {
+                return value;
+            }
+
             expressions.push(value);
         }
 
-        return aggregateTransformFlags(inlineExpressions(expressions));
+        return aggregateTransformFlags(inlineExpressions(expressions)) || createOmittedExpression();
 
         function emitExpression(expression: Expression) {
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
             setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
             aggregateTransformFlags(expression);
-            expressions.push(expression);
+            expressions = append(expressions, expression);
         }
 
         function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) {

@@ -3950,6 +3950,12 @@ namespace ts {
         return false;
     }
 
+    export function isAssignmentPattern(node: Node): node is AssignmentPattern {
+        const kind = node.kind;
+        return kind === SyntaxKind.ArrayLiteralExpression
+            || kind === SyntaxKind.ObjectLiteralExpression;
+    }
+
     export function isBindingElement(node: Node): node is BindingElement {
         return node.kind === SyntaxKind.BindingElement;
     }

@@ -4,6 +4,9 @@
 /*@internal*/
 namespace ts {
     export function transformESNext(context: TransformationContext) {
+        const {
+            endLexicalEnvironment
+        } = context;
         let currentSourceFile: SourceFile;
         return transformSourceFile;
 
@@ -37,6 +40,14 @@ namespace ts {
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.ArrayBindingPattern:
                     return node;
+                case SyntaxKind.Constructor:
+                    return visitConstructorDeclaration(node as ConstructorDeclaration);
+                case SyntaxKind.MethodDeclaration:
+                    return visitMethodDeclaration(node as MethodDeclaration);
+                case SyntaxKind.GetAccessor:
+                    return visitGetAccessorDeclaration(node as GetAccessorDeclaration);
+                case SyntaxKind.SetAccessor:
+                    return visitSetAccessorDeclaration(node as SetAccessorDeclaration);
                 case SyntaxKind.FunctionDeclaration:
                     return visitFunctionDeclaration(node as FunctionDeclaration);
                 case SyntaxKind.FunctionExpression:
@@ -134,7 +145,7 @@ namespace ts {
          * @param node A BinaryExpression node.
          */
         function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
-            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsESNext) {
+            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRest) {
                 return flattenDestructuringAssignment(
                     context,
                     node,
@@ -144,7 +155,6 @@ namespace ts {
                     visitor
                 );
             }
-
             return visitEachChild(node, visitor, context);
         }
 
@@ -155,8 +165,15 @@ namespace ts {
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
-            if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.AssertESNext) {
-                return flattenDestructuringBinding(context, node, /*boundValue*/ undefined, /*skipInitializer*/ false, /*recordTempVariablesInLine*/ true, FlattenLevel.ObjectRest, visitor);
+            if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRest) {
+                return flattenDestructuringBinding(
+                    context,
+                    node,
+                    /*boundValue*/ undefined,
+                    /*skipInitializer*/ false,
+                    /*recordTempVariablesInLine*/ true,
+                    FlattenLevel.ObjectRest,
+                    visitor);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -167,140 +184,194 @@ namespace ts {
          * @param node A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement): VisitResult<Statement> {
-            // The following ESNext code:
-            //
-            //    for (let { x, y, ...rest } of expr) { }
-            //
-            // should be emitted as
-            //
-            //    for (var _a of expr) {
-            //        let { x, y } = _a, rest = __rest(_a, ["x", "y"]);
-            //    }
-            //
-            // where _a is a temp emitted to capture the RHS.
-            // When the left hand side is an expression instead of a let declaration,
-            // the `let` before the `{ x, y }` is not emitted.
-            // When the left hand side is a let/const, the v is renamed if there is
-            // another v in scope.
-            // Note that all assignments to the LHS are emitted in the body, including
-            // all destructuring.
-            // Note also that because an extra statement is needed to assign to the LHS,
-            // for-of bodies are always emitted as blocks.
-
-            // for (<init> of <expression>) <statement>
-            // where <init> is [let] variabledeclarationlist | expression
-            const initializer = node.initializer;
-            if (!isRestBindingPattern(initializer) && !isRestAssignment(initializer)) {
-                return visitEachChild(node, visitor, context);
+            let leadingStatements: Statement[];
+            let temp: Identifier;
+            const initializer = skipParentheses(node.initializer);
+            if (initializer.transformFlags & TransformFlags.ContainsObjectRest) {
+                if (isVariableDeclarationList(initializer)) {
+                    temp = createTempVariable(/*recordTempVariable*/ undefined);
+                    const firstDeclaration = firstOrUndefined(initializer.declarations);
+                    const declarations = flattenDestructuringBinding(
+                        context,
+                        firstDeclaration,
+                        temp,
+                        /*skipInitializer*/ true,
+                        /*recordTempVariablesInLine*/ true,
+                        FlattenLevel.ObjectRest,
+                        visitor
+                    );
+                    if (some(declarations)) {
+                        const statement = createVariableStatement(
+                            /*modifiers*/ undefined,
+                            updateVariableDeclarationList(initializer, declarations),
+                            /*location*/ initializer
+                        );
+                        leadingStatements = append(leadingStatements, statement);
+                    }
+                }
+                else if (isAssignmentPattern(initializer)) {
+                    temp = createTempVariable(/*recordTempVariable*/ undefined);
+                    const expression = flattenDestructuringAssignment(
+                        context,
+                        aggregateTransformFlags(createAssignment(initializer, temp, /*location*/ node.initializer)),
+                        /*needsValue*/ false,
+                        FlattenLevel.ObjectRest,
+                        /*createAssignmentCallback*/ undefined,
+                        visitor
+                    );
+                    leadingStatements = append(leadingStatements, createStatement(expression, /*location*/ node.initializer));
+                }
             }
-
-            return convertForOf(node, undefined, visitor, noop, context, /*transformRest*/ true);
-        }
-
-        function isRestBindingPattern(initializer: ForInitializer) {
-            if (isVariableDeclarationList(initializer)) {
-                const declaration = firstOrUndefined(initializer.declarations);
-                return declaration && declaration.name &&
-                    declaration.name.kind === SyntaxKind.ObjectBindingPattern &&
-                    !!(declaration.name.transformFlags & TransformFlags.ContainsObjectRest);
+            if (temp) {
+                const expression = visitNode(node.expression, visitor, isExpression);
+                const statement = visitNode(node.statement, visitor, isStatement);
+                const block = isBlock(statement)
+                    ? updateBlock(statement, createNodeArray(concatenate(leadingStatements, statement.statements), statement.statements))
+                    : createBlock(append(leadingStatements, statement), statement, /*multiLine*/ true);
+                return updateForOf(
+                    node,
+                    createVariableDeclarationList(
+                        [
+                            createVariableDeclaration(temp, /*type*/ undefined, /*initializer*/ undefined, node.initializer)
+                        ],
+                        node.initializer,
+                        NodeFlags.Let
+                    ),
+                    expression,
+                    block
+                );
             }
-            return false;
-        }
-
-        function isRestAssignment(initializer: ForInitializer) {
-            return initializer.kind === SyntaxKind.ObjectLiteralExpression &&
-                initializer.transformFlags & TransformFlags.ContainsObjectRest;
+            return visitEachChild(node, visitor, context);
         }
 
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
-            if (isObjectRestParameter(node)) {
+            if (node.transformFlags & TransformFlags.ContainsObjectRest) {
                 // Binding patterns are converted into a generated name and are
                 // evaluated inside the function body.
-                return setOriginalNode(
-                    createParameter(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        /*dotDotDotToken*/ undefined,
-                        getGeneratedNameForNode(node),
-                        /*questionToken*/ undefined,
-                        /*type*/ undefined,
-                        node.initializer,
-                        /*location*/ node
-                    ),
-                    /*original*/ node
+                return updateParameter(
+                    node,
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    node.dotDotDotToken,
+                    getGeneratedNameForNode(node),
+                    /*type*/ undefined,
+                    visitNode(node.initializer, visitor, isExpression)
                 );
             }
-            else {
-                return node;
-            }
+            return visitEachChild(node, visitor, context);
         }
 
-        function isObjectRestParameter(node: ParameterDeclaration) {
-            return node.name &&
-                node.name.kind === SyntaxKind.ObjectBindingPattern &&
-                !!(node.name.transformFlags & TransformFlags.ContainsObjectRest);
+        function visitConstructorDeclaration(node: ConstructorDeclaration) {
+            return updateConstructor(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                visitParameterList(node.parameters, visitor, context),
+                transformFunctionBody(node)
+            );
         }
 
-        function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            const body = hasRest ?
-                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
-                visitEachChild(node.body, visitor, context);
+        function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
+            return updateGetAccessor(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                visitNode(node.name, visitor, isPropertyName),
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
+            );
+        }
 
-            return setOriginalNode(
-                createFunctionDeclaration(
-                    /*decorators*/ undefined,
-                    node.modifiers,
-                    node.asteriskToken,
-                    node.name,
-                    /*typeParameters*/ undefined,
-                    visitNodes(node.parameters, visitor, isParameter),
-                    /*type*/ undefined,
-                    body,
-                    /*location*/ node
-                ),
-                /*original*/ node);
+        function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
+            return updateSetAccessor(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                visitNode(node.name, visitor, isPropertyName),
+                visitParameterList(node.parameters, visitor, context),
+                transformFunctionBody(node)
+            );
+        }
+
+        function visitMethodDeclaration(node: MethodDeclaration) {
+            return updateMethod(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                visitNode(node.name, visitor, isPropertyName),
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
+            );
+        }
+
+        function visitFunctionDeclaration(node: FunctionDeclaration) {
+            return updateFunctionDeclaration(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                node.name,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
+            );
         }
 
         function visitArrowFunction(node: ArrowFunction) {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            const body = hasRest ?
-                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
-                visitEachChild(node.body, visitor, context);
-            const func = setOriginalNode(
-                createArrowFunction(
-                    /*modifiers*/ undefined,
-                    /*typeParameters*/ undefined,
-                    visitNodes(node.parameters, visitor, isParameter),
-                    /*type*/ undefined,
-                    node.equalsGreaterThanToken,
-                    body,
-                    /*location*/ node
-                ),
-                /*original*/ node
+            return updateArrowFunction(
+                node,
+                node.modifiers,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
             );
-            setEmitFlags(func, EmitFlags.CapturesThis);
-            return func;
         }
 
-        function visitFunctionExpression(node: FunctionExpression): Expression {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            const body = hasRest ?
-                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
-                visitEachChild(node.body, visitor, context);
-            return setOriginalNode(
-                createFunctionExpression(
-                    /*modifiers*/ undefined,
-                    node.asteriskToken,
-                    name,
-                    /*typeParameters*/ undefined,
-                    visitNodes(node.parameters, visitor, isParameter),
-                    /*type*/ undefined,
-                    body,
-                    /*location*/ node
-                ),
-                /*original*/ node
+        function visitFunctionExpression(node: FunctionExpression) {
+            return updateFunctionExpression(
+                node,
+                node.modifiers,
+                node.name,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
             );
+        }
+
+        function transformFunctionBody(node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | AccessorDeclaration): FunctionBody;
+        function transformFunctionBody(node: ArrowFunction): ConciseBody;
+        function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+            let leadingStatements: Statement[];
+            for (const parameter of node.parameters) {
+                if (parameter.transformFlags & TransformFlags.ContainsObjectRest) {
+                    const temp = getGeneratedNameForNode(parameter);
+                    const declarations = flattenDestructuringBinding(context, parameter, temp, /*skipInitializer*/ true, /*recordTempVariablesInLine*/ true, FlattenLevel.ObjectRest, visitor);
+                    if (some(declarations)) {
+                        const statement = createVariableStatement(
+                            /*modifiers*/ undefined,
+                            createVariableDeclarationList(
+                                declarations
+                            )
+                        );
+                        setEmitFlags(statement, EmitFlags.CustomPrologue);
+                        leadingStatements = append(leadingStatements, statement);
+                    }
+                }
+            }
+
+            const body = visitNode(node.body, visitor, isConciseBody);
+            const trailingStatements = endLexicalEnvironment();
+            if (some(leadingStatements) || some(trailingStatements)) {
+                const block = convertToFunctionBody(body);
+                return updateBlock(block, createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements), block.statements));
+            }
+
+            return body;
         }
     }
 }
