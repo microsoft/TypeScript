@@ -71,6 +71,7 @@ var compilerSources = [
     "transformers/destructuring.ts",
     "transformers/ts.ts",
     "transformers/jsx.ts",
+    "transformers/esnext.ts",
     "transformers/es2017.ts",
     "transformers/es2016.ts",
     "transformers/es2015.ts",
@@ -107,6 +108,7 @@ var servicesSources = [
     "transformers/destructuring.ts",
     "transformers/ts.ts",
     "transformers/jsx.ts",
+    "transformers/esnext.ts",
     "transformers/es2017.ts",
     "transformers/es2016.ts",
     "transformers/es2015.ts",
@@ -310,7 +312,8 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
 
 var es2017LibrarySource = [
     "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts"
+    "es2017.sharedmemory.d.ts",
+    "es2017.string.d.ts",
 ];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
@@ -599,7 +602,7 @@ task("generate-diagnostics", [diagnosticInfoMapTs]);
 var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
 var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
 var packageJson = "package.json";
-var programTs = path.join(compilerDirectory, "program.ts");
+var versionFile = path.join(compilerDirectory, "core.ts");
 
 file(configureNightlyTs);
 
@@ -615,7 +618,7 @@ task("setDebugMode", function () {
 });
 
 task("configure-nightly", [configureNightlyJs], function () {
-    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + programTs;
+    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + versionFile;
     console.log(cmd);
     exec(cmd);
 }, { async: true });

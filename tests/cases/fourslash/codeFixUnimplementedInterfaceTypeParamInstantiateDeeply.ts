@@ -4,14 +4,8 @@
 ////    x: { y: T, z: T[] };
 //// }
 //// 
-//// class C implements I<number> { }
+//// class C implements I<number> {[|  |]}
 
-verify.fileAfterCodeFix(`
-interface I<T> {
-   x: { y: T, z: T[] };
-}
-
-class C implements I<number> {
+verify.rangeAfterCodeFix(`
     x: { y: number; z: number[]; };
-} 
 `);

@@ -12,5 +12,6 @@
     "Found 'package.json' at '/a/node_modules/jquery/package.json'.",
     "'package.json' has 'typings' field 'jquery.d.ts' that references '/a/node_modules/jquery/jquery.d.ts'.",
     "File '/a/node_modules/jquery/jquery.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/a/node_modules/jquery/jquery.d.ts', result '/a/node_modules/jquery/jquery.d.ts'",
     "======== Type reference directive 'jquery' was successfully resolved to '/a/node_modules/jquery/jquery.d.ts', primary: false. ========"
 ]

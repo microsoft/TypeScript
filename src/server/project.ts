@@ -90,16 +90,102 @@ namespace ts.server {
         }
     }
 
+    const emptyResult: any[] = [];
+    const getEmptyResult = () => emptyResult;
+    const getUndefined = () => <any>undefined;
+    const emptyEncodedSemanticClassifications = { spans: emptyResult, endOfLineState: EndOfLineState.None };
+
+    export function createNoSemanticFeaturesWrapper(realLanguageService: LanguageService): LanguageService {
+        return {
+            cleanupSemanticCache: noop,
+            getSyntacticDiagnostics: (fileName) =>
+                fileName ? realLanguageService.getSyntacticDiagnostics(fileName) : emptyResult,
+            getSemanticDiagnostics: getEmptyResult,
+            getCompilerOptionsDiagnostics: () =>
+                realLanguageService.getCompilerOptionsDiagnostics(),
+            getSyntacticClassifications: (fileName, span) =>
+                realLanguageService.getSyntacticClassifications(fileName, span),
+            getEncodedSyntacticClassifications: (fileName, span) =>
+                realLanguageService.getEncodedSyntacticClassifications(fileName, span),
+            getSemanticClassifications: getEmptyResult,
+            getEncodedSemanticClassifications: () =>
+                emptyEncodedSemanticClassifications,
+            getCompletionsAtPosition: getUndefined,
+            findReferences: getEmptyResult,
+            getCompletionEntryDetails: getUndefined,
+            getQuickInfoAtPosition: getUndefined,
+            findRenameLocations: getEmptyResult,
+            getNameOrDottedNameSpan: (fileName, startPos, endPos) =>
+                realLanguageService.getNameOrDottedNameSpan(fileName, startPos, endPos),
+            getBreakpointStatementAtPosition: (fileName, position) =>
+                realLanguageService.getBreakpointStatementAtPosition(fileName, position),
+            getBraceMatchingAtPosition: (fileName, position) =>
+                realLanguageService.getBraceMatchingAtPosition(fileName, position),
+            getSignatureHelpItems: getUndefined,
+            getDefinitionAtPosition: getEmptyResult,
+            getRenameInfo: () => ({
+                canRename: false,
+                localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.Language_service_is_disabled),
+                displayName: undefined,
+                fullDisplayName: undefined,
+                kind: undefined,
+                kindModifiers: undefined,
+                triggerSpan: undefined
+            }),
+            getTypeDefinitionAtPosition: getUndefined,
+            getReferencesAtPosition: getEmptyResult,
+            getDocumentHighlights: getEmptyResult,
+            getOccurrencesAtPosition: getEmptyResult,
+            getNavigateToItems: getEmptyResult,
+            getNavigationBarItems: fileName =>
+                realLanguageService.getNavigationBarItems(fileName),
+            getNavigationTree: fileName =>
+                realLanguageService.getNavigationTree(fileName),
+            getOutliningSpans: fileName =>
+                realLanguageService.getOutliningSpans(fileName),
+            getTodoComments: getEmptyResult,
+            getIndentationAtPosition: (fileName, position, options) =>
+                realLanguageService.getIndentationAtPosition(fileName, position, options),
+            getFormattingEditsForRange: (fileName, start, end, options) =>
+                realLanguageService.getFormattingEditsForRange(fileName, start, end, options),
+            getFormattingEditsForDocument: (fileName, options) =>
+                realLanguageService.getFormattingEditsForDocument(fileName, options),
+            getFormattingEditsAfterKeystroke: (fileName, position, key, options) =>
+                realLanguageService.getFormattingEditsAfterKeystroke(fileName, position, key, options),
+            getDocCommentTemplateAtPosition: (fileName, position) =>
+                realLanguageService.getDocCommentTemplateAtPosition(fileName, position),
+            isValidBraceCompletionAtPosition: (fileName, position, openingBrace) =>
+                realLanguageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace),
+            getEmitOutput: getUndefined,
+            getProgram: () =>
+                realLanguageService.getProgram(),
+            getNonBoundSourceFile: fileName =>
+                realLanguageService.getNonBoundSourceFile(fileName),
+            dispose: () =>
+                realLanguageService.dispose(),
+            getCompletionEntrySymbol: getUndefined,
+            getImplementationAtPosition: getEmptyResult,
+            getSourceFile: fileName =>
+                realLanguageService.getSourceFile(fileName),
+            getCodeFixesAtPosition: getEmptyResult
+        };
+    }
+
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
-        private lsHost: ServerLanguageServiceHost;
+        private lsHost: LSHost;
         private program: ts.Program;
 
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
 
-        private languageService: LanguageService;
+        private readonly languageService: LanguageService;
+        // wrapper over the real language service that will suppress all semantic operations
+        private readonly noSemanticFeaturesLanguageService: LanguageService;
+
+        public languageServiceEnabled = true;
+
         builder: Builder;
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
@@ -147,7 +233,7 @@ namespace ts.server {
             readonly projectService: ProjectService,
             private documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
-            public languageServiceEnabled: boolean,
+            languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean) {
 
@@ -161,14 +247,17 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
-            if (this.projectKind === ProjectKind.Inferred) {
-                this.compilerOptions.noEmitOverwritenFiles = true;
+            if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
+                this.compilerOptions.noEmitForJsFiles = true;
             }
 
-            if (languageServiceEnabled) {
-                this.enableLanguageService();
-            }
-            else {
+            this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
+            this.lsHost.setCompilationSettings(this.compilerOptions);
+
+            this.languageService = ts.createLanguageService(this.lsHost, this.documentRegistry);
+            this.noSemanticFeaturesLanguageService = createNoSemanticFeaturesWrapper(this.languageService);
+
+            if (!languageServiceEnabled) {
                 this.disableLanguageService();
             }
 
@@ -184,7 +273,9 @@ namespace ts.server {
             if (ensureSynchronized) {
                 this.updateGraph();
             }
-            return this.languageService;
+            return this.languageServiceEnabled
+                ? this.languageService
+                : this.noSemanticFeaturesLanguageService;
         }
 
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
@@ -200,18 +291,20 @@ namespace ts.server {
         }
 
         enableLanguageService() {
-            const lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
-            lsHost.setCompilationSettings(this.compilerOptions);
-            this.languageService = ts.createLanguageService(lsHost, this.documentRegistry);
-
-            this.lsHost = lsHost;
+            if (this.languageServiceEnabled) {
+                return;
+            }
             this.languageServiceEnabled = true;
+            this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ true);
         }
 
         disableLanguageService() {
-            this.languageService = nullLanguageService;
-            this.lsHost = nullLanguageServiceHost;
+            if (!this.languageServiceEnabled) {
+                return;
+            }
+            this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
+            this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
 
         abstract getProjectName(): string;
@@ -676,12 +769,12 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, compilerOptions: CompilerOptions) {
             super(ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
                 /*files*/ undefined,
-                languageServiceEnabled,
+                /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
 

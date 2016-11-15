@@ -210,8 +210,7 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
-        rangeAfterCodeFix(expectedText: string): void;
-        fileAfterCodeFix(expectedContents: string, fileName?: string): void;
+        rangeAfterCodeFix(expectedText: string, errorCode?: number): void;
 
         navigationBar(json: any): void;
         navigationTree(json: any): void;

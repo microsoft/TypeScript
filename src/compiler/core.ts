@@ -1,6 +1,11 @@
 ﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
+namespace ts {
+    /** The version of the TypeScript compiler release */
+    export const version = "2.2.0";
+}
+
 /* @internal */
 namespace ts {
     /**
@@ -2210,6 +2215,13 @@ namespace ts {
      * Path must have a valid extension.
      */
     export function extensionFromPath(path: string): Extension {
+        const ext = tryGetExtensionFromPath(path);
+        if (ext !== undefined) {
+            return ext;
+        }
+        Debug.fail(`File ${path} has unknown extension.`);
+    }
+    export function tryGetExtensionFromPath(path: string): Extension | undefined {
         if (fileExtensionIs(path, ".d.ts")) {
             return Extension.Dts;
         }
@@ -2225,7 +2237,5 @@ namespace ts {
         if (fileExtensionIs(path, ".jsx")) {
             return Extension.Jsx;
         }
-        Debug.fail(`File ${path} has unknown extension.`);
-        return Extension.Js;
     }
 }

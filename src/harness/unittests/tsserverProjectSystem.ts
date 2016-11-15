@@ -154,7 +154,6 @@ namespace ts.projectSystem {
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList);
-        host.createFileOrFolder(safeList, /*createParentDirectory*/ true);
         return host;
     }
 
@@ -355,7 +354,8 @@ namespace ts.projectSystem {
         reloadFS(filesOrFolders: FileOrFolder[]) {
             this.filesOrFolders = filesOrFolders;
             this.fs = createFileMap<FSEntry>();
-            for (const fileOrFolder of filesOrFolders) {
+            // always inject safelist file in the list of files
+            for (const fileOrFolder of filesOrFolders.concat(safeList)) {
                 const path = this.toPath(fileOrFolder.path);
                 const fullPath = getNormalizedAbsolutePath(fileOrFolder.path, this.currentDirectory);
                 if (typeof fileOrFolder.content === "string") {
@@ -1585,6 +1585,104 @@ namespace ts.projectSystem {
             projectService.closeClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 0 });
         });
+
+        it("language service disabled events are triggered", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "let x = 1;"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const config = {
+                path: "/a/jsconfig.json",
+                content: "{}"
+            };
+            const configWithExclude = {
+                path: config.path,
+                content: JSON.stringify({ exclude: ["largefile.js"] })
+            };
+            const host = createServerHost([f1, f2, config]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+
+            let lastEvent: server.ProjectLanguageServiceStateEvent;
+            const session = createSession(host, /*typingsInstaller*/ undefined, e => {
+                if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent) {
+                    return;
+                }
+                assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
+                lastEvent = <server.ProjectLanguageServiceStateEvent>e;
+            });
+            session.executeCommand(<protocol.OpenRequest>{
+                seq: 0,
+                type: "request",
+                command: "open",
+                arguments: { file: f1.path }
+            });
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects[0];
+            assert.isFalse(project.languageServiceEnabled, "Language service enabled");
+            assert.isTrue(!!lastEvent, "should receive event");
+            assert.equal(lastEvent.data.project, project, "project name");
+            assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
+
+            host.reloadFS([f1, f2, configWithExclude]);
+            host.triggerFileWatcherCallback(config.path, /*removed*/ false);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.isTrue(project.languageServiceEnabled, "Language service enabled");
+            assert.equal(lastEvent.data.project, project, "project");
+            assert.isTrue(lastEvent.data.languageServiceEnabled, "Language service state");
+        });
+
+        it("syntactic features work even if language service is disabled", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "let x =   1;"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const config = {
+                path: "/a/jsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, f2, config]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+            let lastEvent: server.ProjectLanguageServiceStateEvent;
+            const session = createSession(host, /*typingsInstaller*/ undefined, e => {
+                if (e.eventName === server.ConfigFileDiagEvent) {
+                    return;
+                }
+                assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
+                lastEvent = <server.ProjectLanguageServiceStateEvent>e;
+            });
+            session.executeCommand(<protocol.OpenRequest>{
+                seq: 0,
+                type: "request",
+                command: "open",
+                arguments: { file: f1.path }
+            });
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects[0];
+            assert.isFalse(project.languageServiceEnabled, "Language service enabled");
+            assert.isTrue(!!lastEvent, "should receive event");
+            assert.equal(lastEvent.data.project, project, "project name");
+            assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
+
+            const options = projectService.getFormatCodeOptions();
+            const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
+            assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
+        });
     });
 
     describe("Proper errors", () => {
@@ -1662,12 +1760,8 @@ namespace ts.projectSystem {
                 "File '/a/b/node_modules/lib/index.ts' does not exist.",
                 "File '/a/b/node_modules/lib/index.tsx' does not exist.",
                 "File '/a/b/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib.tsx' does not exist.",
                 "File '/a/b/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/b/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/a/b/node_modules/@types/lib/index.d.ts' does not exist.",
                 "File '/a/node_modules/lib.ts' does not exist.",
                 "File '/a/node_modules/lib.tsx' does not exist.",
@@ -1676,12 +1770,8 @@ namespace ts.projectSystem {
                 "File '/a/node_modules/lib/index.ts' does not exist.",
                 "File '/a/node_modules/lib/index.tsx' does not exist.",
                 "File '/a/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/node_modules/@types/lib.ts' does not exist.",
-                "File '/a/node_modules/@types/lib.tsx' does not exist.",
                 "File '/a/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/node_modules/@types/lib/index.ts' does not exist.",
-                "File '/a/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/a/node_modules/@types/lib/index.d.ts' does not exist.",
                 "File '/node_modules/lib.ts' does not exist.",
                 "File '/node_modules/lib.tsx' does not exist.",
@@ -1690,12 +1780,8 @@ namespace ts.projectSystem {
                 "File '/node_modules/lib/index.ts' does not exist.",
                 "File '/node_modules/lib/index.tsx' does not exist.",
                 "File '/node_modules/lib/index.d.ts' does not exist.",
-                "File '/node_modules/@types/lib.ts' does not exist.",
-                "File '/node_modules/@types/lib.tsx' does not exist.",
                 "File '/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/node_modules/@types/lib/package.json' does not exist.",
-                "File '/node_modules/@types/lib/index.ts' does not exist.",
-                "File '/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/node_modules/@types/lib/index.d.ts' does not exist.",
                 "Loading module 'lib' from 'node_modules' folder.",
                 "File '/a/b/node_modules/lib.js' does not exist.",
@@ -1703,46 +1789,23 @@ namespace ts.projectSystem {
                 "File '/a/b/node_modules/lib/package.json' does not exist.",
                 "File '/a/b/node_modules/lib/index.js' does not exist.",
                 "File '/a/b/node_modules/lib/index.jsx' does not exist.",
-                "File '/a/b/node_modules/@types/lib.js' does not exist.",
-                "File '/a/b/node_modules/@types/lib.jsx' does not exist.",
-                "File '/a/b/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.js' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.jsx' does not exist.",
                 "File '/a/node_modules/lib.js' does not exist.",
                 "File '/a/node_modules/lib.jsx' does not exist.",
                 "File '/a/node_modules/lib/package.json' does not exist.",
                 "File '/a/node_modules/lib/index.js' does not exist.",
                 "File '/a/node_modules/lib/index.jsx' does not exist.",
-                "File '/a/node_modules/@types/lib.js' does not exist.",
-                "File '/a/node_modules/@types/lib.jsx' does not exist.",
-                "File '/a/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/node_modules/@types/lib/index.js' does not exist.",
-                "File '/a/node_modules/@types/lib/index.jsx' does not exist.",
                 "File '/node_modules/lib.js' does not exist.",
                 "File '/node_modules/lib.jsx' does not exist.",
                 "File '/node_modules/lib/package.json' does not exist.",
                 "File '/node_modules/lib/index.js' does not exist.",
                 "File '/node_modules/lib/index.jsx' does not exist.",
-                "File '/node_modules/@types/lib.js' does not exist.",
-                "File '/node_modules/@types/lib.jsx' does not exist.",
-                "File '/node_modules/@types/lib/package.json' does not exist.",
-                "File '/node_modules/@types/lib/index.js' does not exist.",
-                "File '/node_modules/@types/lib/index.jsx' does not exist.",
                 "======== Module name 'lib' was not resolved. ========",
                 `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
-                "File '/a/cache/node_modules/lib.ts' does not exist.",
-                "File '/a/cache/node_modules/lib.tsx' does not exist.",
                 "File '/a/cache/node_modules/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/lib/package.json' does not exist.",
-                "File '/a/cache/node_modules/lib/index.ts' does not exist.",
-                "File '/a/cache/node_modules/lib/index.tsx' does not exist.",
                 "File '/a/cache/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.tsx' does not exist.",
                 "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/cache/node_modules/@types/lib/index.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib/index.tsx' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
             ]);
             checkProjectActualFiles(proj, [file1.path, lib.path]);
@@ -2574,6 +2637,23 @@ namespace ts.projectSystem {
                 arguments: { projectFileName: projectName }
             }).response;
             assert.isTrue(diags.length === 0);
+        });
+    });
+
+    describe("import helpers", () => {
+        it("should not crash in tsserver", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: "export async function foo() { return 100; }"
+            };
+            const tslib = {
+                path: "/a/node_modules/tslib/index.d.ts",
+                content: ""
+            };
+            const host = createServerHost([f1, tslib]);
+            const service = createProjectService(host);
+            service.openExternalProject({ projectFileName: "p", rootFiles: [toExternalFile(f1.path)], options: { importHelpers: true } });
+            service.checkNumberOfProjects({ externalProjects: 1 });
         });
     });
 }

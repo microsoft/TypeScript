@@ -1060,8 +1060,15 @@ namespace ts {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
+                const resolvedFileName = result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined;
+                if (resolvedFileName && !compilerOptions.allowJs && fileExtensionIs(resolvedFileName, ".js")) {
+                    return {
+                        resolvedFileName: undefined,
+                        failedLookupLocations: []
+                    };
+                }
                 return {
-                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined,
+                    resolvedFileName,
                     failedLookupLocations: result.failedLookupLocations
                 };
             });
@@ -1261,11 +1268,8 @@ namespace TypeScript.Services {
     export const TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
 
-/* tslint:disable:no-unused-variable */
 // 'toolsVersion' gets consumed by the managed side, so it's not unused.
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "2.1";
-
-/* tslint:enable:no-unused-variable */
+const toolsVersion = "2.2";

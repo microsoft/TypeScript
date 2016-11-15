@@ -3,3 +3,4 @@
 /// <reference path="fixClassSuperMustPrecedeThisAccess.ts" />
 /// <reference path="fixConstructorForDerivedNeedSuperCall.ts" />
 /// <reference path="fixExtendsInterfaceBecomesImplements.ts" />
+///<reference path='unusedIdentifierFixes.ts' />

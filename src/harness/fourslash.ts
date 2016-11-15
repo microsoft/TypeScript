@@ -2022,7 +2022,7 @@ namespace FourSlash {
          * Because codefixes are only applied on the working file, it is unsafe
          * to apply this more than once (consider a refactoring across files).
          */
-        public verifyRangeAfterCodeFix(expectedText: string) {
+        public verifyRangeAfterCodeFix(expectedText: string, errorCode?: number) {
             const ranges = this.getRanges();
             if (ranges.length !== 1) {
                 this.raiseError("Exactly one range should be specified in the testfile.");
@@ -2030,7 +2030,7 @@ namespace FourSlash {
 
             const fileName = this.activeFile.fileName;
 
-            this.applyCodeFixActions(fileName, this.getCodeFixActions(fileName));
+            this.applyCodeFixActions(fileName, this.getCodeFixActions(fileName, errorCode));
 
             const actualText = this.rangeText(ranges[0]);
 
@@ -2063,11 +2063,16 @@ namespace FourSlash {
          * Rerieves a codefix satisfying the parameters, or undefined if no such codefix is found.
          * @param fileName Path to file where error should be retrieved from.
          */
-        private getCodeFixActions(fileName: string): ts.CodeAction[] {
+        private getCodeFixActions(fileName: string, errorCode?: number): ts.CodeAction[] {
             const diagnostics: ts.Diagnostic[] = this.getDiagnostics(fileName);
 
             let actions: ts.CodeAction[] = undefined;
             for (const diagnostic of diagnostics) {
+
+                if (errorCode && errorCode !== diagnostic.code) {
+                    continue;
+                }
+
                 const newActions = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
                 if (newActions && newActions.length) {
                     actions = actions ? actions.concat(newActions) : newActions;
@@ -3342,12 +3347,8 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public rangeAfterCodeFix(expectedText: string): void {
-            this.state.verifyRangeAfterCodeFix(expectedText);
-        }
-
-        public fileAfterCodeFix(expectedContents: string, fileName?: string): void {
-            this.state.verifyFileAfterCodeFix(expectedContents, fileName);
+        public rangeAfterCodeFix(expectedText: string, errorCode?: number): void {
+            this.state.verifyRangeAfterCodeFix(expectedText, errorCode);
         }
 
         public navigationBar(json: any) {

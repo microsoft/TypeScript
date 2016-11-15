@@ -4,14 +4,8 @@
 ////    x: T;
 //// }
 ////
-//// class C<U> implements I<U> { } 
+//// class C<U> implements I<U> {[|  |]} 
 
-verify.fileAfterCodeFix(`
-interface I<T> {
-   x: T;
-}
-
-class C<U> implements I<U> {
+verify.rangeAfterCodeFix(`
     x: U;
-} 
 `);

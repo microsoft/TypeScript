@@ -1205,7 +1205,7 @@ namespace ts {
         }
 
         function cleanupSemanticCache(): void {
-            // TODO: Should we jettison the program (or it's type checker) here?
+            program = undefined;
         }
 
         function dispose(): void {

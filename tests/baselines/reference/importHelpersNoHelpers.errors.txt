@@ -1,13 +1,17 @@
+error TS2305: Module 'tslib' has no exported member '__assign'.
 error TS2305: Module 'tslib' has no exported member '__decorate'.
 error TS2305: Module 'tslib' has no exported member '__extends'.
 error TS2305: Module 'tslib' has no exported member '__metadata'.
 error TS2305: Module 'tslib' has no exported member '__param'.
+error TS2305: Module 'tslib' has no exported member '__rest'.
 
 
+!!! error TS2305: Module 'tslib' has no exported member '__assign'.
 !!! error TS2305: Module 'tslib' has no exported member '__decorate'.
 !!! error TS2305: Module 'tslib' has no exported member '__extends'.
 !!! error TS2305: Module 'tslib' has no exported member '__metadata'.
 !!! error TS2305: Module 'tslib' has no exported member '__param'.
+!!! error TS2305: Module 'tslib' has no exported member '__rest'.
 ==== tests/cases/compiler/external.ts (0 errors) ====
     export class A { }
     export class B extends A { }
@@ -19,6 +23,10 @@ error TS2305: Module 'tslib' has no exported member '__param'.
         method(@dec x: number) {
         }
     }
+    
+    const o = { a: 1 };
+    const y = { ...o };
+    const { ...x } = y;
     
 ==== tests/cases/compiler/script.ts (0 errors) ====
     class A { }
@@ -34,3 +42,4 @@ error TS2305: Module 'tslib' has no exported member '__param'.
     
 ==== tests/cases/compiler/tslib.d.ts (0 errors) ====
     export {}
+    
