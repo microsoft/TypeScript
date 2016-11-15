@@ -23,6 +23,7 @@ let rrestOff: { y: string };
 for ({ x: xx, ...rrestOff } of array ) {
 >x : Symbol(x, Decl(objectRestForOf.ts, 6, 6))
 >xx : Symbol(xx, Decl(objectRestForOf.ts, 4, 3))
+>rrestOff : Symbol(rrestOff, Decl(objectRestForOf.ts, 5, 3))
 >array : Symbol(array, Decl(objectRestForOf.ts, 0, 3))
 
     [xx, rrestOff];
@@ -34,6 +35,7 @@ for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
 >array.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(objectRestForOf.ts, 0, 3))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(objectRestForOf.ts, 9, 31))
 >a : Symbol(a, Decl(objectRestForOf.ts, 9, 31))
 >x : Symbol(x, Decl(objectRestForOf.ts, 9, 44))
 

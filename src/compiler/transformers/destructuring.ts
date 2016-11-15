@@ -244,12 +244,15 @@ namespace ts {
             boundValue = ensureIdentifier(host, boundValue, reuseIdentifierExpressions, location);
         }
         let bindingElements: BindingOrAssignmentElement[];
+        let computedTempVariables: Expression[];
         for (let i = 0; i < numElements; i++) {
             const element = elements[i];
             if (!getRestIndicatorOfBindingOrAssignmentElement(element)) {
+                const propertyName = getPropertyNameOfBindingOrAssignmentElement(element);
                 if (host.level >= FlattenLevel.ObjectRest
                     && !(element.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest))
-                    && !(getTargetOfBindingOrAssignmentElement(element).transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest))) {
+                    && !(getTargetOfBindingOrAssignmentElement(element).transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest))
+                    && !isComputedPropertyName(propertyName)) {
                     bindingElements = append(bindingElements, element);
                 }
                 else {
@@ -257,8 +260,10 @@ namespace ts {
                         host.emitBindingOrAssignment(host.createObjectBindingOrAssignmentPattern(bindingElements), boundValue, location, bindingTarget);
                         bindingElements = undefined;
                     }
-                    const propertyName = getPropertyNameOfBindingOrAssignmentElement(element);
                     const value = createDestructuringPropertyAccess(host, boundValue, propertyName);
+                    if (isComputedPropertyName(propertyName)) {
+                        computedTempVariables = append(computedTempVariables, (value as ElementAccessExpression).argumentExpression);
+                    }
                     flattenBindingOrAssignmentElement(host, element, value, /*location*/ element);
                 }
             }
@@ -267,7 +272,7 @@ namespace ts {
                     host.emitBindingOrAssignment(host.createObjectBindingOrAssignmentPattern(bindingElements), boundValue, location, bindingTarget);
                     bindingElements = undefined;
                 }
-                const value = createRestCall(boundValue, elements, bindingTarget);
+                const value = createRestCall(boundValue, elements, computedTempVariables, bindingTarget);
                 flattenBindingOrAssignmentElement(host, element, value, element);
             }
         }
@@ -433,17 +438,28 @@ namespace ts {
 
     /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
      * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`*/
-    function createRestCall(value: Expression, elements: BindingOrAssignmentElement[], location: TextRange): Expression {
-        const propertyNames: LiteralExpression[] = [];
+    function createRestCall(value: Expression, elements: BindingOrAssignmentElement[], computedTempVariables: Expression[], location: TextRange): Expression {
+        const propertyNames: Expression[] = [];
         for (let i = 0; i < elements.length - 1; i++) {
-            if (isOmittedExpression(elements[i])) {
-                continue;
+            const propertyName = getPropertyNameOfBindingOrAssignmentElement(elements[i]);
+            if (propertyName) {
+                if (isComputedPropertyName(propertyName)) {
+                    // get the temp name and put that in there instead, like `_tmp + ""`
+                    const temp = computedTempVariables.shift();
+                    propertyNames.push(
+                        createConditional(
+                            createStrictEquality(createTypeOf(temp), createLiteral("symbol")),
+                            createToken(SyntaxKind.QuestionToken),
+                            temp,
+                            createToken(SyntaxKind.ColonToken),
+                            createAdd(temp, createLiteral(""))
+                        )
+                    );
+                }
+                else {
+                    propertyNames.push(createLiteral(propertyName));
+                }
             }
-            const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
-            str.pos = location.pos;
-            str.end = location.end;
-            str.text = getTextOfPropertyName(getPropertyNameOfBindingOrAssignmentElement(elements[i]));
-            propertyNames.push(str);
         }
         const args = createSynthesizedNodeArray([value, createArrayLiteral(propertyNames, location)]);
         return createCall(createIdentifier("__rest"), undefined, args);

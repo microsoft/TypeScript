@@ -1168,7 +1168,7 @@ namespace ts {
 
         function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
-                return parseLiteralNode(/*internName*/ true);
+                return <StringLiteral | NumericLiteral>parseLiteralNode(/*internName*/ true);
             }
             if (allowComputedPropertyNames && token() === SyntaxKind.OpenBracketToken) {
                 return parseComputedPropertyName();
@@ -5514,7 +5514,7 @@ namespace ts {
                 node.flags |= NodeFlags.GlobalAugmentation;
             }
             else {
-                node.name = parseLiteralNode(/*internName*/ true);
+                node.name = <StringLiteral>parseLiteralNode(/*internName*/ true);
             }
 
             if (token() === SyntaxKind.OpenBraceToken) {

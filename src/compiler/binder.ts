@@ -234,8 +234,8 @@ namespace ts {
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     const nameExpression = (<ComputedPropertyName>node.name).expression;
                     // treat computed property names where expression is string/numeric literal as just string/numeric literal
-                    if (isStringOrNumericLiteral(nameExpression.kind)) {
-                        return (<LiteralExpression>nameExpression).text;
+                    if (isStringOrNumericLiteral(nameExpression)) {
+                        return nameExpression.text;
                     }
 
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
@@ -3209,7 +3209,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.SpreadAssignment:
-                transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsSpread | TransformFlags.ContainsObjectSpread;
+                transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectSpread;
                 break;
 
             case SyntaxKind.SuperKeyword:
@@ -3261,10 +3261,10 @@ namespace ts {
                     transformFlags |= TransformFlags.ContainsLexicalThis;
                 }
 
-                if (subtreeFlags & TransformFlags.ContainsSpread) {
+                if (subtreeFlags & TransformFlags.ContainsObjectSpread) {
                     // If an ObjectLiteralExpression contains a spread element, then it
                     // is an ES next node.
-                    transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectSpread;
+                    transformFlags |= TransformFlags.AssertESNext;
                 }
 
                 break;

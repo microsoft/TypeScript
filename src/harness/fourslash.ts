@@ -2013,13 +2013,13 @@ namespace FourSlash {
                 this.raiseError("Errors expected.");
             }
 
-            if (diagnostics.length > 1 && errorCode !== undefined) {
+            if (diagnostics.length > 1 && errorCode === undefined) {
                 this.raiseError("When there's more than one error, you must specify the errror to fix.");
             }
 
             const diagnostic = !errorCode ? diagnostics[0] : ts.find(diagnostics, d => d.code == errorCode);
 
-            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
+            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code]);
         }
 
         public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {

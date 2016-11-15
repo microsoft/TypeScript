@@ -32,7 +32,7 @@ let addAfter: { a: number, b: string, c: boolean } =
 
     { ...o, c: false }
 >{ ...o, c: false } : { c: false; a: number; b: string; }
->o : any
+>o : { a: number; b: string; }
 >c : boolean
 >false : false
 
@@ -46,7 +46,7 @@ let addBefore: { a: number, b: string, c: boolean } =
 >{ c: false, ...o } : { a: number; b: string; c: false; }
 >c : boolean
 >false : false
->o : any
+>o : { a: number; b: string; }
 
 // Note: ignore still changes the order that properties are printed
 let ignore: { a: number, b: string } =
@@ -58,7 +58,7 @@ let ignore: { a: number, b: string } =
 >{ b: 'ignored', ...o } : { a: number; b: string; }
 >b : string
 >'ignored' : "ignored"
->o : any
+>o : { a: number; b: string; }
 
 let override: { a: number, b: string } =
 >override : { a: number; b: string; }
@@ -67,7 +67,7 @@ let override: { a: number, b: string } =
 
     { ...o, b: 'override' }
 >{ ...o, b: 'override' } : { b: string; a: number; }
->o : any
+>o : { a: number; b: string; }
 >b : string
 >'override' : "override"
 
@@ -98,8 +98,8 @@ let combined: { a: number, b: string, c: boolean } =
 
     { ...o, ...o2 }
 >{ ...o, ...o2 } : { b: string; c: boolean; a: number; }
->o : any
->o2 : any
+>o : { a: number; b: string; }
+>o2 : { b: string; c: boolean; }
 
 let combinedBefore: { a: number, b: string, c: boolean } =
 >combinedBefore : { a: number; b: string; c: boolean; }
@@ -111,8 +111,8 @@ let combinedBefore: { a: number, b: string, c: boolean } =
 >{ b: 'ok', ...o, ...o2 } : { b: string; c: boolean; a: number; }
 >b : string
 >'ok' : "ok"
->o : any
->o2 : any
+>o : { a: number; b: string; }
+>o2 : { b: string; c: boolean; }
 
 let combinedMid: { a: number, b: string, c: boolean } =
 >combinedMid : { a: number; b: string; c: boolean; }
@@ -122,10 +122,10 @@ let combinedMid: { a: number, b: string, c: boolean } =
 
     { ...o, b: 'ok', ...o2 }
 >{ ...o, b: 'ok', ...o2 } : { b: string; c: boolean; a: number; }
->o : any
+>o : { a: number; b: string; }
 >b : string
 >'ok' : "ok"
->o2 : any
+>o2 : { b: string; c: boolean; }
 
 let combinedAfter: { a: number, b: string, c: boolean } =
 >combinedAfter : { a: number; b: string; c: boolean; }
@@ -135,8 +135,8 @@ let combinedAfter: { a: number, b: string, c: boolean } =
 
     { ...o, ...o2, b: 'ok' }
 >{ ...o, ...o2, b: 'ok' } : { b: string; c: boolean; a: number; }
->o : any
->o2 : any
+>o : { a: number; b: string; }
+>o2 : { b: string; c: boolean; }
 >b : string
 >'ok' : "ok"
 
@@ -195,7 +195,7 @@ let propertyNested: { a: { a: number, b: string } } =
 >{ a: { ... o } } : { a: { a: number; b: string; }; }
 >a : { a: number; b: string; }
 >{ ... o } : { a: number; b: string; }
->o : any
+>o : { a: number; b: string; }
 
 // accessors don't copy the descriptor
 // (which means that readonly getters become read/write properties)
@@ -212,7 +212,7 @@ let getter: { a: number, c: number } =
 
     { ...op, c: 7 }
 >{ ...op, c: 7 } : { c: number; readonly a: number; }
->op : any
+>op : { readonly a: number; }
 >c : number
 >7 : 7
 
@@ -256,7 +256,7 @@ let spreadC: { p: number } = { ...c }
 >spreadC : { p: number; }
 >p : number
 >{ ...c } : { p: number; }
->c : any
+>c : C
 
 // own methods are enumerable
 let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } };
@@ -264,7 +264,7 @@ let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } }
 >p : number
 >plus : () => void
 >{ ...c, plus() { return this.p + 1; } } : { plus(): any; p: number; }
->c : any
+>c : C
 >plus : () => any
 >this.p + 1 : any
 >this.p : any
@@ -286,7 +286,7 @@ let changeTypeAfter: { a: string, b: string } =
 
     { ...o, a: 'wrong type?' }
 >{ ...o, a: 'wrong type?' } : { a: string; b: string; }
->o : any
+>o : { a: number; b: string; }
 >a : string
 >'wrong type?' : "wrong type?"
 
@@ -299,7 +299,7 @@ let changeTypeBefore: { a: number, b: string } =
 >{ a: 'wrong type?', ...o } : { a: number; b: string; }
 >a : string
 >'wrong type?' : "wrong type?"
->o : any
+>o : { a: number; b: string; }
 
 let changeTypeBoth: { a: string, b: number } =
 >changeTypeBoth : { a: string; b: number; }
@@ -308,8 +308,8 @@ let changeTypeBoth: { a: string, b: number } =
 
     { ...o, ...swap };
 >{ ...o, ...swap } : { a: string; b: number; }
->o : any
->swap : any
+>o : { a: number; b: string; }
+>swap : { a: string; b: number; }
 
 // optional
 let definiteBoolean: { sn: boolean };
@@ -332,25 +332,25 @@ let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean
 >optionalUnionStops : { sn: string | number | boolean; }
 >sn : string | number | boolean
 >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
->definiteBoolean : any
->definiteString : any
->optionalNumber : any
+>definiteBoolean : { sn: boolean; }
+>definiteString : { sn: string; }
+>optionalNumber : { sn?: number; }
 
 let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 >optionalUnionDuplicates : { sn: string | number; }
 >sn : string | number
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
->definiteBoolean : any
->definiteString : any
->optionalString : any
->optionalNumber : any
+>definiteBoolean : { sn: boolean; }
+>definiteString : { sn: string; }
+>optionalString : { sn?: string; }
+>optionalNumber : { sn?: number; }
 
 let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
 >allOptional : { sn?: string | number; }
 >sn : string | number
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number; }
->optionalString : any
->optionalNumber : any
+>optionalString : { sn?: string; }
+>optionalNumber : { sn?: number; }
 
 // computed property
 let computedFirst: { a: number, b: string, "before everything": number } =
@@ -362,7 +362,7 @@ let computedFirst: { a: number, b: string, "before everything": number } =
 >{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; ['before everything']: number; }
 >'before everything' : "before everything"
 >12 : 12
->o : any
+>o : { a: number; b: string; }
 >b : string
 >'yes' : "yes"
 
@@ -374,12 +374,12 @@ let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number 
 
     { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
 >{ ...o, ['in the middle']: 13, b: 'maybe?', ...o2 } : { b: string; c: boolean; ['in the middle']: number; a: number; }
->o : any
+>o : { a: number; b: string; }
 >'in the middle' : "in the middle"
 >13 : 13
 >b : string
 >'maybe?' : "maybe?"
->o2 : any
+>o2 : { b: string; c: boolean; }
 
 let computedAfter: { a: number, b: string, "at the end": number } =
 >computedAfter : { a: number; b: string; "at the end": number; }
@@ -388,7 +388,7 @@ let computedAfter: { a: number, b: string, "at the end": number } =
 
     { ...o, b: 'yeah', ['at the end']: 14 }
 >{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; ['at the end']: number; a: number; }
->o : any
+>o : { a: number; b: string; }
 >b : string
 >'yeah' : "yeah"
 >'at the end' : "at the end"
@@ -404,7 +404,7 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >a : number
 >b : string
 >{ ...o, a } : { a: number; b: string; }
->o : any
+>o : { a: number; b: string; }
 >a : number
 
 
