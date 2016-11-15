@@ -119,7 +119,7 @@ function newExpression2() {
                     _a = x.bind;
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_a.apply(x, [_c.sent(), z]))();
+                    new (_a.apply(x, [void 0, _c.sent(), z]))();
                     return [2 /*return*/];
             }
         });
@@ -132,7 +132,7 @@ function newExpression3() {
             switch (_c.label) {
                 case 0:
                     _a = x.bind;
-                    _b = [y];
+                    _b = [void 0, y];
                     return [4 /*yield*/, z];
                 case 1:
                     new (_a.apply(x, _b.concat([_c.sent()])))();
@@ -280,7 +280,7 @@ function newExpression13() {
                     _b = (_a = x.a).bind;
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_b.apply(_a, [_d.sent(), z]))();
+                    new (_b.apply(_a, [void 0, _d.sent(), z]))();
                     return [2 /*return*/];
             }
         });
@@ -293,7 +293,7 @@ function newExpression14() {
             switch (_d.label) {
                 case 0:
                     _b = (_a = x.a).bind;
-                    _c = [y];
+                    _c = [void 0, y];
                     return [4 /*yield*/, z];
                 case 1:
                     new (_b.apply(_a, _c.concat([_d.sent()])))();
@@ -362,7 +362,7 @@ function newExpression19() {
                     _b = (_a = x[a]).bind;
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_b.apply(_a, [_d.sent(), z]))();
+                    new (_b.apply(_a, [void 0, _d.sent(), z]))();
                     return [2 /*return*/];
             }
         });
@@ -375,7 +375,7 @@ function newExpression20() {
             switch (_d.label) {
                 case 0:
                     _b = (_a = x[a]).bind;
-                    _c = [y];
+                    _c = [void 0, y];
                     return [4 /*yield*/, z];
                 case 1:
                     new (_b.apply(_a, _c.concat([_d.sent()])))();
