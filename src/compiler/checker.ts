@@ -11866,11 +11866,11 @@ namespace ts {
         }
 
         /**
-         * Get attributes symbol of the given Jsx opening-like element. The result is from resolving "attributes" property of the opening-like element.
+         * Get attributes type of the given Jsx opening-like element. The result is from resolving "attributes" property of the opening-like element.
          * @param openingLikeElement a Jsx opening-like element
-         * @return a symbol table resulted from resolving "attributes" property or undefined if any of the attribute resolved to any or there is no attributes.
+         * @return an anonymous type (similar to the one returned by checkObjectLiteral) in which its properties are attributes property.
          */
-        function getJsxAttributeSymbolsFromJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement): Symbol[] | undefined {
+        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?:(symbol: Symbol)=>boolean) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createMap<Symbol>();
             let spread: Type = emptyObjectType;
@@ -11903,10 +11903,10 @@ namespace ts {
                     const exprType = checkExpression(attributeDecl.expression);
                     if (!(exprType.flags & (TypeFlags.Object | TypeFlags.Any))) {
                         error(attributeDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
-                        return undefined;
+                        return anyType;
                     }
                     if (isTypeAny(exprType)) {
-                        return undefined;
+                        return anyType;
                     }
                     spread = getSpreadType(spread, exprType);
                 }
@@ -11921,38 +11921,38 @@ namespace ts {
                 attributesArray = getPropertiesOfType(spread);
             }
 
-            return attributesArray;
+            attributesTable = createMap<Symbol>();
+            if (attributesArray) {
+                forEach(attributesArray, (attr) => {
+                    if (!filter || (filter && filter(attr))) {
+                        attributesTable[attr.name] = attr;
+                    }
+                });
+            }
+            return createJsxAttributesType(attributes.symbol, attributesTable);
+
+            /**
+             * Create anonymous type from given attributes symbol table.
+             * @param symbol a symbol of JsxAttributes containing attributes corresponding to attributesTable
+             * @param attributesTable a symbol table of attributes property
+             */
+            function createJsxAttributesType(symbol: Symbol, attributesTable: Map<Symbol>) {
+                const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+                const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
+                result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
+                result.objectFlags |= ObjectFlags.ObjectLiteral;
+                return result;
+            }
         }
 
         /**
-         * Create anonymous type from given attributes symbol table.
-         * @param symbol a symbol of JsxAttributes containing attributes corresponding to attributesTable
-         * @param attributesTable a symbol table of attributes property
-         */
-        function createJsxAttributesType(symbol: Symbol, attributesTable: Map<Symbol>) {
-            const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-            const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
-            result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
-            result.objectFlags |= ObjectFlags.ObjectLiteral;
-            return result;
-        }
-
-        /**
-         * Check JSXAttributes. This function is used when we are trying to figure out call signature for JSX opening-like element.
-         * In "checkApplicableSignatureForJsxOpeningLikeElement", we get type of arguments by checking the JSX opening-like element attributes property with contextual type.
+         * Check JSXAttributes from "attributes" property. This function is used when we are trying to figure out call signature for JSX opening-like element during chooseOverload
+         * In "checkApplicableSignatureForJsxOpeningLikeElement", we get type of arguments for potential stateless function by checking
+         *      the JSX opening-like element attributes property with contextual type.
          * @param node a JSXAttributes to be resolved of its type
          */
         function checkJsxAttributes(node: JsxAttributes) {
-            const symbolArray = getJsxAttributeSymbolsFromJsxOpeningLikeElement(node.parent as JsxOpeningLikeElement);
-            let argAttributesType = anyType as Type;
-            if (symbolArray) {
-                const symbolTable = createMap<Symbol>();
-                forEach(symbolArray, (attr) => {
-                    symbolTable.set(attr.name, attr);
-                });
-                argAttributesType = createJsxAttributesType(node.symbol, symbolTable);
-            }
-            return argAttributesType;
+            return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement);
         }
 
         /**
@@ -11962,33 +11962,28 @@ namespace ts {
          * @param openingLikeElement an opening-like JSX element to check its JSXAttributes
          */
         function checkJsxAttributesAssignableToTagnameAttributes(openingLikeElement: JsxOpeningLikeElement) {
+            // The function involves following steps:
+            //      1. Figure out expected attributes type expected by resolving tag-name of the JSX opening-like element, tagetAttributesType.
+            //         During these steps, we will try to resolve the tag-name as intrinsic name, stateless function, stateful component (in the order)
+            //      2. Solved Jsx attributes type given by users, sourceAttributesType, which is by resolving "attributes" property of the JSX opening-like element.
+            //      3. Check if the two are assignable to each other
+
             // targetAttributesType is a type of an attributes from resolving tag-name of an opening-like JSX element.
             const targetAttributesType = isJsxIntrinsicIdentifier(openingLikeElement.tagName) ?
                 getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement) :
                 getCustomJsxElementAttributesType(openingLikeElement, /*shouldIncludeAllStatelessAttributesType*/ false);
 
-            const symbolArray = getJsxAttributeSymbolsFromJsxOpeningLikeElement(openingLikeElement);
             // sourceAttributesType is a type of an attributes properties.
             // i.e <div attr1={10} attr2="string" />
             //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes". They resolved to be sourceAttributesType.
-            let sourceAttributesType = anyType as Type;
-            let isSourceAttributesTypeEmpty = true;
-            if (symbolArray) {
-                // Filter out any hyphenated names as those do not play any role in type-checking unless there are corresponding properties in the target type
-                const symbolTable = createMap<Symbol>();
-                forEach(symbolArray, (attr) => {
-                    if (isUnhyphenatedJsxName(attr.name) || getPropertyOfType(targetAttributesType, attr.name)) {
-                        symbolTable.set(attr.name, attr);
-                        isSourceAttributesTypeEmpty = false;
-                    }
+            const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement,
+                (attribute: Symbol) => {
+                    return isUnhyphenatedJsxName(attribute.name) || !!(getPropertyOfType(targetAttributesType, attribute.name));
                 });
-
-                sourceAttributesType = createJsxAttributesType(openingLikeElement.attributes.symbol, symbolTable);
-            }
 
             // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
             // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
-            if (targetAttributesType === emptyObjectType && !isTypeAny(sourceAttributesType) && !isSourceAttributesTypeEmpty) {
+            if (targetAttributesType === emptyObjectType && (isTypeAny(sourceAttributesType) || (<ResolvedType>sourceAttributesType).properties.length > 0)) {
                 error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
             else {
