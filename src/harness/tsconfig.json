@@ -79,7 +79,6 @@
         "../services/codefixes/fixConstructorForDerivedNeedSuperCall.ts",
         "../services/codefixes/fixes.ts",
         "../services/codefixes/fixExtendsInterfaceBecomesImplements.ts",
-        "../services/codefixes/fixRemoveAbstractModifierInNonAbstractClass.ts",
         "harness.ts",
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",
