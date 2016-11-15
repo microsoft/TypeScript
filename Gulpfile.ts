@@ -174,7 +174,7 @@ for (const i in libraryTargets) {
 const configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
 const configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
 const packageJson = "package.json";
-const programTs = path.join(compilerDirectory, "program.ts");
+const versionFile = path.join(compilerDirectory, "core.ts");
 
 function needsUpdate(source: string | string[], dest: string | string[]): boolean {
     if (typeof source === "string" && typeof dest === "string") {
@@ -282,7 +282,7 @@ gulp.task(configureNightlyJs, false, [], () => {
 
 // Nightly management tasks
 gulp.task("configure-nightly", "Runs scripts/configureNightly.ts to prepare a build for nightly publishing", [configureNightlyJs], (done) => {
-    exec(host, [configureNightlyJs, packageJson, programTs], done, done);
+    exec(host, [configureNightlyJs, packageJson, versionFile], done, done);
 });
 gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nightly build on npm", ["LKG"], () => {
     return runSequence("clean", "useDebugMode", "runtests", (done) => {
