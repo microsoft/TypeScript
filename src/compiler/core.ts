@@ -4,7 +4,7 @@
 /* @internal */
 namespace ts {
 
-    export const version = "2.0.9";
+    export const version = "2.0.10";
 
     /**
      * Ternary values are defined such that
@@ -717,7 +717,7 @@ namespace ts {
         if (b === undefined) return Comparison.GreaterThan;
         if (ignoreCase) {
             if (collator && String.prototype.localeCompare) {
-                // accent means a ≠ b, a ≠ á, a = A
+                // accent means a ? b, a ? a´, a = A
                 const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
                 return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
             }
