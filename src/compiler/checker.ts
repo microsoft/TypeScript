@@ -14502,6 +14502,8 @@ namespace ts {
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanEqualsToken:
                     if (checkForDisallowedESSymbolOperand(operator)) {
+                        leftType = getBaseTypeOfLiteralType(leftType);
+                        rightType = getBaseTypeOfLiteralType(rightType);
                         if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
                             reportOperatorError();
                         }
