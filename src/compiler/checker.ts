@@ -87,7 +87,6 @@ namespace ts {
             resolveStructuredTypeMembers,
             getNonNullableType,
             getSymbolsInScope,
-            getSymbolOfNode,
             getSymbolAtLocation,
             getShorthandAssignmentValueSymbol,
             getExportSpecifierLocalTargetSymbol,

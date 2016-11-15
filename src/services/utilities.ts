@@ -1360,8 +1360,7 @@ namespace ts {
     }
 
     export function getMissingAbstractMembersInsertion(classDeclaration: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
-        const classSymbol = checker.getSymbolOfNode(classDeclaration);
-        const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedType.members)), classSymbol.members);
+        const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedType.members)), classDeclaration.symbol.members);
         return getInsertionsForMembers(missingMembers, classDeclaration, checker, newlineChar);
     }
 
@@ -1370,8 +1369,7 @@ namespace ts {
      * and generates source code for the missing members.
      */
     export function getMissingMembersInsertion(classDeclaration: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
-        const classSymbol = checker.getSymbolOfNode(classDeclaration);
-        const missingMembers = filterMissingMembers(filterNonPrivate(resolvedType.members), classSymbol.members);
+        const missingMembers = filterMissingMembers(filterNonPrivate(resolvedType.members), classDeclaration.symbol.members);
         return getInsertionsForMembers(missingMembers, classDeclaration, checker, newlineChar);
     }
 
