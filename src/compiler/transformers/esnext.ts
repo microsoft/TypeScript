@@ -7,39 +7,38 @@ namespace ts {
         const {
             endLexicalEnvironment
         } = context;
-        let currentSourceFile: SourceFile;
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            currentSourceFile = node;
             return visitEachChild(node, visitor, context);
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.ESNext) {
-                return visitorWorker(node);
-            }
-            else if (node.transformFlags & TransformFlags.ContainsESNext) {
-                return visitNodeContainingESNext(node);
-            }
-            else {
-                return node;
-            }
+            return visitorWorker(node, /*noDestructuringValue*/ false);
         }
 
-        function visitorWorker(node: Node): VisitResult<Node> {
+        function visitorNoDestructuringValue(node: Node): VisitResult<Node> {
+            return visitorWorker(node, /*noDestructuringValue*/ true);
+        }
+
+        function visitorWorker(node: Node, noDestructuringValue: boolean): VisitResult<Node> {
+            if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
+                return node;
+            }
+
             switch (node.kind) {
                 case SyntaxKind.ObjectLiteralExpression:
                     return visitObjectLiteralExpression(node as ObjectLiteralExpression);
                 case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(node as BinaryExpression, /*needsDestructuringValue*/ true);
+                    return visitBinaryExpression(node as BinaryExpression, noDestructuringValue);
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.ForOfStatement:
                     return visitForOfStatement(node as ForOfStatement);
-                case SyntaxKind.ObjectBindingPattern:
-                case SyntaxKind.ArrayBindingPattern:
-                    return node;
+                case SyntaxKind.ForStatement:
+                    return visitForStatement(node as ForStatement);
+                case SyntaxKind.VoidExpression:
+                    return visitVoidExpression(node as VoidExpression);
                 case SyntaxKind.Constructor:
                     return visitConstructorDeclaration(node as ConstructorDeclaration);
                 case SyntaxKind.MethodDeclaration:
@@ -56,20 +55,13 @@ namespace ts {
                     return visitArrowFunction(node as ArrowFunction);
                 case SyntaxKind.Parameter:
                     return visitParameter(node as ParameterDeclaration);
-                default:
-                    Debug.failBadSyntaxKind(node);
-                    return visitEachChild(node, visitor, context);
-            }
-        }
-
-        function visitNodeContainingESNext(node: Node) {
-            switch (node.kind) {
                 case SyntaxKind.ExpressionStatement:
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
-                    return visitParenthesizedExpression(node as ParenthesizedExpression, /*needsDestructuringValue*/ true);
+                    return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                default:
+                    return visitEachChild(node, visitor, context);
             }
-            return visitEachChild(node, visitor, context);
         }
 
         function chunkObjectLiteralElements(elements: ObjectLiteralElement[]): Expression[] {
@@ -105,38 +97,27 @@ namespace ts {
         }
 
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
-            // spread elements emit like so:
-            // non-spread elements are chunked together into object literals, and then all are passed to __assign:
-            //     { a, ...o, b } => __assign({a}, o, {b});
-            // If the first element is a spread element, then the first argument to __assign is {}:
-            //     { ...o, a, b, ...o2 } => __assign({}, o, {a, b}, o2)
-            const objects = chunkObjectLiteralElements(node.properties);
-            if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
-                objects.unshift(createObjectLiteral());
+            if (node.transformFlags & TransformFlags.ContainsObjectSpread) {
+                // spread elements emit like so:
+                // non-spread elements are chunked together into object literals, and then all are passed to __assign:
+                //     { a, ...o, b } => __assign({a}, o, {b});
+                // If the first element is a spread element, then the first argument to __assign is {}:
+                //     { ...o, a, b, ...o2 } => __assign({}, o, {a, b}, o2)
+                const objects = chunkObjectLiteralElements(node.properties);
+                if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
+                    objects.unshift(createObjectLiteral());
+                }
+                return createCall(createIdentifier("__assign"), undefined, objects);
             }
-            return createCall(createIdentifier("__assign"), undefined, objects);
+            return visitEachChild(node, visitor, context);
         }
 
         function visitExpressionStatement(node: ExpressionStatement): ExpressionStatement {
-            switch (node.expression.kind) {
-                case SyntaxKind.ParenthesizedExpression:
-                    return updateStatement(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
-                case SyntaxKind.BinaryExpression:
-                    return updateStatement(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
-            }
-            return visitEachChild(node, visitor, context);
+            return visitEachChild(node, visitorNoDestructuringValue, context);
         }
 
-        function visitParenthesizedExpression(node: ParenthesizedExpression, needsDestructuringValue: boolean): ParenthesizedExpression {
-            if (!needsDestructuringValue) {
-                switch (node.expression.kind) {
-                    case SyntaxKind.ParenthesizedExpression:
-                        return updateParen(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
-                    case SyntaxKind.BinaryExpression:
-                        return updateParen(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
-                }
-            }
-            return visitEachChild(node, visitor, context);
+        function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
+            return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
         }
 
         /**
@@ -144,15 +125,22 @@ namespace ts {
          *
          * @param node A BinaryExpression node.
          */
-        function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
+        function visitBinaryExpression(node: BinaryExpression, noDestructuringValue: boolean): Expression {
             if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRest) {
                 return flattenDestructuringAssignment(
                     context,
                     node,
-                    needsDestructuringValue,
+                    !noDestructuringValue,
                     FlattenLevel.ObjectRest,
                     /*createAssignmentCallback*/ undefined,
                     visitor
+                );
+            }
+            else if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                return updateBinary(
+                    node,
+                    visitNode(node.left, visitorNoDestructuringValue, isExpression),
+                    visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
                 );
             }
             return visitEachChild(node, visitor, context);
@@ -176,6 +164,20 @@ namespace ts {
                     visitor);
             }
             return visitEachChild(node, visitor, context);
+        }
+
+        function visitForStatement(node: ForStatement): VisitResult<Statement> {
+            return updateFor(
+                node,
+                visitNode(node.initializer, visitorNoDestructuringValue, isForInitializer),
+                visitNode(node.condition, visitor, isExpression),
+                visitNode(node.incrementor, visitor, isExpression),
+                visitNode(node.statement, visitor, isStatement)
+            );
+        }
+
+        function visitVoidExpression(node: VoidExpression) {
+            return visitEachChild(node, visitorNoDestructuringValue, context);
         }
 
         /**
