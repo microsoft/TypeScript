@@ -1967,9 +1967,10 @@ namespace ts {
         }
     }
 
-    function isObjectLiteralPropertyDeclaration(node: Node): node is ObjectLiteralElement  {
+    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement  {
         switch (node.kind) {
             case SyntaxKind.JsxAttribute:
+            case SyntaxKind.JsxSpreadAttribute:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.MethodDeclaration:
@@ -2001,11 +2002,11 @@ namespace ts {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralPropertyDeclaration(node.parent.parent) ? node.parent.parent : undefined;
+                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
             // intentionally fall through
             case SyntaxKind.Identifier:
-                return isObjectLiteralPropertyDeclaration(node.parent) &&
+                return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     (<ObjectLiteralElement>node.parent).name === node ? node.parent as ObjectLiteralElement : undefined;
         }
@@ -2014,27 +2015,27 @@ namespace ts {
 
     /* @internal */
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
-            const objectLiteral = <ObjectLiteralExpression>node.parent;
-            const contextualType = typeChecker.getContextualType(objectLiteral);
-            const name = getNameFromObjectLiteralElement(node);
-            if (name && contextualType) {
-                const result: Symbol[] = [];
-                const symbol = contextualType.getProperty(name);
-                if (symbol) {
-                    result.push(symbol);
-                }
-
-                if (contextualType.flags & TypeFlags.Union) {
-                    forEach((<UnionType>contextualType).types, t => {
-                        const symbol = t.getProperty(name);
-                        if (symbol) {
-                            result.push(symbol);
-                        }
-                    });
-                }
-                return result;
+        const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
+        const contextualType = typeChecker.getContextualType(objectLiteral);
+        const name = getNameFromObjectLiteralElement(node);
+        if (name && contextualType) {
+            const result: Symbol[] = [];
+            const symbol = contextualType.getProperty(name);
+            if (symbol) {
+                result.push(symbol);
             }
-            return undefined;
+
+            if (contextualType.flags & TypeFlags.Union) {
+                forEach((<UnionType>contextualType).types, t => {
+                    const symbol = t.getProperty(name);
+                    if (symbol) {
+                        result.push(symbol);
+                    }
+                });
+            }
+            return result;
+        }
+        return undefined;
     }
 
     function isArgumentOfElementAccessExpression(node: Node) {
