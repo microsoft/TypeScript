@@ -1547,6 +1547,10 @@ declare namespace ts.server.protocol {
          * true if install request succeeded, otherwise - false
          */
         installSuccess: boolean;
+        /**
+         * version of typings installer
+         */
+        typingsInstallerVersion: string;
     }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];

@@ -664,6 +664,7 @@ declare namespace ts.server.protocol {
     interface TypingsInstalledTelemetryEventPayload {
         installedPackages: string;
         installSuccess: boolean;
+        typingsInstallerVersion: string;
     }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
@@ -2929,6 +2930,9 @@ declare namespace ts.performance {
     function forEachMeasure(cb: (measureName: string, duration: number) => void): void;
     function enable(): void;
     function disable(): void;
+}
+declare namespace ts {
+    const version: string;
 }
 declare namespace ts {
     const enum Ternary {
@@ -8258,7 +8262,6 @@ declare namespace ts {
     function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult;
 }
 declare namespace ts {
-    const version: string;
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: (fileName: string) => string): string;

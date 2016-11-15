@@ -1759,6 +1759,10 @@ declare namespace ts {
     }
 }
 declare namespace ts {
+    /** The version of the TypeScript compiler release */
+    const version: string;
+}
+declare namespace ts {
     type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
     type DirectoryWatcherCallback = (fileName: string) => void;
     interface WatchedFile {
@@ -1897,8 +1901,6 @@ declare namespace ts {
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
 }
 declare namespace ts {
-    /** The version of the TypeScript compiler release */
-    const version: string;
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     /**
