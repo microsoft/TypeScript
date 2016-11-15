@@ -180,7 +180,7 @@ interface ObjectConstructor {
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze<T>(o: T): T;
+    freeze<T>(o: T): Readonly<T>;
 
     /**
       * Prevents the addition of new properties to an object.
@@ -1341,6 +1341,34 @@ interface PromiseLike<T> {
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;
+}
+
+/**
+ * Make all properties in T optional
+ */
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+};
+
+/**
+ * Make all properties in T readonly
+ */
+type Readonly<T> = {
+    readonly [P in keyof T]: T[P];
+};
+
+/**
+ * From T pick a set of properties K
+ */
+type Pick<T, K extends keyof T> = {
+    [P in K]: T[P];
+}
+
+/**
+ * Construct a type with a set of properties K of type T
+ */
+type Record<K extends string | number, T> = {
+    [P in K]: T;
 }
 
 /**
