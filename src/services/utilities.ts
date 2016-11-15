@@ -1419,7 +1419,7 @@ namespace ts {
 
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
         const name = symbol.getName();
-        const type = checker.getTypeOfSymbol(symbol);
+        const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return "";

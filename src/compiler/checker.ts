@@ -74,7 +74,6 @@ namespace ts {
             getGlobalDiagnostics,
             getTypeOfSymbolAtLocation,
             getSymbolsOfParameterPropertyDeclaration,
-            getTypeOfSymbol,
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType,
