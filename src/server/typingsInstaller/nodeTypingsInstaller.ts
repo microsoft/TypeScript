@@ -135,12 +135,12 @@ namespace ts.server.typingsInstaller {
             }
             const command = `${this.npmPath} install ${args.join(" ")} --save-dev`;
             const start = Date.now();
-            this.exec(command, { cwd }, (_err, stdout, stderr) => {
+            this.exec(command, { cwd }, (err, stdout, stderr) => {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms${sys.newLine}stdout: ${stdout}${sys.newLine}stderr: ${stderr}`);
                 }
-                // treat any output on stdout as success
-                onRequestCompleted(!!stdout);
+                // treat absence of error as success
+                onRequestCompleted(!err);
             });
         }
     }

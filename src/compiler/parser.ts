@@ -6304,6 +6304,7 @@ namespace ts {
                     }
                     if (token() === SyntaxKind.NewLineTrivia) {
                         state = JSDocState.BeginningOfLine;
+                        indent = 0;
                         nextJSDocToken();
                     }
                     while (token() !== SyntaxKind.EndOfFileToken) {

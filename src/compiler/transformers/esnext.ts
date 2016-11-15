@@ -92,11 +92,15 @@ namespace ts {
             //     { a, ...o, b } => __assign({a}, o, {b});
             // If the first element is a spread element, then the first argument to __assign is {}:
             //     { ...o, a, b, ...o2 } => __assign({}, o, {a, b}, o2)
-            const objects = chunkObjectLiteralElements(node.properties);
-            if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
-                objects.unshift(createObjectLiteral());
+            if (forEach(node.properties, p => p.kind === SyntaxKind.SpreadAssignment)) {
+                const objects = chunkObjectLiteralElements(node.properties);
+                if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
+                    objects.unshift(createObjectLiteral());
+                }
+
+                return aggregateTransformFlags(createCall(createIdentifier("__assign"), undefined, objects));
             }
-            return createCall(createIdentifier("__assign"), undefined, objects);
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -235,7 +239,7 @@ namespace ts {
                 visitEachChild(node.body, visitor, context);
             const func = setOriginalNode(
                 createArrowFunction(
-                    /*modifiers*/ undefined,
+                    node.modifiers,
                     /*typeParameters*/ undefined,
                     visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
@@ -256,7 +260,7 @@ namespace ts {
                 visitEachChild(node.body, visitor, context);
             return setOriginalNode(
                 createFunctionExpression(
-                    /*modifiers*/ undefined,
+                    node.modifiers,
                     node.asteriskToken,
                     name,
                     /*typeParameters*/ undefined,

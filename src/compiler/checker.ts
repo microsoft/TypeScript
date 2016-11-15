@@ -7536,7 +7536,8 @@ namespace ts {
                                 return Ternary.False;
                             }
                             result &= related;
-                            if (sourceProp.flags & SymbolFlags.Optional && !(targetProp.flags & SymbolFlags.Optional)) {
+                            // When checking for comparability, be more lenient with optional properties.
+                            if (relation !== comparableRelation && sourceProp.flags & SymbolFlags.Optional && !(targetProp.flags & SymbolFlags.Optional)) {
                                 // TypeScript 1.0 spec (April 2014): 3.8.3
                                 // S is a subtype of a type T, and T is a supertype of S if ...
                                 // S' and T are object types and, for each member M in T..
@@ -9935,8 +9936,7 @@ namespace ts {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
-                if (languageVersion === ScriptTarget.ES2015
-                    && declaration.kind === SyntaxKind.ClassDeclaration
+                if (declaration.kind === SyntaxKind.ClassDeclaration
                     && nodeIsDecorated(declaration)) {
                     let container = getContainingClass(node);
                     while (container !== undefined) {
@@ -14505,6 +14505,8 @@ namespace ts {
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanEqualsToken:
                     if (checkForDisallowedESSymbolOperand(operator)) {
+                        leftType = getBaseTypeOfLiteralType(leftType);
+                        rightType = getBaseTypeOfLiteralType(rightType);
                         if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
                             reportOperatorError();
                         }
@@ -17259,11 +17261,15 @@ namespace ts {
         function checkElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node): Type {
             Debug.assert(languageVersion < ScriptTarget.ES2015);
 
-            // After we remove all types that are StringLike, we will know if there was a string constituent
-            // based on whether the remaining type is the same as the initial type.
             let arrayType = arrayOrStringType;
             if (arrayOrStringType.flags & TypeFlags.Union) {
-                arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)), /*subtypeReduction*/ true);
+                // After we remove all types that are StringLike, we will know if there was a string constituent
+                // based on whether the result of filter is a new array.
+                const arrayTypes = (arrayOrStringType as UnionType).types;
+                const filteredTypes = filter(arrayTypes, t => !(t.flags & TypeFlags.StringLike));
+                if (filteredTypes !== arrayTypes) {
+                    arrayType = getUnionType(filteredTypes, /*subtypeReduction*/ true);
+                }
             }
             else if (arrayOrStringType.flags & TypeFlags.StringLike) {
                 arrayType = neverType;
