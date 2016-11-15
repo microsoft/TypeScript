@@ -1,19 +1,14 @@
 //// [mappedTypes2.ts]
 
-type Partial<T> = {
-    [P in keyof T]?: T[P];
-};
-
-type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-};
-
-type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-}
-
-type Record<K extends string | number, T> = {
-    [_ in K]: T;
+function verifyLibTypes<T, K extends keyof T, U>() {
+    var x1: Partial<T>;
+    var x1: { [P in keyof T]?: T[P] };
+    var x2: Readonly<T>;
+    var x2: { readonly [P in keyof T]: T[P] };
+    var x3: Pick<T, K>;
+    var x3: { [P in K]: T[P] };
+    var x4: Record<K, U>;
+    var x4: { [P in K]: U };
 }
 
 type Proxy<T> = {
@@ -95,6 +90,16 @@ function f6(shape: DeepReadonly<Shape>) {
 }
 
 //// [mappedTypes2.js]
+function verifyLibTypes() {
+    var x1;
+    var x1;
+    var x2;
+    var x2;
+    var x3;
+    var x3;
+    var x4;
+    var x4;
+}
 function f0(s1, s2) {
     assign(s1, { name: "circle" });
     assign(s2, { width: 10, height: 20 });
@@ -129,18 +134,7 @@ function f6(shape) {
 
 
 //// [mappedTypes2.d.ts]
-declare type Partial<T> = {
-    [P in keyof T]?: T[P];
-};
-declare type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-};
-declare type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-};
-declare type Record<K extends string | number, T> = {
-    [_ in K]: T;
-};
+declare function verifyLibTypes<T, K extends keyof T, U>(): void;
 declare type Proxy<T> = {
     get(): T;
     set(value: T): void;

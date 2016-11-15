@@ -1,51 +1,60 @@
 === tests/cases/conformance/types/mapped/mappedTypes2.ts ===
 
-type Partial<T> = {
+function verifyLibTypes<T, K extends keyof T, U>() {
+>verifyLibTypes : <T, K extends keyof T, U>() => void
+>T : T
+>K : K
+>T : T
+>U : U
+
+    var x1: Partial<T>;
+>x1 : Partial<T>
 >Partial : Partial<T>
 >T : T
 
-    [P in keyof T]?: T[P];
+    var x1: { [P in keyof T]?: T[P] };
+>x1 : Partial<T>
 >P : P
 >T : T
 >T : T
 >P : P
 
-};
-
-type Readonly<T> = {
+    var x2: Readonly<T>;
+>x2 : Readonly<T>
 >Readonly : Readonly<T>
 >T : T
 
-    readonly [P in keyof T]: T[P];
+    var x2: { readonly [P in keyof T]: T[P] };
+>x2 : Readonly<T>
 >P : P
 >T : T
 >T : T
 >P : P
 
-};
-
-type Pick<T, K extends keyof T> = {
+    var x3: Pick<T, K>;
+>x3 : Pick<T, K>
 >Pick : Pick<T, K>
 >T : T
 >K : K
->T : T
 
-    [P in K]: T[P];
+    var x3: { [P in K]: T[P] };
+>x3 : Pick<T, K>
 >P : P
 >K : K
 >T : T
 >P : P
-}
 
-type Record<K extends string | number, T> = {
+    var x4: Record<K, U>;
+>x4 : Record<K, U>
 >Record : Record<K, T>
 >K : K
->T : T
+>U : U
 
-    [_ in K]: T;
->_ : _
+    var x4: { [P in K]: U };
+>x4 : Record<K, U>
+>P : P
 >K : K
->T : T
+>U : U
 }
 
 type Proxy<T> = {
