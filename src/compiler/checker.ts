@@ -12372,6 +12372,9 @@ namespace ts {
         }
 
         function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
+            if (isJsxOpeningLikeElement(node)) {
+                return checkApplicableSignatureForJsxOpeningLikeElement(<JsxOpeningLikeElement>node, signature, relation);
+            }
             const thisType = getThisTypeOfSignature(signature);
             if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
                 // If the called expression is not of the form `x.f` or `x["f"]`, then sourceType = voidType
@@ -12951,10 +12954,7 @@ namespace ts {
                             }
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
-                        if (isJsxOpeningOrSelfClosingElement && !checkApplicableSignatureForJsxOpeningLikeElement(<JsxOpeningLikeElement>node, candidate, relation)) {
-                            break;
-                        }
-                        else if (!isJsxOpeningOrSelfClosingElement && !checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             break;
                         }
                         const index = excludeArgument ? indexOf(excludeArgument, true) : -1;
