@@ -5,6 +5,8 @@
 /// <reference path="../shared.ts"/>
 
 namespace ts.server.typingsInstaller {
+    const typingsInstallerVersion = "2.0.9";
+
     interface NpmConfig {
         devDependencies: MapLike<any>;
     }
@@ -230,7 +232,7 @@ namespace ts.server.typingsInstaller {
             }
             const result: string[] = [];
             for (const typing of typingsToInstall) {
-                if (this.missingTypingsSet[typing]) {
+                if (this.missingTypingsSet[typing] || this.packageNameToTypingLocation[typing]) {
                     continue;
                 }
                 const validationResult = validatePackageName(typing);
@@ -308,7 +310,8 @@ namespace ts.server.typingsInstaller {
                     this.sendResponse(<TypingsInstallEvent>{
                         kind: EventInstall,
                         packagesToInstall: scopedTypings,
-                        installSuccess: ok
+                        installSuccess: ok,
+                        typingsInstallerVersion
                     });
                 }
 
