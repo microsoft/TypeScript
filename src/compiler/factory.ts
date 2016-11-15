@@ -2343,11 +2343,11 @@ namespace ts {
         return qualifiedName;
     }
 
-    export function convertToFunctionBody(node: ConciseBody) {
+    export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean) {
         if (isBlock(node)) {
             return node;
         }
-        return createBlock([createReturn(node, node)], node, /*multiLine*/ true);
+        return createBlock([createReturn(node, node)], node, multiLine);
     }
 
     function isUseStrictPrologue(node: ExpressionStatement): boolean {

@@ -363,14 +363,12 @@ namespace ts {
                     }
                 }
             }
-
             const body = visitNode(node.body, visitor, isConciseBody);
             const trailingStatements = endLexicalEnvironment();
             if (some(leadingStatements) || some(trailingStatements)) {
-                const block = convertToFunctionBody(body);
+                const block = convertToFunctionBody(body, /*multiLine*/ true);
                 return updateBlock(block, createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements), block.statements));
             }
-
             return body;
         }
     }
