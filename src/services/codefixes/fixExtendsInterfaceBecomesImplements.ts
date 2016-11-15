@@ -21,21 +21,23 @@ namespace ts.codefix {
                 return undefined;
             }
 
+            const textChanges: TextChange[] = [{ newText: " implements", span: { start: extendsToken.pos, length: extendsToken.end - extendsToken.pos } }];
+
+            // We replace existing keywords with commas.
+            for (let i = 1; i < heritageClauses.length; i++) {
+                const keywordToken = heritageClauses[i].getFirstToken();
+                if (keywordToken) {
+                    textChanges.push({ newText: ",", span: { start: keywordToken.pos, length: keywordToken.end - keywordToken.pos } });
+                }
+            }
+
             const result = [{
                 description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements),
                 changes: [{
                     fileName: sourceFile.fileName,
-                    textChanges: [{ newText: " implements", span: { start: extendsToken.pos, length: extendsToken.end - extendsToken.pos } }]
+                    textChanges: textChanges
                 }]
             }];
-
-            // We check if the implements keyword is present and replace it with a comma if so.
-            for (let i = 1; i < heritageClauses.length; i++) {
-                const keywordToken = heritageClauses[i].getFirstToken();
-                if (keywordToken) {
-                    result[0].changes[0].textChanges.push({ newText: ",", span: { start: keywordToken.pos, length: keywordToken.end - keywordToken.pos } });
-                }
-            }
 
             return result;
         }
