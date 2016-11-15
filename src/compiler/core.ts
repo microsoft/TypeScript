@@ -4,7 +4,9 @@
 /* @internal */
 namespace ts {
 
-    export const version = "2.0.9";
+    /** The version of the TypeScript compiler release */
+
+    export const version = "2.2.0";
 
     /**
      * Ternary values are defined such that
