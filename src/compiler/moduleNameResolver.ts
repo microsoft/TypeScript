@@ -74,26 +74,28 @@ namespace ts {
     /** Reads "types"/"typings" for ts and "main" for js. */
     function tryReadPackageJsonFields(ts: boolean, packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string | undefined {
         const jsonContent = readJson(packageJsonPath, state.host);
-        const x = ts ? tryReadFromField("typings") || tryReadFromField("types") : tryReadFromField("main");
-        if (!x && state.traceEnabled) {
+        const file = ts ? tryReadFromField("typings") || tryReadFromField("types") : tryReadFromField("main");
+        if (!file && state.traceEnabled) {
             trace(state.host, Diagnostics.package_json_does_not_have_a_0_field, ts ? "types" : "main");
         }
-        return x;
+        return file;
 
         function tryReadFromField(fieldName: string): string | undefined {
-            if (hasProperty(jsonContent, fieldName)) {
-                const file = (<any>jsonContent)[fieldName];
-                if (typeof file === "string") {
-                    const typesFilePath = normalizePath(combinePaths(baseDirectory, file));
-                    if (state.traceEnabled) {
-                        trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, file, typesFilePath);
-                    }
-                    return typesFilePath;
+            if (!hasProperty(jsonContent, fieldName)) {
+                return;
+            }
+
+            const file = (<any>jsonContent)[fieldName];
+            if (typeof file === "string") {
+                const path = normalizePath(combinePaths(baseDirectory, file));
+                if (state.traceEnabled) {
+                    trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, file, path);
                 }
-                else {
-                    if (state.traceEnabled) {
-                        trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, fieldName, typeof file);
-                    }
+                return path;
+            }
+            else {
+                if (state.traceEnabled) {
+                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, fieldName, typeof file);
                 }
             }
         }
