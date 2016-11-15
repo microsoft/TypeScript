@@ -1,22 +1,6 @@
 // @strictNullChecks: true
 // @declaration: true
 
-type Partial<T> = {
-    [P in keyof T]?: T[P];
-};
-
-type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-};
-
-type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-}
-
-type Record<K extends string | number, T> = {
-    [_ in K]: T;
-}
-
 interface Shape {
     name: string;
     width: number;
@@ -32,6 +16,8 @@ interface Point {
     x: number;
     y: number;
 }
+
+// Constraint checking
 
 type T00 = { [P in P]: string };  // Error
 type T01 = { [P in Date]: number };  // Error
@@ -59,4 +45,25 @@ function f3<T extends keyof Shape>(x: T) {
 
 function f4<T extends keyof Named>(x: T) {
     let y: Pick<Shape, T>;
+}
+
+// Type identity checking
+
+function f10<T>() {
+    type K = keyof T;
+    var x: { [P in keyof T]: T[P] };
+    var x: { [Q in keyof T]: T[Q] };
+    var x: { [R in K]: T[R] };
+}
+
+function f11<T>() {
+    var x: { [P in keyof T]: T[P] };
+    var x: { [P in keyof T]?: T[P] };  // Error
+    var x: { readonly [P in keyof T]: T[P] };  // Error
+    var x: { readonly [P in keyof T]?: T[P] };  // Error
+}
+
+function f12<T>() {
+    var x: { [P in keyof T]: T[P] };
+    var x: { [P in keyof T]: T[P][] };  // Error
 }
