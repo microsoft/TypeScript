@@ -1,6 +1,11 @@
 ﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
+namespace ts {
+    /** The version of the TypeScript compiler release */
+    export const version = "2.2.0";
+}
+
 /* @internal */
 namespace ts {
     /**

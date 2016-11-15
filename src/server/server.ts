@@ -300,7 +300,8 @@ namespace ts.server {
                         telemetryEventName: "typingsInstalled",
                         payload: {
                             installedPackages: response.packagesToInstall.join(","),
-                            installSuccess: response.installSuccess
+                            installSuccess: response.installSuccess,
+                            typingsInstallerVersion: response.typingsInstallerVersion
                         }
                     };
                     const eventName: protocol.TelemetryEventName = "telemetry";
