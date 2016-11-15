@@ -9721,20 +9721,20 @@ namespace ts {
                 }
 
                 if (targetType) {
-                    return getNarrowedType(type, targetType, assumeTrue);
+                    return getNarrowedType(type, targetType, assumeTrue, isTypeInstanceOf);
                 }
 
                 return type;
             }
 
-            function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean) {
+            function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
                 if (!assumeTrue) {
-                    return filterType(type, t => !isTypeInstanceOf(t, candidate));
+                    return filterType(type, t => !isRelated(t, candidate));
                 }
                 // If the current type is a union type, remove all constituents that couldn't be instances of
                 // the candidate type. If one or more constituents remain, return a union of those.
                 if (type.flags & TypeFlags.Union) {
-                    const assignableType = filterType(type, t => isTypeInstanceOf(t, candidate));
+                    const assignableType = filterType(type, t => isRelated(t, candidate));
                     if (!(assignableType.flags & TypeFlags.Never)) {
                         return assignableType;
                     }
@@ -9770,7 +9770,7 @@ namespace ts {
                     const predicateArgument = callExpression.arguments[predicate.parameterIndex];
                     if (predicateArgument) {
                         if (isMatchingReference(reference, predicateArgument)) {
-                            return getNarrowedType(type, predicate.type, assumeTrue);
+                            return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
                         }
                         if (containsMatchingReference(reference, predicateArgument)) {
                             return declaredType;
@@ -9783,7 +9783,7 @@ namespace ts {
                         const accessExpression = invokedExpression as ElementAccessExpression | PropertyAccessExpression;
                         const possibleReference = skipParentheses(accessExpression.expression);
                         if (isMatchingReference(reference, possibleReference)) {
-                            return getNarrowedType(type, predicate.type, assumeTrue);
+                            return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
                         }
                         if (containsMatchingReference(reference, possibleReference)) {
                             return declaredType;
