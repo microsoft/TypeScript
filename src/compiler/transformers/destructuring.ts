@@ -428,7 +428,14 @@ namespace ts {
                 }
                 if (isComputedPropertyName(getPropertyName(element))) {
                     // get the temp name and put that in there instead, like `_tmp + ""`
-                    propertyNames.push(createBinary(computedTempVariables.shift(), SyntaxKind.PlusToken, createLiteral("")));
+                    const temp = computedTempVariables.shift();
+                    propertyNames.push(createConditional(createBinary(createTypeOf(temp),
+                                                                      SyntaxKind.EqualsEqualsEqualsToken,
+                                                                      createLiteral("symbol")),
+                                                         createToken(SyntaxKind.QuestionToken),
+                                                         temp,
+                                                         createToken(SyntaxKind.ColonToken),
+                                                         createBinary(temp, SyntaxKind.PlusToken, createLiteral(""))));
                 }
                 else {
                     const propName = getTextOfPropertyName(getPropertyName(element));
