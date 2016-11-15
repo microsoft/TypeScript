@@ -3118,7 +3118,7 @@
         "category": "Error",
         "code": 18000
     },
-    "The path in an 'extends' option must be relative or rooted, but '{0}' is not.": {
+    "A path in an 'extends' option must be relative or rooted, but '{0}' is not.": {
         "category": "Error",
         "code": 18001
     },
