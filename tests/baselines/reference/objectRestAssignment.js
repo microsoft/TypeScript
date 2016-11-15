@@ -30,6 +30,6 @@ let complex;
 // should be:
 let overEmit;
 // var _g = overEmit.a, [_h, ...y] = _g, nested2 = __rest(_h, []), _j = overEmit.b, { z } = _j, c = __rest(_j, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
-var _b = overEmit.a, [_c, ...y] = _b, nested2 = __rest(_c, []), _d = overEmit.b, { z } = _d, c = __rest(_d, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
-(_e = overEmit.a, [_f, ...y] = _e, nested2 = __rest(_f, []), _g = overEmit.b, { z } = _g, c = __rest(_g, ["z"]), rest2 = __rest(overEmit, ["a", "b"]));
-var _a, _e, _g;
+var [_b, ...y] = overEmit.a, nested2 = __rest(_b, []), _c = overEmit.b, { z } = _c, c = __rest(_c, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
+([_d, ...y] = overEmit.a, nested2 = __rest(_d, []), _e = overEmit.b, { z } = _e, c = __rest(_e, ["z"]), rest2 = __rest(overEmit, ["a", "b"]));
+var _a, _d, _e;

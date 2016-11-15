@@ -734,7 +734,7 @@ namespace ts {
         elements: NodeArray<ArrayBindingElement>;
     }
 
-    export type BindingPattern = (ObjectBindingPattern | ArrayBindingPattern) & { elements: NodeArray<ArrayBindingElement>; };
+    export type BindingPattern = ObjectBindingPattern | ArrayBindingPattern;
 
     export type ArrayBindingElement = BindingElement | OmittedExpression;
 

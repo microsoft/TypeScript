@@ -3284,9 +3284,9 @@ namespace ts {
             return bindingElement.right;
         }
 
-        if (isSpreadExpression(bindingElement) && isBindingOrAssignmentElement(bindingElement.expression)) {
+        if (isSpreadExpression(bindingElement)) {
             // Recovery consistent with existing emit.
-            return getInitializerOfBindingOrAssignmentElement(bindingElement.expression);
+            return getInitializerOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
     }
 
@@ -3327,9 +3327,7 @@ namespace ts {
                     // `b.c` in `({ a: b.c = 1 } = ...)`
                     // `b[0]` in `({ a: b[0] } = ...)`
                     // `b[0]` in `({ a: b[0] = 1 } = ...)`
-                    return isBindingOrAssignmentElement(bindingElement.initializer)
-                        ? getTargetOfBindingOrAssignmentElement(bindingElement.initializer)
-                        : undefined;
+                    return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.initializer);
 
                 case SyntaxKind.ShorthandPropertyAssignment:
                     // `a` in `({ a } = ...)`
@@ -3338,9 +3336,7 @@ namespace ts {
 
                 case SyntaxKind.SpreadAssignment:
                     // `a` in `({ ...a } = ...)`
-                    return isBindingOrAssignmentElement(bindingElement.expression)
-                        ? getTargetOfBindingOrAssignmentElement(bindingElement.expression)
-                        : undefined;
+                    return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
             }
 
             // no target
@@ -3353,16 +3349,12 @@ namespace ts {
             // `[a]` in `[[a] = 1] = ...`
             // `a.b` in `[a.b = 1] = ...`
             // `a[0]` in `[a[0] = 1] = ...`
-            return isBindingOrAssignmentElement(bindingElement.left)
-                ? getTargetOfBindingOrAssignmentElement(bindingElement.left)
-                : undefined;
+            return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.left);
         }
 
         if (isSpreadExpression(bindingElement)) {
             // `a` in `[...a] = ...`
-            return isBindingOrAssignmentElement(bindingElement.expression)
-                ? getTargetOfBindingOrAssignmentElement(bindingElement.expression)
-                : undefined;
+            return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
 
         // `a` in `[a] = ...`
@@ -3442,16 +3434,12 @@ namespace ts {
             case SyntaxKind.ArrayLiteralExpression:
                 // `a` in `{a}`
                 // `a` in `[a]`
-                return map(name.elements, convertToBindingOrAssignmentElement);
+                return <BindingOrAssignmentElement[]>name.elements;
 
             case SyntaxKind.ObjectLiteralExpression:
                 // `a` in `{a}`
-                return filter(name.properties, isBindingOrAssignmentElement);
+                return <BindingOrAssignmentElement[]>name.properties;
         }
-    }
-
-    function convertToBindingOrAssignmentElement(node: Node) {
-        return isBindingOrAssignmentElement(node) ? node : createOmittedExpression(node);
     }
 
     export function convertToArrayAssignmentElement(element: BindingOrAssignmentElement) {

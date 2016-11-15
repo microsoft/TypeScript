@@ -292,6 +292,10 @@ namespace ts {
                 // can perform the ObjectRest destructuring in a different declaration
                 if (element.transformFlags & TransformFlags.ContainsObjectRest) {
                     const temp = createTempVariable(/*recordTempVariable*/ undefined);
+                    if (!host.recordTempVariablesInLine) {
+                        host.context.hoistVariableDeclaration(temp);
+                    }
+
                     restContainingElements = append(restContainingElements, <[Identifier, BindingOrAssignmentElement]>[temp, element]);
                     bindingElements = append(bindingElements, host.createArrayBindingOrAssignmentElement(temp));
                 }

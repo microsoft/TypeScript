@@ -1,7 +1,7 @@
 tests/cases/conformance/types/rest/objectRestNegative.ts(2,10): error TS2462: A rest element must be last in a destructuring pattern
 tests/cases/conformance/types/rest/objectRestNegative.ts(3,31): error TS2462: A rest element must be last in a destructuring pattern
 tests/cases/conformance/types/rest/objectRestNegative.ts(6,17): error TS2700: Rest types may only be created from object types.
-tests/cases/conformance/types/rest/objectRestNegative.ts(11,9): error TS2701: An object rest element must be an identifier.
+tests/cases/conformance/types/rest/objectRestNegative.ts(11,9): error TS2701: The target of an object rest assignment must be a variable or a property access.
 
 
 ==== tests/cases/conformance/types/rest/objectRestNegative.ts (4 errors) ====
@@ -23,5 +23,5 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(11,9): error TS2701: An
     let rest: { b: string }
     ({a, ...rest.b + rest.b} = o);
             ~~~~~~~~~~~~~~~
-!!! error TS2701: An object rest element must be an identifier.
+!!! error TS2701: The target of an object rest assignment must be a variable or a property access.
     
