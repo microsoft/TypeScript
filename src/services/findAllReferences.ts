@@ -1138,7 +1138,7 @@ namespace ts.FindAllReferences {
                     return contextualSymbol;
                 }
 
-                // If the reference location is the name of property from object literal destructing pattern
+                // If the reference location is the name of property from object literal destructuring pattern
                 // Get the property symbol from the object literal's type and look if thats the search symbol
                 // In below eg. get 'property' from type of elems iterating type
                 //      for ( { property: p2 } of elems) { }

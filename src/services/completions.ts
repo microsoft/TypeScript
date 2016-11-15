@@ -1386,7 +1386,7 @@ namespace ts.Completions {
                             //      JsxOpeninLikeElement
                             //          attributes: JsxAttributes
                             //             properties: NodeArray<JsxAttributeLike>
-                            return /*properties list*/parent./*attributes*/parent.parent as JsxOpeningLikeElement;
+                            return parent.parent.parent as JsxOpeningLikeElement;
                         }
                         break;
 
@@ -1399,7 +1399,7 @@ namespace ts.Completions {
                             //      JsxOpeninLikeElement
                             //          attributes: JsxAttributes
                             //             properties: NodeArray<JsxAttributeLike>
-                            return /*properties list*/parent./*attributes*/parent.parent as JsxOpeningLikeElement;
+                            return parent.parent.parent as JsxOpeningLikeElement;
                         }
 
                         break;
@@ -1413,7 +1413,7 @@ namespace ts.Completions {
                             //          attributes: JsxAttributes
                             //             properties: NodeArray<JsxAttributeLike>
                             //                  each JsxAttribute can have initializer as JsxExpression
-                            return /*JsxExpression*/parent./*JsxAttribute*/parent./*JsxAttributes*/parent.parent as JsxOpeningLikeElement;
+                            return parent.parent.parent.parent as JsxOpeningLikeElement;
                         }
 
                         if (parent && parent.kind === SyntaxKind.JsxSpreadAttribute) {
@@ -1421,7 +1421,7 @@ namespace ts.Completions {
                             //      JsxOpeninLikeElement
                             //          attributes: JsxAttributes
                             //             properties: NodeArray<JsxAttributeLike>
-                            return /*properties list*/parent./*attributes*/parent.parent as JsxOpeningLikeElement;
+                            return parent.parent.parent as JsxOpeningLikeElement;
                         }
 
                         break;

@@ -12848,9 +12848,8 @@ namespace ts {
 
             // Do not report any error if we are doing so for stateless function component as such error will be error will be handle in "resolveCustomJsxElementAttributesType".
             if (isJsxOpeningOrSelfClosingElement) {
-                // If this is a type resolution session, e.g. Language Service, just return undefined as the language service can decide how to proceed with this failure.
-                // (see getDefinitionAtPosition which simply get the symbol and return the first declaration of the JSXopeningLikeElement node)
-                // otherwise, just return the latest signature candidate we try so far so that when we report an error we will get better error message.
+                // If resolveCall was called by the language service, return undefined to let the language service decide what to do. (see getDefinitionAtPosition)
+                // Otherwise, return the last candidate we tried so that error reporting can use it.
                 return produceDiagnostics ? candidateForArgumentError : undefined;
             }
 
