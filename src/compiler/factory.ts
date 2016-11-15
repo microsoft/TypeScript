@@ -2424,6 +2424,407 @@ namespace ts {
         return node;
     }
 
+    /**
+     * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
+     * order of operations.
+     *
+     * @param binaryOperator The operator for the BinaryExpression.
+     * @param operand The operand for the BinaryExpression.
+     * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
+     *                           BinaryExpression.
+     */
+    export function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression) {
+        const skipped = skipPartiallyEmittedExpressions(operand);
+
+        // If the resulting expression is already parenthesized, we do not need to do any further processing.
+        if (skipped.kind === SyntaxKind.ParenthesizedExpression) {
+            return operand;
+        }
+
+        return binaryOperandNeedsParentheses(binaryOperator, operand, isLeftSideOfBinary, leftOperand)
+            ? createParen(operand)
+            : operand;
+    }
+
+    /**
+     * Determines whether the operand to a BinaryExpression needs to be parenthesized.
+     *
+     * @param binaryOperator The operator for the BinaryExpression.
+     * @param operand The operand for the BinaryExpression.
+     * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
+     *                           BinaryExpression.
+     */
+    function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand: Expression) {
+        // If the operand has lower precedence, then it needs to be parenthesized to preserve the
+        // intent of the expression. For example, if the operand is `a + b` and the operator is
+        // `*`, then we need to parenthesize the operand to preserve the intended order of
+        // operations: `(a + b) * x`.
+        //
+        // If the operand has higher precedence, then it does not need to be parenthesized. For
+        // example, if the operand is `a * b` and the operator is `+`, then we do not need to
+        // parenthesize to preserve the intended order of operations: `a * b + x`.
+        //
+        // If the operand has the same precedence, then we need to check the associativity of
+        // the operator based on whether this is the left or right operand of the expression.
+        //
+        // For example, if `a / d` is on the right of operator `*`, we need to parenthesize
+        // to preserve the intended order of operations: `x * (a / d)`
+        //
+        // If `a ** d` is on the left of operator `**`, we need to parenthesize to preserve
+        // the intended order of operations: `(a ** b) ** c`
+        const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
+        const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
+        const emittedOperand = skipPartiallyEmittedExpressions(operand);
+        const operandPrecedence = getExpressionPrecedence(emittedOperand);
+        switch (compareValues(operandPrecedence, binaryOperatorPrecedence)) {
+            case Comparison.LessThan:
+                // If the operand is the right side of a right-associative binary operation
+                // and is a yield expression, then we do not need parentheses.
+                if (!isLeftSideOfBinary
+                    && binaryOperatorAssociativity === Associativity.Right
+                    && operand.kind === SyntaxKind.YieldExpression) {
+                    return false;
+                }
+
+                return true;
+
+            case Comparison.GreaterThan:
+                return false;
+
+            case Comparison.EqualTo:
+                if (isLeftSideOfBinary) {
+                    // No need to parenthesize the left operand when the binary operator is
+                    // left associative:
+                    //  (a*b)/x    ->  a*b/x
+                    //  (a**b)/x   ->  a**b/x
+                    //
+                    // Parentheses are needed for the left operand when the binary operator is
+                    // right associative:
+                    //  (a/b)**x   ->  (a/b)**x
+                    //  (a**b)**x  ->  (a**b)**x
+                    return binaryOperatorAssociativity === Associativity.Right;
+                }
+                else {
+                    if (isBinaryExpression(emittedOperand)
+                        && emittedOperand.operatorToken.kind === binaryOperator) {
+                        // No need to parenthesize the right operand when the binary operator and
+                        // operand are the same and one of the following:
+                        //  x*(a*b)     => x*a*b
+                        //  x|(a|b)     => x|a|b
+                        //  x&(a&b)     => x&a&b
+                        //  x^(a^b)     => x^a^b
+                        if (operatorHasAssociativeProperty(binaryOperator)) {
+                            return false;
+                        }
+
+                        // No need to parenthesize the right operand when the binary operator
+                        // is plus (+) if both the left and right operands consist solely of either
+                        // literals of the same kind or binary plus (+) expressions for literals of
+                        // the same kind (recursively).
+                        //  "a"+(1+2)       => "a"+(1+2)
+                        //  "a"+("b"+"c")   => "a"+"b"+"c"
+                        if (binaryOperator === SyntaxKind.PlusToken) {
+                            const leftKind = leftOperand ? getLiteralKindOfBinaryPlusOperand(leftOperand) : SyntaxKind.Unknown;
+                            if (isLiteralKind(leftKind) && leftKind === getLiteralKindOfBinaryPlusOperand(emittedOperand)) {
+                                return false;
+                            }
+                        }
+                    }
+
+                    // No need to parenthesize the right operand when the operand is right
+                    // associative:
+                    //  x/(a**b)    -> x/a**b
+                    //  x**(a**b)   -> x**a**b
+                    //
+                    // Parentheses are needed for the right operand when the operand is left
+                    // associative:
+                    //  x/(a*b)     -> x/(a*b)
+                    //  x**(a/b)    -> x**(a/b)
+                    const operandAssociativity = getExpressionAssociativity(emittedOperand);
+                    return operandAssociativity === Associativity.Left;
+                }
+        }
+    }
+
+    /**
+     * Determines whether a binary operator is mathematically associative.
+     *
+     * @param binaryOperator The binary operator.
+     */
+    function operatorHasAssociativeProperty(binaryOperator: SyntaxKind) {
+        // The following operators are associative in JavaScript:
+        //  (a*b)*c     -> a*(b*c)  -> a*b*c
+        //  (a|b)|c     -> a|(b|c)  -> a|b|c
+        //  (a&b)&c     -> a&(b&c)  -> a&b&c
+        //  (a^b)^c     -> a^(b^c)  -> a^b^c
+        //
+        // While addition is associative in mathematics, JavaScript's `+` is not
+        // guaranteed to be associative as it is overloaded with string concatenation.
+        return binaryOperator === SyntaxKind.AsteriskToken
+            || binaryOperator === SyntaxKind.BarToken
+            || binaryOperator === SyntaxKind.AmpersandToken
+            || binaryOperator === SyntaxKind.CaretToken;
+    }
+
+    interface BinaryPlusExpression extends BinaryExpression {
+        cachedLiteralKind: SyntaxKind;
+    }
+
+    /**
+     * This function determines whether an expression consists of a homogeneous set of
+     * literal expressions or binary plus expressions that all share the same literal kind.
+     * It is used to determine whether the right-hand operand of a binary plus expression can be
+     * emitted without parentheses.
+     */
+    function getLiteralKindOfBinaryPlusOperand(node: Expression): SyntaxKind {
+        node = skipPartiallyEmittedExpressions(node);
+
+        if (isLiteralKind(node.kind)) {
+            return node.kind;
+        }
+
+        if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.PlusToken) {
+            if ((<BinaryPlusExpression>node).cachedLiteralKind !== undefined) {
+                return (<BinaryPlusExpression>node).cachedLiteralKind;
+            }
+
+            const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
+            const literalKind = isLiteralKind(leftKind)
+                && leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)
+                    ? leftKind
+                    : SyntaxKind.Unknown;
+
+            (<BinaryPlusExpression>node).cachedLiteralKind = literalKind;
+            return literalKind;
+        }
+
+        return SyntaxKind.Unknown;
+    }
+
+    /**
+     * Wraps an expression in parentheses if it is needed in order to use the expression
+     * as the expression of a NewExpression node.
+     *
+     * @param expression The Expression node.
+     */
+    export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
+        const emittedExpression = skipPartiallyEmittedExpressions(expression);
+        switch (emittedExpression.kind) {
+            case SyntaxKind.CallExpression:
+                return createParen(expression);
+
+            case SyntaxKind.NewExpression:
+                return (<NewExpression>emittedExpression).arguments
+                    ? <LeftHandSideExpression>expression
+                    : createParen(expression);
+        }
+
+        return parenthesizeForAccess(expression);
+    }
+
+    /**
+     * Wraps an expression in parentheses if it is needed in order to use the expression for
+     * property or element access.
+     *
+     * @param expr The expression node.
+     */
+    export function parenthesizeForAccess(expression: Expression): LeftHandSideExpression {
+        // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
+        // to parenthesize the expression before a dot. The known exceptions are:
+        //
+        //    NewExpression:
+        //       new C.x        -> not the same as (new C).x
+        //    NumericLiteral
+        //       1.x            -> not the same as (1).x
+        //
+        const emittedExpression = skipPartiallyEmittedExpressions(expression);
+        if (isLeftHandSideExpression(emittedExpression)
+            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)
+            && emittedExpression.kind !== SyntaxKind.NumericLiteral) {
+            return <LeftHandSideExpression>expression;
+        }
+
+        return createParen(expression, /*location*/ expression);
+    }
+
+    export function parenthesizePostfixOperand(operand: Expression) {
+        return isLeftHandSideExpression(operand)
+            ? <LeftHandSideExpression>operand
+            : createParen(operand, /*location*/ operand);
+    }
+
+    export function parenthesizePrefixOperand(operand: Expression) {
+        return isUnaryExpression(operand)
+            ? <UnaryExpression>operand
+            : createParen(operand, /*location*/ operand);
+    }
+
+    function parenthesizeListElements(elements: NodeArray<Expression>) {
+        let result: Expression[];
+        for (let i = 0; i < elements.length; i++) {
+            const element = parenthesizeExpressionForList(elements[i]);
+            if (result !== undefined || element !== elements[i]) {
+                if (result === undefined) {
+                    result = elements.slice(0, i);
+                }
+
+                result.push(element);
+            }
+        }
+
+        if (result !== undefined) {
+            return createNodeArray(result, elements, elements.hasTrailingComma);
+        }
+
+        return elements;
+    }
+
+    export function parenthesizeExpressionForList(expression: Expression) {
+        const emittedExpression = skipPartiallyEmittedExpressions(expression);
+        const expressionPrecedence = getExpressionPrecedence(emittedExpression);
+        const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
+        return expressionPrecedence > commaPrecedence
+            ? expression
+            : createParen(expression, /*location*/ expression);
+    }
+
+    export function parenthesizeExpressionForExpressionStatement(expression: Expression) {
+        const emittedExpression = skipPartiallyEmittedExpressions(expression);
+        if (isCallExpression(emittedExpression)) {
+            const callee = emittedExpression.expression;
+            const kind = skipPartiallyEmittedExpressions(callee).kind;
+            if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
+                const mutableCall = getMutableClone(emittedExpression);
+                mutableCall.expression = createParen(callee, /*location*/ callee);
+                return recreatePartiallyEmittedExpressions(expression, mutableCall);
+            }
+        }
+        else {
+            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
+            if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+                return createParen(expression, /*location*/ expression);
+            }
+        }
+
+        return expression;
+    }
+
+    /**
+     * Clones a series of not-emitted expressions with a new inner expression.
+     *
+     * @param originalOuterExpression The original outer expression.
+     * @param newInnerExpression The new inner expression.
+     */
+    function recreatePartiallyEmittedExpressions(originalOuterExpression: Expression, newInnerExpression: Expression) {
+        if (isPartiallyEmittedExpression(originalOuterExpression)) {
+            const clone = getMutableClone(originalOuterExpression);
+            clone.expression = recreatePartiallyEmittedExpressions(clone.expression, newInnerExpression);
+            return clone;
+        }
+
+        return newInnerExpression;
+    }
+
+    function getLeftmostExpression(node: Expression): Expression {
+        while (true) {
+            switch (node.kind) {
+                case SyntaxKind.PostfixUnaryExpression:
+                    node = (<PostfixUnaryExpression>node).operand;
+                    continue;
+
+                case SyntaxKind.BinaryExpression:
+                    node = (<BinaryExpression>node).left;
+                    continue;
+
+                case SyntaxKind.ConditionalExpression:
+                    node = (<ConditionalExpression>node).condition;
+                    continue;
+
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
+                    continue;
+
+                case SyntaxKind.PartiallyEmittedExpression:
+                    node = (<PartiallyEmittedExpression>node).expression;
+                    continue;
+            }
+
+            return node;
+        }
+    }
+
+    export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
+        const emittedBody = skipPartiallyEmittedExpressions(body);
+        if (emittedBody.kind === SyntaxKind.ObjectLiteralExpression) {
+            return createParen(<Expression>body, /*location*/ body);
+        }
+
+        return body;
+    }
+
+    export const enum OuterExpressionKinds {
+        Parentheses = 1 << 0,
+        Assertions = 1 << 1,
+        PartiallyEmittedExpressions = 1 << 2,
+
+        All = Parentheses | Assertions | PartiallyEmittedExpressions
+    }
+
+    export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
+    export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
+    export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
+        let previousNode: Node;
+        do {
+            previousNode = node;
+            if (kinds & OuterExpressionKinds.Parentheses) {
+                node = skipParentheses(node);
+            }
+
+            if (kinds & OuterExpressionKinds.Assertions) {
+                node = skipAssertions(node);
+            }
+
+            if (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) {
+                node = skipPartiallyEmittedExpressions(node);
+            }
+        }
+        while (previousNode !== node);
+
+        return node;
+    }
+
+    export function skipParentheses(node: Expression): Expression;
+    export function skipParentheses(node: Node): Node;
+    export function skipParentheses(node: Node): Node {
+        while (node.kind === SyntaxKind.ParenthesizedExpression) {
+            node = (<ParenthesizedExpression>node).expression;
+        }
+
+        return node;
+    }
+
+    export function skipAssertions(node: Expression): Expression;
+    export function skipAssertions(node: Node): Node;
+    export function skipAssertions(node: Node): Node {
+        while (isAssertionExpression(node)) {
+            node = (<AssertionExpression>node).expression;
+        }
+
+        return node;
+    }
+
+    export function skipPartiallyEmittedExpressions(node: Expression): Expression;
+    export function skipPartiallyEmittedExpressions(node: Node): Node;
+    export function skipPartiallyEmittedExpressions(node: Node) {
+        while (node.kind === SyntaxKind.PartiallyEmittedExpression) {
+            node = (<PartiallyEmittedExpression>node).expression;
+        }
+
+        return node;
+    }
+
     export function startOnNewLine<T extends Node>(node: T): T {
         node.startsOnNewLine = true;
         return node;
@@ -3507,408 +3908,5 @@ namespace ts {
 
         Debug.assertNode(node, isExpression);
         return <Expression>node;
-    }
-
-    // Parenthesizing
-
-    /**
-     * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
-     * order of operations.
-     *
-     * @param binaryOperator The operator for the BinaryExpression.
-     * @param operand The operand for the BinaryExpression.
-     * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
-     *                           BinaryExpression.
-     */
-    export function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression) {
-        const skipped = skipPartiallyEmittedExpressions(operand);
-
-        // If the resulting expression is already parenthesized, we do not need to do any further processing.
-        if (skipped.kind === SyntaxKind.ParenthesizedExpression) {
-            return operand;
-        }
-
-        return binaryOperandNeedsParentheses(binaryOperator, operand, isLeftSideOfBinary, leftOperand)
-            ? createParen(operand)
-            : operand;
-    }
-
-    /**
-     * Determines whether the operand to a BinaryExpression needs to be parenthesized.
-     *
-     * @param binaryOperator The operator for the BinaryExpression.
-     * @param operand The operand for the BinaryExpression.
-     * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
-     *                           BinaryExpression.
-     */
-    function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand: Expression) {
-        // If the operand has lower precedence, then it needs to be parenthesized to preserve the
-        // intent of the expression. For example, if the operand is `a + b` and the operator is
-        // `*`, then we need to parenthesize the operand to preserve the intended order of
-        // operations: `(a + b) * x`.
-        //
-        // If the operand has higher precedence, then it does not need to be parenthesized. For
-        // example, if the operand is `a * b` and the operator is `+`, then we do not need to
-        // parenthesize to preserve the intended order of operations: `a * b + x`.
-        //
-        // If the operand has the same precedence, then we need to check the associativity of
-        // the operator based on whether this is the left or right operand of the expression.
-        //
-        // For example, if `a / d` is on the right of operator `*`, we need to parenthesize
-        // to preserve the intended order of operations: `x * (a / d)`
-        //
-        // If `a ** d` is on the left of operator `**`, we need to parenthesize to preserve
-        // the intended order of operations: `(a ** b) ** c`
-        const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
-        const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
-        const emittedOperand = skipPartiallyEmittedExpressions(operand);
-        const operandPrecedence = getExpressionPrecedence(emittedOperand);
-        switch (compareValues(operandPrecedence, binaryOperatorPrecedence)) {
-            case Comparison.LessThan:
-                // If the operand is the right side of a right-associative binary operation
-                // and is a yield expression, then we do not need parentheses.
-                if (!isLeftSideOfBinary
-                    && binaryOperatorAssociativity === Associativity.Right
-                    && operand.kind === SyntaxKind.YieldExpression) {
-                    return false;
-                }
-
-                return true;
-
-            case Comparison.GreaterThan:
-                return false;
-
-            case Comparison.EqualTo:
-                if (isLeftSideOfBinary) {
-                    // No need to parenthesize the left operand when the binary operator is
-                    // left associative:
-                    //  (a*b)/x    ->  a*b/x
-                    //  (a**b)/x   ->  a**b/x
-                    //
-                    // Parentheses are needed for the left operand when the binary operator is
-                    // right associative:
-                    //  (a/b)**x   ->  (a/b)**x
-                    //  (a**b)**x  ->  (a**b)**x
-                    return binaryOperatorAssociativity === Associativity.Right;
-                }
-                else {
-                    if (isBinaryExpression(emittedOperand)
-                        && emittedOperand.operatorToken.kind === binaryOperator) {
-                        // No need to parenthesize the right operand when the binary operator and
-                        // operand are the same and one of the following:
-                        //  x*(a*b)     => x*a*b
-                        //  x|(a|b)     => x|a|b
-                        //  x&(a&b)     => x&a&b
-                        //  x^(a^b)     => x^a^b
-                        if (operatorHasAssociativeProperty(binaryOperator)) {
-                            return false;
-                        }
-
-                        // No need to parenthesize the right operand when the binary operator
-                        // is plus (+) if both the left and right operands consist solely of either
-                        // literals of the same kind or binary plus (+) expressions for literals of
-                        // the same kind (recursively).
-                        //  "a"+(1+2)       => "a"+(1+2)
-                        //  "a"+("b"+"c")   => "a"+"b"+"c"
-                        if (binaryOperator === SyntaxKind.PlusToken) {
-                            const leftKind = leftOperand ? getLiteralKindOfBinaryPlusOperand(leftOperand) : SyntaxKind.Unknown;
-                            if (isLiteralKind(leftKind) && leftKind === getLiteralKindOfBinaryPlusOperand(emittedOperand)) {
-                                return false;
-                            }
-                        }
-                    }
-
-                    // No need to parenthesize the right operand when the operand is right
-                    // associative:
-                    //  x/(a**b)    -> x/a**b
-                    //  x**(a**b)   -> x**a**b
-                    //
-                    // Parentheses are needed for the right operand when the operand is left
-                    // associative:
-                    //  x/(a*b)     -> x/(a*b)
-                    //  x**(a/b)    -> x**(a/b)
-                    const operandAssociativity = getExpressionAssociativity(emittedOperand);
-                    return operandAssociativity === Associativity.Left;
-                }
-        }
-    }
-
-    /**
-     * Determines whether a binary operator is mathematically associative.
-     *
-     * @param binaryOperator The binary operator.
-     */
-    function operatorHasAssociativeProperty(binaryOperator: SyntaxKind) {
-        // The following operators are associative in JavaScript:
-        //  (a*b)*c     -> a*(b*c)  -> a*b*c
-        //  (a|b)|c     -> a|(b|c)  -> a|b|c
-        //  (a&b)&c     -> a&(b&c)  -> a&b&c
-        //  (a^b)^c     -> a^(b^c)  -> a^b^c
-        //
-        // While addition is associative in mathematics, JavaScript's `+` is not
-        // guaranteed to be associative as it is overloaded with string concatenation.
-        return binaryOperator === SyntaxKind.AsteriskToken
-            || binaryOperator === SyntaxKind.BarToken
-            || binaryOperator === SyntaxKind.AmpersandToken
-            || binaryOperator === SyntaxKind.CaretToken;
-    }
-
-    interface BinaryPlusExpression extends BinaryExpression {
-        cachedLiteralKind: SyntaxKind;
-    }
-
-    /**
-     * This function determines whether an expression consists of a homogeneous set of
-     * literal expressions or binary plus expressions that all share the same literal kind.
-     * It is used to determine whether the right-hand operand of a binary plus expression can be
-     * emitted without parentheses.
-     */
-    function getLiteralKindOfBinaryPlusOperand(node: Expression): SyntaxKind {
-        node = skipPartiallyEmittedExpressions(node);
-
-        if (isLiteralKind(node.kind)) {
-            return node.kind;
-        }
-
-        if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.PlusToken) {
-            if ((<BinaryPlusExpression>node).cachedLiteralKind !== undefined) {
-                return (<BinaryPlusExpression>node).cachedLiteralKind;
-            }
-
-            const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
-            const literalKind = isLiteralKind(leftKind)
-                && leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)
-                    ? leftKind
-                    : SyntaxKind.Unknown;
-
-            (<BinaryPlusExpression>node).cachedLiteralKind = literalKind;
-            return literalKind;
-        }
-
-        return SyntaxKind.Unknown;
-    }
-
-    /**
-     * Wraps an expression in parentheses if it is needed in order to use the expression
-     * as the expression of a NewExpression node.
-     *
-     * @param expression The Expression node.
-     */
-    export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
-        const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        switch (emittedExpression.kind) {
-            case SyntaxKind.CallExpression:
-                return createParen(expression);
-
-            case SyntaxKind.NewExpression:
-                return (<NewExpression>emittedExpression).arguments
-                    ? <LeftHandSideExpression>expression
-                    : createParen(expression);
-        }
-
-        return parenthesizeForAccess(expression);
-    }
-
-    /**
-     * Wraps an expression in parentheses if it is needed in order to use the expression for
-     * property or element access.
-     *
-     * @param expr The expression node.
-     */
-    export function parenthesizeForAccess(expression: Expression): LeftHandSideExpression {
-        // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
-        // to parenthesize the expression before a dot. The known exceptions are:
-        //
-        //    NewExpression:
-        //       new C.x        -> not the same as (new C).x
-        //    NumericLiteral
-        //       1.x            -> not the same as (1).x
-        //
-        const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        if (isLeftHandSideExpression(emittedExpression)
-            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)
-            && emittedExpression.kind !== SyntaxKind.NumericLiteral) {
-            return <LeftHandSideExpression>expression;
-        }
-
-        return createParen(expression, /*location*/ expression);
-    }
-
-    export function parenthesizePostfixOperand(operand: Expression) {
-        return isLeftHandSideExpression(operand)
-            ? <LeftHandSideExpression>operand
-            : createParen(operand, /*location*/ operand);
-    }
-
-    export function parenthesizePrefixOperand(operand: Expression) {
-        return isUnaryExpression(operand)
-            ? <UnaryExpression>operand
-            : createParen(operand, /*location*/ operand);
-    }
-
-    function parenthesizeListElements(elements: NodeArray<Expression>) {
-        let result: Expression[];
-        for (let i = 0; i < elements.length; i++) {
-            const element = parenthesizeExpressionForList(elements[i]);
-            if (result !== undefined || element !== elements[i]) {
-                if (result === undefined) {
-                    result = elements.slice(0, i);
-                }
-
-                result.push(element);
-            }
-        }
-
-        if (result !== undefined) {
-            return createNodeArray(result, elements, elements.hasTrailingComma);
-        }
-
-        return elements;
-    }
-
-    export function parenthesizeExpressionForList(expression: Expression) {
-        const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        const expressionPrecedence = getExpressionPrecedence(emittedExpression);
-        const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
-        return expressionPrecedence > commaPrecedence
-            ? expression
-            : createParen(expression, /*location*/ expression);
-    }
-
-    export function parenthesizeExpressionForExpressionStatement(expression: Expression) {
-        const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        if (isCallExpression(emittedExpression)) {
-            const callee = emittedExpression.expression;
-            const kind = skipPartiallyEmittedExpressions(callee).kind;
-            if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
-                const mutableCall = getMutableClone(emittedExpression);
-                mutableCall.expression = createParen(callee, /*location*/ callee);
-                return recreatePartiallyEmittedExpressions(expression, mutableCall);
-            }
-        }
-        else {
-            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
-            if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
-                return createParen(expression, /*location*/ expression);
-            }
-        }
-
-        return expression;
-    }
-
-    /**
-     * Clones a series of not-emitted expressions with a new inner expression.
-     *
-     * @param originalOuterExpression The original outer expression.
-     * @param newInnerExpression The new inner expression.
-     */
-    function recreatePartiallyEmittedExpressions(originalOuterExpression: Expression, newInnerExpression: Expression) {
-        if (isPartiallyEmittedExpression(originalOuterExpression)) {
-            const clone = getMutableClone(originalOuterExpression);
-            clone.expression = recreatePartiallyEmittedExpressions(clone.expression, newInnerExpression);
-            return clone;
-        }
-
-        return newInnerExpression;
-    }
-
-    function getLeftmostExpression(node: Expression): Expression {
-        while (true) {
-            switch (node.kind) {
-                case SyntaxKind.PostfixUnaryExpression:
-                    node = (<PostfixUnaryExpression>node).operand;
-                    continue;
-
-                case SyntaxKind.BinaryExpression:
-                    node = (<BinaryExpression>node).left;
-                    continue;
-
-                case SyntaxKind.ConditionalExpression:
-                    node = (<ConditionalExpression>node).condition;
-                    continue;
-
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.ElementAccessExpression:
-                case SyntaxKind.PropertyAccessExpression:
-                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
-                    continue;
-
-                case SyntaxKind.PartiallyEmittedExpression:
-                    node = (<PartiallyEmittedExpression>node).expression;
-                    continue;
-            }
-
-            return node;
-        }
-    }
-
-    export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        const emittedBody = skipPartiallyEmittedExpressions(body);
-        if (emittedBody.kind === SyntaxKind.ObjectLiteralExpression) {
-            return createParen(<Expression>body, /*location*/ body);
-        }
-
-        return body;
-    }
-
-    export const enum OuterExpressionKinds {
-        Parentheses = 1 << 0,
-        Assertions = 1 << 1,
-        PartiallyEmittedExpressions = 1 << 2,
-
-        All = Parentheses | Assertions | PartiallyEmittedExpressions
-    }
-
-    export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
-    export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
-    export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
-        let previousNode: Node;
-        do {
-            previousNode = node;
-            if (kinds & OuterExpressionKinds.Parentheses) {
-                node = skipParentheses(node);
-            }
-
-            if (kinds & OuterExpressionKinds.Assertions) {
-                node = skipAssertions(node);
-            }
-
-            if (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) {
-                node = skipPartiallyEmittedExpressions(node);
-            }
-        }
-        while (previousNode !== node);
-
-        return node;
-    }
-
-    export function skipParentheses(node: Expression): Expression;
-    export function skipParentheses(node: Node): Node;
-    export function skipParentheses(node: Node): Node {
-        while (node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = (<ParenthesizedExpression>node).expression;
-        }
-
-        return node;
-    }
-
-    export function skipAssertions(node: Expression): Expression;
-    export function skipAssertions(node: Node): Node;
-    export function skipAssertions(node: Node): Node {
-        while (isAssertionExpression(node)) {
-            node = (<AssertionExpression>node).expression;
-        }
-
-        return node;
-    }
-
-    export function skipPartiallyEmittedExpressions(node: Expression): Expression;
-    export function skipPartiallyEmittedExpressions(node: Node): Node;
-    export function skipPartiallyEmittedExpressions(node: Node) {
-        while (node.kind === SyntaxKind.PartiallyEmittedExpression) {
-            node = (<PartiallyEmittedExpression>node).expression;
-        }
-
-        return node;
     }
 }
