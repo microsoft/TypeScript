@@ -13,9 +13,14 @@ namespace ts.codefix {
                 const startPos = classDecl.members.pos;
 
                 const InstantiatedExtendsType = <InterfaceType>checker.getTypeFromTypeReference(getClassExtendsHeritageClauseElement(classDecl));
-                const resolvedExtendsType = checker.resolveStructuredTypeMembers(InstantiatedExtendsType);
+                const extendsSymbols = checker.getPropertiesOfType(InstantiatedExtendsType);
+                let extendsAbstractSymbolsMap = createMap<Symbol>();
+                for (const symbol of extendsSymbols) {
+                    extendsAbstractSymbolsMap[symbol.getName()] = symbol;
+                }
+                extendsAbstractSymbolsMap = filterAbstractAndNonPrivate(extendsAbstractSymbolsMap);
 
-                const insertion = getMissingAbstractMembersInsertion(classDecl, resolvedExtendsType, checker, context.newLineCharacter);
+                const insertion = getMissingMembersInsertion(classDecl, extendsAbstractSymbolsMap, checker, context.newLineCharacter);
 
                 if (insertion.length > 0) {
                     return [{

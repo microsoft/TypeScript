@@ -1359,17 +1359,13 @@ namespace ts {
         };
     }
 
-    export function getMissingAbstractMembersInsertion(classDeclaration: ClassLikeDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
-        const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedType.members)), classDeclaration.symbol.members);
-        return getInsertionsForMembers(missingMembers, classDeclaration, checker, newlineChar);
-    }
-
     /**
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
+     * @param possiblyMissingSymbols The collection of symbols to filter.
      */
-    export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
-        const missingMembers = filterMissingMembers(filterNonPrivate(resolvedType.members), classDeclaration.symbol.members);
+    export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Map<Symbol>, checker: TypeChecker, newlineChar: string): string {
+        const missingMembers = filterMissingMembers(possiblyMissingSymbols, classDeclaration.symbol.members);
         return getInsertionsForMembers(missingMembers, classDeclaration, checker, newlineChar);
     }
 
@@ -1398,11 +1394,11 @@ namespace ts {
         return result;
     }
 
-    function filterAbstract(symbolMap: Map<Symbol>) {
-        return filterSymbolMapByDeclaration(symbolMap, decl => !!(getModifierFlags(decl) & ModifierFlags.Abstract));
+    export function filterAbstractAndNonPrivate(symbolMap: Map<Symbol>) {
+        return filterSymbolMapByDeclaration(symbolMap, decl => !(getModifierFlags(decl) & ModifierFlags.Private) && !!(getModifierFlags(decl) & ModifierFlags.Abstract));
     }
 
-    function filterNonPrivate(symbolMap: Map<Symbol>) {
+    export function filterNonPrivate(symbolMap: Map<Symbol>) {
         return filterSymbolMapByDeclaration(symbolMap, decl => !(getModifierFlags(decl) & ModifierFlags.Private));
     }
 

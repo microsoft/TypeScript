@@ -84,7 +84,6 @@ namespace ts {
             getIntersectionType,
             getTypeFromTypeReference,
             getReturnTypeOfSignature,
-            resolveStructuredTypeMembers,
             getNonNullableType,
             getSymbolsInScope,
             getSymbolAtLocation,

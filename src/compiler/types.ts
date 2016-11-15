@@ -2264,7 +2264,6 @@ namespace ts {
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): ObjectType[];
-        resolveStructuredTypeMembers(type: StructuredType): ResolvedType;
         getReturnTypeOfSignature(signature: Signature): Type;
         getNonNullableType(type: Type): Type;
         getIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type;
@@ -2849,6 +2848,7 @@ namespace ts {
         finalArrayType?: Type;  // Final array type of evolving array type
     }
 
+    /* @internal */
     // Resolved object, union, or intersection type
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name

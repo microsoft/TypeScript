@@ -17,12 +17,16 @@ namespace ts.codefix {
 
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
             const implementedTypes = implementedTypeNodes.map(checker.getTypeFromTypeReference);
-            const resolvedImplementedTypes = implementedTypes.map(checker.resolveStructuredTypeMembers);
+            const implementedTypeSymbols = implementedTypes.map(checker.getPropertiesOfType);
 
             const result: CodeAction[] = [];
 
-            for (const resolvedType of resolvedImplementedTypes) {
-                const insertion = getMissingMembersInsertion(classDecl, resolvedType, checker, context.newLineCharacter);
+            for (const symbols of implementedTypeSymbols) {
+                const symbolMap = createMap<Symbol>();
+                for (const symbol of symbols) {
+                    symbolMap[symbol.getName()] = symbol;
+                }
+                const insertion = getMissingMembersInsertion(classDecl, filterNonPrivate(symbolMap), checker, context.newLineCharacter);
                 pushAction(result, insertion, getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class));
             }
 
