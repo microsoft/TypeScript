@@ -1,6 +1,3 @@
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(66,23): error TS2365: Operator '<' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(68,27): error TS2365: Operator '<' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(70,31): error TS2365: Operator '<' cannot be applied to types '0' and '1'.
 tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(73,21): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
 tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(76,21): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
 tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(79,21): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
@@ -19,7 +16,7 @@ tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(117,17): error TS2365: Opera
 tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(120,17): error TS2365: Operator '==' cannot be applied to types '0' and '3'.
 
 
-==== tests/cases/compiler/capturedLetConstInLoop8_ES6.ts (19 errors) ====
+==== tests/cases/compiler/capturedLetConstInLoop8_ES6.ts (16 errors) ====
     function foo() {
         l0:
         for (let z = 0; z < 1; ++z) {
@@ -86,16 +83,10 @@ tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(120,17): error TS2365: Opera
     function foo_c() {
         l0:
         for (const z = 0; z < 1;) {
-                          ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '0' and '1'.
             l1:
             for (const x = 0; x < 1;) {
-                              ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '0' and '1'.
                 ll1:
                 for (const y = 0; y < 1;) {
-                                  ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '0' and '1'.
                     (function() { return x + y });
                     (() => x + y);
                     if (y == 1) {

@@ -1,5 +1,5 @@
 === tests/cases/conformance/types/rest/objectRest.ts ===
-let o = { a: 1, b: 'no' }
+var o = { a: 1, b: 'no' }
 >o : { a: number; b: string; }
 >{ a: 1, b: 'no' } : { a: number; b: string; }
 >a : number
@@ -101,10 +101,10 @@ var { x: { ka, ...nested }, y: other, ...rest } = complex;
 >x : { ki: any; ka: any; }
 >{ ka, ...nested } : { ki: any; ka: any; }
 >ka : any
->nested : any
+>nested : { ki: any; }
 >y : number
 >other : number
->rest : any
+>rest : {}
 >complex : { x: { ka: any; ki: any; }; y: number; }
 
 var { x, ...fresh } = { x: 1, y: 2 };
@@ -121,7 +121,7 @@ var { x, ...fresh } = { x: 1, y: 2 };
 >{ x, ...fresh } = { x: 1, y: 2 } : { x: number; y: number; }
 >{ x, ...fresh } : { y: number; x: number; }
 >x : number
->fresh : any
+>fresh : { y: number; }
 >{ x: 1, y: 2 } : { x: number; y: number; }
 >x : number
 >1 : 1
@@ -167,4 +167,31 @@ var { removed, ...removableRest } = removable;
 >removed : string
 >removableRest : { both: number; remainder: string; }
 >removable : Removable
+
+let computed = 'b';
+>computed : string
+>'b' : "b"
+
+let computed2 = 'a';
+>computed2 : string
+>'a' : "a"
+
+var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
+>computed : string
+>stillNotGreat : any
+>computed2 : string
+>soSo : any
+>o : { a: number; b: string; }
+>o : { a: number; b: string; }
+
+({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
+>({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o) : { a: number; b: string; }
+>{ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o : { a: number; b: string; }
+>{ [computed]: stillNotGreat, [computed2]: soSo, ...o } : { a: number; b: string; }
+>computed : string
+>stillNotGreat : any
+>computed2 : string
+>soSo : any
+>o : { a: number; b: string; }
+>o : { a: number; b: string; }
 

@@ -38,6 +38,9 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
         s = arguments[i];
         for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
             t[p] = s[p];
+        if (typeof Object.getOwnPropertySymbols === "function")
+            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
+                t[p[i]] = s[p[i]];
     }
     return t;
 };`;
@@ -45,8 +48,11 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
         const restHelper = `
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && !e.indexOf(p))
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
+    if (typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
     return t;
 };`;
 
@@ -606,7 +612,9 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>node);
                 case SyntaxKind.IndexedAccessType:
-                    return emitPropertyAccessType(<IndexedAccessTypeNode>node);
+                    return emitIndexedAccessType(<IndexedAccessTypeNode>node);
+                case SyntaxKind.MappedType:
+                    return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -1109,11 +1117,34 @@ const _super = (function (geti, seti) {
             emit(node.type);
         }
 
-        function emitPropertyAccessType(node: IndexedAccessTypeNode) {
+        function emitIndexedAccessType(node: IndexedAccessTypeNode) {
             emit(node.objectType);
             write("[");
             emit(node.indexType);
             write("]");
+        }
+
+        function emitMappedType(node: MappedTypeNode) {
+            write("{");
+            writeLine();
+            increaseIndent();
+            if (node.readonlyToken) {
+                write("readonly ");
+            }
+            write("[");
+            emit(node.typeParameter.name);
+            write(" in ");
+            emit(node.typeParameter.constraint);
+            write("]");
+            if (node.questionToken) {
+                write("?");
+            }
+            write(": ");
+            emit(node.type);
+            write(";");
+            writeLine();
+            decreaseIndent();
+            write("}");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
