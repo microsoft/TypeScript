@@ -236,20 +236,6 @@ namespace ts {
             }
         }
 
-        /** Suspends the current lexical environment, usually after visiting a parameter list. */
-        function suspendLexicalEnvironment(): void {
-            Debug.assert(!scopeModificationDisabled, "Cannot suspend a lexical environment during the print phase.");
-            Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is already suspended.");
-            lexicalEnvironmentSuspended = true;
-        }
-
-        /** Resumes a suspended lexical environment, usually before visiting a function body. */
-        function resumeLexicalEnvironment(): void {
-            Debug.assert(!scopeModificationDisabled, "Cannot resume a lexical environment during the print phase.");
-            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended suspended.");
-            lexicalEnvironmentSuspended = false;
-        }
-
         /**
          * Starts a new lexical environment. Any existing hoisted variable or function declarations
          * are pushed onto a stack, and the related storage variables are reset.
@@ -267,6 +253,20 @@ namespace ts {
             lexicalEnvironmentStackOffset++;
             lexicalEnvironmentVariableDeclarations = undefined;
             lexicalEnvironmentFunctionDeclarations = undefined;
+        }
+
+        /** Suspends the current lexical environment, usually after visiting a parameter list. */
+        function suspendLexicalEnvironment(): void {
+            Debug.assert(!scopeModificationDisabled, "Cannot suspend a lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is already suspended.");
+            lexicalEnvironmentSuspended = true;
+        }
+
+        /** Resumes a suspended lexical environment, usually before visiting a function body. */
+        function resumeLexicalEnvironment(): void {
+            Debug.assert(!scopeModificationDisabled, "Cannot resume a lexical environment during the print phase.");
+            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended suspended.");
+            lexicalEnvironmentSuspended = false;
         }
 
         /**
@@ -306,7 +306,6 @@ namespace ts {
                 lexicalEnvironmentVariableDeclarationsStack = [];
                 lexicalEnvironmentFunctionDeclarationsStack = [];
             }
-
             return statements;
         }
 

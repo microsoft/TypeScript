@@ -1777,12 +1777,7 @@ namespace ts {
                     const temp = createTempVariable(hoistVariableDeclaration);
                     return createLogicalOr(
                         createLogicalAnd(
-                            createStrictEquality(
-                                createTypeOf(
-                                    createAssignment(temp, serialized)
-                                ),
-                                createLiteral("function")
-                            ),
+                            createTypeCheck(createAssignment(temp, serialized), "function"),
                             temp
                         ),
                         createIdentifier("Object")
@@ -1891,13 +1886,8 @@ namespace ts {
          */
         function getGlobalSymbolNameWithFallback(): Expression {
             return createConditional(
-                createStrictEquality(
-                    createTypeOf(createIdentifier("Symbol")),
-                    createLiteral("function")
-                ),
-                createToken(SyntaxKind.QuestionToken),
+                createTypeCheck(createIdentifier("Symbol"), "function"),
                 createIdentifier("Symbol"),
-                createToken(SyntaxKind.ColonToken),
                 createIdentifier("Object")
             );
         }
@@ -2249,12 +2239,13 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             const name = node.name;
             if (isBindingPattern(name)) {
-                return flattenVariableDestructuringToExpression(
-                    context,
+                return flattenDestructuringAssignment(
                     node,
-                    hoistVariableDeclaration,
-                    createNamespaceExportExpression,
-                    visitor
+                    visitor,
+                    context,
+                    FlattenLevel.All,
+                    /*needsValue*/ false,
+                    createNamespaceExportExpression
                 );
             }
             else {

@@ -31,12 +31,6 @@ namespace ts {
         let enabledSubstitutions: ES2017SubstitutionFlags;
 
         /**
-         * Keeps track of whether  we are within any containing namespaces when performing
-         * just-in-time substitution while printing an expression identifier.
-         */
-        let applicableSubstitutions: ES2017SubstitutionFlags;
-
-        /**
          * This keeps track of containers where `super` is valid, for use with
          * just-in-time substitution for `super` expressions inside of async methods.
          */
@@ -67,13 +61,9 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.ES2017) {
+            if (node.transformFlags & TransformFlags.ContainsES2017) {
                 return visitorWorker(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsES2017) {
-                return visitEachChild(node, visitor, context);
-            }
-
             return node;
         }
 
@@ -104,8 +94,7 @@ namespace ts {
                     return visitArrowFunction(<ArrowFunction>node);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return node;
+                    return visitEachChild(node, visitor, context);
             }
         }
 
@@ -136,8 +125,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitMethodDeclaration(node: MethodDeclaration) {
-            Debug.assert(hasModifier(node, ModifierFlags.Async));
-            const updated = updateMethod(
+            return updateMethod(
                 node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
@@ -145,9 +133,10 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node)
+                isAsyncFunctionLike(node)
+                    ? transformAsyncFunctionBody(node)
+                    : visitFunctionBody(node.body, visitor, context)
             );
-            return updated;
         }
 
         /**
@@ -159,8 +148,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-            Debug.assert(hasModifier(node, ModifierFlags.Async));
-            const updated = updateFunctionDeclaration(
+            return updateFunctionDeclaration(
                 node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
@@ -168,9 +156,10 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node)
+                isAsyncFunctionLike(node)
+                    ? transformAsyncFunctionBody(node)
+                    : visitFunctionBody(node.body, visitor, context)
             );
-            return updated;
         }
 
         /**
@@ -182,22 +171,20 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            Debug.assert(hasModifier(node, ModifierFlags.Async));
             if (nodeIsMissing(node.body)) {
                 return createOmittedExpression();
             }
-            const updated = updateFunctionExpression(
+            return updateFunctionExpression(
                 node,
-                visitNodes(node.modifiers, visitor, isModifier),
+                /*modifiers*/ undefined,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node)
+                isAsyncFunctionLike(node)
+                    ? transformAsyncFunctionBody(node)
+                    : visitFunctionBody(node.body, visitor, context)
             );
-
-            setOriginalNode(updated, node);
-            return updated;
         }
 
         /**
@@ -209,23 +196,21 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitArrowFunction(node: ArrowFunction) {
-            Debug.assert(hasModifier(node, ModifierFlags.Async));
-            const updated = updateArrowFunction(
+            return updateArrowFunction(
                 node,
                 visitNodes(node.modifiers, visitor, isModifier),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node)
+                isAsyncFunctionLike(node)
+                    ? transformAsyncFunctionBody(node)
+                    : visitFunctionBody(node.body, visitor, context)
             );
-
-            setOriginalNode(updated, node);
-            return updated;
         }
 
-        function transformFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
-        function transformFunctionBody(node: ArrowFunction): ConciseBody;
-        function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+        function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
+        function transformAsyncFunctionBody(node: ArrowFunction): ConciseBody;
+        function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
             const original = getOriginalNode(node, isFunctionLike);
             const nodeType = original.type;
             const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
@@ -237,7 +222,6 @@ namespace ts {
             // `this` and `arguments` objects to `__awaiter`. The generator function
             // passed to `__awaiter` is executed inside of the callback to the
             // promise constructor.
-
             resumeLexicalEnvironment();
 
             if (!isArrowFunction) {
@@ -284,8 +268,7 @@ namespace ts {
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
                     const block = convertToFunctionBody(expression);
-                    const statements = mergeLexicalEnvironment(block.statements, declarations);
-                    return updateBlock(block, statements);
+                    return updateBlock(block, createNodeArray(concatenate(block.statements, declarations), block.statements));
                 }
 
                 return expression;
@@ -294,15 +277,13 @@ namespace ts {
 
         function transformFunctionBodyWorker(body: ConciseBody, start?: number) {
             if (isBlock(body)) {
-                return updateBlock(
-                    body,
-                    visitLexicalEnvironment(body.statements, visitor, context, start));
+                return updateBlock(body, visitLexicalEnvironment(body.statements, visitor, context, start));
             }
             else {
                 startLexicalEnvironment();
                 const visited = convertToFunctionBody(visitNode(body, visitor, isConciseBody));
-                const statements = mergeLexicalEnvironment(visited.statements, endLexicalEnvironment());
-                return updateBlock(visited, statements);
+                const declarations = endLexicalEnvironment();
+                return updateBlock(visited, createNodeArray(concatenate(visited.statements, declarations), visited.statements));
             }
         }
 
@@ -421,18 +402,17 @@ namespace ts {
          * @param emit A callback used to emit the node in the printer.
          */
         function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
-            const savedApplicableSubstitutions = applicableSubstitutions;
-            const savedCurrentSuperContainer = currentSuperContainer;
             // If we need to support substitutions for `super` in an async method,
             // we should track it here.
             if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
+                const savedCurrentSuperContainer = currentSuperContainer;
                 currentSuperContainer = node;
+                previousOnEmitNode(emitContext, node, emitCallback);
+                currentSuperContainer = savedCurrentSuperContainer;
             }
-
-            previousOnEmitNode(emitContext, node, emitCallback);
-
-            applicableSubstitutions = savedApplicableSubstitutions;
-            currentSuperContainer = savedCurrentSuperContainer;
+            else {
+                previousOnEmitNode(emitContext, node, emitCallback);
+            }
         }
 
         /**

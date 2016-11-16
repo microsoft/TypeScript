@@ -30,11 +30,8 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.Jsx) {
+            if (node.transformFlags & TransformFlags.ContainsJsx) {
                 return visitorWorker(node);
-            }
-            else if (node.transformFlags & TransformFlags.ContainsJsx) {
-                return visitEachChild(node, visitor, context);
             }
             else {
                 return node;
@@ -53,8 +50,7 @@ namespace ts {
                     return visitJsxExpression(<JsxExpression>node);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return undefined;
+                    return visitEachChild(node, visitor, context);
             }
         }
 

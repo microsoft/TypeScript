@@ -1991,7 +1991,7 @@
         "category": "Error",
         "code": 2700
     },
-    "An object rest element must be an identifier.": {
+    "The target of an object rest assignment must be a variable or a property access.": {
         "category": "Error",
         "code": 2701
     },

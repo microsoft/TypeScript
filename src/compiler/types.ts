@@ -508,6 +508,7 @@ namespace ts {
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
+        /* @internal */ transformFlags?: TransformFlags;
     }
 
     export interface Token<TKind extends SyntaxKind> extends Node {
@@ -579,9 +580,9 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
-    export type PropertyName = Identifier | LiteralExpression | ComputedPropertyName;
+    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
 
-    export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
+    export type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
 
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -589,7 +590,7 @@ namespace ts {
     }
 
     export interface DeclarationStatement extends Declaration, Statement {
-        name?: Identifier | LiteralExpression;
+        name?: Identifier | StringLiteral | NumericLiteral;
     }
 
     export interface ComputedPropertyName extends Node {
@@ -724,21 +725,19 @@ namespace ts {
         name: PropertyName;
     }
 
-    export interface BindingPattern extends Node {
-        elements: NodeArray<BindingElement | ArrayBindingElement>;
-    }
-
-    export interface ObjectBindingPattern extends BindingPattern {
+    export interface ObjectBindingPattern extends Node {
         kind: SyntaxKind.ObjectBindingPattern;
         elements: NodeArray<BindingElement>;
     }
 
-    export type ArrayBindingElement = BindingElement | OmittedExpression;
-
-    export interface ArrayBindingPattern extends BindingPattern {
+    export interface ArrayBindingPattern extends Node {
         kind: SyntaxKind.ArrayBindingPattern;
         elements: NodeArray<ArrayBindingElement>;
     }
+
+    export type BindingPattern = ObjectBindingPattern | ArrayBindingPattern;
+
+    export type ArrayBindingElement = BindingElement | OmittedExpression;
 
     /**
      * Several node kinds share function-like features such as a signature,
@@ -921,7 +920,7 @@ namespace ts {
 
     export interface StringLiteral extends LiteralExpression {
         kind: SyntaxKind.StringLiteral;
-        /* @internal */ textSourceNode?: Identifier | StringLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
+        /* @internal */ textSourceNode?: Identifier | StringLiteral | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
@@ -1186,20 +1185,64 @@ namespace ts {
         right: Expression;
     }
 
-    export interface AssignmentExpression extends BinaryExpression {
+    export type AssignmentOperatorToken = Token<AssignmentOperator>;
+
+    export interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
         left: LeftHandSideExpression;
-        operatorToken: Token<SyntaxKind.EqualsToken>;
+        operatorToken: TOperator;
     }
 
-    export interface ObjectDestructuringAssignment extends AssignmentExpression {
+    export interface ObjectDestructuringAssignment extends AssignmentExpression<EqualsToken> {
         left: ObjectLiteralExpression;
     }
 
-    export interface ArrayDestructuringAssignment extends AssignmentExpression {
+    export interface ArrayDestructuringAssignment extends AssignmentExpression<EqualsToken> {
         left: ArrayLiteralExpression;
     }
 
-    export type DestructuringAssignment = ObjectDestructuringAssignment | ArrayDestructuringAssignment;
+    export type DestructuringAssignment
+        = ObjectDestructuringAssignment
+        | ArrayDestructuringAssignment
+        ;
+
+    export type BindingOrAssignmentElement
+        = VariableDeclaration
+        | ParameterDeclaration
+        | BindingElement
+        | PropertyAssignment // AssignmentProperty
+        | ShorthandPropertyAssignment // AssignmentProperty
+        | SpreadAssignment // AssignmentRestProperty
+        | OmittedExpression // Elision
+        | SpreadElement // AssignmentRestElement
+        | ArrayLiteralExpression // ArrayAssignmentPattern
+        | ObjectLiteralExpression // ObjectAssignmentPattern
+        | AssignmentExpression<EqualsToken> // AssignmentElement
+        | Identifier // DestructuringAssignmentTarget
+        | PropertyAccessExpression // DestructuringAssignmentTarget
+        | ElementAccessExpression // DestructuringAssignmentTarget
+        ;
+
+    export type BindingOrAssignmentElementRestIndicator
+        = DotDotDotToken // from BindingElement
+        | SpreadElement // AssignmentRestElement
+        | SpreadAssignment // AssignmentRestProperty
+        ;
+
+    export type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Expression;
+
+    export type ObjectBindingOrAssignmentPattern
+        = ObjectBindingPattern
+        | ObjectLiteralExpression // ObjectAssignmentPattern
+        ;
+
+    export type ArrayBindingOrAssignmentPattern
+        = ArrayBindingPattern
+        | ArrayLiteralExpression // ArrayAssignmentPattern
+        ;
+
+    export type AssignmentPattern = ObjectLiteralExpression | ArrayLiteralExpression;
+
+    export type BindingOrAssignmentPattern = ObjectBindingOrAssignmentPattern | ArrayBindingOrAssignmentPattern;
 
     export interface ConditionalExpression extends Expression {
         kind: SyntaxKind.ConditionalExpression;
@@ -1719,7 +1762,7 @@ namespace ts {
 
     export interface ModuleDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ModuleDeclaration;
-        name: Identifier | LiteralExpression;
+        name: Identifier | StringLiteral;
         body?: ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | Identifier;
     }
 
@@ -1925,7 +1968,7 @@ namespace ts {
 
     export interface JSDocRecordMember extends PropertySignature {
         kind: SyntaxKind.JSDocRecordMember;
-        name: Identifier | LiteralExpression;
+        name: Identifier | StringLiteral | NumericLiteral;
         type?: JSDocType;
     }
 
@@ -2692,7 +2735,7 @@ namespace ts {
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
-        maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate 
+        maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
@@ -3528,46 +3571,45 @@ namespace ts {
         // - Flags used to indicate that a node or subtree contains syntax that requires transformation.
         TypeScript = 1 << 0,
         ContainsTypeScript = 1 << 1,
-        Jsx = 1 << 2,
-        ContainsJsx = 1 << 3,
-        ESNext = 1 << 4,
-        ContainsESNext = 1 << 5,
-        ES2017 = 1 << 6,
-        ContainsES2017 = 1 << 7,
-        ES2016 = 1 << 8,
-        ContainsES2016 = 1 << 9,
-        ES2015 = 1 << 10,
-        ContainsES2015 = 1 << 11,
-        Generator = 1 << 12,
-        ContainsGenerator = 1 << 13,
-        DestructuringAssignment = 1 << 14,
-        ContainsDestructuringAssignment = 1 << 15,
+        ContainsJsx = 1 << 2,
+        ContainsESNext = 1 << 3,
+        ContainsES2017 = 1 << 4,
+        ContainsES2016 = 1 << 5,
+        ES2015 = 1 << 6,
+        ContainsES2015 = 1 << 7,
+        Generator = 1 << 8,
+        ContainsGenerator = 1 << 9,
+        DestructuringAssignment = 1 << 10,
+        ContainsDestructuringAssignment = 1 << 11,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 16,
-        ContainsPropertyInitializer = 1 << 17,
-        ContainsLexicalThis = 1 << 18,
-        ContainsCapturedLexicalThis = 1 << 19,
-        ContainsLexicalThisInComputedPropertyName = 1 << 20,
-        ContainsDefaultValueAssignments = 1 << 21,
-        ContainsParameterPropertyAssignments = 1 << 22,
-        ContainsSpreadExpression = 1 << 23,
-        ContainsComputedPropertyName = 1 << 24,
-        ContainsBlockScopedBinding = 1 << 25,
-        ContainsBindingPattern = 1 << 26,
-        ContainsYield = 1 << 27,
-        ContainsHoistedDeclarationOrCompletion = 1 << 28,
+        ContainsDecorators = 1 << 12,
+        ContainsPropertyInitializer = 1 << 13,
+        ContainsLexicalThis = 1 << 14,
+        ContainsCapturedLexicalThis = 1 << 15,
+        ContainsLexicalThisInComputedPropertyName = 1 << 16,
+        ContainsDefaultValueAssignments = 1 << 17,
+        ContainsParameterPropertyAssignments = 1 << 18,
+        ContainsSpread = 1 << 19,
+        ContainsObjectSpread = 1 << 20,
+        ContainsRest = ContainsSpread,
+        ContainsObjectRest = ContainsObjectSpread,
+        ContainsComputedPropertyName = 1 << 21,
+        ContainsBlockScopedBinding = 1 << 22,
+        ContainsBindingPattern = 1 << 23,
+        ContainsYield = 1 << 24,
+        ContainsHoistedDeclarationOrCompletion = 1 << 25,
 
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
         AssertTypeScript = TypeScript | ContainsTypeScript,
-        AssertJsx = Jsx | ContainsJsx,
-        AssertESNext = ESNext | ContainsESNext,
-        AssertES2017 = ES2017 | ContainsES2017,
-        AssertES2016 = ES2016 | ContainsES2016,
+        AssertJsx = ContainsJsx,
+        AssertESNext = ContainsESNext,
+        AssertES2017 = ContainsES2017,
+        AssertES2016 = ContainsES2016,
         AssertES2015 = ES2015 | ContainsES2015,
         AssertGenerator = Generator | ContainsGenerator,
         AssertDestructuringAssignment = DestructuringAssignment | ContainsDestructuringAssignment,
@@ -3575,18 +3617,20 @@ namespace ts {
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        NodeExcludes = TypeScript | Jsx | ESNext | ES2017 | ES2016 | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
-        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
-        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
-        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
-        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
+        NodeExcludes = TypeScript | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
+        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
+        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
+        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
+        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
         ClassExcludes = NodeExcludes | ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments | ContainsLexicalThisInComputedPropertyName,
         ModuleExcludes = NodeExcludes | ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
         TypeExcludes = ~ContainsTypeScript,
-        ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
-        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpreadExpression,
-        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern,
-        ParameterExcludes = NodeExcludes | ContainsBindingPattern,
+        ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName | ContainsObjectSpread,
+        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpread,
+        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectRest,
+        ParameterExcludes = NodeExcludes,
+        CatchClauseExcludes = NodeExcludes | ContainsObjectRest,
+        BindingPatternExcludes = NodeExcludes | ContainsRest,
 
         // Masks
         // - Additional bitmasks

@@ -826,6 +826,13 @@ namespace ts {
         }
     }
 
+    export function appendProperty<T>(map: Map<T>, key: string | number, value: T): Map<T> {
+        if (key === undefined || value === undefined) return map;
+        if (map === undefined) map = createMap<T>();
+        map[key] = value;
+        return map;
+    }
+
     export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
     export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
