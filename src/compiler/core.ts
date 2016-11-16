@@ -1,6 +1,11 @@
 ﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
+namespace ts {
+    /** The version of the TypeScript compiler release */
+    export const version = "2.2.0";
+}
+
 /* @internal */
 namespace ts {
     /**
@@ -819,6 +824,13 @@ namespace ts {
         for (const key in source) {
             target[key] = source[key];
         }
+    }
+
+    export function appendProperty<T>(map: Map<T>, key: string | number, value: T): Map<T> {
+        if (key === undefined || value === undefined) return map;
+        if (map === undefined) map = createMap<T>();
+        map[key] = value;
+        return map;
     }
 
     export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
@@ -2231,6 +2243,13 @@ namespace ts {
      * Path must have a valid extension.
      */
     export function extensionFromPath(path: string): Extension {
+        const ext = tryGetExtensionFromPath(path);
+        if (ext !== undefined) {
+            return ext;
+        }
+        Debug.fail(`File ${path} has unknown extension.`);
+    }
+    export function tryGetExtensionFromPath(path: string): Extension | undefined {
         if (fileExtensionIs(path, ".d.ts")) {
             return Extension.Dts;
         }
@@ -2246,7 +2265,5 @@ namespace ts {
         if (fileExtensionIs(path, ".jsx")) {
             return Extension.Jsx;
         }
-        Debug.fail(`File ${path} has unknown extension.`);
-        return Extension.Js;
     }
 }

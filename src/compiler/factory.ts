@@ -103,12 +103,12 @@ namespace ts {
 
     // Literals
 
-    export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
+    export function createLiteral(textSource: StringLiteral | NumericLiteral | Identifier, location?: TextRange): StringLiteral;
     export function createLiteral(value: string, location?: TextRange): StringLiteral;
     export function createLiteral(value: number, location?: TextRange): NumericLiteral;
     export function createLiteral(value: boolean, location?: TextRange): BooleanLiteral;
     export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
+    export function createLiteral(value: string | number | boolean | StringLiteral | NumericLiteral | Identifier, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
             const node = <NumericLiteral>createNode(SyntaxKind.NumericLiteral, location);
             node.text = value.toString();
@@ -239,9 +239,9 @@ namespace ts {
         return node;
     }
 
-    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], name: BindingName, type: TypeNode, initializer: Expression) {
-        if (node.decorators !== decorators || node.modifiers !== modifiers || node.name !== name || node.type !== type || node.initializer !== initializer) {
-            return updateNode(createParameter(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node), node);
+    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: BindingName, type: TypeNode, initializer: Expression) {
+        if (node.decorators !== decorators || node.modifiers !== modifiers || node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.type !== type || node.initializer !== initializer) {
+            return updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node), node);
         }
 
         return node;
@@ -379,9 +379,9 @@ namespace ts {
         return node;
     }
 
-    export function updateBindingElement(node: BindingElement, propertyName: PropertyName, name: BindingName, initializer: Expression) {
-        if (node.propertyName !== propertyName || node.name !== name || node.initializer !== initializer) {
-            return updateNode(createBindingElement(propertyName, node.dotDotDotToken, name, initializer, node), node);
+    export function updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken, propertyName: PropertyName, name: BindingName, initializer: Expression) {
+        if (node.propertyName !== propertyName || node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.initializer !== initializer) {
+            return updateNode(createBindingElement(propertyName, dotDotDotToken, name, initializer, node), node);
         }
         return node;
     }
@@ -647,13 +647,25 @@ namespace ts {
         return node;
     }
 
-    export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression, location?: TextRange) {
-        const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, location);
-        node.condition = parenthesizeConditionalHead(condition);
-        node.questionToken = questionToken;
-        node.whenTrue = whenTrue;
-        node.colonToken = colonToken;
-        node.whenFalse = whenFalse;
+    export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression, location?: TextRange): ConditionalExpression;
+    export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression, location?: TextRange): ConditionalExpression;
+    export function createConditional(condition: Expression, questionTokenOrWhenTrue: QuestionToken | Expression, whenTrueOrWhenFalse: Expression, colonTokenOrLocation?: ColonToken | TextRange, whenFalse?: Expression, location?: TextRange) {
+        const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, whenFalse ? location : colonTokenOrLocation);
+        node.condition = parenthesizeForConditionalHead(condition);
+        if (whenFalse) {
+            // second overload
+            node.questionToken = <QuestionToken>questionTokenOrWhenTrue;
+            node.whenTrue = whenTrueOrWhenFalse;
+            node.colonToken = <ColonToken>colonTokenOrLocation;
+            node.whenFalse = whenFalse;
+        }
+        else {
+            // first overload
+            node.questionToken = createToken(SyntaxKind.QuestionToken);
+            node.whenTrue = <Expression>questionTokenOrWhenTrue;
+            node.colonToken = createToken(SyntaxKind.ColonToken);
+            node.whenFalse = whenTrueOrWhenFalse;
+        }
         return node;
     }
 
@@ -693,12 +705,12 @@ namespace ts {
     }
 
     export function createSpread(expression: Expression, location?: TextRange) {
-        const node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression, location);
+        const node = <SpreadElement>createNode(SyntaxKind.SpreadElement, location);
         node.expression = parenthesizeExpressionForList(expression);
         return node;
     }
 
-    export function updateSpread(node: SpreadElementExpression, expression: Expression) {
+    export function updateSpread(node: SpreadElement, expression: Expression) {
         if (node.expression !== expression) {
             return updateNode(createSpread(expression, node), node);
         }
@@ -1403,9 +1415,22 @@ namespace ts {
         return node;
     }
 
+    export function createSpreadAssignment(expression: Expression, location?: TextRange) {
+        const node = <SpreadAssignment>createNode(SyntaxKind.SpreadAssignment, location);
+        node.expression = expression !== undefined ? parenthesizeExpressionForList(expression) : undefined;
+        return node;
+    }
+
     export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression) {
         if (node.name !== name || node.objectAssignmentInitializer !== objectAssignmentInitializer) {
             return updateNode(createShorthandPropertyAssignment(name, objectAssignmentInitializer, node), node);
+        }
+        return node;
+    }
+
+    export function updateSpreadAssignment(node: SpreadAssignment, expression: Expression) {
+        if (node.expression !== expression) {
+            return updateNode(createSpreadAssignment(expression, node), node);
         }
         return node;
     }
@@ -1532,6 +1557,8 @@ namespace ts {
         return <Expression>createBinary(left, SyntaxKind.LessThanToken, right, location);
     }
 
+    export function createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression, location?: TextRange): DestructuringAssignment;
+    export function createAssignment(left: Expression, right: Expression, location?: TextRange): BinaryExpression;
     export function createAssignment(left: Expression, right: Expression, location?: TextRange) {
         return createBinary(left, SyntaxKind.EqualsToken, right, location);
     }
@@ -1570,6 +1597,14 @@ namespace ts {
 
     export function createVoidZero() {
         return createVoid(createLiteral(0));
+    }
+
+    export type TypeOfTag = "undefined" | "number" | "boolean" | "string" | "symbol" | "object" | "function";
+
+    export function createTypeCheck(value: Expression, tag: TypeOfTag) {
+        return tag === "undefined"
+            ? createStrictEquality(value, createVoidZero())
+            : createStrictEquality(createTypeOf(value), createLiteral(tag));
     }
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
@@ -1645,7 +1680,34 @@ namespace ts {
         return react;
     }
 
-    export function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
+    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
+        if (isQualifiedName(jsxFactory)) {
+            return createPropertyAccess(
+                createJsxFactoryExpressionFromEntityName(
+                    jsxFactory.left,
+                    parent
+                ),
+                setEmitFlags(
+                    getMutableClone(jsxFactory.right),
+                    EmitFlags.NoSourceMap
+                )
+            );
+        }
+        else {
+            return createReactNamespace(jsxFactory.text, parent);
+        }
+    }
+
+    function createJsxFactoryExpression(jsxFactoryEntity: EntityName, reactNamespace: string, parent: JsxOpeningLikeElement): Expression {
+        return jsxFactoryEntity ?
+            createJsxFactoryExpressionFromEntityName(jsxFactoryEntity, parent) :
+            createPropertyAccess(
+                createReactNamespace(reactNamespace, parent),
+                "createElement"
+            );
+    }
+
+    export function createExpressionForJsxElement(jsxFactoryEntity: EntityName, reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
             argumentsList.push(props);
@@ -1668,10 +1730,7 @@ namespace ts {
         }
 
         return createCall(
-            createPropertyAccess(
-                createReactNamespace(reactNamespace, parentElement),
-                "createElement"
-            ),
+            createJsxFactoryExpression(jsxFactoryEntity, reactNamespace, parentElement),
             /*typeArguments*/ undefined,
             argumentsList,
             location
@@ -1846,6 +1905,9 @@ namespace ts {
             return createStatement(updatedExpression, /*location*/ expression);
         }
     }
+
+
+    // Utilities
 
     export interface CallBinding {
         target: LeftHandSideExpression;
@@ -2196,8 +2258,8 @@ namespace ts {
         return qualifiedName;
     }
 
-    export function convertToFunctionBody(node: ConciseBody) {
-        return isBlock(node) ? node : createBlock([createReturn(node, /*location*/ node)], /*location*/ node);
+    export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean) {
+        return isBlock(node) ? node : createBlock([createReturn(node, /*location*/ node)], /*location*/ node, multiLine);
     }
 
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
@@ -2470,6 +2532,16 @@ namespace ts {
         }
 
         return SyntaxKind.Unknown;
+    }
+
+    export function parenthesizeForConditionalHead(condition: Expression) {
+        const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
+        const emittedCondition = skipPartiallyEmittedExpressions(condition);
+        const conditionPrecedence = getExpressionPrecedence(emittedCondition);
+        if (compareValues(conditionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
+            return createParen(condition);
+        }
+        return condition;
     }
 
     /**
@@ -3088,6 +3160,275 @@ namespace ts {
 
     function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
         return tryGetModuleNameFromFile(resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
+    }
+
+    /**
+     * Gets the initializer of an BindingOrAssignmentElement.
+     */
+    export function getInitializerOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Expression | undefined {
+        if (isDeclarationBindingElement(bindingElement)) {
+            // `1` in `let { a = 1 } = ...`
+            // `1` in `let { a: b = 1 } = ...`
+            // `1` in `let { a: {b} = 1 } = ...`
+            // `1` in `let { a: [b] = 1 } = ...`
+            // `1` in `let [a = 1] = ...`
+            // `1` in `let [{a} = 1] = ...`
+            // `1` in `let [[a] = 1] = ...`
+            return bindingElement.initializer;
+        }
+
+        if (isPropertyAssignment(bindingElement)) {
+            // `1` in `({ a: b = 1 } = ...)`
+            // `1` in `({ a: {b} = 1 } = ...)`
+            // `1` in `({ a: [b] = 1 } = ...)`
+            return isAssignmentExpression(bindingElement.initializer, /*excludeCompoundAssignment*/ true)
+                ? bindingElement.initializer.right
+                : undefined;
+        }
+
+        if (isShorthandPropertyAssignment(bindingElement)) {
+            // `1` in `({ a = 1 } = ...)`
+            return bindingElement.objectAssignmentInitializer;
+        }
+
+        if (isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
+            // `1` in `[a = 1] = ...`
+            // `1` in `[{a} = 1] = ...`
+            // `1` in `[[a] = 1] = ...`
+            return bindingElement.right;
+        }
+
+        if (isSpreadExpression(bindingElement)) {
+            // Recovery consistent with existing emit.
+            return getInitializerOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
+        }
+    }
+
+    /**
+     * Gets the name of an BindingOrAssignmentElement.
+     */
+    export function getTargetOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementTarget {
+        if (isDeclarationBindingElement(bindingElement)) {
+            // `a` in `let { a } = ...`
+            // `a` in `let { a = 1 } = ...`
+            // `b` in `let { a: b } = ...`
+            // `b` in `let { a: b = 1 } = ...`
+            // `a` in `let { ...a } = ...`
+            // `{b}` in `let { a: {b} } = ...`
+            // `{b}` in `let { a: {b} = 1 } = ...`
+            // `[b]` in `let { a: [b] } = ...`
+            // `[b]` in `let { a: [b] = 1 } = ...`
+            // `a` in `let [a] = ...`
+            // `a` in `let [a = 1] = ...`
+            // `a` in `let [...a] = ...`
+            // `{a}` in `let [{a}] = ...`
+            // `{a}` in `let [{a} = 1] = ...`
+            // `[a]` in `let [[a]] = ...`
+            // `[a]` in `let [[a] = 1] = ...`
+            return <ObjectBindingPattern | ArrayBindingPattern | Identifier>bindingElement.name;
+        }
+
+        if (isObjectLiteralElementLike(bindingElement)) {
+            switch (bindingElement.kind) {
+                case SyntaxKind.PropertyAssignment:
+                    // `b` in `({ a: b } = ...)`
+                    // `b` in `({ a: b = 1 } = ...)`
+                    // `{b}` in `({ a: {b} } = ...)`
+                    // `{b}` in `({ a: {b} = 1 } = ...)`
+                    // `[b]` in `({ a: [b] } = ...)`
+                    // `[b]` in `({ a: [b] = 1 } = ...)`
+                    // `b.c` in `({ a: b.c } = ...)`
+                    // `b.c` in `({ a: b.c = 1 } = ...)`
+                    // `b[0]` in `({ a: b[0] } = ...)`
+                    // `b[0]` in `({ a: b[0] = 1 } = ...)`
+                    return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.initializer);
+
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    // `a` in `({ a } = ...)`
+                    // `a` in `({ a = 1 } = ...)`
+                    return bindingElement.name;
+
+                case SyntaxKind.SpreadAssignment:
+                    // `a` in `({ ...a } = ...)`
+                    return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
+            }
+
+            // no target
+            return undefined;
+        }
+
+        if (isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
+            // `a` in `[a = 1] = ...`
+            // `{a}` in `[{a} = 1] = ...`
+            // `[a]` in `[[a] = 1] = ...`
+            // `a.b` in `[a.b = 1] = ...`
+            // `a[0]` in `[a[0] = 1] = ...`
+            return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.left);
+        }
+
+        if (isSpreadExpression(bindingElement)) {
+            // `a` in `[...a] = ...`
+            return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
+        }
+
+        // `a` in `[a] = ...`
+        // `{a}` in `[{a}] = ...`
+        // `[a]` in `[[a]] = ...`
+        // `a.b` in `[a.b] = ...`
+        // `a[0]` in `[a[0]] = ...`
+        return bindingElement;
+    }
+
+    /**
+     * Determines whether an BindingOrAssignmentElement is a rest element.
+     */
+    export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementRestIndicator {
+        switch (bindingElement.kind) {
+            case SyntaxKind.Parameter:
+            case SyntaxKind.BindingElement:
+                // `...` in `let [...a] = ...`
+                return (<ParameterDeclaration | BindingElement>bindingElement).dotDotDotToken;
+
+            case SyntaxKind.SpreadElement:
+            case SyntaxKind.SpreadAssignment:
+                // `...` in `[...a] = ...`
+                return <SpreadElement | SpreadAssignment>bindingElement;
+        }
+
+        return undefined;
+    }
+
+    /**
+     * Gets the property name of a BindingOrAssignmentElement
+     */
+    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement) {
+        switch (bindingElement.kind) {
+            case SyntaxKind.BindingElement:
+                // `a` in `let { a: b } = ...`
+                // `[a]` in `let { [a]: b } = ...`
+                // `"a"` in `let { "a": b } = ...`
+                // `1` in `let { 1: b } = ...`
+                if ((<BindingElement>bindingElement).propertyName) {
+                    const propertyName = (<BindingElement>bindingElement).propertyName;
+                    return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
+                        ? propertyName.expression
+                        : propertyName;
+                }
+
+                break;
+
+            case SyntaxKind.PropertyAssignment:
+                // `a` in `({ a: b } = ...)`
+                // `[a]` in `({ [a]: b } = ...)`
+                // `"a"` in `({ "a": b } = ...)`
+                // `1` in `({ 1: b } = ...)`
+                if ((<PropertyAssignment>bindingElement).name) {
+                    const propertyName = (<PropertyAssignment>bindingElement).name;
+                    return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
+                        ? propertyName.expression
+                        : propertyName;
+                }
+
+                break;
+
+            case SyntaxKind.SpreadAssignment:
+                // `a` in `({ ...a } = ...)`
+                return (<SpreadAssignment>bindingElement).name;
+        }
+
+        const target = getTargetOfBindingOrAssignmentElement(bindingElement);
+        if (target && isPropertyName(target)) {
+            return isComputedPropertyName(target) && isStringOrNumericLiteral(target.expression)
+                ? target.expression
+                : target;
+        }
+
+        Debug.fail("Invalid property name for binding element.");
+    }
+
+    /**
+     * Gets the elements of a BindingOrAssignmentPattern
+     */
+    export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmentPattern): BindingOrAssignmentElement[] {
+        switch (name.kind) {
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ArrayLiteralExpression:
+                // `a` in `{a}`
+                // `a` in `[a]`
+                return <BindingOrAssignmentElement[]>name.elements;
+
+            case SyntaxKind.ObjectLiteralExpression:
+                // `a` in `{a}`
+                return <BindingOrAssignmentElement[]>name.properties;
+        }
+    }
+
+    export function convertToArrayAssignmentElement(element: BindingOrAssignmentElement) {
+        if (isBindingElement(element)) {
+            if (element.dotDotDotToken) {
+                Debug.assertNode(element.name, isIdentifier);
+                return setOriginalNode(createSpread(<Identifier>element.name, element), element);
+            }
+            const expression = convertToAssignmentElementTarget(<ObjectBindingPattern | ArrayBindingPattern | Identifier>element.name);
+            return element.initializer ? setOriginalNode(createAssignment(expression, element.initializer, element), element) : expression;
+        }
+        Debug.assertNode(element, isExpression);
+        return <Expression>element;
+    }
+
+    export function convertToObjectAssignmentElement(element: BindingOrAssignmentElement) {
+        if (isBindingElement(element)) {
+            if (element.dotDotDotToken) {
+                Debug.assertNode(element.name, isIdentifier);
+                return setOriginalNode(createSpreadAssignment(<Identifier>element.name, element), element);
+            }
+            if (element.propertyName) {
+                const expression = convertToAssignmentElementTarget(<ObjectBindingPattern | ArrayBindingPattern | Identifier>element.name);
+                return setOriginalNode(createPropertyAssignment(element.propertyName, element.initializer ? createAssignment(expression, element.initializer) : expression, element), element);
+            }
+            Debug.assertNode(element.name, isIdentifier);
+            return setOriginalNode(createShorthandPropertyAssignment(<Identifier>element.name, element.initializer, element), element);
+        }
+        Debug.assertNode(element, isObjectLiteralElementLike);
+        return <ObjectLiteralElementLike>element;
+    }
+
+    export function convertToAssignmentPattern(node: BindingOrAssignmentPattern): AssignmentPattern {
+        switch (node.kind) {
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ArrayLiteralExpression:
+                return convertToArrayAssignmentPattern(node);
+
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ObjectLiteralExpression:
+                return convertToObjectAssignmentPattern(node);
+        }
+    }
+
+    export function convertToObjectAssignmentPattern(node: ObjectBindingOrAssignmentPattern) {
+        if (isObjectBindingPattern(node)) {
+            return setOriginalNode(createObjectLiteral(map(node.elements, convertToObjectAssignmentElement), node), node);
+        }
+        Debug.assertNode(node, isObjectLiteralExpression);
+        return <ObjectLiteralExpression>node;
+    }
+
+    export function convertToArrayAssignmentPattern(node: ArrayBindingOrAssignmentPattern) {
+        if (isArrayBindingPattern(node)) {
+            return setOriginalNode(createArrayLiteral(map(node.elements, convertToArrayAssignmentElement), node), node);
+        }
+        Debug.assertNode(node, isArrayLiteralExpression);
+        return <ArrayLiteralExpression>node;
+    }
+
+    export function convertToAssignmentElementTarget(node: BindingOrAssignmentElementTarget): Expression {
+        if (isBindingPattern(node)) {
+            return convertToAssignmentPattern(node);
+        }
+
+        Debug.assertNode(node, isExpression);
+        return <Expression>node;
     }
 
     export interface ExternalModuleInfo {

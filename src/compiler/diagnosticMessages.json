@@ -1027,6 +1027,10 @@
         "category": "Error",
         "code": 2342
     },
+    "This syntax requires an imported helper named '{1}', but module '{0}' has no exported member '{1}'.": {
+        "category": "Error",
+        "code": 2343
+    },
     "Type '{0}' does not satisfy the constraint '{1}'.": {
         "category": "Error",
         "code": 2344
@@ -1066,6 +1070,10 @@
     "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
         "category": "Error",
         "code": 2353
+    },
+    "This syntax requires an imported helper but module '{0}' cannot be found.": {
+        "category": "Error",
+        "code": 2354
     },
     "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
@@ -1459,7 +1467,7 @@
         "category": "Error",
         "code": 2461
     },
-    "A rest element must be last in an array destructuring pattern": {
+    "A rest element must be last in a destructuring pattern": {
         "category": "Error",
         "code": 2462
     },
@@ -1999,6 +2007,18 @@
         "category": "Error",
         "code": 2697
     },
+    "Spread types may only be created from object types.": {
+        "category": "Error",
+        "code": 2698
+    },
+    "Rest types may only be created from object types.": {
+        "category": "Error",
+        "code": 2700
+    },
+    "The target of an object rest assignment must be a variable or a property access.": {
+        "category": "Error",
+        "code": 2701
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2396,6 +2416,10 @@
     "Substitutions for pattern '{0}' shouldn't be an empty array.": {
         "category": "Error",
         "code": 5066
+    },
+    "Invalid value for 'jsxFactory'. '{0}' is not a valid identifier or qualified-name.": {
+        "category": "Error",
+        "code": 5067
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2913,6 +2937,10 @@
         "category": "Message",
         "code": 6145
     },
+    "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
+        "category": "Message",
+        "code": 6146
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3085,6 +3113,10 @@
         "category": "Error",
         "code": 9003
     },
+    "Language service is disabled.": {
+        "category": "Error",
+        "code": 9004
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
@@ -3178,5 +3210,9 @@
     "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
         "category": "Error",
         "code": 90009
+    },
+    "Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.": {
+        "category": "Error",
+        "code": 90010
     }
 }

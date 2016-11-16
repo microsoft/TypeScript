@@ -6,8 +6,11 @@ for (var x of Object.values(o)) {
     let y = x;
 }
 
-var entries = Object.entries(o);
+var entries = Object.entries(o);  // <-- entries: ['a' | 'b', number][]
 var entries1 = Object.entries(1); // <-- entries: [string, any][]
+var entries2 = Object.entries({a: true, b: 2}) // ['a' | 'b', number | boolean][]
+var entries3 = Object.entries({}) // [never, any][]
+
 
 //// [useObjectValuesAndEntries1.js]
 var __values = (this && this.__values) || function (o) {
@@ -32,6 +35,8 @@ catch (e_1_1) { e_1 = { error: e_1_1 }; }
 finally {
     try { __close(iterator_1); } finally { if (e_1) throw e_1.error; }
 }
-var entries = Object.entries(o);
+var entries = Object.entries(o); // <-- entries: ['a' | 'b', number][]
 var entries1 = Object.entries(1); // <-- entries: [string, any][]
+var entries2 = Object.entries({ a: true, b: 2 }); // ['a' | 'b', number | boolean][]
+var entries3 = Object.entries({}); // [never, any][]
 var e_1;

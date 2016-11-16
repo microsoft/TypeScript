@@ -530,8 +530,8 @@ namespace ts {
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.YieldExpression:
-            case SyntaxKind.SpreadElementExpression:
-                const unaryWordExpression = (<TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElementExpression>n);
+            case SyntaxKind.SpreadElement:
+                const unaryWordExpression = n as (TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElement);
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -1282,7 +1282,7 @@ namespace ts {
         if (isImportOrExportSpecifierName(location)) {
             return location.getText();
         }
-        else if (isStringOrNumericLiteral(location.kind) &&
+        else if (isStringOrNumericLiteral(location) &&
             location.parent.kind === SyntaxKind.ComputedPropertyName) {
             return (<LiteralExpression>location).text;
         }

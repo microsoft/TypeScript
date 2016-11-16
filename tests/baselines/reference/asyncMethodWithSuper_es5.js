@@ -95,9 +95,9 @@ var B = (function (_super) {
                 // element access (assign)
                 _super.prototype["x"] = f;
                 // destructuring assign with property access
-                (super.x = { f: f }.f);
+                (_super.prototype.x = { f: f }.f);
                 // destructuring assign with element access
-                (super["x"] = { f: f }.f);
+                (_super.prototype["x"] = { f: f }.f);
                 return [2 /*return*/];
             });
         });

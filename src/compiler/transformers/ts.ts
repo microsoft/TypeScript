@@ -330,6 +330,7 @@ namespace ts {
                 case SyntaxKind.ThisType:
                 case SyntaxKind.TypeOperator:
                 case SyntaxKind.IndexedAccessType:
+                case SyntaxKind.MappedType:
                 case SyntaxKind.LiteralType:
                     // TypeScript type nodes are elided.
 
@@ -470,9 +471,10 @@ namespace ts {
         }
 
         function visitSourceFile(node: SourceFile) {
+            const alwaysStrict = compilerOptions.alwaysStrict && !(isExternalModule(node) && moduleKind === ModuleKind.ES2015);
             return updateSourceFileNode(
                 node,
-                visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, compilerOptions.alwaysStrict));
+                visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
         }
 
         /**
@@ -860,7 +862,6 @@ namespace ts {
             let statements: Statement[] = [];
             let indexOfFirstStatement = 0;
 
-            // The body of a constructor is a new lexical environment
             resumeLexicalEnvironment();
 
             if (constructor) {
@@ -1748,6 +1749,7 @@ namespace ts {
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeOperator:
                 case SyntaxKind.IndexedAccessType:
+                case SyntaxKind.MappedType:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ThisType:
@@ -1774,12 +1776,7 @@ namespace ts {
                     const temp = createTempVariable(hoistVariableDeclaration);
                     return createLogicalOr(
                         createLogicalAnd(
-                            createStrictEquality(
-                                createTypeOf(
-                                    createAssignment(temp, serialized)
-                                ),
-                                createLiteral("function")
-                            ),
+                            createTypeCheck(createAssignment(temp, serialized), "function"),
                             temp
                         ),
                         createIdentifier("Object")
@@ -1888,13 +1885,8 @@ namespace ts {
          */
         function getGlobalSymbolNameWithFallback(): Expression {
             return createConditional(
-                createStrictEquality(
-                    createTypeOf(createIdentifier("Symbol")),
-                    createLiteral("function")
-                ),
-                createToken(SyntaxKind.QuestionToken),
+                createTypeCheck(createIdentifier("Symbol"), "function"),
                 createIdentifier("Symbol"),
-                createToken(SyntaxKind.ColonToken),
                 createIdentifier("Object")
             );
         }
@@ -2255,12 +2247,14 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             const name = node.name;
             if (isBindingPattern(name)) {
-                return flattenDestructuringToExpression(
-                    context,
+                return flattenDestructuringAssignment(
                     node,
+                    visitor,
+                    context,
+                    FlattenLevel.All,
                     /*needsValue*/ false,
-                    createNamespaceExportExpression,
-                    visitor);
+                    createNamespaceExportExpression
+                );
             }
             else {
                 return createAssignment(

@@ -819,12 +819,14 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration, isExportedDeclaration: boolean): Expression {
             const createAssignment = isExportedDeclaration ? createExportedVariableAssignment : createNonExportedVariableAssignment;
             return isBindingPattern(node.name)
-                ? flattenDestructuringToExpression(
-                    context,
+                ? flattenDestructuringAssignment(
                     node,
+                    destructuringVisitor,
+                    context,
+                    FlattenLevel.All,
                     /*needsValue*/ false,
-                    createAssignment,
-                    destructuringVisitor)
+                    createAssignment
+                )
                 : createAssignment(node.name, visitNode(node.initializer, destructuringVisitor, isExpression));
         }
 
@@ -1475,13 +1477,15 @@ namespace ts {
          */
         function visitDestructuringAssignment(node: DestructuringAssignment): VisitResult<Expression> {
             if (hasExportedReferenceInDestructuringTarget(node.left)) {
-                return flattenDestructuringToExpression(
-                    context,
+                return flattenDestructuringAssignment(
                     node,
-                    /*needsValue*/ true,
-                    createAssignment,
-                    destructuringVisitor);
+                    destructuringVisitor,
+                    context,
+                    FlattenLevel.All,
+                    /*needsValue*/ true
+                );
             }
+
             return visitEachChild(node, destructuringVisitor, context);
         }
 
@@ -1494,7 +1498,7 @@ namespace ts {
             if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
                 return hasExportedReferenceInDestructuringTarget(node.left);
             }
-            else if (isSpreadElementExpression(node)) {
+            else if (isSpreadExpression(node)) {
                 return hasExportedReferenceInDestructuringTarget(node.expression);
             }
             else if (isObjectLiteralExpression(node)) {

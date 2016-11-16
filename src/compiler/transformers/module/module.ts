@@ -20,7 +20,7 @@ namespace ts {
 
         const {
             startLexicalEnvironment,
-            endLexicalEnvironment,
+            endLexicalEnvironment
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -760,12 +760,13 @@ namespace ts {
          */
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
-                return flattenDestructuringToExpression(
-                    context,
+                return flattenDestructuringAssignment(
                     node,
+                    /*visitor*/ undefined,
+                    context,
+                    FlattenLevel.All,
                     /*needsValue*/ false,
-                    createExportExpression,
-                    /*visitor*/ undefined
+                    createExportExpression
                 );
             }
             else {

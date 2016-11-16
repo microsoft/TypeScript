@@ -3,51 +3,41 @@
 
 /*@internal*/
 namespace ts {
-    type EffectiveBindingElement
-        = VariableDeclaration
-        | ParameterDeclaration
-        | BindingElement
-        | ObjectLiteralElementLike
-        | Expression
-        ;
+    interface FlattenContext {
+        context: TransformationContext;
+        level: FlattenLevel;
+        hoistTempVariables: boolean;
+        emitExpression: (value: Expression) => void;
+        emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) => void;
+        createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
+        createObjectBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ObjectBindingOrAssignmentPattern;
+        createArrayBindingOrAssignmentElement: (node: Identifier) => BindingOrAssignmentElement;
+        visitor?: (node: Node) => VisitResult<Node>;
+    }
 
-    type EffectiveObjectBindingPattern
-        = ObjectBindingPattern
-        | ObjectLiteralExpression
-        ;
-
-    type EffectiveArrayBindingPattern
-        = ArrayBindingPattern
-        | ArrayLiteralExpression
-        ;
-
-    type EffectiveBindingPattern
-        = EffectiveObjectBindingPattern
-        | EffectiveArrayBindingPattern
-        ;
-
-    type EffectiveBindingTarget
-        = EffectiveBindingPattern
-        | Expression
-        ;
+    export const enum FlattenLevel {
+        All,
+        ObjectRest,
+    }
 
     /**
      * Flattens a DestructuringAssignment or a VariableDeclaration to an expression.
      *
      * @param node The node to flatten.
-     * @param needsValue Indicates whether the value from the right-hand-side of the
-     * destructuring assignment is needed as part of a larger expression.
-     * @param createAssignmentCallback A callback used to create an assignment expression.
-     * @param recordTempVariable A callback used to record new temporary variables.
-     * @param visitor An optional visitor used to visit default value initializers of binding patterns.
+     * @param visitor An optional visitor used to visit initializers.
+     * @param context The transformation context.
+     * @param level Indicates the extent to which flattening should occur.
+     * @param needsValue An optional value indicating whether the value from the right-hand-side of
+     * the destructuring assignment is needed as part of a larger expression.
+     * @param createAssignmentCallback An optional callback used to create the assignment expression.
      */
-    export function flattenDestructuringToExpression(
-        context: TransformationContext,
+    export function flattenDestructuringAssignment(
         node: VariableDeclaration | DestructuringAssignment,
-        needsValue: boolean,
-        createAssignmentCallback: (target: Expression, value: Expression, location?: TextRange) => Expression,
-        visitor?: (node: Node) => VisitResult<Node>): Expression {
-
+        visitor: ((node: Node) => VisitResult<Node>) | undefined,
+        context: TransformationContext,
+        level: FlattenLevel,
+        needsValue?: boolean,
+        createAssignmentCallback?: (name: Identifier, value: Expression, location?: TextRange) => Expression): Expression {
         let location: TextRange = node;
         let value: Expression;
         if (isDestructuringAssignment(node)) {
@@ -63,7 +53,18 @@ namespace ts {
             }
         }
 
-        const expressions: Expression[] = [];
+        let expressions: Expression[];
+        const flattenContext: FlattenContext = {
+            context,
+            level,
+            hoistTempVariables: true,
+            emitExpression,
+            emitBindingOrAssignment,
+            createArrayBindingOrAssignmentPattern: makeArrayAssignmentPattern,
+            createObjectBindingOrAssignmentPattern: makeObjectAssignmentPattern,
+            createArrayBindingOrAssignmentElement: makeAssignmentElement,
+            visitor
+        };
 
         if (value) {
             value = visitNode(value, visitor, isExpression);
@@ -74,7 +75,7 @@ namespace ts {
                 //
                 // The source map location for the assignment should point to the entire binary
                 // expression.
-                value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, emitTempVariableAssignment, location);
+                value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
             }
             else if (nodeIsSynthesized(node)) {
                 // Generally, the source map location for a destructuring assignment is the root
@@ -87,520 +88,328 @@ namespace ts {
             }
         }
 
-        flattenEffectiveBindingElement(
-            context,
-            node,
-            value,
-            isDestructuringAssignment(node),
-            emitAssignment,
-            emitTempVariableAssignment,
-            emitExpression,
-            visitor,
-            location);
+        flattenBindingOrAssignmentElement(flattenContext, node, value, location, /*skipInitializer*/ isDestructuringAssignment(node));
 
         if (value && needsValue) {
+            if (!some(expressions)) {
+                return value;
+            }
+
             expressions.push(value);
         }
 
-        return aggregateTransformFlags(inlineExpressions(expressions));
-
-        function emitAssignment(target: Expression, value: Expression, location: TextRange, original: Node) {
-            const expression = createAssignmentCallback(target, value, location);
-            expression.original = original;
-            emitExpression(expression);
-        }
-
-        function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(context.hoistVariableDeclaration);
-            emitExpression(createAssignment(name, value, location));
-            return name;
-        }
+        return aggregateTransformFlags(inlineExpressions(expressions)) || createOmittedExpression();
 
         function emitExpression(expression: Expression) {
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
             setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
             aggregateTransformFlags(expression);
-            expressions.push(expression);
+            expressions = append(expressions, expression);
+        }
+
+        function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) {
+            Debug.assertNode(target, createAssignmentCallback ? isIdentifier : isExpression);
+            const expression = createAssignmentCallback
+                ? createAssignmentCallback(<Identifier>target, value, location)
+                : createAssignment(visitNode(<Expression>target, visitor, isExpression), value, location);
+            expression.original = original;
+            emitExpression(expression);
         }
     }
 
     /**
-     * Flattens binding patterns in a VariableDeclaration or a ParameterDeclaration to a VariableDeclaration list.
+     * Flattens a VariableDeclaration or ParameterDeclaration to one or more variable declarations.
      *
      * @param node The node to flatten.
-     * @param boundValue An optional rhs value for the binding pattern. This value is *not* visited during flattening.
-     * @param visitor An optional visitor to use to visit expressions.
-     * @param recordTempVariable An optional callback used to hoist temporary variables rather than
-     * declaring them inline.
+     * @param visitor An optional visitor used to visit initializers.
+     * @param context The transformation context.
+     * @param boundValue The value bound to the declaration.
+     * @param skipInitializer A value indicating whether to ignore the initializer of `node`.
+     * @param hoistTempVariables Indicates whether temporary variables should not be recorded in-line.
+     * @param level Indicates the extent to which flattening should occur.
      */
-    export function flattenDestructuring(
-        context: TransformationContext,
+    export function flattenDestructuringBinding(
         node: VariableDeclaration | ParameterDeclaration,
-        boundValue: Expression | undefined,
-        recordTempVariablesInLine: boolean,
-        visitor?: (node: Node) => VisitResult<Node>) {
-
+        visitor: (node: Node) => VisitResult<Node>,
+        context: TransformationContext,
+        level: FlattenLevel,
+        rval?: Expression,
+        hoistTempVariables?: boolean,
+        skipInitializer?: boolean): VariableDeclaration[] {
         let pendingExpressions: Expression[];
-        const pendingDeclarations: { pendingExpressions?: Expression[], name: Identifier, value: Expression, location?: TextRange, original?: Node }[] = [];
+        const pendingDeclarations: { pendingExpressions?: Expression[], name: BindingName, value: Expression, location?: TextRange, original?: Node; }[] = [];
         const declarations: VariableDeclaration[] = [];
-
-        flattenEffectiveBindingElement(
+        const flattenContext: FlattenContext = {
             context,
-            node,
-            boundValue,
-            /*skipInitializer*/ false,
-            emitAssignment,
-            emitTempVariableAssignment,
+            level,
+            hoistTempVariables,
             emitExpression,
-            visitor,
-            /*location*/ node);
-
+            emitBindingOrAssignment,
+            createArrayBindingOrAssignmentPattern: makeArrayBindingPattern,
+            createObjectBindingOrAssignmentPattern: makeObjectBindingPattern,
+            createArrayBindingOrAssignmentElement: makeBindingElement,
+            visitor
+        };
+        flattenBindingOrAssignmentElement(flattenContext, node, rval, node, skipInitializer);
         if (pendingExpressions) {
-            const name = createTempVariable(/*recordTempVariable*/ undefined);
-            if (recordTempVariablesInLine) {
-                pendingDeclarations.push({ name, value: inlineExpressions(pendingExpressions) });
+            const temp = createTempVariable(/*recordTempVariable*/ undefined);
+            if (hoistTempVariables) {
+                const value = inlineExpressions(pendingExpressions);
+                pendingExpressions = undefined;
+                emitBindingOrAssignment(temp, value, /*location*/ undefined, /*original*/ undefined);
             }
             else {
-                context.hoistVariableDeclaration(name);
+                context.hoistVariableDeclaration(temp);
                 const pendingDeclaration = lastOrUndefined(pendingDeclarations);
                 pendingDeclaration.pendingExpressions = append(
                     pendingDeclaration.pendingExpressions,
-                    createAssignment(name, pendingDeclaration.value)
+                    createAssignment(temp, pendingDeclaration.value)
                 );
                 addRange(pendingDeclaration.pendingExpressions, pendingExpressions);
-                pendingDeclaration.value = name;
+                pendingDeclaration.value = temp;
             }
         }
-
-        for (const { pendingExpressions, name, value, location, original} of pendingDeclarations) {
-            const declaration = createVariableDeclaration(
+        for (const { pendingExpressions, name, value, location, original } of pendingDeclarations) {
+            const variable = createVariableDeclaration(
                 name,
                 /*type*/ undefined,
-                // pendingExpressions
-                //     ? inlineExpressions(append(pendingExpressions, value))
-                //     : value,
-                inlineExpressions(append(pendingExpressions, value)),
-                location
-            );
-
-            declaration.original = original;
-
-            // NOTE: this completely disables source maps, but aligns with the behavior of
-            //       `emitAssignment` in the old emitter.
-            declarations.push(aggregateTransformFlags(setEmitFlags(declaration, EmitFlags.NoNestedSourceMaps)));
+                pendingExpressions ? inlineExpressions(append(pendingExpressions, value)) : value,
+                location);
+            variable.original = original;
+            if (isIdentifier(name)) {
+                setEmitFlags(variable, EmitFlags.NoNestedSourceMaps);
+            }
+            aggregateTransformFlags(variable);
+            declarations.push(variable);
         }
-
         return declarations;
 
-        function emitAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
-            if (!isIdentifier(name)) {
-                Debug.failBadSyntaxKind(name, "Identifier expected.");
-                return;
-            }
-
-            pendingDeclarations.push({ pendingExpressions, name, value, location, original });
-            pendingExpressions = undefined;
+        function emitExpression(value: Expression) {
+            pendingExpressions = append(pendingExpressions, value);
         }
 
-        function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable(/*recordTempVariable*/ undefined);
-            if (recordTempVariablesInLine) {
-                emitAssignment(name, value, location, /*original*/ undefined);
+        function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) {
+            Debug.assertNode(target, isBindingName);
+            if (pendingExpressions) {
+                value = inlineExpressions(append(pendingExpressions, value));
+                pendingExpressions = undefined;
             }
-            else {
-                context.hoistVariableDeclaration(name);
-                emitExpression(createAssignment(name, value, location));
-            }
-            return name;
-        }
-
-        function emitExpression(expression: Expression) {
-            pendingExpressions = append(pendingExpressions, expression);
+            pendingDeclarations.push({ pendingExpressions, name: <BindingName>target, value, location, original });
         }
     }
 
-    function flattenEffectiveBindingElement(
-        context: TransformationContext,
-        bindingElement: EffectiveBindingElement,
-        boundValue: Expression | undefined,
-        skipInitializer: boolean,
-        emitAssignment: (target: Expression, value: Expression, location: TextRange, original: Node) => void,
-        emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
-        emitExpression: (value: Expression) => void,
-        visitor: ((node: Node) => VisitResult<Node>) | undefined,
-        location: TextRange) {
-
+    /**
+     * Flattens a BindingOrAssignmentElement into zero or more bindings or assignments.
+     *
+     * @param flattenContext Options used to control flattening.
+     * @param element The element to flatten.
+     * @param value The current RHS value to assign to the element.
+     * @param location The location to use for source maps and comments.
+     * @param skipInitializer An optional value indicating whether to include the initializer
+     * for the element.
+     */
+    function flattenBindingOrAssignmentElement(
+        flattenContext: FlattenContext,
+        element: BindingOrAssignmentElement,
+        value: Expression | undefined,
+        location: TextRange,
+        skipInitializer?: boolean) {
         if (!skipInitializer) {
-            const initializer = visitNode(getInitializerOfEffectiveBindingElement(bindingElement), visitor, isExpression);
+            const initializer = visitNode(getInitializerOfBindingOrAssignmentElement(element), flattenContext.visitor, isExpression);
             if (initializer) {
                 // Combine value and initializer
-                boundValue = boundValue ? createDefaultValueCheck(boundValue, initializer, location, emitTempVariableAssignment) : initializer;
+                value = value ? createDefaultValueCheck(flattenContext, value, initializer, location) : initializer;
             }
-            else if (!boundValue) {
+            else if (!value) {
                 // Use 'void 0' in absence of value and initializer
-                boundValue = createVoidZero();
+                value = createVoidZero();
             }
         }
-
-        const bindingTarget = getTargetOfEffectiveBindingElement(bindingElement);
-        if (isEffectiveBindingPattern(bindingTarget)) {
-            const elements = getElementsOfEffectiveBindingPattern(bindingTarget);
-            const numElements = elements.length;
-            if (isEffectiveArrayBindingPattern(bindingTarget) && !isArrayLiteralExpression(boundValue)) {
-                // Read the elements of the iterable into an array
-                boundValue = emitTempVariableAssignment(
-                    createReadHelper(
-                        context,
-                        boundValue,
-                        numElements > 0 && isEffectiveBindingElementWithRest(elements[numElements - 1])
-                            ? undefined
-                            : numElements,
-                        location
-                    ),
-                    location
-                );
-            }
-            else if (numElements !== 1) {
-                // For anything other than a single-element destructuring we need to generate a temporary
-                // to ensure value is evaluated exactly once. Additionally, if we have zero elements
-                // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
-                // so in that case, we'll intentionally create that temporary.
-                const reuseIdentifierExpressions = !isDeclarationBindingElement(bindingElement) || numElements !== 0;
-                boundValue = ensureIdentifier(boundValue, reuseIdentifierExpressions, emitTempVariableAssignment, location);
-            }
-
-            if (isEffectiveObjectBindingPattern(bindingTarget)) {
-                for (const element of elements) {
-                    // Rewrite element to a declaration with an initializer that fetches property
-                    flattenEffectiveBindingElement(
-                        context,
-                        element,
-                        createDestructuringPropertyAccess(
-                            boundValue,
-                            getEffectivePropertyNameOfEffectiveBindingElement(element),
-                            emitTempVariableAssignment),
-                        /*skipInitializer*/ false,
-                        emitAssignment,
-                        emitTempVariableAssignment,
-                        emitExpression,
-                        visitor,
-                        /*location*/ element);
-                }
-            }
-            else {
-                for (let i = 0; i < numElements; i++) {
-                    const element = elements[i];
-                    if (isOmittedExpression(element)) {
-                        continue;
-                    }
-                    else if (!isEffectiveBindingElementWithRest(element)) {
-                        flattenEffectiveBindingElement(
-                            context,
-                            element,
-                            createElementAccess(boundValue, i),
-                            /*skipInitializer*/ false,
-                            emitAssignment,
-                            emitTempVariableAssignment,
-                            emitExpression,
-                            visitor,
-                            /*location*/ element);
-                    }
-                    else if (i === numElements - 1) {
-                        flattenEffectiveBindingElement(
-                            context,
-                            element,
-                            createArraySlice(boundValue, i),
-                            /*skipInitializer*/ false,
-                            emitAssignment,
-                            emitTempVariableAssignment,
-                            emitExpression,
-                            visitor,
-                            /*location*/ element);
-                    }
-                }
-            }
+        const bindingTarget = getTargetOfBindingOrAssignmentElement(element);
+        if (isObjectBindingOrAssignmentPattern(bindingTarget)) {
+            flattenObjectBindingOrAssignmentPattern(flattenContext, element, bindingTarget, value, location);
+        }
+        else if (isArrayBindingOrAssignmentPattern(bindingTarget)) {
+            flattenArrayBindingOrAssignmentPattern(flattenContext, element, bindingTarget, value, location);
         }
         else {
-            emitAssignment(bindingTarget, boundValue, location, /*original*/ bindingElement);
+            flattenContext.emitBindingOrAssignment(bindingTarget, value, location, /*original*/ element);
         }
     }
 
     /**
-     * Determines whether the BindingElement-like is a declaration
+     * Flattens an ObjectBindingOrAssignmentPattern into zero or more bindings or assignments.
+     *
+     * @param flattenContext Options used to control flattening.
+     * @param parent The parent element of the pattern.
+     * @param pattern The ObjectBindingOrAssignmentPattern to flatten.
+     * @param value The current RHS value to assign to the element.
+     * @param location The location to use for source maps and comments.
      */
-    function isDeclarationBindingElement(bindingElement: EffectiveBindingElement): bindingElement is VariableDeclaration | ParameterDeclaration | BindingElement {
-        switch (bindingElement.kind) {
-            case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.Parameter:
-            case SyntaxKind.BindingElement:
-                return true;
+    function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ObjectBindingOrAssignmentPattern, value: Expression, location: TextRange) {
+        const elements = getElementsOfBindingOrAssignmentPattern(pattern);
+        const numElements = elements.length;
+        if (numElements !== 1) {
+            // For anything other than a single-element destructuring we need to generate a temporary
+            // to ensure value is evaluated exactly once. Additionally, if we have zero elements
+            // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
+            // so in that case, we'll intentionally create that temporary.
+            const reuseIdentifierExpressions = !isDeclarationBindingElement(parent) || numElements !== 0;
+            value = ensureIdentifier(flattenContext, value, reuseIdentifierExpressions, location);
         }
-
-        return false;
-    }
-
-    /**
-     * Gets the initializer of a BindingElement-like element
-     */
-    function getInitializerOfEffectiveBindingElement(bindingElement: EffectiveBindingElement): Expression | undefined {
-        if (isDeclarationBindingElement(bindingElement)) {
-            // `1` in `let { a = 1 } = ...`
-            // `1` in `let { a: b = 1 } = ...`
-            // `1` in `let { a: {b} = 1 } = ...`
-            // `1` in `let { a: [b] = 1 } = ...`
-            // `1` in `let [a = 1] = ...`
-            // `1` in `let [{a} = 1] = ...`
-            // `1` in `let [[a] = 1] = ...`
-            return bindingElement.initializer;
-        }
-
-        if (isPropertyAssignment(bindingElement)) {
-            // `1` in `({ a: b = 1 } = ...)`
-            // `1` in `({ a: {b} = 1 } = ...)`
-            // `1` in `({ a: [b] = 1 } = ...)`
-            return isAssignmentExpression(bindingElement.initializer, /*excludeCompoundAssignment*/ true)
-                ? bindingElement.initializer.right
-                : undefined;
-        }
-
-        if (isShorthandPropertyAssignment(bindingElement)) {
-            // `1` in `({ a = 1 } = ...)`
-            return bindingElement.objectAssignmentInitializer;
-        }
-
-        if (isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
-            // `1` in `[a = 1] = ...`
-            // `1` in `[{a} = 1] = ...`
-            // `1` in `[[a] = 1] = ...`
-            return bindingElement.right;
-        }
-
-        if (isSpreadElementExpression(bindingElement) || isPartiallyEmittedExpression(bindingElement)) {
-            // Recovery consistent with existing emit.
-            return getInitializerOfEffectiveBindingElement(bindingElement.expression);
-        }
-    }
-
-    /**
-     * Gets the name of a BindingElement-like element
-     */
-    function getTargetOfEffectiveBindingElement(bindingElement: EffectiveBindingElement): EffectiveBindingTarget {
-        if (isDeclarationBindingElement(bindingElement)) {
-            // `a` in `let { a } = ...`
-            // `a` in `let { a = 1 } = ...`
-            // `b` in `let { a: b } = ...`
-            // `b` in `let { a: b = 1 } = ...`
-            // `{b}` in `let { a: {b} } = ...`
-            // `{b}` in `let { a: {b} = 1 } = ...`
-            // `[b]` in `let { a: [b] } = ...`
-            // `[b]` in `let { a: [b] = 1 } = ...`
-            // `a` in `let [a] = ...`
-            // `a` in `let [a = 1] = ...`
-            // `a` in `let [...a] = ...`
-            // `{a}` in `let [{a}] = ...`
-            // `{a}` in `let [{a} = 1] = ...`
-            // `[a]` in `let [[a]] = ...`
-            // `[a]` in `let [[a] = 1] = ...`
-            return <ObjectBindingPattern | ArrayBindingPattern | Identifier>bindingElement.name;
-        }
-
-        if (isObjectLiteralElementLike(bindingElement)) {
-            switch (bindingElement.kind) {
-                case SyntaxKind.PropertyAssignment:
-                    // `b` in `({ a: b } = ...)`
-                    // `b` in `({ a: b = 1 } = ...)`
-                    // `{b}` in `({ a: {b} } = ...)`
-                    // `{b}` in `({ a: {b} = 1 } = ...)`
-                    // `[b]` in `({ a: [b] } = ...)`
-                    // `[b]` in `({ a: [b] = 1 } = ...)`
-                    // `b.c` in `({ a: b.c } = ...)`
-                    // `b.c` in `({ a: b.c = 1 } = ...)`
-                    // `b[0]` in `({ a: b[0] } = ...)`
-                    // `b[0]` in `({ a: b[0] = 1 } = ...)`
-                    return getTargetOfEffectiveBindingElement(bindingElement.initializer);
-
-                case SyntaxKind.ShorthandPropertyAssignment:
-                    // `a` in `({ a } = ...)`
-                    // `a` in `({ a = 1 } = ...)`
-                    return bindingElement.name;
+        let bindingElements: BindingOrAssignmentElement[];
+        let computedTempVariables: Expression[];
+        for (let i = 0; i < numElements; i++) {
+            const element = elements[i];
+            if (!getRestIndicatorOfBindingOrAssignmentElement(element)) {
+                const propertyName = getPropertyNameOfBindingOrAssignmentElement(element);
+                if (flattenContext.level >= FlattenLevel.ObjectRest
+                    && !(element.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest))
+                    && !(getTargetOfBindingOrAssignmentElement(element).transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest))
+                    && !isComputedPropertyName(propertyName)) {
+                    bindingElements = append(bindingElements, element);
+                }
+                else {
+                    if (bindingElements) {
+                        flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+                        bindingElements = undefined;
+                    }
+                    const rhsValue = createDestructuringPropertyAccess(flattenContext, value, propertyName);
+                    if (isComputedPropertyName(propertyName)) {
+                        computedTempVariables = append(computedTempVariables, (rhsValue as ElementAccessExpression).argumentExpression);
+                    }
+                    flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, /*location*/ element);
+                }
             }
-
-            // no target
-            return undefined;
-        }
-
-        if (isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
-            // `a` in `[a = 1] = ...`
-            // `{a}` in `[{a} = 1] = ...`
-            // `[a]` in `[[a] = 1] = ...`
-            // `a.b` in `[a.b = 1] = ...`
-            // `a[0]` in `[a[0] = 1] = ...`
-            return getTargetOfEffectiveBindingElement(bindingElement.left);
-        }
-
-        if (isSpreadElementExpression(bindingElement) || isPartiallyEmittedExpression(bindingElement)) {
-            // `a` in `[...a] = ...`
-            return getTargetOfEffectiveBindingElement(bindingElement.expression);
-        }
-
-        // `a` in `[a] = ...`
-        // `{a}` in `[{a}] = ...`
-        // `[a]` in `[[a]] = ...`
-        // `a.b` in `[a.b] = ...`
-        // `a[0]` in `[a[0]] = ...`
-        return bindingElement;
-    }
-
-    /**
-     * Determines whether a BindingElement-like element is a rest element.
-     */
-    function isEffectiveBindingElementWithRest(bindingElement: EffectiveBindingElement) {
-        switch (bindingElement.kind) {
-            case SyntaxKind.Parameter:
-            case SyntaxKind.BindingElement:
-                // `...` in `let [...a] = ...`
-                return (<ParameterDeclaration | BindingElement>bindingElement).dotDotDotToken !== undefined;
-
-            case SyntaxKind.SpreadElementExpression:
-                // `...` in `[...a] = ...`
-                return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Gets the property name of a BindingElement-like element
-     */
-    function getEffectivePropertyNameOfEffectiveBindingElement(bindingElement: EffectiveBindingElement) {
-        switch (bindingElement.kind) {
-            case SyntaxKind.BindingElement:
-                // `a` in `let { a: b } = ...`
-                // `[a]` in `let { [a]: b } = ...`
-                // `"a"` in `let { "a": b } = ...`
-                // `1` in `let { 1: b } = ...`
-                if ((<BindingElement>bindingElement).propertyName) {
-                    return (<BindingElement>bindingElement).propertyName;
+            else if (i === numElements - 1) {
+                if (bindingElements) {
+                    flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+                    bindingElements = undefined;
                 }
+                const rhsValue = createRestCall(flattenContext.context, value, elements, computedTempVariables, pattern);
+                flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, element);
+            }
+        }
+        if (bindingElements) {
+            flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+        }
+    }
 
-                break;
+    /**
+     * Flattens an ArrayBindingOrAssignmentPattern into zero or more bindings or assignments.
+     *
+     * @param flattenContext Options used to control flattening.
+     * @param parent The parent element of the pattern.
+     * @param pattern The ArrayBindingOrAssignmentPattern to flatten.
+     * @param value The current RHS value to assign to the element.
+     * @param location The location to use for source maps and comments.
+     */
+    function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ArrayBindingOrAssignmentPattern, value: Expression, location: TextRange) {
+        const elements = getElementsOfBindingOrAssignmentPattern(pattern);
+        const numElements = elements.length;
+        if (flattenContext.level < FlattenLevel.ObjectRest && !isArrayLiteralExpression(value)) {
+            // Read the elements of the iterable into an array
+            value = ensureIdentifier(
+                flattenContext,
+                createReadHelper(
+                    flattenContext.context,
+                    value,
+                    numElements > 0 && getRestIndicatorOfBindingOrAssignmentElement(elements[numElements - 1])
+                        ? undefined
+                        : numElements,
+                    location
+                ),
+                /*reuseIdentifierExpressions*/ false,
+                location
+            );
+        }
+        else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)) {
+            // For anything other than a single-element destructuring we need to generate a temporary
+            // to ensure value is evaluated exactly once. Additionally, if we have zero elements
+            // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
+            // so in that case, we'll intentionally create that temporary.
+            const reuseIdentifierExpressions = !isDeclarationBindingElement(parent) || numElements !== 0;
+            value = ensureIdentifier(flattenContext, value, reuseIdentifierExpressions, location);
+        }
+        let bindingElements: BindingOrAssignmentElement[];
+        let restContainingElements: [Identifier, BindingOrAssignmentElement][];
+        for (let i = 0; i < numElements; i++) {
+            const element = elements[i];
+            if (flattenContext.level >= FlattenLevel.ObjectRest) {
+                // If an array pattern contains an ObjectRest, we must cache the result so that we
+                // can perform the ObjectRest destructuring in a different declaration
+                if (element.transformFlags & TransformFlags.ContainsObjectRest) {
+                    const temp = createTempVariable(/*recordTempVariable*/ undefined);
+                    if (flattenContext.hoistTempVariables) {
+                        flattenContext.context.hoistVariableDeclaration(temp);
+                    }
 
-            case SyntaxKind.PropertyAssignment:
-                // `a` in `({ a: b } = ...)`
-                // `[a]` in `({ [a]: b } = ...)`
-                // `"a"` in `({ "a": b } = ...)`
-                // `1` in `({ 1: b } = ...)`
-                if ((<PropertyAssignment>bindingElement).name) {
-                    return (<PropertyAssignment>bindingElement).name;
+                    restContainingElements = append(restContainingElements, <[Identifier, BindingOrAssignmentElement]>[temp, element]);
+                    bindingElements = append(bindingElements, flattenContext.createArrayBindingOrAssignmentElement(temp));
                 }
-
-                break;
+                else {
+                    bindingElements = append(bindingElements, element);
+                }
+            }
+            else if (isOmittedExpression(element)) {
+                continue;
+            }
+            else if (!getRestIndicatorOfBindingOrAssignmentElement(element)) {
+                const rhsValue = createElementAccess(value, i);
+                flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, /*location*/ element);
+            }
+            else if (i === numElements - 1) {
+                const rhsValue = createArraySlice(value, i);
+                flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, /*location*/ element);
+            }
         }
-
-        const target = getTargetOfEffectiveBindingElement(bindingElement);
-        if (target && isPropertyName(target)) {
-            return target;
+        if (bindingElements) {
+            flattenContext.emitBindingOrAssignment(flattenContext.createArrayBindingOrAssignmentPattern(bindingElements), value, location, pattern);
         }
-
-        Debug.fail("Invalid property name for binding element.");
-    }
-
-    /**
-     * Determines whether a node is BindingPattern-like
-     */
-    function isEffectiveBindingPattern(node: EffectiveBindingTarget): node is EffectiveBindingPattern {
-        return isEffectiveObjectBindingPattern(node)
-            || isEffectiveArrayBindingPattern(node);
-    }
-
-    /**
-     * Determines whether a node is ObjectBindingPattern-like
-     */
-    function isEffectiveObjectBindingPattern(node: EffectiveBindingTarget): node is EffectiveObjectBindingPattern {
-        switch (node.kind) {
-            case SyntaxKind.ObjectBindingPattern:
-            case SyntaxKind.ObjectLiteralExpression:
-                return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Determines whether a node is ArrayBindingPattern-like
-     */
-    function isEffectiveArrayBindingPattern(node: EffectiveBindingTarget): node is EffectiveArrayBindingPattern {
-        switch (node.kind) {
-            case SyntaxKind.ArrayBindingPattern:
-            case SyntaxKind.ArrayLiteralExpression:
-                return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Gets the elements of a BindingPattern-like name
-     */
-    function getElementsOfEffectiveBindingPattern(name: EffectiveBindingPattern): EffectiveBindingElement[] {
-        switch (name.kind) {
-            case SyntaxKind.ObjectBindingPattern:
-            case SyntaxKind.ArrayBindingPattern:
-                // `a` in `{a}`
-                // `a` in `[a]`
-                return name.elements;
-
-            case SyntaxKind.ObjectLiteralExpression:
-                // `a` in `{a}`
-                return name.properties;
-
-            case SyntaxKind.ArrayLiteralExpression:
-                // `a` in `[a]`
-                return name.elements;
+        if (restContainingElements) {
+            for (const [id, element] of restContainingElements) {
+                flattenBindingOrAssignmentElement(flattenContext, element, id, element);
+            }
         }
     }
 
     /**
      * Creates an expression used to provide a default value if a value is `undefined` at runtime.
+     *
+     * @param flattenContext Options used to control flattening.
+     * @param value The RHS value to test.
+     * @param defaultValue The default value to use if `value` is `undefined` at runtime.
+     * @param location The location to use for source maps and comments.
      */
-    function createDefaultValueCheck(value: Expression, defaultValue: Expression, location: TextRange, emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier): Expression {
-        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, emitTempVariableAssignment, location);
-        return createConditional(
-            createStrictEquality(value, createVoidZero()),
-            createToken(SyntaxKind.QuestionToken),
-            defaultValue,
-            createToken(SyntaxKind.ColonToken),
-            value
-        );
+    function createDefaultValueCheck(flattenContext: FlattenContext, value: Expression, defaultValue: Expression, location: TextRange): Expression {
+        value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
+        return createConditional(createTypeCheck(value, "undefined"), defaultValue, value);
     }
 
     /**
      * Creates either a PropertyAccessExpression or an ElementAccessExpression for the
      * right-hand side of a transformed destructuring assignment.
      *
-     * @param expression The right-hand expression that is the source of the property.
+     * @link https://tc39.github.io/ecma262/#sec-runtime-semantics-keyeddestructuringassignmentevaluation
+     *
+     * @param flattenContext Options used to control flattening.
+     * @param value The RHS value that is the source of the property.
      * @param propertyName The destructuring property name.
-     * @param emitTempVariableAssignment A callback used to emit a temporary variable.
      */
-    function createDestructuringPropertyAccess(expression: Expression, propertyName: PropertyName, emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier): LeftHandSideExpression {
+    function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
         if (isComputedPropertyName(propertyName)) {
-            const argumentExpression = ensureIdentifier(propertyName.expression, /*reuseIdentifierExpressions*/ false, emitTempVariableAssignment, /*location*/ propertyName);
-            return createElementAccess(expression, argumentExpression);
+            const argumentExpression = ensureIdentifier(flattenContext, propertyName.expression, /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
+            return createElementAccess(value, argumentExpression);
         }
-        else if (isLiteralExpression(propertyName)) {
+        else if (isStringOrNumericLiteral(propertyName)) {
             const argumentExpression = getSynthesizedClone(propertyName);
             argumentExpression.text = unescapeIdentifier(argumentExpression.text);
-            return createElementAccess(expression, argumentExpression);
-        }
-        else if (isGeneratedIdentifier(propertyName)) {
-            const name = getSynthesizedClone(propertyName);
-            name.text = unescapeIdentifier(name.text);
-            return createPropertyAccess(expression, name);
+            return createElementAccess(value, argumentExpression);
         }
         else {
             const name = createIdentifier(unescapeIdentifier(propertyName.text));
-            return createPropertyAccess(expression, name);
+            return createPropertyAccess(value, name);
         }
     }
 
@@ -609,23 +418,96 @@ namespace ts {
      * This function is useful to ensure that the expression's value can be read from in subsequent expressions.
      * Unless 'reuseIdentifierExpressions' is false, 'value' will be returned if it is just an identifier.
      *
+     * @param flattenContext Options used to control flattening.
      * @param value the expression whose value needs to be bound.
      * @param reuseIdentifierExpressions true if identifier expressions can simply be returned;
      * false if it is necessary to always emit an identifier.
-     * @param emitTempVariableAssignment A callback used to emit a temporary variable.
      * @param location The location to use for source maps and comments.
      */
-    function ensureIdentifier(
-        value: Expression,
-        reuseIdentifierExpressions: boolean,
-        emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
-        location: TextRange) {
-
+    function ensureIdentifier(flattenContext: FlattenContext, value: Expression, reuseIdentifierExpressions: boolean, location: TextRange) {
         if (isIdentifier(value) && reuseIdentifierExpressions) {
             return value;
         }
         else {
-            return emitTempVariableAssignment(value, location);
+            const temp = createTempVariable(/*recordTempVariable*/ undefined);
+            if (flattenContext.hoistTempVariables) {
+                flattenContext.context.hoistVariableDeclaration(temp);
+                flattenContext.emitExpression(createAssignment(temp, value, location));
+            }
+            else {
+                flattenContext.emitBindingOrAssignment(temp, value, location, /*original*/ undefined);
+            }
+            return temp;
         }
+    }
+
+    function makeArrayBindingPattern(elements: BindingOrAssignmentElement[]) {
+        Debug.assertEachNode(elements, isArrayBindingElement);
+        return createArrayBindingPattern(<ArrayBindingElement[]>elements);
+    }
+
+    function makeArrayAssignmentPattern(elements: BindingOrAssignmentElement[]) {
+        return createArrayLiteral(map(elements, convertToArrayAssignmentElement));
+    }
+
+    function makeObjectBindingPattern(elements: BindingOrAssignmentElement[]) {
+        Debug.assertEachNode(elements, isBindingElement);
+        return createObjectBindingPattern(<BindingElement[]>elements);
+    }
+
+    function makeObjectAssignmentPattern(elements: BindingOrAssignmentElement[]) {
+        return createObjectLiteral(map(elements, convertToObjectAssignmentElement));
+    }
+
+    function makeBindingElement(name: Identifier) {
+        return createBindingElement(/*propertyName*/ undefined, /*dotDotDotToken*/ undefined, name);
+    }
+
+    function makeAssignmentElement(name: Identifier) {
+        return name;
+    }
+
+    const restHelper: EmitHelper = {
+        name: "typescript:rest",
+        scoped: false,
+        text: `
+            var __rest = (this && this.__rest) || function (s, e) {
+                var t = {};
+                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+                    t[p] = s[p];
+                if (typeof Object.getOwnPropertySymbols === "function")
+                    for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+                        t[p[i]] = s[p[i]];
+                return t;
+            };`
+    };
+
+    /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
+     * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`*/
+    function createRestCall(context: TransformationContext, value: Expression, elements: BindingOrAssignmentElement[], computedTempVariables: Expression[], location: TextRange): Expression {
+        context.requestEmitHelper(restHelper);
+        const propertyNames: Expression[] = [];
+        let computedTempVariableOffset = 0;
+        for (let i = 0; i < elements.length - 1; i++) {
+            const propertyName = getPropertyNameOfBindingOrAssignmentElement(elements[i]);
+            if (propertyName) {
+                if (isComputedPropertyName(propertyName)) {
+                    const temp = computedTempVariables[computedTempVariableOffset];
+                    computedTempVariableOffset++;
+                    // typeof _tmp === "symbol" ? _tmp : _tmp + ""
+                    propertyNames.push(
+                        createConditional(
+                            createTypeCheck(temp, "symbol"),
+                            temp,
+                            createAdd(temp, createLiteral(""))
+                        )
+                    );
+                }
+                else {
+                    propertyNames.push(createLiteral(propertyName));
+                }
+            }
+        }
+        return createCall(getHelperName("__rest"), undefined, [value, createArrayLiteral(propertyNames, location)]);
     }
 }

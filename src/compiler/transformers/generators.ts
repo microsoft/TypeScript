@@ -227,7 +227,7 @@ namespace ts {
 
     export function transformGenerators(context: TransformationContext) {
         const {
-            startLexicalEnvironment,
+            resumeLexicalEnvironment,
             endLexicalEnvironment,
             hoistFunctionDeclaration,
             hoistVariableDeclaration
@@ -450,11 +450,11 @@ namespace ts {
                 node = setOriginalNode(
                     createFunctionDeclaration(
                         /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
+                        node.modifiers,
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
-                        node.parameters,
+                        visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body),
                         /*location*/ node
@@ -501,7 +501,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
-                        node.parameters,
+                        visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body),
                         /*location*/ node
@@ -579,7 +579,7 @@ namespace ts {
             state = createTempVariable(/*recordTempVariable*/ undefined);
 
             // Build the generator
-            startLexicalEnvironment();
+            resumeLexicalEnvironment();
 
             const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
@@ -947,7 +947,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression) {
-            return visitElements(node.elements, node.multiLine);
+            return visitElements(node.elements, /*leadingElement*/ undefined, /*location*/ undefined, node.multiLine);
         }
 
         /**
@@ -957,7 +957,7 @@ namespace ts {
          * @param elements The elements to visit.
          * @param multiLine Whether array literals created should be emitted on multiple lines.
          */
-        function visitElements(elements: NodeArray<Expression>, _multiLine?: boolean) {
+        function visitElements(elements: NodeArray<Expression>, leadingElement?: Expression, location?: TextRange, multiLine?: boolean) {
             // [source]
             //      ar = [1, yield, 2];
             //
@@ -973,17 +973,21 @@ namespace ts {
             let temp: Identifier;
             if (numInitialElements > 0) {
                 temp = declareLocal();
+                const initialElements = visitNodes(elements, visitor, isExpression, 0, numInitialElements);
                 emitAssignment(temp,
                     createArrayLiteral(
-                        visitNodes(elements, visitor, isExpression, 0, numInitialElements)
+                        leadingElement
+                            ? [leadingElement, ...initialElements]
+                            : initialElements
                     )
                 );
+                leadingElement = undefined;
             }
 
             const expressions = reduceLeft(elements, reduceElement, <Expression[]>[], numInitialElements);
             return temp
-                ? createArrayConcat(temp, [createArrayLiteral(expressions)])
-                : createArrayLiteral(expressions);
+                ? createArrayConcat(temp, [createArrayLiteral(expressions, /*location*/ undefined, multiLine)])
+                : createArrayLiteral(leadingElement ? [leadingElement, ...expressions] : expressions, location, multiLine);
 
             function reduceElement(expressions: Expression[], element: Expression) {
                 if (containsYield(element) && expressions.length > 0) {
@@ -997,10 +1001,15 @@ namespace ts {
                         hasAssignedTemp
                             ? createArrayConcat(
                                 temp,
-                                [createArrayLiteral(expressions)]
+                                [createArrayLiteral(expressions, /*location*/ undefined, multiLine)]
                             )
-                            : createArrayLiteral(expressions)
+                            : createArrayLiteral(
+                                leadingElement ? [leadingElement, ...expressions] : expressions,
+                                /*location*/ undefined,
+                                multiLine
+                            )
                     );
+                    leadingElement = undefined;
                     expressions = [];
                 }
 
@@ -1136,7 +1145,10 @@ namespace ts {
                         createFunctionApply(
                             cacheExpression(visitNode(target, visitor, isExpression)),
                             thisArg,
-                            visitElements(node.arguments)
+                            visitElements(
+                                node.arguments,
+                                /*leadingElement*/ createVoidZero()
+                            )
                         ),
                         /*typeArguments*/ undefined,
                         [],

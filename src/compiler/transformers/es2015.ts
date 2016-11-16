@@ -466,8 +466,8 @@ namespace ts {
                 case SyntaxKind.YieldExpression:
                     return visitYieldExpression(<YieldExpression>node);
 
-                case SyntaxKind.SpreadElementExpression:
-                    return visitSpreadElementExpression(<SpreadElementExpression>node);
+                case SyntaxKind.SpreadElement:
+                    return visitSpreadElement(<SpreadElement>node);
 
                 case SyntaxKind.SuperKeyword:
                     return visitSuperKeyword();
@@ -842,14 +842,14 @@ namespace ts {
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function transformConstructorParameters(constructor: ConstructorDeclaration, hasSynthesizedSuper: boolean): ParameterDeclaration[] {
+        function transformConstructorParameters(constructor: ConstructorDeclaration, hasSynthesizedSuper: boolean) {
             // If the TypeScript transformer needed to synthesize a constructor for property
             // initializers, it would have also added a synthetic `...args` parameter and
             // `super` call.
             // If this is the case, we do not include the synthetic `...args` parameter and
             // will instead use the `arguments` object in ES5/3.
             return visitParameterList(constructor && !hasSynthesizedSuper && constructor.parameters, visitor, context)
-                || [];
+                || <ParameterDeclaration[]>[];
         }
 
         /**
@@ -1029,7 +1029,20 @@ namespace ts {
 
             // Return the result if we have an immediate super() call on the last statement.
             if (superCallExpression && statementOffset === ctorStatements.length - 1) {
-                statements.push(createReturn(superCallExpression));
+                const returnStatement = createReturn(superCallExpression);
+
+                if (superCallExpression.kind !== SyntaxKind.BinaryExpression
+                    || (superCallExpression as BinaryExpression).left.kind !== SyntaxKind.CallExpression) {
+                    Debug.fail("Assumed generated super call would have form 'super.call(...) || this'.");
+                }
+
+                // Shift comments from the original super call to the return statement.
+                setCommentRange(returnStatement, getCommentRange(
+                    setEmitFlags(
+                        (superCallExpression as BinaryExpression).left,
+                        EmitFlags.NoComments)));
+
+                statements.push(returnStatement);
                 return SuperCaptureResult.ReplaceWithReturn;
             }
 
@@ -1163,12 +1176,13 @@ namespace ts {
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList(
-                                flattenDestructuring(
-                                    context,
+                                flattenDestructuringBinding(
                                     parameter,
-                                    temp,
-                                    /*recordTempVariablesInLine*/ true,
-                                    visitor)
+                                    visitor,
+                                    context,
+                                    FlattenLevel.All,
+                                    temp
+                                )
                             )
                         ),
                         EmitFlags.CustomPrologue
@@ -1201,10 +1215,7 @@ namespace ts {
         function addDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
             initializer = visitNode(initializer, visitor, isExpression);
             const statement = createIf(
-                createStrictEquality(
-                    getSynthesizedClone(name),
-                    createVoidZero()
-                ),
+                createTypeCheck(getSynthesizedClone(name), "undefined"),
                 setEmitFlags(
                     createBlock([
                         createStatement(
@@ -1603,13 +1614,11 @@ namespace ts {
             let statementsLocation: TextRange;
             let closeBraceLocation: TextRange;
 
-            let statements: Statement[] = [];
-            let statementOffset: number;
+            const statements: Statement[] = [];
             const body = node.body;
+            let statementOffset: number;
 
-            // Resume the lexical environment and iterator scope started in visitParameterList
             resumeLexicalEnvironment();
-
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
@@ -1663,21 +1672,15 @@ namespace ts {
                 closeBraceLocation = body;
             }
 
-            const declarations = endLexicalEnvironment();
-            addRange(statements, declarations);
+            const lexicalEnvironment = context.endLexicalEnvironment();
+            addRange(statements, lexicalEnvironment);
 
             // If we added any final generated statements, this must be a multi-line block
-            if (some(declarations)) {
+            if (!multiLine && lexicalEnvironment && lexicalEnvironment.length) {
                 multiLine = true;
             }
 
-            const block = createBlock(
-                createNodeArray(statements, statementsLocation),
-                node.body,
-                multiLine);
-
-            setOriginalNode(block, node.body);
-
+            const block = createBlock(createNodeArray(statements, statementsLocation), node.body, multiLine);
             if (!multiLine && singleLine) {
                 setEmitFlags(block, EmitFlags.SingleLine);
             }
@@ -1686,6 +1689,7 @@ namespace ts {
                 setTokenSourceMapRange(block, SyntaxKind.CloseBraceToken, closeBraceLocation);
             }
 
+            setOriginalNode(block, node.body);
             return block;
         }
 
@@ -1698,16 +1702,10 @@ namespace ts {
             // If we are here it is most likely because our expression is a destructuring assignment.
             switch (node.expression.kind) {
                 case SyntaxKind.ParenthesizedExpression:
-                    return updateStatement(node,
-                        visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false)
-                    );
-
+                    return updateStatement(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
                 case SyntaxKind.BinaryExpression:
-                    return updateStatement(node,
-                        visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false)
-                    );
+                    return updateStatement(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
             }
-
             return visitEachChild(node, visitor, context);
         }
 
@@ -1726,19 +1724,11 @@ namespace ts {
                 // we pass that information along to the children that care about it.
                 switch (node.expression.kind) {
                     case SyntaxKind.ParenthesizedExpression:
-                        return updateParen(
-                            node,
-                            visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false)
-                        );
-
+                        return updateParen(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
                     case SyntaxKind.BinaryExpression:
-                        return updateParen(
-                            node,
-                            visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false)
-                        );
+                        return updateParen(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
                 }
             }
-
             return visitEachChild(node, visitor, context);
         }
 
@@ -1752,15 +1742,13 @@ namespace ts {
         function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
             // If we are here it is because this is a destructuring assignment.
             if (isDestructuringAssignment(node)) {
-                return flattenDestructuringToExpression(
-                    context,
+                return flattenDestructuringAssignment(
                     <DestructuringAssignment>node,
-                    needsDestructuringValue,
-                    createAssignment,
-                    visitor
-                );
+                    visitor,
+                    context,
+                    FlattenLevel.All,
+                    needsDestructuringValue);
             }
-
             return visitEachChild(node, visitor, context);
         }
 
@@ -1773,12 +1761,12 @@ namespace ts {
                     if (decl.initializer) {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
-                            assignment = flattenDestructuringToExpression(
-                                context,
+                            assignment = flattenDestructuringAssignment(
                                 decl,
-                                /*needsValue*/ false,
-                                createAssignment,
-                                visitor);
+                                visitor,
+                                context,
+                                FlattenLevel.All
+                            );
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
@@ -1931,14 +1919,16 @@ namespace ts {
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern.
             if (isBindingPattern(node.name)) {
-                const recordTempVariablesInLine = !enclosingVariableStatement
-                    || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
-                return flattenDestructuring(
-                    context,
+                const hoistTempVariables = enclosingVariableStatement
+                    && hasModifier(enclosingVariableStatement, ModifierFlags.Export);
+                return flattenDestructuringBinding(
                     node,
+                    visitor,
+                    context,
+                    FlattenLevel.All,
                     /*value*/ undefined,
-                    recordTempVariablesInLine,
-                    visitor);
+                    hoistTempVariables
+                );
             }
 
             return visitEachChild(node, visitor, context);
@@ -1957,6 +1947,7 @@ namespace ts {
 
             let result: VisitResult<Statement>;
             if (isIterationStatement(enclosedStatement.statement, /*lookInLabeledStatements*/ false)) {
+                const savedEnclosingLabeledStatements = enclosingLabeledStatements;
                 enclosingLabeledStatements = enclosedStatement.enclosingLabeledStatements;
                 if (shouldConvertIterationStatementBody(enclosedStatement.statement)) {
                     result = visitNodes(createNodeArray([enclosedStatement.statement]), visitor, isStatement);
@@ -1966,6 +1957,8 @@ namespace ts {
                     result = restoreEnclosingLabels(visitNode(enclosedStatement.statement, visitor, isStatement), enclosingLabeledStatements);
                     enclosingLabeledStatements = undefined;
                 }
+
+                enclosingLabeledStatements = savedEnclosingLabeledStatements;
             }
             else {
                 result = restoreEnclosingLabels(visitNode(enclosedStatement.statement, visitor, isStatement), enclosedStatement.enclosingLabeledStatements);
@@ -2015,12 +2008,12 @@ namespace ts {
                 if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
                     // This works whether the declaration is a var, let, or const.
                     // It will use rhsIterationValue _a[_i] as the initializer.
-                    const declarations = flattenDestructuring(
-                        context,
+                    const declarations = flattenDestructuringBinding(
                         firstOriginalDeclaration,
-                        boundValue,
-                        /*recordTempVariablesInLine*/ true,
-                        visitor
+                        visitor,
+                        context,
+                        FlattenLevel.All,
+                        boundValue
                     );
 
                     const declarationList = createVariableDeclarationList(declarations, /*location*/ node.initializer);
@@ -2888,13 +2881,13 @@ namespace ts {
 
             const temp = createTempVariable(undefined);
             const newVariableDeclaration = createVariableDeclaration(temp, undefined, undefined, node.variableDeclaration);
-
-            const vars = flattenDestructuring(
-                context,
+            const vars = flattenDestructuringBinding(
                 node.variableDeclaration,
-                temp,
-                /*recordTempVariablesInLine*/ true,
-                visitor);
+                visitor,
+                context,
+                FlattenLevel.All,
+                temp
+            );
             const list = createVariableDeclarationList(vars, /*location*/ node.variableDeclaration, /*flags*/ node.variableDeclaration.flags);
             const destructure = createVariableStatement(undefined, list);
 
@@ -2981,7 +2974,7 @@ namespace ts {
                 setEmitFlags(thisArg, EmitFlags.NoSubstitution);
             }
             let resultingCall: CallExpression | BinaryExpression;
-            if (node.transformFlags & TransformFlags.ContainsSpreadElementExpression) {
+            if (node.transformFlags & TransformFlags.ContainsSpread) {
                 // [source]
                 //      f(...a, b)
                 //      x.m(...a, b)
@@ -3043,7 +3036,7 @@ namespace ts {
          */
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
             // We are here because we contain a SpreadElementExpression.
-            Debug.assert((node.transformFlags & TransformFlags.ContainsSpreadElementExpression) !== 0);
+            Debug.assert((node.transformFlags & TransformFlags.ContainsSpread) !== 0);
 
             // [source]
             //      new C(...a)
@@ -3064,7 +3057,7 @@ namespace ts {
         }
 
         /**
-         * Transforms an array of Expression nodes that contains a SpreadElementExpression.
+         * Transforms an array of Expression nodes that contains a SpreadExpression.
          *
          * @param elements The array of Expression nodes.
          * @param needsUniqueCopy A value indicating whether to ensure that the result is a fresh array.
@@ -3081,7 +3074,7 @@ namespace ts {
             // expressions into an array literal.
             const numElements = elements.length;
             const segments = flatten(
-                spanMap(elements, partitionSpreadElement, (partition, visitPartition, _start, end) =>
+                spanMap(elements, partitionSpread, (partition, visitPartition, _start, end) =>
                     visitPartition(partition, multiLine, hasTrailingComma && end === numElements)
                 )
             );
@@ -3099,17 +3092,17 @@ namespace ts {
             return createSpreadHelper(context, segments);
         }
 
-        function partitionSpreadElement(node: Expression) {
-            return isSpreadElementExpression(node)
-                ? visitSpanOfSpreadElements
-                : visitSpanOfNonSpreadElements;
+        function partitionSpread(node: Expression) {
+            return isSpreadExpression(node)
+                ? visitSpanOfSpreads
+                : visitSpanOfNonSpreads;
         }
 
-        function visitSpanOfSpreadElements(chunk: Expression[]): VisitResult<Expression> {
-            return map(chunk, visitSpreadElementExpression);
+        function visitSpanOfSpreads(chunk: Expression[]): VisitResult<Expression> {
+            return map(chunk, visitExpressionOfSpread);
         }
 
-        function visitSpanOfNonSpreadElements(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
+        function visitSpanOfNonSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
             return createArrayLiteral(
                 visitNodes(createNodeArray(chunk, /*location*/ undefined, hasTrailingComma), visitor, isExpression),
                 /*location*/ undefined,
@@ -3117,12 +3110,16 @@ namespace ts {
             );
         }
 
+        function visitSpreadElement(node: SpreadElement) {
+            return visitNode(node.expression, visitor, isExpression);
+        }
+
         /**
-         * Transforms the expression of a SpreadElementExpression node.
+         * Transforms the expression of a SpreadExpression node.
          *
-         * @param node A SpreadElementExpression node.
+         * @param node A SpreadExpression node.
          */
-        function visitSpreadElementExpression(node: SpreadElementExpression) {
+        function visitExpressionOfSpread(node: SpreadElement) {
             return visitNode(node.expression, visitor, isExpression);
         }
 
@@ -3484,11 +3481,11 @@ namespace ts {
             }
 
             const callArgument = singleOrUndefined((<CallExpression>statementExpression).arguments);
-            if (!callArgument || !nodeIsSynthesized(callArgument) || callArgument.kind !== SyntaxKind.SpreadElementExpression) {
+            if (!callArgument || !nodeIsSynthesized(callArgument) || callArgument.kind !== SyntaxKind.SpreadElement) {
                 return false;
             }
 
-            const expression = (<SpreadElementExpression>callArgument).expression;
+            const expression = (<SpreadElement>callArgument).expression;
             return isIdentifier(expression) && expression.text === "arguments";
         }
     }

@@ -1814,6 +1814,27 @@ namespace ts.server.protocol {
         event: "configFileDiag";
     }
 
+    export type ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
+    export interface ProjectLanguageServiceStateEvent extends Event {
+        event: ProjectLanguageServiceStateEventName;
+        body?: ProjectLanguageServiceStateEventBody;
+    }
+
+    export interface ProjectLanguageServiceStateEventBody {
+        /**
+         * Project name that has changes in the state of language service.
+         * For configured projects this will be the config file path.
+         * For external projects this will be the name of the projects specified when project was open.
+         * For inferred projects this event is not raised.
+         */
+        projectName: string;
+        /**
+         * True if language service state switched from disabled to enabled
+         * and false otherwise.
+         */
+        languageServiceEnabled: boolean;
+    }
+
     /**
       * Arguments for reload request.
       */
@@ -2081,6 +2102,15 @@ namespace ts.server.protocol {
          * Comma separated list of installed typing packages
          */
         installedPackages: string;
+        /**
+         * true if install request succeeded, otherwise - false
+         */
+        installSuccess: boolean;
+
+        /**
+         * version of typings installer
+         */
+        typingsInstallerVersion: string;
     }
 
     export interface NavBarResponse extends Response {

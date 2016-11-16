@@ -32,12 +32,6 @@ namespace ts {
         let enabledSubstitutions: ES2017SubstitutionFlags;
 
         /**
-         * Keeps track of whether  we are within any containing namespaces when performing
-         * just-in-time substitution while printing an expression identifier.
-         */
-        let applicableSubstitutions: ES2017SubstitutionFlags;
-
-        /**
          * This keeps track of containers where `super` is valid, for use with
          * just-in-time substitution for `super` expressions inside of async methods.
          */
@@ -69,59 +63,59 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.ContainsES2017) {
-                switch (node.kind) {
-                    case SyntaxKind.AsyncKeyword:
-                        // ES2017 async modifier should be elided for targets < ES2017
-                        return undefined;
-
-                    case SyntaxKind.AwaitExpression:
-                        // ES2017 'await' expressions must be transformed for targets < ES2017.
-                        return visitAwaitExpression(<AwaitExpression>node);
-
-                    case SyntaxKind.YieldExpression:
-                        // ES2017 'yield' expressions in an async generator must be transformed
-                        // for targets < ES2017.
-                        return visitYieldExpression(<YieldExpression>node);
-
-                    case SyntaxKind.LabeledStatement:
-                        return visitLabeledStatement(<LabeledStatement>node);
-
-                    case SyntaxKind.ForOfStatement:
-                        // ES2017 'for-await-of' statements must be transformed for targets <
-                        // ES2017.
-                        return visitForOfStatement(<ForOfStatement>node, /*enclosingLabeledStatements*/ undefined);
-
-                    case SyntaxKind.MethodDeclaration:
-                        // ES2017 method declarations may be 'async'
-                        return visitMethodDeclaration(<MethodDeclaration>node);
-
-                    case SyntaxKind.FunctionDeclaration:
-                        // ES2017 function declarations may be 'async'
-                        return visitFunctionDeclaration(<FunctionDeclaration>node);
-
-                    case SyntaxKind.FunctionExpression:
-                        // ES2017 function expressions may be 'async'
-                        return visitFunctionExpression(<FunctionExpression>node);
-
-                    case SyntaxKind.ArrowFunction:
-                        // ES2017 arrow functions may be 'async'
-                        return visitArrowFunction(<ArrowFunction>node);
-
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetKeyword:
-                        const savedEnclosingFunctionFlags = enclosingFunctionFlags;
-                        enclosingFunctionFlags = getFunctionFlags(<FunctionLikeDeclaration>node);
-                        const visited = visitEachChild(node, visitor, context);
-                        enclosingFunctionFlags = savedEnclosingFunctionFlags;
-                        return visited;
-
-                    default:
-                        return visitEachChild(node, visitor, context);
-                }
+            if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
+                return node;
             }
-            return node;
+
+            switch (node.kind) {
+                case SyntaxKind.AsyncKeyword:
+                    // ES2017 async modifier should be elided for targets < ES2017
+                    return undefined;
+
+                case SyntaxKind.AwaitExpression:
+                    // ES2017 'await' expressions must be transformed for targets < ES2017.
+                    return visitAwaitExpression(<AwaitExpression>node);
+                case SyntaxKind.YieldExpression:
+                    // ES2017 'yield' expressions in an async generator must be transformed
+                    // for targets < ES2017.
+                    return visitYieldExpression(<YieldExpression>node);
+
+                case SyntaxKind.LabeledStatement:
+                    return visitLabeledStatement(<LabeledStatement>node);
+
+                case SyntaxKind.ForOfStatement:
+                    // ES2017 'for-await-of' statements must be transformed for targets <
+                    // ES2017.
+                    return visitForOfStatement(<ForOfStatement>node, /*enclosingLabeledStatements*/ undefined);
+
+                case SyntaxKind.MethodDeclaration:
+                    // ES2017 method declarations may be 'async'
+                    return visitMethodDeclaration(<MethodDeclaration>node);
+
+                case SyntaxKind.FunctionDeclaration:
+                    // ES2017 function declarations may be 'async'
+                    return visitFunctionDeclaration(<FunctionDeclaration>node);
+
+                case SyntaxKind.FunctionExpression:
+                    // ES2017 function expressions may be 'async'
+                    return visitFunctionExpression(<FunctionExpression>node);
+
+                case SyntaxKind.ArrowFunction:
+                    // ES2017 arrow functions may be 'async'
+                    return visitArrowFunction(<ArrowFunction>node);
+
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetKeyword:
+                    const savedEnclosingFunctionFlags = enclosingFunctionFlags;
+                    enclosingFunctionFlags = getFunctionFlags(<FunctionLikeDeclaration>node);
+                    const visited = visitEachChild(node, visitor, context);
+                    enclosingFunctionFlags = savedEnclosingFunctionFlags;
+                    return visited;
+
+                default:
+                    return visitEachChild(node, visitor, context);
+            }
         }
 
         /**
@@ -483,6 +477,8 @@ namespace ts {
         function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
         function transformAsyncFunctionBody(node: ArrowFunction): ConciseBody;
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+            resumeLexicalEnvironment();
+
             const original = getOriginalNode(node, isFunctionLike);
             const nodeType = original.type;
             const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
@@ -494,8 +490,6 @@ namespace ts {
             // `this` and `arguments` objects to `__awaiter`. The generator function
             // passed to `__awaiter` is executed inside of the callback to the
             // promise constructor.
-
-            resumeLexicalEnvironment();
 
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
@@ -541,9 +535,7 @@ namespace ts {
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
                     const block = convertToFunctionBody(expression);
-                    const statements = mergeLexicalEnvironment(block.statements, declarations);
-
-                    return updateBlock(block, statements);
+                    return updateBlock(block, createNodeArray(concatenate(block.statements, declarations), block.statements));
                 }
 
                 return expression;
@@ -552,15 +544,13 @@ namespace ts {
 
         function transformFunctionBodyWorker(body: ConciseBody, start?: number) {
             if (isBlock(body)) {
-                return updateBlock(
-                    body,
-                    visitLexicalEnvironment(body.statements, visitor, context, start));
+                return updateBlock(body, visitLexicalEnvironment(body.statements, visitor, context, start));
             }
             else {
                 startLexicalEnvironment();
                 const visited = convertToFunctionBody(visitNode(body, visitor, isConciseBody));
-                const statements = mergeLexicalEnvironment(visited.statements, endLexicalEnvironment());
-                return updateBlock(visited, statements);
+                const declarations = endLexicalEnvironment();
+                return updateBlock(visited, createNodeArray(concatenate(visited.statements, declarations), visited.statements));
             }
         }
 
@@ -679,18 +669,17 @@ namespace ts {
          * @param emit A callback used to emit the node in the printer.
          */
         function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
-            const savedApplicableSubstitutions = applicableSubstitutions;
-            const savedCurrentSuperContainer = currentSuperContainer;
             // If we need to support substitutions for `super` in an async method,
             // we should track it here.
             if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
+                const savedCurrentSuperContainer = currentSuperContainer;
                 currentSuperContainer = node;
+                previousOnEmitNode(emitContext, node, emitCallback);
+                currentSuperContainer = savedCurrentSuperContainer;
             }
-
-            previousOnEmitNode(emitContext, node, emitCallback);
-
-            applicableSubstitutions = savedApplicableSubstitutions;
-            currentSuperContainer = savedCurrentSuperContainer;
+            else {
+                previousOnEmitNode(emitContext, node, emitCallback);
+            }
         }
 
         /**
