@@ -166,6 +166,7 @@ namespace ts {
     export function transformES2015(context: TransformationContext) {
         const {
             startLexicalEnvironment,
+            resumeLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
         } = context;
@@ -822,17 +823,14 @@ namespace ts {
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function transformConstructorParameters(constructor: ConstructorDeclaration, hasSynthesizedSuper: boolean): ParameterDeclaration[] {
+        function transformConstructorParameters(constructor: ConstructorDeclaration, hasSynthesizedSuper: boolean) {
             // If the TypeScript transformer needed to synthesize a constructor for property
             // initializers, it would have also added a synthetic `...args` parameter and
             // `super` call.
             // If this is the case, we do not include the synthetic `...args` parameter and
             // will instead use the `arguments` object in ES5/3.
-            if (constructor && !hasSynthesizedSuper) {
-                return visitNodes(constructor.parameters, visitor, isParameter);
-            }
-
-            return [];
+            return visitParameterList(constructor && !hasSynthesizedSuper && constructor.parameters, visitor, context)
+                || <ParameterDeclaration[]>[];
         }
 
         /**
@@ -846,7 +844,7 @@ namespace ts {
          */
         function transformConstructorBody(constructor: ConstructorDeclaration | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
             const statements: Statement[] = [];
-            startLexicalEnvironment();
+            resumeLexicalEnvironment();
 
             let statementOffset = -1;
             if (hasSynthesizedSuper) {
@@ -1504,8 +1502,17 @@ namespace ts {
             if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
                 enableSubstitutionsForCapturedThis();
             }
-
-            const func = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
+            const func = createFunctionExpression(
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node),
+                node
+            );
+            setOriginalNode(func, node);
             setEmitFlags(func, EmitFlags.CapturesThis);
             return func;
         }
@@ -1516,7 +1523,17 @@ namespace ts {
          * @param node a FunctionExpression node.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            return transformFunctionLikeToExpression(node, /*location*/ node, node.name);
+            return updateFunctionExpression(
+                node,
+                /*modifiers*/ undefined,
+                node.name,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                node.transformFlags & TransformFlags.ES2015
+                    ? transformFunctionBody(node)
+                    : visitFunctionBody(node.body, visitor, context)
+            );
         }
 
         /**
@@ -1525,19 +1542,18 @@ namespace ts {
          * @param node a FunctionDeclaration node.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
-            return setOriginalNode(
-                createFunctionDeclaration(
-                    /*decorators*/ undefined,
-                    node.modifiers,
-                    node.asteriskToken,
-                    node.name,
-                    /*typeParameters*/ undefined,
-                    visitNodes(node.parameters, visitor, isParameter),
-                    /*type*/ undefined,
-                    transformFunctionBody(node),
-                    /*location*/ node
-                ),
-                /*original*/ node);
+            return updateFunctionDeclaration(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                node.name,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                node.transformFlags & TransformFlags.ES2015
+                    ? transformFunctionBody(node)
+                    : visitFunctionBody(node.body, visitor, context)
+            );
         }
 
         /**
@@ -1559,7 +1575,7 @@ namespace ts {
                     node.asteriskToken,
                     name,
                     /*typeParameters*/ undefined,
-                    visitNodes(node.parameters, visitor, isParameter),
+                    visitParameterList(node.parameters, visitor, context),
                     /*type*/ undefined,
                     saveStateAndInvoke(node, transformFunctionBody),
                     location
@@ -1586,7 +1602,7 @@ namespace ts {
             const body = node.body;
             let statementOffset: number;
 
-            context.startLexicalEnvironment();
+            resumeLexicalEnvironment();
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array

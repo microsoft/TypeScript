@@ -665,21 +665,40 @@ namespace ts {
         return updated || nodes;
     }
 
-    export function visitLexicalEnvironment(nodes: NodeArray<Statement>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment, start?: number) {
+    /**
+     * Starts a new lexical environment and visits a statement list, ending the lexical environment
+     * and merging hoisted declarations upon completion.
+     */
+    export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment, start?: number) {
         context.startLexicalEnvironment();
-        const updated = visitNodes(nodes, visitor, isStatement, start);
+        statements = visitNodes(statements, visitor, isStatement, start);
         const declarations = context.endLexicalEnvironment();
-        return createNodeArray(concatenate(updated, declarations), updated);
+        return createNodeArray(concatenate(statements, declarations), statements);
     }
 
+    /**
+     * Starts a new lexical environment and visits a parameter list, suspending the lexical
+     * environment upon completion.
+     */
     export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
         context.startLexicalEnvironment();
-        return visitNodes(nodes, visitor, isParameter);
+        const updated = visitNodes(nodes, visitor, isParameter);
+        context.suspendLexicalEnvironment();
+        return updated;
     }
 
+    /**
+     * Resumes a suspended lexical environment and visits a function body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
     export function visitFunctionBody(node: FunctionBody, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): FunctionBody;
+    /**
+     * Resumes a suspended lexical environment and visits a concise body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
     export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): ConciseBody;
     export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+        context.resumeLexicalEnvironment();
         const visited = visitNode(node, visitor, isConciseBody);
         const declarations = context.endLexicalEnvironment();
         if (some(declarations)) {

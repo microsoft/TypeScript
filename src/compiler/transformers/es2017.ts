@@ -14,6 +14,7 @@ namespace ts {
 
         const {
             startLexicalEnvironment,
+            resumeLexicalEnvironment,
             endLexicalEnvironment,
         } = context;
 
@@ -51,18 +52,14 @@ namespace ts {
             }
 
             currentSourceFileExternalHelpersModuleName = node.externalHelpersModuleName;
-
             return visitEachChild(node, visitor, context);
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.ContainsES2017) {
-                return visitorWorker(node);
+            if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
+                return node;
             }
-            return node;
-        }
 
-        function visitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.AsyncKeyword:
                     // ES2017 async modifier should be elided for targets < ES2017
@@ -149,7 +146,7 @@ namespace ts {
                 visitNodes(node.modifiers, visitor, isModifier),
                 node.name,
                 /*typeParameters*/ undefined,
-                visitNodes(node.parameters, visitor, isParameter),
+                visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
                 isAsyncFunctionLike(node)
                     ? transformAsyncFunctionBody(node)
@@ -174,7 +171,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 node.name,
                 /*typeParameters*/ undefined,
-                visitNodes(node.parameters, visitor, isParameter),
+                visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
                 isAsyncFunctionLike(node)
                     ? transformAsyncFunctionBody(node)
@@ -192,7 +189,7 @@ namespace ts {
                 node,
                 visitNodes(node.modifiers, visitor, isModifier),
                 /*typeParameters*/ undefined,
-                visitNodes(node.parameters, visitor, isParameter),
+                visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
                 isAsyncFunctionLike(node)
                     ? transformAsyncFunctionBody(node)
@@ -203,6 +200,8 @@ namespace ts {
         function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
         function transformAsyncFunctionBody(node: ArrowFunction): ConciseBody;
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+            resumeLexicalEnvironment();
+
             const original = getOriginalNode(node, isFunctionLike);
             const nodeType = original.type;
             const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;

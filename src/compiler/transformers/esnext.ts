@@ -5,11 +5,16 @@
 namespace ts {
     export function transformESNext(context: TransformationContext) {
         const {
+            resumeLexicalEnvironment,
             endLexicalEnvironment
         } = context;
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
             return visitEachChild(node, visitor, context);
         }
 
@@ -343,6 +348,7 @@ namespace ts {
         function transformFunctionBody(node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | AccessorDeclaration): FunctionBody;
         function transformFunctionBody(node: ArrowFunction): ConciseBody;
         function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+            resumeLexicalEnvironment();
             let leadingStatements: Statement[];
             for (const parameter of node.parameters) {
                 if (parameter.transformFlags & TransformFlags.ContainsObjectRest) {

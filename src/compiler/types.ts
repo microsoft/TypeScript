@@ -3681,6 +3681,9 @@ namespace ts {
         /** Starts a new lexical environment. */
         startLexicalEnvironment(): void;
 
+        suspendLexicalEnvironment(): void;
+        resumeLexicalEnvironment(): void;
+
         /** Ends a lexical environment, returning any declarations. */
         endLexicalEnvironment(): Statement[];
     }
