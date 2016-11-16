@@ -123,6 +123,10 @@ namespace ts.codefix {
             const name = token.getText();
             const symbolIdActionMap = new ImportCodeActionMap();
 
+            // this is a module id -> module import declaration map
+            const cachedImportDeclarations = createMap<(ImportDeclaration | ImportEqualsDeclaration)[]>();
+            let cachedNewImportInsertPosition: number;
+
             const allPotentialModules = checker.getAmbientModules();
             for (const otherSourceFile of allSourceFiles) {
                 if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
@@ -155,20 +159,13 @@ namespace ts.codefix {
 
             return symbolIdActionMap.getAllActions();
 
-            function getUniqueSymbolId(symbol: Symbol) {
-                if (symbol.flags & SymbolFlags.Alias) {
-                    return getSymbolId(checker.getAliasedSymbol(symbol));
+            function getImportDeclarations(moduleSymbol: Symbol) {
+                const moduleSymbolId = getUniqueSymbolId(moduleSymbol);
+
+                if (cachedImportDeclarations[moduleSymbolId]) {
+                    return cachedImportDeclarations[moduleSymbolId];
                 }
-                return getSymbolId(symbol);
-            }
 
-            function checkSymbolHasMeaning(symbol: Symbol, meaning: SemanticMeaning) {
-                const declarations = symbol.getDeclarations();
-                return declarations ? some(symbol.declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning)) : false;
-            }
-
-            function getCodeActionForImport(moduleSymbol: Symbol, isDefault?: boolean): ImportCodeAction[] {
-                // Check to see if there are already imports being made from this source in the current file
                 const existingDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[] = [];
                 for (const importModuleSpecifier of sourceFile.imports) {
                     const importSymbol = checker.getSymbolAtLocation(importModuleSpecifier);
@@ -176,14 +173,8 @@ namespace ts.codefix {
                         existingDeclarations.push(getImportDeclaration(importModuleSpecifier));
                     }
                 }
-
-                if (existingDeclarations.length > 0) {
-                    // With an existing import statement, there are more than one actions the user can do.
-                    return getCodeActionsForExistingImport(existingDeclarations);
-                }
-                else {
-                    return [getCodeActionForNewImport()];
-                }
+                cachedImportDeclarations[moduleSymbolId] = existingDeclarations;
+                return existingDeclarations;
 
                 function getImportDeclaration(moduleSpecifier: LiteralExpression) {
                     let node: Node = moduleSpecifier;
@@ -198,6 +189,31 @@ namespace ts.codefix {
                     }
                     return undefined;
                 }
+            }
+
+            function getUniqueSymbolId(symbol: Symbol) {
+                if (symbol.flags & SymbolFlags.Alias) {
+                    return getSymbolId(checker.getAliasedSymbol(symbol));
+                }
+                return getSymbolId(symbol);
+            }
+
+            function checkSymbolHasMeaning(symbol: Symbol, meaning: SemanticMeaning) {
+                const declarations = symbol.getDeclarations();
+                return declarations ? some(symbol.declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning)) : false;
+            }
+
+            function getCodeActionForImport(moduleSymbol: Symbol, isDefault?: boolean): ImportCodeAction[] {
+                const existingDeclarations = getImportDeclarations(moduleSymbol);
+                if (existingDeclarations.length > 0) {
+                    // With an existing import statement, there are more than one actions the user can do.
+                    return getCodeActionsForExistingImport(existingDeclarations);
+                }
+                else {
+                    return [getCodeActionForNewImport()];
+                }
+
+
 
                 function getCodeActionsForExistingImport(declarations: (ImportDeclaration | ImportEqualsDeclaration)[]): ImportCodeAction[] {
                     const actions: ImportCodeAction[] = [];
@@ -354,15 +370,17 @@ namespace ts.codefix {
                 }
 
                 function getCodeActionForNewImport(moduleSpecifier?: string): ImportCodeAction {
-                    // insert after any existing imports
-                    let lastModuleSpecifierEnd = -1;
-                    for (const moduleSpecifier of sourceFile.imports) {
-                        const end = moduleSpecifier.getEnd();
-                        if (!lastModuleSpecifierEnd || end > lastModuleSpecifierEnd) {
-                            lastModuleSpecifierEnd = end;
+                    if (!cachedNewImportInsertPosition) {
+                        // insert after any existing imports
+                        let lastModuleSpecifierEnd = -1;
+                        for (const moduleSpecifier of sourceFile.imports) {
+                            const end = moduleSpecifier.getEnd();
+                            if (!lastModuleSpecifierEnd || end > lastModuleSpecifierEnd) {
+                                lastModuleSpecifierEnd = end;
+                            }
                         }
+                        cachedNewImportInsertPosition = lastModuleSpecifierEnd > 0 ? sourceFile.getLineEndOfPosition(lastModuleSpecifierEnd) : sourceFile.getStart();
                     }
-                    const insertPos = lastModuleSpecifierEnd > 0 ? sourceFile.getLineEndOfPosition(lastModuleSpecifierEnd) : sourceFile.getStart();
 
                     const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
                     const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier || getModuleSpecifierForNewImport());
@@ -373,7 +391,7 @@ namespace ts.codefix {
                     // if this file doesn't have any import statements, insert an import statement and then insert a new line
                     // between the only import statement and user code. Otherwise just insert the statement because chances
                     // are there are already a new line seperating code and import statements.
-                    const newText = insertPos === sourceFile.getStart()
+                    const newText = cachedNewImportInsertPosition === sourceFile.getStart()
                         ? `${importStatementText};${context.newLineCharacter}${context.newLineCharacter}`
                         : `${context.newLineCharacter}${importStatementText};`;
 
@@ -381,7 +399,7 @@ namespace ts.codefix {
                         Diagnostics.Import_0_from_1,
                         [name, `"${moduleSpecifierWithoutQuotes}"`],
                         newText,
-                        { start: insertPos, length: 0 },
+                        { start: cachedNewImportInsertPosition, length: 0 },
                         sourceFile.fileName,
                         "NewImport",
                         moduleSpecifierWithoutQuotes
