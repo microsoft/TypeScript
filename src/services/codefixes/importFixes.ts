@@ -7,6 +7,110 @@ namespace ts.codefix {
         moduleSpecifier?: string
     }
 
+    enum ModuleSpecifierComparison {
+        Better,
+        Equal,
+        Worse
+    }
+
+    class ImportCodeActionMap {
+        private symbolIdToActionMap = createMap<ImportCodeAction[]>();
+
+        addAction(symbolId: number, newAction: ImportCodeAction) {
+            if (!newAction) {
+                return;
+            }
+
+            if (!this.symbolIdToActionMap[symbolId]) {
+                this.symbolIdToActionMap[symbolId] = [newAction];
+                return;
+            }
+
+            if (newAction.kind === "CodeChange") {
+                this.symbolIdToActionMap[symbolId].push(newAction);
+                return;
+            }
+
+            const updatedNewImports: ImportCodeAction[] = [];
+            for (const existingAction of this.symbolIdToActionMap[symbolId]) {
+                if (existingAction.kind === "CodeChange") {
+                    // only import actions should compare
+                    updatedNewImports.push(existingAction);
+                    continue;
+                }
+
+                switch (this.compareModuleSpecifiers(existingAction.moduleSpecifier, newAction.moduleSpecifier)) {
+                    case ModuleSpecifierComparison.Better:
+                        // the new one is not worth considering if it is a new improt.
+                        // However if it is instead a insertion into existing import, the user might want to use
+                        // the module specifier even it is worse by our standards. So keep it.
+                        if (newAction.kind === "NewImport") {
+                            return;
+                        }
+                    case ModuleSpecifierComparison.Equal:
+                        // the current one is safe. But it is still possible that the new one is worse
+                        // than another existing one. For example, you may have new imports from "./foo/bar"
+                        // and "bar", when the new one is "bar/bar2" and the current one is "./foo/bar". The new
+                        // one and the current one are not comparable (one relative path and one absolute path),
+                        // but the new one is worse than the other one, so should not add to the list.  
+                        updatedNewImports.push(existingAction);
+                        break;
+                    case ModuleSpecifierComparison.Worse:
+                        // the existing one is worse, remove from the list.
+                        continue;
+                }
+            }
+            // if we reach here, it means the new one is better or equal to all of the existing ones.
+            updatedNewImports.push(newAction);
+            this.symbolIdToActionMap[symbolId] = updatedNewImports;
+        }
+
+        addActions(symbolId: number, newActions: ImportCodeAction[]) {
+            for (const newAction of newActions) {
+                this.addAction(symbolId, newAction);
+            }
+        }
+
+        getAllActions() {
+            let result: ImportCodeAction[] = [];
+            for (const symbolId in this.symbolIdToActionMap) {
+                result = concatenate(result, this.symbolIdToActionMap[symbolId]);
+            }
+            return result;
+        }
+
+        private compareModuleSpecifiers(moduleSpecifier1: string, moduleSpecifier2: string): ModuleSpecifierComparison {
+            if (moduleSpecifier1 === moduleSpecifier2) {
+                return ModuleSpecifierComparison.Equal;
+            }
+
+            // if moduleSpecifier1 (ms1) is a substring of ms2, then it is better
+            if (moduleSpecifier2.indexOf(moduleSpecifier1) === 0) {
+                return ModuleSpecifierComparison.Better;
+            }
+
+            if (moduleSpecifier1.indexOf(moduleSpecifier2) === 0) {
+                return ModuleSpecifierComparison.Worse;
+            }
+
+            // if both are relative paths, and ms1 has fewer levels, then it is better
+            if (isExternalModuleNameRelative(moduleSpecifier1) && isExternalModuleNameRelative(moduleSpecifier2)) {
+                const regex = new RegExp(directorySeparator, "g");
+                const moduleSpecifier1LevelCount = (moduleSpecifier1.match(regex) || []).length;
+                const moduleSpecifier2LevelCount = (moduleSpecifier2.match(regex) || []).length;
+
+                return moduleSpecifier1LevelCount < moduleSpecifier2LevelCount
+                    ? ModuleSpecifierComparison.Better
+                    : moduleSpecifier1LevelCount === moduleSpecifier2LevelCount
+                        ? ModuleSpecifierComparison.Equal
+                        : ModuleSpecifierComparison.Worse;
+            }
+
+            // the equal cases include when the two specifiers are not comparable.
+            return ModuleSpecifierComparison.Equal;
+        }
+    }
+
     registerCodeFix({
         errorCodes: [Diagnostics.Cannot_find_name_0.code],
         getCodeActions: (context: CodeFixContext) => {
@@ -17,7 +121,7 @@ namespace ts.codefix {
 
             const token = getTokenAtPosition(sourceFile, context.span.start);
             const name = token.getText();
-            const allActions: ImportCodeAction[] = [];
+            const symbolIdActionMap = new ImportCodeActionMap();
 
             const allPotentialModules = checker.getAmbientModules();
             for (const otherSourceFile of allSourceFiles) {
@@ -35,36 +139,28 @@ namespace ts.codefix {
                 if (defaultExport) {
                     const localSymbol = getLocalSymbolForExportDefault(defaultExport);
                     if (localSymbol && localSymbol.name === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
-                        addRange(allActions, getCodeActionForImport(moduleSymbol, /*isDefaultExport*/ true));
+                        // check if this symbol is already used
+                        const symbolId = getUniqueSymbolId(localSymbol);
+                        symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, /*isDefaultExport*/ true));
                     }
                 }
 
                 // check exports with the same name
-                const exportWithIdenticalName = checker.tryGetMemberInModuleExports(name, moduleSymbol);
-                if (exportWithIdenticalName && checkSymbolHasMeaning(exportWithIdenticalName, currentTokenMeaning)) {
-                    addRange(allActions, getCodeActionForImport(moduleSymbol));
+                const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExports(name, moduleSymbol);
+                if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
+                    const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName);
+                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol));
                 }
             }
 
-            //sort the code actions
-            const confirmedActions: ImportCodeAction[] = [];
-            for (const action of allActions) {
-                switch (action.kind) {
-                    case "CodeChange":
-                    case "InsertingIntoExistingImport":
-                        confirmedActions.push(action);
-                        break;
-                    case "NewImport":
-                        if (action.moduleSpecifier &&
-                            some(allActions, otherAction => action.moduleSpecifier !== otherAction.moduleSpecifier && action.moduleSpecifier.indexOf(otherAction.moduleSpecifier) === 0)) {
-                            // there is another action with a shorter module specifier. Use that instead.
-                            continue;
-                        }
-                        confirmedActions.push(action);
-                }
-            }
+            return symbolIdActionMap.getAllActions();
 
-            return confirmedActions;
+            function getUniqueSymbolId(symbol: Symbol) {
+                if (symbol.flags & SymbolFlags.Alias) {
+                    return getSymbolId(checker.getAliasedSymbol(symbol));
+                }
+                return getSymbolId(symbol);
+            }
 
             function checkSymbolHasMeaning(symbol: Symbol, meaning: SemanticMeaning) {
                 const declarations = symbol.getDeclarations();
@@ -404,10 +500,13 @@ namespace ts.codefix {
                                 try {
                                     const moduleDirectory = getDirectoryPath(moduleFileName);
                                     const packageJsonContent = JSON.parse(context.host.readFile(combinePaths(moduleDirectory, "package.json")));
-                                    if (packageJsonContent && packageJsonContent.main) {
-                                        const mainExportFile = toPath(packageJsonContent.main, moduleDirectory, getCanonicalFileName);
-                                        if (removeFileExtension(mainExportFile) === removeFileExtension(moduleFileName)) {
-                                            relativeFileName = getDirectoryPath(relativeFileName);
+                                    if (packageJsonContent) {
+                                        const mainFile = packageJsonContent.main || packageJsonContent.typings;
+                                        if (mainFile) {
+                                            const mainExportFile = toPath(mainFile, moduleDirectory, getCanonicalFileName);
+                                            if (removeFileExtension(mainExportFile) === removeFileExtension(moduleFileName)) {
+                                                relativeFileName = getDirectoryPath(relativeFileName);
+                                            }
                                         }
                                     }
                                 }
