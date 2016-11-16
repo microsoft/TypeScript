@@ -179,7 +179,7 @@ namespace ts {
                 testFailure("can error when 'extends' is neither relative nor rooted.", "extends2.json", [{
                     code: 18001,
                     category: DiagnosticCategory.Error,
-                    messageText: `The path in an 'extends' options must be relative or rooted.`
+                    messageText: `A path in an 'extends' option must be relative or rooted, but 'configs/base' is not.`
                 }]);
             });
         });

@@ -99,20 +99,26 @@ namespace ts {
         return node ? f(initial, node) : initial;
     }
 
+    function reduceNodeArray<T>(nodes: Node[], f: (memo: T, nodes: Node[]) => T, initial: T) {
+        return nodes ? f(initial, nodes) : initial;
+    }
+
     /**
      * Similar to `reduceLeft`, performs a reduction against each child of a node.
      * NOTE: Unlike `forEachChild`, this does *not* visit every node. Only nodes added to the
      *       `nodeEdgeTraversalMap` above will be visited.
      *
      * @param node The node containing the children to reduce.
-     * @param f The callback function
      * @param initial The initial value to supply to the reduction.
+     * @param f The callback function
      */
-    export function reduceEachChild<T>(node: Node, f: (memo: T, node: Node) => T, initial: T): T {
+    export function reduceEachChild<T>(node: Node, initial: T, cbNode: (memo: T, node: Node) => T, cbNodeArray?: (memo: T, nodes: Node[]) => T): T {
         if (node === undefined) {
             return initial;
         }
 
+        const reduceNodes: (nodes: Node[], f: (memo: T, node: Node | Node[]) => T, initial: T) => T = cbNodeArray ? reduceNodeArray : reduceLeft;
+        const cbNodes = cbNodeArray || cbNode;
         const kind = node.kind;
 
         // No need to visit nodes with no children.
@@ -138,127 +144,127 @@ namespace ts {
 
             // Names
             case SyntaxKind.ComputedPropertyName:
-                result = reduceNode((<ComputedPropertyName>node).expression, f, result);
+                result = reduceNode((<ComputedPropertyName>node).expression, cbNode, result);
                 break;
 
             // Signature elements
             case SyntaxKind.Parameter:
-                result = reduceLeft((<ParameterDeclaration>node).decorators, f, result);
-                result = reduceLeft((<ParameterDeclaration>node).modifiers, f, result);
-                result = reduceNode((<ParameterDeclaration>node).name, f, result);
-                result = reduceNode((<ParameterDeclaration>node).type, f, result);
-                result = reduceNode((<ParameterDeclaration>node).initializer, f, result);
+                result = reduceNodes((<ParameterDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<ParameterDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<ParameterDeclaration>node).name, cbNode, result);
+                result = reduceNode((<ParameterDeclaration>node).type, cbNode, result);
+                result = reduceNode((<ParameterDeclaration>node).initializer, cbNode, result);
                 break;
 
             case SyntaxKind.Decorator:
-                result = reduceNode((<Decorator>node).expression, f, result);
+                result = reduceNode((<Decorator>node).expression, cbNode, result);
                 break;
 
             // Type member
             case SyntaxKind.PropertyDeclaration:
-                result = reduceLeft((<PropertyDeclaration>node).decorators, f, result);
-                result = reduceLeft((<PropertyDeclaration>node).modifiers, f, result);
-                result = reduceNode((<PropertyDeclaration>node).name, f, result);
-                result = reduceNode((<PropertyDeclaration>node).type, f, result);
-                result = reduceNode((<PropertyDeclaration>node).initializer, f, result);
+                result = reduceNodes((<PropertyDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<PropertyDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<PropertyDeclaration>node).name, cbNode, result);
+                result = reduceNode((<PropertyDeclaration>node).type, cbNode, result);
+                result = reduceNode((<PropertyDeclaration>node).initializer, cbNode, result);
                 break;
 
             case SyntaxKind.MethodDeclaration:
-                result = reduceLeft((<MethodDeclaration>node).decorators, f, result);
-                result = reduceLeft((<MethodDeclaration>node).modifiers, f, result);
-                result = reduceNode((<MethodDeclaration>node).name, f, result);
-                result = reduceLeft((<MethodDeclaration>node).typeParameters, f, result);
-                result = reduceLeft((<MethodDeclaration>node).parameters, f, result);
-                result = reduceNode((<MethodDeclaration>node).type, f, result);
-                result = reduceNode((<MethodDeclaration>node).body, f, result);
+                result = reduceNodes((<MethodDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<MethodDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<MethodDeclaration>node).name, cbNode, result);
+                result = reduceNodes((<MethodDeclaration>node).typeParameters, cbNodes, result);
+                result = reduceNodes((<MethodDeclaration>node).parameters, cbNodes, result);
+                result = reduceNode((<MethodDeclaration>node).type, cbNode, result);
+                result = reduceNode((<MethodDeclaration>node).body, cbNode, result);
                 break;
 
             case SyntaxKind.Constructor:
-                result = reduceLeft((<ConstructorDeclaration>node).modifiers, f, result);
-                result = reduceLeft((<ConstructorDeclaration>node).parameters, f, result);
-                result = reduceNode((<ConstructorDeclaration>node).body, f, result);
+                result = reduceNodes((<ConstructorDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNodes((<ConstructorDeclaration>node).parameters, cbNodes, result);
+                result = reduceNode((<ConstructorDeclaration>node).body, cbNode, result);
                 break;
 
             case SyntaxKind.GetAccessor:
-                result = reduceLeft((<GetAccessorDeclaration>node).decorators, f, result);
-                result = reduceLeft((<GetAccessorDeclaration>node).modifiers, f, result);
-                result = reduceNode((<GetAccessorDeclaration>node).name, f, result);
-                result = reduceLeft((<GetAccessorDeclaration>node).parameters, f, result);
-                result = reduceNode((<GetAccessorDeclaration>node).type, f, result);
-                result = reduceNode((<GetAccessorDeclaration>node).body, f, result);
+                result = reduceNodes((<GetAccessorDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<GetAccessorDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<GetAccessorDeclaration>node).name, cbNode, result);
+                result = reduceNodes((<GetAccessorDeclaration>node).parameters, cbNodes, result);
+                result = reduceNode((<GetAccessorDeclaration>node).type, cbNode, result);
+                result = reduceNode((<GetAccessorDeclaration>node).body, cbNode, result);
                 break;
 
             case SyntaxKind.SetAccessor:
-                result = reduceLeft((<GetAccessorDeclaration>node).decorators, f, result);
-                result = reduceLeft((<GetAccessorDeclaration>node).modifiers, f, result);
-                result = reduceNode((<GetAccessorDeclaration>node).name, f, result);
-                result = reduceLeft((<GetAccessorDeclaration>node).parameters, f, result);
-                result = reduceNode((<GetAccessorDeclaration>node).body, f, result);
+                result = reduceNodes((<GetAccessorDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<GetAccessorDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<GetAccessorDeclaration>node).name, cbNode, result);
+                result = reduceNodes((<GetAccessorDeclaration>node).parameters, cbNodes, result);
+                result = reduceNode((<GetAccessorDeclaration>node).body, cbNode, result);
                 break;
 
             // Binding patterns
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-                result = reduceLeft((<BindingPattern>node).elements, f, result);
+                result = reduceNodes((<BindingPattern>node).elements, cbNodes, result);
                 break;
 
             case SyntaxKind.BindingElement:
-                result = reduceNode((<BindingElement>node).propertyName, f, result);
-                result = reduceNode((<BindingElement>node).name, f, result);
-                result = reduceNode((<BindingElement>node).initializer, f, result);
+                result = reduceNode((<BindingElement>node).propertyName, cbNode, result);
+                result = reduceNode((<BindingElement>node).name, cbNode, result);
+                result = reduceNode((<BindingElement>node).initializer, cbNode, result);
                 break;
 
             // Expression
             case SyntaxKind.ArrayLiteralExpression:
-                result = reduceLeft((<ArrayLiteralExpression>node).elements, f, result);
+                result = reduceNodes((<ArrayLiteralExpression>node).elements, cbNodes, result);
                 break;
 
             case SyntaxKind.ObjectLiteralExpression:
-                result = reduceLeft((<ObjectLiteralExpression>node).properties, f, result);
+                result = reduceNodes((<ObjectLiteralExpression>node).properties, cbNodes, result);
                 break;
 
             case SyntaxKind.PropertyAccessExpression:
-                result = reduceNode((<PropertyAccessExpression>node).expression, f, result);
-                result = reduceNode((<PropertyAccessExpression>node).name, f, result);
+                result = reduceNode((<PropertyAccessExpression>node).expression, cbNode, result);
+                result = reduceNode((<PropertyAccessExpression>node).name, cbNode, result);
                 break;
 
             case SyntaxKind.ElementAccessExpression:
-                result = reduceNode((<ElementAccessExpression>node).expression, f, result);
-                result = reduceNode((<ElementAccessExpression>node).argumentExpression, f, result);
+                result = reduceNode((<ElementAccessExpression>node).expression, cbNode, result);
+                result = reduceNode((<ElementAccessExpression>node).argumentExpression, cbNode, result);
                 break;
 
             case SyntaxKind.CallExpression:
-                result = reduceNode((<CallExpression>node).expression, f, result);
-                result = reduceLeft((<CallExpression>node).typeArguments, f, result);
-                result = reduceLeft((<CallExpression>node).arguments, f, result);
+                result = reduceNode((<CallExpression>node).expression, cbNode, result);
+                result = reduceNodes((<CallExpression>node).typeArguments, cbNodes, result);
+                result = reduceNodes((<CallExpression>node).arguments, cbNodes, result);
                 break;
 
             case SyntaxKind.NewExpression:
-                result = reduceNode((<NewExpression>node).expression, f, result);
-                result = reduceLeft((<NewExpression>node).typeArguments, f, result);
-                result = reduceLeft((<NewExpression>node).arguments, f, result);
+                result = reduceNode((<NewExpression>node).expression, cbNode, result);
+                result = reduceNodes((<NewExpression>node).typeArguments, cbNodes, result);
+                result = reduceNodes((<NewExpression>node).arguments, cbNodes, result);
                 break;
 
             case SyntaxKind.TaggedTemplateExpression:
-                result = reduceNode((<TaggedTemplateExpression>node).tag, f, result);
-                result = reduceNode((<TaggedTemplateExpression>node).template, f, result);
+                result = reduceNode((<TaggedTemplateExpression>node).tag, cbNode, result);
+                result = reduceNode((<TaggedTemplateExpression>node).template, cbNode, result);
                 break;
 
             case SyntaxKind.FunctionExpression:
-                result = reduceLeft((<FunctionExpression>node).modifiers, f, result);
-                result = reduceNode((<FunctionExpression>node).name, f, result);
-                result = reduceLeft((<FunctionExpression>node).typeParameters, f, result);
-                result = reduceLeft((<FunctionExpression>node).parameters, f, result);
-                result = reduceNode((<FunctionExpression>node).type, f, result);
-                result = reduceNode((<FunctionExpression>node).body, f, result);
+                result = reduceNodes((<FunctionExpression>node).modifiers, cbNodes, result);
+                result = reduceNode((<FunctionExpression>node).name, cbNode, result);
+                result = reduceNodes((<FunctionExpression>node).typeParameters, cbNodes, result);
+                result = reduceNodes((<FunctionExpression>node).parameters, cbNodes, result);
+                result = reduceNode((<FunctionExpression>node).type, cbNode, result);
+                result = reduceNode((<FunctionExpression>node).body, cbNode, result);
                 break;
 
             case SyntaxKind.ArrowFunction:
-                result = reduceLeft((<ArrowFunction>node).modifiers, f, result);
-                result = reduceLeft((<ArrowFunction>node).typeParameters, f, result);
-                result = reduceLeft((<ArrowFunction>node).parameters, f, result);
-                result = reduceNode((<ArrowFunction>node).type, f, result);
-                result = reduceNode((<ArrowFunction>node).body, f, result);
+                result = reduceNodes((<ArrowFunction>node).modifiers, cbNodes, result);
+                result = reduceNodes((<ArrowFunction>node).typeParameters, cbNodes, result);
+                result = reduceNodes((<ArrowFunction>node).parameters, cbNodes, result);
+                result = reduceNode((<ArrowFunction>node).type, cbNode, result);
+                result = reduceNode((<ArrowFunction>node).body, cbNode, result);
                 break;
 
             case SyntaxKind.ParenthesizedExpression:
@@ -269,258 +275,258 @@ namespace ts {
             case SyntaxKind.YieldExpression:
             case SyntaxKind.SpreadElement:
             case SyntaxKind.NonNullExpression:
-                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElement | NonNullExpression>node).expression, f, result);
+                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElement | NonNullExpression>node).expression, cbNode, result);
                 break;
 
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                result = reduceNode((<PrefixUnaryExpression | PostfixUnaryExpression>node).operand, f, result);
+                result = reduceNode((<PrefixUnaryExpression | PostfixUnaryExpression>node).operand, cbNode, result);
                 break;
 
             case SyntaxKind.BinaryExpression:
-                result = reduceNode((<BinaryExpression>node).left, f, result);
-                result = reduceNode((<BinaryExpression>node).right, f, result);
+                result = reduceNode((<BinaryExpression>node).left, cbNode, result);
+                result = reduceNode((<BinaryExpression>node).right, cbNode, result);
                 break;
 
             case SyntaxKind.ConditionalExpression:
-                result = reduceNode((<ConditionalExpression>node).condition, f, result);
-                result = reduceNode((<ConditionalExpression>node).whenTrue, f, result);
-                result = reduceNode((<ConditionalExpression>node).whenFalse, f, result);
+                result = reduceNode((<ConditionalExpression>node).condition, cbNode, result);
+                result = reduceNode((<ConditionalExpression>node).whenTrue, cbNode, result);
+                result = reduceNode((<ConditionalExpression>node).whenFalse, cbNode, result);
                 break;
 
             case SyntaxKind.TemplateExpression:
-                result = reduceNode((<TemplateExpression>node).head, f, result);
-                result = reduceLeft((<TemplateExpression>node).templateSpans, f, result);
+                result = reduceNode((<TemplateExpression>node).head, cbNode, result);
+                result = reduceNodes((<TemplateExpression>node).templateSpans, cbNodes, result);
                 break;
 
             case SyntaxKind.ClassExpression:
-                result = reduceLeft((<ClassExpression>node).modifiers, f, result);
-                result = reduceNode((<ClassExpression>node).name, f, result);
-                result = reduceLeft((<ClassExpression>node).typeParameters, f, result);
-                result = reduceLeft((<ClassExpression>node).heritageClauses, f, result);
-                result = reduceLeft((<ClassExpression>node).members, f, result);
+                result = reduceNodes((<ClassExpression>node).modifiers, cbNodes, result);
+                result = reduceNode((<ClassExpression>node).name, cbNode, result);
+                result = reduceNodes((<ClassExpression>node).typeParameters, cbNodes, result);
+                result = reduceNodes((<ClassExpression>node).heritageClauses, cbNodes, result);
+                result = reduceNodes((<ClassExpression>node).members, cbNodes, result);
                 break;
 
             case SyntaxKind.ExpressionWithTypeArguments:
-                result = reduceNode((<ExpressionWithTypeArguments>node).expression, f, result);
-                result = reduceLeft((<ExpressionWithTypeArguments>node).typeArguments, f, result);
+                result = reduceNode((<ExpressionWithTypeArguments>node).expression, cbNode, result);
+                result = reduceNodes((<ExpressionWithTypeArguments>node).typeArguments, cbNodes, result);
                 break;
 
             // Misc
             case SyntaxKind.TemplateSpan:
-                result = reduceNode((<TemplateSpan>node).expression, f, result);
-                result = reduceNode((<TemplateSpan>node).literal, f, result);
+                result = reduceNode((<TemplateSpan>node).expression, cbNode, result);
+                result = reduceNode((<TemplateSpan>node).literal, cbNode, result);
                 break;
 
             // Element
             case SyntaxKind.Block:
-                result = reduceLeft((<Block>node).statements, f, result);
+                result = reduceNodes((<Block>node).statements, cbNodes, result);
                 break;
 
             case SyntaxKind.VariableStatement:
-                result = reduceLeft((<VariableStatement>node).modifiers, f, result);
-                result = reduceNode((<VariableStatement>node).declarationList, f, result);
+                result = reduceNodes((<VariableStatement>node).modifiers, cbNodes, result);
+                result = reduceNode((<VariableStatement>node).declarationList, cbNode, result);
                 break;
 
             case SyntaxKind.ExpressionStatement:
-                result = reduceNode((<ExpressionStatement>node).expression, f, result);
+                result = reduceNode((<ExpressionStatement>node).expression, cbNode, result);
                 break;
 
             case SyntaxKind.IfStatement:
-                result = reduceNode((<IfStatement>node).expression, f, result);
-                result = reduceNode((<IfStatement>node).thenStatement, f, result);
-                result = reduceNode((<IfStatement>node).elseStatement, f, result);
+                result = reduceNode((<IfStatement>node).expression, cbNode, result);
+                result = reduceNode((<IfStatement>node).thenStatement, cbNode, result);
+                result = reduceNode((<IfStatement>node).elseStatement, cbNode, result);
                 break;
 
             case SyntaxKind.DoStatement:
-                result = reduceNode((<DoStatement>node).statement, f, result);
-                result = reduceNode((<DoStatement>node).expression, f, result);
+                result = reduceNode((<DoStatement>node).statement, cbNode, result);
+                result = reduceNode((<DoStatement>node).expression, cbNode, result);
                 break;
 
             case SyntaxKind.WhileStatement:
             case SyntaxKind.WithStatement:
-                result = reduceNode((<WhileStatement | WithStatement>node).expression, f, result);
-                result = reduceNode((<WhileStatement | WithStatement>node).statement, f, result);
+                result = reduceNode((<WhileStatement | WithStatement>node).expression, cbNode, result);
+                result = reduceNode((<WhileStatement | WithStatement>node).statement, cbNode, result);
                 break;
 
             case SyntaxKind.ForStatement:
-                result = reduceNode((<ForStatement>node).initializer, f, result);
-                result = reduceNode((<ForStatement>node).condition, f, result);
-                result = reduceNode((<ForStatement>node).incrementor, f, result);
-                result = reduceNode((<ForStatement>node).statement, f, result);
+                result = reduceNode((<ForStatement>node).initializer, cbNode, result);
+                result = reduceNode((<ForStatement>node).condition, cbNode, result);
+                result = reduceNode((<ForStatement>node).incrementor, cbNode, result);
+                result = reduceNode((<ForStatement>node).statement, cbNode, result);
                 break;
 
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
-                result = reduceNode((<ForInStatement | ForOfStatement>node).initializer, f, result);
-                result = reduceNode((<ForInStatement | ForOfStatement>node).expression, f, result);
-                result = reduceNode((<ForInStatement | ForOfStatement>node).statement, f, result);
+                result = reduceNode((<ForInStatement | ForOfStatement>node).initializer, cbNode, result);
+                result = reduceNode((<ForInStatement | ForOfStatement>node).expression, cbNode, result);
+                result = reduceNode((<ForInStatement | ForOfStatement>node).statement, cbNode, result);
                 break;
 
             case SyntaxKind.ReturnStatement:
             case SyntaxKind.ThrowStatement:
-                result = reduceNode((<ReturnStatement>node).expression, f, result);
+                result = reduceNode((<ReturnStatement>node).expression, cbNode, result);
                 break;
 
             case SyntaxKind.SwitchStatement:
-                result = reduceNode((<SwitchStatement>node).expression, f, result);
-                result = reduceNode((<SwitchStatement>node).caseBlock, f, result);
+                result = reduceNode((<SwitchStatement>node).expression, cbNode, result);
+                result = reduceNode((<SwitchStatement>node).caseBlock, cbNode, result);
                 break;
 
             case SyntaxKind.LabeledStatement:
-                result = reduceNode((<LabeledStatement>node).label, f, result);
-                result = reduceNode((<LabeledStatement>node).statement, f, result);
+                result = reduceNode((<LabeledStatement>node).label, cbNode, result);
+                result = reduceNode((<LabeledStatement>node).statement, cbNode, result);
                 break;
 
             case SyntaxKind.TryStatement:
-                result = reduceNode((<TryStatement>node).tryBlock, f, result);
-                result = reduceNode((<TryStatement>node).catchClause, f, result);
-                result = reduceNode((<TryStatement>node).finallyBlock, f, result);
+                result = reduceNode((<TryStatement>node).tryBlock, cbNode, result);
+                result = reduceNode((<TryStatement>node).catchClause, cbNode, result);
+                result = reduceNode((<TryStatement>node).finallyBlock, cbNode, result);
                 break;
 
             case SyntaxKind.VariableDeclaration:
-                result = reduceNode((<VariableDeclaration>node).name, f, result);
-                result = reduceNode((<VariableDeclaration>node).type, f, result);
-                result = reduceNode((<VariableDeclaration>node).initializer, f, result);
+                result = reduceNode((<VariableDeclaration>node).name, cbNode, result);
+                result = reduceNode((<VariableDeclaration>node).type, cbNode, result);
+                result = reduceNode((<VariableDeclaration>node).initializer, cbNode, result);
                 break;
 
             case SyntaxKind.VariableDeclarationList:
-                result = reduceLeft((<VariableDeclarationList>node).declarations, f, result);
+                result = reduceNodes((<VariableDeclarationList>node).declarations, cbNodes, result);
                 break;
 
             case SyntaxKind.FunctionDeclaration:
-                result = reduceLeft((<FunctionDeclaration>node).decorators, f, result);
-                result = reduceLeft((<FunctionDeclaration>node).modifiers, f, result);
-                result = reduceNode((<FunctionDeclaration>node).name, f, result);
-                result = reduceLeft((<FunctionDeclaration>node).typeParameters, f, result);
-                result = reduceLeft((<FunctionDeclaration>node).parameters, f, result);
-                result = reduceNode((<FunctionDeclaration>node).type, f, result);
-                result = reduceNode((<FunctionDeclaration>node).body, f, result);
+                result = reduceNodes((<FunctionDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<FunctionDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<FunctionDeclaration>node).name, cbNode, result);
+                result = reduceNodes((<FunctionDeclaration>node).typeParameters, cbNodes, result);
+                result = reduceNodes((<FunctionDeclaration>node).parameters, cbNodes, result);
+                result = reduceNode((<FunctionDeclaration>node).type, cbNode, result);
+                result = reduceNode((<FunctionDeclaration>node).body, cbNode, result);
                 break;
 
             case SyntaxKind.ClassDeclaration:
-                result = reduceLeft((<ClassDeclaration>node).decorators, f, result);
-                result = reduceLeft((<ClassDeclaration>node).modifiers, f, result);
-                result = reduceNode((<ClassDeclaration>node).name, f, result);
-                result = reduceLeft((<ClassDeclaration>node).typeParameters, f, result);
-                result = reduceLeft((<ClassDeclaration>node).heritageClauses, f, result);
-                result = reduceLeft((<ClassDeclaration>node).members, f, result);
+                result = reduceNodes((<ClassDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<ClassDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<ClassDeclaration>node).name, cbNode, result);
+                result = reduceNodes((<ClassDeclaration>node).typeParameters, cbNodes, result);
+                result = reduceNodes((<ClassDeclaration>node).heritageClauses, cbNodes, result);
+                result = reduceNodes((<ClassDeclaration>node).members, cbNodes, result);
                 break;
 
             case SyntaxKind.CaseBlock:
-                result = reduceLeft((<CaseBlock>node).clauses, f, result);
+                result = reduceNodes((<CaseBlock>node).clauses, cbNodes, result);
                 break;
 
             case SyntaxKind.ImportDeclaration:
-                result = reduceLeft((<ImportDeclaration>node).decorators, f, result);
-                result = reduceLeft((<ImportDeclaration>node).modifiers, f, result);
-                result = reduceNode((<ImportDeclaration>node).importClause, f, result);
-                result = reduceNode((<ImportDeclaration>node).moduleSpecifier, f, result);
+                result = reduceNodes((<ImportDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<ImportDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<ImportDeclaration>node).importClause, cbNode, result);
+                result = reduceNode((<ImportDeclaration>node).moduleSpecifier, cbNode, result);
                 break;
 
             case SyntaxKind.ImportClause:
-                result = reduceNode((<ImportClause>node).name, f, result);
-                result = reduceNode((<ImportClause>node).namedBindings, f, result);
+                result = reduceNode((<ImportClause>node).name, cbNode, result);
+                result = reduceNode((<ImportClause>node).namedBindings, cbNode, result);
                 break;
 
             case SyntaxKind.NamespaceImport:
-                result = reduceNode((<NamespaceImport>node).name, f, result);
+                result = reduceNode((<NamespaceImport>node).name, cbNode, result);
                 break;
 
             case SyntaxKind.NamedImports:
             case SyntaxKind.NamedExports:
-                result = reduceLeft((<NamedImports | NamedExports>node).elements, f, result);
+                result = reduceNodes((<NamedImports | NamedExports>node).elements, cbNodes, result);
                 break;
 
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                result = reduceNode((<ImportSpecifier | ExportSpecifier>node).propertyName, f, result);
-                result = reduceNode((<ImportSpecifier | ExportSpecifier>node).name, f, result);
+                result = reduceNode((<ImportSpecifier | ExportSpecifier>node).propertyName, cbNode, result);
+                result = reduceNode((<ImportSpecifier | ExportSpecifier>node).name, cbNode, result);
                 break;
 
             case SyntaxKind.ExportAssignment:
-                result = reduceLeft((<ExportAssignment>node).decorators, f, result);
-                result = reduceLeft((<ExportAssignment>node).modifiers, f, result);
-                result = reduceNode((<ExportAssignment>node).expression, f, result);
+                result = reduceLeft((<ExportAssignment>node).decorators, cbNode, result);
+                result = reduceLeft((<ExportAssignment>node).modifiers, cbNode, result);
+                result = reduceNode((<ExportAssignment>node).expression, cbNode, result);
                 break;
 
             case SyntaxKind.ExportDeclaration:
-                result = reduceLeft((<ExportDeclaration>node).decorators, f, result);
-                result = reduceLeft((<ExportDeclaration>node).modifiers, f, result);
-                result = reduceNode((<ExportDeclaration>node).exportClause, f, result);
-                result = reduceNode((<ExportDeclaration>node).moduleSpecifier, f, result);
+                result = reduceLeft((<ExportDeclaration>node).decorators, cbNode, result);
+                result = reduceLeft((<ExportDeclaration>node).modifiers, cbNode, result);
+                result = reduceNode((<ExportDeclaration>node).exportClause, cbNode, result);
+                result = reduceNode((<ExportDeclaration>node).moduleSpecifier, cbNode, result);
                 break;
 
             // JSX
             case SyntaxKind.JsxElement:
-                result = reduceNode((<JsxElement>node).openingElement, f, result);
-                result = reduceLeft((<JsxElement>node).children, f, result);
-                result = reduceNode((<JsxElement>node).closingElement, f, result);
+                result = reduceNode((<JsxElement>node).openingElement, cbNode, result);
+                result = reduceLeft((<JsxElement>node).children, cbNode, result);
+                result = reduceNode((<JsxElement>node).closingElement, cbNode, result);
                 break;
 
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
-                result = reduceNode((<JsxSelfClosingElement | JsxOpeningElement>node).tagName, f, result);
-                result = reduceLeft((<JsxSelfClosingElement | JsxOpeningElement>node).attributes, f, result);
+                result = reduceNode((<JsxSelfClosingElement | JsxOpeningElement>node).tagName, cbNode, result);
+                result = reduceNodes((<JsxSelfClosingElement | JsxOpeningElement>node).attributes, cbNodes, result);
                 break;
 
             case SyntaxKind.JsxClosingElement:
-                result = reduceNode((<JsxClosingElement>node).tagName, f, result);
+                result = reduceNode((<JsxClosingElement>node).tagName, cbNode, result);
                 break;
 
             case SyntaxKind.JsxAttribute:
-                result = reduceNode((<JsxAttribute>node).name, f, result);
-                result = reduceNode((<JsxAttribute>node).initializer, f, result);
+                result = reduceNode((<JsxAttribute>node).name, cbNode, result);
+                result = reduceNode((<JsxAttribute>node).initializer, cbNode, result);
                 break;
 
             case SyntaxKind.JsxSpreadAttribute:
-                result = reduceNode((<JsxSpreadAttribute>node).expression, f, result);
+                result = reduceNode((<JsxSpreadAttribute>node).expression, cbNode, result);
                 break;
 
             case SyntaxKind.JsxExpression:
-                result = reduceNode((<JsxExpression>node).expression, f, result);
+                result = reduceNode((<JsxExpression>node).expression, cbNode, result);
                 break;
 
             // Clauses
             case SyntaxKind.CaseClause:
-                result = reduceNode((<CaseClause>node).expression, f, result);
+                result = reduceNode((<CaseClause>node).expression, cbNode, result);
                 // fall-through
 
             case SyntaxKind.DefaultClause:
-                result = reduceLeft((<CaseClause | DefaultClause>node).statements, f, result);
+                result = reduceNodes((<CaseClause | DefaultClause>node).statements, cbNodes, result);
                 break;
 
             case SyntaxKind.HeritageClause:
-                result = reduceLeft((<HeritageClause>node).types, f, result);
+                result = reduceNodes((<HeritageClause>node).types, cbNodes, result);
                 break;
 
             case SyntaxKind.CatchClause:
-                result = reduceNode((<CatchClause>node).variableDeclaration, f, result);
-                result = reduceNode((<CatchClause>node).block, f, result);
+                result = reduceNode((<CatchClause>node).variableDeclaration, cbNode, result);
+                result = reduceNode((<CatchClause>node).block, cbNode, result);
                 break;
 
             // Property assignments
             case SyntaxKind.PropertyAssignment:
-                result = reduceNode((<PropertyAssignment>node).name, f, result);
-                result = reduceNode((<PropertyAssignment>node).initializer, f, result);
+                result = reduceNode((<PropertyAssignment>node).name, cbNode, result);
+                result = reduceNode((<PropertyAssignment>node).initializer, cbNode, result);
                 break;
 
             case SyntaxKind.ShorthandPropertyAssignment:
-                result = reduceNode((<ShorthandPropertyAssignment>node).name, f, result);
-                result = reduceNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, f, result);
+                result = reduceNode((<ShorthandPropertyAssignment>node).name, cbNode, result);
+                result = reduceNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, cbNode, result);
                 break;
 
             case SyntaxKind.SpreadAssignment:
-                result = reduceNode((node as SpreadAssignment).expression, f, result);
+                result = reduceNode((node as SpreadAssignment).expression, cbNode, result);
                 break;
 
             // Top-level nodes
             case SyntaxKind.SourceFile:
-                result = reduceLeft((<SourceFile>node).statements, f, result);
+                result = reduceNodes((<SourceFile>node).statements, cbNodes, result);
                 break;
 
             case SyntaxKind.PartiallyEmittedExpression:
-                result = reduceNode((<PartiallyEmittedExpression>node).expression, f, result);
+                result = reduceNode((<PartiallyEmittedExpression>node).expression, cbNode, result);
                 break;
 
             default:
@@ -530,8 +536,8 @@ namespace ts {
                         const value = (<MapLike<any>>node)[edge.name];
                         if (value !== undefined) {
                             result = isArray(value)
-                                ? reduceLeft(<NodeArray<Node>>value, f, result)
-                                : f(result, <Node>value);
+                                ? reduceNodes(<NodeArray<Node>>value, cbNodes, result)
+                                : cbNode(result, <Node>value);
                         }
                     }
                 }
@@ -553,8 +559,8 @@ namespace ts {
     export function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T;
     export function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional: boolean, lift: (node: NodeArray<Node>) => T, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): T;
     export function visitNode(node: Node, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: Node[]) => Node, parenthesize?: (node: Node, parentNode: Node) => Node, parentNode?: Node): Node {
-        if (node === undefined) {
-            return undefined;
+        if (node === undefined || visitor === undefined) {
+            return node;
         }
 
         aggregateTransformFlags(node);
@@ -660,14 +666,61 @@ namespace ts {
     }
 
     /**
+     * Starts a new lexical environment and visits a statement list, ending the lexical environment
+     * and merging hoisted declarations upon completion.
+     */
+    export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext, start?: number, ensureUseStrict?: boolean) {
+        context.startLexicalEnvironment();
+        statements = visitNodes(statements, visitor, isStatement, start);
+        if (ensureUseStrict && !startsWithUseStrict(statements)) {
+            statements = createNodeArray([createStatement(createLiteral("use strict")), ...statements], statements);
+        }
+        const declarations = context.endLexicalEnvironment();
+        return createNodeArray(concatenate(statements, declarations), statements);
+    }
+
+    /**
+     * Starts a new lexical environment and visits a parameter list, suspending the lexical
+     * environment upon completion.
+     */
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext) {
+        context.startLexicalEnvironment();
+        const updated = visitNodes(nodes, visitor, isParameterDeclaration);
+        context.suspendLexicalEnvironment();
+        return updated;
+    }
+
+    /**
+     * Resumes a suspended lexical environment and visits a function body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
+    export function visitFunctionBody(node: FunctionBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): FunctionBody;
+    /**
+     * Resumes a suspended lexical environment and visits a concise body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
+    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): ConciseBody;
+    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): ConciseBody {
+        context.resumeLexicalEnvironment();
+        const updated = visitNode(node, visitor, isConciseBody);
+        const declarations = context.endLexicalEnvironment();
+        if (some(declarations)) {
+            const block = convertToFunctionBody(updated);
+            const statements = mergeLexicalEnvironment(block.statements, declarations);
+            return updateBlock(block, statements);
+        }
+        return updated;
+    }
+
+    /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
      * @param node The Node whose children will be visited.
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
-    export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): Node {
+    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): T;
+    export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): Node {
         if (node === undefined) {
             return undefined;
         }
@@ -701,6 +754,7 @@ namespace ts {
                 return updateParameter(<ParameterDeclaration>node,
                     visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
+                    (<ParameterDeclaration>node).dotDotDotToken,
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
                     visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
                     visitNode((<ParameterDeclaration>node).initializer, visitor, isExpression, /*optional*/ true));
@@ -720,41 +774,33 @@ namespace ts {
                     visitNodes((<MethodDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    (context.startLexicalEnvironment(), visitNodes((<MethodDeclaration>node).parameters, visitor, isParameter)),
+                    visitParameterList((<MethodDeclaration>node).parameters, visitor, context),
                     visitNode((<MethodDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<MethodDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<MethodDeclaration>node).body, visitor, context));
 
             case SyntaxKind.Constructor:
                 return updateConstructor(<ConstructorDeclaration>node,
                     visitNodes((<ConstructorDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ConstructorDeclaration>node).modifiers, visitor, isModifier),
-                    (context.startLexicalEnvironment(), visitNodes((<ConstructorDeclaration>node).parameters, visitor, isParameter)),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<ConstructorDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitParameterList((<ConstructorDeclaration>node).parameters, visitor, context),
+                    visitFunctionBody((<ConstructorDeclaration>node).body, visitor, context));
 
             case SyntaxKind.GetAccessor:
                 return updateGetAccessor(<GetAccessorDeclaration>node,
                     visitNodes((<GetAccessorDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<GetAccessorDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<GetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    (context.startLexicalEnvironment(), visitNodes((<GetAccessorDeclaration>node).parameters, visitor, isParameter)),
+                    visitParameterList((<GetAccessorDeclaration>node).parameters, visitor, context),
                     visitNode((<GetAccessorDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<GetAccessorDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<GetAccessorDeclaration>node).body, visitor, context));
 
             case SyntaxKind.SetAccessor:
                 return updateSetAccessor(<SetAccessorDeclaration>node,
                     visitNodes((<SetAccessorDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<SetAccessorDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<SetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    (context.startLexicalEnvironment(), visitNodes((<SetAccessorDeclaration>node).parameters, visitor, isParameter)),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<SetAccessorDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitParameterList((<SetAccessorDeclaration>node).parameters, visitor, context),
+                    visitFunctionBody((<SetAccessorDeclaration>node).body, visitor, context));
 
             // Binding patterns
             case SyntaxKind.ObjectBindingPattern:
@@ -767,6 +813,7 @@ namespace ts {
 
             case SyntaxKind.BindingElement:
                 return updateBindingElement(<BindingElement>node,
+                    (<BindingElement>node).dotDotDotToken,
                     visitNode((<BindingElement>node).propertyName, visitor, isPropertyName, /*optional*/ true),
                     visitNode((<BindingElement>node).name, visitor, isBindingName),
                     visitNode((<BindingElement>node).initializer, visitor, isExpression, /*optional*/ true));
@@ -816,21 +863,17 @@ namespace ts {
                     visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier),
                     visitNode((<FunctionExpression>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
-                    (context.startLexicalEnvironment(), visitNodes((<FunctionExpression>node).parameters, visitor, isParameter)),
+                    visitParameterList((<FunctionExpression>node).parameters, visitor, context),
                     visitNode((<FunctionExpression>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<FunctionExpression>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<FunctionExpression>node).body, visitor, context));
 
             case SyntaxKind.ArrowFunction:
                 return updateArrowFunction(<ArrowFunction>node,
                     visitNodes((<ArrowFunction>node).modifiers, visitor, isModifier),
                     visitNodes((<ArrowFunction>node).typeParameters, visitor, isTypeParameter),
-                    (context.startLexicalEnvironment(), visitNodes((<ArrowFunction>node).parameters, visitor, isParameter)),
+                    visitParameterList((<ArrowFunction>node).parameters, visitor, context),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<ArrowFunction>node).body, visitor, isConciseBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
                 return updateDelete(<DeleteExpression>node,
@@ -1001,11 +1044,9 @@ namespace ts {
                     visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<FunctionDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    (context.startLexicalEnvironment(), visitNodes((<FunctionDeclaration>node).parameters, visitor, isParameter)),
+                    visitParameterList((<FunctionDeclaration>node).parameters, visitor, context),
                     visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    mergeFunctionBodyLexicalEnvironment(
-                        visitNode((<FunctionDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context.endLexicalEnvironment()));
+                    visitFunctionBody((<FunctionExpression>node).body, visitor, context));
 
             case SyntaxKind.ClassDeclaration:
                 return updateClassDeclaration(<ClassDeclaration>node,
@@ -1137,13 +1178,8 @@ namespace ts {
 
            // Top-level nodes
             case SyntaxKind.SourceFile:
-                context.startLexicalEnvironment();
                 return updateSourceFileNode(<SourceFile>node,
-                    createNodeArray(
-                        concatenate(
-                            visitNodes((<SourceFile>node).statements, visitor, isStatement),
-                            context.endLexicalEnvironment()),
-                        (<SourceFile>node).statements));
+                    visitLexicalEnvironment((<SourceFile>node).statements, visitor, context));
 
             // Transformation nodes
             case SyntaxKind.PartiallyEmittedExpression:
@@ -1176,6 +1212,24 @@ namespace ts {
 
         // return node;
     }
+
+    /**
+     * Merges generated lexical declarations into a new statement list.
+     */
+    export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: Statement[]): NodeArray<Statement>;
+    /**
+     * Appends generated lexical declarations to an array of statements.
+     */
+    export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]): Statement[];
+    export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]) {
+        if (!some(declarations)) {
+            return statements;
+        }
+        return isNodeArray(statements)
+            ? createNodeArray(concatenate(statements, declarations), statements)
+            : addRange(statements, declarations);
+    }
+
 
     /**
      * Merges generated lexical declarations into the FunctionBody of a non-arrow function-like declaration.
@@ -1247,13 +1301,25 @@ namespace ts {
         if (node === undefined) {
             return TransformFlags.None;
         }
-        else if (node.transformFlags & TransformFlags.HasComputedFlags) {
+        if (node.transformFlags & TransformFlags.HasComputedFlags) {
             return node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
         }
-        else {
-            const subtreeFlags = aggregateTransformFlagsForSubtree(node);
-            return computeTransformFlagsForNode(node, subtreeFlags);
+        const subtreeFlags = aggregateTransformFlagsForSubtree(node);
+        return computeTransformFlagsForNode(node, subtreeFlags);
+    }
+
+    function aggregateTransformFlagsForNodeArray(nodes: NodeArray<Node>): TransformFlags {
+        if (nodes === undefined) {
+            return TransformFlags.None;
         }
+        let subtreeFlags = TransformFlags.None;
+        let nodeArrayFlags = TransformFlags.None;
+        for (const node of nodes) {
+            subtreeFlags |= aggregateTransformFlagsForNode(node);
+            nodeArrayFlags |= node.transformFlags & ~TransformFlags.HasComputedFlags;
+        }
+        nodes.transformFlags = nodeArrayFlags | TransformFlags.HasComputedFlags;
+        return subtreeFlags;
     }
 
     /**
@@ -1267,15 +1333,19 @@ namespace ts {
         }
 
         // Aggregate the transform flags of each child.
-        return reduceEachChild(node, aggregateTransformFlagsForChildNode, TransformFlags.None);
+        return reduceEachChild(node, TransformFlags.None, aggregateTransformFlagsForChildNode, aggregateTransformFlagsForChildNodes);
     }
 
     /**
      * Aggregates the TransformFlags of a child node with the TransformFlags of its
      * siblings.
      */
-    function aggregateTransformFlagsForChildNode(transformFlags: TransformFlags, child: Node): TransformFlags {
-        return transformFlags | aggregateTransformFlagsForNode(child);
+    function aggregateTransformFlagsForChildNode(transformFlags: TransformFlags, node: Node): TransformFlags {
+        return transformFlags | aggregateTransformFlagsForNode(node);
+    }
+
+    function aggregateTransformFlagsForChildNodes(transformFlags: TransformFlags, nodes: NodeArray<Node>): TransformFlags {
+        return transformFlags | aggregateTransformFlagsForNodeArray(nodes);
     }
 
     export namespace Debug {
@@ -1287,11 +1357,39 @@ namespace ts {
             ? (node: Node, message?: string) => assert(false, message || "Unexpected node.", () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`)
             : noop;
 
+        export const assertEachNode = shouldAssert(AssertionLevel.Normal)
+            ? (nodes: Node[], test: (node: Node) => boolean, message?: string) => assert(
+                    test === undefined || every(nodes, test),
+                    message || "Unexpected node.",
+                    () => `Node array did not pass test '${getFunctionName(test)}'.`)
+            : noop;
+
         export const assertNode = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
                     test === undefined || test(node),
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
+            : noop;
+
+        export const assertOptionalNode = shouldAssert(AssertionLevel.Normal)
+            ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
+                    test === undefined || node === undefined || test(node),
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
+            : noop;
+
+        export const assertOptionalToken = shouldAssert(AssertionLevel.Normal)
+            ? (node: Node, kind: SyntaxKind, message?: string) => assert(
+                    kind === undefined || node === undefined || node.kind === kind,
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} was not a '${formatSyntaxKind(kind)}' token.`)
+            : noop;
+
+        export const assertMissingNode = shouldAssert(AssertionLevel.Normal)
+            ? (node: Node, message?: string) => assert(
+                    node === undefined,
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} was unexpected'.`)
             : noop;
 
         function getFunctionName(func: Function) {

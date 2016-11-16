@@ -1,6 +1,11 @@
 ﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
+namespace ts {
+    /** The version of the TypeScript compiler release */
+    export const version = "2.2.0";
+}
+
 /* @internal */
 namespace ts {
     /**
@@ -566,7 +571,7 @@ namespace ts {
      */
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
         if (value === undefined) return to;
-        if (to === undefined) to = [];
+        if (to === undefined) return [value];
         to.push(value);
         return to;
     }
@@ -585,6 +590,16 @@ namespace ts {
             to = append(to, v);
         }
         return to;
+    }
+
+    /**
+     * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
+     */
+    export function stableSort<T>(array: T[], comparer: (x: T, y: T) => Comparison = compareValues) {
+        return array
+            .map((_, i) => i) // create array of indices
+            .sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y)) // sort indices by value then position
+            .map(i => array[i]); // get sorted array
     }
 
     export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
@@ -809,6 +824,13 @@ namespace ts {
         for (const key in source) {
             target[key] = source[key];
         }
+    }
+
+    export function appendProperty<T>(map: Map<T>, key: string | number, value: T): Map<T> {
+        if (key === undefined || value === undefined) return map;
+        if (map === undefined) map = createMap<T>();
+        map[key] = value;
+        return map;
     }
 
     export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
@@ -2087,6 +2109,17 @@ namespace ts {
     }
 
     /** Remove an item from an array, moving everything to its right one space left. */
+    export function orderedRemoveItem<T>(array: T[], item: T): boolean {
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] === item) {
+                orderedRemoveItemAt(array, i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Remove an item by index from an array, moving everything to its right one space left. */
     export function orderedRemoveItemAt<T>(array: T[], index: number): void {
         // This seems to be faster than either `array.splice(i, 1)` or `array.copyWithin(i, i+ 1)`.
         for (let i = index; i < array.length - 1; i++) {

@@ -17,8 +17,11 @@ var { a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit;
 //// [objectRestAssignment.js]
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && !e.indexOf(p))
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
+    if (typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
     return t;
 };
 let ka;
@@ -26,10 +29,10 @@ let nested;
 let other;
 let rest;
 let complex;
-(_a = complex.x, { ka } = _a, nested = __rest(_a, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]), complex);
+(_a = complex.x, { ka } = _a, nested = __rest(_a, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]));
 // should be:
 let overEmit;
 // var _g = overEmit.a, [_h, ...y] = _g, nested2 = __rest(_h, []), _j = overEmit.b, { z } = _j, c = __rest(_j, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
-var _b = overEmit.a, [_c, ...y] = _b, nested2 = __rest(_c, []), _d = overEmit.b, { z } = _d, c = __rest(_d, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
-(_e = overEmit.a, [_f, ...y] = _e, nested2 = __rest(_f, []), _g = overEmit.b, { z } = _g, c = __rest(_g, ["z"]), rest2 = __rest(overEmit, ["a", "b"]), overEmit);
-var _a, _e, _f, _g;
+var [_b, ...y] = overEmit.a, nested2 = __rest(_b, []), _c = overEmit.b, { z } = _c, c = __rest(_c, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
+([_d, ...y] = overEmit.a, nested2 = __rest(_d, []), _e = overEmit.b, { z } = _e, c = __rest(_e, ["z"]), rest2 = __rest(overEmit, ["a", "b"]));
+var _a, _d, _e;

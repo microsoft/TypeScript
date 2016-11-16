@@ -154,7 +154,6 @@ namespace ts.projectSystem {
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList);
-        host.createFileOrFolder(safeList, /*createParentDirectory*/ true);
         return host;
     }
 
@@ -355,7 +354,8 @@ namespace ts.projectSystem {
         reloadFS(filesOrFolders: FileOrFolder[]) {
             this.filesOrFolders = filesOrFolders;
             this.fs = createFileMap<FSEntry>();
-            for (const fileOrFolder of filesOrFolders) {
+            // always inject safelist file in the list of files
+            for (const fileOrFolder of filesOrFolders.concat(safeList)) {
                 const path = this.toPath(fileOrFolder.path);
                 const fullPath = getNormalizedAbsolutePath(fileOrFolder.path, this.currentDirectory);
                 if (typeof fileOrFolder.content === "string") {
@@ -1584,6 +1584,104 @@ namespace ts.projectSystem {
 
             projectService.closeClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 0 });
+        });
+
+        it("language service disabled events are triggered", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "let x = 1;"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const config = {
+                path: "/a/jsconfig.json",
+                content: "{}"
+            };
+            const configWithExclude = {
+                path: config.path,
+                content: JSON.stringify({ exclude: ["largefile.js"] })
+            };
+            const host = createServerHost([f1, f2, config]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+
+            let lastEvent: server.ProjectLanguageServiceStateEvent;
+            const session = createSession(host, /*typingsInstaller*/ undefined, e => {
+                if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent) {
+                    return;
+                }
+                assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
+                lastEvent = <server.ProjectLanguageServiceStateEvent>e;
+            });
+            session.executeCommand(<protocol.OpenRequest>{
+                seq: 0,
+                type: "request",
+                command: "open",
+                arguments: { file: f1.path }
+            });
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects[0];
+            assert.isFalse(project.languageServiceEnabled, "Language service enabled");
+            assert.isTrue(!!lastEvent, "should receive event");
+            assert.equal(lastEvent.data.project, project, "project name");
+            assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
+
+            host.reloadFS([f1, f2, configWithExclude]);
+            host.triggerFileWatcherCallback(config.path, /*removed*/ false);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.isTrue(project.languageServiceEnabled, "Language service enabled");
+            assert.equal(lastEvent.data.project, project, "project");
+            assert.isTrue(lastEvent.data.languageServiceEnabled, "Language service state");
+        });
+
+        it("syntactic features work even if language service is disabled", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "let x =   1;"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const config = {
+                path: "/a/jsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, f2, config]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+            let lastEvent: server.ProjectLanguageServiceStateEvent;
+            const session = createSession(host, /*typingsInstaller*/ undefined, e => {
+                if (e.eventName === server.ConfigFileDiagEvent) {
+                    return;
+                }
+                assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
+                lastEvent = <server.ProjectLanguageServiceStateEvent>e;
+            });
+            session.executeCommand(<protocol.OpenRequest>{
+                seq: 0,
+                type: "request",
+                command: "open",
+                arguments: { file: f1.path }
+            });
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects[0];
+            assert.isFalse(project.languageServiceEnabled, "Language service enabled");
+            assert.isTrue(!!lastEvent, "should receive event");
+            assert.equal(lastEvent.data.project, project, "project name");
+            assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
+
+            const options = projectService.getFormatCodeOptions();
+            const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
+            assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
         });
     });
 

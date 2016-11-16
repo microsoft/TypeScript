@@ -1,4 +1,4 @@
-{
+﻿{
     "compilerOptions": {
         "noImplicitAny": true,
         "noImplicitThis": true,
@@ -12,7 +12,8 @@
         "declaration": true,
         "target": "es5",
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "types": []
     },
     "files": [
         "../compiler/core.ts",

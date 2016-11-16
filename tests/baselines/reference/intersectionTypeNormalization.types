@@ -189,7 +189,7 @@ var z: Z4;
 // Repro from #9919
 
 type ToString = {
->ToString : { toString(): string; }
+>ToString : ToString
 
     toString(): string;
 >toString : () => string
@@ -207,18 +207,18 @@ type BoxedValue = { kind: 'int',    num: number }
 type IntersectionFail = BoxedValue & ToString
 >IntersectionFail : IntersectionFail
 >BoxedValue : BoxedValue
->ToString : { toString(): string; }
+>ToString : ToString
 
 type IntersectionInline = { kind: 'int',    num: number } & ToString
 >IntersectionInline : IntersectionInline
 >kind : "int"
 >num : number
->ToString : { toString(): string; }
+>ToString : ToString
 
                         | { kind: 'string', str: string } & ToString
 >kind : "string"
 >str : string
->ToString : { toString(): string; }
+>ToString : ToString
 
 function getValueAsString(value: IntersectionFail): string {
 >getValueAsString : (value: IntersectionFail) => string
@@ -236,11 +236,11 @@ function getValueAsString(value: IntersectionFail): string {
 >'' + value.num : string
 >'' : ""
 >value.num : number
->value : { kind: "int"; num: number; } & { toString(): string; }
+>value : { kind: "int"; num: number; } & ToString
 >num : number
     }
     return value.str;
 >value.str : string
->value : { kind: "string"; str: string; } & { toString(): string; }
+>value : { kind: "string"; str: string; } & ToString
 >str : string
 }
