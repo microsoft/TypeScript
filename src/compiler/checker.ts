@@ -38,6 +38,8 @@ namespace ts {
         // is because diagnostics can be quite expensive, and we want to allow hosts to bail out if
         // they no longer need the information (for example, if the user started editing again).
         let cancellationToken: CancellationToken;
+        let requestedExternalEmitHelpers: ExternalEmitHelpers;
+        let externalHelpersModule: Symbol;
 
         const Symbol = objectAllocator.getSymbolConstructor();
         const Type = objectAllocator.getTypeConstructor();
@@ -11272,6 +11274,9 @@ namespace ts {
                     member = prop;
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
+                    if (languageVersion < ScriptTarget.ESNext) {
+                        checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
+                    }
                     if (propertiesArray.length > 0) {
                         spread = getSpreadType(spread, createObjectLiteralType(), /*isFromObjectLiteral*/ true);
                         propertiesArray = [];
@@ -11459,6 +11464,9 @@ namespace ts {
         }
 
         function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
+            if (compilerOptions.jsx === JsxEmit.React) {
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.Assign);
+            }
             const type = checkExpression(node.expression);
             const props = getPropertiesOfType(type);
             for (const prop of props) {
@@ -14223,6 +14231,9 @@ namespace ts {
                 }
             }
             else if (property.kind === SyntaxKind.SpreadAssignment) {
+                if (languageVersion < ScriptTarget.ESNext) {
+                    checkExternalEmitHelpers(property, ExternalEmitHelpers.Rest);
+                }
                 checkReferenceExpression(property.expression, Diagnostics.The_target_of_an_object_rest_assignment_must_be_a_variable_or_a_property_access);
             }
             else {
@@ -15105,6 +15116,13 @@ namespace ts {
                 node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
                 node.kind === SyntaxKind.ConstructSignature) {
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
+            }
+
+            if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES2017) {
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.Awaiter);
+                if (languageVersion < ScriptTarget.ES2015) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Generator);
+                }
             }
 
             checkTypeParameters(node.typeParameters);
@@ -16242,7 +16260,15 @@ namespace ts {
                 error(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_to_remove_this_warning);
             }
 
+            const firstDecorator = node.decorators[0];
+            checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Decorate);
+            if (node.kind === SyntaxKind.Parameter) {
+                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Param);
+            }
+
             if (compilerOptions.emitDecoratorMetadata) {
+                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Metadata);
+
                 // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
@@ -16629,7 +16655,7 @@ namespace ts {
         }
 
         function checkCollisionWithGlobalPromiseInGeneratedCode(node: Node, name: Identifier): void {
-            if (!needCollisionCheckForIdentifier(node, name, "Promise")) {
+            if (languageVersion >= ScriptTarget.ES2017 || !needCollisionCheckForIdentifier(node, name, "Promise")) {
                 return;
             }
 
@@ -16806,6 +16832,9 @@ namespace ts {
             }
 
             if (node.kind === SyntaxKind.BindingElement) {
+                if (node.parent.kind === SyntaxKind.ObjectBindingPattern && languageVersion < ScriptTarget.ESNext) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Rest);
+                }
                 // check computed properties inside property names of binding elements
                 if (node.propertyName && node.propertyName.kind === SyntaxKind.ComputedPropertyName) {
                     checkComputedPropertyName(<ComputedPropertyName>node.propertyName);
@@ -17724,6 +17753,10 @@ namespace ts {
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
+                if (languageVersion < ScriptTarget.ES2015) {
+                    checkExternalEmitHelpers(baseTypeNode.parent, ExternalEmitHelpers.Extends);
+                }
+
                 const baseTypes = getBaseTypes(type);
                 if (baseTypes.length && produceDiagnostics) {
                     const baseType = baseTypes[0];
@@ -20164,8 +20197,6 @@ namespace ts {
 
             // Initialize global symbol table
             let augmentations: LiteralExpression[][];
-            let requestedExternalEmitHelpers: NodeFlags = 0;
-            let firstFileRequestingExternalHelpers: SourceFile;
             for (const file of host.getSourceFiles()) {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
@@ -20182,15 +20213,6 @@ namespace ts {
                     for (const id in source) {
                         if (!(id in globals)) {
                             globals[id] = source[id];
-                        }
-                    }
-                }
-                if ((compilerOptions.isolatedModules || isExternalModule(file)) && !file.isDeclarationFile) {
-                    const fileRequestedExternalEmitHelpers = file.flags & NodeFlags.EmitHelperFlags;
-                    if (fileRequestedExternalEmitHelpers) {
-                        requestedExternalEmitHelpers |= fileRequestedExternalEmitHelpers;
-                        if (firstFileRequestingExternalHelpers === undefined) {
-                            firstFileRequestingExternalHelpers = file;
                         }
                     }
                 }
@@ -20259,56 +20281,50 @@ namespace ts {
             const symbol = getGlobalSymbol("ReadonlyArray", SymbolFlags.Type, /*diagnostic*/ undefined);
             globalReadonlyArrayType = symbol && <GenericType>getTypeOfGlobalSymbol(symbol, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
+        }
 
-            // If we have specified that we are importing helpers, we should report global
-            // errors if we cannot resolve the helpers external module, or if it does not have
-            // the necessary helpers exported.
-            if (compilerOptions.importHelpers && firstFileRequestingExternalHelpers) {
-                // Find the first reference to the helpers module.
-                const helpersModule = resolveExternalModule(
-                    firstFileRequestingExternalHelpers,
-                    externalHelpersModuleNameText,
-                    Diagnostics.Cannot_find_module_0,
-                    /*errorNode*/ undefined);
-
-                // If we found the module, report errors if it does not have the necessary exports.
-                if (helpersModule) {
-                    const exports = helpersModule.exports;
-                    if (requestedExternalEmitHelpers & NodeFlags.HasClassExtends && languageVersion < ScriptTarget.ES2015) {
-                        verifyHelperSymbol(exports, "__extends", SymbolFlags.Value);
-                    }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasSpreadAttribute &&
-                        (languageVersion < ScriptTarget.ESNext || compilerOptions.jsx === JsxEmit.React)) {
-                        verifyHelperSymbol(exports, "__assign", SymbolFlags.Value);
-                    }
-                    if (languageVersion < ScriptTarget.ESNext && requestedExternalEmitHelpers & NodeFlags.HasRestAttribute) {
-                        verifyHelperSymbol(exports, "__rest", SymbolFlags.Value);
-                    }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasDecorators) {
-                        verifyHelperSymbol(exports, "__decorate", SymbolFlags.Value);
-                        if (compilerOptions.emitDecoratorMetadata) {
-                            verifyHelperSymbol(exports, "__metadata", SymbolFlags.Value);
+        function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
+            if ((requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
+                const sourceFile = getSourceFileOfNode(location);
+                if (isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                    const helpersModule = resolveHelpersModule(sourceFile, location);
+                    if (helpersModule !== unknownSymbol) {
+                        const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
+                        for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
+                            if (uncheckedHelpers & helper) {
+                                const name = getHelperName(helper);
+                                const symbol = getSymbol(helpersModule.exports, escapeIdentifier(name), SymbolFlags.Value);
+                                if (!symbol) {
+                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_but_module_0_has_no_exported_member_1, externalHelpersModuleNameText, name);
+                                }
+                            }
                         }
                     }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasParamDecorators) {
-                        verifyHelperSymbol(exports, "__param", SymbolFlags.Value);
-                    }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasAsyncFunctions) {
-                        verifyHelperSymbol(exports, "__awaiter", SymbolFlags.Value);
-                        if (languageVersion < ScriptTarget.ES2015) {
-                            verifyHelperSymbol(exports, "__generator", SymbolFlags.Value);
-                        }
-                    }
+                    requestedExternalEmitHelpers |= helpers;
                 }
             }
         }
 
-        function verifyHelperSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags) {
-            const symbol = getSymbol(symbols, escapeIdentifier(name), meaning);
-            if (!symbol) {
-                error(/*location*/ undefined, Diagnostics.Module_0_has_no_exported_member_1, externalHelpersModuleNameText, name);
+        function getHelperName(helper: ExternalEmitHelpers) {
+            switch (helper) {
+                case ExternalEmitHelpers.Extends: return "__extends";
+                case ExternalEmitHelpers.Assign: return "__assign";
+                case ExternalEmitHelpers.Rest: return "__rest";
+                case ExternalEmitHelpers.Decorate: return "__decorate";
+                case ExternalEmitHelpers.Metadata: return "__metadata";
+                case ExternalEmitHelpers.Param: return "__param";
+                case ExternalEmitHelpers.Awaiter: return "__awaiter";
+                case ExternalEmitHelpers.Generator: return "__generator";
             }
         }
+
+        function resolveHelpersModule(node: SourceFile, errorNode: Node) {
+            if (!externalHelpersModule) {
+                externalHelpersModule = resolveExternalModule(node, externalHelpersModuleNameText, Diagnostics.This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found, errorNode) || unknownSymbol;
+            }
+            return externalHelpersModule;
+        }
+
 
         function createInstantiatedPromiseLikeType(): ObjectType {
             const promiseLikeType = getGlobalPromiseLikeType();

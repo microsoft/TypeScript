@@ -1023,6 +1023,10 @@
         "category": "Error",
         "code": 2342
     },
+    "This syntax requires an imported helper named '{1}', but module '{0}' has no exported member '{1}'.": {
+        "category": "Error",
+        "code": 2343
+    },
     "Type '{0}' does not satisfy the constraint '{1}'.": {
         "category": "Error",
         "code": 2344
@@ -1062,6 +1066,10 @@
     "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
         "category": "Error",
         "code": 2353
+    },
+    "This syntax requires an imported helper but module '{0}' cannot be found.": {
+        "category": "Error",
+        "code": 2354
     },
     "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",

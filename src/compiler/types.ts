@@ -417,26 +417,20 @@ namespace ts {
         HasImplicitReturn =  1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
         HasExplicitReturn =  1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
         GlobalAugmentation = 1 << 9,  // Set if module declaration is an augmentation for the global scope
-        HasClassExtends =    1 << 10, // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
-        HasDecorators =      1 << 11, // If the file has decorators (initialized by binding)
-        HasParamDecorators = 1 << 12, // If the file has parameter decorators (initialized by binding)
-        HasAsyncFunctions =  1 << 13, // If the file has async functions (initialized by binding)
-        HasSpreadAttribute = 1 << 14, // If the file as JSX spread attributes (initialized by binding)
-        HasRestAttribute =   1 << 15, // If the file has object destructure elements
-        DisallowInContext =  1 << 16, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 17, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 18, // If node was parsed as part of a decorator
-        AwaitContext =       1 << 19, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 20, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 21, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 22, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 23, // If we've computed data from children and cached it in this node
+        HasAsyncFunctions =  1 << 10, // If the file has async functions (initialized by binding)
+        DisallowInContext =  1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 13, // If node was parsed as part of a decorator
+        AwaitContext =       1 << 14, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 15, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 16, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
-        EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions | HasSpreadAttribute | HasRestAttribute,
-        ReachabilityAndEmitFlags = ReachabilityCheckFlags | EmitHelperFlags,
+        ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
 
         // Parsing context flags
         ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,
@@ -3685,6 +3679,25 @@ namespace ts {
         readonly scoped: boolean;   // Indicates whether ther helper MUST be emitted in the current scope.
         readonly text: string;      // ES3-compatible raw script text.
         readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
+    }
+
+    /**
+     * Used by the checker, this enum keeps track of external emit helpers that should be type
+     * checked.
+     */
+    /* @internal */
+    export const enum ExternalEmitHelpers {
+        Extends = 1 << 0,           // __extends (used by the ES2015 class transformation)
+        Assign = 1 << 1,            // __assign (used by Jsx and ESNext object spread transformations)
+        Rest = 1 << 2,              // __rest (used by ESNext object rest transformation)
+        Decorate = 1 << 3,          // __decorate (used by TypeScript decorators transformation)
+        Metadata = 1 << 4,          // __metadata (used by TypeScript decorators transformation)
+        Param = 1 << 5,             // __param (used by TypeScript decorators transformation)
+        Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
+        Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
+
+        FirstEmitHelper = Extends,
+        LastEmitHelper = Generator
     }
 
     /* @internal */
