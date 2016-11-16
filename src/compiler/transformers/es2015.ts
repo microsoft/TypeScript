@@ -1159,13 +1159,11 @@ namespace ts {
                             /*modifiers*/ undefined,
                             createVariableDeclarationList(
                                 flattenDestructuringBinding(
-                                    context,
                                     parameter,
-                                    temp,
-                                    /*skipInitializer*/ false,
-                                    /*recordTempVariablesInLine*/ true,
+                                    visitor,
+                                    context,
                                     FlattenLevel.All,
-                                    visitor
+                                    temp
                                 )
                             )
                         ),
@@ -1199,10 +1197,7 @@ namespace ts {
         function addDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
             initializer = visitNode(initializer, visitor, isExpression);
             const statement = createIf(
-                createStrictEquality(
-                    getSynthesizedClone(name),
-                    createVoidZero()
-                ),
+                createTypeCheck(getSynthesizedClone(name), "undefined"),
                 setEmitFlags(
                     createBlock([
                         createStatement(
@@ -1713,12 +1708,11 @@ namespace ts {
             // If we are here it is because this is a destructuring assignment.
             Debug.assert(isDestructuringAssignment(node));
             return flattenDestructuringAssignment(
-                context,
                 <DestructuringAssignment>node,
-                needsDestructuringValue,
+                visitor,
+                context,
                 FlattenLevel.All,
-                /*createAssignmentCallback*/ undefined,
-                visitor);
+                needsDestructuringValue);
         }
 
         function visitVariableStatement(node: VariableStatement): Statement {
@@ -1731,12 +1725,10 @@ namespace ts {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
                             assignment = flattenDestructuringAssignment(
-                                context,
                                 decl,
-                                /*needsValue*/ false,
-                                FlattenLevel.All,
-                                /*createAssignmentCallback*/ undefined,
-                                visitor
+                                visitor,
+                                context,
+                                FlattenLevel.All
                             );
                         }
                         else {
@@ -1888,16 +1880,15 @@ namespace ts {
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern.
             if (isBindingPattern(node.name)) {
-                const recordTempVariablesInLine = !enclosingVariableStatement
-                    || !hasModifier(enclosingVariableStatement, ModifierFlags.Export);
+                const doNotRecordTempVariablesInLine = enclosingVariableStatement
+                    && hasModifier(enclosingVariableStatement, ModifierFlags.Export);
                 return flattenDestructuringBinding(
-                    context,
                     node,
-                    /*value*/ undefined,
-                    /*skipInitializer*/ false,
-                    recordTempVariablesInLine,
+                    visitor,
+                    context,
                     FlattenLevel.All,
-                    visitor
+                    /*value*/ undefined,
+                    doNotRecordTempVariablesInLine
                 );
             }
 
@@ -2001,13 +1992,11 @@ namespace ts {
                     // This works whether the declaration is a var, let, or const.
                     // It will use rhsIterationValue _a[_i] as the initializer.
                     const declarations = flattenDestructuringBinding(
-                        context,
                         firstOriginalDeclaration,
-                        elementAccess,
-                        /*skipInitializer*/ false,
-                        /*recordTempVariablesInLine*/ true,
+                        visitor,
+                        context,
                         FlattenLevel.All,
-                        visitor
+                        elementAccess
                     );
 
                     const declarationList = createVariableDeclarationList(declarations, /*location*/ initializer);
@@ -2056,12 +2045,10 @@ namespace ts {
                     statements.push(
                         createStatement(
                             flattenDestructuringAssignment(
-                                context,
                                 assignment,
-                                /*needsValue*/ false,
-                                FlattenLevel.All,
-                                /*createAssignmentCallback*/ undefined,
-                                visitor
+                                visitor,
+                                context,
+                                FlattenLevel.All
                             )
                         )
                     );
@@ -2697,7 +2684,13 @@ namespace ts {
             const temp = createTempVariable(undefined);
             const newVariableDeclaration = createVariableDeclaration(temp, undefined, undefined, node.variableDeclaration);
 
-            const vars = flattenDestructuringBinding(context, node.variableDeclaration, temp, /*skipInitializer*/ false, /*recordTempVariablesInLine*/ true, FlattenLevel.All, visitor);
+            const vars = flattenDestructuringBinding(
+                node.variableDeclaration,
+                visitor,
+                context,
+                FlattenLevel.All,
+                temp
+            );
             const list = createVariableDeclarationList(vars, /*location*/node.variableDeclaration, /*flags*/node.variableDeclaration.flags);
             const destructure = createVariableStatement(undefined, list);
 

@@ -1819,12 +1819,7 @@ namespace ts {
                     const temp = createTempVariable(hoistVariableDeclaration);
                     return createLogicalOr(
                         createLogicalAnd(
-                            createStrictEquality(
-                                createTypeOf(
-                                    createAssignment(temp, serialized)
-                                ),
-                                createLiteral("function")
-                            ),
+                            createTypeCheck(createAssignment(temp, serialized), "function"),
                             temp
                         ),
                         createIdentifier("Object")
@@ -1933,13 +1928,8 @@ namespace ts {
          */
         function getGlobalSymbolNameWithFallback(): Expression {
             return createConditional(
-                createStrictEquality(
-                    createTypeOf(createIdentifier("Symbol")),
-                    createLiteral("function")
-                ),
-                createToken(SyntaxKind.QuestionToken),
+                createTypeCheck(createIdentifier("Symbol"), "function"),
                 createIdentifier("Symbol"),
-                createToken(SyntaxKind.ColonToken),
                 createIdentifier("Object")
             );
         }
@@ -2356,12 +2346,12 @@ namespace ts {
             const name = node.name;
             if (isBindingPattern(name)) {
                 return flattenDestructuringAssignment(
-                    context,
                     node,
-                    /*needsValue*/ false,
+                    visitor,
+                    context,
                     FlattenLevel.All,
-                    createNamespaceExportExpression,
-                    visitor
+                    /*needsValue*/ false,
+                    createNamespaceExportExpression
                 );
             }
             else {

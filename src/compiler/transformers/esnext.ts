@@ -128,12 +128,11 @@ namespace ts {
         function visitBinaryExpression(node: BinaryExpression, noDestructuringValue: boolean): Expression {
             if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRest) {
                 return flattenDestructuringAssignment(
-                    context,
                     node,
-                    !noDestructuringValue,
+                    visitor,
+                    context,
                     FlattenLevel.ObjectRest,
-                    /*createAssignmentCallback*/ undefined,
-                    visitor
+                    !noDestructuringValue
                 );
             }
             else if (node.operatorToken.kind === SyntaxKind.CommaToken) {
@@ -155,13 +154,11 @@ namespace ts {
             // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
             if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRest) {
                 return flattenDestructuringBinding(
-                    context,
                     node,
-                    /*boundValue*/ undefined,
-                    /*skipInitializer*/ false,
-                    /*recordTempVariablesInLine*/ true,
-                    FlattenLevel.ObjectRest,
-                    visitor);
+                    visitor,
+                    context,
+                    FlattenLevel.ObjectRest
+                );
             }
             return visitEachChild(node, visitor, context);
         }
@@ -194,13 +191,13 @@ namespace ts {
                     temp = createTempVariable(/*recordTempVariable*/ undefined);
                     const firstDeclaration = firstOrUndefined(initializer.declarations);
                     const declarations = flattenDestructuringBinding(
-                        context,
                         firstDeclaration,
-                        temp,
-                        /*skipInitializer*/ true,
-                        /*recordTempVariablesInLine*/ true,
+                        visitor,
+                        context,
                         FlattenLevel.ObjectRest,
-                        visitor
+                        temp,
+                        /*doNotRecordTempVariablesInLine*/ false,
+                        /*skipInitializer*/ true,
                     );
                     if (some(declarations)) {
                         const statement = createVariableStatement(
@@ -214,12 +211,10 @@ namespace ts {
                 else if (isAssignmentPattern(initializer)) {
                     temp = createTempVariable(/*recordTempVariable*/ undefined);
                     const expression = flattenDestructuringAssignment(
-                        context,
                         aggregateTransformFlags(createAssignment(initializer, temp, /*location*/ node.initializer)),
-                        /*needsValue*/ false,
-                        FlattenLevel.ObjectRest,
-                        /*createAssignmentCallback*/ undefined,
-                        visitor
+                        visitor,
+                        context,
+                        FlattenLevel.ObjectRest
                     );
                     leadingStatements = append(leadingStatements, createStatement(expression, /*location*/ node.initializer));
                 }
@@ -352,7 +347,15 @@ namespace ts {
             for (const parameter of node.parameters) {
                 if (parameter.transformFlags & TransformFlags.ContainsObjectRest) {
                     const temp = getGeneratedNameForNode(parameter);
-                    const declarations = flattenDestructuringBinding(context, parameter, temp, /*skipInitializer*/ true, /*recordTempVariablesInLine*/ true, FlattenLevel.ObjectRest, visitor);
+                    const declarations = flattenDestructuringBinding(
+                        parameter,
+                        visitor,
+                        context,
+                        FlattenLevel.ObjectRest,
+                        temp,
+                        /*doNotRecordTempVariablesInLine*/ false,
+                        /*skipInitializer*/ true,
+                    );
                     if (some(declarations)) {
                         const statement = createVariableStatement(
                             /*modifiers*/ undefined,

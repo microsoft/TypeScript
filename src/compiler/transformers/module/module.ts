@@ -757,12 +757,12 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringAssignment(
-                    context,
                     node,
-                    /*needsValue*/ false,
+                    /*visitor*/ undefined,
+                    context,
                     FlattenLevel.All,
-                    createExportExpression,
-                    /*visitor*/ undefined
+                    /*needsValue*/ false,
+                    createExportExpression
                 );
             }
             else {

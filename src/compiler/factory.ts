@@ -646,13 +646,25 @@ namespace ts {
         return node;
     }
 
-    export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression, location?: TextRange) {
-        const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, location);
+    export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression, location?: TextRange): ConditionalExpression;
+    export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression, location?: TextRange): ConditionalExpression;
+    export function createConditional(condition: Expression, questionTokenOrWhenTrue: QuestionToken | Expression, whenTrueOrWhenFalse: Expression, colonTokenOrLocation?: ColonToken | TextRange, whenFalse?: Expression, location?: TextRange) {
+        const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, whenFalse ? location : colonTokenOrLocation);
         node.condition = parenthesizeForConditionalHead(condition);
-        node.questionToken = questionToken;
-        node.whenTrue = whenTrue;
-        node.colonToken = colonToken;
-        node.whenFalse = whenFalse;
+        if (whenFalse) {
+            // second overload
+            node.questionToken = <QuestionToken>questionTokenOrWhenTrue;
+            node.whenTrue = whenTrueOrWhenFalse;
+            node.colonToken = <ColonToken>colonTokenOrLocation;
+            node.whenFalse = whenFalse;
+        }
+        else {
+            // first overload
+            node.questionToken = createToken(SyntaxKind.QuestionToken);
+            node.whenTrue = <Expression>questionTokenOrWhenTrue;
+            node.colonToken = createToken(SyntaxKind.ColonToken);
+            node.whenFalse = whenTrueOrWhenFalse;
+        }
         return node;
     }
 
@@ -1568,6 +1580,14 @@ namespace ts {
 
     export function createVoidZero() {
         return createVoid(createLiteral(0));
+    }
+
+    export type TypeOfTag = "undefined" | "number" | "boolean" | "string" | "symbol" | "object" | "function";
+
+    export function createTypeCheck(value: Expression, tag: TypeOfTag) {
+        return tag === "undefined"
+            ? createStrictEquality(value, createVoidZero())
+            : createStrictEquality(createTypeOf(value), createLiteral(tag));
     }
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
