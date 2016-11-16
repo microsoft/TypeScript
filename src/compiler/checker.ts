@@ -189,6 +189,13 @@ namespace ts {
         let globalNumberType: ObjectType;
         let globalBooleanType: ObjectType;
         let globalRegExpType: ObjectType;
+        let globalESSymbolType: ObjectType;
+        let globalIterableType: GenericType;
+        let globalIteratorType: GenericType;
+        let globalIterableIteratorType: GenericType;
+        let globalAsyncIterableType: GenericType;
+        let globalAsyncIteratorType: GenericType;
+        let globalAsyncIterableIteratorType: GenericType;
         let anyArrayType: Type;
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
@@ -197,14 +204,6 @@ namespace ts {
         // This allows users to just specify library files they want to used through --lib
         // and they will not get an error from not having unrelated library files
         let getGlobalTemplateStringsArrayType: () => ObjectType;
-
-        let getGlobalESSymbolType: () => ObjectType;
-        let getGlobalIterableType: () => GenericType;
-        let getGlobalIteratorType: () => GenericType;
-        let getGlobalIterableIteratorType: () => GenericType;
-        let getGlobalAsyncIterableType: () => GenericType;
-        let getGlobalAsyncIteratorType: () => GenericType;
-        let getGlobalAsyncIterableIteratorType: () => GenericType;
 
         let getGlobalTypedPropertyDescriptorType: () => GenericType;
         let getGlobalPromiseType: () => GenericType;
@@ -3213,8 +3212,8 @@ namespace ts {
                 // missing properties/signatures required to get its iteratedType (like
                 // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
                 // or it may have led to an error inside getElementTypeOfIterable.
-                const isForAwaitOf = (<ForOfStatement>declaration.parent.parent).awaitKeyword !== undefined;
-                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression, isForAwaitOf) || anyType;
+                const forOfStatement = <ForOfStatement>declaration.parent.parent;
+                return checkRightHandSideOfForOf(forOfStatement.expression, getForOfModifierKind(forOfStatement)) || anyType;
             }
 
             if (isBindingPattern(declaration.parent)) {
@@ -3631,7 +3630,9 @@ namespace ts {
         }
 
         function isReferenceToType(type: Type, target: Type) {
-            return (getObjectFlags(type) & ObjectFlags.Reference) !== 0
+            return type !== undefined
+                && target !== undefined
+                && (getObjectFlags(type) & ObjectFlags.Reference) !== 0
                 && (<TypeReference>type).target === target;
         }
 
@@ -4668,7 +4669,7 @@ namespace ts {
             return t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
-                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType() :
+                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*checked*/ languageVersion >= ScriptTarget.ES2015) :
                 t.flags & TypeFlags.Index ? stringOrNumberType :
                 t;
         }
@@ -5499,22 +5500,51 @@ namespace ts {
             return <ObjectType>type;
         }
 
-        function getGlobalValueSymbol(name: string): Symbol {
-            return getGlobalSymbol(name, SymbolFlags.Value, Diagnostics.Cannot_find_global_value_0);
+        function getGlobalValueSymbol(name: string, unchecked?: boolean): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Value, unchecked ? undefined : Diagnostics.Cannot_find_global_value_0);
         }
 
-        function getGlobalTypeSymbol(name: string): Symbol {
-            return getGlobalSymbol(name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0);
+        function getGlobalTypeSymbol(name: string, unchecked?: boolean): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Type, unchecked ? undefined : Diagnostics.Cannot_find_global_type_0);
         }
 
         function getGlobalSymbol(name: string, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
             return resolveName(undefined, name, meaning, diagnostic, name);
         }
 
-        function getGlobalType(name: string, arity?: 0): ObjectType;
-        function getGlobalType(name: string, arity: number): GenericType;
-        function getGlobalType(name: string, arity = 0): ObjectType {
-            return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
+        function getGlobalType(name: string, arity?: 0, unchecked?: boolean): ObjectType;
+        function getGlobalType(name: string, arity: number, unchecked?: boolean): GenericType;
+        function getGlobalType(name: string, arity = 0, unchecked?: boolean): ObjectType {
+            const symbol = getGlobalTypeSymbol(name, unchecked);
+            return symbol || !unchecked ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
+        }
+
+        function getGlobalESSymbolType(checked: boolean) {
+            return globalESSymbolType || (globalESSymbolType = getGlobalType("Symbol", 0, !checked)) || emptyObjectType;
+        }
+
+        function getGlobalAsyncIterableType(checked: boolean) {
+            return globalAsyncIterableType || (globalAsyncIterableType = getGlobalType("AsyncIterable", 1, !checked)) || emptyGenericType;
+        }
+
+        function getGlobalAsyncIteratorType(checked: boolean) {
+            return globalAsyncIteratorType || (globalAsyncIteratorType = getGlobalType("AsyncIterator", 1, !checked)) || emptyGenericType;
+        }
+
+        function getGlobalAsyncIterableIteratorType(checked: boolean) {
+            return globalAsyncIterableIteratorType || (globalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator", 1, !checked)) || emptyGenericType;
+        }
+
+        function getGlobalIterableType(checked: boolean) {
+            return globalIterableType || (globalIterableType = getGlobalType("Iterable", 1, !checked)) || emptyGenericType;
+        }
+
+        function getGlobalIteratorType(checked: boolean) {
+            return globalIteratorType || (globalIteratorType = getGlobalType("Iterator", 1, !checked)) || emptyGenericType;
+        }
+
+        function getGlobalIterableIteratorType(checked: boolean) {
+            return globalIterableIteratorType || (globalIterableIteratorType = getGlobalType("IterableIterator", 1, !checked)) || emptyGenericType;
         }
 
         /**
@@ -5545,19 +5575,19 @@ namespace ts {
         }
 
         function createAsyncIterableType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalAsyncIterableType(), [iteratedType]);
+            return createTypeFromGenericGlobalType(getGlobalAsyncIterableType(/*checked*/ true), [iteratedType]);
         }
 
         function createAsyncIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalAsyncIterableIteratorType(), [iteratedType]);
+            return createTypeFromGenericGlobalType(getGlobalAsyncIterableIteratorType(/*checked*/ true), [iteratedType]);
         }
 
         function createIterableType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalIterableType(), [iteratedType]);
+            return createTypeFromGenericGlobalType(getGlobalIterableType(/*checked*/ true), [iteratedType]);
         }
 
         function createIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(), [iteratedType]);
+            return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(/*checked*/ true), [iteratedType]);
         }
 
         function createArrayType(elementType: Type): ObjectType {
@@ -7061,7 +7091,7 @@ namespace ts {
                 if ((globalStringType === source && stringType === target) ||
                     (globalNumberType === source && numberType === target) ||
                     (globalBooleanType === source && booleanType === target) ||
-                    (getGlobalESSymbolType() === source && esSymbolType === target)) {
+                    (getGlobalESSymbolType(/*checked*/ false) === source && esSymbolType === target)) {
                         reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
                 }
             }
@@ -8985,7 +9015,7 @@ namespace ts {
                 case SyntaxKind.ForInStatement:
                     return stringType;
                 case SyntaxKind.ForOfStatement:
-                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, (<ForOfStatement>parent).awaitKeyword !== undefined) || unknownType;
+                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, getForOfModifierKind(<ForOfStatement>parent)) || unknownType;
                 case SyntaxKind.BinaryExpression:
                     return getAssignedTypeOfBinaryExpression(<BinaryExpression>parent);
                 case SyntaxKind.DeleteExpression:
@@ -9029,8 +9059,7 @@ namespace ts {
                 return stringType;
             }
             if (node.parent.parent.kind === SyntaxKind.ForOfStatement) {
-                const isForAwaitOf = (<ForOfStatement>node.parent.parent).awaitKeyword !== undefined;
-                return checkRightHandSideOfForOf((<ForOfStatement>node.parent.parent).expression, isForAwaitOf) || unknownType;
+                return checkRightHandSideOfForOf((<ForOfStatement>node.parent.parent).expression, getForOfModifierKind(<ForOfStatement>node.parent.parent)) || unknownType;
             }
             return unknownType;
         }
@@ -10838,7 +10867,7 @@ namespace ts {
                 const index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*checkAssignability*/ false);
+                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*checkAssignability*/ false, /*arrayLikeOnly*/ false);
             }
             return undefined;
         }
@@ -11091,7 +11120,7 @@ namespace ts {
                     // if there is no index type / iterated type.
                     const restArrayType = checkExpression((<SpreadElement>e).expression, contextualMapper);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*checkAssignability*/ false);
+                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*checkAssignability*/ false, /*arrayLikeOnly*/ false);
                     if (restElementType) {
                         elementTypes.push(restElementType);
                     }
@@ -15207,8 +15236,12 @@ namespace ts {
                             error(node.type, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                         }
                         else {
-                            const generatorElementType = getIteratedTypeOfIterableIterator(returnType) || anyType;
-                            const iterableIteratorInstantiation = createIterableIteratorType(generatorElementType);
+                            const generatorElementType = functionFlags & FunctionFlags.Async
+                                ? getIteratedTypeOfAsyncIterableIterator(returnType) || anyType // AsyncGenerator function
+                                : getIteratedTypeOfIterableIterator(returnType) || anyType; // Generator function
+                            const iterableIteratorInstantiation = functionFlags & FunctionFlags.Async
+                                ? createAsyncIterableIteratorType(generatorElementType) // AsyncGenerator function
+                                : createIterableIteratorType(generatorElementType); // Generator function
 
                             // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
                             // However, that would not catch the error in the following case.
@@ -17108,7 +17141,7 @@ namespace ts {
             checkGrammarForInOrForOfStatement(node);
 
             if (node.kind === SyntaxKind.ForOfStatement) {
-                if ((<ForOfStatement>node).awaitKeyword) {
+                if (getForOfModifierKind(<ForOfStatement>node) === SyntaxKind.AwaitKeyword) {
                     if (languageVersion < ScriptTarget.ES2017) {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
                     }
@@ -17128,7 +17161,7 @@ namespace ts {
             }
             else {
                 const varExpr = <Expression>node.initializer;
-                const iteratedType = checkRightHandSideOfForOf(node.expression, node.awaitKeyword !== undefined);
+                const iteratedType = checkRightHandSideOfForOf(node.expression, getForOfModifierKind(node));
 
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -17215,28 +17248,28 @@ namespace ts {
             }
         }
 
-        function checkRightHandSideOfForOf(rhsExpression: Expression, isForAwaitOf: boolean): Type {
+        function checkRightHandSideOfForOf(rhsExpression: Expression, modifierKind: SyntaxKind): Type {
             const expressionType = checkNonNullExpression(rhsExpression);
-            return isForAwaitOf
+            return modifierKind === SyntaxKind.AwaitKeyword
                 ? checkIteratedTypeOfIterableOrAsyncIterable(expressionType, rhsExpression)
-                : checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
+                : checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, /*arrayLikeOnly*/ modifierKind === SyntaxKind.EachKeyword);
         }
 
-        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
+        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, arrayLikeOnly?: boolean): Type {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
 
-            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput, /*checkAssignability*/ true) || anyType;
+            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput, /*checkAssignability*/ true, arrayLikeOnly) || anyType;
         }
 
         /**
          * When consuming an iterable type in a for..of, spread, or iterator destructuring assignment
          * we want to get the iterated type of an iterable for ES2015 or later, or the iterated type
-         * of a pseudo-iterable or element type of an array like for ES2015 or earlier.
+         * of a iterable (if defined globally) or element type of an array like for ES2015 or earlier.
          */
-        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, checkAssignability: boolean): Type {
-            if (languageVersion >= ScriptTarget.ES2015) {
+        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, checkAssignability: boolean, arrayLikeOnly: boolean): Type {
+            if (!arrayLikeOnly && languageVersion >= ScriptTarget.ES2015) {
                 const iteratedType = getIteratedTypeOfIterable(inputType, errorNode);
                 if (checkAssignability && errorNode && iteratedType) {
                     checkTypeAssignableTo(inputType, createIterableType(iteratedType), errorNode);
@@ -17244,8 +17277,8 @@ namespace ts {
                 return iteratedType;
             }
             return allowStringInput
-                ? getIteratedTypeOfPseudoIterableOrElementTypeOfArrayOrString(inputType, errorNode, checkAssignability)
-                : getIteratedTypeOfPseudoIterableOrElementTypeOfArray(inputType, errorNode, checkAssignability);
+                ? getIteratedTypeOfIterableOrElementTypeOfArrayOrString(inputType, errorNode, checkAssignability, arrayLikeOnly)
+                : getIteratedTypeOfIterableOrElementTypeOfArray(inputType, errorNode, checkAssignability, arrayLikeOnly);
         }
 
         function checkIteratedTypeOfIterableOrAsyncIterable(asyncIterable: Type, errorNode: Node): Type {
@@ -17299,14 +17332,14 @@ namespace ts {
             // As an optimization, if the type is instantiated directly using the
             // globalAsyncIterableType (AsyncIterable<T>) or globalAsyncIterableIteratorType
             // (AsyncIterableIterator<T>), then just grab its type argument.
-            if (isReferenceToType(type, getGlobalAsyncIterableType()) ||
-                isReferenceToType(type, getGlobalAsyncIterableIteratorType())) {
+            if (isReferenceToType(type, getGlobalAsyncIterableType(/*checked*/ false)) ||
+                isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*checked*/ false))) {
                 return typeAsAsyncIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0];
             }
 
             if (allowIterables) {
-                if (isReferenceToType(type, getGlobalIterableType()) ||
-                    isReferenceToType(type, getGlobalIterableIteratorType())) {
+                if (isReferenceToType(type, getGlobalIterableType(/*checked*/ false)) ||
+                    isReferenceToType(type, getGlobalIterableIteratorType(/*checked*/ false))) {
                     return typeAsAsyncIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0];
                 }
             }
@@ -17359,7 +17392,7 @@ namespace ts {
 
             // As an optimization, if the type is instantiated directly using the
             // globalAsyncIteratorType (AsyncIterator<number>), then just grab its type argument.
-            if (isReferenceToType(type, getGlobalAsyncIteratorType())) {
+            if (isReferenceToType(type, getGlobalAsyncIteratorType(/*checked*/ false))) {
                 return typeAsAsyncIterator.iteratedTypeOfAsyncIterator = (<GenericType>type).typeArguments[0];
             }
 
@@ -17439,15 +17472,12 @@ namespace ts {
             // As an optimization, if the type is instantiated directly using the
             // globalIterableType (Iterable<T>) or globalIterableIteratorType (IterableIterator<T>),
             // then just grab its type argument.
-            if (isReferenceToType(type, getGlobalIterableType()) ||
-                isReferenceToType(type, getGlobalIterableIteratorType())) {
+            if (isReferenceToType(type, getGlobalIterableType(/*checked*/ false)) ||
+                isReferenceToType(type, getGlobalIterableIteratorType(/*checked*/ false))) {
                 return typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments[0];
             }
 
-            const propertyName = languageVersion >= ScriptTarget.ES2015
-                ? getPropertyNameForKnownSymbolName("iterator")
-                : "___iterator__";
-
+            const propertyName = getPropertyNameForKnownSymbolName("iterator");
             const iteratorMethod = getTypeOfPropertyOfType(type, propertyName);
             if (isTypeAny(iteratorMethod)) {
                 return undefined;
@@ -17489,7 +17519,7 @@ namespace ts {
 
             // As an optimization, if the type is instantiated directly using the globalIteratorType (Iterator<number>),
             // then just grab its type argument.
-            if (isReferenceToType(type, getGlobalIteratorType())) {
+            if (isReferenceToType(type, getGlobalIteratorType(/*checked*/ false))) {
                 return typeAsIterator.iteratedTypeOfIterator = (<GenericType>type).typeArguments[0];
             }
 
@@ -17523,10 +17553,9 @@ namespace ts {
         }
 
         /**
-         * A generator may have a return type of Iterator<T>, Iterable<T> (PseudoIterable<T> in
-         * ES5), or IterableIterator<T> (PseudoIterableIterator<T> in ES5). This function can be
-         * used to extract the iterated type from this return type for contextual typing and
-         * verifying signatures.
+         * A generator may have a return type of Iterator<T>, Iterable<T>, or IterableIterator<T>.
+         * This function can be used to extract the iterated type from this return type for
+         * contextual typing and verifying signatures.
          */
         function getIteratedTypeOfIterableIterator(type: Type): Type {
             if (isTypeAny(type)) {
@@ -17554,10 +17583,8 @@ namespace ts {
          *   1. Some constituent is neither a string nor an array.
          *   2. Some constituent is a string and target is less than ES5 (because in ES3 string is not indexable).
          */
-        function getIteratedTypeOfPseudoIterableOrElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node, checkAssignability: boolean): Type {
-            Debug.assert(languageVersion < ScriptTarget.ES2015);
-
-            const iteratedType = getIteratedTypeOfIterable(arrayOrStringType, /*errorNode*/ undefined);
+        function getIteratedTypeOfIterableOrElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node, checkAssignability: boolean, arrayLikeOnly: boolean): Type {
+            const iteratedType = !arrayLikeOnly && getIteratedTypeOfIterable(arrayOrStringType, /*errorNode*/ undefined);
             if (iteratedType) {
                 if (checkAssignability && errorNode) {
                     checkTypeAssignableTo(arrayOrStringType, createIterableType(iteratedType), errorNode);
@@ -17578,6 +17605,7 @@ namespace ts {
             else if (arrayOrStringType.flags & TypeFlags.StringLike) {
                 arrayType = neverType;
             }
+
             const hasStringConstituent = arrayOrStringType !== arrayType;
             let reportedError = false;
             if (hasStringConstituent) {
@@ -17603,8 +17631,12 @@ namespace ts {
                         // But if the input was just number, we want to say that number is not an array type
                         // or a string type.
                         const diagnostic = hasStringConstituent
-                            ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_an_iterator_method_that_returns_an_iterator
-                            : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_an_iterator_method_that_returns_an_iterator;
+                            ? arrayLikeOnly
+                                ? Diagnostics.Type_0_is_not_an_array_type
+                                : Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+                            : arrayLikeOnly
+                                ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type
+                                : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator;
                         error(errorNode, diagnostic, typeToString(arrayType));
                     }
                 }
@@ -17624,10 +17656,8 @@ namespace ts {
             return arrayElementType;
         }
 
-        function getIteratedTypeOfPseudoIterableOrElementTypeOfArray(inputType: Type, errorNode: Node, checkAssignability: boolean): Type {
-            Debug.assert(languageVersion < ScriptTarget.ES2015);
-
-            const iteratedType = getIteratedTypeOfIterable(inputType, /*errorNode*/ undefined);
+        function getIteratedTypeOfIterableOrElementTypeOfArray(inputType: Type, errorNode: Node, checkAssignability: boolean, arrayLikeOnly: boolean): Type {
+            const iteratedType = !arrayLikeOnly && getIteratedTypeOfIterable(inputType, /*errorNode*/ undefined);
             if (iteratedType) {
                 if (checkAssignability && errorNode) {
                     checkTypeAssignableTo(inputType, createIterableType(iteratedType), errorNode);
@@ -17638,7 +17668,10 @@ namespace ts {
                 return getIndexTypeOfType(inputType, IndexKind.Number);
             }
             if (errorNode) {
-                error(errorNode, Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_an_iterator_method_that_returns_an_iterator, typeToString(inputType));
+                const diagnostic = arrayLikeOnly
+                    ? Diagnostics.Type_0_is_not_an_array_type
+                    : Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator;
+                error(errorNode, diagnostic, typeToString(inputType));
             }
             return undefined;
         }
@@ -19803,7 +19836,7 @@ namespace ts {
             //     for ( { a } of elems) {
             //     }
             if (expr.parent.kind === SyntaxKind.ForOfStatement) {
-                const iteratedType = checkRightHandSideOfForOf((<ForOfStatement>expr.parent).expression, (<ForOfStatement>expr.parent).awaitKeyword !== undefined);
+                const iteratedType = checkRightHandSideOfForOf((<ForOfStatement>expr.parent).expression, getForOfModifierKind(<ForOfStatement>expr.parent));
                 return checkDestructuringAssignment(expr, iteratedType || unknownType);
             }
             // If this is from "for" initializer
@@ -20532,32 +20565,7 @@ namespace ts {
             getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
             tryGetGlobalPromiseConstructorSymbol = memoize(() => getGlobalSymbol("Promise", SymbolFlags.Value, /*diagnostic*/ undefined) && getGlobalPromiseConstructorSymbol());
             getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
-
             getGlobalTemplateStringsArrayType = memoize(() => getGlobalType("TemplateStringsArray"));
-
-            if (languageVersion >= ScriptTarget.ES2017) {
-                getGlobalAsyncIteratorType = memoize(() => getGlobalType("AsyncIterator", /*arity*/ 1));
-                getGlobalAsyncIterableType = memoize(() => getGlobalType("AsyncIterable", /*arity*/ 1));
-                getGlobalAsyncIterableIteratorType = memoize(() => getGlobalType("AsyncIterableIterator", /*arity*/ 1));
-            }
-            else {
-                getGlobalAsyncIteratorType = memoize(() => getGlobalType("PseudoAsyncIterator", /*arity*/ 1));
-                getGlobalAsyncIterableType = memoize(() => getGlobalType("PseudoAsyncIterable", /*arity*/ 1));
-                getGlobalAsyncIterableIteratorType = memoize(() => getGlobalType("PseudoAsyncIterableIterator", /*arity*/ 1));
-            }
-
-            if (languageVersion >= ScriptTarget.ES2015) {
-                getGlobalESSymbolType = memoize(() => getGlobalType("Symbol"));
-                getGlobalIterableType = memoize(() => getGlobalType("Iterable", /*arity*/ 1));
-                getGlobalIterableIteratorType = memoize(() => getGlobalType("IterableIterator", /*arity*/ 1));
-            }
-            else {
-                getGlobalESSymbolType = memoize(() => emptyObjectType);
-                getGlobalIterableType = memoize(() => getGlobalType("PseudoIterable", /*arity*/ 1));
-                getGlobalIterableIteratorType = memoize(() => getGlobalType("PseudoIterableIterator", /*arity*/ 1));
-            }
-
-            getGlobalIteratorType = memoize(() => getGlobalType("Iterator", /*arity*/ 1));
 
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
@@ -21277,9 +21285,9 @@ namespace ts {
                 return true;
             }
 
-            if (forInOrOfStatement.kind === SyntaxKind.ForOfStatement && forInOrOfStatement.awaitKeyword) {
+            if (forInOrOfStatement.kind === SyntaxKind.ForOfStatement && getForOfModifierKind(forInOrOfStatement) === SyntaxKind.AwaitKeyword) {
                 if ((forInOrOfStatement.flags & NodeFlags.AwaitContext) === NodeFlags.None) {
-                    return grammarErrorOnNode(forInOrOfStatement.awaitKeyword, Diagnostics.A_for_await_of_statement_is_only_allowed_within_an_async_function_or_async_generator);
+                    return grammarErrorOnNode(forInOrOfStatement.modifierToken, Diagnostics.A_for_await_of_statement_is_only_allowed_within_an_async_function_or_async_generator);
                 }
             }
 

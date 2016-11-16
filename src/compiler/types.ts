@@ -166,6 +166,7 @@ namespace ts {
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
+        EachKeyword,
         GetKeyword,
         IsKeyword,
         KeyOfKeyword,
@@ -519,6 +520,7 @@ namespace ts {
     export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
+    export type EachKeywordToken = Token<SyntaxKind.EachKeyword>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -1617,7 +1619,7 @@ namespace ts {
 
     export interface ForOfStatement extends IterationStatement {
         kind: SyntaxKind.ForOfStatement;
-        awaitKeyword?: AwaitKeywordToken;
+        modifierToken?: AwaitKeywordToken | EachKeywordToken;
         initializer: ForInitializer;
         expression: Expression;
     }

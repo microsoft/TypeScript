@@ -154,7 +154,7 @@ namespace ts {
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
             const enclosedStatement = getEnclosedStatement(node);
             if (enclosedStatement.statement.kind === SyntaxKind.ForOfStatement &&
-                (<ForOfStatement>enclosedStatement.statement).awaitKeyword) {
+                (<ForOfStatement>enclosedStatement.statement).modifierToken) {
                 return visitForOfStatement(<ForOfStatement>node.statement, enclosedStatement.enclosingLabeledStatements);
             }
 
@@ -162,7 +162,7 @@ namespace ts {
         }
 
         function visitForOfStatement(node: ForOfStatement, enclosingLabeledStatements: LabeledStatement[]): VisitResult<Statement> {
-            if (!node.awaitKeyword) return visitEachChild(node, visitor, context);
+            if (!node.modifierToken) return visitEachChild(node, visitor, context);
 
             let bodyLocation: TextRange;
             let statementsLocation: TextRange;
@@ -774,8 +774,8 @@ namespace ts {
         scoped: false,
         text: `
             var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
-                var g = generator.apply(thisArg, _arguments || []), q = [], c;
-                return { next: verb("next"), "throw": verb("throw"), "return": verb("return"), __asyncIterator__: function () { return this; } };
+                var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
+                return i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.asyncIterator] = function () { return this; }, i;
                 function verb(n) { return function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]), next(); }); }; }
                 function next() { if (!c && q.length) resume((c = q.shift())[0], c[1]); }
                 function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(c[3], e); } }
@@ -808,9 +808,9 @@ namespace ts {
         name: "typescript:asyncValues",
         scoped: false,
         text: `
-            var __asyncValues = (this && this.__asyncIterator) || function (o, iterator) {
-                var m;
-                return (m = o.__asyncIterator__) ? m.call(o) : typeof __values === "function" ? __values(o) : o[iterator || Symbol.iterator]();
+            var __asyncValues = (this && this.__asyncIterator) || function (o) {
+                var m = o[Symbol.asyncIterator];
+                return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
             };`
     };
 
@@ -832,9 +832,9 @@ namespace ts {
         name: "typescript:asyncDelegator",
         scoped: false,
         text: `
-            var __asyncDelegator = (this && this.__asyncDelegator) || function (o, iterator) {
+            var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
                 var i = { next: verb("next"), "throw": verb("throw", function (e) { throw e; }), "return": verb("return", function (v) { return { value: v, done: true }; }) };
-                return o = __asyncValues(o, iterator), i[iterator || Symbol.iterator] = function () { return this; }, i;
+                return o = __asyncValues(o), i[Symbol.iterator] = function () { return this; }, i;
                 function verb(n, f) { return function (v) { return { value: ["delegate", (o[n] || f).call(o, v)], done: false }; }; }
             };`
     };

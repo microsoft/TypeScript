@@ -126,6 +126,7 @@ namespace ts {
         "yield": SyntaxKind.YieldKeyword,
         "async": SyntaxKind.AsyncKeyword,
         "await": SyntaxKind.AwaitKeyword,
+        "each": SyntaxKind.EachKeyword,
         "of": SyntaxKind.OfKeyword,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,

@@ -926,17 +926,18 @@ namespace ts {
         return node;
     }
 
-    export function createForOf(initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange) {
+    export function createForOf(modifierToken: AwaitKeywordToken | EachKeywordToken, initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange) {
         const node = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, location);
+        node.modifierToken = modifierToken;
         node.initializer = initializer;
         node.expression = expression;
         node.statement = statement;
         return node;
     }
 
-    export function updateForOf(node: ForOfStatement, initializer: ForInitializer, expression: Expression, statement: Statement) {
-        if (node.initializer !== initializer || node.expression !== expression || node.statement !== statement) {
-            return updateNode(createForOf(initializer, expression, statement, node), node);
+    export function updateForOf(node: ForOfStatement, modifierToken: AwaitKeywordToken | EachKeywordToken, initializer: ForInitializer, expression: Expression, statement: Statement) {
+        if (node.modifierToken !== modifierToken || node.initializer !== initializer || node.expression !== expression || node.statement !== statement) {
+            return updateNode(createForOf(modifierToken, initializer, expression, statement, node), node);
         }
         return node;
     }
@@ -1768,7 +1769,7 @@ namespace ts {
         scoped: false,
         text: `
             var __values = (this && this.__values) || function (o) {
-                var i = o.__iterator__ || 0, d;
+                var i = typeof Symbol === "function" && o[Symbol.iterator] || 0, d;
                 return i ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } };
             };`
     };
@@ -1827,7 +1828,7 @@ namespace ts {
         scoped: false,
         text: `
             var __read = (this && this.__read) || function (o, n) {
-                if (!(m = o.__iterator__)) return o;
+                if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
                 var m, i = m.call(o), ar = [], r, e;
                 try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
                 catch (error) { e = { error: error }; }
@@ -1906,8 +1907,14 @@ namespace ts {
         }
     }
 
-
-    // Utilities
+    export function insertLeadingStatement(dest: Statement, source: Statement) {
+        if (isBlock(dest)) {
+            return updateBlock(dest, createNodeArray([source, ...dest.statements], dest.statements));
+        }
+        else {
+            return createBlock(createNodeArray([dest, source]), /*location*/ undefined, /*multiLine*/ true);
+        }
+    }
 
     export interface CallBinding {
         target: LeftHandSideExpression;

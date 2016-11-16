@@ -1261,6 +1261,7 @@ namespace ts {
 
             node = updateForOf(
                 node,
+                node.modifierToken,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)

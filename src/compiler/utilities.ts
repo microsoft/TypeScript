@@ -874,6 +874,11 @@ namespace ts {
         return false;
     }
 
+    export function getForOfModifierKind(node: ForOfStatement) {
+        return node.modifierToken
+            && node.modifierToken.kind;
+    }
+
     export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement {
         switch (node.kind) {
             case SyntaxKind.ForStatement:
@@ -3666,10 +3671,6 @@ namespace ts {
      */
     export function isFirstDeclarationOfKind(node: Node, kind: SyntaxKind) {
         return node.symbol && getDeclarationOfKind(node.symbol, kind) === node;
-    }
-
-    export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-        return isExternalModule(node) || compilerOptions.isolatedModules;
     }
 
     // Node tests

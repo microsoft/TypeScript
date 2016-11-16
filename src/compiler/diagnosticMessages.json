@@ -1463,7 +1463,7 @@
         "category": "Error",
         "code": 2460
     },
-    "Type '{0}' is not an array type or does not have an '__iterator__()' method that returns an iterator.": {
+    "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
     },
@@ -1587,7 +1587,7 @@
         "category": "Error",
         "code": 2494
     },
-    "Type '{0}' is not an array type or a string type or does not have an '__iterator__()' method that returns an iterator.": {
+    "Type '{0}' is not an array type or a string type.": {
         "category": "Error",
         "code": 2495
     },
@@ -1782,6 +1782,14 @@
     "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2543
+    },
+    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2544
+    },
+    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2545
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",

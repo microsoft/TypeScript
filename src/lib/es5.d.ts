@@ -1338,39 +1338,6 @@ interface PromiseLike<T> {
         onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): PromiseLike<TResult1 | TResult2>;
 }
 
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
-}
-
-interface Iterator<T> {
-    next(value?: any): IteratorResult<T>;
-    return?(value?: any): IteratorResult<T>;
-    throw?(e?: any): IteratorResult<T>;
-}
-
-interface PseudoIterable<T> {
-    __iterator__(): Iterator<T>;
-}
-
-interface PseudoIterableIterator<T> extends Iterator<T> {
-    __iterator__(): PseudoIterableIterator<T>;
-}
-
-interface PseudoAsyncIterator<T> {
-    next(value?: any): PromiseLike<IteratorResult<T>>;
-    return?(value?: any): PromiseLike<IteratorResult<T>>;
-    throw?(e?: any): PromiseLike<IteratorResult<T>>;
-}
-
-interface PseudoAsyncIterable<T> {
-    __asyncIterator__(): PseudoAsyncIterator<T>;
-}
-
-interface PseudoAsyncIterableIterator<T> extends PseudoAsyncIterator<T> {
-    __asyncIterator__(): PseudoAsyncIterableIterator<T>;
-}
-
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;
