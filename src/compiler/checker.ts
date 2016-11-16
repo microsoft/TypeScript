@@ -14744,7 +14744,7 @@ namespace ts {
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
             const type = checkExpressionCached(declaration.initializer);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
-                getCombinedModifierFlags(declaration) & ModifierFlags.Readonly ||
+                getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
         }
 
