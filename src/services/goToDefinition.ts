@@ -113,10 +113,11 @@ namespace ts.GoToDefinition {
         if (container) {
             const contextualType = typeChecker.getContextualType(node.parent.parent as Expression);
             if (contextualType) {
-                let result: DefinitionInfo[] = [];
-                forEach(getPropertySymbolsFromContextualType(typeChecker, container), contextualSymbol => {
-                    result = result.concat(getDefinitionFromSymbol(typeChecker, contextualSymbol, node));
-                });
+                const result: DefinitionInfo[] = [];
+                const propertySymbols = getPropertySymbolsFromContextualType(typeChecker, container);
+                for (const propertySymbol of propertySymbols) {
+                    result.push(...getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+                }
                 return result;
             }
         }
