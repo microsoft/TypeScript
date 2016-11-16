@@ -1907,7 +1907,7 @@ namespace ts {
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern.
             if (isBindingPattern(node.name)) {
-                const doNotRecordTempVariablesInLine = enclosingVariableStatement
+                const hoistTempVariables = enclosingVariableStatement
                     && hasModifier(enclosingVariableStatement, ModifierFlags.Export);
                 return flattenDestructuringBinding(
                     node,
@@ -1915,7 +1915,7 @@ namespace ts {
                     context,
                     FlattenLevel.All,
                     /*value*/ undefined,
-                    doNotRecordTempVariablesInLine
+                    hoistTempVariables
                 );
             }
 

@@ -6,7 +6,7 @@ namespace ts {
     interface FlattenContext {
         context: TransformationContext;
         level: FlattenLevel;
-        doNotRecordTempVariablesInLine: boolean;
+        hoistTempVariables: boolean;
         emitExpression: (value: Expression) => void;
         emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) => void;
         createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
@@ -57,7 +57,7 @@ namespace ts {
         const flattenContext: FlattenContext = {
             context,
             level,
-            doNotRecordTempVariablesInLine: true,
+            hoistTempVariables: true,
             emitExpression,
             emitBindingOrAssignment,
             createArrayBindingOrAssignmentPattern: makeArrayAssignmentPattern,
@@ -126,7 +126,7 @@ namespace ts {
      * @param context The transformation context.
      * @param boundValue The value bound to the declaration.
      * @param skipInitializer A value indicating whether to ignore the initializer of `node`.
-     * @param doNotRecordTempVariablesInLine Indicates whether temporary variables should not be recored in-line.
+     * @param hoistTempVariables Indicates whether temporary variables should not be recorded in-line.
      * @param level Indicates the extent to which flattening should occur.
      */
     export function flattenDestructuringBinding(
@@ -135,16 +135,15 @@ namespace ts {
         context: TransformationContext,
         level: FlattenLevel,
         rval?: Expression,
-        doNotRecordTempVariablesInLine?: boolean,
+        hoistTempVariables?: boolean,
         skipInitializer?: boolean): VariableDeclaration[] {
-
         let pendingExpressions: Expression[];
         const pendingDeclarations: { pendingExpressions?: Expression[], name: BindingName, value: Expression, location?: TextRange, original?: Node; }[] = [];
         const declarations: VariableDeclaration[] = [];
         const flattenContext: FlattenContext = {
             context,
             level,
-            doNotRecordTempVariablesInLine,
+            hoistTempVariables,
             emitExpression,
             emitBindingOrAssignment,
             createArrayBindingOrAssignmentPattern: makeArrayBindingPattern,
@@ -152,12 +151,10 @@ namespace ts {
             createArrayBindingOrAssignmentElement: makeBindingElement,
             visitor
         };
-
         flattenBindingOrAssignmentElement(flattenContext, node, rval, node, skipInitializer);
-
         if (pendingExpressions) {
             const temp = createTempVariable(/*recordTempVariable*/ undefined);
-            if (doNotRecordTempVariablesInLine) {
+            if (hoistTempVariables) {
                 const value = inlineExpressions(pendingExpressions);
                 pendingExpressions = undefined;
                 emitBindingOrAssignment(temp, value, /*location*/ undefined, /*original*/ undefined);
@@ -173,7 +170,6 @@ namespace ts {
                 pendingDeclaration.value = temp;
             }
         }
-
         for (const { pendingExpressions, name, value, location, original } of pendingDeclarations) {
             const variable = createVariableDeclaration(
                 name,
@@ -187,7 +183,6 @@ namespace ts {
             aggregateTransformFlags(variable);
             declarations.push(variable);
         }
-
         return declarations;
 
         function emitExpression(value: Expression) {
@@ -330,7 +325,7 @@ namespace ts {
                 // can perform the ObjectRest destructuring in a different declaration
                 if (element.transformFlags & TransformFlags.ContainsObjectRest) {
                     const temp = createTempVariable(/*recordTempVariable*/ undefined);
-                    if (flattenContext.doNotRecordTempVariablesInLine) {
+                    if (flattenContext.hoistTempVariables) {
                         flattenContext.context.hoistVariableDeclaration(temp);
                     }
 
@@ -419,7 +414,7 @@ namespace ts {
         }
         else {
             const temp = createTempVariable(/*recordTempVariable*/ undefined);
-            if (flattenContext.doNotRecordTempVariablesInLine) {
+            if (flattenContext.hoistTempVariables) {
                 flattenContext.context.hoistVariableDeclaration(temp);
                 flattenContext.emitExpression(createAssignment(temp, value, location));
             }
@@ -430,46 +425,28 @@ namespace ts {
         }
     }
 
-    /**
-     * Creates an ArrayBindingPattern from an array of BindingOrAssignmentElement nodes.
-     */
     function makeArrayBindingPattern(elements: BindingOrAssignmentElement[]) {
         Debug.assertEachNode(elements, isArrayBindingElement);
         return createArrayBindingPattern(<ArrayBindingElement[]>elements);
     }
 
-    /**
-     * Creates an ArrayLiteralExpression assignment pattern from an array of BindingOrAssignmentElement nodes.
-     */
     function makeArrayAssignmentPattern(elements: BindingOrAssignmentElement[]) {
         return createArrayLiteral(map(elements, convertToArrayAssignmentElement));
     }
 
-    /**
-     * Creates an ObjectBindingPattern from an array of BindingOrAssignmentElement nodes.
-     */
     function makeObjectBindingPattern(elements: BindingOrAssignmentElement[]) {
         Debug.assertEachNode(elements, isBindingElement);
         return createObjectBindingPattern(<BindingElement[]>elements);
     }
 
-    /**
-     * Creates an ObjectLiteralExpression assignment pattern from an array of BindingOrAssignmentElement nodes.
-     */
     function makeObjectAssignmentPattern(elements: BindingOrAssignmentElement[]) {
         return createObjectLiteral(map(elements, convertToObjectAssignmentElement));
     }
 
-    /**
-     * Creates a BindingElement for a name.
-     */
     function makeBindingElement(name: Identifier) {
         return createBindingElement(/*propertyName*/ undefined, /*dotDotDotToken*/ undefined, name);
     }
 
-    /**
-     * Creates an assignment element for a name.
-     */
     function makeAssignmentElement(name: Identifier) {
         return name;
     }
