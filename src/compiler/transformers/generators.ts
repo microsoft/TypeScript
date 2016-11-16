@@ -946,7 +946,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression) {
-            return visitElements(node.elements, node.multiLine);
+            return visitElements(node.elements, /*leadingElement*/ undefined, /*location*/ undefined, node.multiLine);
         }
 
         /**
@@ -956,7 +956,7 @@ namespace ts {
          * @param elements The elements to visit.
          * @param multiLine Whether array literals created should be emitted on multiple lines.
          */
-        function visitElements(elements: NodeArray<Expression>, _multiLine?: boolean) {
+        function visitElements(elements: NodeArray<Expression>, leadingElement?: Expression, location?: TextRange, multiLine?: boolean) {
             // [source]
             //      ar = [1, yield, 2];
             //
@@ -971,18 +971,22 @@ namespace ts {
             const temp = declareLocal();
             let hasAssignedTemp = false;
             if (numInitialElements > 0) {
+                const initialElements = visitNodes(elements, visitor, isExpression, 0, numInitialElements);
                 emitAssignment(temp,
                     createArrayLiteral(
-                        visitNodes(elements, visitor, isExpression, 0, numInitialElements)
+                        leadingElement
+                            ? [leadingElement, ...initialElements]
+                            : initialElements
                     )
                 );
+                leadingElement = undefined;
                 hasAssignedTemp = true;
             }
 
             const expressions = reduceLeft(elements, reduceElement, <Expression[]>[], numInitialElements);
             return hasAssignedTemp
-                ? createArrayConcat(temp, [createArrayLiteral(expressions)])
-                : createArrayLiteral(expressions);
+                ? createArrayConcat(temp, [createArrayLiteral(expressions, /*location*/ undefined, multiLine)])
+                : createArrayLiteral(leadingElement ? [leadingElement, ...expressions] : expressions, location, multiLine);
 
             function reduceElement(expressions: Expression[], element: Expression) {
                 if (containsYield(element) && expressions.length > 0) {
@@ -991,11 +995,16 @@ namespace ts {
                         hasAssignedTemp
                             ? createArrayConcat(
                                 temp,
-                                [createArrayLiteral(expressions)]
+                                [createArrayLiteral(expressions, /*location*/ undefined, multiLine)]
                             )
-                            : createArrayLiteral(expressions)
+                            : createArrayLiteral(
+                                leadingElement ? [leadingElement, ...expressions] : expressions,
+                                /*location*/ undefined,
+                                multiLine
+                            )
                     );
                     hasAssignedTemp = true;
+                    leadingElement = undefined;
                     expressions = [];
                 }
 
@@ -1131,7 +1140,10 @@ namespace ts {
                         createFunctionApply(
                             cacheExpression(visitNode(target, visitor, isExpression)),
                             thisArg,
-                            visitElements(node.arguments)
+                            visitElements(
+                                node.arguments,
+                                /*leadingElement*/ createVoidZero()
+                            )
                         ),
                         /*typeArguments*/ undefined,
                         [],

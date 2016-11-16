@@ -593,7 +593,7 @@ task("generate-diagnostics", [diagnosticInfoMapTs]);
 var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
 var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
 var packageJson = "package.json";
-var programTs = path.join(compilerDirectory, "program.ts");
+var versionFile = path.join(compilerDirectory, "core.ts");
 
 file(configureNightlyTs);
 
@@ -609,7 +609,7 @@ task("setDebugMode", function () {
 });
 
 task("configure-nightly", [configureNightlyJs], function () {
-    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + programTs;
+    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + versionFile;
     console.log(cmd);
     exec(cmd);
 }, { async: true });
