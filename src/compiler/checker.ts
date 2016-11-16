@@ -12848,11 +12848,10 @@ namespace ts {
                 return result;
             }
 
-            // Do not report any error if we are doing so for stateless function component as such error will be handled in "resolveCustomJsxElementAttributesType".
             if (isJsxOpeningOrSelfClosingElement) {
-                // If resolveCall was called by the language service, return undefined to let the language service decide what to do. (see getDefinitionAtPosition)
-                // Otherwise, return the last candidate we tried so that error reporting can use it.
-                return produceDiagnostics ? candidateForArgumentError : undefined;
+                // If there is not result, just return the last one we try as a candidate.
+                // We do not report any error here because any error will be handled in "resolveCustomJsxElementAttributesType".
+                return candidateForArgumentError;
             }
 
             // No signatures were applicable. Now report errors based on the last applicable signature with
