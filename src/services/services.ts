@@ -495,10 +495,18 @@ namespace ts {
         public getLineEndOfPosition(pos: number): number {
             const { line } = this.getLineAndCharacterOfPosition(pos);
             const lineStarts = this.getLineStarts();
-            if (line >= lineStarts.length) {
-                return this.getEnd();
+
+            let lastCharPos: number;
+            if (line + 1 >= lineStarts.length) {
+                lastCharPos = this.getEnd();
             }
-            return lineStarts[line + 1] - 1;
+            if (!lastCharPos) {
+                lastCharPos = lineStarts[line + 1] - 1;
+            }
+
+            const fullText = this.getFullText();
+            // if the new line is "\r\n", we should return the last non-new-line-character position
+            return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
         }
 
         public getNamedDeclarations(): Map<Declaration[]> {
